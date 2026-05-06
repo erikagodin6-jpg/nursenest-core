@@ -1,9 +1,13 @@
 /**
- * Rasterize `public/logos/arctic-frost-leaf.svg` into App Router metadata icons under `src/app/`
- * (`favicon.ico`, `apple-icon.png`). SVG tab icon is `src/app/icon.svg` (kept in sync by hand;
- * this script uses the same source leaf for rasters).
+ * Rasterize `public/logos/nursenest-leaf-icon-source.svg` into **public** icons (App Router file
+ * metadata under `src/app/` is intentionally unused so `/public/*` is the single source).
  *
- * Run from package root: `npm run generate:favicon` (see package.json).
+ * Outputs:
+ * - `public/favicon-v2.ico` (16 + 32 PNG frames, cache-bust filename)
+ * - `public/apple-touch-icon.png` (180)
+ * - `public/icon-192.png`, `public/icon-512.png` (PWA / Android)
+ *
+ * Run from package root: `npm run icons:generate`
  */
 import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -13,20 +17,41 @@ import sharp from "sharp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const pkgRoot = path.resolve(__dirname, "..");
-const svgPath = path.join(pkgRoot, "public/logos/arctic-frost-leaf.svg");
-const appDir = path.join(pkgRoot, "src/app");
+const svgPath = path.join(pkgRoot, "public/logos/nursenest-leaf-icon-source.svg");
+const publicDir = path.join(pkgRoot, "public");
+
+const WHITE = { r: 255, g: 255, b: 255, alpha: 1 };
+
+async function rasterSquare(size) {
+  const svg = await readFile(svgPath);
+  return sharp(svg)
+    .resize(size, size, {
+      fit: "contain",
+      position: "centre",
+      background: WHITE,
+    })
+    .png()
+    .toBuffer();
+}
 
 async function main() {
-  const svg = await readFile(svgPath);
-  const png180 = await sharp(svg).resize(180, 180).png().toBuffer();
-  const png32 = await sharp(svg).resize(32, 32).png().toBuffer();
-  const png16 = await sharp(svg).resize(16, 16).png().toBuffer();
+  const png180 = await rasterSquare(180);
+  const png192 = await rasterSquare(192);
+  const png512 = await rasterSquare(512);
+  const png32 = await rasterSquare(32);
+  const png16 = await rasterSquare(16);
 
-  const ico = await pngToIco([png32, png16]);
-  await writeFile(path.join(appDir, "apple-icon.png"), png180);
-  await writeFile(path.join(appDir, "favicon.ico"), ico);
+  const ico = await pngToIco([png16, png32]);
+
+  await writeFile(path.join(publicDir, "favicon-v2.ico"), ico);
+  await writeFile(path.join(publicDir, "apple-touch-icon.png"), png180);
+  await writeFile(path.join(publicDir, "icon-192.png"), png192);
+  await writeFile(path.join(publicDir, "icon-512.png"), png512);
+
   // eslint-disable-next-line no-console
-  console.log("Wrote src/app/favicon.ico, src/app/apple-icon.png from public/logos/arctic-frost-leaf.svg");
+  console.log(
+    "Wrote public/favicon-v2.ico, apple-touch-icon.png, icon-192.png, icon-512.png from nursenest-leaf-icon-source.svg",
+  );
 }
 
 main().catch((e) => {

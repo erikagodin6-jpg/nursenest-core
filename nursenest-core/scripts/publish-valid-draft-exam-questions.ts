@@ -17,6 +17,10 @@
 import { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import {
+  examKeyNormsForPathwayPool,
+  examQuestionExamNormInSql,
+} from "../src/lib/content-quality/exam-question-exam-normalization";
+import {
   examQuestionDraftPublishableMinimalSql,
   examQuestionDraftPublishableStrictSql,
   EXAM_QUESTION_STATUS_PUBLISHED_SQL,
@@ -124,9 +128,9 @@ async function main(): Promise<void> {
     { pathwayId: "ca-np-cnple", examKeys: ["NP", "CNPLE", "CAN-NP"] },
   ] as const;
 
-  console.log("\n=== Published + scoped (exam keys, case-insensitive) + flashcard usability ===");
+  console.log("\n=== Published + scoped (exam keys, norm match) + flashcard usability ===");
   for (const pw of AUDIT_PATHWAYS) {
-    const examLower = pw.examKeys.map((k) => k.toLowerCase());
+    const examNorms = examKeyNormsForPathwayPool(pw.examKeys);
     const [scoped] = await prisma.$queryRaw<[{ n: bigint }]>`
       SELECT COUNT(*)::bigint AS n
       FROM exam_questions
@@ -134,13 +138,13 @@ async function main(): Promise<void> {
         AND coalesce(trim(stem), '') <> ''
         AND correct_answer IS NOT NULL
         AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
-        AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
+        AND (${examQuestionExamNormInSql(examNorms)})
     `;
     const [pubPath] = await prisma.$queryRaw<[{ n: bigint }]>`
       SELECT COUNT(*)::bigint AS n
       FROM exam_questions
       WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
-        AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
+        AND (${examQuestionExamNormInSql(examNorms)})
     `;
     console.log(
       `  ${pw.pathwayId.padEnd(22)} published(exam-scope)=${Number(pubPath.n).toLocaleString()} usable-scoped=${Number(scoped.n).toLocaleString()}`,

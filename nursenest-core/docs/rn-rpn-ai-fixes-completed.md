@@ -1,34 +1,36 @@
 # RN / RPN audit — SAFE_FOR_AI fixes completed
 
-**Scope:** Items from `reports/rn-rpn-flow-gaps.md` classified **SAFE_FOR_AI** only. No paywall, Stripe, schema, CAT engine, flashcard architecture, canonical/hreflang, or lesson source changes.
+**Scope:** Items from `rn-rpn-flow-gaps.md` (this repo: `docs/rn-rpn-flow-gaps.md`; copy to `reports/` if your workflow expects that path) classified **SAFE_FOR_AI** only — **G5**, **G11**. No Stripe, auth/paywall, schema, CAT engine, flashcard architecture, canonical/hreflang, or lesson source changes.
 
-## Changes
+## Changes (latest batch)
 
 | Gap ID | Change | Files | Risk |
 | --- | --- | --- | --- |
-| **G-002** | Onboarding step 0 shows **country-specific** PN copy: US → “PN (NCLEX-PN)”, CA → “RPN (REx-PN)”, other → combined line referencing account country. | `src/lib/onboarding/exam-goal-rows-for-country.ts` (new), `src/lib/onboarding/exam-goal-rows-for-country.test.ts` (new), `src/components/onboarding/trial-onboarding-flow.tsx`, `src/app/(student)/app/(learner)/onboarding/page.tsx`, `onboarding-page-client.tsx` | **Low** — copy + props only; pathway resolution unchanged (`resolveDefaultPathwayIdForOnboarding`). Added `!user` guard on onboarding page. |
-| **G-009** | Contract test: `collectExamPathwayUrls` must include US RN, US PN/NCLEX-PN, and CA REx-PN hub roots. | `src/lib/seo/sitemap-rn-pn-core-pathways.contract.test.ts` (new), `package.json` (`test:seo-sitemap` list) | **Low** — read-only URL list assertion. |
-| **G-011** | Playwright: public PN hubs must not show common missing-translation sentinels in `body` text. | `tests/e2e/public/pn-marketing-hub-i18n-sanity.spec.ts` (new) | **Low** — anonymous marketing only; heuristic regexes (`[missing`, `{{missing`, `missing canonical English key`). |
-| **G-018** | Contract test: `practice/page.tsx` still redirects to `/app/practice-tests` and forwards query via `URLSearchParams`. | `src/lib/practice-tests/practice-alias-redirect.contract.test.ts` (new), `package.json` | **Low** — reads source file (path without `()` for `sh` compatibility). E2E already covered in `tier-matrix-public-marketing-smoke.spec.ts` / `tier-matrix-paid-owned-pathway.spec.ts`. |
+| **G5** | Anonymous **ExamSelector** first step: PN row copy now states **US: NCLEX-PN · Canada: REx-PN** before country selection (aligns with signed-in onboarding `examGoalRowsForCountry`). | `src/lib/context/context-routing.ts`, `src/lib/context/context-routing.test.ts`, `src/components/onboarding/trial-onboarding-flow.tsx` (JSDoc only) | **Low** — marketing copy + unit assertion; routing IDs unchanged (`rpn` still maps via `resolveOnboardingRoute`). |
+| **G11** | Extend English marketing **i18n sentinel** checks to **US NCLEX-RN** and **Canada NCLEX-RN** hubs (existing PN + REx-PN coverage retained). | `tests/e2e/public/pn-marketing-hub-i18n-sanity.spec.ts` | **Low** — anonymous Playwright; same sentinel regexes as before. |
 
-## Tests run
+## Prior SAFE_FOR_AI work (still in tree)
+
+| Gap ID | Change | Files | Risk |
+| --- | --- | --- | --- |
+| **G5** | Signed-in onboarding step 0: country-specific PN labels (`PN (NCLEX-PN)` vs `RPN (REx-PN)`). | `src/lib/onboarding/exam-goal-rows-for-country.ts`, `exam-goal-rows-for-country.test.ts`, `trial-onboarding-flow.tsx`, onboarding pages | **Low** |
+| **G11** | Initial PN hub sentinel tests (US NCLEX-PN, CA REx-PN). | `tests/e2e/public/pn-marketing-hub-i18n-sanity.spec.ts` | **Low** |
+
+## Tests run (targeted)
 
 ```bash
 cd nursenest-core
 node --import tsx --test \
-  src/lib/onboarding/exam-goal-rows-for-country.test.ts \
-  src/lib/seo/sitemap-rn-pn-core-pathways.contract.test.ts \
-  src/lib/practice-tests/practice-alias-redirect.contract.test.ts
+  src/lib/context/context-routing.test.ts \
+  src/lib/onboarding/exam-goal-rows-for-country.test.ts
 ```
 
-**Note:** `npm run test:seo-sitemap` runs the full blog + SEO bundle; in this environment an **existing** `long-tail-seo-trio-blog-seed.contract.test.ts` assertion may fail unrelated to these edits. The three new contract tests and onboarding unit tests pass when run directly (above).
-
-## Playwright (optional, needs dev server)
+## Playwright (optional; needs dev server + baseURL)
 
 ```bash
 npx playwright test tests/e2e/public/pn-marketing-hub-i18n-sanity.spec.ts
 ```
 
-## Developer-only (unchanged)
+## Developer-only / review queue (unchanged)
 
-All **DEVELOPER_ONLY** / **AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW** rows in `rn-rpn-flow-gaps.md` remain (pools, paywall verification, CAT rationale E2E, Stripe webhooks, admin pool cards, etc.).
+Per `rn-rpn-flow-gaps.md`: **G1–G4, G6–G10, G12–G15** — pools, blueprints, paywall/Stripe verification, CAT rationale E2E, practice–CAT parity, typecheck CI, admin rollup tiles, hreflang/sitemap ownership, progress API tests, flashcard SQL, etc.

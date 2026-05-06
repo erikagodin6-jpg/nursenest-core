@@ -24,3 +24,10 @@ test("plain-text guard rejects angle brackets", () => {
   assert.ok(def);
   assert.throws(() => assertMarketingOverrideSeoGuards("pages.home.hero.headline", "bad <b>", def!), /Angle brackets/);
 });
+
+test("SEO guard rejects meta title longer than recommended cap", () => {
+  const def = getMarketingPublicContentKeyDef("pages.home.metaTitle");
+  assert.ok(def?.seoTitleMaxLen);
+  const tooLong = "x".repeat((def!.seoTitleMaxLen ?? 0) + 5);
+  assert.throws(() => assertMarketingOverrideSeoGuards("pages.home.metaTitle", tooLong, def!), /SEO title/);
+});

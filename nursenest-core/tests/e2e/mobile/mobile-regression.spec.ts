@@ -20,7 +20,8 @@ async function assertDocumentOverflowSoft(page: Page): Promise<void> {
 
 test.describe("Mobile regression — marketing", () => {
   test("homepage loads with public chrome and bounded width", async ({ page }) => {
-    const r = await page.goto("/", { waitUntil: "domcontentloaded" });
+    test.setTimeout(300_000);
+    const r = await page.goto("/", { waitUntil: "domcontentloaded", timeout: 120_000 });
     expect(r?.ok(), `HTTP ${r?.status()} for /`).toBeTruthy();
     await dismissMarketingScrims(page);
     await expect(page.locator(MARKETING_PUBLIC_SELECTOR)).toBeVisible({ timeout: 60_000 });
@@ -30,7 +31,8 @@ test.describe("Mobile regression — marketing", () => {
   });
 
   test("pricing loads with main landmark and bounded width", async ({ page }) => {
-    const r = await page.goto("/pricing", { waitUntil: "domcontentloaded" });
+    test.setTimeout(300_000);
+    const r = await page.goto("/pricing", { waitUntil: "domcontentloaded", timeout: 120_000 });
     expect(r?.ok(), `HTTP ${r?.status()} for /pricing`).toBeTruthy();
     await dismissMarketingScrims(page);
     await expect(page.locator("main").first()).toBeVisible({ timeout: 60_000 });

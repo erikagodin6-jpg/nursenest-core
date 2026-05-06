@@ -1,74 +1,66 @@
-# RN / RPN — Phase 1 implementation priority list
+# RN / RPN implementation priority list (Phase 1)
 
-Ordered for **revenue protection first**, then **learner fluidity**, then **observability and SEO**. All items reference **`reports/rn-rpn-flow-gaps.md`** IDs (`nursenest-core/reports/` and repo root `reports/`).
+Use after **staging verification** of pools and entitlements. Order: **revenue risk first**, then **coverage**, then **polish**.
 
 ---
 
-## Phase 0 — Block release / revenue (P0)
+## Phase 1A — Verify or fix before marketing push (P0 / revenue)
 
-| Order | Gap ID | Title | Category | Owner |
+| Priority | Gap ID | Work item | Owner | Exit criteria |
 | --- | --- | --- | --- | --- |
-| 0.1 | G-004 | Core pathway exam question pools non-zero (RN + US PN + CA RPN) | DEVELOPER_ONLY | Eng + content |
-| 0.2 | G-005 | CAT / practice can start with real pools | DEVELOPER_ONLY | Eng |
-| 0.3 | G-006 | CAT rationale lock in live exam mode | DEVELOPER_ONLY | Eng |
-| 0.4 | G-016 | Cross-tier paywall leakage none; paid users not blocked | DEVELOPER_ONLY | Eng |
-| 0.5 | G-020 | Stripe webhook + subscription row integrity (staging → prod) | DEVELOPER_ONLY | Eng + ops |
-
-**Exit criteria:** `audit:exam-bank` / `content:ensure:exam-bank` green for `CORE_PATHWAY_AUDIT_ROWS`; `verify:no-cross-tier-leakage` green; manual CAT attempt on RN + one PN pathway; Stripe test subscription end-to-end on staging.
+| 1A.1 | G3 | Confirm non-zero flashcard pools for `us-rn-nclex-rn`, `ca-rn-nclex-rn`, `ca-rpn-rex-pn`, `us-lpn-nclex-pn` in staging + prod | Dev + content | Admin or SQL shows counts ≥ product minimum per pathway |
+| 1A.2 | G4 | Confirm CAT blueprint pool mapping ≥ warning threshold for each pathway; fix blueprint if mapped fraction low | Dev | `admin/diagnostics/cat-blueprint-sessions` green for recent sessions |
+| 1A.3 | G9 | Run Stripe test-mode scenarios: subscribe → access; cancel → downgrade; no false 403 on entitled routes | Dev | Scripted checklist + optional new E2E with Stripe test clock |
 
 ---
 
-## Phase 1 — Learner journey completeness (P1 / high P2)
+## Phase 1B — Regression safety (P1)
 
-| Order | Gap ID | Title | Category | Owner |
+| Priority | Gap ID | Work item | Fix class | Exit criteria |
 | --- | --- | --- | --- | --- |
-| 1.1 | G-001 | Add US NCLEX-PN to tier-matrix signup E2E | AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW | QA + eng |
-| 1.2 | G-015 | Keep pathway lesson link graph green in CI | AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW | Eng |
-| 1.3 | G-007 | Document / test practice vs CAT pool parity | AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW | Eng |
-| 1.4 | G-014 | Flashcard “effective pool” UX vs API counts | AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW | Eng |
+| 1B.1 | G13 | Add automated assertion: CAT **exam** mode does not render rationale feedback before session end | `DEVELOPER_ONLY` | Unit or Playwright on CAT runner |
+| 1B.2 | G14 | Keep flashcard SQL exclusions enforced on every PR | `DEVELOPER_ONLY` | CI runs `flashcard-pool-exam-fallback.test.ts` |
+| 1B.3 | G11 | Eliminate raw i18n keys on CA PN / REx-PN marketing routes | `SAFE_FOR_AI` + review | `i18n-route-readiness` passes |
 
 ---
 
-## Phase 2 — Clarity, SEO, mobile (P2)
+## Phase 1C — Coverage and confidence (P2)
 
-| Order | Gap ID | Title | Category | Owner |
+| Priority | Gap ID | Work item | Fix class | Exit criteria |
 | --- | --- | --- | --- | --- |
-| 2.1 | G-002 | US PN vs CA RPN onboarding + hub copy | SAFE_FOR_AI (copy) + product sign-off | Product + eng |
-| 2.2 | G-008 | Nightly mobile paid shell for `us-rn-nclex-rn` + `us-lpn-nclex-pn` | AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW | QA |
-| 2.3 | G-009 | SEO sitemap/canonical checks on PR | SAFE_FOR_AI | Eng |
-| 2.4 | G-011 | Raw i18n key sweep on PN hubs | SAFE_FOR_AI | Eng |
-| 2.5 | G-012 | Admin: surface target pathway + deep link to audits | AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW | Eng |
+| 1C.1 | G1 | Add Canada REx-PN signup → `/app` Playwright | `AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW` | Spec green in CI |
+| 1C.2 | G2 | Paid mobile path for RPN fixture (or seed) | `AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW` | No overlap/cutoff on `/app`, lessons |
+| 1C.3 | G12 | Pathway-scoped progress API/component test | `AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW` | Fails if progress mis-attributed |
+| 1C.4 | G6 | Document / enforce practice–CAT pool parity where product requires | `DEVELOPER_ONLY` | Written matrix + one integration proof |
 
 ---
 
-## Phase 3 — Hardening (P3)
+## Phase 1D — Polish (P3)
 
-| Order | Gap ID | Title | Category | Owner |
-| --- | --- | --- | --- | --- |
-| 3.1 | G-003 | Dashboard Prisma catch behavior vs onboarding redirect | AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW | Eng |
-| 3.2 | G-010 | hreflang assertions | DEVELOPER_ONLY | Eng |
-| 3.3 | G-013 | Optional admin pathway pool health card | DEVELOPER_ONLY | Eng |
-| 3.4 | G-017 | Onboarding `examGoal` fallback telemetry / validation | AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW | Eng |
-
----
-
-## Test bundle to add or keep green
-
-1. **RN onboarding:** Tier-matrix RN row + `POST /api/onboarding/complete` with `examGoal=rn` (US/CA).
-2. **RPN / PN onboarding:** CA `rpn` + US PN path once G-001 exists.
-3. **Paid entitlement:** `verify:no-cross-tier-leakage` + `tier-matrix-cross-tier-gating.spec.ts`.
-4. **Lesson hub:** `npm run test:pathway-lessons`.
-5. **Flashcard pool:** API or script assertion against `audit-flashcard-pools` / flashcard E2E.
-6. **CAT session start:** `paid-user-cat-focused-viewport.spec.ts` (with creds).
-7. **Practice session start:** Practice builder E2E with pathway param.
-8. **Mobile homepage:** `mobile-usability-audit.spec.ts` + `test:e2e:mobile`.
-9. **Mobile lesson detail:** Mobile paid optional spec or manual checklist.
-10. **Sitemap / canonical:** `npm run test:seo-sitemap` + `verify:sitemap`.
+| Priority | Gap ID | Work item | Fix class |
+| --- | --- | --- | --- |
+| 1D.1 | G5 | Onboarding copy: disambiguate US PN vs CA RPN | `SAFE_FOR_AI` |
+| 1D.2 | G7 | Optional admin “readiness” rollup tile | `AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW` |
+| 1D.3 | G8 | Stabilize `typecheck` in CI (heap / parallelism) | `DEVELOPER_ONLY` |
+| 1D.4 | G10 | Schedule periodic sitemap diff vs production | `AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW` |
 
 ---
 
-## AI execution policy (for follow-on PRs)
+## Recommended test additions (bundle)
 
-- **SAFE_FOR_AI:** Copy, comments, test fixtures, non-gating assertions, docs.
-- **AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW:** New E2E rows, admin read-only aggregations, refactors near entitlement filters.
-- **DEVELOPER_ONLY:** Stripe, webhook signing, paywall condition changes, pool SQL filters, schema, route shape changes.
+1. **RN onboarding** — existing `rn-student-signup-flow.spec.ts`; keep in CI.
+2. **RPN onboarding** — new CA REx-PN spec (G1).
+3. **Paid entitlement** — extend tier-matrix or add API-level 403/200 matrix per pathway.
+4. **Lesson hub** — already in `test:pathway-lessons` + production gate; add RPN hub if missing from matrix.
+5. **Flashcard pool count** — staging script or admin query + unit SQL tests.
+6. **CAT session start** — staging Playwright: start CAT, answer one item, verify no rationale in exam mode.
+7. **Practice session start** — same with rationale after submit/end per config.
+8. **Mobile homepage** — `test:e2e:mobile` + `mobile-usability-audit`.
+9. **Mobile lesson** — paid mobile spec on lesson detail width/scroll.
+10. **Sitemap / canonical** — `npm run test:seo-sitemap` + `verify:seo-indexability`.
+
+---
+
+## Handoff note for developers
+
+Do **not** weaken paywalls or broaden public lesson payloads while closing G3/G4. Prefer **admin diagnostics** and **bounded** list endpoints when adding visibility.

@@ -93,12 +93,13 @@ describe("allied health pathway hub route smoke", () => {
     assert.doesNotMatch(html, /Go home/);
   });
 
-  it("legacy country allied hubs still render full hub shell when reached (redirects normally send users to global)", () => {
-    const pathway = getExamPathwayById("ca-allied-core");
+  it("non-global hubPath still renders full hub shell (bookmarks; marketing redirects prefer global)", () => {
+    const pathway = getExamPathwayById("us-allied-core");
     assert.ok(pathway);
     const html = renderToStaticMarkup(
-      <AlliedHealthPathwayHub pathway={pathway!} hubPath="/canada/allied/allied-health" overview={labsModuleOverview} />,
+      <AlliedHealthPathwayHub pathway={pathway!} hubPath="/us/allied/allied-health" overview={labsModuleOverview} />,
     );
+    assert.match(html, /United States Allied Health hub/);
     assert.match(html, /Choose your Allied Health track/);
     assert.match(html, /Study modes/);
     assert.match(html, /Lab values and interpretation/);

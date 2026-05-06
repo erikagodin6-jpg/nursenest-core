@@ -1,81 +1,76 @@
-# TypeScript stabilization guidelines (NurseNest)
+# TypeScript stabilization guidelines
 
-Audience: engineers shipping learner, billing, and admin surfaces. Complements `AGENTS.md` and global engineering constraints.
-
----
-
-## Commands
-
-| Command | When to use |
-|---------|-------------|
-| `npm run typecheck` | **Required** before merge for any non-trivial change; CI baseline. |
-| `npm run typecheck:critical` | Optional **faster** pass rooted at Stripe, auth, `db`, and `api/subscriptions` (`tsconfig.typecheck-critical.json`). Does **not** prove the whole app—full `typecheck` is still authoritative. |
+For external developers and anyone merging into `main`. Complements `AGENTS.md` and production governance rules.
 
 ---
 
-## Acceptable patterns
+## 1. Payment / Stripe safety
 
-1. **Narrow then access** — Discriminated unions (`PageEntitlementResult`, Prisma results) must be narrowed before property access.  
-2. **Explicit nullish defaults** — Prefer `?? ""`, `?? undefined`, or early `continue` when runtime already guarantees safety.  
-3. **Prisma relation writes** — When `UpdateInput` omits scalar FKs, use `connect` / `disconnect` / `set` per current Prisma version—mirror schema relations.  
-4. **`groupBy` + `take`** — Prisma requires a deterministic `orderBy`; use `_count: { <groupedField>: "desc" }` when ordering by aggregate count, or omit `take` and slice in JS if the product set is bounded.  
-5. **Bounded serialization for logs** — `JSON.stringify(obj).slice(0, N)` or scalar flags when log schema expects primitives.  
-6. **Readonly vs mutable** — Prefer widening declared types (`string[]`) over pervasive `as mutable` casts; avoid `as const` on values assigned to mutable DTO fields.  
-7. **Targeted helper** — Small pure functions (e.g. stripping `undefined` from i18n params) reduce duplication without new frameworks.
+- **One SDK entrypoint:** Use `getStripeClient()` from `src/lib/stripe/stripe-client.ts` for any server path that needs the Stripe SDK (webhooks, reconciliation, optional notify). Do not invent parallel clients or alternate env var names.
+- **Never reference removed helpers:** `getStripeClientForNotification` is **not** part of the codebase — if it appears in a merge, **revert to `getStripeClient()`** and run `src/lib/stripe/stripe-webhook-policy.test.ts`.
+- **Webhooks:** Keep `claimStripeWebhookEvent` before `applyStripeWebhookEvent`; do not weaken signature verification or allowlist handling (see existing static tests).
+- **Subscription logic:** Type fixes must not change status mapping, period end merges, or entitlement audits — fix types with narrowing, correct Prisma shapes, or imports only.
 
 ---
 
-## Forbidden shortcuts
+## 2. Prisma typing rules
 
-- **`any`** except at documented system boundaries (and then minimize scope).  
-- **Broad `@ts-ignore` / `@ts-expect-error`** without ticket, owner, and removal plan.  
-- **Disabling `strict`**, `noImplicitAny`, or other compiler safeguards repo-wide.  
-- **Silent subscription or entitlement behavior changes** "to make types happy"—fix types or narrow; preserve runtime semantics.  
-- **Giant `as` chains** on Prisma results instead of mapping to a typed view model.
-
----
-
-## Runtime-sensitive areas (extra care)
-
-| Domain | Notes |
-|--------|--------|
-| **Stripe** | Webhooks, checkout, customer resolution—use shared `getStripeClient()` / documented helpers only; never invent alternate clients. |
-| **Auth / sessions** | NextAuth env and callbacks; server session is source of truth for sensitive pages. |
-| **Entitlements** | `resolveEntitlementForPage` and related unions—always narrow `"error"`. |
-| **Prisma mutations** | Admin routes: validate inputs, use typed `UpdateInput`, avoid raw stringly-typed patches. |
-| **Learner study APIs** | Flashcards, practice, CAT—keep diagnostics **bounded** and non-PII. |
+- Prefer **generated** `Prisma.*Input` types for writes; if the client rejects scalar FKs, use **`connect` / `disconnect` / `update`** on relations (as with `PrintableProductUpdateInput`).
+- **`groupBy` + `take`:** Prisma requires a compatible **`orderBy`** — use an aggregate `orderBy` on a field in `by`, or remove `take` and slice in application code.
+- After **schema or Prisma version** bumps: run `npm run db:generate` before `typecheck`.
+- Avoid `as any` on query results; use small mappers or `satisfies` where it clarifies intent.
 
 ---
 
-## Prisma typing guidance
-1. **After pulling schema changes:** run `npm run db:generate` before `typecheck` so `UserSelect` and other shapes match `schema.prisma`.
-2. After **`prisma generate`**, if types drift, prefer **relation-shaped** updates over guessing scalar column names.
-3. **`groupBy`**: confirm `orderBy` + `take`/`skip` rules for your Prisma minor version; validate with `tsc` locally.
-4. **`_count`**: access via a small helper if Prisma union for `_count` is `true | { … }`—keeps call sites readable.
-5. **Do not change `schema.prisma`** in a typecheck-only PR unless the task explicitly includes migrations.
+## 3. Acceptable narrow casts
 
-## Stripe / payment safety
-
-1. **Single client factory** — Avoid duplicate Stripe initialization paths.  
-2. **Webhooks** — Preserve idempotency and event ordering assumptions; type fixes must not alter branching on `event.type` or subscription lifecycle.  
-3. **Secrets** — Never widen types to smuggle keys into client bundles; no changes to env loading without security review.
+- **Bounded:** `unknown` → validated shape (Zod / manual guard) before use.
+- **Prisma JSON:** Normalize `undefined` optional JSON columns to `null` when a downstream type requires `JsonValue`.
+- **Discriminated unions:** Narrow `PageEntitlementResult` (`!== "error"`) before accessing `AccessScope` fields.
 
 ---
 
-## When temporary suppression is allowed
+## 4. Forbidden shortcuts
 
-Only if:
-
-1. **Blocked** on upstream types (e.g. third-party bug) with a **linked issue**.  
-2. **Isolated** to one statement or import line.  
-3. **Documented** with `// TODO(type): <category> — <ticket> — remove by <date>`.  
-4. **Reviewed** by a second engineer for payment/auth paths.
-
-Prefer **fixing types** or **adding a 5-line adapter** over suppression.
+- Disabling **`strict`** or lowering `noEmit` / `skipLibCheck` globally to “go green”.
+- Blanket **`@ts-ignore` / `@ts-expect-error`** without ticket, owner, and removal date.
+- **`as any`** on webhook, checkout, or entitlement payloads.
+- Changing **runtime** subscription or paywall behavior to silence a type error.
 
 ---
 
-## Related docs
+## 5. Checks before merging
 
-- `reports/typecheck-baseline-audit.md` — what was fixed in the stabilization sweep.  
-- `reports/developer-onboarding.md` — onboarding + full command matrix.  
+| Step | Command |
+|------|---------|
+| Fast Stripe/auth/db/API roots | `npm run typecheck:critical` |
+| Full project | `npm run typecheck` |
+| Stripe static contracts | `node --import tsx --test src/lib/stripe/stripe-webhook-policy.test.ts src/lib/stripe/stripe-webhook-signature-contract.test.ts` |
+| After Prisma changes | `npm run db:generate` then typecheck |
+
+CI should keep **`typecheck`** as the merge gate; `typecheck:critical` is for **local iteration** and quick signal (still follows imports from included roots).
+
+---
+
+## 6. How to document remaining debt
+
+When `tsc` reports errors you cannot fix in the same PR:
+
+1. Add a row to **`reports/typecheck-baseline-audit.md`** under the right category (revenue, Prisma, nullable, etc.).  
+2. Include **file**, **error summary**, **cause hypothesis**, **fix plan**, **risk**, **deploy blocker?**.  
+3. Link the tracking issue; do not leave debt only in chat.
+
+---
+
+## 7. Observability / logging
+
+- **`safeServerLog`** and similar helpers expect **scalar or short string** properties — do not pass arbitrary nested objects; use `JSON.stringify(...).slice(0, N)` or booleans.
+
+---
+
+## 8. Related paths
+
+- Webhook entry: `src/app/api/subscriptions/webhook/route.ts`  
+- Apply handler: `src/lib/stripe/apply-stripe-webhook-event.ts`  
+- Stripe client: `src/lib/stripe/stripe-client.ts`  
+- Critical TS config: `nursenest-core/tsconfig.typecheck-critical.json`

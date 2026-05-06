@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto";
 import type { ContentEntityKind, ExamQuestion, Prisma, PrismaClient } from "@prisma/client";
 
 import { contentIntegritySha256 } from "@/lib/content-pipeline/content-integrity";
+import { coerceRecordedExamQuestionExamValue } from "@/lib/content-quality/exam-question-exam-normalization";
 
 function examQuestionToSnapshot(row: ExamQuestion): Record<string, unknown> {
   return JSON.parse(JSON.stringify(row)) as Record<string, unknown>;
@@ -84,13 +85,18 @@ export async function rollbackExamQuestionToArchivedVersion(
       (await tx.examQuestion.findUnique({ where: { id: params.questionId }, select: { sourceVersion: true } }))!
         .sourceVersion + 1;
 
-    const { id: _id, createdAt: _c, updatedAt: _u, ...payload } = snap;
+    const { id: _id, createdAt: _c, updatedAt: _u, ...payloadRest } = snap;
+    const payload = { ...payloadRest } as Record<string, unknown>;
+    if ("exam" in payload) {
+      const coercedExam = coerceRecordedExamQuestionExamValue(payload.exam);
+      if (coercedExam !== undefined) payload.exam = coercedExam;
+    }
 
     // Admin rollback: snapshot is JSON from DB; Prisma coerces ISO date strings for DateTime fields.
     await tx.examQuestion.update({
       where: { id: params.questionId },
       data: {
-        ...(payload as Record<string, unknown>),
+        ...payload,
         sourceVersion: nextVersion,
         updatedAt: new Date(),
         publishedByUserId: params.actorUserId ?? undefined,

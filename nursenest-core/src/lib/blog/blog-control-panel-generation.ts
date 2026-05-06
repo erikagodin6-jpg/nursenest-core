@@ -1230,7 +1230,7 @@ function mergeControlPanelPlanSectionPatch(
   switch (patch.section) {
     case "title_options": {
       const titles = patch.titleOptions as string[];
-      const h1Next = (titles[0] ?? plan.h1 ?? plan.titleOptions[0] ?? "").trim().slice(0, 200);
+      const h1Next = (titles[0] ?? plan.h1 ?? plan.titleOptions?.[0] ?? "").trim().slice(0, 200);
       return {
         ...plan,
         titleOptions: titles,

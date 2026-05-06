@@ -1,5 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
+import { expandedExamKeysForPathwayPool } from "@/lib/content-quality/exam-question-exam-normalization";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 
 /**
@@ -34,7 +35,7 @@ export function examQuestionPoolWhereForContext(ctx: GlobalExamContext): {
           ? ["np", "fnp", "agpcnp"]
           : [tierLower];
   return {
-    examIn: [...p.contentExamKeys],
+    examIn: expandedExamKeysForPathwayPool(p.contentExamKeys),
     tierMatches,
   };
 }

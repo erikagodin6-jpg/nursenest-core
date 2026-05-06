@@ -1,46 +1,57 @@
 # AI fix priority list (NurseNest)
 
-Ordered for **max safe progress before external developer** deep work. All items reference `docs/ai-fixable-issues-audit.md` (ISSUE-001, etc.).
+Ordered for **low risk first**, then **prep-for-dev**, then **developer-only**. Aligns with `ai-fixable-issues-audit.md`.
 
-**SAFE_FOR_AI batch (completed):** ISSUE-007, ISSUE-008, ISSUE-009 — see `docs/ai-fixes-completed.md`.
+## Completed (SAFE_FOR_AI — see `docs/ai-fixes-completed.md`)
 
-| Priority | ISSUE | Category | Why this order |
+| Priority | Audit ID | Status |
+| --- | --- | --- |
+| P0.1 | ISSUE-009 | **Done** — canonical banners on `docs/mobile-ux-audit.md`, `docs/mobile-layout-regression-checklist.md`, `docs/mobile-navigation-risk-areas.md`. |
+| P0.2 | ISSUE-008 | **Done** — `docs/blog-quality-thresholds.md` + contract test `blog-quality-thresholds-doc.contract.test.ts` in `blog:quality:test`. |
+| P0.3 | ISSUE-007 | **Done** *(prior session)* — removed `page.tsx.save`; `test:source-hygiene` guards recurrence. |
+
+## P1 — After developer supplies TS output (AI_CAN_PREP + review)
+
+| Priority | Audit ID | Action | Verify |
 | --- | --- | --- | --- |
-| P0 | ISSUE-001 | AI_CAN_PREP | Unblock TS signal: run full `typecheck`, then batch-fix leaf errors (imports, typos). |
-| ~~P1~~ | ~~ISSUE-007~~ | ~~SAFE_FOR_AI~~ | **Done** — removed stray `page.tsx.save`; `test:source-hygiene` guards recurrence. |
-| ~~P2~~ | ~~ISSUE-008~~ | ~~SAFE_FOR_AI~~ | **Done** — blog thresholds doc points to TS only. |
-| ~~P3~~ | ~~ISSUE-009~~ | ~~SAFE_FOR_AI~~ | **Done** — mobile UX audit canonical path header. |
-| P4 | ISSUE-002–004 | AI_CAN_PREP | Remove `@ts-expect-error` in admin blog routes **after** Prisma client/schema confirmed aligned. |
-| P5 | ISSUE-016 | SAFE_FOR_AI | Fix **specific** routes failing `test:e2e:mobile` overflow checks (evidence-driven). |
-| P6 | ISSUE-011 | AI_CAN_PREP | CI/docs: ensure paid mobile env documented so regression suite actually runs. |
-| P7 | ISSUE-012 | AI_CAN_PREP | Extend blog guardrail lists with tests only when content ops requests. |
-| P8 | ISSUE-006 | AI_CAN_PREP | Replace `any` in CAT audit/persistence with typed boundaries — **after** CAT tests green. |
-| P9 | ISSUE-015 | AI_CAN_PREP | Run SEO verify scripts; fix **copy-only** gaps where truthpack allows. |
-| — | ISSUE-005 | DEVELOPER_ONLY | Do **not** prioritize AI on exhaustive-deps in exam runner without human plan. |
-| — | ISSUE-010 | DEVELOPER_ONLY | `ci:verify` failures: developer triage first. |
-| — | ISSUE-013 | DEVELOPER_ONLY | Admin audit failures: developer + security. |
-| — | ISSUE-014 | DO_NOT_TOUCH | Auth/entitlements/Stripe: no autonomous AI edits. |
+| P1.1 | ISSUE-001 | Human runs `npm run typecheck`; paste errors; AI fixes **imports**, wrong optional chaining on **leaf** UI only. | `npm run typecheck` |
+| P1.2 | ISSUE-002–004 | Remove `@ts-expect-error` on admin blog routes once Prisma client matches schema. | `typecheck` + admin blog smoke |
+| P1.3 | ISSUE-006 | Replace `any` in CAT audit/persistence with typed shapes / zod. | CAT tests + E2E |
+| P1.4 | ISSUE-011 | Extend mobile audit doc with exact env var names for paid mobile projects. | `npm run test:e2e:mobile` (with creds) |
+| P1.5 | ISSUE-012 | Incremental blog governance list/tests in small PRs. | `npm run blog:quality:test`, `blog:audit-quality` |
+| P1.6 | ISSUE-015 | Run SEO verify scripts; fix **copy-only** gaps if truthpack-aligned. | `verify:seo-indexability`, `test:seo-sitemap` |
 
-## Quick wins (same day, low risk)
+## P2 — Developer-led (DEVELOPER_ONLY / high blast radius)
 
-- ~~ISSUE-007, ISSUE-008, ISSUE-009~~ **Completed** (see `docs/ai-fixes-completed.md`).
+| Priority | Audit ID | Action | Verify |
+| --- | --- | --- | --- |
+| P2.1 | ISSUE-010 | Interpret `ci:verify` failures; no AI bulk “fixes” without root cause. | `npm run ci:verify` |
+| P2.2 | ISSUE-005 | Any `exhaustive-deps` change in practice/CAT runner — human + E2E. | Playwright practice/CAT |
+| P2.3 | ISSUE-013 | Admin edit/publish audit failures — policy + code review. | `audit:admin-edit-publish-surface:verify` |
 
-## Blocked on developer input
+## P3 — DO_NOT_TOUCH (AI)
 
-- ISSUE-001 until `typecheck` log exists.  
-- ISSUE-002–004 until Prisma/migrations state is confirmed.  
-- ISSUE-005, ISSUE-010, ISSUE-013, ISSUE-014 at all times without explicit ticket.
+| Priority | Audit ID | Rule |
+| --- | --- | --- |
+| P3.1 | ISSUE-014 | No unsupervised AI edits to auth, entitlements, Stripe, or JWT/session bridging. |
 
-## Verification commands (expected)
+## P4 — SAFE_FOR_AI (after mobile failures exist)
 
-```bash
-cd nursenest-core
-npm run typecheck
-npm run test:source-hygiene
-npm run test:e2e:mobile
-npm run blog:quality:test
-npm run audit:admin-edit-publish-surface:verify
-npm run verify:seo-indexability
-```
+| Priority | Audit ID | Action | Verify |
+| --- | --- | --- | --- |
+| P4.1 | ISSUE-016 | Per-route overflow fixes only when `test:e2e:mobile` fails. | `npm run test:e2e:mobile` |
 
-Use only environments and DB credentials approved for the task.
+---
+
+## Quick reference — npm commands
+
+| Goal | Command |
+| --- | --- |
+| Type baseline | `npm run typecheck` |
+| CI parity | `npm run ci:verify` |
+| Mobile width | `npm run test:e2e:mobile` |
+| Blog governance | `npm run blog:quality:test` |
+| Blog audit | `npm run blog:audit-quality` |
+| Admin surface | `npm run audit:admin-edit-publish-surface:verify` |
+| SEO | `npm run verify:seo-indexability` |
+| Source hygiene | `npm run test:source-hygiene` |

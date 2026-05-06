@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { resolveOnboardingRoute } from "./context-routing";
+import { PROFESSION_CHOICES, resolveOnboardingRoute } from "./context-routing";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 
 test("onboarding US + en resolves to canonical English pathway (no /en/ prefix)", () => {
@@ -29,4 +29,12 @@ test("UK / AU: English onboarding routes to shipped expansion hubs", () => {
 test("intentional /fr/ and /es/ marketing trees remain valid locale prefixes", () => {
   assert.equal(isCoreHostedNonDefaultLocale("fr"), true);
   assert.equal(isCoreHostedNonDefaultLocale("es"), true);
+});
+
+test("PROFESSION_CHOICES PN row names both NCLEX-PN and REx-PN (anonymous exam selector)", () => {
+  const rpn = PROFESSION_CHOICES.find((c) => c.id === "rpn");
+  assert.ok(rpn, "expected rpn profession row");
+  const text = `${rpn!.label} ${rpn!.description}`;
+  assert.match(text, /NCLEX-PN/i);
+  assert.match(text, /REx-PN/i);
 });

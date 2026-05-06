@@ -184,8 +184,8 @@ export type ContentBatchOutput = {
    */
   pathwayLessons: GeneratedPathwayLesson[];
   /**
-   * ExamQuestion rows ready for:
-   *   `prisma.examQuestion.createMany({ data: examQuestions })`
+   * ExamQuestion rows ready for Prisma `createMany` (see admin `content-pipeline/batch` route;
+   * `exam` is canonicalized at insert time).
    */
   examQuestions: GeneratedExamQuestion[];
   errors: Array<{

@@ -12,6 +12,7 @@ import {
 import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 import { getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
 import { stemHash } from "@/lib/content/stem-hash";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { prisma } from "@/lib/db";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { computeStructuralPublicCompleteFromDbRow } from "@/lib/lessons/pathway-lesson-catalog-sync";
@@ -120,7 +121,7 @@ describe("VERIFIED content admin write → same canonical store (marketing + lea
         countryCode: "US",
         tier: "rn",
         status: DB_PUBLISHED,
-        exam: "NCLEX-RN",
+        exam: canonicalExamQuestionExamForDbWrite("NCLEX_RN"),
         topic: "Fundamentals",
         bodySystem: "Fundamentals",
         careerType: "nursing",
@@ -134,6 +135,7 @@ describe("VERIFIED content admin write → same canonical store (marketing + lea
     try {
       const adminRow = await prisma.examQuestion.findUnique({ where: { id: created.id } });
       assert.equal(adminRow?.stem, stem);
+      assert.equal(adminRow?.exam, "NCLEX-RN", "underscore import exam must persist as canonical pathway key");
 
       const poolStyle = await prisma.examQuestion.findFirst({
         where: { id: created.id, status: DB_PUBLISHED },

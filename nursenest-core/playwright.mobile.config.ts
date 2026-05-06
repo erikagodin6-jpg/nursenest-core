@@ -28,10 +28,11 @@ function localDevWebServer() {
   const secret = process.env.NEXTAUTH_SECRET?.trim() || process.env.AUTH_SECRET?.trim() || "playwright-e2e-local-secret";
   const dbUrl = process.env.DATABASE_URL?.trim();
   return {
-    command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
+    /* `npm run dev` points at `server/index.ts` (monolith entry); Next.js for E2E is `next dev`. */
+    command: `npx next dev --hostname ${host} --port ${port}`,
     url: `${origin.origin}/api/auth/csrf`,
     reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
+    timeout: 300_000,
     env: {
       RUN_HEAVY_BUILD_TASKS: "false",
       NEXTAUTH_SECRET: secret,
@@ -47,7 +48,8 @@ const paidAuthEnabled = hasPaidTestCredentials();
 const e2eWebServer = localDevWebServer();
 
 const publicMobileMatch = /tests\/e2e\/mobile\/(mobile-regression|mobile-marketing-routes|mobile-learner-free-layout)\.spec\.ts$/;
-const paidMobileMatch = /tests\/e2e\/mobile\/mobile-learner-authenticated-layout\.spec\.ts$/;
+const paidMobileMatch =
+  /tests\/e2e\/mobile\/mobile-learner-(authenticated-layout|study-interactions)\.spec\.ts$/;
 
 const publicProjects = [
   {
@@ -96,8 +98,10 @@ export default defineConfig({
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  workers: paidAuthEnabled ? 1 : 2,
-  timeout: 180_000,
+  /* Single worker avoids starving `next dev` when slow routes (e.g. /blog SSR) run in parallel with Pixel + WebKit. */
+  workers: 1,
+  /* Cold `next dev` + marketing SSR can exceed 3m on some routes; keep above slowest goto budget. */
+  timeout: 300_000,
   expect: { timeout: 60_000 },
   use: {
     baseURL,

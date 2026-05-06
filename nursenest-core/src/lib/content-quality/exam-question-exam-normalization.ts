@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { EXAM_PATHWAYS } from "../exam-pathways/exam-pathways-catalog";
 
 /**
@@ -42,6 +43,10 @@ const LEGACY_EXAM_ALIAS_BY_NORM: Readonly<Record<string, string>> = {
   nclexpn: "NCLEX-PN",
   /** Some exports used condensed tokens */
   rexpn: "REx-PN",
+  /** Canadian NP pathway: consolidate legacy board strings onto CNPLE storage */
+  "can-np": "CNPLE",
+  /** Rare import typo: pathway id stored as exam */
+  "us-np-fnp": "FNP",
 };
 
 /** Allied board / discipline codes stored on `ExamQuestion.exam` (tier is often `allied` or profession-specific). */
@@ -96,6 +101,47 @@ export function examQuestionExamPublishAllowlist(): ReadonlySet<string> {
 
 const PUBLISH_ALLOWLIST = examQuestionExamPublishAllowlist();
 
+/**
+ * Norms derived from pathway `contentExamKeys` (plus norms of their normalized forms).
+ * Used with {@link examQuestionExamNormInSql} so SQL filters match underscore/hyphen/case variants.
+ */
+export function examKeyNormsForPathwayPool(keys: readonly string[]): string[] {
+  const set = new Set<string>();
+  for (const k of keys) {
+    set.add(normExamKeyForMatching(k));
+    const canon = normalizeExamQuestionExamForStorage(k);
+    if (canon) set.add(normExamKeyForMatching(canon));
+  }
+  return [...set];
+}
+
+/**
+ * Exact `exam` strings to use in Prisma `exam: { in: [...] }` — pathway keys plus every
+ * publish-allowlist spelling whose norm matches one of the pathway key norms (no cross-pool widening).
+ */
+export function expandedExamKeysForPathwayPool(keys: readonly string[]): string[] {
+  const keyNorms = new Set(examKeyNormsForPathwayPool(keys));
+  const out = new Set<string>();
+  for (const k of keys) {
+    const t = k.trim();
+    if (t) out.add(t);
+  }
+  for (const alt of PUBLISH_ALLOWLIST) {
+    if (keyNorms.has(normExamKeyForMatching(alt))) out.add(alt);
+  }
+  return [...out];
+}
+
+/** Postgres expression aligned with {@link normExamKeyForMatching} for `exam_questions.exam`. */
+export function examQuestionExamNormExprSql(): Prisma.Sql {
+  return Prisma.sql`regexp_replace(regexp_replace(lower(trim(coalesce(exam, ''))), '[_\s]+', '-', 'g'), '-+', '-', 'g')`;
+}
+
+export function examQuestionExamNormInSql(keyNorms: readonly string[]): Prisma.Sql {
+  if (keyNorms.length === 0) return Prisma.sql`FALSE`;
+  return Prisma.sql`${examQuestionExamNormExprSql()} IN (${Prisma.join([...keyNorms])})`;
+}
+
 /** Deterministic casing for keys that share the same norm (pathway + allied allowlist). */
 function resolveCanonicalFromPublishAllowlistByNorm(n: string): string | null {
   let best: string | null = null;
@@ -131,6 +177,18 @@ export function normalizeExamQuestionExamForStorage(raw: string | null | undefin
 export function canonicalExamQuestionExamForDbWrite(raw: string): string {
   const n = normalizeExamQuestionExamForStorage(raw);
   return (n ?? raw.trim()).trim();
+}
+
+/**
+ * Coerce `exam` from JSON snapshots / unknown payloads before Prisma `update` spreads.
+ * Returns `undefined` when absent or not a non-empty string (caller may omit the field).
+ */
+export function coerceRecordedExamQuestionExamValue(exam: unknown): string | undefined {
+  if (exam == null) return undefined;
+  if (typeof exam !== "string") return undefined;
+  const t = exam.trim();
+  if (!t) return undefined;
+  return canonicalExamQuestionExamForDbWrite(t);
 }
 
 /**

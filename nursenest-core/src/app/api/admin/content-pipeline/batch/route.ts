@@ -10,6 +10,7 @@ import { validatePathwayLessonTaxonomyBeforeWrite } from "@/lib/taxonomy/nursing
 import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 import type { ContentBatchInput } from "@/lib/content-pipeline/types";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -107,7 +108,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         subtopic: q.topicSlug,
         tags: q.tags ?? [],
       });
-      return { ...q, bodySystem: tax.bodySystem };
+      return {
+        ...q,
+        bodySystem: tax.bodySystem,
+        exam: canonicalExamQuestionExamForDbWrite(String(q.exam ?? "")),
+      };
     });
     let importStats: Record<string, number> = {};
 

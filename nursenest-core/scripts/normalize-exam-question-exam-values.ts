@@ -7,16 +7,17 @@
  *   npx tsx scripts/normalize-exam-question-exam-values.ts --dry-run
  *   npx tsx scripts/normalize-exam-question-exam-values.ts
  *   npx tsx scripts/normalize-exam-question-exam-values.ts --dry-run --json
+ *
+ * Prefer `scripts/repair-exam-question-exam-keys.ts` for default-dry-run UX (`--apply` to write).
  */
 
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parse as parseDotenv } from "dotenv";
 import { PrismaClient } from "@prisma/client";
-import {
-  normalizeExamQuestionExamForStorage,
-  orderExamQuestionExamRewritesForBackfill,
-} from "../src/lib/content-quality/exam-question-exam-normalization";
+import { runExamQuestionExamValueRepair } from "../src/lib/content-quality/run-exam-question-exam-value-repair";
+
+const prisma = new PrismaClient();
 
 function loadDotenvFromPackageRoot(): void {
   const root = process.cwd();
@@ -30,21 +31,7 @@ function loadDotenvFromPackageRoot(): void {
   }
 }
 
-const prisma = new PrismaClient();
-
-type DistRow = { exam: string };
-type CountRow = { exam: string; c: bigint };
-
-async function examDistribution(): Promise<CountRow[]> {
-  return prisma.$queryRaw<CountRow[]>`
-    SELECT exam, COUNT(*)::bigint AS c
-    FROM exam_questions
-    GROUP BY exam
-    ORDER BY c DESC
-  `;
-}
-
-function printDist(label: string, rows: CountRow[]): void {
+function printDist(label: string, rows: { exam: string; c: bigint }[]): void {
   console.log(`\n${label}`);
   console.log("-".repeat(56));
   let total = 0;
@@ -65,51 +52,24 @@ async function main(): Promise<void> {
     process.exit(0);
   }
 
-  const before = await examDistribution();
+  const { plan, totalRowsTouched, before, after } = await runExamQuestionExamValueRepair({
+    prisma,
+    execute: !dryRun,
+  });
+
   printDist("BEFORE (exam → count)", before);
 
-  const distinct = await prisma.$queryRaw<DistRow[]>`
-    SELECT DISTINCT exam FROM exam_questions
-    WHERE exam IS NOT NULL AND trim(exam) <> ''
-    ORDER BY exam
-  `;
-
-  const plan: { from: string; to: string; n: bigint }[] = [];
-  for (const { exam } of distinct) {
-    const to = normalizeExamQuestionExamForStorage(exam);
-    if (!to || to === exam) continue;
-    const [{ c }] = await prisma.$queryRaw<{ c: bigint }[]>`
-      SELECT COUNT(*)::bigint AS c FROM exam_questions WHERE exam = ${exam}
-    `;
-    if (c > 0n) plan.push({ from: exam, to, n: c });
-  }
-
-  const orderedPlan = orderExamQuestionExamRewritesForBackfill(plan);
-
-  console.log(`\nPlanned rewrites (${orderedPlan.length} source values, dependency-ordered):`);
-  for (const p of orderedPlan) {
+  console.log(`\nPlanned rewrites (${plan.length} source values, dependency-ordered):`);
+  for (const p of plan) {
     console.log(`  "${p.from}" → "${p.to}"  (${p.n.toString()} rows)`);
   }
 
-  let totalUpdated = 0;
-  if (!dryRun) {
-    for (const p of orderedPlan) {
-      const r = await prisma.examQuestion.updateMany({ where: { exam: p.from }, data: { exam: p.to } });
-      totalUpdated += r.count;
-    }
-  } else {
-    for (const p of orderedPlan) {
-      totalUpdated += Number(p.n);
-    }
-  }
+  console.log(`\n${dryRun ? "[dry-run] Would update" : "Updated"} row count: ${totalRowsTouched.toLocaleString()}`);
 
-  console.log(`\n${dryRun ? "[dry-run] Would update" : "Updated"} row count: ${totalUpdated.toLocaleString()}`);
-
-  const after = dryRun ? before : await examDistribution();
   printDist(dryRun ? "AFTER (unchanged in dry-run)" : "AFTER (exam → count)", after);
 
   if (process.argv.includes("--json")) {
-    const ser = (rows: CountRow[]) =>
+    const ser = (rows: { exam: string; c: bigint }[]) =>
       rows.map((r) => ({ exam: r.exam, count: r.c.toString() }));
     console.log(
       JSON.stringify(
@@ -117,8 +77,8 @@ async function main(): Promise<void> {
           dryRun,
           before: ser(before),
           after: ser(after),
-          plan: orderedPlan.map((p) => ({ from: p.from, to: p.to, count: p.n.toString() })),
-          totalUpdatedRows: totalUpdated,
+          plan: plan.map((p) => ({ from: p.from, to: p.to, count: p.n.toString() })),
+          totalUpdatedRows: totalRowsTouched,
         },
         null,
         2,

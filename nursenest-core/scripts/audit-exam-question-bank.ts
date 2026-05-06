@@ -21,6 +21,10 @@ import { PrismaClient } from "@prisma/client";
 import type { CountryCode } from "@prisma/client";
 import { buildGlobalExamContext } from "../src/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "../src/lib/exam-context/query-scope";
+import {
+  examKeyNormsForPathwayPool,
+  examQuestionExamNormInSql,
+} from "../src/lib/content-quality/exam-question-exam-normalization";
 import { databaseUrlDriftAuditPublic } from "../src/lib/db/database-url-drift-audit";
 import {
   EXAM_QUESTION_CAT_PIPELINE_ROW_SQL,
@@ -207,7 +211,7 @@ async function main(): Promise<void> {
         continue;
       }
       const { examIn, tierMatches } = examQuestionPoolWhereForContext(ctx);
-      const examLower = examIn.map((k) => k.toLowerCase());
+      const examNorms = examKeyNormsForPathwayPool(examIn);
       const tierLower = tierMatches.map((t) => t.toLowerCase());
       const reg = regionSql(ctx.country);
 
@@ -220,7 +224,7 @@ async function main(): Promise<void> {
           AND length(trim(coalesce(stem, ''))) >= 10
           AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
           AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
-          AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
+          AND (${examQuestionExamNormInSql(examNorms)})
           AND lower(coalesce(tier, '')) IN (${Prisma.join(tierLower)})
       `;
       const n = Number(row.n);
@@ -236,7 +240,7 @@ async function main(): Promise<void> {
         FROM exam_questions
         WHERE ${EXAM_QUESTION_CAT_PIPELINE_ROW_SQL}
           AND ${reg}
-          AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
+          AND (${examQuestionExamNormInSql(examNorms)})
           AND lower(coalesce(tier, '')) IN (${Prisma.join(tierLower)})
       `;
       const catN = Number(catRow.n);

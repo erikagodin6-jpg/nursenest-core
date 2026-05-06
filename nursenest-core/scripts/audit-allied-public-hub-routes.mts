@@ -1,6 +1,6 @@
 /**
- * Lists published Allied Health marketing hubs and verifies {@link buildExamPathwayPath}
- * resolves to regional URLs (`/us/allied/allied-health`, `/canada/allied/allied-health`).
+ * Lists published Allied Health marketing pathways and verifies {@link buildExamPathwayPath}
+ * resolves to the single global marketing hub (`/allied/allied-health`) for every registry row.
  *
  * Usage (from `nursenest-core/`):
  *   npx tsx scripts/audit-allied-public-hub-routes.mts
@@ -19,15 +19,10 @@ function main() {
     publishedForPublicSite: isPathwayPublishedForPublicSite(p.id),
   }));
   console.log(JSON.stringify({ count: rows.length, hubs: rows }, null, 2));
+  const expected = "/allied/allied-health";
   for (const row of rows) {
-    const ok =
-      row.country === "us"
-        ? row.hub === "/us/allied/allied-health"
-        : row.country === "canada"
-          ? row.hub === "/canada/allied/allied-health"
-          : false;
-    if (!ok) {
-      console.error("Unexpected allied hub path", row);
+    if (row.hub !== expected) {
+      console.error("Unexpected allied hub path (expected global hub)", { ...row, expected });
       process.exitCode = 1;
     }
   }

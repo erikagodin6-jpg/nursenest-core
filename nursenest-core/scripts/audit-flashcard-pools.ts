@@ -20,7 +20,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parse as parseDotenv } from "dotenv";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
+import {
+  examKeyNormsForPathwayPool,
+  examQuestionExamNormInSql,
+} from "../src/lib/content-quality/exam-question-exam-normalization";
 import { databaseUrlDriftAuditPublic } from "../src/lib/db/database-url-drift-audit";
 import {
   EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL,
@@ -115,12 +119,8 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
   console.log(`  Usable for flashcards                : ${fmt(usableTotal)}`);
   console.log(`  Excluded (ECG/video/no-stem/no-ans)  : ${fmt(totalPublished - usableTotal)}`);
 
-  // 3. Scoped by exam keys (case-insensitive lower comparison)
-  const examLower = examKeys.map((k) => k.toLowerCase());
-  // Build a literal IN list — safe because examLower is a static const array of known strings
-  const examInSql = examLower.map(() => "?").join(", ");
-  void examInSql; // constructed above for docs — use Prisma.sql for actual query below
-  const { Prisma } = await import("@prisma/client");
+  // 3. Scoped by exam keys (norm matches pathway keys: case + underscore/hyphen tolerant)
+  const examNorms = examKeyNormsForPathwayPool(examKeys);
   const scopedRow = await prisma.$queryRaw<CountRow[]>(
     Prisma.sql`
       SELECT COUNT(*)::bigint AS n FROM exam_questions
@@ -129,7 +129,7 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
         AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
         AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
         AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
-        AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
+        AND (${examQuestionExamNormInSql(examNorms)})
     `,
   );
   const scopedTotal = Number(scopedRow[0]?.n ?? 0);

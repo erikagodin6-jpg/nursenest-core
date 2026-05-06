@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import { DB_PUBLISHED, examQuestionTiersForUserTier } from "@/lib/entitlements/content-access-scope";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
+import { examKeyNormsForPathwayPool, examQuestionExamNormInSql } from "@/lib/content-quality/exam-question-exam-normalization";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -40,9 +41,10 @@ export function pathwayExamKeysSql(pathway: ExamPathwayDefinition | null): Prism
   if (!ctx) return Prisma.sql` AND FALSE`;
   const scoped = examQuestionPoolWhereForContext(ctx);
   const keys = [...new Set(scoped.examIn)];
+  const examNorms = examKeyNormsForPathwayPool(keys);
   const tiers = [...new Set(scoped.tierMatches.map((tier) => tier.toLowerCase()))];
-  if (keys.length === 0 || tiers.length === 0) return Prisma.sql` AND FALSE`;
-  return Prisma.sql` AND exam IN (${Prisma.join(keys)}) AND lower(coalesce(tier, '')) IN (${Prisma.join(tiers)})`;
+  if (examNorms.length === 0 || tiers.length === 0) return Prisma.sql` AND FALSE`;
+  return Prisma.sql` AND (${examQuestionExamNormInSql(examNorms)}) AND lower(coalesce(tier, '')) IN (${Prisma.join(tiers)})`;
 }
 
 export function topicEqualsSql(topic: string): Prisma.Sql {

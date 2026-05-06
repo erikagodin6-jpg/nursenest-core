@@ -104,7 +104,11 @@ export type ProfessionChoice = {
  */
 export const PROFESSION_CHOICES: ProfessionChoice[] = [
   { id: "rn", label: "RN", description: "Registered Nurse" },
-  { id: "rpn", label: "RPN / LPN", description: "Practical Nurse" },
+  {
+    id: "rpn",
+    label: "PN / practical nurse",
+    description: "US: NCLEX-PN · Canada: REx-PN — pick your country next.",
+  },
   { id: "np", label: "NP", description: "Nurse Practitioner" },
   { id: "allied", label: "Allied Health", description: "Other nursing roles" },
 ];
