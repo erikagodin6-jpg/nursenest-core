@@ -115,3 +115,6 @@ Release / mobile smoke: unchanged unless routes touched (they are not in this ph
 - [x] No unverifiable clinical advice in contracts.
 - [x] Deterministic adaptive fallback preserved by design docs + types.
 - [x] Low-noise telemetry via severity + aggregation guidance.
+
+**See also:** [Phase 13 strategic intelligence](./phase-13-strategic-intelligence.md) — benchmarking, workforce readiness, federation, privacy.
+

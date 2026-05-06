@@ -56,6 +56,7 @@
     "test:unit:phase10-platform": "node --import tsx --test src/lib/platform/phase10/phase10-platform.contract.test.ts",
     "test:unit:phase11-developer-platform": "node --import tsx --test src/lib/platform/phase11/phase11-developer-platform.contract.test.ts",
     "test:unit:phase12-platform-intelligence": "node --import tsx --test src/lib/platform/phase12/phase12-platform-intelligence.contract.test.ts",
+    "test:unit:phase13-strategic-intelligence": "node --import tsx --test src/lib/platform/phase13/phase13-strategic-intelligence.contract.test.ts",
     "test:e2e:tier-matrix": "npx playwright test -c playwright.tier-matrix.config.ts",
     "test:e2e:clinical-scenarios": "npx playwright test -c playwright.clinical-scenarios.config.ts",
     "build:lesson-indexes": "node scripts/build-normalized-lesson-indexes.mjs",
