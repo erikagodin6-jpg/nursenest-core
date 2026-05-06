@@ -7,33 +7,14 @@
  *   npx tsx scripts/normalize-exam-question-exam-values.ts --dry-run
  *   npx tsx scripts/normalize-exam-question-exam-values.ts
  *   npx tsx scripts/normalize-exam-question-exam-values.ts --dry-run --json
+ *
+ * Prefer `scripts/repair-exam-question-exam-keys.ts` for default-dry-run UX (`--apply` to write).
  */
 
 import { requireScriptDatabaseUrl } from "./bootstrap-env.mjs";
-import {
-  normalizeExamQuestionExamForStorage,
-  orderExamQuestionExamRewritesForBackfill,
-} from "../src/lib/content-quality/exam-question-exam-normalization";
+import { runExamQuestionExamValueRepair } from "../src/lib/content-quality/run-exam-question-exam-value-repair";
 
-type DistRow = { exam: string };
 type CountRow = { exam: string; c: bigint };
-
-type PrismaClientLike = {
-  $queryRaw<T = unknown>(strings: TemplateStringsArray, ...values: unknown[]): Promise<T>;
-  examQuestion: {
-    updateMany(args: { where: { exam: string }; data: { exam: string } }): Promise<{ count: number }>;
-  };
-  $disconnect(): Promise<void>;
-};
-
-async function examDistribution(prisma: PrismaClientLike): Promise<CountRow[]> {
-  return prisma.$queryRaw<CountRow[]>`
-    SELECT exam, COUNT(*)::bigint AS c
-    FROM exam_questions
-    GROUP BY exam
-    ORDER BY c DESC
-  `;
-}
 
 function printDist(label: string, rows: CountRow[]): void {
   console.log(`\n${label}`);
@@ -54,47 +35,20 @@ async function main(): Promise<void> {
   const prisma = new PrismaClient();
 
   try {
-    const before = await examDistribution(prisma);
+    const { plan, totalRowsTouched, before, after } = await runExamQuestionExamValueRepair({
+      prisma,
+      execute: !dryRun,
+    });
+
     printDist("BEFORE (exam → count)", before);
 
-    const distinct = await prisma.$queryRaw<DistRow[]>`
-    SELECT DISTINCT exam FROM exam_questions
-    WHERE exam IS NOT NULL AND trim(exam) <> ''
-    ORDER BY exam
-  `;
-
-    const plan: { from: string; to: string; n: bigint }[] = [];
-    for (const { exam } of distinct) {
-      const to = normalizeExamQuestionExamForStorage(exam);
-      if (!to || to === exam) continue;
-      const [{ c }] = await prisma.$queryRaw<{ c: bigint }[]>`
-        SELECT COUNT(*)::bigint AS c FROM exam_questions WHERE exam = ${exam}
-      `;
-      if (c > 0n) plan.push({ from: exam, to, n: c });
-    }
-
-    const orderedPlan = orderExamQuestionExamRewritesForBackfill(plan);
-
-    console.log(`\nPlanned rewrites (${orderedPlan.length} source values, dependency-ordered):`);
-    for (const p of orderedPlan) {
+    console.log(`\nPlanned rewrites (${plan.length} source values, dependency-ordered):`);
+    for (const p of plan) {
       console.log(`  "${p.from}" → "${p.to}"  (${p.n.toString()} rows)`);
     }
 
-    let totalUpdated = 0;
-    if (!dryRun) {
-      for (const p of orderedPlan) {
-        const r = await prisma.examQuestion.updateMany({ where: { exam: p.from }, data: { exam: p.to } });
-        totalUpdated += r.count;
-      }
-    } else {
-      for (const p of orderedPlan) {
-        totalUpdated += Number(p.n);
-      }
-    }
+    console.log(`\n${dryRun ? "[dry-run] Would update" : "Updated"} row count: ${totalRowsTouched.toLocaleString()}`);
 
-    console.log(`\n${dryRun ? "[dry-run] Would update" : "Updated"} row count: ${totalUpdated.toLocaleString()}`);
-
-    const after = dryRun ? before : await examDistribution(prisma);
     printDist(dryRun ? "AFTER (unchanged in dry-run)" : "AFTER (exam → count)", after);
 
     if (process.argv.includes("--json")) {
@@ -106,8 +60,8 @@ async function main(): Promise<void> {
             dryRun,
             before: ser(before),
             after: ser(after),
-            plan: orderedPlan.map((p) => ({ from: p.from, to: p.to, count: p.n.toString() })),
-            totalUpdatedRows: totalUpdated,
+            plan: plan.map((p) => ({ from: p.from, to: p.to, count: p.n.toString() })),
+            totalUpdatedRows: totalRowsTouched,
           },
           null,
           2,

@@ -36,10 +36,8 @@ import { loadExamQuestionRowsForFlashcardPool } from "@/lib/flashcards/flashcard
 import { firstHttpsImageUrlFromExamQuestionImages } from "@/lib/study-question-pool/exam-question-image-url";
 import { getStudyQuestionPoolForPathway } from "@/lib/study-question-pool/get-study-question-pool-for-pathway";
 import { normalizePathwayIdForStudySurfaces } from "@/lib/study-question-pool/study-pathway-normalize";
-import {
-  getCanonicalExamQuestionWhere,
-  type ExamQuestionLite,
-} from "@/lib/study-question-pool/canonical-exam-question-where";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
 
 export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -488,40 +486,23 @@ export async function buildFlashcardCustomSession(
     const useExamForInventory =
       Boolean(pathwayScopeId) && !lessonId && !includeCards && !needsProgress && !persistenceFiltersActive;
 
-    let examInventoryRows: ExamQuestionLite[] = [];
-    if (useExamForInventory) {
-      const canonicalWhere = getCanonicalExamQuestionWhere(entitlement);
-      examInventoryRows = await prisma.examQuestion.findMany({
-        where: canonicalWhere,
-        select: { id: true, bodySystem: true, topic: true },
-        take: 8000,
-        orderBy: { id: "asc" },
-      });
-      console.log("FLASHCARD INVENTORY COUNT:", examInventoryRows.length);
-      if (examInventoryRows.length === 0) {
-        throw new Error("CRITICAL: ExamQuestion pool is empty — system misconfigured");
+    const examInventoryCounts: Record<string, number> = {};
+    let examTotal = 0;
+
+    if (useExamForInventory && pathwayScopeId) {
+      const pathway = getExamPathwayById(pathwayScopeId);
+      if (pathway) {
+        const inv = await loadFlashcardsExamInventoryForPathway({ userId, entitlement, pathway });
+        if (inv.ok) {
+          examTotal = inv.total;
+          Object.assign(examInventoryCounts, inv.countsByBuilderId);
+        } else if (inv.code === "CRITICAL_EMPTY_POOL") {
+          throw new Error(inv.message);
+        }
       }
     }
 
-    const examTotal = examInventoryRows.length;
     const useEffectiveTotalForSummary = useExamForInventory && examTotal > 0;
-
-    // Build category counts from the canonical inventory rows using the same
-    // resolveBuilderCategoryId logic used for DB flashcard rows.
-    const examInventoryCounts: Record<string, number> = {};
-    for (const q of examInventoryRows) {
-      const categoryId = resolveBuilderCategoryId({
-        label: q.topic?.trim() || q.bodySystem?.trim() || "General",
-        topicCode: null,
-        pathwayId: pathwayScopeId,
-        deckTitle: null,
-        front: "",
-        back: "",
-        examBodySystem: q.bodySystem,
-        examTopic: q.topic,
-      });
-      examInventoryCounts[categoryId] = (examInventoryCounts[categoryId] ?? 0) + 1;
-    }
 
     const selectedCategorySum = selectedCategories.reduce((s, id) => s + (examInventoryCounts[id] ?? 0), 0);
     const matchingCardsForSummary = includeCards

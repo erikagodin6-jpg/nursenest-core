@@ -25,6 +25,11 @@ test("support staff cannot access super-only routes", () => {
   assert.equal(isPathAllowedForStaffTier("support", "/api/admin/demo-users"), false);
 });
 
+test("learners without a staff tier are not granted admin API paths (gate uses staff DB session)", () => {
+  assert.equal(adminRouteGateDecision(null, "/api/admin/marketing-public-content").allow, false);
+  assert.equal(adminRouteGateDecision(null, "/admin/content/page-copy/preview").allow, false);
+});
+
 test("super staff can access demo user routes", () => {
   assert.equal(isPathAllowedForStaffTier("super", "/admin/demo-users"), true);
   assert.equal(isPathAllowedForStaffTier("super", "/api/admin/demo-users"), true);
@@ -126,6 +131,11 @@ test("support and content staff can access internal courses admin surfaces", () 
 test("support staff can access page copy editor and marketing public content API", () => {
   assert.equal(isPathAllowedForStaffTier("support", "/admin/content/page-copy"), true);
   assert.equal(isPathAllowedForStaffTier("support", "/api/admin/marketing-public-content"), true);
+});
+
+test("support and content staff can access staged page-copy preview under page-copy prefix", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/content/page-copy/preview"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/content/page-copy/preview"), true);
 });
 
 test("content staff can access page copy editor (not support-only)", () => {

@@ -3,6 +3,7 @@
  * Does not touch CAT, grading, or entitlements — reporting only.
  */
 import { CountryCode, Prisma } from "@prisma/client";
+import { examKeyNormsForPathwayPool, examQuestionExamNormInSql } from "@/lib/content-quality/exam-question-exam-normalization";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
@@ -77,6 +78,8 @@ function countrySql(country: CountryCode): Prisma.Sql {
 async function loadAggregatedGroups(pathway: ExamPathwayDefinition): Promise<AggRow[]> {
   const keys = [...new Set(pathway.contentExamKeys)];
   if (keys.length === 0) return [];
+  const examNorms = examKeyNormsForPathwayPool(keys);
+  if (examNorms.length === 0) return [];
   const tiers = examQuestionTierStringsForProfileTier(pathway.stripeTier);
   if (tiers.length === 0) return [];
 
@@ -84,7 +87,7 @@ async function loadAggregatedGroups(pathway: ExamPathwayDefinition): Promise<Agg
     SELECT topic, subtopic, body_system, exam, nclex_client_needs_category, COUNT(*)::bigint AS cnt
     FROM exam_questions
     WHERE status = ${DB_PUBLISHED}
-      AND exam IN (${Prisma.join(keys)})
+      AND (${examQuestionExamNormInSql(examNorms)})
       AND tier IN (${Prisma.join(tiers)})
       ${regionSql(pathway.countryCode)}
       ${countrySql(pathway.countryCode)}
@@ -108,6 +111,8 @@ async function loadQuality(pathway: ExamPathwayDefinition): Promise<{
   };
   const keys = [...new Set(pathway.contentExamKeys)];
   if (keys.length === 0) return empty;
+  const examNorms = examKeyNormsForPathwayPool(keys);
+  if (examNorms.length === 0) return empty;
   const tiers = examQuestionTierStringsForProfileTier(pathway.stripeTier);
   if (tiers.length === 0) return empty;
 
@@ -142,7 +147,7 @@ async function loadQuality(pathway: ExamPathwayDefinition): Promise<{
       )::bigint AS acceptable
     FROM exam_questions
     WHERE status = ${DB_PUBLISHED}
-      AND exam IN (${Prisma.join(keys)})
+      AND (${examQuestionExamNormInSql(examNorms)})
       AND tier IN (${Prisma.join(tiers)})
       ${regionSql(pathway.countryCode)}
       ${countrySql(pathway.countryCode)}

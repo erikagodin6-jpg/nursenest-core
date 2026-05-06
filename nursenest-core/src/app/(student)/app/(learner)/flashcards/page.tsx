@@ -22,10 +22,9 @@ import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-rout
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
-import { buildFlashcardCustomSession } from "@/lib/flashcards/build-flashcard-custom-session";
 import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { flashcardLessonVirtualDiagnosticsForPathway } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
-import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
+import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
@@ -225,38 +224,27 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   let initialHub: FlashcardsHubServerPayload | null = null;
   if (userId && isDatabaseUrlConfigured() && entitlement.hasAccess) {
-    const inv = await buildFlashcardCustomSession({
-      userId,
-      entitlement,
-      pathwayId: scopedPathwayId,
-      selectedCategories: [],
-      stateIds: [],
-      weakOnly: false,
-      incorrectOnly: false,
-      starredOnly: false,
-      savedOnly: false,
-      notesOnly: false,
-      revisitOnly: false,
-      notStudiedOnly: false,
-      recentStudiedOnly: false,
-      recentDays: 7,
-      shuffle: false,
-      mode: "mixed",
-      limit: 20,
-      includeCards: false,
-      sourceKind: parseCustomSessionSourceKind("all"),
-      sessionSeed: null,
-      cardLimitRaw: "20",
-    });
-    if (inv.ok) {
-      initialHub = {
-        categoryOptions: inv.categoryOptions,
-        matchingTotal: inv.summary.matchingCards,
-        lessonVirtualDiagnostics:
-          pathwayLessonFlashDiagnostics ?? inv.summary.lessonVirtualDiagnostics ?? null,
-      };
+    if (catalogPathway) {
+      const inv = await loadFlashcardsExamInventoryForPathway({
+        userId,
+        entitlement,
+        pathway: catalogPathway,
+      });
+      if (inv.ok) {
+        initialHub = {
+          categoryOptions: inv.categoryOptions,
+          matchingTotal: inv.total,
+          lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
+        };
+      } else {
+        /** Pathway skeleton matches lessons hub even when inventory query fails — avoids empty hub + false client errors. */
+        initialHub = {
+          categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+          matchingTotal: 0,
+          lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
+        };
+      }
     } else {
-      /** Pathway skeleton matches lessons hub even when inventory query fails — avoids empty hub + false client errors. */
       initialHub = {
         categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
         matchingTotal: 0,

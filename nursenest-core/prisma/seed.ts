@@ -5,6 +5,7 @@ assertDatabaseUrlPresentOrExit("prisma/seed.ts requires DATABASE_URL.");
 import { hash } from "bcryptjs";
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "../scripts/lib/prisma-script-client";
+import { canonicalExamQuestionExamForDbWrite } from "../src/lib/content-quality/exam-question-exam-normalization";
 
 async function main() {
   const fundamentals = await prisma.category.upsert({
@@ -65,51 +66,56 @@ async function main() {
     skipDuplicates: true,
   });
 
+  const examQuestionSeedRows = [
+    {
+      stem: "A client with dehydration has BP 88/54. Which action is priority?",
+      rationale: "Restore intravascular volume promptly and reassess perfusion.",
+      options: ["Start isotonic fluids", "Encourage oral fluids only", "Restrict sodium", "Delay intervention"],
+      correctAnswer: ["Start isotonic fluids"],
+      questionType: "multiple_choice",
+      countryCode: "CA",
+      tier: "rpn",
+      status: published,
+      exam: "NCLEX-PN",
+      topic: fundamentals.name,
+      careerType: "nursing",
+      regionScope: "BOTH",
+    },
+    {
+      stem: "Select all findings consistent with hypoglycemia.",
+      rationale: "Sweating, tremor, confusion, and tachycardia are typical signs.",
+      options: ["Diaphoresis", "Bradycardia", "Confusion", "Tremor"],
+      correctAnswer: ["Diaphoresis", "Confusion", "Tremor"],
+      questionType: "sata",
+      countryCode: "US",
+      tier: "rn",
+      status: published,
+      exam: "NCLEX-RN",
+      topic: fundamentals.name,
+      careerType: "nursing",
+      regionScope: "BOTH",
+    },
+    {
+      stem: "A CA hospital unit is short-staffed. Which duty aligns with RN scope first?",
+      rationale: "Prioritize safe patient assignments and escalate staffing per policy.",
+      options: ["Accept all additional patients alone", "Delegate assessments to unlicensed staff without supervision", "Report unsafe staffing and stabilize current assignments", "Leave the unit"],
+      correctAnswer: ["Report unsafe staffing and stabilize current assignments"],
+      questionType: "multiple_choice",
+      countryCode: "CA",
+      tier: "rn",
+      status: published,
+      exam: "NCLEX-RN",
+      topic: fundamentals.name,
+      careerType: "nursing",
+      regionScope: "BOTH",
+    },
+  ] as const;
+
   await prisma.examQuestion.createMany({
-    data: [
-      {
-        stem: "A client with dehydration has BP 88/54. Which action is priority?",
-        rationale: "Restore intravascular volume promptly and reassess perfusion.",
-        options: ["Start isotonic fluids", "Encourage oral fluids only", "Restrict sodium", "Delay intervention"],
-        correctAnswer: ["Start isotonic fluids"],
-        questionType: "multiple_choice",
-        countryCode: "CA",
-        tier: "rpn",
-        status: published,
-        exam: "NCLEX-PN",
-        topic: fundamentals.name,
-        careerType: "nursing",
-        regionScope: "BOTH",
-      },
-      {
-        stem: "Select all findings consistent with hypoglycemia.",
-        rationale: "Sweating, tremor, confusion, and tachycardia are typical signs.",
-        options: ["Diaphoresis", "Bradycardia", "Confusion", "Tremor"],
-        correctAnswer: ["Diaphoresis", "Confusion", "Tremor"],
-        questionType: "sata",
-        countryCode: "US",
-        tier: "rn",
-        status: published,
-        exam: "NCLEX-RN",
-        topic: fundamentals.name,
-        careerType: "nursing",
-        regionScope: "BOTH",
-      },
-      {
-        stem: "A CA hospital unit is short-staffed. Which duty aligns with RN scope first?",
-        rationale: "Prioritize safe patient assignments and escalate staffing per policy.",
-        options: ["Accept all additional patients alone", "Delegate assessments to unlicensed staff without supervision", "Report unsafe staffing and stabilize current assignments", "Leave the unit"],
-        correctAnswer: ["Report unsafe staffing and stabilize current assignments"],
-        questionType: "multiple_choice",
-        countryCode: "CA",
-        tier: "rn",
-        status: published,
-        exam: "NCLEX-RN",
-        topic: fundamentals.name,
-        careerType: "nursing",
-        regionScope: "BOTH",
-      },
-    ],
+    data: examQuestionSeedRows.map((row) => ({
+      ...row,
+      exam: canonicalExamQuestionExamForDbWrite(row.exam),
+    })),
     skipDuplicates: true,
   });
 

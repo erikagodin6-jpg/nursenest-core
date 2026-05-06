@@ -6,6 +6,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
+import { examKeyNormsForPathwayPool, examQuestionExamNormInSql } from "@/lib/content-quality/exam-question-exam-normalization";
 import {
   GENERAL_STUDY_BANK_MODULE_SCOPE_SQL,
   NON_ECG_GENERAL_BANK_SQL,
@@ -48,8 +49,9 @@ export function discoveryExamContextScopeSql(ctx: GlobalExamContext | null): Pri
   if (!ctx) return Prisma.empty;
   const scoped = examQuestionPoolWhereForContext(ctx);
   if (scoped.examIn.length === 0 || scoped.tierMatches.length === 0) return Prisma.sql` AND FALSE`;
+  const examNorms = examKeyNormsForPathwayPool(scoped.examIn);
   return Prisma.sql`
-    AND exam IN (${Prisma.join(scoped.examIn)})
+    AND (${examQuestionExamNormInSql(examNorms)})
     AND lower(coalesce(tier, '')) IN (${Prisma.join(scoped.tierMatches.map((tier) => tier.toLowerCase()))})
   `;
 }
@@ -74,8 +76,9 @@ export function discoveryExamContextScopeForFlashcardFallback(ctx: GlobalExamCon
     // No content keys configured — skip exam scope entirely (let entitlement WHERE do the scoping).
     return { sql: Prisma.empty, hasScopeFilter: false };
   }
+  const examNorms = examKeyNormsForPathwayPool(scoped.examIn);
   const sql = Prisma.sql`
-    AND exam IN (${Prisma.join(scoped.examIn)})
+    AND (${examQuestionExamNormInSql(examNorms)})
     AND lower(coalesce(tier, '')) IN (${Prisma.join(scoped.tierMatches.map((t) => t.toLowerCase()))})
   `;
   return { sql, hasScopeFilter: true };

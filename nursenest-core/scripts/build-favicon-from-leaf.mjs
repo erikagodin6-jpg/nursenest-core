@@ -1,32 +1,82 @@
 /**
- * Rasterize `public/logos/arctic-frost-leaf.svg` into App Router metadata icons under `src/app/`
- * (`favicon.ico`, `apple-icon.png`). SVG tab icon is `src/app/icon.svg` (kept in sync by hand;
- * this script uses the same source leaf for rasters).
+ * Rasterize the canonical clinical-light leaf PNG (`public/icon.png`) into public favicon/PWA icons.
+ * App Router file metadata under `src/app/` is intentionally unused so `/public/*` is the single source.
  *
- * Run from package root: `npm run generate:favicon` (see package.json).
+ * Outputs:
+ * - `public/favicon.ico` (16 + 32 PNG frames)
+ * - `public/favicon-v2.ico` (16 + 32 PNG frames, optional cache-bust filename)
+ * - `public/apple-touch-icon.png` (180)
+ * - `public/icon-192.png`, `public/icon-512.png` (PWA / Android)
+ *
+ * Run from package root: `npm run icons:generate`
  */
-import { readFile, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import pngToIco from "png-to-ico";
 import sharp from "sharp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const pkgRoot = path.resolve(__dirname, "..");
-const svgPath = path.join(pkgRoot, "public/logos/arctic-frost-leaf.svg");
-const appDir = path.join(pkgRoot, "src/app");
+const sourcePngPath = path.join(pkgRoot, "public/icon.png");
+const publicDir = path.join(pkgRoot, "public");
+
+const WHITE = { r: 255, g: 255, b: 255, alpha: 1 };
+
+function icoFromPngs(images) {
+  const count = images.length;
+  const headerSize = 6 + 16 * count;
+  const total = headerSize + images.reduce((n, img) => n + img.data.length, 0);
+  const out = Buffer.alloc(total);
+  out.writeUInt16LE(0, 0);
+  out.writeUInt16LE(1, 2);
+  out.writeUInt16LE(count, 4);
+  let dataOffset = headerSize;
+  images.forEach((img, i) => {
+    const entry = 6 + i * 16;
+    out.writeUInt8(img.size >= 256 ? 0 : img.size, entry);
+    out.writeUInt8(img.size >= 256 ? 0 : img.size, entry + 1);
+    out.writeUInt8(0, entry + 2);
+    out.writeUInt8(0, entry + 3);
+    out.writeUInt16LE(1, entry + 4);
+    out.writeUInt16LE(32, entry + 6);
+    out.writeUInt32LE(img.data.length, entry + 8);
+    out.writeUInt32LE(dataOffset, entry + 12);
+    img.data.copy(out, dataOffset);
+    dataOffset += img.data.length;
+  });
+  return out;
+}
+
+async function rasterSquare(size) {
+  return sharp(sourcePngPath)
+    .resize(size, size, {
+      fit: "contain",
+      position: "centre",
+      background: WHITE,
+    })
+    .png()
+    .toBuffer();
+}
 
 async function main() {
-  const svg = await readFile(svgPath);
-  const png180 = await sharp(svg).resize(180, 180).png().toBuffer();
-  const png32 = await sharp(svg).resize(32, 32).png().toBuffer();
-  const png16 = await sharp(svg).resize(16, 16).png().toBuffer();
+  const png180 = await rasterSquare(180);
+  const png192 = await rasterSquare(192);
+  const png512 = await rasterSquare(512);
+  const png32 = await rasterSquare(32);
+  const png16 = await rasterSquare(16);
 
-  const ico = await pngToIco([png32, png16]);
-  await writeFile(path.join(appDir, "apple-icon.png"), png180);
-  await writeFile(path.join(appDir, "favicon.ico"), ico);
+  const ico = icoFromPngs([{ size: 16, data: png16 }, { size: 32, data: png32 }]);
+
+  await writeFile(path.join(publicDir, "favicon.ico"), ico);
+  await writeFile(path.join(publicDir, "favicon-v2.ico"), ico);
+  await writeFile(path.join(publicDir, "apple-touch-icon.png"), png180);
+  await writeFile(path.join(publicDir, "icon-192.png"), png192);
+  await writeFile(path.join(publicDir, "icon-512.png"), png512);
+
   // eslint-disable-next-line no-console
-  console.log("Wrote src/app/favicon.ico, src/app/apple-icon.png from public/logos/arctic-frost-leaf.svg");
+  console.log(
+    "Wrote public/favicon.ico, favicon-v2.ico, apple-touch-icon.png, icon-192.png, icon-512.png from public/icon.png",
+  );
 }
 
 main().catch((e) => {

@@ -9,8 +9,9 @@ export type MobileLayoutHealthOptions = {
 };
 
 /**
- * Guards against horizontal scroll and clipped full-width layouts on narrow viewports.
- * Prefer this over raw `overflow-x: hidden` in components — catches wide children.
+ * Guards against **document-level** horizontal bleed using measured `scrollWidth` vs `viewport`
+ * (not `overflow-x: hidden` on `body`, which can clip without fixing root cause). Prefer inner
+ * `overflow-x-auto` for tables/code. Inner panels may scroll while `document.excess` stays ≤ slop.
  */
 export async function assertMobileHorizontalLayoutHealth(
   page: Page,

@@ -4,7 +4,7 @@
  * TrialOnboardingFlow — 4-step onboarding wizard.
  *
  * Steps:
- *   1. Exam goal (RN / RPN / NP / Allied)
+ *   1. Exam goal (RN / PN / NP / Allied) — PN row copy is country-specific via {@link examGoalRowsForCountry}.
  *   2. Exam timeline (date picker or "not scheduled")
  *   3. Study style preference (structured plan / questions / weak areas)
  *   4. CTA — "Your Study Plan is Ready"

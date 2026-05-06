@@ -193,3 +193,97 @@ export function parseFlashcardCustomSessionResponse(
 
   return { ok: true, summary, categoryOptions };
 }
+
+/**
+ * Validates GET /api/flashcards/inventory JSON (pathway-scoped pool counts).
+ * Shapes a minimal {@link FlashcardCustomSessionSummary} so the hub can reuse the same state wiring.
+ */
+export function parseFlashcardInventoryResponse(
+  resOk: boolean,
+  json: unknown,
+): ParsedCustomSessionSuccess | ParsedCustomSessionFailure {
+  if (!resOk) {
+    const msg =
+      json && typeof json === "object"
+        ? typeof (json as { message?: unknown }).message === "string"
+          ? ((json as { message: string }).message as string)
+          : typeof (json as { error?: unknown }).error === "string"
+            ? ((json as { error: string }).error as string)
+            : typeof (json as { code?: unknown }).code === "string"
+              ? ((json as { code: string }).code as string)
+              : "Request failed"
+        : "Request failed";
+    return { ok: false, message: msg };
+  }
+
+  if (json == null || typeof json !== "object") {
+    return { ok: false, message: "Invalid response" };
+  }
+
+  const o = json as Record<string, unknown>;
+  if (o.success !== true) {
+    const msg =
+      typeof o.message === "string"
+        ? o.message
+        : typeof o.error === "string"
+          ? o.error
+          : "Inventory failed";
+    return { ok: false, message: msg };
+  }
+
+  if ("categoryOptions" in o && o.categoryOptions != null && !Array.isArray(o.categoryOptions)) {
+    return { ok: false, message: "Invalid response shape" };
+  }
+
+  const rawOptions = Array.isArray(o.categoryOptions) ? o.categoryOptions : [];
+  const categoryOptions: BuilderCategoryOption[] = [];
+  for (const row of rawOptions) {
+    if (!row || typeof row !== "object") continue;
+    const r = row as Record<string, unknown>;
+    const id = typeof r.id === "string" ? r.id.trim() : "";
+    const title = typeof r.title === "string" ? r.title : "";
+    const rawCount = r.count;
+    const parsedCount =
+      typeof rawCount === "number" && Number.isFinite(rawCount)
+        ? rawCount
+        : typeof rawCount === "string" && rawCount.trim()
+          ? Number(rawCount)
+          : NaN;
+    const count = Number.isFinite(parsedCount) ? Math.max(0, Math.floor(parsedCount)) : 0;
+    if (!id) continue;
+    categoryOptions.push({
+      id,
+      title,
+      description: typeof r.description === "string" ? r.description : undefined,
+      count,
+    });
+  }
+
+  const rawTotal = o.total;
+  const total =
+    typeof rawTotal === "number" && Number.isFinite(rawTotal)
+      ? Math.max(0, Math.floor(rawTotal))
+      : categoryOptions.reduce((s, c) => s + c.count, 0);
+
+  const summary: FlashcardCustomSessionSummary = {
+    pathwayId: null,
+    topicCode: null,
+    lessonId: null,
+    selectedCategories: [],
+    matchingCards: total,
+    returnedCards: 0,
+    mode: "mixed",
+    shuffle: false,
+    weakOnly: false,
+    incorrectOnly: false,
+    starredOnly: false,
+    savedOnly: false,
+    notesOnly: false,
+    revisitOnly: false,
+    notStudiedOnly: false,
+    cardLimit: "20",
+    lessonVirtualDiagnostics: undefined,
+  };
+
+  return { ok: true, summary, categoryOptions };
+}

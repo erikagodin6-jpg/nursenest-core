@@ -31,6 +31,15 @@ describe("stripe webhook policy (static)", () => {
     assert.ok(!route.includes("constructEvent(body, signature"), "use shared verify helper");
   });
 
+  it("apply-stripe-webhook-event uses shared getStripeClient (no stale notification-only helper)", () => {
+    const applySrc = readFileSync(join(nursenestCoreRoot, "src", "lib", "stripe", "apply-stripe-webhook-event.ts"), "utf8");
+    assert.match(applySrc, /import\s*\{\s*getStripeClient\s*\}\s*from\s*["']@\/lib\/stripe\/stripe-client["']/);
+    assert.ok(
+      !applySrc.includes("getStripeClientForNotification"),
+      "removed/renamed helper must not reappear — use getStripeClient() for SMS/email notify paths",
+    );
+  });
+
   it("handler module covers allowlisted event types (keep in sync with stripe-webhook-event-policy)", () => {
     const applySrc = readFileSync(join(nursenestCoreRoot, "src", "lib", "stripe", "apply-stripe-webhook-event.ts"), "utf8");
     const policy = readFileSync(

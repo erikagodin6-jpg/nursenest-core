@@ -14,6 +14,7 @@ import {
   difficultyLabelToInt,
   examCodeToTier,
 } from "./pipeline-hashes";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 
 // ---------------------------------------------------------------------------
 // AI output schema
@@ -174,7 +175,7 @@ function normalizeQuestion(
 
   return {
     tier,
-    exam: resolvedExam,
+    exam: canonicalExamQuestionExamForDbWrite(String(resolvedExam)),
     questionType: item.questionType,
     status: "draft",
     stem: item.stem,

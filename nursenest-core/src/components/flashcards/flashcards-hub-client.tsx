@@ -16,7 +16,10 @@ import {
   type CanonicalBodySystemId,
 } from "@/lib/learner-study-hub/body-system-data";
 import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
-import { parseFlashcardCustomSessionResponse } from "@/lib/flashcards/flashcard-custom-session-response";
+import {
+  parseFlashcardCustomSessionResponse,
+  parseFlashcardInventoryResponse,
+} from "@/lib/flashcards/flashcard-custom-session-response";
 import {
   countSavedStudyItems,
   getStudyItemIdsMatchingFilters,
@@ -174,18 +177,22 @@ export function FlashcardsHubClient({
 
   const refreshCategories = useCallback(async () => {
     setLoadError(null);
+    const needsFilteredPool =
+      weakOnly || incorrectOnly || notStudiedOnly || starredOnly;
+
     try {
-      const allIds = builderCategoriesRef.current.map((c) => c.id);
-      const allCanon = CANONICAL_STUDY_CATEGORIES.length;
-      const canonSel = selectedCanonicalIds;
-      const resolved =
-        canonSel.length === 0 || canonSel.length >= allCanon
-          ? []
-          : builderCategoryIdsForCanonicalSelection(
-              scopedPathwayId,
-              builderCategoriesRef.current,
-              new Set(canonSel as CanonicalBodySystemId[]),
-            );
+      if (needsFilteredPool) {
+        const allIds = builderCategoriesRef.current.map((c) => c.id);
+        const allCanon = CANONICAL_STUDY_CATEGORIES.length;
+        const canonSel = selectedCanonicalIds;
+        const resolved =
+          canonSel.length === 0 || canonSel.length >= allCanon
+            ? []
+            : builderCategoryIdsForCanonicalSelection(
+                scopedPathwayId,
+                builderCategoriesRef.current,
+                new Set(canonSel as CanonicalBodySystemId[]),
+              );
       const qs = buildCustomSessionQuery({
         pathwayId: scopedPathwayId,
         cardLimit,
@@ -200,7 +207,11 @@ export function FlashcardsHubClient({
         alliedProfession: apForQuery || null,
         hubTopicSlug,
       });
-      const res = await fetch(`/api/flashcards/custom-session?${qs}`, { credentials: "include" });
+      const progressFiltersActive = weakOnly || incorrectOnly || starredOnly || notStudiedOnly;
+      const invUrl = `/api/flashcards/inventory?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
+      const sessionUrl = `/api/flashcards/custom-session?${qs}`;
+      const fetchUrl = progressFiltersActive ? sessionUrl : invUrl;
+      const res = await fetch(fetchUrl, { credentials: "include" });
       let json: unknown;
       try {
         json = await res.json();
@@ -208,7 +219,7 @@ export function FlashcardsHubClient({
         const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
         setLoadError(
           process.env.NODE_ENV === "development"
-            ? `${base} (pathwayId=${scopedPathwayId}, url=/api/flashcards/custom-session)`
+            ? `${base} (pathwayId=${scopedPathwayId}, url=${fetchUrl})`
             : base,
         );
         setBuilderCategories([]);
@@ -216,12 +227,14 @@ export function FlashcardsHubClient({
         setLessonVirtualDiagnostics(null);
         return;
       }
-      const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
+      const parsed = progressFiltersActive
+        ? parseFlashcardCustomSessionResponse(res.ok, json)
+        : parseFlashcardInventoryResponse(res.ok, json);
       if (!parsed.ok) {
         const base = parsed.message.trim() ? parsed.message : "Could not load flashcard topics.";
         setLoadError(
           process.env.NODE_ENV === "development"
-            ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status})`
+            ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status}, url=${fetchUrl})`
             : base,
         );
         setBuilderCategories([]);
@@ -230,26 +243,88 @@ export function FlashcardsHubClient({
       }
       setBuilderCategories(parsed.categoryOptions);
       setMatchingCards(parsed.summary?.matchingCards ?? 0);
-      setLessonVirtualDiagnostics(parsed.summary?.lessonVirtualDiagnostics ?? null);
-      if (process.env.NODE_ENV === "development") {
-        const totalCards = parsed.categoryOptions.reduce((n, c) => n + c.count, 0);
-        console.debug("[flashcards-hub] inventory", {
-          pathwayId: scopedPathwayId,
-          topicRows: parsed.categoryOptions.length,
-          perSystemCounts: parsed.categoryOptions.filter((c) => c.count > 0).length,
-          sumCounts: totalCards,
-          matchingCards: parsed.summary?.matchingCards ?? 0,
-        });
+      if (progressFiltersActive) {
+        setLessonVirtualDiagnostics(parsed.summary?.lessonVirtualDiagnostics ?? null);
       }
+        return;
+      }
+
+      const invQs = new URLSearchParams();
+      invQs.set("pathwayId", scopedPathwayId);
+      const res = await fetch(`/api/flashcards/inventory?${invQs.toString()}`, { credentials: "include" });
+      let json: unknown;
+      try {
+        json = await res.json();
       } catch {
-        const base = "Network error while loading flashcards. Check your connection and try again.";
+        const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
         setLoadError(
-          process.env.NODE_ENV === "development" ? `${base} (pathwayId=${scopedPathwayId})` : base,
+          process.env.NODE_ENV === "development"
+            ? `${base} (pathwayId=${scopedPathwayId}, url=/api/flashcards/inventory)`
+            : base,
         );
         setBuilderCategories([]);
         setMatchingCards(null);
         setLessonVirtualDiagnostics(null);
+        return;
       }
+      const body = json as {
+        success?: boolean;
+        categoryOptions?: Array<{ id: string; title: string; description?: string; count: number }>;
+        total?: number;
+        code?: string;
+        message?: string;
+      };
+      if (!res.ok || body.success !== true) {
+        const base =
+          typeof body.message === "string" && body.message.trim()
+            ? body.message.trim()
+            : "Could not load flashcard pool counts.";
+        setLoadError(
+          process.env.NODE_ENV === "development"
+            ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status}, code=${String(body.code ?? "")})`
+            : base,
+        );
+        setBuilderCategories([]);
+        setMatchingCards(null);
+        return;
+      }
+      const opts = Array.isArray(body.categoryOptions) ? body.categoryOptions : [];
+      setBuilderCategories(opts);
+      const total = typeof body.total === "number" && Number.isFinite(body.total) ? body.total : 0;
+      const allCanon = CANONICAL_STUDY_CATEGORIES.length;
+      const sel = selectedCanonicalIds;
+      const match =
+        sel.length === 0 || sel.length >= allCanon
+          ? total
+          : (() => {
+              const ids = builderCategoryIdsForCanonicalSelection(
+                scopedPathwayId,
+                opts,
+                new Set(sel as CanonicalBodySystemId[]),
+              );
+              const sum = ids.reduce((s, id) => s + (opts.find((c) => c.id === id)?.count ?? 0), 0);
+              return sum > 0 ? sum : total;
+            })();
+      setMatchingCards(match);
+      if (process.env.NODE_ENV === "development") {
+        const totalCards = opts.reduce((n, c) => n + (typeof c.count === "number" ? c.count : 0), 0);
+        console.debug("[flashcards-hub] inventory", {
+          pathwayId: scopedPathwayId,
+          topicRows: opts.length,
+          perSystemCounts: opts.filter((c) => c.count > 0).length,
+          sumCounts: totalCards,
+          matchingCards: match,
+        });
+      }
+    } catch {
+      const base = "Network error while loading flashcards. Check your connection and try again.";
+      setLoadError(
+        process.env.NODE_ENV === "development" ? `${base} (pathwayId=${scopedPathwayId})` : base,
+      );
+      setBuilderCategories([]);
+      setMatchingCards(null);
+      setLessonVirtualDiagnostics(null);
+    }
   }, [
     scopedPathwayId,
     cardLimit,

@@ -142,7 +142,10 @@ export async function PATCH(req: Request) {
       body.learnerPath !== undefined ? (body.learnerPath === null ? null : body.learnerPath.trim()) : undefined;
     const effectiveLearnerPath = nextLearnerPath !== undefined ? nextLearnerPath : user.learnerPath;
 
-    if (!learnerPathIsAllowed(effectiveLearnerPath, pathwayOptions)) {
+    const measurementPreferenceOnly =
+      Object.keys(body).length === 1 && body.measurementPreference !== undefined;
+
+    if (!measurementPreferenceOnly && !learnerPathIsAllowed(effectiveLearnerPath, pathwayOptions)) {
       return NextResponse.json(
         {
           error: "Selected exam pathway is not available for your region and tier. Save region/tier first, then pick a pathway.",

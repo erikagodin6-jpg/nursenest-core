@@ -1,5 +1,8 @@
 # Mobile navigation — risk areas
 
+**Canonical edit path:** change this file at **`nursenest-core/docs/mobile-navigation-risk-areas.md`** only.  
+Copies under `nursenest-core/reports/` or repo root `reports/` are **mirrors** — refresh after edits (e.g. `cp docs/mobile-navigation-risk-areas.md reports/` from package root).
+
 Use when changing **header**, **learner shell**, **drawers**, or **exam chrome**.
 
 ## Marketing (`site-header.tsx`)

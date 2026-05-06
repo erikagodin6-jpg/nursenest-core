@@ -23,41 +23,25 @@ afterEach(() => {
 });
 
 describe("FlashcardsHubClient", () => {
-  it("loads custom-session inventory once per filter set (no dependency churn loop)", async () => {
+  it("loads flashcards inventory once per filter set (no dependency churn loop)", async () => {
     const origFetch = globalThis.fetch;
     let fetchCount = 0;
 
     globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
       const url = String(args[0]);
-      if (url.includes("/api/flashcards/custom-session")) {
+      if (url.includes("/api/flashcards/inventory")) {
         fetchCount += 1;
         return new Response(
           JSON.stringify({
-            ok: true,
-            summary: {
-              pathwayId: "ca-rn-nclex-rn",
-              selectedCategories: [],
-              matchingCards: 12,
-              returnedCards: 0,
-              mode: "mixed",
-              shuffle: true,
-              weakOnly: false,
-              incorrectOnly: false,
-              starredOnly: false,
-              savedOnly: false,
-              notesOnly: false,
-              revisitOnly: false,
-              notStudiedOnly: false,
-              recentStudiedOnly: false,
-              recentDays: 7,
-              sourceKind: "all",
-              cardLimit: "20",
-              queryRelaxation: "none",
-              sessionShuffleSalt: "test-salt",
-            },
+            success: true,
+            total: 12,
             categoryOptions: [
               { id: "cardiovascular", title: "Cardiovascular", count: 5 },
               { id: "respiratory", title: "Respiratory", count: 7 },
+            ],
+            categories: [
+              { name: "cardiovascular", count: 5 },
+              { name: "respiratory", count: 7 },
             ],
           }),
           { status: 200, headers: { "Content-Type": "application/json" } },
@@ -76,21 +60,21 @@ describe("FlashcardsHubClient", () => {
     await new Promise((r) => setTimeout(r, 500));
     assert.ok(
       fetchCount <= 4,
-      `expected a bounded number of custom-session fetches (React Strict Mode may double), got ${fetchCount}`,
+      `expected a bounded number of inventory fetches (React Strict Mode may double), got ${fetchCount}`,
     );
 
     globalThis.fetch = origFetch;
   });
 
-  it("skips the first custom-session fetch when RSC passed initialHub (categoryOptions)", async () => {
+  it("skips the first inventory fetch when RSC passed initialHub (categoryOptions)", async () => {
     const origFetch = globalThis.fetch;
     let fetchCount = 0;
 
     globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
       const url = String(args[0]);
-      if (url.includes("/api/flashcards/custom-session")) {
+      if (url.includes("/api/flashcards/inventory")) {
         fetchCount += 1;
-        return new Response(JSON.stringify({ ok: false }), { status: 500 });
+        return new Response(JSON.stringify({ success: false }), { status: 500 });
       }
       return origFetch(...args);
     };
@@ -113,7 +97,7 @@ describe("FlashcardsHubClient", () => {
     );
 
     await new Promise((r) => setTimeout(r, 800));
-    assert.equal(fetchCount, 0, "initialHub with categories must skip duplicate inventory fetch");
+    assert.equal(fetchCount, 0, "initialHub with categories must skip duplicate /api/flashcards/inventory fetch");
 
     globalThis.fetch = origFetch;
   });
@@ -124,35 +108,19 @@ describe("FlashcardsHubClient", () => {
 
     globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
       const url = String(args[0]);
-      if (url.includes("/api/flashcards/custom-session")) {
+      if (url.includes("/api/flashcards/inventory")) {
         fetchCount += 1;
         return new Response(
           JSON.stringify({
-            ok: true,
-            summary: {
-              pathwayId: "ca-rn-nclex-rn",
-              selectedCategories: [],
-              matchingCards: 2,
-              returnedCards: 0,
-              mode: "mixed",
-              shuffle: true,
-              weakOnly: false,
-              incorrectOnly: false,
-              starredOnly: false,
-              savedOnly: false,
-              notesOnly: false,
-              revisitOnly: false,
-              notStudiedOnly: false,
-              recentStudiedOnly: false,
-              recentDays: 7,
-              sourceKind: "all",
-              cardLimit: "20",
-              queryRelaxation: "none",
-              sessionShuffleSalt: "salt",
-            },
+            success: true,
+            total: 2,
             categoryOptions: [
               { id: "cardiovascular", title: "Cardiovascular", count: 2 },
               { id: "respiratory", title: "Respiratory", count: 0 },
+            ],
+            categories: [
+              { name: "cardiovascular", count: 2 },
+              { name: "respiratory", count: 0 },
             ],
           }),
           { status: 200, headers: { "Content-Type": "application/json" } },
@@ -189,7 +157,7 @@ describe("FlashcardsHubClient", () => {
 
     globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
       const url = String(args[0]);
-      if (url.includes("/api/flashcards/custom-session")) {
+      if (url.includes("/api/flashcards/inventory")) {
         fetchCount += 1;
       }
       return origFetch(...args);

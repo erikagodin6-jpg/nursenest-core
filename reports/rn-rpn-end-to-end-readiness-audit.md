@@ -1,115 +1,186 @@
-# RN / RPN end-to-end learner readiness audit (NurseNest)
+# RN / RPN end-to-end learner readiness audit
 
-**Audit type:** Read-only review of routes, onboarding, entitlements, study surfaces, admin tooling, SEO scripts, and automated tests. **No runtime verification** against production/staging data was performed in this pass.
+**Goal:** Describe what is **in place** for RN (NCLEX-RN) and RPN/PN (Canada REx-PN, US/CA NCLEX-PN) from first visit through paid learner usage, and where **staging/production verification** is still required.
+
+**Constraints (this document):** Read-only audit — no runtime, schema, route, or paywall changes.
 
 **Primary pathway IDs (registry):**
 
-| Track | US | Canada |
+| Learner intent | US | Canada |
 | --- | --- | --- |
-| RN NCLEX-RN | `us-rn-nclex-rn` | `ca-rn-nclex-rn` |
-| PN / RPN | `us-lpn-nclex-pn` (NCLEX-PN) | `ca-rpn-rex-pn` (REx-PN) |
+| RN / NCLEX-RN | `us-rn-nclex-rn` | `ca-rn-nclex-rn` |
+| PN / NCLEX-PN | `us-lpn-nclex-pn` | — |
+| RPN / REx-PN | — | `ca-rpn-rex-pn` |
 
-**Onboarding mapping** (`resolveDefaultPathwayIdForOnboarding`): exam goal `rn` → US/CA RN pathways; `rpn` → **US** `us-lpn-nclex-pn` vs **CA** `ca-rpn-rex-pn`. This is intentional registry wiring but **copy** must clarify US “PN” vs Canadian “RPN”.
+**Onboarding mapping** (`src/lib/onboarding/resolve-default-pathway-for-onboarding.ts`):
+
+- Exam goal `rn` → US RN or CA RN pathway.
+- Exam goal `rpn` → **US → `us-lpn-nclex-pn`**, **CA → `ca-rpn-rex-pn`** (Canadian “RPN” = REx-PN; US practical nurse = NCLEX-PN).
 
 ---
 
-## 1. Anonymous visitor
+## 1. Anonymous visitor → pathway
 
-- **Home → hub:** Homepage tier cards (`data-nn-home-tier-card`) drive to marketing hubs; tier-matrix E2E covers RN and **CA PN/RPN** hub (`TIER_MATRIX_SIGNUP_ROWS`).
-- **Pricing:** Public `/pricing`; learner paywall surfaces use `resolveEntitlementForPage` / subscriber gates.
-- **Lesson previews:** Marketing lesson hubs + public lesson surfaces; free learner sees paywall on `/app/lessons` (smoke tests).
-- **SEO:** `generateMetadata` on lesson hub routes (`.../lessons/page.tsx`) builds canonical + OG; `npm run test:seo-sitemap`, `verify:seo-indexability`, `verify:sitemap`, `verify:robots` exist.
-- **CTAs / mobile nav:** Site header + mobile menu; `npm run test:e2e:mobile`, `tests/e2e/public/mobile-usability-audit.spec.ts`.
+**Marketing hubs**
+
+- Default exam hubs follow `buildExamPathwayPath` / registry (`src/lib/exam-pathways/*`).
+- Public smoke / production gates hit RN and PN hubs (e.g. `tests/e2e/public/marketing-study-surfaces-production-gate.spec.ts`, `pn-marketing-hub-i18n-sanity.spec.ts`).
+- CAT marketing entrypoints: `tests/e2e/cat/cat-entrypoints.spec.ts` includes `/us/rn/nclex-rn/cat` and `/canada/pn/rex-pn/cat`; guards wrong US `/us/rpn/rex-pn` links.
+
+**Pricing / CTAs**
+
+- Standard marketing routes (`/pricing`, signup flows) — covered by mobile + smoke suites partially; not pathway-specific in one spec.
+
+**Lesson previews**
+
+- Free tier E2E hits lesson paywall (`tests/e2e/smoke-production/free-user.spec.ts`); paid RN signup flow reaches learner shell (`tests/e2e/rn-student-signup-flow.spec.ts`).
+
+**SEO / canonical**
+
+- Lesson hubs and localized routes have `generateMetadata` patterns (e.g. `src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx`).
+- Automated: `npm run test:seo-sitemap`, `verify:seo-indexability`, `i18n-route-readiness` for REx-PN paths.
+
+**Mobile**
+
+- `npm run test:e2e:mobile` — marketing + optional paid learner width; `mobile-usability-audit` for public drawers/touch.
 
 ---
 
 ## 2. Signup / onboarding
 
-- **API:** `POST /api/onboarding/complete` persists `examFocus`, `examDate`, `learnerPath`, `targetExamPathwayId`, `onboardingCompletedAt` using `resolveDefaultPathwayIdForOnboarding`.
-- **Routes:** `/app/onboarding` redirects completed users to `/app/start-studying`; dashboard `/app` redirects incomplete users to `/app/onboarding`.
-- **Tier-matrix signup:** Covers RN + **CA** PN/RPN hub → signup; requires `QA_SIGNUP_EMAIL_DOMAIN` and Turnstile bypass for full E2E.
+**Flow**
+
+- `POST /api/onboarding/complete` sets `examFocus`, `learnerPath`, `targetExamPathwayId`, `onboardingCompletedAt` (`src/app/api/onboarding/complete/route.ts`).
+- Client exam selector persists region/locale/profession (`src/components/onboarding/exam-selector.tsx` → `resolveOnboardingRoute`).
+- Learner `start-studying` redirects to `/app/onboarding` if incomplete (`src/app/(student)/app/(learner)/start-studying/page.tsx`).
+
+**Tests**
+
+- `tests/e2e/rn-student-signup-flow.spec.ts` — RN goal + “Start studying” through onboarding.
+- `tests/e2e/tier-matrix/tier-matrix-signup-multi-tier.spec.ts` — dismisses onboarding with generic selectors.
+
+**Gap (see `rn-rpn-flow-gaps.md`):** No first-class **Canada REx-PN-only** signup E2E mirroring the RN file (coverage gap, not proof of breakage).
 
 ---
 
 ## 3. Subscription / paywall
 
-- **Core resolver:** `resolveEntitlementForPage` (fail-closed patterns in layout).
-- **Automation:** `verify:no-cross-tier-leakage`, `audit:paywall-security`, tier-matrix cross-tier gating specs.
-- **Stripe:** Admin subscriptions page and user detail show **masked** Stripe ids — audit only; no Stripe logic changes here.
+**Policy**
+
+- Pathway entitlements ladder: `src/lib/exam-pathways/pathway-entitlements*.ts` + tests (`pathway-entitlements.test.ts`) — RN vs RPN tier/country matrix.
+
+**Automation**
+
+- `npm run verify:no-cross-tier-leakage`, `npm run audit:paywall-security` (unit), tier-matrix Playwright, free-user smoke.
+
+**Staging need:** Stripe webhook edge cases and “subscribed but blocked” false positives require **real** subscription rows — not fully simulatable in static audit.
 
 ---
 
 ## 4. Learner dashboard
 
-- **Server:** `(learner)/page.tsx` loads entitlement, redirects onboarding, resolves pathway identity.
-- **Risk:** DB errors on user fetch are caught and dashboard may render without redirect to onboarding — documented in code path (non-fatal).
+**Implementation**
+
+- Dashboard deferred content in `src/app/(student)/app/(learner)/page.tsx` (pathway context, paywall stats provider).
+
+**Tests**
+
+- Paid mobile layout touches `/app` (`tests/e2e/mobile/mobile-learner-authenticated-layout.spec.ts`).
+- No dedicated “RPN dashboard copy” assertion in repo search — **verify** CA RPN user sees correct pathway pill labels in staging.
 
 ---
 
 ## 5. Lessons
 
-- **Hubs:** Marketing + app routes scoped by `pathwayId`; internal links via hub builders (`learnerLessonsUrl`, etc.).
-- **Progress:** `POST /api/lessons/pathway-progress`, `PathwayLessonProgressTracker` client.
-- **Tests:** `test:pathway-lessons`, marketing hub safety tests.
+**Hubs / detail**
+
+- Virtualized lists, pathway scoping, paywall on free tier (smoke tests).
+- Marketing lesson hub production gate includes `/canada/pn/rex-pn/lessons` with minimum link count.
+
+**Progress / internal links**
+
+- Pathway lesson contracts + `test:pathway-lessons` bundle; internal link validators exist (`validate:internal-links`, audits).
 
 ---
 
 ## 6. Flashcards
 
-- **Primary DB list:** `GET /api/flashcards` uses `prisma.flashcard` with entitlement `where`.
-- **Exam bank augmentation:** `loadExamQuestionRowsForFlashcardPool` excludes ECG/video-unfriendly formats (`FLASHCARD_USABILITY_SQL`); `buildFlashcardCustomSession` can augment from exam bank; `loadLessonLinkedFlashcardVirtuals` builds virtuals from lesson-linked question ids.
-- **Core pathway audit list:** `CORE_PATHWAY_AUDIT_ROWS` includes RN + CA RPN + US LPN PN (`ensure-core-pathway-exam-questions.ts`).
+**Pool rules**
+
+- `src/lib/flashcards/flashcard-exam-bank-hub-inventory.ts` — SQL excludes ECG/video/media formats; documented in file header.
+- `flashcard-pool-exam-fallback.test.ts` — structural coverage including ECG exclusion.
+
+**Staging need:** **Counts per pathway** (RN vs REx-PN) require DB with populated `ExamQuestion` / flashcard tables — audit cannot assert non-zero pools without data.
 
 ---
 
 ## 7. CAT exams
 
-- **Rationale UX:** `cat-rationale-panel.tsx` — modes `locked` vs `feedback` (test vs study).
-- **Pools:** CAT uses pathway-scoped study pools; `ensure-core-pathway-exam-questions` and CAT-focused E2E (`paid-user-cat-focused-viewport`, cat smoke) when credentials exist.
-- **Hub URL:** `/app/practice-tests?cat=1&pathwayId=…` (`learnerCatHubUrl`).
+**Readiness config**
+
+- `src/lib/exam-pathways/pathway-readiness-config.ts` — `production_ready` CAT for `us-rn-nclex-rn`, `ca-rn-nclex-rn`, `ca-rpn-rex-pn`, `us-lpn-nclex-pn` with min/max items and timers.
+
+**Rationale policy**
+
+- `RationalePanel` modes: `locked` for CAT **test** mode vs `feedback` for study (`src/components/study/cat-rationale-panel.tsx`).
+- `PracticeTestRunnerClient` separates `catMode` vs `catFeedbackStudy` and `beforeunload` in exam style (`src/components/student/practice-test-runner-client.tsx`).
+
+**Tests**
+
+- `study-loop-cat-routing.test.ts`, `pathway-cat-flow.test.ts`, paid CAT viewport E2E (`paid-user-cat-focused-viewport.spec.ts`).
 
 ---
 
 ## 8. Practice exams
 
-- **Hub:** `/app/practice-tests?pathwayId=…`; legacy alias `/app/practice?…` documented in tier matrix helper.
-- **Rationales:** Practice flows differ from CAT test-mode locking — verify with practice E2E + product spec.
+- Same runner family as CAT with linear rationale visibility (`linearRationaleVisibility`, `practice-test-runner-client.tsx`).
+- Practice hub pages gate by pathway query (`practice-tests/page.tsx`).
+
+**Staging need:** “Same pool as CAT where intended” is a **product** assertion — compare practice test builder config vs CAT blueprint in DB/admin diagnostics (`admin/diagnostics/cat-blueprint-sessions`).
 
 ---
 
 ## 9. Mobile UX
 
-- **Playwright:** `playwright.mobile.config.ts` + `tests/e2e/mobile/*` (overflow, marketing routes, optional paid auth).
-- **Public audit:** `mobile-usability-audit.spec.ts` (touch targets, drawers).
+- Playwright mobile suite + public mobile usability audit (see `docs/mobile-ux-audit.md`).
+- **Gap:** Paid mobile tests require credentials; RPN-specific narrow flows not isolated in one spec.
 
 ---
 
 ## 10. Admin visibility
 
-- **User detail:** `loadAdminUserSupportDetail` — subscriptions, exam attempts/sessions (incl. adaptive), practice tests, progress groupBy, flashcard progress/sessions, recent activity tables (`admin/users/[userId]/page.tsx`).
-- **Dashboard:** `AdminDashboardOverview` — user counts, active subscribers, question bank by tier.
-- **Subscriptions:** `/admin/subscriptions` — recent rows, Stripe price matrix gaps.
-- **Gap:** Pathway-specific **empty pool** alerts may require running `audit:exam-bank` / `content:ensure:exam-bank` rather than a single admin widget (see gap list).
+- **Subscriptions:** `src/app/(admin)/admin/subscriptions/page.tsx` — Stripe row summaries.
+- **Users:** `admin/users`, `admin/users/[userId]` — read-only support view with subscription list.
+- **CAT pool health:** `admin/diagnostics`, `admin/diagnostics/cat-blueprint-sessions` — pool mapped fraction warnings.
+
+**Gap:** No single “RPN pool deficit alert” named surface — operators use diagnostics pages; document as **process** gap if product wants a dashboard tile.
 
 ---
 
 ## 11. SEO
 
-- **Tests:** `npm run test:seo-sitemap`, `test:sitemap`, verify scripts for sitemap/robots/public links.
-- **Hreflang / English:** Covered by i18n + SEO tests — any change is **DEVELOPER_ONLY** / copy review.
+- Sitemap / robots / merged route tests (`test:seo-sitemap`, `test:sitemap`).
+- i18n route readiness lists REx-PN lesson hub paths (`tests/e2e/i18n/i18n-route-readiness.spec.ts`).
 
 ---
 
-## Evidence commands (for developers)
+## Test commands (quick reference)
 
-```bash
-cd nursenest-core
-npm run verify:no-cross-tier-leakage
-npm run test:pathway-lessons
-npm run test:seo-sitemap
-npm run test:e2e:mobile
-# With credentials:
-npx playwright test -c playwright.tier-matrix.config.ts
-```
+| Area | Command |
+| --- | --- |
+| Pathway lessons | `npm run test:pathway-lessons` |
+| Entitlements | (included in pathway / paywall tests) `npm run audit:paywall-security` |
+| CAT routing | `node --import tsx --test src/lib/exam-pathways/study-loop-cat-routing.test.ts` (or full unit glob) |
+| Flashcard pool | `node --import tsx --test src/lib/flashcards/flashcard-pool-exam-fallback.test.ts` |
+| RN signup E2E | `npx playwright test tests/e2e/rn-student-signup-flow.spec.ts` |
+| Mobile | `npm run test:e2e:mobile` |
+| SEO | `npm run test:seo-sitemap` |
 
-See **`reports/rn-rpn-flow-gaps.md`** (package `nursenest-core/reports/`, also copied to repo root `reports/`) and **`reports/rn-rpn-implementation-priority-list.md`** for phased work.
+---
+
+## Deliverables
+
+| File | Purpose |
+| --- | --- |
+| `rn-rpn-flow-gaps.md` | Tabular gaps with severity, revenue impact, AI vs dev. |
+| `rn-rpn-implementation-priority-list.md` | Phase 1 ordering for engineering. |

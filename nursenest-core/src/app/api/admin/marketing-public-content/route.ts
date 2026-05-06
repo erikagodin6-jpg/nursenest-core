@@ -19,6 +19,7 @@ import {
   logMarketingPublicContentSaveAttempt,
   logMarketingPublicContentSaveResult,
 } from "@/lib/marketing/marketing-public-content-observability";
+import { getMarketingPublicContentDefaultCatalogValue } from "@/lib/marketing/marketing-public-content-default-catalog";
 
 const noStoreJsonInit = { headers: { "Cache-Control": "no-store" } } as const;
 
@@ -92,15 +93,22 @@ export async function GET(req: Request) {
 
   try {
     const slots = listMarketingPublicContentSlots();
+    const filterLc = messageKeyFilter.toLowerCase();
+    const defaultsByKey = Object.fromEntries(
+      slots.map((s) => [s.messageKey, getMarketingPublicContentDefaultCatalogValue(s.messageKey, locale)]),
+    );
     const filteredSlots =
       messageKeyFilter.length > 0
-        ? slots.filter(
-            (s) =>
-              s.messageKey.includes(messageKeyFilter) ||
-              s.route.includes(messageKeyFilter) ||
-              s.sectionKey.includes(messageKeyFilter) ||
-              s.fieldKey.includes(messageKeyFilter),
-          )
+        ? slots.filter((s) => {
+            const defVal = defaultsByKey[s.messageKey] ?? "";
+            return (
+              s.messageKey.toLowerCase().includes(filterLc) ||
+              s.route.toLowerCase().includes(filterLc) ||
+              s.sectionKey.toLowerCase().includes(filterLc) ||
+              s.fieldKey.toLowerCase().includes(filterLc) ||
+              defVal.toLowerCase().includes(filterLc)
+            );
+          })
         : slots;
 
     const rows = await prisma.marketingPublicContentOverride.findMany({
@@ -136,11 +144,16 @@ export async function GET(req: Request) {
       },
     });
 
+    const slotsOut = filteredSlots.map((s) => ({
+      ...s,
+      defaultCatalogValue: defaultsByKey[s.messageKey] ?? "",
+    }));
+
     return NextResponse.json(
       {
         ok: true,
         locale,
-        slots: filteredSlots,
+        slots: slotsOut,
         overrides: byKey,
         revisions,
       },

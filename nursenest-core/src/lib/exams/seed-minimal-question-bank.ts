@@ -4,6 +4,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { isNonFatalPrismaSchemaError } from "@/lib/prisma/safe-reads";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 
 /** Fixed exam ids — one published exam per (country, tier) so submit() can resolve access. */
 function examIdFor(country: CountryCode, tier: TierCode): string {
@@ -218,7 +219,7 @@ export async function seedMinimalQuestionBankIfEmpty(): Promise<{ seeded: boolea
           create: {
             id: q.id,
             tier: q.tier,
-            exam: q.exam,
+            exam: canonicalExamQuestionExamForDbWrite(q.exam),
             questionType: q.questionType,
             status: DB_PUBLISHED,
             stem: q.stem,

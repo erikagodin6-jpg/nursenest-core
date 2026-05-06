@@ -3,7 +3,11 @@ import { Prisma } from "@prisma/client";
 import { stemHash } from "@/lib/content/stem-hash";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
-import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
+import {
+  canonicalExamQuestionExamForDbWrite,
+  examKeyNormsForPathwayPool,
+  examQuestionExamNormInSql,
+} from "@/lib/content-quality/exam-question-exam-normalization";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { isNonFatalPrismaSchemaError } from "@/lib/prisma/safe-reads";
 import {
@@ -68,7 +72,7 @@ function pickExamForPathway(pathwayId: string, examIn: string[]): string {
   return canonicalExamQuestionExamForDbWrite(examIn[0]!);
 }
 
-function poolCountSql(examLower: string[], tierLower: string[], region: Prisma.Sql): Prisma.Sql {
+function poolCountSql(examNorms: string[], tierLower: string[], region: Prisma.Sql): Prisma.Sql {
   return Prisma.sql`
     SELECT COUNT(*)::bigint AS n
     FROM exam_questions
@@ -78,7 +82,7 @@ function poolCountSql(examLower: string[], tierLower: string[], region: Prisma.S
       AND length(trim(coalesce(stem, ''))) >= 10
       AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
       AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
-      AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
+      AND (${examQuestionExamNormInSql(examNorms)})
       AND lower(coalesce(tier, '')) IN (${Prisma.join(tierLower)})
   `;
 }
@@ -88,10 +92,10 @@ export async function countCorePathwayPublishedPool(prisma: PrismaClient, pathwa
   const ctx = buildGlobalExamContext(pathwayId, "en");
   if (!ctx) return -1;
   const { examIn, tierMatches } = examQuestionPoolWhereForContext(ctx);
-  const examLower = examIn.map((k) => k.toLowerCase());
+  const examNorms = examKeyNormsForPathwayPool(examIn);
   const tierLower = tierMatches.map((t) => t.toLowerCase());
   const rows = await prisma.$queryRaw<{ n: bigint }[]>(
-    poolCountSql(examLower, tierLower, regionSql(ctx.country)),
+    poolCountSql(examNorms, tierLower, regionSql(ctx.country)),
   );
   return Number(rows[0]?.n ?? 0n);
 }
@@ -120,11 +124,11 @@ export async function ensureCorePathwayPublishedExamQuestions(
       continue;
     }
     const { examIn, tierMatches } = examQuestionPoolWhereForContext(ctx);
-    const examLower = examIn.map((k) => k.toLowerCase());
+    const examNorms = examKeyNormsForPathwayPool(examIn);
     const tierLower = tierMatches.map((t) => t.toLowerCase());
     const reg = regionSql(ctx.country);
 
-    const beforeRows = await prisma.$queryRaw<{ n: bigint }[]>(poolCountSql(examLower, tierLower, reg));
+    const beforeRows = await prisma.$queryRaw<{ n: bigint }[]>(poolCountSql(examNorms, tierLower, reg));
     const poolBefore = Number(beforeRows[0]?.n ?? 0n);
     if (poolBefore > 0) {
       results.push({ pathwayId: row.pathwayId, poolBefore, inserted: 0 });

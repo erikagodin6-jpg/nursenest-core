@@ -1,5 +1,8 @@
 # Mobile layout regression checklist
 
+**Canonical edit path:** change this file at **`nursenest-core/docs/mobile-layout-regression-checklist.md`** only.  
+Copies under `nursenest-core/reports/` or repo root `reports/` are **mirrors** — refresh after edits (e.g. `cp docs/mobile-layout-regression-checklist.md reports/` from package root).
+
 Run before shipping learner chrome, marketing header, lesson body, exam runners, or global `globals.css` layout tokens.
 
 ## Preconditions

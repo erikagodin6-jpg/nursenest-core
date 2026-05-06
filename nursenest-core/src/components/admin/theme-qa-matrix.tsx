@@ -117,7 +117,7 @@ function ThemeQaCard({ opt }: { opt: ThemeOption }) {
 
       <div className="flex items-center gap-2 border-t border-[var(--theme-card-border)] pt-2">
         {/* eslint-disable-next-line @next/next/no-img-element -- QA favicon smoke test */}
-        <img src="/favicon.ico" alt="" width={20} height={20} className="h-5 w-5 shrink-0 rounded-sm" />
+        <img src="/favicon-v2.ico" alt="" width={20} height={20} className="h-5 w-5 shrink-0 rounded-sm" />
         <span className="text-[9px] text-[var(--theme-muted-text)]">Favicon (global, default theme tint)</span>
       </div>
     </div>

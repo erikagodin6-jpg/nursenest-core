@@ -7,6 +7,7 @@ import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { CountryCode, Prisma } from "@prisma/client";
+import { examKeyNormsForPathwayPool, examQuestionExamNormInSql } from "@/lib/content-quality/exam-question-exam-normalization";
 import {
   MIN_PUBLISHED_BY_BUCKET,
   RATIONALE_MIN_WORDS,
@@ -151,11 +152,13 @@ function alliedPathwayCountrySql(countryCode: CountryCode): Prisma.Sql {
 
 async function loadTopicGroups(examKeys: string[], alliedCountry?: CountryCode): Promise<TopicGroupRow[]> {
   if (examKeys.length === 0) return [];
+  const examNorms = examKeyNormsForPathwayPool(examKeys);
+  if (examNorms.length === 0) return [];
   const allied = alliedCountry ? alliedPathwayCountrySql(alliedCountry) : Prisma.empty;
   return prisma.$queryRaw<TopicGroupRow[]>`
     SELECT topic, subtopic, body_system, exam, COUNT(*)::bigint AS cnt
     FROM exam_questions
-    WHERE status = ${DB_PUBLISHED} AND exam IN (${Prisma.join(examKeys)}) ${allied}
+    WHERE status = ${DB_PUBLISHED} AND (${examQuestionExamNormInSql(examNorms)}) ${allied}
     GROUP BY topic, subtopic, body_system, exam
   `;
 }
@@ -167,6 +170,10 @@ async function loadQualityStats(examKeys: string[], alliedCountry?: CountryCode)
   shortStem: number;
 }> {
   if (examKeys.length === 0) {
+    return { publishedInScope: 0, missingRationale: 0, thinRationale: 0, shortStem: 0 };
+  }
+  const examNorms = examKeyNormsForPathwayPool(examKeys);
+  if (examNorms.length === 0) {
     return { publishedInScope: 0, missingRationale: 0, thinRationale: 0, shortStem: 0 };
   }
   const allied = alliedCountry ? alliedPathwayCountrySql(alliedCountry) : Prisma.empty;
@@ -190,7 +197,7 @@ async function loadQualityStats(examKeys: string[], alliedCountry?: CountryCode)
       )::bigint AS thin_rationale,
       COUNT(*) FILTER (WHERE stem IS NULL OR LENGTH(TRIM(stem)) < 12)::bigint AS short_stem
     FROM exam_questions
-    WHERE status = ${DB_PUBLISHED} AND exam IN (${Prisma.join(examKeys)}) ${allied}
+    WHERE status = ${DB_PUBLISHED} AND (${examQuestionExamNormInSql(examNorms)}) ${allied}
   `;
   const r = rows[0];
   if (!r) {

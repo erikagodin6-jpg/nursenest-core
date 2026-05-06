@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { buildMarketingPublicLivePageHref } from "@/lib/marketing/marketing-public-content-live-href";
 
 type Slot = {
   messageKey: string;
@@ -11,6 +13,8 @@ type Slot = {
   maxLen: number;
   seoTitleMaxLen?: number;
   seoDescriptionMaxLen?: number;
+  /** From GET API; catalog default for diagnostics + search. */
+  defaultCatalogValue?: string;
 };
 
 type OverrideRow = {
@@ -100,6 +104,22 @@ export function AdminPageCopyEditorClient() {
   );
 
   const selectedOverride = selectedKey && data?.overrides ? data.overrides[selectedKey] : undefined;
+
+  const revisionCountForSelected = useMemo(() => {
+    if (!selectedKey || !data?.revisions) return 0;
+    return data.revisions.filter((r) => r.messageKey === selectedKey).length;
+  }, [data?.revisions, selectedKey]);
+
+  const livePageHref = useMemo(() => {
+    if (!selectedSlot) return "/";
+    return buildMarketingPublicLivePageHref(locale, selectedSlot.route);
+  }, [locale, selectedSlot]);
+
+  const previewHref = useMemo(() => {
+    if (!selectedKey) return "/admin/content/page-copy/preview";
+    const q = new URLSearchParams({ messageKey: selectedKey, locale });
+    return `/admin/content/page-copy/preview?${q.toString()}`;
+  }, [locale, selectedKey]);
 
   useEffect(() => {
     if (!selectedKey) {
@@ -205,7 +225,7 @@ export function AdminPageCopyEditorClient() {
             </select>
           </label>
           <label className="flex min-w-[12rem] flex-1 flex-col gap-1 text-xs font-medium text-muted-foreground">
-            Search route, section, field, or message key
+            Search route, section, field, message key, or visible default copy
             <input
               className="rounded-lg border border-border bg-[var(--theme-card-bg)] px-3 py-2 text-sm"
               value={search}
@@ -295,7 +315,69 @@ export function AdminPageCopyEditorClient() {
                     ? ` · SEO description soft cap ${selectedSlot.seoDescriptionMaxLen}`
                     : ""}
               </p>
+              <div className="mt-3 flex flex-wrap gap-3 text-sm">
+                <Link
+                  href={previewHref}
+                  className="font-semibold text-primary underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open staged preview
+                </Link>
+                <a
+                  href={livePageHref}
+                  className="font-semibold text-primary underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Open live page ↗
+                </a>
+              </div>
             </div>
+
+            <section className="rounded-xl border border-border/70 bg-muted/10 p-4">
+              <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Copy slot preview diagnostics</h3>
+              <dl className="mt-3 grid gap-2 text-xs text-muted-foreground">
+                <div className="grid gap-1 sm:grid-cols-[11rem_1fr]">
+                  <dt className="font-medium text-foreground">Route</dt>
+                  <dd className="font-mono">{selectedSlot.route}</dd>
+                </div>
+                <div className="grid gap-1 sm:grid-cols-[11rem_1fr]">
+                  <dt className="font-medium text-foreground">Locale</dt>
+                  <dd>{locale}</dd>
+                </div>
+                <div className="grid gap-1 sm:grid-cols-[11rem_1fr]">
+                  <dt className="font-medium text-foreground">Message key</dt>
+                  <dd className="break-all font-mono">{selectedSlot.messageKey}</dd>
+                </div>
+                <div className="grid gap-1 sm:grid-cols-[11rem_1fr]">
+                  <dt className="font-medium text-foreground">Default (catalog)</dt>
+                  <dd className="whitespace-pre-wrap break-words">{selectedSlot.defaultCatalogValue ?? "—"}</dd>
+                </div>
+                <div className="grid gap-1 sm:grid-cols-[11rem_1fr]">
+                  <dt className="font-medium text-foreground">Draft (staged)</dt>
+                  <dd className="whitespace-pre-wrap break-words">{selectedOverride?.draftValue ?? "—"}</dd>
+                </div>
+                <div className="grid gap-1 sm:grid-cols-[11rem_1fr]">
+                  <dt className="font-medium text-foreground">Published (live DB)</dt>
+                  <dd className="whitespace-pre-wrap break-words">
+                    {selectedOverride?.isPublished ? selectedOverride.value || "—" : "—"}
+                  </dd>
+                </div>
+                <div className="grid gap-1 sm:grid-cols-[11rem_1fr]">
+                  <dt className="font-medium text-foreground">Last published (UTC)</dt>
+                  <dd>
+                    {selectedOverride?.publishedAt
+                      ? new Date(selectedOverride.publishedAt).toISOString()
+                      : "—"}
+                  </dd>
+                </div>
+                <div className="grid gap-1 sm:grid-cols-[11rem_1fr]">
+                  <dt className="font-medium text-foreground">Revision rows (loaded)</dt>
+                  <dd>{revisionCountForSelected}</dd>
+                </div>
+              </dl>
+            </section>
 
             <label className="block space-y-2 text-sm">
               <span className="font-medium text-foreground">Draft / live text</span>

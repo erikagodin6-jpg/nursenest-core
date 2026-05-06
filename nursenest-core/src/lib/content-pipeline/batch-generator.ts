@@ -253,7 +253,7 @@ export function lessonToPrismaCreateInput(
  * Usage:
  *   const { lessons, questions } = batchToPrismaInputs(output);
  *   await prisma.pathwayLesson.createMany({ data: lessons, skipDuplicates: true });
- *   await prisma.examQuestion.createMany({ data: questions, skipDuplicates: true });
+ *   then insert ExamQuestion rows via createMany (batch route canonicalizes `exam`).
  */
 export function batchToPrismaInputs(output: ContentBatchOutput): {
   lessons: ReturnType<typeof lessonToPrismaCreateInput>[];

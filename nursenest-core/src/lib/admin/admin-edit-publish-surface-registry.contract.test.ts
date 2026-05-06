@@ -34,6 +34,7 @@ test("canonical admin APIs exist on disk", () => {
     "src/app/api/admin/pathway-lessons/[id]/route.ts",
     "src/app/api/admin/marketing-public-content/route.ts",
     "src/app/(admin)/admin/content/page-copy/page.tsx",
+    "src/app/(admin)/admin/content/page-copy/preview/page.tsx",
     "src/app/api/admin/blog/control-panel/persist-draft/route.ts",
     "src/lib/blog/publish-blog-post-canonical.ts",
   ];
