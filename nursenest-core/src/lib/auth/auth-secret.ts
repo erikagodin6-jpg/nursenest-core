@@ -110,7 +110,7 @@ export function getAuthSecretEnvPresenceReport(): {
 /**
  * One-time startup diagnostics for a missing auth secret.
  *
- * - During `next build` static/compile phases: single non-critical log (no Sentry fan-out).
+ * - During `next build` (NEXT_PHASE, npm lifecycle `build`, or `next build` argv): single non-critical log.
  * - Production runtime (outside build phases): single critical log (existing behavior).
  * - Development runtime: optional single informational line (deduped with build path if both ran — rare).
  */
@@ -125,7 +125,7 @@ export function reportAuthSecretStartupStatus(surface: string): void {
     surface,
     AUTH_SECRET_present: Boolean(process.env.AUTH_SECRET?.trim()),
     NEXTAUTH_SECRET_present: Boolean(process.env.NEXTAUTH_SECRET?.trim()),
-    NEXT_PHASE: process.env.NEXT_PHASE ?? null,
+    NEXT_PHASE: process.env.NEXT_PHASE?.trim() || undefined,
   };
 
   if (isAuthSecretBuildToleranceContext()) {
