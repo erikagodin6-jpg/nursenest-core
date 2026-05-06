@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import {
   getCatalogLessonsRaw,
+  getLessonCatalogMemoizationStats,
   getLessonSummariesIndex,
   getMarketingHubEffectiveCatalogSlugSet,
   listCatalogPathwayIdsWithLessonsSync,
@@ -18,6 +19,7 @@ import { parsePathwayLessonGeneratedIndexV1 } from "@/lib/lessons/pathway-lesson
 import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 import { getMarketingLessonsHubCatalogLessons } from "@/lib/lessons/marketing-lessons-hub-category";
 import { buildLessonNormalizationCoverageReport } from "./lesson-normalization-coverage.mts";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const realIndexDir = path.join(coreRoot, "src", "content", "pathway-lessons", "generated-indexes");
@@ -71,6 +73,42 @@ function assertDetailHrefs(pathwayId: string, slugs: string[]): void {
   }
 }
 
+function warnHighLessonCatalogMemoMissRates(memo: ReturnType<typeof getLessonCatalogMemoizationStats>): void {
+  const raw = process.env.NN_LESSON_CATALOG_MEMO_MISS_WARN_RATE ?? "0.35";
+  const threshold = Number(raw);
+  if (!Number.isFinite(threshold) || threshold <= 0 || threshold > 1) return;
+  const gauges: Array<{ label: string; hits: number; misses: number }> = [
+    { label: "merged_raw_catalog", hits: memo.mergedRawCatalogHits, misses: memo.mergedRawCatalogMisses },
+    { label: "pathway_normalize", hits: memo.pathwayNormalizeHits, misses: memo.pathwayNormalizeMisses },
+    { label: "effective_hub", hits: memo.effectiveHubHits, misses: memo.effectiveHubMisses },
+    { label: "marketing_slug_set", hits: memo.marketingSlugSetHits, misses: memo.marketingSlugSetMisses },
+    { label: "summary_index", hits: memo.summaryIndexHits, misses: memo.summaryIndexMisses },
+  ];
+  for (const g of gauges) {
+    const denom = g.hits + g.misses;
+    if (denom < 50) continue;
+    const rate = g.misses / denom;
+    if (rate >= threshold) {
+      safeServerLog("lesson_indexes", "lesson_catalog_memo_miss_rate_warn", {
+        gauge: g.label,
+        phase: "verify",
+        missRate: Number(rate.toFixed(4)),
+        hits: g.hits,
+        misses: g.misses,
+        threshold,
+      });
+      console.error(
+        `[nursenest-core] lesson_indexes lesson_catalog_memo_miss_rate_warn ${JSON.stringify({
+          gauge: g.label,
+          phase: "verify",
+          missRate: Number(rate.toFixed(4)),
+          threshold,
+        })}`,
+      );
+    }
+  }
+}
+
 async function main(): Promise<void> {
   if (isNNSkipLessonIndexBuild()) {
     console.info("[verify:lesson-indexes] skipped reason=NN_SKIP_LESSON_INDEX_BUILD");
@@ -87,6 +125,8 @@ async function main(): Promise<void> {
   }
 
   const catalogIds = new Set(listCatalogPathwayIdsWithLessonsSync());
+  const verifyStarted = performance.now();
+  let totalLessonRowsVerified = 0;
 
   for (const file of files) {
     const pathwayId = file.replace(/\.json$/i, "");
@@ -132,6 +172,7 @@ async function main(): Promise<void> {
     }
 
     assertDetailHrefs(pathwayId, fileSlugs);
+    totalLessonRowsVerified += parsed.summaries.length;
     console.info(`[verify:lesson-indexes] ok pathway=${pathwayId} lessons=${parsed.summaries.length}`);
   }
   console.info(`[verify:lesson-indexes] all ${files.length} file(s) validated.`);
@@ -180,6 +221,32 @@ async function main(): Promise<void> {
         .join(", ")}`,
     );
   }
+
+  const memo = getLessonCatalogMemoizationStats();
+  warnHighLessonCatalogMemoMissRates(memo);
+  safeServerLog("lesson_indexes", "lesson_index_verification_duration_ms", {
+    totalMs: Math.round(performance.now() - verifyStarted),
+    fileCount: files.length,
+    totalLessonRowsVerified,
+    summaryHits: memo.summaryIndexHits,
+    summaryMisses: memo.summaryIndexMisses,
+    pathwayNormHits: memo.pathwayNormalizeHits,
+    pathwayNormMisses: memo.pathwayNormalizeMisses,
+  });
+
+  const heapMb = Math.round(process.memoryUsage().heapUsed / (1024 * 1024));
+  console.error(
+    `[nursenest-core] lesson_index_verify_phase_summary\n${JSON.stringify(
+      {
+        fileCount: files.length,
+        totalLessonRowsVerified,
+        verifyMs: Math.round(performance.now() - verifyStarted),
+        heapUsedMb: heapMb,
+      },
+      null,
+      2,
+    )}`,
+  );
 }
 
 main().catch((e) => {

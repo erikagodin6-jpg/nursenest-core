@@ -166,6 +166,9 @@ export function MarketingI18nProvider({
 
       if (!ok) {
         console.error(
+          `[nursenest-core] i18n marketing_critical_nav_keys_missing_count ${JSON.stringify({ count: missing.length })}`,
+        );
+        console.error(
           "[MarketingI18nProvider] Missing hero/nav keys:\n",
           missing.join("\n")
         );

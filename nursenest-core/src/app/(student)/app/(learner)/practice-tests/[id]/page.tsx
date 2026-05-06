@@ -13,6 +13,7 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
 import { prisma } from "@/lib/db";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
@@ -111,6 +112,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
           protectionFlags={protectionFlags}
           studySettings={studySettings}
           initialPathwaySurface={initialPathwaySurface}
+          adaptiveLearningEnabled={isAdaptiveLearningEnabled()}
         />
       </ExamSessionErrorBoundary>
     </div>

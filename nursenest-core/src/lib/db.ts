@@ -4,6 +4,7 @@ import "./db/env-bootstrap";
 
 import { PrismaClient, type Prisma } from "@prisma/client";
 import { attachPrismaQueryCapture } from "@/lib/db/prisma-query-capture";
+import { emitOperationalStartupDiagnosticsOnce } from "@/lib/ops/operational-startup-diagnostics";
 
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
@@ -78,3 +79,5 @@ assertEnvBootstrapRan();
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 globalForPrisma.prisma = prisma;
+
+emitOperationalStartupDiagnosticsOnce();

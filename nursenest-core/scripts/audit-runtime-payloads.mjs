@@ -123,5 +123,22 @@ console.log("  LARGE_API_RESPONSE_BYTES=500000 — logLargeApiResponse / jsonRes
 console.log("  ALERT_API_PAYLOAD_BYTES=250000 — logApiPayloadAlert");
 console.log("  See src/lib/observability/api-response-size-constants.ts\n");
 
-console.log("See ../reports/runtime-payload-audit.md and ../reports/largest-bundle-surfaces.md (repo root).\n");
+console.log("See ../reports/runtime-payload-audit.md and ../reports/largest-bundle-surfaces.md (repo root).");
+console.log("Phase 6 scaling notes: ../reports/phase-6-infrastructure-scaling.md\n");
+
+if (/^(1|true|yes)$/i.test(String(process.env.BUILD_LOG_MEMORY_USAGE ?? "").trim())) {
+  const m = process.memoryUsage();
+  console.log("--- process.memoryUsage() (BUILD_LOG_MEMORY_USAGE=1, warn-only) ---");
+  console.log(
+    JSON.stringify({
+      rss: m.rss,
+      heapTotal: m.heapTotal,
+      heapUsed: m.heapUsed,
+      external: m.external,
+      arrayBuffers: m.arrayBuffers ?? 0,
+    }),
+  );
+  console.log("");
+}
+
 if (process.exitCode) process.exit(process.exitCode);

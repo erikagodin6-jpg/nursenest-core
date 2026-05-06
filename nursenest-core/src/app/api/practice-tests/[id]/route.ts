@@ -13,6 +13,9 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
  * Incremental recording on each CAT advance would double-count if the client retried the same step
  * or replayed answers; completion uses the full question id + answer set once.
  */
+import { isAdaptiveLearningEnabled } from "@/lib/adaptive-learning/adaptive-learning-flags";
+import { buildPracticeAdaptivePostMissPayload } from "@/lib/learner/build-learner-adaptive-wire-bundle";
+import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
 import { buildLinearCommitFeedback } from "@/lib/practice-tests/build-linear-commit-feedback";
 import { getLinearCommittedQuestionIds, mergeLinearCommittedQuestionId } from "@/lib/practice-tests/practice-linear-engine";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
@@ -451,21 +454,40 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     await invalidateHeavyReads();
     const committedQuestionIds = getLinearCommittedQuestionIds(nextAdaptive);
     if (cfg.linearDeliveryMode === "practice") {
-      return NextResponse.json({
-        ok: true,
-        committedQuestionIds,
-        feedback: {
-          isCorrect: feedback.isCorrect,
-          rationale: feedback.rationale,
-          correctKeys: feedback.correctKeys,
-          correctAnswerExplanation: feedback.correctAnswerExplanation,
-          distractorRationalesMap: feedback.distractorRationalesMap,
-          keyTakeaway: feedback.keyTakeaway,
-          relatedLessons: feedback.relatedLessons,
-          clinicalPearlDisplay: feedback.clinicalPearlDisplay,
-          referenceSource: feedback.referenceSource,
+      let adaptivePostMiss: Awaited<ReturnType<typeof buildPracticeAdaptivePostMissPayload>> = null;
+      if (isAdaptiveLearningEnabled() && !feedback.isCorrect) {
+        const pid = typeof cfg.pathwayId === "string" ? cfg.pathwayId.trim() : "";
+        if (pid) {
+          try {
+            adaptivePostMiss = await buildPracticeAdaptivePostMissPayload(gate.userId, gate.entitlement, {
+              pathwayId: pid,
+              missedTopicKey: feedback.topic,
+            });
+          } catch {
+            adaptivePostMiss = null;
+          }
+        }
+      }
+      return NextResponse.json(
+        {
+          ok: true,
+          committedQuestionIds,
+          feedback: {
+            isCorrect: feedback.isCorrect,
+            topic: feedback.topic,
+            rationale: feedback.rationale,
+            correctKeys: feedback.correctKeys,
+            correctAnswerExplanation: feedback.correctAnswerExplanation,
+            distractorRationalesMap: feedback.distractorRationalesMap,
+            keyTakeaway: feedback.keyTakeaway,
+            relatedLessons: feedback.relatedLessons,
+            clinicalPearlDisplay: feedback.clinicalPearlDisplay,
+            referenceSource: feedback.referenceSource,
+          },
+          ...(adaptivePostMiss ? { adaptivePostMiss } : {}),
         },
-      });
+        { headers: mergeSubscriberPrivateCacheHeaders() },
+      );
     }
     return NextResponse.json({ ok: true, committedQuestionIds, locked: true as const });
   }

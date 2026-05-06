@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     try {
       await deps.resetUserLearningProgress(deps.prisma, userId);
 
-      deps.safeServerLog("learner", USER_PROGRESS_RESET_ACTION, { userId });
+      deps.safeServerLog("learner", USER_PROGRESS_RESET_ACTION, { outcome: "success" });
 
       await deps.invalidateLearnerPrivateReadCache(userId);
       deps.revalidatePath("/app");
@@ -56,7 +56,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: true, action: USER_PROGRESS_RESET_ACTION });
     } catch (e) {
       deps.safeServerLog("learner", "USER_PROGRESS_RESET_FAILED", {
-        userId,
         detail: (e instanceof Error ? e.message : String(e)).slice(0, 400),
       });
       return NextResponse.json({ error: "Unable to reset progress." }, { status: 503 });

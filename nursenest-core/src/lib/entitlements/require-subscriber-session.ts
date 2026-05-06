@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { accessScopeFromUserAccess, getUserAccess, type AccessScope, type UserAccess } from "@/lib/entitlements/get-user-access";
+import type { AccessScope, UserAccess } from "@/lib/entitlements/get-user-access";
+import { requireSubscriberSessionDeps } from "@/lib/entitlements/require-subscriber-session-deps";
 import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
-import { correlationIdFromHeaders } from "@/lib/observability/request-correlation-headers";
 import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
 import { productEvent } from "@/lib/observability/product-events";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
-import { maybeBlockOrTouchAccountSharingAfterSubscriberOk } from "@/lib/security/learner-session-activity.server";
 
 export type SubscriberSessionOk = { ok: true; userId: string; entitlement: AccessScope; userAccess: UserAccess };
 export type SubscriberSessionFail = { ok: false; response: NextResponse };
@@ -26,8 +24,8 @@ export function notSubscribedResponse() {
  * Avoid duplicating auth/403 logic across route handlers.
  */
 export async function requireSubscriberSession(): Promise<SubscriberSessionResult> {
-  const correlation = (await correlationIdFromHeaders()) ?? "";
-  const session = await auth();
+  const correlation = (await requireSubscriberSessionDeps.correlationIdFromHeaders()) ?? "";
+  const session = await requireSubscriberSessionDeps.auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
     safeServerLog("access", "unauthorized_no_session", {
@@ -48,7 +46,7 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
 
   let userAccess: UserAccess;
   try {
-    userAccess = await getUserAccess(userId);
+    userAccess = await requireSubscriberSessionDeps.getUserAccess(userId);
   } catch (e) {
     productEvent("entitlement_resolve_failed", { surface: "subscriber_api" });
     recordEntitlementResolveFailureSignal("subscriber_api", correlation || undefined);
@@ -75,12 +73,13 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
     };
   }
 
-  const entitlement = accessScopeFromUserAccess(userAccess);
+  const entitlement = requireSubscriberSessionDeps.accessScopeFromUserAccess(userAccess);
 
   if (!entitlement.hasAccess) {
     safeServerLog("access", "denied", {
       reason: "no_active_entitlement",
       surface: "subscriber_gate",
+      outcome: "premium_api_403",
       userIdPrefix: userId.slice(0, 8),
       tier: String(entitlement.tier ?? ""),
       country: String(entitlement.country ?? ""),
@@ -93,7 +92,7 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
     };
   }
 
-  const block = await maybeBlockOrTouchAccountSharingAfterSubscriberOk(userId, userAccess);
+  const block = await requireSubscriberSessionDeps.maybeBlockOrTouchAccountSharingAfterSubscriberOk(userId, userAccess);
   if (block) {
     return { ok: false, response: block };
   }

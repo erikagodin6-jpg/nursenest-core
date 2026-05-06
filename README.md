@@ -14,6 +14,8 @@ Do **not** add a second remote for “backup” or “old monolith” without re
 
 See `nursenest-core/README.md` for app documentation.
 
+**Native (Expo):** `apps/mobile` + `packages/nursenest-mobile-shared`. Commands from repo root: `npm run mobile:typecheck`, `npm run mobile:lint`, `npm run mobile:release:readiness`. Store readiness and audit notes: `docs/mobile-production-audit-report.md`.
+
 **Repository hygiene** (what to commit, CI checks, branch protection): `docs/REPO_COMMIT_POLICY.md` and `docs/BRANCH_PROTECTION.md`.
 
 **Git:** set `git config remote.pushDefault origin` in each clone so `git push` targets `origin` only. Never commit `.git/config` — it is local. Run `git remote -v` before pushing from unfamiliar machines.

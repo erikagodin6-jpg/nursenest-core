@@ -3,6 +3,10 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { loadAdminDashboardStats, type QuestionTierBucket } from "@/lib/admin/load-admin-dashboard-stats";
+import {
+  loadEntitlementDriftSignals,
+  type EntitlementDriftSignals,
+} from "@/lib/billing/entitlement-drift-signals.server";
 
 export type AdminDashboardOverview = {
   generatedAt: string;
@@ -28,6 +32,7 @@ export type AdminDashboardOverview = {
     nodeEnv: string;
     vercelEnv: string | null;
   };
+  billingIntegrity: EntitlementDriftSignals | null;
 };
 
 async function safeBlogCount(): Promise<number | null> {
@@ -82,14 +87,16 @@ export async function loadAdminDashboardOverview(): Promise<AdminDashboardOvervi
       exams: { totalQuestions: null, byTier: null },
       health: { dbOk: false, lastAutomation: null },
       env,
+      billingIntegrity: null,
     };
   }
 
-  const [blogPosts, stats, dbOk, lastAutomation] = await Promise.all([
+  const [blogPosts, stats, dbOk, lastAutomation, billingIntegrity] = await Promise.all([
     safeBlogCount(),
     loadAdminDashboardStats().catch(() => null),
     safeDbPing(),
     safeLastAutomation(),
+    loadEntitlementDriftSignals().catch(() => null),
   ]);
 
   const lessons =
@@ -120,5 +127,6 @@ export async function loadAdminDashboardOverview(): Promise<AdminDashboardOvervi
       lastAutomation,
     },
     env,
+    billingIntegrity,
   };
 }

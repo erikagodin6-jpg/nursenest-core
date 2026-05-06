@@ -271,6 +271,12 @@ export function parseFlashcardInventoryResponse(
     return { ok: false, message: "Invalid response shape" };
   }
 
+  const rawTotalField = o.total;
+  if (typeof rawTotalField !== "number" || !Number.isFinite(rawTotalField)) {
+    // Do not infer "0 cards" from `{ success: true }` with missing/invalid `total` (ambiguous vs load failure).
+    return { ok: false, message: "Invalid inventory response" };
+  }
+
   const rawOptions = Array.isArray(o.categoryOptions) ? o.categoryOptions : [];
   const categoryOptions: BuilderCategoryOption[] = [];
   for (const row of rawOptions) {
@@ -295,11 +301,7 @@ export function parseFlashcardInventoryResponse(
     });
   }
 
-  const rawTotal = o.total;
-  const total =
-    typeof rawTotal === "number" && Number.isFinite(rawTotal)
-      ? Math.max(0, Math.floor(rawTotal))
-      : categoryOptions.reduce((s, c) => s + c.count, 0);
+  const total = Math.max(0, Math.floor(rawTotalField));
 
   const poolInventoryDiagnostics = parsePoolInventoryDiagnostics(o.diagnostics);
 

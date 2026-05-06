@@ -51,6 +51,9 @@ import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-fl
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-study-home-durability-minimal";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
+import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
+import { loadLearnerAdaptiveWireBundle } from "@/lib/learner/build-learner-adaptive-wire-bundle";
+import { LearnerAdaptiveRecommendationsSection } from "@/components/student/learner-adaptive-recommendations-section";
 
 type DashboardSessionLike = {
   user?: {
@@ -277,46 +280,58 @@ async function LearnerDashboardHeavyContent({
             })()
           : null;
 
+      let adaptiveWireBundle: Awaited<ReturnType<typeof loadLearnerAdaptiveWireBundle>> = null;
+      if (isAdaptiveLearningEnabled() && !skipNonCriticalHome) {
+        adaptiveWireBundle = await loadLearnerAdaptiveWireBundle(userId, entitlement, {
+          source: "rsc:learner-dashboard-adaptive",
+          topicPerformance: premiumSnapshot.topicPerformance,
+          supplementalWeakTopicRows: studySnap?.weakTopics ?? null,
+        });
+      }
+
       return (
-        <LearnerStudyHome
-          crumbs={crumbs}
-          t={t}
-          locale={locale}
-          examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
-          identity={identity}
-          heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
-          snapshot={premiumSnapshot}
-          studySnap={studySnap}
-          benchmark={benchmark}
-          heatmapTopics={heatmapTopics}
-          weakTopicTitles={weakTopicTitles}
-          continueLinks={scopedContinueLinks}
-          nextAction={scopedNextAction}
-          todayGoal={todayGoal}
-          questionBankGoal={questionBankGoal}
-          resume={resume}
-          momentumLine={momentumLine}
-          personalNote={personalNote}
-          streakProtect={streakProtect}
-          progressFeedbackLine={progressFeedbackLine}
-          countdown={countdown}
-          questionsPerDay={questionsPerDay}
-          daysLeft={daysLeft}
-          recentNotes={notes}
-          readinessDeferHint={t("learner.dashboard.hub.readinessDeferHint")}
-          showCoach={isStudyCoachEnabled()}
-          coachSummary={coachSummary}
-          studySettings={studySettings}
-          priorityEyebrowKey={
-            isNewLearnerPriority
-              ? "learner.studyHome.sectionPriorityEyebrowNew"
-              : "learner.studyHome.sectionPriorityEyebrow"
-          }
-          showShell={false}
-          entitlement={entitlement}
-          adaptiveStudyNextRecs={adaptiveStudyNextRecs}
-          reportCard={reportCard}
-        />
+        <>
+          <LearnerStudyHome
+            crumbs={crumbs}
+            t={t}
+            locale={locale}
+            examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
+            identity={identity}
+            heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
+            snapshot={premiumSnapshot}
+            studySnap={studySnap}
+            benchmark={benchmark}
+            heatmapTopics={heatmapTopics}
+            weakTopicTitles={weakTopicTitles}
+            continueLinks={scopedContinueLinks}
+            nextAction={scopedNextAction}
+            todayGoal={todayGoal}
+            questionBankGoal={questionBankGoal}
+            resume={resume}
+            momentumLine={momentumLine}
+            personalNote={personalNote}
+            streakProtect={streakProtect}
+            progressFeedbackLine={progressFeedbackLine}
+            countdown={countdown}
+            questionsPerDay={questionsPerDay}
+            daysLeft={daysLeft}
+            recentNotes={notes}
+            readinessDeferHint={t("learner.dashboard.hub.readinessDeferHint")}
+            showCoach={isStudyCoachEnabled()}
+            coachSummary={coachSummary}
+            studySettings={studySettings}
+            priorityEyebrowKey={
+              isNewLearnerPriority
+                ? "learner.studyHome.sectionPriorityEyebrowNew"
+                : "learner.studyHome.sectionPriorityEyebrow"
+            }
+            showShell={false}
+            entitlement={entitlement}
+            adaptiveStudyNextRecs={adaptiveStudyNextRecs}
+            reportCard={reportCard}
+          />
+          <LearnerAdaptiveRecommendationsSection t={t} bundle={adaptiveWireBundle} />
+        </>
       );
     }
   } catch {

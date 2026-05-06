@@ -3,7 +3,14 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { loadAdminUserSearch } from "@/lib/admin/load-admin-user-search";
+import {
+  adminUserDirectoryFilterQueryString,
+  loadAdminUserDirectory,
+  parseAdminUserDirectoryFilters,
+} from "@/lib/admin/load-admin-user-directory";
 import { AdminUserSearchPanel } from "@/components/admin/admin-user-search-panel";
+import { AdminUserDirectoryFilters } from "@/components/admin/admin-user-directory-filters";
+import { AdminUserDirectoryTable } from "@/components/admin/admin-user-directory-table";
 import { UserRole } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
@@ -13,11 +20,28 @@ const ADMIN_USERS_DB_TIMEOUT_MS = 1800;
 export default async function AdminUsersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    paid?: string;
+    pathway?: string;
+    tier?: string;
+    inactive?: string;
+    weak?: string;
+    after?: string;
+  }>;
 }) {
   await requireAdmin();
   const sp = await searchParams;
   const q = sp.q?.trim() ?? "";
+  const { filters: dirFilters, cursor: dirCursor } = parseAdminUserDirectoryFilters(sp);
+  const dirQuery = adminUserDirectoryFilterQueryString(dirFilters);
+  const directory = await withDatabaseFallbackTimeout(
+    () => loadAdminUserDirectory(dirFilters, dirCursor),
+    { rows: [], nextCursor: null },
+    ADMIN_USERS_DB_TIMEOUT_MS,
+    { scope: "admin_users", label: "user_directory" },
+  );
+
   const initialRows =
     q.length >= 2
       ? await withDatabaseFallbackTimeout(
@@ -80,6 +104,25 @@ export default async function AdminUsersPage({
 
       <div className="mt-8">
         <AdminUserSearchPanel key={q || "home"} initialQuery={q} initialRows={initialRows} />
+      </div>
+
+      <div className="mt-8 space-y-4">
+        <AdminUserDirectoryFilters
+          initialPaid={dirFilters.paid}
+          initialPathway={dirFilters.pathwayId ?? ""}
+          initialTier={dirFilters.tier ?? ""}
+          initialInactive={dirFilters.inactiveDays != null ? String(dirFilters.inactiveDays) : ""}
+          initialWeak={dirFilters.weakTopicsOnly ? "1" : ""}
+        />
+        <section className="nn-card p-6">
+          <h2 className="text-lg font-semibold">Filtered learner directory</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Up to {directory.rows.length} rows per page · paid flag uses subscription ACTIVE/GRACE only.
+          </p>
+          <div className="mt-4">
+            <AdminUserDirectoryTable rows={directory.rows} nextCursor={directory.nextCursor} querySuffix={dirQuery} />
+          </div>
+        </section>
       </div>
 
       {usingFallback ? (

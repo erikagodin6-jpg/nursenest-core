@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import { auditRawSqlQuery } from "@/lib/db/prisma-query-audit";
+import { logPrismaQueryDiagnosticsIfConfigured } from "@/lib/db/prisma-slow-query-log";
 
 const MAX_QUERIES = 800;
 
@@ -35,5 +36,6 @@ export function attachPrismaQueryCapture(prisma: PrismaClient): void {
   p.$on("query", (e) => {
     pushQuery({ query: e.query, durationMs: e.duration });
     auditRawSqlQuery(e.query);
+    logPrismaQueryDiagnosticsIfConfigured(e.duration, e.query);
   });
 }

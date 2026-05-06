@@ -8,6 +8,8 @@ export type { AccessScope };
 
 /**
  * Resolves premium access scope for SQL helpers (`questionAccessWhere`, lesson scope, CAT gates).
+ * For the typed cross-platform snapshot (`pathwayId`, `reasonCode`, `source`), see {@link toCanonicalLearnerAccess}
+ * in `./canonical-learner-access.server.ts` (Phase 4B) — still backed by this chain.
  * Prefer {@link getUserAccess} when you also need plan code, billing region slug, or renewal dates.
  *
  * Staff roles (ADMIN, SUPER_ADMIN, …) receive full learner access via {@link getUserAccess}

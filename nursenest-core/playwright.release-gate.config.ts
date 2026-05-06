@@ -87,6 +87,7 @@ export default defineConfig({
     ["list"],
     ["./tests/e2e/reporters/release-blocker-console-reporter.ts"],
     ["./tests/e2e/reporters/paid-user-summary-reporter.ts"],
+    ["./tests/e2e/reporters/release-gate-summary-reporter.ts"],
   ],
   use: {
     baseURL,
@@ -105,6 +106,21 @@ export default defineConfig({
       testMatch: /tests\/e2e\/release\/phase-1-release-qa-guest\.spec\.ts$/,
       use: { ...devices["Desktop Chrome"] },
     },
+    {
+      name: "release-mobile",
+      dependencies: ["release-phase-1-guest"],
+      testMatch: /tests\/e2e\/release\/phase-3-release-mobile-smoke\.spec\.ts$/,
+      use: { ...devices["Pixel 7"] },
+    },
     ...releasePaidProjects,
+    {
+      name: "release-synthetic-paid-smoke",
+      dependencies: ["release-blocking-paid"],
+      testMatch: /tests\/e2e\/release\/phase-3-synthetic-paid-learner-smoke\.spec\.ts$/,
+      use: {
+        ...devices["Desktop Chrome"],
+        ...(paidAuthEnabled ? { storageState: PAID_USER_AUTH_FILE } : {}),
+      },
+    },
   ],
 });

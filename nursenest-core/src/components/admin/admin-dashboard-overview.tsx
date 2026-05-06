@@ -67,6 +67,27 @@ export function AdminDashboardOverview({
         </p>
       )}
 
+      {data.billingIntegrity && data.billingIntegrity.severity !== "ok" ? (
+        <div
+          className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-warm)] p-4 text-sm text-[var(--semantic-text-primary)] shadow-sm"
+          role="alert"
+          data-testid="admin-billing-drift-banner"
+        >
+          <p className="font-semibold text-[var(--semantic-text-primary)]">Access mismatch signals (report only)</p>
+          <p className="mt-1 text-[var(--semantic-text-secondary)]">
+            DB heuristics flagged potential entitlement drift — severity {data.billingIntegrity.severity}. No automatic
+            fixes are applied. Review{" "}
+            <Link className="font-semibold text-[var(--semantic-brand)] underline" href="/admin/subscriptions">
+              Subscriptions &amp; billing
+            </Link>{" "}
+            and Stripe reconcile dry-run per runbook.
+          </p>
+          {data.billingIntegrity.hints[0] ? (
+            <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">{data.billingIntegrity.hints[0]}</p>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         <CardShell
           title="Content Management"
@@ -119,6 +140,64 @@ export function AdminDashboardOverview({
             </li>
           </ul>
           <p className="text-xs text-[var(--semantic-text-muted)]">Subscriptions: active + grace (see analytics for detail).</p>
+        </CardShell>
+
+        <CardShell
+          title="Billing integrity"
+          footer={
+            <Link
+              href="/admin/subscriptions"
+              className="nn-btn-secondary inline-flex min-h-[2.5rem] w-full items-center justify-center rounded-xl px-4 text-sm font-semibold"
+            >
+              Subscriptions &amp; billing
+            </Link>
+          }
+        >
+          {data.billingIntegrity ? (
+            <ul className="space-y-2 text-[var(--semantic-text-secondary)]">
+              <li className="flex justify-between gap-3">
+                <span>Signal severity</span>
+                <span className="font-semibold uppercase text-[var(--semantic-text-primary)]">
+                  {data.billingIntegrity.severity}
+                </span>
+              </li>
+              <li className="flex justify-between gap-3">
+                <span>Paid-like rows missing Stripe customer id</span>
+                <span className="tabular-nums font-semibold text-[var(--semantic-text-primary)]">
+                  {fmt(data.billingIntegrity.signals.activeLikeMissingStripeCustomer)}
+                </span>
+              </li>
+              <li className="flex justify-between gap-3">
+                <span>Plan tier ≠ user.tier (paid-like)</span>
+                <span className="tabular-nums font-semibold text-[var(--semantic-text-primary)]">
+                  {fmt(data.billingIntegrity.signals.activeLikeTierMismatchUser)}
+                </span>
+              </li>
+              <li className="flex justify-between gap-3">
+                <span>Webhook claims (24h)</span>
+                <span className="tabular-nums font-semibold text-[var(--semantic-text-primary)]">
+                  {data.billingIntegrity.signals.recentWebhookEvents24h == null
+                    ? "—"
+                    : fmt(data.billingIntegrity.signals.recentWebhookEvents24h)}
+                </span>
+              </li>
+              <li className="flex flex-col gap-1">
+                <span className="text-[var(--semantic-text-muted)]">Latest subscription row update</span>
+                <span className="text-xs">
+                  {data.billingIntegrity.signals.latestSubscriptionUpdatedAt
+                    ? new Date(data.billingIntegrity.signals.latestSubscriptionUpdatedAt).toLocaleString()
+                    : "—"}
+                </span>
+              </li>
+            </ul>
+          ) : (
+            <p className="text-[var(--semantic-text-muted)]">Billing integrity metrics unavailable.</p>
+          )}
+          <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">
+            JSON: <code className="rounded bg-[var(--semantic-panel-muted)] px-1">GET /api/admin/billing/integrity-summary</code>{" "}
+            (staff). Optional <code className="rounded bg-[var(--semantic-panel-muted)] px-1">?emitLog=1</code> writes{" "}
+            <code className="rounded bg-[var(--semantic-panel-muted)] px-1">entitlement_drift_suspected</code> when non-ok.
+          </p>
         </CardShell>
 
         <CardShell

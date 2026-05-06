@@ -34,6 +34,11 @@
     "seed:local-verify": "node scripts/seed-local-verify-data.mjs",
     "seed:career-questions": "npx tsx scripts/seed-career-questions.ts",
     "seed:mlt-lessons": "npx tsx scripts/seed-mlt-structured-lessons.ts",
+    "mobile:typecheck": "npm --prefix apps/mobile run typecheck",
+    "mobile:lint": "npm --prefix apps/mobile run lint",
+    "mobile:start": "npm --prefix apps/mobile run start",
+    "mobile:ios": "npm --prefix apps/mobile run ios",
+    "mobile:android": "npm --prefix apps/mobile run android",
     "audit:build-stability": "npm --prefix nursenest-core run audit:build-stability",
     "env:validate": "npm --prefix nursenest-core run env:validate",
     "env:validate:production": "npm --prefix nursenest-core run env:validate:production",
@@ -60,6 +65,8 @@
     "test:e2e:mobile": "npm --prefix nursenest-core run test:e2e:mobile --",
     "test:e2e:release": "npm --prefix nursenest-core run test:e2e:release --",
     "qa:release-gate": "npm --prefix nursenest-core run qa:release-gate --",
+    "health-check:production": "node scripts/health-check-production.mjs",
+    "predeploy:check": "node scripts/predeploy-check.mjs",
     "db:push": "drizzle-kit push",
     "backup:full": "tsx backup-system/backup-full.ts",
     "backup:db": "tsx backup-system/backup-db.ts",
@@ -106,7 +113,11 @@
     "db:migrate:deploy:safe": "npm --prefix nursenest-core run db:migrate:deploy:safe",
     "db:generate:safe": "npm --prefix nursenest-core run db:generate:safe",
     "db:schema:check:safe": "npm --prefix nursenest-core run db:schema:check:safe",
-    "production:preflight": "npm --prefix nursenest-core run production:preflight"
+    "production:preflight": "npm --prefix nursenest-core run production:preflight",
+    "mobile:eas:build": "npm --prefix apps/mobile run eas:build",
+    "mobile:release:readiness": "npm --prefix apps/mobile run release:readiness",
+    "mobile:typecheck:shared": "npm --prefix packages/nursenest-mobile-shared run typecheck",
+    "mobile:lint:shared": "npm --prefix packages/nursenest-mobile-shared run lint"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.19.0",

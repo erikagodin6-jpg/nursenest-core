@@ -318,10 +318,11 @@ export async function buildFlashcardCustomSession(
     ) {
       const pid = pathwayScopeId;
       const pathwayForBank = getExamPathwayById(pid);
-      const poolScopeForBank =
+      const poolAccessForBank =
         pathwayForBank != null
           ? await resolveAccessScopeForPathwayExamQuestionPool(userId, entitlement, pathwayForBank)
           : null;
+      const poolScopeForBank = poolAccessForBank?.scope ?? null;
       const pool =
         pathwayForBank != null && poolScopeForBank != null
           ? await loadExamQuestionRowsForFlashcardPool(

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { logAdminApiGate } from "@/lib/admin/admin-audit-log";
 import type { AdminSession } from "@/lib/admin/admin-types";
-import { isPathAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import { tierAllowsAdminApiPath } from "@/lib/rbac/institutional-admin-path-bridge";
 import { resolveAdminRequestPath } from "@/lib/auth/resolve-admin-request-path";
 import { getStaffSession } from "@/lib/auth/staff-session";
 
@@ -68,7 +68,7 @@ export async function requireAdmin(req: Request) {
 
   const admin: AdminSession = { userId: staff.userId, role: staff.role, tier: staff.tier };
 
-  if (!isPathAllowedForStaffTier(staff.tier, path)) {
+  if (!tierAllowsAdminApiPath(staff.tier, path)) {
     logAdminApiGate({ req, path: path || "(unknown)", admin, result: "denied_rbac" });
     return {
       ok: false as const,

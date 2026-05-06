@@ -6,6 +6,34 @@ import {
   parseFlashcardInventoryResponse,
 } from "@/lib/flashcards/flashcard-custom-session-response";
 
+test("parseFlashcardInventoryResponse: rejects success:true without numeric total (no fake empty pool)", () => {
+  const r = parseFlashcardInventoryResponse(true, { success: true, categoryOptions: [] });
+  assert.equal(r.ok, false);
+  if (r.ok) return;
+  assert.match(r.message, /Invalid inventory/i);
+});
+
+test("parseFlashcardInventoryResponse: rejects success:true with non-finite total", () => {
+  const r = parseFlashcardInventoryResponse(true, {
+    success: true,
+    total: Number.NaN,
+    categoryOptions: [],
+  });
+  assert.equal(r.ok, false);
+});
+
+test("parseFlashcardInventoryResponse: HTTP error branch wins over confusing success-shaped body", () => {
+  const r = parseFlashcardInventoryResponse(false, {
+    success: true,
+    total: 0,
+    categoryOptions: [],
+    message: "subscription_required",
+  });
+  assert.equal(r.ok, false);
+  if (r.ok) return;
+  assert.equal(r.message, "subscription_required");
+});
+
 test("parseFlashcardInventoryResponse: maps diagnostics onto summary.poolInventoryDiagnostics", () => {
   const r = parseFlashcardInventoryResponse(true, {
     success: true,

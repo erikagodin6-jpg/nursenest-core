@@ -1,0 +1,12 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "paths": {
+      "@nursenest/mobile-shared": ["../../packages/nursenest-mobile-shared/src/index.ts"],
+      "@nursenest/mobile-shared/*": ["../../packages/nursenest-mobile-shared/src/*"]
+    }
+  },
+  "include": ["App.tsx", "src/**/*.ts", "src/**/*.tsx"]
+}

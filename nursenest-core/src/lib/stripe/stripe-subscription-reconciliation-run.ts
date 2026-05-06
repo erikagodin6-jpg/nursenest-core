@@ -186,11 +186,26 @@ function logSubscriptionRepaired(args: {
 }
 
 /** Metrics + logs for log drains / Sentry — call once per run. */
-export function emitReconciliationDriftSignals(report: StripeSubscriptionReconciliationReport): void {
+export function emitReconciliationDriftSignals(
+  report: StripeSubscriptionReconciliationReport,
+  durationMs: number,
+): void {
   const summary = summarizeStripeSubscriptionReconciliationReport(report);
   const c = summary.counts;
   const unknown = report.unknownStripePriceIds.length;
   const highRisk = report.discrepancies.dbActiveButStripeNotEntitled.length;
+
+  safeServerLog("billing_sync", "entitlement_reconcile_run_complete", {
+    durationMs,
+    dryRun: report.dryRun ? 1 : 0,
+    stripeListed: report.stripeSubscriptionTotalListed,
+    dbRows: report.dbSubscriptionTotal,
+    rowsUpdated: report.apply.subscriptionRowsUpdated,
+    userSyncs: report.apply.userSyncsApplied,
+    createsApplied: report.apply.createsApplied,
+    errors: report.apply.errors.length,
+    outcome: report.apply.errors.length > 0 ? "partial_errors" : "ok",
+  });
 
   sentryCount("billing.reconcile.drifts.status_mismatch", c.statusMismatch);
   sentryCount("billing.reconcile.drifts.tier_mismatch", c.tierMismatch);
@@ -227,12 +242,12 @@ export function emitReconciliationDriftSignals(report: StripeSubscriptionReconci
   emitStructuredLog("billing_reconcile_run", warnDrift ? "warn" : "info", {
     flow: "billing",
     degraded: warnDrift,
-    message: `stripe_reconcile dryRun=${report.dryRun} subRowsUpdated=${report.apply.subscriptionRowsUpdated} creates=${report.apply.createsApplied} statusMismatch=${c.statusMismatch} tierMismatch=${c.tierMismatch} missingDb=${c.missingInDb} unknownPrices=${unknown} highRisk=${highRisk}`,
+    message: `stripe_reconcile dryRun=${report.dryRun} durationMs=${durationMs} subRowsUpdated=${report.apply.subscriptionRowsUpdated} creates=${report.apply.createsApplied} statusMismatch=${c.statusMismatch} tierMismatch=${c.tierMismatch} missingDb=${c.missingInDb} unknownPrices=${unknown} highRisk=${highRisk}`,
   });
 }
 
-function finalizeReconciliationRun(report: StripeSubscriptionReconciliationReport): void {
-  emitReconciliationDriftSignals(report);
+function finalizeReconciliationRun(report: StripeSubscriptionReconciliationReport, durationMs: number): void {
+  emitReconciliationDriftSignals(report, durationMs);
 }
 
 export function summarizeStripeSubscriptionReconciliationReport(r: StripeSubscriptionReconciliationReport) {
@@ -258,6 +273,7 @@ export function summarizeStripeSubscriptionReconciliationReport(r: StripeSubscri
 export async function runStripeSubscriptionReconciliation(
   apply: boolean,
 ): Promise<StripeSubscriptionReconciliationReport> {
+  const runStarted = performance.now();
   const generatedAt = new Date().toISOString();
   const unknownPriceMap = new Map<string, string[]>();
 
@@ -298,13 +314,13 @@ export async function runStripeSubscriptionReconciliation(
   const stripe = await getStripeClient();
   if (!stripe) {
     report.apply.errors.push({ message: "STRIPE_SECRET_KEY not set — cannot list Stripe subscriptions." });
-    finalizeReconciliationRun(report);
+    finalizeReconciliationRun(report, Math.round(performance.now() - runStarted));
     return report;
   }
 
   if (!isDatabaseUrlConfigured()) {
     report.apply.errors.push({ message: "DATABASE_URL not configured — cannot compare to Prisma." });
-    finalizeReconciliationRun(report);
+    finalizeReconciliationRun(report, Math.round(performance.now() - runStarted));
     return report;
   }
 
@@ -618,6 +634,6 @@ export async function runStripeSubscriptionReconciliation(
     }
   }
 
-  finalizeReconciliationRun(report);
+  finalizeReconciliationRun(report, Math.round(performance.now() - runStarted));
   return report;
 }

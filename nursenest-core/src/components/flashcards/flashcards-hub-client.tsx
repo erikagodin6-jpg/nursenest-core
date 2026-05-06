@@ -20,6 +20,8 @@ import {
   parseFlashcardCustomSessionResponse,
   parseFlashcardInventoryResponse,
 } from "@/lib/flashcards/flashcard-custom-session-response";
+import { reportFlashcardInventoryMalformedSuccessPayload } from "@/lib/flashcards/flashcard-inventory-parse-telemetry.server";
+import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import {
   countSavedStudyItems,
   getStudyItemIdsMatchingFilters,
@@ -260,6 +262,10 @@ export function FlashcardsHubClient({
       try {
         json = await res.json();
       } catch {
+        logDedupedClientDiagnostic("flashcards_hub", "inventory_json_parse_failed", scopedPathwayId, {
+          pathwayId: scopedPathwayId,
+          httpStatus: res.status,
+        });
         const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
         setLoadError(
           process.env.NODE_ENV === "development"
@@ -273,6 +279,19 @@ export function FlashcardsHubClient({
       }
       const parsed = parseFlashcardInventoryResponse(res.ok, json);
       if (!parsed.ok) {
+        logDedupedClientDiagnostic("flashcards_hub", "inventory_parse_failed", `${scopedPathwayId}:${res.status}`, {
+          pathwayId: scopedPathwayId,
+          httpStatus: res.status,
+          httpOk: res.ok,
+        });
+        if (res.ok) {
+          void reportFlashcardInventoryMalformedSuccessPayload({
+            httpStatus: res.status,
+            messageLen: parsed.message.trim().length,
+            pathwayId: scopedPathwayId,
+            reason: "parse_failed_after_2xx",
+          });
+        }
         const base = parsed.message.trim() ? parsed.message : "Could not load flashcard pool counts.";
         setLoadError(
           process.env.NODE_ENV === "development"
@@ -341,6 +360,9 @@ export function FlashcardsHubClient({
         });
       }
     } catch {
+      logDedupedClientDiagnostic("flashcards_hub", "inventory_network_error", scopedPathwayId, {
+        pathwayId: scopedPathwayId,
+      });
       const base = "Network error while loading flashcards. Check your connection and try again.";
       setLoadError(
         process.env.NODE_ENV === "development" ? `${base} (pathwayId=${scopedPathwayId})` : base,

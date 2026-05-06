@@ -28,8 +28,8 @@ import {
 import { safeOptional } from "@/lib/server/safe-optional";
 import { getLearnerFallback, setLearnerFallback } from "@/lib/server/fallback-cache";
 import { isDegradedMode } from "@/lib/config/degraded-mode";
-import { BaselineAssessmentPrompt } from "@/components/student/baseline-assessment-prompt";
 import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
+import { BaselineAssessmentPrompt } from "@/components/student/baseline-assessment-prompt";
 import {
   LearnerShellDesktopStudyLinks,
   LearnerShellMobileBottomNav,
@@ -49,6 +49,7 @@ import { SupportEmailHeaderLink } from "@/components/support/support-email-heade
 import { LearnerExamStudyProviders } from "@/components/exam/learner-exam-study-providers";
 import { isCoreOnlyEmergencyMode, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
+import { getOperationalStartupTraceFields } from "@/lib/ops/operational-startup-diagnostics";
 import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silent-section-boundary";
 import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
@@ -63,8 +64,6 @@ import {
   publicQaStateFromPayload,
 } from "@/lib/admin/admin-learner-qa-simulation";
 import { getAdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
-import { AdminLearnerQaAppToolbar } from "@/components/admin/admin-learner-qa-app-toolbar";
-import { AdminLearnerQaPosthogSuppressor } from "@/components/admin/admin-learner-qa-posthog-suppressor";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
 
@@ -74,7 +73,10 @@ export default async function LearnerShellLayout({ children }: { children: React
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   if (isDegradedMode()) {
-    layoutStderrTrace("learner_shell", "degraded_mode_active", { active: true });
+    layoutStderrTrace("learner_shell", "degraded_mode_active", {
+      active: true,
+      ...getOperationalStartupTraceFields(),
+    });
   }
 
   if (!userId) {
@@ -87,6 +89,15 @@ export default async function LearnerShellLayout({ children }: { children: React
     getAdminViewAsLearnerContext(userId),
   ]);
   const { staffSession, simulation: qaShell } = viewAsCtx;
+
+  const adminQaModules = qaShell
+    ? await Promise.all([
+        import("@/components/admin/admin-learner-qa-posthog-suppressor"),
+        import("@/components/admin/admin-learner-qa-app-toolbar"),
+      ])
+    : null;
+  const AdminLearnerQaPosthogSuppressor = adminQaModules?.[0].AdminLearnerQaPosthogSuppressor ?? null;
+  const AdminLearnerQaAppToolbar = adminQaModules?.[1].AdminLearnerQaAppToolbar ?? null;
 
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
@@ -221,7 +232,9 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   return (
     <SentryLearnerShell userId={userId}>
-      <AdminLearnerQaPosthogSuppressor active={Boolean(qaShell)} />
+      {AdminLearnerQaPosthogSuppressor ? (
+        <AdminLearnerQaPosthogSuppressor active={Boolean(qaShell)} />
+      ) : null}
       <PaywallHomeStatsProvider value={paywallHomeStats}>
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate>
@@ -261,7 +274,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   </p>
                 </div>
               ) : null}
-              {qaShell ? (
+              {qaShell && AdminLearnerQaAppToolbar ? (
                 <AdminLearnerQaAppToolbar
                   bannerTitle={bannerTitleForPayload(qaShell)}
                   initialPublicState={publicQaStateFromPayload(qaShell)}

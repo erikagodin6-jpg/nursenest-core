@@ -15,7 +15,7 @@ import { flashcardLearnerExamPoolWhereSql } from "@/lib/flashcards/flashcard-lea
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import { foldExamQuestionTopicBodyGroupsIntoBuilderCounts } from "@/lib/flashcards/flashcards-exam-inventory-counts";
 import type { FlashcardsPoolInventoryDiagnostics } from "@/lib/flashcards/flashcards-hub-types";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { getCanonicalExamQuestionWhereForPathway } from "@/lib/study-question-pool/canonical-exam-question-where";
 
 export type FlashcardsExamInventoryLoadResult =
@@ -33,6 +33,26 @@ function bn(v: bigint | number | null | undefined): number {
   return typeof v === "bigint" ? Number(v) : Number(v);
 }
 
+export type FlashcardPoolAccessTierCountrySource = "entitlement" | "user_profile" | "pathway_catalog_default";
+
+/** How tier/country were resolved for the exam pool (no user ids). */
+export type ResolvedFlashcardPoolAccess = {
+  scope: AccessScope | null;
+  tierResolutionSource: FlashcardPoolAccessTierCountrySource;
+  countryResolutionSource: FlashcardPoolAccessTierCountrySource;
+  /** True when a `User` row was read to fill missing tier/country on the entitlement scope. */
+  entitlementTierCountryUserRowCoalesce: boolean;
+};
+
+function tierCountrySource(
+  hadEntitlementValue: boolean,
+  hadValueAfterUserCoalesce: boolean,
+): FlashcardPoolAccessTierCountrySource {
+  if (hadEntitlementValue) return "entitlement";
+  if (hadValueAfterUserCoalesce) return "user_profile";
+  return "pathway_catalog_default";
+}
+
 /**
  * Resolves tier/country for `ExamQuestion` gates when subscription-derived `AccessScope`
  * is missing `country` and/or `tier` (e.g. `planCountry` not yet synced) by coalescing from
@@ -42,14 +62,39 @@ export async function resolveAccessScopeForPathwayExamQuestionPool(
   userId: string,
   entitlement: AccessScope,
   pathway: ExamPathwayDefinition,
-): Promise<AccessScope | null> {
-  if (!entitlement.hasAccess) return null;
-  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) return entitlement;
+): Promise<ResolvedFlashcardPoolAccess> {
+  function denied(
+    tierResolutionSource: FlashcardPoolAccessTierCountrySource,
+    countryResolutionSource: FlashcardPoolAccessTierCountrySource,
+    entitlementTierCountryUserRowCoalesce: boolean,
+  ): ResolvedFlashcardPoolAccess {
+    return {
+      scope: null,
+      tierResolutionSource,
+      countryResolutionSource,
+      entitlementTierCountryUserRowCoalesce,
+    };
+  }
 
-  let tier = entitlement.tier;
-  let country = entitlement.country;
+  if (!entitlement.hasAccess) return denied("entitlement", "entitlement", false);
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
+    return {
+      scope: entitlement,
+      tierResolutionSource: "entitlement",
+      countryResolutionSource: "entitlement",
+      entitlementTierCountryUserRowCoalesce: false,
+    };
+  }
+
+  const hadEntTier = entitlement.tier != null;
+  const hadEntCountry = entitlement.country != null && String(entitlement.country).trim() !== "";
+
+  let tier = entitlement.tier ?? null;
+  let country = entitlement.country ?? null;
+  let entitlementTierCountryUserRowCoalesce = false;
 
   if (!tier || !country) {
+    entitlementTierCountryUserRowCoalesce = true;
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { tier: true, country: true },
@@ -58,12 +103,26 @@ export async function resolveAccessScopeForPathwayExamQuestionPool(
     if (!country) country = user?.country ?? null;
   }
 
+  const tierAfterUser = tier;
+  const countryAfterUser = country;
   tier = tier ?? pathway.stripeTier;
   country = country ?? pathway.countryCode;
 
   const coalesced: AccessScope = { ...entitlement, tier, country };
-  if (!subscriptionCoversPathwayBase(coalesced, pathway)) return null;
-  return coalesced;
+  if (!subscriptionCoversPathwayBase(coalesced, pathway)) {
+    return denied(
+      tierCountrySource(hadEntTier, tierAfterUser != null),
+      tierCountrySource(hadEntCountry, countryAfterUser != null),
+      entitlementTierCountryUserRowCoalesce,
+    );
+  }
+
+  return {
+    scope: coalesced,
+    tierResolutionSource: tierCountrySource(hadEntTier, tierAfterUser != null),
+    countryResolutionSource: tierCountrySource(hadEntCountry, countryAfterUser != null),
+    entitlementTierCountryUserRowCoalesce,
+  };
 }
 
 const FLASHCARD_INVENTORY_GROUP_BY_LIMIT = 500;
@@ -81,8 +140,19 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
   pathway: ExamPathwayDefinition;
 }): Promise<FlashcardsExamInventoryLoadResult> {
   const { userId, entitlement, pathway } = args;
-  const poolScope = await resolveAccessScopeForPathwayExamQuestionPool(userId, entitlement, pathway);
+  const loadStarted = performance.now();
+
+  const accessResolved = await resolveAccessScopeForPathwayExamQuestionPool(userId, entitlement, pathway);
+  const resolveAccessMs = Math.round(performance.now() - loadStarted);
+  const poolScope = accessResolved.scope;
   if (!poolScope) {
+    safeServerLog("flashcards", "exam_inventory_access_denied", {
+      pathwayId: pathway.id,
+      resolveAccessMs,
+      tierResolutionSource: accessResolved.tierResolutionSource,
+      countryResolutionSource: accessResolved.countryResolutionSource,
+      entitlementUserRowCoalesce: accessResolved.entitlementTierCountryUserRowCoalesce,
+    });
     return {
       ok: false,
       code: "pathway_not_entitled",
@@ -93,6 +163,7 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
   const whereSql = flashcardLearnerExamPoolWhereSql(poolScope, pathway);
 
   const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathway.id);
+  const prismaAggStarted = performance.now();
   const [totalRow, groupRows, dedicatedFlashcardCount] = await Promise.all([
     prisma.$queryRaw<[{ n: bigint }]>`
       SELECT COUNT(*)::bigint AS n FROM exam_questions
@@ -119,17 +190,21 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
       },
     }),
   ]);
+  const prismaParallelAggregateMs = Math.round(performance.now() - prismaAggStarted);
 
   const total = bn(totalRow[0]?.n);
 
   let legacyCanonicalPrismaPoolCount: number | null = null;
+  let legacyCanonicalPrismaCountMs = 0;
   if (!accessScopeIsStaffLearnerEntitlementBypass(poolScope)) {
+    const tLeg = performance.now();
     try {
       const legacyWhere = getCanonicalExamQuestionWhereForPathway(poolScope, pathway);
       legacyCanonicalPrismaPoolCount = await prisma.examQuestion.count({ where: legacyWhere });
     } catch {
       legacyCanonicalPrismaPoolCount = null;
     }
+    legacyCanonicalPrismaCountMs = Math.round(performance.now() - tLeg);
   }
 
   const groups = groupRows.map((g) => ({
@@ -139,26 +214,30 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
   }));
 
   const summed = groups.reduce((s, g) => s + g._count._all, 0);
+  let aggregateSumMismatch = false;
+  let groupByCapped = false;
   if (summed !== total && groupRows.length >= FLASHCARD_INVENTORY_GROUP_BY_LIMIT) {
+    groupByCapped = true;
     safeServerLog("flashcards", "exam_inventory_groupby_capped", {
       pathwayId: pathway.id,
-      userIdPrefix: userId.slice(0, 8),
       total,
       summed,
       cap: FLASHCARD_INVENTORY_GROUP_BY_LIMIT,
     });
   } else if (summed !== total) {
+    aggregateSumMismatch = true;
     safeServerLog("flashcards", "exam_inventory_aggregate_sum_mismatch", {
       pathwayId: pathway.id,
-      userIdPrefix: userId.slice(0, 8),
       total,
       summed,
       buckets: groups.length,
     });
   }
 
+  const foldStarted = performance.now();
   const countsByBuilderId = foldExamQuestionTopicBodyGroupsIntoBuilderCounts(groups, pathway.id);
   const categoryOptions = applyCountsToBuilderCategories(pathway.id, countsByBuilderId);
+  const categoryFoldMs = Math.round(performance.now() - foldStarted);
 
   const diagnostics: FlashcardsPoolInventoryDiagnostics = {
     pathwayId: pathway.id,
@@ -176,13 +255,53 @@ export async function loadFlashcardsExamInventoryForPathway(args: {
       : {}),
   };
 
-  safeServerLog("flashcards", "exam_inventory_aggregate_total", {
+  const pathwayDefaultUsedForAccess =
+    accessResolved.tierResolutionSource === "pathway_catalog_default" ||
+    accessResolved.countryResolutionSource === "pathway_catalog_default";
+
+  const totalLoadMs = Math.round(performance.now() - loadStarted);
+
+  if (
+    total === 0 &&
+    (legacyCanonicalPrismaPoolCount === null || aggregateSumMismatch || groupByCapped)
+  ) {
+    safeServerLogCritical(
+      "flashcards",
+      "FLASHCARDS_CRITICAL_EMPTY_POOL",
+      {
+        pathwayId: pathway.id,
+        totalLoadMs,
+        prismaParallelAggregateMs,
+        legacyCanonicalPrismaCountMs,
+        categoryFoldMs,
+        legacyCountNull: legacyCanonicalPrismaPoolCount === null ? 1 : 0,
+        aggregateSumMismatch: aggregateSumMismatch ? 1 : 0,
+        groupByCapped: groupByCapped ? 1 : 0,
+      },
+      undefined,
+      { flow: "flashcards_exam_inventory" },
+    );
+  }
+
+  safeServerLog("flashcards", "exam_inventory_load_complete", {
     pathwayId: pathway.id,
-    userIdPrefix: userId.slice(0, 8),
+    totalLoadMs,
+    resolveAccessMs,
+    prismaParallelAggregateMs,
+    legacyCanonicalPrismaCountMs,
+    categoryFoldMs,
     total,
+    matchingCards: total,
+    categoriesReturned: categoryOptions.length,
     distinctTopicBodyBuckets: groups.length,
     dedicatedFlashcardRowCount: dedicatedFlashcardCount,
     legacyCanonicalPrismaPoolCount: legacyCanonicalPrismaPoolCount ?? undefined,
+    tierResolutionSource: accessResolved.tierResolutionSource,
+    countryResolutionSource: accessResolved.countryResolutionSource,
+    entitlementUserRowCoalesce: accessResolved.entitlementTierCountryUserRowCoalesce,
+    pathwayCatalogDefaultUsed: pathwayDefaultUsedForAccess ? 1 : 0,
+    groupByCapped: groupByCapped ? 1 : 0,
+    aggregateSumMismatch: aggregateSumMismatch ? 1 : 0,
   });
 
   return {

@@ -631,6 +631,13 @@ export async function GET(req: NextRequest) {
 
   const snap = await getFreemiumSnapshot(userId);
   if (!snap || snap.questionRemaining <= 0) {
+    safeServerLog("api_questions", "premium_denied_freemium_exhausted", {
+      outcome: "denied",
+      code: "not_subscribed",
+      userIdPrefix: userId.slice(0, 8),
+      freemiumRemaining: snap?.questionRemaining ?? 0,
+      severity: "expected_denial",
+    });
     return NextResponse.json({ code: "not_subscribed", message: "Subscription required", freemiumExhausted: true }, { status: 403 });
   }
 

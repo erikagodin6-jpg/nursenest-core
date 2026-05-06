@@ -2,7 +2,7 @@ import "server-only";
 
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { getUserAccess } from "@/lib/entitlements/get-user-access";
+import { loadCanonicalLearnerAccessForUserId } from "@/lib/entitlements/canonical-learner-access.server";
 import { getAdminModulePreviewAccess, type AdminModulePreviewAccess } from "@/lib/modules/admin-module-preview-access";
 import {
   assertNoEcgForRpn,
@@ -48,12 +48,12 @@ export async function getCurrentEcgModuleAccess(): Promise<EcgModuleAccess> {
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) return { ok: false, reason: "unauthorized" };
 
-  const access = await getUserAccess(userId);
-  const tier = access.allowedProfession.tier;
+  const canonical = await loadCanonicalLearnerAccessForUserId(userId);
+  const tier = canonical.tier;
   if (!canAccessEcgModuleForTier(tier)) return { ok: false, reason: "tier_denied" };
-  if (!access.hasPremium) return { ok: false, reason: "premium_required" };
+  if (!canonical.hasAccess) return { ok: false, reason: "premium_required" };
   try {
-    assertNoEcgForRpn(tier, access.allowedExam.pathwayId);
+    assertNoEcgForRpn(tier, canonical.pathwayId);
   } catch {
     return { ok: false, reason: "tier_denied" };
   }
@@ -63,8 +63,8 @@ export async function getCurrentEcgModuleAccess(): Promise<EcgModuleAccess> {
     mode: "public",
     userId,
     tier: tier as "RN" | "NP",
-    pathwayId: access.allowedExam.pathwayId,
-    hasPremium: access.hasPremium,
+    pathwayId: canonical.pathwayId,
+    hasPremium: canonical.hasAccess,
   };
 }
 

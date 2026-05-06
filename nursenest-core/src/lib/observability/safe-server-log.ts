@@ -21,7 +21,7 @@ type SentryServerSdk = {
 
 let sentryServerSdkPromise: Promise<SentryServerSdk | null> | null = null;
 
-export type SafeLogMeta = Record<string, string | number | boolean | undefined>;
+export type SafeLogMeta = Record<string, string | number | boolean | null | undefined>;
 
 function loadSentryServerSdk(): Promise<SentryServerSdk | null> {
   if (!isSentryServerRuntimeEnabled()) return Promise.resolve(null);

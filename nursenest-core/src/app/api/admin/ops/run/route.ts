@@ -6,6 +6,7 @@ import path from "path";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { InstitutionalCapability, staffTierHasInstitutionalCapability } from "@/lib/rbac/institutional-capabilities";
 import { parseAdminJsonMutationIntent, stripAdminMutationControlFields } from "@/lib/admin/admin-mutation-intent";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { loadAdminDashboardStats } from "@/lib/admin/load-admin-dashboard-stats";
@@ -62,7 +63,7 @@ function loadMaterializedMetadata() {
 export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
-  if (gate.admin.tier !== "super") {
+  if (!staffTierHasInstitutionalCapability(gate.admin.tier, InstitutionalCapability.SuperDangerousOps)) {
     return NextResponse.json({ error: "Forbidden", code: "admin_super_only" }, { status: 403 });
   }
 

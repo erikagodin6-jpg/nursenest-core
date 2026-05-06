@@ -10,6 +10,7 @@
     "src/lib/auth/**/*.ts",
     "src/lib/db.ts",
     "src/lib/db/**/*.ts",
-    "src/app/api/subscriptions/**/*.ts"
+    "src/app/api/subscriptions/**/*.ts",
+    "src/lib/mobile-native/**/*.ts"
   ]
 }

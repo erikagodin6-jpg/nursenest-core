@@ -234,9 +234,23 @@ function buildRequiredAlliedProfessionCoverage(): AlliedProfessionCoverage[] {
   });
 }
 
-export function buildLessonNormalizationCoverageReport(): LessonNormalizationCoverageReport {
+export type BuildLessonNormalizationCoverageReportOptions = {
+  /**
+   * When provided (e.g. lesson index build runner), skips a second
+   * {@link listCatalogPathwayIdsWithLessonsSync} pass — same pathway set, same report output.
+   */
+  pathwayIds?: readonly string[];
+};
+
+export function buildLessonNormalizationCoverageReport(
+  options?: BuildLessonNormalizationCoverageReportOptions,
+): LessonNormalizationCoverageReport {
   const generatedAt = new Date().toISOString();
-  const pathways = listCatalogPathwayIdsWithLessonsSync()
+  const pathwaySource =
+    options?.pathwayIds && options.pathwayIds.length > 0
+      ? [...options.pathwayIds]
+      : listCatalogPathwayIdsWithLessonsSync();
+  const pathways = pathwaySource
     .map((pathwayId) => buildPathwayCoverage(pathwayId))
     .sort((a, b) => a.pathwayId.localeCompare(b.pathwayId));
 

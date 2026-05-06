@@ -30,6 +30,40 @@ const SCHEMA_V1 = 1;
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = path.join(coreRoot, "src", "content", "pathway-lessons", "generated-indexes");
 
+function warnHighLessonCatalogMemoMissRates(memo: ReturnType<typeof getLessonCatalogMemoizationStats>): void {
+  const raw = process.env.NN_LESSON_CATALOG_MEMO_MISS_WARN_RATE ?? "0.35";
+  const threshold = Number(raw);
+  if (!Number.isFinite(threshold) || threshold <= 0 || threshold > 1) return;
+  const gauges: Array<{ label: string; hits: number; misses: number }> = [
+    { label: "merged_raw_catalog", hits: memo.mergedRawCatalogHits, misses: memo.mergedRawCatalogMisses },
+    { label: "pathway_normalize", hits: memo.pathwayNormalizeHits, misses: memo.pathwayNormalizeMisses },
+    { label: "effective_hub", hits: memo.effectiveHubHits, misses: memo.effectiveHubMisses },
+    { label: "marketing_slug_set", hits: memo.marketingSlugSetHits, misses: memo.marketingSlugSetMisses },
+    { label: "summary_index", hits: memo.summaryIndexHits, misses: memo.summaryIndexMisses },
+  ];
+  for (const g of gauges) {
+    const denom = g.hits + g.misses;
+    if (denom < 50) continue;
+    const rate = g.misses / denom;
+    if (rate >= threshold) {
+      safeServerLog("lesson_indexes", "lesson_catalog_memo_miss_rate_warn", {
+        gauge: g.label,
+        missRate: Number(rate.toFixed(4)),
+        hits: g.hits,
+        misses: g.misses,
+        threshold,
+      });
+      console.error(
+        `[nursenest-core] lesson_indexes lesson_catalog_memo_miss_rate_warn ${JSON.stringify({
+          gauge: g.label,
+          missRate: Number(rate.toFixed(4)),
+          threshold,
+        })}`,
+      );
+    }
+  }
+}
+
 function stripExistingJson(): void {
   if (!fs.existsSync(outDir)) return;
   for (const f of fs.readdirSync(outDir)) {
@@ -45,6 +79,7 @@ async function main(): Promise<void> {
   const ids = listCatalogPathwayIdsWithLessonsSync();
   const generatedAt = new Date().toISOString();
   const buildStarted = performance.now();
+  let totalIndexedLessons = 0;
 
   for (const pathwayId of ids) {
     const safe = pathwayId.trim();
@@ -83,11 +118,13 @@ async function main(): Promise<void> {
 
     fs.writeFileSync(path.join(outDir, `${safe}.json`), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
     const pathwayMs = Math.round(performance.now() - pathwayStarted);
+    totalIndexedLessons += summaries.length;
     console.info(
       `[build:lesson-indexes] wrote ${safe}.json lessons=${summaries.length} raw=${rawCount} pathwayMs=${pathwayMs}`,
     );
   }
   const memo = getLessonCatalogMemoizationStats();
+  warnHighLessonCatalogMemoMissRates(memo);
   safeServerLog("lesson_indexes", "lesson_index_generation_memoization", {
     pathwayCount: ids.length,
     totalMs: Math.round(performance.now() - buildStarted),
@@ -102,7 +139,7 @@ async function main(): Promise<void> {
     summaryHits: memo.summaryIndexHits,
     summaryMisses: memo.summaryIndexMisses,
   });
-  const coverage = buildLessonNormalizationCoverageReport();
+  const coverage = buildLessonNormalizationCoverageReport({ pathwayIds: ids });
   writeLessonNormalizationCoverageReports(coverage);
   const collapsed = coverage.pathways.filter((pathway) => pathway.rawCount > 0 && pathway.renderableCount === 0);
   if (collapsed.length > 0) {
@@ -124,6 +161,24 @@ async function main(): Promise<void> {
     `[build:lesson-indexes] wrote coverage reports json=${lessonNormalizationCoverageJsonPath()} md=${lessonNormalizationCoverageMarkdownPath()}`,
   );
   console.info(`[build:lesson-indexes] done pathways=${ids.length} -> ${outDir}`);
+  safeServerLog("lesson_indexes", "lesson_index_generation_complete_ms", {
+    totalMs: Math.round(performance.now() - buildStarted),
+    pathwayCount: ids.length,
+  });
+
+  const heapMb = Math.round(process.memoryUsage().heapUsed / (1024 * 1024));
+  console.error(
+    `[nursenest-core] lesson_index_build_phase_summary\n${JSON.stringify(
+      {
+        pathwayCount: ids.length,
+        totalIndexedLessons,
+        totalBuildMs: Math.round(performance.now() - buildStarted),
+        heapUsedMb: heapMb,
+      },
+      null,
+      2,
+    )}`,
+  );
 }
 
 main().catch((e) => {

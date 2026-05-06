@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { CheckCircle2, BookOpen, Target, Brain, Calendar, ArrowRight } from "lucide-react";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { examGoalRowsForCountry, normalizeOnboardingCountry } from "@/lib/onboarding/exam-goal-rows-for-country";
 
 // ── Types ──────────────────────────────────────────────────────────────────
@@ -127,6 +128,11 @@ export function TrialOnboardingFlow({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
+    if (!res.ok) {
+      logDedupedClientDiagnostic("onboarding", "complete_http_error", String(res.status), {
+        httpStatus: res.status,
+      });
+    }
     return res.ok;
   }
 
@@ -150,6 +156,7 @@ export function TrialOnboardingFlow({
         onComplete?.();
       }
     } catch {
+      logDedupedClientDiagnostic("onboarding", "complete_request_exception", "fast_path", {});
       /* stay on step; user can retry */
     } finally {
       setSaving(false);
@@ -173,6 +180,7 @@ export function TrialOnboardingFlow({
         onComplete?.();
       }
     } catch {
+      logDedupedClientDiagnostic("onboarding", "complete_request_exception", "wizard", {});
       /* stay on step */
     } finally {
       setSaving(false);

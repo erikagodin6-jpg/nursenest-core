@@ -66,13 +66,20 @@ export async function GET(req: NextRequest) {
         );
       }
 
+      const invStarted = performance.now();
       const inv = await loadFlashcardsExamInventoryForPathway({
         userId: gate.userId,
         entitlement: gate.entitlement,
         pathway,
       });
+      const inventoryRouteMs = Math.round(performance.now() - invStarted);
 
       if (!inv.ok) {
+        safeServerLog("flashcards", "inventory_route_load_failed", {
+          pathwayId: pathway.id,
+          inventoryRouteMs,
+          code: inv.code,
+        });
         if (inv.code === "pathway_not_entitled") {
           return NextResponse.json(
             { success: false, code: inv.code, message: inv.message, categories: [], total: 0, categoryOptions: [] },
@@ -86,6 +93,14 @@ export async function GET(req: NextRequest) {
       }
 
       const categories = Object.entries(inv.countsByBuilderId).map(([name, count]) => ({ name, count }));
+
+      safeServerLog("flashcards", "inventory_route_ok", {
+        pathwayId: pathway.id,
+        inventoryRouteMs,
+        total: inv.total,
+        categoriesReturned: inv.categoryOptions.length,
+        matchingCards: inv.total,
+      });
 
       return NextResponse.json(
         {

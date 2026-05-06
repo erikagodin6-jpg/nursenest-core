@@ -44,6 +44,7 @@ function warnIfStripeKeyModeMismatch(): void {
  */
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/subscriptions/webhook", "webhook", async () => {
+  const handlerStarted = performance.now();
   warnIfStripeKeyModeMismatch();
 
   const correlation = correlationIdFromRequest(req) ?? "";
@@ -164,6 +165,8 @@ export async function POST(req: Request) {
     safeServerLog("stripe_webhook", "duplicate_delivery_skipped", {
       eventIdPrefix: event.id.slice(0, 12),
       correlation,
+      durationMs: Math.round(performance.now() - handlerStarted),
+      outcome: "duplicate_skipped",
       severity: "info",
     });
     return NextResponse.json({ ok: true, duplicate: true });
@@ -174,6 +177,8 @@ export async function POST(req: Request) {
       type: event.type,
       eventIdPrefix: event.id.slice(0, 12),
       correlation,
+      durationMs: Math.round(performance.now() - handlerStarted),
+      outcome: "ignored_unhandled_type",
       severity: "info",
     });
     emitStructuredLog("webhook_ignored", "info", {
@@ -211,7 +216,13 @@ export async function POST(req: Request) {
     safeServerLogCritical(
       "stripe_webhook",
       "handler_failed",
-      { type: event.type, correlation, severity: "error" },
+      {
+        type: event.type,
+        correlation,
+        durationMs: Math.round(performance.now() - handlerStarted),
+        outcome: "handler_exception",
+        severity: "error",
+      },
       e,
     );
     captureServerExceptionIfEnabled(e, {
@@ -226,6 +237,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
   }
 
+  safeServerLog("stripe_webhook", "event_applied", {
+    type: event.type,
+    eventIdPrefix: event.id.slice(0, 12),
+    keyMode,
+    correlation,
+    durationMs: Math.round(performance.now() - handlerStarted),
+    outcome: "applied",
+    severity: "info",
+  });
   return NextResponse.json({ ok: true });
   });
 }

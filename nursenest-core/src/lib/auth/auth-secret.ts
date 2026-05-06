@@ -121,11 +121,12 @@ export function reportAuthSecretStartupStatus(surface: string): void {
   }
 
   const dedupe = readDedupe();
+  const presence = getAuthSecretEnvPresenceReport();
   const meta = {
     surface,
-    AUTH_SECRET_present: Boolean(process.env.AUTH_SECRET?.trim()),
-    NEXTAUTH_SECRET_present: Boolean(process.env.NEXTAUTH_SECRET?.trim()),
+    ...presence,
     NEXT_PHASE: process.env.NEXT_PHASE?.trim() || undefined,
+    npm_lifecycle_event: process.env.npm_lifecycle_event?.trim() || undefined,
   };
 
   if (isAuthSecretBuildToleranceContext()) {
@@ -144,7 +145,7 @@ export function reportAuthSecretStartupStatus(surface: string): void {
     safeServerLogCritical(
       "auth",
       "missing_auth_secret",
-      { surface },
+      { surface, ...presence },
       new Error("AUTH_SECRET (or NEXTAUTH_SECRET) must be set in production for JWT signing"),
     );
     return;

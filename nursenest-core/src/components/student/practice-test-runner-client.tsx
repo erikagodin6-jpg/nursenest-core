@@ -52,6 +52,17 @@ import {
 } from "@/lib/practice-tests/practice-session-contract";
 import { resolveLinearEngineRunnerUiKind } from "@/lib/practice-tests/linear-runner-session-mode";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
+import {
+  PracticeTestCatAdaptiveExamFooter,
+  PracticeTestCatStudyRationaleAside,
+  PracticeTestClinicalFigure,
+  PracticeTestFlagForReviewButton,
+  PracticeTestMcqChoicesInstruction,
+  PracticeTestMcqRadiogroupOptions,
+  PracticeTestQuestionMediaBlock,
+  PracticeTestTimedSessionAlert,
+  PracticeTestTimedSessionAlertCompact,
+} from "@/components/student/practice-test-runner/practice-test-runner-board-parts";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
 import { resolvePracticeTestRunCopy } from "@/lib/practice-tests/practice-test-run-i18n-fallbacks";
 import { splitPromptLeadingImage } from "@/components/flashcards/flashcard-study-question-stack";
@@ -74,12 +85,16 @@ import {
 import { StudyPlanFromResults } from "@/components/study/study-plan";
 import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-card";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
-import { RationalePanel } from "@/components/study/cat-rationale-panel";
 import { ResultsSummary } from "@/components/study/cat-results-summary";
 import type { StudySettings } from "@/lib/learner/study-settings";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
+import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { captureClientException } from "@/lib/runtime/client-observability";
 import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
+import {
+  PracticeAdaptivePostMissPanel,
+  type PracticeAdaptivePostMissPayload,
+} from "@/components/student/practice-adaptive-post-miss-panel";
 import { LearnerStudyCard } from "@/components/learner-ui/learner-study-card";
 import {
   buildExamOptionDisplayOrder,
@@ -131,6 +146,7 @@ export function PracticeTestRunnerClient({
   studySettings,
   isEntitled = true,
   initialPathwaySurface = null,
+  adaptiveLearningEnabled = false,
 }: {
   testId: string;
   userId: string;
@@ -146,6 +162,8 @@ export function PracticeTestRunnerClient({
   isEntitled?: boolean;
   /** Server snapshot from stored test config so chrome can render before hydrate returns pathwaySurface. */
   initialPathwaySurface?: PracticeTestPathwayClientShell | null;
+  /** Server env `ADAPTIVE_LEARNING_ENABLED` — gates optional post-miss study wiring (linear practice only). */
+  adaptiveLearningEnabled?: boolean;
 }) {
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const { t } = useMarketingI18n();
@@ -215,6 +233,10 @@ export function PracticeTestRunnerClient({
       referenceSource?: string | null;
     }>
   >({});
+  const [practiceAdaptivePostMiss, setPracticeAdaptivePostMiss] = useState<{
+    questionId: string;
+    payload: PracticeAdaptivePostMissPayload;
+  } | null>(null);
   /** CAT Study Mode: rationale for the current item after scoring, before the next adaptive pick. */
   const [catStudyFeedback, setCatStudyFeedback] = useState<CatStudyFeedbackPayload | null>(null);
   /** CAT Study Mode: last item explanation before switching to the results layout. */
@@ -422,6 +444,11 @@ export function PracticeTestRunnerClient({
       setPhase("ready");
     } catch (e) {
       captureClientException("practice_test_hydrate", e, { testId });
+      logDedupedClientDiagnostic("practice_runner", "hydrate_failed", String(testId), {
+        testId,
+        phase: "error",
+        surface: "hydrate",
+      });
       const message = e instanceof Error ? e.message : "Error";
       setError(message);
       setPhase("error");
@@ -928,6 +955,47 @@ export function PracticeTestRunnerClient({
             referenceSource: data.feedback!.referenceSource ?? null,
           },
         }));
+      }
+      if (data.feedback?.isCorrect) {
+        setPracticeAdaptivePostMiss((p) => (p?.questionId === current.id ? null : p));
+      } else {
+        const pathwayId = testConfig?.pathwayId ?? pathwaySurface?.id ?? "";
+        const topicRaw =
+          [current.topic, current.subtopic].find((x) => typeof x === "string" && String(x).trim().length > 1) ?? null;
+        if (
+          adaptiveLearningEnabled &&
+          isEntitled &&
+          !catMode &&
+          pathwayId &&
+          data.feedback &&
+          linearRationaleVisibility === "after_each"
+        ) {
+          const qidAtCommit = current.id;
+          const idxAtCommit = idx;
+          void (async () => {
+            try {
+              const ar = await fetch("/api/learner/adaptive-post-miss", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  pathwayId,
+                  missedTopicKey: typeof topicRaw === "string" ? topicRaw : null,
+                }),
+              });
+              const payload = (await ar.json()) as PracticeAdaptivePostMissPayload & {
+                locked?: boolean;
+                code?: string;
+              };
+              if (!runnerMountedRef.current) return;
+              if (idxRef.current !== idxAtCommit || questionIdsRef.current[idxAtCommit] !== qidAtCommit) return;
+              if (ar.ok && payload && !payload.locked) {
+                setPracticeAdaptivePostMiss({ questionId: qidAtCommit, payload });
+              }
+            } catch {
+              /* optional wiring — ignore */
+            }
+          })();
+        }
       }
       logSessionEvent("submit_linear_commit_success", { idx, questionId: current.id });
     } catch (e) {
@@ -2120,33 +2188,15 @@ export function PracticeTestRunnerClient({
                         examStemScrollPartition
                         examCategoryLabel={catExamCategoryLine}
                         examHeaderRightSlot={
-                          <button
-                            type="button"
-                            aria-pressed={Boolean(flagged[current.id])}
+                          <PracticeTestFlagForReviewButton
+                            flagged={Boolean(flagged[current.id])}
                             disabled={examPrimaryBusy}
-                            title={
-                              flagged[current.id]
-                                ? tx("learner.practiceTests.run.unflagForReview", "Remove flag")
-                                : tx("learner.practiceTests.run.flagForReview", "Flag for review")
-                            }
-                            className={`rounded-md p-2 transition ${
-                              flagged[current.id]
-                                ? "text-[var(--semantic-brand)]"
-                                : "text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-text-primary)_6%,var(--semantic-surface))]"
-                            }`}
-                            onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
-                          >
-                            {flagged[current.id] ? (
-                              <Flag className="h-4 w-4 fill-current text-[var(--semantic-brand)]" aria-hidden />
-                            ) : (
-                              <Flag className="h-4 w-4 text-[var(--semantic-text-muted)]" strokeWidth={1.75} aria-hidden />
-                            )}
-                            <span className="sr-only">
-                              {flagged[current.id]
-                                ? tx("learner.practiceTests.run.flagged", "Flagged")
-                                : tx("learner.practiceTests.run.flag", "Flag")}
-                            </span>
-                          </button>
+                            titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
+                            titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
+                            srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
+                            srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
+                            onToggle={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                          />
                         }
                         examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
                       >
@@ -2172,85 +2222,86 @@ export function PracticeTestRunnerClient({
                           phase="pre_submit"
                         />
                         {timedMode && timeLimitSec != null ? (
-                          <div className="nn-cat-exam-timing-alert mb-2 sm:mb-3" role="alert">
-                            {tx(
+                          <PracticeTestTimedSessionAlertCompact
+                            message={tx(
                               "learner.practiceTests.run.timedAutoEnd",
                               "Timed session: the exam may end automatically when time expires.",
                             )}
-                          </div>
+                          />
                         ) : null}
 
-                        <p className="nn-cat-options-label">
-                          {isSata
-                            ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
-                            : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
-                        </p>
+                        <PracticeTestMcqChoicesInstruction
+                          isSata={isSata}
+                          selectAllLabel={tx(
+                            "learner.practiceTests.run.selectAllThatApply",
+                            "Select all that apply",
+                          )}
+                          selectBestLabel={tx(
+                            "learner.practiceTests.run.selectBestAnswer",
+                            "Select the best answer",
+                          )}
+                        />
 
                         {catOptions}
                       </QuestionCard>
                     )}
                   </div>
-                  <footer
-                    data-nn-qa-cat-adaptive-exam-footer
-                    className="nn-cat-exam-board-footer nn-cat-exam-board-footer--adaptive flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]"
-                  >
-                    <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-2 px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
-                      <button
-                        type="button"
-                        disabled
-                        className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-muted)] opacity-50 sm:min-h-0 sm:px-2 sm:py-1.5"
-                        title={tx(
-                          "learner.practiceTests.run.catExamNoPrevious",
-                          "Previous item is not available during this exam.",
-                        )}
-                      >
-                        <ChevronLeft className="h-4 w-4" aria-hidden />
-                        {tx("learner.practiceTests.run.previous", "Previous")}
-                      </button>
-                      <p className="m-0 text-center text-xs font-medium text-[var(--semantic-text-muted)] sm:text-sm">
-                        {catExamFooterProgressLabel}
-                      </p>
-                      <div className="min-w-0 shrink text-right sm:min-w-[5.5rem] sm:shrink-0">
-                        {catExamUiPhase === "answering" ? (
-                          <button
-                            type="button"
-                            data-nn-qa-cat-exam-submit-answer
-                            disabled={
-                              examPrimaryBusy || catTimerHydrateRecovery || !hasMeaningfulAnswer(current.id)
-                            }
-                            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
-                            onClick={lockCatExamAnswer}
-                          >
-                            {tx("learner.practiceTests.run.submit", "Submit answer")}
-                            <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            ref={catExamAdvanceButtonRef}
-                            data-nn-qa-cat-exam-advance
-                            data-nn-qa-cat-exam-advance-intent="server_driven"
-                            aria-busy={catExamUiPhase === "advancing"}
-                            disabled={
-                              examPrimaryBusy ||
-                              catTimerHydrateRecovery ||
-                              catExamUiPhase !== "submitted_locked" ||
-                              !hasMeaningfulAnswer(current.id)
-                            }
-                            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
-                            onClick={() => {
-                              if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
-                              if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
-                              void catAdvance();
-                            }}
-                          >
-                            {catExamAdvancePrimaryLabel}
-                            <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
-                          </button>
-                        )}
-                      </div>
+                  <PracticeTestCatAdaptiveExamFooter>
+                    <button
+                      type="button"
+                      disabled
+                      className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-muted)] opacity-50 sm:min-h-0 sm:px-2 sm:py-1.5"
+                      title={tx(
+                        "learner.practiceTests.run.catExamNoPrevious",
+                        "Previous item is not available during this exam.",
+                      )}
+                    >
+                      <ChevronLeft className="h-4 w-4" aria-hidden />
+                      {tx("learner.practiceTests.run.previous", "Previous")}
+                    </button>
+                    <p className="m-0 text-center text-xs font-medium text-[var(--semantic-text-muted)] sm:text-sm">
+                      {catExamFooterProgressLabel}
+                    </p>
+                    <div className="min-w-0 shrink text-right sm:min-w-[5.5rem] sm:shrink-0">
+                      {catExamUiPhase === "answering" ? (
+                        <button
+                          type="button"
+                          data-nn-qa-cat-exam-submit-answer
+                          disabled={
+                            examPrimaryBusy || catTimerHydrateRecovery || !hasMeaningfulAnswer(current.id)
+                          }
+                          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
+                          onClick={lockCatExamAnswer}
+                        >
+                          {tx("learner.practiceTests.run.submit", "Submit answer")}
+                          <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          ref={catExamAdvanceButtonRef}
+                          data-nn-qa-cat-exam-advance
+                          data-nn-qa-cat-exam-advance-intent="server_driven"
+                          aria-busy={catExamUiPhase === "advancing"}
+                          disabled={
+                            examPrimaryBusy ||
+                            catTimerHydrateRecovery ||
+                            catExamUiPhase !== "submitted_locked" ||
+                            !hasMeaningfulAnswer(current.id)
+                          }
+                          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
+                          onClick={() => {
+                            if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
+                            if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
+                            void catAdvance();
+                          }}
+                        >
+                          {catExamAdvancePrimaryLabel}
+                          <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+                        </button>
+                      )}
                     </div>
-                  </footer>
+                  </PracticeTestCatAdaptiveExamFooter>
                 </div>
                 <dialog
                   ref={catExamNavigatorDialogRef}
@@ -2360,11 +2411,17 @@ export function PracticeTestRunnerClient({
                             mode={isExamStyle ? "cat" : "practice"}
                             phase={catStudyFeedback ? "post_submit" : "pre_submit"}
                           />
-                          <p className="nn-cat-options-label">
-                            {isSata
-                              ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
-                              : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
-                          </p>
+                          <PracticeTestMcqChoicesInstruction
+                            isSata={isSata}
+                            selectAllLabel={tx(
+                              "learner.practiceTests.run.selectAllThatApply",
+                              "Select all that apply",
+                            )}
+                            selectBestLabel={tx(
+                              "learner.practiceTests.run.selectBestAnswer",
+                              "Select the best answer",
+                            )}
+                          />
                           {catOptions}
                           {confidenceTrackingEnabled && hasMeaningfulAnswer(current.id) ? (
                             <div className="mt-4">
@@ -2379,16 +2436,12 @@ export function PracticeTestRunnerClient({
                         </QuestionCard>
                       </div>
                     </div>
-                    <aside className="nn-question-session-rationale flex min-h-0 flex-col">
-                      <RationalePanel
-                        mode={rationalePanelMode}
-                        feedback={
-                          rationalePanelMode === "feedback" ? catStudyFeedback ?? undefined : undefined
-                        }
-                        optionKeys={optsOrderCanonical}
-                        optionTexts={optsOrderDisplay}
-                      />
-                    </aside>
+                    <PracticeTestCatStudyRationaleAside
+                      rationalePanelMode={rationalePanelMode}
+                      catStudyFeedback={catStudyFeedback}
+                      optionKeys={optsOrderCanonical}
+                      optionTexts={optsOrderDisplay}
+                    />
                   </div>
                 </div>
               </>
@@ -2456,23 +2509,14 @@ export function PracticeTestRunnerClient({
           })}
         </ul>
       ) : (
-        <ul
-          className="nn-cat-opt-list"
-          role="radiogroup"
-          aria-label={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
-        >
-          {optsOrderCanonical.map((canonical, i) => (
-            <li key={canonical}>
-              <AnswerOptionRow
-                letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
-                text={optsOrderDisplay[i] ?? canonical}
-                state={legacyCatOptState(canonical)}
-                disabled={false}
-                onClick={() => setAnswerForCurrent(canonical)}
-              />
-            </li>
-          ))}
-        </ul>
+        <PracticeTestMcqRadiogroupOptions
+          canonicalKeys={optsOrderCanonical}
+          displayTexts={optsOrderDisplay}
+          rowState={legacyCatOptState}
+          disabled={false}
+          ariaLabel={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
+          onSelectCanonical={(canonical) => setAnswerForCurrent(canonical)}
+        />
       );
 
     const legacyStemTrimmed =
@@ -2497,61 +2541,44 @@ export function PracticeTestRunnerClient({
       (qTags.find((t) => typeof t === "string" && t.trim().length > 0) as string | undefined)?.trim() ??
       null;
     const legacyExamFlagSlot = (
-      <button
-        type="button"
-        aria-pressed={Boolean(flagged[current.id])}
+      <PracticeTestFlagForReviewButton
+        flagged={Boolean(flagged[current.id])}
         disabled={controlsBusy}
-        title={
-          flagged[current.id]
-            ? tx("learner.practiceTests.run.unflagForReview", "Remove flag")
-            : tx("learner.practiceTests.run.flagForReview", "Flag for review")
-        }
-        className={`rounded-md p-2 transition ${
-          flagged[current.id]
-            ? "text-[var(--semantic-brand)]"
-            : "text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-text-primary)_6%,var(--semantic-surface))]"
-        }`}
-        onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
-      >
-        {flagged[current.id] ? (
-          <Flag className="h-4 w-4 fill-current text-[var(--semantic-brand)]" aria-hidden />
-        ) : (
-          <Flag className="h-4 w-4 text-[var(--semantic-text-muted)]" strokeWidth={1.75} aria-hidden />
-        )}
-        <span className="sr-only">
-          {flagged[current.id]
-            ? tx("learner.practiceTests.run.flagged", "Flagged")
-            : tx("learner.practiceTests.run.flag", "Flag")}
-        </span>
-      </button>
+        titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
+        titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
+        srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
+        srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
+        onToggle={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+      />
     );
     const legacyQuestionCardInner = (
       <>
-        {legacyClinicalSrc ? (
-          <div className="nn-cat-exam-clinical-figure mb-4 flex justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] p-3">
-            {/* eslint-disable-next-line @next/next/no-img-element -- stems may reference CDN URLs from trusted exam content */}
-            <img src={legacyClinicalSrc} alt="" className="max-h-[min(36vh,20rem)] w-auto max-w-full object-contain" />
-          </div>
-        ) : null}
-        <EcgVideoQuestionMedia
+        {legacyClinicalSrc ? <PracticeTestClinicalFigure src={legacyClinicalSrc} /> : null}
+        <PracticeTestQuestionMediaBlock
           exhibitData={current.exhibitData}
           images={current.images}
           mode={isExamStyle ? "cat" : "practice"}
           phase="pre_submit"
         />
         {timedMode && timeLimitSec != null ? (
-          <div className="nn-cat-exam-timing-alert mb-4" role="alert">
-            {tx(
+          <PracticeTestTimedSessionAlert
+            message={tx(
               "learner.practiceTests.run.timedAutoEnd",
               "Timed session: the exam may end automatically when time expires.",
             )}
-          </div>
+          />
         ) : null}
-        <p className="nn-cat-options-label">
-          {isSata
-            ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
-            : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
-        </p>
+        <PracticeTestMcqChoicesInstruction
+          isSata={isSata}
+          selectAllLabel={tx(
+            "learner.practiceTests.run.selectAllThatApply",
+            "Select all that apply",
+          )}
+          selectBestLabel={tx(
+            "learner.practiceTests.run.selectBestAnswer",
+            "Select the best answer",
+          )}
+        />
         {legacyCatOptions}
         {confidenceTrackingEnabled ? (
           <div className="mt-4">
@@ -2747,23 +2774,14 @@ export function PracticeTestRunnerClient({
         })}
       </ul>
     ) : (
-      <ul
-        className="nn-cat-opt-list"
-        role="radiogroup"
-        aria-label={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
-      >
-        {optsOrderCanonical.map((canonical, i) => (
-          <li key={canonical}>
-            <AnswerOptionRow
-              letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
-              text={formatLinearOptionText(i, canonical)}
-              state={linearOptState(canonical)}
-              disabled={optionsInteractionLocked}
-              onClick={() => setAnswerForCurrent(canonical)}
-            />
-          </li>
-        ))}
-      </ul>
+      <PracticeTestMcqRadiogroupOptions
+        canonicalKeys={optsOrderCanonical}
+        displayTexts={optsOrderCanonical.map((canonical, i) => formatLinearOptionText(i, canonical))}
+        rowState={linearOptState}
+        disabled={optionsInteractionLocked}
+        ariaLabel={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
+        onSelectCanonical={(canonical) => setAnswerForCurrent(canonical)}
+      />
     );
 
   const rationaleFullStatus: import("@/components/study/practice-rationale-full-panel").PracticeRationaleFullPanelStatus =
@@ -2818,35 +2836,32 @@ export function PracticeTestRunnerClient({
 
   const linearQuestionCardInner = (
     <>
-      {clinicalImageSrcLinear ? (
-        <div className="nn-cat-exam-clinical-figure mb-4 flex justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] p-3">
-          {/* eslint-disable-next-line @next/next/no-img-element -- stems may reference CDN URLs from trusted exam content */}
-          <img
-            src={clinicalImageSrcLinear}
-            alt=""
-            className="max-h-[min(36vh,20rem)] w-auto max-w-full object-contain"
-          />
-        </div>
-      ) : null}
-      <EcgVideoQuestionMedia
+      {clinicalImageSrcLinear ? <PracticeTestClinicalFigure src={clinicalImageSrcLinear} /> : null}
+      <PracticeTestQuestionMediaBlock
         exhibitData={current.exhibitData}
         images={current.images}
         mode={linearIsExamShell ? "cat" : "practice"}
         phase={showLinearPerItemRationale ? "post_submit" : "pre_submit"}
       />
       {timedMode && timeLimitSec != null ? (
-        <div className="nn-cat-exam-timing-alert mb-4" role="alert">
-          {tx(
+        <PracticeTestTimedSessionAlert
+          message={tx(
             "learner.practiceTests.run.timedAutoEnd",
             "Timed session: the exam may end automatically when time expires.",
           )}
-        </div>
+        />
       ) : null}
-      <p className="nn-cat-options-label">
-        {isSata
-          ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
-          : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
-      </p>
+      <PracticeTestMcqChoicesInstruction
+        isSata={isSata}
+        selectAllLabel={tx(
+          "learner.practiceTests.run.selectAllThatApply",
+          "Select all that apply",
+        )}
+        selectBestLabel={tx(
+          "learner.practiceTests.run.selectBestAnswer",
+          "Select the best answer",
+        )}
+      />
       {linearCatOptions}
       {confidenceTrackingEnabled ? (
         <div className="mt-4">
@@ -2883,33 +2898,15 @@ export function PracticeTestRunnerClient({
   );
 
   const linearExamFlagSlot = (
-    <button
-      type="button"
-      aria-pressed={Boolean(flagged[current.id])}
+    <PracticeTestFlagForReviewButton
+      flagged={Boolean(flagged[current.id])}
       disabled={controlsBusy}
-      title={
-        flagged[current.id]
-          ? tx("learner.practiceTests.run.unflagForReview", "Remove flag")
-          : tx("learner.practiceTests.run.flagForReview", "Flag for review")
-      }
-      className={`rounded-md p-2 transition ${
-        flagged[current.id]
-          ? "text-[var(--semantic-brand)]"
-          : "text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-text-primary)_6%,var(--semantic-surface))]"
-      }`}
-      onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
-    >
-      {flagged[current.id] ? (
-        <Flag className="h-4 w-4 fill-current text-[var(--semantic-brand)]" aria-hidden />
-      ) : (
-        <Flag className="h-4 w-4 text-[var(--semantic-text-muted)]" strokeWidth={1.75} aria-hidden />
-      )}
-      <span className="sr-only">
-        {flagged[current.id]
-          ? tx("learner.practiceTests.run.flagged", "Flagged")
-          : tx("learner.practiceTests.run.flag", "Flag")}
-      </span>
-    </button>
+      titleFlagged={tx("learner.practiceTests.run.unflagForReview", "Remove flag")}
+      titleUnflagged={tx("learner.practiceTests.run.flagForReview", "Flag for review")}
+      srFlagged={tx("learner.practiceTests.run.flagged", "Flagged")}
+      srUnflagged={tx("learner.practiceTests.run.flag", "Flag")}
+      onToggle={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+    />
   );
 
   const linearExamQuestionCard = (
@@ -3063,6 +3060,14 @@ export function PracticeTestRunnerClient({
                       referenceSource={linearFeedback?.referenceSource ?? null}
                       showDistractorFallback={Boolean(currentCommitted && rationaleFullStatus !== "waiting" && rationaleFullStatus !== null)}
                     />
+                    {practiceAdaptivePostMiss?.questionId === current.id ? (
+                      <PracticeAdaptivePostMissPanel
+                        payload={practiceAdaptivePostMiss.payload}
+                        testConfig={testConfig}
+                        pathwaySurface={pathwaySurface}
+                        tx={(key, fallback) => tx(key, fallback)}
+                      />
+                    ) : null}
                   </PracticeExamRationalePanel>
                 </div>
                 {linearBoardFooter}

@@ -28,28 +28,65 @@ function runLessonIndexesForBuild() {
 
   console.log("[lesson-indexes] generating");
   const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
+  const genStarted = Date.now();
   const gen = spawnSync(npmCmd, ["run", "build:lesson-indexes"], {
     cwd: packageRoot,
     stdio: "inherit",
     env: process.env,
   });
+  const genMs = Date.now() - genStarted;
   if ((gen.status ?? 1) !== 0) {
     console.error("[lesson-indexes] FATAL: build:lesson-indexes failed");
     return gen.status ?? 1;
   }
+  console.error(
+    `[nursenest-core] lesson_indexes gate_build_lesson_indexes_ms ${JSON.stringify({ durationMs: genMs, ok: true })}`,
+  );
 
   console.log("[lesson-indexes] verifying");
+  const verStarted = Date.now();
   const ver = spawnSync(npmCmd, ["run", "verify:lesson-indexes"], {
     cwd: packageRoot,
     stdio: "inherit",
     env: process.env,
   });
+  const verMs = Date.now() - verStarted;
   if ((ver.status ?? 1) !== 0) {
     console.error("[lesson-indexes] FATAL: verify:lesson-indexes failed");
     return ver.status ?? 1;
   }
+  console.error(
+    `[nursenest-core] lesson_indexes gate_verify_lesson_indexes_ms ${JSON.stringify({ durationMs: verMs, ok: true })}`,
+  );
 
   console.log("[lesson-indexes] ready");
+
+  if (/^(1|true|yes)$/i.test(String(process.env.BUILD_LOG_MEMORY_USAGE ?? "").trim())) {
+    const m = process.memoryUsage();
+    console.error(
+      `[nursenest-core] build_memory lesson_index_gate ${JSON.stringify({
+        rss: m.rss,
+        heapTotal: m.heapTotal,
+        heapUsed: m.heapUsed,
+        external: m.external,
+      })}`,
+    );
+  }
+
+  const heapMb = Math.round(process.memoryUsage().heapUsed / (1024 * 1024));
+  console.error(
+    `[nursenest-core] lesson_indexes_gate_summary\n${JSON.stringify(
+      {
+        buildLessonIndexesMs: genMs,
+        verifyLessonIndexesMs: verMs,
+        totalGateMs: genMs + verMs,
+        heapUsedMb: heapMb,
+      },
+      null,
+      2,
+    )}`,
+  );
+
   return 0;
 }
 

@@ -1,5 +1,9 @@
 import { expect, type Page } from "@playwright/test";
+import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { measureHorizontalOverflow } from "./mobile-usability-audit";
+
+/** @see {@link MOBILE_OVERFLOW_GATE_REPORT} — canonical list for Phase 1B overflow gates. */
+export { MOBILE_OVERFLOW_GATE_REPORT } from "./mobile-layout-overflow-gate-routes";
 
 export type MobileLayoutHealthOptions = {
   /** Allow small subpixel / scrollbar differences on `documentElement` (default 2). */
@@ -21,10 +25,20 @@ export async function assertMobileHorizontalLayoutHealth(
   const docSlop = opts.documentSlopPx ?? 2;
   const mainSlop = opts.mainSlopPx ?? 4;
   const o = await measureHorizontalOverflow(page);
+  if (o.document.excess > docSlop) {
+    logDedupedClientDiagnostic("mobile_e2e", "horizontal_overflow_document", context, {
+      documentExcessPx: o.document.excess,
+      scrollWidth: o.document.scrollWidth,
+      clientWidth: o.document.clientWidth,
+    });
+  }
   expect(o.document.excess, `[${context}] document overflow ${o.document.scrollWidth}px vs ${o.document.clientWidth}px`).toBeLessThanOrEqual(
     docSlop,
   );
   if (o.main && o.main.excess > mainSlop) {
+    logDedupedClientDiagnostic("mobile_e2e", "horizontal_overflow_main", context, {
+      mainExcessPx: o.main.excess,
+    });
     expect(o.main.excess, `[${context}] <main> overflow excess ${o.main.excess}px`).toBeLessThanOrEqual(mainSlop);
   }
 }

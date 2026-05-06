@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth/guards";
 import { loadAdminUserSupportDetail } from "@/lib/admin/load-admin-user-support-detail";
+import { loadAdaptiveLearnerAdminSummary } from "@/lib/admin/adaptive-learner-summary.server";
+import { AdminAdaptiveLearnerOverview } from "@/components/admin/admin-adaptive-learner-overview";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +23,7 @@ export default async function AdminUserSupportDetailPage({ params }: { params: P
     notFound();
   }
 
+  const adaptiveSummary = await loadAdaptiveLearnerAdminSummary(userId);
   const d = data;
   const u = d.user;
 
@@ -52,6 +55,8 @@ export default async function AdminUserSupportDetailPage({ params }: { params: P
           <li key={n}>{n}</li>
         ))}
       </ul>
+
+      <AdminAdaptiveLearnerOverview data={adaptiveSummary} />
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2">
         <div className="nn-card p-5">
@@ -403,6 +408,10 @@ export default async function AdminUserSupportDetailPage({ params }: { params: P
         JSON:{" "}
         <Link className="text-primary underline" href={`/api/admin/users/${encodeURIComponent(u.id)}/support`}>
           /api/admin/users/…/support
+        </Link>
+        {" · "}
+        <Link className="text-primary underline" href={`/api/admin/users/${encodeURIComponent(u.id)}/adaptive-summary`}>
+          adaptive-summary
         </Link>
       </p>
     </main>

@@ -16,6 +16,7 @@ describe("stripe subscription reconciliation (static)", () => {
     assert.match(src, /subscription_repaired/);
     assert.match(src, /emitReconciliationDriftSignals/);
     assert.match(src, /finalizeReconciliationRun/);
+    assert.match(src, /entitlement_reconcile_run_complete/);
   });
 
   it("exposes admin on-demand route", () => {

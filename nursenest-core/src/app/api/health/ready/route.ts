@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { DatabaseHealthClassification } from "@/lib/db/db-error-classification";
+import { isAuthSecretConfigured } from "@/lib/auth/auth-secret";
 import { checkDatabaseReadiness } from "@/lib/db/prisma-readiness";
 import { buildHealthProbeLogEntry } from "@/lib/health/health-probe-log";
 import { recordHealthReadyDatabaseFailure } from "@/lib/observability/production-signal-metrics";
@@ -11,6 +11,10 @@ export const dynamic = "force-dynamic";
 
 const NO_STORE = { "Cache-Control": "no-store" };
 const HEALTH_READY_SLOW_THRESHOLD_MS = 1000;
+
+function sessionSigningPayload(): { sessionSigning: "configured" | "not_configured" } {
+  return { sessionSigning: isAuthSecretConfigured() ? "configured" : "not_configured" };
+}
 
 /** Default below typical load-balancer / DO health check ceilings; override with `HEALTH_READY_DB_TIMEOUT_MS`. */
 function readinessDbTimeoutMs(): number {
@@ -50,7 +54,10 @@ export async function GET() {
         classification: r.classification,
       });
       recordHealthReadyDatabaseFailure();
-      return NextResponse.json({ ok: false, ready: false, database: "error" }, { status: 503, headers: NO_STORE });
+      return NextResponse.json(
+        { ok: false, ready: false, database: "error", ...sessionSigningPayload() },
+        { status: 503, headers: NO_STORE },
+      );
     }
     if ("latencyMs" in r) {
       const entry = buildHealthProbeLogEntry({
@@ -63,7 +70,10 @@ export async function GET() {
       if (entry) {
         safeServerLog("health", entry.event, entry.meta);
       }
-      return NextResponse.json({ ok: true, ready: true, database: "ok" }, { status: 200, headers: NO_STORE });
+      return NextResponse.json(
+        { ok: true, ready: true, database: "ok", ...sessionSigningPayload() },
+        { status: 200, headers: NO_STORE },
+      );
     }
     const entry = buildHealthProbeLogEntry({
       route: "/api/health/ready",
@@ -76,7 +86,10 @@ export async function GET() {
     if (entry) {
       safeServerLog("health", entry.event, entry.meta);
     }
-    return NextResponse.json({ ok: true, ready: true, database: "not_configured" }, { status: 200, headers: NO_STORE });
+    return NextResponse.json(
+      { ok: true, ready: true, database: "not_configured", ...sessionSigningPayload() },
+      { status: 200, headers: NO_STORE },
+    );
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     const detail = msg.slice(0, 120);
@@ -94,6 +107,9 @@ export async function GET() {
     }
     safeServerLog("health", "ready_handler_error", { detail });
     recordHealthReadyDatabaseFailure();
-    return NextResponse.json({ ok: false, ready: false, database: "error" }, { status: 503, headers: NO_STORE });
+    return NextResponse.json(
+      { ok: false, ready: false, database: "error", ...sessionSigningPayload() },
+      { status: 503, headers: NO_STORE },
+    );
   }
 }

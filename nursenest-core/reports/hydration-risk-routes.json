@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-05-06T17:05:42.260Z",
+  "rows": [
+    {
+      "rel": "src/components/student/practice-test-runner-client.tsx",
+      "lines": 3126,
+      "bytes": 142738,
+      "useClient": true,
+      "riskScore": 3594.9,
+      "risk": "medium"
+    },
+    {
+      "rel": "src/components/admin/admin-blog-control-panel-client.tsx",
+      "lines": 2859,
+      "bytes": 126702,
+      "useClient": true,
+      "riskScore": 3287.85,
+      "risk": "medium"
+    },
+    {
+      "rel": "src/components/student/question-bank-practice-client.tsx",
+      "lines": 1898,
+      "bytes": 86711,
+      "useClient": true,
+      "riskScore": 2182.7,
+      "risk": "lower"
+    },
+    {
+      "rel": "src/components/student/practice-tests-hub-client.tsx",
+      "lines": 1512,
+      "bytes": 69494,
+      "useClient": true,
+      "riskScore": 1738.8,
+      "risk": "lower"
+    },
+    {
+      "rel": "src/app/(student)/app/(learner)/layout.tsx",
+      "lines": 371,
+      "bytes": 18320,
+      "useClient": false,
+      "riskScore": 315.35,
+      "risk": "lower"
+    }
+  ]
+}

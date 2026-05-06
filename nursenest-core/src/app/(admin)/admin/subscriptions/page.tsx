@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { AdminPhase4bCanonicalEntitlementsPanel } from "@/components/admin/admin-phase4b-canonical-entitlements.server";
 import { requireAdmin } from "@/lib/auth/guards";
+import { loadEntitlementDriftSignals } from "@/lib/billing/entitlement-drift-signals.server";
 import { eachStripePriceMatrixRow } from "@/lib/stripe/pricing-map";
 import { prisma } from "@/lib/db";
 
@@ -7,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminSubscriptionsPage() {
   await requireAdmin();
-  const [recent, byStatus, byTier, byCountry] = await Promise.all([
+  const [recent, byStatus, byTier, byCountry, drift] = await Promise.all([
     prisma.subscription.findMany({
       orderBy: { createdAt: "desc" },
       take: 40,
@@ -17,12 +19,16 @@ export default async function AdminSubscriptionsPage() {
         planTier: true,
         planCountry: true,
         createdAt: true,
+        updatedAt: true,
+        stripeSubscriptionId: true,
+        stripeCustomerId: true,
         user: { select: { email: true, name: true } },
       },
     }),
     prisma.subscription.groupBy({ by: ["status"], _count: { _all: true } }),
     prisma.subscription.groupBy({ by: ["planTier"], _count: { _all: true } }),
     prisma.subscription.groupBy({ by: ["planCountry"], _count: { _all: true } }),
+    loadEntitlementDriftSignals().catch(() => null),
   ]);
 
   const matrix = eachStripePriceMatrixRow();
@@ -40,6 +46,33 @@ export default async function AdminSubscriptionsPage() {
           ← Overview
         </Link>
       </div>
+
+      {drift && drift.severity !== "ok" ? (
+        <aside
+          className="mt-6 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-warm)] p-4 text-sm text-[var(--semantic-text-primary)]"
+          role="status"
+          data-testid="admin-subscriptions-drift-panel"
+        >
+          <p className="font-semibold">Integrity signals ({drift.severity})</p>
+          <ul className="mt-2 list-inside list-disc space-y-1 text-xs sm:text-sm">
+            <li>Missing Stripe customer on paid-like rows: {drift.signals.activeLikeMissingStripeCustomer}</li>
+            <li>Plan tier vs user.tier mismatch (paid-like): {drift.signals.activeLikeTierMismatchUser}</li>
+            <li>Webhook claims (24h): {drift.signals.recentWebhookEvents24h ?? "unknown"}</li>
+            <li>
+              Latest subscription mirror update:{" "}
+              {drift.signals.latestSubscriptionUpdatedAt
+                ? new Date(drift.signals.latestSubscriptionUpdatedAt).toLocaleString()
+                : "—"}
+            </li>
+          </ul>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Report-only — use Stripe reconcile dry-run and ops runbook. Optional structured log: GET{" "}
+            <code className="rounded bg-muted px-1">/api/admin/billing/integrity-summary?emitLog=1</code>.
+          </p>
+        </aside>
+      ) : null}
+
+      <AdminPhase4bCanonicalEntitlementsPanel drift={drift} />
 
       <section className="mt-8 grid gap-6 lg:grid-cols-3">
         <div className="nn-card p-6">
@@ -119,6 +152,8 @@ export default async function AdminSubscriptionsPage() {
                 <th className="py-2">User</th>
                 <th className="py-2">Status</th>
                 <th className="py-2">Plan</th>
+                <th className="py-2">Stripe linkage</th>
+                <th className="py-2">Updated</th>
                 <th className="py-2">Created</th>
               </tr>
             </thead>
@@ -132,6 +167,10 @@ export default async function AdminSubscriptionsPage() {
                   <td className="py-2">
                     {s.planTier ?? "N/A"} / {s.planCountry ?? "N/A"}
                   </td>
+                  <td className="py-2 text-xs font-mono text-muted-foreground">
+                    sub {s.stripeSubscriptionId.slice(0, 12)}… · cust {s.stripeCustomerId ? `${s.stripeCustomerId.slice(0, 10)}…` : "—"}
+                  </td>
+                  <td className="py-2 text-xs">{s.updatedAt.toISOString().slice(0, 19)}</td>
                   <td className="py-2 text-xs">{s.createdAt.toISOString().slice(0, 19)}</td>
                 </tr>
               ))}
