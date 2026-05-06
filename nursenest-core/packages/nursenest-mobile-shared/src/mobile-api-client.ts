@@ -70,10 +70,15 @@ export function createMobileApiClient(cfg: MobileApiClientConfig) {
 
     const pathwayId = cfg.getPathwayId();
     let url = joinUrl(cfg.baseUrl, path);
-    if (path.startsWith("/api/flashcards/decks") && !path.includes("/study") && !path.includes("/review") && pathwayId) {
-      const u = new URL(url);
-      if (!u.searchParams.has("pathwayId")) u.searchParams.set("pathwayId", pathwayId);
-      url = u.toString();
+    try {
+      const pathname = new URL(url).pathname;
+      if (pathname === "/api/flashcards/decks" && pathwayId) {
+        const u = new URL(url);
+        if (!u.searchParams.has("pathwayId")) u.searchParams.set("pathwayId", pathwayId);
+        url = u.toString();
+      }
+    } catch {
+      /* ignore malformed base+path */
     }
 
     const { jsonBody, studySurfaceHeader: _hdr, ...rest } = init;

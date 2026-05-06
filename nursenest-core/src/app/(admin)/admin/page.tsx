@@ -22,7 +22,11 @@ function AdminPageShell({ children }: { children: ReactNode }) {
           <Link className="font-semibold text-[var(--semantic-brand)] underline" href="/admin/observability">
             observability hub
           </Link>{" "}
-          for study usage, subscriptions, and bounded learner roster (support/super).
+          for study usage, subscriptions, and bounded learner roster (support/super). Phase 10B{" "}
+          <Link className="font-semibold text-[var(--semantic-brand)] underline" href="/admin/platform-ecosystem">
+            ecosystem readiness
+          </Link>{" "}
+          summarizes contract-only extensibility and integration planning (admin-only).
         </p>
       </header>
       {children}

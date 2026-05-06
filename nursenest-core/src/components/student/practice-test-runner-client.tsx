@@ -674,10 +674,12 @@ export function PracticeTestRunnerClient({
     return optsCanonical;
   }, [current, optsCanonical]);
 
-  const isSata =
+  const isSata = Boolean(
     current &&
-    typeof current.questionType === "string" &&
-    (current.questionType.toUpperCase() === "SATA" || current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY");
+      typeof current.questionType === "string" &&
+      (current.questionType.toUpperCase() === "SATA" ||
+        current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY"),
+  );
   const raw = current ? answers[current.id] : undefined;
 
   useEffect(() => {
@@ -2231,7 +2233,7 @@ export function PracticeTestRunnerClient({
                         ) : null}
 
                         <PracticeTestMcqChoicesInstruction
-                          isSata={isSata}
+                          isSata={Boolean(isSata)}
                           selectAllLabel={tx(
                             "learner.practiceTests.run.selectAllThatApply",
                             "Select all that apply",
@@ -2412,7 +2414,7 @@ export function PracticeTestRunnerClient({
                             phase={catStudyFeedback ? "post_submit" : "pre_submit"}
                           />
                           <PracticeTestMcqChoicesInstruction
-                            isSata={isSata}
+                            isSata={Boolean(isSata)}
                             selectAllLabel={tx(
                               "learner.practiceTests.run.selectAllThatApply",
                               "Select all that apply",
@@ -2569,7 +2571,7 @@ export function PracticeTestRunnerClient({
           />
         ) : null}
         <PracticeTestMcqChoicesInstruction
-          isSata={isSata}
+          isSata={Boolean(isSata)}
           selectAllLabel={tx(
             "learner.practiceTests.run.selectAllThatApply",
             "Select all that apply",
@@ -2852,7 +2854,7 @@ export function PracticeTestRunnerClient({
         />
       ) : null}
       <PracticeTestMcqChoicesInstruction
-        isSata={isSata}
+        isSata={Boolean(isSata)}
         selectAllLabel={tx(
           "learner.practiceTests.run.selectAllThatApply",
           "Select all that apply",

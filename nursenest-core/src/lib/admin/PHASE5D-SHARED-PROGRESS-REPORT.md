@@ -14,6 +14,7 @@ One **canonical DB-backed** source for bounded progress aggregates consumed by a
 | `mergedPerformanceFromLatestAdaptiveRows({ practiceAdaptiveState, examAdaptiveState })` | Pure merge of `_v:1` `performance` blobs; prefers the side with more `bySystem` attempts (same rule as pre-5D admin). |
 | `mergePerformanceProfilesPreferringMoreAttempts(a, b)` | Pure helper for tests / reuse. |
 | `extractPerformanceProfileFromAdaptiveJson(raw)` | Safe extract; re-exported from `adaptive-learner-summary.server.ts` for existing imports. |
+| `buildSharedRecentActivityRows({ progActs, ptActs, … })` | Pure merge/sort/cap for recent-activity cards (used by the bundle loader; exported for deterministic tests). |
 | `SharedLearnerProgressBundle` | `topicRows`, `mergedPerformanceProfile`, `adaptiveSnapshot`, `recentActivity` — **counts/metadata only**. |
 
 **Callers**
@@ -52,6 +53,7 @@ npm run test:unit:flashcards
 node --import tsx --test src/lib/admin/adaptive-learner-summary-admin.test.ts
 node --import tsx --test src/lib/admin/adaptive-summary-api-route.contract.test.ts
 node --import tsx --test src/lib/learner/shared-learner-progress.server.test.ts
+node --import tsx --test src/lib/learner/build-learner-adaptive-wire-bundle.test.ts
 npm run typecheck:critical
 ```
 

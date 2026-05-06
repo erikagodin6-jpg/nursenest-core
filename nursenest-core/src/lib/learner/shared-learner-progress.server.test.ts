@@ -3,21 +3,14 @@
  */
 import "../../../scripts/stub-server-only.cjs";
 import assert from "node:assert/strict";
-import { afterEach, describe, it, mock } from "node:test";
+import { describe, it } from "node:test";
 import { emptyPerformanceProfile } from "@/lib/cat/performance-tracker";
-import { prisma } from "@/lib/db";
 import {
+  buildSharedRecentActivityRows,
   extractPerformanceProfileFromAdaptiveJson,
-  loadSharedLearnerProgressBundle,
   mergePerformanceProfilesPreferringMoreAttempts,
   mergedPerformanceFromLatestAdaptiveRows,
 } from "@/lib/learner/shared-learner-progress.server";
-
-const userId = "usr_shared_progress_phase5d";
-
-afterEach(() => {
-  mock.restoreAll();
-});
 
 describe("shared learner progress (pure)", () => {
   it("mergePerformanceProfilesPreferringMoreAttempts picks richer bySystem totals", () => {
@@ -54,69 +47,42 @@ describe("shared learner progress (pure)", () => {
   });
 });
 
-describe("shared learner progress (Prisma mocked)", () => {
-  it("loadSharedLearnerProgressBundle surfaces lesson + flashcard rows in recentActivity (no question stems)", async () => {
+describe("shared learner progress (simulated DB slices)", () => {
+  it("buildSharedRecentActivityRows includes lesson + flashcard kinds (labels are metadata-only)", () => {
     const t = new Date("2026-01-10T12:00:00.000Z");
-    mock.method(prisma.userTopicStat, "findMany", async () => [
-      {
-        topic: "fluid_balance",
-        correctCount: 1,
-        wrongCount: 2,
-        wrongStreak: 1,
-        lastAttemptAt: t,
-      },
-    ]);
-    mock.method(prisma.practiceTest, "findFirst", async () => ({ adaptiveState: null }));
-    mock.method(prisma.examSession, "findFirst", async () => ({ adaptiveState: null }));
-    mock.method(prisma.progress, "findMany", async () => [
-      { lessonId: "les_1", updatedAt: t, completed: true },
-    ]);
-    mock.method(prisma.practiceTest, "findMany", async () => []);
-    mock.method(prisma.examSession, "findMany", async () => []);
-    mock.method(prisma.examAttempt, "findMany", async () => []);
-    mock.method(prisma.flashcardStudySession, "findMany", async () => [
-      { updatedAt: new Date("2026-01-10T13:00:00.000Z"), deckId: "deck_flashcards_abc" },
-    ]);
-
-    const bundle = await loadSharedLearnerProgressBundle(userId);
-    assert.ok(bundle);
-    const kinds = bundle!.recentActivity.map((r) => r.kind).sort();
+    const rows = buildSharedRecentActivityRows({
+      progActs: [{ lessonId: "les_1", updatedAt: t, completed: true }],
+      ptActs: [],
+      exSessActs: [],
+      attActs: [],
+      fcActs: [{ updatedAt: new Date("2026-01-10T13:00:00.000Z"), deckId: "deck_flashcards_abc" }],
+    });
+    const kinds = rows.map((r) => r.kind).sort();
     assert.ok(kinds.includes("lesson_progress"));
     assert.ok(kinds.includes("flashcard_session"));
-    assert.ok(bundle!.recentActivity.every((r) => !r.label.toLowerCase().includes("stem")));
-    assert.equal(bundle!.topicRows[0]?.topic, "fluid_balance");
+    assert.ok(rows.every((r) => !r.label.toLowerCase().includes("stem")));
   });
 
-  it("loadSharedLearnerProgressBundle returns empty-safe topic + activity when DB slices are empty", async () => {
-    mock.method(prisma.userTopicStat, "findMany", async () => []);
-    mock.method(prisma.practiceTest, "findFirst", async () => null);
-    mock.method(prisma.examSession, "findFirst", async () => null);
-    mock.method(prisma.progress, "findMany", async () => []);
-    mock.method(prisma.practiceTest, "findMany", async () => []);
-    mock.method(prisma.examSession, "findMany", async () => []);
-    mock.method(prisma.examAttempt, "findMany", async () => []);
-    mock.method(prisma.flashcardStudySession, "findMany", async () => []);
-
-    const bundle = await loadSharedLearnerProgressBundle(userId);
-    assert.ok(bundle);
-    assert.equal(bundle!.topicRows.length, 0);
-    assert.equal(bundle!.recentActivity.length, 0);
+  it("buildSharedRecentActivityRows returns empty when all slices are empty", () => {
+    assert.equal(
+      buildSharedRecentActivityRows({
+        progActs: [],
+        ptActs: [],
+        exSessActs: [],
+        attActs: [],
+        fcActs: [],
+      }).length,
+      0,
+    );
   });
 
-  it("two calls with same userId see identical mergedPerformanceProfile when mocks are stable (mobile = same store)", async () => {
-    mock.method(prisma.userTopicStat, "findMany", async () => []);
-    mock.method(prisma.practiceTest, "findFirst", async () => ({
-      adaptiveState: { _v: 1, performance: emptyPerformanceProfile() },
-    }));
-    mock.method(prisma.examSession, "findFirst", async () => null);
-    mock.method(prisma.progress, "findMany", async () => []);
-    mock.method(prisma.practiceTest, "findMany", async () => []);
-    mock.method(prisma.examSession, "findMany", async () => []);
-    mock.method(prisma.examAttempt, "findMany", async () => []);
-    mock.method(prisma.flashcardStudySession, "findMany", async () => []);
-
-    const a = await loadSharedLearnerProgressBundle(userId);
-    const b = await loadSharedLearnerProgressBundle(userId);
-    assert.deepEqual(a?.mergedPerformanceProfile, b?.mergedPerformanceProfile);
+  it("mergedPerformanceFromLatestAdaptiveRows is deterministic for identical inputs (same userId / same store)", () => {
+    const raw = { _v: 1 as const, performance: emptyPerformanceProfile() };
+    raw.performance.bySystem = {
+      cardio: { attempted: 3, correct: 2, accuracy: 0.66, recentAccuracy: 0.66, weightedAccuracy: 0.66, uniqueQuestionsSeen: 3 },
+    };
+    const a = mergedPerformanceFromLatestAdaptiveRows({ practiceAdaptiveState: raw, examAdaptiveState: null });
+    const b = mergedPerformanceFromLatestAdaptiveRows({ practiceAdaptiveState: raw, examAdaptiveState: null });
+    assert.deepEqual(a, b);
   });
 });

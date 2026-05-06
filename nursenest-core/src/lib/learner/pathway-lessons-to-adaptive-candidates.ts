@@ -1,7 +1,11 @@
 import type { LessonRecommendationCandidate } from "@/lib/adaptive-learning/adaptive-learning-types";
 import { computePathwayLessonLinkedLearningSignals } from "@/lib/lessons/pathway-lesson-linked-learning-assets";
 import type { PathwayLessonDashboardRow } from "@/lib/learner/load-learner-dashboard";
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonQuizItem,
+  PathwayLessonRecord,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
 
 function dashboardRowAsLessonRecord(row: PathwayLessonDashboardRow): PathwayLessonRecord {
   return {
@@ -10,12 +14,15 @@ function dashboardRowAsLessonRecord(row: PathwayLessonDashboardRow): PathwayLess
     topic: row.topic,
     topicSlug: row.topicSlug ?? "",
     bodySystem: row.bodySystem,
-    sections: [],
-    preTestQuestionIds: [],
-    postTestQuestionIds: [],
-    preTest: [],
-    postTest: [],
-  } as PathwayLessonRecord;
+    previewSectionCount: 0,
+    seoTitle: row.title,
+    seoDescription: "",
+    sections: [] as PathwayLessonSection[],
+    preTestQuestionIds: [] as string[],
+    postTestQuestionIds: [] as string[],
+    preTest: [] as PathwayLessonQuizItem[],
+    postTest: [] as PathwayLessonQuizItem[],
+  };
 }
 
 /**

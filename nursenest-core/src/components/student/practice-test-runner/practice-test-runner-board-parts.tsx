@@ -95,8 +95,8 @@ export function PracticeTestCatStudyRationaleAside({
       <RationalePanel
         mode={rationalePanelMode}
         feedback={rationalePanelMode === "feedback" ? catStudyFeedback ?? undefined : undefined}
-        optionKeys={optionKeys}
-        optionTexts={optionTexts}
+        optionKeys={Array.from(optionKeys)}
+        optionTexts={Array.from(optionTexts)}
       />
     </aside>
   );

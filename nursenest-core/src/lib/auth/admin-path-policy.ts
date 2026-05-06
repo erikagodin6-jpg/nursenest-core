@@ -66,6 +66,8 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/queue",
   "/admin/diagnostics",
   "/admin/operations",
+  /** Phase 10B — contract-only ecosystem readiness (admin UI only). */
+  "/admin/platform-ecosystem",
   "/admin/subscriptions",
   "/admin/system-status",
   "/admin/users",

@@ -2,8 +2,11 @@ import {
   canShowPaidLessonProgressRow,
   createJsonApiClient,
   fetchPathwayLessonDetail,
+  isLessonHubRetryableErrorMessage,
+  isLessonHubSubscriptionLockedMessage,
   lessonQueryKeys,
   LESSON_RESUME_SCROLL_KEY,
+  neutralLessonLockedBodyForSurface,
   postPathwayLessonProgress,
   splitMarkdownBodyIntoChunks,
   type MobilePathwayLessonDetailResponse,
@@ -12,11 +15,13 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { memo, useEffect, useMemo } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useAuth } from "../../lib/auth-context";
 import { useAppTheme } from "../../lib/theme-provider";
 import type { NurseNestPalette } from "../../lib/theme";
+
+const SCROLL_PERSIST_MIN_DELTA = 120;
 
 const SectionBody = memo(function SectionBody({ body, palette }: { body: string; palette: NurseNestPalette }) {
   const chunks = useMemo(() => splitMarkdownBodyIntoChunks(body, 3200), [body]);
@@ -53,12 +58,53 @@ const LessonSectionCard = memo(function LessonSectionCard({
   );
 });
 
+type RelatedRow = MobilePathwayLessonDetailResponse["related"][number];
+
+const LessonRelatedBlock = memo(function LessonRelatedBlock({
+  related,
+  palette,
+  onSelect,
+}: {
+  related: readonly RelatedRow[];
+  palette: NurseNestPalette;
+  onSelect: (lessonId: string) => void;
+}) {
+  if (!related.length) return null;
+  return (
+    <View style={{ marginTop: 16, gap: 8 }}>
+      <Text style={[styles.relatedTitle, { color: palette.semanticTextPrimary }]} allowFontScaling>
+        Related
+      </Text>
+      {related.map((r) => (
+        <Pressable
+          key={r.slug}
+          onPress={() => {
+            if (!r.lessonId) return;
+            onSelect(r.lessonId);
+          }}
+          style={{ minHeight: 44, justifyContent: "center", opacity: r.lessonId ? 1 : 0.45 }}
+          disabled={!r.lessonId}
+        >
+          <Text style={{ color: palette.semanticBrand, fontWeight: "600" }} allowFontScaling numberOfLines={2}>
+            {r.title}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+});
+
 export default function LessonDetailScreen() {
   const { lessonId } = useLocalSearchParams<{ lessonId: string }>();
   const { origin, cookieJar } = useAuth();
   const { palette } = useAppTheme();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const lastPersistedScrollY = useRef(-1);
+
+  useEffect(() => {
+    lastPersistedScrollY.current = -1;
+  }, [lessonId]);
 
   const client = useMemo(
     () =>
@@ -78,6 +124,10 @@ export default function LessonDetailScreen() {
 
   const data = detailQuery.data as MobilePathwayLessonDetailResponse | undefined;
 
+  const errMsg = detailQuery.isError ? String((detailQuery.error as Error)?.message ?? "") : "";
+  const locked = Boolean(errMsg && isLessonHubSubscriptionLockedMessage(errMsg));
+  const retryable = Boolean(errMsg && isLessonHubRetryableErrorMessage(errMsg));
+
   useEffect(() => {
     if (!data?.record?.slug || !data.pathwayId) return;
     if (!canShowPaidLessonProgressRow(data.entitlement)) return;
@@ -95,6 +145,22 @@ export default function LessonDetailScreen() {
     })();
   }, [client, data?.pathwayId, data?.record?.slug, data?.entitlement, queryClient]);
 
+  const onScrollPersist = useCallback(
+    (y: number) => {
+      if (Math.abs(y - lastPersistedScrollY.current) < SCROLL_PERSIST_MIN_DELTA) return;
+      lastPersistedScrollY.current = y;
+      void SecureStore.setItemAsync(LESSON_RESUME_SCROLL_KEY, String(y)).catch(() => undefined);
+    },
+    [],
+  );
+
+  const onSelectRelated = useCallback(
+    (id: string) => {
+      router.replace({ pathname: "/lesson/[lessonId]", params: { lessonId: id } });
+    },
+    [router],
+  );
+
   return (
     <>
       <Stack.Screen options={{ title: data?.record?.title ?? "Lesson" }} />
@@ -103,7 +169,7 @@ export default function LessonDetailScreen() {
         contentContainerStyle={styles.scroll}
         onScroll={({ nativeEvent }) => {
           const y = Math.round(nativeEvent.contentOffset.y);
-          void SecureStore.setItemAsync(LESSON_RESUME_SCROLL_KEY, String(y)).catch(() => undefined);
+          onScrollPersist(y);
         }}
         scrollEventThrottle={400}
       >
@@ -116,7 +182,16 @@ export default function LessonDetailScreen() {
         ) : null}
 
         {detailQuery.isError ? (
-          <Text style={{ color: palette.semanticDanger }}>{(detailQuery.error as Error)?.message ?? "Error"}</Text>
+          <View style={[styles.errorBox, { borderColor: palette.semanticBorderSoft, backgroundColor: palette.semanticSurfaceElevated }]}>
+            <Text style={{ color: locked ? palette.semanticTextSecondary : palette.semanticDanger }} allowFontScaling>
+              {locked ? neutralLessonLockedBodyForSurface("detail") : errMsg || "Something went wrong."}
+            </Text>
+            {retryable ? (
+              <Pressable onPress={() => void detailQuery.refetch()} style={{ marginTop: 12, minHeight: 44, justifyContent: "center" }}>
+                <Text style={{ color: palette.semanticBrand, fontWeight: "700" }}>Try again</Text>
+              </Pressable>
+            ) : null}
+          </View>
         ) : null}
 
         {data ? (
@@ -137,28 +212,7 @@ export default function LessonDetailScreen() {
               <LessonSectionCard key={s.id} section={s} palette={palette} />
             ))}
 
-            {data.related.length > 0 ? (
-              <View style={{ marginTop: 16, gap: 8 }}>
-                <Text style={[styles.relatedTitle, { color: palette.semanticTextPrimary }]} allowFontScaling>
-                  Related
-                </Text>
-                {data.related.map((r) => (
-                  <Pressable
-                    key={r.slug}
-                    onPress={() => {
-                      if (!r.lessonId) return;
-                      router.replace({ pathname: "/lesson/[lessonId]", params: { lessonId: r.lessonId } });
-                    }}
-                    style={{ minHeight: 44, justifyContent: "center", opacity: r.lessonId ? 1 : 0.45 }}
-                    disabled={!r.lessonId}
-                  >
-                    <Text style={{ color: palette.semanticBrand, fontWeight: "600" }} allowFontScaling numberOfLines={2}>
-                      {r.title}
-                    </Text>
-                  </Pressable>
-                ))}
-              </View>
-            ) : null}
+            <LessonRelatedBlock related={data.related} palette={palette} onSelect={onSelectRelated} />
           </>
         ) : null}
 
@@ -188,4 +242,10 @@ const styles = StyleSheet.create({
   relatedTitle: { fontSize: 17, fontWeight: "700" },
   backBtn: { marginTop: 20, minHeight: 44, justifyContent: "center" },
   skel: { height: 100, borderRadius: 12, opacity: 0.4 },
+  errorBox: {
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: 12,
+    gap: 4,
+  },
 });

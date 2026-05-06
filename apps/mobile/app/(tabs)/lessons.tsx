@@ -3,21 +3,26 @@ import {
   createJsonApiClient,
   fetchPathwayLessonTopics,
   fetchPathwayLessonsPage,
+  isLessonHubRetryableErrorMessage,
+  isLessonHubSubscriptionLockedMessage,
+  lessonListProgressPillText,
   lessonQueryKeys,
   LESSON_RESUME_LESSON_ID_KEY,
   LESSON_RESUME_PATHWAY_ID_KEY,
   LESSON_RESUME_SCROLL_KEY,
   LESSON_RESUME_SLUG_KEY,
+  neutralLessonLockedBodyForSurface,
   type MobilePathwayLessonListRow,
   type MobilePathwayLessonsListResponse,
 } from "@nursenest/mobile-shared";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  type ListRenderItem,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -25,6 +30,7 @@ import {
   Text,
   View,
 } from "react-native";
+import type { NurseNestPalette } from "../../lib/theme";
 import { LoadingFallback } from "../../components/LoadingFallback";
 import { emitEngagementEvent } from "../../hooks/useAnalytics";
 import { useAuth } from "../../lib/auth-context";
@@ -47,17 +53,49 @@ function useMobileApiClient() {
   );
 }
 
-function progressLabel(
-  row: MobilePathwayLessonListRow,
-  map: Record<string, "not_started" | "in_progress" | "completed"> | null | undefined,
-): string | null {
-  if (!map) return null;
-  const k = `${row.pathwayMeta.pathwayId}:${row.pathwayMeta.slug}`;
-  const s = map[k];
-  if (!s || s === "not_started") return null;
-  if (s === "completed") return "Done";
-  return "In progress";
-}
+type LessonListRowProps = {
+  item: MobilePathwayLessonListRow;
+  pill: string | null;
+  palette: NurseNestPalette;
+  onPressLesson: (row: MobilePathwayLessonListRow) => void;
+};
+
+const LessonListRow = memo(function LessonListRow({ item, pill, palette, onPressLesson }: LessonListRowProps) {
+  return (
+    <Pressable
+      onPress={() => void onPressLesson(item)}
+      style={({ pressed }) => [
+        styles.card,
+        {
+          backgroundColor: palette.semanticSurfaceElevated,
+          borderColor: palette.semanticBorderSoft,
+          opacity: pressed ? 0.92 : 1,
+        },
+      ]}
+    >
+      <View style={styles.cardTop}>
+        <Text style={[styles.cardTitle, { color: palette.semanticTextPrimary }]} allowFontScaling numberOfLines={3}>
+          {item.title}
+        </Text>
+        {pill ? (
+          <View style={[styles.pill, { borderColor: palette.semanticInfo, backgroundColor: palette.semanticBgSoft }]}>
+            <Text style={[styles.pillText, { color: palette.semanticInfo }]} allowFontScaling>
+              {pill}
+            </Text>
+          </View>
+        ) : null}
+      </View>
+      {item.summary ? (
+        <Text style={[styles.cardSum, { color: palette.semanticTextSecondary }]} allowFontScaling numberOfLines={3}>
+          {item.summary}
+        </Text>
+      ) : null}
+      <Text style={[styles.meta, { color: palette.semanticTextMuted }]} allowFontScaling numberOfLines={1}>
+        {[item.topic, item.bodySystem].filter(Boolean).join(" · ")}
+      </Text>
+    </Pressable>
+  );
+});
 
 function LessonsHubInner() {
   const { palette } = useAppTheme();
@@ -105,7 +143,18 @@ function LessonsHubInner() {
 
   const flatRows = useMemo(() => listQuery.data?.pages.flatMap((p) => p.rows) ?? [], [listQuery.data?.pages]);
 
+  const progressMap = useMemo(
+    () => listQuery.data?.pages[0]?.progressByPathwaySlug ?? null,
+    [listQuery.data?.pages],
+  );
+
   const showProgress = canShowPaidLessonProgressRow(listQuery.data?.pages[0]?.entitlement);
+
+  const listErrorMessage = listQuery.isError ? String((listQuery.error as Error)?.message ?? "") : "";
+  const topicsErrorMessage = topicsQuery.isError ? String((topicsQuery.error as Error)?.message ?? "") : "";
+
+  const listLocked = Boolean(listErrorMessage && isLessonHubSubscriptionLockedMessage(listErrorMessage));
+  const listRetryable = Boolean(listErrorMessage && isLessonHubRetryableErrorMessage(listErrorMessage));
 
   const onPressLesson = useCallback(
     async (row: MobilePathwayLessonListRow) => {
@@ -117,6 +166,20 @@ function LessonsHubInner() {
     },
     [router],
   );
+
+  const renderItem = useCallback<ListRenderItem<MobilePathwayLessonListRow>>(
+    ({ item }) => (
+      <LessonListRow
+        item={item}
+        palette={palette}
+        onPressLesson={onPressLesson}
+        pill={showProgress ? lessonListProgressPillText(item, progressMap) : null}
+      />
+    ),
+    [onPressLesson, palette, progressMap, showProgress],
+  );
+
+  const keyExtractor = useCallback((item: MobilePathwayLessonListRow) => item.id, []);
 
   if (!origin || !cookieJar) {
     return (
@@ -187,15 +250,39 @@ function LessonsHubInner() {
         </View>
       ) : null}
 
+      {topicsQuery.isError ? (
+        <View style={styles.inlineError}>
+          <Text style={{ color: palette.semanticDanger, flex: 1 }} allowFontScaling>
+            {(topicsQuery.error as Error)?.message ?? "Topics unavailable."}
+          </Text>
+          <Pressable
+            onPress={() => void topicsQuery.refetch()}
+            style={({ pressed }) => [styles.retryBtn, { opacity: pressed ? 0.75 : 1 }]}
+          >
+            <Text style={{ color: palette.semanticBrand, fontWeight: "700" }}>Retry</Text>
+          </Pressable>
+        </View>
+      ) : null}
+
       {listQuery.isError ? (
-        <Text style={{ color: palette.semanticDanger, paddingHorizontal: 12 }}>
-          {(listQuery.error as Error)?.message ?? "Could not load lessons."}
-        </Text>
+        <View style={[styles.listErrorBox, { borderColor: palette.semanticBorderSoft, backgroundColor: palette.semanticSurfaceElevated }]}>
+          <Text style={{ color: listLocked ? palette.semanticTextSecondary : palette.semanticDanger }} allowFontScaling>
+            {listLocked ? neutralLessonLockedBodyForSurface("list") : listErrorMessage || "Could not load lessons."}
+          </Text>
+          {listRetryable ? (
+            <Pressable
+              onPress={() => void listQuery.refetch()}
+              style={({ pressed }) => [styles.retryBtnWide, { opacity: pressed ? 0.85 : 1 }]}
+            >
+              <Text style={{ color: palette.semanticBrand, fontWeight: "700" }}>Try again</Text>
+            </Pressable>
+          ) : null}
+        </View>
       ) : null}
 
       <FlatList
         data={flatRows}
-        keyExtractor={(item) => item.id}
+        keyExtractor={keyExtractor}
         contentContainerStyle={styles.listPad}
         windowSize={7}
         removeClippedSubviews
@@ -222,47 +309,13 @@ function LessonsHubInner() {
                 <View key={i} style={[styles.cardSkel, { backgroundColor: palette.semanticSurfaceElevated }]} />
               ))}
             </View>
-          ) : (
-            <Text style={{ color: palette.semanticTextMuted, padding: 12 }}>No lessons for this filter.</Text>
+          ) : listQuery.isError ? null : (
+            <Text style={{ color: palette.semanticTextMuted, padding: 12 }} allowFontScaling>
+              No lessons for this filter.
+            </Text>
           )
         }
-        renderItem={({ item }) => {
-          const pill = showProgress ? progressLabel(item, listQuery.data?.pages[0]?.progressByPathwaySlug ?? null) : null;
-          return (
-            <Pressable
-              onPress={() => void onPressLesson(item)}
-              style={({ pressed }) => [
-                styles.card,
-                {
-                  backgroundColor: palette.semanticSurfaceElevated,
-                  borderColor: palette.semanticBorderSoft,
-                  opacity: pressed ? 0.92 : 1,
-                },
-              ]}
-            >
-              <View style={styles.cardTop}>
-                <Text style={[styles.cardTitle, { color: palette.semanticTextPrimary }]} allowFontScaling numberOfLines={3}>
-                  {item.title}
-                </Text>
-                {pill ? (
-                  <View style={[styles.pill, { borderColor: palette.semanticInfo, backgroundColor: palette.semanticBgSoft }]}>
-                    <Text style={[styles.pillText, { color: palette.semanticInfo }]} allowFontScaling>
-                      {pill}
-                    </Text>
-                  </View>
-                ) : null}
-              </View>
-              {item.summary ? (
-                <Text style={[styles.cardSum, { color: palette.semanticTextSecondary }]} allowFontScaling numberOfLines={3}>
-                  {item.summary}
-                </Text>
-              ) : null}
-              <Text style={[styles.meta, { color: palette.semanticTextMuted }]} allowFontScaling numberOfLines={1}>
-                {[item.topic, item.bodySystem].filter(Boolean).join(" · ")}
-              </Text>
-            </Pressable>
-          );
-        }}
+        renderItem={renderItem}
       />
     </View>
   );
@@ -306,4 +359,8 @@ const styles = StyleSheet.create({
   skeletonRow: { flexDirection: "row", gap: 8, paddingHorizontal: 12, marginBottom: 6 },
   skel: { height: 12, flex: 1, borderRadius: 6, opacity: 0.5 },
   cardSkel: { height: 88, borderRadius: 12, opacity: 0.35 },
+  inlineError: { flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 12, marginBottom: 8 },
+  retryBtn: { paddingVertical: 8, paddingHorizontal: 10 },
+  listErrorBox: { marginHorizontal: 10, marginBottom: 8, padding: 12, borderRadius: 12, borderWidth: StyleSheet.hairlineWidth, gap: 10 },
+  retryBtnWide: { alignSelf: "flex-start", paddingVertical: 10, paddingHorizontal: 4 },
 });

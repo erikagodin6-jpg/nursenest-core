@@ -170,8 +170,11 @@ export async function loadLearnerAdaptiveWireBundle(
 ): Promise<AdaptiveWireBundleJson | null> {
   if (!userId || !entitlement.hasAccess) return null;
 
-  const hasExplicitCatProfile = options != null && "catOrPracticeProfile" in options;
-  const resolvedCatOrPracticeProfile = hasExplicitCatProfile
+  const hasMeaningfulExplicitCatProfile =
+    options != null &&
+    "catOrPracticeProfile" in options &&
+    options.catOrPracticeProfile !== undefined;
+  const resolvedCatOrPracticeProfile = hasMeaningfulExplicitCatProfile
     ? options.catOrPracticeProfile ?? null
     : (await loadSharedLearnerProgressBundle(userId))?.mergedPerformanceProfile ?? null;
 

@@ -13,6 +13,8 @@ export * from "./api-client.js";
 export * from "./lesson-types.js";
 export * from "./lessons-api.js";
 export * from "./entitlement-gates.js";
+export * from "./lesson-access-messages.js";
+export * from "./lesson-progress-ui.js";
 export * from "./lesson-pagination.js";
 export * from "./markdown-chunks.js";
 export * from "./bookmarks.js";

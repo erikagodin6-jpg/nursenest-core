@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner";
+import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { TierCode } from "@prisma/client";
-import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner";
+import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
