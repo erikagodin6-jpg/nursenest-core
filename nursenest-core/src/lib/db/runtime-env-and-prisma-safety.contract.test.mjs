@@ -100,6 +100,22 @@ describe("runtime env loader", () => {
 });
 
 describe("prisma-safe build-time generate env policy", () => {
+  it("allows Prisma generate during install without database env", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        const logs = [];
+        const result = loadPrismaSafeEnvForCommand("generate", {
+          envRoot,
+          logger: { log: (line) => logs.push(line) },
+          argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+        });
+        assert.equal(result.buildSafeGenerate, false);
+        assert.match(process.env.DATABASE_URL, /^postgresql:\/\/postgres:postgres@127\.0\.0\.1:65432\/nn_prisma_codegen/);
+        assert.equal(process.env.DIRECT_URL, process.env.DATABASE_URL);
+        assert.equal(logs.some((line) => line.includes("codegen-only DATABASE_URL placeholder")), true);
+      }),
+    ));
+
   it("allows DigitalOcean build Prisma generate with DATABASE_URL only", () =>
     withCleanDbEnv(() =>
       withTempEnv({}, (envRoot) => {
@@ -117,7 +133,7 @@ describe("prisma-safe build-time generate env policy", () => {
       }),
     ));
 
-  it("does not treat non-build generate as DIRECT_URL-optional", () =>
+  it("allows non-build generate with DATABASE_URL only", () =>
     withCleanDbEnv(() =>
       withTempEnv({}, (envRoot) => {
         process.env.DATABASE_URL = VALID_DATABASE_URL;
@@ -129,15 +145,12 @@ describe("prisma-safe build-time generate env policy", () => {
           }),
           false,
         );
-        assert.throws(
-          () =>
-            loadPrismaSafeEnvForCommand("generate", {
-              envRoot,
-              logger: { log() {} },
-              argv: ["node", "scripts/prisma-safe.mjs", "generate"],
-            }),
-          (error) => error instanceof RuntimeEnvError && error.code === "ENV_MISSING" && error.message.includes("DIRECT_URL"),
-        );
+        loadPrismaSafeEnvForCommand("generate", {
+          envRoot,
+          logger: { log() {} },
+          argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+        });
+        assert.equal(process.env.DIRECT_URL, VALID_DATABASE_URL);
       }),
     ));
 
