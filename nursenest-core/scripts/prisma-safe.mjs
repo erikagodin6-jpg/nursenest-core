@@ -17,6 +17,8 @@ const packageRoot = resolve(__dirname, "..");
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
 const BUILD_TIME_GENERATE_MESSAGE =
   "[prisma-safe] Build-time Prisma generate detected; DIRECT_URL requirement skipped.";
+const POSTINSTALL_GENERATE_MESSAGE =
+  "[prisma-safe] Postinstall Prisma generate detected; database URL requirement skipped.";
 
 function usage() {
   console.error(`Usage: node scripts/prisma-safe.mjs <status|deploy|generate|check-schema>
@@ -65,14 +67,21 @@ export function assertDatabaseUrlForBuildGenerate(env = process.env) {
   maskedPostgresTarget(env.DATABASE_URL?.trim(), "DATABASE_URL");
 }
 
+export function isPostinstallPrismaGenerateContext({ command, argv = process.argv, env = process.env } = {}) {
+  const commandString = argv.join(" ");
+  const isGenerate = command === "generate" || commandString.includes("generate");
+  return isGenerate && (env.NN_PRISMA_SAFE_POSTINSTALL === "1" || env.npm_lifecycle_event === "postinstall");
+}
+
 export function loadPrismaSafeEnvForCommand(
   command,
   { argv = process.argv, env = process.env, logger = console, envRoot } = {},
 ) {
   const buildSafeGenerate = isBuildSafePrismaGenerateContext({ command, argv, env });
+  const postinstallGenerate = isPostinstallPrismaGenerateContext({ command, argv, env });
   const telemetry = loadRuntimeEnv({
     purpose: `prisma-safe:${command}`,
-    validate: !buildSafeGenerate,
+    validate: !(buildSafeGenerate || postinstallGenerate),
     logger,
     ...(envRoot ? { envRoot } : {}),
   });
@@ -85,7 +94,11 @@ export function loadPrismaSafeEnvForCommand(
     logger.log(BUILD_TIME_GENERATE_MESSAGE);
   }
 
-  return { telemetry, buildSafeGenerate };
+  if (postinstallGenerate) {
+    logger.log(POSTINSTALL_GENERATE_MESSAGE);
+  }
+
+  return { telemetry, buildSafeGenerate, postinstallGenerate };
 }
 
 async function main() {
