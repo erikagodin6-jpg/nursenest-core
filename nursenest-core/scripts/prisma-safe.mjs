@@ -16,7 +16,9 @@ const packageRoot = resolve(__dirname, "..");
 
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
 const BUILD_TIME_GENERATE_MESSAGE =
-  "[prisma-safe] Build-time Prisma generate detected; DIRECT_URL requirement skipped.";
+  "[prisma-safe] Build/install-time Prisma generate detected; using placeholder database URL when none is configured.";
+const BUILD_TIME_GENERATE_DATABASE_URL =
+  "postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public";
 
 function usage() {
   console.error(`Usage: node scripts/prisma-safe.mjs <status|deploy|generate|check-schema>
@@ -61,8 +63,21 @@ export function isBuildSafePrismaGenerateContext({ command, argv = process.argv,
   return isBuildGenerate;
 }
 
-export function assertDatabaseUrlForBuildGenerate(env = process.env) {
-  maskedPostgresTarget(env.DATABASE_URL?.trim(), "DATABASE_URL");
+export function isInstallTimePrismaGenerateContext({ command, argv = process.argv, env = process.env } = {}) {
+  void command;
+  const commandString = argv.join(" ");
+  const isGenerate = commandString.includes("generate");
+  return isGenerate && env.npm_lifecycle_event === "postinstall";
+}
+
+export function prepareDatabaseUrlsForGenerate(env = process.env) {
+  if (!env.DATABASE_URL?.trim()) {
+    env.DATABASE_URL = BUILD_TIME_GENERATE_DATABASE_URL;
+  }
+  maskedPostgresTarget(env.DATABASE_URL.trim(), "DATABASE_URL");
+  if (!env.DIRECT_URL?.trim()) {
+    env.DIRECT_URL = env.DATABASE_URL;
+  }
 }
 
 export function loadPrismaSafeEnvForCommand(
@@ -70,22 +85,21 @@ export function loadPrismaSafeEnvForCommand(
   { argv = process.argv, env = process.env, logger = console, envRoot } = {},
 ) {
   const buildSafeGenerate = isBuildSafePrismaGenerateContext({ command, argv, env });
+  const installSafeGenerate = isInstallTimePrismaGenerateContext({ command, argv, env });
+  const safeGenerate = buildSafeGenerate || installSafeGenerate;
   const telemetry = loadRuntimeEnv({
     purpose: `prisma-safe:${command}`,
-    validate: !buildSafeGenerate,
+    validate: !safeGenerate,
     logger,
     ...(envRoot ? { envRoot } : {}),
   });
 
-  if (buildSafeGenerate) {
-    assertDatabaseUrlForBuildGenerate(env);
-    if (!process.env.DIRECT_URL?.trim()) {
-      process.env.DIRECT_URL = process.env.DATABASE_URL;
-    }
+  if (safeGenerate) {
+    prepareDatabaseUrlsForGenerate(env);
     logger.log(BUILD_TIME_GENERATE_MESSAGE);
   }
 
-  return { telemetry, buildSafeGenerate };
+  return { telemetry, buildSafeGenerate, installSafeGenerate };
 }
 
 async function main() {

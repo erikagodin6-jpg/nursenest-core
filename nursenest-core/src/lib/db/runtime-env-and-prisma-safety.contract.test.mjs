@@ -10,6 +10,7 @@ import {
 } from "../../../scripts/lib/load-runtime-env.mjs";
 import {
   isBuildSafePrismaGenerateContext,
+  isInstallTimePrismaGenerateContext,
   loadPrismaSafeEnvForCommand,
 } from "../../../scripts/prisma-safe.mjs";
 import {
@@ -21,9 +22,17 @@ import {
 
 const VALID_DATABASE_URL = "postgresql://user:secret@example-do-user-1.db.ondigitalocean.com:25060/defaultdb?sslmode=require";
 const VALID_DIRECT_URL = "postgresql://direct:secret@example-do-user-1.db.ondigitalocean.com:25060/defaultdb?sslmode=require";
+const PLACEHOLDER_DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public";
 
 function withCleanDbEnv(fn) {
-  const keys = ["DATABASE_URL", "DIRECT_URL", "DATABASE_DIRECT_URL", "NN_APP_PLATFORM_BUILD", "NN_LOW_MEMORY_BUILD"];
+  const keys = [
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "DATABASE_DIRECT_URL",
+    "NN_APP_PLATFORM_BUILD",
+    "NN_LOW_MEMORY_BUILD",
+    "npm_lifecycle_event",
+  ];
   const previous = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
   for (const key of keys) delete process.env[key];
   try {
@@ -113,7 +122,37 @@ describe("prisma-safe build-time generate env policy", () => {
         });
         assert.equal(result.buildSafeGenerate, true);
         assert.equal(process.env.DIRECT_URL, process.env.DATABASE_URL);
-        assert.equal(logs.some((line) => line.includes("Build-time Prisma generate detected; DIRECT_URL requirement skipped.")), true);
+        assert.equal(
+          logs.some((line) =>
+            line.includes("Build/install-time Prisma generate detected; using placeholder database URL when none is configured."),
+          ),
+          true,
+        );
+      }),
+    ));
+
+  it("allows npm postinstall Prisma generate without database secrets", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        process.env.npm_lifecycle_event = "postinstall";
+        const logs = [];
+        const result = loadPrismaSafeEnvForCommand("generate", {
+          envRoot,
+          logger: { log: (line) => logs.push(line) },
+          argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+        });
+        assert.equal(result.installSafeGenerate, true);
+        assert.equal(process.env.DATABASE_URL, PLACEHOLDER_DATABASE_URL);
+        assert.equal(process.env.DIRECT_URL, PLACEHOLDER_DATABASE_URL);
+        assert.equal(
+          isInstallTimePrismaGenerateContext({
+            command: "generate",
+            argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+            env: process.env,
+          }),
+          true,
+        );
+        assert.equal(logs.some((line) => line.includes("placeholder database URL")), true);
       }),
     ));
 
