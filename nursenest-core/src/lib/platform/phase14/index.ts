@@ -5,7 +5,8 @@
  *
  * See reports/phase-14-governance-autonomous-network.md
  *
- * Mobile / App Store readiness: typed contracts in `mobile-*.ts` modules below; see the Phase 14 governance report for posture.
+ * Phase 14 mobile / App Store readiness: typed contracts in `mobile-*.ts` modules below.
+ * See `reports/phase-14-mobile-platform-readiness.md` (repo root).
  */
 
 export * from "@/lib/platform/phase14/governance-architecture";

@@ -58,6 +58,7 @@
     "test:unit:phase12-platform-intelligence": "node --import tsx --test src/lib/platform/phase12/phase12-platform-intelligence.contract.test.ts",
     "test:unit:phase13-strategic-intelligence": "node --import tsx --test src/lib/platform/phase13/phase13-strategic-intelligence.contract.test.ts",
     "test:unit:phase14-governance-autonomous-network": "node --import tsx --test src/lib/platform/phase14/phase14-governance-autonomous-network.contract.test.ts",
+    "test:unit:phase14-mobile-readiness": "node --import tsx --test src/lib/platform/phase14/phase14-mobile-readiness.contract.test.ts",
     "test:e2e:tier-matrix": "npx playwright test -c playwright.tier-matrix.config.ts",
     "test:e2e:clinical-scenarios": "npx playwright test -c playwright.clinical-scenarios.config.ts",
     "build:lesson-indexes": "node scripts/build-normalized-lesson-indexes.mjs",
