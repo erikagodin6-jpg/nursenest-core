@@ -229,8 +229,7 @@ export function PathwayLessonDetailScreen() {
   const errBody = errParsed?.body;
 
   const errCode = errBody !== undefined ? parseApiErrorCode(errBody) : undefined;
-  const needsSession =
-    errStatus === 401 || errCode === "unauthorized" || errCode === "access_verify_failed";
+  const needsSession = errStatus === 401 || errCode === "unauthorized";
   const upgradeUi = errStatus !== undefined && shouldShowUpgradeUi(errStatus, errBody) && !needsSession;
   const subscriptionLocked = Boolean(errMsg && isLessonHubSubscriptionLockedMessage(errMsg));
   const showNeutralPaywall = upgradeUi || subscriptionLocked;
