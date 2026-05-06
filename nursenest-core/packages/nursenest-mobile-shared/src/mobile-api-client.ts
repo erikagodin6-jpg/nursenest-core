@@ -46,6 +46,7 @@ const RETRYABLE = new Set([408, 425, 429, 500, 502, 503, 504]);
 
 export type MobileFetchInit = Omit<RequestInit, "body"> & {
   jsonBody?: unknown;
+  studySurfaceHeader?: Record<string, string>;
 };
 
 /**
@@ -54,7 +55,7 @@ export type MobileFetchInit = Omit<RequestInit, "body"> & {
 export function createMobileApiClient(cfg: MobileApiClientConfig) {
   async function request<T>(
     path: string,
-    init: MobileFetchInit & { studySurfaceHeader?: Record<string, string> },
+    init: MobileFetchInit,
     attempt = 0,
   ): Promise<T> {
     const token = await cfg.getAccessToken();
@@ -75,14 +76,14 @@ export function createMobileApiClient(cfg: MobileApiClientConfig) {
       url = u.toString();
     }
 
-    const { jsonBody, studySurfaceHeader: _s, ...rest } = init;
-    const body = jsonBody !== undefined ? JSON.stringify(jsonBody) : rest.body;
+    const { jsonBody, studySurfaceHeader: _hdr, ...rest } = init;
+    const body = jsonBody !== undefined ? JSON.stringify(jsonBody) : undefined;
 
     const res = await fetch(url, {
       ...rest,
       headers,
-      body,
-      credentials: cfg.credentialsInclude ? "include" : rest.credentials ?? "omit",
+      ...(body !== undefined ? { body } : {}),
+      credentials: cfg.credentialsInclude ? "include" : (rest.credentials ?? "omit"),
     });
 
     if (res.status === 401 || res.status === 403) {

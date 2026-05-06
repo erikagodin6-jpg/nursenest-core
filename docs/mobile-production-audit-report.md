@@ -127,6 +127,7 @@ Documented in `packages/nursenest-mobile-shared/src/env/public-env-schema.ts` an
 cd apps/mobile && npm run typecheck && npm run lint   # pass
 cd packages/nursenest-mobile-shared && npm test      # pass (vitest)
 cd nursenest-core && npm run typecheck:critical      # pass (root package.json touched only)
+npm run mobile:release:readiness                      # pass; expo-doctor may warn in some CI images — install react-native-svg (PostHog peer) and keep `react-native-safe-area-context` on the Expo SDK matrix (`npx expo install --check`).
 ```
 
 ---

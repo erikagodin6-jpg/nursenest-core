@@ -77,7 +77,8 @@ export function mergedPerformanceFromLatestAdaptiveRows(args: {
   return mergePerformanceProfilesPreferringMoreAttempts(a, b);
 }
 
-function buildRecentActivityRows(input: {
+/** Pure: deterministic recent-activity cards from bounded DB slices (exported for tests). */
+export function buildSharedRecentActivityRows(input: {
   progActs: Array<{ lessonId: string; updatedAt: Date; completed: boolean }>;
   ptActs: Array<{ title: string | null; status: string; updatedAt: Date }>;
   exSessActs: Array<{ id: string; status: string; examMode: string; updatedAt: Date }>;
@@ -196,7 +197,7 @@ export async function loadSharedLearnerProgressBundle(userId: string): Promise<S
       examAdaptiveState: exState?.adaptiveState ?? null,
     });
 
-    const recentActivity = buildRecentActivityRows({
+    const recentActivity = buildSharedRecentActivityRows({
       progActs,
       ptActs,
       exSessActs,
