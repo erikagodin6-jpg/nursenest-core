@@ -28,5 +28,10 @@ export async function verifyTurnstileToken(token: string | undefined): Promise<b
 }
 
 export function isTurnstileEnforced(): boolean {
+  if (isTurnstileQaBypassEnabled()) return false;
   return Boolean(process.env.TURNSTILE_SECRET_KEY?.trim() && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim());
+}
+
+export function isTurnstileQaBypassEnabled(): boolean {
+  return process.env.NODE_ENV !== "production" && process.env.QA_BYPASS_TURNSTILE === "1";
 }

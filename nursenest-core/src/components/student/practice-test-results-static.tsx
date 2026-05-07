@@ -455,7 +455,7 @@ export function PracticeTestResultsStatic({
           href="/app/practice-tests"
           className="inline-flex justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-info))] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[var(--semantic-panel-cool)]"
         >
-          Practice tests home
+          Practice Tests Home
         </Link>
       </div>
     </div>

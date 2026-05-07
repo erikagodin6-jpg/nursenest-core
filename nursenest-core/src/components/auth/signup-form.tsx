@@ -8,10 +8,12 @@ import { TurnstileSignup } from "@/components/auth/turnstile-signup";
 import { resolveLoginSubmitOutcome } from "@/components/auth/login-form-result";
 import { isLikelyNetworkFailure } from "@/components/auth/auth-client-error-handling";
 import {
-  reconcileExamFocusForCountry,
+  reconcileExamFocusForCountryAndTier,
   signupExamFocusOptions,
   type SignupExamFocusValue,
+  type SignupTierValue,
 } from "@/lib/marketing/signup-exam-focus-options";
+import { safeSignupFieldCopy } from "@/lib/marketing/signup-copy";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -56,12 +58,18 @@ export function SignupForm({
   const [clientReady, setClientReady] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
+  const [tier, setTier] = useState<SignupTierValue>("RN");
   const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
   const onCaptcha = useCallback((tok: string | null) => setCaptchaToken(tok), []);
   /** When the widget is shown, `/api/signup` may require a token (see `isTurnstileEnforced`). */
-  const turnstileGateActive = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim());
+  const turnstileQaBypassActive =
+    process.env.NODE_ENV !== "production" && process.env.NEXT_PUBLIC_QA_BYPASS_TURNSTILE === "1";
+  const turnstileGateActive =
+    Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim()) && !turnstileQaBypassActive;
 
-  const examOptions = useMemo(() => signupExamFocusOptions(country, t), [country, t]);
+  const examOptions = useMemo(() => signupExamFocusOptions(country, tier, t), [country, tier, t]);
+  const firstNamePlaceholder = safeSignupFieldCopy(t("pages.signup.placeholderFirstName"), "First name");
+  const lastNamePlaceholder = safeSignupFieldCopy(t("pages.signup.placeholderLastName"), "Last name");
 
   useEffect(() => {
     setClientReady(true);
@@ -110,7 +118,7 @@ export function SignupForm({
       email: String(formData.get("email") ?? "").trim(),
       password: String(formData.get("password") ?? ""),
       country,
-      tier: String(formData.get("tier") ?? "RN"),
+      tier,
       examFocus,
       studyGoal: String(formData.get("studyGoal") ?? ""),
       dailyStudyMinutes: Number(formData.get("dailyStudyMinutes") ?? 30),
@@ -232,7 +240,8 @@ export function SignupForm({
           className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
           type="text"
           name="firstName"
-          placeholder={t("pages.signup.placeholderFirstName") ?? "First name"}
+          aria-label={firstNamePlaceholder}
+          placeholder={firstNamePlaceholder}
           required
           autoComplete="given-name"
         />
@@ -240,7 +249,8 @@ export function SignupForm({
           className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
           type="text"
           name="lastName"
-          placeholder={t("pages.signup.placeholderLastName") ?? "Last name"}
+          aria-label={lastNamePlaceholder}
+          placeholder={lastNamePlaceholder}
           autoComplete="family-name"
         />
       </div>
@@ -274,7 +284,7 @@ export function SignupForm({
           onChange={(e) => {
             const next = e.target.value === "US" ? "US" : "CA";
             setCountry(next);
-            setExamFocus((prev) => reconcileExamFocusForCountry(next, prev));
+            setExamFocus((prev) => reconcileExamFocusForCountryAndTier(next, tier, prev, t));
           }}
         >
           <option value="CA">{t("pages.signup.countryCa")}</option>
@@ -283,7 +293,12 @@ export function SignupForm({
         <select
           className="rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
           name="tier"
-          defaultValue="RN"
+          value={tier}
+          onChange={(e) => {
+            const next = e.target.value as SignupTierValue;
+            setTier(next);
+            setExamFocus((prev) => reconcileExamFocusForCountryAndTier(country, next, prev, t));
+          }}
         >
           <option value="RPN">{t("pages.signup.tierRpn")}</option>
           <option value="LVN_LPN">{t("pages.signup.tierLvn")}</option>

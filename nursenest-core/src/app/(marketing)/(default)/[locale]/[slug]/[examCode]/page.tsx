@@ -79,7 +79,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         type: "website",
       },
     };
-  }, { pathname, locale, routeGroup: "marketing.exam_hub" });
+  }, {
+    pathname,
+    locale,
+    routeGroup: "marketing.exam_hub",
+    fallbackMetadata: pathwayPre
+      ? {
+          title: pathwayPre.seoTitle,
+          description: pathwayPre.seoDescription,
+        }
+      : undefined,
+  });
 }
 
 export default async function ExamPathwayOverviewPage({ params }: Props) {

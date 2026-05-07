@@ -44,9 +44,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const catPath = `${pathname}/cat`;
+  const pathwayPre = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: catPath });
   return safeGenerateMetadata(
     async () => {
-      const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: catPath });
+      const pathway = pathwayPre;
       if (!pathway) {
         return { robots: { index: false, follow: true } };
       }
@@ -61,7 +62,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         robots: { index: false, follow: true },
       };
     },
-    { pathname: catPath, locale: countrySlug, routeGroup: "marketing.exam_hub.cat" },
+    {
+      pathname: catPath,
+      locale: countrySlug,
+      routeGroup: "marketing.exam_hub.cat",
+      fallbackMetadata: pathwayPre
+        ? {
+            title: `${pathwayCatLandingTitle(pathwayPre)} | NurseNest`,
+            description: pathwayPre.seoDescription,
+          }
+        : undefined,
+    },
   );
 }
 

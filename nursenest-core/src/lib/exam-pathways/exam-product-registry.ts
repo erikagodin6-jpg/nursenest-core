@@ -38,8 +38,22 @@ function normalizeMarketingHubSegment(segment: string): string {
   return segment.trim().toLowerCase();
 }
 
-function normalizeRoleTrackSegmentForCountry(countrySlug: string, roleTrack: string, examCode: string): string {
+function normalizeCountrySegmentForMarketingHub(countrySlug: string, roleTrack: string, examCode: string): string {
   const country = normalizeMarketingHubSegment(countrySlug);
+  const role = normalizeMarketingHubSegment(roleTrack);
+  const exam = normalizeMarketingHubSegment(examCode);
+  if (
+    country === "en" &&
+    role === "np" &&
+    ["fnp", "agpcnp", "pmhnp", "whnp", "pnp-pc"].includes(exam)
+  ) {
+    return "us";
+  }
+  return country;
+}
+
+function normalizeRoleTrackSegmentForCountry(countrySlug: string, roleTrack: string, examCode: string): string {
+  const country = normalizeCountrySegmentForMarketingHub(countrySlug, roleTrack, examCode);
   const role = normalizeMarketingHubSegment(roleTrack);
   const exam = normalizeMarketingHubSegment(examCode);
   if (role !== "pn") return role;
@@ -52,7 +66,7 @@ export function getExamPathwayByRoute(
   roleTrack: string,
   examCode: string,
 ): ExamPathwayDefinition | undefined {
-  const normalizedCountry = normalizeMarketingHubSegment(countrySlug);
+  const normalizedCountry = normalizeCountrySegmentForMarketingHub(countrySlug, roleTrack, examCode);
   const normalizedRole = normalizeRoleTrackSegmentForCountry(countrySlug, roleTrack, examCode);
   const normalizedExam = normalizeMarketingHubSegment(examCode);
   return byRoute.get(`${normalizedCountry}/${normalizedRole}/${normalizedExam}`);

@@ -33,7 +33,7 @@ function stemPreview(stem: string, max = 160): string {
 
 const RESULTS_CRUMBS = [
   { name: "Home", href: "/" as const },
-  { name: "Practice tests", href: "/app/practice-tests" as const },
+  { name: "Practice Tests", href: "/app/practice-tests" as const },
   { name: "Results", href: undefined as undefined },
 ];
 
@@ -166,7 +166,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
         <h1 className="text-2xl font-bold">Practice test results</h1>
         <p className="mt-3 text-sm text-muted-foreground">This session was abandoned. Start a new practice test anytime.</p>
         <Link href="/app/practice-tests" className="mt-6 inline-block text-sm font-semibold text-primary underline">
-          Back to practice tests
+          Back to Practice Tests
         </Link>
       </div>
     );

@@ -26,6 +26,16 @@ describe("exam-product-registry marketing hub resolution", () => {
     assert.equal(p.id, "us-np-fnp");
   });
 
+  it("resolves legacy /en/np specialty hubs to canonical US NP pathways", () => {
+    const fnp = resolveExamPathwayFromMarketingHubSegment("en", "np", "fnp");
+    const agpcnp = resolveExamPathwayFromMarketingHubSegment("en", "np", "agpcnp");
+    assert.ok(fnp);
+    assert.ok(agpcnp);
+    assert.equal(fnp.id, "us-np-fnp");
+    assert.equal(fnp.seoTitle, "FNP Exam Prep | AANP Practice Exam & Readiness | NurseNest");
+    assert.equal(agpcnp.id, "us-np-agpcnp");
+  });
+
   it("resolves WHNP and PNP-PC SEO alias segments", () => {
     const w = resolveExamPathwayFromMarketingHubSegment("us", "np", "whnp-practice-test");
     assert.ok(w);

@@ -61,7 +61,7 @@ export class ExamSessionErrorBoundary extends Component<Props, State> {
               href="/app/practice-tests"
               className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-semibold"
             >
-              Back to practice tests
+              Back to Practice Tests
             </Link>
           </div>
         </div>

@@ -148,7 +148,7 @@ export default function CatInsightsPage() {
 
       <p className="text-sm">
         <Link href="/app/practice-tests" className="font-semibold text-primary underline">
-          Back to practice tests
+          Back to Practice Tests
         </Link>
       </p>
     </div>

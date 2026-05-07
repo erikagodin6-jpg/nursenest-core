@@ -1792,7 +1792,7 @@ export function PracticeTestRunnerClient({
           )}
         </p>
         <Link className="inline-block font-semibold text-primary underline" href="/app/practice-tests">
-          {tx("learner.practiceTests.run.backToPracticeTests", "Back to practice tests")}
+          {tx("learner.practiceTests.run.backToPracticeTests", "Back to Practice Tests")}
         </Link>
       </div>
     );
