@@ -22,17 +22,23 @@ export function EeatContentAttribution(props: EeatContentAttributionProps) {
   if (props.variant === "lesson") {
     return (
       <aside
-        className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] p-4 text-sm text-[var(--semantic-text-primary)]"
+        data-testid="lesson-editorial-disclosure"
+        className="mt-8 border-t pt-5 text-xs leading-relaxed text-[var(--semantic-text-muted)]"
+        style={{
+          borderColor: "color-mix(in srgb, var(--semantic-border-soft), transparent 15%)",
+        }}
         aria-label="Editorial and review"
       >
-        <p className="font-semibold text-[var(--semantic-text-primary)]">Editorial quality</p>
-        <p className="mt-1.5 text-[var(--semantic-text-muted)]">
+        <p className="italic">
           NurseNest lessons are written for exam preparation, reviewed under our editorial standards, and updated when
           exam emphasis changes. This page is not a substitute for facility policy, orders, or independent clinical
           judgment.
         </p>
-        <p className="mt-3 text-xs text-[var(--semantic-text-muted)]">
-          <Link className="font-medium text-[var(--semantic-brand)] underline-offset-2 hover:underline" href="/editorial-policy">
+        <p className="mt-2.5 text-[var(--semantic-text-muted)] not-italic">
+          <Link
+            className="font-medium text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+            href="/editorial-policy"
+          >
             Editorial policy
           </Link>
           {" · "}
