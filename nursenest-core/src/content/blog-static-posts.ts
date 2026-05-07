@@ -14,7 +14,7 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
     title: "Clinical judgment on exam day: turning cues into safe decisions",
     excerpt:
       "How to read stems for stability vs urgency, delegate safely, and avoid tempting-but-wrong shortcuts on high-stakes items.",
-    category: "Exam strategy",
+    category: "Exam Strategy",
     createdAt: "2025-11-12",
     tags: ["NCLEX", "clinical judgment", "prioritization"],
     bodyHtml: `
@@ -51,6 +51,12 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
 <p>On the unit, nurses who perform well under surge conditions verbalize a short situational summary: who the patient is, what changed, what they need next. Practice that aloud when you review rationales—one sentence of synthesis after each question builds the same reflex the exam rewards. Closed-loop communication to the provider should include patient identifiers, the worrisome trend, and what you have already done—mirroring safe handoff structure.</p>
 <p>Simulation and residency research both point to the same habit: slow down the read, then move fast on the first action. Misreads come from scanning for keywords (“pain,” “anxiety”) instead of interpreting the full cue cluster. After you pick an answer, force yourself to name the cue you would have weighted highest—this builds metacognition so you catch your own biases on the next item.</p>
 
+<h2>CAT Exam and unfolding case items</h2>
+<p>The NCLEX Computerized Adaptive Test (CAT Exam) can present longer case-style prompts with multiple tabs or highlighted ranges. Treat each new finding as a possible cue shift: reassess stability after the latest data, then choose the action that addresses the highest-risk problem within registered nurse scope. This mirrors the same priority ladder described above, with information staged across the item rather than in a single short stem.</p>
+
+<h2>Patient education after stability</h2>
+<p>When the stem shows a stable patient or a resolved acute issue, Patient Education, discharge readiness, and culturally sensitive explanations move up the list—still ordered after any remaining risk (glucose extremes, infection signs, anticoagulation safety). Effective teaching states what to monitor at home, when to seek urgent care, the purpose of each medication in plain language, and follow-up expectations, without fabricating doses the stem never provided.</p>
+
 <h2>If you trained outside the United States or Canada</h2>
 <p>International nurses often arrive with strong clinical experience and different medication names or team roles. The NCLEX still tests <em>US-style</em> scope, delegation, and communication norms. Focus extra practice on RN versus assistive roles, who performs initial assessment, and what must be monitored after high-risk medications. Your clinical instincts transfer; the exam wants them expressed through this framework—use the <a href="/us/rn/nclex-rn/lessons">NCLEX-RN lesson hub</a> to align content scope with what items assume.</p>
 
@@ -66,7 +72,7 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
 
 <h2>Summary</h2>
 <p>Clinical judgment on exam day is a disciplined sequence: scan for instability, rank threats, match the first action to scope, and let trends—not single snapshots—drive urgency. Rehearse the sequence until it feels automatic; speed comes from pattern recognition, not rushing.</p>
-<p>Next steps: timed mixed sets in the <a href="/question-bank">question bank</a>, targeted review via the <a href="/us/rn/nclex-rn/lessons">exam pathway lessons</a>, and occasional use of free <a href="/tools">study tools</a> for variety. Cross-train with <a href="/blog/lab-trends-and-acute-kidney-injury">AKI lab trends</a> and <a href="/blog/pharmacology-without-memorization-chaos">pharmacology reasoning</a> so knowledge ties together the way the NCLEX presents it—messy, concurrent, and time-sensitive.</p>
+<p>Next steps: timed mixed sets in the <a href="/question-bank">question bank</a>, targeted review via the <a href="/us/rn/nclex-rn/lessons">Lessons</a> on your exam pathway, <a href="/flashcards">Flashcards</a> for spaced recall, and occasional use of free <a href="/tools">study tools</a> for variety. Cross-train with <a href="/blog/lab-trends-and-acute-kidney-injury">AKI lab trends</a> and <a href="/blog/pharmacology-without-memorization-chaos">Pharmacology reasoning</a> so knowledge ties together the way the NCLEX presents it—messy, concurrent, and time-sensitive.</p>
 `,
   },
   {
@@ -118,6 +124,10 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
 <p>In practice you verify orders, allergies, vitals, labs, interactions, and teach—all under time pressure. Simulate that mentally: after each practice question, state the single monitoring parameter you would recheck in the next hour. That habit converts knowledge into the safety mindset the NCLEX encodes in options.</p>
 <p>Pair every new admission medication list with “what must never be double-dosed” and “what needs a baseline lab”: anticoagulants, digoxin in older adults, lithium, insulin, and nephrotoxic combinations. On the exam, those are the classes that sneak into SATA items as “select all nursing actions before administration.”</p>
 
+<h2>Contraindications, precautions, and interaction vigilance</h2>
+<p>At a class level, screen for active bleeding or high bleeding risk before anticoagulants or antiplatelets; severe reactive-airway history before nonselective beta blockers; hypoglycemia unawareness when beta blockers could mask adrenergic warning signs; QT-prolonging combinations with multiple contributors; pregnancy or pediatric considerations when a class carries boxed warnings; and acute kidney injury or dehydration when renally cleared or renally harmful agents appear in the order set. Nursing assessment before administration should confirm allergies, baseline vitals, pertinent labs, swallowing ability for oral routes, and recent changes that alter clearance.</p>
+<p>High-yield interaction patterns include additive central nervous system depression (opioids with benzodiazepines), serotonin excess when serotonergic agents combine, hyperkalemia risk with renin-angiotensin blockers plus potassium-sparing diuretics or supplements, and nephrotoxic stacking. Follow organizational protocols and pharmacist consults when uncertainty remains—documentation of what you verified is part of safe practice and matches examination expectations for communication items.</p>
+
 <h2>If you are an international nurse planning to work in Canada or the United States</h2>
 <p>Formulary names and units may differ from what you used at home, but mechanisms do not. Focus on high-alert medication classes, insulin concentrations, anticoagulant monitoring expectations, and opioid sedation scales used in North American protocols. Pair pharmacology review with the <a href="/us/rn/nclex-rn/lessons">NCLEX-RN lesson hub</a> so scope and documentation language match what items assume.</p>
 
@@ -148,8 +158,8 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
     slug: "lab-trends-and-acute-kidney-injury",
     title: "Lab trends that matter in acute kidney injury",
     excerpt:
-      "Creatinine, urine output, and electrolyte shifts-how to interpret patterns quickly on the floor and on the exam.",
-    category: "Labs & pathophysiology",
+      "Creatinine, urine output, and electrolyte shifts—how to interpret patterns quickly on the floor and on the exam.",
+    category: "Labs & Pathophysiology",
     createdAt: "2025-09-15",
     tags: ["AKI", "labs", "fluids"],
     bodyHtml: `
@@ -197,6 +207,23 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
 <h2>If you are an international nurse planning to work in Canada or the United States</h2>
 <p>Renal dosing, contrast protocols, and medication brand names may differ from your home setting, but early recognition of AKI and hyperkalemia translates everywhere. Emphasize practice with US-style delegation questions alongside labs—your trend awareness is an asset once paired with <a href="/us/rn/nclex-rn/lessons">NCLEX-RN scope expectations</a>.</p>
 
+<h2>Nursing priorities</h2>
+<p>Maintain accurate intake and output when ordered, trend daily weights when protocol requires them, reconcile home and inpatient medications to reduce nephrotoxic combinations, monitor potassium and acid–base status when injury is suspected or worsening, and coordinate urgent evaluation when cardiac conduction changes accompany rising potassium or when respiratory distress emerges with suspected fluid overload.</p>
+
+<h2>Clinical judgment and red flags</h2>
+<ul>
+  <li>Electrocardiogram changes or muscle symptoms with rising potassium (treat as emergent per protocol)</li>
+  <li>Sudden oliguria or anuria especially with lower abdominal discomfort (consider postrenal obstruction)</li>
+  <li>Hypoxia, crackles, and jugular distention in the oliguric patient (evaluate fluid overload)</li>
+  <li>Confusion, seizure, or pericarditic-type pain descriptions with uremic context (escalate urgently)</li>
+</ul>
+
+<h2>Patient and family education</h2>
+<p>Use plain language to explain why fluid limits, scheduled labs, and temporary medication changes support kidney recovery; teach warning signs such as shortness of breath, chest pressure, markedly decreased urine, weakness, or palpitations; reinforce adherence to follow-up and avoiding unsupervised over-the-counter nephrotoxins unless a clinician approves.</p>
+
+<h2>Exam relevance</h2>
+<p>Practice Tests and NCLEX-style items reward integrating creatinine trajectory with urine output, potassium, and respiratory findings: prioritize assessments and safety actions before lengthy teaching, choose fluid strategies that match perfusion versus overload clues, and select escalation pathways appropriate to scope when life threats appear.</p>
+
 <h2>Practice questions</h2>
 <h3>Question 1</h3>
 <p><strong>Stem:</strong> A patient with sepsis has rising creatinine, urine output down each shift, and soft blood pressure with tachycardia. What is the best interpretation?</p>
@@ -213,7 +240,7 @@ export const STATIC_BLOG_POSTS: StaticBlogPostRecord[] = [
 
 <h2>Summary</h2>
 <p>AKI questions reward trend literacy, symptom integration, and immediate-threat triage. Learn to read creatinine together with output, potassium, acid-base status, and respiratory findings. Pair every AKI stem with a silent question: <em>What could kill this patient fastest, and what nursing action addresses that first?</em></p>
-<p>Keep drilling with <a href="/question-bank">timed questions</a>, revisit <a href="/pre-nursing/lessons/fluids-electrolytes">electrolyte fundamentals</a>, and use <a href="/tools">study tools</a> for quick refreshers between longer sessions.</p>
+<p>Keep drilling with <a href="/question-bank">Practice Questions</a> and <a href="/flashcards">Flashcards</a>, revisit <a href="/pre-nursing/lessons/fluids-electrolytes">electrolyte fundamentals</a>, and use <a href="/tools">study tools</a> for quick refreshers between longer sessions.</p>
 `,
   },
 ];

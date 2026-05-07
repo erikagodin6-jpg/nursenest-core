@@ -3,10 +3,10 @@
     "slug": "clinical-judgment-on-exam-day",
     "title": "Clinical judgment on exam day: turning cues into safe decisions",
     "excerpt": "How to read stems for stability vs urgency, delegate safely, and avoid tempting-but-wrong shortcuts on high-stakes items.",
-    "category": "Exam strategy",
+    "category": "Exam Strategy",
     "createdAt": "2025-11-12",
     "tags": ["NCLEX", "clinical judgment", "prioritization"],
-    "bodyHtml": "<p>Exam items reward a repeatable pattern: identify the <strong>most urgent patient problem</strong>, confirm whether the stem is stable or unstable, then pick the intervention that matches scope and orders.</p><h2>Stability first</h2><p>When vitals or trends suggest instability, your first job is to <em>stay with the patient</em>—assess, intervene within scope, and escalate when needed. Avoid answers that delay assessment when the picture is changing.</p><h2>Delegation and communication</h2><p>Choose the answer that protects safety: clear handoffs, closed-loop communication, and tasks matched to competency—not whoever is available first.</p><p>Pair this mindset with timed practice so judgment feels familiar, not improvised, on test day.</p>"
+    "bodyHtml": "<p>Exam items reward a repeatable pattern: identify the <strong>most urgent patient problem</strong>, confirm whether the stem is stable or unstable, then pick the intervention that matches scope and orders. The CAT Exam may stage findings across tabs—reassess after each new datum.</p><h2>Stability first</h2><p>When vitals or trends suggest instability, your first job is to <em>stay with the patient</em>—assess, intervene within scope, and escalate when needed. Avoid answers that delay assessment when the picture is changing.</p><h2>Delegation and communication</h2><p>Choose the answer that protects safety: clear handoffs, closed-loop communication, and tasks matched to competency—not whoever is available first.</p><h2>Patient education after stability</h2><p>When the scenario is stable, Patient Education, discharge readiness, and clear return precautions move up the priority list—still after any acute threat is addressed.</p><p>Pair this mindset with timed Practice Questions, Flashcards, and Lessons so judgment feels familiar on test day.</p>"
   },
   {
     "slug": "pharmacology-without-memorization-chaos",
@@ -15,15 +15,15 @@
     "category": "Pharmacology",
     "createdAt": "2025-10-28",
     "tags": ["pharmacology", "study skills"],
-    "bodyHtml": "<p>Effective pharmacology prep groups drugs by <strong>what the body does with them</strong> and <strong>what you must monitor</strong>. Start with prototypes: for a class, learn one representative drug deeply, then map siblings by what changes.</p><h2>Three questions per drug</h2><ul><li>What is the intended effect—and the main adverse effects?</li><li>What labs or vitals do I recheck?</li><li>What teaching keeps the patient safe at home?</li></ul><p>Use short question blocks with rationales so you practice retrieval, not passive reading.</p>"
+    "bodyHtml": "<p>Effective Pharmacology prep groups drugs by <strong>mechanism</strong>, predictable adverse effects, and what you must monitor before and after administration.</p><h2>Three questions per drug</h2><ul><li>What is the intended effect—and the main adverse effects?</li><li>What labs or vitals do I recheck?</li><li>What Patient Education keeps the patient safe at home?</li></ul><h2>Precautions and interactions</h2><p>Watch for bleeding risk with anticoagulants, additive sedation with opioids plus benzodiazepines, QT concerns with multiple contributors, and renal clearance issues in acute illness—verify allergies, baseline vitals, and pertinent labs before giving high-alert medications.</p><p>Use short Practice Questions with rationales so you practice retrieval, not passive reading.</p>"
   },
   {
     "slug": "lab-trends-and-acute-kidney-injury",
     "title": "Lab trends that matter in acute kidney injury",
     "excerpt": "Creatinine, urine output, and electrolyte shifts—how to interpret patterns quickly on the floor and on the exam.",
-    "category": "Labs & pathophysiology",
+    "category": "Labs & Pathophysiology",
     "createdAt": "2025-09-15",
     "tags": ["AKI", "labs", "fluids"],
-    "bodyHtml": "<p>AKI is often a <strong>pattern recognition</strong> problem: rising creatinine with or without oliguria, contextualized by meds, perfusion, and obstruction risk.</p><h2>Quick checks</h2><p>Compare baseline to current, look at potassium and acid–base status, and tie interventions to the underlying mechanism (prerenal, intrarenal, postrenal) when the stem provides clues.</p><p>On exams, prioritize life threats (hyperkalemia, pulmonary edema) and therapies that match the scenario data.</p>"
+    "bodyHtml": "<p>AKI is often a <strong>pattern recognition</strong> problem: rising creatinine with or without oliguria, contextualized by meds, perfusion, and obstruction risk. Pathophysiology buckets include prerenal hypoperfusion, intrinsic parenchymal injury, and postrenal obstruction.</p><h2>Quick checks</h2><p>Compare baseline to current, watch potassium and acid–base status, and tie interventions to the scenario—prioritize Nursing Priorities such as accurate I/O, medication reconciliation to avoid nephrotoxins, and escalation for hyperkalemia with ECG changes or respiratory compromise from fluid overload.</p><h2>Red flags</h2><p>Sudden anuria with discomfort may signal obstruction; peaked T waves or widening QRS with rising potassium demand emergent protocol care.</p><p>On Practice Tests, choose assessments and stabilization before lengthy teaching when life threats are present.</p>"
   }
 ]
