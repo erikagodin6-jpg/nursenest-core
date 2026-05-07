@@ -4,6 +4,7 @@
  * rendering updated pathway lessons does not depend on ContentItem sync.
  */
 import { randomUUID } from "node:crypto";
+import { Suspense } from "react";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
@@ -71,7 +72,18 @@ import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import { lessonTopicMatchesTopPriority } from "@/lib/coach/study-coach-lesson-priority";
 import { buildPathwayLessonCoachExcerpt } from "@/lib/coach/build-pathway-lesson-coach-excerpt";
-import { loadPathwayLessonProgressForSlug } from "@/lib/lessons/pathway-lesson-progress";
+import {
+  loadPathwayLessonProgressForSlug,
+  type PathwayLessonProgressStatus,
+} from "@/lib/lessons/pathway-lesson-progress";
+import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
+import { extractExamFocusHighYieldLines, extractSecondaryExamContextLines } from "@/lib/lessons/pathway-lesson-study-extract";
+import { PathwayLessonStudyRail } from "@/components/lessons/pathway-lesson-study-rail";
+import {
+  PathwayLessonDeferredRelatedRail,
+  PathwayLessonRelatedRailSkeleton,
+} from "@/components/lessons/pathway-lesson-detail-deferred";
+import { toPathwayLessonDeferredServerSnapshot } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
 import { LessonSectionNoteInline } from "@/components/lessons/lesson-section-note-inline";
 import { LessonSectionCard, lessonSectionSurface } from "@/components/lessons/lesson-section-card";
@@ -113,6 +125,17 @@ import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesso
 
 /** Bust data cache after admin publishes pathway or ContentItem lessons (see admin PATCH + revalidatePath). */
 export const dynamic = "force-dynamic";
+
+function pathwayLessonProgressRailSummary(status: PathwayLessonProgressStatus): string {
+  switch (status) {
+    case "completed":
+      return "Marked complete — revisit anytime for retention.";
+    case "in_progress":
+      return "In progress — continue sections below.";
+    default:
+      return "Not started — use Contents to jump in.";
+  }
+}
 
 function LessonBody({
   content,
@@ -609,6 +632,11 @@ async function LessonDetailPageInner({ params }: Props) {
           lessonTopicMatchesTopPriority(record.topicSlug, pathwayStudySnap),
       );
     const pathwayCoachExcerpt = buildPathwayLessonCoachExcerpt(displaySections);
+    const quickReviewRailLines = buildQuickReviewBullets(record);
+    const examFocusPrimaryRail = extractExamFocusHighYieldLines(record);
+    const examFocusFallbackRail = extractSecondaryExamContextLines(record.sections);
+    const examFocusRailLines =
+      examFocusPrimaryRail.length > 0 ? examFocusPrimaryRail : examFocusFallbackRail;
     const pathwayQuality = classifyPathwayLesson(record);
     const tier = entitlement.tier as TierCode | null;
     const lessonViewerTier =
@@ -839,7 +867,7 @@ async function LessonDetailPageInner({ params }: Props) {
               ) : null}
             </article>
             {pathway && pathwayLessonQuizEmbed?.length ? (
-              <div className="mt-8 max-w-5xl">
+              <div className="mt-8 w-full max-w-none">
                 <PathwayLessonQuizEmbedSection
                   lessonSlug={record.slug}
                   links={{
@@ -852,7 +880,7 @@ async function LessonDetailPageInner({ params }: Props) {
               </div>
             ) : null}
             {pathway && pathwayInteractiveModules.length > 0 ? (
-              <div className="mt-6 max-w-5xl">
+              <div className="mt-6 w-full max-w-none">
                 <PathwayLessonInteractiveModules
                   modules={pathwayInteractiveModules}
                   viewerTier={contentTierForPathwayLessonRender(pathway, tier)}
@@ -861,12 +889,12 @@ async function LessonDetailPageInner({ params }: Props) {
               </div>
             ) : null}
             {pathway && record.studyCommonTraps && record.studyCommonTraps.length > 0 ? (
-              <div className="mt-6 max-w-5xl">
+              <div className="mt-6 w-full max-w-none">
                 <PathwayLessonCommonTrapsStrip items={record.studyCommonTraps} />
               </div>
             ) : null}
             {pathway && lessonHasExamTakeaways(record.studyTakeaways) ? (
-              <div className="mt-6 max-w-5xl">
+              <div className="mt-6 w-full max-w-none">
                 <ExamTakeawaysBlock
                   pathway={pathway}
                   items={record.studyTakeaways}
@@ -956,7 +984,7 @@ async function LessonDetailPageInner({ params }: Props) {
                 alt={matchedLessonImage.alt}
                 source={matchedLessonImage.source}
                 lessonTitle={displayTitle}
-                className="!mt-0 !mb-2 max-w-[44rem]"
+                className="!mt-0 !mb-2 w-full max-w-none"
               />
             </div>
           ) : null}
@@ -989,9 +1017,9 @@ async function LessonDetailPageInner({ params }: Props) {
           ) : null}
         </div>
 
-        <div className="nn-lesson-layout">
+        <div className="nn-lesson-layout nn-lesson-layout--triple">
           <LessonSectionNav sections={navSections} />
-          <div className="nn-lesson-main min-w-0">
+          <div className="nn-lesson-main min-w-0" data-testid="pathway-lesson-main-column">
             <div className="nn-lesson-editorial-rail nn-lesson-editorial-rail--main">
               {studyLoopBankActive ? (
                 <PathwayLessonStudyLoopOrchestrator
@@ -1015,6 +1043,40 @@ async function LessonDetailPageInner({ params }: Props) {
               )}
             </div>
           </div>
+          {pathway ? (
+            <aside
+              className="nn-lesson-study-rail-aside shrink-0 border-t border-[var(--semantic-border-soft)] pt-6 xl:sticky xl:top-24 xl:w-full xl:self-start xl:border-t-0 xl:pt-0 xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
+              aria-label="Lesson quick review"
+              data-testid="pathway-lesson-study-rail"
+            >
+              <PathwayLessonStudyRail
+                quickReviewLines={quickReviewRailLines}
+                examFocusLines={examFocusRailLines}
+                commonMistakes={record.studyCommonTraps}
+                fullAccess={entitlement.hasAccess}
+                progressSummary={
+                  userId && entitlement.hasAccess
+                    ? {
+                        status: initialProgress,
+                        label: pathwayLessonProgressRailSummary(initialProgress),
+                      }
+                    : null
+                }
+                relatedQuestionsSlot={
+                  <Suspense fallback={<PathwayLessonRelatedRailSkeleton />}>
+                    <PathwayLessonDeferredRelatedRail
+                      pathway={pathway}
+                      lesson={toPathwayLessonDeferredServerSnapshot(record)}
+                      contentLocale={pathwayLessonLocale}
+                      bankEntitlement={entitlement.hasAccess ? entitlement : null}
+                      fullQuizAccess={entitlement.hasAccess}
+                      userId={userId ?? ""}
+                    />
+                  </Suspense>
+                }
+              />
+            </aside>
+          ) : null}
         </div>
       </div>
     );

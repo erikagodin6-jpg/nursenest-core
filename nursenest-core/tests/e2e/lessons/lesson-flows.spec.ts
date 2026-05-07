@@ -78,6 +78,12 @@ for (const cfg of LESSON_FLOW_PATHWAY_QA) {
 
       const lessonPageUrl = page.url();
 
+      await page.setViewportSize({ width: 1440, height: 900 });
+      const mainCol = page.getByTestId("pathway-lesson-main-column");
+      await expect(mainCol).toBeVisible();
+      const mainBox = await mainCol.boundingBox();
+      expect(mainBox?.width ?? 0).toBeGreaterThan(420);
+
       const header = page.locator(`header[data-nn-pathway-id="${cfg.pathwayId}"]`);
       await expect(header).toBeVisible();
       await expect(header).toHaveAttribute("data-nn-exam-short", cfg.pathway.shortName);

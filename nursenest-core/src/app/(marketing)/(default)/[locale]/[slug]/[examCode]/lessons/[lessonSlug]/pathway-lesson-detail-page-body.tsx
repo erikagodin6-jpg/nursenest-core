@@ -321,7 +321,6 @@ export async function PathwayLessonDetailPageBody({
         <div className="mt-4 space-y-2">
           {fullAccess ? <PremiumLessonPublishNotice validation={lesson.premiumValidation} /> : null}
           {fullAccess ? <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} /> : null}
-          <EeatContentAttribution variant="lesson" />
         </div>
         {fullAccess && lesson.memoryAnchor ? (
           <div className="mt-4 max-w-5xl">
@@ -571,6 +570,7 @@ export async function PathwayLessonDetailPageBody({
         </div>
 
         <MarketingStudyCrossLinks className="mt-12" />
+        <EeatContentAttribution variant="lesson" />
         <StaffEditLivePageBanner
           adminHref={buildAdminPathwayLessonStableEditHref({
             pathwayId: pathway.id,

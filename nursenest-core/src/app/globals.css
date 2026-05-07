@@ -4201,7 +4201,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 
 .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main {
   width: 100%;
-  max-width: min(60rem, 100%);
+  max-width: none;
   margin-inline: 0;
   /* ~16px mobile gutter (matches Tailwind px-4); widen smoothly on larger phones / tablets. */
   padding-inline: 1rem;
@@ -4219,12 +4219,12 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--theme-primary) 12%);
 }
 
-.nn-lesson-page--learner-app .nn-lesson-layout {
+.nn-lesson-page--learner-app .nn-lesson-layout--triple {
   margin-top: 1.25rem;
 }
 
 @media (min-width: 1024px) {
-  .nn-lesson-page--learner-app .nn-lesson-layout {
+  .nn-lesson-page--learner-app .nn-lesson-layout--triple {
     margin-top: 1.5rem;
   }
 }
@@ -4281,7 +4281,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 
 .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-content.nn-lesson-prose,
 .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-prose {
-  max-width: min(72ch, 100%);
+  max-width: min(96ch, 100%);
   width: 100%;
   font-size: 0.9375rem;
   line-height: 1.62;
@@ -4309,26 +4309,47 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   box-shadow: none;
 }
 
-.nn-lesson-layout {
-  display: block;
+/* Learner pathway lesson: TOC + wide article + study rail (stacked below xl). */
+.nn-lesson-page--learner-app .nn-lesson-layout--triple {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-@media (min-width: 1024px) {
-  .nn-lesson-layout {
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .nn-lesson-page--learner-app .nn-lesson-layout--triple {
     display: grid;
-    grid-template-columns: min(15.75rem, 26vw) minmax(0, 1fr);
+    grid-template-columns: minmax(11rem, 13.5rem) minmax(0, 1fr);
     gap: clamp(1.25rem, 2.2vw, 2.25rem);
     align-items: start;
+  }
+
+  .nn-lesson-page--learner-app .nn-lesson-layout--triple .nn-lesson-study-rail-aside {
+    grid-column: 1 / -1;
   }
 }
 
 @media (min-width: 1280px) {
-  .nn-lesson-layout {
-    gap: 3.5rem;
+  .nn-lesson-page--learner-app .nn-lesson-layout--triple {
+    display: grid;
+    grid-template-columns:
+      minmax(10.5rem, 13rem)
+      minmax(0, 7fr)
+      minmax(11.5rem, 16rem);
+    gap: clamp(1.5rem, 2.5vw, 2.75rem);
+    align-items: start;
+  }
+
+  .nn-lesson-page--learner-app .nn-lesson-layout--triple .nn-lesson-study-rail-aside {
+    grid-column: auto;
   }
 }
 
 .nn-lesson-main {
+  min-width: 0;
+}
+
+.nn-lesson-study-rail-aside {
   min-width: 0;
 }
 
