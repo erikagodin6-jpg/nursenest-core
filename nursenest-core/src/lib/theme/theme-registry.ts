@@ -40,9 +40,9 @@ export type ThemeOption = {
   named?: boolean;
 };
 
-/** Theme list — named premium palettes first, then legacy themes grouped by family. */
+/** Theme list — launch study atmospheres first, then legacy themes grouped by family. */
 export const THEME_OPTIONS: ThemeOption[] = [
-  /* ── Premium clinical palettes ── */
+  /* ── Launch study atmospheres ── */
   {
     id: "blossom",
     label: "Blossom",
@@ -54,31 +54,31 @@ export const THEME_OPTIONS: ThemeOption[] = [
     named: true,
   },
   {
-    id: "sunset",
-    label: "Sunset",
-    color: "#F97361",
-    swatchSecondary: "#7C8CFF",
-    swatchAccent: "#F6C453",
-    group: "light",
-    logoVariant: "rose",
+    id: "midnight",
+    label: "Midnight",
+    color: "#0B1220",
+    swatchSecondary: "#38BDF8",
+    swatchAccent: "#60A5FA",
+    group: "dark",
+    logoVariant: "dark",
     named: true,
   },
   {
-    id: "ocean-air",
+    id: "ocean",
     label: "Ocean",
-    color: "#2F80ED",
-    swatchSecondary: "#2EC4B6",
-    swatchAccent: "#90E0EF",
+    color: "#1D9BD7",
+    swatchSecondary: "#14B8A6",
+    swatchAccent: "#7DD3FC",
     group: "light",
     logoVariant: "blue",
     named: true,
   },
   {
-    id: "meadow",
-    label: "Garden",
-    color: "#52B788",
-    swatchSecondary: "#48A6E8",
-    swatchAccent: "#F6D365",
+    id: "forest",
+    label: "Forest",
+    color: "#12805C",
+    swatchSecondary: "#0F766E",
+    swatchAccent: "#D9A441",
     group: "light",
     logoVariant: "mint",
     named: true,
@@ -102,7 +102,6 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "deep-twilight", label: "Deep Twilight", color: "#2A1E4A", group: "dark", logoVariant: "dark", named: true },
 
   /* ── Clinical / Default ── */
-  { id: "ocean", label: "Clinical Blue", color: "#1da2d8", group: "light", logoVariant: "blue" },
   { id: "clinical-light", label: "Clinical Light", color: "#3b82f6", group: "light", logoVariant: "blue" },
 
   /* ── Pink family ── */
@@ -120,7 +119,6 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "mint", label: "Mint Calm", color: "#66b2b2", group: "light", logoVariant: "mint" },
   { id: "pastel-mint", label: "Pastel Mint", color: "#4fd1a5", group: "light", logoVariant: "mint" },
   { id: "teal", label: "Teal", color: "#14b8a6", group: "light", logoVariant: "mint" },
-  { id: "forest", label: "Forest", color: "#10b981", group: "light", logoVariant: "mint" },
   { id: "soft-sage", label: "Soft Sage", color: "#7da87d", group: "light", logoVariant: "mint" },
   { id: "evergreen-steel", label: "Evergreen Steel", color: "#3E6B68", group: "dark", logoVariant: "dark", named: true },
 
@@ -145,7 +143,6 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "graphite-blue", label: "Graphite Blue", color: "#4A607A", group: "light", logoVariant: "neutral", named: true },
   { id: "north-sea", label: "North Sea", color: "#2E5D7B", group: "light", logoVariant: "neutral", named: true },
   { id: "slate", label: "Slate", color: "#64748b", group: "light", logoVariant: "neutral" },
-  { id: "midnight", label: "Midnight", color: "#1e293b", group: "dark", logoVariant: "dark" },
   { id: "neutral-sand", label: "Sand", color: "#a08060", group: "light", logoVariant: "neutral" },
   { id: "neutral-slate", label: "Cool Slate", color: "#708090", group: "light", logoVariant: "neutral" },
 

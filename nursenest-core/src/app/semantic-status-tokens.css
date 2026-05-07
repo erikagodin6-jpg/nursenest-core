@@ -58,6 +58,55 @@
   --nn-correct-fg: var(--semantic-text-primary);
   --nn-review-panel-bg: var(--semantic-surface);
   --nn-exam-option-selected-bg: color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-surface));
+
+  /* Premium UI aliases: components consume these, themes define the expression. */
+  --nn-surface: var(--semantic-surface);
+  --nn-surface-muted: var(--semantic-panel-muted);
+  --nn-surface-elevated: var(--semantic-surface-elevated);
+  --nn-border: var(--semantic-border-soft);
+  --nn-border-strong: color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-text-muted));
+  --nn-text-primary: var(--semantic-text-primary);
+  --nn-text-muted: var(--semantic-text-muted);
+  --nn-accent-primary: var(--semantic-brand);
+  --nn-accent-soft: var(--semantic-brand-soft);
+  --nn-accent-ring: color-mix(in srgb, var(--semantic-brand) 35%, transparent);
+  --nn-success: var(--semantic-success);
+  --nn-warning: var(--semantic-warning);
+  --nn-danger: var(--semantic-danger);
+  --nn-info: var(--semantic-info);
+  --nn-mastery: var(--semantic-mastery-high);
+  --nn-study: var(--semantic-info);
+  --nn-reinforce: var(--semantic-chart-5);
+  --lesson-pathophysiology-accent: var(--semantic-chart-1);
+  --lesson-pathophysiology-soft: color-mix(in srgb, var(--lesson-pathophysiology-accent) 10%, var(--semantic-surface));
+  --lesson-pathophysiology-contrast: color-mix(in srgb, var(--lesson-pathophysiology-accent) 70%, var(--semantic-text-primary));
+  --lesson-diagnostics-accent: var(--semantic-warning);
+  --lesson-diagnostics-soft: var(--semantic-warning-soft);
+  --lesson-diagnostics-contrast: var(--semantic-warning-contrast);
+  --lesson-symptoms-accent: color-mix(in srgb, var(--semantic-warning) 82%, var(--semantic-danger));
+  --lesson-symptoms-soft: color-mix(in srgb, var(--lesson-symptoms-accent) 10%, var(--semantic-surface));
+  --lesson-symptoms-contrast: color-mix(in srgb, var(--lesson-symptoms-accent) 70%, var(--semantic-text-primary));
+  --lesson-red-flags-accent: var(--semantic-danger);
+  --lesson-red-flags-soft: var(--semantic-danger-soft);
+  --lesson-red-flags-contrast: var(--semantic-danger-contrast);
+  --lesson-interventions-accent: var(--semantic-success);
+  --lesson-interventions-soft: var(--semantic-success-soft);
+  --lesson-interventions-contrast: var(--semantic-success-contrast);
+  --lesson-teaching-accent: var(--semantic-info);
+  --lesson-teaching-soft: var(--semantic-info-soft);
+  --lesson-teaching-contrast: var(--semantic-info-contrast);
+  --lesson-medications-accent: var(--semantic-chart-5);
+  --lesson-medications-soft: color-mix(in srgb, var(--lesson-medications-accent) 10%, var(--semantic-surface));
+  --lesson-medications-contrast: color-mix(in srgb, var(--lesson-medications-accent) 70%, var(--semantic-text-primary));
+  --lesson-pearls-accent: var(--semantic-chart-5);
+  --lesson-pearls-soft: color-mix(in srgb, var(--lesson-pearls-accent) 10%, var(--semantic-surface));
+  --lesson-pearls-contrast: color-mix(in srgb, var(--lesson-pearls-accent) 70%, var(--semantic-text-primary));
+  --lesson-exam-focus-accent: var(--semantic-brand);
+  --lesson-exam-focus-soft: var(--semantic-brand-soft);
+  --lesson-exam-focus-contrast: color-mix(in srgb, var(--lesson-exam-focus-accent) 72%, var(--semantic-text-primary));
+  --lesson-next-steps-accent: var(--semantic-text-muted);
+  --lesson-next-steps-soft: var(--semantic-panel-muted);
+  --lesson-next-steps-contrast: var(--semantic-text-secondary);
 }
 
 :where([data-theme]) {
@@ -182,6 +231,57 @@
   --progress-low: var(--semantic-mastery-low);
   --progress-mid: var(--semantic-mastery-mid);
   --progress-high: var(--semantic-mastery-high);
+
+  /* Premium NurseNest UI tokens — components use these instead of page-level colors. */
+  --nn-surface: var(--semantic-surface);
+  --nn-surface-muted: var(--semantic-panel-muted);
+  --nn-surface-elevated: var(--semantic-surface-elevated);
+  --nn-border: var(--semantic-border-soft);
+  --nn-border-strong: color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-text-muted));
+  --nn-text-primary: var(--semantic-text-primary);
+  --nn-text-muted: var(--semantic-text-muted);
+  --nn-accent-primary: var(--semantic-brand);
+  --nn-accent-soft: var(--semantic-brand-soft);
+  --nn-accent-ring: color-mix(in srgb, var(--semantic-brand) 35%, transparent);
+  --nn-success: var(--semantic-success);
+  --nn-warning: var(--semantic-warning);
+  --nn-danger: var(--semantic-danger);
+  --nn-info: var(--semantic-info);
+  --nn-mastery: var(--semantic-mastery-high);
+  --nn-study: var(--semantic-info);
+  --nn-reinforce: var(--semantic-chart-5);
+
+  /* Lesson semantic section colors. Distinct roles, theme-aware expression. */
+  --lesson-pathophysiology-accent: var(--semantic-violet);
+  --lesson-pathophysiology-soft: var(--semantic-violet-soft);
+  --lesson-pathophysiology-contrast: var(--semantic-violet-contrast);
+  --lesson-diagnostics-accent: var(--semantic-warning);
+  --lesson-diagnostics-soft: var(--semantic-warning-soft);
+  --lesson-diagnostics-contrast: var(--semantic-warning-contrast);
+  --lesson-symptoms-accent: color-mix(in srgb, var(--semantic-warning) 82%, var(--semantic-danger));
+  --lesson-symptoms-soft: color-mix(in srgb, var(--lesson-symptoms-accent) 10%, var(--bg-card));
+  --lesson-symptoms-contrast: color-mix(in srgb, var(--lesson-symptoms-accent) 70%, var(--semantic-text-primary));
+  --lesson-red-flags-accent: var(--semantic-danger);
+  --lesson-red-flags-soft: var(--semantic-danger-soft);
+  --lesson-red-flags-contrast: var(--semantic-danger-contrast);
+  --lesson-interventions-accent: var(--semantic-success);
+  --lesson-interventions-soft: var(--semantic-success-soft);
+  --lesson-interventions-contrast: var(--semantic-success-contrast);
+  --lesson-teaching-accent: var(--semantic-cyan);
+  --lesson-teaching-soft: var(--semantic-cyan-soft);
+  --lesson-teaching-contrast: var(--semantic-cyan-contrast);
+  --lesson-medications-accent: var(--semantic-chart-5);
+  --lesson-medications-soft: color-mix(in srgb, var(--lesson-medications-accent) 10%, var(--bg-card));
+  --lesson-medications-contrast: color-mix(in srgb, var(--lesson-medications-accent) 70%, var(--semantic-text-primary));
+  --lesson-pearls-accent: var(--semantic-violet);
+  --lesson-pearls-soft: var(--semantic-violet-soft);
+  --lesson-pearls-contrast: var(--semantic-violet-contrast);
+  --lesson-exam-focus-accent: var(--semantic-info);
+  --lesson-exam-focus-soft: var(--semantic-info-soft);
+  --lesson-exam-focus-contrast: var(--semantic-info-contrast);
+  --lesson-next-steps-accent: var(--semantic-text-muted);
+  --lesson-next-steps-soft: var(--semantic-panel-muted);
+  --lesson-next-steps-contrast: var(--semantic-text-secondary);
 }
 
 /* Lavender: brand violet — success mint, info sky, warning amber, danger coral-rose */
@@ -228,6 +328,7 @@ html[data-theme="soft-sage"] {
 }
 
 /* Blush / rose / strawberry brand — success mint, info periwinkle */
+html[data-theme="blossom"],
 html[data-theme="blush"],
 html[data-theme="pastel-blush"],
 html[data-theme="strawberry"] {
@@ -292,6 +393,7 @@ html[data-theme="multi-pastel"] {
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
 html[data-theme="dark-mode"],
+html[data-theme="midnight"],
 html[data-theme="midnight-indigo"],
 html[data-theme="deep-twilight"] {
   /* Multi-surface: higher % so tints are perceptible on dark backgrounds */
@@ -366,6 +468,7 @@ html[data-theme="lavender-dream"] {
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
 html[data-theme="dark-mode"],
+html[data-theme="midnight"],
 html[data-theme="midnight-indigo"],
 html[data-theme="deep-twilight"] {
   --semantic-violet: #a78bfa;

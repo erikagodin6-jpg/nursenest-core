@@ -444,18 +444,18 @@ html[data-theme] {
    * Lesson section role backgrounds — per-theme overrides in theme-palettes.css.
    * Fallbacks derive from existing semantic tokens so legacy themes keep working.
    */
-  --lesson-summary: var(--semantic-info-soft, color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg)));
-  --lesson-key-concepts: var(--semantic-info-soft, color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg)));
-  --lesson-signs-symptoms: var(--semantic-danger-soft, color-mix(in srgb, var(--semantic-danger) 8%, var(--theme-card-bg)));
-  --lesson-assessment: var(--semantic-teal-soft, color-mix(in srgb, var(--semantic-teal) 8%, var(--theme-card-bg)));
-  --lesson-diagnostics: var(--semantic-cyan-soft, color-mix(in srgb, var(--semantic-cyan) 8%, var(--theme-card-bg)));
-  --lesson-interventions: var(--semantic-success-soft, color-mix(in srgb, var(--semantic-success) 8%, var(--theme-card-bg)));
-  --lesson-medications: var(--semantic-warning-soft, color-mix(in srgb, var(--semantic-warning) 8%, var(--theme-card-bg)));
-  --lesson-patient-teaching: var(--semantic-success-soft, color-mix(in srgb, var(--semantic-success) 6%, var(--theme-card-bg)));
-  --lesson-exam-tips: var(--semantic-warning-soft, color-mix(in srgb, var(--semantic-warning) 6%, var(--theme-card-bg)));
-  --lesson-red-flags: var(--semantic-danger-soft, color-mix(in srgb, var(--semantic-danger) 10%, var(--theme-card-bg)));
-  --lesson-clinical-pearls: var(--semantic-violet-soft, color-mix(in srgb, var(--semantic-violet) 8%, var(--theme-card-bg)));
-  --lesson-notes: color-mix(in srgb, var(--theme-body-text) 4%, var(--theme-card-bg));
+  --lesson-summary: var(--lesson-exam-focus-soft, var(--semantic-info-soft));
+  --lesson-key-concepts: var(--lesson-pathophysiology-soft, var(--semantic-info-soft));
+  --lesson-signs-symptoms: var(--lesson-symptoms-soft, var(--semantic-danger-soft));
+  --lesson-assessment: var(--lesson-interventions-soft, var(--semantic-success-soft));
+  --lesson-diagnostics: var(--lesson-diagnostics-soft, var(--semantic-warning-soft));
+  --lesson-interventions: var(--lesson-interventions-soft, var(--semantic-success-soft));
+  --lesson-medications: var(--lesson-medications-soft, var(--semantic-warning-soft));
+  --lesson-patient-teaching: var(--lesson-teaching-soft, var(--semantic-info-soft));
+  --lesson-exam-tips: var(--lesson-exam-focus-soft, var(--semantic-info-soft));
+  --lesson-red-flags: var(--lesson-red-flags-soft, var(--semantic-danger-soft));
+  --lesson-clinical-pearls: var(--lesson-pearls-soft, var(--semantic-brand-soft));
+  --lesson-notes: var(--lesson-next-steps-soft, var(--semantic-panel-muted));
 
   /*
    * Lesson clinical media card — surfaces for the LessonClinicalImageCard component.
@@ -4051,60 +4051,60 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
  * theme-palettes.css, falling back to semantic tokens for legacy themes.
  */
 .nn-lesson-section-card[data-lsc-role="info"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-info));
-  --lsc-soft: var(--lesson-summary, var(--semantic-info-soft));
-  --lsc-contrast: var(--semantic-info-contrast);
+  --lsc-color: var(--lsc-accent, var(--lesson-exam-focus-accent));
+  --lsc-soft: var(--lesson-summary, var(--lesson-exam-focus-soft));
+  --lsc-contrast: var(--lesson-exam-focus-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="warning"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-warning));
-  --lsc-soft: var(--lesson-signs-symptoms, var(--semantic-warning-soft));
-  --lsc-contrast: var(--semantic-warning-contrast);
+  --lsc-color: var(--lsc-accent, var(--lesson-symptoms-accent));
+  --lsc-soft: var(--lesson-signs-symptoms, var(--lesson-symptoms-soft));
+  --lsc-contrast: var(--lesson-symptoms-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="danger"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-danger));
-  --lsc-soft: var(--lesson-red-flags, var(--semantic-danger-soft));
-  --lsc-contrast: var(--semantic-danger-contrast);
+  --lsc-color: var(--lsc-accent, var(--lesson-red-flags-accent));
+  --lsc-soft: var(--lesson-red-flags, var(--lesson-red-flags-soft));
+  --lsc-contrast: var(--lesson-red-flags-contrast);
   --lsc-surface: color-mix(in srgb, var(--lsc-soft) 44%, var(--bg-card, var(--theme-card-bg)) 56%);
 }
 .nn-lesson-section-card[data-lsc-role="success"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-success));
-  --lsc-soft: var(--lesson-medications, var(--semantic-success-soft));
-  --lsc-contrast: var(--semantic-success-contrast);
+  --lsc-color: var(--lsc-accent, var(--lesson-medications-accent));
+  --lsc-soft: var(--lesson-medications, var(--lesson-medications-soft));
+  --lsc-contrast: var(--lesson-medications-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="education"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-success));
-  --lsc-soft: var(--lesson-patient-teaching, color-mix(in srgb, var(--semantic-success) 8%, var(--bg-card)));
-  --lsc-contrast: var(--semantic-success-contrast);
+  --lsc-color: var(--lsc-accent, var(--lesson-teaching-accent));
+  --lsc-soft: var(--lesson-patient-teaching, var(--lesson-teaching-soft));
+  --lsc-contrast: var(--lesson-teaching-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="concept"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-violet));
-  --lsc-soft: var(--lesson-key-concepts, var(--semantic-violet-soft));
-  --lsc-contrast: var(--semantic-violet-contrast);
+  --lsc-color: var(--lsc-accent, var(--lesson-pathophysiology-accent));
+  --lsc-soft: var(--lesson-key-concepts, var(--lesson-pathophysiology-soft));
+  --lsc-contrast: var(--lesson-pathophysiology-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="action"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-teal));
-  --lsc-soft: var(--lesson-interventions, var(--semantic-teal-soft));
-  --lsc-contrast: var(--semantic-teal-contrast);
+  --lsc-color: var(--lsc-accent, var(--lesson-interventions-accent));
+  --lsc-soft: var(--lesson-interventions, var(--lesson-interventions-soft));
+  --lsc-contrast: var(--lesson-interventions-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="diagnostic"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-cyan));
-  --lsc-soft: var(--lesson-diagnostics, var(--semantic-cyan-soft));
-  --lsc-contrast: var(--semantic-cyan-contrast);
+  --lsc-color: var(--lsc-accent, var(--lesson-diagnostics-accent));
+  --lsc-soft: var(--lesson-diagnostics, var(--lesson-diagnostics-soft));
+  --lsc-contrast: var(--lesson-diagnostics-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="application"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-chart-5));
-  --lsc-soft: var(--lesson-clinical-pearls, color-mix(in srgb, var(--semantic-chart-5) 10%, var(--bg-card)));
-  --lsc-contrast: color-mix(in srgb, var(--semantic-chart-5) 65%, var(--semantic-text-primary));
+  --lsc-color: var(--lsc-accent, var(--lesson-pearls-accent));
+  --lsc-soft: var(--lesson-clinical-pearls, var(--lesson-pearls-soft));
+  --lsc-contrast: var(--lesson-pearls-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="review"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-brand));
-  --lsc-soft: var(--lesson-exam-tips, var(--semantic-brand-soft));
-  --lsc-contrast: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-primary));
+  --lsc-color: var(--lsc-accent, var(--lesson-exam-focus-accent));
+  --lsc-soft: var(--lesson-exam-tips, var(--lesson-exam-focus-soft));
+  --lsc-contrast: var(--lesson-exam-focus-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="cta"] {
-  --lsc-color: var(--lsc-accent, var(--semantic-text-muted));
-  --lsc-soft: var(--lesson-notes, var(--semantic-panel-muted));
-  --lsc-contrast: var(--semantic-text-secondary);
+  --lsc-color: var(--lsc-accent, var(--lesson-next-steps-accent));
+  --lsc-soft: var(--lesson-notes, var(--lesson-next-steps-soft));
+  --lsc-contrast: var(--lesson-next-steps-contrast);
 }
 
 /*
@@ -4682,17 +4682,17 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   transition: background var(--motion-base, 150ms) ease;
 }
 
-.nn-lesson-nav-dot[data-role=info]        { background: var(--semantic-info); }
-.nn-lesson-nav-dot[data-role=warning]     { background: var(--semantic-warning); }
-.nn-lesson-nav-dot[data-role=danger]      { background: var(--semantic-danger); }
-.nn-lesson-nav-dot[data-role=success]     { background: var(--semantic-success); }
-.nn-lesson-nav-dot[data-role=education]   { background: var(--semantic-success); }
-.nn-lesson-nav-dot[data-role=concept]     { background: var(--semantic-violet, #7c3aed); }
-.nn-lesson-nav-dot[data-role=action]      { background: var(--semantic-teal, #0d9488); }
-.nn-lesson-nav-dot[data-role=diagnostic]  { background: var(--semantic-cyan, #0891b2); }
-.nn-lesson-nav-dot[data-role=application] { background: var(--semantic-chart-5, #6366f1); }
-.nn-lesson-nav-dot[data-role=review]      { background: var(--semantic-brand); }
-.nn-lesson-nav-dot[data-role=cta]         { background: var(--semantic-text-muted); }
+.nn-lesson-nav-dot[data-role=info]        { background: var(--lesson-exam-focus-accent); }
+.nn-lesson-nav-dot[data-role=warning]     { background: var(--lesson-symptoms-accent); }
+.nn-lesson-nav-dot[data-role=danger]      { background: var(--lesson-red-flags-accent); }
+.nn-lesson-nav-dot[data-role=success]     { background: var(--lesson-medications-accent); }
+.nn-lesson-nav-dot[data-role=education]   { background: var(--lesson-teaching-accent); }
+.nn-lesson-nav-dot[data-role=concept]     { background: var(--lesson-pathophysiology-accent); }
+.nn-lesson-nav-dot[data-role=action]      { background: var(--lesson-interventions-accent); }
+.nn-lesson-nav-dot[data-role=diagnostic]  { background: var(--lesson-diagnostics-accent); }
+.nn-lesson-nav-dot[data-role=application] { background: var(--lesson-pearls-accent); }
+.nn-lesson-nav-dot[data-role=review]      { background: var(--lesson-exam-focus-accent); }
+.nn-lesson-nav-dot[data-role=cta]         { background: var(--lesson-next-steps-accent); }
 
 .nn-lesson-nav-label {
   font-size: 0.8125rem;

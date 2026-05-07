@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { getClinicalThemeMeta } from "@/lib/ui/themes/clinical-theme-tokens";
 import { computeMarketingUtilityFloatingPanelRect } from "@/components/layout/marketing-utility-floating-panel-geometry";
 
 const THEME_PANEL_WIDTH = 224;
@@ -69,23 +70,31 @@ function ThemeMenuList({
           <div>
             <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--palette-text-muted)]">Featured</p>
             {named.map((opt) => (
-              <button
-                key={opt.id}
-                type="button"
-                role="option"
-                aria-selected={opt.id === current}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setTheme(opt.id);
-                  setOpen(false);
-                }}
-                className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-[background-color,color] duration-150 ease-out hover:bg-[var(--palette-nav-hover)] ${
-                  opt.id === current ? "font-semibold text-[var(--palette-accent)]" : "text-[var(--palette-nav-text)]"
-                }`}
-              >
-                <ThemeSwatches opt={opt} />
-                <span className="min-w-0 flex-1 leading-snug">{opt.label}</span>
-              </button>
+              (() => {
+                const meta = getClinicalThemeMeta(opt.id);
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    role="option"
+                    aria-selected={opt.id === current}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setTheme(opt.id);
+                      setOpen(false);
+                    }}
+                    className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-[background-color,color] duration-150 ease-out hover:bg-[var(--palette-nav-hover)] ${
+                      opt.id === current ? "font-semibold text-[var(--palette-accent)]" : "text-[var(--palette-nav-text)]"
+                    }`}
+                  >
+                    <ThemeSwatches opt={opt} />
+                    <span className="min-w-0 flex-1 leading-snug">
+                      <span className="block">{opt.label}</span>
+                      {meta ? <span className="block text-[11px] font-medium text-[var(--palette-text-muted)]">{meta.mood}</span> : null}
+                    </span>
+                  </button>
+                );
+              })()
             ))}
           </div>
         ) : null;

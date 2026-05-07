@@ -1,5 +1,5 @@
 /**
- * Contract checks for premium clinical palettes (Blossom, Sunset, Ocean, Garden).
+ * Contract checks for premium clinical launch palettes (Blossom, Midnight, Ocean, Forest).
  *
  * Run: `npx tsx --test src/lib/theme/premium-palettes.contract.test.ts`
  */
@@ -14,8 +14,8 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const PALETTES_PATH = resolve(HERE, "../../app/theme-palettes.css");
 const css = readFileSync(PALETTES_PATH, "utf-8");
 
-const PREMIUM_IDS = ["blossom", "sunset", "ocean-air", "meadow"] as const;
-const USER_LABELS = ["Blossom", "Sunset", "Ocean", "Garden"] as const;
+const PREMIUM_IDS = ["blossom", "midnight", "ocean", "forest"] as const;
+const USER_LABELS = ["Blossom", "Midnight", "Ocean", "Forest"] as const;
 
 /** Harsh / neon pinks disallowed as primary swatch on these themes */
 const BANNED_PRIMARY_HEX = [/^#ff1493/i, /^#ff00/i, /^#ff2d/i, /^#ec4899/i];
@@ -23,10 +23,10 @@ const BANNED_PRIMARY_HEX = [/^#ff1493/i, /^#ff00/i, /^#ff2d/i, /^#ec4899/i];
 function blockFor(themeId: string): string | null {
   const re = new RegExp(
     `\\[data-theme="${themeId}"\\]\\s*\\{([\\s\\S]*?)\\n\\}`,
-    "m",
+    "gm",
   );
-  const m = css.match(re);
-  return m ? m[0] : null;
+  const matches = [...css.matchAll(re)].map((m) => m[0]);
+  return matches.find((block) => /--theme-page-bg:/i.test(block)) ?? matches[0] ?? null;
 }
 
 describe("premium palette registry", () => {
@@ -38,11 +38,11 @@ describe("premium palette registry", () => {
       assert.ok(opt, `missing THEME_OPTIONS entry for ${id}`);
       assert.equal(opt?.label, label);
       assert.equal(opt?.named, true);
-      assert.equal(opt?.group, "light");
+      assert.equal(opt?.group, id === "midnight" ? "dark" : "light");
     }
   });
 
-  it("theme picker featured list includes Blossom, Sunset, Ocean, Garden labels in order", () => {
+  it("theme picker featured list includes Blossom, Midnight, Ocean, Forest labels in order", () => {
     const named = THEME_OPTIONS.filter((o) => o.named);
     const labels = named.map((o) => o.label);
     for (const L of USER_LABELS) {
@@ -52,9 +52,9 @@ describe("premium palette registry", () => {
       );
     }
     const idx = (L: string) => labels.indexOf(L);
-    assert.ok(idx("Blossom") < idx("Sunset"), "Blossom should appear before Sunset in featured order");
-    assert.ok(idx("Sunset") < idx("Ocean"), "Sunset should appear before Ocean");
-    assert.ok(idx("Ocean") < idx("Garden"), "Ocean should appear before Garden");
+    assert.ok(idx("Blossom") < idx("Midnight"), "Blossom should appear before Midnight in featured order");
+    assert.ok(idx("Midnight") < idx("Ocean"), "Midnight should appear before Ocean");
+    assert.ok(idx("Ocean") < idx("Forest"), "Ocean should appear before Forest");
   });
 
   it("does not use banned neon/hot-pink hex values as primary swatch color", () => {
@@ -87,15 +87,15 @@ describe("premium palette CSS", () => {
       assert.match(block, /--theme-primary:\s*#/i, `${id} should set --theme-primary`);
     });
 
-    it(`${id} does not set a tinted card surface in the identity block (white cards via shared shell)`, () => {
+    it(`${id} keeps readable card surfaces in the identity block`, () => {
       const block = blockFor(id);
       assert.ok(block);
-      if (/--theme-card-bg:/i.test(block)) {
-        assert.match(
-          block,
-          /--theme-card-bg:\s*(#fff\b|#ffffff\b)/i,
-          `${id}: if --theme-card-bg is set it must stay white`,
-        );
+      if (id !== "midnight" && /--theme-card-bg:/i.test(block)) {
+        assert.match(block, /--theme-card-bg:\s*(#fff\b|#ffffff\b)/i, `${id}: light cards should stay white`);
+      }
+      if (id === "midnight") {
+        assert.match(block, /color-scheme:\s*dark/i, "midnight should opt into dark color scheme");
+        assert.match(block, /--theme-card-bg:\s*#/i, "midnight should define a dark card surface");
       }
     });
   }

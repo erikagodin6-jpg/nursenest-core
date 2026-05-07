@@ -20,6 +20,8 @@ test("lesson section presentation + theme: spot kinds stay wired", () => {
     assert.match(cls, /^nn-lesson-body--/, `body class for ${k}`);
     const theme = getLessonSectionTheme(k);
     assert.ok(theme.lessonToken.startsWith("--lesson-"), `lesson token for ${k}`);
+    assert.match(theme.accent, /^var\(--lesson-[a-z-]+-accent\)$/, `theme accent token for ${k}`);
+    assert.doesNotMatch(theme.accent, /#[0-9a-f]{3,8}/i, `no raw accent color for ${k}`);
     assert.equal(theme.dataRole, theme.role);
   }
 });

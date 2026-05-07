@@ -170,16 +170,16 @@ const KIND_THEME_KEY_OVERRIDES: Partial<Record<PathwayLessonSectionKind, LessonS
 };
 
 const THEME_ACCENTS: Record<LessonSectionThemeKey, string> = {
-  pathophysiology: "#3730A3",
-  diagnosticsLabs: "#D97706",
-  signsSymptoms: "#EA580C",
-  redFlags: "#E11D48",
-  nursingInterventions: "#059669",
-  patientTeaching: "#0891B2",
-  medicationsTreatments: "#DB2777",
-  clinicalPearls: "#7C3AED",
-  examFocus: "#2563EB",
-  nextSteps: "#475569",
+  pathophysiology: "var(--lesson-pathophysiology-accent)",
+  diagnosticsLabs: "var(--lesson-diagnostics-accent)",
+  signsSymptoms: "var(--lesson-symptoms-accent)",
+  redFlags: "var(--lesson-red-flags-accent)",
+  nursingInterventions: "var(--lesson-interventions-accent)",
+  patientTeaching: "var(--lesson-teaching-accent)",
+  medicationsTreatments: "var(--lesson-medications-accent)",
+  clinicalPearls: "var(--lesson-pearls-accent)",
+  examFocus: "var(--lesson-exam-focus-accent)",
+  nextSteps: "var(--lesson-next-steps-accent)",
 };
 
 export type LessonSectionTheme = {

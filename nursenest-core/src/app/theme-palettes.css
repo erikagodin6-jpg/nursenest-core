@@ -1490,7 +1490,7 @@
   --theme-page-bg: #ffffff;
 }
 
-/* ── Premium clinical palettes (Blossom, Sunset, Ocean, Garden) ── */
+/* ── Premium clinical palettes (Blossom, Midnight, Ocean, Forest) ── */
 
 [data-theme="blossom"] {
   --theme-primary: #e75480;
@@ -1636,6 +1636,54 @@
   --theme-header-divider: rgba(37, 99, 235, 0.24);
 }
 
+[data-theme="ocean"] {
+  --theme-primary: #1d9bd7;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #14b8a6;
+  --theme-secondary-foreground: #0f766e;
+  --theme-accent: #7dd3fc;
+  --theme-accent-foreground: #075985;
+  --theme-border: #cfe8f4;
+  --theme-ring: #0284c7;
+  --theme-page-bg: #f6fbff;
+  --theme-heading-text: #0f172a;
+  --theme-body-text: #334155;
+  --theme-muted-text: #64748b;
+
+  --lesson-summary: #e7f5ff;
+  --lesson-key-concepts: #e9edff;
+  --lesson-signs-symptoms: #fff0e8;
+  --lesson-assessment: #e2f7f1;
+  --lesson-diagnostics: #fff7df;
+  --lesson-interventions: #e4f8ec;
+  --lesson-medications: #ffeaf2;
+  --lesson-patient-teaching: #e0f7fb;
+  --lesson-exam-tips: #e7f1ff;
+  --lesson-red-flags: #ffe3e7;
+  --lesson-clinical-pearls: #f1eaff;
+  --lesson-notes: #edf4f8;
+
+  --state-success: #e4f8ec;
+  --state-warning: #fff7df;
+  --state-info: #e7f5ff;
+  --state-danger-soft: #ffe3e7;
+
+  --logo-primary: #1d9bd7;
+  --logo-accent: #14b8a6;
+  --logo-text: #0f172a;
+  --theme-brand-accent: #1d9bd7;
+  --theme-brand-strong: #0369a1;
+  --theme-nav-background: #0369a1;
+  --theme-nav-foreground: #ffffff;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #ffffff;
+  --theme-header-top-bg: #0369a1;
+  --theme-header-main-bg: #0369a1;
+  --theme-header-secondary-bg: #ffffff;
+  --theme-header-secondary-fg: #0f172a;
+  --theme-header-divider: rgba(3, 105, 161, 0.24);
+}
+
 [data-theme="meadow"] {
   --theme-primary: #52b788;
   --theme-primary-foreground: #ffffff;
@@ -1682,6 +1730,132 @@
   --theme-header-secondary-bg: #FFFFFF;
   --theme-header-secondary-fg: #10251A;
   --theme-header-divider: rgba(61, 154, 114, 0.24);
+}
+
+[data-theme="forest"] {
+  --theme-primary: #12805c;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #0f766e;
+  --theme-secondary-foreground: #134e4a;
+  --theme-accent: #d9a441;
+  --theme-accent-foreground: #713f12;
+  --theme-border: #d8e7dc;
+  --theme-ring: #047857;
+  --theme-page-bg: #f7fbf7;
+  --theme-heading-text: #10251a;
+  --theme-body-text: #31483b;
+  --theme-muted-text: #5b6f62;
+
+  --lesson-summary: #e8f5ef;
+  --lesson-key-concepts: #e9edff;
+  --lesson-signs-symptoms: #fff0e6;
+  --lesson-assessment: #e0f4ee;
+  --lesson-diagnostics: #fff4d9;
+  --lesson-interventions: #dff3eb;
+  --lesson-medications: #ffeaf2;
+  --lesson-patient-teaching: #e5f7f6;
+  --lesson-exam-tips: #e8f1ff;
+  --lesson-red-flags: #fadadd;
+  --lesson-clinical-pearls: #efe7ff;
+  --lesson-notes: #eef6f0;
+
+  --state-success: #dff3eb;
+  --state-warning: #fff4d9;
+  --state-info: #e5f7f6;
+  --state-danger-soft: #fadadd;
+
+  --logo-primary: #12805c;
+  --logo-accent: #0f766e;
+  --logo-text: #10251a;
+  --theme-brand-accent: #12805c;
+  --theme-brand-strong: #047857;
+  --theme-nav-background: #047857;
+  --theme-nav-foreground: #ffffff;
+  --theme-nav-hover: rgba(255, 255, 255, 0.15);
+  --theme-nav-hover-foreground: #ffffff;
+  --theme-header-top-bg: #047857;
+  --theme-header-main-bg: #047857;
+  --theme-header-secondary-bg: #ffffff;
+  --theme-header-secondary-fg: #10251a;
+  --theme-header-divider: rgba(4, 120, 87, 0.24);
+}
+
+[data-theme="midnight"] {
+  color-scheme: dark;
+  --theme-primary: #38bdf8;
+  --theme-primary-foreground: #07111f;
+  --theme-secondary: #1e293b;
+  --theme-secondary-foreground: #bae6fd;
+  --theme-accent: #60a5fa;
+  --theme-accent-foreground: #07111f;
+  --theme-border: #26364d;
+  --theme-ring: #38bdf8;
+  --color-warmwhite: #07111f;
+  --color-softgray: #cbd5e1;
+  --color-background: #07111f;
+  --color-foreground: #e5edf7;
+  --color-card: #111827;
+  --color-card-foreground: #e5edf7;
+  --color-popover: #111827;
+  --color-popover-foreground: #e5edf7;
+  --color-card-base: #111827;
+  --color-card-fg-base: #e5edf7;
+  --color-popover-base: #111827;
+  --color-popover-fg-base: #e5edf7;
+  --theme-page-bg: #07111f;
+  --theme-nav-bg: #0b1220;
+  --theme-nav-text: #dbeafe;
+  --theme-nav-border: #26364d;
+  --theme-topbar-bg: #0b1220;
+  --theme-topbar-text: #7dd3fc;
+  --theme-menu-text: #e5edf7;
+  --theme-menu-hover-bg: color-mix(in srgb, #38bdf8 14%, transparent);
+  --theme-menu-hover-text: #7dd3fc;
+  --theme-menu-active-bg: color-mix(in srgb, #38bdf8 22%, transparent);
+  --theme-card-bg: #111827;
+  --theme-card-border: #26364d;
+  --theme-card-text: #e5edf7;
+  --theme-input-bg: #0b1220;
+  --theme-input-border: #26364d;
+  --theme-heading-text: #f8fafc;
+  --theme-body-text: #cbd5e1;
+  --theme-muted-text: #94a3b8;
+  --theme-focus-ring: #38bdf8;
+  --theme-separator: #26364d;
+  --theme-header-surface: #0b1220;
+  --theme-brand-accent: #38bdf8;
+  --theme-brand-strong: #7dd3fc;
+  --theme-nav-background: #0b1220;
+  --theme-nav-foreground: #e5edf7;
+  --theme-nav-hover: rgba(125, 211, 252, 0.14);
+  --theme-nav-hover-foreground: #ffffff;
+  --theme-header-top-bg: #0b1220;
+  --theme-header-main-bg: #0b1220;
+  --theme-header-secondary-bg: #111827;
+  --theme-header-secondary-fg: #f8fafc;
+  --theme-header-divider: rgba(125, 211, 252, 0.18);
+
+  --lesson-summary: #10243a;
+  --lesson-key-concepts: #1e1b4b;
+  --lesson-signs-symptoms: #3a2415;
+  --lesson-assessment: #133532;
+  --lesson-diagnostics: #3a2e13;
+  --lesson-interventions: #14382d;
+  --lesson-medications: #3a1830;
+  --lesson-patient-teaching: #12323b;
+  --lesson-exam-tips: #10243a;
+  --lesson-red-flags: #461b2a;
+  --lesson-clinical-pearls: #2b214e;
+  --lesson-notes: #172033;
+
+  --state-success: #14382d;
+  --state-warning: #3a2e13;
+  --state-info: #10243a;
+  --state-danger-soft: #461b2a;
+
+  --logo-primary: #7dd3fc;
+  --logo-accent: #60a5fa;
+  --logo-text: #f8fafc;
 }
 
 /*

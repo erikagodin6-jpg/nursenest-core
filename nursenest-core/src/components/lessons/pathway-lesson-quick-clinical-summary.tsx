@@ -82,12 +82,12 @@ export function PathwayLessonQuickClinicalSummary({
         <h2 id="quick-clinical-summary">Quick Clinical Summary</h2>
       </div>
       <div className="nn-lesson-quick-summary__grid">
-        <SummaryCard title="Key Takeaways" lines={takeaways} icon={Lightbulb} accent="#7C3AED" />
-        <SummaryCard title="Red Flags" lines={redFlags.length ? redFlags : fallbackExam.slice(0, 2)} icon={ShieldAlert} accent="#E11D48" />
-        <SummaryCard title="Priority Interventions" lines={interventions.length ? interventions : takeaways.slice(0, 2)} icon={Stethoscope} accent="#059669" />
-        <SummaryCard title="Exam Traps" lines={traps.length ? traps : fallbackExam} icon={AlertTriangle} accent="#2563EB" />
-        <SummaryCard title="Must-Know Labs" lines={labs.length ? labs : fallbackExam.slice(0, 2)} icon={FlaskConical} accent="#D97706" />
-        <SummaryCard title="Escalation Cues" lines={escalation.length ? escalation : redFlags.slice(0, 2)} icon={ClipboardCheck} accent="#475569" />
+        <SummaryCard title="Key Takeaways" lines={takeaways} icon={Lightbulb} accent="var(--lesson-pearls-accent)" />
+        <SummaryCard title="Red Flags" lines={redFlags.length ? redFlags : fallbackExam.slice(0, 2)} icon={ShieldAlert} accent="var(--lesson-red-flags-accent)" />
+        <SummaryCard title="Priority Interventions" lines={interventions.length ? interventions : takeaways.slice(0, 2)} icon={Stethoscope} accent="var(--lesson-interventions-accent)" />
+        <SummaryCard title="Exam Traps" lines={traps.length ? traps : fallbackExam} icon={AlertTriangle} accent="var(--lesson-exam-focus-accent)" />
+        <SummaryCard title="Must-Know Labs" lines={labs.length ? labs : fallbackExam.slice(0, 2)} icon={FlaskConical} accent="var(--lesson-diagnostics-accent)" />
+        <SummaryCard title="Escalation Cues" lines={escalation.length ? escalation : redFlags.slice(0, 2)} icon={ClipboardCheck} accent="var(--lesson-next-steps-accent)" />
       </div>
     </section>
   );

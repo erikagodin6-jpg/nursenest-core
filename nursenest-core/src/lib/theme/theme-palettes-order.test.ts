@@ -108,9 +108,11 @@ const EXPECTED_COMPLETE_LIGHT_THEMES = [
   "plum-mist",
   "graphite-blue",
   "north-sea",
+  "ocean",
   "blossom",
   "sunset",
   "ocean-air",
+  "forest",
   "meadow",
 ];
 
