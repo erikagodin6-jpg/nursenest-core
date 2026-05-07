@@ -47,7 +47,10 @@
 
 ## Validation
 
-Commands and results will be filled after the final validation run.
+- `node --import tsx --test src/lib/marketing/signup-copy.test.ts src/lib/marketing/signup-exam-focus-options.test.ts src/lib/captcha/verify-turnstile.test.ts src/lib/exam-pathways/exam-product-registry.test.ts src/components/layout/site-header-start-free.contract.test.ts` — **passed** (`5/5` files).
+- `npm run typecheck:critical` — **passed**.
+- `npx playwright test tests/e2e/public/np-qa-regression.spec.ts --project=chromium` with `127.0.0.1` — **failed due local dev origin/runtime instability**, not accepted as product failure. First signup assertion saw unhydrated server HTML because Next dev blocked `127.0.0.1` chunk/HMR access from a server advertising `localhost`. The NP title route then returned `ERR_EMPTY_RESPONSE`.
+- `BASE_URL=http://localhost:3000 npx playwright test tests/e2e/public/np-qa-regression.spec.ts --project=chromium` — **failed due local browser/server harness**, with Chromium sandbox `sandbox_host_linux.cc:41 shutdown: Operation not permitted` in one run and `page.goto: net::ERR_ABORTED` timeouts in another.
 
 ## Skipped authenticated QA
 
