@@ -4,7 +4,11 @@
  */
 import OpenAI from "openai";
 import type { BlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
-import { getBlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
+import {
+  assertBlogAiExplicitOpenRouterHonored,
+  getBlogAiChatProvider,
+  sanitizeEnvProviderToken,
+} from "@/lib/ai/blog-ai-routing";
 import { appendOpenRouterHintIfQuotaError } from "@/lib/ai/openai-quota-hint";
 import type { ChatCompletionResult } from "@/lib/ai/openai-chat-types";
 import {
@@ -19,15 +23,12 @@ export type { BlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
 
 type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
 
-let lastLoggedBlogProvider = "";
 const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 const OPENROUTER_401_MESSAGE =
   "OpenRouter rejected the API key. Check OPENROUTER_API_KEY, account credits, model access, and shell env loading.";
 
-function logBlogProviderSelection(provider: BlogAiChatProvider, model: string): void {
-  const key = `${provider}:${model}`;
-  if (key === lastLoggedBlogProvider) return;
-  lastLoggedBlogProvider = key;
+/** Logged on every blog pipeline completion (repair/retry uses the same entrypoint). */
+function logBlogAiInvocation(provider: BlogAiChatProvider, model: string): void {
   console.info(`[BlogAI] provider=${provider} model=${model}`);
 }
 
@@ -121,6 +122,7 @@ export async function blogAiChatCompletion(params: {
   model?: string;
 }): Promise<ChatCompletionResult> {
   const provider = getBlogAiChatProvider();
+  assertBlogAiExplicitOpenRouterHonored(provider);
   if (provider === "gemini") {
     throw new Error(
       "BLOG_AI_PROVIDER=gemini does not use OpenAI-compatible chat completions; use generateGeminiBlogDraft or set BLOG_AI_PROVIDER=openai|openrouter (or AI_PROVIDER=openrouter).",
@@ -135,7 +137,7 @@ export async function blogAiChatCompletion(params: {
   if (provider === "openrouter") {
     normalizeOpenRouterApiKey(process.env.OPENROUTER_API_KEY);
     const model = normalizeOpenRouterModel(params.model, getBlogOpenRouterChatModel());
-    logBlogProviderSelection(provider, model);
+    logBlogAiInvocation(provider, model);
     return openRouterChatCompletion({
       messages: params.messages,
       temperature: params.temperature,
@@ -143,6 +145,12 @@ export async function blogAiChatCompletion(params: {
       user: params.user,
       model,
     });
+  }
+
+  if (sanitizeEnvProviderToken(process.env.BLOG_AI_PROVIDER) === "openrouter") {
+    throw new Error(
+      "[BlogAI] Blocked OpenAI SDK path while BLOG_AI_PROVIDER=openrouter — routing should use OpenRouter only.",
+    );
   }
 
   const user = params.user ? String(params.user).slice(0, 128) : undefined;
@@ -153,7 +161,7 @@ export async function blogAiChatCompletion(params: {
       "OpenAI API key is required when using the OpenAI blog provider (BLOG_OPENAI_API_KEY or AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY).",
     );
   }
-  logBlogProviderSelection(provider, model);
+  logBlogAiInvocation(provider, model);
   const base = getOpenAiBaseUrl().replace(/\/$/, "");
   const client = new OpenAI({
     apiKey,

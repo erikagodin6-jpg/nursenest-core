@@ -36,6 +36,7 @@ export async function openAiChatCompletion(params: {
   useBlogOpenAiApiKey?: boolean;
 }): Promise<ChatCompletionResult> {
   if (params.useBlogOpenAiApiKey) {
+    // Blog generation, repair, retry, localized follow-ups — single router (`blogAiChatCompletion`).
     const provider = getBlogAiChatProvider();
     if (provider === "gemini") {
       throw new Error(

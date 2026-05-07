@@ -64,4 +64,18 @@ describe("getBlogAiChatProvider", () => {
     delete process.env.OPENROUTER_API_KEY;
     assert.equal(getBlogAiChatProvider(), "unconfigured");
   });
+
+  it("normalizes BLOG_AI_PROVIDER with stray CR/LF to openrouter", () => {
+    process.env.BLOG_AI_PROVIDER = "openrouter\r";
+    delete process.env.AI_PROVIDER;
+    delete process.env.OPENROUTER_API_KEY;
+    assert.equal(getBlogAiChatProvider(), "openrouter");
+  });
+
+  it("detects OPENROUTER_API_KEY with trailing CR as present", () => {
+    delete process.env.BLOG_AI_PROVIDER;
+    delete process.env.AI_PROVIDER;
+    process.env.OPENROUTER_API_KEY = "sk-or-test\r";
+    assert.equal(getBlogAiChatProvider(), "openrouter");
+  });
 });

@@ -6,14 +6,43 @@
 export type BlogAiChatProvider = "openai" | "openrouter" | "gemini" | "unconfigured";
 export type AiChatProvider = "openai" | "openrouter" | "gemini";
 
+/** Trim + strip BOM / stray CR/LF so platform-specific env files cannot break routing. */
+export function sanitizeEnvProviderToken(raw: string | undefined): string | undefined {
+  if (raw == null) return undefined;
+  const t = raw
+    .trim()
+    .replace(/^\uFEFF/, "")
+    .replace(/\r|\n/g, "")
+    .trim()
+    .toLowerCase();
+  return t.length > 0 ? t : undefined;
+}
+
+/** Non-empty secret/env value after trimming (never lowercase — API keys must stay raw). */
+export function envSecretLooksPresent(raw: string | undefined): boolean {
+  if (raw == null) return false;
+  return raw.replace(/\r|\n/g, "").trim().length > 0;
+}
+
 function normalizedBlogProvider(): string | undefined {
-  const raw = process.env.BLOG_AI_PROVIDER?.trim().toLowerCase();
-  return raw && raw.length > 0 ? raw : undefined;
+  return sanitizeEnvProviderToken(process.env.BLOG_AI_PROVIDER);
 }
 
 function normalizedAiProvider(): string | undefined {
-  const raw = process.env.AI_PROVIDER?.trim().toLowerCase();
-  return raw && raw.length > 0 ? raw : undefined;
+  return sanitizeEnvProviderToken(process.env.AI_PROVIDER);
+}
+
+/**
+ * When operators set `BLOG_AI_PROVIDER=openrouter`, routing must resolve to OpenRouter or fail loudly
+ * (never silently fall through to OpenAI).
+ */
+export function assertBlogAiExplicitOpenRouterHonored(provider: BlogAiChatProvider): void {
+  const explicit = sanitizeEnvProviderToken(process.env.BLOG_AI_PROVIDER);
+  if (explicit === "openrouter" && provider !== "openrouter") {
+    throw new Error(
+      `[BlogAI] BLOG_AI_PROVIDER=openrouter but resolved provider=${provider}. Ensure OPENROUTER_API_KEY is set and loaded in this Node/runtime process.`,
+    );
+  }
 }
 
 /** Global provider for OpenAI-compatible chat callers outside blog-specific routes. */
@@ -30,7 +59,7 @@ export function getBlogAiChatProvider(): BlogAiChatProvider {
   if (blog === "openrouter" || blog === "gemini" || blog === "openai") {
     return blog;
   }
-  if (process.env.OPENROUTER_API_KEY?.trim()) {
+  if (envSecretLooksPresent(process.env.OPENROUTER_API_KEY)) {
     return "openrouter";
   }
   const ai = normalizedAiProvider();
