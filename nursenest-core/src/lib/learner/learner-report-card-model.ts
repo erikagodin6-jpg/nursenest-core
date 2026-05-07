@@ -1,6 +1,7 @@
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import { buildAppFlashcardsTopicHref, buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 import { normalizeTopicSlugInput } from "@/lib/study/topic-slug-normalize";
 import type { ContinueStudyCheckpoint } from "@/lib/learner/continue-study-types";
 
@@ -82,18 +83,23 @@ export function buildLearnerReportCardViewModel(input: {
   }
 
   const dedup = new Set<string>();
-  const linksDeduped = links.filter((l) => {
-    const h = l.href.trim();
-    if (!h || dedup.has(h)) return false;
-    dedup.add(h);
-    return true;
-  });
+  const linksDeduped = links
+    .map((l) => ({ ...l, href: coerceSafeLearnerNavHref(l.href) }))
+    .filter((l) => {
+      const h = l.href.trim();
+      if (!h || dedup.has(h)) return false;
+      dedup.add(h);
+      return true;
+    });
 
   const continueCta =
     continueCheckpoint &&
     continueCheckpoint.pathwayId === pid &&
     continueCheckpoint.href.trim().startsWith("/app/")
-      ? { label: "Continue where you left off", href: continueCheckpoint.href.trim() }
+      ? {
+          label: "Continue where you left off",
+          href: coerceSafeLearnerNavHref(continueCheckpoint.href.trim()),
+        }
       : null;
 
   return {

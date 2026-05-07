@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { AdaptiveWireBundleJson } from "@/lib/learner/build-learner-adaptive-wire-bundle";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
+import { buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
 
 type Props = {
   t: LearnerMarketingT;
@@ -73,7 +74,7 @@ export function LearnerAdaptiveRecommendationsSection({ t, bundle }: Props) {
                 <li key={l.slug}>
                   <Link
                     className="text-sm font-medium text-[color-mix(in_srgb,var(--semantic-brand)_92%,var(--semantic-text-primary))] underline-offset-2 hover:underline"
-                    href={withPathwayScopeHref(`/app/lessons/${encodeURIComponent(l.slug)}`, pid)}
+                    href={withPathwayScopeHref(buildAppLessonsReviewLessonHref(pid, l.slug), pid)}
                   >
                     {l.title}
                   </Link>

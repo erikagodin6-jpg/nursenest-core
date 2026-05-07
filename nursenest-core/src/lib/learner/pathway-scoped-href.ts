@@ -15,7 +15,12 @@ export function withPathwayScopeHref(href: string, pathwayId: string | null | un
   const rawHref = href.trim();
   if (!rawHref || !rawHref.startsWith("/")) return href;
 
-  const url = new URL(rawHref, "http://localhost");
+  let url: URL;
+  try {
+    url = new URL(rawHref, "http://localhost");
+  } catch {
+    return href;
+  }
   if (!isPathwayScopablePath(url.pathname)) return href;
   if (url.searchParams.has("pathwayId")) return href;
 

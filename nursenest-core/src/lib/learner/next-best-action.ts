@@ -5,6 +5,7 @@ import type { LearnerStudySnapshot } from "@/lib/learner/build-learner-study-sna
 import type { TodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import type { ExplainableAction } from "@/lib/insights/types";
 import type { StudySettings } from "@/lib/learner/study-settings";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 
 /**
  * Next-best-action resolution for the dashboard primary CTA.
@@ -76,7 +77,7 @@ export function getNextBestAction(
     return {
       title: primary.title,
       subtitle: primary.what,
-      href: primary.href,
+      href: coerceSafeLearnerNavHref(primary.href),
       kind: primary.kind,
       reasoning: primary.why,
     };
@@ -87,7 +88,7 @@ export function getNextBestAction(
     return {
       title: "Continue Your Lesson",
       subtitle: `Pick up where you left off: ${snapshot.continueLesson.title}`,
-      href: snapshot.continueLesson.href,
+      href: coerceSafeLearnerNavHref(snapshot.continueLesson.href),
       kind: "continue",
       reasoning: "You have an unfinished lesson",
       i18n: {
@@ -102,7 +103,9 @@ export function getNextBestAction(
   // 3. Weak topic practice (pathway-scoped lesson drill when available — avoids generic /app/questions mismatch)
   const topWeak = studySnap?.topWeak;
   if (topWeak) {
-    const href = studySnap?.weakTopicPathwayLesson?.href ?? "/app/questions";
+    const href = coerceSafeLearnerNavHref(
+      studySnap?.weakTopicPathwayLesson?.href ?? "/app/questions",
+    );
     return {
       title: `Strengthen ${topWeak.topic}`,
       subtitle: "Practice questions on your weakest topic",

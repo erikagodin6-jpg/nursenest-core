@@ -10,6 +10,7 @@ import type {
   StudyNextReasonCode,
   StudyNextRecommendation,
 } from "@/lib/learner/study-next-types";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 
 function confidenceLabelForWeakTopic(w: WeakTopicRow): RecommendationConfidence {
   return w.recommendationConfidence ?? confidenceFromSignal(w.sourceConfidence);
@@ -191,9 +192,10 @@ export function recommendNextActions(
   const seen = new Set<string>();
   const out: StudyNextRecommendation[] = [];
   for (const rec of flat) {
-    if (seen.has(rec.href)) continue;
-    seen.add(rec.href);
-    out.push(rec);
+    const href = coerceSafeLearnerNavHref(rec.href);
+    if (seen.has(href)) continue;
+    seen.add(href);
+    out.push({ ...rec, href });
     if (out.length >= maxTotal) break;
   }
   return out;

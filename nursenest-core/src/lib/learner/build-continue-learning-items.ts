@@ -1,5 +1,6 @@
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 
 const MAX_ITEMS = 6;
 
@@ -30,7 +31,7 @@ export function buildContinueLearningItems(
   const seenHref = new Set<string>();
 
   const canPush = (href: string) => {
-    const h = href.trim();
+    const h = coerceSafeLearnerNavHref(href);
     if (!h || seenHref.has(h)) return false;
     seenHref.add(h);
     return true;
@@ -40,7 +41,7 @@ export function buildContinueLearningItems(
     out.push({
       kind: "continue",
       title: snapshot.continueLesson.title.trim() || "Continue lesson",
-      href: snapshot.continueLesson.href,
+      href: coerceSafeLearnerNavHref(snapshot.continueLesson.href),
     });
   }
 
@@ -48,7 +49,7 @@ export function buildContinueLearningItems(
     out.push({
       kind: "practice_resume",
       title: extras.practice.title.trim() || "Resume practice",
-      href: extras.practice.href,
+      href: coerceSafeLearnerNavHref(extras.practice.href),
     });
   }
 
@@ -56,7 +57,7 @@ export function buildContinueLearningItems(
     out.push({
       kind: "flashcard_resume",
       title: extras.flashcard.title.trim() || "Resume flashcards",
-      href: extras.flashcard.href,
+      href: coerceSafeLearnerNavHref(extras.flashcard.href),
     });
   }
 
@@ -66,7 +67,7 @@ export function buildContinueLearningItems(
     out.push({
       kind: "track",
       title: row.title,
-      href: row.href,
+      href: coerceSafeLearnerNavHref(row.href),
       pathwayShortName: row.pathwayShortName,
     });
   }

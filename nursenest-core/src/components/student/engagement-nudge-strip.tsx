@@ -22,6 +22,7 @@ import {
   X,
 } from "lucide-react";
 import { useEngagementNudges } from "@/lib/retention/use-engagement-nudges";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import type { EngagementNudgeKind } from "@/lib/retention/engagement-triggers";
 
@@ -70,6 +71,7 @@ export function EngagementNudgeStrip({
     <section aria-label="Study reminders" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {visible.map((nudge) => {
         const color = TONE_COLORS[nudge.tone] ?? "var(--semantic-info)";
+        const href = coerceSafeLearnerNavHref(nudge.href);
         return (
           <div key={nudge.kind} className="nn-engagement-nudge group relative">
             <div
@@ -86,7 +88,7 @@ export function EngagementNudgeStrip({
               <p className="nn-engagement-nudge__title">{nudge.headline}</p>
               <p className="nn-engagement-nudge__body">{nudge.body}</p>
               <Link
-                href={nudge.href}
+                href={href}
                 onClick={() => trackClientEvent("engagement_nudge_clicked", { kind: nudge.kind })}
                 className="nn-engagement-nudge__cta"
                 style={{ color }}

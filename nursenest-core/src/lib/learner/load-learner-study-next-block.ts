@@ -8,6 +8,7 @@ import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
 import { buildSmartStudyNextRecommendations } from "@/lib/learner/smart-study-next-engine";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 
 export type RetentionWeakDrillLink = { label: string; href: string };
 
@@ -69,10 +70,22 @@ export async function loadLearnerStudyNextBlock(
     examDate: user.examDate,
   });
 
-  const primary = actions[0]!;
+  const primaryRaw = actions[0]!;
+  const primary: StudyNextRecommendation = {
+    ...primaryRaw,
+    href: coerceSafeLearnerNavHref(primaryRaw.href),
+  };
+  const secondary: StudyNextRecommendation[] = actions.slice(1).map((r) => ({
+    ...r,
+    href: coerceSafeLearnerNavHref(r.href),
+  }));
+
   let continueWhere: { title: string; href: string } | null = null;
   if (snapshot.pathwayNext) {
-    continueWhere = { title: snapshot.pathwayNext.title, href: snapshot.pathwayNext.href };
+    continueWhere = {
+      title: snapshot.pathwayNext.title,
+      href: coerceSafeLearnerNavHref(snapshot.pathwayNext.href),
+    };
   } else if (primary.type === "continue_pathway_lesson" || primary.type === "weak_topic_lesson") {
     continueWhere = {
       title: primary.title.replace(/^(Continue|Lesson):\s*/i, "").trim() || primary.title,
@@ -82,7 +95,7 @@ export async function loadLearnerStudyNextBlock(
 
   const weakDrills: RetentionWeakDrillLink[] = snapshot.weakTopics.slice(0, 4).map((w) => ({
     label: w.topic.trim(),
-    href: weakTopicDrillHref(w.topic, w.normalizedTopic ?? null),
+    href: coerceSafeLearnerNavHref(weakTopicDrillHref(w.topic, w.normalizedTopic ?? null)),
   }));
 
   if (
@@ -101,7 +114,7 @@ export async function loadLearnerStudyNextBlock(
     countdownSecondary: countdown.secondary,
     plannerHref: "/app/study-plan",
     primary,
-    secondary: actions.slice(1),
+    secondary,
     streakDays,
     todayGoalCredits: credits,
     todayGoalTarget: target,

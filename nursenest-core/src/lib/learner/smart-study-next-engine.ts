@@ -7,6 +7,7 @@ import type { LearnerStudySnapshot } from "@/lib/learner/build-learner-study-sna
 import { recommendNextActions } from "@/lib/learner/recommend-next-actions";
 import { attachModes, filterSuppressed, reorderForAfterActivity } from "@/lib/learner/smart-study-next-helpers";
 import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 
 const SUPPRESS_LESSON_TAKE = 8;
 const SUPPRESS_FC_SESSION_TAKE = 5;
@@ -81,14 +82,18 @@ export async function buildSmartStudyNextRecommendations(
   filtered = reorderForAfterActivity(filtered, opts?.afterActivity);
   const seen = new Set<string>();
   const out: StudyNextRecommendation[] = [];
-  for (const r of filtered) {
-    if (seen.has(r.href)) continue;
-    seen.add(r.href);
-    out.push(r);
-    if (out.length >= maxTotal) break;
-  }
+  const pushSanitized = (recs: StudyNextRecommendation[]) => {
+    for (const r of recs) {
+      const href = coerceSafeLearnerNavHref(r.href);
+      if (seen.has(href)) continue;
+      seen.add(href);
+      out.push({ ...r, href });
+      if (out.length >= maxTotal) break;
+    }
+  };
+  pushSanitized(filtered);
   if (out.length === 0) {
-    return attachModes(recommendNextActions(snapshot, { maxTotal: Math.min(5, maxTotal + 2) }));
+    pushSanitized(recommendNextActions(snapshot, { maxTotal: Math.min(5, maxTotal + 2) }));
   }
   return attachModes(out);
 }

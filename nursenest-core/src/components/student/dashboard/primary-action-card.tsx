@@ -7,6 +7,7 @@ import type { NextBestAction } from "@/lib/learner/next-best-action";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-t";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 
 function displayNextAction(action: NextBestAction, t: LearnerMarketingT): {
   title: string;
@@ -50,15 +51,16 @@ export function PrimaryActionCard({
   t: LearnerMarketingT;
 }) {
   const { title, subtitle, reasoning } = displayNextAction(action, t);
+  const href = coerceSafeLearnerNavHref(action.href);
   return (
     <Link
-      href={action.href}
+      href={href}
       className="nn-primary-action-card group"
       onClick={() => {
         trackProductEvent(PH.conversionCtaClick, {
           surface: "dashboard_primary_next_action",
           contextual_variant: action.kind,
-          href_kind: action.href.startsWith("/app/") ? "app" : "other",
+          href_kind: href.startsWith("/app/") ? "app" : "other",
         });
       }}
     >

@@ -211,7 +211,8 @@ export async function resolvePathwayLessonForWeakTopic(
 
     for (const r of rows) {
       const fromTopic = normalizeTopicKey(r.topic);
-      const fromSlug = normalizeTopicKey(r.topicSlug.replace(/-/g, " "));
+      const topicSlugRaw = typeof r.topicSlug === "string" ? r.topicSlug : "";
+      const fromSlug = normalizeTopicKey(topicSlugRaw.replace(/-/g, " "));
       if (fromTopic === target || fromSlug === target) {
         return { title: r.title, href: `/app/lessons/${r.id}`, pathwayId };
       }

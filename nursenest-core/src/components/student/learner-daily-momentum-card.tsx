@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { TodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import type { DailyQuestionGoalProgress } from "@/lib/learner/load-daily-question-goal-progress";
@@ -196,7 +197,7 @@ export function LearnerDailyMomentumCard({
           </p>
           {resume ? (
             <Link
-              href={resume.href}
+              href={coerceSafeLearnerNavHref(resume.href)}
               className="text-sm font-semibold text-primary underline-offset-2 hover:underline [overflow-wrap:anywhere]"
             >
               {resume.title}
