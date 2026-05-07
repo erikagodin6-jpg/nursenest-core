@@ -335,6 +335,9 @@ export async function pumpBackgroundBlogDraftBatches(): Promise<PumpBackgroundBl
 
   for (const b of batches) {
     batchesTouched += 1;
+    safeServerLog("cron", "blog_generation_job_cron_picked", {
+      jobId: b.id,
+    });
     safeServerLog("cron", "blog_generation_cron_picked_batch", {
       batchId: b.id,
       itemsPerTick,

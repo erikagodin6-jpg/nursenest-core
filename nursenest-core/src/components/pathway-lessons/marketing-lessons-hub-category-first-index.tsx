@@ -11,7 +11,7 @@ import { CategoryProgressBar } from "@/components/pathway-lessons/category-progr
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
-import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";

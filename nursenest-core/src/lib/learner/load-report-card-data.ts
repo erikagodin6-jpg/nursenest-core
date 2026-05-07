@@ -2,7 +2,8 @@ import "server-only";
 
 import { getLearnerDurabilityObservabilityFields, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { ExamSessionStatus, PracticeTestStatus } from "@prisma/client";
-import { learnerPrivateReadAccessScopeKey, loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
+import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
+import { learnerPrivateReadAccessScopeKey } from "@/lib/cache/learner-private-read-cache-keying";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";

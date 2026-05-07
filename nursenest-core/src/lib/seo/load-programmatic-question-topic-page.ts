@@ -7,7 +7,7 @@ import { prisma } from "@/lib/db";
 import { pathwayLessonStructuralCompleteWhereInput } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { buildLessonPath } from "@/lib/lessons/lesson-routes";

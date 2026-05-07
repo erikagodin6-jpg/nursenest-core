@@ -8,7 +8,7 @@ import { describe, it } from "node:test";
 import { CountryCode, Prisma, TierCode } from "@prisma/client";
 import { coreApiStudyDiagnosticsEnabled } from "@/lib/observability/core-api-diagnostics";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import { NON_ECG_PRACTICE_EXAM_WHERE, isCompleteCatQuestionRow } from "@/lib/practice-tests/cat-pool";
 import { loadExamQuestionHubInventoryForPathway } from "@/lib/flashcards/flashcard-exam-bank-hub-inventory";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
@@ -43,7 +43,7 @@ describe("core API learning surfaces", () => {
   });
 
   it("pathway question snapshot applies non-ECG pool filter", () => {
-    const snap = readFileSync(join(appRoot, "lib/exam-pathways/pathway-question-bank-snapshot.ts"), "utf8");
+    const snap = readFileSync(join(appRoot, "lib/exam-pathways/pathway-question-bank-snapshot.server.ts"), "utf8");
     assert.match(snap, /NON_ECG_PRACTICE_EXAM_WHERE/);
     assert.match(snap, /baseNonEcg/);
   });

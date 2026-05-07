@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
-import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { getPathwayLessonForProgress } from "@/lib/lessons/pathway-lesson-loader";
 import { requireSubscriberSession, notSubscribedResponse } from "@/lib/entitlements/require-subscriber-session";

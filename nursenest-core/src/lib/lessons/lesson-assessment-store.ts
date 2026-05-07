@@ -11,7 +11,7 @@
  */
 
 import { PracticeTestStatus } from "@prisma/client";
-import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
 import { prisma } from "@/lib/db";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";

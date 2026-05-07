@@ -74,7 +74,7 @@ test("admin draft batch client recovers queued jobs from create/read timeout", (
   const p = join(__dirname, "..", "..", "components", "admin", "admin-blog-draft-batch-client.tsx");
   const src = readFileSync(p, "utf8");
   assert.match(src, /recoveredFromTimeout/);
-  assert.match(src, /loadBatch\(id,\s*"full"\)/);
+  assert.match(src, /loadBatch\(id,\s*"poll"\)/);
   assert.match(src, /statusPoll=1/);
   assert.match(src, /Progress updates automatically/);
 });
@@ -84,4 +84,25 @@ test("blog batch cron pumps background draft generation jobs", () => {
   const src = readFileSync(p, "utf8");
   assert.match(src, /pumpBackgroundBlogDraftBatches/);
   assert.match(src, /draftGenerationItemsProcessed/);
+});
+
+test("generation job GET route uses internal load deadlines", () => {
+  const p = join(__dirname, "..", "..", "app", "api", "admin", "blog", "generation-jobs", "[id]", "route.ts");
+  const src = readFileSync(p, "utf8");
+  assert.match(src, /JOB_LOAD_DEADLINE_STATUS_POLL_MS/);
+  assert.match(src, /JOB_LOAD_DEADLINE_FULL_MS/);
+  assert.match(src, /JobLoadDeadlineError/);
+  assert.match(src, /JOB_RESPONSE_TIMEOUT/);
+});
+
+test("generation jobs POST route keeps create path bounded", () => {
+  const p = join(__dirname, "..", "..", "app", "api", "admin", "blog", "generation-jobs", "route.ts");
+  const src = readFileSync(p, "utf8");
+  assert.match(src, /maxDuration = 30/);
+});
+
+test("blog generation cron logs picked job id", () => {
+  const p = join(__dirname, "blog-generation-jobs.ts");
+  const src = readFileSync(p, "utf8");
+  assert.match(src, /blog_generation_job_cron_picked/);
 });

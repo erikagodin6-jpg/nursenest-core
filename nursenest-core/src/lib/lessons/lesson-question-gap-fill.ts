@@ -6,7 +6,7 @@
  */
 import { prisma } from "@/lib/db";
 import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
-import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import {
   countRelatedExamQuestionsForPathwayLesson,
   RELATED_EXAM_QUESTIONS_MIN_TARGET,

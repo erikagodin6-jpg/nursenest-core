@@ -12,7 +12,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { loadExamQuestionHubInventoryForPathway } from "@/lib/flashcards/flashcard-exam-bank-hub-inventory";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
-import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 
 /** Match each pathway’s catalog tier/country so NP/PN pools are not falsely empty under an RN-only scope. */
 function subscriberScopeForPathway(pathway: { stripeTier: TierCode; countryCode: CountryCode }): AccessScope {

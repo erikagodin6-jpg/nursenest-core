@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
-import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";

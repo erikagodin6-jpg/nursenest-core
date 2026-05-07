@@ -3,7 +3,7 @@ import "server-only";
 import { ContentStatus, FlashcardDeckVisibility, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { clusterPageMeetsIndexabilityThreshold } from "@/lib/seo/programmatic-seo-engine/cluster-gates";
 import { normalizeBodySystemUrlKey } from "@/lib/seo/content-backed-study-resource-hub-slug";

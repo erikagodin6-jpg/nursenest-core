@@ -1,6 +1,6 @@
 /**
  * Edge-safe correlation helpers (no `next/headers`). Use {@link correlationIdFromHeaders} from
- * `request-correlation-headers` in Server Components / async server contexts only.
+ * `request-correlation-headers.server` in Server Components / async server contexts only.
  */
 export const NN_CORRELATION_HEADER = "x-nn-correlation-id";
 

@@ -7,7 +7,7 @@ import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import { countPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
 import {
   countRelatedExamQuestionsForPathwayLesson,

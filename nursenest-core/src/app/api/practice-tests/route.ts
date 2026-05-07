@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ExamFamily, PracticeTestStatus, Prisma } from "@prisma/client";
 import { z } from "zod";
-import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";

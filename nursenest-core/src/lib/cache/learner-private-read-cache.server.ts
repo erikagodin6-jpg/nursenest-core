@@ -4,7 +4,6 @@ import { revalidateTag, unstable_cache } from "next/cache";
 import {
   ALL_LEARNER_PRIVATE_READ_SURFACES,
   buildLearnerPrivateReadCacheKeyParts,
-  learnerPrivateReadAccessScopeKey,
   learnerPrivateReadSurfaceTag,
   learnerPrivateReadUserTag,
   shouldBypassLearnerPrivateReadCache,
@@ -54,5 +53,3 @@ export async function loadWithLearnerPrivateReadCache<T>(
     },
   )();
 }
-
-export { learnerPrivateReadAccessScopeKey };

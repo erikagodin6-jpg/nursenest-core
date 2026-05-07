@@ -140,8 +140,11 @@ async function main(): Promise<void> {
     summaryMisses: memo.summaryIndexMisses,
   });
   const coverage = buildLessonNormalizationCoverageReport({ pathwayIds: ids });
-  if (process.env.NN_DEBUG_LESSON_INDEX_EXCLUSIONS === "1") {
+  const debugExclusions = process.env.NN_DEBUG_LESSON_INDEX_EXCLUSIONS === "1";
+  const debugExclusionsPathwayFilter = process.env.NN_DEBUG_LESSON_INDEX_EXCLUSIONS_PATHWAY?.trim();
+  if (debugExclusions) {
     for (const pathway of coverage.pathways) {
+      if (debugExclusionsPathwayFilter && pathway.pathwayId !== debugExclusionsPathwayFilter) continue;
       if (pathway.exclusions.length === 0) continue;
       for (const ex of pathway.exclusions) {
         console.error(

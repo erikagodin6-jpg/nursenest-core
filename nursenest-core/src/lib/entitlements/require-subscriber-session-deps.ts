@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { accessScopeFromUserAccess, getUserAccess } from "@/lib/entitlements/get-user-access";
-import { correlationIdFromHeaders } from "@/lib/observability/request-correlation-headers";
+import { correlationIdFromHeaders } from "@/lib/observability/request-correlation-headers.server";
 import { maybeBlockOrTouchAccountSharingAfterSubscriberOk } from "@/lib/security/learner-session-activity.server";
 
 /**

@@ -26,7 +26,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 /** Create path only validates + inserts rows (no inline AI). */
-export const maxDuration = 60;
+export const maxDuration = 30;
 
 const IDEMPOTENCY_WINDOW_MS = 120_000;
 

@@ -15,7 +15,7 @@
  */
 
 import { prisma } from "@/lib/db";
-import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
+import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";

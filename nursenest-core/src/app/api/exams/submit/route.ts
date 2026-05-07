@@ -3,7 +3,7 @@ import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import type { Prisma } from "@prisma/client";
 import { ExamSessionStatus } from "@prisma/client";
 import { z } from "zod";
-import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
+import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
 import { JSON_BODY_EXAM_SUBMIT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { prisma } from "@/lib/db";
 import { userCanAccessExam } from "@/lib/entitlements/content-access-scope";

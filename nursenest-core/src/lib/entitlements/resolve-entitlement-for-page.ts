@@ -1,5 +1,5 @@
 import { resolveEntitlement, type AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { correlationIdFromHeaders } from "@/lib/observability/request-correlation-headers";
+import { correlationIdFromHeaders } from "@/lib/observability/request-correlation-headers.server";
 import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";

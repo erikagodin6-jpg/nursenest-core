@@ -4,7 +4,7 @@ import { ContentStatus, CountryCode, LocalizedBlogStatus } from "@prisma/client"
 import { prisma } from "@/lib/db";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { listExamPathways } from "@/lib/exam-pathways/exam-product-registry";
-import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import { GLOBAL_LOCALE_CODES } from "@/lib/i18n/global-regions";
 import { evaluatePathwayLessonStructuralGate } from "@/lib/lessons/pathway-lesson-premium";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";

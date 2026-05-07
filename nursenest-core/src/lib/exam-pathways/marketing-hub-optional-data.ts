@@ -16,7 +16,7 @@ import {
   emptyPathwayLessonsPageResult,
 } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
-import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import {
   countPathwayLessonsPublic,
   getPathwayLessonsPageFresh,

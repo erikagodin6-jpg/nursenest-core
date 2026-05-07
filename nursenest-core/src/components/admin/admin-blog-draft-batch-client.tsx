@@ -134,8 +134,16 @@ const JOB_STATUS_POLL_TIMEOUT_MS = 28_000;
 const POLLING_SOFT_FAILURE =
   "Job created, but status polling timed out. The worker may still process it.";
 
+/** Full/detail loads: suggest refresh when the gateway drops the body or times out. */
+const JOB_DETAIL_FETCH_GATEWAY_SOFT =
+  "Could not load full job details (gateway or timeout). Click Refresh or reload the page — the background job may still be running.";
+
 function isAuthOrNotFoundStatus(status: number): boolean {
   return status === 401 || status === 403 || status === 404;
+}
+
+function isCloudflareGatewayStatus(status: number): boolean {
+  return status === 524 || (status >= 520 && status < 530);
 }
 
 /** Unreadable or slow gateway responses while polling should not look like hard failures. */
@@ -146,8 +154,9 @@ function shouldSoftenUnreadableJobFetch(
 ): boolean {
   if (json != null) return false;
   if (isAuthOrNotFoundStatus(res.status)) return false;
+  if (res.status === 429) return false;
   if (res.status === 0 || res.status >= 500 || res.status === 408) return true;
-  if (res.status === 429) return true;
+  if (isCloudflareGatewayStatus(res.status)) return true;
   if (mode === "poll") return true;
   return false;
 }
@@ -295,7 +304,7 @@ export function AdminBlogDraftBatchClient() {
       }>(res);
       if (!json) {
         if (shouldSoftenUnreadableJobFetch(res, mode, json)) {
-          setMsg(POLLING_SOFT_FAILURE);
+          setMsg(mode === "poll" ? POLLING_SOFT_FAILURE : JOB_DETAIL_FETCH_GATEWAY_SOFT);
           setErr(null);
           return;
         }
@@ -303,7 +312,7 @@ export function AdminBlogDraftBatchClient() {
         return;
       }
       if (json.code === "JOB_RESPONSE_TIMEOUT") {
-        setMsg(POLLING_SOFT_FAILURE);
+        setMsg(mode === "poll" ? POLLING_SOFT_FAILURE : JOB_DETAIL_FETCH_GATEWAY_SOFT);
         setErr(null);
         return;
       }
@@ -324,11 +333,11 @@ export function AdminBlogDraftBatchClient() {
         if (
           mode === "poll" &&
           !isAuthOrNotFoundStatus(res.status) &&
-          (json.code === "JOB_RESPONSE_TIMEOUT" ||
-            res.status === 503 ||
+          (res.status === 503 ||
             res.status === 504 ||
             res.status === 502 ||
-            res.status >= 500)
+            res.status >= 500 ||
+            isCloudflareGatewayStatus(res.status))
         ) {
           setMsg(POLLING_SOFT_FAILURE);
           setErr(null);
@@ -480,10 +489,7 @@ export function AdminBlogDraftBatchClient() {
       }
       if (!json) {
         const createTimedOut =
-          res.status === 0 ||
-          res.status >= 502 ||
-          res.status === 524 ||
-          (res.status >= 520 && res.status < 530);
+          res.status === 0 || res.status >= 500 || res.status === 408;
         if (createTimedOut) {
           setMsg(POLLING_SOFT_FAILURE);
         }

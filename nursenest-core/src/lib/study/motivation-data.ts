@@ -18,7 +18,7 @@
 import "server-only";
 
 import { PracticeTestStatus } from "@prisma/client";
-import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
+import { loadWithLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache.server";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";

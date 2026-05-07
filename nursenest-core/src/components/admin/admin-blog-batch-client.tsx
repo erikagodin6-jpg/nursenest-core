@@ -22,6 +22,26 @@ async function safeJson<T>(res: Response): Promise<T | null> {
 }
 
 type JobPhase = "queued" | "running" | "completed" | "cancelled" | "partial";
+const JOB_POLL_GATEWAY_SOFT =
+  "Could not read job status (gateway or timeout). Click Refresh — processing may still be running.";
+
+function isAuthOrNotFoundStatus(status: number): boolean {
+  return status === 401 || status === 403 || status === 404;
+}
+
+function isCloudflareGatewayStatus(status: number): boolean {
+  return status === 524 || (status >= 520 && status < 530);
+}
+
+function shouldSoftenUnreadableJobPoll(res: Response, json: unknown): boolean {
+  if (json != null) return false;
+  if (isAuthOrNotFoundStatus(res.status)) return false;
+  if (res.status === 429) return false;
+  if (res.status === 0 || res.status >= 500 || res.status === 408) return true;
+  if (isCloudflareGatewayStatus(res.status)) return true;
+  return true;
+}
+
 
 type GenerationJobApiPayload = {
   id: string;
@@ -52,10 +72,39 @@ export function AdminBlogBatchClient() {
         cache: "no-store",
       });
 
-      const json = await safeJson<{ job?: GenerationJobApiPayload; error?: string }>(res);
+      const json = await safeJson<{
+        job?: GenerationJobApiPayload;
+        error?: string;
+        code?: string;
+        message?: string;
+      }>(res);
 
-      if (!res.ok || !json?.job) {
-        setErr(json?.error ?? `Failed to load job (${res.status})`);
+      if (!json) {
+        if (shouldSoftenUnreadableJobPoll(res, json)) {
+          setMsg(JOB_POLL_GATEWAY_SOFT);
+          setErr(null);
+          return;
+        }
+        setErr(`Failed to load job (${res.status})`);
+        return;
+      }
+
+      if (json.code === "JOB_RESPONSE_TIMEOUT") {
+        setMsg(JOB_POLL_GATEWAY_SOFT);
+        setErr(null);
+        return;
+      }
+
+      if (!res.ok || !json.job) {
+        if (
+          !isAuthOrNotFoundStatus(res.status) &&
+          (res.status >= 500 || res.status === 503 || res.status === 504 || res.status === 502 || isCloudflareGatewayStatus(res.status))
+        ) {
+          setMsg(JOB_POLL_GATEWAY_SOFT);
+          setErr(null);
+          return;
+        }
+        setErr(json.error ?? `Failed to load job (${res.status})`);
         return;
       }
 

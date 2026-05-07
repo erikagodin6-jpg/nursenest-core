@@ -10,6 +10,23 @@ import { prisma } from "@/lib/db";
 import { loadBlogGenerationJobForAdmin } from "@/lib/blog/blog-generation-jobs";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+
+const JOB_TICK_LOAD_DEADLINE_MS = 25_000;
+
+function raceJobLoadForTick<T>(promise: Promise<T>): Promise<T> {
+  let to: ReturnType<typeof setTimeout> | undefined;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    to = setTimeout(() => {
+      const err = new Error("Blog generation job load exceeded internal deadline");
+      err.name = "JobLoadDeadlineError";
+      reject(err);
+    }, JOB_TICK_LOAD_DEADLINE_MS);
+  });
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    if (to) clearTimeout(to);
+  }) as Promise<T>;
+}
+
 const bodySchema = z.object({
   limit: z.number().int().min(1).max(DRAFT_BATCH_MAX_ITEMS_PER_PROCESS).optional(),
 });
@@ -89,6 +106,27 @@ export async function POST(req: Request, ctx: RouteContext) {
     return NextResponse.json({ ok: false, ...out }, { status });
   }
 
-  const job = await loadBlogGenerationJobForAdmin(id, { maxItems: 40 });
+  let job;
+  try {
+    job = await raceJobLoadForTick(loadBlogGenerationJobForAdmin(id, { maxItems: 40 }));
+  } catch (e) {
+    if (e instanceof Error && e.name === "JobLoadDeadlineError") {
+      safeServerLog("admin", "blog_generation_job_response_read_timeout", {
+        jobId: id,
+        statusPoll: false,
+        lite: false,
+        deadlineMs: JOB_TICK_LOAD_DEADLINE_MS,
+      });
+      return NextResponse.json(
+        {
+          ok: false,
+          code: "JOB_RESPONSE_TIMEOUT",
+          message: "Job status load exceeded internal deadline; retry polling shortly.",
+        },
+        { status: 503 },
+      );
+    }
+    throw e;
+  }
   return NextResponse.json({ ok: true, ...out, job });
 }

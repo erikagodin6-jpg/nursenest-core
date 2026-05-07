@@ -12,8 +12,56 @@ type RouteContext = { params: Promise<{ id: string }> };
 const LITE_POLL_DEFAULT_CAP = 48;
 const LITE_POLL_MAX_CAP = 120;
 
+const JOB_LOAD_DEADLINE_STATUS_POLL_MS = 12_000;
+const JOB_LOAD_DEADLINE_FULL_MS = 55_000;
+
 const JOB_GET_WARN_MS = 8_000;
 const JOB_GET_TIMEOUT_LOG_MS = 25_000;
+
+class JobLoadDeadlineError extends Error {
+  override readonly name = "JobLoadDeadlineError";
+  constructor(
+    readonly deadlineMs: number,
+    readonly statusPoll: boolean,
+    readonly lite: boolean,
+  ) {
+    super("Blog generation job load exceeded internal deadline");
+    this.name = "JobLoadDeadlineError";
+  }
+}
+
+function raceJobLoad<T>(
+  promise: Promise<T>,
+  deadlineMs: number,
+  ctx: { statusPoll: boolean; lite: boolean },
+): Promise<T> {
+  let to: ReturnType<typeof setTimeout> | undefined;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    to = setTimeout(() => {
+      reject(new JobLoadDeadlineError(deadlineMs, ctx.statusPoll, ctx.lite));
+    }, deadlineMs);
+  });
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    if (to) clearTimeout(to);
+  }) as Promise<T>;
+}
+
+function jobLoadDeadlineResponse(id: string, e: JobLoadDeadlineError) {
+  safeServerLog("admin", "blog_generation_job_response_read_timeout", {
+    jobId: id,
+    statusPoll: e.statusPoll,
+    lite: e.lite,
+    deadlineMs: e.deadlineMs,
+  });
+  return NextResponse.json(
+    {
+      ok: false,
+      code: "JOB_RESPONSE_TIMEOUT",
+      message: "Job status load exceeded internal deadline; retry polling shortly.",
+    },
+    { status: 503 },
+  );
+}
 
 export async function GET(req: Request, ctx: RouteContext) {
   const gate = await requireAdmin(req);
@@ -28,7 +76,19 @@ export async function GET(req: Request, ctx: RouteContext) {
     searchParams.get("summary") === "status";
 
   if (statusPoll) {
-    const job = await loadBlogGenerationJobForAdmin(id, { statusPoll: true });
+    let job;
+    try {
+      job = await raceJobLoad(
+        loadBlogGenerationJobForAdmin(id, { statusPoll: true }),
+        JOB_LOAD_DEADLINE_STATUS_POLL_MS,
+        { statusPoll: true, lite: false },
+      );
+    } catch (e) {
+      if (e instanceof JobLoadDeadlineError) {
+        return jobLoadDeadlineResponse(id, e);
+      }
+      throw e;
+    }
     const durationMs = Date.now() - started;
     if (durationMs >= JOB_GET_WARN_MS) {
       safeServerLog("admin", "blog_generation_job_get_slow", {
@@ -61,8 +121,15 @@ export async function GET(req: Request, ctx: RouteContext) {
 
   let job;
   try {
-    job = await loadBlogGenerationJobForAdmin(id, maxItems != null ? { maxItems } : undefined);
+    job = await raceJobLoad(
+      loadBlogGenerationJobForAdmin(id, maxItems != null ? { maxItems } : undefined),
+      JOB_LOAD_DEADLINE_FULL_MS,
+      { statusPoll: false, lite },
+    );
   } catch (e) {
+    if (e instanceof JobLoadDeadlineError) {
+      return jobLoadDeadlineResponse(id, e);
+    }
     const durationMs = Date.now() - started;
     safeServerLog("admin", "blog_generation_job_get_failed", {
       jobId: id,
