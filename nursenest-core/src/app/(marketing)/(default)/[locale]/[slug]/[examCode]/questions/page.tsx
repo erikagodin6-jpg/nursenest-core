@@ -47,6 +47,10 @@ import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { MarketingPracticeQuestionsHubClient } from "@/components/marketing/marketing-practice-questions-hub-client";
 import { loadPathwayPracticeBodySystemHubAggregates } from "@/lib/questions/pathway-practice-body-system-aggregates";
+import {
+  marketingCatCompletePoolUsable,
+  marketingLinearPracticeBankUsable,
+} from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -256,6 +260,35 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
     }).toString()}`,
   );
 
+  const linearPracticeUsable = marketingLinearPracticeBankUsable(questionSnapshot);
+  const catCompletePoolUsable = marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
+
+  const heroPrimaryCta = linearPracticeUsable
+    ? isTopicNarrowed
+      ? {
+          label: "Open question bank" as const,
+          href: appQuestionsScoped,
+          variant: "primary" as const,
+        }
+      : {
+          label: "Start mixed practice" as const,
+          href: mixedAllTopicsHref,
+          variant: "primary" as const,
+        }
+    : {
+        label: "Browse clinical lessons" as const,
+        href: lessonsHrefWithProfession,
+        variant: "primary" as const,
+      };
+
+  const heroOutlineCtas: { label: string; href: string; variant: "outline" | "ghost" }[] = [];
+  if (linearPracticeUsable) {
+    heroOutlineCtas.push({ label: "Browse lessons", href: lessonsHrefWithProfession, variant: "outline" });
+  } else {
+    heroOutlineCtas.push({ label: `${pathway.shortName} overview`, href: overviewHref, variant: "outline" });
+  }
+  heroOutlineCtas.push({ label: "Create account", href: "/signup", variant: "ghost" });
+
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
@@ -265,15 +298,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         title={`${examName} Practice Questions`}
         subtitle={heroSubtitle}
         backLink={{ label: `${pathway.shortName} overview`, href: overviewHref }}
-        ctas={[
-          {
-            label: isTopicNarrowed ? "Open question bank" : "Start mixed practice",
-            href: isTopicNarrowed ? appQuestionsScoped : mixedAllTopicsHref,
-            variant: "primary",
-          },
-          { label: "Browse lessons", href: lessonsHrefWithProfession, variant: "outline" },
-          { label: "Create account", href: "/signup", variant: "ghost" },
-        ]}
+        ctas={[heroPrimaryCta, ...heroOutlineCtas]}
       />
 
       {/* 2. Stat cards */}
@@ -300,9 +325,13 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         <div className="mt-6">
           <ContentEmptyState
             variant="questions"
-            primaryCta={{ label: "Start available topics", href: lessonsHrefWithProfession }}
+            headline="No pathway-scoped practice items yet"
+            body="Clinical lessons below are available now. The scored question bank for this exam track is still empty or not yet published for this scope — check back as new items ship."
+            primaryCta={{ label: "Browse clinical lessons", href: lessonsHrefWithProfession }}
             secondaryCtas={[
-              { label: `Open ${catShortLabel}`, href: catHrefWithProfession },
+              ...(catCompletePoolUsable
+                ? [{ label: `Open ${catShortLabel}`, href: catHrefWithProfession }]
+                : []),
               { label: "Create account", href: "/signup", variant: "ghost" },
             ]}
           />
@@ -323,6 +352,8 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
             lessonsHref={lessonsHrefWithProfession}
             marketingCatHref={catHrefWithProfession}
             alliedProfessionKey={alliedProfessionKey || undefined}
+            linearPracticePoolUsable={linearPracticeUsable}
+            catCompletePoolUsable={catCompletePoolUsable}
           />
         </div>
       ) : null}
@@ -360,7 +391,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
       <StudyBottomNav
         relatedLinks={[
           { label: "Clinical lessons", href: lessonsHrefWithProfession },
-          { label: "Adaptive CAT", href: catHrefWithProfession },
+          ...(catCompletePoolUsable ? [{ label: "Adaptive CAT", href: catHrefWithProfession }] : []),
           { label: "Practice exams", href: HUB.practiceExams },
           { label: "Exam overview", href: overviewHref },
         ]}

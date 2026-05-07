@@ -50,6 +50,10 @@ export type MarketingPracticeQuestionsHubClientProps = {
   marketingCatHref: string;
   /** Canonical allied occupation filter for app question / CAT entry URLs. */
   alliedProfessionKey?: string;
+  /** Mirrors server snapshot — hide mixed/linear entry when the pathway bank is empty. */
+  linearPracticePoolUsable: boolean;
+  /** Mirrors server snapshot — hide CAT / adaptive when complete adaptive pool is below floor. */
+  catCompletePoolUsable: boolean;
 };
 
 const cardBase =
@@ -118,6 +122,8 @@ export function MarketingPracticeQuestionsHubClient({
   lessonsHref,
   marketingCatHref,
   alliedProfessionKey = "",
+  linearPracticePoolUsable,
+  catCompletePoolUsable,
 }: MarketingPracticeQuestionsHubClientProps) {
   const [selected, setSelected] = useState<Set<PracticeBodySystemHubId>>(new Set());
   const [studyFilter, setStudyFilter] = useState<PracticeSessionStudyFilter>("all");
@@ -273,7 +279,7 @@ export function MarketingPracticeQuestionsHubClient({
     }
   }
 
-  const modeCards = [
+  const modeCardsAll = [
     {
       icon: LayoutGrid,
       title: "Practice by category",
@@ -281,6 +287,8 @@ export function MarketingPracticeQuestionsHubClient({
       href: "#practice-body-systems",
       accent: "success" as const,
       cta: "Select categories",
+      needsLinear: false,
+      needsCat: false,
     },
     {
       icon: Shuffle,
@@ -289,6 +297,8 @@ export function MarketingPracticeQuestionsHubClient({
       href: startMixedHref,
       accent: "brand" as const,
       cta: "Start mixed quiz",
+      needsLinear: true,
+      needsCat: false,
     },
     {
       icon: TrendingDown,
@@ -297,6 +307,8 @@ export function MarketingPracticeQuestionsHubClient({
       href: weakHref,
       accent: "info" as const,
       cta: "Practice weak areas",
+      needsLinear: true,
+      needsCat: false,
     },
     {
       icon: XCircle,
@@ -305,6 +317,8 @@ export function MarketingPracticeQuestionsHubClient({
       href: incorrectHref,
       accent: "warning" as const,
       cta: "Review incorrect",
+      needsLinear: true,
+      needsCat: false,
     },
     {
       icon: EyeOff,
@@ -313,6 +327,8 @@ export function MarketingPracticeQuestionsHubClient({
       href: unseenHref,
       accent: "chart" as const,
       cta: "Start unseen set",
+      needsLinear: true,
+      needsCat: false,
     },
     {
       icon: LineChart,
@@ -321,8 +337,14 @@ export function MarketingPracticeQuestionsHubClient({
       href: catAppHref,
       accent: "purple" as const,
       cta: "Launch CAT",
+      needsLinear: false,
+      needsCat: true,
     },
   ];
+
+  const modeCards = modeCardsAll.filter(
+    (m) => (!m.needsLinear || linearPracticePoolUsable) && (!m.needsCat || catCompletePoolUsable),
+  );
 
   return (
     <div className="space-y-8" data-testid="marketing-practice-questions-hub">
@@ -473,33 +495,47 @@ export function MarketingPracticeQuestionsHubClient({
         ) : null}
 
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <Link
-            href={startPrimaryHref}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2 text-sm font-semibold nn-text-on-solid-fill hover:opacity-90"
-            data-testid="start-selected-systems-practice"
-          >
-            {studyFilter !== "all"
-              ? `Start practice (${FILTER_LABELS[studyFilter].toLowerCase()})`
-              : selected.size > 0
-                ? "Start practice (selected hubs)"
-                : "Start mixed practice (all hubs)"}
-          </Link>
-          <button
-            type="button"
-            disabled={startingAdaptive}
-            onClick={() => void startAdaptivePractice()}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[var(--semantic-success)] px-5 py-2 text-sm font-semibold text-[var(--semantic-success-contrast)] hover:opacity-90 disabled:opacity-50"
-            data-testid="start-adaptive-selected-systems"
-          >
-            {startingAdaptive ? "Starting…" : "Start adaptive session (selected)"}
-          </button>
-          <Link
-            href={marketingCatHref}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 py-2 text-sm font-semibold text-[var(--semantic-brand)] hover:bg-[var(--semantic-panel-muted)]"
-            data-testid="marketing-cat-overview-link"
-          >
-            CAT overview (marketing)
-          </Link>
+          {linearPracticePoolUsable ? (
+            <Link
+              href={startPrimaryHref}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2 text-sm font-semibold nn-text-on-solid-fill hover:opacity-90"
+              data-testid="start-selected-systems-practice"
+            >
+              {studyFilter !== "all"
+                ? `Start practice (${FILTER_LABELS[studyFilter].toLowerCase()})`
+                : selected.size > 0
+                  ? "Start practice (selected hubs)"
+                  : "Start mixed practice (all hubs)"}
+            </Link>
+          ) : (
+            <Link
+              href={lessonsHref}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2 text-sm font-semibold nn-text-on-solid-fill hover:opacity-90"
+              data-testid="start-selected-systems-practice"
+            >
+              Browse clinical lessons
+            </Link>
+          )}
+          {catCompletePoolUsable ? (
+            <button
+              type="button"
+              disabled={startingAdaptive}
+              onClick={() => void startAdaptivePractice()}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[var(--semantic-success)] px-5 py-2 text-sm font-semibold text-[var(--semantic-success-contrast)] hover:opacity-90 disabled:opacity-50"
+              data-testid="start-adaptive-selected-systems"
+            >
+              {startingAdaptive ? "Starting…" : "Start adaptive session (selected)"}
+            </button>
+          ) : null}
+          {catCompletePoolUsable ? (
+            <Link
+              href={marketingCatHref}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 py-2 text-sm font-semibold text-[var(--semantic-brand)] hover:bg-[var(--semantic-panel-muted)]"
+              data-testid="marketing-cat-overview-link"
+            >
+              CAT overview (marketing)
+            </Link>
+          ) : null}
         </div>
         {adaptiveError ? <p className="mt-2 text-sm text-[var(--semantic-danger)]">{adaptiveError}</p> : null}
 
@@ -555,12 +591,16 @@ export function MarketingPracticeQuestionsHubClient({
           <Link href={lessonsHref} className="text-[var(--semantic-brand)] hover:underline">
             Browse lessons
           </Link>
-          <Link href={catAppHref} className="text-[var(--semantic-brand)] hover:underline" data-testid="quick-cat-app-link">
-            CAT (app)
-          </Link>
-          <Link href={startMixedHref} className="text-[var(--semantic-brand)] hover:underline">
-            Mixed quiz
-          </Link>
+          {catCompletePoolUsable ? (
+            <Link href={catAppHref} className="text-[var(--semantic-brand)] hover:underline" data-testid="quick-cat-app-link">
+              CAT (app)
+            </Link>
+          ) : null}
+          {linearPracticePoolUsable ? (
+            <Link href={startMixedHref} className="text-[var(--semantic-brand)] hover:underline">
+              Mixed quiz
+            </Link>
+          ) : null}
         </div>
       </section>
     </div>

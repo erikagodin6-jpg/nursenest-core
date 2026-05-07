@@ -9,6 +9,7 @@ import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/p
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { NpQuestionsHubBoardLinkContext } from "@/components/exam-pathways/np-questions-hub-board-links";
+import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
 
 function formatCount(n: number): string {
   if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}k+`;
@@ -177,7 +178,8 @@ export function PathwayQuestionsHubView({
   const totalQuestions = snap ? formatCount(snap.pathwayScopedCount) : "–";
   const catEligible = snap ? formatCount(snap.adaptiveEligibleCount) : "–";
   const totalLessons = typeof lessonCount === "number" ? String(lessonCount) : "–";
-  const hasQuestions = snap ? snap.pathwayScopedCount > 0 : true;
+  const hasQuestions = snap ? snap.pathwayScopedCount > 0 : false;
+  const catPoolUsable = snap ? snap.adaptiveEligibleCount >= CAT_MIN_COMPLETE_POOL : false;
 
   return (
     <div className="space-y-10">
@@ -207,24 +209,37 @@ export function PathwayQuestionsHubView({
 
         {/* CTAs */}
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <Link
-            href={appQuestionsScoped}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
-          >
-            Start practice
-          </Link>
-          <Link
-            href={catHref}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white/60 px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-white/80"
-          >
-            Open CAT intro
-          </Link>
-          <Link
-            href={lessonsHref}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white/60 px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-white/80"
-          >
-            View lessons
-          </Link>
+          {hasQuestions ? (
+            <Link
+              href={appQuestionsScoped}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+            >
+              Start practice
+            </Link>
+          ) : (
+            <Link
+              href={lessonsHref}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+            >
+              View lessons
+            </Link>
+          )}
+          {catPoolUsable ? (
+            <Link
+              href={catHref}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white/60 px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-white/80"
+            >
+              Open CAT intro
+            </Link>
+          ) : null}
+          {hasQuestions ? (
+            <Link
+              href={lessonsHref}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white/60 px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-white/80"
+            >
+              View lessons
+            </Link>
+          ) : null}
         </div>
       </section>
 
@@ -234,7 +249,7 @@ export function PathwayQuestionsHubView({
           variant="questions"
           primaryCta={{ label: "Start available topics", href: lessonsHref }}
           secondaryCtas={[
-            { label: "Try CAT exam", href: catHref },
+            ...(catPoolUsable ? [{ label: "Try CAT exam", href: catHref }] : []),
             { label: "Create account", href: "/signup", variant: "ghost" },
           ]}
         />
@@ -262,8 +277,12 @@ export function PathwayQuestionsHubView({
             <InfoCard
               icon={Brain}
               variant="muted"
-              title="Adaptive practice available"
-              body={`${catEligible !== "–" ? `${catEligible} items are` : "Items are"} CAT-eligible — the adaptive engine adjusts difficulty based on your answers, mirroring computerized adaptive testing.`}
+              title={catPoolUsable ? "Adaptive practice available" : "Adaptive practice"}
+              body={
+                catPoolUsable
+                  ? `${catEligible !== "–" ? `${catEligible} items are` : "Items are"} CAT-eligible — the adaptive engine adjusts difficulty based on your answers, mirroring computerized adaptive testing.`
+                  : "CAT-style runs need a larger pool of complete adaptive-eligible items. Use linear practice and lessons until the pathway bank meets the minimum."
+              }
             />
             <InfoCard
               icon={Users}
@@ -313,30 +332,45 @@ export function PathwayQuestionsHubView({
           Choose how you want to study
         </h2>
         <div className="flex flex-col gap-4 sm:flex-row">
-          <StudyModeCard
-            icon={Zap}
-            accentClass="success"
-            title="Quick practice questions"
-            description={`Run a fast set of ${pathway.shortName} items. No login required to browse — sign in to save progress.`}
-            ctaLabel="Start items"
-            ctaHref={appQuestionsScoped}
-          />
-          <StudyModeCard
-            icon={BookOpen}
-            accentClass="info"
-            title="Full question bank session"
-            description="Open the in-app bank with all filters and topic drill. Tracks rationale reads, correct rate, and topic gaps."
-            ctaLabel="Open practice"
-            ctaHref={appQuestionsScoped}
-          />
-          <StudyModeCard
-            icon={Brain}
-            accentClass="brand"
-            title="CAT-style adaptive run"
-            description="One question at a time, difficulty adjusts from your answers. Pathway-scoped pool, requires an active plan."
-            ctaLabel="Open CAT intro"
-            ctaHref={catHref}
-          />
+          {hasQuestions ? (
+            <>
+              <StudyModeCard
+                icon={Zap}
+                accentClass="success"
+                title="Quick practice questions"
+                description={`Run a fast set of ${pathway.shortName} items. No login required to browse — sign in to save progress.`}
+                ctaLabel="Start items"
+                ctaHref={appQuestionsScoped}
+              />
+              <StudyModeCard
+                icon={BookOpen}
+                accentClass="info"
+                title="Full question bank session"
+                description="Open the in-app bank with all filters and topic drill. Tracks rationale reads, correct rate, and topic gaps."
+                ctaLabel="Open practice"
+                ctaHref={appQuestionsScoped}
+              />
+            </>
+          ) : (
+            <StudyModeCard
+              icon={BookOpen}
+              accentClass="info"
+              title="Clinical lessons"
+              description="Structured pathways, objectives, and links — start here while the scored question bank for this pathway is still growing."
+              ctaLabel="View lessons"
+              ctaHref={lessonsHref}
+            />
+          )}
+          {catPoolUsable ? (
+            <StudyModeCard
+              icon={Brain}
+              accentClass="brand"
+              title="CAT-style adaptive run"
+              description="One question at a time, difficulty adjusts from your answers. Pathway-scoped pool, requires an active plan."
+              ctaLabel="Open CAT intro"
+              ctaHref={catHref}
+            />
+          ) : null}
         </div>
       </section>
 
@@ -365,9 +399,11 @@ export function PathwayQuestionsHubView({
           <span className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
             Related:
           </span>
-          <Link href={catHref} className="font-medium text-primary hover:underline">
-            CAT prep for this pathway
-          </Link>
+          {catPoolUsable ? (
+            <Link href={catHref} className="font-medium text-primary hover:underline">
+              CAT prep for this pathway
+            </Link>
+          ) : null}
           <Link href={HUB.practiceExams} className="font-medium text-primary hover:underline">
             Practice exams
           </Link>

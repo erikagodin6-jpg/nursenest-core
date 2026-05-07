@@ -9,11 +9,18 @@ import { npPathwaySpecialtyWhere } from "@/lib/exam-pathways/np-question-special
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
+import {
+  catReadinessMinCompletePoolRows,
+  isCompleteCatQuestionRow,
+  NON_ECG_PRACTICE_EXAM_WHERE,
+} from "@/lib/practice-tests/cat-pool";
+import { validatePracticeCatPool, type CatPoolRow } from "@/lib/exams/cat-engine";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 
 const SNAPSHOT_TIMEOUT_MS = 1000;
 const REVALIDATE_SECONDS = 3600;
+const SNAPSHOT_ADAPTIVE_BATCH = 280;
+const SNAPSHOT_ADAPTIVE_SCAN_CAP = 8000;
 
 /**
  * Route-scoped marketing/question-bank aggregate.
@@ -40,6 +47,19 @@ export function pathwayExamQuestionMarketingWhere(pathway: ExamPathwayDefinition
   };
 }
 
+/**
+ * Published items counted on marketing hubs, CAT snapshot, and body-system aggregates —
+ * tier/region + pathway exam scope + non-ECG general-bank surface (matches subscriber pools).
+ */
+export function pathwayExamQuestionMarketingHubInventoryWhere(
+  pathway: ExamPathwayDefinition,
+): Prisma.ExamQuestionWhereInput {
+  const base = pathwayExamQuestionMarketingWhere(pathway);
+  return {
+    AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere()],
+  };
+}
+
 export type PathwayQuestionBankSnapshot =
   | {
       status: "ok";
@@ -52,42 +72,65 @@ export type PathwayQuestionBankSnapshot =
 async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition): Promise<PathwayQuestionBankSnapshot> {
   return withDatabaseFallbackTimeout<PathwayQuestionBankSnapshot>(
     async (): Promise<PathwayQuestionBankSnapshot> => {
-      const base = pathwayExamQuestionMarketingWhere(pathway);
-      const baseNonEcg: Prisma.ExamQuestionWhereInput = {
-        AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere()],
-      };
+      const inventoryWhere = pathwayExamQuestionMarketingHubInventoryWhere(pathway);
+      const minCatReady = catReadinessMinCompletePoolRows(pathway.id);
       const counts = await Promise.allSettled([
         withDatabaseFallbackTimeout(
-          () => prisma.examQuestion.count({ where: baseNonEcg }),
+          () => prisma.examQuestion.count({ where: inventoryWhere }),
           0,
           SNAPSHOT_TIMEOUT_MS,
           { scope: "exam_pathway_hub", label: `question_snapshot_count:${pathway.id}` },
         ),
-        withDatabaseFallbackTimeout(
-          () =>
-            prisma.examQuestion.findMany({
-              where: { AND: [baseNonEcg, { isAdaptiveEligible: true }] },
+        withDatabaseFallbackTimeout(async () => {
+          const adaptiveWhere: Prisma.ExamQuestionWhereInput = {
+            AND: [inventoryWhere, { isAdaptiveEligible: true }],
+          };
+          const pool: CatPoolRow[] = [];
+          const maxHeld = Math.min(512, Math.max(minCatReady + 120, 200));
+          let skip = 0;
+          while (skip < SNAPSHOT_ADAPTIVE_SCAN_CAP) {
+            const batch = await prisma.examQuestion.findMany({
+              where: adaptiveWhere,
               select: {
+                id: true,
+                difficulty: true,
+                bodySystem: true,
+                topic: true,
                 stem: true,
                 options: true,
                 correctAnswer: true,
                 rationale: true,
+                nclexClientNeedsCategory: true,
+                nclexClientNeedsSubcategory: true,
               },
-              /** Bounded scan for completeness filter — hub uses this as a conservative CAT-ready signal, not a full bank census. */
-              take: 4000,
               orderBy: { id: "asc" },
-            }),
-          [],
-          SNAPSHOT_TIMEOUT_MS,
-          { scope: "exam_pathway_hub", label: `question_snapshot_adaptive:${pathway.id}` },
-        ),
+              skip,
+              take: SNAPSHOT_ADAPTIVE_BATCH,
+            });
+            if (batch.length === 0) break;
+            for (const r of batch) {
+              if (!isCompleteCatQuestionRow(r)) continue;
+              if (pool.length >= maxHeld) pool.shift();
+              pool.push({
+                id: r.id,
+                difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
+                bodySystem: r.bodySystem,
+                topic: r.topic,
+                nclexClientNeedsCategory: r.nclexClientNeedsCategory,
+                nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
+              });
+            }
+            skip += batch.length;
+            if (pool.length >= minCatReady && validatePracticeCatPool(pool).ok) break;
+            if (batch.length < SNAPSHOT_ADAPTIVE_BATCH) break;
+          }
+          return pool.length;
+        }, 0, SNAPSHOT_TIMEOUT_MS, { scope: "exam_pathway_hub", label: `question_snapshot_adaptive:${pathway.id}` }),
       ]);
       const pathwayScopedCount =
         counts[0]?.status === "fulfilled" && typeof counts[0].value === "number" ? counts[0].value : 0;
       const adaptiveEligibleCount =
-        counts[1]?.status === "fulfilled" && Array.isArray(counts[1].value)
-          ? counts[1].value.filter((q) => isCompleteCatQuestionRow(q)).length
-          : 0;
+        counts[1]?.status === "fulfilled" && typeof counts[1].value === "number" ? counts[1].value : 0;
       if (counts[0]?.status === "rejected" || counts[1]?.status === "rejected") {
         safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
           event: "hub_data_load_failed",

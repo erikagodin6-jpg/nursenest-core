@@ -179,7 +179,9 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
       : null;
   const lockedQuestionBankCopy =
     questionSnapshot.status === "ok"
-      ? `You have access to ${questionSnapshot.pathwayScopedCount} practice questions on this pathway.`
+      ? questionSnapshot.pathwayScopedCount > 0
+        ? `You have access to ${questionSnapshot.pathwayScopedCount} practice questions on this pathway.`
+        : "The live question bank for this pathway is still empty for this scope — use clinical lessons while more items are published."
       : "You have access to practice questions for this pathway.";
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const lessonsHrefWithProfession = alliedProfessionKey

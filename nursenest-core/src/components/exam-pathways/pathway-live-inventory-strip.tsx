@@ -9,6 +9,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { TopicCoverageIndicator } from "@/components/ui/topic-coverage-indicator";
+import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 
 type Variant = "hub" | "lessons" | "questions" | "cat";
 
@@ -65,6 +66,7 @@ export function PathwayLiveInventoryStrip({
   }
 
   const { pathwayScopedCount, adaptiveEligibleCount, examKeys: snapshotExamKeys } = questionSnapshot;
+  const catMarketingUsable = marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
 
   const lessonLine =
     typeof lessonCount === "number" ? (
@@ -97,10 +99,15 @@ export function PathwayLiveInventoryStrip({
       </p>
     ) : pathwayScopedCount > 0 ? (
       <p className="mt-2 text-[var(--theme-muted-text)]">
-        {t("components.pathwayInventory.catLineHub", { adaptiveCount: adaptiveEligibleCount })}{" "}
-        <SafePathwayHubLink pathway={pathway} href={catHref} className="font-semibold text-primary hover:underline">
-          {t("components.pathwayInventory.catOpenIntro")}
-        </SafePathwayHubLink>
+        {t("components.pathwayInventory.catLineHub", { adaptiveCount: adaptiveEligibleCount })}
+        {catMarketingUsable ? (
+          <>
+            {" "}
+            <SafePathwayHubLink pathway={pathway} href={catHref} className="font-semibold text-primary hover:underline">
+              {t("components.pathwayInventory.catOpenIntro")}
+            </SafePathwayHubLink>
+          </>
+        ) : null}
       </p>
     ) : null;
 

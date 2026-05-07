@@ -2,7 +2,7 @@ import { unstable_cache } from "next/cache";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { pathwayExamQuestionMarketingHubInventoryWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { PracticeBodySystemHubId } from "@/lib/questions/normalize-question-body-system";
 import {
@@ -18,10 +18,10 @@ export { buildSkeletonPracticeHubAggregates, hydratePracticeHubAggregatesFromGro
 const REVALIDATE_SECONDS = 3600;
 
 async function computeAggregates(pathway: ExamPathwayDefinition): Promise<PracticeBodySystemHubAggregate[]> {
-  const base = pathwayExamQuestionMarketingWhere(pathway);
+  const where = pathwayExamQuestionMarketingHubInventoryWhere(pathway);
   const rows = await prisma.examQuestion.groupBy({
     by: ["bodySystem", "topic", "nclexClientNeedsCategory"],
-    where: base,
+    where,
     _count: { _all: true },
   });
   return hydratePracticeHubAggregatesFromGroupByRows(rows);
