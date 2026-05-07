@@ -79,7 +79,7 @@ import {
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
-import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
+import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 import {
   alliedProfessionTrackChipLabel,
   getAlliedProfessionByProfessionKey,
@@ -596,9 +596,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     const questionsHref = buildExamPathwayPath(pathway, "questions");
     const catHref = buildExamPathwayPath(pathway, "cat");
     const canStartCat =
-      !questionSnapshotLoadRejected &&
-      questionSnapshot.status === "ok" &&
-      questionSnapshot.adaptiveEligibleCount >= CAT_MIN_COMPLETE_POOL;
+      !questionSnapshotLoadRejected && marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
     const lessonHubSurfaceChips = [
       { label: "Practice questions", href: questionsHref },
       {
@@ -1074,9 +1072,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
   const canStartCat =
-    !questionSnapshotLoadRejected &&
-    questionSnapshot.status === "ok" &&
-    questionSnapshot.adaptiveEligibleCount >= CAT_MIN_COMPLETE_POOL;
+    !questionSnapshotLoadRejected && marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
 
   const lessonHubSurfaceChips = [
     { label: "Practice questions", href: questionsHref },

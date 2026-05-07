@@ -6,7 +6,7 @@ import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-cont
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import type { CatPoolRow } from "@/lib/exams/cat-engine";
+import { validatePracticeCatPool, type CatPoolRow } from "@/lib/exams/cat-engine";
 import type { CatPracticePoolBuildMeta } from "@/lib/practice-tests/types";
 import {
   loadMissedQuestionIdsForPoolFilter,
@@ -21,6 +21,9 @@ import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnost
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 
 const MAX_POOL = 4000;
+/** Batched CAT readiness scans — avoids loading thousands of stems/rationales when only a minimum pool proof is needed. */
+const READINESS_SCAN_BATCH = 280;
+const READINESS_SCAN_CAP = 8000;
 export const CAT_MIN_COMPLETE_POOL = 30;
 
 /** CAT readiness pool floor — full tracks use {@link CAT_MIN_COMPLETE_POOL}; Pre-Nursing uses a smaller MV pool. */
@@ -205,6 +208,154 @@ async function queryShuffledCompletePool(
   return salt && salt.length >= 8
     ? shuffleSeeded(completeRows, `${salt}:cat-pool-row-order-v1`)
     : shuffleSeeded(completeRows, `ephemeral-cat-pool:${randomUUID()}`);
+}
+
+async function accumulateCompleteCatPoolForReadiness(
+  where: Prisma.ExamQuestionWhereInput,
+  minCompleteRequired: number,
+): Promise<{ pool: CatPoolRow[]; scannedDbRows: number }> {
+  const pool: CatPoolRow[] = [];
+  let scannedDbRows = 0;
+  let skip = 0;
+  const maxHeld = Math.min(512, Math.max(minCompleteRequired + 120, 200));
+  while (skip < READINESS_SCAN_CAP) {
+    const batch = await prisma.examQuestion.findMany({
+      where,
+      select: {
+        id: true,
+        difficulty: true,
+        bodySystem: true,
+        topic: true,
+        stem: true,
+        options: true,
+        correctAnswer: true,
+        rationale: true,
+        nclexClientNeedsCategory: true,
+        nclexClientNeedsSubcategory: true,
+      },
+      orderBy: { id: "asc" },
+      skip,
+      take: READINESS_SCAN_BATCH,
+    });
+    if (batch.length === 0) break;
+    scannedDbRows += batch.length;
+    for (const r of batch) {
+      if (!isCompleteCatQuestionRow(r)) continue;
+      if (pool.length >= maxHeld) pool.shift();
+      pool.push({
+        id: r.id,
+        difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
+        bodySystem: r.bodySystem,
+        topic: r.topic,
+        nclexClientNeedsCategory: r.nclexClientNeedsCategory,
+        nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
+      });
+    }
+    skip += batch.length;
+    if (pool.length >= minCompleteRequired && validatePracticeCatPool(pool).ok) break;
+    if (batch.length < READINESS_SCAN_BATCH) break;
+  }
+  return { pool, scannedDbRows };
+}
+
+/**
+ * Pathway-scanned pool proof for CAT **readiness** (fast): same WHERE gates as {@link fetchCatPracticePool}
+ * but stops once the pathway minimum + {@link validatePracticeCatPool} succeed, or the scan budget is exhausted.
+ * Full {@link fetchCatPracticePool} still loads the shuffled session window for active play / session create.
+ */
+export async function fetchCatPracticePoolReadiness(
+  userId: string,
+  entitlement: AccessScope,
+  input: PickQuestionsInput,
+): Promise<{ pool: CatPoolRow[]; buildMeta: CatPracticePoolBuildMeta }> {
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  const pathwayIdTrim = input.pathwayId?.trim() ?? "";
+  let pathway: ExamPathwayDefinition | null = pathwayIdTrim ? getExamPathwayById(pathwayIdTrim) ?? null : null;
+  const emptyMeta = (strict = 0): CatPracticePoolBuildMeta => ({
+    strictCompleteRowCount: strict,
+    usedRelaxedFilters: false,
+    finalCompleteRowCount: 0,
+  });
+
+  if (pathwayIdTrim && !pathway) {
+    return { pool: [], buildMeta: emptyMeta() };
+  }
+  if (pathway && !subscriptionCoversPathwayBase(entitlement, pathway)) {
+    return { pool: [], buildMeta: emptyMeta() };
+  }
+
+  const base: Prisma.ExamQuestionWhereInput = pathway
+    ? questionAccessWhereWithPathway(entitlement, pathway)
+    : questionAccessWhere(entitlement);
+
+  const strictness = input.selectionStrictness ?? "strict";
+
+  if (strictness !== "soft") {
+    if (input.selectionMode === "missed") {
+      const missedIds = await loadMissedQuestionIdsForPoolFilter(userId, 200);
+      if (missedIds.length === 0) {
+        return { pool: [], buildMeta: emptyMeta() };
+      }
+    }
+    if (input.selectionMode === "starred") {
+      const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
+      if (starredIds.length === 0) {
+        return { pool: [], buildMeta: emptyMeta() };
+      }
+    }
+  }
+
+  const minNeed = catReadinessMinCompletePoolRows(pathwayIdTrim);
+  const secondaryStrict = await buildSecondaryFilterParts(userId, entitlement, input, false);
+  const whereStrict: Prisma.ExamQuestionWhereInput = {
+    AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryStrict],
+  };
+  let { pool } = await accumulateCompleteCatPoolForReadiness(whereStrict, minNeed);
+  const strictCompleteRowCount = pool.length;
+  let usedRelaxedFilters = false;
+
+  if (strictness === "soft" && pool.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
+    const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
+    const whereRelaxed: Prisma.ExamQuestionWhereInput = {
+      AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryRelaxed],
+    };
+    const relaxed = await accumulateCompleteCatPoolForReadiness(whereRelaxed, minNeed);
+    pool = relaxed.pool;
+    usedRelaxedFilters = true;
+  }
+
+  const buildMeta: CatPracticePoolBuildMeta = {
+    strictCompleteRowCount: strictCompleteRowCount,
+    usedRelaxedFilters,
+    finalCompleteRowCount: pool.length,
+  };
+
+  logCoreApiStudyDiagnostic({
+    endpoint: "fetchCatPracticePoolReadiness",
+    pathwayId: pathwayIdTrim || null,
+    tier: String(entitlement.tier ?? ""),
+    country: String(entitlement.country ?? ""),
+    hasAccess: entitlement.hasAccess,
+    examKeys: pathway ? [...pathway.contentExamKeys].join(",") : "",
+    selectionMode: input.selectionMode,
+    selectionStrictness: strictness,
+    rowsFoundStrict: strictCompleteRowCount,
+    rowsReturned: pool.length,
+    usedRelaxedFilters,
+    reasonIfZero:
+      pool.length === 0
+        ? pathwayIdTrim && !pathway
+          ? "unknown_pathway_id"
+          : pathway && !subscriptionCoversPathwayBase(entitlement, pathway)
+            ? "pathway_not_covered_by_entitlement"
+            : strictness !== "soft" &&
+                (input.selectionMode === "missed" || input.selectionMode === "starred")
+              ? "empty_missed_or_starred_ids"
+              : "readiness_scan_no_complete_rows"
+        : undefined,
+  });
+
+  return { pool, buildMeta };
 }
 
 /**

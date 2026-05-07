@@ -1,5 +1,6 @@
 import { ContentStatus } from "@prisma/client";
 import { loadPathwayQuestionBankSnapshot, type PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -105,7 +106,7 @@ export async function loadAlliedPathwayHubOverview(
     lessonCount: pathwayLessonCount,
     flashcardDeckCount,
     questionSnapshot,
-    practiceExamReady: questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount > 0,
+    practiceExamReady: marketingCatCompletePoolUsable(questionSnapshot, pathway.id),
     moduleCards: buildAlliedModuleCards(),
   };
 }

@@ -5,8 +5,7 @@ import {
 } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
-import { catReadinessMinCompletePoolRows, fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
+import { catReadinessMinCompletePoolRows, fetchCatPracticePoolReadiness } from "@/lib/practice-tests/cat-pool";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 
@@ -62,14 +61,6 @@ export async function assessCatPracticeReadinessForPathway(
 
   const minPool = catReadinessMinCompletePoolRows(trimmed);
 
-  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
-    return {
-      ok: true,
-      availableQuestions: minPool,
-      requiredQuestions: minPool,
-    };
-  }
-
   const readinessConfig = await readinessConfigForPathwayId(trimmed);
   const poolInput: PickQuestionsInput = {
     questionCount: readinessConfig?.maxQuestions ?? 75,
@@ -80,7 +71,7 @@ export async function assessCatPracticeReadinessForPathway(
     pathwayId: trimmed,
   };
 
-  const { pool } = await fetchCatPracticePool(userId, entitlement, poolInput);
+  const { pool } = await fetchCatPracticePoolReadiness(userId, entitlement, poolInput);
   if (pool.length < minPool) {
     return {
       ok: false,

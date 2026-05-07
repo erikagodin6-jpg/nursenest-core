@@ -55,8 +55,14 @@ export function CatDirectLaunchClient({
       }
       const learnerMessage =
         result.phase === "readiness"
-          ? "We could not verify the practice pool for this track yet. You can open the full setup page to review conditions and try again."
-          : "We could not start the timed session. Please try again, or use full setup below.";
+          ? result.code === "readiness_timeout" || String(result.code ?? "").includes("timeout")
+            ? "The readiness check timed out. Wait a moment and refresh this page, or open full setup below to retry from the guided flow."
+            : String(result.code ?? "").startsWith("readiness_http_")
+              ? "The readiness service returned an error. Try again in a few seconds, or use full setup below."
+              : "We could not verify the practice pool for this track yet. You can open the full setup page to review conditions and try again."
+          : result.code === "create_timeout"
+            ? "Starting your session timed out. Check your connection, wait a moment, and refresh — or use full setup below."
+            : "We could not start the timed session. Please try again, or use full setup below.";
       setErrorCode(result.code);
       setMessage(result.message?.trim() ? result.message : learnerMessage);
       setPhase("error");

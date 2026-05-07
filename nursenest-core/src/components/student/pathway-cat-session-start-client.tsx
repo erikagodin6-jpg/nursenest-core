@@ -127,12 +127,42 @@ export function PathwayCatSessionStartClient({
     setReadinessLoading(true);
     setReadiness(null);
     void (async () => {
+      const ctl = new AbortController();
+      const tid = window.setTimeout(() => ctl.abort(), 25_000);
       try {
         const res = await fetch(`/api/practice-tests/cat-readiness?pathwayId=${encodeURIComponent(normalizedPathwayId)}`, {
           method: "GET",
           credentials: "same-origin",
+          signal: ctl.signal,
         });
-        const data = (await res.json()) as CatPracticeReadinessResult;
+        if (!res.ok) {
+          if (!cancelled) {
+            setReadiness({
+              ok: false,
+              code: `readiness_http_${res.status}`,
+              message:
+                res.status === 429
+                  ? "Too many readiness checks in a short window. Wait a few seconds and use Retry below."
+                  : res.status === 503
+                    ? "Readiness check is temporarily unavailable. Try again shortly."
+                    : `Readiness check failed (HTTP ${res.status}). Try again or open the practice tests hub.`,
+            });
+          }
+          return;
+        }
+        let data: CatPracticeReadinessResult;
+        try {
+          data = (await res.json()) as CatPracticeReadinessResult;
+        } catch {
+          if (!cancelled) {
+            setReadiness({
+              ok: false,
+              code: "readiness_bad_json",
+              message: "Received an invalid readiness response. Refresh the page and try again.",
+            });
+          }
+          return;
+        }
         if (!cancelled) {
           setReadiness(data);
           if (isDev) {
@@ -145,15 +175,19 @@ export function PathwayCatSessionStartClient({
             });
           }
         }
-      } catch {
+      } catch (e) {
         if (!cancelled) {
+          const aborted = e instanceof DOMException && e.name === "AbortError";
           setReadiness({
             ok: false,
-            code: "readiness_fetch_failed",
-            message: "Could not verify adaptive pool readiness. Check your connection and try again.",
+            code: aborted ? "readiness_timeout" : "readiness_fetch_failed",
+            message: aborted
+              ? "Timed out while verifying the CAT pool (25s). Check your connection and try again, or open the practice tests hub."
+              : "Could not verify adaptive pool readiness. Check your connection and try again.",
           });
         }
       } finally {
+        window.clearTimeout(tid);
         if (!cancelled) setReadinessLoading(false);
       }
     })();
@@ -526,7 +560,13 @@ export function PathwayCatSessionStartClient({
             >
               Review lessons first
             </Link>
-            {!readinessLoading && readinessCode === "readiness_fetch_failed" ? (
+            {!readinessLoading &&
+            readiness &&
+            !readiness.ok &&
+            (readiness.code === "readiness_fetch_failed" ||
+              readiness.code === "readiness_timeout" ||
+              readiness.code === "readiness_bad_json" ||
+              (typeof readiness.code === "string" && readiness.code.startsWith("readiness_http_"))) ? (
               <button
                 type="button"
                 className="inline-flex min-h-11 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] px-5 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"

@@ -12,7 +12,7 @@ import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
-import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
+import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingExamHubBasePath, marketingPathwayLessonsCategoryPath } from "@/lib/lessons/lesson-routes";
@@ -127,9 +127,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
   const canStartCat =
-    !questionSnapshotLoadRejected &&
-    questionSnapshot.status === "ok" &&
-    questionSnapshot.adaptiveEligibleCount >= CAT_MIN_COMPLETE_POOL;
+    !questionSnapshotLoadRejected && marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
 
   const lessonHubSurfaceChips = [
     { label: "Practice questions", href: questionsHref },

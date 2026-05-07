@@ -8,10 +8,9 @@ import {
   subscriptionCoversPathwayBase,
 } from "@/lib/exam-pathways/pathway-entitlements";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
-import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
+import { catReadinessMinCompletePoolRows } from "@/lib/practice-tests/cat-pool";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-cat-start";
@@ -75,8 +74,6 @@ export type CatEligibilityAssessment = {
   debugDetail?: string;
 };
 
-const MIN_ADAPTIVE_MARKETING_SNAPSHOT = CAT_MIN_COMPLETE_POOL;
-
 function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatEligibilityAssessment | null {
   if (pathway.acquisitionMode === "info_only") {
     const cat = catPathwayShortCatLabel(pathway);
@@ -137,8 +134,9 @@ export function assessMarketingCatSurfaceWithoutAuth(
   if (block) return block;
 
   const marketingCatPath = marketingCatPathForPathway(pathway);
+  const minMarketingPool = catReadinessMinCompletePoolRows(pathway.id);
   const poolOk =
-    questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount >= MIN_ADAPTIVE_MARKETING_SNAPSHOT;
+    questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount >= minMarketingPool;
 
   if (!poolOk) {
     const cat = catPathwayShortCatLabel(pathway);
@@ -147,7 +145,7 @@ export function assessMarketingCatSurfaceWithoutAuth(
       reason: "insufficient_cat_pool",
       nextAction: "use_question_bank",
       marketingPrimaryCta: "none",
-      safeUserMessage: `Adaptive exam not available yet for this pathway. At least ${MIN_ADAPTIVE_MARKETING_SNAPSHOT} complete questions are required before CAT can start.`,
+      safeUserMessage: `Adaptive exam not available yet for this pathway. At least ${minMarketingPool} complete, CAT-ready questions are required before CAT can start.`,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath,
@@ -217,24 +215,6 @@ export async function assessCatEligibilityForSubscriberAndPathway(input: Subscri
 
   const block = pathwayWaitlistOrUpcomingBlock(pathway);
   if (block) return block;
-
-  /** Staff / student-ops: bypass subscription tier + adaptive-pool preflight for QA (pathway rollout gates still apply). */
-  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
-    const cat = catPathwayShortCatLabel(pathway);
-    return {
-      eligible: true,
-      reason: "ok",
-      nextAction: "start_cat_app",
-      marketingPrimaryCta: "open_app_cat",
-      safeUserMessage: `Staff access: start ${cat} in-app for QA (subscription pool checks skipped).`,
-      pathway,
-      pathwayId: pathway.id,
-      marketingCatPath,
-      appCatStartPath: appPathwayCatSessionStartPath(pathway.id),
-      logCode: "CAT_OK",
-      debugDetail: "staff_learner_bypass",
-    };
-  }
 
   if (!subscriptionCoversPathwayBase(entitlement, pathway)) {
     const line = catPathwayRegionalExamLine(pathway);
