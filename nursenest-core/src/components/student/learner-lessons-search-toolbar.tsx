@@ -40,7 +40,7 @@ export function LearnerLessonsSearchToolbar({
   }, [value, router, searchParams]);
 
   return (
-    <div className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4">
+    <div className="nn-card rounded-2xl border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 sm:p-5">
       <label className="block text-sm font-semibold text-[var(--semantic-text-primary)]" htmlFor="learner-lessons-q">
         {label}
       </label>
@@ -51,7 +51,7 @@ export function LearnerLessonsSearchToolbar({
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
         autoComplete="off"
-        className="mt-2 min-h-11 w-full max-w-xl rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-base text-[var(--semantic-text-primary)] placeholder:text-[var(--semantic-text-muted)] sm:min-h-0 sm:py-2 sm:text-sm"
+        className="mt-2 min-h-11 w-full max-w-xl rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-base text-[var(--semantic-text-primary)] shadow-[inset_0_1px_0_color-mix(in_srgb,var(--semantic-text-primary)_04%,transparent)] placeholder:text-[var(--semantic-text-muted)] transition-[border-color,box-shadow] motion-safe:duration-200 focus-visible:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_28%,transparent)] sm:min-h-0 sm:py-2 sm:text-sm"
       />
     </div>
   );

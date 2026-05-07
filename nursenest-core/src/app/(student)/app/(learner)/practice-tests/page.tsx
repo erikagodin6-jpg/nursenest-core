@@ -54,11 +54,13 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
 
   if (entitlement === "error") {
     return (
-      <div>
-        <div className="mb-4">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        <div className="mb-5">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
+        <div className="nn-card rounded-2xl border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm leading-relaxed text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+          {t("learner.entitlement.verifyFailed")}
+        </div>
       </div>
     );
   }
@@ -66,13 +68,13 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <div className="space-y-6">
-        <div className="mb-4">
+      <div className="mx-auto w-full max-w-6xl space-y-6 px-4 sm:px-6">
+        <div className="mb-1">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
         <div className="nn-learner-page-hero">
-          <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
-          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.locked")}</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.locked")}</p>
         </div>
         <div>
           <SubscriptionPaywall

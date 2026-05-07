@@ -73,7 +73,7 @@ export function LessonCard({
 
   return (
     <article
-      className={`nn-card overflow-hidden border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)] transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--theme-primary)]/40 ${statusAccent}`}
+      className={`nn-card overflow-hidden border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)] transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--theme-primary)]/40 sm:p-5 ${statusAccent}`}
     >
       {/* Header row: chips, meta row, and status/progress badges */}
       {chips || meta || progressStatus || status ? (

@@ -80,19 +80,23 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   if (entitlement === "error") {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-8 text-sm text-[var(--theme-muted-text)]">
-        {t("learner.entitlement.flashcardsShort")}
+      <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6">
+        <div className="nn-card rounded-2xl border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm leading-relaxed text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+          {t("learner.entitlement.flashcardsShort")}
+        </div>
       </div>
     );
   }
 
   if (!entitlement.hasAccess) {
     return (
-      <div className="mx-auto max-w-3xl space-y-4 px-4 sm:px-6">
-        <h1 className="text-3xl font-bold">{t("learner.flashcards.page.title")}</h1>
-        <p className="text-sm text-muted-foreground">
-          {t("learner.flashcards.page.subtitle.locked")}
-        </p>
+      <div className="mx-auto w-full max-w-6xl space-y-6 px-4 sm:px-6">
+        <div className="nn-learner-page-hero">
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.flashcards.page.title")}</h1>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            {t("learner.flashcards.page.subtitle.locked")}
+          </p>
+        </div>
         <SubscriptionPaywall context="dashboard" />
       </div>
     );

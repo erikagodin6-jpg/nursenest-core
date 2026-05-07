@@ -39,7 +39,7 @@ export function LearnerLessonsVirtualList({
   return (
     <div
       ref={parentRef}
-      className="max-h-[min(70vh,880px)] overflow-auto rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_22%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
+      className="max-h-[min(70vh,880px)] overflow-auto rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_22%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
       style={{ contain: "strict" }}
     >
       <div
@@ -65,7 +65,7 @@ export function LearnerLessonsVirtualList({
               key={lesson.id}
               ref={virtualizer.measureElement}
               data-index={vRow.index}
-              className="absolute left-0 top-0 w-full px-1 pb-3"
+              className="absolute left-0 top-0 w-full px-2 pb-3.5 sm:px-2.5"
               style={{ transform: `translateY(${vRow.start}px)` }}
             >
               <LessonCard

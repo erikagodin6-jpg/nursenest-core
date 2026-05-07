@@ -62,7 +62,7 @@ export function LearnerReportCard({ model }: { model: LearnerReportCardViewModel
         {model.continueCta ? (
           <Link
             href={model.continueCta.href}
-            className="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-sm"
+            className="inline-flex min-h-11 items-center rounded-full px-4 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-sm transition-[filter,transform] motion-safe:duration-200 hover:brightness-[1.03] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_38%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--semantic-surface)]"
             style={{ background: "var(--role-cta)" }}
           >
             {model.continueCta.label}
@@ -72,7 +72,7 @@ export function LearnerReportCard({ model }: { model: LearnerReportCardViewModel
           <Link
             key={l.href}
             href={l.href}
-            className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
+            className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition-colors motion-safe:duration-200 hover:bg-[var(--semantic-panel-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_30%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--semantic-surface)]"
           >
             {l.label}
           </Link>

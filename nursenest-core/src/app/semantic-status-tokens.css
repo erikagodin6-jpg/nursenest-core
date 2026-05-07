@@ -669,7 +669,7 @@ html[data-theme="deep-twilight"] {
 .nn-learner-page-hero {
   border-radius: 1.25rem;
   border: 1px solid var(--semantic-border-soft);
-  margin-bottom: var(--nn-space-1, 0.25rem);
+  margin-bottom: clamp(0.5rem, 1.5vw, 0.85rem);
   background:
     radial-gradient(
       ellipse 85% 65% at 100% -5%,

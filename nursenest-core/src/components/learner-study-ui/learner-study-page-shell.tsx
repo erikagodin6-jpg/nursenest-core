@@ -13,7 +13,7 @@ export function LearnerStudyPageShell({ children, className, ...rest }: ShellPro
   return (
     <div
       {...rest}
-      className={["mx-auto w-full max-w-6xl space-y-8 px-4 sm:px-6", className].filter(Boolean).join(" ")}
+      className={["mx-auto w-full max-w-6xl space-y-9 px-4 sm:space-y-10 sm:px-6", className].filter(Boolean).join(" ")}
       data-nn-learner-study-page-shell
     >
       {children}
