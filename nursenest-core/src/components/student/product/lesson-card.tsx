@@ -73,12 +73,12 @@ export function LessonCard({
 
   return (
     <article
-      className={`nn-card overflow-hidden border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)] transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--theme-primary)]/40 sm:p-5 ${statusAccent}`}
+      className={`nn-card overflow-hidden border-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_28%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] transition-[border-color,box-shadow] motion-safe:duration-200 hover:border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--theme-primary)]/40 sm:p-5 ${statusAccent}`}
     >
       {/* Header row: chips, meta row, and status/progress badges */}
       {chips || meta || progressStatus || status ? (
-        <div className="mb-2 flex flex-wrap items-start justify-between gap-2">
-          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+        <div className="mb-2.5 flex flex-wrap items-start justify-between gap-2.5">
+          <div className="flex min-w-0 flex-1 flex-col gap-2">
             {chips ? <div className="flex flex-wrap gap-1.5">{chips}</div> : null}
             {meta && meta.length > 0 ? <MetaRow items={meta} /> : null}
           </div>
@@ -89,13 +89,13 @@ export function LessonCard({
         </div>
       ) : null}
 
-      <h2 className="font-semibold text-[var(--semantic-text-primary)]">
+      <h2 className="text-base font-semibold leading-snug text-[var(--semantic-text-primary)] sm:text-[1.0625rem]">
         <Link href={href} className="hover:text-[var(--semantic-brand)] hover:underline">
           {title}
         </Link>
       </h2>
-      {summary ? <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{summary}</p> : null}
-      {footer ? <div className="mt-3">{footer}</div> : null}
+      {summary ? <p className="mt-2.5 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{summary}</p> : null}
+      {footer ? <div className="mt-3.5">{footer}</div> : null}
     </article>
   );
 }

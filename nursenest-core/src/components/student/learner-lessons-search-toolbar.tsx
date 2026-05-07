@@ -40,7 +40,7 @@ export function LearnerLessonsSearchToolbar({
   }, [value, router, searchParams]);
 
   return (
-    <div className="nn-card rounded-2xl border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 sm:p-5">
+    <div className="nn-card rounded-2xl border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_92%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5">
       <label className="block text-sm font-semibold text-[var(--semantic-text-primary)]" htmlFor="learner-lessons-q">
         {label}
       </label>

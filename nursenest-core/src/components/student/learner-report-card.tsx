@@ -4,17 +4,17 @@ import type { LearnerReportCardViewModel } from "@/lib/learner/learner-report-ca
 export function LearnerReportCard({ model }: { model: LearnerReportCardViewModel }) {
   return (
     <section
-      className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] p-5 shadow-sm"
+      className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]"
       aria-labelledby="learner-report-card-heading"
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h2 id="learner-report-card-heading" className="text-base font-bold text-[var(--semantic-text-primary)]">
+        <div className="min-w-0 flex-1">
+          <h2 id="learner-report-card-heading" className="text-base font-bold tracking-tight text-[var(--semantic-text-primary)]">
             Report card
           </h2>
-          <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{model.readinessLabel}</p>
+          <p className="mt-1.5 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{model.readinessLabel}</p>
         </div>
-        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-right">
+        <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-surface))] px-3 py-2 text-right shadow-[inset_0_1px_0_color-mix(in_srgb,var(--semantic-text-primary)_05%,transparent)]">
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Lessons</p>
           <p className="text-lg font-bold text-[var(--semantic-text-primary)]">
             {model.lessonsCompleted}/{model.lessonsTotal}
@@ -28,30 +28,46 @@ export function LearnerReportCard({ model }: { model: LearnerReportCardViewModel
         </p>
       ) : null}
 
-      <div className="mt-4 grid gap-4 min-[720px]:grid-cols-2">
-        <div>
+      <div className="mt-5 grid gap-5 min-[720px]:grid-cols-2 min-[720px]:gap-6">
+        <div className="min-w-0">
           <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-chart-4)]">Weak topics</p>
-          <ul className="mt-2 space-y-1 text-sm text-[var(--semantic-text-secondary)]">
-            {model.weakTopics.length === 0 ? <li>None flagged yet — keep practicing.</li> : null}
+          <ul className="mt-2 space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+            {model.weakTopics.length === 0 ? (
+              <li className="list-none">
+                <span className="block rounded-lg border border-[color-mix(in_srgb,var(--semantic-chart-4)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_55%,var(--semantic-surface))] px-3 py-2 text-sm leading-snug text-[var(--semantic-text-secondary)]">
+                  No weak topics flagged yet — keep practicing.
+                </span>
+              </li>
+            ) : null}
             {model.weakTopics.map((t) => (
-              <li key={t}>{t}</li>
+              <li key={t} className="leading-snug">
+                {t}
+              </li>
             ))}
           </ul>
         </div>
-        <div>
+        <div className="min-w-0">
           <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-chart-3)]">Strongest topics</p>
-          <ul className="mt-2 space-y-1 text-sm text-[var(--semantic-text-secondary)]">
-            {model.strongTopics.length === 0 ? <li>Your strengths will appear as you bank more attempts.</li> : null}
+          <ul className="mt-2 space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+            {model.strongTopics.length === 0 ? (
+              <li className="list-none">
+                <span className="block rounded-lg border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_45%,var(--semantic-surface))] px-3 py-2 text-sm leading-snug text-[var(--semantic-text-secondary)]">
+                  Strong topics appear as you log more attempts.
+                </span>
+              </li>
+            ) : null}
             {model.strongTopics.map((t) => (
-              <li key={t}>{t}</li>
+              <li key={t} className="leading-snug">
+                {t}
+              </li>
             ))}
           </ul>
         </div>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-5 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-5">
         <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">Recommended next</p>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-[var(--semantic-text-secondary)]">
+        <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
           {model.recommendedActions.map((a) => (
             <li key={a}>{a}</li>
           ))}

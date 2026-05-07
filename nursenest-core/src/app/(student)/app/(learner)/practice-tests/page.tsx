@@ -74,7 +74,9 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
         </div>
         <div className="nn-learner-page-hero">
           <h1 className="text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.locked")}</p>
+          <p className="mt-3 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            {t("learner.practiceTests.subtitle.locked")}
+          </p>
         </div>
         <div>
           <SubscriptionPaywall
@@ -258,15 +260,17 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       </div>
       <LearnerRenderTraceBanner data-route="practice-tests" label="NN_RENDER_TRACE: practice live route" />
       <div className="nn-learner-page-hero">
-        <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
-        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.subscriber")}</p>
-        <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">
-          {t("learner.practiceTests.pageHero.catInsightsLead")}{" "}
-          <Link href="/app/practice-tests/cat-insights" className="font-semibold text-primary underline">
-            {t("learner.practiceTests.pageHero.catInsightsLink")}
-          </Link>
-          .
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
+        <div className="mt-3 flex max-w-prose flex-col gap-2.5 text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+          <p>{t("learner.practiceTests.subtitle.subscriber")}</p>
+          <p>
+            {t("learner.practiceTests.pageHero.catInsightsLead")}{" "}
+            <Link href="/app/practice-tests/cat-insights" className="font-semibold text-primary underline">
+              {t("learner.practiceTests.pageHero.catInsightsLink")}
+            </Link>
+            .
+          </p>
+        </div>
       </div>
       <LearnerStudyQuickLinksCard t={t} id="practice-tests-study-quick-links" catHref={catHref} />
       <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>

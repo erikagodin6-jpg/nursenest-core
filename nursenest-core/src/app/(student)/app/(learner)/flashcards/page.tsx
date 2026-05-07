@@ -93,7 +93,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       <div className="mx-auto w-full max-w-6xl space-y-6 px-4 sm:px-6">
         <div className="nn-learner-page-hero">
           <h1 className="text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.flashcards.page.title")}</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+          <p className="mt-3 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
             {t("learner.flashcards.page.subtitle.locked")}
           </p>
         </div>

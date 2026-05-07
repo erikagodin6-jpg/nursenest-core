@@ -636,12 +636,14 @@ export default async function LessonsPage({ searchParams }: Props) {
         : null;
 
   return (
-    <div className="min-w-0 space-y-7 sm:space-y-9">
+    <div className="min-w-0 space-y-6 sm:space-y-8">
       <div className="nn-learner-page-hero">
         <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.7rem]">
           {t("learner.lessons.list.title")}
         </h1>
-        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.lessons.list.subscriberIntro")}</p>
+        <p className="mt-3 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+          {t("learner.lessons.list.subscriberIntro")}
+        </p>
       </div>
 
       {lessonsHubInventorySource === "degraded_snapshot" ? <LearnerStudyLiveSyncBanner /> : null}
