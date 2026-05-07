@@ -63,7 +63,7 @@ export function HomeHeroScreenshotSection() {
           eventProps={{ region, surface: "home_hero_screenshot_text_fallback" }}
           className="nn-marketing-body inline-flex items-center gap-1 font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
         >
-          {safeHomepageMarketingT(t, "pages.home.carouselHandoff.fallbackCta", "Open the question bank")}
+          {safeHomepageMarketingT(t, "pages.home.carouselHandoff.fallbackCta", "Open the Question Bank")}
           <ArrowRight className="h-4 w-4" aria-hidden />
         </MarketingTrackedLink>
       </p>

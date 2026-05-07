@@ -79,7 +79,7 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
             className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl`}
           >
             {formatTitleCase(
-              safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start practice questions"),
+              safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start Practice Questions"),
               locale
             )}
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -92,7 +92,7 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
             className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl`}
           >
             {formatTitleCase(
-              safeHomepageMarketingT(t, "pages.home.hero.secondaryCta", "Browse lessons"),
+              safeHomepageMarketingT(t, "pages.home.hero.secondaryCta", "Browse Lessons"),
               locale
             )}
           </MarketingTrackedLink>

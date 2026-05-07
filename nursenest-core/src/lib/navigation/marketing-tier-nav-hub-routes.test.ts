@@ -5,6 +5,7 @@ import {
   marketingHeaderLearnPracticeFlowDestinations,
   publicExamPrepHubDestinations,
 } from "@/lib/navigation/canonical-destinations";
+import { CANADA_NEW_GRAD_MARKETING_HUB_PATH, US_NEW_GRAD_MARKETING_HUB_PATH } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
 import { buildMarketingTierHubStrip } from "@/lib/navigation/marketing-tier-hub-strip";
 
 const GENERIC_LESSONS_INDEX = "/lessons";
@@ -22,7 +23,7 @@ describe("top-tier marketing nav hub routes", () => {
     assert.equal(strip.find((r) => r.key === "np")?.hubHref, hubs.np);
     assert.equal(strip.find((r) => r.key === "allied")?.hubHref, hubs.allied);
     assert.equal(strip.find((r) => r.key === "pn")?.hubHref, hubs.pn);
-    assert.equal(strip.find((r) => r.key === "newgrad")?.hubHref, "/us/rn/new-grad-transition");
+    assert.equal(strip.find((r) => r.key === "newgrad")?.hubHref, US_NEW_GRAD_MARKETING_HUB_PATH);
   });
 
   it("CA: RN/NP/New Grad/Allied hubs are pathway roots; PN stays REx-PN hub", () => {
@@ -36,7 +37,7 @@ describe("top-tier marketing nav hub routes", () => {
     for (const row of strip) {
       assert.notEqual(row.hubHref, GENERIC_LESSONS_INDEX, `${row.key} must not land on mixed-tier lessons index`);
     }
-    assert.equal(strip.find((r) => r.key === "newgrad")?.hubHref, "/canada/rn/nclex-rn");
+    assert.equal(strip.find((r) => r.key === "newgrad")?.hubHref, CANADA_NEW_GRAD_MARKETING_HUB_PATH);
   });
 
   it("marketingExamHubPath stays aligned with publicExamPrepHubDestinations for each offering", () => {
@@ -79,5 +80,11 @@ describe("marketingHeaderLearnPracticeFlowDestinations (mobile Learn / Practice 
   it("NEW_GRAD US uses transition pathway questions surface", () => {
     const f = marketingHeaderLearnPracticeFlowDestinations("US", { tier: "NEW_GRAD", country: "US" });
     assert.match(f.practiceHref, /new-grad-transition\/questions$/);
+  });
+
+  it("NEW_GRAD US highlights Learn/Practice from the transition pathway root (not /us/new-grad)", () => {
+    const f = marketingHeaderLearnPracticeFlowDestinations("US", { tier: "NEW_GRAD", country: "US" });
+    assert.equal(f.learnMatchBase, "/us/rn/new-grad-transition");
+    assert.equal(f.practiceMatchBase, "/us/rn/new-grad-transition");
   });
 });

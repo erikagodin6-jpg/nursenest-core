@@ -9,6 +9,7 @@
  */
 
 import { CountryCode } from "@prisma/client";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
 import { defaultPathwayIdForMarketingOffering, marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
@@ -18,7 +19,10 @@ import {
   defaultNursingExamMarketingHub as defaultNursingExamMarketingHubFromNav,
   marketingExamPrepHubs,
 } from "@/lib/marketing/marketing-exam-navigation";
-import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
+import {
+  publicNewGradStudyDestinations,
+  US_NEW_GRAD_TRANSITION_PATHWAY_ID,
+} from "@/lib/navigation/marketing-pathway-nav-destinations";
 
 export type { MarketingRegionToggle };
 
@@ -99,12 +103,14 @@ export function marketingHeaderLearnPracticeFlowDestinations(
 
   if (ctx.tier === "NEW_GRAD") {
     const d = publicNewGradStudyDestinations(region, rnHub);
-    const base = d.hubHref;
+    const transitionPathway = getExamPathwayById(US_NEW_GRAD_TRANSITION_PATHWAY_ID);
+    const transitionRoot =
+      region === "US" && transitionPathway ? buildExamPathwayPath(transitionPathway) : rnHub;
     return {
       learnHref: d.lessons,
       practiceHref: d.questions,
-      learnMatchBase: base,
-      practiceMatchBase: base,
+      learnMatchBase: transitionRoot,
+      practiceMatchBase: transitionRoot,
     };
   }
 

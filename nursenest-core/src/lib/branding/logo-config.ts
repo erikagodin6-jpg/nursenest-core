@@ -17,7 +17,7 @@ export const PRIMARY_LOGO_CDN_URL = `${NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL.re
  * Committed same-origin wordmark — always available when CDN/proxy/theme objects fail.
  * Bump `v` after visual updates to bust caches.
  */
-export const LOCAL_BRAND_MARK_PATH = "/branding/nursenest-mark.svg?v=1" as const;
+export const LOCAL_BRAND_MARK_PATH = "/branding/nursenest-mark.svg?v=2" as const;
 
 /** Same-origin SVG when remote theme marks fail (not the hero gradient placeholder). */
 export const SITE_LOGO_FALLBACK_PATH = LOCAL_BRAND_MARK_PATH;

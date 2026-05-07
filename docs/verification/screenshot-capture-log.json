@@ -1,0 +1,66 @@
+{
+  "base": "http://127.0.0.1:3000",
+  "capturedAt": "2026-05-07T16:37:40.999Z",
+  "summary": [
+    {
+      "url": "http://127.0.0.1:3000/app/practice-tests",
+      "file": "/root/nursenest-core/docs/verification-screenshots/practice-tests-desktop.png",
+      "status": 200,
+      "title": "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health"
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/new-grad",
+      "file": "/root/nursenest-core/docs/verification-screenshots/canada-new-grad-desktop.png",
+      "status": 200,
+      "title": "New graduate nurses | Canada | NurseNest | NurseNest"
+    },
+    {
+      "url": "http://127.0.0.1:3000/allied/allied-health",
+      "file": "/root/nursenest-core/docs/verification-screenshots/allied-global-hub-desktop.png",
+      "status": 200,
+      "title": "Allied Health | NurseNest"
+    },
+    {
+      "url": "http://127.0.0.1:3000/allied/mlt",
+      "file": "/root/nursenest-core/docs/verification-screenshots/allied-mlt-occupation-desktop.png",
+      "status": 200,
+      "title": "Medical laboratory exam prep | Allied Health | NurseNest"
+    },
+    {
+      "url": "http://127.0.0.1:3000/app/dashboard",
+      "file": "/root/nursenest-core/docs/verification-screenshots/learner-dashboard-desktop.png",
+      "status": 200,
+      "title": "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health"
+    },
+    {
+      "url": "http://127.0.0.1:3000/app/practice-tests",
+      "file": "/root/nursenest-core/docs/verification-screenshots/practice-tests-mobile.png",
+      "status": 200,
+      "title": "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health"
+    },
+    {
+      "url": "http://127.0.0.1:3000/canada/new-grad",
+      "file": "/root/nursenest-core/docs/verification-screenshots/canada-new-grad-mobile.png",
+      "status": 200,
+      "title": "New graduate nurses | Canada | NurseNest | NurseNest"
+    },
+    {
+      "url": "http://127.0.0.1:3000/allied/allied-health",
+      "file": "/root/nursenest-core/docs/verification-screenshots/allied-global-hub-mobile.png",
+      "status": 200,
+      "title": "Allied Health | NurseNest"
+    },
+    {
+      "url": "http://127.0.0.1:3000/allied/mlt",
+      "file": "/root/nursenest-core/docs/verification-screenshots/allied-mlt-occupation-mobile.png",
+      "status": 200,
+      "title": "Medical laboratory exam prep | Allied Health | NurseNest"
+    },
+    {
+      "url": "http://127.0.0.1:3000/app/dashboard",
+      "file": "/root/nursenest-core/docs/verification-screenshots/learner-dashboard-mobile.png",
+      "status": 200,
+      "title": "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health"
+    }
+  ]
+}

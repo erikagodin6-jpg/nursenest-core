@@ -113,8 +113,8 @@ export function AlliedHealthPathwayHub({
   const heroKicker = profession
     ? `${countryLine} · ${pathway.shortName} · ${alliedProfessionTrackChipLabel(profession)}`
     : isGlobalAlliedHub
-      ? "Allied health · Global pathway"
-      : `${countryLine} · Allied health`;
+      ? `${pathway.shortName} · Global pathway`
+      : `${countryLine} · ${pathway.shortName}`;
   const flashcardDeckLine =
     typeof overview?.flashcardDeckCount === "number"
       ? `${overview.flashcardDeckCount} published flashcard deck${overview.flashcardDeckCount === 1 ? "" : "s"}`
@@ -157,21 +157,21 @@ export function AlliedHealthPathwayHub({
             href={pricingHref}
             className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-brand-contrast)] shadow-md transition hover:opacity-95"
           >
-            View plans and pricing
+            View Plans and Pricing
           </Link>
           <>
             <Link
               href={profession ? ALLIED_GLOBAL_HUB_PATH : `${ALLIED_GLOBAL_HUB_PATH}#allied-occupation-tracks`}
               className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
             >
-              {profession ? "All occupation tracks" : "Choose your occupation track"}
+              {profession ? "All Occupation Tracks" : "Choose Your Occupation Track"}
             </Link>
             {showFullStudySurface ? (
               <Link
                 href={lessonsHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-info)] transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))]"
               >
-                {profession ? "Lessons for this track" : "Browse lessons hub"}
+                {profession ? "Lessons for This Track" : "Browse Lessons Hub"}
               </Link>
             ) : null}
           </>
@@ -493,7 +493,7 @@ export function AlliedHealthPathwayHub({
               icon={BookOpen}
               title="Lessons by category"
               description="Pathway-scoped modules aligned to discipline clusters — same card layout as the lessons hub."
-              cta="Open lessons"
+              cta="Open Lessons"
             />
           </li>
           <li>
@@ -505,7 +505,7 @@ export function AlliedHealthPathwayHub({
               icon={Target}
               title="Practice questions"
               description="Vignettes and rationales filtered to your allied authorization lane — no RN-only depth mixed in."
-              cta="Practice questions hub"
+              cta="Practice Questions Hub"
             />
           </li>
           <li>
@@ -517,7 +517,7 @@ export function AlliedHealthPathwayHub({
               icon={Layers}
               title="Flashcards"
               description="High-yield recall for terminology, protocols, and safety edges. Opens the in-app flashcard builder for this pathway."
-              cta="Open flashcards"
+              cta="Open Flashcards"
             />
           </li>
           <li>
@@ -529,7 +529,7 @@ export function AlliedHealthPathwayHub({
               icon={ClipboardCheck}
               title="Practice exams"
               description="Longer exam-style sets with pathway-aware pacing and sign-in callbacks that keep the allied tier in scope."
-              cta="Open practice exams"
+              cta="Open Practice Exams"
             />
           </li>
           <li>
@@ -541,7 +541,7 @@ export function AlliedHealthPathwayHub({
               icon={Activity}
               title="Adaptive readiness"
               description="CAT-style practice where difficulty responds to performance — use this when you are ready for longer, exam-shaped sessions."
-              cta="Explore adaptive hub"
+              cta="Explore Adaptive Hub"
             />
           </li>
         </ul>
@@ -572,7 +572,7 @@ export function AlliedHealthPathwayHub({
                     href={card.href}
                     className="mt-4 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
                   >
-                    Open module →
+                    Open Module →
                   </Link>
                 </article>
               </li>
@@ -610,7 +610,7 @@ export function AlliedHealthPathwayHub({
                   {c.description ? (
                     <span className="mt-2 line-clamp-2 text-xs text-[var(--semantic-text-secondary)]">{c.description}</span>
                   ) : null}
-                  <span className="mt-3 text-xs font-semibold text-[var(--semantic-brand)]">View lessons →</span>
+                  <span className="mt-3 text-xs font-semibold text-[var(--semantic-brand)]">View Lessons →</span>
                 </Link>
               </li>
             );
@@ -637,14 +637,14 @@ export function AlliedHealthPathwayHub({
             href={scenarioPrimaryHref}
             className="mt-4 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
           >
-            {clinicalScenariosHref ? "Open clinical scenarios (sign in) →" : "Open practice questions →"}
+            {clinicalScenariosHref ? "Open Clinical Scenarios (Sign In) →" : "Open Practice Questions →"}
           </Link>
           {clinicalScenariosHref ? (
             <Link
               href={questionsHref}
               className="mt-2 inline-flex text-sm font-medium text-[var(--semantic-text-secondary)] underline-offset-2 hover:text-[var(--semantic-brand)] hover:underline"
             >
-              Or go straight to practice questions →
+              Or Go Straight to Practice Questions →
             </Link>
           ) : null}
         </article>
@@ -656,7 +656,7 @@ export function AlliedHealthPathwayHub({
             Use lessons first, then flashcards for rapid checklist-style review.
           </p>
           <Link href={lessonsHref} className="mt-4 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
-            Browse lesson skills →
+            Browse Lesson Skills →
           </Link>
         </article>
         <article className="rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-warning)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] p-6">
@@ -671,13 +671,13 @@ export function AlliedHealthPathwayHub({
               href={examPlanHref}
               className="inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
             >
-              Open My Exam Plan (sign in) →
+              Open My Exam Plan (Sign In) →
             </Link>
             <Link
               href={practiceTestsHref}
               className="inline-flex text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
             >
-              Practice exams hub →
+              Practice Exams Hub →
             </Link>
           </div>
         </article>
@@ -702,13 +702,13 @@ export function AlliedHealthPathwayHub({
             href={pricingHref}
             className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-success)] px-8 py-2.5 text-sm font-semibold text-[var(--semantic-success-contrast)] transition hover:opacity-95"
           >
-            Compare allied pricing
+            Compare Allied Pricing
           </Link>
           <Link
             href="/signup"
             className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-8 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
           >
-            Create account
+            Create Account
           </Link>
         </div>
         <p className="mt-4 text-xs text-[var(--semantic-text-secondary)]">
@@ -744,7 +744,7 @@ export function AlliedHealthPathwayHub({
             href={practiceTestsHref}
             className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold hover:bg-[var(--semantic-panel-cool)]"
           >
-            Practice exams
+            Practice Exams
           </Link>
         </div>
       </section>

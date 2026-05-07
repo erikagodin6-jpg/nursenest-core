@@ -83,7 +83,7 @@ export function CatDirectLaunchClient({
             href={buildExamPathwayPath(pathwayShell, "questions")}
             className="inline-flex min-h-11 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] px-5 text-sm font-semibold text-[var(--theme-heading-text)]"
           >
-            Question bank
+            Question Bank
           </Link>
           <Link
             href={setupHref}
@@ -95,7 +95,7 @@ export function CatDirectLaunchClient({
             href="/app/practice-tests"
             className="inline-flex min-h-11 items-center justify-center text-sm font-semibold text-[var(--semantic-text-muted)] underline"
           >
-            Practice tests hub
+            Practice Tests Hub
           </Link>
         </div>
         {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled ? (

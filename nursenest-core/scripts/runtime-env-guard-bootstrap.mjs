@@ -182,6 +182,34 @@ function assertRuntimeDatabaseEnvContractMjs() {
   });
 }
 
+function isNonDevelopmentNodeEnv() {
+  const n = process.env.NODE_ENV;
+  if (n === "development" || n === "test") return false;
+  return true;
+}
+
+/** Mirrors `isAuthSecretBuildToleranceContext` in `src/lib/auth/auth-session-signing-env.ts`. */
+function isAuthSecretBuildToleranceContextMjs() {
+  const p = process.env.NEXT_PHASE?.trim();
+  if (p === "phase-production-build" || p === "phase-development-build") return true;
+  const ev = process.env.npm_lifecycle_event?.trim();
+  if (ev === "build" || ev === "vercel-build") return true;
+  const parts = process.argv;
+  for (let i = 0; i < parts.length - 1; i += 1) {
+    const a = parts[i] ?? "";
+    const isNextBin = a === "next" || a.endsWith("/next") || a.endsWith("\\next.cmd");
+    if (isNextBin && parts[i + 1] === "build") return true;
+  }
+  return false;
+}
+
+function isAuthSecretConfiguredMjs() {
+  const a = process.env.AUTH_SECRET?.trim();
+  if (a) return true;
+  const b = process.env.NEXTAUTH_SECRET?.trim();
+  return Boolean(b);
+}
+
 function collectMissingRuntimeEnvIssues() {
   const missing = [];
 
@@ -195,6 +223,12 @@ function collectMissingRuntimeEnvIssues() {
   if (!satisfiesAiFundingContractMjs()) {
     missing.push(
       `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
+    );
+  }
+
+  if (isNonDevelopmentNodeEnv() && !isAuthSecretBuildToleranceContextMjs() && !isAuthSecretConfiguredMjs()) {
+    missing.push(
+      "AUTH_SECRET (preferred) or NEXTAUTH_SECRET (legacy) — required for Auth.js JWT signing at runtime (generate: openssl rand -base64 32)",
     );
   }
 

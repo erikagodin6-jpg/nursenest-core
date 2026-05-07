@@ -41,7 +41,6 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { PathwayHero } from "@/components/study/pathway-hero";
 import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
@@ -266,28 +265,28 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const heroPrimaryCta = linearPracticeUsable
     ? isTopicNarrowed
       ? {
-          label: "Open question bank" as const,
+          label: "Open Question Bank" as const,
           href: appQuestionsScoped,
           variant: "primary" as const,
         }
       : {
-          label: "Start mixed practice" as const,
+          label: "Start Mixed Practice" as const,
           href: mixedAllTopicsHref,
           variant: "primary" as const,
         }
     : {
-        label: "Browse clinical lessons" as const,
+        label: "Browse Clinical Lessons" as const,
         href: lessonsHrefWithProfession,
         variant: "primary" as const,
       };
 
   const heroOutlineCtas: { label: string; href: string; variant: "outline" | "ghost" }[] = [];
   if (linearPracticeUsable) {
-    heroOutlineCtas.push({ label: "Browse lessons", href: lessonsHrefWithProfession, variant: "outline" });
+    heroOutlineCtas.push({ label: "Browse Lessons", href: lessonsHrefWithProfession, variant: "outline" });
   } else {
     heroOutlineCtas.push({ label: `${pathway.shortName} overview`, href: overviewHref, variant: "outline" });
   }
-  heroOutlineCtas.push({ label: "Create account", href: "/signup", variant: "ghost" });
+  heroOutlineCtas.push({ label: "Create Account", href: "/signup", variant: "ghost" });
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
@@ -301,15 +300,15 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         ctas={[heroPrimaryCta, ...heroOutlineCtas]}
       />
 
-      {/* 2. Stat cards */}
+      {/* 2. Stat cards — never foreground a “0 practice questions” tile */}
       {(questionCount !== null || adaptiveCount !== null || pathwayLessonCount !== undefined) ? (
         <div className="mt-5">
           <PathwayStatsCards
             stats={[
-              ...(questionCount !== null
+              ...(questionCount !== null && questionCount > 0
                 ? [{ value: questionCount, label: "Practice questions", icon: ClipboardList, accent: "brand" as const }]
                 : []),
-              ...(adaptiveCount !== null
+              ...(adaptiveCount !== null && adaptiveCount > 0
                 ? [{ value: adaptiveCount, label: "CAT-eligible items", icon: Layers, accent: "info" as const }]
                 : []),
               ...(typeof pathwayLessonCount === "number"
@@ -320,21 +319,41 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         </div>
       ) : null}
 
-      {/* Empty state when no questions exist */}
+      {/* Bank ramping: constructive framing — not an inventory failure callout */}
       {questionSnapshot?.status === "ok" && questionSnapshot.pathwayScopedCount === 0 ? (
-        <div className="mt-6">
-          <ContentEmptyState
-            variant="questions"
-            headline="No pathway-scoped practice items yet"
-            body="Clinical lessons below are available now. The scored question bank for this exam track is still empty or not yet published for this scope — check back as new items ship."
-            primaryCta={{ label: "Browse clinical lessons", href: lessonsHrefWithProfession }}
-            secondaryCtas={[
-              ...(catCompletePoolUsable
-                ? [{ label: `Open ${catShortLabel}`, href: catHrefWithProfession }]
-                : []),
-              { label: "Create account", href: "/signup", variant: "ghost" },
-            ]}
-          />
+        <div
+          className="mt-6 rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_88%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]"
+          data-nn-marketing-questions-bank-ramping
+        >
+          <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+            Study modes stay available while the scored bank fills in
+          </p>
+          <p className="mt-2 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Clinical lessons and adaptive prep surfaces stay open. When pathway-scoped scored items are still ramping,
+            start with lessons and CAT-style practice — full linear bank counts appear here as publishing catches up.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <a
+              href={lessonsHrefWithProfession}
+              className="inline-flex min-h-11 items-center rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-semibold text-[var(--semantic-brand-contrast)]"
+            >
+              Browse Clinical Lessons
+            </a>
+            {catCompletePoolUsable ? (
+              <a
+                href={catHrefWithProfession}
+                className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm"
+              >
+                Open {catShortLabel}
+              </a>
+            ) : null}
+            <a
+              href="/signup"
+              className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
+            >
+              Create Account
+            </a>
+          </div>
         </div>
       ) : null}
 

@@ -132,8 +132,8 @@ export const CANADA_HOMEPAGE: CountryHomepageContent = {
   subheadline:
     "Practice NCLEX-RN and REx-PN questions with rationales, lessons, flashcards, and adaptive CAT-style tests. Built for Canadian nurses.",
   brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
-  primaryCta: { label: "Start REx-PN prep", href: "/canada/pn/rex-pn" },
-  secondaryCta: { label: "Browse Canada RN & PN prep", href: "/canada/rn" },
+  primaryCta: { label: "Start REx-PN Prep", href: "/canada/pn/rex-pn" },
+  secondaryCta: { label: "Browse Canada RN & PN Prep", href: "/canada/rn" },
   pathwayCards: [
     { title: "REx-PN", href: "/canada/pn/rex-pn", description: "Practical nurse entry exam for Canada." },
     { title: "NCLEX-RN", href: "/lessons", description: "Registered nurse licensing aligned to Canadian regulators." },
@@ -144,7 +144,7 @@ export const CANADA_HOMEPAGE: CountryHomepageContent = {
   crossBorderCta: {
     title: "Internationally educated and heading to Canada?",
     href: "/exams/canada",
-    label: "Read the Canada exam and registration overview",
+    label: "Read the Canada Exam and Registration Overview",
   },
 };
 
@@ -153,7 +153,7 @@ export const US_HOMEPAGE: CountryHomepageContent = {
   subheadline: "Study for NCLEX-RN and NCLEX-PN with structured lessons, flashcards, question banks, and CAT exams.",
   brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
   primaryCta: { label: "Start NCLEX-RN", href: "/lessons" },
-  secondaryCta: { label: "Explore US pathways", href: "/us/rn" },
+  secondaryCta: { label: "Explore US Pathways", href: "/us/rn" },
   pathwayCards: [
     { title: "NCLEX-RN", href: "/lessons", description: "Clinical judgment, lessons, and timed practice for RN candidates." },
     { title: "NCLEX-PN", href: "/us/pn/nclex-pn", description: "PN-focused prep with questions, flashcards, and CAT-style exams." },
@@ -164,7 +164,7 @@ export const US_HOMEPAGE: CountryHomepageContent = {
   crossBorderCta: {
     title: "Also targeting Canadian registration?",
     href: "/canada",
-    label: "Explore Canada-first pathways",
+    label: "Explore Canada-First Pathways",
   },
 };
 
@@ -172,8 +172,8 @@ export const PHILIPPINES_HOMEPAGE: CountryHomepageContent = {
   headline: "Nursing exam prep for the Philippines and beyond",
   subheadline: "Study for the NLE and explore pathways for working in Canada or the United States.",
   brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
-  primaryCta: { label: "Start NLE prep", href: "/exams/philippines" },
-  secondaryCta: { label: "Explore Canada pathways", href: "/canada" },
+  primaryCta: { label: "Start NLE Prep", href: "/exams/philippines" },
+  secondaryCta: { label: "Explore Canada Pathways", href: "/canada" },
   pathwayCards: [
     { title: "NLE", href: "/exams/philippines", description: "Philippines licensure context plus transferable study skills." },
     { title: "Work in Canada", href: "/canada", description: "Canada-first hubs for REx-PN, NCLEX-RN, and PN/RN tracks." },
@@ -184,7 +184,7 @@ export const PHILIPPINES_HOMEPAGE: CountryHomepageContent = {
   crossBorderCta: {
     title: "Planning Canada or the US after the NLE?",
     href: "/exams/philippines",
-    label: "Open the Philippines NLE and migration guide",
+    label: "Open the Philippines NLE and Migration Guide",
   },
 };
 
@@ -192,8 +192,8 @@ export const MIDDLE_EAST_HOMEPAGE: CountryHomepageContent = {
   headline: "Nursing licensing prep for the Middle East",
   subheadline: "Prepare for Saudi Prometric, DHA, and HAAD exams with structured study tools and lessons.",
   brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
-  primaryCta: { label: "Start your exam", href: "/middle-east/prometric-nursing-exam" },
-  secondaryCta: { label: "Compare pathways", href: "/exams/middle-east" },
+  primaryCta: { label: "Start Your Exam", href: "/middle-east/prometric-nursing-exam" },
+  secondaryCta: { label: "Compare Pathways", href: "/exams/middle-east" },
   pathwayCards: [
     { title: "Saudi Prometric", href: "/middle-east/prometric-nursing-exam", description: "Nursing licensing exam prep context for Saudi pathways." },
     { title: "DHA", href: "/middle-east/dha-exam", description: "Dubai Health Authority exam orientation and study scaffolding." },
@@ -204,7 +204,7 @@ export const MIDDLE_EAST_HOMEPAGE: CountryHomepageContent = {
   crossBorderCta: {
     title: "Relocating to North America later?",
     href: "/canada",
-    label: "Browse Canada-first exam prep",
+    label: "Browse Canada-First Exam Prep",
   },
 };
 
@@ -214,8 +214,8 @@ export const GLOBAL_ROOT_HOMEPAGE: CountryHomepageContent = {
   subheadline:
     "NurseNest is a global study platform with Canada-first depth: REx-PN, NCLEX-RN, PN/RN pathways, lessons, flashcards, question banks, and CAT exams.",
   brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
-  primaryCta: { label: "Start with Canada hubs", href: "/canada" },
-  secondaryCta: { label: "Explore US NCLEX hubs", href: "/us" },
+  primaryCta: { label: "Start with Canada Hubs", href: "/canada" },
+  secondaryCta: { label: "Explore US NCLEX Hubs", href: "/us" },
   pathwayCards: [
     { title: "Canada hub", href: "/canada", description: "REx-PN, NCLEX-RN, PN, and RN marketing pathways." },
     { title: "United States hub", href: "/us", description: "NCLEX-RN and NCLEX-PN structured prep." },

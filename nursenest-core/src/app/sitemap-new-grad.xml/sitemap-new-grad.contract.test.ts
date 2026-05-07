@@ -30,10 +30,14 @@ test("collectNewGradMarketingUrls emits only listed HTTPS paths (no query or has
     assert.equal(parsed.hostname, "www.nursenest.ca");
     assert.equal(parsed.search, "");
     assert.equal(parsed.hash, "");
-    assert.ok(parsed.pathname.startsWith("/new-grad"));
+    assert.ok(
+      parsed.pathname.startsWith("/us/new-grad") || parsed.pathname.startsWith("/canada/new-grad"),
+      parsed.pathname,
+    );
     assert.doesNotMatch(parsed.pathname, /^\/app\//);
   }
-  assert.ok(urls.includes(`${origin}/new-grad`));
+  assert.ok(urls.includes(`${origin}/us/new-grad`));
+  assert.ok(urls.includes(`${origin}/canada/new-grad`));
   for (const rel of NEW_GRAD_MARKETING_SITEMAP_PATHS) {
     assert.ok(urls.includes(`${origin}${rel}`), `missing ${rel}`);
   }
@@ -57,7 +61,8 @@ test("new grad sitemap route GET returns application/xml and valid urlset", asyn
   assert.match(xml, /<\/urlset>/);
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   assert.equal(locs.length, NEW_GRAD_MARKETING_SITEMAP_PATHS.length);
-  assert.ok(locs.includes("https://www.nursenest.ca/new-grad"));
+  assert.ok(locs.includes("https://www.nursenest.ca/us/new-grad"));
+  assert.ok(locs.includes("https://www.nursenest.ca/canada/new-grad"));
   for (const rel of NEW_GRAD_MARKETING_SITEMAP_PATHS) {
     assert.ok(locs.includes(`https://www.nursenest.ca${rel}`), `missing loc ${rel}`);
   }
@@ -76,7 +81,7 @@ test("new grad urlset builder matches filtered collector output", () => {
     origin,
   );
   const xml = buildSitemapUrlsetFromAbsoluteUrls(entries);
-  assert.match(xml, /<loc>https:\/\/www\.nursenest\.ca\/new-grad<\/loc>/);
+  assert.match(xml, /<loc>https:\/\/www\.nursenest\.ca\/us\/new-grad<\/loc>/);
 });
 
 test("sitemap-new-grad.xml route handler wires collector + filter + urlset builder", () => {

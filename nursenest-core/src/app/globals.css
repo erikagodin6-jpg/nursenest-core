@@ -2392,19 +2392,28 @@ html[data-theme] .nn-marketing-surface {
 @media (min-width: 1280px) {
   .nn-header-desktop-grid {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    /* Equal side tracks pull logo + auth toward the centered nav instead of pinning them to far edges. */
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    column-gap: 1rem;
+    column-gap: 0.75rem;
     row-gap: 0.375rem;
     width: 100%;
     min-height: 3.625rem;
     padding-block: 0.45rem;
   }
 
-  /* Brand flush-left in the section shell; center column owns main nav between brand and auth. */
   .nn-header-desktop-grid > .nn-header-brand-cluster {
-    justify-self: start;
+    justify-self: end;
     margin-inline-start: 0;
+  }
+
+  .nn-header-desktop-grid > .nav {
+    justify-self: center;
+    max-width: min(100%, 52rem);
+  }
+
+  .nn-header-desktop-grid > .nn-header-desktop-auth-cluster {
+    justify-self: start;
   }
 }
 

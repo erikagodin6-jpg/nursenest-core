@@ -116,7 +116,7 @@ export function NursingTierHubPage({
                         ? action.disabledNote
                         : action.description || ""
                     }
-                    cta={locked ? (action.disabledNote || "Lessons unavailable for this pathway") : action.label || "Open"}
+                    cta={locked ? (action.disabledNote || "Lessons Unavailable for This Pathway") : action.label || "Open"}
                   />
                 </li>
               );

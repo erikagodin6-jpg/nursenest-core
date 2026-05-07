@@ -85,7 +85,7 @@ export function HomeFinalStudyCta() {
             eventProps={{ region }}
             className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl`}
           >
-            {safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start practice questions")}
+            {safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start Practice Questions")}
             <ArrowRight className="ml-2 h-4 w-4" />
           </MarketingTrackedLink>
 
@@ -95,12 +95,12 @@ export function HomeFinalStudyCta() {
             eventProps={{ region }}
             className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl`}
           >
-            {safeHomepageMarketingT(t, "pages.home.hero.secondaryCta", "Browse lessons")}
+            {safeHomepageMarketingT(t, "pages.home.hero.secondaryCta", "Browse Lessons")}
           </MarketingTrackedLink>
         </div>
 
         <p className="nn-marketing-body-sm mt-6 text-[var(--theme-muted-text)]">
-          {safeHomepageMarketingT(t, "pages.home.finalCta.pricingLead", "See full pricing")}{" "}
+          {safeHomepageMarketingT(t, "pages.home.finalCta.pricingLead", "See Full Pricing")}{" "}
           <MarketingTrackedLink
             href={loc(HUB.pricing)}
             event={PH.marketingHomeFinalCta}

@@ -6,7 +6,6 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
-import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -259,23 +258,19 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           <InternationalRnHubSections pathway={pathway} copy={intlSections} disclaimer={intlDisclaimer} />
         ) : null}
 
-        <section className="mt-8 border-t border-[var(--border-subtle)] pt-6">
-          <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 sm:p-5">
-            <h2 className="nn-marketing-h4">Recommended blog reading</h2>
-            <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">
-              Explore exam-focused blog posts to reinforce lessons and question practice.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-3 text-sm">
-              <Link href={buildExamPathwayPath(pathway, "blog")} className="font-semibold text-primary hover:underline">
-                Open {pathway.shortName} blog hub
-              </Link>
-              <Link href="/blog" className="font-medium text-primary hover:underline">
-                All blog posts
-              </Link>
-            </div>
-            <MarketingBlogLatestLinks take={3} className="mt-4 border-t border-[var(--border-subtle)] pt-4" heading="New on the blog" />
-          </div>
-        </section>
+        <footer className="mt-10 border-t border-[var(--border-subtle)] pt-5 text-center">
+          <p className="nn-marketing-body-sm text-[color-mix(in_srgb,var(--theme-body-text)_78%,transparent)]">
+            <Link href={buildExamPathwayPath(pathway, "blog")} className="font-medium text-primary/90 hover:underline">
+              {pathway.shortName} articles
+            </Link>
+            <span className="mx-2 text-[var(--border-subtle)]" aria-hidden>
+              ·
+            </span>
+            <Link href="/blog" className="font-medium text-primary/90 hover:underline">
+              All posts
+            </Link>
+          </p>
+        </footer>
       </div>
     );
   });

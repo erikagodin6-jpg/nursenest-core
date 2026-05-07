@@ -112,7 +112,13 @@ export function LearnerDashboardUserPanelBand({
             </p>
             <LearnerCoreStudyShortcuts pathwayId={pathwayId} examsLabel={examsNavLabel} t={t} locale={locale} />
           </div>
-        ) : null}
+        ) : (
+          <p className="border-t border-[var(--semantic-border-soft)] pt-4 text-center text-[11px] leading-snug text-[var(--semantic-text-secondary)]">
+            <Link href="/blog" className="font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-brand)] hover:underline">
+              {t("learner.studyModes.footerArticlesLink")}
+            </Link>
+          </p>
+        )}
       </div>
     </LearnerStudySurfaceSection>
   );

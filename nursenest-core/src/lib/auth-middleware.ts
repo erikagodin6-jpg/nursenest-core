@@ -10,9 +10,15 @@ import {
   JWT_SESSION_UPDATE_AGE_SEC,
 } from "@/lib/auth/auth-session-constants";
 import {
+  assertDevAuthSigningSecretConfiguredOrThrow,
+  resolveAuthSecretFromEnv,
+} from "@/lib/auth/auth-session-signing-env";
+import {
   getAuthSessionJwtFromRequest,
   sessionJwtHasUserIdentity,
 } from "@/lib/auth/nextauth-request-jwt";
+
+const edgeAuthSigningSecret = resolveAuthSecretFromEnv().secret ?? undefined;
 
 function hasSignedInUser(auth: unknown): boolean {
   const user = (auth as { user?: { id?: unknown; email?: unknown; sub?: unknown } } | null)?.user;
@@ -86,9 +92,12 @@ function isInternalGatedPath(pathname: string): boolean {
  * Keep this Prisma-free and bcrypt-free. Middleware must not import the Node auth
  * handler or PrismaAdapter, otherwise Edge session resolution can fail in production.
  */
+assertDevAuthSigningSecretConfiguredOrThrow("lib/auth-middleware");
+
 export const { auth: middlewareAuth } = NextAuth({
   basePath: PINNED_AUTH_BASE_PATH,
   trustHost: true,
+  secret: edgeAuthSigningSecret,
   session: {
     strategy: "jwt",
     maxAge: JWT_SESSION_MAX_AGE_SEC,

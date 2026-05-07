@@ -21,6 +21,10 @@ import {
 } from "@/lib/entitlements/get-user-access";
 import { getTrustedClientIp } from "@/lib/http/client-ip";
 import { reportAuthSecretStartupStatus } from "@/lib/auth/auth-secret";
+import {
+  assertDevAuthSigningSecretConfiguredOrThrow,
+  resolveAuthSecretFromEnv,
+} from "@/lib/auth/auth-session-signing-env";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { recordCredentialsLoginFailure } from "@/lib/observability/production-signal-metrics";
 import { Prisma } from "@prisma/client";
@@ -135,9 +139,13 @@ async function safeUserUpdateLastLogin(userId: string, ip: string) {
    AUTH CONFIG
    ========================= */
 
+const resolvedAuthSigningSecret = resolveAuthSecretFromEnv().secret ?? undefined;
+
 export const authConfig: NextAuthConfig = {
   basePath: PINNED_AUTH_BASE_PATH,
   trustHost: true,
+  /** Prefer env; explicit value ensures legacy `NEXTAUTH_SECRET`-only setups work (Auth.js reads `AUTH_SECRET` by default). */
+  secret: resolvedAuthSigningSecret,
 
   session: {
     strategy: "jwt",
@@ -282,6 +290,8 @@ export const authConfig: NextAuthConfig = {
 /* =========================
    HANDLERS
    ========================= */
+
+assertDevAuthSigningSecretConfiguredOrThrow("lib/auth");
 
 const { auth, signIn, signOut } = NextAuth(authConfig);
 

@@ -31,7 +31,7 @@ export const EXAM_PATHWAYS_SEGMENT_B: ExamPathwayDefinition[] = [
     examCode: "new-grad-transition",
     examFamily: ExamFamily.NCLEX_RN,
     examKey: "NEW_GRAD_TRANSITION",
-    displayName: "New Grad RN: transition to practice",
+    displayName: "New Grad RN: Transition to Practice",
     shortName: "New Grad",
     stripeTier: TierCode.NEW_GRAD,
     contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],

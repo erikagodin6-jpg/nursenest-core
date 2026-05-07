@@ -173,8 +173,8 @@ export async function MarketingLoginPage({
           </div>
         </div>
 
-        <section className="mt-8 w-full pb-2" aria-labelledby="auth-trust-heading">
-          <AuthFlowTrustReassurance variant="login" layout="standalone" />
+        <section className="mt-5 w-full pb-2 sm:mt-6" aria-labelledby="auth-trust-heading">
+          <AuthFlowTrustReassurance variant="login" layout="standalone" contactHref={contactHref} />
         </section>
       </MarketingI18nShardLayer>
     </main>

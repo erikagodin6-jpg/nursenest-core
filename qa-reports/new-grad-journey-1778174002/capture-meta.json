@@ -1,0 +1,597 @@
+[
+  {
+    "route": "/us/new-grad",
+    "viewport": "desktop",
+    "file": "01-newgrad-us-landing-desktop.png",
+    "title": "New Grad nursing | Clinical work areas | NurseNest",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad",
+    "consoleErrors": [
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=gb9eN2hOUFjrSaOpuxZbO' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE"
+    ]
+  },
+  {
+    "route": "/us/new-grad",
+    "viewport": "mobile",
+    "file": "02-newgrad-us-landing-mobile.png",
+    "title": "New Grad nursing | Clinical work areas | NurseNest",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad",
+    "consoleErrors": [
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=gb9eN2hOUFjrSaOpuxZbO' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=gb9eN2hOUFjrSaOpuxZbO' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=Ikyrf4jmQEd5mfs4wC9HO' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=Ikyrf4jmQEd5mfs4wC9HO' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE"
+    ]
+  },
+  {
+    "route": "/canada/new-grad",
+    "viewport": "desktop",
+    "file": "03-newgrad-canada-landing-desktop.png",
+    "title": "New graduate nurses | Canada | NurseNest | NurseNest",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad",
+    "consoleErrors": [
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=Ikyrf4jmQEd5mfs4wC9HO' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=Ikyrf4jmQEd5mfs4wC9HO' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=Ikyrf4jmQEd5mfs4wC9HO' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=Ikyrf4jmQEd5mfs4wC9HO' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=ACP4mTSmfnLNYYgaipeTw' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=ACP4mTSmfnLNYYgaipeTw' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE"
+    ]
+  },
+  {
+    "route": "/canada/new-grad",
+    "viewport": "mobile",
+    "file": "04-newgrad-canada-landing-mobile.png",
+    "title": "New graduate nurses | Canada | NurseNest | NurseNest",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad",
+    "consoleErrors": [
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=7pUozyWk1aGqub_F4XI9W' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=7pUozyWk1aGqub_F4XI9W' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE"
+    ]
+  },
+  {
+    "route": "/en/new-grad",
+    "viewport": "desktop",
+    "file": "05-newgrad-en-locale-redirect-desktop.png",
+    "title": "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health",
+    "finalUrl": "http://127.0.0.1:3000/en/new-grad",
+    "consoleErrors": [
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=7pUozyWk1aGqub_F4XI9W' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=7pUozyWk1aGqub_F4XI9W' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=7pUozyWk1aGqub_F4XI9W' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=7pUozyWk1aGqub_F4XI9W' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=7pUozyWk1aGqub_F4XI9W' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE"
+    ]
+  },
+  {
+    "route": "/new-grad",
+    "viewport": "desktop",
+    "file": "06-newgrad-root-path-desktop.png",
+    "title": "Page Not Found | NurseNest",
+    "finalUrl": "http://127.0.0.1:3000/new-grad",
+    "consoleErrors": [
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=jGOeVGqwwwLOMBWyGebky' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=jGOeVGqwwwLOMBWyGebky' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE"
+    ]
+  },
+  {
+    "route": "/us/new-grad/med-surg",
+    "viewport": "desktop",
+    "file": "07-hub-us-med-surg-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/med-surg",
+    "consoleErrors": [
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "WebSocket connection to 'ws://127.0.0.1:3000/_next/webpack-hmr?id=sgEWRLLfBsIVnuqm9P9I1' failed: Error during WebSocket handshake: net::ERR_INVALID_HTTP_RESPONSE",
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/med-surg\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/med-surg\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/emergency-department",
+    "viewport": "desktop",
+    "file": "08-hub-us-emergency-department-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/emergency-department",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/emergency-department\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/emergency-department\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/icu",
+    "viewport": "desktop",
+    "file": "09-hub-us-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/pediatric-icu",
+    "viewport": "desktop",
+    "file": "10-hub-us-pediatric-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/pediatric-icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/pediatric-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/pediatric-icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/neonatal-icu",
+    "viewport": "desktop",
+    "file": "11-hub-us-neonatal-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/neonatal-icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/neonatal-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/neonatal-icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/cardiac-icu",
+    "viewport": "desktop",
+    "file": "12-hub-us-cardiac-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/cardiac-icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/cardiac-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/cardiac-icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/neuro-icu",
+    "viewport": "desktop",
+    "file": "13-hub-us-neuro-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/neuro-icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/neuro-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/neuro-icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/trauma",
+    "viewport": "desktop",
+    "file": "14-hub-us-trauma-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/trauma",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/trauma\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/trauma\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/long-term-care",
+    "viewport": "desktop",
+    "file": "15-hub-us-long-term-care-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/long-term-care",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/long-term-care\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/long-term-care\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/rehabilitation",
+    "viewport": "desktop",
+    "file": "16-hub-us-rehabilitation-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/rehabilitation",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/rehabilitation\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/rehabilitation\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/mental-health",
+    "viewport": "desktop",
+    "file": "17-hub-us-mental-health-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/mental-health",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/mental-health\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/mental-health\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/pediatrics",
+    "viewport": "desktop",
+    "file": "18-hub-us-pediatrics-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/pediatrics",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/pediatrics\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/pediatrics\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/maternal-newborn",
+    "viewport": "desktop",
+    "file": "19-hub-us-maternal-newborn-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/maternal-newborn",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/maternal-newborn\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/maternal-newborn\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/labour-delivery",
+    "viewport": "desktop",
+    "file": "20-hub-us-labour-delivery-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/labour-delivery",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/labour-delivery\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/labour-delivery\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/oncology-hematology",
+    "viewport": "desktop",
+    "file": "21-hub-us-oncology-hematology-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/oncology-hematology",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/oncology-hematology\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/oncology-hematology\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/renal-dialysis",
+    "viewport": "desktop",
+    "file": "22-hub-us-renal-dialysis-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/renal-dialysis",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/renal-dialysis\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/renal-dialysis\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/operating-room",
+    "viewport": "desktop",
+    "file": "23-hub-us-operating-room-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/operating-room",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/operating-room\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/operating-room\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/pacu",
+    "viewport": "desktop",
+    "file": "24-hub-us-pacu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/pacu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/pacu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/pacu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/community-public-health",
+    "viewport": "desktop",
+    "file": "25-hub-us-community-public-health-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/community-public-health",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/community-public-health\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/community-public-health\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/primary-care-clinics",
+    "viewport": "desktop",
+    "file": "26-hub-us-primary-care-clinics-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/primary-care-clinics",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/primary-care-clinics\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/primary-care-clinics\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/home-care",
+    "viewport": "desktop",
+    "file": "27-hub-us-home-care-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/home-care",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/home-care\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/home-care\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/hospice-palliative-care",
+    "viewport": "desktop",
+    "file": "28-hub-us-hospice-palliative-care-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/hospice-palliative-care",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/hospice-palliative-care\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/hospice-palliative-care\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/med-surg",
+    "viewport": "desktop",
+    "file": "29-hub-canada-med-surg-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/med-surg",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/med-surg\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/med-surg\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/emergency-department",
+    "viewport": "desktop",
+    "file": "30-hub-canada-emergency-department-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/emergency-department",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/emergency-department\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/emergency-department\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/icu",
+    "viewport": "desktop",
+    "file": "31-hub-canada-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/pediatric-icu",
+    "viewport": "desktop",
+    "file": "32-hub-canada-pediatric-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/pediatric-icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/pediatric-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/pediatric-icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/neonatal-icu",
+    "viewport": "desktop",
+    "file": "33-hub-canada-neonatal-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/neonatal-icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/neonatal-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/neonatal-icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/cardiac-icu",
+    "viewport": "desktop",
+    "file": "34-hub-canada-cardiac-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/cardiac-icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/cardiac-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/cardiac-icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/neuro-icu",
+    "viewport": "desktop",
+    "file": "35-hub-canada-neuro-icu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/neuro-icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/neuro-icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/neuro-icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/trauma",
+    "viewport": "desktop",
+    "file": "36-hub-canada-trauma-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/trauma",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/trauma\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/trauma\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/long-term-care",
+    "viewport": "desktop",
+    "file": "37-hub-canada-long-term-care-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/long-term-care",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/long-term-care\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/long-term-care\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/rehabilitation",
+    "viewport": "desktop",
+    "file": "38-hub-canada-rehabilitation-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/rehabilitation",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/rehabilitation\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/rehabilitation\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/mental-health",
+    "viewport": "desktop",
+    "file": "39-hub-canada-mental-health-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/mental-health",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/mental-health\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/mental-health\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/pediatrics",
+    "viewport": "desktop",
+    "file": "40-hub-canada-pediatrics-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/pediatrics",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/pediatrics\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/pediatrics\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/maternal-newborn",
+    "viewport": "desktop",
+    "file": "41-hub-canada-maternal-newborn-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/maternal-newborn",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/maternal-newborn\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/maternal-newborn\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/labour-delivery",
+    "viewport": "desktop",
+    "file": "42-hub-canada-labour-delivery-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/labour-delivery",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/labour-delivery\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/labour-delivery\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/oncology-hematology",
+    "viewport": "desktop",
+    "file": "43-hub-canada-oncology-hematology-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/oncology-hematology",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/oncology-hematology\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/oncology-hematology\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/renal-dialysis",
+    "viewport": "desktop",
+    "file": "44-hub-canada-renal-dialysis-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/renal-dialysis",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/renal-dialysis\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/renal-dialysis\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/operating-room",
+    "viewport": "desktop",
+    "file": "45-hub-canada-operating-room-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/operating-room",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/operating-room\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/operating-room\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/pacu",
+    "viewport": "desktop",
+    "file": "46-hub-canada-pacu-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/pacu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/pacu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/pacu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/community-public-health",
+    "viewport": "desktop",
+    "file": "47-hub-canada-community-public-health-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/community-public-health",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/community-public-health\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/community-public-health\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/primary-care-clinics",
+    "viewport": "desktop",
+    "file": "48-hub-canada-primary-care-clinics-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/primary-care-clinics",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/primary-care-clinics\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/primary-care-clinics\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/home-care",
+    "viewport": "desktop",
+    "file": "49-hub-canada-home-care-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/home-care",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/home-care\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/home-care\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/canada/new-grad/hospice-palliative-care",
+    "viewport": "desktop",
+    "file": "50-hub-canada-hospice-palliative-care-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/canada/new-grad/hospice-palliative-care",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/canada/new-grad/hospice-palliative-care\nCall log:\n  - navigating to \"http://127.0.0.1:3000/canada/new-grad/hospice-palliative-care\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/icu",
+    "viewport": "mobile",
+    "file": "m-icu-us-mobile.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/icu",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/icu\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/icu\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/med-surg",
+    "viewport": "mobile",
+    "file": "m-med-surg-us-mobile.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/med-surg",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/med-surg\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/med-surg\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/new-grad/community-public-health",
+    "viewport": "mobile",
+    "file": "m-community-public-health-us-mobile.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/new-grad/community-public-health",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/new-grad/community-public-health\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/new-grad/community-public-health\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/rn/new-grad-transition/lessons",
+    "viewport": "desktop",
+    "file": "z-study-us-lessons-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/rn/new-grad-transition/lessons",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/rn/new-grad-transition/lessons\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/rn/new-grad-transition/lessons\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/rn/new-grad-transition/questions",
+    "viewport": "desktop",
+    "file": "z-study-us-questions-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/rn/new-grad-transition/questions",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/rn/new-grad-transition/questions\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/rn/new-grad-transition/questions\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/us/rn/new-grad-transition/cat",
+    "viewport": "desktop",
+    "file": "z-study-us-cat-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/us/rn/new-grad-transition/cat",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/us/rn/new-grad-transition/cat\nCall log:\n  - navigating to \"http://127.0.0.1:3000/us/rn/new-grad-transition/cat\", waiting until \"domcontentloaded\"\n"
+    ]
+  },
+  {
+    "route": "/signup?callbackUrl=%2Fus%2Frn%2Fnew-grad-transition%2Flessons",
+    "viewport": "desktop",
+    "file": "z-signup-callback-newgrad-lessons-desktop.png",
+    "title": "(error)",
+    "finalUrl": "http://127.0.0.1:3000/signup?callbackUrl=%2Fus%2Frn%2Fnew-grad-transition%2Flessons",
+    "consoleErrors": [
+      "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3000/signup?callbackUrl=%2Fus%2Frn%2Fnew-grad-transition%2Flessons\nCall log:\n  - navigating to \"http://127.0.0.1:3000/signup?callbackUrl=%2Fus%2Frn%2Fnew-grad-transition%2Flessons\", waiting until \"domcontentloaded\"\n"
+    ]
+  }
+]

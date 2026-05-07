@@ -50,7 +50,7 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     examCode: "cnple",
     examFamily: ExamFamily.NP,
     examKey: "CA_NP_LICENSURE",
-    displayName: "Canadian NP licensure (CNPLE track)",
+    displayName: "Canadian NP Licensure (CNPLE Track)",
     shortName: "CNPLE",
     stripeTier: TierCode.NP,
     contentExamKeys: ["NP", "CNPLE", "CAN-NP"],

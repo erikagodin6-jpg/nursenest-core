@@ -305,6 +305,7 @@ export function LoginForm({
       ) : null}
       <p className="text-xs leading-relaxed text-muted-foreground">
         {t("pages.login.legalBefore")}
+        {" "}
         <Link href={termsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
           {t("pages.login.termsLink")}
         </Link>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
 import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
+import { AlliedMarketingPathwayMissing } from "@/components/marketing/allied-marketing-pathway-missing";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
@@ -46,7 +46,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function GlobalAlliedHealthHubPage() {
   const pathway = getCanonicalAlliedPathway();
-  if (!pathway) notFound();
+  if (!pathway) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <AlliedMarketingPathwayMissing pathname={ALLIED_GLOBAL_HUB_PATH} />
+      </div>
+    );
+  }
 
   let alliedInitialMeasurement: MeasurementPreference | null = null;
   let alliedMeasurementSync = false;

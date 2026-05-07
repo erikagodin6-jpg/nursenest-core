@@ -33,6 +33,9 @@ for (const name of REQUIRED_VARS) {
 
 if (!sessionSigningOk) {
   missingCount += 1;
+  console.log(
+    "[env:check] session signing: set AUTH_SECRET (preferred) or NEXTAUTH_SECRET (legacy); generate: openssl rand -base64 32",
+  );
 }
 
 if (missingCount === 0) {

@@ -21,12 +21,13 @@ export type BrandMarkLoadState = "loading" | "ready" | "error";
  * swapping to text branding.
  *
  * `variant`     — presentation slot sizing (header / footer / auth / learner / hero).
- * `logoVariant` — reserved for future full vs leaf assets; same resolver key today.
+ * `logoVariant` — `leaf` uses compact marks where supported (e.g. same-origin SVG for arctic-frost);
+ * other themes resolve to the mapped CDN leaf raster for both variants.
  */
 export function SiteBrandLogoMark({
   className = DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
   variant = "header",
-  logoVariant = "full",
+  logoVariant = "leaf",
   onMarkState,
 }: {
   className?: string;

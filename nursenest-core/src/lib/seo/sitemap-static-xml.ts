@@ -16,6 +16,11 @@
  */
 export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
+import {
+  CANADA_NEW_GRAD_MARKETING_HUB_PATH,
+  US_NEW_GRAD_MARKETING_HUB_PATH,
+} from "@/lib/navigation/marketing-mega-menu-active-prefixes";
+import { listNewGradWorkAreaSlugs } from "@/lib/new-grad/new-grad-work-areas";
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-hub-path";
 import { isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
@@ -189,26 +194,19 @@ export function collectAlliedMarketingUrls(origin: string): string[] {
 }
 
 /**
- * Root-relative public New Grad marketing URLs (`/new-grad`, `/new-grad/{unit}`).
+ * Root-relative public New Grad marketing URLs (`/us/new-grad`, `/canada/new-grad`, + work-area hubs).
  * Single source for `/sitemap-new-grad.xml` — no `/app`, no query/hash, no learner shell paths.
  */
-export const NEW_GRAD_MARKETING_SITEMAP_PATHS = [
-  "/new-grad",
-  "/new-grad/icu",
-  "/new-grad/med-surg",
-  "/new-grad/emergency",
-  "/new-grad/pediatrics",
-  "/new-grad/picu",
-  "/new-grad/cardiac-icu",
-  "/new-grad/neuro-icu",
-  "/new-grad/trauma",
-  "/new-grad/surgery",
-  "/new-grad/renal-dialysis",
-  "/new-grad/long-term-care",
-  "/new-grad/community-health",
-  "/new-grad/hem-onc",
-  "/new-grad/clinics",
-] as const;
+export const NEW_GRAD_MARKETING_SITEMAP_PATHS: readonly string[] = (() => {
+  const bases = [US_NEW_GRAD_MARKETING_HUB_PATH, CANADA_NEW_GRAD_MARKETING_HUB_PATH] as const;
+  const slugs = listNewGradWorkAreaSlugs();
+  const out: string[] = [];
+  for (const b of bases) {
+    out.push(b);
+    for (const s of slugs) out.push(`${b}/${s}`);
+  }
+  return out;
+})();
 
 /** New Grad marketing hub + unit landing paths for the dedicated sitemap only. */
 export function collectNewGradMarketingUrls(origin: string): string[] {

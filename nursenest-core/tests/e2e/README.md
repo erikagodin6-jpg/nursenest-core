@@ -31,6 +31,10 @@ npx playwright test --project=chromium-paid
 
 `paid-test-credentials.ts` loads this file when it exists and does **not** override variables already set (CI injected secrets win). **Do not commit real credentials** — the file is listed in `.gitignore`.
 
+### Visual QA (authenticated screenshots)
+
+See **`docs/visual-qa.md`**. Quick flow: `npm run visual-qa:auth` → `npm run visual-qa:capture` (from `nursenest-core/`).
+
 ## Layout
 
 | Folder | Purpose |

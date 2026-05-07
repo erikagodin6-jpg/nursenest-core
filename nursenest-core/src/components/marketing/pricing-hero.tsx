@@ -3,7 +3,7 @@ import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/li
 
 export function PricingHero({
   studySystemHref,
-  ctaLabel = "Continue to checkout",
+  ctaLabel = "Continue to Checkout",
   trialSubtext = "No charge today. Cancel anytime before your trial ends.",
   trialFinePrint = "Billing begins automatically after 3 days unless cancelled.",
   pricesShownLine = "All prices are shown in Canadian dollars.",

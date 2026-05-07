@@ -4,23 +4,26 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  EyeOff,
-  LayoutGrid,
+  BarChart3,
+  BookOpen,
+  Brain,
+  ClipboardList,
+  GraduationCap,
+  Layers,
+  LayoutList,
   LineChart,
-  Shuffle,
-  Star,
-  TrendingDown,
-  XCircle,
+  ListTodo,
+  PlayCircle,
+  Sparkles,
+  Target,
+  Wrench,
 } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import {
   LearnerCategorySelector,
-  LearnerFilterBar,
   LearnerSessionStartPanel,
-  LearnerStudyHero,
   LearnerStudyModeCard,
-  LearnerStudyModeGrid,
   LearnerStudyPageShell,
 } from "@/components/learner-study-ui";
 import {
@@ -58,9 +61,12 @@ import {
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
+import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
 import type { StudyLaunchPayload } from "@/lib/practice-tests/types";
 import { buildAppFlashcardsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { humanizeTopicSlug } from "@/components/lessons/pathway-lesson-link-practice";
+
+type SessionBuilderKind = "cat_exam" | "practice_exam" | "practice_questions";
 
 type TestListRow = {
   id: string;
@@ -111,6 +117,10 @@ export function PracticeTestsHubClient({
     return qp.get("topic")?.trim().toLowerCase() || null;
   }, [searchParamString]);
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
+  /** Total matching exam bank rows for pathway (from discovery API). Used for learner-safe messaging only — never as a shaming zero callout. */
+  const [discoveryTotal, setDiscoveryTotal] = useState<number | null>(null);
+  const [discoveryReady, setDiscoveryReady] = useState(false);
+  const builderSectionRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState<TestListRow[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -175,6 +185,25 @@ export function PracticeTestsHubClient({
     const totalIndexed = topics.reduce((n, b) => n + b.count, 0);
     return { topicBuckets: topics.length, totalIndexed };
   }, [topics]);
+
+  const resumeSession = useMemo(() => {
+    const rows = list.filter((r) => r.status === "IN_PROGRESS");
+    rows.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+    return rows[0] ?? null;
+  }, [list]);
+
+  const recentCompletedSession = useMemo(() => {
+    const rows = list.filter((r) => r.status === "COMPLETED");
+    rows.sort((a, b) => {
+      const tb = b.completedAt ? new Date(b.completedAt).getTime() : 0;
+      const ta = a.completedAt ? new Date(a.completedAt).getTime() : 0;
+      return tb - ta;
+    });
+    return rows[0] ?? null;
+  }, [list]);
+
+  const poolLikelyEmpty =
+    discoveryReady && discoveryStats.totalIndexed === 0 && (discoveryTotal ?? 0) === 0;
 
   const catExamStartHref = useMemo(() => {
     if (!catHref?.trim()) return null;
@@ -285,6 +314,63 @@ export function PracticeTestsHubClient({
     }
   }
 
+  const sessionBuilderKind = useMemo((): SessionBuilderKind => {
+    if (selectionMode === "cat") return "cat_exam";
+    return linearDeliveryMode === "exam" ? "practice_exam" : "practice_questions";
+  }, [selectionMode, linearDeliveryMode]);
+
+  const applySessionBuilderKind = useCallback(
+    (kind: SessionBuilderKind) => {
+      if (kind === "cat_exam") {
+        setSelectionMode("cat");
+        if (examSimulationEnabled) {
+          setCatPresentationMode("exam_simulation");
+          setCatAdaptiveSessionType("cat");
+          setTimedMode(true);
+          applyExamSimulationDefaultsForPathway(pathwayId.trim());
+        } else {
+          setCatPresentationMode("practice");
+          setCatAdaptiveSessionType("cat");
+          setCatExamFeedbackMode("study");
+          setQuestionCount((q) => (q > 75 ? 75 : q));
+        }
+        return;
+      }
+      if (selectionMode === "cat") {
+        setSelectionMode("random");
+      }
+      if (kind === "practice_exam") {
+        setLinearDeliveryMode("exam");
+        setLinearRationaleVisibility("end_of_exam");
+        setLinearAllowReviewNavigation(false);
+      } else {
+        setLinearDeliveryMode("practice");
+        setLinearRationaleVisibility("after_each");
+      }
+    },
+    [examSimulationEnabled, pathwayId, selectionMode],
+  );
+
+  const questionQuickPicks = useMemo<readonly number[]>(() => {
+    if (selectionMode !== "cat") return [10, 25, 50, 75, 100];
+    if (catPresentationMode === "exam_simulation") {
+      return isNpPathway ? [75, 100, 125, 150] : [75, 100, 115, 145];
+    }
+    return [10, 25, 50, 75];
+  }, [selectionMode, catPresentationMode, isNpPathway]);
+
+  const primaryStartLabel = useMemo(() => {
+    if (creating) return t("learner.practiceTests.hub.building");
+    if (selectionMode === "cat") {
+      return catPresentationMode === "exam_simulation"
+        ? t("learner.practiceTests.hub.startCatExam")
+        : t("learner.practiceTests.hub.startCatAdaptive");
+    }
+    return linearDeliveryMode === "exam"
+      ? t("learner.practiceTests.hub.startPracticeExam")
+      : t("learner.practiceTests.hub.startPracticeQuestions");
+  }, [creating, selectionMode, catPresentationMode, linearDeliveryMode, t]);
+
   useEffect(() => {
     const qp = new URLSearchParams(searchParamString);
     const pid = qp.get("pathwayId")?.trim();
@@ -298,8 +384,8 @@ export function PracticeTestsHubClient({
     const startMode = qp.get("startMode");
     if (startMode === "practice_exam") {
       setSelectionMode("random");
-      setLinearDeliveryMode("practice");
-      setLinearRationaleVisibility("after_each");
+      setLinearDeliveryMode("exam");
+      setLinearRationaleVisibility("end_of_exam");
     }
     const focus = qp.get("focus");
     if (focus === "weak") {
@@ -333,6 +419,7 @@ export function PracticeTestsHubClient({
 
   useEffect(() => {
     let cancelled = false;
+    setDiscoveryReady(false);
     (async () => {
       try {
         const qp = new URLSearchParams();
@@ -342,11 +429,27 @@ export function PracticeTestsHubClient({
         }
         const discoveryUrl = qp.size > 0 ? `/api/questions/discovery?${qp.toString()}` : "/api/questions/discovery";
         const res = await fetch(discoveryUrl);
-        if (!res.ok) return;
-        const data = (await res.json()) as { buckets?: { topic: string; count: number }[] };
-        if (!cancelled && data.buckets) setTopics(data.buckets);
+        if (!res.ok) {
+          if (!cancelled) {
+            setDiscoveryTotal(null);
+            setDiscoveryReady(true);
+          }
+          return;
+        }
+        const data = (await res.json()) as {
+          buckets?: { topic: string; count: number }[];
+          total?: number;
+        };
+        if (!cancelled) {
+          if (Array.isArray(data.buckets)) setTopics(data.buckets);
+          setDiscoveryTotal(typeof data.total === "number" ? data.total : null);
+          setDiscoveryReady(true);
+        }
       } catch {
-        /* optional */
+        if (!cancelled) {
+          setDiscoveryTotal(null);
+          setDiscoveryReady(true);
+        }
       }
     })();
     return () => {
@@ -521,6 +624,116 @@ export function PracticeTestsHubClient({
     return `${m}m ${r}s`;
   }
 
+  const pathwayScopedQs = useMemo(() => {
+    const pid = pathwayId.trim();
+    return pid ? `?pathwayId=${encodeURIComponent(pid)}` : "";
+  }, [pathwayId]);
+  const questionsHubHref = `/app/questions${pathwayScopedQs}`;
+  const lessonsHubHref = `/app/lessons${pathwayScopedQs}`;
+  const flashcardsHubHref = `/app/flashcards${pathwayScopedQs}`;
+  const catEntryHref = (catHref?.trim() || catExamStartHref || "/app/practice-tests/start").trim();
+
+  const studyToolsRailNav = useMemo(() => {
+    const rowClass =
+      "flex min-h-10 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-surface))] px-3 py-2 text-left text-xs font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_70%,var(--semantic-surface))]";
+    const iconWrap = "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--semantic-surface)] text-[var(--semantic-chart-3)] shadow-sm";
+    return (
+      <nav className="space-y-2" aria-label={t("learner.practiceTests.examFirst.studyToolsRailTitle")}>
+        <TrackedStudyLoopCatLink
+          href={catEntryHref}
+          sourceSurface="study_quick_links"
+          className={rowClass}
+          studyAccent="cat"
+        >
+          <span className={iconWrap} aria-hidden>
+            <LineChart className="h-4 w-4 text-[var(--semantic-brand)]" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.catPractice")}</span>
+        </TrackedStudyLoopCatLink>
+        <Link href="/app/exams" className={rowClass}>
+          <span className={iconWrap} aria-hidden>
+            <GraduationCap className="h-4 w-4" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("nav.practiceExams")}</span>
+        </Link>
+        <Link href={questionsHubHref} className={rowClass}>
+          <span className={iconWrap} aria-hidden>
+            <LayoutList className="h-4 w-4" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("nav.questionBank")}</span>
+        </Link>
+        <Link href={lessonsHubHref} className={rowClass}>
+          <span className={iconWrap} aria-hidden>
+            <BookOpen className="h-4 w-4 text-[var(--semantic-success)]" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.lessons")}</span>
+        </Link>
+        <Link href={flashcardsHubHref} className={rowClass}>
+          <span className={iconWrap} aria-hidden>
+            <Brain className="h-4 w-4 text-[var(--semantic-info)]" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.flashcards")}</span>
+        </Link>
+        <Link href="/app/study-plan" className={rowClass}>
+          <span className={iconWrap} aria-hidden>
+            <ListTodo className="h-4 w-4 text-[var(--semantic-chart-2)]" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.studyPlanner")}</span>
+        </Link>
+        <Link href="/app/account/report" className={rowClass}>
+          <span className={iconWrap} aria-hidden>
+            <BarChart3 className="h-4 w-4 text-[var(--semantic-chart-4)]" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("learner.account.nav.report")}</span>
+        </Link>
+        <Link href="/app/account/readiness" className={rowClass}>
+          <span className={iconWrap} aria-hidden>
+            <Target className="h-4 w-4 text-[var(--semantic-warning)]" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("learner.account.nav.readiness")}</span>
+        </Link>
+        <Link href="/app/account/review-queue" className={rowClass}>
+          <span className={iconWrap} aria-hidden>
+            <ClipboardList className="h-4 w-4 text-[var(--semantic-chart-5)]" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("learner.account.nav.reviewQueue")}</span>
+        </Link>
+        <Link
+          href="/app/practice-tests/cat-insights"
+          className={rowClass}
+          aria-label={t("learner.practiceTests.examFirst.ctaReviewAria")}
+          data-nn-e2e-exam-first-cta-review
+        >
+          <span className={iconWrap} aria-hidden>
+            <BarChart3 className="h-4 w-4 text-[var(--semantic-chart-3)]" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("learner.practiceTests.examFirst.ctaReview")}</span>
+        </Link>
+        {recentCompletedSession ? (
+          <Link
+            href={`/app/practice-tests/${encodeURIComponent(recentCompletedSession.id)}${
+              pathwayId.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : ""
+            }`}
+            className={`${rowClass} border-[color-mix(in_srgb,var(--semantic-brand)_24%,var(--semantic-border-soft))]`}
+          >
+            <span className={iconWrap} aria-hidden>
+              <PlayCircle className="h-4 w-4 text-[var(--semantic-brand)]" strokeWidth={2} />
+            </span>
+            <span className="min-w-0 leading-snug">{t("learner.practiceTests.examFirst.openLastCompleted")}</span>
+          </Link>
+        ) : null}
+      </nav>
+    );
+  }, [
+    t,
+    catEntryHref,
+    questionsHubHref,
+    lessonsHubHref,
+    flashcardsHubHref,
+    pathwayId,
+    recentCompletedSession,
+  ]);
+
   return (
     <LearnerStudyPageShell data-nn-learner-area="practice-tests">
       {hubBootstrapSource === "secondary" ? (
@@ -528,29 +741,103 @@ export function PracticeTestsHubClient({
           <LearnerStudyLiveSyncBanner />
         </div>
       ) : null}
-      <LearnerStudyHero
-        eyebrow={t("learner.practiceTests.title")}
-        title={t("learner.practiceTests.hub.builderTitle")}
-        subtitle={t("learner.practiceTests.hub.builderIntro")}
-        stats={
-          <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <div className="rounded-xl border border-border bg-muted/20 px-3 py-2">
-              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Bank topics</dt>
-              <dd className="mt-0.5 text-lg font-semibold tabular-nums text-foreground">{discoveryStats.topicBuckets}</dd>
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(240px,280px)] lg:items-start lg:gap-10">
+        <div className="min-w-0 space-y-9">
+      <header
+        className="relative overflow-hidden rounded-[1.75rem] border-2 border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))_0%,var(--semantic-surface)_38%,color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))_100%)] p-6 text-[var(--semantic-text-primary)] shadow-[0_22px_48px_color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--semantic-info)_22%,transparent)] sm:p-8"
+        data-nn-e2e-practice-exam-first-hero
+      >
+        <div
+          className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_18%,transparent)] blur-2xl"
+          aria-hidden
+        />
+        <div className="relative flex flex-wrap items-start gap-3">
+          <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--semantic-surface)] text-[var(--semantic-brand)] shadow-[var(--semantic-shadow-soft)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))]">
+            <Sparkles className="h-6 w-6" aria-hidden strokeWidth={2} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-chart-3)_85%,var(--semantic-text-secondary))]">
+              {t("learner.practiceTests.title")}
+            </p>
+            <h2 className="mt-2 text-3xl font-extrabold leading-[1.12] tracking-tight text-[var(--semantic-text-primary)] sm:text-4xl">
+              {t("learner.practiceTests.examFirst.heroTitle")}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-[0.95rem]">
+              {t("learner.practiceTests.examFirst.heroSubtitle")}
+            </p>
+            {poolLikelyEmpty ? (
+              <p
+                className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_85%,var(--semantic-surface))] px-4 py-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]"
+                data-nn-practice-pool-fallback
+              >
+                {t("learner.practiceTests.examFirst.poolBuilding")}
+              </p>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="relative mt-8 space-y-4">
+          {catExamStartHref && catOptions.length > 0 ? (
+            <Link
+              href={catExamStartHref}
+              className="nn-btn-primary group flex min-h-[3.75rem] w-full flex-col justify-center gap-1 rounded-2xl px-5 py-4 text-left text-base font-bold shadow-[0_14px_32px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] transition hover:brightness-[1.03] active:brightness-[0.98]"
+              data-nn-e2e-exam-first-cta-cat
+            >
+              <span className="flex items-center gap-2.5">
+                <PlayCircle className="h-7 w-7 shrink-0 opacity-95" aria-hidden />
+                {t("learner.practiceTests.examFirst.ctaCat")}
+              </span>
+              <span className="text-xs font-medium opacity-95">
+                {t("learner.practiceTests.examFirst.ctaCatSublabel")}
+              </span>
+            </Link>
+          ) : (
+            <div className="flex min-h-[3.25rem] flex-col justify-center rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_40%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+              {t("learner.practiceTests.hub.catUnavailableBody")}
             </div>
-            <div className="rounded-xl border border-border bg-muted/20 px-3 py-2">
-              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Indexed items</dt>
-              <dd className="mt-0.5 text-lg font-semibold tabular-nums text-foreground">{discoveryStats.totalIndexed}</dd>
-            </div>
-            <div className="rounded-xl border border-border bg-muted/20 px-3 py-2 sm:col-span-2">
-              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Track</dt>
-              <dd className="mt-0.5 truncate text-sm font-semibold text-foreground">
-                {(selectedPathway?.label ?? pathwayId.trim()) || "—"}
-              </dd>
-            </div>
-          </dl>
-        }
-      />
+          )}
+
+          <div className={`grid gap-3 ${resumeSession ? "sm:grid-cols-2" : ""}`}>
+            <button
+              type="button"
+              className="flex min-h-[3.5rem] flex-col justify-center gap-1 rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--semantic-surface))] px-4 py-3.5 text-left shadow-[var(--semantic-shadow-soft)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--semantic-surface))] sm:min-h-[3.25rem]"
+              data-nn-e2e-exam-first-cta-custom
+              onClick={() => builderSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+            >
+              <span className="flex items-center gap-2 text-sm font-bold text-[var(--semantic-text-primary)]">
+                <Wrench className="h-5 w-5 shrink-0 text-[var(--semantic-info)]" aria-hidden />
+                {t("learner.practiceTests.examFirst.ctaCustom")}
+              </span>
+              <span className="text-xs font-medium text-[var(--semantic-text-secondary)]">
+                {t("learner.practiceTests.examFirst.ctaCustomSublabel")}
+              </span>
+            </button>
+
+            {resumeSession ? (
+              <Link
+                href={`/app/practice-tests/${encodeURIComponent(resumeSession.id)}${
+                  pathwayId.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : ""
+                }`}
+                className="flex min-h-[3.5rem] flex-col justify-center gap-1 rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-success)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_55%,var(--semantic-surface))] px-4 py-3.5 text-left shadow-[var(--semantic-shadow-soft)] transition hover:brightness-[1.02] sm:min-h-[3.25rem]"
+                data-nn-e2e-exam-first-cta-continue
+              >
+                <span className="flex items-center gap-2 text-sm font-bold text-[var(--semantic-text-primary)]">
+                  <LineChart className="h-5 w-5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                  {t("learner.practiceTests.examFirst.ctaContinue")}
+                </span>
+                <span className="truncate text-xs font-medium text-[var(--semantic-text-secondary)]">
+                  {resumeSession.title?.trim() || t("learner.practiceTests.examFirst.resumeUntitled")}
+                </span>
+              </Link>
+            ) : null}
+          </div>
+          {!resumeSession ? (
+            <p className="text-xs font-medium leading-snug text-[var(--semantic-text-secondary)]">
+              {t("learner.practiceTests.examFirst.continueUnavailable")}
+            </p>
+          ) : null}
+        </div>
+      </header>
 
       {topicSlugFromUrl && pathwayId.trim() ? (
         <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
@@ -569,20 +856,22 @@ export function PracticeTestsHubClient({
       (pathwayLessonPractice.publishedLessonCount > 0 ||
         pathwayLessonPractice.practiceQuestionCount > 0 ||
         pathwayLessonPractice.lessonLinkedVirtualCards > 0) ? (
-        <section
+        <details
           className="nn-card nn-student-card-lift border-[color-mix(in_srgb,var(--semantic-panel-cool)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-5 sm:p-6"
           data-nn-e2e-pathway-lesson-practice-strip
-          aria-label="Pathway lesson study inventory"
         >
-          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Pathway lessons — study inventory</h2>
+          <summary className="cursor-pointer text-base font-bold text-[var(--semantic-text-primary)] marker:text-[var(--semantic-text-secondary)]">
+            {t("learner.practiceTests.examFirst.optionalLessonInventory")}
+          </summary>
+          <div className="mt-4">
+          <h2 className="sr-only">{t("learner.practiceTests.examFirst.lessonInventorySrHeading")}</h2>
           <p className="mt-1 max-w-3xl text-sm text-[var(--semantic-text-secondary)]">
-            Inline checks and checkpoints from your published pathway lessons (same catalog as the lessons hub). Mock
-            exams below still use the indexed question bank when you start a session.
+            {t("learner.practiceTests.examFirst.lessonInventoryIntro")}
           </p>
           <dl className="mt-4 grid gap-3 sm:grid-cols-3">
             <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2">
               <dt className="text-[11px] font-medium uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-                Published lessons
+                {t("learner.practiceTests.examFirst.publishedLessonsLabel")}
               </dt>
               <dd className="mt-0.5 text-lg font-semibold tabular-nums text-[var(--semantic-text-primary)]">
                 {pathwayLessonPractice.publishedLessonCount}
@@ -590,7 +879,7 @@ export function PracticeTestsHubClient({
             </div>
             <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2">
               <dt className="text-[11px] font-medium uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-                Lesson-linked MCQs
+                {t("learner.practiceTests.examFirst.lessonLinkedMcqsLabel")}
               </dt>
               <dd className="mt-0.5 text-lg font-semibold tabular-nums text-[var(--semantic-text-primary)]">
                 {pathwayLessonPractice.practiceQuestionCount}
@@ -599,7 +888,7 @@ export function PracticeTestsHubClient({
             </div>
             <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2">
               <dt className="text-[11px] font-medium uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-                Lesson-linked flashcards
+                {t("learner.practiceTests.examFirst.lessonLinkedFlashcardsLabel")}
               </dt>
               <dd className="mt-0.5 text-lg font-semibold tabular-nums text-[var(--semantic-text-primary)]">
                 {pathwayLessonPractice.lessonLinkedVirtualCards}
@@ -609,7 +898,7 @@ export function PracticeTestsHubClient({
           {pathwayLessonPractice.topSystems.length > 0 ? (
             <div className="mt-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-                Lessons by system (catalog)
+                {t("learner.practiceTests.examFirst.lessonsBySystemLabel")}
               </p>
               <ul className="mt-2 flex flex-wrap gap-2">
                 {pathwayLessonPractice.topSystems.map((s) => (
@@ -629,28 +918,41 @@ export function PracticeTestsHubClient({
               href={`/app/questions/bank?pathwayId=${encodeURIComponent(pathwayLessonPractice.pathwayId)}`}
               className="inline-flex min-h-11 items-center sm:min-h-10 rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
             >
-              Open question bank (same pathway)
+              {t("learner.practiceTests.examFirst.openPathwayQuestionBank")}
             </Link>
             <Link
               href={`/app/flashcards?pathwayId=${encodeURIComponent(pathwayLessonPractice.pathwayId)}`}
               className="inline-flex min-h-11 items-center sm:min-h-10 rounded-full border border-[var(--semantic-border-soft)] px-4 font-semibold text-[var(--semantic-text-primary)] underline-offset-2 hover:underline"
             >
-              Flashcards hub
+              {t("learner.practiceTests.examFirst.flashcardsHubCta")}
             </Link>
           </div>
-        </section>
+          </div>
+        </details>
       ) : null}
 
       <section
+        ref={builderSectionRef}
+        id="practice-exam-builder"
         data-nn-e2e-practice-exams-builder
-        className={`nn-card nn-student-card-lift p-6 sm:p-7 ${
+        className={[
+          "scroll-mt-20 space-y-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-cool))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7",
           isPriorityWinner(hubPriority, "weak_focus")
-            ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))]"
-            : "border-[var(--semantic-border-soft)]"
-        }`}
+            ? "border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] shadow-[var(--semantic-shadow-soft)]"
+            : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
-        <h2 className="sr-only">{t("learner.practiceTests.hub.builderTitle")}</h2>
-        <p className="mt-0 max-w-3xl text-sm leading-relaxed text-muted-foreground">{t("learner.practiceTests.hub.builderIntro")}</p>
+        <div className="max-w-3xl space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+            {t("learner.practiceTests.hub.builderEyebrow")}
+          </p>
+          <h2 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-3xl">
+            {t("learner.practiceTests.hub.builderHeadline")}
+          </h2>
+          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.builderIntro")}</p>
+        </div>
         {isPriorityWinner(hubPriority, "weak_focus") ? (
           <p className="mt-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
             {t("learner.practiceTests.hub.weakFocusBanner")}
@@ -702,315 +1004,146 @@ export function PracticeTestsHubClient({
           </div>
         ) : null}
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <label className="block text-sm">
-            <span className="text-muted-foreground">{t("learner.practiceTests.hub.titleOptionalLabel")}</span>
-            <input
-              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder={t("learner.practiceTests.hub.titlePlaceholder")}
-            />
-          </label>
-          <label className="block text-sm">
-            <span className="text-muted-foreground">
-              {selectionMode === "cat"
-                ? catPresentationMode === "exam_simulation"
-                  ? isNpPathway
-                    ? t("learner.practiceTests.hub.questionCount.catExamNp")
-                    : t("learner.practiceTests.hub.questionCount.catExamRn", {
-                        exam: selectedExamLabel ?? t("learner.practiceTests.hub.defaultExamLabel"),
-                      })
-                  : t("learner.practiceTests.hub.questionCount.catCap")
-                : t("learner.practiceTests.hub.questionCount.linear")}
-            </span>
-            <input
-              type="number"
-              data-nn-e2e-question-count
-              min={selectionMode === "cat" ? 10 : 5}
-              max={
-                selectionMode === "cat" && catPresentationMode === "exam_simulation"
-                  ? isNpPathway
-                    ? 150
-                    : 145
-                  : selectionMode === "cat"
-                    ? 75
-                    : 100
-              }
-              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
-              value={questionCount}
-              onChange={(e) => setQuestionCount(Number(e.target.value))}
-            />
-            {selectionMode !== "cat" ? (
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                <span className="text-xs text-muted-foreground">{t("learner.practiceTests.hub.quickPicksLabel")}</span>
-                {([10, 25, 50, 75, 100] as const).map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setQuestionCount(n)}
-                    data-selected={questionCount === n}
-                    className="nn-chip px-3 py-1 text-xs font-medium"
-                  >
-                    {n}
-                  </button>
-                ))}
+        <div className="mt-8 space-y-10">
+          <section aria-labelledby="practice-builder-mode">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                  {t("learner.practiceTests.hub.stepSessionType")}
+                </p>
+                <h3 id="practice-builder-mode" className="text-xl font-bold text-[var(--semantic-text-primary)]">
+                  {t("learner.practiceTests.hub.stepChooseMode")}
+                </h3>
               </div>
-            ) : null}
-          </label>
-        </div>
-
-        <div className="mt-6">
-          <LearnerStudyModeGrid label={t("learner.practiceTests.hub.selectionLabel")}>
-            <LearnerStudyModeCard
-              title="Practice by category"
-              description={t("learner.practiceTests.hub.selectionHelp.targeted")}
-              icon={LayoutGrid}
-              selected={selectionMode === "targeted"}
-              onSelect={() => {
-                setSelectionMode("targeted");
-                setCatPresentationMode("practice");
-                setQuestionCount((q) => (q > 100 ? 100 : q));
-              }}
-            />
-            <LearnerStudyModeCard
-              title="Mixed quiz"
-              description={t("learner.practiceTests.hub.selectionHelp.linear")}
-              icon={Shuffle}
-              selected={selectionMode === "random"}
-              onSelect={() => {
-                setSelectionMode("random");
-                setCatPresentationMode("practice");
-                setQuestionCount((q) => (q > 100 ? 100 : q));
-              }}
-            />
-            <LearnerStudyModeCard
-              title={t("learner.practiceTests.hub.selection.weak")}
-              description={t("learner.practiceTests.hub.selectionHelp.weak")}
-              icon={TrendingDown}
-              selected={selectionMode === "weak"}
-              onSelect={() => {
-                setSelectionMode("weak");
-                setCatPresentationMode("practice");
-                setQuestionCount((q) => (q > 100 ? 100 : q));
-              }}
-            />
-            <LearnerStudyModeCard
-              title="Incorrect review"
-              description={t("learner.practiceTests.hub.selectionHelp.missed")}
-              icon={XCircle}
-              selected={selectionMode === "missed"}
-              onSelect={() => {
-                setSelectionMode("missed");
-                setCatPresentationMode("practice");
-                setQuestionCount((q) => (q > 100 ? 100 : q));
-              }}
-            />
-            <LearnerStudyModeCard
-              title="Unseen questions"
-              description="Prioritizes questions you have not practiced recently in this pathway (linear sessions only)."
-              icon={EyeOff}
-              selected={selectionMode === "unseen"}
-              onSelect={() => {
-                setSelectionMode("unseen");
-                setCatPresentationMode("practice");
-                setQuestionCount((q) => (q > 100 ? 100 : q));
-              }}
-            />
-            <LearnerStudyModeCard
-              title={t("learner.practiceTests.hub.selection.starred")}
-              description={t("learner.practiceTests.hub.selectionHelp.starred")}
-              icon={Star}
-              selected={selectionMode === "starred"}
-              onSelect={() => {
-                setSelectionMode("starred");
-                setCatPresentationMode("practice");
-                setQuestionCount((q) => (q > 100 ? 100 : q));
-              }}
-            />
-            <LearnerStudyModeCard
-              title={t("learner.practiceTests.hub.selection.cat")}
-              description={
-                catPresentationMode === "exam_simulation"
-                  ? isNpPathway
-                    ? t("learner.practiceTests.hub.selectionHelp.cat.examSim.np")
-                    : t("learner.practiceTests.hub.selectionHelp.cat.examSim.rn")
-                  : t("learner.practiceTests.hub.selectionHelp.cat.practice")
-              }
-              icon={LineChart}
-              badge="Adaptive"
-              selected={selectionMode === "cat"}
-              disabled={catOptions.length === 0}
-              onSelect={() => {
-                setSelectionMode("cat");
-                if (catPresentationMode === "practice") {
-                  setQuestionCount((q) => (q > 75 ? 75 : q));
-                }
-              }}
-            />
-          </LearnerStudyModeGrid>
-        </div>
-
-        {selectionMode !== "cat" ? (
-          <LearnerFilterBar className="mt-4" title={t("learner.practiceTests.hub.questionFocusLabel")}>
-            <div className="flex flex-wrap gap-2" data-nn-e2e-practice-pool-presets>
-              <button
-                type="button"
-                data-selected={selectionMode === "random" && topicPicks.length === 0}
-                className="nn-chip px-3 py-1.5 text-xs font-medium"
-                onClick={() => {
-                  setSelectionMode("random");
-                  setCatSelectionBasis("random");
-                  setTopicPicks([]);
-                }}
-              >
-                {t("learner.practiceTests.hub.poolPresetAllQuestions")}
-              </button>
-              <button
-                type="button"
-                data-selected={selectionMode === "weak"}
-                className="nn-chip px-3 py-1.5 text-xs font-medium"
-                onClick={() => {
-                  setSelectionMode("weak");
-                  setCatSelectionBasis("weak");
-                }}
-              >
-                {t("learner.practiceTests.hub.selection.weak")}
-              </button>
-              <button
-                type="button"
-                data-selected={selectionMode === "missed"}
-                className="nn-chip px-3 py-1.5 text-xs font-medium"
-                onClick={() => {
-                  setSelectionMode("missed");
-                  setCatSelectionBasis("missed");
-                }}
-              >
-                {t("learner.practiceTests.hub.selection.missed")}
-              </button>
-              <button
-                type="button"
-                data-selected={selectionMode === "starred"}
-                className="nn-chip px-3 py-1.5 text-xs font-medium"
-                data-nn-e2e-practice-pool-starred
-                onClick={() => {
-                  setSelectionMode("starred");
-                  setCatSelectionBasis("starred");
-                }}
-              >
-                {t("learner.practiceTests.hub.selection.starred")}
-              </button>
-              <button
-                type="button"
-                data-selected={selectionMode === "random" && topicPicks.length > 0}
-                className="nn-chip px-3 py-1.5 text-xs font-medium"
-                onClick={() => {
-                  setSelectionMode("random");
-                  setCatSelectionBasis("random");
-                }}
-              >
-                {t("learner.practiceTests.hub.poolPresetFreshMix")}
-              </button>
-              {catOptions.length > 0 ? (
-                <button
-                  type="button"
-                  className="nn-chip px-3 py-1.5 text-xs font-medium"
-                  data-nn-e2e-practice-cat-starred-pool
-                  onClick={() => {
-                    setSelectionMode("cat");
-                    setCatPresentationMode("practice");
-                    setCatAdaptiveSessionType("practice");
-                    setCatExamFeedbackMode("study");
-                    setCatSelectionBasis("starred");
-                    if (questionCount > 75) setQuestionCount(75);
-                  }}
-                >
-                  {t("learner.practiceTests.hub.catSavedPoolChip")}
-                </button>
-              ) : null}
+              <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))] px-3 py-1 text-xs font-semibold text-[var(--semantic-brand)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))]">
+                {t("learner.practiceTests.hub.catExamBadge")}
+              </span>
             </div>
-            <p className="text-xs text-muted-foreground">{t("learner.practiceTests.hub.poolPresetIntro")}</p>
-          </LearnerFilterBar>
-        ) : null}
 
-        {selectionMode !== "cat" ? (
-          <LearnerFilterBar className="mt-4" title={t("learner.practiceTests.hub.sessionModeLabel")}>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setLinearDeliveryMode("practice");
-                  setLinearRationaleVisibility("after_each");
-                }}
-                data-active={linearDeliveryMode === "practice"}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+            <div className="mt-4 grid gap-3 lg:grid-cols-[1.25fr_1fr_1fr]">
+              <div
+                data-active={sessionBuilderKind === "cat_exam"}
+                className="group relative overflow-hidden rounded-[1.75rem] border border-[color-mix(in_srgb,var(--semantic-brand)_36%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] p-5 text-left shadow-[var(--semantic-shadow-soft)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_17%,var(--semantic-surface))] data-[active=true]:ring-2 data-[active=true]:ring-[color-mix(in_srgb,var(--semantic-brand)_32%,transparent)]"
               >
-                {t("learner.practiceTests.hub.sessionMode.tutor")}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setLinearDeliveryMode("exam");
-                  setLinearRationaleVisibility("end_of_exam");
-                  setLinearAllowReviewNavigation(false);
-                }}
-                data-active={linearDeliveryMode === "exam"}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
-              >
-                {t("learner.practiceTests.hub.sessionMode.exam")}
-              </button>
-            </div>
-            <div className="mt-4 space-y-2">
-              <span className="text-sm font-medium text-foreground">{t("learner.practiceTests.hub.rationaleVisibilityLabel")}</span>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLinearRationaleVisibility("after_each");
-                    setLinearDeliveryMode("practice");
-                  }}
-                  data-active={linearRationaleVisibility === "after_each"}
-                  className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
-                >
-                  {t("learner.practiceTests.hub.rationale.afterEach")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLinearRationaleVisibility("end_of_exam");
-                    setLinearDeliveryMode("exam");
-                    setLinearAllowReviewNavigation(false);
-                  }}
-                  data-active={linearRationaleVisibility === "end_of_exam"}
-                  className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
-                >
-                  {t("learner.practiceTests.hub.rationale.endOnly")}
-                </button>
-              </div>
-            </div>
-            {linearDeliveryMode === "practice" ? (
-              <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-3 text-sm text-foreground shadow-sm">
-                <input
-                  type="checkbox"
-                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
-                  checked={linearAllowReviewNavigation}
-                  onChange={(e) => setLinearAllowReviewNavigation(e.target.checked)}
-                  data-nn-qa-practice-hub-linear-allow-review-nav
-                />
-                <span>
-                  <span className="font-medium">{t("learner.practiceTests.hub.linearAllowReviewNavLabel")}</span>
-                  <span className="mt-1 block text-xs text-muted-foreground">
-                    {t("learner.practiceTests.hub.linearAllowReviewNavHelp")}
+                <div className="flex items-start justify-between gap-4">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--semantic-surface)] text-[var(--semantic-brand)] shadow-sm">
+                    <LineChart className="h-6 w-6" aria-hidden />
                   </span>
-                </span>
-              </label>
-            ) : null}
-            <p className="mt-2 text-xs text-muted-foreground">{t("learner.practiceTests.hub.sessionModeHelp")}</p>
-          </LearnerFilterBar>
-        ) : null}
+                  <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-brand)]">
+                    {t("learner.practiceTests.hub.catExamBadge")}
+                  </span>
+                </div>
+                <h4 className="mt-4 text-xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.kind.catExam")}</h4>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                  {t("learner.practiceTests.hub.kind.catExamDesc")}
+                </p>
+                {catOptions.length > 0 ? (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => applySessionBuilderKind("cat_exam")}
+                      className="inline-flex min-h-11 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_36%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-5 text-sm font-bold text-[var(--semantic-brand)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))]"
+                    >
+                      {t("learner.practiceTests.hub.catConfigureCta")}
+                    </button>
+                    {catExamStartHref ? (
+                      <Link
+                        href={catExamStartHref}
+                        className="inline-flex min-h-11 items-center rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-bold text-[var(--semantic-brand-contrast)] shadow-sm transition hover:opacity-95"
+                        data-nn-e2e-practice-hub-cat-exam
+                      >
+                        {t("learner.practiceTests.hub.startCatExam")}
+                      </Link>
+                    ) : null}
+                  </div>
+                ) : (
+                  <span className="mt-4 block text-xs font-medium text-[var(--semantic-warning-contrast)]">
+                    {t("learner.practiceTests.hub.catUnavailableBody")}
+                  </span>
+                )}
+              </div>
 
-        {selectionMode !== "cat" && topics.length > 0 ? (
-          <div className="mt-6 space-y-4" data-nn-e2e-practice-canonical-grid>
+              <LearnerStudyModeCard
+                title={t("learner.practiceTests.hub.kind.practiceExam")}
+                description={t("learner.practiceTests.hub.kind.practiceExamDesc")}
+                icon={ClipboardList}
+                selected={sessionBuilderKind === "practice_exam"}
+                onSelect={() => {
+                  applySessionBuilderKind("practice_exam");
+                  setQuestionCount((q) => (q > 100 ? 100 : q));
+                }}
+                className="min-h-[13rem]"
+              />
+              <LearnerStudyModeCard
+                title={t("learner.practiceTests.hub.kind.practiceQuestions")}
+                description={t("learner.practiceTests.hub.kind.practiceQuestionsDesc")}
+                icon={Layers}
+                selected={sessionBuilderKind === "practice_questions"}
+                onSelect={() => {
+                  applySessionBuilderKind("practice_questions");
+                  setQuestionCount((q) => (q > 100 ? 100 : q));
+                }}
+                className="min-h-[13rem]"
+              />
+            </div>
+          </section>
+
+          {selectionMode === "cat" && examSimulationEnabled ? (
+            <section className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_30%,var(--semantic-surface))] p-4 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-base font-bold text-[var(--semantic-text-primary)]">
+                    {t("learner.practiceTests.hub.catFormatLabel")}
+                  </h3>
+                  <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.catFormatHelp")}</p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCatPresentationMode("practice");
+                      if (questionCount > 75) setQuestionCount(75);
+                      setCatAdaptiveSessionType("cat");
+                    }}
+                    data-active={catPresentationMode === "practice"}
+                    className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                  >
+                    {t("learner.practiceTests.hub.catFormat.practice")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCatPresentationMode("exam_simulation");
+                      setCatAdaptiveSessionType("cat");
+                      setCatSelectionBasis("random");
+                      setTimedMode(true);
+                      const np =
+                        (pathwayId.trim() ? pathwayOptions.find((p) => p.id === pathwayId) : undefined)?.examFamily === "NP";
+                      if (np) {
+                        setTimeLimitMin(180);
+                        setQuestionCount((q) => (q < 75 ? 150 : Math.min(150, Math.max(75, q))));
+                      } else {
+                        setTimeLimitMin(300);
+                        setQuestionCount((q) => (q < 75 ? 145 : Math.min(145, Math.max(75, q))));
+                      }
+                    }}
+                    data-active={catPresentationMode === "exam_simulation"}
+                    className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                  >
+                    {t("learner.practiceTests.hub.catFormat.examSim")}
+                  </button>
+                </div>
+              </div>
+            </section>
+          ) : null}
+
+          {topics.length > 0 ? (
+          <section className="space-y-4" data-nn-e2e-practice-canonical-grid>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                {t("learner.practiceTests.hub.stepCategories")}
+              </p>
+            </div>
             <LearnerCategorySelector
               countsBySystem={countsByCanonical}
               selectedCanonicalIds={selectedCanonicalIds}
@@ -1031,12 +1164,13 @@ export function PracticeTestsHubClient({
               }}
               search={categorySearch}
               onSearchChange={setCategorySearch}
-              heading="Exam categories & body systems"
-              intro="Pick canonical categories first. The large lesson-style topic grid is hidden here — use the advanced drawer only when you need bank topic labels."
+              heading={t("learner.practiceTests.hub.categoriesHeading")}
+              intro={t("learner.practiceTests.hub.categoriesIntro")}
+              searchPlaceholder={t("learner.practiceTests.hub.categoriesSearchPlaceholder")}
             />
             {topicPicks.length > 0 ? (
               <div className="flex flex-wrap gap-2">
-                <span className="w-full text-xs font-medium text-muted-foreground">Refined topic picks (sent to the server)</span>
+                <span className="w-full text-xs font-medium text-muted-foreground">{t("learner.practiceTests.hub.topicPicksLabel")}</span>
                 {topicPicks.map((pickedTopic) => (
                   <button
                     key={pickedTopic}
@@ -1045,276 +1179,458 @@ export function PracticeTestsHubClient({
                     data-selected="true"
                     onClick={() => removeTopic(pickedTopic)}
                   >
-                    {pickedTopic} ✕
+                    {pickedTopic} x
                   </button>
                 ))}
               </div>
             ) : null}
-            <details className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3 text-sm">
-              <summary className="cursor-pointer font-semibold text-[var(--semantic-text-primary)]">
-                Advanced: refine by exam-bank topic labels (optional)
-              </summary>
-              <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
-                Topics shown here respect your category selection above. They map directly to `topic` values in the exam
-                bank — not the marketing lesson card list.
+          </section>
+        ) : null}
+
+          <section aria-labelledby="practice-builder-count">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                {t("learner.practiceTests.hub.stepQuestionCount")}
               </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {(selectedCanonicalIds.length === 0 || selectedCanonicalIds.length >= CANONICAL_STUDY_CATEGORIES.length
-                  ? topics
-                  : topics.filter((b) =>
-                      discoveryTopicsForCanonicalFilters(
-                        pathwayId.trim(),
-                        topics,
-                        new Set(selectedCanonicalIds as CanonicalBodySystemId[]),
-                      ).includes(b.topic),
-                    )
-                ).map((b) => {
-                  const picked = topicPicks.includes(b.topic);
-                  return (
-                    <button
-                      key={b.topic}
-                      type="button"
-                      data-nn-e2e-practice-topic-chip={b.topic}
-                      data-selected={picked}
-                      onClick={() => toggleTopicBucket(b.topic)}
-                      className="nn-chip px-3 py-1 text-xs font-medium data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
-                    >
-                      {formatTitleCase(b.topic)} ({b.count})
-                    </button>
-                  );
-                })}
-              </div>
-            </details>
-          </div>
-        ) : null}
-
-        {selectionMode === "cat" && examSimulationEnabled ? (
-          <div className="mt-4 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
-            <span className="text-sm font-medium text-foreground">{t("learner.practiceTests.hub.catFormatLabel")}</span>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setCatPresentationMode("practice");
-                  if (questionCount > 75) setQuestionCount(75);
-                  setCatAdaptiveSessionType("cat");
-                }}
-                data-active={catPresentationMode === "practice"}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
-              >
-                {t("learner.practiceTests.hub.catFormat.practice")}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setCatPresentationMode("exam_simulation");
-                  setCatAdaptiveSessionType("cat");
-                  setCatSelectionBasis("random");
-                  setTimedMode(true);
-                  const np =
-                    (pathwayId.trim() ? pathwayOptions.find((p) => p.id === pathwayId) : undefined)?.examFamily === "NP";
-                  if (np) {
-                    setTimeLimitMin(180);
-                    setQuestionCount((q) => (q < 75 ? 150 : Math.min(150, Math.max(75, q))));
-                  } else {
-                    setTimeLimitMin(300);
-                    setQuestionCount((q) => (q < 75 ? 145 : Math.min(145, Math.max(75, q))));
-                  }
-                }}
-                data-active={catPresentationMode === "exam_simulation"}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
-              >
-                {t("learner.practiceTests.hub.catFormat.examSim")}
-              </button>
+              <h3 id="practice-builder-count" className="text-xl font-bold text-[var(--semantic-text-primary)]">
+                {t("learner.practiceTests.hub.questionCountLabel")}
+              </h3>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+                {selectionMode === "cat"
+                  ? catPresentationMode === "exam_simulation"
+                    ? isNpPathway
+                      ? t("learner.practiceTests.hub.questionCount.catExamNp")
+                      : t("learner.practiceTests.hub.questionCount.catExamRn", {
+                          exam: selectedExamLabel ?? t("learner.practiceTests.hub.defaultExamLabel"),
+                        })
+                    : t("learner.practiceTests.hub.questionCount.catCap")
+                  : t("learner.practiceTests.hub.questionCount.linear")}
+              </p>
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">{t("learner.practiceTests.hub.catFormatHelp")}</p>
-          </div>
-        ) : null}
-
-        {selectionMode === "cat" && catPresentationMode === "practice" ? (
-          <div className="mt-4">
-            <div className="space-y-2">
-              <span className="text-sm font-medium text-foreground">{t("learner.practiceTests.hub.catSessionStyleLabel")}</span>
-              <p className="text-xs text-muted-foreground">{t("learner.practiceTests.hub.catSessionStyleIntro")}</p>
-              <div className="grid gap-2 sm:grid-cols-2">
+            <div className="mt-4 flex flex-wrap gap-2">
+              {questionQuickPicks.map((n) => (
                 <button
+                  key={n}
                   type="button"
-                  onClick={() => setCatAdaptiveSessionType("cat")}
-                  className={`rounded-2xl border p-3 text-left text-sm transition ${
-                    catAdaptiveSessionType === "cat"
-                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_36%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
-                      : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
-                  }`}
+                  onClick={() => setQuestionCount(n)}
+                  data-selected={questionCount === n}
+                  className="nn-chip min-h-11 px-5 py-2 text-sm font-bold"
                 >
-                  <span className="font-semibold text-foreground">{t("learner.practiceTests.hub.catSessionStyleAdaptiveTitle")}</span>
-                  <span className="mt-1 block text-xs text-muted-foreground">{t("learner.practiceTests.hub.catSessionStyleAdaptiveDesc")}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCatAdaptiveSessionType("practice");
-                    setCatExamFeedbackMode("study");
-                  }}
-                  className={`rounded-2xl border p-3 text-left text-sm transition ${
-                    catAdaptiveSessionType === "practice"
-                      ? "border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
-                      : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
-                  }`}
-                >
-                  <span className="font-semibold text-foreground">{t("learner.practiceTests.hub.catSessionStyleGuidedTitle")}</span>
-                  <span className="mt-1 block text-xs text-muted-foreground">{t("learner.practiceTests.hub.catSessionStyleGuidedDesc")}</span>
-                </button>
-              </div>
-            </div>
-            <span className="mt-6 block text-sm text-muted-foreground">{t("learner.practiceTests.hub.poolLabel")}</span>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {(
-                [
-                  ["random", t("learner.practiceTests.hub.poolBroadMix")],
-                  ["targeted", t("learner.practiceTests.hub.poolFiltered")],
-                  ["weak", t("learner.practiceTests.hub.poolWeakFirst")],
-                  ["missed", t("learner.practiceTests.hub.poolMissedReview")],
-                ] as const
-              ).map(([v, label]) => (
-                <button
-                  key={v}
-                  type="button"
-                  onClick={() => setCatSelectionBasis(v)}
-                  data-active={catSelectionBasis === v}
-                  className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
-                >
-                  {label}
+                  {n}
                 </button>
               ))}
             </div>
-            <p className="mt-2 text-xs text-muted-foreground">{t("learner.practiceTests.hub.poolHelp")}</p>
-            {catAdaptiveSessionType === "cat" ? (
-              <div className="mt-4 space-y-2">
-                <span className="text-sm font-medium text-foreground">{t("learner.practiceTests.hub.catFeedbackHeading")}</span>
-                <p className="text-xs text-muted-foreground">{t("learner.practiceTests.hub.catFeedbackIntro")}</p>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  <button
-                    type="button"
-                    onClick={() => setCatExamFeedbackMode("study")}
-                    className={`rounded-2xl border p-3 text-left text-sm transition ${
-                      catExamFeedbackMode === "study"
-                        ? "border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
-                        : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
-                    }`}
-                  >
-                    <span className="font-semibold text-foreground">{t("learner.practiceTests.hub.catCardLearnTitle")}</span>
-                    <span className="mt-1 block text-xs text-muted-foreground">{t("learner.practiceTests.hub.catCardLearnDesc")}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCatExamFeedbackMode("test")}
-                    className={`rounded-2xl border p-3 text-left text-sm transition ${
-                      catExamFeedbackMode === "test"
-                        ? "border-[color-mix(in_srgb,var(--semantic-brand)_36%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
-                        : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
-                    }`}
-                  >
-                    <span className="font-semibold text-foreground">{t("learner.practiceTests.hub.catCardBoardTitle")}</span>
-                    <span className="mt-1 block text-xs text-muted-foreground">{t("learner.practiceTests.hub.catCardBoardDesc")}</span>
-                  </button>
-                </div>
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-
-        {selectionMode === "cat" ? (
-          <div className="mt-4 space-y-2">
-            <span className="text-sm text-muted-foreground">{t("learner.practiceTests.hub.topicsLabel")}</span>
-            <div className="flex flex-wrap gap-2">
-              {topicPicks.map((pickedTopic) => (
-                <button
-                  key={pickedTopic}
-                  type="button"
-                  className="nn-chip px-3 py-1 text-xs font-medium"
-                  data-selected="true"
-                  onClick={() => removeTopic(pickedTopic)}
-                >
-                  {pickedTopic} ✕
-                </button>
-              ))}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <select
-                className="rounded-lg border border-border px-2 py-1.5 text-sm"
-                value=""
-                onChange={(e) => {
-                  addTopicFromMenu(e.target.value);
-                  e.target.value = "";
-                }}
-              >
-                <option value="">{t("learner.practiceTests.hub.addFromBank")}</option>
-                {topics.map((b) => (
-                  <option key={b.topic} value={b.topic}>
-                    {b.topic} ({b.count})
-                  </option>
-                ))}
-              </select>
-              <input
-                className="rounded-lg border border-border px-2 py-1.5 text-sm"
-                placeholder={t("learner.practiceTests.hub.customTopicPlaceholder")}
-                value={topicInput}
-                onChange={(e) => setTopicInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomTopic())}
-              />
-              <button type="button" className="nn-premium-action-chip rounded-lg border border-border px-3 py-1.5 text-sm" onClick={addCustomTopic}>
-                {t("learner.practiceTests.hub.add")}
-              </button>
-            </div>
-          </div>
-        ) : null}
-
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <label className="block text-sm">
-            <span className="text-muted-foreground">{t("learner.practiceTests.hub.difficultyMin")}</span>
-            <input
-              type="number"
-              min={1}
-              max={5}
-              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
-              value={difficultyMin}
-              onChange={(e) => setDifficultyMin(e.target.value === "" ? "" : Number(e.target.value))}
-            />
-          </label>
-          <label className="block text-sm">
-            <span className="text-muted-foreground">{t("learner.practiceTests.hub.difficultyMax")}</span>
-            <input
-              type="number"
-              min={1}
-              max={5}
-              className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
-              value={difficultyMax}
-              onChange={(e) => setDifficultyMax(e.target.value === "" ? "" : Number(e.target.value))}
-            />
-          </label>
-        </div>
-        <p className="mt-1 text-xs text-muted-foreground">{t("learner.practiceTests.hub.difficultyFootnote")}</p>
-
-        <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[var(--semantic-border-soft)] pt-4">
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={timedMode} onChange={(e) => setTimedMode(e.target.checked)} />
-            {t("learner.practiceTests.hub.timedMode")}
-          </label>
-          {timedMode ? (
-            <label className="text-sm">
-              <span className="text-muted-foreground">{t("learner.practiceTests.hub.timeLimitMinutes")}</span>
+            <label className="mt-4 block max-w-xs text-sm">
+              <span className="text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.customCountLabel")}</span>
               <input
                 type="number"
-                min={2}
-                max={selectionMode === "cat" && catPresentationMode === "exam_simulation" ? 400 : 240}
-                className="ml-2 rounded-lg border border-border px-2 py-1 text-sm"
-                value={timeLimitMin}
-                onChange={(e) => setTimeLimitMin(Number(e.target.value))}
+                data-nn-e2e-question-count
+                min={selectionMode === "cat" ? 10 : 5}
+                max={
+                  selectionMode === "cat" && catPresentationMode === "exam_simulation"
+                    ? isNpPathway
+                      ? 150
+                      : 145
+                    : selectionMode === "cat"
+                      ? 75
+                      : 100
+                }
+                className="mt-1 w-full rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
+                value={questionCount}
+                onChange={(e) => setQuestionCount(Number(e.target.value))}
               />
             </label>
-          ) : (
-            <span className="text-xs text-muted-foreground">{t("learner.practiceTests.hub.untimedHint")}</span>
-          )}
+          </section>
+
+          <details className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_65%,var(--semantic-surface))] p-4 text-sm sm:p-5">
+            <summary className="cursor-pointer text-base font-bold text-[var(--semantic-text-primary)] marker:text-[var(--semantic-text-secondary)]">
+              {t("learner.practiceTests.hub.customizeSessionTitle")}
+            </summary>
+            <div className="mt-5 grid gap-5 md:grid-cols-2">
+              <label className="block text-sm">
+                <span className="font-medium text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.optionalTitleLabel")}</span>
+                <input
+                  className="mt-1 w-full rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder={t("learner.practiceTests.hub.titlePlaceholder")}
+                />
+              </label>
+              <div className="space-y-2">
+                <span className="font-medium text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.timingLabel")}</span>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setTimedMode(false)}
+                    data-active={!timedMode}
+                    className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                  >
+                    {t("learner.practiceTests.hub.untimedShort")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTimedMode(true)}
+                    data-active={timedMode}
+                    className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                  >
+                    {t("learner.practiceTests.hub.timedShort")}
+                  </button>
+                </div>
+                {timedMode ? (
+                  <label className="block max-w-xs text-sm">
+                    <span className="text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.timeLimitMinutes")}</span>
+                    <input
+                      type="number"
+                      min={2}
+                      max={selectionMode === "cat" && catPresentationMode === "exam_simulation" ? 400 : 240}
+                      className="mt-1 w-full rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
+                      value={timeLimitMin}
+                      onChange={(e) => setTimeLimitMin(Number(e.target.value))}
+                    />
+                  </label>
+                ) : (
+                  <p className="text-xs text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.untimedHint")}</p>
+                )}
+              </div>
+
+              {selectionMode !== "cat" ? (
+                <div className="space-y-3 md:col-span-2">
+                  <div>
+                    <span className="font-medium text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.sessionFeelLabel")}</span>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLinearDeliveryMode("practice");
+                          setLinearRationaleVisibility("after_each");
+                        }}
+                        data-active={linearDeliveryMode === "practice"}
+                        className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                      >
+                        {t("learner.practiceTests.hub.sessionMode.tutor")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLinearDeliveryMode("exam");
+                          setLinearRationaleVisibility("end_of_exam");
+                          setLinearAllowReviewNavigation(false);
+                        }}
+                        data-active={linearDeliveryMode === "exam"}
+                        className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                      >
+                        {t("learner.practiceTests.hub.sessionMode.exam")}
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="font-medium text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.rationalesShortLabel")}</span>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLinearRationaleVisibility("after_each");
+                          setLinearDeliveryMode("practice");
+                        }}
+                        data-active={linearRationaleVisibility === "after_each"}
+                        className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                      >
+                        {t("learner.practiceTests.hub.afterEachShort")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLinearRationaleVisibility("end_of_exam");
+                          setLinearDeliveryMode("exam");
+                          setLinearAllowReviewNavigation(false);
+                        }}
+                        data-active={linearRationaleVisibility === "end_of_exam"}
+                        className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                      >
+                        {t("learner.practiceTests.hub.atEndShort")}
+                      </button>
+                    </div>
+                  </div>
+                  {linearDeliveryMode === "practice" ? (
+                    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-3 text-sm text-foreground shadow-sm">
+                      <input
+                        type="checkbox"
+                        className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
+                        checked={linearAllowReviewNavigation}
+                        onChange={(e) => setLinearAllowReviewNavigation(e.target.checked)}
+                        data-nn-qa-practice-hub-linear-allow-review-nav
+                      />
+                      <span>
+                        <span className="font-medium">{t("learner.practiceTests.hub.linearAllowReviewNavLabel")}</span>
+                        <span className="mt-1 block text-xs text-muted-foreground">
+                          {t("learner.practiceTests.hub.linearAllowReviewNavHelp")}
+                        </span>
+                      </span>
+                    </label>
+                  ) : null}
+                </div>
+              ) : (
+                <div className="space-y-4 md:col-span-2">
+                  {catPresentationMode === "practice" ? (
+                    <>
+                      <div>
+                        <span className="font-medium text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.adaptiveStyleLabel")}</span>
+                        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                          <button
+                            type="button"
+                            onClick={() => setCatAdaptiveSessionType("cat")}
+                            className={`rounded-2xl border p-3 text-left text-sm transition ${
+                              catAdaptiveSessionType === "cat"
+                                ? "border-[color-mix(in_srgb,var(--semantic-brand)_36%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
+                                : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
+                            }`}
+                          >
+                            <span className="font-semibold text-foreground">{t("learner.practiceTests.hub.catSessionStyleAdaptiveTitle")}</span>
+                            <span className="mt-1 block text-xs text-muted-foreground">{t("learner.practiceTests.hub.catSessionStyleAdaptiveDesc")}</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCatAdaptiveSessionType("practice");
+                              setCatExamFeedbackMode("study");
+                            }}
+                            className={`rounded-2xl border p-3 text-left text-sm transition ${
+                              catAdaptiveSessionType === "practice"
+                                ? "border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
+                                : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
+                            }`}
+                          >
+                            <span className="font-semibold text-foreground">{t("learner.practiceTests.hub.catSessionStyleGuidedTitle")}</span>
+                            <span className="mt-1 block text-xs text-muted-foreground">{t("learner.practiceTests.hub.catSessionStyleGuidedDesc")}</span>
+                          </button>
+                        </div>
+                      </div>
+                      {catAdaptiveSessionType === "cat" ? (
+                        <div>
+                          <span className="font-medium text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.rationalesShortLabel")}</span>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setCatExamFeedbackMode("study")}
+                              data-active={catExamFeedbackMode === "study"}
+                              className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                            >
+                              {t("learner.practiceTests.hub.afterEachShort")}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setCatExamFeedbackMode("test")}
+                              data-active={catExamFeedbackMode === "test"}
+                              className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
+                            >
+                              {t("learner.practiceTests.hub.atEndShort")}
+                            </button>
+                          </div>
+                        </div>
+                      ) : null}
+                    </>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          </details>
+
+          <details className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 text-sm shadow-sm sm:p-5">
+            <summary className="cursor-pointer text-base font-bold text-[var(--semantic-text-primary)] marker:text-[var(--semantic-text-secondary)]">
+              {t("learner.practiceTests.hub.advancedFiltersTitle")}
+            </summary>
+            <div className="mt-5 space-y-5">
+              <div>
+                <span className="font-medium text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.questionFocusSection")}</span>
+                <div className="mt-2 flex flex-wrap gap-2" data-nn-e2e-practice-pool-presets>
+                  {selectionMode !== "cat" ? (
+                    <>
+                      <button
+                        type="button"
+                        data-selected={selectionMode === "random" && topicPicks.length === 0}
+                        className="nn-chip px-3 py-1.5 text-xs font-medium"
+                        onClick={() => {
+                          setSelectionMode("random");
+                          setCatSelectionBasis("random");
+                          setTopicPicks([]);
+                        }}
+                      >
+                        {t("learner.practiceTests.hub.poolPresetAllQuestions")}
+                      </button>
+                      <button
+                        type="button"
+                        data-selected={selectionMode === "weak"}
+                        className="nn-chip px-3 py-1.5 text-xs font-medium"
+                        onClick={() => {
+                          setSelectionMode("weak");
+                          setCatSelectionBasis("weak");
+                        }}
+                      >
+                        {t("learner.practiceTests.hub.selection.weak")}
+                      </button>
+                      <button
+                        type="button"
+                        data-selected={selectionMode === "missed"}
+                        className="nn-chip px-3 py-1.5 text-xs font-medium"
+                        onClick={() => {
+                          setSelectionMode("missed");
+                          setCatSelectionBasis("missed");
+                        }}
+                      >
+                        {t("learner.practiceTests.hub.selection.missed")}
+                      </button>
+                      <button
+                        type="button"
+                        data-selected={selectionMode === "starred"}
+                        className="nn-chip px-3 py-1.5 text-xs font-medium"
+                        data-nn-e2e-practice-pool-starred
+                        onClick={() => {
+                          setSelectionMode("starred");
+                          setCatSelectionBasis("starred");
+                        }}
+                      >
+                        {t("learner.practiceTests.hub.selection.starred")}
+                      </button>
+                      <button
+                        type="button"
+                        data-selected={selectionMode === "unseen"}
+                        className="nn-chip px-3 py-1.5 text-xs font-medium"
+                        onClick={() => setSelectionMode("unseen")}
+                      >
+                        {t("learner.practiceTests.hub.selection.unseen")}
+                      </button>
+                    </>
+                  ) : (
+                    ([
+                      ["random", t("learner.practiceTests.hub.poolBroadMix")],
+                      ["targeted", t("learner.practiceTests.hub.poolFiltered")],
+                      ["weak", t("learner.practiceTests.hub.poolWeakFirst")],
+                      ["missed", t("learner.practiceTests.hub.poolMissedReview")],
+                      ["starred", t("learner.practiceTests.hub.selection.starred")],
+                    ] as const).map(([v, label]) => (
+                      <button
+                        key={v}
+                        type="button"
+                        onClick={() => setCatSelectionBasis(v)}
+                        data-selected={catSelectionBasis === v}
+                        className="nn-chip px-3 py-1.5 text-xs font-medium"
+                      >
+                        {label}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {topics.length > 0 ? (
+                <div className="space-y-3">
+                  <span className="font-medium text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.topicLabelsSection")}</span>
+                  <div className="flex flex-wrap gap-2">
+                    {(selectedCanonicalIds.length === 0 || selectedCanonicalIds.length >= CANONICAL_STUDY_CATEGORIES.length
+                      ? topics
+                      : topics.filter((b) =>
+                          discoveryTopicsForCanonicalFilters(
+                            pathwayId.trim(),
+                            topics,
+                            new Set(selectedCanonicalIds as CanonicalBodySystemId[]),
+                          ).includes(b.topic),
+                        )
+                    ).map((b) => {
+                      const picked = topicPicks.includes(b.topic);
+                      return (
+                        <button
+                          key={b.topic}
+                          type="button"
+                          data-nn-e2e-practice-topic-chip={b.topic}
+                          data-selected={picked}
+                          onClick={() => toggleTopicBucket(b.topic)}
+                          className="nn-chip px-3 py-1 text-xs font-medium data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
+                        >
+                          {formatTitleCase(b.topic)} ({b.count})
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <select
+                      className="rounded-lg border border-border px-2 py-1.5 text-sm"
+                      value=""
+                      onChange={(e) => {
+                        addTopicFromMenu(e.target.value);
+                        e.target.value = "";
+                      }}
+                    >
+                      <option value="">{t("learner.practiceTests.hub.addFromBank")}</option>
+                      {topics.map((b) => (
+                        <option key={b.topic} value={b.topic}>
+                          {b.topic} ({b.count})
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      className="rounded-lg border border-border px-2 py-1.5 text-sm"
+                      placeholder={t("learner.practiceTests.hub.customTopicPlaceholder")}
+                      value={topicInput}
+                      onChange={(e) => setTopicInput(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomTopic())}
+                    />
+                    <button
+                      type="button"
+                      className="nn-premium-action-chip rounded-lg border border-border px-3 py-1.5 text-sm"
+                      onClick={addCustomTopic}
+                    >
+                      {t("learner.practiceTests.hub.add")}
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+
+              <div>
+                <span className="font-medium text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.difficultySection")}</span>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {(["", 1, 2, 3, 4, 5] as const).map((level) => (
+                    <button
+                      key={level === "" ? "any" : level}
+                      type="button"
+                      data-selected={level === "" ? difficultyMin === "" && difficultyMax === "" : difficultyMin === level && difficultyMax === level}
+                      className="nn-chip px-3 py-1.5 text-xs font-medium"
+                      onClick={() => {
+                        setDifficultyMin(level);
+                        setDifficultyMax(level);
+                      }}
+                    >
+                      {level === "" ? t("learner.practiceTests.hub.difficultyAny") : t("learner.practiceTests.hub.difficultyLevel", { level })}
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  <label className="block text-sm">
+                    <span className="text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.difficultyMin")}</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={5}
+                      className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
+                      value={difficultyMin}
+                      onChange={(e) => setDifficultyMin(e.target.value === "" ? "" : Number(e.target.value))}
+                    />
+                  </label>
+                  <label className="block text-sm">
+                    <span className="text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.difficultyMax")}</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={5}
+                      className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
+                      value={difficultyMax}
+                      onChange={(e) => setDifficultyMax(e.target.value === "" ? "" : Number(e.target.value))}
+                    />
+                  </label>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground">{t("learner.practiceTests.hub.difficultyFootnote")}</p>
+              </div>
+            </div>
+          </details>
         </div>
 
         {error ? (
@@ -1329,15 +1645,6 @@ export function PracticeTestsHubClient({
         <LearnerSessionStartPanel
           primary={
             <>
-              {catExamStartHref && catOptions.length > 0 ? (
-                <Link
-                  href={catExamStartHref}
-                  className="nn-premium-action-chip inline-flex min-h-11 items-center sm:min-h-10 rounded-full border border-border px-5 py-2 text-sm font-semibold text-foreground hover:bg-muted"
-                  data-nn-e2e-practice-hub-cat-exam
-                >
-                  CAT exam
-                </Link>
-              ) : null}
               <button
                 type="button"
                 data-nn-qa-practice-hub-start-test
@@ -1352,15 +1659,11 @@ export function PracticeTestsHubClient({
                 onClick={() => setCustomizeOpen(true)}
                 className="nn-btn-primary px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
               >
-                {creating ? t("learner.practiceTests.hub.building") : "Start practice"}
+                {primaryStartLabel}
               </button>
             </>
           }
-          footnote={
-            catExamStartHref
-              ? "CAT exam link keeps your current pathway in the URL when you leave this builder."
-              : undefined
-          }
+          footnote={t("learner.practiceTests.hub.startFootnote")}
         />
 
         <ExamPreExamCustomizeModal
@@ -1375,8 +1678,8 @@ export function PracticeTestsHubClient({
       </section>
 
       <section>
-        <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)]">{t("learner.practiceTests.hub.savedHistoryTitle")}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{t("learner.practiceTests.hub.savedHistoryIntro")}</p>
+        <h2 className="text-lg font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.savedHistoryTitle")}</h2>
+        <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.savedHistoryIntro")}</p>
         {historyPriorityMessage ? <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">{historyPriorityMessage}</p> : null}
         {loading ? (
           <p className="mt-4 text-sm text-muted-foreground">{t("learner.practiceTests.hub.loading")}</p>
@@ -1400,7 +1703,7 @@ export function PracticeTestsHubClient({
             </button>
           </div>
         ) : list.length === 0 ? (
-          <div className="mt-4">
+          <div className="mt-4 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))] px-4 py-5 sm:px-5">
             <PremiumEmptyState
               data-nn-empty="practice-tests-history"
               tone="early"
@@ -1427,7 +1730,7 @@ export function PracticeTestsHubClient({
                         : row.selectionMode === "starred"
                           ? t("learner.practiceTests.hub.selection.starred")
                           : row.selectionMode === "unseen"
-                            ? "Unseen"
+                            ? t("learner.practiceTests.hub.rowUnseen")
                             : row.selectionMode === "cat"
                               ? t("learner.practiceTests.hub.selection.cat")
                               : row.selectionMode ?? t("learner.practiceTests.hub.notApplicable");
@@ -1506,6 +1809,36 @@ export function PracticeTestsHubClient({
           </ul>
         )}
       </section>
+
+      <details className="nn-card rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] p-4 shadow-sm lg:hidden">
+        <summary className="cursor-pointer list-none text-sm font-bold text-[var(--semantic-text-primary)] marker:content-none [&::-webkit-details-marker]:hidden">
+          <span className="inline-flex w-full items-center justify-between gap-2">
+            <span>{t("learner.practiceTests.examFirst.mobileStudyToolsSummary")}</span>
+            <span className="text-xs font-semibold text-[var(--semantic-chart-3)]" aria-hidden>
+              +
+            </span>
+          </span>
+        </summary>
+        <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.examFirst.studyToolsRailIntro")}</p>
+        <div className="mt-4">{studyToolsRailNav}</div>
+      </details>
+        </div>
+
+        <aside
+          className="mt-8 max-lg:hidden lg:mt-0 lg:sticky lg:top-24"
+          aria-label={t("learner.practiceTests.examFirst.studyToolsRailTitle")}
+        >
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] ring-1 ring-[color-mix(in_srgb,var(--semantic-info)_12%,transparent)]">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+              {t("learner.practiceTests.examFirst.studyToolsRailTitle")}
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+              {t("learner.practiceTests.examFirst.studyToolsRailIntro")}
+            </p>
+            <div className="mt-4">{studyToolsRailNav}</div>
+          </div>
+        </aside>
+      </div>
     </LearnerStudyPageShell>
   );
 }

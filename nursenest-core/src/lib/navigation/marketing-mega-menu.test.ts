@@ -1,14 +1,15 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { CANADA_NEW_GRAD_MARKETING_HUB_PATH, US_NEW_GRAD_MARKETING_HUB_PATH } from "./marketing-mega-menu-active-prefixes";
 import { buildMarketingMegaMenus } from "./marketing-mega-menu";
 
 describe("buildMarketingMegaMenus", () => {
   const t = (key: string) => key;
 
-  it("US New Grad mega menu hub is the transition pathway root (not /pre-nursing or generic /lessons)", () => {
+  it("US New Grad mega menu hub is the marketing landing (not /pre-nursing or generic /lessons)", () => {
     const menus = buildMarketingMegaMenus("US", t);
     const ng = menus.find((m) => m.key === "newgrad");
-    assert.equal(ng?.hubHref, "/us/rn/new-grad-transition");
+    assert.equal(ng?.hubHref, US_NEW_GRAD_MARKETING_HUB_PATH);
     const flat = ng?.groups.flatMap((g) => g.links) ?? [];
     assert.equal(flat.find((l) => l.key === "ng-lessons")?.href, "/us/rn/new-grad-transition/lessons");
     assert.equal(flat.find((l) => l.key === "ng-questions")?.href, "/us/rn/new-grad-transition/questions");
@@ -18,10 +19,10 @@ describe("buildMarketingMegaMenus", () => {
     assert.equal(flat.some((l) => l.href === "/lessons"), false);
   });
 
-  it("CA New Grad mega menu hub follows the RN pathway hub (region policy)", () => {
+  it("CA New Grad mega menu hub is the Canada new-grad landing (study links still on RN pathway)", () => {
     const menus = buildMarketingMegaMenus("CA", t);
     const ng = menus.find((m) => m.key === "newgrad");
-    assert.equal(ng?.hubHref, "/canada/rn/nclex-rn");
+    assert.equal(ng?.hubHref, CANADA_NEW_GRAD_MARKETING_HUB_PATH);
     const flat = ng?.groups.flatMap((g) => g.links) ?? [];
     assert.equal(flat.find((l) => l.key === "ng-lessons")?.href, "/canada/rn/nclex-rn/lessons");
     assert.equal(flat.find((l) => l.key === "ng-questions")?.href, "/canada/rn/nclex-rn/questions");

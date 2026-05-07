@@ -11,6 +11,7 @@
 import "server-only";
 
 import { blogChatUsesOpenRouter } from "@/lib/ai/blog-ai-routing";
+import { isAuthSecretBuildToleranceContext, isAuthSecretConfigured } from "@/lib/auth/auth-session-signing-env";
 import { assertRuntimeDatabaseEnvContract } from "./require-database-env";
 
 const REQUIRED_RUNTIME_ENVS = ["AI_ADMIN_GENERATION_ENABLED"] as const;
@@ -45,6 +46,12 @@ function getEnvValidationMode(): EnvValidationMode {
   return "strict";
 }
 
+function isNonDevelopmentNodeEnv(): boolean {
+  const n = process.env.NODE_ENV;
+  if (n === "development" || n === "test") return false;
+  return true;
+}
+
 function collectMissingRuntimeEnvIssues(): string[] {
   const missing: string[] = [];
 
@@ -58,6 +65,16 @@ function collectMissingRuntimeEnvIssues(): string[] {
   if (!satisfiesAiFundingContract()) {
     missing.push(
       `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
+    );
+  }
+
+  if (
+    isNonDevelopmentNodeEnv() &&
+    !isAuthSecretBuildToleranceContext() &&
+    !isAuthSecretConfigured()
+  ) {
+    missing.push(
+      "AUTH_SECRET (preferred) or NEXTAUTH_SECRET (legacy) — required for Auth.js JWT signing at runtime (generate: openssl rand -base64 32)",
     );
   }
 

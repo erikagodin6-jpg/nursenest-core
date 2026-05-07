@@ -295,13 +295,13 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
                 }
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
               >
-                {assessment.marketingPrimaryCta === "sign_in_to_cat" ? "Sign in to start exam simulation" : "Start exam simulation"}
+                {assessment.marketingPrimaryCta === "sign_in_to_cat" ? "Sign In to Start Exam Simulation" : "Start Exam Simulation"}
               </Link>
               <Link
                 href={questionsHrefWithProfession}
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
               >
-                Practice questions first
+                Practice Questions First
               </Link>
             </div>
           </>
@@ -316,27 +316,27 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
                   href={signInReturnHref}
                   className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
                 >
-                  Sign in for {catShort}
+                  Sign In for {catShort}
                 </Link>
               ) : assessment.reason === "no_subscription" || assessment.reason === "wrong_subscription_tier" ? (
                 <Link
                   href={pricingHref}
                   className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
                 >
-                  View plans for CAT access
+                  View Plans for CAT Access
                 </Link>
               ) : null}
               <Link
                 href={questionsHrefWithProfession}
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
               >
-                Open question bank
+                Open Question Bank
               </Link>
               <Link
                 href={lessonsHrefWithProfession}
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
               >
-                Browse lessons
+                Browse Lessons
               </Link>
             </div>
           </>
@@ -354,13 +354,13 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
           href={questionsHrefWithProfession}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
         >
-          Question bank
+          Question Bank
         </Link>
         <Link
           href={HUB.practiceExams}
           className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-dashed border-border px-8 py-3 text-sm font-semibold text-[var(--theme-muted-text)] hover:bg-card sm:w-auto"
         >
-          All practice exams (every pathway)
+          All Practice Exams (Every Pathway)
         </Link>
       </div>
     </div>

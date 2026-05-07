@@ -181,7 +181,7 @@ export default function HomeRestoredClient({
           "Choose RN, PN, NP, or Allied from the pathway cards below — regional hubs stay one click away.",
         )}
         href={explorePricingHref}
-        linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.regions.link", "View pricing")}
+        linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.regions.link", "View Pricing")}
       />
 
       {/* TRUST */}
@@ -201,7 +201,7 @@ export default function HomeRestoredClient({
           "CAT-style practice, rationales, and lessons are available after you sign in — this page keeps the shell lightweight.",
         )}
         href={exploreQuestionsHref}
-        linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.study.link", "Start practicing")}
+        linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.study.link", "Start Practicing")}
       />
       <HomeStableMarketingPlaceholder
         bandToneClass="nn-home-rich-placeholder-band--tone-cool"
@@ -212,7 +212,7 @@ export default function HomeRestoredClient({
           "Pricing and plans are documented on the pricing page so you can compare tiers without loading large previews here.",
         )}
         href={explorePricingHref}
-        linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.support.link", "Compare plans")}
+        linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.support.link", "Compare Plans")}
       />
 
       {/* AUDIENCE CARDS */}

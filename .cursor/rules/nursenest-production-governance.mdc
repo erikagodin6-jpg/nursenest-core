@@ -15,3 +15,47 @@ alwaysApply: true
 - Do not reintroduce the arch graphic.
 - Do not add heavy libraries, touch env/secrets, or silently change app-wide copy unless explicitly asked.
 - After auth, dashboard, nav, lesson, or paywall edits, run focused validation and report what you verified.
+
+## Learner emotional experience (critical product override)
+
+For **learner-facing** surfaces (`/app/*`, marketing study hubs, pathway learner pages), optimize for **emotional experience and study success**, not internal-, dashboard-, or engineering-first layouts. Staff/admin UIs stay operational and secure; never trade **server-enforced** auth, entitlements, or paywall correctness for visual polish.
+
+### Success signals (what “good” means)
+
+Prioritize: motivation, confidence, focus, study momentum, emotional engagement, visual clarity, ease of starting, perceived quality and intelligence. Learners should tend to feel: calm, supported, energized, optimistic, immersed, confident, productive. The product should read as **premium, polished, modern, visually alive, clinically intelligent, emotionally motivating**.
+
+### Mandatory design questions (answer before substantive learner-page redesign)
+
+1. What is the learner trying to accomplish **immediately**?
+2. What should **visually dominate** the page?
+3. What should feel **secondary**?
+4. What can be **removed** entirely?
+5. What creates **emotional motivation**?
+6. What creates **cognitive overload**?
+7. **Immersive** vs **administrative** — which mode does this screen serve?
+8. Does this feel like a **premium modern product**?
+9. Would a nursing student **want to spend hours** here?
+10. Does the layout preserve **study momentum** (next step obvious, low friction)?
+
+### Simplification rule
+
+Before adding new UI: remove clutter, redundant utility surfaces, weak cards, repetitive sections, and low-value copy first. **Aggressively simplify**; clear **visual hierarchy** beats implementation cleverness.
+
+### Anti-patterns on learner surfaces
+
+Avoid internal-tool defaults: dense “control panel” grids everywhere, inventory- or builder-first hierarchy, metric walls without breathing room or narrative, flat/boring layouts that are technically correct but emotionally empty.
+
+### Visual and tone guardrails
+
+Prefer brighter, cleaner, more dynamic, optimistic, immersive presentation — **professional and uplifting**, not childish, cartoon, toy-like gamification, or chaotic noise. For color, charts, and status bands on learner and marketing study surfaces, follow **`.cursor/rules/semantic-color-guardrails.mdc`** (tokens and multi-hue semantics; no monochrome product UI).
+
+### PR / review checklist (mandatory for learner-facing redesign PRs)
+
+Include all of the following in the PR description (not only implementation notes):
+
+1. **Before** screenshots (key states).
+2. **After** screenshots (same states).
+3. **Emotional UX** — what should improve for the learner’s feelings and engagement?
+4. **Hierarchy** — what dominates, what is secondary, and how did that change?
+5. **Simplification / removal** — what was removed or de-emphasized, and why?
+6. **Studying** — how does the change support focus, momentum, confidence, or starting the next task?

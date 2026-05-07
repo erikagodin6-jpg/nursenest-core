@@ -188,7 +188,7 @@ export function TrialOnboardingFlow({
   }
 
   return (
-    <div className="mx-auto w-full max-w-lg">
+    <div className="mx-auto w-full min-w-0 max-w-lg px-1 sm:px-0">
       {/* Progress bar */}
       <div className="mb-8">
         <div className="flex items-center justify-between text-xs font-medium text-muted-foreground">
@@ -314,18 +314,18 @@ function StepExamGoal({
             onClick={() => onChange(opt.id)}
             className={`nn-onboarding-option ${value === opt.id ? "nn-onboarding-option--selected" : ""}`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 items-start gap-3">
               {value === opt.id && (
                 <CheckCircle2
-                  className="h-5 w-5 shrink-0"
+                  className="mt-0.5 h-5 w-5 shrink-0"
                   style={{ color: "var(--semantic-success)" }}
                 />
               )}
-              <div className="text-left">
-                <p className="font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
+              <div className="min-w-0 flex-1 text-left">
+                <p className="text-wrap break-words font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
                   {opt.label}
                 </p>
-                <p className="text-sm" style={{ color: "var(--semantic-text-muted)" }}>
+                <p className="mt-0.5 text-wrap break-words text-sm leading-snug" style={{ color: "var(--semantic-text-muted)" }}>
                   {opt.description}
                 </p>
               </div>
@@ -376,18 +376,18 @@ function StepTimeline({
           onClick={onNotScheduled}
           className={`nn-onboarding-option ${notScheduled ? "nn-onboarding-option--selected" : ""}`}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-start gap-3">
             {notScheduled && (
               <CheckCircle2
-                className="h-5 w-5 shrink-0"
+                className="mt-0.5 h-5 w-5 shrink-0"
                 style={{ color: "var(--semantic-success)" }}
               />
             )}
-            <div className="text-left">
-              <p className="font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
+            <div className="min-w-0 flex-1 text-left">
+              <p className="text-wrap break-words font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
                 Not scheduled yet
               </p>
-              <p className="text-sm" style={{ color: "var(--semantic-text-muted)" }}>
+              <p className="mt-0.5 text-wrap break-words text-sm leading-snug" style={{ color: "var(--semantic-text-muted)" }}>
                 I'm studying ahead — I'll set a date later
               </p>
             </div>
@@ -421,7 +421,7 @@ function StepStudyStyle({
             onClick={() => onChange(opt.id)}
             className={`nn-onboarding-option ${value === opt.id ? "nn-onboarding-option--selected" : ""}`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 items-start gap-3">
               <div
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                 style={{
@@ -433,17 +433,17 @@ function StepStudyStyle({
               >
                 {opt.icon}
               </div>
-              <div className="text-left">
-                <p className="font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
+              <div className="min-w-0 flex-1 text-left">
+                <p className="text-wrap break-words font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
                   {opt.label}
                 </p>
-                <p className="text-sm" style={{ color: "var(--semantic-text-muted)" }}>
+                <p className="mt-0.5 text-wrap break-words text-sm leading-snug" style={{ color: "var(--semantic-text-muted)" }}>
                   {opt.description}
                 </p>
               </div>
               {value === opt.id && (
                 <CheckCircle2
-                  className="ml-auto h-5 w-5 shrink-0"
+                  className="ml-auto mt-0.5 h-5 w-5 shrink-0"
                   style={{ color: "var(--semantic-success)" }}
                 />
               )}
@@ -482,12 +482,12 @@ function StepCta({
         Jump into your first lesson and question set. You can start a trial or upgrade anytime from your study hub.
       </p>
 
-      <div className="mt-8 flex flex-col items-center gap-3">
+      <div className="mt-8 flex w-full min-w-0 flex-col items-stretch gap-3 sm:items-center">
         <button
           type="button"
           disabled={saving}
           onClick={onStartTrial}
-          className="nn-btn-primary inline-flex min-h-[3rem] w-full max-w-xs items-center justify-center rounded-xl px-6 text-base font-semibold shadow-none disabled:opacity-50"
+          className="nn-btn-primary inline-flex min-h-[3rem] w-full min-w-0 max-w-md items-center justify-center rounded-xl px-6 text-base font-semibold shadow-none disabled:opacity-50 sm:max-w-sm"
         >
           {saving ? "Setting up…" : "Start studying now"}
         </button>

@@ -118,7 +118,7 @@ export const TIER_MATRIX_SIGNUP_ROWS: readonly TierMatrixSignupRow[] = [
     signupTier: "RN",
     signupExamFocus: "nclex_rn",
     signupLearnerPath: "new_grad",
-    hubPathnameRegex: /\/us\/rn\/new-grad-transition/i,
+    hubPathnameRegex: /\/us\/new-grad|\/us\/rn\/new-grad-transition/i,
   },
 ];
 

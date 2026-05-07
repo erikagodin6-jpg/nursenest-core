@@ -11,11 +11,18 @@ import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-rout
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import {
+  CANADA_NEW_GRAD_MARKETING_HUB_PATH,
+  US_NEW_GRAD_MARKETING_HUB_PATH,
   MEGA_MENU_STRIPPED_ACTIVE_PREFIXES,
   type MarketingPathwayMegaMenuKey,
 } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
 
-export { MEGA_MENU_STRIPPED_ACTIVE_PREFIXES, type MarketingPathwayMegaMenuKey };
+export {
+  CANADA_NEW_GRAD_MARKETING_HUB_PATH,
+  US_NEW_GRAD_MARKETING_HUB_PATH,
+  MEGA_MENU_STRIPPED_ACTIVE_PREFIXES,
+  type MarketingPathwayMegaMenuKey,
+};
 
 /** US-only product pathway: new graduate RN transition lessons (not pre-nursing). */
 export const US_NEW_GRAD_TRANSITION_PATHWAY_ID = "us-rn-new-grad-transition" as const;
@@ -31,8 +38,9 @@ export type PublicNewGradStudyDestinations = {
 };
 
 /**
- * Public "New Grad" study destinations: US uses the dedicated transition pathway; Canada
- * follows the same policy as `[locale]/new-grad` (RN hub + RN lesson surfaces).
+ * Public "New Grad" study destinations: US marketing hub is `/us/new-grad` while lessons,
+ * questions, and CAT stay on the `us-rn-new-grad-transition` pathway URLs. Canada keeps the
+ * dedicated `/canada/new-grad` landing with RN-hub lesson surfaces (no duplicate RN tab href).
  */
 export function publicNewGradStudyDestinations(
   region: MarketingRegionToggle,
@@ -59,9 +67,8 @@ export function publicNewGradStudyDestinations(
     const lessons = buildExamPathwayPath(pathway, "lessons");
     const cat =
       marketingCatPathForPathwayId(US_NEW_GRAD_TRANSITION_PATHWAY_ID) ?? buildExamPathwayPath(pathway, "cat");
-    const hubRoot = buildExamPathwayPath(pathway);
     return {
-      hubHref: hubRoot,
+      hubHref: US_NEW_GRAD_MARKETING_HUB_PATH,
       lessons,
       questions: buildExamPathwayPath(pathway, "questions"),
       cat,
@@ -72,8 +79,9 @@ export function publicNewGradStudyDestinations(
   }
 
   const rnPathway = getExamPathwayById(defaultPathwayIdForMarketingOffering(region, "rn"));
+  /** Canada has no `ca-*-new-grad-transition` pathway — dedicated hub avoids duplicate RN tab hrefs. */
   return {
-    hubHref: rnHub,
+    hubHref: CANADA_NEW_GRAD_MARKETING_HUB_PATH,
     lessons: marketingPathwaySubpathBesideExamHub(rnHub, rnPathway, "lessons"),
     questions: marketingPathwaySubpathBesideExamHub(rnHub, rnPathway, "questions"),
     cat: publicMarketingCatHrefForOffering(region, "rn"),

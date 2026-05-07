@@ -120,7 +120,7 @@ function HeroSection() {
             className="nn-marketing-cta-primary inline-flex min-h-[2.75rem] items-center rounded-full px-7 text-sm font-semibold shadow-sm transition"
             style={{ background: ACCENT, color: "var(--color-on-primary, #fff)" }}
           >
-            Start studying free
+            Start Studying Free
           </Link>
           <Link
             href="/pricing"
@@ -131,7 +131,7 @@ function HeroSection() {
               background: "transparent",
             }}
           >
-            View plans
+            View Plans
           </Link>
         </div>
       </div>
@@ -357,7 +357,7 @@ function FinalCtaSection() {
             className="nn-marketing-cta-primary inline-flex min-h-[2.75rem] items-center rounded-full px-7 text-sm font-semibold shadow-sm transition"
             style={{ background: ACCENT, color: "var(--color-on-primary, #fff)" }}
           >
-            Start studying free
+            Start Studying Free
           </Link>
           <Link
             href="/pricing"
@@ -367,7 +367,7 @@ function FinalCtaSection() {
               color: TEXT_HEADING,
             }}
           >
-            View plans
+            View Plans
           </Link>
         </div>
       </div>

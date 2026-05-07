@@ -5,6 +5,8 @@
 
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import { ALLIED, HUB, NP, PN } from "@/lib/marketing/marketing-entry-routes";
+import { listNewGradWorkAreaSlugs } from "@/lib/new-grad/new-grad-work-areas";
+import { newGradWorkAreaHubPath } from "@/lib/navigation/new-grad-marketing-hub-paths";
 import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 
 const US_RN_HUB = CANONICAL_PATHWAY_HUB.usRn;
@@ -13,6 +15,7 @@ const CA_RN_HUB = CANONICAL_PATHWAY_HUB.caRn;
 /** Stable, deduped public paths (English-default shell, no `/[locale]` prefix unless required). */
 export function getProductionSmokePublicPaths(): readonly string[] {
   const usNewGrad = publicNewGradStudyDestinations("US", US_RN_HUB);
+  const caNewGrad = publicNewGradStudyDestinations("CA", CA_RN_HUB);
   const set = new Set<string>([
     "/",
     HUB.pricing,
@@ -42,6 +45,9 @@ export function getProductionSmokePublicPaths(): readonly string[] {
     ALLIED.caHub,
     usNewGrad.hubHref,
     usNewGrad.lessons,
+    newGradWorkAreaHubPath("us", listNewGradWorkAreaSlugs()[0] ?? "med-surg"),
+    caNewGrad.hubHref,
+    newGradWorkAreaHubPath("canada", listNewGradWorkAreaSlugs()[0] ?? "med-surg"),
     "/sitemap.xml",
     "/robots.txt",
   ]);

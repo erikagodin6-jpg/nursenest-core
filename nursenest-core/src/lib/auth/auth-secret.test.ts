@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
+import { assertDevAuthSigningSecretConfiguredOrThrow, resolveAuthSecretFromEnv } from "@/lib/auth/auth-session-signing-env";
 import {
   getAuthSecretEnvPresenceReport,
   reportAuthSecretStartupStatus,
   resetAuthSecretStartupDedupeForTests,
-  resolveAuthSecretFromEnv,
 } from "@/lib/auth/auth-secret";
 
 function withEnv<T>(overrides: Record<string, string | undefined>, run: () => T): T {
@@ -59,6 +59,54 @@ describe("getAuthSecretEnvPresenceReport", () => {
       assert.equal(r.resolvedFrom, "AUTH_SECRET");
       assert.equal(JSON.stringify(r).includes("super-secret"), false);
     });
+  });
+});
+
+describe("assertDevAuthSigningSecretConfiguredOrThrow", () => {
+  it("throws in development when no secret and not build-tolerant", () => {
+    withEnv(
+      {
+        AUTH_SECRET: undefined,
+        NEXTAUTH_SECRET: undefined,
+        NODE_ENV: "development",
+        NEXT_PHASE: undefined,
+        npm_lifecycle_event: undefined,
+        NN_SKIP_DEV_AUTH_SECRET: undefined,
+      },
+      () => {
+        assert.throws(
+          () => assertDevAuthSigningSecretConfiguredOrThrow("test"),
+          /Auth\.js session signing secret is missing/,
+        );
+      },
+    );
+  });
+
+  it("no-ops when NN_SKIP_DEV_AUTH_SECRET=1", () => {
+    withEnv(
+      {
+        AUTH_SECRET: undefined,
+        NEXTAUTH_SECRET: undefined,
+        NODE_ENV: "development",
+        NN_SKIP_DEV_AUTH_SECRET: "1",
+      },
+      () => {
+        assert.doesNotThrow(() => assertDevAuthSigningSecretConfiguredOrThrow("test"));
+      },
+    );
+  });
+
+  it("no-ops outside development", () => {
+    withEnv(
+      {
+        AUTH_SECRET: undefined,
+        NEXTAUTH_SECRET: undefined,
+        NODE_ENV: "production",
+      },
+      () => {
+        assert.doesNotThrow(() => assertDevAuthSigningSecretConfiguredOrThrow("test"));
+      },
+    );
   });
 });
 

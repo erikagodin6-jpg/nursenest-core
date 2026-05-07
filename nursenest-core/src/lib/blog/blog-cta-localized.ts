@@ -162,8 +162,8 @@ function pricingCta(
   return {
     variant: isAffordableMarket ? "pricing_affordable" : "pricing_value",
     text: isAffordableMarket
-      ? `See affordable plans for ${regionName}`
-      : `View plans and pricing`,
+      ? `See Affordable Plans for ${regionName}`
+      : `View Plans and Pricing`,
     href: `${basePath}/pricing`,
     position: "end_of_article",
     regionContext: strategy?.ctaAngle ?? "",

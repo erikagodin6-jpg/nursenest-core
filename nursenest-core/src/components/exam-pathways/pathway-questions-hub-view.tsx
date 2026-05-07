@@ -6,7 +6,6 @@ import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-qu
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
 import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
-import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { NpQuestionsHubBoardLinkContext } from "@/components/exam-pathways/np-questions-hub-board-links";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-readiness-floor";
@@ -200,11 +199,23 @@ export function PathwayQuestionsHubView({
             : `Clinical vignettes and rationales written for ${examName} — same scope and language as test day for your ${countryLabel} track.`}
         </p>
 
-        {/* Stat tiles */}
-        <div className="mt-5 grid grid-cols-3 gap-3">
-          <StatTile label="Practice questions" value={totalQuestions} accent="brand" />
+        {/* Stat tiles — suppress zero practice counts (learner confidence) */}
+        <div
+          className={`mt-5 grid gap-3 ${
+            snap && snap.pathwayScopedCount > 0 && snap.adaptiveEligibleCount > 0
+              ? "grid-cols-3"
+              : snap && (snap.pathwayScopedCount > 0 || snap.adaptiveEligibleCount > 0)
+                ? "grid-cols-2"
+                : "grid-cols-1 sm:grid-cols-2"
+          }`}
+        >
+          {snap && snap.pathwayScopedCount > 0 ? (
+            <StatTile label="Practice questions" value={totalQuestions} accent="brand" />
+          ) : null}
           <StatTile label="Clinical lessons" value={totalLessons} accent="info" />
-          <StatTile label="CAT-eligible" value={catEligible} accent="success" />
+          {snap && snap.adaptiveEligibleCount > 0 ? (
+            <StatTile label="CAT-eligible" value={catEligible} accent="success" />
+          ) : null}
         </div>
 
         {/* CTAs */}
@@ -243,16 +254,39 @@ export function PathwayQuestionsHubView({
         </div>
       </section>
 
-      {/* ── Zero-question empty state ─────────────────────── */}
+      {/* ── Bank ramping (no harsh zero-inventory headline) ─────────────────────── */}
       {snap && !hasQuestions ? (
-        <ContentEmptyState
-          variant="questions"
-          primaryCta={{ label: "Start available topics", href: lessonsHref }}
-          secondaryCtas={[
-            ...(catPoolUsable ? [{ label: "Try CAT exam", href: catHref }] : []),
-            { label: "Create account", href: "/signup", variant: "ghost" },
-          ]}
-        />
+        <div className="mt-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_88%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]">
+          <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+            Start with lessons and adaptive prep — scored counts appear as publishing expands
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Clinical lessons and CAT surfaces stay available for this pathway. When the scored linear bank is still
+            ramping, focus on lessons and adaptive sessions tied to your scope — no broken experience.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href={lessonsHref}
+              className="inline-flex min-h-11 items-center rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-semibold text-[var(--semantic-brand-contrast)]"
+            >
+              Browse lessons
+            </Link>
+            {catPoolUsable ? (
+              <Link
+                href={catHref}
+                className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm"
+              >
+                Try CAT exam
+              </Link>
+            ) : null}
+            <Link
+              href="/signup"
+              className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
+            >
+              Create account
+            </Link>
+          </div>
+        </div>
       ) : null}
 
       {/* ── Info cards ───────────────────────────────────── */}
@@ -280,7 +314,9 @@ export function PathwayQuestionsHubView({
               title={catPoolUsable ? "Adaptive practice available" : "Adaptive practice"}
               body={
                 catPoolUsable
-                  ? `${catEligible !== "–" ? `${catEligible} items are` : "Items are"} CAT-eligible — the adaptive engine adjusts difficulty based on your answers, mirroring computerized adaptive testing.`
+                  ? snap && snap.adaptiveEligibleCount > 0
+                    ? `${catEligible} items are CAT-eligible — the adaptive engine adjusts difficulty based on your answers, mirroring computerized adaptive testing.`
+                    : "Eligible CAT items are available for adaptive sessions — difficulty adjusts from your responses."
                   : "CAT-style runs need a larger pool of complete adaptive-eligible items. Use linear practice and lessons until the pathway bank meets the minimum."
               }
             />

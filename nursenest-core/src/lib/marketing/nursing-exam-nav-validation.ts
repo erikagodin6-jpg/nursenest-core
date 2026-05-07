@@ -16,6 +16,7 @@ const KNOWN_SHORT_MARKETING_DESTINATIONS = new Set([
 /**
  * Guards nav and CTAs: marketing exam hubs are `/{us|canada}/{role}/{exam}[/…]`, or known short canonical routes.
  * Invalid strings fall back to the region’s canonical RN pathway hub so the shell never emits broken hrefs.
+ * Allied occupation URLs (`/allied/...`) are accepted so nav validation cannot silently rewrite them to RN.
  */
 export function isWellFormedExamHubPath(href: string): boolean {
   const raw = href.trim().split("?")[0]?.split("#")[0] ?? href.trim();
@@ -25,6 +26,8 @@ export function isWellFormedExamHubPath(href: string): boolean {
     return true;
   }
   const parts = path.split("/").filter(Boolean);
+  /** Occupation hubs `/allied/{professionKey}` — never coerce these to RN via {@link ensureMarketingExamHubPath}. */
+  if (parts[0] === "allied" && parts.length >= 2) return true;
   if (parts.length < 3) return false;
   const country = parts[0]!.toLowerCase();
   return country === "us" || country === "canada";

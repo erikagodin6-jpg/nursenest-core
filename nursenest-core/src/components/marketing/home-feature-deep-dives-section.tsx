@@ -92,7 +92,7 @@ export function HomeFeatureDeepDivesSection() {
             eventProps={{ region }}
             className={MARKETING_PRIMARY_CTA_CLASS}
           >
-            View pricing
+            View Pricing
             <ArrowRight className="ml-2 h-4 w-4" />
           </MarketingTrackedLink>
 
@@ -102,7 +102,7 @@ export function HomeFeatureDeepDivesSection() {
             eventProps={{ region }}
             className={MARKETING_SECONDARY_CTA_CLASS}
           >
-            Try practice questions
+            Try Practice Questions
           </MarketingTrackedLink>
         </div>
       </div>

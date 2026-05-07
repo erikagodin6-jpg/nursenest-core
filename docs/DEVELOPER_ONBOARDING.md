@@ -86,7 +86,8 @@ Registry-driven exam URLs are documented in `nursenest-core/docs/exam-product-ar
 Authoritative lists: `nursenest-core/docs/SECRETS_AND_ENV.md`, `nursenest-core/docs/environment-reference.md`. Minimum for local auth/database (also enforced by `scripts/check-required-env.mjs` when run via `npm run env:check` from app):
 
 - `DATABASE_URL`, `DIRECT_URL`
-- `NEXTAUTH_SECRET`, `NEXTAUTH_URL`
+- **`AUTH_SECRET`** (preferred for Auth.js v5) or **`NEXTAUTH_SECRET`** (legacy) — at least one required; generate with `openssl rand -base64 32`
+- **`AUTH_URL`** / **`NEXTAUTH_URL`** — public dev origin (e.g. `http://127.0.0.1:3000`)
 
 Production additionally needs Stripe keys, cron secrets, storage credentials, etc.—see SECRETS doc. **Do not commit secrets.**
 

@@ -23,8 +23,6 @@ import {
   resolveSubscribedQuestionBankPathways,
   type ResolvedQuestionBankPathways,
 } from "@/lib/learner/tier-scoped-study-routes";
-import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
-import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failover/practice-tests-hub-bootstrap-snapshot-read";
@@ -265,18 +263,10 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
         <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
           {t("learner.practiceTests.title")}
         </h1>
-        <div className="mt-2.5 flex max-w-prose flex-col gap-2.5 text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
-          <p>{t("learner.practiceTests.subtitle.subscriber")}</p>
-          <p>
-            {t("learner.practiceTests.pageHero.catInsightsLead")}{" "}
-            <Link href="/app/practice-tests/cat-insights" className="font-semibold text-primary underline">
-              {t("learner.practiceTests.pageHero.catInsightsLink")}
-            </Link>
-            .
-          </p>
-        </div>
+        <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
+          {t("learner.practiceTests.subtitle.subscriber")}
+        </p>
       </div>
-      <LearnerStudyQuickLinksCard t={t} id="practice-tests-study-quick-links" catHref={catHref} />
       <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>
         <PracticeTestsHubClient
           pathwayOptions={pathwayOptions}

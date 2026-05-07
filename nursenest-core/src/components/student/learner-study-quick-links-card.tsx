@@ -58,13 +58,13 @@ export function LearnerStudyQuickLinksCard({
 
   return (
     <section
-      className="nn-card nn-learner-quick-links-section nn-product-surface-accent relative overflow-hidden border-[var(--semantic-border-soft)] pt-7 shadow-[var(--semantic-shadow-soft)]"
+      className="nn-card nn-learner-quick-links-section nn-product-surface-accent relative overflow-hidden border-[var(--semantic-border-soft)] pt-5 shadow-[var(--semantic-shadow-soft)] sm:pt-6"
       aria-labelledby={`${id}-heading`}
     >
       <div className="flex flex-wrap items-start gap-2 px-6">
         <Sparkles className="nn-learner-quick-links-heading-icon mt-0.5 h-5 w-5 shrink-0" aria-hidden strokeWidth={2} />
         <div>
-          <h2 id={`${id}-heading`} className="text-lg font-semibold text-[var(--semantic-text-primary)]">
+          <h2 id={`${id}-heading`} className="text-base font-semibold text-[var(--semantic-text-primary)] sm:text-lg">
             {t("learner.profile.quickLinks.heading")}
           </h2>
           <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("learner.profile.quickLinks.subtitle")}</p>

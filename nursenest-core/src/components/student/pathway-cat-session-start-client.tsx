@@ -267,7 +267,7 @@ export function PathwayCatSessionStartClient({
           href="/app/practice-tests"
           className="mt-3 inline-block text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
         >
-          Back to practice tests
+          Back to Practice Tests
         </Link>
       </div>
     );
@@ -278,7 +278,7 @@ export function PathwayCatSessionStartClient({
       <nav aria-label="Pathway context" className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
         <div className="min-w-0 space-y-1">
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
-            Practice tests
+            Practice Tests
             {pathwayOptionLabel ? (
               <>
                 <span aria-hidden className="mx-1.5 text-[var(--semantic-border-soft)]">
@@ -292,7 +292,7 @@ export function PathwayCatSessionStartClient({
             href="/app/practice-tests"
             className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
           >
-            ← Return to practice tests
+            ← Return to Practice Tests
           </Link>
         </div>
       </nav>
@@ -401,7 +401,7 @@ export function PathwayCatSessionStartClient({
             {readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid && pathwayMeta ? (
               <li>
                 <Link className="font-medium text-[var(--semantic-brand)] underline" href={buildExamPathwayPath(pathwayMeta, "questions")}>
-                  Open pathway question bank
+                  Open Pathway Question Bank
                 </Link>
               </li>
             ) : null}
@@ -421,7 +421,7 @@ export function PathwayCatSessionStartClient({
             ) : null}
             <li>
               <Link className="font-medium text-[var(--semantic-brand)] underline" href="/app/practice-tests">
-                Practice tests hub
+                Practice Tests Hub
               </Link>
             </li>
           </ul>
@@ -552,7 +552,7 @@ export function PathwayCatSessionStartClient({
               href={pathwayQuestionsHref ?? "/app/questions"}
               className="inline-flex min-h-11 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] bg-transparent px-5 text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
             >
-              Warm up in question bank
+              Warm Up in Question Bank
             </Link>
             <Link
               href={lessonsHubHref}
@@ -581,7 +581,7 @@ export function PathwayCatSessionStartClient({
           </div>
           <p className="mt-4 text-xs text-[var(--semantic-text-muted)]">
             <Link href="/app/practice-tests" className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
-              Practice tests hub
+              Practice Tests Hub
             </Link>{" "}
             — resume an in-progress linear or adaptive session, or open a prior report.
           </p>
@@ -601,7 +601,7 @@ export function PathwayCatSessionStartClient({
             href={pathwayQuestionsHref ?? "/app/questions"}
             className="inline-flex min-h-11 items-center rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-xs font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
           >
-            {pathwayQuestionsHref ? "Pathway question bank" : "Question bank"}
+            {pathwayQuestionsHref ? "Pathway Question Bank" : "Question Bank"}
           </Link>
           <Link
             href="/app/practice-tests"
@@ -613,7 +613,7 @@ export function PathwayCatSessionStartClient({
             href={normalizedPathwayId ? pathwayHubAppQuestionsHref(normalizedPathwayId) : "/app/account/study-preferences"}
             className="inline-flex min-h-11 items-center rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-xs font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
           >
-            App question bank
+            App Question Bank
           </Link>
         </div>
       </div>

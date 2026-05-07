@@ -19682,7 +19682,7 @@ const tlTranslations: Record<string, string> = {
     "pages.signup.examFocus.rexPnCa": "REx-PN / praktikal na pag-aalaga (Canada)",
     "pages.signup.h1": "Gumawa ng account",
     "pages.signup.legalAfter": ".",
-    "pages.signup.legalAnd": "at",
+    "pages.signup.legalAnd": " at ",
     "pages.signup.legalBefore": "Sa pamamagitan ng paglikha ng isang account, sumasang-ayon ka sa aming",
     "pages.signup.onboardingTitle": "Mabilis na onboarding (pinapabuti ang rekomendasyon)",
     "pages.signup.pathCareerChange": "Pagpalit ng career",

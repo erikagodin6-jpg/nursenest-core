@@ -30,7 +30,7 @@ This document tells contributors **what must never be committed** and **where se
 
 ## Local setup
 
-1. Copy `nursenest-core/.env.example` → `.env.local` (or your host’s secret UI).
+1. Copy `nursenest-core/.env.example` → `.env.local` (or your host’s secret UI). Set **`AUTH_SECRET`** (or legacy **`NEXTAUTH_SECRET`**) — required for Auth.js; generate with `openssl rand -base64 32`. From `nursenest-core/`, **`npm run dev:next`** runs a small preflight before `next dev`.
 2. For Playwright: copy `nursenest-core/.env.playwright.example` → `.env.playwright.local` with **staging-only** test users — never production accounts.
 
 ## Redaction helpers

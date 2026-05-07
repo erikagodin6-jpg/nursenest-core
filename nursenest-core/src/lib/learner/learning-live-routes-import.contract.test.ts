@@ -78,6 +78,6 @@ describe("learner live study routes import contract", () => {
     assert.doesNotMatch(src, /router\.push\(/);
     assert.match(src, /data-nn-e2e-practice-exams-builder/);
     assert.match(src, /data-nn-e2e-practice-pool-presets/);
-    assert.match(src, /Start practice/);
+    assert.match(src, /learner\.practiceTests\.hub\.startPracticeQuestions/);
   });
 });

@@ -5,10 +5,10 @@ import {
   Brain,
   ClipboardList,
   Crosshair,
-  GraduationCap,
   LayoutList,
   ListTodo,
   PlayCircle,
+  Target,
   Zap,
 } from "lucide-react";
 import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
@@ -137,27 +137,28 @@ export function QuickActionPanel({
           href={catStartHref}
           sourceSurface="dashboard_quick_actions"
           dashboardCatCard={catScoped ? "scoped" : "generic"}
-          className={`group flex flex-col gap-1.5 rounded-xl border bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 py-3.5 transition-[transform,background-color,box-shadow,border-color] duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))] hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5 ${
+          className={`group relative flex flex-col gap-1.5 overflow-hidden rounded-xl border-2 bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-chart-4)_12%,var(--semantic-surface))] to-[color-mix(in_srgb,var(--semantic-brand)_08%,var(--semantic-surface))] px-4 py-3.5 transition-[transform,background-color,box-shadow,border-color] duration-200 hover:shadow-[var(--semantic-shadow-soft)] motion-safe:hover:-translate-y-0.5 ${
             hasRecentCompletion
               ? emphasizeCat
-                ? "border-[color-mix(in_srgb,var(--semantic-brand)_46%,var(--semantic-border-soft))] shadow-[0_0_0_1px_color-mix(in_srgb,var(--semantic-brand)_22%,transparent)]"
-                : "border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))]"
-              : "border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))]"
+                ? "border-[color-mix(in_srgb,var(--semantic-chart-4)_52%,var(--semantic-border-soft))] shadow-[0_0_0_1px_color-mix(in_srgb,var(--semantic-chart-4)_22%,transparent)]"
+                : "border-[color-mix(in_srgb,var(--semantic-chart-4)_42%,var(--semantic-border-soft))]"
+              : "border-[color-mix(in_srgb,var(--semantic-chart-4)_42%,var(--semantic-border-soft))]"
           }`}
         >
-          <div className="flex items-center gap-2">
-            <GraduationCap
-              className="h-4 w-4 shrink-0 text-[var(--semantic-brand)] transition-transform duration-200 group-hover:translate-x-0.5"
+          <div aria-hidden className="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-4)_14%,transparent)] blur-2xl" />
+          <div className="relative flex items-center gap-2">
+            <Crosshair
+              className="h-4 w-4 shrink-0 text-[color-mix(in_srgb,var(--semantic-chart-4)_90%,var(--semantic-brand))] transition-transform duration-200 group-hover:translate-x-0.5"
               strokeWidth={2}
               aria-hidden
             />
-            <span className="text-sm font-semibold text-[var(--semantic-brand)]">
+            <span className="text-sm font-semibold text-[color-mix(in_srgb,var(--semantic-chart-4)_92%,var(--semantic-text-primary))]">
               {catScoped
                 ? t("learner.dashboard.student.quick.catScoped", { exam: guided!.catPathwayLabel! })
                 : t("learner.dashboard.student.quick.cat")}
             </span>
           </div>
-          <p className="text-[11px] leading-snug text-[var(--semantic-text-secondary)]">
+          <p className="relative text-[11px] leading-snug text-[var(--semantic-text-secondary)]">
             {catScoped
               ? t("learner.dashboard.student.quick.catSubScoped", { pathwayLine: guided!.catPathwayLine! })
               : t("learner.dashboard.student.quick.catSub")}
@@ -182,7 +183,7 @@ export function QuickActionPanel({
         >
           <div className="flex items-center gap-2">
             {hasWeakAreas ? (
-              <Crosshair
+              <Target
                 className="h-4 w-4 shrink-0 text-[var(--semantic-warning-contrast)] transition-transform duration-200 group-hover:translate-x-0.5"
                 strokeWidth={2}
                 aria-hidden

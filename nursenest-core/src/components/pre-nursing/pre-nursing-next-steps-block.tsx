@@ -96,7 +96,7 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
             })
           }
         >
-          Compare plans
+          Compare Plans
         </Link>
         <Link
           href="/lessons"
@@ -108,14 +108,14 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
             })
           }
         >
-          Browse exam lesson hubs
+          Browse Exam Lesson Hubs
         </Link>
         {prioritizedHref ? (
           <Link
             href={prioritizedHref}
             className="font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)] hover:underline"
           >
-            Open suggested pathway
+            Open Suggested Pathway
           </Link>
         ) : null}
         {secondaryHref ? (

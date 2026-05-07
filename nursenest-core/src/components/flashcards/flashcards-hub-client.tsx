@@ -7,7 +7,6 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   LearnerCategorySelector,
   LearnerFilterBar,
-  LearnerSessionStartPanel,
   LearnerStudyPageShell,
 } from "@/components/learner-study-ui";
 import {
@@ -33,6 +32,7 @@ import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashca
 import type { FlashcardsHubServerPayload, FlashcardsPoolInventoryDiagnostics } from "@/lib/flashcards/flashcards-hub-types";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
+import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 
 const CARD_COUNTS = [10, 20, 30, 50] as const;
 
@@ -170,6 +170,14 @@ export function FlashcardsHubClient({
     [countsByCanonical],
   );
 
+  /** Slim progress row — ratio of current match to full pathway pool (semantic bar, not a score). */
+  const poolFillPct = useMemo(() => {
+    if (matchingCards == null) return 0;
+    if (matchingCards <= 0) return 0;
+    if (sumCanonicalPool > 0) return Math.min(100, Math.round((matchingCards / sumCanonicalPool) * 100));
+    return 100;
+  }, [matchingCards, sumCanonicalPool]);
+
   const selectedBuilderCategoryIds = useMemo(() => {
     const allCanon = CANONICAL_STUDY_CATEGORIES.length;
     if (
@@ -224,6 +232,13 @@ export function FlashcardsHubClient({
         try {
           json = await res.json();
         } catch {
+          if (builderCategoriesRef.current.length > 0) {
+            logDedupedClientDiagnostic("flashcards_hub", "custom_session_json_kept_stale", scopedPathwayId, {
+              pathwayId: scopedPathwayId,
+            });
+            setLoadError(null);
+            return;
+          }
           const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
           setLoadError(
             process.env.NODE_ENV === "development"
@@ -238,6 +253,14 @@ export function FlashcardsHubClient({
         }
         const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
         if (!parsed.ok) {
+          if (builderCategoriesRef.current.length > 0) {
+            logDedupedClientDiagnostic("flashcards_hub", "custom_session_parse_kept_stale", scopedPathwayId, {
+              pathwayId: scopedPathwayId,
+              httpStatus: res.status,
+            });
+            setLoadError(null);
+            return;
+          }
           const base = parsed.message.trim() ? parsed.message : "Could not load flashcard topics.";
           setLoadError(
             process.env.NODE_ENV === "development"
@@ -266,6 +289,13 @@ export function FlashcardsHubClient({
           pathwayId: scopedPathwayId,
           httpStatus: res.status,
         });
+        if (builderCategoriesRef.current.length > 0) {
+          logDedupedClientDiagnostic("flashcards_hub", "inventory_json_kept_stale", scopedPathwayId, {
+            pathwayId: scopedPathwayId,
+          });
+          setLoadError(null);
+          return;
+        }
         const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
         setLoadError(
           process.env.NODE_ENV === "development"
@@ -284,6 +314,14 @@ export function FlashcardsHubClient({
           httpStatus: res.status,
           httpOk: res.ok,
         });
+        if (builderCategoriesRef.current.length > 0) {
+          logDedupedClientDiagnostic("flashcards_hub", "inventory_parse_kept_stale", scopedPathwayId, {
+            pathwayId: scopedPathwayId,
+            httpStatus: res.status,
+          });
+          setLoadError(null);
+          return;
+        }
         if (res.ok) {
           void reportFlashcardInventoryMalformedSuccessPayload({
             httpStatus: res.status,
@@ -319,6 +357,13 @@ export function FlashcardsHubClient({
           : undefined;
       const total = totalFromSummary ?? totalFromBody;
       if (typeof total !== "number" || !Number.isFinite(total)) {
+        if (builderCategoriesRef.current.length > 0) {
+          logDedupedClientDiagnostic("flashcards_hub", "inventory_missing_total_kept_stale", scopedPathwayId, {
+            pathwayId: scopedPathwayId,
+          });
+          setLoadError(null);
+          return;
+        }
         const base =
           process.env.NODE_ENV === "development"
             ? "Flashcards inventory response missing total count"
@@ -363,6 +408,13 @@ export function FlashcardsHubClient({
       logDedupedClientDiagnostic("flashcards_hub", "inventory_network_error", scopedPathwayId, {
         pathwayId: scopedPathwayId,
       });
+      if (builderCategoriesRef.current.length > 0) {
+        logDedupedClientDiagnostic("flashcards_hub", "inventory_network_kept_stale", scopedPathwayId, {
+          pathwayId: scopedPathwayId,
+        });
+        setLoadError(null);
+        return;
+      }
       const base = "Network error while loading flashcards. Check your connection and try again.";
       setLoadError(
         process.env.NODE_ENV === "development" ? `${base} (pathwayId=${scopedPathwayId})` : base,
@@ -411,14 +463,9 @@ export function FlashcardsHubClient({
 
   const sessionSummaryLine = [
     `${cardLimit} cards`,
-    selectedCanonicalIds.length === 0 ? "all categories" : `${selectedCanonicalIds.length} categories`,
-    shuffleOn ? "shuffle on" : "shuffle off",
-    lessonVirtualDiagnostics
-      ? `lesson-linked ${lessonVirtualDiagnostics.totalGeneratedVirtualCards} cards · ${lessonVirtualDiagnostics.lessonsWithDerivedCards}/${lessonVirtualDiagnostics.catalogLessonCount} lessons`
-      : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+    selectedCanonicalIds.length === 0 ? "All systems" : `${selectedCanonicalIds.length} selected`,
+    shuffleOn ? "Shuffled" : "In order",
+  ].join(" · ");
 
   const startQuery = useMemo(
     () =>
@@ -493,87 +540,184 @@ export function FlashcardsHubClient({
     }
   };
 
-  return (
-    <LearnerStudyPageShell className="py-6" data-nn-e2e-flashcards-hub>
-      {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
-
-      <header
-        className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 sm:px-5"
-        data-nn-e2e-flashcards-compact-header
-      >
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-              {pathwayDisplayName}
-            </p>
-            <h2 className="mt-0.5 text-xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-2xl">
-              {t("learner.flashcards.hub.title")}
-            </h2>
-            <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-              {t("learner.flashcards.hub.subtitle")}
-            </p>
-          </div>
-          <div className="shrink-0 text-right text-sm text-[var(--semantic-text-secondary)]">
-            {matchingCards != null ? (
-              <>
-                <span className="font-semibold text-[var(--semantic-text-primary)]">{matchingCards}</span> cards in pool
-              </>
-            ) : (
-              <span className="text-muted-foreground">Loading pool…</span>
-            )}
-          </div>
-        </div>
-        {catHref ? (
-          <p className="mt-2 text-xs">
-            <Link href={catHref} className="font-semibold text-primary underline underline-offset-2">
-              Continue adaptive (CAT)
+  /** Single contextual hint below the fold — avoids stacked grey empty-state panels. */
+  const hubContextualNotice = useMemo(() => {
+    if (loadError) return null;
+    if (
+      matchingCards === 0 &&
+      !starredOnly &&
+      builderCategories.length > 0 &&
+      (weakOnly || incorrectOnly || notStudiedOnly || selectedCanonicalIds.length > 0)
+    ) {
+      return (
+        <div
+          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-filter-empty
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">No cards match this combination</p>
+          <p className="mt-2">
+            Choose <strong>All cards</strong>, clear extra system picks, or open the{" "}
+            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
+              lessons hub
             </Link>
+            .
           </p>
-        ) : null}
-      </header>
+        </div>
+      );
+    }
+    if (
+      matchingCards === 0 &&
+      sumCanonicalPool === 0 &&
+      (lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) === 0 &&
+      !weakOnly &&
+      !incorrectOnly &&
+      !notStudiedOnly &&
+      !starredOnly &&
+      selectedCanonicalIds.length === 0 &&
+      builderCategories.length > 0
+    ) {
+      return (
+        <div
+          className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-pathway-empty-seeded
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">No flashcards are seeded for this pathway yet.</p>
+          {process.env.NODE_ENV === "development" ? (
+            <p className="mt-2 font-mono text-xs text-[var(--semantic-text-muted)]">pathwayId={scopedPathwayId}</p>
+          ) : null}
+        </div>
+      );
+    }
+    if (
+      matchingCards === 0 &&
+      !starredOnly &&
+      builderCategories.length === 0 &&
+      (lessonVirtualDiagnostics?.catalogLessonCount ?? 0) === 0 &&
+      !(lessonVirtualDiagnostics && lessonVirtualDiagnostics.totalGeneratedVirtualCards > 0)
+    ) {
+      return (
+        <div
+          className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-setup-report
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">Deck not loaded yet</p>
+          <p className="mt-2">
+            Open the{" "}
+            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
+              lessons hub
+            </Link>{" "}
+            for this track or choose <strong>All cards</strong>.
+          </p>
+        </div>
+      );
+    }
+    if (
+      matchingCards === 0 &&
+      !starredOnly &&
+      builderCategories.length === 0 &&
+      (lessonVirtualDiagnostics?.catalogLessonCount ?? 0) > 0 &&
+      (lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) === 0
+    ) {
+      return (
+        <div
+          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-lessons-no-derived-cards
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">Lesson-linked cards are still building</p>
+          <p className="mt-2">
+            Try <strong>All cards</strong>, refresh, or continue in the{" "}
+            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
+              lessons hub
+            </Link>
+            .
+          </p>
+        </div>
+      );
+    }
+    if (
+      matchingCards === 0 &&
+      !starredOnly &&
+      builderCategories.length === 0 &&
+      lessonVirtualDiagnostics &&
+      lessonVirtualDiagnostics.totalGeneratedVirtualCards > 0
+    ) {
+      return (
+        <div
+          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-inventory-mismatch
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">Cards exist but categories need a refresh</p>
+          <p className="mt-2">Clear filters and reload this page.</p>
+        </div>
+      );
+    }
+    if (!loadError && starredOnly && matchingCards === 0) {
+      return (
+        <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+          No starred cards yet ({starredCount} saved in this browser).
+        </div>
+      );
+    }
+    return null;
+  }, [
+    loadError,
+    matchingCards,
+    starredOnly,
+    builderCategories.length,
+    weakOnly,
+    incorrectOnly,
+    notStudiedOnly,
+    selectedCanonicalIds.length,
+    sumCanonicalPool,
+    lessonVirtualDiagnostics,
+    scopedPathwayId,
+    resolvedLessonsHubHref,
+    starredCount,
+  ]);
+
+  const deckProgressFillClass = semanticFillClassForAccuracyPct(poolFillPct);
+
+  return (
+    <LearnerStudyPageShell className="space-y-4 py-4 sm:space-y-5 sm:py-5" data-nn-e2e-flashcards-hub>
+      {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
 
       <h1 className="sr-only">{t("learner.flashcards.hub.title")}</h1>
 
+      <header
+        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_10%,var(--semantic-surface))] px-4 py-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:py-4"
+        data-nn-e2e-flashcards-compact-header
+      >
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+              {pathwayDisplayName}
+            </p>
+            <h2 className="mt-1 text-xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-2xl">
+              {t("learner.flashcards.hub.title")}
+            </h2>
+            <p className="sr-only">{t("learner.flashcards.hub.subtitle")}</p>
+          </div>
+          <LearnerCtaLink
+            href={startHref}
+            data-nn-e2e-start-review
+            className="inline-flex min-h-12 shrink-0 items-center justify-center px-6 py-3 text-base font-semibold shadow-[var(--semantic-shadow-soft)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_32%,transparent)] sm:min-h-11 sm:px-7"
+          >
+            {t("flashcards.startSession")}
+          </LearnerCtaLink>
+        </div>
+      </header>
+
       {loadError ? (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_08%,var(--semantic-surface))] px-3 py-2 text-sm text-[var(--semantic-danger)]">
           {loadError}
         </div>
       ) : null}
 
-      <LearnerFilterBar title="Deck filters">
-        <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
-          {(
-            [
-              ["all", "All cards"],
-              ["weak", "Weak areas"],
-              ["starred", "Starred"],
-              ["unseen", "Unseen"],
-              ["incorrect", "Review incorrect"],
-            ] as const
-          ).map(([key, label]) => {
-            const on = activePreset === key;
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => applyFilterPreset(key)}
-                className={`min-h-11 rounded-full border px-3 py-2 text-sm font-semibold transition sm:min-h-0 sm:py-1.5 sm:text-xs ${
-                  on
-                    ? "border-[color-mix(in_srgb,var(--semantic-info)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                    : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]"
-                }`}
-              >
-                {label}
-              </button>
-            );
-          })}
-          {activePreset === "custom" ? (
-            <span className="self-center text-xs text-muted-foreground">Custom mix</span>
-          ) : null}
-        </div>
-      </LearnerFilterBar>
-
-      <section className="space-y-4" data-nn-e2e-flashcards-canonical-grid>
+      <section
+        className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5"
+        aria-labelledby="nn-flashcards-categories-heading"
+        data-nn-e2e-flashcards-canonical-grid
+      >
         <LearnerCategorySelector
           countsBySystem={countsByCanonical}
           selectedCanonicalIds={selectedCanonicalIds}
@@ -581,50 +725,104 @@ export function FlashcardsHubClient({
           search={categorySearch}
           onSearchChange={setCategorySearch}
           heading={t("learner.flashcards.hub.bodySystemsHeading")}
-          intro="Cards are grouped by canonical exam categories (same grid as practice questions). Builder rows are mapped automatically — you are not picking raw lesson topic cards here."
+          headingId="nn-flashcards-categories-heading"
+          searchPlaceholder="Search systems…"
         />
       </section>
 
-      <LearnerSessionStartPanel
-        primary={
-          <div>
-            <LearnerCtaLink href={startHref} data-nn-e2e-start-review>
-              {t("flashcards.startSession")}
-            </LearnerCtaLink>
-            <p className="mt-1 text-xs text-muted-foreground">{sessionSummaryLine}</p>
-          </div>
-        }
-        secondary={
-          <Link href={weakAreaFlashcardsHref(scopedPathwayId)} className="text-xs font-medium text-primary underline">
-            Weak areas
-          </Link>
-        }
-      />
+      {hubContextualNotice}
 
-      <details className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
+      <div
+        className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 shadow-[var(--semantic-shadow-soft)] sm:px-5"
+        data-nn-e2e-flashcards-deck-band
+      >
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="min-w-0 flex-1 space-y-2">
+            <div className="flex items-baseline justify-between gap-2 text-xs text-[var(--semantic-text-secondary)]">
+              <span className="font-medium text-[var(--semantic-text-primary)]">Deck match</span>
+              <span className="tabular-nums font-semibold text-[var(--semantic-text-primary)]">
+                {matchingCards != null ? matchingCards : "—"}
+                {sumCanonicalPool > 0 ? (
+                  <span className="font-normal text-[var(--semantic-text-muted)]"> / {sumCanonicalPool}</span>
+                ) : null}
+              </span>
+            </div>
+            <div className="nn-progress-track-semantic nn-progress-track-semantic--md h-2 w-full overflow-hidden rounded-full bg-[var(--semantic-progress-track)]">
+              <div
+                className={`h-full rounded-full ${deckProgressFillClass} transition-[width] duration-300 ease-out`}
+                style={{ width: `${poolFillPct}%` }}
+              />
+            </div>
+            <p className="text-[11px] leading-snug text-[var(--semantic-text-muted)]">{sessionSummaryLine}</p>
+          </div>
+        </div>
+      </div>
+
+      <details
+        className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 sm:px-4"
+        data-nn-e2e-flashcards-secondary
+      >
         <summary className="cursor-pointer text-sm font-semibold text-[var(--semantic-text-primary)]">
-          Advanced filters & deck options
+          Filters, weak areas &amp; more{" "}
+          <span className="font-normal text-[var(--semantic-text-muted)]">(optional)</span>
         </summary>
-        <div className="mt-3 space-y-4">
+        <div className="mt-4 space-y-5 border-t border-[var(--semantic-border-soft)] pt-4">
+          <LearnerFilterBar
+            title="Quick presets"
+            className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-none sm:p-4"
+          >
+            <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
+              {(
+                [
+                  ["all", "All cards"],
+                  ["weak", "Weak areas"],
+                  ["starred", "Starred"],
+                  ["unseen", "Unseen"],
+                  ["incorrect", "Review incorrect"],
+                ] as const
+              ).map(([key, label]) => {
+                const on = activePreset === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => applyFilterPreset(key)}
+                    className={`min-h-11 rounded-full border px-3 py-2 text-sm font-semibold transition sm:min-h-0 sm:py-1.5 sm:text-xs ${
+                      on
+                        ? "border-[color-mix(in_srgb,var(--semantic-info)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                        : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))]"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+              {activePreset === "custom" ? (
+                <span className="self-center text-xs text-[var(--semantic-text-muted)]">Custom mix</span>
+              ) : null}
+            </div>
+          </LearnerFilterBar>
+
           <div className="space-y-3">
-            <p className="text-xs font-medium text-[var(--semantic-text-secondary)]">Filter flags (same as API)</p>
-            <label className="flex items-center gap-2 text-sm">
+            <p className="text-xs font-medium text-[var(--semantic-text-secondary)]">Fine-tune (same as API)</p>
+            <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
               <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
               Weak areas only
             </label>
-            <label className="flex items-center gap-2 text-sm">
+            <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
               <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
               Previously incorrect
             </label>
-            <label className="flex items-center gap-2 text-sm">
+            <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
               <input type="checkbox" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
               Not studied
             </label>
-            <label className="flex items-center gap-2 text-sm">
+            <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
               <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
               Starred only
             </label>
           </div>
+
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <span className="text-[var(--semantic-text-secondary)]">Deck size:</span>
             {CARD_COUNTS.map((n) => (
@@ -642,16 +840,48 @@ export function FlashcardsHubClient({
               </button>
             ))}
           </div>
-          <label className="flex items-center gap-2 text-sm">
+
+          <label className="flex items-center gap-2 text-sm text-[var(--semantic-text-primary)]">
             <input type="checkbox" checked={shuffleOn} onChange={(e) => setShuffleOn(e.target.checked)} />
             Shuffle order
           </label>
-          {lessonVirtualDiagnostics ? (
+
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            <Link
+              href={weakAreaFlashcardsHref(scopedPathwayId)}
+              className="font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
+            >
+              Weak areas hub
+            </Link>
+            <Link
+              href={resolvedLessonsHubHref}
+              className="font-semibold text-[color-mix(in_srgb,var(--semantic-chart-2)_85%,var(--semantic-text-primary))] underline underline-offset-2"
+            >
+              Lessons (same pathway)
+            </Link>
+            {catHref ? (
+              <Link href={catHref} className="font-semibold text-[var(--semantic-info)] underline underline-offset-2">
+                Adaptive CAT
+              </Link>
+            ) : null}
+            {hubTopicSlug?.trim() ? (
+              <Link
+                href={buildAppPracticeTestsTopicHref(scopedPathwayId, hubTopicSlug)}
+                className="font-semibold text-[color-mix(in_srgb,var(--semantic-chart-3)_88%,var(--semantic-text-primary))] underline underline-offset-2"
+                data-testid="flashcards-hub-link-practice-tests-topic"
+                data-nn-pathway-id={scopedPathwayId}
+              >
+                {t("learner.studyLoop.practiceQuestionsThisTopic")}
+              </Link>
+            ) : null}
+          </div>
+
+          {process.env.NODE_ENV === "development" && lessonVirtualDiagnostics ? (
             <div
-              className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground"
+              className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-xs text-[var(--semantic-text-secondary)]"
               data-nn-e2e-flashcards-lesson-diagnostics
             >
-              <p className="font-semibold text-foreground">Lesson-linked inventory</p>
+              <p className="font-semibold text-[var(--semantic-text-primary)]">Lesson-linked inventory (dev)</p>
               <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
                 <li>pathwayId: {lessonVirtualDiagnostics.pathwayId}</li>
                 <li>catalog lessons: {lessonVirtualDiagnostics.catalogLessonCount}</li>
@@ -665,12 +895,12 @@ export function FlashcardsHubClient({
               </ul>
             </div>
           ) : null}
-          {poolDiagnostics ? (
+          {process.env.NODE_ENV === "development" && poolDiagnostics ? (
             <div
-              className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground"
+              className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-xs text-[var(--semantic-text-secondary)]"
               data-nn-e2e-flashcards-pool-diagnostics
             >
-              <p className="font-semibold text-foreground">Pool diagnostics (exam bank vs Flashcard table)</p>
+              <p className="font-semibold text-[var(--semantic-text-primary)]">Pool diagnostics (dev)</p>
               <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
                 <li>pathwayId: {poolDiagnostics.pathwayId}</li>
                 <li>exam_question SQL pool: {poolDiagnostics.examQuestionSqlPoolCount}</li>
@@ -680,141 +910,14 @@ export function FlashcardsHubClient({
                 {poolDiagnostics.legacyCanonicalPrismaPoolCount != null ? (
                   <li>legacy Prisma exam IN() count: {poolDiagnostics.legacyCanonicalPrismaPoolCount}</li>
                 ) : null}
-                {poolDiagnostics.zeroHint ? <li className="text-[var(--semantic-warning)]">{poolDiagnostics.zeroHint}</li> : null}
+                {poolDiagnostics.zeroHint ? (
+                  <li className="text-[var(--semantic-warning)]">{poolDiagnostics.zeroHint}</li>
+                ) : null}
               </ul>
             </div>
           ) : null}
         </div>
       </details>
-
-      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
-        <Link href={resolvedLessonsHubHref} className="font-semibold text-primary underline underline-offset-2">
-          Open lessons hub (same pathway)
-        </Link>
-        {hubTopicSlug?.trim() ? (
-          <Link
-            href={buildAppPracticeTestsTopicHref(scopedPathwayId, hubTopicSlug)}
-            className="font-semibold text-[var(--semantic-info)] underline underline-offset-2"
-            data-testid="flashcards-hub-link-practice-tests-topic"
-            data-nn-pathway-id={scopedPathwayId}
-          >
-            {t("learner.studyLoop.practiceQuestionsThisTopic")}
-          </Link>
-        ) : null}
-      </div>
-
-      {!loadError &&
-      matchingCards === 0 &&
-      sumCanonicalPool === 0 &&
-      (lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) === 0 &&
-      !weakOnly &&
-      !incorrectOnly &&
-      !notStudiedOnly &&
-      !starredOnly &&
-      selectedCanonicalIds.length === 0 &&
-      builderCategories.length > 0 ? (
-        <div
-          className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
-          data-nn-e2e-flashcards-pathway-empty-seeded
-        >
-          <p className="font-medium text-[var(--semantic-text-primary)]">No flashcards are seeded for this pathway yet.</p>
-          {process.env.NODE_ENV === "development" ? (
-            <p className="mt-2 font-mono text-xs text-muted-foreground">pathwayId={scopedPathwayId}</p>
-          ) : null}
-        </div>
-      ) : null}
-
-      {!loadError &&
-      matchingCards === 0 &&
-      !starredOnly &&
-      builderCategories.length > 0 &&
-      (weakOnly || incorrectOnly || notStudiedOnly || starredOnly || selectedCanonicalIds.length > 0) ? (
-        <div
-          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
-          data-nn-e2e-flashcards-filter-empty
-        >
-          <p className="font-medium text-[var(--semantic-text-primary)]">No cards match this combination</p>
-          <p className="mt-2">
-            Systems are listed below, but filters removed every matching card. Choose <strong>All cards</strong>, clear
-            extra system picks, or open the{" "}
-            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
-              lessons hub
-            </Link>{" "}
-            to confirm lesson-linked recall is available for this track.
-          </p>
-        </div>
-      ) : null}
-
-      {!loadError &&
-      matchingCards === 0 &&
-      !starredOnly &&
-      builderCategories.length === 0 &&
-      (lessonVirtualDiagnostics?.catalogLessonCount ?? 0) === 0 &&
-      !(lessonVirtualDiagnostics && lessonVirtualDiagnostics.totalGeneratedVirtualCards > 0) ? (
-        <div
-          className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
-          data-nn-e2e-flashcards-setup-report
-        >
-          <p className="font-medium text-[var(--semantic-text-primary)]">No flashcard deck loaded for this filter yet</p>
-          <p className="mt-2">
-            When the question bank has no published cards for this pathway, we still try to build study cards from
-            your lesson checkpoints. Open the{" "}
-            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
-              lessons hub
-            </Link>{" "}
-            for this track, complete a lesson section, then return — or clear filters above and choose <strong>All cards</strong>.
-          </p>
-        </div>
-      ) : null}
-
-      {!loadError &&
-      matchingCards === 0 &&
-      !starredOnly &&
-      builderCategories.length === 0 &&
-      (lessonVirtualDiagnostics?.catalogLessonCount ?? 0) > 0 &&
-      (lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) === 0 ? (
-        <div
-          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
-          data-nn-e2e-flashcards-lessons-no-derived-cards
-        >
-          <p className="font-medium text-[var(--semantic-text-primary)]">Published lessons exist — cards are still building</p>
-          <p className="mt-2">
-            This track has {lessonVirtualDiagnostics?.catalogLessonCount} pathway lesson
-            {lessonVirtualDiagnostics && lessonVirtualDiagnostics.catalogLessonCount === 1 ? "" : "s"} in catalog, but no
-            lesson-linked study cards were derived yet (recall prompts, checkpoints, or section takeaways). Open the{" "}
-            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
-              lessons hub
-            </Link>{" "}
-            to confirm content, choose <strong>All cards</strong>, then refresh. Full mock exams and bank cards may still
-            appear once indexed separately.
-          </p>
-        </div>
-      ) : null}
-
-      {!loadError &&
-      matchingCards === 0 &&
-      !starredOnly &&
-      builderCategories.length === 0 &&
-      lessonVirtualDiagnostics &&
-      lessonVirtualDiagnostics.totalGeneratedVirtualCards > 0 ? (
-        <div
-          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
-          data-nn-e2e-flashcards-inventory-mismatch
-        >
-          <p className="font-medium text-[var(--semantic-text-primary)]">Lesson-linked cards exist but topics did not resolve</p>
-          <p className="mt-2">
-            Diagnostics show {lessonVirtualDiagnostics.totalGeneratedVirtualCards} catalog-derived cards for pathway{" "}
-            <span className="font-mono">{lessonVirtualDiagnostics.pathwayId}</span>. Try refreshing the page or clearing
-            filters; if this persists, contact support with this pathway id.
-          </p>
-        </div>
-      ) : null}
-
-      {!loadError && starredOnly && matchingCards === 0 ? (
-        <div className="rounded-lg border border-border bg-[var(--theme-card-bg)] px-4 py-3 text-sm text-[var(--theme-muted-text)]">
-          No starred cards yet. Star cards during study ({starredCount} saved in this browser).
-        </div>
-      ) : null}
     </LearnerStudyPageShell>
   );
 }

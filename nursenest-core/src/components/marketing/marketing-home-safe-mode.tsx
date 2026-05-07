@@ -64,7 +64,7 @@ export function MarketingHomeSafeMode({ layout = "embedded", onRetry }: Marketin
                   href="/login"
                   className="rounded-lg border border-[var(--nav-border)] px-3 py-2 text-sm font-semibold text-[var(--nav-fg)]"
                 >
-                  Log in
+                  Log In
                 </Link>
                 <Link
                   href="/signup"
@@ -94,7 +94,7 @@ export function MarketingHomeSafeMode({ layout = "embedded", onRetry }: Marketin
               href="/pricing"
               className="inline-flex min-h-[44px] items-center rounded-xl border border-[var(--semantic-border-soft)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,transparent)]"
             >
-              View pricing
+              View Pricing
             </Link>
             {onRetry ? (
               <button
@@ -102,7 +102,7 @@ export function MarketingHomeSafeMode({ layout = "embedded", onRetry }: Marketin
                 onClick={onRetry}
                 className="inline-flex min-h-[44px] items-center rounded-xl border border-[var(--semantic-border-soft)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-warm)_18%,transparent)]"
               >
-                Try again
+                Try Again
               </button>
             ) : null}
           </div>

@@ -166,8 +166,9 @@ export function normalizeResolvedMarketingLeaf(
 }
 
 /**
- * DEV fallback only.
- * NEVER used in production UI.
+ * Last-resort visible string when a key is missing or invalid after `formatMarketingMessage`.
+ * Prefer adding real copy to `tools/i18n/marketing/marketing-en.json` (then `npm run i18n:normalize-marketing`)
+ * so learner surfaces never depend on this heuristic.
  */
 export function humanizedMarketingKeyFallback(key: string): string {
   const tail = key.includes(".") ? (key.split(".").pop() ?? key) : key;

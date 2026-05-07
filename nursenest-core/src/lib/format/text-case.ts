@@ -8,7 +8,9 @@ const PRESERVE_CASE: Readonly<Record<string, string>> = {
   nclex: "NCLEX",
   "nclex-rn": "NCLEX-RN",
   "nclex-pn": "NCLEX-PN",
-  "rex-pn": "REX-PN",
+  /** Practical-nursing exam brand (mixed case), including when hyphenated tokens are title-cased separately. */
+  rex: "REx",
+  "rex-pn": "REx-PN",
   cat: "CAT",
   cta: "CTA",
   us: "US",

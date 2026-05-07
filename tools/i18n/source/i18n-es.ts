@@ -19682,7 +19682,7 @@ const esTranslations: Record<string, string> = {
     "pages.signup.examFocus.rexPnCa": "REx-PN / enfermería práctica (Canadá)",
     "pages.signup.h1": "Crear una cuenta",
     "pages.signup.legalAfter": ".",
-    "pages.signup.legalAnd": "y",
+    "pages.signup.legalAnd": " y ",
     "pages.signup.legalBefore": "Al crear una cuenta, usted acepta nuestra",
     "pages.signup.onboardingTitle": "Incorporación rápida (mejora recomendaciones)",
     "pages.signup.pathCareerChange": "Cambio de carrera",

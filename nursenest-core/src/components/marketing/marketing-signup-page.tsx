@@ -9,8 +9,8 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 export async function MarketingSignupPage({ locale }: { locale: string }) {
   const m = await loadMarketingMessages(locale);
   return (
-    <main className="mx-auto w-full max-w-md nn-marketing-x nn-rhythm-page">
-      <div className="nn-card relative overflow-hidden p-6 sm:p-8">
+    <main className="mx-auto w-full min-w-0 max-w-2xl nn-marketing-x nn-rhythm-page">
+      <div className="nn-card relative overflow-hidden p-6 sm:p-9 lg:p-10">
         <AuthLeafWatermark />
         <div className="relative z-[1]">
           <div className="mb-6 flex justify-center bg-transparent">
@@ -22,7 +22,10 @@ export async function MarketingSignupPage({ locale }: { locale: string }) {
             </h1>
             <p className="mt-2 text-center text-sm text-muted-foreground sm:text-base">{m["pages.signup.subtitle"]}</p>
           </header>
-          <AuthFlowTrustReassurance variant="signup" />
+          <AuthFlowTrustReassurance
+            variant="signup"
+            contactHref={withMarketingLocale(locale, "/contact")}
+          />
           <Suspense fallback={<div className="mt-6 h-64 animate-pulse rounded-xl bg-muted/40" aria-hidden />}>
             <SignupForm
               termsHref={withMarketingLocale(locale, "/terms")}

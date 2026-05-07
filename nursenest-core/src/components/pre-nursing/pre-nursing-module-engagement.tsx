@@ -295,7 +295,7 @@ export function PreNursingModuleEngagement({
                   })
                 }
               >
-                Compare plans
+                Compare Plans
               </Link>
             </li>
             <li>

@@ -42,41 +42,51 @@ Commands: `npm run disk:audit`, `npm run storage:check` (use `storage:check:stri
 
 ## Local Setup
 
-1. Copy environment template:
+1. Copy environment template to **`.env.local`** (gitignored):
 
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 ```
 
-2. Install dependencies:
+2. **Auth.js (required for `/app/*`, practice tests, login):** set **`AUTH_SECRET`** (preferred) or legacy **`NEXTAUTH_SECRET`** to a long random value — at least one must be non-empty or the dev server fails fast with a clear error. Generate locally:
+
+```bash
+openssl rand -base64 32
+```
+
+Also set **`AUTH_URL`** / **`NEXTAUTH_URL`** to your dev origin (see `.env.example`).
+
+3. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Generate Prisma client:
+4. Generate Prisma client:
 
 ```bash
 npm run db:generate
 ```
 
-4. Run migrations:
+5. Run migrations:
 
 ```bash
 npm run db:migrate
 ```
 
-5. Seed sample data (CA/US + RPN/LVN-LPN/RN/NP):
+6. Seed sample data (CA/US + RPN/LVN-LPN/RN/NP):
 
 ```bash
 npm run db:seed
 ```
 
-6. Start dev server:
+7. Start the **Next.js** dev server (learner app, App Router):
 
 ```bash
-npm run dev
+npm run dev:next
 ```
+
+(`npm run dev` points at the legacy Express entry in the monorepo root; use **`dev:next`** for this package.)
 
 ## Prisma Models
 
@@ -122,7 +132,7 @@ npm start
 
 Environment variables to set in DigitalOcean (see also `.env.example`):
 - **`DATABASE_URL`** (secret) — DigitalOcean Managed PostgreSQL URI; canonical for Prisma at runtime.
-- `AUTH_SECRET`, `AUTH_URL` (Auth.js)
+- **`AUTH_SECRET`** (preferred) or **`NEXTAUTH_SECRET`** (legacy), plus **`AUTH_URL`** / **`NEXTAUTH_URL`** (Auth.js)
 - `NEXT_PUBLIC_APP_URL` (optional)
 - Stripe keys as needed
 

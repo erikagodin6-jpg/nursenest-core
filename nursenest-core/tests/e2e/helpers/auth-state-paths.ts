@@ -20,3 +20,14 @@ export const PAID_USER_AUTH_FILE =
 export const FREE_USER_AUTH_FILE =
   process.env.PLAYWRIGHT_FREE_AUTH_STATE ??
   path.join(process.cwd(), "tests", "e2e", ".auth", "free-user.json");
+
+/**
+ * Visual QA / route-pack auth file (separate from default E2E `paid-user.json` so capture runs never
+ * overwrite release-gate storage). Override: `PLAYWRIGHT_VISUAL_QA_AUTH_STATE`.
+ *
+ * The `setup-visual-qa-auth` project sets `PLAYWRIGHT_PAID_AUTH_STATE` to this path so
+ * `tests/e2e/setup/auth.setup.ts` writes here without forking login logic.
+ */
+export const VISUAL_QA_LEARNER_AUTH_FILE =
+  process.env.PLAYWRIGHT_VISUAL_QA_AUTH_STATE ??
+  path.join(process.cwd(), "playwright", ".auth", "learner-paid.json");

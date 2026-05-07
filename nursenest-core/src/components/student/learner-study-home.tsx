@@ -12,6 +12,7 @@ import { LearnerDashboardInsightPanels } from "@/components/student/learner-dash
 import { BenchmarkCard } from "@/components/student/dashboard/benchmark-card";
 import { WeaknessHeatmap, type HeatmapTopic } from "@/components/student/dashboard/weakness-heatmap";
 import { LearnerDashboardUserPanelBand } from "@/components/student/learner-dashboard-user-panel-band";
+import { LearnerStudyModesBand } from "@/components/student/learner-study-modes-band";
 import { LearnerAdaptiveFocusCard } from "@/components/student/learner-adaptive-focus-card";
 import { WeakAreasDashboardClient } from "@/components/student/weak-areas-dashboard-client";
 import { LearnerContinueLearningCard } from "@/components/student/learner-continue-learning-card";
@@ -203,6 +204,7 @@ export function LearnerStudyHome({
 
   const hubNavItems: LearnerDashboardHubNavItem[] = [
     { href: "#study-priority", label: t("learner.studyHome.sectionPriorityTitle") },
+    { href: "#study-modes", label: t("learner.studyModes.sectionNavLabel") },
   ];
   if (continueLinks.length > 0) {
     hubNavItems.push({ href: "#study-continue", label: t("learner.retention.continueHeading") });
@@ -250,6 +252,18 @@ export function LearnerStudyHome({
             <PrimaryActionCard action={nextAction} t={t} />
           </div>
         </div>
+      </LearnerStudySurfaceSection>
+
+      <LearnerStudySurfaceSection
+        id="study-modes"
+        eyebrow={t("learner.studyModes.sectionEyebrow")}
+        title={t("learner.studyModes.sectionTitle")}
+        intro={t("learner.studyModes.sectionIntro")}
+        tone="primary"
+        surfacePadding="md"
+        className="nn-dash-band nn-dash-band--study-modes nn-dash-band--stack-tight"
+      >
+        <LearnerStudyModesBand t={t} snapshot={snapshot} />
       </LearnerStudySurfaceSection>
 
       {continueLinks.length > 0 ? (
@@ -486,7 +500,7 @@ export function LearnerStudyHome({
         pathwayId={preferredPathwayId}
         examsNavLabel={examsNavLabel}
         entitlement={entitlement}
-        includeStudyShortcuts
+        includeStudyShortcuts={false}
       />
     </LearnerDashboardHubLayout>
   );

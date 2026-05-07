@@ -108,8 +108,8 @@ const FILTER_ICONS: Record<PracticeSessionStudyFilter, typeof LayoutGrid> = {
 
 const FILTER_LABELS: Record<PracticeSessionStudyFilter, string> = {
   all: "All",
-  weak: "Weak areas",
-  incorrect: "Incorrect review",
+  weak: "Weak Areas",
+  incorrect: "Incorrect Review",
   unseen: "Unseen",
   bookmarked: "Bookmarked",
 };
@@ -286,7 +286,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Select one or more body-system hubs below, then start a focused session.",
       href: "#practice-body-systems",
       accent: "success" as const,
-      cta: "Select categories",
+      cta: "Select Categories",
       needsLinear: false,
       needsCat: false,
     },
@@ -296,7 +296,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Random items across the full pathway scope.",
       href: startMixedHref,
       accent: "brand" as const,
-      cta: "Start mixed quiz",
+      cta: "Start Mixed Quiz",
       needsLinear: true,
       needsCat: false,
     },
@@ -306,7 +306,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Prioritize topics where accuracy is lowest (after you have attempt data).",
       href: weakHref,
       accent: "info" as const,
-      cta: "Practice weak areas",
+      cta: "Practice Weak Areas",
       needsLinear: true,
       needsCat: false,
     },
@@ -316,7 +316,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Replay questions you answered incorrectly recently.",
       href: incorrectHref,
       accent: "warning" as const,
-      cta: "Review incorrect",
+      cta: "Review Incorrect",
       needsLinear: true,
       needsCat: false,
     },
@@ -326,7 +326,7 @@ export function MarketingPracticeQuestionsHubClient({
       description: "Bias toward questions you have not opened in this bank yet.",
       href: unseenHref,
       accent: "chart" as const,
-      cta: "Start unseen set",
+      cta: "Start Unseen Set",
       needsLinear: true,
       needsCat: false,
     },
@@ -413,7 +413,7 @@ export function MarketingPracticeQuestionsHubClient({
               className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-brand)] hover:bg-[var(--semantic-panel-muted)]"
               onClick={selectAllFromAggregates}
             >
-              Select all
+              Select All
             </button>
             <button
               type="button"
@@ -502,10 +502,10 @@ export function MarketingPracticeQuestionsHubClient({
               data-testid="start-selected-systems-practice"
             >
               {studyFilter !== "all"
-                ? `Start practice (${FILTER_LABELS[studyFilter].toLowerCase()})`
+                ? `Start Practice (${FILTER_LABELS[studyFilter]})`
                 : selected.size > 0
-                  ? "Start practice (selected hubs)"
-                  : "Start mixed practice (all hubs)"}
+                  ? "Start Practice (Selected Hubs)"
+                  : "Start Mixed Practice (All Hubs)"}
             </Link>
           ) : (
             <Link
@@ -513,7 +513,7 @@ export function MarketingPracticeQuestionsHubClient({
               className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2 text-sm font-semibold nn-text-on-solid-fill hover:opacity-90"
               data-testid="start-selected-systems-practice"
             >
-              Browse clinical lessons
+              Browse Clinical Lessons
             </Link>
           )}
           {catCompletePoolUsable ? (
@@ -524,7 +524,7 @@ export function MarketingPracticeQuestionsHubClient({
               className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[var(--semantic-success)] px-5 py-2 text-sm font-semibold text-[var(--semantic-success-contrast)] hover:opacity-90 disabled:opacity-50"
               data-testid="start-adaptive-selected-systems"
             >
-              {startingAdaptive ? "Starting…" : "Start adaptive session (selected)"}
+              {startingAdaptive ? "Starting…" : "Start Adaptive Session (Selected)"}
             </button>
           ) : null}
           {catCompletePoolUsable ? (
@@ -533,7 +533,7 @@ export function MarketingPracticeQuestionsHubClient({
               className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 py-2 text-sm font-semibold text-[var(--semantic-brand)] hover:bg-[var(--semantic-panel-muted)]"
               data-testid="marketing-cat-overview-link"
             >
-              CAT overview (marketing)
+              CAT Overview (Marketing)
             </Link>
           ) : null}
         </div>
@@ -573,7 +573,7 @@ export function MarketingPracticeQuestionsHubClient({
                           })}
                           className="mt-1 inline-block font-semibold text-[var(--semantic-brand)] hover:underline"
                         >
-                          Open in question bank
+                          Open in Question Bank
                         </Link>
                       </li>
                     ))}
@@ -589,7 +589,7 @@ export function MarketingPracticeQuestionsHubClient({
         <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Quick links</p>
         <div className="mt-2 flex flex-wrap gap-3 text-sm font-semibold">
           <Link href={lessonsHref} className="text-[var(--semantic-brand)] hover:underline">
-            Browse lessons
+            Browse Lessons
           </Link>
           {catCompletePoolUsable ? (
             <Link href={catAppHref} className="text-[var(--semantic-brand)] hover:underline" data-testid="quick-cat-app-link">
@@ -598,7 +598,7 @@ export function MarketingPracticeQuestionsHubClient({
           ) : null}
           {linearPracticePoolUsable ? (
             <Link href={startMixedHref} className="text-[var(--semantic-brand)] hover:underline">
-              Mixed quiz
+              Mixed Quiz
             </Link>
           ) : null}
         </div>

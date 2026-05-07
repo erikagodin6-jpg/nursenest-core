@@ -361,6 +361,7 @@ export function SignupForm({
       ) : null}
       <p className="text-xs leading-relaxed text-muted-foreground">
         {t("pages.signup.legalBefore")}
+        {" "}
         <Link href={termsHref} className="nn-link-quiet font-semibold">
           {t("pages.signup.termsLink")}
         </Link>

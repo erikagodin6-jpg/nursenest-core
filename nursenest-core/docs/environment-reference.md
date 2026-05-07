@@ -29,7 +29,7 @@ Test/staging/production should use **different** secrets and DB URLs; never reus
 
 | Variable | Required (prod) | Purpose |
 |----------|------------------|---------|
-| `AUTH_SECRET` or `NEXTAUTH_SECRET` | **Yes** | JWT/session signing |
+| `AUTH_SECRET` or `NEXTAUTH_SECRET` | **Yes** (local learner dev too) | JWT/session signing — Auth.js reads `AUTH_SECRET` by default; the app resolves **either** `AUTH_SECRET` or legacy `NEXTAUTH_SECRET` and passes an explicit `secret` to NextAuth so `NEXTAUTH_SECRET`-only envs still work. Generate: `openssl rand -base64 32`. Preflight: `npm run dev:next` (from `nursenest-core/`) runs `scripts/assert-local-auth-secret.mjs`. |
 | `AUTH_URL` / `NEXTAUTH_URL` | Recommended | Public origin; origin-only URL |
 | `NEXTAUTH_URL` | Legacy | Same as `AUTH_URL` if set |
 
@@ -64,6 +64,7 @@ Add `?statement_timeout=…` and `connection_limit=…` on the URL when possible
 
 | Variable | Purpose |
 |----------|---------|
+| `NN_RENDER_TRACE` | When `1` / `true`, server `renderTrace()` logs use `console.info`; otherwise traces use `console.debug` only (avoids `console.error` noise during local QA). |
 | `SENTRY_ENABLED` | Server/edge runtime Sentry enable flag. Also required before source map upload is allowed. |
 | `NEXT_PUBLIC_SENTRY_ENABLED` | Optional client/browser enable flag. Defaults to `SENTRY_ENABLED` when omitted at build time. |
 | `SENTRY_DSN` | Server/edge DSN (falls back to `NEXT_PUBLIC_SENTRY_DSN` if only one DSN is provided). |

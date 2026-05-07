@@ -3,6 +3,7 @@
  * @see SiteHeader
  */
 
+import { buildAlliedOccupationMarketingHubPath } from "@/lib/allied/allied-global-pathway";
 import { ALLIED_HUB_CATEGORY_ORDER, ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { alliedHub, HUB, NP, npNpQuestionsForRegion, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -199,7 +200,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           links: profs.map((p) => ({
             key: `allied-${p.professionKey}`,
             label: p.h1.replace(/ exam prep$/i, "").replace(/ \(.*\)$/i, "").trim(),
-            href: `/allied/${p.professionKey}`,
+            href: buildAlliedOccupationMarketingHubPath(p.professionKey),
           })),
         };
       }),

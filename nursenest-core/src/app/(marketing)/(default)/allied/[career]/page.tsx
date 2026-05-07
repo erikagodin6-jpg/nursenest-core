@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
+import { AlliedMarketingPathwayMissing } from "@/components/marketing/allied-marketing-pathway-missing";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
@@ -60,10 +61,15 @@ export default async function AlliedCareerHubPage({ params }: Props) {
   const prof = resolveAlliedProfessionFromRouteSlug(career);
   if (!prof) notFound();
 
-  const pathway = getPathwayOrThrow(prof.pathwayId);
-  if (!pathway) notFound();
-
   const hubPath = `/allied/${prof.professionKey}`;
+  const pathway = getPathwayOrThrow(prof.pathwayId);
+  if (!pathway) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <AlliedMarketingPathwayMissing pathname={hubPath} />
+      </div>
+    );
+  }
 
   let alliedInitialMeasurement: MeasurementPreference | null = null;
   let alliedMeasurementSync = false;

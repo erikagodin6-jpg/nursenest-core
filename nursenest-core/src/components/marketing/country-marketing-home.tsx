@@ -44,7 +44,7 @@ export function CountryMarketingHome({ country, content }: Props) {
               >
                 <span className="text-base font-semibold text-[var(--theme-heading-text)]">{card.title}</span>
                 <span className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-muted)]">{card.description}</span>
-                <span className="mt-4 text-sm font-semibold text-[var(--semantic-brand)]">Open hub →</span>
+                <span className="mt-4 text-sm font-semibold text-[var(--semantic-brand)]">Open Hub →</span>
               </Link>
             </li>
           ))}

@@ -13,9 +13,18 @@ test("isWellFormedExamHubPath accepts canonical three-segment hubs", () => {
   assert.equal(isWellFormedExamHubPath("/lessons"), true);
 });
 
+test("isWellFormedExamHubPath accepts allied occupation marketing hubs", () => {
+  assert.equal(isWellFormedExamHubPath("/allied/mlt"), true);
+  assert.equal(isWellFormedExamHubPath("/allied/respiratory"), true);
+});
+
+test("ensureMarketingExamHubPath preserves allied occupation paths (no RN fallback)", () => {
+  assert.equal(ensureMarketingExamHubPath("US", "/allied/pharmacy-technician"), "/allied/pharmacy-technician");
+});
+
 test("ensureMarketingExamHubPath falls back to RN hub when href is malformed", () => {
-  assert.equal(ensureMarketingExamHubPath("US", ""), "/lessons");
-  assert.equal(ensureMarketingExamHubPath("CA", "/bad"), "/lessons");
+  assert.equal(ensureMarketingExamHubPath("US", ""), "/us/rn/nclex-rn");
+  assert.equal(ensureMarketingExamHubPath("CA", "/bad"), "/canada/rn/nclex-rn");
 });
 
 test("marketingExamHubPath returns well-formed hubs for US and CA (RN / PN / NP / allied)", () => {
