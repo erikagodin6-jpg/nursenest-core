@@ -9,7 +9,7 @@ import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/p
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { NpQuestionsHubBoardLinkContext } from "@/components/exam-pathways/np-questions-hub-board-links";
-import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
+import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-readiness-floor";
 
 function formatCount(n: number): string {
   if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}k+`;

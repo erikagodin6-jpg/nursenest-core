@@ -1,5 +1,5 @@
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
-import { catReadinessMinCompletePoolRows } from "@/lib/practice-tests/cat-pool";
+import { catReadinessMinCompletePoolRows } from "@/lib/practice-tests/cat-readiness-floor";
 
 /** Minimum published hub-scoped items before we advertise linear / mixed practice entry. */
 export const MIN_MARKETING_LINEAR_PRACTICE_BANK = 1;

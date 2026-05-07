@@ -157,11 +157,11 @@ async function scanApiGuards() {
 }
 
 async function readCatConstants() {
-  const catPool = await readFile(join(APP_ROOT, "src/lib/practice-tests/cat-pool.ts"), "utf8");
-  const minM = catPool.match(/export const CAT_MIN_COMPLETE_POOL = (\d+)/);
+  const catFloor = await readFile(join(APP_ROOT, "src/lib/practice-tests/cat-readiness-floor.ts"), "utf8");
+  const minM = catFloor.match(/export const CAT_MIN_COMPLETE_POOL = (\d+)/);
   return {
     CAT_MIN_COMPLETE_POOL: minM ? Number(minM[1]) : null,
-    poolSource: "src/lib/practice-tests/cat-pool.ts",
+    poolSource: "src/lib/practice-tests/cat-readiness-floor.ts",
     adaptivePolicy: "src/lib/exams/cat-adaptive-policy.ts",
     session: "src/lib/practice-tests/cat-session.ts",
   };

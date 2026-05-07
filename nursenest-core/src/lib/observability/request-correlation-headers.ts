@@ -1,3 +1,5 @@
+import "server-only";
+
 import { headers } from "next/headers";
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 

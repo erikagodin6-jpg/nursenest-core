@@ -20,18 +20,14 @@ import { ECG_QUESTION_FORMAT } from "@/lib/ecg-module/ecg-module-config";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 
+import { catReadinessMinCompletePoolRows } from "./cat-readiness-floor";
+
+export { CAT_MIN_COMPLETE_POOL, catReadinessMinCompletePoolRows } from "./cat-readiness-floor";
+
 const MAX_POOL = 4000;
 /** Batched CAT readiness scans — avoids loading thousands of stems/rationales when only a minimum pool proof is needed. */
 const READINESS_SCAN_BATCH = 280;
 const READINESS_SCAN_CAP = 8000;
-export const CAT_MIN_COMPLETE_POOL = 30;
-
-/** CAT readiness pool floor — full tracks use {@link CAT_MIN_COMPLETE_POOL}; Pre-Nursing uses a smaller MV pool. */
-export function catReadinessMinCompletePoolRows(pathwayId: string | null | undefined): number {
-  const id = pathwayId?.trim().toLowerCase() ?? "";
-  if (id === "pre-nursing" || id === "pre-nursing-ca") return 8;
-  return CAT_MIN_COMPLETE_POOL;
-}
 
 /** Soft practice widens filters when the strict slice is too thin for {@link validatePracticeCatPool}. */
 const CAT_SOFT_MIN_COMPLETE_ROWS = 8;

@@ -4,7 +4,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
-import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
+import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-readiness-floor";
 import {
   marketingCatCompletePoolUsable,
   marketingLinearPracticeBankUsable,

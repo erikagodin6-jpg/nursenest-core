@@ -9,11 +9,8 @@ import { npPathwaySpecialtyWhere } from "@/lib/exam-pathways/np-question-special
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import {
-  catReadinessMinCompletePoolRows,
-  isCompleteCatQuestionRow,
-  NON_ECG_PRACTICE_EXAM_WHERE,
-} from "@/lib/practice-tests/cat-pool";
+import { catReadinessMinCompletePoolRows } from "@/lib/practice-tests/cat-readiness-floor";
+import { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
 import { validatePracticeCatPool, type CatPoolRow } from "@/lib/exams/cat-engine";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 

@@ -10,7 +10,7 @@ import {
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
-import { catReadinessMinCompletePoolRows } from "@/lib/practice-tests/cat-pool";
+import { catReadinessMinCompletePoolRows } from "@/lib/practice-tests/cat-readiness-floor";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-cat-start";
