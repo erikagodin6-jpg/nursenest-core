@@ -88,7 +88,7 @@ export type GenerateBlogAiDraftInput = {
    * Use only when an admin explicitly accepts duplicate topic coverage (e.g. variant angles).
    */
   allowDuplicateCanonicalTopic?: boolean;
-  /** OpenAI `user` / trace id (e.g. batchId:itemId). */
+  /** Provider `user` / trace id (e.g. batchId:itemId). */
   generationIdempotencyKey?: string;
   /**
    * When true, uses {@link normalizeBlogTopicIntent} legacy-compatible broad-topic normalization (batch/CLI).
@@ -563,7 +563,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
 
 /**
  * Canonical entrypoint for creating AI blog posts.
- * Kept as a stable alias while older call-sites still reference `generateBlogAiDraft`.
+ * Kept as a stable alias while older call sites still reference `generateBlogAiDraft`.
  */
 export async function generateBlogPost(d: GenerateBlogAiDraftInput): Promise<GenerateBlogAiDraftResult> {
   return generateBlogAiDraft(d);

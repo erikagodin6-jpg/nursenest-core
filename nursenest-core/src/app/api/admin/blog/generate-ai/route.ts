@@ -27,14 +27,14 @@ import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
-/** Multi-topic batches can run for many minutes (sequential OpenAI + persistence). */
+/** Multi-topic batches can run for many minutes (sequential provider calls + persistence). */
 export const maxDuration = 300;
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/** OpenAI / provider pressure — bounded retries per topic (does not retry duplicate/skip outcomes). */
+/** Provider pressure — bounded retries per topic (does not retry duplicate/skip outcomes). */
 const TRANSIENT_PROVIDER_ERR =
   /rate|429|timeout|timed out|econnreset|overloaded|temporarily unavailable|too many requests|context length|resource_exhausted|throttl|503|service unavailable/i;
 
@@ -332,7 +332,7 @@ export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  const aiBlock = adminAiGenerationHttpBlock();
+  const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
   if (aiBlock) return aiBlock;
 
   let payload: unknown;

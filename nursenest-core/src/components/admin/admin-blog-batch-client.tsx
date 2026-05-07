@@ -67,7 +67,8 @@ export function AdminBlogBatchClient() {
   }, []);
 
   const shouldPoll = useMemo(() => {
-    if (!jobId || !job) return false;
+    if (!jobId) return false;
+    if (!job) return true;
     if (!job.phase) return false;
 
     return job.phase === "queued" || job.phase === "running";
@@ -103,18 +104,30 @@ export function AdminBlogBatchClient() {
       const json = await safeJson<{
         jobId?: string;
         job?: GenerationJobApiPayload;
+        status?: JobPhase;
+        message?: string;
         error?: string;
       }>(res);
 
-      if (!res.ok || !json?.job) {
+      if (!res.ok || !json) {
         setErr(json?.error ?? "Failed to create job");
         return;
       }
 
-      setJobId(json.jobId ?? json.job.id);
-      setJob(json.job);
+      const id = json.jobId ?? json.job?.id;
+      if (!id) {
+        setErr(json.error ?? "Failed to create job");
+        return;
+      }
+
+      setJobId(id);
+      if (json.job) setJob(json.job);
+      else {
+        setJob(null);
+        void loadJob(id);
+      }
       setIdempotencyKey(newIdempotencyKey());
-      setMsg("Job queued successfully.");
+      setMsg(json.message ?? "Job queued successfully.");
     } catch {
       setErr("Network error creating job.");
     } finally {

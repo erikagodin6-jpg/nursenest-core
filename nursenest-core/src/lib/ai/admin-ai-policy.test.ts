@@ -145,6 +145,46 @@ test("getAdminAiGenerationGate: enabled when AI_PROVIDER=openrouter and OPENROUT
   );
 });
 
+test("getAdminAiGenerationGate: blog pipeline uses OpenRouter when only OPENROUTER_API_KEY is set", () => {
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: "true",
+      AI_PROVIDER: undefined,
+      BLOG_AI_PROVIDER: undefined,
+      OPENROUTER_API_KEY: "or-test",
+      OPENAI_API_KEY: undefined,
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+    },
+    () => {
+      const g = getAdminAiGenerationGate({ pipeline: "blog" });
+      assert.equal(g.mode, "enabled");
+      assert.equal(g.runnable, true);
+      assert.equal(g.aiProvider, "openrouter");
+      assert.equal(g.aiProviderKeyPresent, true);
+      assert.equal(g.openAiKeyPresent, false);
+    },
+  );
+});
+
+test("getAdminAiGenerationGate: blog pipeline requires OpenRouter key when BLOG_AI_PROVIDER=openrouter", () => {
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: "true",
+      BLOG_AI_PROVIDER: "openrouter",
+      OPENROUTER_API_KEY: undefined,
+      OPENAI_API_KEY: "sk-test",
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+    },
+    () => {
+      const g = getAdminAiGenerationGate({ pipeline: "blog" });
+      assert.equal(g.mode, "misconfigured");
+      assert.equal(g.runnable, false);
+      assert.equal(g.aiProvider, "openrouter");
+      assert.match(g.summaryLine, /OPENROUTER_API_KEY/);
+    },
+  );
+});
+
 test("getAdminAiGenerationGate: misconfigured when AI_PROVIDER=openrouter lacks OPENROUTER_API_KEY", () => {
   withEnv(
     {
@@ -192,4 +232,19 @@ test("adminAiGenerationHttpBlock returns null when runnable", () => {
   withEnv({ AI_ADMIN_GENERATION_ENABLED: "true", OPENAI_API_KEY: "sk-test" }, () => {
     assert.equal(adminAiGenerationHttpBlock(), null);
   });
+});
+
+test("adminAiGenerationHttpBlock returns null for blog OpenRouter without OpenAI keys", () => {
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: "true",
+      BLOG_AI_PROVIDER: "openrouter",
+      OPENROUTER_API_KEY: "or-test",
+      OPENAI_API_KEY: undefined,
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+    },
+    () => {
+      assert.equal(adminAiGenerationHttpBlock({ pipeline: "blog" }), null);
+    },
+  );
 });

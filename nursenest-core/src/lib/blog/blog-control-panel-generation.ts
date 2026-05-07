@@ -257,6 +257,8 @@ export async function assembleRegenerationBlogPostFields(opts: {
     keywordCluster: input.keywordCluster,
     template: input.template,
   });
+  const categoryResolved =
+    categoryAssigned ?? tagsForSeo[0] ?? (pageTitle.slice(0, 80) || "Exam preparation");
   const faqBlock = { items: Array.isArray(plan.faqs) ? plan.faqs : [] };
   let seoBundle: ReturnType<typeof buildPersistedSeoBundle>;
   try {
@@ -336,7 +338,7 @@ export async function assembleRegenerationBlogPostFields(opts: {
     metaTitleVariant: seoTitleStored,
     metaDescriptionVariant: seoDescriptionStored,
     targetKeyword: targetKeywordStored,
-    category: categoryAssigned,
+    category: categoryResolved,
     tags: tagsForSeo,
     outlineJson: (Array.isArray(plan.outline) && plan.outline.length > 0
       ? plan.outline
@@ -752,6 +754,8 @@ export async function persistControlPanelDraft(
     keywordCluster: input.keywordCluster,
     template: input.template,
   });
+  const categoryResolved =
+    categoryAssigned ?? tagsForSeo[0] ?? (pageTitle.slice(0, 80) || "Exam preparation");
 
   const faqBlock = { items: Array.isArray(plan.faqs) ? plan.faqs : [] };
   let seoBundle;
@@ -845,7 +849,7 @@ export async function persistControlPanelDraft(
     title: pageTitle,
     body: bodyWithRequiredLinks,
     targetKeyword: input.targetKeyword ?? input.topic,
-    category: categoryAssigned,
+    category: categoryResolved,
     tags: tagsForSeo,
     faqBlock: faqBlock as unknown as Prisma.JsonValue,
     apaReferences,
@@ -907,7 +911,7 @@ export async function persistControlPanelDraft(
           excerpt: excerpt.length >= 10 ? excerpt : `${pageTitle.slice(0, 200)}. Draft excerpt; edit before publish.`,
           body: bodyWithRequiredLinks,
           exam: input.exam,
-          category: categoryAssigned,
+          category: categoryResolved,
           targetKeyword: (
             (seoBundle.primaryKeyword && seoBundle.primaryKeyword.trim()) ||
             normalizedTopic ||

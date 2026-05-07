@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  const aiBlock = adminAiGenerationHttpBlock();
+  const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
   if (aiBlock) return aiBlock;
 
   const result = await processDueBlogBatchScheduleItems();

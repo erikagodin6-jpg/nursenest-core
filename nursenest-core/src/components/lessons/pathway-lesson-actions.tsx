@@ -156,10 +156,13 @@ export function PathwayLessonActions({
   const primaryLegacyActive = mode === "legacy" && Boolean(pack?.questionsHref);
 
   return (
-    <section className="lv-lesson-actions" aria-label="Continue studying">
+    <section
+      className="lv-lesson-actions rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--semantic-surface))] px-4 py-5 shadow-[var(--semantic-shadow-soft)] sm:px-5"
+      aria-label="Continue studying"
+    >
       <p className="nn-lesson-module-eyebrow">{t("learner.lessons.detail.studyActionsEyebrow")}</p>
 
-      <div className="lv-lesson-actions__primary">
+      <div className="lv-lesson-actions__primary mt-3">
         {primaryLinkedActive && pack?.questionsHref ? (
           <Link
             href={pack.questionsHref}

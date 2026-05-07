@@ -35,7 +35,7 @@ export async function POST(req: Request, ctx: RouteContext) {
 
   const shellJob = isRnTopicMapShellGenerationBatch(batch);
   if (!shellJob) {
-    const aiBlock = adminAiGenerationHttpBlock();
+    const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
     if (aiBlock) return aiBlock;
   }
 
@@ -89,6 +89,6 @@ export async function POST(req: Request, ctx: RouteContext) {
     return NextResponse.json({ ok: false, ...out }, { status });
   }
 
-  const job = await loadBlogGenerationJobForAdmin(id);
+  const job = await loadBlogGenerationJobForAdmin(id, { maxItems: 120 });
   return NextResponse.json({ ok: true, ...out, job });
 }

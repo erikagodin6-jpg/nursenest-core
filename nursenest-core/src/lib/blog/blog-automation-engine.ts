@@ -48,7 +48,7 @@ type AutomationInput = {
   includeAiImage?: boolean;
   sourceRecords?: Prisma.JsonValue;
   fixedSlug?: string;
-  /** Passed to OpenAI `user` and pipeline repair idempotency (e.g. batchId:itemId). */
+  /** Passed to provider `user` and pipeline repair idempotency (e.g. batchId:itemId). */
   generationIdempotencyKey?: string;
   autoPublish?: boolean;
   publishAt?: Date;
@@ -538,4 +538,3 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     repairPassesUsed: pipelineResult.repairPassesUsed,
   };
 }
-

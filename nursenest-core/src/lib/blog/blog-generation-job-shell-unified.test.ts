@@ -52,3 +52,27 @@ test("admin-blog-batch-client has no client-owned while processing loop", () => 
   assert.match(src, /generation-jobs/);
   assert.equal(/\bwhile\s*\(/.test(src), false, "expected no while( loops on batch shell surface");
 });
+
+test("generation job create route returns a timeout-safe queued response", () => {
+  const p = join(__dirname, "..", "..", "app", "api", "admin", "blog", "generation-jobs", "route.ts");
+  const src = readFileSync(p, "utf8");
+  assert.match(src, /createTimeoutSafeJobResponse/);
+  assert.match(src, /blog_generation_job_timeout_safe_return/);
+  assert.match(src, /\{\s*status:\s*202\s*\}/);
+  assert.doesNotMatch(src, /loadBlogGenerationJobForAdmin/);
+});
+
+test("admin draft batch client recovers queued jobs from create/read timeout", () => {
+  const p = join(__dirname, "..", "..", "components", "admin", "admin-blog-draft-batch-client.tsx");
+  const src = readFileSync(p, "utf8");
+  assert.match(src, /recoveredFromTimeout/);
+  assert.match(src, /loadBatch\(id\)/);
+  assert.match(src, /Polling will retry automatically/);
+});
+
+test("blog batch cron pumps background draft generation jobs", () => {
+  const p = join(__dirname, "..", "..", "app", "api", "cron", "blog-batch-schedule", "route.ts");
+  const src = readFileSync(p, "utf8");
+  assert.match(src, /pumpBackgroundBlogDraftBatches/);
+  assert.match(src, /draftGenerationItemsProcessed/);
+});

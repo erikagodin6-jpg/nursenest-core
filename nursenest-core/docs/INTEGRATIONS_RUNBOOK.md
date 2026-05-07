@@ -639,10 +639,10 @@ Optional admin generation, study coach, and related features when keys and featu
 | Variable | Role |
 |----------|------|
 | `AI_PROVIDER=openrouter` | Routes shared OpenAI-compatible admin/content calls through OpenRouter. |
-| `OPENROUTER_API_KEY` | OpenRouter key used when `AI_PROVIDER=openrouter`. |
-| `OPENROUTER_MODEL` | OpenRouter model slug, for example `openai/gpt-4o-mini`. |
-| `BLOG_AI_PROVIDER=openrouter` | Optional blog-only override; `AI_PROVIDER=openrouter` is preferred for all content generation. |
-| `OPENAI_API_KEY` or `AI_INTEGRATIONS_OPENAI_API_KEY` | Optional OpenAI fallback when `AI_PROVIDER` is unset or `openai`. |
+| `OPENROUTER_API_KEY` | OpenRouter key used when `AI_PROVIDER=openrouter`; blog generation also selects OpenRouter when this key is present and no explicit blog OpenAI provider is set. |
+| `OPENROUTER_MODEL` | Required OpenRouter model slug for blog generation, for example `anthropic/claude-3.5-sonnet` or another model enabled on the account. |
+| `BLOG_AI_PROVIDER=openrouter` | Blog-only override for OpenRouter. |
+| `BLOG_AI_PROVIDER=openai` plus `OPENAI_API_KEY` or `AI_INTEGRATIONS_OPENAI_API_KEY` | Explicit OpenAI opt-in for blog generation. |
 | `OPENAI_BASE_URL` / `AI_INTEGRATIONS_OPENAI_BASE_URL` | Optional non-default API base. |
 | `AI_OPENAI_MODEL`, `AI_ADMIN_MODEL`, `AI_ADMIN_GENERATION_ENABLED`, etc. | Feature gating (see `.env.example`). |
 | `GEMINI_API_KEY`, `GEMINI_MODEL` | Google Gemini where implemented. |

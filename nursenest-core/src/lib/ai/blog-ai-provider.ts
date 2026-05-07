@@ -1,5 +1,5 @@
 /**
- * AI chat completions: OpenAI (default) or OpenRouter via the OpenAI SDK.
+ * AI chat completions: OpenAI (explicit) or OpenRouter via OpenAI-compatible chat completions.
  * Blog callers may override the global provider with `BLOG_AI_PROVIDER`.
  */
 import OpenAI from "openai";
@@ -20,6 +20,9 @@ export type { BlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
 type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
 
 let lastLoggedBlogProvider = "";
+const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
+const OPENROUTER_401_MESSAGE =
+  "OpenRouter rejected the API key. Check OPENROUTER_API_KEY, account credits, model access, and shell env loading.";
 
 function logBlogProviderSelection(provider: BlogAiChatProvider, model: string): void {
   const key = `${provider}:${model}`;
@@ -28,7 +31,7 @@ function logBlogProviderSelection(provider: BlogAiChatProvider, model: string): 
   console.info(`[BlogAI] provider=${provider} model=${model}`);
 }
 
-async function mapOpenAiSdkError<T>(fn: () => Promise<T>): Promise<T> {
+async function mapProviderError<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } catch (e) {
@@ -44,6 +47,25 @@ function normalizeOpenRouterModel(explicit: string | undefined, fallback: string
   return fallback.includes("/") ? fallback : getOpenRouterChatModel();
 }
 
+function normalizeOpenRouterApiKey(raw: string | undefined): string {
+  const apiKey = raw?.trim() ?? "";
+  if (!apiKey) {
+    throw new Error(
+      "OPENROUTER_API_KEY is required when AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter",
+    );
+  }
+  if ((apiKey.startsWith("\"") && apiKey.endsWith("\"")) || (apiKey.startsWith("'") && apiKey.endsWith("'"))) {
+    throw new Error("OPENROUTER_API_KEY appears to include wrapping quote characters. Remove the quotes from the runtime value.");
+  }
+  if (/^bearer\s+/i.test(apiKey)) {
+    throw new Error("OPENROUTER_API_KEY must be the raw key only; do not include a Bearer prefix.");
+  }
+  if (apiKey === "dry-run-test" || apiKey === "test" || apiKey.includes("YOUR_OPENROUTER_API_KEY")) {
+    throw new Error("OPENROUTER_API_KEY is a placeholder value, not a live OpenRouter API key.");
+  }
+  return apiKey;
+}
+
 export async function openRouterChatCompletion(params: {
   messages: ChatMessage[];
   temperature: number;
@@ -51,31 +73,42 @@ export async function openRouterChatCompletion(params: {
   user?: string;
   model?: string;
 }): Promise<ChatCompletionResult> {
-  const apiKey = process.env.OPENROUTER_API_KEY?.trim();
-  if (!apiKey) {
-    throw new Error(
-      "OPENROUTER_API_KEY is required when AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter",
-    );
-  }
+  const apiKey = normalizeOpenRouterApiKey(process.env.OPENROUTER_API_KEY);
   const user = params.user ? String(params.user).slice(0, 128) : undefined;
   const model = normalizeOpenRouterModel(params.model, getOpenRouterChatModel());
-  const client = new OpenAI({
-    apiKey,
-    baseURL: "https://openrouter.ai/api/v1",
-    defaultHeaders: {
-      "HTTP-Referer": process.env.OPENROUTER_HTTP_REFERER?.trim() || "https://nursenest.ca",
-      "X-Title": process.env.OPENROUTER_APP_TITLE?.trim() || "NurseNest",
-    },
+  const resp = await mapProviderError(async () => {
+    const res = await fetch(`${OPENROUTER_BASE_URL}/chat/completions`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": process.env.OPENROUTER_HTTP_REFERER?.trim() || "https://nursenest.ca",
+        "X-Title": process.env.OPENROUTER_APP_TITLE?.trim() || "NurseNest",
+      },
+      body: JSON.stringify({
+        model,
+        messages: params.messages,
+        temperature: params.temperature,
+        max_tokens: params.maxTokens,
+        ...(user ? { user } : {}),
+      }),
+    });
+    const rawText = await res.text();
+    if (!res.ok) {
+      if (res.status === 401) {
+        throw new Error(`${OPENROUTER_401_MESSAGE}${rawText ? ` OpenRouter response: ${rawText.slice(0, 500)}` : ""}`);
+      }
+      throw new Error(`OpenRouter HTTP ${res.status}${rawText ? `: ${rawText.slice(0, 500)}` : ""}`);
+    }
+    try {
+      return JSON.parse(rawText) as {
+        choices?: { message?: { content?: string } }[];
+        usage?: { total_tokens?: number };
+      };
+    } catch {
+      throw new Error("Invalid JSON from OpenRouter response");
+    }
   });
-  const resp = await mapOpenAiSdkError(() =>
-    client.chat.completions.create({
-      model,
-      messages: params.messages,
-      temperature: params.temperature,
-      max_tokens: params.maxTokens,
-      ...(user ? { user } : {}),
-    }),
-  );
   const content = resp.choices[0]?.message?.content ?? "";
   return { content, totalTokens: resp.usage?.total_tokens };
 }
@@ -100,11 +133,7 @@ export async function blogAiChatCompletion(params: {
   }
 
   if (provider === "openrouter") {
-    if (!process.env.OPENROUTER_API_KEY?.trim()) {
-      throw new Error(
-        "OPENROUTER_API_KEY is required when AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter",
-      );
-    }
+    normalizeOpenRouterApiKey(process.env.OPENROUTER_API_KEY);
     const model = normalizeOpenRouterModel(params.model, getBlogOpenRouterChatModel());
     logBlogProviderSelection(provider, model);
     return openRouterChatCompletion({
@@ -130,7 +159,7 @@ export async function blogAiChatCompletion(params: {
     apiKey,
     baseURL: base,
   });
-  const resp = await mapOpenAiSdkError(() =>
+  const resp = await mapProviderError(() =>
     client.chat.completions.create({
       model,
       messages: params.messages,

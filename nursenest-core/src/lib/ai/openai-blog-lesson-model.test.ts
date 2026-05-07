@@ -12,7 +12,6 @@ import {
   getLessonOpenAiChatModel,
   getOpenRouterChatModel,
   OPENAI_DEFAULT_BLOG_LESSON_MODEL,
-  OPENROUTER_DEFAULT_BLOG_MODEL,
   OPENROUTER_DEFAULT_CHAT_MODEL,
 } from "@/lib/ai/openai-env";
 
@@ -77,6 +76,7 @@ describe("getBlogOpenAiApiKey + assertOpenAiKeyConfigured", () => {
   it("assertOpenAiKeyConfigured({ pipeline: 'blog' }) ok when only BLOG_OPENAI_API_KEY is set", () => {
     delete process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
     delete process.env.OPENAI_API_KEY;
+    process.env.BLOG_AI_PROVIDER = "openai";
     process.env.BLOG_OPENAI_API_KEY = ["m", "o", "c", "k", "-", "b", "l", "o", "g"].join("");
     assert.equal(assertOpenAiKeyConfigured({ pipeline: "blog" }).ok, true);
     assert.equal(assertOpenAiKeyConfigured().ok, false);
@@ -85,6 +85,7 @@ describe("getBlogOpenAiApiKey + assertOpenAiKeyConfigured", () => {
   it("assertOpenAiKeyConfigured({ pipeline: 'blog' }) ok when only AI_INTEGRATIONS_OPENAI_API_KEY is set", () => {
     delete process.env.BLOG_OPENAI_API_KEY;
     delete process.env.OPENAI_API_KEY;
+    process.env.BLOG_AI_PROVIDER = "openai";
     process.env.AI_INTEGRATIONS_OPENAI_API_KEY = ["m", "o", "c", "k", "-", "i", "n", "t"].join("");
     assert.equal(assertOpenAiKeyConfigured({ pipeline: "blog" }).ok, true);
   });
@@ -97,6 +98,17 @@ describe("getBlogOpenAiApiKey + assertOpenAiKeyConfigured", () => {
     process.env.OPENROUTER_API_KEY = ["o", "r", "-", "m", "o", "c", "k"].join("");
     assert.equal(assertOpenAiKeyConfigured({ pipeline: "blog" }).ok, true);
     assert.equal(assertOpenAiKeyConfigured().ok, true);
+  });
+
+  it("assertOpenAiKeyConfigured({ pipeline: 'blog' }) accepts OpenRouter key as the blog default without OpenAI keys", () => {
+    delete process.env.BLOG_OPENAI_API_KEY;
+    delete process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
+    delete process.env.OPENAI_API_KEY;
+    delete process.env.AI_PROVIDER;
+    delete process.env.BLOG_AI_PROVIDER;
+    process.env.OPENROUTER_API_KEY = ["o", "r", "-", "m", "o", "c", "k"].join("");
+    assert.equal(assertOpenAiKeyConfigured({ pipeline: "blog" }).ok, true);
+    assert.equal(assertOpenAiKeyConfigured().ok, false);
   });
 
   it("assertOpenAiKeyConfigured({ pipeline: 'blog' }) names OpenRouter when selected without key", () => {
@@ -157,11 +169,11 @@ describe("getBlogOpenRouterChatModel", () => {
     assert.equal(getBlogOpenRouterChatModel(), "anthropic/claude-3.5-haiku");
   });
 
-  it("falls back to default slug when unset", () => {
+  it("requires OPENROUTER_MODEL when unset", () => {
     delete process.env.OPENROUTER_MODEL;
     delete process.env.BLOG_OPENAI_MODEL;
     delete process.env.AI_INTEGRATIONS_OPENAI_MODEL;
-    assert.equal(getBlogOpenRouterChatModel(), OPENROUTER_DEFAULT_BLOG_MODEL);
+    assert.throws(() => getBlogOpenRouterChatModel(), /OPENROUTER_MODEL is required/);
   });
 });
 
@@ -185,10 +197,10 @@ describe("getOpenRouterChatModel", () => {
     assert.equal(getOpenRouterChatModel(), OPENROUTER_DEFAULT_CHAT_MODEL);
   });
 
-  it("allows blog model fallback only for blog OpenRouter routing", () => {
+  it("does not use blog OpenAI model fallback for OpenRouter blog routing", () => {
     delete process.env.OPENROUTER_MODEL;
     process.env.BLOG_OPENAI_MODEL = "openai/gpt-4.1-mini";
-    assert.equal(getBlogOpenRouterChatModel(), "openai/gpt-4.1-mini");
+    assert.throws(() => getBlogOpenRouterChatModel(), /OPENROUTER_MODEL is required/);
     assert.equal(getOpenRouterChatModel(), OPENROUTER_DEFAULT_CHAT_MODEL);
   });
 });

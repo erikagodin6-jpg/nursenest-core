@@ -30,7 +30,7 @@ export async function openAiChatCompletion(params: {
   model?: string;
   /**
    * When true, resolve API key with {@link getBlogOpenAiApiKey} (`BLOG_OPENAI_API_KEY` first), unless
-   * `AI_PROVIDER=openrouter` or `BLOG_AI_PROVIDER=openrouter` (then {@link OPENROUTER_API_KEY} via OpenRouter-compatible SDK).
+   * `AI_PROVIDER=openrouter` or `BLOG_AI_PROVIDER=openrouter` (then {@link OPENROUTER_API_KEY} via OpenRouter-compatible chat).
    * Blog pipelines should set this; other callers use shared {@link getOpenAiApiKey}.
    */
   useBlogOpenAiApiKey?: boolean;

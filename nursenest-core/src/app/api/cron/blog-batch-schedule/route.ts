@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { enforceCronSecretOrResponse } from "@/lib/cron/enforce-cron-secret";
 import { ensureDailyBlogQueue, processDueBlogBatchScheduleItems } from "@/lib/blog/blog-batch-schedule";
+import { pumpBackgroundBlogDraftBatches } from "@/lib/blog/blog-generation-jobs";
 import { verifyBlogPublishSchemaColumns } from "@/lib/blog/blog-publish-db-guard";
 import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
 import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
@@ -47,10 +48,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const [queue, result, promoted] = await Promise.all([
+    const [queue, result, promoted, draftGenerationPump] = await Promise.all([
       ensureDailyBlogQueue(),
       processDueBlogBatchScheduleItems(),
       promoteScheduledBlogPosts(),
+      pumpBackgroundBlogDraftBatches(),
     ]);
 
     revalidateBlogPublishingSurfaces({ promotedSlugs: promoted.promotedSlugs });
@@ -59,6 +61,8 @@ export async function POST(req: Request) {
       durationMs: Date.now() - started,
       promoted: promoted.count,
       processedItems: result.processedItems,
+      draftGenerationBatchesTouched: draftGenerationPump.batchesTouched,
+      draftGenerationItemsProcessed: draftGenerationPump.itemsProcessed,
     });
 
     return NextResponse.json({
@@ -79,6 +83,9 @@ export async function POST(req: Request) {
       publishFailedCount: promoted.failures.length,
       publishFailures: promoted.failures,
       publishSkippedMaxRetries: promoted.skippedMaxRetries,
+      draftGenerationBatchesTouched: draftGenerationPump.batchesTouched,
+      draftGenerationItemsProcessed: draftGenerationPump.itemsProcessed,
+      draftGenerationPumpErrors: draftGenerationPump.errors,
     });
   } finally {
     await releaseCronAdvisoryLock(lockId);

@@ -124,7 +124,7 @@ export type RunBlogArticlePipelineOptions = {
   persist?: boolean;
   /** Override on-page H1 for the body pass (e.g. admin picked another title option). */
   pageH1Override?: string;
-  /** Suffix for OpenAI `user` on completions (e.g. batch id + item id). */
+  /** Suffix for provider `user` on completions (e.g. batch id + item id). */
   idempotencyKey?: string;
   /** Skip first plan LLM fetch (async job retry / resume). */
   initialPlan?: BlogControlPanelPlan;

@@ -265,10 +265,10 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const aiBlock = adminAiGenerationHttpBlock();
+  const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
   if (aiBlock) return aiBlock;
 
-  // Live OpenAI adaptation and persist
+  // Live provider adaptation and persist
   let generatedOutput: LocalizedBlogAiOutput;
   try {
     console.info("[localized_blog_generate] start_ai", {

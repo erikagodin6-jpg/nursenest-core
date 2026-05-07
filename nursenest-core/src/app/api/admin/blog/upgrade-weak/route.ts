@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  const aiBlock = adminAiGenerationHttpBlock();
+  const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
   if (aiBlock) return aiBlock;
 
   const parsed = requestSchema.safeParse(await req.json().catch(() => ({})));
@@ -212,4 +212,3 @@ export async function POST(req: Request) {
     results,
   });
 }
-

@@ -87,6 +87,15 @@ export type BlogGenerationJobPayload = {
   /** True when this job creates RN topic-map DRAFT shells (no AI). */
   rnTopicMapShellJob: boolean;
   items: BlogGenerationJobItemPayload[];
+  /** When true, `items` is a prefix of the full list (use for fast polling with `?lite=1`). */
+  itemsTruncated?: boolean;
+};
+
+type SerializeJobOpts = {
+  /** Accurate counts when `items` is only a prefix slice (lite polling). */
+  pendingOverride?: number;
+  generatingOverride?: number;
+  itemsTruncated?: boolean;
 };
 
 function serializeJob(
@@ -97,9 +106,14 @@ function serializeJob(
       }
     >;
   },
+  opts?: SerializeJobOpts,
 ): BlogGenerationJobPayload {
-  const pending = batch.items.filter((i) => i.status === BlogDraftGenerationBatchItemStatus.PENDING).length;
-  const generating = batch.items.filter((i) => i.status === BlogDraftGenerationBatchItemStatus.GENERATING).length;
+  const pending =
+    opts?.pendingOverride ??
+    batch.items.filter((i) => i.status === BlogDraftGenerationBatchItemStatus.PENDING).length;
+  const generating =
+    opts?.generatingOverride ??
+    batch.items.filter((i) => i.status === BlogDraftGenerationBatchItemStatus.GENERATING).length;
   const phase = mapBlogDraftBatchToJobPhase(batch, pending, generating);
   const rnTopicMapShellJob = isRnTopicMapShellGenerationBatch(batch);
   return {
@@ -140,29 +154,83 @@ function serializeJob(
       blogPost: i.blogPost,
       repairMeta: parseBlogBatchItemRepairMeta(i.error),
     })),
+    itemsTruncated: opts?.itemsTruncated === true,
   };
 }
 
-export async function loadBlogGenerationJobForAdmin(id: string): Promise<BlogGenerationJobPayload | null> {
-  const batch = await prisma.blogDraftGenerationBatch.findUnique({
-    where: { id },
-    include: {
-      items: {
-        orderBy: { ordinal: "asc" },
-        select: {
-          id: true,
-          ordinal: true,
-          topicRaw: true,
-          status: true,
-          blogPostId: true,
-          error: true,
-          blogPost: { select: { id: true, slug: true, title: true } },
+export type LoadBlogGenerationJobOpts = {
+  /**
+   * When set, loads only the first N items (ordered by ordinal) but uses DB aggregates for accurate
+   * queued/running counts — keeps polling responses small under proxy timeouts.
+   */
+  maxItems?: number | null;
+};
+
+export async function loadBlogGenerationJobForAdmin(
+  id: string,
+  opts?: LoadBlogGenerationJobOpts,
+): Promise<BlogGenerationJobPayload | null> {
+  const cap = opts?.maxItems;
+  if (cap == null) {
+    const batch = await prisma.blogDraftGenerationBatch.findUnique({
+      where: { id },
+      include: {
+        items: {
+          orderBy: { ordinal: "asc" },
+          select: {
+            id: true,
+            ordinal: true,
+            topicRaw: true,
+            status: true,
+            blogPostId: true,
+            error: true,
+            blogPost: { select: { id: true, slug: true, title: true } },
+          },
         },
       },
+    });
+    if (!batch) return null;
+    return serializeJob(batch);
+  }
+
+  const batchRow = await prisma.blogDraftGenerationBatch.findUnique({ where: { id } });
+  if (!batchRow) return null;
+
+  const [groups, itemRows] = await Promise.all([
+    prisma.blogDraftGenerationBatchItem.groupBy({
+      by: ["status"],
+      where: { batchId: id },
+      _count: { _all: true },
+    }),
+    prisma.blogDraftGenerationBatchItem.findMany({
+      where: { batchId: id },
+      orderBy: { ordinal: "asc" },
+      take: cap,
+      select: {
+        id: true,
+        ordinal: true,
+        topicRaw: true,
+        status: true,
+        blogPostId: true,
+        error: true,
+        blogPost: { select: { id: true, slug: true, title: true } },
+      },
+    }),
+  ]);
+
+  const pending =
+    groups.find((g) => g.status === BlogDraftGenerationBatchItemStatus.PENDING)?._count._all ?? 0;
+  const generating =
+    groups.find((g) => g.status === BlogDraftGenerationBatchItemStatus.GENERATING)?._count._all ?? 0;
+
+  return serializeJob(
+    { ...batchRow, items: itemRows },
+    {
+      pendingOverride: pending,
+      generatingOverride: generating,
+      itemsTruncated: batchRow.totalItems > itemRows.length,
     },
-  });
-  if (!batch) return null;
-  return serializeJob(batch);
+  );
 }
 
 export type ListBlogGenerationJobsParams = {

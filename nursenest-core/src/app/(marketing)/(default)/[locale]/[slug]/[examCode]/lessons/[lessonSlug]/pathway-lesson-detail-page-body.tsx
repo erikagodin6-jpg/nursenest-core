@@ -379,7 +379,7 @@ export async function PathwayLessonDetailPageBody({
           )
         ) : null}
 
-        <div className="mt-4 flex flex-col gap-6 xl:grid xl:grid-cols-[minmax(0,1fr)_17.5rem] xl:items-start xl:gap-8 2xl:gap-10">
+        <div className="mt-6 flex flex-col gap-8 xl:grid xl:grid-cols-[minmax(0,1fr)_16.5rem] xl:items-start xl:gap-10 2xl:gap-12">
           <aside
             className="shrink-0 space-y-4 xl:sticky xl:top-24 xl:order-2 xl:col-start-2 xl:w-full xl:self-start xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
             aria-label="Lesson quick review"
@@ -404,7 +404,7 @@ export async function PathwayLessonDetailPageBody({
             />
           </aside>
 
-          <div className="min-w-0 xl:order-1 xl:col-start-1 xl:row-start-1">
+          <div className="min-w-0 xl:order-1 xl:col-start-1 xl:row-start-1 xl:max-w-[min(100%,52rem)] xl:justify-self-start">
         {matchedLessonImage.url && hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
           <LessonClinicalImageCard
             url={matchedLessonImage.url}

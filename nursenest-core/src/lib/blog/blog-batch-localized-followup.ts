@@ -101,7 +101,7 @@ export function blogBatchDefaultRegionForLocale(locale: GlobalLocaleCode, schedu
 }
 
 /**
- * After a canonical batch post is created, generate localized variants (OpenAI + post-process + upsert).
+ * After a canonical batch post is created, generate localized variants (provider + post-process + upsert).
  * Failures are logged per locale; does not throw unless the canonical row is missing.
  */
 export async function runBlogBatchLocalizedFollowup(params: {

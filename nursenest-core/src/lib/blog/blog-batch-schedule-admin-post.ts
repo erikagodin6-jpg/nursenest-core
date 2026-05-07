@@ -63,7 +63,7 @@ export async function handleBlogBatchScheduleAdminPost(
   const d = parsed.data;
 
   if (mode === "save") {
-    const aiBlock = adminAiGenerationHttpBlock();
+    const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
     if (aiBlock) return aiBlock;
   }
 

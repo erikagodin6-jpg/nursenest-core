@@ -23,6 +23,14 @@ function newIdempotencyKey(): string {
   return `idem_${Date.now()}_${Math.random().toString(36).slice(2, 12)}`;
 }
 
+async function safeJson<T>(res: Response): Promise<T | null> {
+  try {
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}
+
 const templates: BlogPostTemplate[] = [
   BlogPostTemplate.HOW_TO_PASS,
   BlogPostTemplate.TOPIC_EXPLAINED,
@@ -69,6 +77,11 @@ type BatchDetail = BatchRow & {
   includeImage: boolean;
   includeAiImage: boolean;
   items: ItemRow[];
+  /** Accurate job-wide counts (use when `items` is truncated for lite polling). */
+  pendingItems?: number;
+  generatingItems?: number;
+  /** Present when API returned a prefix slice (`?lite=1`) for fast polling. */
+  itemsTruncated?: boolean;
   jobPhase?: "queued" | "running" | "completed" | "cancelled" | "partial";
   lastProcessorError?: string | null;
 };
@@ -95,11 +108,31 @@ type GenerationJobApiPayload = {
   completedItems: number;
   failedItems: number;
   skippedItems: number;
+  pendingItems?: number;
+  generatingItems?: number;
   lastProcessorError: string | null;
   items: ItemRow[];
+  itemsTruncated?: boolean;
+};
+
+type CreateGenerationJobResponse = {
+  ok?: boolean;
+  error?: string;
+  message?: string;
+  jobId?: string;
+  status?: NonNullable<BatchDetail["jobPhase"]>;
+  job?: GenerationJobApiPayload;
+  droppedShortLines?: number;
+  idempotentReplay?: boolean;
 };
 
 function mapJobPayloadToBatchDetail(job: GenerationJobApiPayload): BatchDetail {
+  const pendingFallback = job.items.filter(
+    (i) => i.status === BlogDraftGenerationBatchItemStatus.PENDING,
+  ).length;
+  const generatingFallback = job.items.filter(
+    (i) => i.status === BlogDraftGenerationBatchItemStatus.GENERATING,
+  ).length;
   return {
     id: job.id,
     status: job.batchStatus,
@@ -122,6 +155,9 @@ function mapJobPayloadToBatchDetail(job: GenerationJobApiPayload): BatchDetail {
     includeImage: job.includeImage,
     includeAiImage: job.includeAiImage,
     items: job.items,
+    pendingItems: typeof job.pendingItems === "number" ? job.pendingItems : pendingFallback,
+    generatingItems: typeof job.generatingItems === "number" ? job.generatingItems : generatingFallback,
+    itemsTruncated: job.itemsTruncated,
     jobPhase: job.phase,
     lastProcessorError: job.lastProcessorError,
   };
@@ -209,18 +245,27 @@ export function AdminBlogDraftBatchClient() {
   }, []);
 
   const loadBatch = useCallback(async (id: string) => {
-    const res = await fetch(`/api/admin/blog/generation-jobs/${id}`, { credentials: "include", cache: "no-store" });
-    let json: {
+    const res = await fetch(`/api/admin/blog/generation-jobs/${encodeURIComponent(id)}?lite=1&maxItems=80`, {
+      credentials: "include",
+      cache: "no-store",
+    });
+    const json = await safeJson<{
       ok?: boolean;
       job?: GenerationJobApiPayload;
       error?: string;
       message?: string;
       code?: string;
       details?: unknown;
-    };
-    try {
-      json = (await res.json()) as typeof json;
-    } catch {
+    }>(res);
+    if (!json) {
+      const gatewayish = res.status >= 502 && res.status <= 504;
+      if (gatewayish) {
+        setMsg(
+          "Could not read job status JSON (gateway timeout or empty body). The job may still be running — polling will retry. Use “Process chunk” if progress stalls.",
+        );
+        setErr(null);
+        return;
+      }
       setErr(`Could not read job response (HTTP ${res.status}).`);
       return;
     }
@@ -288,17 +333,20 @@ export function AdminBlogDraftBatchClient() {
   }, [loadBatch]);
 
   const pendingCount = useMemo(() => {
-    if (!batch?.items) return 0;
+    if (!batch) return 0;
+    if (typeof batch.pendingItems === "number") return batch.pendingItems;
     return batch.items.filter((i) => i.status === BlogDraftGenerationBatchItemStatus.PENDING).length;
   }, [batch]);
 
   const isProcessing = useMemo(() => {
-    if (!batch?.items) return false;
+    if (!batch) return false;
+    if (typeof batch.generatingItems === "number" && batch.generatingItems > 0) return true;
     return batch.items.some((i) => i.status === BlogDraftGenerationBatchItemStatus.GENERATING);
   }, [batch]);
 
   const shouldPollJob = useMemo(() => {
-    if (!batchId || !batch) return false;
+    if (!batchId) return false;
+    if (!batch) return true;
     if (batch.status !== BlogDraftGenerationBatchStatus.ACTIVE) return false;
     if (!batch.backgroundProcessing) return false;
     const ph = batch.jobPhase;
@@ -320,53 +368,79 @@ export function AdminBlogDraftBatchClient() {
     setMsg(null);
     setErr(null);
     try {
-      const res = await fetch("/api/admin/blog/generation-jobs", {
-        method: "POST",
-        credentials: "include",
-        cache: "no-store",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          topicsText,
-          exam,
-          country,
-          template,
-          tone,
-          intent,
-          funnelStage,
-          keywords: keywords || undefined,
-          keywordCluster: keywordCluster || undefined,
-          countryTarget: countryTarget || undefined,
-          includeImage,
-          includeAiImage,
-          allowDuplicateCanonicalTopic,
-          idempotencyKey,
-        }),
-      });
-      const json = (await res.json()) as {
-        ok?: boolean;
-        error?: string;
-        jobId?: string;
-        job?: GenerationJobApiPayload;
-        droppedShortLines?: number;
-        idempotentReplay?: boolean;
+      const body = {
+        topicsText,
+        exam,
+        country,
+        template,
+        tone,
+        intent,
+        funnelStage,
+        keywords: keywords || undefined,
+        keywordCluster: keywordCluster || undefined,
+        countryTarget: countryTarget || undefined,
+        includeImage,
+        includeAiImage,
+        allowDuplicateCanonicalTopic,
+        idempotencyKey,
       };
+      const createJob = async () => {
+        const res = await fetch("/api/admin/blog/generation-jobs", {
+          method: "POST",
+          credentials: "include",
+          cache: "no-store",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const json = await safeJson<CreateGenerationJobResponse>(res);
+        return { res, json };
+      };
+
+      let recoveredFromTimeout = false;
+      let { res, json } = await createJob();
+      if (!json && (res.status === 504 || res.status === 502 || res.status === 503)) {
+        const retry = await createJob();
+        res = retry.res;
+        json = retry.json;
+        recoveredFromTimeout = Boolean(json?.jobId || json?.job?.id);
+      }
+      if (!json) {
+        if (res.status >= 502 && res.status <= 504) {
+          setMsg(
+            "The create request may have completed on the server, but the gateway returned a timeout or empty body before the client could read JSON. Check “Recent jobs” or your URL `?batch=` id; polling will pick up a created job when it appears.",
+          );
+        }
+        setErr(
+          res.status >= 502 && res.status <= 504
+            ? null
+            : `Could not read create response (HTTP ${res.status}).`,
+        );
+        if (res.status < 502 || res.status > 504) return;
+        await loadRecent();
+        return;
+      }
       if (!res.ok) {
         setErr(res.status === 429 ? formatAdminRateLimitMessageFromJson(json) : (json.error ?? "Create failed"));
         return;
       }
       const id = json.jobId ?? json.job?.id;
-      if (!id || !json.job) {
+      if (!id) {
         setErr("Missing job id");
         return;
       }
       setBatchId(id);
-      setBatch(mapJobPayloadToBatchDetail(json.job));
+      if (json.job) setBatch(mapJobPayloadToBatchDetail(json.job));
+      else {
+        setBatch(null);
+        void loadBatch(id);
+      }
       if (!json.idempotentReplay) {
         setIdempotencyKey(newIdempotencyKey());
       }
-      setMsg(
-        `${json.idempotentReplay ? "Returned existing job (same idempotency key)." : "Server job created."} Progress updates automatically; cron runs every few minutes. Use “Process chunk” to nudge sooner.${json.droppedShortLines ? ` Dropped ${json.droppedShortLines} short lines.` : ""}`,
-      );
+      const createdMessage = recoveredFromTimeout
+        ? "Server job exists; initial response timed out while reading, so status polling recovered it."
+        : (json.message ?? (json.idempotentReplay ? "Returned existing job (same idempotency key)." : "Server job created."));
+      setMsg(`${createdMessage} Progress updates automatically; cron runs every few minutes. Use “Process chunk” to nudge sooner.${json.droppedShortLines ? ` Dropped ${json.droppedShortLines} short lines.` : ""}`);
       if (typeof window !== "undefined") {
         const url = new URL(window.location.href);
         url.searchParams.set("batch", id);
@@ -655,6 +729,12 @@ export function AdminBlogDraftBatchClient() {
               </Link>
             </div>
           </div>
+          {batch.itemsTruncated ? (
+            <p className="mb-2 max-w-3xl text-xs text-muted-foreground">
+              Showing the first {batch.items.length} of {batch.totalItems} rows in this view for fast polling; queued /
+              running counts above reflect the full job.
+            </p>
+          ) : null}
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] border-collapse text-left text-sm">
               <thead>

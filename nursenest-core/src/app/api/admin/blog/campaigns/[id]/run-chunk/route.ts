@@ -50,7 +50,7 @@ export async function POST(req: Request, { params }: Props) {
   }
   const d = parsed.data;
   if (d.mode === "generate") {
-    const aiBlock = adminAiGenerationHttpBlock();
+    const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
     if (aiBlock) return aiBlock;
   }
   const campaign = await prisma.blogCampaign.findUnique({ where: { id } });

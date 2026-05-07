@@ -39,12 +39,34 @@ function RailSection({ title, subtitle, accent, children }: SectionProps) {
   );
 }
 
+/** Renders lightweight `**bold**` from pathway summaries without a full markdown runtime. */
+function RailBulletLine({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return (
+    <>
+      {parts.map((part, i) => {
+        const bold = /^\*\*([^*]+)\*\*$/.exec(part);
+        if (bold) {
+          return (
+            <strong key={`b-${i}-${part.slice(0, 12)}`} className="font-semibold text-[var(--theme-heading-text)]">
+              {bold[1]}
+            </strong>
+          );
+        }
+        return <span key={`t-${i}-${part.slice(0, 12)}`}>{part}</span>;
+      })}
+    </>
+  );
+}
+
 function BulletList({ lines }: { lines: readonly string[] }) {
   if (lines.length === 0) return null;
   return (
     <ul className="list-disc space-y-1.5 pl-4 text-sm leading-relaxed text-[var(--theme-body-text)] [overflow-wrap:anywhere]">
       {lines.map((line, i) => (
-        <li key={`${i}-${line.slice(0, 24)}`}>{line}</li>
+        <li key={`${i}-${line.slice(0, 24)}`}>
+          <RailBulletLine text={line} />
+        </li>
       ))}
     </ul>
   );

@@ -102,12 +102,12 @@ If any of those are missing, runtime Sentry can still run, but source map upload
 
 | Variable | Purpose |
 |----------|---------|
-| `AI_PROVIDER` | Set `openrouter` (with `OPENROUTER_API_KEY`) to route **blog** OpenAI-compatible generation through OpenRouter; coach and other non-blog callers still use OpenAI keys |
-| `BLOG_AI_PROVIDER` | Optional override: `openai` \| `openrouter` \| `gemini` — wins over `AI_PROVIDER` for blog when set to a known value |
+| `AI_PROVIDER` | Set `openrouter` (with `OPENROUTER_API_KEY`) to route shared OpenAI-compatible generation through OpenRouter |
+| `BLOG_AI_PROVIDER` | Blog override: `openai` \| `openrouter` \| `gemini` — wins over `AI_PROVIDER` for blog when set to a known value; OpenAI blog generation requires explicit `BLOG_AI_PROVIDER=openai` or `AI_PROVIDER=openai` |
 | `OPENROUTER_API_KEY` | OpenRouter key when blog chat is configured for OpenRouter |
-| `OPENROUTER_MODEL` | OpenRouter model slug (e.g. `openai/gpt-4o-mini`); see `getBlogOpenRouterChatModel` in `openai-env.ts` |
+| `OPENROUTER_MODEL` | Required for OpenRouter blog generation. Use a model slug available on your OpenRouter account, for example `anthropic/claude-3.5-sonnet`. |
 | `OPENROUTER_HTTP_REFERER` / `OPENROUTER_APP_TITLE` | Optional OpenRouter attribution headers |
-| `OPENAI_API_KEY` / `AI_INTEGRATIONS_OPENAI_API_KEY` | OpenAI for non-blog paths and for blog when provider is `openai` |
+| `OPENAI_API_KEY` / `AI_INTEGRATIONS_OPENAI_API_KEY` | OpenAI for non-blog paths and for blog only when provider is explicitly `openai` |
 | `AI_*` | Model overrides for coach/admin generation |
 
 ## Captcha

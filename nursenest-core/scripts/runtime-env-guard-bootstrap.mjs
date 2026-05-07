@@ -21,6 +21,7 @@ function blogChatUsesOpenRouterMjs() {
   const b = process.env["BLOG_AI_PROVIDER"]?.trim().toLowerCase();
   if (b === "openrouter") return true;
   if (b === "openai" || b === "gemini") return false;
+  if (hasTrimmedEnvMjs("OPENROUTER_API_KEY")) return true;
   return process.env["AI_PROVIDER"]?.trim().toLowerCase() === "openrouter";
 }
 

@@ -4,9 +4,8 @@ import { getOpenAiApiKeyFromRuntimeEnv } from "@/lib/env/runtime-env";
 /** Default for blog + RN lesson expansion when no env overrides are set. */
 export const OPENAI_DEFAULT_BLOG_LESSON_MODEL = "gpt-4.1-mini";
 
-/** Default OpenRouter slug when `OPENROUTER_MODEL` is unset (OpenAI-compatible chat). */
+/** Documentation-only fallback for non-blog OpenRouter callers that have not opted into strict model config. */
 export const OPENROUTER_DEFAULT_CHAT_MODEL = "openai/gpt-4o-mini";
-export const OPENROUTER_DEFAULT_BLOG_MODEL = OPENROUTER_DEFAULT_CHAT_MODEL;
 
 /** Shared OpenAI-compatible HTTP config (server-only). */
 export function getOpenAiChatModel(): string {
@@ -26,16 +25,17 @@ export function getBlogOpenAiChatModel(): string {
 }
 
 /**
- * Model slug for OpenRouter blog chat: `OPENROUTER_MODEL` → `BLOG_OPENAI_MODEL` →
- * `AI_INTEGRATIONS_OPENAI_MODEL` → {@link OPENROUTER_DEFAULT_BLOG_MODEL}.
+ * Model slug for OpenRouter blog chat. Blog generation requires an explicit OpenRouter model so
+ * it does not silently select an unavailable OpenAI-branded route on OpenRouter accounts.
  */
 export function getBlogOpenRouterChatModel(): string {
-  return (
-    process.env.OPENROUTER_MODEL?.trim() ||
-    process.env.BLOG_OPENAI_MODEL?.trim() ||
-    process.env.AI_INTEGRATIONS_OPENAI_MODEL?.trim() ||
-    OPENROUTER_DEFAULT_BLOG_MODEL
-  );
+  const model = process.env.OPENROUTER_MODEL?.trim();
+  if (!model) {
+    throw new Error(
+      "OPENROUTER_MODEL is required for OpenRouter blog generation. Set it to a model available on your OpenRouter account, for example anthropic/claude-3.5-sonnet.",
+    );
+  }
+  return model;
 }
 
 /** OpenRouter chat model for shared admin/content AI callers. */

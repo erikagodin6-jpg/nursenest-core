@@ -29,7 +29,7 @@ export async function POST(req: Request, ctx: RouteContext) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  const aiBlock = adminAiGenerationHttpBlock();
+  const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
   if (aiBlock) return aiBlock;
 
   const { id } = await ctx.params;

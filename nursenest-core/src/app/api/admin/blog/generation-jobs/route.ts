@@ -3,6 +3,10 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import {
+  getBlogGenerationModelLabelForLogs,
+  getBlogGenerationProviderLabelForLogs,
+} from "@/lib/ai/openai-env";
+import {
   assertRnTopicMapShellRowCount,
   assertTopicsWithinBatchLimit,
   blogGenerationJobCreateBodySchema,
@@ -15,13 +19,75 @@ import {
   RN_TOPIC_MAP_SHELL_MAX_ITEMS,
 } from "@/lib/blog/blog-topic-map-shell-batch-constants";
 import {
-  loadBlogGenerationJobForAdmin,
   listBlogGenerationJobsForAdmin,
   type BlogGenerationJobPhase,
 } from "@/lib/blog/blog-generation-jobs";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+export const dynamic = "force-dynamic";
+/** Job create only writes DB rows (no inline AI). Keep headroom for large paste batches + slow DB. */
+export const maxDuration = 120;
+
 const IDEMPOTENCY_WINDOW_MS = 120_000;
+
+function getSafeBlogAiLogSelection() {
+  const provider = getBlogGenerationProviderLabelForLogs();
+  try {
+    return {
+      provider,
+      model: getBlogGenerationModelLabelForLogs(),
+    };
+  } catch (e) {
+    return {
+      provider,
+      model: "(unavailable)",
+      modelSelectionError: e instanceof Error ? e.message : String(e),
+    };
+  }
+}
+
+function createTimeoutSafeJobResponse(params: {
+  jobId: string;
+  totalItems: number;
+  droppedShortLines: number;
+  jobKind: "ai_topics" | "rn_topic_map_shell";
+  idempotentReplay?: boolean;
+}) {
+  const selection = getSafeBlogAiLogSelection();
+  const status = "queued" satisfies BlogGenerationJobPhase;
+  const message = params.idempotentReplay
+    ? "Returned existing blog generation job. Poll status or process a chunk to continue."
+    : "Blog generation job queued. Poll status or process a chunk to continue.";
+
+  safeServerLog("admin", "blog_generation_job_first_chunk_queued", {
+    jobId: params.jobId,
+    pendingItems: params.totalItems,
+    jobKind: params.jobKind,
+    provider: selection.provider,
+    model: selection.model,
+  });
+
+  safeServerLog("admin", "blog_generation_job_timeout_safe_return", {
+    jobId: params.jobId,
+    status,
+    jobKind: params.jobKind,
+    provider: selection.provider,
+    model: selection.model,
+    idempotentReplay: params.idempotentReplay === true,
+  });
+
+  return NextResponse.json(
+    {
+      ok: true,
+      jobId: params.jobId,
+      status,
+      message,
+      droppedShortLines: params.droppedShortLines,
+      idempotentReplay: params.idempotentReplay === true,
+    },
+    { status: 202 },
+  );
+}
 
 export async function POST(req: Request) {
   const gate = await requireAdmin(req);
@@ -62,14 +128,18 @@ export async function POST(req: Request) {
 
     if (!existing) return null;
 
-    const job = await loadBlogGenerationJobForAdmin(existing.id);
-
-    return NextResponse.json({
-      ok: true,
+    safeServerLog("admin", "blog_generation_job_idempotent_replay", {
       jobId: existing.id,
-      idempotentReplay: true,
+      totalItems: existing.totalItems,
+      jobKind: isShell ? "rn_topic_map_shell" : "ai_topics",
+    });
+
+    return createTimeoutSafeJobResponse({
+      jobId: existing.id,
+      totalItems: existing.totalItems,
       droppedShortLines,
-      job,
+      jobKind: isShell ? "rn_topic_map_shell" : "ai_topics",
+      idempotentReplay: true,
     });
   };
 
@@ -93,35 +163,39 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: shellErr }, { status: 400 });
     }
 
-    const batch = await prisma.blogDraftGenerationBatch.create({
-      data: {
-        exam: RN_TOPIC_MAP_SHELL_BATCH_EXAM,
-        country: "unspecified",
-        defaultTemplate: BlogPostTemplate.TOPIC_EXPLAINED,
-        defaultIntent: null,
-        funnelStage: null,
-        tone: "professional",
-        keywords: null,
-        keywordCluster: null,
-        countryTarget: null,
-        includeImage: true,
-        includeAiImage: false,
-        allowDuplicateCanonicalTopic: false,
-        totalItems: rows.length,
-        createdById: gate.admin.userId,
-        backgroundProcessing: true,
-        idempotencyKey: d.idempotencyKey ?? null,
-        items: {
-          create: rows.map((row, ordinal) => ({
-            ordinal,
-            topicRaw: row.slug,
-            canonicalTopicKey:
-              normalizeBlogTopicKey(row.tags[1] ?? row.title) ||
-              null,
-          })),
+    const batch = await prisma.$transaction(async (tx) => {
+      const b = await tx.blogDraftGenerationBatch.create({
+        data: {
+          exam: RN_TOPIC_MAP_SHELL_BATCH_EXAM,
+          country: "unspecified",
+          defaultTemplate: BlogPostTemplate.TOPIC_EXPLAINED,
+          defaultIntent: null,
+          funnelStage: null,
+          tone: "professional",
+          keywords: null,
+          keywordCluster: null,
+          countryTarget: null,
+          includeImage: true,
+          includeAiImage: false,
+          allowDuplicateCanonicalTopic: false,
+          totalItems: rows.length,
+          createdById: gate.admin.userId,
+          backgroundProcessing: true,
+          idempotencyKey: d.idempotencyKey ?? null,
         },
-      },
-      select: { id: true, totalItems: true },
+        select: { id: true, totalItems: true },
+      });
+      await tx.blogDraftGenerationBatchItem.createMany({
+        data: rows.map((row, ordinal) => ({
+          batchId: b.id,
+          ordinal,
+          topicRaw: row.slug,
+          canonicalTopicKey:
+            normalizeBlogTopicKey(row.tags[1] ?? row.title) ||
+            null,
+        })),
+      });
+      return b;
     });
 
     safeServerLog("admin", "blog_generation_job_created", {
@@ -129,15 +203,15 @@ export async function POST(req: Request) {
       totalItems: batch.totalItems,
       droppedShortLines: 0,
       jobKind: "rn_topic_map_shell",
+      itemsInserted: rows.length,
+      ...getSafeBlogAiLogSelection(),
     });
 
-    const job = await loadBlogGenerationJobForAdmin(batch.id);
-
-    return NextResponse.json({
-      ok: true,
+    return createTimeoutSafeJobResponse({
       jobId: batch.id,
+      totalItems: batch.totalItems,
       droppedShortLines: 0,
-      job,
+      jobKind: "rn_topic_map_shell",
     });
   }
 
@@ -145,7 +219,7 @@ export async function POST(req: Request) {
   // AI JOB (FIXED)
   // =========================
 
-  const aiBlock = adminAiGenerationHttpBlock();
+  const aiBlock = adminAiGenerationHttpBlock({ pipeline: "blog" });
   if (aiBlock) return aiBlock;
 
   // ✅ CRITICAL FIX: type narrowing
@@ -182,35 +256,39 @@ export async function POST(req: Request) {
 
   const country = d.country ?? "unspecified";
 
-  const batch = await prisma.blogDraftGenerationBatch.create({
-    data: {
-      exam: d.exam,
-      country,
-      defaultTemplate: d.template,
-      defaultIntent: d.intent ?? null,
-      funnelStage: d.funnelStage ?? null,
-      tone: d.tone ?? "professional",
-      keywords: d.keywords ?? null,
-      keywordCluster: d.keywordCluster ?? null,
-      countryTarget: d.countryTarget ?? null,
-      includeImage: d.includeImage ?? true,
-      includeAiImage: d.includeAiImage ?? false,
-      allowDuplicateCanonicalTopic:
-        d.allowDuplicateCanonicalTopic ?? false,
-      totalItems: topics.length,
-      createdById: gate.admin.userId,
-      backgroundProcessing: true,
-      idempotencyKey: d.idempotencyKey ?? null,
-      items: {
-        create: topics.map((topicRaw, ordinal) => ({
-          ordinal,
-          topicRaw,
-          canonicalTopicKey:
-            normalizeBlogTopicKey(topicRaw) || null,
-        })),
+  const batch = await prisma.$transaction(async (tx) => {
+    const b = await tx.blogDraftGenerationBatch.create({
+      data: {
+        exam: d.exam,
+        country,
+        defaultTemplate: d.template,
+        defaultIntent: d.intent ?? null,
+        funnelStage: d.funnelStage ?? null,
+        tone: d.tone ?? "professional",
+        keywords: d.keywords ?? null,
+        keywordCluster: d.keywordCluster ?? null,
+        countryTarget: d.countryTarget ?? null,
+        includeImage: d.includeImage ?? true,
+        includeAiImage: d.includeAiImage ?? false,
+        allowDuplicateCanonicalTopic:
+          d.allowDuplicateCanonicalTopic ?? false,
+        totalItems: topics.length,
+        createdById: gate.admin.userId,
+        backgroundProcessing: true,
+        idempotencyKey: d.idempotencyKey ?? null,
       },
-    },
-    select: { id: true, totalItems: true },
+      select: { id: true, totalItems: true },
+    });
+    await tx.blogDraftGenerationBatchItem.createMany({
+      data: topics.map((topicRaw, ordinal) => ({
+        batchId: b.id,
+        ordinal,
+        topicRaw,
+        canonicalTopicKey:
+          normalizeBlogTopicKey(topicRaw) || null,
+      })),
+    });
+    return b;
   });
 
   safeServerLog("admin", "blog_generation_job_created", {
@@ -218,15 +296,15 @@ export async function POST(req: Request) {
     totalItems: batch.totalItems,
     droppedShortLines,
     jobKind: "ai_topics",
+    itemsInserted: topics.length,
+    ...getSafeBlogAiLogSelection(),
   });
 
-  const job = await loadBlogGenerationJobForAdmin(batch.id);
-
-  return NextResponse.json({
-    ok: true,
+  return createTimeoutSafeJobResponse({
     jobId: batch.id,
+    totalItems: batch.totalItems,
     droppedShortLines,
-    job,
+    jobKind: "ai_topics",
   });
 }
 

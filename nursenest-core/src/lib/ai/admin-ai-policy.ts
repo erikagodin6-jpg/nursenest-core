@@ -2,7 +2,7 @@
  * Admin AI batch tools — opt-in kill switch + AI provider key requirement (server-only).
  *
  * - `AI_ADMIN_GENERATION_ENABLED` — truthy when set to true/1/yes/on (case-insensitive, trimmed).
- * - `OPENROUTER_API_KEY` when `AI_PROVIDER=openrouter`, otherwise `AI_INTEGRATIONS_OPENAI_API_KEY` or `OPENAI_API_KEY`.
+ * - Blog routes use `BLOG_AI_PROVIDER` / `OPENROUTER_API_KEY`; other routes use `AI_PROVIDER`.
  *
  * Env reads are centralized in `@/lib/env/runtime-env` (fresh `process.env` each evaluation — no
  * stale module cache). `getAdminAiGenerationGate` calls `validateRuntimeEnvOrThrow()` from
@@ -10,6 +10,7 @@
  * **This module is the only gate** for enabled / misconfigured / disabled decisions.
  */
 import { NextResponse } from "next/server";
+import { getBlogAiChatProvider, type BlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
 import { parseBooleanEnv } from "@/lib/env/parse-boolean-env";
 import {
   getAdminAiOpenAiRuntimeSnapshot,
@@ -19,6 +20,7 @@ import { validateRuntimeEnvOrThrow } from "@/lib/env/runtime-env-guard";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type AdminAiGenerationMode = "enabled" | "disabled" | "misconfigured";
+export type AdminAiGenerationPipeline = "default" | "blog";
 
 /** How the generation flag env was interpreted (no raw values). */
 export type AdminAiGenerationFlagClass = "unset" | "empty" | "enabled" | "disabled_explicit" | "unrecognized";
@@ -29,7 +31,7 @@ export type AdminAiGenerationGate = {
   /** True only when the env flag is true and the selected provider has an API key configured. */
   runnable: boolean;
   flagEnabled: boolean;
-  aiProvider: "openai" | "openrouter" | "gemini";
+  aiProvider: BlogAiChatProvider;
   aiProviderKeyPresent: boolean;
   openAiKeyPresent: boolean;
   /** Short admin-facing explanation (safe to show in UI). */
@@ -41,7 +43,7 @@ export type AdminAiGenerationGate = {
     aiIntegrationsOpenAiKeyPresent: boolean;
     legacyOpenAiKeyPresent: boolean;
     openRouterApiKeyPresent: boolean;
-    aiProvider: "openai" | "openrouter" | "gemini";
+    aiProvider: BlogAiChatProvider;
     /** Parsed boolean from flag after trim/case rules (for boot logs). */
     adminAiGenerationFlagNormalized: boolean;
   };
@@ -93,12 +95,15 @@ function disabledFlagSummaryLine(flagClass: AdminAiGenerationFlagClass): string 
   }
 }
 
-function misconfiguredSummaryLine(provider: "openai" | "openrouter" | "gemini"): string {
+function misconfiguredSummaryLine(provider: BlogAiChatProvider): string {
   if (provider === "openrouter") {
-    return "AI generation disabled: AI_PROVIDER=openrouter but OPENROUTER_API_KEY is not configured on this server process.";
+    return "AI generation disabled: OpenRouter is selected for this generation path but OPENROUTER_API_KEY is not configured on this server process.";
   }
   if (provider === "gemini") {
     return "AI generation disabled: AI_PROVIDER=gemini is not supported by the shared OpenAI-compatible admin generation routes; use Gemini-specific tools or set AI_PROVIDER=openai|openrouter.";
+  }
+  if (provider === "unconfigured") {
+    return "AI generation disabled: blog AI provider is not configured. Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.";
   }
   return "AI generation disabled: no funded AI provider key configured (set AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or set AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY).";
 }
@@ -111,13 +116,20 @@ export function isAdminAiGenerationEnabled(): boolean {
  * Full runtime gate: flag + key. Use for UI and for `adminAiGenerationHttpBlock`.
  * Evaluated at **call time** — reads live `process.env` via `@/lib/env/runtime-env` on each call.
  */
-export function getAdminAiGenerationGate(): AdminAiGenerationGate {
+export function getAdminAiGenerationGate(options?: { pipeline?: AdminAiGenerationPipeline }): AdminAiGenerationGate {
   validateRuntimeEnvOrThrow();
   const snap = getAdminAiOpenAiRuntimeSnapshot();
+  const pipeline = options?.pipeline ?? "default";
+  const provider: BlogAiChatProvider = pipeline === "blog" ? getBlogAiChatProvider() : snap.aiProvider;
   const rawFlag = snap.rawAiAdminGenerationEnabled;
   const flagClass = classifyAdminGenerationFlag(rawFlag);
   const flagEnabled = flagClass === "enabled";
-  const aiProviderKeyPresent = snap.hasAiProviderKey;
+  const aiProviderKeyPresent =
+    provider === "openrouter"
+      ? snap.openRouterApiKeyPresent
+      : provider === "openai"
+        ? snap.hasOpenAiKey
+        : false;
   const openAiKeyPresent = snap.hasOpenAiKey;
 
   const diagnostics: AdminAiGenerationGate["diagnostics"] = {
@@ -126,7 +138,7 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
     aiIntegrationsOpenAiKeyPresent: snap.aiIntegrationsOpenAiKeyPresent,
     legacyOpenAiKeyPresent: snap.legacyOpenAiKeyPresent,
     openRouterApiKeyPresent: snap.openRouterApiKeyPresent,
-    aiProvider: snap.aiProvider,
+    aiProvider: provider,
     adminAiGenerationFlagNormalized: snap.adminAiGenerationFlagParsed,
   };
 
@@ -137,21 +149,21 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
       mode: "disabled",
       runnable: false,
       flagEnabled: false,
-      aiProvider: snap.aiProvider,
+      aiProvider: provider,
       aiProviderKeyPresent,
       openAiKeyPresent,
       summaryLine: disabledFlagSummaryLine(flagClass),
       diagnostics,
     };
-  } else if (!aiProviderKeyPresent || snap.aiProvider === "gemini") {
+  } else if (!aiProviderKeyPresent || provider === "gemini" || provider === "unconfigured") {
     gate = {
       mode: "misconfigured",
       runnable: false,
       flagEnabled: true,
-      aiProvider: snap.aiProvider,
+      aiProvider: provider,
       aiProviderKeyPresent: false,
       openAiKeyPresent,
-      summaryLine: misconfiguredSummaryLine(snap.aiProvider),
+      summaryLine: misconfiguredSummaryLine(provider),
       diagnostics,
     };
   } else {
@@ -159,7 +171,7 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
       mode: "enabled",
       runnable: true,
       flagEnabled: true,
-      aiProvider: snap.aiProvider,
+      aiProvider: provider,
       aiProviderKeyPresent: true,
       openAiKeyPresent,
       summaryLine: "AI generation enabled",
@@ -184,8 +196,8 @@ export function warnAdminAiGenerationMisconfigurationIfNeeded(gate: AdminAiGener
  * When admin AI generation cannot run, return a JSON error response; otherwise `null`.
  * Replaces separate flag + key checks on generation routes (consistent codes + status).
  */
-export function adminAiGenerationHttpBlock(): NextResponse | null {
-  const gate = getAdminAiGenerationGate();
+export function adminAiGenerationHttpBlock(options?: { pipeline?: AdminAiGenerationPipeline }): NextResponse | null {
+  const gate = getAdminAiGenerationGate(options);
   if (gate.runnable) return null;
 
   const status = gate.mode === "misconfigured" ? 503 : 403;

@@ -84,7 +84,7 @@ async function main(): Promise<void> {
   if (!keyGate.ok) {
     console.error(`[blog-ai-generate] ${keyGate.message}`);
     console.error(
-      "Set AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or configure BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY.",
+      "Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY.",
     );
     process.exitCode = 1;
     return;

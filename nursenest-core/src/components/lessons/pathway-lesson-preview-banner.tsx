@@ -62,7 +62,7 @@ export function PathwayLessonPreviewBanner({ kind, pathwayShortName, pathwayCoun
 
   return (
     <aside
-      className="nn-card mt-4 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-brand-soft)_6%)] p-4 sm:p-5"
+      className="nn-card mt-5 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-warm)_10%)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
       aria-label="Lesson access"
     >
       {/* Badge + title */}

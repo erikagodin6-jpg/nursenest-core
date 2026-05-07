@@ -37,6 +37,13 @@ describe("getBlogAiChatProvider", () => {
     assert.equal(getBlogAiChatProvider(), "openai");
   });
 
+  it("keeps explicit BLOG_AI_PROVIDER=openrouter on OpenRouter even when OpenAI is configured elsewhere", () => {
+    process.env.AI_PROVIDER = "openai";
+    process.env.BLOG_AI_PROVIDER = "openrouter";
+    delete process.env.OPENROUTER_API_KEY;
+    assert.equal(getBlogAiChatProvider(), "openrouter");
+  });
+
   it("uses OpenRouter when only OPENROUTER_API_KEY is present", () => {
     delete process.env.BLOG_AI_PROVIDER;
     delete process.env.AI_PROVIDER;
