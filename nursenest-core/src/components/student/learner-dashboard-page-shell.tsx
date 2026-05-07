@@ -23,10 +23,10 @@ export function LearnerDashboardPageShell({
 }: LearnerDashboardPageShellProps) {
   return (
     <div className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden" data-testid="learner-dashboard-shell">
-      <div className="flex min-w-0 flex-col gap-6 sm:gap-7">
+      <div className="flex min-w-0 flex-col gap-7 sm:gap-8">
         <BreadcrumbTrail items={crumbs} />
 
-        <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub">
+        <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub nn-product-surface-accent rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))] px-[clamp(1rem,2.8vw,1.35rem)] py-[clamp(1rem,2.5vw,1.25rem)] shadow-[var(--semantic-shadow-soft)]">
           <div className="nn-dash-page-header__top">
             <div className="nn-dash-page-header__titles min-w-0">
               <p className="sr-only">{t("learner.studyHome.pageEyebrow")}</p>
@@ -39,10 +39,10 @@ export function LearnerDashboardPageShell({
                   </div>
                 ) : null}
               </div>
-              <p className="nn-dash-page-header__subtitle mt-1 max-w-prose text-pretty">
+              <p className="nn-dash-page-header__subtitle mt-2 max-w-prose text-pretty sm:mt-2.5">
                 {t("learner.studyHome.pageSubtitle")}
               </p>
-              {context ? <div className="nn-dash-page-header__context">{context}</div> : null}
+              {context ? <div className="nn-dash-page-header__context mt-1">{context}</div> : null}
             </div>
           </div>
         </header>

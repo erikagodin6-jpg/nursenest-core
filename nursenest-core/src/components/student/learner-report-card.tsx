@@ -4,7 +4,7 @@ import type { LearnerReportCardViewModel } from "@/lib/learner/learner-report-ca
 export function LearnerReportCard({ model }: { model: LearnerReportCardViewModel }) {
   return (
     <section
-      className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]"
+      className="nn-product-surface-accent relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_08%,color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface)))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
       aria-labelledby="learner-report-card-heading"
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -34,8 +34,11 @@ export function LearnerReportCard({ model }: { model: LearnerReportCardViewModel
           <ul className="mt-2 space-y-2 text-sm text-[var(--semantic-text-secondary)]">
             {model.weakTopics.length === 0 ? (
               <li className="list-none">
-                <span className="block rounded-lg border border-[color-mix(in_srgb,var(--semantic-chart-4)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_55%,var(--semantic-surface))] px-3 py-2 text-sm leading-snug text-[var(--semantic-text-secondary)]">
-                  No weak topics flagged yet — keep practicing.
+                <span className="flex flex-col gap-1 rounded-lg border border-[color-mix(in_srgb,var(--semantic-chart-4)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_52%,var(--semantic-surface))] px-3 py-2.5 text-sm leading-snug shadow-[inset_0_1px_0_color-mix(in_srgb,var(--semantic-chart-4)_12%,transparent)]">
+                  <span className="font-semibold text-[var(--semantic-text-primary)]">No weak spots yet</span>
+                  <span className="text-[var(--semantic-text-secondary)]">
+                    Keep answering questions — we surface weaker areas as patterns emerge.
+                  </span>
                 </span>
               </li>
             ) : null}
@@ -51,8 +54,11 @@ export function LearnerReportCard({ model }: { model: LearnerReportCardViewModel
           <ul className="mt-2 space-y-2 text-sm text-[var(--semantic-text-secondary)]">
             {model.strongTopics.length === 0 ? (
               <li className="list-none">
-                <span className="block rounded-lg border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_45%,var(--semantic-surface))] px-3 py-2 text-sm leading-snug text-[var(--semantic-text-secondary)]">
-                  Strong topics appear as you log more attempts.
+                <span className="flex flex-col gap-1 rounded-lg border border-[color-mix(in_srgb,var(--semantic-chart-3)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_48%,var(--semantic-surface))] px-3 py-2.5 text-sm leading-snug shadow-[inset_0_1px_0_color-mix(in_srgb,var(--semantic-chart-3)_10%,transparent)]">
+                  <span className="font-semibold text-[var(--semantic-text-primary)]">Strengths appear with volume</span>
+                  <span className="text-[var(--semantic-text-secondary)]">
+                    Finish more lessons and reviews — strongest topics show up here automatically.
+                  </span>
                 </span>
               </li>
             ) : null}

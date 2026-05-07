@@ -638,10 +638,10 @@ export default async function LessonsPage({ searchParams }: Props) {
   return (
     <div className="min-w-0 space-y-6 sm:space-y-8">
       <div className="nn-learner-page-hero">
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.7rem]">
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
           {t("learner.lessons.list.title")}
         </h1>
-        <p className="mt-3 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+        <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
           {t("learner.lessons.list.subscriberIntro")}
         </p>
       </div>

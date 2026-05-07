@@ -73,8 +73,10 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
         <div className="nn-learner-page-hero">
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
-          <p className="mt-3 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
+            {t("learner.practiceTests.title")}
+          </h1>
+          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
             {t("learner.practiceTests.subtitle.locked")}
           </p>
         </div>
@@ -260,8 +262,10 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       </div>
       <LearnerRenderTraceBanner data-route="practice-tests" label="NN_RENDER_TRACE: practice live route" />
       <div className="nn-learner-page-hero">
-        <h1 className="text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
-        <div className="mt-3 flex max-w-prose flex-col gap-2.5 text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
+          {t("learner.practiceTests.title")}
+        </h1>
+        <div className="mt-2.5 flex max-w-prose flex-col gap-2.5 text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
           <p>{t("learner.practiceTests.subtitle.subscriber")}</p>
           <p>
             {t("learner.practiceTests.pageHero.catInsightsLead")}{" "}
