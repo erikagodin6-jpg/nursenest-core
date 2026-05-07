@@ -299,20 +299,7 @@ export async function verifyMarketingHubLessonRowsResolve(
     }
   }
 
-  const kept: PathwayLessonRecord[] = [];
   const excluded: HubLessonDetailExcluded[] = [...verifyExcluded];
-
-  for (const lesson of lessons) {
-    if (!pathwayLessonHasRenderableHubSlug(lesson)) {
-      excluded.push({ slug: String(lesson.slug ?? ""), reason: "missing_slug" });
-      continue;
-    }
-
-    const slug = lesson.slug.trim();
-    if (okSlugSet.has(slug)) {
-      kept.push(lesson);
-    }
-  }
 
   const excludedByReason: Partial<Record<HubMarketingLessonDetailFailureReason, number>> = {};
 
@@ -332,26 +319,17 @@ export async function verifyMarketingHubLessonRowsResolve(
     slugFailureReason.set(e.slug.trim(), e.reason);
   }
 
-  const strictVerifiedRowCount = kept.length;
-
-  for (const lesson of lessons) {
-    if (!pathwayLessonHasRenderableHubSlug(lesson)) continue;
-
-    const slug = lesson.slug.trim();
-    if (okSlugSet.has(slug)) continue;
-
-    const r = slugFailureReason.get(slug);
-    if (isSoftHubVerifyRecoveryReason(r)) {
-      const hubMarketingDegradedReason =
-        r === "pathway_context_mismatch" ? ("pathway_mismatch" as const) : ("partial_content" as const);
-
-      kept.push({
-        ...lesson,
-        hubMarketingDegraded: true,
-        hubMarketingDegradedReason,
-      });
-    }
-  }
+  /**
+   * Build `kept` in **the same order as `lessons`** (prepared hub list / catalog order).
+   *
+   * Previously we appended `[all strict rows][soft-recovery][capped-unverified]`, which grouped every
+   * `unverified_inventory_fill` row after *all* detail-verified rows. Hub pagination slices that array
+   * (`sliceNormalizedHubLessons`), so page 2+ could contain **only** degraded rows — marketing cards then
+   * intentionally render **no** `href` (`pathwayLessonMarketingHubVerifiedCardHref` → null) and lesson
+   * links appeared "dead" across the whole page.
+   */
+  const kept: PathwayLessonRecord[] = [];
+  let strictVerifiedRowCount = 0;
 
   if (unverifiedSlugSet.size > 0) {
     safeServerLog("pathway_lessons", "marketing_hub_verify_slug_cap_applied", {
@@ -361,16 +339,43 @@ export async function verifyMarketingHubLessonRowsResolve(
       verify_slug_cap: String(verifyCap),
       skipped_unique_slugs: String(unverifiedSlugSet.size),
     });
-    for (const lesson of lessons) {
-      if (!pathwayLessonHasRenderableHubSlug(lesson)) continue;
-      const slug = lesson.slug.trim();
-      if (!unverifiedSlugSet.has(slug)) continue;
+  }
+
+  for (const lesson of lessons) {
+    if (!pathwayLessonHasRenderableHubSlug(lesson)) {
+      excluded.push({ slug: String(lesson.slug ?? ""), reason: "missing_slug" });
+      continue;
+    }
+
+    const slug = lesson.slug.trim();
+    if (okSlugSet.has(slug)) {
+      kept.push(lesson);
+      strictVerifiedRowCount += 1;
+      continue;
+    }
+
+    if (unverifiedSlugSet.has(slug)) {
       kept.push({
         ...lesson,
         hubMarketingDegraded: true,
         hubMarketingDegradedReason: "unverified_inventory_fill",
       });
+      continue;
     }
+
+    const r = slugFailureReason.get(slug);
+    if (isSoftHubVerifyRecoveryReason(r)) {
+      const hubMarketingDegradedReason =
+        r === "pathway_context_mismatch" ? ("pathway_mismatch" as const) : ("partial_content" as const);
+      kept.push({
+        ...lesson,
+        hubMarketingDegraded: true,
+        hubMarketingDegradedReason,
+      });
+      continue;
+    }
+
+    // Hard verify failure — row is not inventory-safe to keep (differs from soft recovery + cap padding).
   }
 
   const degradedHubRowCount = Math.max(0, kept.length - strictVerifiedRowCount);

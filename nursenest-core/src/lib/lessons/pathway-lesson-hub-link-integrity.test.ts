@@ -189,6 +189,27 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
     assert.ok(degraded.every((r) => r.hubMarketingDegradedReason === "unverified_inventory_fill"));
   });
 
+  it("preserves prepared lesson order under verify caps (pagination slices must not cluster all degraded rows)", async () => {
+    let slugResolveCalls = 0;
+    const resolveLessonDetail = async (pathwayId: string, slug: string) => {
+      if (pathwayId !== "ca-rn-nclex-rn") return undefined;
+      slugResolveCalls += 1;
+      return hubRow(slug);
+    };
+    const rows = ["m3", "m1", "m2", "m4", "m5"].map((s) => hubRow(s));
+    const { kept } = await verifyMarketingHubLessonRowsResolve({ id: "ca-rn-nclex-rn" }, rows, "en", {
+      resolveLessonDetail,
+      maxUniqueSlugsToVerify: 2,
+    });
+    assert.deepEqual(
+      kept.map((r) => r.slug),
+      ["m3", "m1", "m2", "m4", "m5"],
+    );
+    assert.equal(slugResolveCalls, 2);
+    assert.equal(kept.filter((r) => !r.hubMarketingDegraded).length, 2);
+    assert.ok(kept.filter((r) => r.hubMarketingDegraded).every((r) => r.hubMarketingDegradedReason === "unverified_inventory_fill"));
+  });
+
   it("returns empty kept without throwing when every slug fails (recoverable inventory shrink)", async () => {
     const resolveLessonDetail = async () => undefined;
     const { kept, diagnostics } = await verifyMarketingHubLessonRowsResolve(
