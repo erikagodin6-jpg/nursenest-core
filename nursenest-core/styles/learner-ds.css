@@ -434,9 +434,24 @@
 
 .lv-wayfinding {
   border-radius: var(--lv-radius-lg);
-  border: 1px solid color-mix(in srgb, var(--lv-border-soft) 90%, var(--lv-primary-500) 10%);
-  background: color-mix(in srgb, var(--lv-bg-surface) 96%, var(--lv-bg-surface-alt));
-  box-shadow: var(--lv-shadow-soft);
+  border: 1px solid var(--semantic-border-soft, color-mix(in srgb, var(--lv-border-soft) 90%, var(--lv-primary-500) 10%));
+  background:
+    radial-gradient(
+      circle at 50% -25%,
+      color-mix(in srgb, var(--semantic-brand, var(--lv-primary-500)) 11%, transparent),
+      transparent 46%
+    ),
+    radial-gradient(
+      circle at 0% 0%,
+      color-mix(in srgb, var(--semantic-panel-cool, var(--lv-primary-50)) 38%, transparent),
+      transparent 44%
+    ),
+    linear-gradient(
+      165deg,
+      var(--semantic-surface, var(--lv-bg-surface)),
+      color-mix(in srgb, var(--semantic-panel-muted, var(--lv-bg-surface-alt)) 72%, var(--lv-bg-surface))
+    );
+  box-shadow: var(--semantic-shadow-soft, var(--lv-shadow-soft));
   padding: 1rem 0.95rem 1.1rem;
   transition:
     border-color var(--lv-motion) var(--lv-motion-ease),
@@ -521,8 +536,10 @@
 
 .lv-wayfinding__related {
   margin-top: 0.85rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid color-mix(in srgb, var(--lv-border-soft) 92%, transparent);
+  padding: 0.75rem 0.65rem 0.65rem;
+  border-radius: var(--lv-radius-md);
+  border: 1px solid color-mix(in srgb, var(--semantic-success, var(--lv-primary-500)) 14%, var(--semantic-border-soft, var(--lv-border-soft)));
+  background: color-mix(in srgb, var(--semantic-panel-positive, var(--lv-bg-surface)) 42%, transparent);
 }
 
 .lv-wayfinding__related-list {

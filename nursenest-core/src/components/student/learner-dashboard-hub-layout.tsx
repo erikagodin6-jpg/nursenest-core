@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { LearnerDashboardHubNavIsland } from "@/components/student/learner-dashboard-hub-nav-island";
+
 export type LearnerDashboardHubNavItem = {
   href: string;
   label: string;
@@ -27,18 +29,7 @@ export function LearnerDashboardHubLayout({
 
   return (
     <div className="nn-dash-hub-layout">
-      <nav className="nn-dash-hub-nav nn-dash-hub-nav-scroll" aria-label={navAriaLabel}>
-        <p className="nn-dash-hub-nav__heading">{navHeading}</p>
-        <ul className="nn-dash-hub-nav__list" role="list">
-          {items.map((item) => (
-            <li key={item.href} className="nn-dash-hub-nav__item">
-              <a className="nn-dash-hub-nav__link" href={item.href}>
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <LearnerDashboardHubNavIsland navAriaLabel={navAriaLabel} navHeading={navHeading} items={items} />
       <div className="nn-dash-hub-main min-w-0">{children}</div>
     </div>
   );

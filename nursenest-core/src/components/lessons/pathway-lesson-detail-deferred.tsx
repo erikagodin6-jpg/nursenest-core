@@ -99,8 +99,14 @@ export function PathwayLessonDetailDeferredSkeleton() {
       aria-busy="true"
       aria-label="Loading related practice"
     >
-      <div className="h-28 animate-pulse rounded-xl bg-muted/20" />
-      <div className="h-44 animate-pulse rounded-xl bg-muted/15" />
+      <div
+        className="h-28 animate-pulse rounded-xl"
+        style={{ background: "color-mix(in srgb, var(--semantic-panel-muted) 55%, transparent)" }}
+      />
+      <div
+        className="h-44 animate-pulse rounded-xl"
+        style={{ background: "color-mix(in srgb, var(--semantic-panel-cool) 35%, var(--semantic-panel-muted) 40%)" }}
+      />
     </div>
   );
 }
@@ -113,13 +119,28 @@ export function PathwayLessonRelatedRailSkeleton() {
       aria-busy="true"
       aria-label="Loading related questions"
     >
-      <div className="h-4 w-40 animate-pulse rounded bg-muted/30" />
+      <div
+        className="h-4 w-40 animate-pulse rounded"
+        style={{ background: "color-mix(in srgb, var(--semantic-brand) 22%, var(--semantic-panel-muted))" }}
+      />
       <div className="mt-4 space-y-2">
-        <div className="h-3 w-full animate-pulse rounded bg-muted/25" />
-        <div className="h-3 w-[92%] animate-pulse rounded bg-muted/25" />
-        <div className="h-3 w-[88%] animate-pulse rounded bg-muted/25" />
+        <div
+          className="h-3 w-full animate-pulse rounded"
+          style={{ background: "color-mix(in srgb, var(--semantic-panel-muted) 70%, transparent)" }}
+        />
+        <div
+          className="h-3 w-[92%] animate-pulse rounded"
+          style={{ background: "color-mix(in srgb, var(--semantic-panel-muted) 65%, transparent)" }}
+        />
+        <div
+          className="h-3 w-[88%] animate-pulse rounded"
+          style={{ background: "color-mix(in srgb, var(--semantic-panel-muted) 60%, transparent)" }}
+        />
       </div>
-      <div className="mt-4 h-9 w-full animate-pulse rounded-full bg-muted/20" />
+      <div
+        className="mt-4 h-9 w-full animate-pulse rounded-full"
+        style={{ background: "color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-panel-muted))" }}
+      />
     </div>
   );
 }

@@ -39,7 +39,7 @@ export function LearnerLessonsVirtualList({
   return (
     <div
       ref={parentRef}
-      className="max-h-[min(70vh,880px)] overflow-auto rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)]"
+      className="max-h-[min(70vh,880px)] overflow-auto rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_22%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]"
       style={{ contain: "strict" }}
     >
       <div

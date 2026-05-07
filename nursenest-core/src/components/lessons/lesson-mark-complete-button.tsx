@@ -35,7 +35,11 @@ export function LessonMarkCompleteButton({ lessonId }: { lessonId: string }) {
         <SuccessLeaf show={status === "done"} size={20} />
         {status === "done" ? "Marked complete" : status === "saving" ? "Saving\u2026" : "Mark lesson complete"}
       </button>
-      {status === "error" ? <span className="text-xs text-amber-800">Could not save. Try again.</span> : null}
+      {status === "error" ? (
+        <span className="text-xs font-medium text-[color-mix(in_srgb,var(--semantic-warning)_85%,var(--semantic-text-primary))]">
+          Could not save. Try again.
+        </span>
+      ) : null}
     </div>
   );
 }

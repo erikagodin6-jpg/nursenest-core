@@ -12,8 +12,8 @@
  *   cd nursenest-core && npx tsx scripts/generate-blog-posts.ts --topic="..." --publish
  *   cd nursenest-core && npx tsx scripts/generate-blog-posts.ts --topics-file=./tmp/blog-topics.txt --pathway=us-rn-nclex-rn
  *
- * Env: `OPENROUTER_API_KEY` when `AI_PROVIDER=openrouter`; otherwise `BLOG_OPENAI_API_KEY`
- * or `AI_INTEGRATIONS_OPENAI_API_KEY` (see `blog-ai-generate.ts`).
+ * Env: `BLOG_AI_PROVIDER=openrouter` with `OPENROUTER_API_KEY` (or `OPENROUTER_API_KEY`
+ * alone for blog default). OpenAI requires explicit `BLOG_AI_PROVIDER=openai`.
  */
 import "../src/lib/db/script-env-bootstrap";
 
@@ -21,6 +21,7 @@ import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/clien
 import {
   assertOpenAiKeyConfigured,
   getBlogGenerationModelLabelForLogs,
+  getBlogGenerationProviderLabelForLogs,
   primeBlogCliOpenAiIntegrationKey,
 } from "@/lib/ai/openai-env";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
@@ -85,6 +86,7 @@ async function main(): Promise<void> {
   });
 
   // eslint-disable-next-line no-console
+  console.log(`Provider: ${getBlogGenerationProviderLabelForLogs()}`);
   console.log(`Model: ${getBlogGenerationModelLabelForLogs()}`);
   const keyGate = assertOpenAiKeyConfigured({ pipeline: "blog" });
   if (!keyGate.ok) {

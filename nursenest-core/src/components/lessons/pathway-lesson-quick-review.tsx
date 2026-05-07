@@ -13,7 +13,12 @@ export function PathwayLessonQuickReview({ quickReviewLines }: MarketingPathwayL
   if (safe.length === 0) return null;
 
   return (
-    <div className="nn-card rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--bg-card)_92%,var(--semantic-warning-soft)_8%)] p-3.5 dark:border-amber-900/35 dark:bg-amber-950/15">
+    <div
+      className="nn-card rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] p-3.5"
+      style={{
+        background: "color-mix(in srgb, var(--semantic-panel-warm) 42%, var(--semantic-surface))",
+      }}
+    >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">Quick review (condensed)</p>
@@ -24,7 +29,7 @@ export function PathwayLessonQuickReview({ quickReviewLines }: MarketingPathwayL
         <button
           type="button"
           onClick={() => setOn((v) => !v)}
-          className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] px-3 py-1.5 text-xs font-medium text-[var(--theme-body-text)] hover:bg-[var(--theme-muted-surface)] sm:text-sm"
+          className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-medium text-[var(--theme-body-text)] hover:bg-[var(--semantic-panel-muted)] sm:text-sm"
         >
           {on ? "Show full lesson" : "Show condensed review"}
         </button>
@@ -36,7 +41,9 @@ export function PathwayLessonQuickReview({ quickReviewLines }: MarketingPathwayL
           ))}
         </ul>
       ) : (
-        <p className="mt-2 text-xs text-muted">Toggle for a short revision list before a mock or question block.</p>
+        <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
+          Toggle for a short revision list before a mock or question block.
+        </p>
       )}
     </div>
   );

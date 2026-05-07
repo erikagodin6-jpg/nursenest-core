@@ -14,10 +14,11 @@ function readAppFile(relativePath: string): string {
 }
 
 test("default blog and lessons routes opt out of build-time static work", () => {
-  const blogLayout = readAppFile("app/(marketing)/(default)/blog/layout.tsx");
+  /** Blog index uses ISR (`revalidate`); layout is a passthrough wrapper. */
+  const blogIndexPage = readAppFile("app/(marketing)/(default)/blog/page.tsx");
   const lessonsPage = readAppFile("app/(marketing)/(default)/lessons/page.tsx");
 
-  assert.match(blogLayout, /export const dynamic = "force-dynamic"/);
+  assert.match(blogIndexPage, /export const revalidate =/);
   assert.match(lessonsPage, /export const dynamic = "force-dynamic"/);
 });
 
@@ -30,7 +31,7 @@ test("marketing default layout uses chrome-only shards and layers main page shar
 
   assert.match(defaultLayout, /MarketingMainI18nShards/);
   assert.match(chromeServer, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
-  assert.match(chromeServer, /layoutChromeShardList/);
+  assert.match(chromeServer, /function defaultLayoutShardList/);
   assert.match(chromeServer, /MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS/);
   assert.match(chromeServer, /MARKETING_CHROME_MESSAGE_SHARDS/);
   assert.match(mainShards, /Suspense/);
@@ -38,17 +39,17 @@ test("marketing default layout uses chrome-only shards and layers main page shar
   assert.match(shardGroups, /"marketing"/);
   assert.match(shardGroups, /"nav"/);
 
-  assert.match(shardLoader, /phase-production-build/);
-  assert.match(shardLoader, /effectiveLocale/);
+  assert.match(shardLoader, /loadMarketingMessageShardsSync/);
+  assert.match(shardLoader, /mergeShards/);
 });
 
 test("fixed home and lessons surfaces use page-body shards during production build", () => {
-  const homePage = readAppFile("app/(marketing)/(default)/page.tsx");
+  /** Default `/` composes body i18n via layout `MarketingMainI18nShards`, not inline in `page.tsx`. */
+  const mainPageShards = readAppFile("components/i18n/marketing-main-i18n-shards.tsx");
   const lessonsPage = readAppFile("app/(marketing)/(default)/lessons/page.tsx");
   const lessonSections = readAppFile("components/marketing/public-lessons-pathway-sections.tsx");
 
-  assert.match(homePage, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
-  assert.match(homePage, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
+  assert.match(mainPageShards, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
 
   assert.match(lessonsPage, /process\.env\.NEXT_PHASE === MARKETING_BUILD_PHASE/);
   assert.match(lessonsPage, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
@@ -175,12 +176,11 @@ test("home and paywall shells lazy-load public home stats instead of importing t
   assert.match(paywallHomeStats, /await import\(["']@\/lib\/marketing\/public-home-stats["']\)/);
 });
 
-test("homepage defers the anonymous exam selector gate behind a tiny lazy wrapper", () => {
+test("exam selector gate stays lazy-loaded when mounted (no eager server path)", () => {
   const defaultHomePage = readAppFile("app/(marketing)/(default)/page.tsx");
   const deferredGate = readAppFile("components/onboarding/exam-selector-gate-lazy.tsx");
 
   assert.doesNotMatch(defaultHomePage, /from ["']@\/components\/onboarding\/exam-selector-gate["']/);
-  assert.match(defaultHomePage, /@\/components\/onboarding\/exam-selector-gate-lazy/);
 
   assert.match(deferredGate, /dynamic\(/);
   assert.match(deferredGate, /@\/components\/onboarding\/exam-selector-gate/);

@@ -43,6 +43,7 @@ import { LearnerStudySurfaceSection, LearnerSurface } from "@/components/learner
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 import { LearnerDashboardHubLayout, type LearnerDashboardHubNavItem } from "@/components/student/learner-dashboard-hub-layout";
+import { LearnerDashboardMobileFold } from "@/components/student/learner-dashboard-mobile-fold";
 import { FocusTodayStrip } from "@/components/student/focus-today-strip";
 import { LearnerReportCard } from "@/components/student/learner-report-card";
 import type { LearnerReportCardViewModel } from "@/lib/learner/learner-report-card-model";
@@ -468,7 +469,7 @@ export function LearnerStudyHome({
             readinessDeferHint={readinessDeferHint}
           />
           <LearnerSurface tone="secondary" padding="md" radius="lg" shadow={false} className="nn-dash-account-cta">
-            <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
+            <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.dashboard.accountTeaser")}</p>
             <Link
               href="/app/account/overview"
               className="inline-flex w-full shrink-0 justify-center rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2.5 text-sm font-semibold text-role-cta-on-soft sm:w-auto"

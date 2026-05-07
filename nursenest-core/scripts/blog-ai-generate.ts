@@ -5,8 +5,8 @@
  *   npx tsx scripts/blog-ai-generate.ts [--dry-run] [--limit=5] [--topic "…"] [--pathophysiology-only]
  *     [--tier rn|rpn|pn|np|new-grad|allied] [--publish true|false] [--min-words 1200]
  *
- * API key: `OPENROUTER_API_KEY` when `AI_PROVIDER=openrouter`; otherwise `BLOG_OPENAI_API_KEY`
- * || `AI_INTEGRATIONS_OPENAI_API_KEY`.
+ * API key: `OPENROUTER_API_KEY` when `BLOG_AI_PROVIDER=openrouter` or when the
+ * OpenRouter key is present by default. OpenAI requires explicit `BLOG_AI_PROVIDER=openai`.
  * Model: `OPENROUTER_MODEL` when OpenRouter is selected; otherwise blog OpenAI model envs.
  */
 import "../src/lib/db/script-env-bootstrap";
@@ -31,6 +31,7 @@ import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-genera
 import {
   assertOpenAiKeyConfigured,
   getBlogGenerationModelLabelForLogs,
+  getBlogGenerationProviderLabelForLogs,
   primeBlogCliOpenAiIntegrationKey,
 } from "@/lib/ai/openai-env";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
@@ -76,6 +77,7 @@ type RunStats = {
 
 async function main(): Promise<void> {
   primeBlogCliOpenAiIntegrationKey();
+  console.log(`Provider: ${getBlogGenerationProviderLabelForLogs()}`);
   console.log(`Model: ${getBlogGenerationModelLabelForLogs()}`);
 
   const keyGate = assertOpenAiKeyConfigured({ pipeline: "blog" });

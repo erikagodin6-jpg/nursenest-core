@@ -1,4 +1,4 @@
-import { aiChatUsesOpenRouter, blogChatUsesOpenRouter } from "@/lib/ai/blog-ai-routing";
+import { aiChatUsesOpenRouter, blogChatUsesOpenRouter, getBlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
 import { getOpenAiApiKeyFromRuntimeEnv } from "@/lib/env/runtime-env";
 
 /** Default for blog + RN lesson expansion when no env overrides are set. */
@@ -75,7 +75,15 @@ export function getOpenAiBaseUrl(): string {
 
 /** Model logged at CLI startup (OpenRouter vs OpenAI blog model). */
 export function getBlogGenerationModelLabelForLogs(): string {
-  return blogChatUsesOpenRouter() ? getBlogOpenRouterChatModel() : getBlogOpenAiChatModel();
+  const provider = getBlogAiChatProvider();
+  if (provider === "openrouter") return getBlogOpenRouterChatModel();
+  if (provider === "openai") return getBlogOpenAiChatModel();
+  return "(unconfigured)";
+}
+
+/** Provider logged at CLI/runtime startup without exposing secrets. */
+export function getBlogGenerationProviderLabelForLogs(): string {
+  return getBlogAiChatProvider();
 }
 
 /**
@@ -114,6 +122,14 @@ export function assertOpenAiKeyConfigured(
       };
     }
     return { ok: true };
+  }
+
+  if (options?.pipeline === "blog" && getBlogAiChatProvider() === "unconfigured") {
+    return {
+      ok: false,
+      message:
+        "Blog AI provider is not configured. Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.",
+    };
   }
 
   const key = options?.pipeline === "blog" ? getBlogOpenAiApiKey() : getOpenAiApiKey();

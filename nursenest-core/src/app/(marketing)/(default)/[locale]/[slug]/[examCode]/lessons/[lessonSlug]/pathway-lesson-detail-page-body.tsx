@@ -350,9 +350,15 @@ export async function PathwayLessonDetailPageBody({
         {!fullAccess ? (
           entitlementError ? (
             <>
-              <aside className="nn-card mt-6 border-amber-200 bg-amber-50 p-4 text-sm text-[var(--theme-body-text)] dark:border-amber-900/40 dark:bg-amber-950/30">
-                <p className="font-semibold">Access check didn’t complete</p>
-                <p className="mt-1 text-[var(--theme-body-text)]">
+              <aside
+                className="nn-card mt-6 border p-4 text-sm text-[var(--theme-body-text)]"
+                style={{
+                  borderColor: "color-mix(in srgb, var(--semantic-warning) 35%, var(--semantic-border-soft))",
+                  background: "color-mix(in srgb, var(--semantic-panel-warm) 55%, var(--semantic-surface))",
+                }}
+              >
+                <p className="font-semibold text-[var(--theme-heading-text)]">Access check didn’t complete</p>
+                <p className="mt-1 text-[var(--semantic-text-secondary)]">
                   We couldn’t confirm your plan (temporary server or data issue). This is not the same as being denied access.
                   Refresh in a moment; you can still read the preview sections below. Sign in again or contact support if it
                   persists.
@@ -526,7 +532,8 @@ export async function PathwayLessonDetailPageBody({
           />
         </Suspense>
 
-        <p className="mt-8 text-center text-xs text-[var(--theme-muted-text)]">
+        <div className="mt-8 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] px-4 py-3 text-center shadow-[var(--semantic-shadow-soft)] sm:px-5">
+          <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
           <Link href={blogHubPath} className="font-medium text-primary hover:underline">
             {examName} blog posts
           </Link>
@@ -554,7 +561,8 @@ export async function PathwayLessonDetailPageBody({
           <Link href={buildExamPathwayPath(pathway)} className="font-medium text-primary hover:underline">
             {examName} exam hub
           </Link>
-        </p>
+          </p>
+        </div>
 
         <MarketingStudyCrossLinks className="mt-12" />
         <StaffEditLivePageBanner

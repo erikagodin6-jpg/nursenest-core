@@ -266,7 +266,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
                   {href ? (
                     <Link
                       href={href}
-                      className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm font-medium text-primary hover:bg-[var(--semantic-panel-muted)]"
+                      className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm font-medium text-primary shadow-[var(--semantic-shadow-soft)] transition-colors hover:border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))]"
                     >
                       <span className="min-w-0 flex-1">{label}</span>
                       {canShowResume ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}

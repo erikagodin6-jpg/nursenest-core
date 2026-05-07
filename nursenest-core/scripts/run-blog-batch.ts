@@ -4,6 +4,7 @@ import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogP
 import {
   assertOpenAiKeyConfigured,
   getBlogGenerationModelLabelForLogs,
+  getBlogGenerationProviderLabelForLogs,
   primeBlogCliOpenAiIntegrationKey,
 } from "@/lib/ai/openai-env";
 import { buildDefaultBatchInternalLessonLinkStubs } from "@/lib/blog/blog-generated-publish-gates";
@@ -69,6 +70,7 @@ function buildInput(
 
 async function main(): Promise<void> {
   primeBlogCliOpenAiIntegrationKey();
+  console.log(`Provider: ${getBlogGenerationProviderLabelForLogs()}`);
   console.log(`Model: ${getBlogGenerationModelLabelForLogs()}`);
 
   const keyGate = assertOpenAiKeyConfigured({ pipeline: "blog" });

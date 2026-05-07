@@ -19,6 +19,15 @@ export type { BlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
 
 type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
 
+let lastLoggedBlogProvider = "";
+
+function logBlogProviderSelection(provider: BlogAiChatProvider, model: string): void {
+  const key = `${provider}:${model}`;
+  if (key === lastLoggedBlogProvider) return;
+  lastLoggedBlogProvider = key;
+  console.info(`[BlogAI] provider=${provider} model=${model}`);
+}
+
 async function mapOpenAiSdkError<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
@@ -84,6 +93,11 @@ export async function blogAiChatCompletion(params: {
       "BLOG_AI_PROVIDER=gemini does not use OpenAI-compatible chat completions; use generateGeminiBlogDraft or set BLOG_AI_PROVIDER=openai|openrouter (or AI_PROVIDER=openrouter).",
     );
   }
+  if (provider === "unconfigured") {
+    throw new Error(
+      "Blog AI provider is not configured. Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.",
+    );
+  }
 
   if (provider === "openrouter") {
     if (!process.env.OPENROUTER_API_KEY?.trim()) {
@@ -91,12 +105,14 @@ export async function blogAiChatCompletion(params: {
         "OPENROUTER_API_KEY is required when AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter",
       );
     }
+    const model = normalizeOpenRouterModel(params.model, getBlogOpenRouterChatModel());
+    logBlogProviderSelection(provider, model);
     return openRouterChatCompletion({
       messages: params.messages,
       temperature: params.temperature,
       maxTokens: params.maxTokens,
       user: params.user,
-      model: normalizeOpenRouterModel(params.model, getBlogOpenRouterChatModel()),
+      model,
     });
   }
 
@@ -108,6 +124,7 @@ export async function blogAiChatCompletion(params: {
       "OpenAI API key is required when using the OpenAI blog provider (BLOG_OPENAI_API_KEY or AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY).",
     );
   }
+  logBlogProviderSelection(provider, model);
   const base = getOpenAiBaseUrl().replace(/\/$/, "");
   const client = new OpenAI({
     apiKey,
