@@ -25,7 +25,7 @@ test("POST /api/admin/ai-assistant blocks non-admin callers", async () => {
   assert.equal(res.status, 403);
 });
 
-test("POST /api/admin/ai-assistant requires OpenAI configuration", async () => {
+test("POST /api/admin/ai-assistant requires funded AI provider configuration", async () => {
   const deps: AdminAiAssistantRouteDeps = {
     requireAdmin: async () => ({
       ok: true as const,
@@ -35,7 +35,7 @@ test("POST /api/admin/ai-assistant requires OpenAI configuration", async () => {
       NextResponse.json(
         {
           error: "AI admin generation is misconfigured.",
-          hint: "AI generation disabled: no OpenAI API key configured (set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY on this server process).",
+          hint: "AI generation disabled: no funded AI provider key configured (set AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or set AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY).",
         },
         { status: 503 },
       ),
@@ -53,7 +53,7 @@ test("POST /api/admin/ai-assistant requires OpenAI configuration", async () => {
   const json = (await res.json()) as { error?: string; hint?: string };
 
   assert.equal(res.status, 503);
-  assert.match(String(json.hint ?? ""), /OPENAI_API_KEY/);
+  assert.match(String(json.hint ?? ""), /OPENROUTER_API_KEY|OPENAI_API_KEY/);
 });
 
 test("POST /api/admin/ai-assistant returns draft-only output for admins", async () => {

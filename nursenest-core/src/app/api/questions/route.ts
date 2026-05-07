@@ -324,7 +324,7 @@ export async function GET(req: NextRequest) {
         });
         pathway = resolveNpSubscriberQuestionPathway({
           tier: gate.entitlement.tier,
-          pathwayIdParam,
+          pathwayIdParam: pathwayIdParam ?? null,
           pathwayResolved: pathway,
           pathwayHintIds: [userHints?.learnerPath, userHints?.targetExamPathwayId, gate.userAccess.allowedExam.pathwayId],
           entitlement: gate.entitlement,

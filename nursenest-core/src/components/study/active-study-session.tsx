@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
-import { AlertCircle, CheckCircle2, ChevronLeft, ChevronRight, Home, RefreshCw, Star, XCircle } from "lucide-react";
+import { useEffect, useMemo, useReducer, useState } from "react";
+import { AlertCircle, CheckCircle2, ChevronLeft, ChevronRight, Home, RefreshCw, Sparkles, Star, XCircle } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getStudyItemState, setStudyItemState } from "@/lib/flashcards/study-session-persistence";
-import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
-import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
-import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
-import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
-import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
-import { firstTeachingLine, FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
+import {
+  ExamSessionProgressStrip,
+  ExamSessionStickyChrome,
+  ExamSessionTopBar,
+} from "@/components/exam/exam-session-shell";
+import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";

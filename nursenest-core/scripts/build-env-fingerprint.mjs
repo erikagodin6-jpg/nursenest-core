@@ -10,7 +10,8 @@ function isSensitiveEnvKey(name) {
   const u = String(name).toUpperCase();
   if (u === "DATABASE_URL" || u === "DIRECT_URL") return true;
   if (u === "AUTH_SECRET" || u === "NEXTAUTH_SECRET" || u === "CRON_SECRET") return true;
-  if (u === "OPENAI_API_KEY" || u === "AI_INTEGRATIONS_OPENAI_API_KEY") return true;
+  if (u === "OPENAI_API_KEY" || u === "AI_INTEGRATIONS_OPENAI_API_KEY" || u === "OPENROUTER_API_KEY")
+    return true;
   if (/_SECRET$|_TOKEN$|_PASSWORD$|_API_KEY$/i.test(name)) return true;
   if (/^STRIPE_/i.test(name) && /SECRET|KEY|WEBHOOK/i.test(name)) return true;
   return false;

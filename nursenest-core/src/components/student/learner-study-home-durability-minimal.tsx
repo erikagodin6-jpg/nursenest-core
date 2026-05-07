@@ -39,6 +39,18 @@ export function LearnerStudyHomeDurabilityMinimal({
 
   const content = (
     <>
+      <LearnerStudySurfaceSection
+        id="durability-notice"
+        eyebrow={t("learner.studyHome.pageEyebrow")}
+        title={t("learner.dashboard.title")}
+        intro={null}
+        tone="supportive"
+        surfacePadding="md"
+        className="nn-dash-band nn-dash-band--stack-tight"
+      >
+        <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{notice}</p>
+      </LearnerStudySurfaceSection>
+
       <LearnerDashboardUserPanelBand
         t={t}
         locale={locale}
@@ -47,18 +59,6 @@ export function LearnerStudyHomeDurabilityMinimal({
         entitlement={entitlement}
         includeStudyShortcuts
       />
-
-      <LearnerStudySurfaceSection
-        id="durability-notice"
-        eyebrow={t("learner.studyHome.pageEyebrow")}
-        title={t("learner.dashboard.title")}
-        intro={null}
-        tone="supportive"
-        surfacePadding="md"
-        className="nn-dash-band"
-      >
-        <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{notice}</p>
-      </LearnerStudySurfaceSection>
     </>
   );
 

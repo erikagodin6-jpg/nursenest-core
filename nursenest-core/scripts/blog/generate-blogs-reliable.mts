@@ -9,7 +9,7 @@
  * `--publish` persists and requests immediate publish when output gates pass; otherwise draft stays with warnings.
  * `--apply` persists as DRAFT only (no immediate publish).
  *
- * Requires DATABASE_URL when persisting. Requires blog OpenAI credentials for full LLM path (no --dry-skip-ai).
+ * Requires DATABASE_URL when persisting. Requires a funded AI provider for full LLM path (no --dry-skip-ai).
  */
 import path from "node:path";
 import { fileURLToPath } from "node:url";

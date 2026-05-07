@@ -52,7 +52,7 @@ function HomeStableMarketingPlaceholder({
     <section
       className={`nn-home-rich-placeholder-band ${bandToneClass} border-b border-[var(--border-subtle)] px-4 py-[var(--nn-rhythm-mobile-section-y)] sm:px-6 md:py-[var(--nn-rhythm-shell-y)]`}
     >
-      <div className="nn-home-rich-placeholder-card mx-auto max-w-5xl rounded-2xl border p-6 sm:p-8">
+      <div className="nn-home-rich-placeholder-card mx-auto max-w-5xl rounded-2xl border border-[var(--border-subtle)] p-6 sm:p-8 md:p-9">
         <h2 className="nn-marketing-h3 text-balance text-[var(--palette-heading)]">{title}</h2>
         <p className="mt-2 max-w-prose text-pretty nn-marketing-body text-[var(--palette-text-muted)]">{body}</p>
         <p className="mt-4">
@@ -219,8 +219,8 @@ export default function HomeRestoredClient({
       {/* AUDIENCE CARDS */}
       <section className="nn-section-block nn-home-pathways-band border-b border-[var(--border-subtle)]">
         <div className="nn-section-shell">
-          <div className="mx-auto mb-8 max-w-2xl text-center">
-            <h2 className="nn-marketing-h2">
+          <div className="mx-auto mb-10 max-w-2xl text-center md:mb-12">
+            <h2 className="nn-marketing-h2 text-balance">
               {formatTitleCase(
                 safeHomepageMarketingT(t, "pages.home.pathwaysSection.title", "Choose your path"),
                 locale
@@ -228,7 +228,7 @@ export default function HomeRestoredClient({
             </h2>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-[var(--nn-rhythm-card-grid-gap)] sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
             {audienceCards.map((c) => (
               <MarketingTrackedLink
                 key={c.id}

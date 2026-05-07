@@ -24,7 +24,7 @@
  *
  * ENV VARS REQUIRED
  * ─────────────────
- *   BLOG_OPENAI_API_KEY or AI_INTEGRATIONS_OPENAI_API_KEY  (OpenAI key)
+ *   OPENROUTER_API_KEY with AI_PROVIDER=openrouter, or BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY
  *   DATABASE_URL                                            (Postgres connection string)
  *
  * OPTIONAL
@@ -35,7 +35,11 @@
 import "../../src/lib/db/script-env-bootstrap";
 
 import { BlogFunnelStage, BlogPostIntent, BlogPostStatus, BlogPostTemplate } from "@prisma/client";
-import { assertOpenAiKeyConfigured, getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
+import {
+  assertOpenAiKeyConfigured,
+  getBlogGenerationModelLabelForLogs,
+  primeBlogCliOpenAiIntegrationKey,
+} from "@/lib/ai/openai-env";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import {
@@ -122,9 +126,7 @@ function logRow(row: RunRow): void {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
-  // Prime the OpenAI key
-  const k = process.env.BLOG_OPENAI_API_KEY?.trim() || process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim() || "";
-  if (k) process.env.AI_INTEGRATIONS_OPENAI_API_KEY = k;
+  primeBlogCliOpenAiIntegrationKey();
 
   const dryRun = flag("--dry-run");
   const publish = !dryRun && parseBool(argv("--publish"), false);
@@ -146,7 +148,7 @@ async function main(): Promise<void> {
     resume,
     limit,
     categoryFilter: categoryFilter ?? "all",
-    model: getBlogOpenAiChatModel(),
+    model: getBlogGenerationModelLabelForLogs(),
     minWords,
     minReferences,
     categoryCounts: LONGTAIL_200_CATEGORY_COUNTS,

@@ -31,6 +31,8 @@ const enabledGate = (): AdminAiGenerationGate => ({
   mode: "enabled",
   runnable: true,
   flagEnabled: true,
+  aiProvider: "openai",
+  aiProviderKeyPresent: true,
   openAiKeyPresent: true,
   summaryLine: "AI generation enabled",
   diagnostics: {
@@ -38,6 +40,8 @@ const enabledGate = (): AdminAiGenerationGate => ({
     aiAdminGenerationFlagClass: "enabled",
     aiIntegrationsOpenAiKeyPresent: true,
     legacyOpenAiKeyPresent: false,
+    openRouterApiKeyPresent: false,
+    aiProvider: "openai",
     adminAiGenerationFlagNormalized: true,
   },
 });
@@ -216,7 +220,7 @@ describe("AdminBlogGenerateClient (mounted)", () => {
         JSON.stringify({
           error: "AI admin generation is disabled.",
           code: "ADMIN_AI_DISABLED",
-          hint: "Enable AI_ADMIN_GENERATION_ENABLED (true, 1, yes, or on) and set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY.",
+          hint: "Enable AI_ADMIN_GENERATION_ENABLED (true, 1, yes, or on) and configure AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or OpenAI with AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.",
           mode: "disabled",
         }),
         { status: 403, headers: { "Content-Type": "application/json" } },
@@ -234,7 +238,7 @@ describe("AdminBlogGenerateClient (mounted)", () => {
     await waitFor(() => {
       const err = screen.getByText(/AI admin generation is disabled/i);
       assert.match(err.textContent ?? "", /AI_ADMIN_GENERATION_ENABLED/i);
-      assert.match(err.textContent ?? "", /OPENAI_API_KEY|AI_INTEGRATIONS_OPENAI_API_KEY/);
+      assert.match(err.textContent ?? "", /OPENROUTER_API_KEY|OPENAI_API_KEY|AI_INTEGRATIONS_OPENAI_API_KEY/);
     });
   });
 });

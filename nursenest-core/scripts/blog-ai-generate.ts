@@ -5,8 +5,9 @@
  *   npx tsx scripts/blog-ai-generate.ts [--dry-run] [--limit=5] [--topic "…"] [--pathophysiology-only]
  *     [--tier rn|rpn|pn|np|new-grad|allied] [--publish true|false] [--min-words 1200]
  *
- * API key: `BLOG_OPENAI_API_KEY` || `AI_INTEGRATIONS_OPENAI_API_KEY` (injected into `AI_INTEGRATIONS_OPENAI_API_KEY` for shared helpers).
- * Model: `BLOG_OPENAI_MODEL` → `AI_INTEGRATIONS_OPENAI_MODEL` → gpt-4.1-mini (see {@link getBlogOpenAiChatModel}).
+ * API key: `OPENROUTER_API_KEY` when `AI_PROVIDER=openrouter`; otherwise `BLOG_OPENAI_API_KEY`
+ * || `AI_INTEGRATIONS_OPENAI_API_KEY`.
+ * Model: `OPENROUTER_MODEL` when OpenRouter is selected; otherwise blog OpenAI model envs.
  */
 import "../src/lib/db/script-env-bootstrap";
 
@@ -27,18 +28,14 @@ import {
 } from "@/lib/blog/blog-content-quality-gate";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
-import { assertOpenAiKeyConfigured, getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
+import {
+  assertOpenAiKeyConfigured,
+  getBlogGenerationModelLabelForLogs,
+  primeBlogCliOpenAiIntegrationKey,
+} from "@/lib/ai/openai-env";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
 
 const SITE_ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://nursenest.ca").replace(/\/$/, "");
-
-function primeOpenAiKeyFromCliEnv(): void {
-  const resolved =
-    process.env.BLOG_OPENAI_API_KEY?.trim() || process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim() || "";
-  if (resolved) {
-    process.env.AI_INTEGRATIONS_OPENAI_API_KEY = resolved;
-  }
-}
 
 function faqBlockFromPlan(plan: BlogControlPanelPlan): Prisma.JsonValue {
   return { items: plan.faqs.map((f) => ({ q: f.q, a: f.a })) } as unknown as Prisma.JsonValue;
@@ -78,13 +75,15 @@ type RunStats = {
 };
 
 async function main(): Promise<void> {
-  console.log(`Model: ${getBlogOpenAiChatModel()}`);
-  primeOpenAiKeyFromCliEnv();
+  primeBlogCliOpenAiIntegrationKey();
+  console.log(`Model: ${getBlogGenerationModelLabelForLogs()}`);
 
   const keyGate = assertOpenAiKeyConfigured({ pipeline: "blog" });
   if (!keyGate.ok) {
     console.error(`[blog-ai-generate] ${keyGate.message}`);
-    console.error("Set BLOG_OPENAI_API_KEY or AI_INTEGRATIONS_OPENAI_API_KEY (e.g. in .env.local).");
+    console.error(
+      "Set AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or configure BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY.",
+    );
     process.exitCode = 1;
     return;
   }

@@ -507,7 +507,7 @@ export function AdminBlogTopicBatchClient({
       <p className="text-xs text-muted-foreground">
         Cron: POST <code className="rounded bg-muted px-1">/api/cron/blog-batch-schedule</code> with{" "}
         <code className="rounded bg-muted px-1">Authorization: Bearer CRON_SECRET</code> every 5–15 minutes. Requires{" "}
-        <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED</code> and OpenAI keys, same as the blog generator.
+        <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED</code> and a funded AI provider key, same as the blog generator.
       </p>
     </div>
   );

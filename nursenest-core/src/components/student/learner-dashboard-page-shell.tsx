@@ -23,26 +23,28 @@ export function LearnerDashboardPageShell({
 }: LearnerDashboardPageShellProps) {
   return (
     <div className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden" data-testid="learner-dashboard-shell">
-      <BreadcrumbTrail items={crumbs} />
+      <div className="flex min-w-0 flex-col gap-3 sm:gap-4">
+        <BreadcrumbTrail items={crumbs} />
 
-      <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub">
-        <div className="nn-dash-page-header__top">
-          <div className="nn-dash-page-header__titles min-w-0">
-            <p className="sr-only">{t("learner.studyHome.pageEyebrow")}</p>
-            <div className="nn-dash-page-header__title-row">
-              <h1 className="nn-dash-page-header__title">{heroHeading}</h1>
-              {identity ? (
-                <div className="nn-dash-page-header__identity nn-dash-page-header__identity--inline">
-                  <span className="nn-dash-page-header__pill">{identity.pill}</span>
-                  <span className="nn-dash-page-header__meta">{identity.subtitle}</span>
-                </div>
-              ) : null}
+        <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub">
+          <div className="nn-dash-page-header__top">
+            <div className="nn-dash-page-header__titles min-w-0">
+              <p className="sr-only">{t("learner.studyHome.pageEyebrow")}</p>
+              <div className="nn-dash-page-header__title-row">
+                <h1 className="nn-dash-page-header__title">{heroHeading}</h1>
+                {identity ? (
+                  <div className="nn-dash-page-header__identity nn-dash-page-header__identity--inline">
+                    <span className="nn-dash-page-header__pill">{identity.pill}</span>
+                    <span className="nn-dash-page-header__meta">{identity.subtitle}</span>
+                  </div>
+                ) : null}
+              </div>
+              <p className="nn-dash-page-header__subtitle">{t("learner.studyHome.pageSubtitle")}</p>
+              {context ? <div className="nn-dash-page-header__context">{context}</div> : null}
             </div>
-            <p className="nn-dash-page-header__subtitle">{t("learner.studyHome.pageSubtitle")}</p>
-            {context ? <div className="nn-dash-page-header__context">{context}</div> : null}
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
       {children}
     </div>

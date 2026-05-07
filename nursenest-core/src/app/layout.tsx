@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DM_Sans } from "next/font/google";
 
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
@@ -8,6 +9,15 @@ import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 
 import "./globals.css";
 import "./(marketing)/marketing-dark-utilities.css";
+
+/** Host-loaded DM Sans (swap + size-adjusted fallback) — exposed as `--font-dm-sans-next` on `<html>`. */
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-dm-sans-next",
+  weight: ["400", "500", "600", "700"],
+  adjustFontFallback: true,
+});
 
 const siteUrl = MARKETING_SITE_ORIGIN || "https://www.nursenest.ca";
 
@@ -100,7 +110,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className="h-full antialiased"
+      className={`${dmSans.variable} h-full antialiased`}
       data-theme={NURSENEST_DEFAULT_THEME}
       suppressHydrationWarning
     >

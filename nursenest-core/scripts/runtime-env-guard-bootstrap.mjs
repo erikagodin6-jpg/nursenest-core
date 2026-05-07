@@ -14,7 +14,25 @@ const REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS = "postgres:postgres@127.0
 
 const REQUIRED_RUNTIME_ENVS = ["AI_ADMIN_GENERATION_ENABLED"];
 
-const REQUIRED_ONE_OF = [["AI_INTEGRATIONS_OPENAI_API_KEY", "OPENAI_API_KEY"]];
+const OPENAI_KEY_GROUP = ["AI_INTEGRATIONS_OPENAI_API_KEY", "OPENAI_API_KEY"];
+
+/** Keep in sync with `blogChatUsesOpenRouter` in `src/lib/ai/blog-ai-routing.ts`. */
+function blogChatUsesOpenRouterMjs() {
+  const b = process.env["BLOG_AI_PROVIDER"]?.trim().toLowerCase();
+  if (b === "openrouter") return true;
+  if (b === "openai" || b === "gemini") return false;
+  return process.env["AI_PROVIDER"]?.trim().toLowerCase() === "openrouter";
+}
+
+function hasTrimmedEnvMjs(key) {
+  const v = process.env[key];
+  return Boolean(v && String(v).trim() !== "");
+}
+
+function satisfiesAiFundingContractMjs() {
+  if (OPENAI_KEY_GROUP.some((k) => hasTrimmedEnvMjs(k))) return true;
+  return blogChatUsesOpenRouterMjs() && hasTrimmedEnvMjs("OPENROUTER_API_KEY");
+}
 
 function isNextProductionBuildPhase() {
   return process.env["NEXT_PHASE"] === "phase-production-build";
@@ -173,14 +191,10 @@ function collectMissingRuntimeEnvIssues() {
     }
   }
 
-  for (const group of REQUIRED_ONE_OF) {
-    const hasOne = group.some((k) => {
-      const val = process.env[k];
-      return Boolean(val && val.trim() !== "");
-    });
-    if (!hasOne) {
-      missing.push(`One of: ${group.join(", ")}`);
-    }
+  if (!satisfiesAiFundingContractMjs()) {
+    missing.push(
+      `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
+    );
   }
 
   return missing;
@@ -196,6 +210,9 @@ export function logRuntimeEnvSnapshot() {
     AI_ADMIN_GENERATION_ENABLED_value: process.env["AI_ADMIN_GENERATION_ENABLED"] ?? null,
     AI_INTEGRATIONS_OPENAI_API_KEY_present: Boolean(process.env["AI_INTEGRATIONS_OPENAI_API_KEY"]),
     OPENAI_API_KEY_present: Boolean(process.env["OPENAI_API_KEY"]),
+    OPENROUTER_API_KEY_present: Boolean(process.env["OPENROUTER_API_KEY"]),
+    AI_PROVIDER: process.env["AI_PROVIDER"] ?? null,
+    BLOG_AI_PROVIDER: process.env["BLOG_AI_PROVIDER"] ?? null,
     NN_ENV_VALIDATION_MODE: process.env["NN_ENV_VALIDATION_MODE"] ?? null,
   };
 
@@ -219,7 +236,9 @@ export function validateRuntimeEnvOrThrow() {
     return;
   }
 
-  const presentKeys = Object.keys(process.env).filter((k) => k.includes("AI_") || k.includes("OPENAI"));
+  const presentKeys = Object.keys(process.env).filter(
+    (k) => k.includes("AI_") || k.includes("OPENAI") || k.includes("OPENROUTER"),
+  );
 
   console.error("[ENV VALIDATION ERROR]", {
     missing,

@@ -1518,7 +1518,7 @@ export function AdminBlogControlPanelClient({
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">1. Brief</h2>
         <p className="text-sm text-muted-foreground">
           Two-step AI: editorial JSON plan (titles, SEO, outline, links, FAQs, images, APA stubs) then full HTML draft. Requires{" "}
-          <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and OpenAI credentials.
+          <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and funded AI provider credentials.
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="block space-y-1 sm:col-span-2">

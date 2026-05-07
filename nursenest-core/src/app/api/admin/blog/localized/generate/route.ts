@@ -41,7 +41,7 @@ const generateSchema = z.object({
  * Modes:
  * 1. `precomputedAiOutput`: post-process + persist (no live LLM; allowed when admin AI gate is off).
  * 2. `promptOnly=true`: returns built prompts only (no keys required).
- * 3. Default: OpenAI adaptation — requires `AI_ADMIN_GENERATION_ENABLED=true` and OpenAI API key (same gate as other admin generators).
+ * 3. Default: AI adaptation — requires `AI_ADMIN_GENERATION_ENABLED=true` and a funded provider key (same gate as other admin generators).
  */
 export async function POST(req: NextRequest) {
   const gate = await requireAdmin(req);

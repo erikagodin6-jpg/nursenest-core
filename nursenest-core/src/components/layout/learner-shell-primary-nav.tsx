@@ -169,7 +169,7 @@ export function LearnerShellDesktopStudyLinks({
       aria-label="Learner primary actions"
       data-nn-learner-shell-study-nav=""
     >
-      <div className="flex w-full flex-wrap items-center justify-center gap-x-1.5 gap-y-2 sm:justify-start sm:gap-x-2 sm:gap-y-2 lg:gap-x-3">
+      <div className="grid w-full grid-cols-1 gap-2 md:max-lg:grid-cols-2 md:max-lg:gap-x-2 md:max-lg:gap-y-2 lg:flex lg:flex-wrap lg:items-center lg:justify-start lg:gap-x-2 lg:gap-y-2 xl:gap-x-3">
         {items.map((item) => {
           const active = isLearnerShellNavActive(pathname, item);
           const isPrimarySurface = isLearnerPrimaryNavKey(item.id);
@@ -189,10 +189,10 @@ export function LearnerShellDesktopStudyLinks({
               }}
               className={
                 active
-                  ? "nn-marketing-body-sm max-w-full min-h-10 min-w-0 touch-manipulation rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-2.5 py-1.5 text-start font-medium leading-snug text-[var(--semantic-brand)] transition-colors duration-150 sm:min-h-11 sm:px-3 sm:py-2"
+                  ? "nn-marketing-body-sm max-w-full min-h-11 min-w-0 touch-manipulation rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-2.5 py-1.5 text-start font-medium leading-snug text-[var(--semantic-brand)] transition-colors duration-150 sm:px-3 sm:py-2 md:max-lg:w-full md:max-lg:justify-center md:max-lg:text-center lg:w-auto lg:justify-start lg:text-start"
                   : isPrimarySurface
-                    ? "nn-marketing-body-sm max-w-full min-h-10 min-w-0 touch-manipulation rounded-full px-2.5 py-1.5 text-start leading-snug transition-colors duration-150 sm:min-h-11 sm:px-3 sm:py-2 nn-learner-shell-link--primary hover:text-primary"
-                    : "nn-marketing-body-sm max-w-full min-h-10 min-w-0 touch-manipulation rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-2.5 py-1.5 text-start font-medium leading-snug text-[var(--theme-body-text)] transition-colors duration-150 hover:bg-[var(--accent-soft)] hover:text-primary sm:min-h-11 sm:px-3 sm:py-2"
+                    ? "nn-marketing-body-sm max-w-full min-h-11 min-w-0 touch-manipulation rounded-full px-2.5 py-1.5 text-start leading-snug transition-colors duration-150 sm:px-3 sm:py-2 nn-learner-shell-link--primary hover:text-primary md:max-lg:flex md:max-lg:w-full md:max-lg:justify-center md:max-lg:text-center lg:inline-flex lg:w-auto lg:justify-start lg:text-start"
+                    : "nn-marketing-body-sm max-w-full min-h-11 min-w-0 touch-manipulation rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-2.5 py-1.5 text-start font-medium leading-snug text-[var(--theme-body-text)] transition-colors duration-150 hover:bg-[var(--accent-soft)] hover:text-primary sm:px-3 sm:py-2 md:max-lg:flex md:max-lg:w-full md:max-lg:justify-center md:max-lg:text-center lg:inline-flex lg:w-auto lg:justify-start lg:text-start"
               }
             >
               {item.label}
@@ -218,7 +218,7 @@ export function LearnerShellMobileBottomNav({
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-1 pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-6px_20px_-10px_color-mix(in_srgb,var(--semantic-text-primary)_10%,transparent)] md:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-6px_20px_-10px_color-mix(in_srgb,var(--semantic-text-primary)_10%,transparent)] md:hidden [overscroll-behavior-x:contain]"
       aria-label="Learner bottom navigation"
       data-nn-learner-shell-study-nav=""
     >

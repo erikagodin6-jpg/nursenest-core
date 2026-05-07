@@ -239,7 +239,7 @@ export default async function LearnerShellLayout({ children }: { children: React
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate>
             <div
-              className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
+              className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+var(--nn-learner-bottom-nav-reserve))] sm:px-5 md:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
               data-nn-learner-ds
               data-testid="learner-shell"
             >
@@ -282,9 +282,9 @@ export default async function LearnerShellLayout({ children }: { children: React
               ) : null}
               {!skipNonCritical && !qaShell ? <LearnerAppSectionAnalytics /> : null}
               <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] overflow-x-clip bg-[var(--semantic-bg-base)] pt-0.5 md:pt-1">
-                <div className="flex flex-col gap-1.5 md:gap-2">
-                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 shadow-sm sm:px-4 sm:py-2.5">
-                    <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 sm:gap-x-3">
+                <div className="flex min-h-0 flex-col gap-2 md:gap-2.5">
+                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 shadow-[var(--shadow-card)] sm:px-4 sm:py-2.5 md:px-4 md:py-2">
+                    <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 sm:gap-x-3 md:gap-x-3 md:gap-y-2.5">
                       <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
                         <LearnerShellBrandHomeLink />
                         <LearnerShellPathwayPill pathwayPillLabel={pathwayShortLabel} pathwayHubHref={pathwayHubHref} />
@@ -304,7 +304,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                       <LearnerPathwayContextBar label={pathwayContextBar} hubHref={pathwayHubHref} />
                     ) : null}
                   </div>
-                  <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 shadow-[0_1px_0_0_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)] sm:px-3 sm:py-2">
+                  <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 shadow-[var(--shadow-card)] sm:px-3 sm:py-2 md:px-3.5 md:py-2.5">
                     <LearnerShellDesktopStudyLinks
                       pathwayId={pathwayId}
                       examsLabel={examsLabel}

@@ -9,7 +9,7 @@
  * Env:
  *   BLOG_LEGACY_TOPICS — comma-separated topics (used when no --topic= passed)
  *
- * Requires DATABASE_URL and blog OpenAI credentials (same as admin blog generation).
+ * Requires DATABASE_URL and funded AI provider credentials (same as admin blog generation).
  */
 import { promises as fs } from "node:fs";
 import path from "node:path";

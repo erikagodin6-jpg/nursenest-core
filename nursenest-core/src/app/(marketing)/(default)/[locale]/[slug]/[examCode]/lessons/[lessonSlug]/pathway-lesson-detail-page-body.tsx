@@ -235,6 +235,13 @@ export async function PathwayLessonDetailPageBody({
     .filter((s) => shouldRenderPathwayLessonSection(s.kind))
     .filter((s) => !omitHighYieldIds.has(s.id));
 
+  const tocNavSections = displaySections.map((s) => ({
+    id: s.id,
+    heading: s.heading,
+    kind: s.kind,
+  }));
+  let editorialRhythmCounter = 0;
+
   if (process.env.PATHWAY_LESSON_PUBLIC_RENDER_LOG === "1") {
     const first = displaySections[0];
     const preview = (typeof first?.body === "string" ? first.body : "")

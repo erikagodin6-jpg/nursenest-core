@@ -21,7 +21,7 @@ export async function GlobalMarketingHomeIntro() {
       className="border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--surface-base))]"
       aria-label="Global marketing overview"
     >
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-9 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 py-[var(--nn-rhythm-section-y)] sm:px-6 lg:px-8">
         <p className="nn-marketing-eyebrow text-[var(--semantic-text-muted)]">
           {c.brandLine}
         </p>

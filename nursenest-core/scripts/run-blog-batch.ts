@@ -1,7 +1,11 @@
 import "./../src/lib/db/script-env-bootstrap";
 
 import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate, CountryCode } from "@prisma/client";
-import { assertOpenAiKeyConfigured, getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
+import {
+  assertOpenAiKeyConfigured,
+  getBlogGenerationModelLabelForLogs,
+  primeBlogCliOpenAiIntegrationKey,
+} from "@/lib/ai/openai-env";
 import { buildDefaultBatchInternalLessonLinkStubs } from "@/lib/blog/blog-generated-publish-gates";
 import { parseBlogBatchCliArgs, resolveBatchPathway, selectBatchTopics } from "@/lib/blog/blog-batch-cli";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
@@ -22,12 +26,6 @@ type BatchRow = {
 };
 
 const SITE_ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://nursenest.ca").replace(/\/$/, "");
-
-function primeOpenAiKeyFromCliEnv(): void {
-  const resolved =
-    process.env.BLOG_OPENAI_API_KEY?.trim() || process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim() || "";
-  if (resolved) process.env.AI_INTEGRATIONS_OPENAI_API_KEY = resolved;
-}
 
 function buildInput(
   topic: string,
@@ -70,8 +68,8 @@ function buildInput(
 }
 
 async function main(): Promise<void> {
-  primeOpenAiKeyFromCliEnv();
-  console.log(`Model: ${getBlogOpenAiChatModel()}`);
+  primeBlogCliOpenAiIntegrationKey();
+  console.log(`Model: ${getBlogGenerationModelLabelForLogs()}`);
 
   const keyGate = assertOpenAiKeyConfigured({ pipeline: "blog" });
   if (!keyGate.ok) {

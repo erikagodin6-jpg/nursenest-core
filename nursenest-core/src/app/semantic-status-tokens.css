@@ -669,6 +669,7 @@ html[data-theme="deep-twilight"] {
 .nn-learner-page-hero {
   border-radius: 1.25rem;
   border: 1px solid var(--semantic-border-soft);
+  margin-bottom: var(--nn-space-1, 0.25rem);
   background:
     radial-gradient(
       ellipse 85% 65% at 100% -5%,
@@ -682,7 +683,7 @@ html[data-theme="deep-twilight"] {
     ),
     linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-mid) 48%, var(--hero-gradient-end) 100%);
   box-shadow: var(--semantic-shadow-soft);
-  padding: clamp(1.25rem, 3vw, 1.75rem);
+  padding: clamp(1.35rem, 3.2vw, 1.95rem);
 }
 
 /* Reusable top accent for results / summary cards (theme multi-stop, not single purple) */

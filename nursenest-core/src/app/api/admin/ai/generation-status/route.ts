@@ -16,6 +16,8 @@ export async function GET(req: Request) {
     mode: g.mode,
     runnable: g.runnable,
     flagEnabled: g.flagEnabled,
+    aiProvider: g.aiProvider,
+    aiProviderKeyPresent: g.aiProviderKeyPresent,
     openAiKeyPresent: g.openAiKeyPresent,
     summaryLine: g.summaryLine,
     diagnostics: g.diagnostics,

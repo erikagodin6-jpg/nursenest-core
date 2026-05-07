@@ -102,7 +102,12 @@ If any of those are missing, runtime Sentry can still run, but source map upload
 
 | Variable | Purpose |
 |----------|---------|
-| `OPENAI_API_KEY` | OpenAI (see `openai-env.ts`) |
+| `AI_PROVIDER` | Set `openrouter` (with `OPENROUTER_API_KEY`) to route **blog** OpenAI-compatible generation through OpenRouter; coach and other non-blog callers still use OpenAI keys |
+| `BLOG_AI_PROVIDER` | Optional override: `openai` \| `openrouter` \| `gemini` — wins over `AI_PROVIDER` for blog when set to a known value |
+| `OPENROUTER_API_KEY` | OpenRouter key when blog chat is configured for OpenRouter |
+| `OPENROUTER_MODEL` | OpenRouter model slug (e.g. `openai/gpt-4o-mini`); see `getBlogOpenRouterChatModel` in `openai-env.ts` |
+| `OPENROUTER_HTTP_REFERER` / `OPENROUTER_APP_TITLE` | Optional OpenRouter attribution headers |
+| `OPENAI_API_KEY` / `AI_INTEGRATIONS_OPENAI_API_KEY` | OpenAI for non-blog paths and for blog when provider is `openai` |
 | `AI_*` | Model overrides for coach/admin generation |
 
 ## Captcha

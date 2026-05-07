@@ -446,7 +446,7 @@ export function AdminBlogDraftBatchClient() {
           One draft per non-empty line. Create starts a single server job (no browser loop): the platform cron advances
           items every few minutes; this page polls status. Use “Process chunk” to nudge up to{" "}
           {DRAFT_BATCH_MAX_ITEMS_PER_PROCESS} items sooner. Requires{" "}
-          <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and OpenAI.
+          <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and a funded AI provider.
         </p>
         <label className="block space-y-1">
           <span className="text-xs font-medium text-muted-foreground">

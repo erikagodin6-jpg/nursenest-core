@@ -24,6 +24,7 @@ export function LearnerAdaptiveRecommendationsSection({ t, bundle }: Props) {
 
   return (
     <section
+      id="study-adaptive-wired"
       className="nn-dash-section rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))] p-5 shadow-sm"
       aria-labelledby="adaptive-recs-heading"
     >

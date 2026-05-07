@@ -19,7 +19,7 @@ export default async function AdminExamQuestionsBatchPage() {
       </div>
       <h1 className="text-2xl font-bold">Batch question drafts</h1>
       <p className="mt-2 text-sm text-muted">
-        Requires <code className="rounded bg-black/5 px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and OpenAI credentials.
+        Requires <code className="rounded bg-black/5 px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and funded AI provider credentials.
       </p>
       <div className="mt-8">
         <ExamQuestionsBatchClient />

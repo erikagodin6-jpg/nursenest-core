@@ -73,6 +73,8 @@ export async function registerNodeInstrumentation(): Promise<void> {
         `AI_ADMIN_GENERATION_ENABLED_normalized=${String(aiGate.diagnostics.adminAiGenerationFlagNormalized)} ` +
         `AI_INTEGRATIONS_OPENAI_API_KEY_present=${String(aiGate.diagnostics.aiIntegrationsOpenAiKeyPresent)} ` +
         `OPENAI_API_KEY_present=${String(aiGate.diagnostics.legacyOpenAiKeyPresent)} ` +
+        `OPENROUTER_API_KEY_present=${String(aiGate.diagnostics.openRouterApiKeyPresent)} ` +
+        `AI_PROVIDER=${aiGate.diagnostics.aiProvider} ` +
         `final_gate_runnable=${String(aiGate.runnable)} ` +
         `final_gate_mode=${aiGate.mode}`,
     );
@@ -83,6 +85,8 @@ export async function registerNodeInstrumentation(): Promise<void> {
         AI_ADMIN_GENERATION_ENABLED_normalized: aiGate.diagnostics.adminAiGenerationFlagNormalized,
         AI_INTEGRATIONS_OPENAI_API_KEY_present: aiGate.diagnostics.aiIntegrationsOpenAiKeyPresent,
         OPENAI_API_KEY_present: aiGate.diagnostics.legacyOpenAiKeyPresent,
+        OPENROUTER_API_KEY_present: aiGate.diagnostics.openRouterApiKeyPresent,
+        AI_PROVIDER: aiGate.diagnostics.aiProvider,
         final_gate_runnable: aiGate.runnable,
         final_gate_mode: aiGate.mode,
       });
@@ -93,6 +97,8 @@ export async function registerNodeInstrumentation(): Promise<void> {
         AI_ADMIN_GENERATION_ENABLED_normalized: aiGate.diagnostics.adminAiGenerationFlagNormalized,
         AI_INTEGRATIONS_OPENAI_API_KEY_present: aiGate.diagnostics.aiIntegrationsOpenAiKeyPresent,
         OPENAI_API_KEY_present: aiGate.diagnostics.legacyOpenAiKeyPresent,
+        OPENROUTER_API_KEY_present: aiGate.diagnostics.openRouterApiKeyPresent,
+        AI_PROVIDER: aiGate.diagnostics.aiProvider,
         final_gate_runnable: aiGate.runnable,
         final_gate_mode: aiGate.mode,
       });

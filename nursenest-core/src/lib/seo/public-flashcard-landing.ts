@@ -3,18 +3,19 @@ import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-r
 import preNursingStringsEn from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
-import {
-  publicPreNursingMarketingFlashcardHubDeckWhere,
-} from "@/lib/entitlements/content-access-scope";
+import { publicMarketingFlashcardDeckWhere } from "@/lib/entitlements/content-access-scope";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { logRouteDataPipeline, routeDataDiagnosticsEnabled } from "@/lib/observability/route-data-pipeline-log";
 import { truncateForPreview } from "@/lib/flashcards/flashcard-access";
 import {
   classifyPublicFlashcardDeck,
   lessonNameFromSlug,
   lessonSlugFromSourceKey,
+  PUBLIC_FLASHCARD_CATEGORIES,
 } from "@/lib/flashcards/public-flashcard-categories";
 import { formatTitleCase } from "@/lib/format/text-case";
-import { preNursingLessonDetailPath } from "@/lib/lessons/lesson-routes";
+import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
+import type { LearningCategory, LearningSubcategory } from "@/lib/pathways/pathway-learning-structure";
 
 export type PublicFlashcardTopicRow = { slug: string; name: string };
 /**
@@ -25,6 +26,14 @@ export const PUBLIC_FLASHCARD_LANDING_DB_TIMEOUT_MS = 12_000;
 const PUBLIC_FLASHCARD_DB_TIMEOUT_MS = PUBLIC_FLASHCARD_LANDING_DB_TIMEOUT_MS;
 
 const PRE_NURSING_HUB_PATHWAY_ID = "pre-nursing" as const;
+
+function publicLessonHrefForMarketing(pathwayId: string | null, lessonSlug: string): string | null {
+  const pid = pathwayId?.trim();
+  if (!pid) return null;
+  const pathway = getExamPathwayById(pid);
+  if (!pathway) return null;
+  return marketingPathwayLessonDetailPath(pathway, lessonSlug);
+}
 
 function preNursingCopy(key: string): string | undefined {
   const v = (preNursingStringsEn as Record<string, string>)[key];
@@ -206,7 +215,7 @@ export async function loadPublicFlashcardHub(): Promise<{
       lessonSourceByDeckId.set(row.deckId, { slug, name: lessonNameFromSlug(slug) });
     }
 
-    const decorated = nursingDecks.slice(0, 12).map((d) => {
+    const decorated: PublicFeaturedDeck[] = nursingDecks.slice(0, 12).map((d) => {
       const tags = d.tags.map((entry) => entry.tag);
       const category = classifyPublicFlashcardDeck({
         title: d.title,
@@ -214,7 +223,10 @@ export async function loadPublicFlashcardHub(): Promise<{
         tags,
         pathwayId: d.pathwayId,
       });
-      return {
+      const ls = lessonSourceByDeckId.get(d.id);
+      const href = ls ? publicLessonHrefForMarketing(d.pathwayId, ls.slug) : null;
+      const lessonSource = ls && href ? { slug: ls.slug, name: ls.name, href } : undefined;
+      const row: PublicFeaturedDeck = {
         slug: d.slug,
         title: formatTitleCase(d.title),
         description: d.description,
@@ -224,23 +236,24 @@ export async function loadPublicFlashcardHub(): Promise<{
         categoryId: category.categoryId,
         ...(category.subcategoryId ? { subcategoryId: category.subcategoryId } : {}),
         highYield: category.highYield,
-        ...(lessonSourceByDeckId.get(d.id) ? { lessonSource: lessonSourceByDeckId.get(d.id) } : {}),
-      } satisfies PublicFeaturedDeck;
+      };
+      if (lessonSource) row.lessonSource = lessonSource;
+      return row;
     });
 
     const pathwayIds = [...new Set(decorated.map((deck) => deck.pathwayId ?? "default-nursing"))];
     const categorySections: PublicFlashcardCategorySection[] = pathwayIds.flatMap((pathwayId) => {
       const scopedDecks = decorated.filter((deck) => (deck.pathwayId ?? "default-nursing") === pathwayId);
       return PUBLIC_FLASHCARD_CATEGORIES(pathwayId)
-        .map((category) => {
+        .map((category: LearningCategory) => {
           const categoryDecks = scopedDecks.filter((deck) => deck.categoryId === category.id);
           const subcategories = category.subcategories
-            ?.map((sub) => ({
+            ?.map((sub: LearningSubcategory) => ({
               id: sub.id,
               title: sub.title,
               decks: categoryDecks.filter((deck) => deck.subcategoryId === sub.id),
             }))
-            .filter((sub) => sub.decks.length > 0);
+            .filter((sub: { decks: PublicFeaturedDeck[] }) => sub.decks.length > 0);
           const topDecks = subcategories?.length ? categoryDecks.filter((deck) => !deck.subcategoryId) : categoryDecks;
           return {
             id: `${pathwayId}:${category.id}`,
@@ -250,7 +263,7 @@ export async function loadPublicFlashcardHub(): Promise<{
             ...(subcategories?.length ? { subcategories } : {}),
           };
         })
-        .filter((section) => section.decks.length > 0 || (section.subcategories?.length ?? 0) > 0);
+        .filter((section: PublicFlashcardCategorySection) => section.decks.length > 0 || (section.subcategories?.length ?? 0) > 0);
     });
 
   if (routeDataDiagnosticsEnabled()) {

@@ -83,7 +83,7 @@ export function HomeHeroScreenshotSection() {
         aria-describedby="home-conversion-hero-heading"
         data-testid="home-hero-screenshot-section"
       >
-        <div className="nn-section-shell pb-[var(--nn-rhythm-shell-y)]">{carouselHandoffFallback}</div>
+        <div className="nn-section-shell pb-[var(--nn-rhythm-section-y)]">{carouselHandoffFallback}</div>
       </section>
     );
   }
@@ -100,8 +100,8 @@ export function HomeHeroScreenshotSection() {
       aria-describedby="home-conversion-hero-heading"
       data-testid="home-hero-screenshot-section"
     >
-      <div className="nn-section-shell pb-[var(--nn-rhythm-shell-y)]">
-        <div className="mx-auto mb-5 max-w-2xl text-center md:mb-6">
+      <div className="nn-section-shell pb-[var(--nn-rhythm-section-y)]">
+        <div className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
           <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
             {safeHomepageMarketingT(t, "pages.home.carouselHandoff.kicker", "Practice that feels like the real thing")}
           </p>

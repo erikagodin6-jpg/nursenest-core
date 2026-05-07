@@ -1,6 +1,6 @@
 /**
- * Centralized reads for admin AI + OpenAI API key env.
- * All `AI_ADMIN_GENERATION_ENABLED` / `AI_INTEGRATIONS_OPENAI_API_KEY` / `OPENAI_API_KEY`
+ * Centralized reads for admin AI + AI provider key env.
+ * All `AI_ADMIN_GENERATION_ENABLED` / `AI_PROVIDER` / provider API key
  * access for server logic should go through this module — not scattered `process.env` reads.
  *
  * **No module-level cache:** values are read from `process.env` on every call so the gate
@@ -15,12 +15,16 @@ export type AdminAiOpenAiRuntimeSnapshot = {
   adminAiGenerationFlagParsed: boolean;
   /** Either integrations or legacy key is non-empty after trim. */
   hasOpenAiKey: boolean;
+  /** Active provider has a usable key (OpenRouter when AI_PROVIDER=openrouter, otherwise OpenAI). */
+  hasAiProviderKey: boolean;
   /** Resolved key for outbound calls (integrations preferred). Null if absent. */
   openAiApiKey: string | null;
   /** Raw `process.env.AI_ADMIN_GENERATION_ENABLED` (undefined if unset). */
   rawAiAdminGenerationEnabled: string | undefined;
   aiIntegrationsOpenAiKeyPresent: boolean;
   legacyOpenAiKeyPresent: boolean;
+  openRouterApiKeyPresent: boolean;
+  aiProvider: "openai" | "openrouter" | "gemini";
 };
 
 function readAdminAiEnvString(key: string): string | undefined {
@@ -31,16 +35,26 @@ function buildAdminAiOpenAiRuntimeSnapshot(): AdminAiOpenAiRuntimeSnapshot {
   const rawAiAdminGenerationEnabled = readAdminAiEnvString("AI_ADMIN_GENERATION_ENABLED");
   const integrationsRaw = readAdminAiEnvString("AI_INTEGRATIONS_OPENAI_API_KEY");
   const legacyRaw = readAdminAiEnvString("OPENAI_API_KEY");
+  const openRouterRaw = readAdminAiEnvString("OPENROUTER_API_KEY");
+  const aiProviderRaw = readAdminAiEnvString("AI_PROVIDER")?.trim().toLowerCase();
   const integrations = integrationsRaw?.trim() || null;
   const legacy = legacyRaw?.trim() || null;
+  const openRouter = openRouterRaw?.trim() || null;
   const aiIntegrationsOpenAiKeyPresent = Boolean(integrations);
   const legacyOpenAiKeyPresent = Boolean(legacy);
+  const openRouterApiKeyPresent = Boolean(openRouter);
+  const aiProvider = aiProviderRaw === "openrouter" || aiProviderRaw === "gemini" ? aiProviderRaw : "openai";
+  const hasOpenAiKey = aiIntegrationsOpenAiKeyPresent || legacyOpenAiKeyPresent;
+  const hasAiProviderKey = aiProvider === "openrouter" ? openRouterApiKeyPresent : hasOpenAiKey;
   return {
     rawAiAdminGenerationEnabled,
     adminAiGenerationFlagParsed: parseBooleanEnv(rawAiAdminGenerationEnabled),
     aiIntegrationsOpenAiKeyPresent,
     legacyOpenAiKeyPresent,
-    hasOpenAiKey: aiIntegrationsOpenAiKeyPresent || legacyOpenAiKeyPresent,
+    openRouterApiKeyPresent,
+    aiProvider,
+    hasOpenAiKey,
+    hasAiProviderKey,
     openAiApiKey: integrations || legacy || null,
   };
 }
@@ -61,6 +75,10 @@ export function isAdminAiEnabled(): boolean {
 
 export function hasOpenAiKey(): boolean {
   return getAdminAiOpenAiRuntimeSnapshot().hasOpenAiKey;
+}
+
+export function hasAiProviderKey(): boolean {
+  return getAdminAiOpenAiRuntimeSnapshot().hasAiProviderKey;
 }
 
 export function getOpenAiApiKeyFromRuntimeEnv(): string | null {

@@ -17,8 +17,8 @@ body {
  * Mobile UX (≤768px): iOS safe areas are applied at component level (header, learner shell, drawers).
  * Touch targets: prefer min-h-11 (2.75rem) for primary actions; WCAG 2.5.5 recommends ~44×44 CSS px.
  *
- * Fonts: keep the `--font-dm-sans` variable local so production builds do not fetch remote Google font CSS.
- * The family falls back to any installed DM Sans, then system UI.
+ * Fonts: `next/font` (root `layout.tsx`) sets `--font-dm-sans-next` on `<html>` with a metrics-adjusted fallback.
+ * `--font-sans` chains that first, then named DM Sans / system UI if the variable is absent.
  * Do not add orphan `@font-face { font-display: swap }` rules without `src:` — they are invalid CSS.
  */
 
@@ -35,8 +35,8 @@ body {
  * prevented theme switching from changing page colors.
  */
 :root {
-  --font-dm-sans: "DM Sans", system-ui, sans-serif;
-  --font-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+  --font-dm-sans: var(--font-dm-sans-next, "DM Sans"), system-ui, sans-serif;
+  --font-sans: var(--font-dm-sans);
   --font-devanagari: "Noto Sans Devanagari", "Mangal", "Kohinoor Devanagari", "Nirmala UI", var(--font-sans);
   /* Slightly rounder global radius → calmer cards without “chunky” mobile tiles */
   --radius: 0.8125rem;
@@ -410,11 +410,29 @@ html[data-theme] {
   --nn-rhythm-hero-gap: clamp(0.875rem, 1.8vw, 1.125rem);
   --nn-rhythm-footer-y: clamp(2.25rem, 4vw, 2.875rem);
   --nn-rhythm-shell-y: clamp(1.375rem, 3vw, 2rem);
+  /*
+   * Fixed learner bottom bar (mobile / small tablet): single-row touch target + top/bottom padding + safe area.
+   * Keeps `.nn-learner-app` bottom padding aligned with the actual bar to reduce content jumping when the bar wraps.
+   */
+  --nn-learner-bottom-nav-reserve: calc(
+    0.5rem + max(2.75rem, min(3rem, 11vw)) + max(0.35rem, env(safe-area-inset-bottom, 0px)) + 0.125rem
+  );
   --nn-rhythm-heading-sub: clamp(0.5rem, 1.15vw, 0.75rem);
   --nn-rhythm-text-to-cta: clamp(0.875rem, 1.9vw, 1.375rem);
   --nn-rhythm-btn-group-gap: 0.75rem;
   --nn-rhythm-card-grid-gap: clamp(0.75rem, 1.6vw, 1.125rem);
   --nn-rhythm-mobile-section-y: clamp(1.35rem, 3.6vw, 2.125rem);
+  /* Shared spacing scale (layout + gaps) — pairs with Tailwind where useful */
+  --nn-space-1: 0.25rem;
+  --nn-space-2: 0.5rem;
+  --nn-space-3: 0.75rem;
+  --nn-space-4: 1rem;
+  --nn-space-5: 1.25rem;
+  --nn-space-6: 1.5rem;
+  --nn-space-8: 2rem;
+  /* Restrained learner/marketing titles (optional hooks; existing clamps stay valid) */
+  --nn-text-page-title: clamp(1.35rem, 2.1vw, 1.875rem);
+  --nn-text-section-title: clamp(1.0625rem, 1.35vw, 1.25rem);
   --nn-presentation-wash: var(--bg-section-alt);
   --nn-presentation-panel: var(--theme-card-bg);
   --nn-presentation-badge: var(--bg-section-alt);
@@ -913,6 +931,51 @@ a {
   text-decoration: none;
 }
 
+/* Calm keyboard focus — complements `.nn-ui-btn:focus-visible` and shadcn rings */
+:where(
+    a,
+    button,
+    input:not([type="hidden"]),
+    select,
+    textarea,
+    summary,
+    [role="button"],
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible {
+  outline: 2px solid var(--focus-halo-strong, var(--focus-halo));
+  outline-offset: 2px;
+}
+
+/* Dashboard / hub loading placeholders — semantic surfaces, explicit min-height (CLS) */
+@keyframes nn-skeleton-pulse-soft {
+  50% {
+    opacity: 0.78;
+  }
+}
+.nn-skeleton-block {
+  min-height: var(--nn-skeleton-min, 8rem);
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  animation: nn-skeleton-pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+.nn-skeleton-block--tall {
+  --nn-skeleton-min: 13rem;
+}
+.nn-skeleton-block--short {
+  --nn-skeleton-min: 8rem;
+}
+.nn-skeleton-block--toolbar {
+  --nn-skeleton-min: 6rem;
+  border-radius: 0.75rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nn-skeleton-block {
+    animation: none;
+    opacity: 0.92;
+  }
+}
+
 /*
  * Brand wordmark slots (header / footer / auth / learner / hero).
  * Keep slot + <img> backgrounds fully transparent so true-alpha CDN marks show the
@@ -980,6 +1043,14 @@ a {
   color: var(--theme-card-foreground-readable, var(--theme-body-text));
   /* Single soft stack: hairline rim + calm ambient (tokens follow `[data-theme]` shadows) */
   box-shadow: var(--shadow-card, var(--elevation-rest));
+  transition:
+    border-color var(--motion-base) var(--motion-ease),
+    box-shadow var(--motion-base) var(--motion-ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nn-card {
+    transition: none;
+  }
 }
 
 /**
@@ -10567,8 +10638,130 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   padding-bottom: 1rem;
 }
 .nn-dash--learner-home {
-  gap: clamp(1.25rem, 2.4vw, 2rem);
+  /* SaaS-style vertical rhythm: slightly roomier than legacy compact stacks */
+  gap: clamp(1.35rem, 2.8vw, 2.35rem);
   width: 100%;
+}
+
+/* Learner dashboard hub: mobile-first jump nav + main column (in-page anchors only). */
+.nn-dash-hub-layout {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .nn-dash-hub-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 13.5rem) minmax(0, 1fr);
+    gap: clamp(1.25rem, 2.2vw, 2rem);
+    align-items: start;
+  }
+}
+.nn-dash-hub-nav {
+  position: relative;
+  z-index: 1;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-info));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
+  padding: 0.85rem 0.9rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+@media (min-width: 1024px) {
+  .nn-dash-hub-nav {
+    position: sticky;
+    top: 5.5rem;
+    padding: 1rem 1rem 1.1rem;
+  }
+}
+.nn-dash-hub-nav__heading {
+  margin: 0 0 0.55rem;
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+.nn-dash-hub-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+@media (min-width: 1024px) {
+  .nn-dash-hub-nav__list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0.2rem;
+    max-height: min(70vh, 36rem);
+    overflow: auto;
+    padding-right: 0.15rem;
+  }
+}
+.nn-dash-hub-nav__item {
+  margin: 0;
+}
+.nn-dash-hub-nav__link {
+  display: block;
+  border-radius: 0.65rem;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--semantic-text-secondary);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+.nn-dash-hub-nav__link:hover {
+  color: var(--semantic-text-primary);
+  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-border-soft));
+}
+.nn-dash-hub-nav__link:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--semantic-brand) 42%, transparent);
+  outline-offset: 2px;
+}
+@media (min-width: 1024px) {
+  .nn-dash-hub-nav__link {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.6rem;
+  }
+}
+.nn-dash-hub-main {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.15rem, 2.4vw, 1.85rem);
+}
+
+/* Tight coupling between adjacent bands on the learner hub (reduces “double margin” feel). */
+.nn-dash--learner-home .nn-dash-band--stack-tight + .nn-dash-band--stack-tight {
+  margin-top: calc(var(--nn-rhythm-tight-y, 0.5rem) * -0.35);
+}
+
+/* When dashboard is active, give desktop study nav a calmer “rail” (URLs unchanged). */
+.nn-learner-app:has([data-testid="learner-dashboard-shell"]) .nn-learner-shell-nav-row {
+  padding-block: 0.65rem;
+  padding-inline: 0.65rem;
+}
+@media (min-width: 640px) {
+  .nn-learner-app:has([data-testid="learner-dashboard-shell"]) .nn-learner-shell-nav-row {
+    padding-block: 0.75rem;
+    padding-inline: 0.85rem;
+  }
+}
+
+/* Adaptive RSC block sits inside a band wrapper — avoid nested section shadows fighting */
+.nn-dash--learner-home .nn-dash-band--adaptive .nn-dash-section {
+  box-shadow: none;
+}
+.nn-dash--learner-home .nn-dash-band--adaptive .nn-dash-section.rounded-2xl {
+  border-radius: 1.25rem;
 }
 @media (min-width: 640px) {
   .nn-dash:not(.nn-dash--learner-home) {
@@ -10638,7 +10831,7 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   border-radius: 1.25rem;
   border: 1px solid color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
   background: var(--semantic-surface);
-  box-shadow: 0 1px 2px -1px color-mix(in srgb, var(--semantic-text-primary) 10%, transparent);
+  box-shadow: var(--shadow-card);
 }
 @media (min-width: 640px) {
   .nn-dash-page-header {
@@ -10667,7 +10860,7 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 }
 .nn-dash-page-header__title {
   margin-top: 0.35rem;
-  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  font-size: var(--nn-text-page-title);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -10815,6 +11008,14 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-learner-shell-nav-row {
   position: relative;
   z-index: 1;
+}
+
+/* Horizontal strip for fixed bottom learner nav — stable height, scroll when many destinations */
+.nn-learner-shell-bottom-scroll {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  scroll-padding-inline: 0.25rem;
 }
 
 .nn-dash-hero-shell {

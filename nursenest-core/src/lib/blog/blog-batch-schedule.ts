@@ -529,6 +529,8 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
     safeServerLog("blog_batch_schedule", "skipped_ai_disabled", {
       mode: aiGate.mode,
       flagEnabled: aiGate.flagEnabled,
+      aiProvider: aiGate.aiProvider,
+      aiProviderKeyPresent: aiGate.aiProviderKeyPresent,
       openAiKeyPresent: aiGate.openAiKeyPresent,
     });
     return { processedItems: 0, schedulesTouched: [], errors: [aiGate.summaryLine] };

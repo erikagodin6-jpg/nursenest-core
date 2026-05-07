@@ -37,20 +37,18 @@ export function AdminAiGenerationBanner({
       <p className="font-semibold">{summary}</p>
 
       <p className="mt-2 text-xs opacity-90">
-        Live OpenAI-backed admin tools (blog, lessons, exam questions, flashcards, batch processors) stay disabled until
+        Live AI-backed admin tools (blog, lessons, exam questions, flashcards, batch processors) stay disabled until
         the generation flag is enabled (for example{" "}
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">true</code>,{" "}
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">1</code>,{" "}
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">yes</code>, or{" "}
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">on</code> — case-insensitive) and{" "}
-        <code className="rounded bg-black/10 px-1 dark:bg-white/10">
-          AI_INTEGRATIONS_OPENAI_API_KEY
-        </code>{" "}
-        (or{" "}
-        <code className="rounded bg-black/10 px-1 dark:bg-white/10">
-          OPENAI_API_KEY
-        </code>
-        ) is set. Slot preview and precomputed localized imports may still work without this gate.
+        a funded provider key is set:{" "}
+        <code className="rounded bg-black/10 px-1 dark:bg-white/10">AI_PROVIDER=openrouter</code>{" "}
+        with <code className="rounded bg-black/10 px-1 dark:bg-white/10">OPENROUTER_API_KEY</code>, or OpenAI via{" "}
+        <code className="rounded bg-black/10 px-1 dark:bg-white/10">AI_INTEGRATIONS_OPENAI_API_KEY</code> /{" "}
+        <code className="rounded bg-black/10 px-1 dark:bg-white/10">OPENAI_API_KEY</code>. Slot preview and precomputed
+        localized imports may still work without this gate.
       </p>
     </div>
   );

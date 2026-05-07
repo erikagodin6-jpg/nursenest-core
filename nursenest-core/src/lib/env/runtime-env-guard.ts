@@ -10,13 +10,27 @@
 
 import "server-only";
 
+import { blogChatUsesOpenRouter } from "@/lib/ai/blog-ai-routing";
 import { assertRuntimeDatabaseEnvContract } from "./require-database-env";
 
 const REQUIRED_RUNTIME_ENVS = ["AI_ADMIN_GENERATION_ENABLED"] as const;
 
-const REQUIRED_ONE_OF = [
-  ["AI_INTEGRATIONS_OPENAI_API_KEY", "OPENAI_API_KEY"],
-] as const;
+const OPENAI_KEY_GROUP = ["AI_INTEGRATIONS_OPENAI_API_KEY", "OPENAI_API_KEY"] as const;
+
+function hasTrimmedEnv(key: string): boolean {
+  const v = process.env[key];
+  return Boolean(v && v.trim() !== "");
+}
+
+function hasOpenAiFunding(): boolean {
+  return OPENAI_KEY_GROUP.some((k) => hasTrimmedEnv(k));
+}
+
+/** OpenAI keys, or OpenRouter key when blog/content chat is routed to OpenRouter. */
+function satisfiesAiFundingContract(): boolean {
+  if (hasOpenAiFunding()) return true;
+  return blogChatUsesOpenRouter() && hasTrimmedEnv("OPENROUTER_API_KEY");
+}
 
 function isNextProductionBuildPhase(): boolean {
   return process.env["NEXT_PHASE"] === "phase-production-build";
@@ -41,14 +55,10 @@ function collectMissingRuntimeEnvIssues(): string[] {
     }
   }
 
-  for (const group of REQUIRED_ONE_OF) {
-    const hasOne = group.some((k) => {
-      const val = process.env[k];
-      return Boolean(val && val.trim() !== "");
-    });
-    if (!hasOne) {
-      missing.push(`One of: ${group.join(", ")}`);
-    }
+  if (!satisfiesAiFundingContract()) {
+    missing.push(
+      `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
+    );
   }
 
   return missing;
@@ -67,6 +77,9 @@ export function logRuntimeEnvSnapshot(): void {
     AI_ADMIN_GENERATION_ENABLED_value: process.env["AI_ADMIN_GENERATION_ENABLED"] ?? null,
     AI_INTEGRATIONS_OPENAI_API_KEY_present: Boolean(process.env["AI_INTEGRATIONS_OPENAI_API_KEY"]),
     OPENAI_API_KEY_present: Boolean(process.env["OPENAI_API_KEY"]),
+    OPENROUTER_API_KEY_present: Boolean(process.env["OPENROUTER_API_KEY"]),
+    AI_PROVIDER: process.env["AI_PROVIDER"] ?? null,
+    BLOG_AI_PROVIDER: process.env["BLOG_AI_PROVIDER"] ?? null,
     NN_ENV_VALIDATION_MODE: process.env["NN_ENV_VALIDATION_MODE"] ?? null,
   };
 
@@ -96,7 +109,7 @@ export function validateRuntimeEnvOrThrow(): void {
   }
 
   const presentKeys = Object.keys(process.env).filter(
-    (k) => k.includes("AI_") || k.includes("OPENAI"),
+    (k) => k.includes("AI_") || k.includes("OPENAI") || k.includes("OPENROUTER"),
   );
 
   console.error("[ENV VALIDATION ERROR]", {

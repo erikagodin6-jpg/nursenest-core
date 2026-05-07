@@ -2,16 +2,23 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   getAdminAiOpenAiRuntimeSnapshot,
+  hasAiProviderKey,
   hasOpenAiKey,
   isAdminAiEnabled,
   resetRuntimeEnvSnapshotForTests,
 } from "@/lib/env/runtime-env";
 
 function withEnv<T>(patch: Record<string, string | undefined>, fn: () => T): T {
+  const effectivePatch = {
+    AI_PROVIDER: undefined,
+    BLOG_AI_PROVIDER: undefined,
+    OPENROUTER_API_KEY: undefined,
+    ...patch,
+  };
   const prev: Record<string, string | undefined> = {};
-  for (const k of Object.keys(patch)) {
+  for (const k of Object.keys(effectivePatch)) {
     prev[k] = process.env[k];
-    const v = patch[k];
+    const v = effectivePatch[k];
     if (v === undefined) delete process.env[k];
     else process.env[k] = v;
   }
@@ -19,7 +26,7 @@ function withEnv<T>(patch: Record<string, string | undefined>, fn: () => T): T {
     resetRuntimeEnvSnapshotForTests();
     return fn();
   } finally {
-    for (const k of Object.keys(patch)) {
+    for (const k of Object.keys(effectivePatch)) {
       const old = prev[k];
       if (old === undefined) delete process.env[k];
       else process.env[k] = old;
@@ -49,10 +56,32 @@ test("runtime env: missing keys", () => {
       AI_ADMIN_GENERATION_ENABLED: "true",
       AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
       OPENAI_API_KEY: undefined,
+      OPENROUTER_API_KEY: undefined,
+      AI_PROVIDER: undefined,
     },
     () => {
       assert.equal(hasOpenAiKey(), false);
+      assert.equal(hasAiProviderKey(), false);
       assert.equal(getAdminAiOpenAiRuntimeSnapshot().openAiApiKey, null);
+    },
+  );
+});
+
+test("runtime env: OpenRouter provider key satisfies selected provider", () => {
+  withEnv(
+    {
+      AI_PROVIDER: "openrouter",
+      OPENROUTER_API_KEY: "or-test",
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+      OPENAI_API_KEY: undefined,
+    },
+    () => {
+      const s = getAdminAiOpenAiRuntimeSnapshot();
+      assert.equal(hasOpenAiKey(), false);
+      assert.equal(hasAiProviderKey(), true);
+      assert.equal(s.aiProvider, "openrouter");
+      assert.equal(s.openRouterApiKeyPresent, true);
+      assert.equal(s.hasAiProviderKey, true);
     },
   );
 });

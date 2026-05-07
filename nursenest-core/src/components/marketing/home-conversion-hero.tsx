@@ -12,7 +12,6 @@ import {
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 
 function safeLocale(locale?: string) {
   return locale || "en";
@@ -45,17 +44,12 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
     region = safeRegion(useNursenestRegion().region);
   } catch {}
 
-  let isMobile = false;
-  try {
-    isMobile = useMarketingMobilePerfIsMobile() === true;
-  } catch {}
-
   const q = props.questionCount ?? 0;
   const lessons = props.lessonCount ?? 0;
 
   return (
     <section className="nn-hero-bridge nn-home-marketing-rich-hero border-b border-[var(--header-nav-border)]">
-      <div className="mx-auto max-w-6xl px-4 py-12 md:py-14">
+      <div className="mx-auto max-w-6xl px-4 py-[var(--nn-rhythm-page-y)] sm:px-6 md:py-[var(--nn-rhythm-section-y)] lg:px-8">
         <h1
           id="home-conversion-hero-heading"
           className="nn-marketing-h1 max-w-[22ch] text-[var(--palette-heading)]"
@@ -66,7 +60,7 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
           )}
         </h1>
 
-        <p className="mt-3 text-[var(--palette-text-muted)]">
+        <p className="nn-marketing-body mt-[var(--nn-rhythm-heading-sub)] max-w-2xl text-pretty text-[var(--palette-text-muted)]">
           {formatSentenceCase(
             safeHomepageMarketingT(
               t,
@@ -77,7 +71,7 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
           )}
         </p>
 
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-[var(--nn-rhythm-text-to-cta)] flex flex-wrap gap-[var(--nn-rhythm-btn-group-gap)]">
           <MarketingTrackedLink
             href={safePath(locale, HUB.questionBank)}
             event={PH.marketingHomeHeroPrimaryCta}
@@ -104,13 +98,13 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
           </MarketingTrackedLink>
         </div>
 
-        <p className="mt-4 text-sm text-[var(--palette-text-muted)]">
+        <p className="nn-marketing-body-sm mt-4 text-[var(--palette-text-muted)]">
           {q > 0 || lessons > 0
             ? `${q || ""} questions · ${lessons || ""} lessons`
             : safeHomepageMarketingT(t, "pages.home.hero.statsFallback", "Updated regularly")}
         </p>
 
-        <p className="mt-2 flex items-center gap-2 text-sm text-[var(--palette-text-muted)]">
+        <p className="nn-marketing-body-sm mt-2 flex items-center gap-2 text-[var(--palette-text-muted)]">
           <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
           {safeHomepageMarketingT(t, "pages.home.hero.noCreditCard", "No credit card required")}
         </p>

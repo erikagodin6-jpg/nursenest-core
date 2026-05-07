@@ -1,14 +1,10 @@
-import {
-  blogOpenRouterChatCompletion,
-  getEffectiveBlogAiProvider,
-  getBlogAiChatModel,
-} from "@/lib/ai/blog-ai-provider";
-import {
-  getBlogOpenAiApiKey,
-  getOpenAiApiKey,
-  getOpenAiBaseUrl,
-  getOpenAiChatModel,
-} from "@/lib/ai/openai-env";
+import { blogAiChatCompletion, openRouterChatCompletion } from "@/lib/ai/blog-ai-provider";
+import type { ChatCompletionResult } from "@/lib/ai/openai-chat-types";
+import { getAiChatProvider, getBlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
+import { appendOpenRouterHintIfQuotaError } from "@/lib/ai/openai-quota-hint";
+import { getOpenAiApiKey, getOpenAiBaseUrl, getOpenAiChatModel } from "@/lib/ai/openai-env";
+
+export type { ChatCompletionResult } from "@/lib/ai/openai-chat-types";
 
 function resolveChatModel(explicit?: string): string {
   const t = explicit?.trim();
@@ -17,11 +13,6 @@ function resolveChatModel(explicit?: string): string {
 }
 
 type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
-
-export type ChatCompletionResult = {
-  content: string;
-  totalTokens?: number;
-};
 
 /**
  * OpenAI-compatible chat completions via fetch (no `openai` SDK — keeps server deps minimal).
@@ -39,37 +30,46 @@ export async function openAiChatCompletion(params: {
   model?: string;
   /**
    * When true, resolve API key with {@link getBlogOpenAiApiKey} (`BLOG_OPENAI_API_KEY` first), unless
-   * `BLOG_AI_PROVIDER=openrouter` (then {@link OPENROUTER_API_KEY} via OpenRouter-compatible SDK).
+   * `AI_PROVIDER=openrouter` or `BLOG_AI_PROVIDER=openrouter` (then {@link OPENROUTER_API_KEY} via OpenRouter-compatible SDK).
    * Blog pipelines should set this; other callers use shared {@link getOpenAiApiKey}.
    */
   useBlogOpenAiApiKey?: boolean;
 }): Promise<ChatCompletionResult> {
   if (params.useBlogOpenAiApiKey) {
-    const provider = getEffectiveBlogAiProvider();
+    const provider = getBlogAiChatProvider();
     if (provider === "gemini") {
       throw new Error(
-        "BLOG_AI_PROVIDER=gemini is not supported for OpenAI-compatible blog chat; set BLOG_AI_PROVIDER=openai|openrouter or use the admin Gemini draft endpoint.",
+        "BLOG_AI_PROVIDER=gemini is not supported for OpenAI-compatible blog chat; set AI_PROVIDER=openrouter, BLOG_AI_PROVIDER=openai|openrouter, or use the admin Gemini draft endpoint.",
       );
     }
-    if (provider === "openrouter") {
-      const model = params.model?.trim() ? params.model.trim() : getBlogAiChatModel();
-      return blogOpenRouterChatCompletion({
-        messages: params.messages,
-        temperature: params.temperature,
-        maxTokens: params.maxTokens,
-        model,
-        user: params.user,
-      });
-    }
+    return blogAiChatCompletion({
+      messages: params.messages,
+      temperature: params.temperature,
+      maxTokens: params.maxTokens,
+      user: params.user,
+      model: params.model,
+    });
   }
 
-  const key = params.useBlogOpenAiApiKey ? getBlogOpenAiApiKey() : getOpenAiApiKey();
-  if (!key) {
+  const provider = getAiChatProvider();
+  if (provider === "gemini") {
     throw new Error(
-      params.useBlogOpenAiApiKey
-        ? "Missing BLOG_OPENAI_API_KEY (or AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY)"
-        : "Missing AI_INTEGRATIONS_OPENAI_API_KEY (or OPENAI_API_KEY)",
+      "AI_PROVIDER=gemini is not supported for OpenAI-compatible chat completions; use Gemini-specific draft helpers or set AI_PROVIDER=openai|openrouter.",
     );
+  }
+  if (provider === "openrouter") {
+    return openRouterChatCompletion({
+      messages: params.messages,
+      temperature: params.temperature,
+      maxTokens: params.maxTokens,
+      user: params.user,
+      model: params.model,
+    });
+  }
+
+  const key = getOpenAiApiKey();
+  if (!key) {
+    throw new Error("Missing AI_INTEGRATIONS_OPENAI_API_KEY (or OPENAI_API_KEY)");
   }
 
   const base = getOpenAiBaseUrl().replace(/\/$/, "");
@@ -94,7 +94,9 @@ export async function openAiChatCompletion(params: {
   const rawText = await res.text();
   if (!res.ok) {
     const snippet = rawText.slice(0, 500);
-    throw new Error(`OpenAI HTTP ${res.status}${snippet ? `: ${snippet}` : ""}`);
+    throw appendOpenRouterHintIfQuotaError(
+      new Error(`OpenAI HTTP ${res.status}${snippet ? `: ${snippet}` : ""}`),
+    );
   }
 
   let data: unknown;

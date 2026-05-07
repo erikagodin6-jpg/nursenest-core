@@ -622,7 +622,7 @@ Growth, funnel analysis, optional server-side funnel events.
 
 ---
 
-## 11. AI providers (OpenAI, Gemini)
+## 11. AI providers (OpenRouter, OpenAI, Gemini)
 
 ### What it does
 
@@ -630,14 +630,19 @@ Optional admin generation, study coach, and related features when keys and featu
 
 ### Where initialized
 
-- `src/lib/ai/openai-env.ts` — resolves OpenAI key/base URL/model envs.
-- Various `src/app/api/admin/**` and learner AI routes (grep `OPENAI_API_KEY`, `GEMINI_API_KEY`).
+- `src/lib/ai/blog-ai-routing.ts` — resolves `AI_PROVIDER` / `BLOG_AI_PROVIDER`.
+- `src/lib/ai/openai-env.ts` — resolves provider key/base URL/model envs.
+- Various `src/app/api/admin/**` and learner AI routes (grep `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `GEMINI_API_KEY`).
 
 ### Required env vars
 
 | Variable | Role |
 |----------|------|
-| `OPENAI_API_KEY` or `AI_INTEGRATIONS_OPENAI_API_KEY` | OpenAI. |
+| `AI_PROVIDER=openrouter` | Routes shared OpenAI-compatible admin/content calls through OpenRouter. |
+| `OPENROUTER_API_KEY` | OpenRouter key used when `AI_PROVIDER=openrouter`. |
+| `OPENROUTER_MODEL` | OpenRouter model slug, for example `openai/gpt-4o-mini`. |
+| `BLOG_AI_PROVIDER=openrouter` | Optional blog-only override; `AI_PROVIDER=openrouter` is preferred for all content generation. |
+| `OPENAI_API_KEY` or `AI_INTEGRATIONS_OPENAI_API_KEY` | Optional OpenAI fallback when `AI_PROVIDER` is unset or `openai`. |
 | `OPENAI_BASE_URL` / `AI_INTEGRATIONS_OPENAI_BASE_URL` | Optional non-default API base. |
 | `AI_OPENAI_MODEL`, `AI_ADMIN_MODEL`, `AI_ADMIN_GENERATION_ENABLED`, etc. | Feature gating (see `.env.example`). |
 | `GEMINI_API_KEY`, `GEMINI_MODEL` | Google Gemini where implemented. |
@@ -652,7 +657,7 @@ Runtime secrets on components that run admin/AI routes.
 
 ### Dashboard / outside repo
 
-- **OpenAI / Google AI Studio:** keys, usage limits, billing alerts.
+- **OpenRouter / OpenAI / Google AI Studio:** keys, usage limits, billing alerts.
 
 ### Webhooks
 

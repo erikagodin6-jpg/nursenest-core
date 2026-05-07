@@ -16,6 +16,8 @@ const enabledGate: AdminAiGenerationGate = {
   mode: "enabled",
   runnable: true,
   flagEnabled: true,
+  aiProvider: "openai",
+  aiProviderKeyPresent: true,
   openAiKeyPresent: true,
   summaryLine: "AI generation enabled",
   diagnostics: {
@@ -23,6 +25,8 @@ const enabledGate: AdminAiGenerationGate = {
     aiAdminGenerationFlagClass: "enabled",
     aiIntegrationsOpenAiKeyPresent: true,
     legacyOpenAiKeyPresent: true,
+    openRouterApiKeyPresent: false,
+    aiProvider: "openai",
     adminAiGenerationFlagNormalized: true,
   },
 };

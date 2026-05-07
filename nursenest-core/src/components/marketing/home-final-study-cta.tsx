@@ -53,15 +53,15 @@ export function HomeFinalStudyCta() {
 
   return (
     <section
-      className="border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)] py-12"
+      className="border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)] py-[var(--nn-rhythm-section-y)]"
       aria-labelledby="home-final-cta-heading"
     >
-      <div className="mx-auto max-w-2xl text-center px-4">
-        <h2 className="text-2xl font-bold">
+      <div className="mx-auto max-w-2xl px-4 text-center sm:px-6">
+        <h2 className="nn-marketing-h2 text-balance">
           {safeHomepageMarketingT(t, "pages.home.finalCta.headline", "Start preparing with confidence")}
         </h2>
 
-        <p className="mt-3 text-[var(--theme-muted-text)]">
+        <p className="nn-marketing-body mt-3 max-w-xl text-pretty text-[var(--theme-muted-text)] mx-auto">
           {safeHomepageMarketingT(
             t,
             "pages.home.finalCta.subheading",
@@ -78,7 +78,7 @@ export function HomeFinalStudyCta() {
           ))}
         </ul>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+        <div className="mt-8 flex flex-col gap-[var(--nn-rhythm-btn-group-gap)] sm:flex-row sm:justify-center">
           <MarketingTrackedLink
             href={loc(HUB.questionBank)}
             event={PH.marketingHomeFinalCta}
@@ -99,7 +99,7 @@ export function HomeFinalStudyCta() {
           </MarketingTrackedLink>
         </div>
 
-        <p className="mt-6 text-sm text-[var(--theme-muted-text)]">
+        <p className="nn-marketing-body-sm mt-6 text-[var(--theme-muted-text)]">
           {safeHomepageMarketingT(t, "pages.home.finalCta.pricingLead", "See full pricing")}{" "}
           <MarketingTrackedLink
             href={loc(HUB.pricing)}

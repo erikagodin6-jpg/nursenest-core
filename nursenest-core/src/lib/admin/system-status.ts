@@ -392,6 +392,7 @@ async function probeConfigSanity(): Promise<SystemCheckResult> {
       Boolean(process.env.AUTH_SECRET?.trim()) || Boolean(process.env.NEXTAUTH_SECRET?.trim());
     const authUrlPresent = Boolean(process.env.AUTH_URL?.trim() || process.env.NEXTAUTH_URL?.trim());
     const openaiKeyPresent = Boolean(getBlogOpenAiApiKey());
+    const openrouterKeyPresent = Boolean(process.env.OPENROUTER_API_KEY?.trim());
     const stripeSecretPresent = Boolean(process.env.STRIPE_SECRET_KEY?.trim());
     const stripeWebhookPresent = Boolean(process.env.STRIPE_WEBHOOK_SECRET?.trim());
     const spacesCredsPresent =
@@ -428,6 +429,7 @@ async function probeConfigSanity(): Promise<SystemCheckResult> {
       authSecretPresent: authSecret,
       authUrlPresent,
       openaiIntegrationKeyPresent: openaiKeyPresent,
+      openrouterKeyPresent,
       stripeSecretPresent,
       stripeWebhookSecretPresent: stripeWebhookPresent,
       spacesCredentialsPresent: spacesCredsPresent,
@@ -462,7 +464,7 @@ async function probeConfigSanity(): Promise<SystemCheckResult> {
       "Auth & config sanity",
       ms,
       "failed",
-      "AI_ADMIN_GENERATION_ENABLED but OpenAI API key is not set (AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY).",
+      "AI_ADMIN_GENERATION_ENABLED but the selected AI provider is not funded/configured.",
       value,
     );
   }

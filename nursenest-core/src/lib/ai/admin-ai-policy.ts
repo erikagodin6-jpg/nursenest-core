@@ -1,8 +1,8 @@
 /**
- * Admin AI batch tools — opt-in kill switch + OpenAI key requirement (server-only).
+ * Admin AI batch tools — opt-in kill switch + AI provider key requirement (server-only).
  *
  * - `AI_ADMIN_GENERATION_ENABLED` — truthy when set to true/1/yes/on (case-insensitive, trimmed).
- * - `AI_INTEGRATIONS_OPENAI_API_KEY` or `OPENAI_API_KEY` — required when enabled.
+ * - `OPENROUTER_API_KEY` when `AI_PROVIDER=openrouter`, otherwise `AI_INTEGRATIONS_OPENAI_API_KEY` or `OPENAI_API_KEY`.
  *
  * Env reads are centralized in `@/lib/env/runtime-env` (fresh `process.env` each evaluation — no
  * stale module cache). `getAdminAiGenerationGate` calls `validateRuntimeEnvOrThrow()` from
@@ -26,9 +26,11 @@ export type AdminAiGenerationFlagClass = "unset" | "empty" | "enabled" | "disabl
 /** Serializable gate for admin layout + client islands (no secrets). */
 export type AdminAiGenerationGate = {
   mode: AdminAiGenerationMode;
-  /** True only when the env flag is true and an OpenAI API key is configured. */
+  /** True only when the env flag is true and the selected provider has an API key configured. */
   runnable: boolean;
   flagEnabled: boolean;
+  aiProvider: "openai" | "openrouter" | "gemini";
+  aiProviderKeyPresent: boolean;
   openAiKeyPresent: boolean;
   /** Short admin-facing explanation (safe to show in UI). */
   summaryLine: string;
@@ -38,6 +40,8 @@ export type AdminAiGenerationGate = {
     aiAdminGenerationFlagClass: AdminAiGenerationFlagClass;
     aiIntegrationsOpenAiKeyPresent: boolean;
     legacyOpenAiKeyPresent: boolean;
+    openRouterApiKeyPresent: boolean;
+    aiProvider: "openai" | "openrouter" | "gemini";
     /** Parsed boolean from flag after trim/case rules (for boot logs). */
     adminAiGenerationFlagNormalized: boolean;
   };
@@ -57,6 +61,8 @@ function maybeLogVerboseAdminAiGateSnapshotOnce(gate: AdminAiGenerationGate): vo
     AI_ADMIN_GENERATION_ENABLED_normalized: gate.diagnostics.adminAiGenerationFlagNormalized,
     AI_INTEGRATIONS_OPENAI_API_KEY_present: gate.diagnostics.aiIntegrationsOpenAiKeyPresent,
     OPENAI_API_KEY_present: gate.diagnostics.legacyOpenAiKeyPresent,
+    OPENROUTER_API_KEY_present: gate.diagnostics.openRouterApiKeyPresent,
+    AI_PROVIDER: gate.diagnostics.aiProvider,
     final_gate_runnable: gate.runnable,
     final_gate_mode: gate.mode,
   });
@@ -87,8 +93,14 @@ function disabledFlagSummaryLine(flagClass: AdminAiGenerationFlagClass): string 
   }
 }
 
-function misconfiguredSummaryLine(): string {
-  return "AI generation disabled: no OpenAI API key configured (set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY on this server process).";
+function misconfiguredSummaryLine(provider: "openai" | "openrouter" | "gemini"): string {
+  if (provider === "openrouter") {
+    return "AI generation disabled: AI_PROVIDER=openrouter but OPENROUTER_API_KEY is not configured on this server process.";
+  }
+  if (provider === "gemini") {
+    return "AI generation disabled: AI_PROVIDER=gemini is not supported by the shared OpenAI-compatible admin generation routes; use Gemini-specific tools or set AI_PROVIDER=openai|openrouter.";
+  }
+  return "AI generation disabled: no funded AI provider key configured (set AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or set AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY).";
 }
 
 export function isAdminAiGenerationEnabled(): boolean {
@@ -105,6 +117,7 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
   const rawFlag = snap.rawAiAdminGenerationEnabled;
   const flagClass = classifyAdminGenerationFlag(rawFlag);
   const flagEnabled = flagClass === "enabled";
+  const aiProviderKeyPresent = snap.hasAiProviderKey;
   const openAiKeyPresent = snap.hasOpenAiKey;
 
   const diagnostics: AdminAiGenerationGate["diagnostics"] = {
@@ -112,6 +125,8 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
     aiAdminGenerationFlagClass: flagClass,
     aiIntegrationsOpenAiKeyPresent: snap.aiIntegrationsOpenAiKeyPresent,
     legacyOpenAiKeyPresent: snap.legacyOpenAiKeyPresent,
+    openRouterApiKeyPresent: snap.openRouterApiKeyPresent,
+    aiProvider: snap.aiProvider,
     adminAiGenerationFlagNormalized: snap.adminAiGenerationFlagParsed,
   };
 
@@ -122,17 +137,21 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
       mode: "disabled",
       runnable: false,
       flagEnabled: false,
+      aiProvider: snap.aiProvider,
+      aiProviderKeyPresent,
       openAiKeyPresent,
       summaryLine: disabledFlagSummaryLine(flagClass),
       diagnostics,
     };
-  } else if (!openAiKeyPresent) {
+  } else if (!aiProviderKeyPresent || snap.aiProvider === "gemini") {
     gate = {
       mode: "misconfigured",
       runnable: false,
       flagEnabled: true,
-      openAiKeyPresent: false,
-      summaryLine: misconfiguredSummaryLine(),
+      aiProvider: snap.aiProvider,
+      aiProviderKeyPresent: false,
+      openAiKeyPresent,
+      summaryLine: misconfiguredSummaryLine(snap.aiProvider),
       diagnostics,
     };
   } else {
@@ -140,7 +159,9 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
       mode: "enabled",
       runnable: true,
       flagEnabled: true,
-      openAiKeyPresent: true,
+      aiProvider: snap.aiProvider,
+      aiProviderKeyPresent: true,
+      openAiKeyPresent,
       summaryLine: "AI generation enabled",
       diagnostics,
     };
@@ -175,7 +196,7 @@ export function adminAiGenerationHttpBlock(): NextResponse | null {
       : "AI admin generation is misconfigured.";
   const hint =
     gate.mode === "disabled"
-      ? "Enable AI_ADMIN_GENERATION_ENABLED (true, 1, yes, or on) and set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY."
+      ? "Enable AI_ADMIN_GENERATION_ENABLED (true, 1, yes, or on) and configure a funded provider: AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or OpenAI with AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY."
       : gate.summaryLine;
 
   return NextResponse.json({ error, code, hint, mode: gate.mode }, { status });

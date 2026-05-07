@@ -106,13 +106,13 @@ function LearnerDashboardBodyFallback() {
     <>
       <section className="nn-dash-band" aria-hidden>
         <div className="grid gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]">
-          <div className="min-h-[13rem] animate-pulse rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]" />
-          <div className="min-h-[13rem] animate-pulse rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]" />
+          <div className="nn-skeleton-block nn-skeleton-block--tall rounded-2xl" />
+          <div className="nn-skeleton-block nn-skeleton-block--tall rounded-2xl" />
         </div>
       </section>
 
       <section className="nn-dash-band" aria-hidden>
-        <div className="min-h-[8rem] animate-pulse rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]" />
+        <div className="nn-skeleton-block nn-skeleton-block--short rounded-2xl" />
       </section>
     </>
   );
@@ -329,8 +329,12 @@ async function LearnerDashboardHeavyContent({
             entitlement={entitlement}
             adaptiveStudyNextRecs={adaptiveStudyNextRecs}
             reportCard={reportCard}
+            adaptiveRecommendations={
+              adaptiveWireBundle ? (
+                <LearnerAdaptiveRecommendationsSection t={t} bundle={adaptiveWireBundle} />
+              ) : null
+            }
           />
-          <LearnerAdaptiveRecommendationsSection t={t} bundle={adaptiveWireBundle} />
         </>
       );
     }

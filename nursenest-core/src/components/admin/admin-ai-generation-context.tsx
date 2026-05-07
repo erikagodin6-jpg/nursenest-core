@@ -8,12 +8,16 @@ const FALLBACK_ADMIN_AI_GENERATION_GATE: AdminAiGenerationGate = {
   mode: "misconfigured",
   summaryLine: "AI generation is unavailable because the admin AI generation context was not loaded.",
   flagEnabled: false,
+  aiProvider: "openai",
+  aiProviderKeyPresent: false,
   openAiKeyPresent: false,
   diagnostics: {
     aiAdminGenerationEnvPresent: false,
     aiAdminGenerationFlagClass: "unset",
     aiIntegrationsOpenAiKeyPresent: false,
     legacyOpenAiKeyPresent: false,
+    openRouterApiKeyPresent: false,
+    aiProvider: "openai",
     adminAiGenerationFlagNormalized: false,
   },
 };

@@ -184,7 +184,7 @@ export function AdminAiLessonGeneratorClient() {
           <code className="rounded bg-muted px-1">ContentItem</code> lesson (still DRAFT).
         </p>
         <p className="mt-2 text-xs text-muted-foreground">
-          Requires <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and OpenAI credentials.
+          Requires <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and funded AI provider credentials.
         </p>
       </div>
 

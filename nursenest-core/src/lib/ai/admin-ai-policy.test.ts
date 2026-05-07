@@ -11,10 +11,17 @@ import { parseBooleanEnv } from "@/lib/env/parse-boolean-env";
 import { resetRuntimeEnvSnapshotForTests } from "@/lib/env/runtime-env";
 
 function withEnv<T>(patch: Record<string, string | undefined>, fn: () => T): T {
+  const effectivePatch = {
+    AI_PROVIDER: undefined,
+    BLOG_AI_PROVIDER: undefined,
+    OPENROUTER_API_KEY: undefined,
+    NN_ENV_VALIDATION_MODE: "off",
+    ...patch,
+  };
   const prev: Record<string, string | undefined> = {};
-  for (const k of Object.keys(patch)) {
+  for (const k of Object.keys(effectivePatch)) {
     prev[k] = process.env[k];
-    const v = patch[k];
+    const v = effectivePatch[k];
     if (v === undefined) delete process.env[k];
     else process.env[k] = v;
   }
@@ -22,7 +29,7 @@ function withEnv<T>(patch: Record<string, string | undefined>, fn: () => T): T {
     resetRuntimeEnvSnapshotForTests();
     return fn();
   } finally {
-    for (const k of Object.keys(patch)) {
+    for (const k of Object.keys(effectivePatch)) {
       const old = prev[k];
       if (old === undefined) delete process.env[k];
       else process.env[k] = old;
@@ -78,15 +85,24 @@ test("getAdminAiGenerationGate: disabled when flag unrecognized", () => {
 });
 
 test("getAdminAiGenerationGate: misconfigured when flag on but no key", () => {
-  withEnv({ AI_ADMIN_GENERATION_ENABLED: "true", AI_INTEGRATIONS_OPENAI_API_KEY: undefined, OPENAI_API_KEY: undefined }, () => {
-    const g = getAdminAiGenerationGate();
-    assert.equal(g.mode, "misconfigured");
-    assert.equal(g.runnable, false);
-    assert.equal(
-      g.summaryLine,
-      "AI generation disabled: no OpenAI API key configured (set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY on this server process).",
-    );
-  });
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: "true",
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+      OPENAI_API_KEY: undefined,
+      OPENROUTER_API_KEY: undefined,
+      AI_PROVIDER: undefined,
+    },
+    () => {
+      const g = getAdminAiGenerationGate();
+      assert.equal(g.mode, "misconfigured");
+      assert.equal(g.runnable, false);
+      assert.equal(
+        g.summaryLine,
+        "AI generation disabled: no funded AI provider key configured (set AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or set AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY).",
+      );
+    },
+  );
 });
 
 test("getAdminAiGenerationGate: enabled when flag on and OPENAI_API_KEY set", () => {
@@ -108,6 +124,45 @@ test("getAdminAiGenerationGate: enabled when flag is numeric 1 and key set", () 
   });
 });
 
+test("getAdminAiGenerationGate: enabled when AI_PROVIDER=openrouter and OPENROUTER_API_KEY set", () => {
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: "true",
+      AI_PROVIDER: "openrouter",
+      OPENROUTER_API_KEY: "or-test",
+      OPENAI_API_KEY: undefined,
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+    },
+    () => {
+      const g = getAdminAiGenerationGate();
+      assert.equal(g.mode, "enabled");
+      assert.equal(g.runnable, true);
+      assert.equal(g.aiProvider, "openrouter");
+      assert.equal(g.aiProviderKeyPresent, true);
+      assert.equal(g.openAiKeyPresent, false);
+      assert.equal(g.diagnostics.openRouterApiKeyPresent, true);
+    },
+  );
+});
+
+test("getAdminAiGenerationGate: misconfigured when AI_PROVIDER=openrouter lacks OPENROUTER_API_KEY", () => {
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: "true",
+      AI_PROVIDER: "openrouter",
+      OPENROUTER_API_KEY: undefined,
+      OPENAI_API_KEY: undefined,
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+    },
+    () => {
+      const g = getAdminAiGenerationGate();
+      assert.equal(g.mode, "misconfigured");
+      assert.equal(g.runnable, false);
+      assert.match(g.summaryLine, /OPENROUTER_API_KEY/);
+    },
+  );
+});
+
 test("adminAiGenerationHttpBlock returns 403 JSON when disabled", () => {
   withEnv({ AI_ADMIN_GENERATION_ENABLED: undefined }, () => {
     const res = adminAiGenerationHttpBlock();
@@ -117,11 +172,20 @@ test("adminAiGenerationHttpBlock returns 403 JSON when disabled", () => {
 });
 
 test("adminAiGenerationHttpBlock returns 503 when misconfigured (flag on, no key)", () => {
-  withEnv({ AI_ADMIN_GENERATION_ENABLED: "true", OPENAI_API_KEY: undefined, AI_INTEGRATIONS_OPENAI_API_KEY: undefined }, () => {
-    const res = adminAiGenerationHttpBlock();
-    assert.ok(res);
-    assert.equal(res.status, 503);
-  });
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: "true",
+      OPENAI_API_KEY: undefined,
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+      OPENROUTER_API_KEY: undefined,
+      AI_PROVIDER: undefined,
+    },
+    () => {
+      const res = adminAiGenerationHttpBlock();
+      assert.ok(res);
+      assert.equal(res.status, 503);
+    },
+  );
 });
 
 test("adminAiGenerationHttpBlock returns null when runnable", () => {

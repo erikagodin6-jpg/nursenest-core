@@ -636,9 +636,9 @@ export default async function LessonsPage({ searchParams }: Props) {
         : null;
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6 sm:space-y-8">
       <div className="nn-learner-page-hero">
-        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)] sm:text-[1.7rem]">
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.7rem]">
           {t("learner.lessons.list.title")}
         </h1>
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.lessons.list.subscriberIntro")}</p>
@@ -646,7 +646,9 @@ export default async function LessonsPage({ searchParams }: Props) {
 
       {lessonsHubInventorySource === "degraded_snapshot" ? <LearnerStudyLiveSyncBanner /> : null}
 
-      <Suspense fallback={<div className="h-24 animate-pulse rounded-xl bg-[var(--semantic-panel-muted)]" />}>
+      <Suspense
+        fallback={<div className="nn-skeleton-block nn-skeleton-block--toolbar w-full max-w-3xl" aria-hidden />}
+      >
         <LearnerLessonsSearchToolbar initialQ={qEffective ?? ""} label="Search lessons" placeholder="Search by title, topic, or keyword" />
       </Suspense>
 

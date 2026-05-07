@@ -8,8 +8,12 @@ import {
   assertOpenAiKeyConfigured,
   getBlogOpenAiApiKey,
   getBlogOpenAiChatModel,
+  getBlogOpenRouterChatModel,
   getLessonOpenAiChatModel,
+  getOpenRouterChatModel,
   OPENAI_DEFAULT_BLOG_LESSON_MODEL,
+  OPENROUTER_DEFAULT_BLOG_MODEL,
+  OPENROUTER_DEFAULT_CHAT_MODEL,
 } from "@/lib/ai/openai-env";
 
 const KEYS = [
@@ -19,6 +23,10 @@ const KEYS = [
   "BLOG_OPENAI_API_KEY",
   "AI_INTEGRATIONS_OPENAI_API_KEY",
   "OPENAI_API_KEY",
+  "AI_PROVIDER",
+  "BLOG_AI_PROVIDER",
+  "OPENROUTER_API_KEY",
+  "OPENROUTER_MODEL",
 ] as const;
 
 function snapshotEnv(): Record<string, string | undefined> {
@@ -35,6 +43,13 @@ function restoreEnv(prev: Record<string, string | undefined>): void {
   }
 }
 
+function clearProviderSelectionEnv(): void {
+  delete process.env.AI_PROVIDER;
+  delete process.env.BLOG_AI_PROVIDER;
+  delete process.env.OPENROUTER_API_KEY;
+  delete process.env.OPENROUTER_MODEL;
+}
+
 describe("OPENAI_DEFAULT_BLOG_LESSON_MODEL", () => {
   it("matches gpt-4.1-mini fallback for blog and lesson pipelines", () => {
     assert.equal(OPENAI_DEFAULT_BLOG_LESSON_MODEL, "gpt-4.1-mini");
@@ -45,6 +60,7 @@ describe("getBlogOpenAiApiKey + assertOpenAiKeyConfigured", () => {
   let saved: Record<string, string | undefined>;
   beforeEach(() => {
     saved = snapshotEnv();
+    clearProviderSelectionEnv();
   });
   afterEach(() => {
     restoreEnv(saved);
@@ -72,12 +88,34 @@ describe("getBlogOpenAiApiKey + assertOpenAiKeyConfigured", () => {
     process.env.AI_INTEGRATIONS_OPENAI_API_KEY = ["m", "o", "c", "k", "-", "i", "n", "t"].join("");
     assert.equal(assertOpenAiKeyConfigured({ pipeline: "blog" }).ok, true);
   });
+
+  it("assertOpenAiKeyConfigured({ pipeline: 'blog' }) accepts OpenRouter when selected", () => {
+    delete process.env.BLOG_OPENAI_API_KEY;
+    delete process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
+    delete process.env.OPENAI_API_KEY;
+    process.env.AI_PROVIDER = "openrouter";
+    process.env.OPENROUTER_API_KEY = ["o", "r", "-", "m", "o", "c", "k"].join("");
+    assert.equal(assertOpenAiKeyConfigured({ pipeline: "blog" }).ok, true);
+    assert.equal(assertOpenAiKeyConfigured().ok, true);
+  });
+
+  it("assertOpenAiKeyConfigured({ pipeline: 'blog' }) names OpenRouter when selected without key", () => {
+    delete process.env.BLOG_OPENAI_API_KEY;
+    delete process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
+    delete process.env.OPENAI_API_KEY;
+    delete process.env.OPENROUTER_API_KEY;
+    process.env.AI_PROVIDER = "openrouter";
+    const result = assertOpenAiKeyConfigured({ pipeline: "blog" });
+    assert.equal(result.ok, false);
+    assert.match(result.message, /OPENROUTER_API_KEY/);
+  });
 });
 
 describe("getBlogOpenAiChatModel", () => {
   let saved: Record<string, string | undefined>;
   beforeEach(() => {
     saved = snapshotEnv();
+    clearProviderSelectionEnv();
   });
   afterEach(() => {
     restoreEnv(saved);
@@ -104,10 +142,62 @@ describe("getBlogOpenAiChatModel", () => {
   });
 });
 
+describe("getBlogOpenRouterChatModel", () => {
+  let saved: Record<string, string | undefined>;
+  beforeEach(() => {
+    saved = snapshotEnv();
+  });
+  afterEach(() => {
+    restoreEnv(saved);
+  });
+
+  it("prefers OPENROUTER_MODEL", () => {
+    process.env.OPENROUTER_MODEL = "anthropic/claude-3.5-haiku";
+    process.env.BLOG_OPENAI_MODEL = "gpt-4o";
+    assert.equal(getBlogOpenRouterChatModel(), "anthropic/claude-3.5-haiku");
+  });
+
+  it("falls back to default slug when unset", () => {
+    delete process.env.OPENROUTER_MODEL;
+    delete process.env.BLOG_OPENAI_MODEL;
+    delete process.env.AI_INTEGRATIONS_OPENAI_MODEL;
+    assert.equal(getBlogOpenRouterChatModel(), OPENROUTER_DEFAULT_BLOG_MODEL);
+  });
+});
+
+describe("getOpenRouterChatModel", () => {
+  let saved: Record<string, string | undefined>;
+  beforeEach(() => {
+    saved = snapshotEnv();
+    clearProviderSelectionEnv();
+  });
+  afterEach(() => {
+    restoreEnv(saved);
+  });
+
+  it("uses OPENROUTER_MODEL for shared OpenRouter chat", () => {
+    process.env.OPENROUTER_MODEL = "anthropic/claude-3.5-sonnet";
+    assert.equal(getOpenRouterChatModel(), "anthropic/claude-3.5-sonnet");
+  });
+
+  it("uses OpenRouter default when unset", () => {
+    delete process.env.OPENROUTER_MODEL;
+    assert.equal(getOpenRouterChatModel(), OPENROUTER_DEFAULT_CHAT_MODEL);
+  });
+
+  it("allows blog model fallback only for blog OpenRouter routing", () => {
+    delete process.env.OPENROUTER_MODEL;
+    process.env.BLOG_OPENAI_MODEL = "openai/gpt-4.1-mini";
+    assert.equal(getBlogOpenRouterChatModel(), "openai/gpt-4.1-mini");
+    assert.equal(getOpenRouterChatModel(), OPENROUTER_DEFAULT_CHAT_MODEL);
+  });
+});
+
 describe("getLessonOpenAiChatModel", () => {
   let saved: Record<string, string | undefined>;
   beforeEach(() => {
     saved = snapshotEnv();
+    clearProviderSelectionEnv();
   });
   afterEach(() => {
     restoreEnv(saved);

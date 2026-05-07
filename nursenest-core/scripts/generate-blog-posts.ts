@@ -12,12 +12,17 @@
  *   cd nursenest-core && npx tsx scripts/generate-blog-posts.ts --topic="..." --publish
  *   cd nursenest-core && npx tsx scripts/generate-blog-posts.ts --topics-file=./tmp/blog-topics.txt --pathway=us-rn-nclex-rn
  *
- * Env: `BLOG_OPENAI_API_KEY` or `AI_INTEGRATIONS_OPENAI_API_KEY` (see `blog-ai-generate.ts`).
+ * Env: `OPENROUTER_API_KEY` when `AI_PROVIDER=openrouter`; otherwise `BLOG_OPENAI_API_KEY`
+ * or `AI_INTEGRATIONS_OPENAI_API_KEY` (see `blog-ai-generate.ts`).
  */
 import "../src/lib/db/script-env-bootstrap";
 
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
-import { assertOpenAiKeyConfigured, getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
+import {
+  assertOpenAiKeyConfigured,
+  getBlogGenerationModelLabelForLogs,
+  primeBlogCliOpenAiIntegrationKey,
+} from "@/lib/ai/openai-env";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { publishGeneratedBlogArticle } from "@/lib/blog/publish-generated-blog-article";
@@ -34,12 +39,6 @@ import { prisma } from "@/lib/db";
 import { getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
 
 const SITE_ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://nursenest.ca").replace(/\/$/, "");
-
-function primeOpenAiKeyFromCliEnv(): void {
-  const resolved =
-    process.env.BLOG_OPENAI_API_KEY?.trim() || process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim() || "";
-  if (resolved) process.env.AI_INTEGRATIONS_OPENAI_API_KEY = resolved;
-}
 
 function buildControlPanelInput(
   topic: string,
@@ -76,7 +75,7 @@ function buildControlPanelInput(
 }
 
 async function main(): Promise<void> {
-  primeOpenAiKeyFromCliEnv();
+  primeBlogCliOpenAiIntegrationKey();
   const cli = parseGenerateBlogPostsCliArgs(process.argv);
   const pathway = resolveBatchPathway(cli.pathwayId);
 
@@ -86,7 +85,7 @@ async function main(): Promise<void> {
   });
 
   // eslint-disable-next-line no-console
-  console.log(`Model: ${getBlogOpenAiChatModel()}`);
+  console.log(`Model: ${getBlogGenerationModelLabelForLogs()}`);
   const keyGate = assertOpenAiKeyConfigured({ pipeline: "blog" });
   if (!keyGate.ok) {
     // eslint-disable-next-line no-console
