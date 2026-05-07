@@ -153,7 +153,7 @@ function sectionParagraph(topic: LongTailTopicSpec, role: LongTailSectionRole): 
       return `${p1}${p2}${table}${bullets}${pearl}`;
     }
     case "assessment": {
-      const p1 = `<p><strong>Assessment clustering.</strong> Organize subjective and objective data for “${t}” into examiner-style groupings: vitals trends, focused ${sys} inspection, device data, and red-flag language patients use about ${anchor}. Practice one tight bedside report that states what changed since the prior assessment.</p>`;
+      const p1 = `<p><strong>Focused assessment.</strong> Organize subjective and objective data for “${t}” into examiner-style groupings: vitals trends, focused ${sys} inspection, device data, and red-flag language patients use about ${anchor}. Practice one tight bedside report that states what changed since the prior assessment.</p>`;
       const bullets = ul([
         `Compare paired measurements (left/right, lying/sitting, pre/post intervention) when offered.`,
         `Separate chronic abnormal baselines from acute deltas that do not fit the plan.`,
@@ -248,13 +248,23 @@ export function buildFaq(topic: LongTailTopicSpec): FaqTriple {
   const anchor = esc(topic.anchorLabel);
   const kw = topic.targetKeyword.trim();
   const shortTitle = topic.title.trim().slice(0, 140);
+  if (topic.kind === "pharmacology") {
+    return {
+      q1: `What should nurses connect first when studying ${anchor}?`,
+      a1: `Start with why the medication or treatment changes physiology, then pair each expected effect with a monitoring cue such as vitals, sedation, bleeding, renal clearance, glucose, or rhythm changes. For “${shortTitle}”, the safest answer usually protects the patient before it explains the drug.`,
+      q2: `What exam trap is common with ${anchor}?`,
+      a2: `Stems often include an answer that sounds knowledgeable but skips assessment, allergy review, contraindication screening, or provider clarification. When “${kw}” appears, ask which adverse effect or interaction the nurse must catch before administering or teaching.`,
+      q3: `When does ${anchor} require urgent reporting?`,
+      a3: `Report findings that suggest toxicity, allergy, unstable vital signs, arrhythmia, severe bleeding, respiratory depression, mental status change, or a lab trend that makes the planned therapy unsafe. Tie the report to objective data and the timing of the medication exposure.`,
+    };
+  }
   return {
-    q1: `What is the safest way to study ${anchor} when the stem centers on “${shortTitle}”?`,
-    a1: `Anchor your review to the search intent “${kw}”: sketch the causal chain first, then list assessment changes that prove that chain at the bedside, then match interventions to the most unstable cue. Pair each step with one monitoring parameter you would actually trend so answers stay tied to this topic rather than generic pathophysiology notes.`,
-    q2: `Which misunderstandings about ${anchor} show up most often for “${shortTitle}”?`,
-    a2: `Because “${kw}” bundles several mechanisms, students often mix up timing (acute shift versus chronic compensation) or confuse look-alike presentations. Slow down, separate onset clues from complication clues, and re-read the stem for what changed **now** versus what is baseline for this patient profile.`,
-    q3: `When should a nurse prioritize escalation over continued routine monitoring for “${shortTitle}”?`,
-    a3: `Use “${kw}” as the escalation lens: worsening work of breathing, rapid mentation change, refractory hypotension, escalating oxygen needs, new arrhythmias, or labs trending badly should trigger urgent reporting when they do not match the expected trajectory for the current plan of care.`,
+    q1: `What mechanism should nurses understand for ${anchor}?`,
+    a1: `Trace the chain from trigger to compensation to bedside finding. For “${shortTitle}”, name what changes first, which assessment proves it is worsening, and which nursing priority reduces the immediate risk.`,
+    q2: `Which bedside cues make ${anchor} unsafe?`,
+    a2: `Look for a change from baseline: altered mentation, unstable perfusion, respiratory effort, abnormal labs that fit the mechanism, new pain patterns, or failure to respond to expected care. Those cues matter more than the diagnosis label alone.`,
+    q3: `How does ${anchor} show up in exam questions?`,
+    a3: `The stem usually tests whether you can connect “${kw}” to priority action. Eliminate teaching or routine-care choices when the data point toward airway, breathing, circulation, neurologic decline, infection spread, or another time-sensitive complication.`,
   };
 }
 
@@ -361,18 +371,16 @@ export function buildLongTailBody(topic: LongTailTopicSpec, internalLinksHtml: s
 
   const h1 = `<h1>${t}</h1>`;
   const disclaimer = `<p><em>This article is for nursing education and exam preparation, not personal medical advice.</em> It is written for RN, PN/RPN, NP, allied health, and new graduate audiences as a shared learning layer; scope, supervision, and local protocols still define what you may do at the bedside. Always follow orders, scope of practice, facility policy, and local regulations.</p>`;
-  const canonicalNote = `<p><strong>Canonical URL path:</strong> <code>${esc(`/blog/${topic.slug}`)}</code> (public article route).</p>`;
   const internal = `<p><strong>Study tools and related reading.</strong> Reinforce concepts with the <a href="/flashcards">flashcards hub</a>, the <a href="/question-bank">question bank</a>, and your pathway practice surfaces after reading. Related NurseNest posts: ${internalLinksHtml}</p>`;
 
   const mechanismIntro =
     kind === "pharmacology"
-      ? `<p>This pharmacology-focused review emphasizes receptor and tissue-level effects, predictable adverse effects, monitoring priorities, and how exam writers test “why” questions. We avoid overstated claims; when evidence is mixed, we describe the uncertainty explicitly.</p>`
-      : `<p>This pathophysiology-focused review emphasizes compensatory responses, typical assessment patterns, and how acute changes evolve. We avoid overstated claims; when mechanisms are incompletely understood, we describe the uncertainty explicitly.</p>`;
+      ? `<p>Start with the drug or treatment effect, then connect it to monitoring: expected response, adverse effect, contraindication cue, and the point where a nurse should hold, clarify, or escalate according to orders and policy.</p>`
+      : `<p>Start with the physiologic trigger, then follow compensation at the bedside: what the body tries first, what fails next, and which assessment finding tells the nurse that routine monitoring is no longer enough.</p>`;
 
   return [
     h1,
     disclaimer,
-    canonicalNote,
     internal,
     `<h2>${esc(mechanismHeading)}</h2>`,
     mechanismIntro,
@@ -430,7 +438,6 @@ export function validateGeneratedBody(html: string, title: string): { ok: true }
   if (!/advanced np considerations/i.test(html)) reasons.push("missing_np_tier_section");
   if (!/allied health relevance/i.test(html)) reasons.push("missing_allied_health_tier_section");
   if (!/new graduate nurse focus/i.test(html)) reasons.push("missing_new_grad_tier_section");
-  if (!/canonical url path/i.test(html)) reasons.push("missing_canonical_note");
   if (/<h2\b[^>]*>\s*frequently\s+asked\s+questions/i.test(html)) {
     reasons.push("embedded_faq_in_body");
   }

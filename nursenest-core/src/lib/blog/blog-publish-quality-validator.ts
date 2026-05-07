@@ -38,6 +38,10 @@ export type BlogPublishQualityOptions = {
 const EXTRA_PLACEHOLDER_PHRASES = [
   "this section connects the clinical question",
   "this section connects",
+  "this section focuses on how",
+  "this article will",
+  "here we explore",
+  "in this section, learners",
   "clinical question to the bedside",
   "clinical question to safe nursing action",
   "exam-aligned clinical reasoning",
@@ -45,10 +49,17 @@ const EXTRA_PLACEHOLDER_PHRASES = [
   "without overcomplicating the review",
   "gives learners a",
   "learners a clinically relevant",
+  "mechanism narrative",
+  "assessment clustering",
+  "intervention priorities",
+  "teaching script",
   "topic-specific clinical content goes here",
   "replace this section",
   "placeholder paragraph",
 ] as const;
+
+const BANNED_TEMPLATE_HEADING_RE =
+  /\b(deeper|go deeper|application|mechanism narrative|assessment clustering|intervention priorities|teaching script)\b/i;
 
 const GENERIC_FAQ_PATTERNS = [
   /\bit depends\b/i,
@@ -240,6 +251,16 @@ export function validateBlogPublishQuality(
   }
 
   const sections = splitBlogBodyByH2(body).filter((s) => s.heading && s.heading !== "(body)");
+  const bannedHeading = sections.find((s) => BANNED_TEMPLATE_HEADING_RE.test(s.heading));
+  if (bannedHeading) {
+    issues.push({
+      id: "blog_template_filler_heading",
+      severity: "block",
+      message: `Article uses a banned template/filler heading: "${bannedHeading.heading.slice(0, 80)}".`,
+      fix: "Rename and rewrite this section around a real clinical teaching job, not a generic deeper/application module.",
+    });
+  }
+
   let genericHeadingFollowers = 0;
   const firstParagraphKeys = new Map<string, number>();
   for (const section of sections) {
@@ -291,7 +312,13 @@ export function validateBlogPublishQuality(
     });
   }
 
-  const refRows = [...(input.apaReferences ?? []), ...sourceTextRows(input.sourcesJson)];
+  const refRows = Array.from(
+    new Set(
+      [...(input.apaReferences ?? []), ...sourceTextRows(input.sourcesJson)]
+        .map((row) => row.trim())
+        .filter(Boolean),
+    ),
+  );
   if (!options?.skipReferenceTopicAlignment && refRows.length > 0 && topicTokens.length > 0) {
     const aligned = refRows.filter((row) => topicSpecificTokenHits(row, topicTokens) > 0).length;
     if (refRows.length >= 3 && aligned === 0) {
@@ -330,7 +357,7 @@ export function validateBlogPublishQuality(
   }
 
   const kw = (input.targetKeyword ?? "").trim().toLowerCase().replace(/\s+/g, " ");
-  if (kw.length >= 12 && wc >= 500) {
+  if (kw.length >= 12 && wc >= 200) {
     let phraseHits = 0;
     let searchFrom = 0;
     while (searchFrom <= lower.length - kw.length) {
@@ -340,7 +367,7 @@ export function validateBlogPublishQuality(
       searchFrom = idx + Math.max(8, Math.floor(kw.length * 0.85));
     }
     const density = phraseHits / wc;
-    if (phraseHits >= 22 || density > 0.034) {
+    if (phraseHits >= 10 || density > 0.02) {
       issues.push({
         id: "blog_keyword_stuffing_primary_phrase",
         severity: "block",
@@ -363,7 +390,10 @@ export function validateBlogPublishQuality(
     }
   }
 
-  if (!options?.skipReferenceTopicAlignment && refRows.length >= 2 && topicTokens.length >= 3) {
+  const strategyArticle = /\b(exam\s+strateg|study\s+strateg|test-taking|question\s+review)\b/i.test(
+    `${input.title} ${input.category ?? ""}`,
+  );
+  if (!strategyArticle && !options?.skipReferenceTopicAlignment && refRows.length >= 2 && topicTokens.length >= 3) {
     const offTopicCdc = refRows.filter((line) => {
       const l = line.toLowerCase();
       return /\bcdc\b|centers for disease control/.test(l) && topicSpecificTokenHits(line, topicTokens) === 0;

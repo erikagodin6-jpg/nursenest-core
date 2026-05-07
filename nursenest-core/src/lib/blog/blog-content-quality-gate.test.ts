@@ -74,7 +74,7 @@ describe("collectBlogContentQualityIssues (diabetic neuropathy regression)", () 
       section("Patient teaching and foot protection", 17),
       section("NCLEX and REx-PN exam traps", 18),
       section("Escalation red flags", 19),
-      section("Mini case application", 20),
+      section("Mini case scenario", 20),
       "<h2>Key takeaways</h2><ul><li>Glucose control slows progression.</li><li>Inspect feet daily.</li></ul>",
       "<h2>Related study paths</h2><p>Use flashcards and practice questions on diabetes and neurological care.</p>",
     ].join("");
@@ -185,6 +185,28 @@ describe("blogIntentForQualityGate", () => {
       blogIntentForQualityGate(BlogPostTemplate.TOPIC_EXPLAINED, BlogPostIntent.CONCEPT_EXPLAINER),
       "pathophysiology_strict",
     );
+  });
+});
+
+describe("blog template/filler heading gates", () => {
+  it("blocks fake deeper/application/template headings", () => {
+    const issues = collectBlogContentQualityIssues({
+      title: "Metabolic alkalosis and hypokalemia nursing priorities",
+      body: [
+        section("Pathophysiology mechanism", 31),
+        section("Application", 32),
+        section("Assessment priorities", 33),
+        section("Nursing interventions", 34),
+        section("Patient teaching", 35),
+      ].join(""),
+      targetKeyword: "metabolic alkalosis hypokalemia",
+      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
+      intent: "pathophysiology_strict",
+      faqBlock: { items: [] },
+      apaReferences: [],
+      sourcesJson: { version: 2, verified: [], excluded: [], generatedAt: new Date().toISOString() },
+    });
+    assert.ok(issues.some((i) => i.id === "blog_banned_template_heading"));
   });
 });
 

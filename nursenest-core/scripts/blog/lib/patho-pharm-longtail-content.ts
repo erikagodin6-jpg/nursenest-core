@@ -24,11 +24,9 @@ export function countH2(html: string): number {
 
 export function buildConservativeApaReferences(accessDate: string): string[] {
   return [
-    `Centers for Disease Control and Prevention. (2024). CDC health topics A–Z index. Retrieved ${accessDate}, from https://www.cdc.gov/az/a.html`,
-    `World Health Organization. (2024). WHO health topics. Retrieved ${accessDate}, from https://www.who.int/health-topics`,
-    `National Library of Medicine. (2024). MedlinePlus: trusted consumer health information. Retrieved ${accessDate}, from https://medlineplus.gov/`,
-    `National Institutes of Health. (2024). NCBI Bookshelf (StatPearls and other books). Retrieved ${accessDate}, from https://www.ncbi.nlm.nih.gov/books`,
-    `U.S. Food and Drug Administration. (2024). Drugs@FDA and related drug information resources. Retrieved ${accessDate}, from https://www.fda.gov/drugs`,
+    `National Library of Medicine. (2024). MedlinePlus condition and medication topic library. Retrieved ${accessDate}, from https://medlineplus.gov/`,
+    `National Center for Biotechnology Information. (2024). NCBI Bookshelf clinical review library. Retrieved ${accessDate}, from https://www.ncbi.nlm.nih.gov/books/`,
+    `National Council of State Boards of Nursing. (2024). NCLEX examinations and clinical judgment measurement. Retrieved ${accessDate}, from https://www.ncsbn.org/exams.htm`,
   ];
 }
 
@@ -135,7 +133,7 @@ export function buildArticleHtml(
 <p><strong>Educational disclaimer:</strong> This article is for nursing education and exam preparation, not personal medical advice. It summarizes widely taught mechanisms and nursing priorities; always follow facility policy, provider orders, and scope of practice.</p>
 
 <h2>${mechLabel}</h2>
-<p>This section focuses on how <strong>${tag}</strong> connects to measurable physiology in the <strong>${sys}</strong> context. Rather than memorizing isolated facts, link each step to a vital sign, lab, or bedside observation you can trend.</p>
+<p><strong>${tag}</strong> becomes clinically useful when you can explain the chain from trigger to bedside finding in the <strong>${sys}</strong> context. Start with the primary imbalance, then name the compensatory response and the assessment that would change first if the patient is getting worse.</p>
 <p>For many NCLEX-style items, the “why” is more important than the brand name: identify the primary imbalance, the compensatory response, and the earliest unsafe deviation. When medications are involved, connect receptor or pathway effects to the assessments you repeat after dosing changes.</p>
 <p>Common teaching frames include supply/demand mismatch, inflammation altering endothelial function, neurohormonal activation, autoregulation limits, and oxygen delivery dependencies. Use those frames to explain why two patients with the same diagnosis may look different based on age, comorbidities, and chronic compensation.</p>
 <p>When data are incomplete in a stem, choose the option that stabilizes the highest-risk problem first while monitoring for predictable side effects of the intervention itself.</p>
@@ -179,26 +177,24 @@ export function buildArticleHtml(
 <h2>Related NurseNest blog reading</h2>
 ${links}
 
-<h2 id="faq">FAQ</h2>
+<h2 id="faq">Focused learner questions</h2>
 <div id="faq">
-<h3>What should I prioritize first in an unstable presentation?</h3>
-<p>Protect airway, breathing, and circulation, then treat the underlying mechanism while trending focused reassessments.</p>
-<h3>How do I avoid choosing a “true but not best” NCLEX answer?</h3>
-<p>Pick the option that addresses the primary mechanism and highest-risk harm described in the stem.</p>
-<h3>Can I use this page as medical advice for a real patient?</h3>
-<p>No—this article is for nursing education and exam preparation, not personal medical advice. Individual care requires licensed evaluation.</p>
+<h3>What should I connect first when studying ${tag}?</h3>
+<p>Connect the mechanism to one bedside cue: a vital sign, lab, rhythm, symptom, or safety risk that proves the condition is changing.</p>
+<h3>How do I avoid choosing a true but low-priority answer?</h3>
+<p>Ask which option addresses the highest-risk harm named in the stem before choosing comfort, education, or routine documentation.</p>
+<h3>Which details make this topic unsafe?</h3>
+<p>New confusion, worsening oxygenation, unstable perfusion, severe pain, abnormal labs that match the mechanism, or failure to respond to expected care should shift the nurse toward urgent reassessment and reporting.</p>
 </div>
 
-<h2>Safety and scope boundaries</h2>
-<p>This template intentionally uses conservative language and emphasizes reassessment. Avoid stating rare complications as universal rules, and avoid implying that a single screen replaces bedside judgment.</p>
-<p>When sources conflict across institutions, follow your local protocol and escalate questions through appropriate channels.</p>
-<p>Remember that social determinants, language access, and caregiver availability change what “safe discharge teaching” looks like in practice.</p>
-<p>Documentation should reflect objective data, patient statements, education provided, and the patient’s response to teaching.</p>
-<p>If you are ever unsure, prioritize patient safety, notify the appropriate clinician, and continue monitoring while awaiting guidance.</p>
+<h2>Nursing judgment and scope boundaries</h2>
+<p>Nursing judgment means matching the cue pattern to a safe next action: reassess, protect the patient, clarify orders, notify the appropriate clinician, and document the response. It does not mean independently changing a treatment plan without authority.</p>
+<p>When institutional policies differ, use the local policy as the action rule and use physiology to explain why that rule exists. Social determinants, language access, and caregiver availability can change what safe teaching and follow-up look like.</p>
+<p>Document objective data, patient statements, education provided, barriers identified, and the patient’s response to teaching so the next clinician can continue the same reasoning trail.</p>
 
 <h2>References (APA-style list)</h2>
 <section id="references" class="apa-style-references">
-<p>The reference list below uses conservative, organization-level entries suitable when a page-specific peer-reviewed citation is not embedded. Prefer primary literature, clinical practice guidelines, and official labeling when writing for publication outside this educational template.</p>
+<p>Editors should replace or supplement these starter sources with topic-matched guidelines, labels, or reviews before final publication when a narrower source is available.</p>
 <ol>
 ${refs}
 </ol>

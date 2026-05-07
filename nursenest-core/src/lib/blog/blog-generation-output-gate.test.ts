@@ -49,4 +49,18 @@ describe("evaluateBlogGenerationOutputGate", () => {
     });
     assert.equal(r.ok, false);
   });
+
+  it("rejects template/filler headings before draft storage", () => {
+    const r = evaluateBlogGenerationOutputGate({
+      title: "Respiratory acidosis confusion nursing priorities",
+      slug: "respiratory-acidosis-confusion-nursing-priorities",
+      seoTitle: "Respiratory Acidosis Confusion Nursing Priorities",
+      seoDescription: "Clinical nursing review of respiratory acidosis, confusion, assessment, and NCLEX priorities.",
+      bodyHtml: `<h2>Application</h2>${words(340)}`,
+      contentDepth: "standard",
+      mode: "draft_storage",
+    });
+    assert.equal(r.ok, false);
+    if (!r.ok) assert.ok(r.reasons.includes("template_filler_heading_detected"));
+  });
 });

@@ -50,6 +50,16 @@ function hasEmptySectionSignals(html: string): boolean {
   return false;
 }
 
+function hasTemplateFillerHeading(html: string): boolean {
+  const h2 = [...html.matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/gi)];
+  return h2.some((m) => {
+    const heading = (m[1] ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    return /\b(deeper|go deeper|application|mechanism narrative|assessment clustering|intervention priorities|teaching script)\b/i.test(
+      heading,
+    );
+  });
+}
+
 /**
  * Deterministic quality gate for generated HTML before persisting as SCHEDULED/PUBLISHED,
  * or before accepting thin “metadata shells” in automation paths.
@@ -88,6 +98,9 @@ export function evaluateBlogGenerationOutputGate(input: BlogGenerationOutputGate
   }
   if (hasEmptySectionSignals(body)) {
     reasons.push("empty_or_trivial_section_under_heading");
+  }
+  if (hasTemplateFillerHeading(body)) {
+    reasons.push("template_filler_heading_detected");
   }
 
   if (reasons.length > 0) {

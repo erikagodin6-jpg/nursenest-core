@@ -96,6 +96,30 @@ describe("validateBlogPublishQuality", () => {
     assert.ok(result.blocking.some((i) => i.id === "blog_keyword_stuffing_primary_phrase"));
   });
 
+  it("rejects fake template headings such as deeper and application", () => {
+    const result = validateBlogPublishQuality({
+      title: "Respiratory acidosis confusion nursing priorities",
+      body: `${goodBody()}<h2>Application</h2><p>Respiratory acidosis can cause confusion when carbon dioxide retention changes cerebral blood flow and depresses neurologic function.</p>`,
+      targetKeyword: "respiratory acidosis confusion",
+      category: "Respiratory",
+      tags: ["respiratory acidosis", "confusion", "nclex"],
+      faqBlock: {
+        items: [
+          {
+            q: "Why can respiratory acidosis cause confusion?",
+            a: "Carbon dioxide retention and worsening ventilation can alter mental status, so the nurse watches respiratory effort and oxygenation trends.",
+          },
+        ],
+      },
+      apaReferences: [
+        "National Library of Medicine. (2024). Respiratory acidosis.",
+        "National Council of State Boards of Nursing. (2023). NCLEX test plans.",
+      ],
+    });
+    assert.equal(result.ok, false);
+    assert.ok(result.blocking.some((i) => i.id === "blog_template_filler_heading"));
+  });
+
   it("rejects bodies that never substantively echo the title tokens", () => {
     const vague = `
       <h2>Mechanism</h2><p>Healthcare is complex and requires careful attention to many different factors that nurses must consider.</p>

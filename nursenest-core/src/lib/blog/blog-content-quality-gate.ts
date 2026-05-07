@@ -21,8 +21,16 @@ export type BlogContentQualityIssue = {
 export const BLOG_BANNED_FILLER_PHRASES: readonly string[] = [
   "this section connects the clinical question",
   "this section connects",
+  "this section focuses on how",
+  "this article will",
+  "here we explore",
+  "in this section, learners",
   "keyword framing for study",
   "language here is intentionally cautious",
+  "mechanism narrative",
+  "assessment clustering",
+  "intervention priorities",
+  "teaching script",
   "mechanistic reasoning rather than isolated memorization",
   "this paragraph intentionally",
   "exam-aligned framing without",
@@ -30,6 +38,17 @@ export const BLOG_BANNED_FILLER_PHRASES: readonly string[] = [
   "without overcomplicating the review",
   "gives learners a clinically relevant",
   "study-surface alignment",
+] as const;
+
+const BLOG_BANNED_HEADING_PATTERNS: readonly RegExp[] = [
+  /\bdeeper\b/i,
+  /\bdeeper\s+study\b/i,
+  /\bgo\s+deeper\b/i,
+  /\bapplication\b/i,
+  /\bmechanism\s+narrative\b/i,
+  /\bassessment\s+clustering\b/i,
+  /\bintervention\s+priorities\b/i,
+  /\bteaching\s+script\b/i,
 ] as const;
 
 const STOP = new Set([
@@ -373,6 +392,18 @@ export function collectBlogContentQualityIssues(input: BlogContentQualityGateInp
     }
   }
 
+  const bannedHeading = splitBlogBodyByH2(body).find((seg) =>
+    BLOG_BANNED_HEADING_PATTERNS.some((re) => re.test(seg.heading)),
+  );
+  if (bannedHeading) {
+    issues.push({
+      id: "blog_banned_template_heading",
+      severity: "block",
+      message: `Body contains a banned template/filler heading: "${bannedHeading.heading.slice(0, 80)}".`,
+      fix: "Replace fake template headings with topic-specific clinical headings such as mechanism, labs, red flags, nursing priorities, patient teaching, or exam traps.",
+    });
+  }
+
   if (pathophysiologyStrict && /[\u2014\u2013]/.test(body)) {
     issues.push({
       id: "blog_unicode_en_em_dash_body",
@@ -504,7 +535,7 @@ export function collectBlogContentQualityIssues(input: BlogContentQualityGateInp
       { label: "Patient teaching", patterns: [/patient\s+teach/i, /\beducation/i, /\bteach(ing)?\b/i] },
       { label: "NCLEX / exam traps", patterns: [/nclex/i, /\bexam\s+trap/i, /\btest-taking/i, /\btrap\b/i, /rex-pn/i] },
       { label: "Escalation / red flags", patterns: [/red\s+flag/i, /\bescalat/i, /\bemergency/i, /\burgen/i] },
-      { label: "Case application", patterns: [/case\b/i, /\bscenario/i, /\bapplication\b/i, /\bmini\s+case/i] },
+      { label: "Mini case scenario", patterns: [/case\b/i, /\bscenario/i, /\bmini\s+case/i, /\bvignette/i] },
     ];
     const missingLabels = requiredH2Snippets
       .filter((req) => !req.patterns.some((re) => re.test(body)))

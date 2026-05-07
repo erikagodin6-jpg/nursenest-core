@@ -103,7 +103,7 @@ export function buildRnLessonSeoBodyHtml(input: {
     `<p>Start with pattern recognition, then move to risk-ranked action. Focus on what must be assessed first, what can wait, and which findings require immediate provider notification.</p>`,
     `<h2>Practice questions for ${topic}</h2>`,
     `<ol>${questionsHtml}</ol>`,
-    `<h2>Go deeper with the full RN lesson</h2>`,
+    `<h2>Continue with the full RN lesson</h2>`,
     `<p>Read the complete lesson: <a href="${lessonLink}">${input.lessonTitle}</a>. Use it to reinforce pathophysiology, assessment priorities, and intervention rationale before your next question set.</p>`,
     `<h2>Start free trial</h2>`,
     `<p>Ready for more NCLEX practice? <a href="/pricing">Start your free trial</a> to unlock full lessons, adaptive practice questions, and exam-focused study tools.</p>`,

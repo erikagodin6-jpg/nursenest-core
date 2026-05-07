@@ -1,59 +1,153 @@
-# Blog quality audit — methodology and gates
+# Blog Quality Audit
 
-This document describes **how NurseNest evaluates public blog quality**, where automation lives, and how to **refresh a data-backed audit** without changing URLs, slugs, or canonical metadata.
+Generated at: 2026-05-07T21:51:43.759Z
+Mode: apply
+Scanned published rows: 169
+Flagged rows: 142
 
-## What "weak" means here
+| Slug | Title | Blocking issues | Action | First issue |
+| --- | --- | ---: | --- | --- |
+| `lt-reg-cs-diabetic-neuropathy-loss-of-protective-sensation` | Why does diabetic neuropathy cause loss of protective sensation? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-metabolic-alkalosis-hypokalemia` | Why does metabolic alkalosis cause hypokalemia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-respiratory-acidosis-confusion` | Why does respiratory acidosis cause confusion? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hypomagnesemia-ventricular-arrhythmias` | Why does hypomagnesemia cause ventricular arrhythmias? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hyperkalemia-peaked-t-waves` | Why does hyperkalemia cause peaked T waves? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hypokalemia-u-waves-on-ecg` | Why does hypokalemia cause U waves on ECG? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hyponatremia-seizures` | Why does hyponatremia cause seizures? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hypernatremia-altered-mental-status` | Why does hypernatremia cause altered mental status? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-pheochromocytoma-paroxysmal-hypertension` | Why does pheochromocytoma cause paroxysmal hypertension? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-addisonian-crisis-refractory-hypotension` | Why does Addisonian crisis cause refractory hypotension? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-myxedema-coma-hypothermia` | Why does myxedema coma cause hypothermia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-thyroid-storm-hyperthermia` | Why does thyroid storm cause hyperthermia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-transfusion-reaction-fever-and-chills` | Why does transfusion reaction cause fever and chills? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-rhabdomyolysis-tea-colored-urine` | Why does rhabdomyolysis cause tea-colored urine? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-nephrotic-syndrome-edema` | Why does nephrotic syndrome cause edema? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-cirrhosis-ascites` | Why does cirrhosis cause ascites? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-acute-liver-failure-coagulopathy` | Why does acute liver failure cause coagulopathy? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hyperosmolar-hyperglycemic-state-altered-mental-status` | Why does hyperosmolar hyperglycemic state cause altered mental status? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-diabetic-ketoacidosis-kussmaul-respirations` | Why does diabetic ketoacidosis cause Kussmaul respirations? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-increased-icp-widening-pulse-pressure` | Why does increased ICP cause widening pulse pressure? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-acute-stroke-focal-neurologic-deficits` | Why does acute stroke cause focal neurologic deficits? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-cellulitis-spreading-erythema` | Why does cellulitis cause spreading erythema? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-pyelonephritis-costovertebral-tenderness` | Why does pyelonephritis cause costovertebral tenderness? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-uti-in-older-adults-acute-confusion` | Why does UTI in older adults cause acute confusion? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-bronchiectasis-purulent-sputum` | Why does bronchiectasis cause purulent sputum? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-asthma-exacerbation-accessory-muscle-use` | Why does asthma exacerbation cause accessory muscle use? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-pericarditis-positional-chest-pain` | Why does pericarditis cause positional chest pain? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-fluid-overload-crackles` | Why does fluid overload cause crackles? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hypothyroidism-bradycardia` | Why does hypothyroidism cause bradycardia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hyperthyroidism-heat-intolerance` | Why does hyperthyroidism cause heat intolerance? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-gi-bleeding-orthostatic-hypotension` | Why does GI bleeding cause orthostatic hypotension? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-pancreatitis-hypocalcemia` | Why does pancreatitis cause hypocalcemia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-cholecystitis-murphy-sign-pain` | Why does cholecystitis cause Murphy sign pain? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-meningitis-photophobia` | Why does meningitis cause photophobia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-ards-refractory-hypoxemia` | Why does ARDS cause refractory hypoxemia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hypovolemic-shock-tachycardia` | Why does hypovolemic shock cause tachycardia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-tension-pneumothorax-hypotension` | Why does tension pneumothorax cause hypotension? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-anaphylaxis-bronchospasm` | Why does anaphylaxis cause bronchospasm? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-liver-failure-coagulopathy` | Why does liver failure cause coagulopathy? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-acute-kidney-injury-metabolic-acidosis` | Why does acute kidney injury cause metabolic acidosis? | 5 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-pulmonary-embolism-sudden-hypoxia` | Why does pulmonary embolism cause sudden hypoxia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-pneumonia-hypoxemia` | Why does pneumonia cause hypoxemia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-left-sided-heart-failure-pulmonary-edema` | Why does left-sided heart failure cause pulmonary edema? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-heart-failure-pulmonary-edema` | Why does heart failure cause pulmonary edema? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-siadh-hyponatremia` | Why does SIADH cause hyponatremia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-hypocalcemia-tetany` | Why does hypocalcemia cause tetany? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-copd-co2-retention` | Why does COPD cause CO2 retention? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-renal-failure-hyperkalemia` | Why does renal failure cause hyperkalemia? | 6 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-sepsis-hypotension` | Why does sepsis cause hypotension? | 5 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `lt-reg-cs-dka-hyperkalemia` | Why does DKA cause hyperkalemia? | 7 | quarantined | Body contains generated placeholder/template phrase: "this section connects the clinical question". |
+| `newgrad-nursing-on-pediatrics-how-new-grad-nurses-handle-calling-the-provider` | On Pediatrics: How New Grad Nurses Handle Calling the Provider | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-new-grads-on-ltc-staying-organized-around-preceptor-conflict` | New Grads on LTC: Staying Organized Around Preceptor Conflict | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-angry-families-on-dialysis-as-a-new-grad-nurse-first-priorities` | Handling Angry Families on Dialysis as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-end-of-shift-anxiety-on-dialysis-as-a-new-grad-nurse-first-priorities` | Handling End-of-Shift Anxiety on Dialysis as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-med-pass-delays-on-the-ed-as-a-new-grad-nurse-what-to-do-first` | First Med Pass Delays on the ED as a New Grad Nurse: What to Do First | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-med-surg-what-charting-backlog-really-looks-like` | From Orientation to Med-Surg: What Charting Backlog Really Looks Like | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-after-charting-backlog-on-telemetry-rebuilding-momentum-on-your-shift` | After Charting Backlog on Telemetry: Rebuilding Momentum on Your Shift | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-on-the-ed-how-new-grad-nurses-handle-angry-families` | On the ED: How New Grad Nurses Handle Angry Families | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-new-grads-on-ltc-staying-organized-around-angry-families` | New Grads on LTC: Staying Organized Around Angry Families | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-shift-report-on-same-day-surgery-as-a-new-grad-nurse-first-priorities` | Handling Shift Report on Same-Day Surgery as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-pediatrics-what-patient-death-really-looks-like` | From Orientation to Pediatrics: What Patient Death Really Looks Like | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-after-night-shift-on-ltc-rebuilding-momentum-on-your-shift` | After Night Shift on LTC: Rebuilding Momentum on Your Shift | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-on-rehab-how-new-grad-nurses-handle-missed-assessment` | On Rehab: How New Grad Nurses Handle Missed Assessment | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-new-grads-on-icu-staying-organized-around-night-shift` | New Grads on ICU: Staying Organized Around Night Shift | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-night-shift-on-same-day-surgery-as-a-new-grad-nurse-first-priorities` | Handling Night Shift on Same-Day Surgery as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-missed-assessment-on-dialysis-as-a-new-grad-nurse-priorities-and-first-steps` | Missed Assessment on Dialysis as a New Grad Nurse: Priorities and First Steps | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-missed-assessment-on-home-health-as-a-new-grad-nurse-what-to-do-first` | First Missed Assessment on Home Health as a New Grad Nurse: What to Do First | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-unsafe-staffing-on-icu-a-practical-checklist-for-new-grad-nurses` | Unsafe Staffing on ICU: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-rehab-what-preceptor-conflict-really-looks-like` | From Orientation to Rehab: What Preceptor Conflict Really Looks Like | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-after-preceptor-conflict-on-icu-rebuilding-momentum-on-your-shift` | After Preceptor Conflict on ICU: Rebuilding Momentum on Your Shift | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-on-step-down-how-new-grad-nurses-handle-unsafe-staffing` | On Step-Down: How New Grad Nurses Handle Unsafe Staffing | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-new-grads-on-pediatrics-staying-organized-around-unsafe-staffing` | New Grads on Pediatrics: Staying Organized Around Unsafe Staffing | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-missed-assessment-on-telemetry-as-a-new-grad-nurse-priorities-and-first-steps` | Missed Assessment on Telemetry as a New Grad Nurse: Priorities and First Steps | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-unsafe-staffing-on-ltc-as-a-new-grad-nurse-what-to-do-first` | First Unsafe Staffing on LTC as a New Grad Nurse: What to Do First | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-unsafe-staffing-on-same-day-surgery-a-practical-checklist-for-new-grad-nurses` | Unsafe Staffing on Same-Day Surgery: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-labor-delivery-what-missed-assessment-really-looks-like` | From Orientation to Labor & Delivery: What Missed Assessment Really Looks Like | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-after-shift-report-on-rehab-rebuilding-momentum-on-your-shift` | After Shift Report on Rehab: Rebuilding Momentum on Your Shift | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-on-telemetry-how-new-grad-nurses-handle-end-of-shift-anxiety` | On Telemetry: How New Grad Nurses Handle End-of-Shift Anxiety | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-charting-backlog-on-pediatrics-as-a-new-grad-nurse-first-priorities` | Handling Charting Backlog on Pediatrics as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-patient-death-on-same-day-surgery-as-a-new-grad-nurse-priorities-and-first-steps` | Patient Death on Same-Day Surgery as a New Grad Nurse: Priorities and First Steps | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-preceptor-conflict-on-dialysis-as-a-new-grad-nurse-what-to-do-first` | First Preceptor Conflict on Dialysis as a New Grad Nurse: What to Do First | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-missed-assessment-on-icu-a-practical-checklist-for-new-grad-nurses` | Missed Assessment on ICU: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-step-down-what-charting-backlog-really-looks-like` | From Orientation to Step-Down: What Charting Backlog Really Looks Like | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-after-patient-death-on-step-down-rebuilding-momentum-on-your-shift` | After Patient Death on Step-Down: Rebuilding Momentum on Your Shift | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-new-grads-on-home-health-staying-organized-around-rapid-response` | New Grads on Home Health: Staying Organized Around Rapid Response | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-unsafe-staffing-on-dialysis-a-practical-checklist-for-new-grad-nurses` | Unsafe Staffing on Dialysis: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-same-day-surgery-what-missed-assessment-really-looks-like` | From Orientation to Same-Day Surgery: What Missed Assessment Really Looks Like | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-after-patient-death-on-dialysis-rebuilding-momentum-on-your-shift` | After Patient Death on Dialysis: Rebuilding Momentum on Your Shift | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-new-grads-on-labor-delivery-staying-organized-around-rapid-response` | New Grads on Labor & Delivery: Staying Organized Around Rapid Response | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-angry-families-on-pediatrics-as-a-new-grad-nurse-first-priorities` | Handling Angry Families on Pediatrics as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-calling-the-provider-on-same-day-surgery-as-a-new-grad-nurse-priorities-and-first-steps` | Calling the Provider on Same-Day Surgery as a New Grad Nurse: Priorities and First Steps | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-end-of-shift-anxiety-on-psychiatry-as-a-new-grad-nurse-what-to-do-first` | First End-of-Shift Anxiety on Psychiatry as a New Grad Nurse: What to Do First | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-missed-assessment-on-psychiatry-a-practical-checklist-for-new-grad-nurses` | Missed Assessment on Psychiatry: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-step-down-what-rapid-response-really-looks-like` | From Orientation to Step-Down: What Rapid Response Really Looks Like | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-on-icu-how-new-grad-nurses-handle-code-blue` | On ICU: How New Grad Nurses Handle Code Blue | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-rapid-response-on-pediatrics-as-a-new-grad-nurse-first-priorities` | Handling Rapid Response on Pediatrics as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-rapid-response-on-rehab-as-a-new-grad-nurse-priorities-and-first-steps` | Rapid Response on Rehab as a New Grad Nurse: Priorities and First Steps | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-step-down-what-code-blue-really-looks-like` | From Orientation to Step-Down: What Code Blue Really Looks Like | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-after-code-blue-on-labor-delivery-rebuilding-momentum-on-your-shift` | After Code Blue on Labor & Delivery: Rebuilding Momentum on Your Shift | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-on-rehab-how-new-grad-nurses-handle-code-blue` | On Rehab: How New Grad Nurses Handle Code Blue | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-icu-what-end-of-shift-anxiety-really-looks-like` | From Orientation to ICU: What End-of-Shift Anxiety Really Looks Like | 3 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-med-pass-delays-on-icu-a-practical-checklist-for-new-grad-nurses` | Med Pass Delays on ICU: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-preceptor-conflict-on-telemetry-as-a-new-grad-nurse-what-to-do-first` | First Preceptor Conflict on Telemetry as a New Grad Nurse: What to Do First | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-unsafe-staffing-on-telemetry-a-practical-checklist-for-new-grad-nurses` | Unsafe Staffing on Telemetry: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-charting-backlog-on-the-ed-as-a-new-grad-nurse-what-to-do-first` | First Charting Backlog on the ED as a New Grad Nurse: What to Do First | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-end-of-shift-anxiety-on-oncology-a-practical-checklist-for-new-grad-nurses` | End-of-Shift Anxiety on Oncology: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-on-telemetry-how-new-grad-nurses-handle-calling-the-provider` | On Telemetry: How New Grad Nurses Handle Calling the Provider | 3 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-night-shift-on-telemetry-as-a-new-grad-nurse-what-to-do-first` | First Night Shift on Telemetry as a New Grad Nurse: What to Do First | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-after-med-pass-delays-on-med-surg-rebuilding-momentum-on-your-shift` | After Med Pass Delays on Med-Surg: Rebuilding Momentum on Your Shift | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-angry-families-on-med-surg-as-a-new-grad-nurse-first-priorities` | Handling Angry Families on Med-Surg as a New Grad Nurse: First Priorities | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-night-shift-on-med-surg-as-a-new-grad-nurse-priorities-and-first-steps` | Night Shift on Med-Surg as a New Grad Nurse: Priorities and First Steps | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-from-orientation-to-ltc-what-end-of-shift-anxiety-really-looks-like` | From Orientation to LTC: What End-of-Shift Anxiety Really Looks Like | 3 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-unsafe-staffing-on-med-surg-as-a-new-grad-nurse-first-priorities` | Handling Unsafe Staffing on Med-Surg as a New Grad Nurse: First Priorities | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-missed-assessment-on-the-ed-as-a-new-grad-nurse-first-priorities` | Handling Missed Assessment on the ED as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-shift-report-on-icu-a-practical-checklist-for-new-grad-nurses` | Shift Report on ICU: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-preceptor-conflict-on-med-surg-as-a-new-grad-nurse-priorities-and-first-steps` | Preceptor Conflict on Med-Surg as a New Grad Nurse: Priorities and First Steps | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-shift-report-on-step-down-a-practical-checklist-for-new-grad-nurses` | Shift Report on Step-Down: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-angry-families-on-telemetry-as-a-new-grad-nurse-priorities-and-first-steps` | Angry Families on Telemetry as a New Grad Nurse: Priorities and First Steps | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-calling-the-provider-on-med-surg-as-a-new-grad-nurse-what-to-do-first` | First Calling the Provider on Med-Surg as a New Grad Nurse: What to Do First | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-charting-backlog-on-icu-a-practical-checklist-for-new-grad-nurses` | Charting Backlog on ICU: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-charting-backlog-on-same-day-surgery-as-a-new-grad-nurse-first-priorities` | Handling Charting Backlog on Same-Day Surgery as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-new-grads-on-the-ed-staying-organized-around-shift-report` | New Grads on the ED: Staying Organized Around Shift Report | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-on-ltc-how-new-grad-nurses-handle-charting-backlog` | On LTC: How New Grad Nurses Handle Charting Backlog | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-shift-report-on-telemetry-as-a-new-grad-nurse-first-priorities` | Handling Shift Report on Telemetry as a New Grad Nurse: First Priorities | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-after-med-pass-delays-on-telemetry-rebuilding-momentum-on-your-shift` | After Med Pass Delays on Telemetry: Rebuilding Momentum on Your Shift | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-end-of-shift-anxiety-on-the-ed-as-a-new-grad-nurse-priorities-and-first-steps` | End-of-Shift Anxiety on the ED as a New Grad Nurse: Priorities and First Steps | 3 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-missed-assessment-on-step-down-as-a-new-grad-nurse-what-to-do-first` | First Missed Assessment on Step-Down as a New Grad Nurse: What to Do First | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-on-telemetry-how-new-grad-nurses-handle-patient-death` | On Telemetry: How New Grad Nurses Handle Patient Death | 3 | quarantined | Body contains generated placeholder/template phrase: "this article will". |
+| `newgrad-nursing-new-grads-on-icu-staying-organized-around-calling-the-provider` | New Grads on ICU: Staying Organized Around Calling the Provider | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-patient-death-on-oncology-as-a-new-grad-nurse-what-to-do-first` | First Patient Death on Oncology as a New Grad Nurse: What to Do First | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-rapid-response-on-icu-a-practical-checklist-for-new-grad-nurses` | Rapid Response on ICU: A Practical Checklist for New Grad Nurses | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-new-grads-on-the-ed-staying-organized-around-rapid-response` | New Grads on the ED: Staying Organized Around Rapid Response | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-handling-code-blue-on-med-surg-as-a-new-grad-nurse-first-priorities` | Handling Code Blue on Med-Surg as a New Grad Nurse: First Priorities | 1 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-rapid-response-on-telemetry-as-a-new-grad-nurse-priorities-and-first-steps` | Rapid Response on Telemetry as a New Grad Nurse: Priorities and First Steps | 2 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `newgrad-nursing-first-code-blue-on-same-day-surgery-as-a-new-grad-nurse-what-to-do-first` | First Code Blue on Same-Day Surgery as a New Grad Nurse: What to Do First | 3 | quarantined | FAQ answers are generic, too short, or not tied to the article topic. |
+| `why-does-heart-failure-cause-edema` | Why does heart failure cause edema explained for NCLEX-RN exams (what NCLEX-style items re | 1 | quarantined | Body contains generated placeholder/template phrase: "this article will". |
+| `why-does-dka-cause-kussmaul-respirations` | Why does DKA cause Kussmaul respirations explained for NCLEX-RN exams (what NCLEX-style it | 1 | quarantined | Body contains generated placeholder/template phrase: "this article will". |
+| `cellulitis-and-wound-infections-nursing-assessment-and-antibiotic-care` | Cellulitis and Wound Infections: Nursing Assessment and Antibiotic Care explained for NCLE | 1 | quarantined | Body contains generated placeholder/template phrase: "this article will". |
+| `respiratory-nclex-questions-common-stems-and-how-to-approach-them` | Respiratory NCLEX Questions: Common Stems and How to Approach Them explained for NCLEX-RN  | 1 | quarantined | Body contains generated placeholder/template phrase: "this article will". |
+| `pressure-injuries-staging-prevention-bundles-and-wound-dressings` | Pressure Injuries: Staging, Prevention Bundles, and Wound Dressings explained for NCLEX-RN | 1 | quarantined | Body contains generated placeholder/template phrase: "this article will". |
+| `how-nclex-tests-cardiac-arrhythmias-priority-questions-and-strategies` | How NCLEX Tests Cardiac Arrhythmias: Priority Questions and Strategies explained for NCLEX | 2 | quarantined | Body contains generated placeholder/template phrase: "this article will". |
+| `burn-injuries-depth-classification-fluid-resuscitation-and-wound-care` | Burn Injuries: Depth Classification, Fluid Resuscitation, and Wound Care explained for NCL | 1 | quarantined | Body contains generated placeholder/template phrase: "this article will". |
 
-| Dimension | Signal | Primary enforcement |
-| --- | --- | --- |
-| Placeholder / stub copy | Lorem ipsum, bracket TODOs, "content goes here", mustache templates, WIP markers | `educational-content-placeholder-guard` + `validateBlogPrePublish` (`educational_stub_language`) |
-| Thin or shell articles | Low word count vs publish targets | `blog-pre-publish-validation` (`body`, `body_word_count`), `evaluateBlogGenerationOutputGate` |
-| Repetitive / filler prose | Banned phrases, paragraph similarity, arc coverage | `blog-content-quality-gate`, `blog-publish-quality-validator` |
-| SEO bundle | Meta title/description length, schema summary JSON | `blog-pre-publish-validation` |
-| Internal linking | Plan rows, invalid paths, anchor opportunities | `blog-pre-publish-validation` (`internal_links`, …) |
-| References (when required) | APA list + structured sources | `blog-pre-publish-validation` (`references_required`, `sources_structure`) |
-
-## Code map (source of truth)
-
-- **Pre-publish (admin / canonical publish path):** `nursenest-core/src/lib/blog/blog-pre-publish-validation.ts`  
-  - Includes **hard block** for shared placeholder + AI meta-disclaimer patterns (`educational_stub_language`).
-- **Generated HTML before persist / schedule:** `nursenest-core/src/lib/blog/blog-generation-output-gate.ts`  
-  - Uses the same shared guard for placeholder + disclaimer detection (reason codes remain machine-readable).
-- **Corpus-level quality:** `blog-content-quality-gate.ts`, `blog-publish-quality-validator.ts`, `blog-generated-draft-quality.ts`.
-- **Governance scoring (read-only audits):** `blog-quality-score.ts` (used by `npm run blog:audit-published-quality`).
-
-## Shared anti-placeholder module
-
-`nursenest-core/src/lib/education/educational-content-placeholder-guard.ts`
-
-- Stable pattern **ids** for logs and audits (`lorem_ipsum`, `todo_colon`, `mustache_template`, …).
-- **AI disclaimer** phrasing is blocked for live educational copy (aligned with premium clinical voice).
-
-## How to run audits (read-only)
-
-From `nursenest-core/`:
-
-```bash
-npm run blog:audit-published-quality -- --limit=300
-```
-
-Writes timestamped `reports/blog-audit-published-*.md` + `.json` with composite scores and weak rows.
-
-**Placeholder + thin + internal-link heuristics (blogs + pathway lessons):**
-
-```bash
-npm run content:audit-published-educational -- --limit=400
-```
-
-Writes `reports/educational-audit-snapshot-*.md` (requires `DATABASE_URL`).
-
-## Remediation principles
-
-1. **Do not change slugs or indexed URLs** — edit body/meta in place; use 301 only when product explicitly requires it (out of scope for this audit track).
-2. **Prefer surgical rewrites** over deletion; thin posts should be **expanded or demoted** via workflow status, not mass-removed.
-3. Re-run `validateBlogPrePublish` (or admin "validate publish") after edits until `okToPublish` is true.
-
-## Tests
-
-- `src/lib/blog/blog-pre-publish-validation.test.ts` — includes placeholder blocking.
-- `src/lib/education/educational-content-placeholder-guard.test.ts` — pattern + duplicate-paragraph coverage.
+No posts are deleted by this script. `--apply` moves flagged rows to `NEEDS_REVIEW`.

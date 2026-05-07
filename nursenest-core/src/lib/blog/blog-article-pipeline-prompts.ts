@@ -7,6 +7,7 @@ import { isLongFormPathophysiologyProfile } from "@/lib/blog/blog-longform-nursi
 const ANTI_FILLER = `Quality bar (non-negotiable):
 - No generic filler ("in today's world", "it is important to note", "mastering this will unlock success", vague motivation).
 - **No template scaffolding or meta narration**: never write "This section connects…", "This article will…", "Here we explore…", "In this section, learners…", "This paragraph…", "exam-aligned framing without overcomplicating", or any sentence that describes the document instead of teaching the disease/topic.
+- **No fake module headings**: never use "deeper", "application", "mechanism narrative", "assessment clustering", "intervention priorities", or "teaching script" as H2/H3 headings or repeated subsection labels.
 - **No cloned subsection bodies**: each <h2> must introduce genuinely different teaching (mechanism vs labs vs meds vs teaching vs traps). Do not paste the same paragraph under multiple headings with tiny edits.
 - Every major section must include concrete nursing content: assessment findings, nursing actions, rationales tied to patient safety, or exam-style decision rules.
 - **Mechanism depth (pathophysiology)**: for disease processes, spell out WHY (causal chain), HOW compensation or progression shows at the bedside, WHAT labs or meds tie to which monitoring priorities — not topic labels alone.
@@ -44,7 +45,7 @@ When this mode applies, the JSON must satisfy a **stricter editorial contract** 
   8) Patient teaching (home care, adherence, foot/skin care when relevant, when to call the care team)
   9) NCLEX / REx-PN exam traps (distractors, prioritization, "best next action" patterns)
   10) Escalation red flags (when to escalate, emergency vs clinic urgency)
-  11) Mini case application (short vignette + questions that reference **this** topic only)
+  11) Mini case scenario (short vignette + questions that reference **this** topic only)
   12) Key takeaways (may mirror keyTakeaways JSON but still unique prose in HTML)
 - **faqs**: **at least 4** items; answers must connect mechanism → bedside decision or common exam trap. Do **not** reuse generic FAQ text across unrelated diseases; vary question stems and traps.
 - **suggestedInternalLessons** + **internalAnchorOpportunities** + **recommendedInternalLinks** together must provide **≥5** study destinations. Include a mix when relevant: pathway lessons, /questions, /practice-exams, flashcards hub, adaptive/CAT practice hints (marketing paths only — never /app/ or /api/).
@@ -176,7 +177,7 @@ export function buildArticleBodySystemPrompt(ctx?: BlogArticleBodyPromptContext)
 ## Pathophysiology long-form body rules (this article)
 - Mirror the **outline H2 order** as <h2> sections (do not skip a planned section).
 - Target **~120–250 unique words per major H2** of substantive teaching; **never** reuse the same <p> paragraph under different H2 headings (automated quality review rejects duplicate blocks).
-- **Banned boilerplate** (instant quality failure): "This section connects…", "clinically relevant way…", "exam-aligned framing without overcomplicating…", "learners should understand that this article…", or any meta-description of the section's purpose — write only patient-relevant teaching.
+- **Banned boilerplate** (instant quality failure): "This section connects…", "This section focuses on…", "clinically relevant way…", "exam-aligned framing without overcomplicating…", "learners should understand that this article…", "mechanism narrative", "assessment clustering", "intervention priorities", "teaching script", or any meta-description of the section's purpose — write only patient-relevant teaching.
 - In each major section: **mechanism → clinical picture → nursing action / monitoring** (at least one paragraph chain) with **topic-specific** facts (labs, exam findings, foot care, glucose patterns, etc. as appropriate).
 - Use **plain English first**, then precise terms; define abbreviations on first use.
 - **Safety / uncertainty**: use measured language ("often", "may", "typically") — no false certainty; no fabricated trial results or statistics.

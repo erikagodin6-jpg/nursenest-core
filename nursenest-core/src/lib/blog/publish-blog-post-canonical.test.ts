@@ -19,9 +19,9 @@ function longWords(n: number): string {
 
 function buildPublishableBody(): string {
   return (
-    `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 40)}` +
-    "<h2>Pathophysiology</h2><p>Mechanism explanation for clinical depth.</p>" +
-    "<h2>Nursing implications</h2><p>Practice and safety considerations.</p>"
+    `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 20)}` +
+    "<h2>Pathophysiology</h2><p>Fluid balance problems change intravascular volume and tissue perfusion, so the nurse connects intake, output, daily weight, edema, lung sounds, blood pressure, and oxygenation to the underlying clinical mechanism instead of treating the numbers as isolated charting tasks.</p>" +
+    "<h2>Nursing implications</h2><p>For NCLEX fluid balance items, prioritize new crackles, falling oxygen saturation, rapid weight gain, hypotension, poor urine output, or mental status change before routine teaching. The safest nursing action ties the fluid balance cue to airway, circulation, and timely provider escalation.</p>"
   );
 }
 
@@ -80,7 +80,7 @@ describe("publishBlogPostCanonical", () => {
     const created = await prisma.blogPost.create({
       data: {
         slug,
-        title: "Canonical publish integration test row",
+        title: "Fluid balance NCLEX nursing priority integration test row",
         excerpt,
         body,
         exam: "NCLEX-RN",
@@ -89,10 +89,10 @@ describe("publishBlogPostCanonical", () => {
         postStatus: BlogPostStatus.DRAFT,
         workflowStatus: BlogWorkflowStatus.GENERATED,
         postTemplate: BlogPostTemplate.TOPIC_EXPLAINED,
-        seoTitle: "Canonical test — SEO title",
+        seoTitle: "Fluid balance NCLEX nursing priority test",
         seoDescription:
           "Meta description with enough substance for SERP previews and pre-publish validation rules in tests.",
-        metaTitleVariant: "Canonical test — SEO title",
+        metaTitleVariant: "Fluid balance NCLEX nursing priority test",
         metaDescriptionVariant:
           "Meta description with enough substance for SERP previews and pre-publish validation rules in tests.",
         requiresReferences: false,
