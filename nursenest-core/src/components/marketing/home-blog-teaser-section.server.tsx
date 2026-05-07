@@ -42,14 +42,14 @@ export function HomeBlogTeaserSectionShell({
   if (!hasTopCopy && !hasList) return null;
 
   return (
-    <section className="mx-auto mt-6 w-full max-w-7xl px-4 pb-2 sm:px-6 lg:px-8">
-      <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-5">
+    <section className="mx-auto mt-8 w-full max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
+      <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-5 shadow-[var(--elevation-rest)] sm:p-6">
         {hasTopCopy ? (
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             {title || subtitle ? (
               <div>
                 {title ? (
-                  <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
+                  <h2 className="nn-marketing-h3 text-[var(--theme-heading-text)]">
                     {title}
                   </h2>
                 ) : null}

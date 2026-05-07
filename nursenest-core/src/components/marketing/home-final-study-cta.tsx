@@ -57,11 +57,11 @@ export function HomeFinalStudyCta() {
       aria-labelledby="home-final-cta-heading"
     >
       <div className="mx-auto max-w-2xl px-4 text-center sm:px-6">
-        <h2 className="nn-marketing-h2 text-balance">
+        <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance">
           {safeHomepageMarketingT(t, "pages.home.finalCta.headline", "Start preparing with confidence")}
         </h2>
 
-        <p className="nn-marketing-body mt-3 max-w-xl text-pretty text-[var(--theme-muted-text)] mx-auto">
+        <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty text-[var(--theme-muted-text)]">
           {safeHomepageMarketingT(
             t,
             "pages.home.finalCta.subheading",
@@ -69,10 +69,10 @@ export function HomeFinalStudyCta() {
           )}
         </p>
 
-        <ul className="mt-6 space-y-2 text-sm text-[var(--theme-muted-text)]">
+        <ul className="nn-marketing-body-sm mt-6 space-y-2 text-[var(--theme-muted-text)]">
           {trust.map((item) => (
             <li key={item} className="flex items-center justify-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-500" />
+              <CheckCircle className="h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
               {item}
             </li>
           ))}
