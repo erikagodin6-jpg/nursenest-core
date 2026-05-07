@@ -32,6 +32,18 @@ export type LessonSectionRole =
   | "review"
   | "cta";
 
+export type LessonSectionThemeKey =
+  | "pathophysiology"
+  | "diagnosticsLabs"
+  | "signsSymptoms"
+  | "redFlags"
+  | "nursingInterventions"
+  | "patientTeaching"
+  | "medicationsTreatments"
+  | "clinicalPearls"
+  | "examFocus"
+  | "nextSteps";
+
 /**
  * Maps each role to its `--lesson-*` CSS custom property name.
  * These tokens are defined per-theme in `theme-palettes.css` with exact colors,
@@ -120,8 +132,60 @@ const KIND_CHIP_LABEL_OVERRIDES: Partial<Record<PathwayLessonSectionKind, string
   country_specific_notes: "Regional Notes",
 };
 
+const ROLE_THEME_KEY: Record<LessonSectionRole, LessonSectionThemeKey> = {
+  info: "examFocus",
+  warning: "signsSymptoms",
+  concept: "pathophysiology",
+  action: "nursingInterventions",
+  diagnostic: "diagnosticsLabs",
+  danger: "redFlags",
+  success: "medicationsTreatments",
+  education: "patientTeaching",
+  application: "clinicalPearls",
+  review: "examFocus",
+  cta: "nextSteps",
+};
+
+const KIND_THEME_KEY_OVERRIDES: Partial<Record<PathwayLessonSectionKind, LessonSectionThemeKey>> = {
+  introduction: "examFocus",
+  pathophysiology_overview: "pathophysiology",
+  clinical_meaning: "pathophysiology",
+  signs_symptoms: "signsSymptoms",
+  clinical_manifestations: "signsSymptoms",
+  red_flags: "redFlags",
+  complications: "redFlags",
+  labs_diagnostics: "diagnosticsLabs",
+  nursing_assessment_interventions: "nursingInterventions",
+  nursing_priorities: "nursingInterventions",
+  clinical_application: "nursingInterventions",
+  client_education: "patientTeaching",
+  treatment_management: "medicationsTreatments",
+  clinical_pearls: "clinicalPearls",
+  clinical_scenario: "clinicalPearls",
+  exam_focus: "examFocus",
+  exam_tips: "examFocus",
+  exam_relevance: "examFocus",
+  takeaways: "examFocus",
+  related_next_steps: "nextSteps",
+};
+
+const THEME_ACCENTS: Record<LessonSectionThemeKey, string> = {
+  pathophysiology: "#3730A3",
+  diagnosticsLabs: "#D97706",
+  signsSymptoms: "#EA580C",
+  redFlags: "#E11D48",
+  nursingInterventions: "#059669",
+  patientTeaching: "#0891B2",
+  medicationsTreatments: "#DB2777",
+  clinicalPearls: "#7C3AED",
+  examFocus: "#2563EB",
+  nextSteps: "#475569",
+};
+
 export type LessonSectionTheme = {
   role: LessonSectionRole;
+  themeKey: LessonSectionThemeKey;
+  accent: string;
   /** Short label shown in the colored chip above the section heading. */
   chipLabel: string;
   /** Value for `data-lsc-role` attribute on `.nn-lesson-section-card`. */
@@ -139,10 +203,13 @@ export function getLessonSectionTheme(
   kind: PathwayLessonSectionKind | undefined | null,
 ): LessonSectionTheme {
   const role: LessonSectionRole = (kind != null && KIND_TO_ROLE[kind]) || "info";
+  const themeKey = (kind != null && KIND_THEME_KEY_OVERRIDES[kind]) || ROLE_THEME_KEY[role];
   const roleChipLabel = ROLE_CHIP_LABELS[role];
   const kindChipLabel = kind != null ? KIND_CHIP_LABEL_OVERRIDES[kind] : undefined;
   return {
     role,
+    themeKey,
+    accent: THEME_ACCENTS[themeKey],
     chipLabel: kindChipLabel ?? roleChipLabel,
     dataRole: role,
     lessonToken: ROLE_LESSON_TOKEN[role],

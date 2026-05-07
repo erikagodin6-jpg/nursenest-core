@@ -90,6 +90,8 @@ import { LessonSectionCard, lessonSectionSurface } from "@/components/lessons/le
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
+import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
+import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
 import { AppLessonUnavailable } from "@/components/student/app-lesson-unavailable";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
@@ -906,6 +908,13 @@ async function LessonDetailPageInner({ params }: Props) {
           </PremiumLessonShell>
         </LessonAssessmentFlow>
 
+        <PathwayLessonQuickClinicalSummary
+          quickReviewLines={quickReviewRailLines}
+          examFocusLines={examFocusRailLines}
+          commonMistakes={record.studyCommonTraps}
+          fullAccess={entitlement.hasAccess}
+        />
+
         <LessonNavButtons
           position="bottom"
           backHref="/app/lessons"
@@ -977,6 +986,9 @@ async function LessonDetailPageInner({ params }: Props) {
             purposeLine={purposeLine}
             assessmentHint={assessmentHint}
           />
+          <div className="mt-4">
+            <LessonStudyPhaseProgress progress={initialProgress} persisted={Boolean(userId) && entitlement.hasAccess} />
+          </div>
           {matchedLessonImage.url && hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
             <div className="mt-4">
               <LessonClinicalImageCard
@@ -1018,7 +1030,11 @@ async function LessonDetailPageInner({ params }: Props) {
         </div>
 
         <div className="nn-lesson-layout nn-lesson-layout--triple">
-          <LessonSectionNav sections={navSections} />
+          <LessonSectionNav
+            sections={navSections}
+            progress={initialProgress}
+            progressVisible={Boolean(userId) && entitlement.hasAccess}
+          />
           <div className="nn-lesson-main min-w-0" data-testid="pathway-lesson-main-column">
             <div className="nn-lesson-editorial-rail nn-lesson-editorial-rail--main">
               {studyLoopBankActive ? (
@@ -1046,7 +1062,7 @@ async function LessonDetailPageInner({ params }: Props) {
           {pathway ? (
             <aside
               className="nn-lesson-study-rail-aside shrink-0 border-t border-[var(--semantic-border-soft)] pt-6 xl:sticky xl:top-24 xl:w-full xl:self-start xl:border-t-0 xl:pt-0 xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
-              aria-label="Lesson quick review"
+              aria-label="Lesson utilities"
               data-testid="pathway-lesson-study-rail"
             >
               <PathwayLessonStudyRail

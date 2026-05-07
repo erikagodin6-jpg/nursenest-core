@@ -36,6 +36,9 @@ import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { extractExamFocusHighYieldLines, extractSecondaryExamContextLines } from "@/lib/lessons/pathway-lesson-study-extract";
 import { PathwayLessonStudyRail } from "@/components/lessons/pathway-lesson-study-rail";
+import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
+import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
+import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
@@ -262,7 +265,7 @@ export async function PathwayLessonDetailPageBody({
 
   return (
     <PathwayLessonDetailMarketingI18nLayer messages={marketingMessages}>
-    <div className="mx-auto w-full max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
+    <div className="mx-auto w-full max-w-[100rem] px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
       <div
         className={`nn-lesson-page-shell px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
@@ -313,6 +316,12 @@ export async function PathwayLessonDetailPageBody({
             ) : null
           }
         />
+        <div className="mt-4">
+          <LessonStudyPhaseProgress
+            progress={lessonProgress}
+            persisted={Boolean(userId) && fullAccess}
+          />
+        </div>
         {fullAccess && lessonHasExamTakeaways(lesson.studyTakeaways) ? (
           <div className="mt-4 max-w-5xl">
             <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="top" />
@@ -381,9 +390,14 @@ export async function PathwayLessonDetailPageBody({
           )
         ) : null}
 
-        <div className="mt-5 flex flex-col gap-7 xl:grid xl:grid-cols-[minmax(0,1fr)_15.75rem] xl:items-start xl:gap-9 2xl:gap-11">
+        <div className="nn-lesson-layout nn-lesson-layout--triple mt-5">
+          <LessonSectionNav
+            sections={tocNavSections}
+            progress={lessonProgress}
+            progressVisible={Boolean(userId) && fullAccess}
+          />
           <div
-            className="min-w-0 xl:col-start-1 xl:row-start-1 xl:max-w-[min(100%,48rem)] xl:justify-self-start"
+            className="nn-lesson-main min-w-0"
             data-testid="pathway-lesson-main-column"
           >
         {matchedLessonImage.url && hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
@@ -415,7 +429,7 @@ export async function PathwayLessonDetailPageBody({
               <div className="mb-2 flex w-full justify-end px-0">
                 <LessonRecallToggle />
               </div>
-              <article className="grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+              <article className="nn-lesson-article-flow nn-lesson-article-grid grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5">
                 {displaySections.map((section) => {
                   const wide = pathwayLessonSectionPrefersWideColumn(section.kind, {
                     hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
@@ -485,6 +499,13 @@ export async function PathwayLessonDetailPageBody({
             </div>
           ) : null}
 
+          <PathwayLessonQuickClinicalSummary
+            quickReviewLines={quickReviewBullets}
+            examFocusLines={examFocusRailLines}
+            commonMistakes={fullAccess ? lesson.studyCommonTraps : undefined}
+            fullAccess={fullAccess}
+          />
+
           <PathwayLessonActions
             pathwayId={pathway.id}
             lessonSlug={lesson.slug}
@@ -501,8 +522,8 @@ export async function PathwayLessonDetailPageBody({
           </div>
 
           <aside
-            className="shrink-0 space-y-4 border-t border-[var(--semantic-border-soft)] pt-6 xl:sticky xl:top-24 xl:col-start-2 xl:row-start-1 xl:w-full xl:border-t-0 xl:pt-0 xl:self-start xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
-            aria-label="Lesson quick review"
+            className="nn-lesson-study-rail-aside shrink-0 border-t border-[var(--semantic-border-soft)] pt-6 xl:sticky xl:top-24 xl:w-full xl:border-t-0 xl:pt-0 xl:self-start xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
+            aria-label="Lesson utilities"
           >
             <PathwayLessonStudyRail
               quickReviewLines={quickReviewBullets}

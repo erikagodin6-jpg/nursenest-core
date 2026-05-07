@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   BookOpen,
   BriefcaseMedical,
+  Check,
   ChevronDown,
   FlaskConical,
   GraduationCap,
@@ -17,6 +18,8 @@ import {
 } from "lucide-react";
 import { getLessonSectionTheme } from "@/lib/ui/lesson-section-theme";
 import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
+import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { lessonStudyPhaseLabel, lessonStudyProgressPercent } from "@/components/lessons/lesson-study-phase-progress";
 
 type SectionEntry = {
   id: string;
@@ -42,7 +45,15 @@ const ROLE_ICON = {
  * Sticky quick-jump sidebar (desktop, left column) + collapsible contents (mobile).
  * Uses IntersectionObserver for active tracking on large screens.
  */
-export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
+export function LessonSectionNav({
+  sections,
+  progress,
+  progressVisible = false,
+}: {
+  sections: SectionEntry[];
+  progress?: PathwayLessonProgressStatus | null;
+  progressVisible?: boolean;
+}) {
   const [activeId, setActiveId] = useState<string | null>(sections[0]?.id ?? null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -97,7 +108,10 @@ export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
       {sections.map((section) => {
         const { role, chipLabel } = getLessonSectionTheme(section.kind ?? null);
         const Icon = ROLE_ICON[role];
+        const activeIndex = sections.findIndex((s) => s.id === activeId);
+        const index = sections.findIndex((s) => s.id === section.id);
         const isActive = activeId === section.id;
+        const isCompleted = progressVisible && (progress === "completed" || (activeIndex > 0 && index < activeIndex));
 
         return (
           <li key={section.id}>
@@ -105,6 +119,7 @@ export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
               href={`#${section.id}`}
               className="nn-lesson-nav-item"
               data-active={isActive ? "true" : undefined}
+              data-completed={isCompleted ? "true" : undefined}
               aria-current={isActive ? "location" : undefined}
               aria-label={`Go to section: ${section.heading || chipLabel}`}
               onClick={(e) => {
@@ -112,7 +127,9 @@ export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
                 goTo(section.id);
               }}
             >
-              <span className="nn-lesson-nav-dot flex-shrink-0" data-role={role} aria-hidden="true" />
+              <span className="nn-lesson-nav-dot flex-shrink-0" data-role={role} aria-hidden="true">
+                {isCompleted ? <Check className="h-2.5 w-2.5" /> : null}
+              </span>
               <span className="flex min-w-0 flex-col gap-0.5">
                 <span className="nn-lesson-nav-label line-clamp-2">
                   {section.heading?.trim() || chipLabel}
@@ -145,13 +162,19 @@ export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
       </details>
 
       <aside className="nn-lesson-section-nav" aria-label="Lesson sections">
-        <p
-          className="mb-3 text-xs font-semibold uppercase tracking-wider"
-          style={{ color: "var(--semantic-text-muted)" }}
-        >
-          Contents
-        </p>
+        <div className="nn-lesson-section-nav__header">
+          <p>On this page</p>
+          <span>{sections.length} sections</span>
+        </div>
+        <div className="nn-lesson-section-nav__progress" aria-label="Study phase">
+          <span>{lessonStudyPhaseLabel(progressVisible ? progress : "not_started")}</span>
+          <strong>{progressVisible ? `${lessonStudyProgressPercent(progress)}%` : "Local"}</strong>
+        </div>
         <nav>{navList}</nav>
+        <div className="nn-lesson-section-nav__jump" aria-label="Lesson jump controls">
+          <button type="button" onClick={() => goTo(sections[0]!.id)}>Top</button>
+          <button type="button" onClick={() => goTo(sections[sections.length - 1]!.id)}>Review</button>
+        </div>
       </aside>
     </>
   );

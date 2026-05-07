@@ -4007,18 +4007,22 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 
 .nn-lesson-section-card {
   /* Default role: info (blue) — overridden per data-lsc-role below */
-  --lsc-color: var(--semantic-info);
+  --lsc-color: var(--lsc-accent, var(--semantic-info));
   --lsc-soft: var(--semantic-info-soft);
   --lsc-contrast: var(--semantic-info-contrast);
   /* Mute per-role tints toward card base for calmer, editorial panels */
   --lsc-surface: color-mix(in srgb, var(--lsc-soft) 38%, var(--bg-card, var(--theme-card-bg)) 62%);
 
-  border-radius: 0.875rem;
-  border: 1px solid color-mix(in srgb, var(--lsc-color) 11%, var(--semantic-border-soft));
-  border-left: 2px solid color-mix(in srgb, var(--lsc-color) 34%, var(--semantic-border-soft));
-  background: var(--lsc-surface);
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 18%, var(--semantic-border-soft));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 72%, var(--semantic-border-soft));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 10%, transparent), transparent 42%),
+    var(--lsc-surface);
   padding: 1.125rem 1.125rem 1.25rem 1.25rem;
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 80%, transparent);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 80%, transparent),
+    0 14px 36px color-mix(in srgb, var(--lsc-color) 7%, transparent);
   transition:
     box-shadow var(--motion-base) var(--motion-ease),
     border-color var(--motion-base) var(--motion-ease);
@@ -4047,58 +4051,58 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
  * theme-palettes.css, falling back to semantic tokens for legacy themes.
  */
 .nn-lesson-section-card[data-lsc-role="info"] {
-  --lsc-color: var(--semantic-info);
+  --lsc-color: var(--lsc-accent, var(--semantic-info));
   --lsc-soft: var(--lesson-summary, var(--semantic-info-soft));
   --lsc-contrast: var(--semantic-info-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="warning"] {
-  --lsc-color: var(--semantic-warning);
+  --lsc-color: var(--lsc-accent, var(--semantic-warning));
   --lsc-soft: var(--lesson-signs-symptoms, var(--semantic-warning-soft));
   --lsc-contrast: var(--semantic-warning-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="danger"] {
-  --lsc-color: var(--semantic-danger);
+  --lsc-color: var(--lsc-accent, var(--semantic-danger));
   --lsc-soft: var(--lesson-red-flags, var(--semantic-danger-soft));
   --lsc-contrast: var(--semantic-danger-contrast);
   --lsc-surface: color-mix(in srgb, var(--lsc-soft) 44%, var(--bg-card, var(--theme-card-bg)) 56%);
 }
 .nn-lesson-section-card[data-lsc-role="success"] {
-  --lsc-color: var(--semantic-success);
+  --lsc-color: var(--lsc-accent, var(--semantic-success));
   --lsc-soft: var(--lesson-medications, var(--semantic-success-soft));
   --lsc-contrast: var(--semantic-success-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="education"] {
-  --lsc-color: var(--semantic-success);
+  --lsc-color: var(--lsc-accent, var(--semantic-success));
   --lsc-soft: var(--lesson-patient-teaching, color-mix(in srgb, var(--semantic-success) 8%, var(--bg-card)));
   --lsc-contrast: var(--semantic-success-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="concept"] {
-  --lsc-color: var(--semantic-violet);
+  --lsc-color: var(--lsc-accent, var(--semantic-violet));
   --lsc-soft: var(--lesson-key-concepts, var(--semantic-violet-soft));
   --lsc-contrast: var(--semantic-violet-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="action"] {
-  --lsc-color: var(--semantic-teal);
+  --lsc-color: var(--lsc-accent, var(--semantic-teal));
   --lsc-soft: var(--lesson-interventions, var(--semantic-teal-soft));
   --lsc-contrast: var(--semantic-teal-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="diagnostic"] {
-  --lsc-color: var(--semantic-cyan);
+  --lsc-color: var(--lsc-accent, var(--semantic-cyan));
   --lsc-soft: var(--lesson-diagnostics, var(--semantic-cyan-soft));
   --lsc-contrast: var(--semantic-cyan-contrast);
 }
 .nn-lesson-section-card[data-lsc-role="application"] {
-  --lsc-color: var(--semantic-chart-5);
+  --lsc-color: var(--lsc-accent, var(--semantic-chart-5));
   --lsc-soft: var(--lesson-clinical-pearls, color-mix(in srgb, var(--semantic-chart-5) 10%, var(--bg-card)));
   --lsc-contrast: color-mix(in srgb, var(--semantic-chart-5) 65%, var(--semantic-text-primary));
 }
 .nn-lesson-section-card[data-lsc-role="review"] {
-  --lsc-color: var(--semantic-brand);
+  --lsc-color: var(--lsc-accent, var(--semantic-brand));
   --lsc-soft: var(--lesson-exam-tips, var(--semantic-brand-soft));
   --lsc-contrast: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-primary));
 }
 .nn-lesson-section-card[data-lsc-role="cta"] {
-  --lsc-color: var(--semantic-text-muted);
+  --lsc-color: var(--lsc-accent, var(--semantic-text-muted));
   --lsc-soft: var(--lesson-notes, var(--semantic-panel-muted));
   --lsc-contrast: var(--semantic-text-secondary);
 }
@@ -4239,10 +4243,14 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 }
 
 .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--editorial {
-  padding-top: 1rem;
-  padding-bottom: 1.1rem;
-  padding-left: 0.2rem;
-  padding-right: 0.2rem;
+  padding: 1.1rem 1rem 1.2rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 15%, var(--semantic-border-soft));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 68%, var(--semantic-border-soft));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 8%, transparent), transparent 45%),
+    color-mix(in srgb, var(--lsc-soft) 20%, var(--bg-card, var(--theme-card-bg)) 80%);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--lsc-color) 5%, transparent);
   scroll-margin-top: 4.5rem;
 }
 
@@ -4255,6 +4263,138 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   box-shadow: none;
   padding: 1rem 0.95rem 1.15rem 0.95rem;
   scroll-margin-top: 4.5rem;
+}
+
+.nn-lesson-utilities-rail .rounded-lg,
+.nn-lesson-utility-card {
+  border-radius: 0.875rem;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--semantic-text-primary) 4%, transparent);
+}
+
+.nn-lesson-utility-card {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 90%, var(--semantic-info) 10%);
+  background: color-mix(in srgb, var(--bg-card) 94%, var(--semantic-panel-muted) 6%);
+  padding: 0.85rem;
+}
+
+.nn-lesson-utility-card--accent {
+  border-color: color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 6%, var(--bg-card));
+}
+
+.nn-lesson-utility-card__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  color: var(--semantic-info);
+}
+
+.nn-lesson-utility-card h2 {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 750;
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-utility-card p {
+  margin: 0.15rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-lesson-quick-summary {
+  margin-top: 2rem;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 16%, var(--semantic-border-soft));
+  background:
+    radial-gradient(110% 70% at 0% 0%, color-mix(in srgb, var(--semantic-info) 11%, transparent), transparent 55%),
+    linear-gradient(145deg, color-mix(in srgb, var(--semantic-text-primary) 7%, var(--bg-card)) 0%, color-mix(in srgb, var(--semantic-panel-muted) 42%, var(--bg-card)) 100%);
+  padding: clamp(1rem, 2vw, 1.35rem);
+  box-shadow: 0 20px 48px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent);
+}
+
+.nn-lesson-quick-summary__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.95rem;
+}
+
+.nn-lesson-quick-summary__header p {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--semantic-info);
+}
+
+.nn-lesson-quick-summary__header h2 {
+  margin: 0;
+  font-size: clamp(1.25rem, 1rem + 0.85vw, 1.65rem);
+  line-height: 1.2;
+  font-weight: 750;
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-quick-summary__grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 760px) {
+  .nn-lesson-quick-summary__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.nn-lesson-quick-summary-card {
+  --summary-accent: var(--semantic-info);
+  border-radius: 0.875rem;
+  border: 1px solid color-mix(in srgb, var(--summary-accent) 26%, var(--semantic-border-soft));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--summary-accent) 11%, transparent), transparent 48%),
+    color-mix(in srgb, var(--bg-card) 92%, var(--summary-accent) 8%);
+  padding: 0.85rem;
+}
+
+.nn-lesson-quick-summary-card__title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.55rem;
+}
+
+.nn-lesson-quick-summary-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.6rem;
+  background: color-mix(in srgb, var(--summary-accent) 14%, transparent);
+  color: var(--summary-accent);
+}
+
+.nn-lesson-quick-summary-card h3 {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 760;
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-quick-summary-card ul {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.nn-lesson-quick-summary-card li {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--semantic-text-secondary);
 }
 
 .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout:hover {
@@ -4318,7 +4458,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   box-shadow: none;
 }
 
-/* Learner pathway lesson: TOC + wide article + study rail (stacked below xl). */
+/* Pathway lesson: TOC + wide article + utilities rail (stacked below xl). */
+.nn-lesson-layout--triple,
 .nn-lesson-page--learner-app .nn-lesson-layout--triple {
   display: flex;
   flex-direction: column;
@@ -4326,29 +4467,34 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 }
 
 @media (min-width: 1024px) and (max-width: 1279px) {
+  .nn-lesson-layout--triple,
   .nn-lesson-page--learner-app .nn-lesson-layout--triple {
     display: grid;
-    grid-template-columns: minmax(11rem, 13.5rem) minmax(0, 1fr);
+    grid-template-columns: minmax(13rem, 15rem) minmax(0, 1fr);
     gap: clamp(1.25rem, 2.2vw, 2.25rem);
     align-items: start;
   }
 
+  .nn-lesson-layout--triple .nn-lesson-study-rail-aside,
   .nn-lesson-page--learner-app .nn-lesson-layout--triple .nn-lesson-study-rail-aside {
     grid-column: 1 / -1;
   }
 }
 
 @media (min-width: 1280px) {
+  .nn-lesson-layout--triple,
   .nn-lesson-page--learner-app .nn-lesson-layout--triple {
     display: grid;
     grid-template-columns:
-      minmax(10.5rem, 13rem)
-      minmax(0, 7fr)
-      minmax(11.5rem, 16rem);
-    gap: clamp(1.5rem, 2.5vw, 2.75rem);
+      minmax(13.75rem, 15rem)
+      minmax(47.5rem, 60rem)
+      minmax(16.25rem, 18.75rem);
+    gap: clamp(1.25rem, 2vw, 2rem);
     align-items: start;
+    justify-content: center;
   }
 
+  .nn-lesson-layout--triple .nn-lesson-study-rail-aside,
   .nn-lesson-page--learner-app .nn-lesson-layout--triple .nn-lesson-study-rail-aside {
     grid-column: auto;
   }
@@ -4360,6 +4506,14 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 
 .nn-lesson-study-rail-aside {
   min-width: 0;
+}
+
+@media (max-width: 767px) {
+  .nn-lesson-phase-strip {
+    position: sticky;
+    top: 0.5rem;
+    z-index: 20;
+  }
 }
 
 /* ==========================================================================
@@ -4418,15 +4572,79 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
     overflow-y: auto;
     padding: 1.375rem 1.125rem;
     border-radius: 1.125rem;
-    background: var(--bg-card);
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--semantic-info) 5%, transparent), transparent 44%),
+      var(--bg-card);
     border: 1px solid color-mix(in srgb, var(--theme-primary) 12%, var(--border-subtle));
-    box-shadow: var(--elevation-rest);
+    box-shadow: 0 18px 44px color-mix(in srgb, var(--semantic-text-primary) 6%, transparent);
     scrollbar-width: none;
     border-top: 3px solid color-mix(in srgb, var(--theme-primary) 50%, var(--border-subtle));
   }
   .nn-lesson-section-nav::-webkit-scrollbar {
     display: none;
   }
+}
+
+.nn-lesson-section-nav__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.nn-lesson-section-nav__header p {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-section-nav__header span,
+.nn-lesson-section-nav__progress span {
+  font-size: 0.7rem;
+  color: var(--semantic-text-muted);
+}
+
+.nn-lesson-section-nav__progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 6%, transparent);
+}
+
+.nn-lesson-section-nav__progress strong {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--semantic-info);
+}
+
+.nn-lesson-section-nav__jump {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  margin-top: 0.9rem;
+}
+
+.nn-lesson-section-nav__jump button {
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 13%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--theme-primary) 4%, transparent);
+  color: var(--semantic-text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.45rem 0.55rem;
+}
+
+.nn-lesson-section-nav__jump button:hover {
+  background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
+  color: var(--semantic-text-primary);
 }
 
 .nn-lesson-nav-item {
@@ -4447,6 +4665,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 
 .nn-lesson-nav-item[data-active] {
   background: color-mix(in srgb, var(--theme-primary) 11%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-primary) 12%, transparent);
 }
 
 .nn-lesson-nav-dot {
@@ -4456,6 +4675,10 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   margin-top: 0.28rem;
   flex-shrink: 0;
   background: var(--semantic-border-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
   transition: background var(--motion-base, 150ms) ease;
 }
 
@@ -4496,6 +4719,116 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   color: color-mix(in srgb, var(--theme-primary) 70%, var(--semantic-text-muted));
 }
 
+.nn-lesson-nav-item[data-completed] .nn-lesson-nav-dot {
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-top: 0.16rem;
+}
+
+.nn-lesson-phase-strip {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 16%, var(--semantic-border-soft));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--semantic-info) 8%, transparent), transparent 52%),
+    color-mix(in srgb, var(--bg-card) 94%, var(--semantic-panel-cool) 6%);
+  padding: 0.85rem 0.95rem;
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--semantic-info) 6%, transparent);
+}
+
+.nn-lesson-phase-strip__top,
+.nn-lesson-phase-strip__steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.nn-lesson-phase-strip__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-phase-strip__percent {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--semantic-info);
+}
+
+.nn-lesson-phase-strip__bar {
+  height: 0.35rem;
+  overflow: hidden;
+  margin: 0.65rem 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+}
+
+.nn-lesson-phase-strip__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--semantic-info), var(--semantic-success));
+}
+
+.nn-lesson-phase-strip__steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nn-lesson-phase-strip__steps li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  color: var(--semantic-text-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+.nn-lesson-phase-strip__dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 92%, var(--semantic-info) 8%);
+  background: var(--bg-card);
+}
+
+.nn-lesson-phase-strip__steps li[data-active] {
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-phase-strip__steps li[data-active] .nn-lesson-phase-strip__dot {
+  border-color: color-mix(in srgb, var(--semantic-info) 60%, var(--semantic-border-soft));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--semantic-info) 12%, transparent);
+  color: var(--semantic-info);
+}
+
+.nn-lesson-phase-strip__steps li[data-complete] .nn-lesson-phase-strip__dot {
+  background: var(--semantic-success);
+  border-color: var(--semantic-success);
+  color: white;
+}
+
+@media (max-width: 520px) {
+  .nn-lesson-phase-strip__steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .nn-lesson-phase-strip__steps li {
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+    font-size: 0.64rem;
+  }
+}
+
 /* ==========================================================================
  * Lesson article flow — hierarchy, pastel rhythm, long-session comfort
  * Token-driven only. Use on pathway lesson <article> wrappers.
@@ -4507,6 +4840,10 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   display: flex;
   flex-direction: column;
   gap: clamp(0.65rem, 1.2vw, 1.05rem);
+}
+
+.nn-lesson-article-flow.nn-lesson-article-grid {
+  display: grid;
 }
 
 .nn-lesson-article-flow::before {

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import {
   Activity,
   AlertTriangle,
@@ -9,8 +9,11 @@ import {
   HeartPulse,
   Lightbulb,
   NotebookPen,
+  Pill,
   ShieldAlert,
   Stethoscope,
+  Target,
+  Thermometer,
 } from "lucide-react";
 import type { PathwayLessonFigure, PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 import { LessonSectionOptionalImage } from "@/components/lessons/lesson-section-optional-image";
@@ -80,7 +83,8 @@ export function LessonSectionCard({
   sectionLeadFigure?: PathwayLessonFigure | null;
   children: ReactNode;
 }) {
-  const { chipLabel: derivedChipLabel, dataRole, role } = getLessonSectionTheme(kind);
+  const theme = getLessonSectionTheme(kind);
+  const { chipLabel: derivedChipLabel, dataRole, role } = theme;
   const chipLabel = chipLabelOverride ?? derivedChipLabel;
   const surface = lessonSectionSurface(kind);
   const tierCrosswalk = kind === "tier_specific_relevance";
@@ -95,18 +99,19 @@ export function LessonSectionCard({
         : "";
   const ROLE_ICON = {
     info: Lightbulb,
-    warning: AlertTriangle,
+    warning: Thermometer,
     concept: BookOpen,
     action: Stethoscope,
     diagnostic: FlaskConical,
     danger: ShieldAlert,
-    success: HeartPulse,
+    success: Pill,
     education: GraduationCap,
     application: BriefcaseMedical,
-    review: Activity,
+    review: Target,
     cta: NotebookPen,
   } as const;
   const ChipIcon = ROLE_ICON[role];
+  const style = { "--lsc-accent": theme.accent } as CSSProperties;
 
   const chipRow =
     surface === "callout" ? (
@@ -153,8 +158,10 @@ export function LessonSectionCard({
         .filter(Boolean)
         .join(" ")}
       data-lsc-role={dataRole}
+      data-lsc-theme={theme.themeKey}
       data-lsc-kind={kind ?? undefined}
       aria-label={heading?.trim() || "Lesson section"}
+      style={style}
     >
       {chipRow}
       <h2 className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">

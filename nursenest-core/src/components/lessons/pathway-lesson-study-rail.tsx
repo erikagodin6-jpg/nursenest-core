@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { BookMarked, Brain, Clock3, Target, Zap } from "lucide-react";
 import type { MarketingPathwayLessonQuickReviewClientProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
@@ -91,8 +92,8 @@ function BulletList({ lines }: { lines: readonly string[] }) {
 }
 
 /**
- * Scannable study rail: clinical summary, exam focus, common mistakes, and an optional slot for
- * streamed related-question links. Intended for `xl` sticky column; stacked above the article on smaller viewports.
+ * Context utilities rail. Quick clinical summary belongs at the bottom of the lesson page;
+ * this rail stays compact and action-oriented.
  */
 export function PathwayLessonStudyRail({
   quickReviewLines,
@@ -110,12 +111,11 @@ export function PathwayLessonStudyRail({
   /** Optional signed-in progress line — does not block the main article when omitted. */
   progressSummary?: { status: PathwayLessonProgressStatus; label: string } | null;
 }) {
-  const summary = [...quickReviewLines].filter(Boolean).slice(0, 10);
   const focus = [...examFocusLines].filter(Boolean).slice(0, 6);
   const traps = fullAccess ? (commonMistakes ?? []).filter(Boolean).slice(0, 6) : [];
 
   const hasStatic =
-    summary.length > 0 || focus.length > 0 || traps.length > 0 || Boolean(progressSummary?.label);
+    focus.length > 0 || traps.length > 0 || Boolean(progressSummary?.label) || quickReviewLines.length > 0;
   if (!hasStatic && !relatedQuestionsSlot) return null;
 
   /** Wider screens: related stems stream into the rail; narrow viewports use the full-width block in the footer. */
@@ -128,26 +128,46 @@ export function PathwayLessonStudyRail({
   }
 
   return (
-    <div className="space-y-4" data-nn-lesson-study-rail>
+    <div className="nn-lesson-utilities-rail space-y-3" data-nn-lesson-study-rail>
       {progressSummary?.label ? (
         <RailSection title="Study progress" subtitle={`Status: ${progressSummary.status.replace(/_/g, " ")}`} accent="brand">
           <p className="text-sm leading-relaxed text-[var(--theme-body-text)]">{progressSummary.label}</p>
         </RailSection>
       ) : null}
 
-      {summary.length > 0 ? (
-        <RailSection
-          title="Quick clinical summary"
-          subtitle="Skim before the full read."
-          accent="success"
-        >
-          <BulletList lines={summary} />
-        </RailSection>
-      ) : null}
+      <section className="nn-lesson-utility-card">
+        <div className="nn-lesson-utility-card__row">
+          <BookMarked className="h-4 w-4" aria-hidden />
+          <div>
+            <h2>Saved lesson</h2>
+            <p>Bookmark from the action bar.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="nn-lesson-utility-card">
+        <div className="nn-lesson-utility-card__row">
+          <Clock3 className="h-4 w-4" aria-hidden />
+          <div>
+            <h2>Study time</h2>
+            <p>{quickReviewLines.length >= 8 ? "12-18 min focused read" : "8-12 min focused read"}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="nn-lesson-utility-card">
+        <div className="nn-lesson-utility-card__row">
+          <Brain className="h-4 w-4" aria-hidden />
+          <div>
+            <h2>Quick recall</h2>
+            <p>Toggle recall prompts in the lesson body.</p>
+          </div>
+        </div>
+      </section>
 
       {focus.length > 0 ? (
         <RailSection
-          title="Exam focus"
+          title="Exam readiness"
           subtitle="How this topic usually tests."
           accent="info"
         >
@@ -157,13 +177,24 @@ export function PathwayLessonStudyRail({
 
       {traps.length > 0 ? (
         <RailSection
-          title="Common mistakes"
+          title="Reinforcement status"
           subtitle="Traps to sidestep."
           accent="warning"
         >
           <BulletList lines={traps} />
         </RailSection>
       ) : null}
+
+      <section className="nn-lesson-utility-card nn-lesson-utility-card--accent">
+        <div className="nn-lesson-utility-card__row">
+          <Target className="h-4 w-4" aria-hidden />
+          <div>
+            <h2>Related practice</h2>
+            <p>Use the practice links after the rapid review.</p>
+          </div>
+          <Zap className="ml-auto h-3.5 w-3.5 opacity-60" aria-hidden />
+        </div>
+      </section>
 
       {relatedQuestionsSlot ? <div className="hidden xl:block">{relatedQuestionsSlot}</div> : null}
     </div>
