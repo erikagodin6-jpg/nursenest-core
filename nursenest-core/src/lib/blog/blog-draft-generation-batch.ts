@@ -274,6 +274,14 @@ async function processRnTopicMapShellBatchItems(batchId: string, limit: number):
     }
   }
 
+  if (results.length > 0) {
+    safeServerLog("blog", "blog_generation_chunk_processed", {
+      batchId,
+      processed: results.length,
+      source: "rn_topic_map_shell",
+    });
+  }
+
   return { processed: results.length, results, errors };
 }
 
@@ -409,6 +417,14 @@ export async function processDraftGenerationBatchItems(
         });
         await refreshDraftGenerationBatchStats(batchId);
         const parsed = parseBlogBatchItemRepairMeta(errText);
+        safeServerLog("blog", "blog_generation_job_failed_provider", {
+          batchId,
+          itemId: item.id,
+          ordinal: item.ordinal,
+          stage: result.stage ?? "body",
+          message: (result.error ?? "").slice(0, 500),
+          code: result.code ?? null,
+        });
         await logDraftBatchItemRun({
           batchId,
           itemId: item.id,
@@ -507,6 +523,16 @@ export async function processDraftGenerationBatchItems(
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       errors.push(`${item.id}: ${msg}`);
+      if (isTransientBlogProviderError(msg) || /\b(401|403|429|5\d{2})\b/.test(msg)) {
+        safeServerLog("blog", "blog_generation_job_failed_provider", {
+          batchId,
+          itemId: item.id,
+          ordinal: item.ordinal,
+          stage: "thrown",
+          message: msg.slice(0, 500),
+          code: null,
+        });
+      }
       await prisma.blogDraftGenerationBatchItem
         .update({
           where: { id: item.id },
@@ -543,6 +569,14 @@ export async function processDraftGenerationBatchItems(
         providerThrottleBackoffMs = Math.min(60_000, Math.floor(providerThrottleBackoffMs * 1.5));
       }
     }
+  }
+
+  if (results.length > 0) {
+    safeServerLog("blog", "blog_generation_chunk_processed", {
+      batchId,
+      processed: results.length,
+      source: "draft_batch_process",
+    });
   }
 
   return { processed: results.length, results, errors };

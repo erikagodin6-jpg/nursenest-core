@@ -17,6 +17,7 @@ type WayfindingLink = { href: string; label: string; icon: typeof ClipboardList 
 
 /**
  * Compact study support: four high-intent routes only (no duplicate hubs or long blurbs).
+ * `relatedOnly` renders curated related lessons only — use when the page already has a primary “Continue studying” module.
  */
 export function PathwayLessonWayfinding({
   pathway,
@@ -25,6 +26,7 @@ export function PathwayLessonWayfinding({
   topicSlug,
   currentSlug,
   relatedLessonRefs,
+  variant = "full",
 }: {
   pathway: ExamPathwayDefinition;
   lessonsBasePath: string;
@@ -32,6 +34,7 @@ export function PathwayLessonWayfinding({
   topicSlug: string;
   currentSlug: string;
   relatedLessonRefs?: PathwayLessonRelatedRef[] | null;
+  variant?: "full" | "relatedOnly";
 }) {
   const topic = lessonTopic.trim();
   const slug = topicSlug.trim().toLowerCase();
@@ -60,6 +63,31 @@ export function PathwayLessonWayfinding({
     if (!href) continue;
     const title = ref.titleHint?.trim() || humanizeTopicSlug(s) || s;
     curated.push({ href, title });
+  }
+
+  if (variant === "relatedOnly") {
+    if (curated.length === 0) return null;
+    return (
+      <nav
+        className="lv-wayfinding lv-wayfinding--related-only mx-auto mt-8 max-w-5xl border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-6 sm:mt-10"
+        aria-labelledby="lesson-wayfinding-related-heading"
+      >
+        <h2 id="lesson-wayfinding-related-heading" className="lv-wayfinding__title">
+          Related lessons
+        </h2>
+        <ul className="lv-wayfinding__related-list mt-3">
+          {curated.map((c) => (
+            <li key={c.href}>
+              <LearnerListRowLink
+                href={c.href}
+                icon={<BookOpen className="h-4 w-4" strokeWidth={1.75} aria-hidden />}
+                label={c.title}
+              />
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
   }
 
   return (

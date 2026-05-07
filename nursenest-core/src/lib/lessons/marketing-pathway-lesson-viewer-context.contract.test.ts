@@ -44,13 +44,13 @@ describe("marketing pathway lesson viewer context", () => {
     assert.ok(!src.includes('const userId = ""'), "must not hardcode anonymous userId");
   });
 
-  it("resolves staff full-lesson access from DB role (not getStaffSession-only) to avoid paywall flaps", () => {
+  it("resolves staff full-lesson access via getStaffSession (DB-backed + retry) like staff chrome", () => {
     const src = fs.readFileSync(
       path.join(HERE, "marketing-pathway-lesson-viewer-context.server.ts"),
       "utf8",
     );
-    assert.match(src, /loadUserRoleFromDbIdentity/);
-    assert.match(src, /marketingPathwayLessonStaffFullBodyAccess/);
+    assert.match(src, /getStaffSession/);
+    assert.ok(!src.includes("marketingPathwayLessonStaffFullBodyAccess"), "use getStaffSession instead of one-shot role row");
   });
 
   it("keeps learner /app/lessons/[id] on resolveEntitlementForPage with real user id", () => {

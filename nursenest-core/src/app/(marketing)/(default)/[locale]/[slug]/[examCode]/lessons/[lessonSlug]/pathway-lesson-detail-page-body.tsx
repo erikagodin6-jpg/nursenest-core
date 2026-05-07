@@ -97,6 +97,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
 import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { PathwayLessonDetailMarketingI18nLayer } from "@/components/lessons/pathway-lesson-detail-marketing-i18n-layer";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
@@ -132,7 +133,8 @@ export async function PathwayLessonDetailPageBody({
   const [studySettingsRes] = await Promise.allSettled([loadStudySettings(userId)]);
   const studySettings = studySettingsRes.status === "fulfilled" ? studySettingsRes.value : DEFAULT_STUDY_SETTINGS;
   const bankEntitlement: AccessScope | null = entitlement === "error" ? null : entitlement;
-  const fullQuizAccess = bankEntitlement?.hasAccess === true;
+  /** Staff QA: treat like subscriber for bank-linked surfaces where entitlement resolves; lesson body uses `fullAccess`. */
+  const fullQuizAccess = bankEntitlement?.hasAccess === true || staffFullLessonAccess;
 
   const routeResolution = resolveMarketingPathwayLessonRouteResolution({
     pathway,
@@ -259,9 +261,10 @@ export async function PathwayLessonDetailPageBody({
   }
 
   return (
+    <PathwayLessonDetailMarketingI18nLayer messages={marketingMessages}>
     <div className="mx-auto w-full max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell px-0 py-3 sm:px-6 sm:py-5${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <MarketingPathwayLessonDetailViewBeacon
           pathway={pathway}
@@ -379,32 +382,11 @@ export async function PathwayLessonDetailPageBody({
           )
         ) : null}
 
-        <div className="mt-6 flex flex-col gap-8 xl:grid xl:grid-cols-[minmax(0,1fr)_16.5rem] xl:items-start xl:gap-10 2xl:gap-12">
-          <aside
-            className="shrink-0 space-y-4 xl:sticky xl:top-24 xl:order-2 xl:col-start-2 xl:w-full xl:self-start xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
-            aria-label="Lesson quick review"
+        <div className="mt-5 flex flex-col gap-7 xl:grid xl:grid-cols-[minmax(0,1fr)_15.75rem] xl:items-start xl:gap-9 2xl:gap-11">
+          <div
+            className="min-w-0 xl:col-start-1 xl:row-start-1 xl:max-w-[min(100%,48rem)] xl:justify-self-start"
+            data-testid="pathway-lesson-main-column"
           >
-            <PathwayLessonStudyRail
-              quickReviewLines={quickReviewBullets}
-              examFocusLines={examFocusRailLines}
-              commonMistakes={fullAccess ? lesson.studyCommonTraps : undefined}
-              fullAccess={fullAccess}
-              relatedQuestionsSlot={
-                <Suspense fallback={<PathwayLessonRelatedRailSkeleton />}>
-                  <PathwayLessonDeferredRelatedRail
-                    pathway={pathway}
-                    lesson={toPathwayLessonDeferredServerSnapshot(lesson)}
-                    contentLocale={lessonContentLocale}
-                    bankEntitlement={bankEntitlement}
-                    fullQuizAccess={fullQuizAccess}
-                    userId={userId}
-                  />
-                </Suspense>
-              }
-            />
-          </aside>
-
-          <div className="min-w-0 xl:order-1 xl:col-start-1 xl:row-start-1 xl:max-w-[min(100%,52rem)] xl:justify-self-start">
         {matchedLessonImage.url && hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
           <LessonClinicalImageCard
             url={matchedLessonImage.url}
@@ -518,6 +500,30 @@ export async function PathwayLessonDetailPageBody({
           />
         </PathwayLessonAssessmentExperience>
           </div>
+
+          <aside
+            className="shrink-0 space-y-4 border-t border-[var(--semantic-border-soft)] pt-6 xl:sticky xl:top-24 xl:col-start-2 xl:row-start-1 xl:w-full xl:border-t-0 xl:pt-0 xl:self-start xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
+            aria-label="Lesson quick review"
+          >
+            <PathwayLessonStudyRail
+              quickReviewLines={quickReviewBullets}
+              examFocusLines={examFocusRailLines}
+              commonMistakes={fullAccess ? lesson.studyCommonTraps : undefined}
+              fullAccess={fullAccess}
+              relatedQuestionsSlot={
+                <Suspense fallback={<PathwayLessonRelatedRailSkeleton />}>
+                  <PathwayLessonDeferredRelatedRail
+                    pathway={pathway}
+                    lesson={toPathwayLessonDeferredServerSnapshot(lesson)}
+                    contentLocale={lessonContentLocale}
+                    bankEntitlement={bankEntitlement}
+                    fullQuizAccess={fullQuizAccess}
+                    userId={userId}
+                  />
+                </Suspense>
+              }
+            />
+          </aside>
         </div>
 
         <Suspense fallback={<PathwayLessonDetailDeferredSkeleton />}>
@@ -576,5 +582,6 @@ export async function PathwayLessonDetailPageBody({
         {hasLessonSequence ? <PathwayLessonStickySequenceNav adjacent={lessonAdjacentHrefs} /> : null}
       </div>
     </div>
+    </PathwayLessonDetailMarketingI18nLayer>
   );
 }

@@ -59,15 +59,24 @@ test("generation job create route returns a timeout-safe queued response", () =>
   assert.match(src, /createTimeoutSafeJobResponse/);
   assert.match(src, /blog_generation_job_timeout_safe_return/);
   assert.match(src, /\{\s*status:\s*202\s*\}/);
+  assert.match(src, /createdAt/);
   assert.doesNotMatch(src, /loadBlogGenerationJobForAdmin/);
+});
+
+test("generation job GET supports lightweight statusPoll query", () => {
+  const p = join(__dirname, "..", "..", "app", "api", "admin", "blog", "generation-jobs", "[id]", "route.ts");
+  const src = readFileSync(p, "utf8");
+  assert.match(src, /statusPoll/);
+  assert.match(src, /loadBlogGenerationJobForAdmin/);
 });
 
 test("admin draft batch client recovers queued jobs from create/read timeout", () => {
   const p = join(__dirname, "..", "..", "components", "admin", "admin-blog-draft-batch-client.tsx");
   const src = readFileSync(p, "utf8");
   assert.match(src, /recoveredFromTimeout/);
-  assert.match(src, /loadBatch\(id\)/);
-  assert.match(src, /Polling will retry automatically/);
+  assert.match(src, /loadBatch\(id,\s*"full"\)/);
+  assert.match(src, /statusPoll=1/);
+  assert.match(src, /Progress updates automatically/);
 });
 
 test("blog batch cron pumps background draft generation jobs", () => {

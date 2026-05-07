@@ -25,8 +25,8 @@ import {
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
-/** Job create only writes DB rows (no inline AI). Keep headroom for large paste batches + slow DB. */
-export const maxDuration = 120;
+/** Create path only validates + inserts rows (no inline AI). */
+export const maxDuration = 60;
 
 const IDEMPOTENCY_WINDOW_MS = 120_000;
 
@@ -52,6 +52,7 @@ function createTimeoutSafeJobResponse(params: {
   droppedShortLines: number;
   jobKind: "ai_topics" | "rn_topic_map_shell";
   idempotentReplay?: boolean;
+  createdAt: string;
 }) {
   const selection = getSafeBlogAiLogSelection();
   const status = "queued" satisfies BlogGenerationJobPhase;
@@ -74,6 +75,7 @@ function createTimeoutSafeJobResponse(params: {
     provider: selection.provider,
     model: selection.model,
     idempotentReplay: params.idempotentReplay === true,
+    createdAt: params.createdAt,
   });
 
   return NextResponse.json(
@@ -81,6 +83,7 @@ function createTimeoutSafeJobResponse(params: {
       ok: true,
       jobId: params.jobId,
       status,
+      createdAt: params.createdAt,
       message,
       droppedShortLines: params.droppedShortLines,
       idempotentReplay: params.idempotentReplay === true,
@@ -140,6 +143,7 @@ export async function POST(req: Request) {
       droppedShortLines,
       jobKind: isShell ? "rn_topic_map_shell" : "ai_topics",
       idempotentReplay: true,
+      createdAt: existing.createdAt.toISOString(),
     });
   };
 
@@ -183,7 +187,7 @@ export async function POST(req: Request) {
           backgroundProcessing: true,
           idempotencyKey: d.idempotencyKey ?? null,
         },
-        select: { id: true, totalItems: true },
+        select: { id: true, totalItems: true, createdAt: true },
       });
       await tx.blogDraftGenerationBatchItem.createMany({
         data: rows.map((row, ordinal) => ({
@@ -212,6 +216,7 @@ export async function POST(req: Request) {
       totalItems: batch.totalItems,
       droppedShortLines: 0,
       jobKind: "rn_topic_map_shell",
+      createdAt: batch.createdAt.toISOString(),
     });
   }
 
@@ -277,7 +282,7 @@ export async function POST(req: Request) {
         backgroundProcessing: true,
         idempotencyKey: d.idempotencyKey ?? null,
       },
-      select: { id: true, totalItems: true },
+      select: { id: true, totalItems: true, createdAt: true },
     });
     await tx.blogDraftGenerationBatchItem.createMany({
       data: topics.map((topicRaw, ordinal) => ({
@@ -305,6 +310,7 @@ export async function POST(req: Request) {
     totalItems: batch.totalItems,
     droppedShortLines,
     jobKind: "ai_topics",
+    createdAt: batch.createdAt.toISOString(),
   });
 }
 

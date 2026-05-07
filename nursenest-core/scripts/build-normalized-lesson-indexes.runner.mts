@@ -140,6 +140,16 @@ async function main(): Promise<void> {
     summaryMisses: memo.summaryIndexMisses,
   });
   const coverage = buildLessonNormalizationCoverageReport({ pathwayIds: ids });
+  if (process.env.NN_DEBUG_LESSON_INDEX_EXCLUSIONS === "1") {
+    for (const pathway of coverage.pathways) {
+      if (pathway.exclusions.length === 0) continue;
+      for (const ex of pathway.exclusions) {
+        console.error(
+          `[lesson-index-exclusion] pathway=${pathway.pathwayId} slug=${ex.slug} title=${JSON.stringify(ex.title)} reasonCode=${ex.reasonCode} allowed=${ex.allowed ? "yes" : "no"} reason=${JSON.stringify(ex.reason)}`,
+        );
+      }
+    }
+  }
   writeLessonNormalizationCoverageReports(coverage);
   const collapsed = coverage.pathways.filter((pathway) => pathway.rawCount > 0 && pathway.renderableCount === 0);
   if (collapsed.length > 0) {

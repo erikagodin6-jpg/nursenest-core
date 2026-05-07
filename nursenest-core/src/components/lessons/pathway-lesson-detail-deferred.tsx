@@ -41,6 +41,7 @@ export async function PathwayLessonDetailDeferred({
         topicSlug={lesson.topicSlug}
         currentSlug={lesson.slug}
         relatedLessonRefs={lesson.relatedLessonRefs}
+        variant="relatedOnly"
       />
       <div className="xl:hidden">
         <LessonTopicPracticeSection

@@ -113,6 +113,8 @@ type GenerationJobApiPayload = {
   lastProcessorError: string | null;
   items: ItemRow[];
   itemsTruncated?: boolean;
+  /** Server-built counts-only poll snapshot (`?statusPoll=1`). */
+  statusPoll?: boolean;
 };
 
 type CreateGenerationJobResponse = {
@@ -121,10 +123,34 @@ type CreateGenerationJobResponse = {
   message?: string;
   jobId?: string;
   status?: NonNullable<BatchDetail["jobPhase"]>;
+  createdAt?: string;
   job?: GenerationJobApiPayload;
   droppedShortLines?: number;
   idempotentReplay?: boolean;
 };
+
+const JOB_STATUS_POLL_TIMEOUT_MS = 28_000;
+
+const POLLING_SOFT_FAILURE =
+  "Job created, but status polling timed out. The worker may still process it.";
+
+function isAuthOrNotFoundStatus(status: number): boolean {
+  return status === 401 || status === 403 || status === 404;
+}
+
+/** Unreadable or slow gateway responses while polling should not look like hard failures. */
+function shouldSoftenUnreadableJobFetch(
+  res: Response,
+  mode: "full" | "poll",
+  json: unknown,
+): boolean {
+  if (json != null) return false;
+  if (isAuthOrNotFoundStatus(res.status)) return false;
+  if (res.status === 0 || res.status >= 500 || res.status === 408) return true;
+  if (res.status === 429) return true;
+  if (mode === "poll") return true;
+  return false;
+}
 
 function mapJobPayloadToBatchDetail(job: GenerationJobApiPayload): BatchDetail {
   const pendingFallback = job.items.filter(
@@ -244,54 +270,102 @@ export function AdminBlogDraftBatchClient() {
     if (res.ok && json.batches) setRecent(json.batches);
   }, []);
 
-  const loadBatch = useCallback(async (id: string) => {
-    const res = await fetch(`/api/admin/blog/generation-jobs/${encodeURIComponent(id)}?lite=1&maxItems=80`, {
-      credentials: "include",
-      cache: "no-store",
-    });
-    const json = await safeJson<{
-      ok?: boolean;
-      job?: GenerationJobApiPayload;
-      error?: string;
-      message?: string;
-      code?: string;
-      details?: unknown;
-    }>(res);
-    if (!json) {
-      const gatewayish = res.status >= 502 && res.status <= 504;
-      if (gatewayish) {
-        setMsg(
-          "Could not read job status JSON (gateway timeout or empty body). The job may still be running — polling will retry. Use “Process chunk” if progress stalls.",
-        );
+  const loadBatch = useCallback(async (id: string, mode: "full" | "poll" = "poll") => {
+    const qs = mode === "poll" ? "statusPoll=1" : "lite=1&maxItems=48";
+    const ac = mode === "poll" ? new AbortController() : null;
+    const timer =
+      ac != null
+        ? setTimeout(() => {
+            ac.abort();
+          }, JOB_STATUS_POLL_TIMEOUT_MS)
+        : null;
+    try {
+      const res = await fetch(`/api/admin/blog/generation-jobs/${encodeURIComponent(id)}?${qs}`, {
+        credentials: "include",
+        cache: "no-store",
+        signal: ac?.signal,
+      });
+      const json = await safeJson<{
+        ok?: boolean;
+        job?: GenerationJobApiPayload;
+        error?: string;
+        message?: string;
+        code?: string;
+        details?: unknown;
+      }>(res);
+      if (!json) {
+        if (shouldSoftenUnreadableJobFetch(res, mode, json)) {
+          setMsg(POLLING_SOFT_FAILURE);
+          setErr(null);
+          return;
+        }
+        setErr(`Could not read job response (HTTP ${res.status}).`);
+        return;
+      }
+      if (json.code === "JOB_RESPONSE_TIMEOUT") {
+        setMsg(POLLING_SOFT_FAILURE);
         setErr(null);
         return;
       }
-      setErr(`Could not read job response (HTTP ${res.status}).`);
-      return;
-    }
-    if (!res.ok || !json.job) {
-      const fromBody =
-        (typeof json.message === "string" && json.message.trim()) ||
-        (typeof json.error === "string" && json.error.trim()) ||
-        "";
-      let detail = "";
-      if (json.details != null) {
-        try {
-          detail = typeof json.details === "string" ? json.details : JSON.stringify(json.details);
-        } catch {
-          detail = "";
+      if (!res.ok || !json.job) {
+        const fromBody =
+          (typeof json.message === "string" && json.message.trim()) ||
+          (typeof json.error === "string" && json.error.trim()) ||
+          "";
+        let detail = "";
+        if (json.details != null) {
+          try {
+            detail = typeof json.details === "string" ? json.details : JSON.stringify(json.details);
+          } catch {
+            detail = "";
+          }
         }
+        const combined = [fromBody, detail].filter(Boolean).join(detail ? "\n" : "");
+        if (
+          mode === "poll" &&
+          !isAuthOrNotFoundStatus(res.status) &&
+          (json.code === "JOB_RESPONSE_TIMEOUT" ||
+            res.status === 503 ||
+            res.status === 504 ||
+            res.status === 502 ||
+            res.status >= 500)
+        ) {
+          setMsg(POLLING_SOFT_FAILURE);
+          setErr(null);
+          return;
+        }
+        setErr(
+          res.status === 429
+            ? formatAdminRateLimitMessageFromJson(json)
+            : combined.trim() || `Request failed (HTTP ${res.status}).`,
+        );
+        return;
       }
-      const combined = [fromBody, detail].filter(Boolean).join(detail ? "\n" : "");
-      setErr(
-        res.status === 429
-          ? formatAdminRateLimitMessageFromJson(json)
-          : combined.trim() || `Request failed (HTTP ${res.status}).`,
-      );
-      return;
+      if (json.job.statusPoll) {
+        setBatch((prev) => {
+          if (prev && prev.id === json.job!.id) {
+            return mapJobPayloadToBatchDetail({
+              ...json.job!,
+              items: prev.items,
+            });
+          }
+          return mapJobPayloadToBatchDetail(json.job!);
+        });
+      } else {
+        setBatch(mapJobPayloadToBatchDetail(json.job));
+      }
+      setErr(null);
+    } catch (e) {
+      const aborted = e instanceof DOMException && e.name === "AbortError";
+      if (aborted || (e instanceof Error && e.name === "AbortError")) {
+        setMsg(POLLING_SOFT_FAILURE);
+        setErr(null);
+        return;
+      }
+      setErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      if (timer) clearTimeout(timer);
     }
-    setBatch(mapJobPayloadToBatchDetail(json.job));
-    setErr(null);
   }, []);
 
   const retryRepairItem = useCallback(
@@ -309,7 +383,7 @@ export function AdminBlogDraftBatchClient() {
           setErr(json.error || `HTTP ${res.status}`);
           return;
         }
-        await loadBatch(batchId);
+        await loadBatch(batchId, "full");
       } catch (e) {
         setErr(e instanceof Error ? e.message : String(e));
       } finally {
@@ -328,7 +402,7 @@ export function AdminBlogDraftBatchClient() {
     const fromUrl = q.get("batch");
     if (fromUrl) {
       setBatchId(fromUrl);
-      void loadBatch(fromUrl);
+      void loadBatch(fromUrl, "full");
     }
   }, [loadBatch]);
 
@@ -346,7 +420,7 @@ export function AdminBlogDraftBatchClient() {
 
   const shouldPollJob = useMemo(() => {
     if (!batchId) return false;
-    if (!batch) return true;
+    if (!batch) return false;
     if (batch.status !== BlogDraftGenerationBatchStatus.ACTIVE) return false;
     if (!batch.backgroundProcessing) return false;
     const ph = batch.jobPhase;
@@ -357,7 +431,7 @@ export function AdminBlogDraftBatchClient() {
   useEffect(() => {
     if (!batchId || !shouldPollJob) return;
     const t = setInterval(() => {
-      void loadBatch(batchId);
+      void loadBatch(batchId, "poll");
     }, 3000);
     return () => clearInterval(t);
   }, [batchId, shouldPollJob, loadBatch]);
@@ -405,17 +479,20 @@ export function AdminBlogDraftBatchClient() {
         recoveredFromTimeout = Boolean(json?.jobId || json?.job?.id);
       }
       if (!json) {
-        if (res.status >= 502 && res.status <= 504) {
-          setMsg(
-            "The create request may have completed on the server, but the gateway returned a timeout or empty body before the client could read JSON. Check “Recent jobs” or your URL `?batch=` id; polling will pick up a created job when it appears.",
-          );
+        const createTimedOut =
+          res.status === 0 ||
+          res.status >= 502 ||
+          res.status === 524 ||
+          (res.status >= 520 && res.status < 530);
+        if (createTimedOut) {
+          setMsg(POLLING_SOFT_FAILURE);
         }
         setErr(
-          res.status >= 502 && res.status <= 504
+          createTimedOut
             ? null
             : `Could not read create response (HTTP ${res.status}).`,
         );
-        if (res.status < 502 || res.status > 504) return;
+        if (!createTimedOut) return;
         await loadRecent();
         return;
       }
@@ -432,7 +509,7 @@ export function AdminBlogDraftBatchClient() {
       if (json.job) setBatch(mapJobPayloadToBatchDetail(json.job));
       else {
         setBatch(null);
-        void loadBatch(id);
+        void loadBatch(id, "poll");
       }
       if (!json.idempotentReplay) {
         setIdempotencyKey(newIdempotencyKey());
@@ -490,7 +567,7 @@ export function AdminBlogDraftBatchClient() {
       if (useTick && json.job) {
         setBatch(mapJobPayloadToBatchDetail(json.job));
       } else {
-        await loadBatch(batchId);
+        await loadBatch(batchId, "full");
       }
       await loadRecent();
     } catch (e) {
@@ -507,7 +584,7 @@ export function AdminBlogDraftBatchClient() {
       url.searchParams.set("batch", id);
       window.history.replaceState({}, "", url.toString());
     }
-    void loadBatch(id);
+    void loadBatch(id, "full");
   }
 
   const lineCount = topicsText.split(/\r?\n/).filter((l) => l.trim().length >= 3).length;

@@ -39,9 +39,19 @@ function RailSection({ title, subtitle, accent, children }: SectionProps) {
   );
 }
 
-/** Renders lightweight `**bold**` from pathway summaries without a full markdown runtime. */
+/** Drops stray `**` markers when authors/editors leave unbalanced emphasis (shows raw otherwise). */
+function normalizeBulletMarkdownLine(raw: string): string {
+  const count = (raw.match(/\*\*/g) ?? []).length;
+  if (count % 2 !== 0) {
+    return raw.replace(/\*\*/g, "");
+  }
+  return raw;
+}
+
+/** Renders lightweight `**bold**` / `*italic*` from pathway summaries without a full markdown runtime. */
 function RailBulletLine({ text }: { text: string }) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  const normalized = normalizeBulletMarkdownLine(text.trim());
+  const parts = normalized.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
   return (
     <>
       {parts.map((part, i) => {
@@ -51,6 +61,14 @@ function RailBulletLine({ text }: { text: string }) {
             <strong key={`b-${i}-${part.slice(0, 12)}`} className="font-semibold text-[var(--theme-heading-text)]">
               {bold[1]}
             </strong>
+          );
+        }
+        const italic = /^\*([^*]+)\*$/.exec(part);
+        if (italic) {
+          return (
+            <em key={`i-${i}-${part.slice(0, 12)}`} className="italic text-[var(--theme-body-text)]">
+              {italic[1]}
+            </em>
           );
         }
         return <span key={`t-${i}-${part.slice(0, 12)}`}>{part}</span>;

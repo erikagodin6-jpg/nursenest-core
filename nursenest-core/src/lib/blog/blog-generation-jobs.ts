@@ -89,6 +89,11 @@ export type BlogGenerationJobPayload = {
   items: BlogGenerationJobItemPayload[];
   /** When true, `items` is a prefix of the full list (use for fast polling with `?lite=1`). */
   itemsTruncated?: boolean;
+  /**
+   * True when this payload was built for lightweight polling (`?statusPoll=1`): counts + metadata only,
+   * `items` is empty — merge with a prior full snapshot on the client if needed.
+   */
+  statusPoll?: boolean;
 };
 
 type SerializeJobOpts = {
@@ -96,6 +101,7 @@ type SerializeJobOpts = {
   pendingOverride?: number;
   generatingOverride?: number;
   itemsTruncated?: boolean;
+  statusPoll?: boolean;
 };
 
 function serializeJob(
@@ -155,6 +161,7 @@ function serializeJob(
       repairMeta: parseBlogBatchItemRepairMeta(i.error),
     })),
     itemsTruncated: opts?.itemsTruncated === true,
+    statusPoll: opts?.statusPoll === true,
   };
 }
 
@@ -164,12 +171,42 @@ export type LoadBlogGenerationJobOpts = {
    * queued/running counts — keeps polling responses small under proxy timeouts.
    */
   maxItems?: number | null;
+  /**
+   * Counts and batch metadata only (one batch row + groupBy). No item rows — fastest poll path.
+   */
+  statusPoll?: boolean;
 };
 
 export async function loadBlogGenerationJobForAdmin(
   id: string,
   opts?: LoadBlogGenerationJobOpts,
 ): Promise<BlogGenerationJobPayload | null> {
+  if (opts?.statusPoll) {
+    const batchRow = await prisma.blogDraftGenerationBatch.findUnique({ where: { id } });
+    if (!batchRow) return null;
+
+    const groups = await prisma.blogDraftGenerationBatchItem.groupBy({
+      by: ["status"],
+      where: { batchId: id },
+      _count: { _all: true },
+    });
+
+    const pending =
+      groups.find((g) => g.status === BlogDraftGenerationBatchItemStatus.PENDING)?._count._all ?? 0;
+    const generating =
+      groups.find((g) => g.status === BlogDraftGenerationBatchItemStatus.GENERATING)?._count._all ?? 0;
+
+    return serializeJob(
+      { ...batchRow, items: [] },
+      {
+        pendingOverride: pending,
+        generatingOverride: generating,
+        itemsTruncated: true,
+        statusPoll: true,
+      },
+    );
+  }
+
   const cap = opts?.maxItems;
   if (cap == null) {
     const batch = await prisma.blogDraftGenerationBatch.findUnique({
@@ -298,6 +335,11 @@ export async function pumpBackgroundBlogDraftBatches(): Promise<PumpBackgroundBl
 
   for (const b of batches) {
     batchesTouched += 1;
+    safeServerLog("cron", "blog_generation_cron_picked_batch", {
+      batchId: b.id,
+      itemsPerTick,
+    });
+
     await prisma.blogDraftGenerationBatch.updateMany({
       where: { id: b.id, processorStartedAt: null },
       data: { processorStartedAt: new Date() },

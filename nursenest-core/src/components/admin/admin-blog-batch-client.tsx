@@ -47,7 +47,7 @@ export function AdminBlogBatchClient() {
 
   const loadJob = useCallback(async (id: string) => {
     try {
-      const res = await fetch(`/api/admin/blog/generation-jobs/${encodeURIComponent(id)}`, {
+      const res = await fetch(`/api/admin/blog/generation-jobs/${encodeURIComponent(id)}?statusPoll=1`, {
         credentials: "include",
         cache: "no-store",
       });

@@ -19,6 +19,87 @@ export type ExclusionAllowlistEntry = {
   comment: string;
 };
 
+const US_LPN_NCLEX_PN_PREMIUM_STUB_ALLOWLIST_COMMENT =
+  "Premium-shaped catalog stubs (BP26 + PN-scope clinical skills rows): fail validatePathwayLessonPremium until editorial expansion; marketing hub exclusion is expected.";
+
+/**
+ * Slugs only appear here after coverage confirms each fails {@link evaluatePathwayLessonStructuralGate}
+ * only due to incomplete premium spine/copy — not exam/country mismatch.
+ */
+const US_LPN_NCLEX_PN_PREMIUM_STUB_ALLOWLIST_SLUGS = [
+  "antibiotic-side-effect-reporting",
+  "behavioral-escalation-reporting",
+  "bp26-uslpn-cs-multiorgan-triage",
+  "bp26-uslpn-cs-two-patients",
+  "bp26-uslpn-hp-immunization-ed",
+  "bp26-uslpn-mat-labor-fhr",
+  "bp26-uslpn-mat-postpartum-hem",
+  "bp26-uslpn-mo-care-conference",
+  "bp26-uslpn-mo-delegate-uap",
+  "bp26-uslpn-mo-ethical-concern",
+  "bp26-uslpn-mo-shift-report-sbar",
+  "bp26-uslpn-pa-aki-urine-labs",
+  "bp26-uslpn-pa-asthma-exac",
+  "bp26-uslpn-pa-chf-volume",
+  "bp26-uslpn-pa-copd-exac",
+  "bp26-uslpn-pa-dka-vs-hhs",
+  "bp26-uslpn-pa-gi-bleed-stable",
+  "bp26-uslpn-pa-hyperk-emerg",
+  "bp26-uslpn-pa-hyponat-symp",
+  "bp26-uslpn-pa-ich-nih",
+  "bp26-uslpn-pa-pe-suspect",
+  "bp26-uslpn-pa-pneumonia-curbs",
+  "bp26-uslpn-pa-sepsis-trending",
+  "bp26-uslpn-pa-shock-classify",
+  "bp26-uslpn-pa-stroke-window",
+  "bp26-uslpn-ped-febrile-infant",
+  "bp26-uslpn-ped-growth-chart",
+  "bp26-uslpn-ph-abx-stewardship",
+  "bp26-uslpn-ph-anticoag-bridging",
+  "bp26-uslpn-ph-insulin-safety",
+  "bp26-uslpn-ph-opioid-resp-depr",
+  "bp26-uslpn-psy-anxiety-therapeutic",
+  "bp26-uslpn-psy-suicide-safety",
+  "bp26-uslpn-rr-vte-mechanical",
+  "bp26-uslpn-sf-falls-bed-exit",
+  "bp26-uslpn-sf-med-reconciliation",
+  "bp26-uslpn-sf-ppe-isolation",
+  "bp26-uslpn-sf-restraint-alternatives",
+  "daily-weights-pattern",
+  "dialysis-diet-teaching",
+  "documentation-do-nots",
+  "edema-daily-weights",
+  "falls-risk-side-rails-policy",
+  "fingerstick-hypoglycemia-response",
+  "foot-inspection-teaching",
+  "i-o-fluid-restriction-teaching",
+  "immunization-consent",
+  "inhaler-technique-teaching",
+  "insulin-administration-checks",
+  "newborn-safety-bath",
+  "npo-post-op-diet-progression",
+  "postpartum-fundus-lochia",
+  "restraint-monitoring-requirements",
+  "seizure-observation",
+  "stool-assessment-report",
+  "stroke-sequela-mobility-assist",
+  "suicide-precautions-observation",
+  "us-pn-angina",
+  "us-pn-antibiotics",
+  "us-pn-anticoagulants",
+  "us-pn-dysrhythmias",
+  "us-pn-general-nursing-clinical",
+  "us-pn-insulin-hypoglycemia",
+  "us-pn-potassium-imbalance",
+] as const;
+
+function stubAllowlistCommentEverySlug(
+  slugs: readonly string[],
+  comment: string,
+): Record<string, ExclusionAllowlistEntry> {
+  return Object.fromEntries(slugs.map((slug) => [slug, { comment }]));
+}
+
 export const LESSON_NORMALIZATION_EXCLUSION_ALLOWLIST: Record<string, Record<string, ExclusionAllowlistEntry>> = {
   "us-rn-new-grad-transition": {
     // Placeholder/development copy must not leak onto public lesson pages.
@@ -26,6 +107,10 @@ export const LESSON_NORMALIZATION_EXCLUSION_ALLOWLIST: Record<string, Record<str
       comment: "Contains explicit development/placeholder phrasing and must stay excluded until editorial cleanup.",
     },
   },
+  "us-lpn-nclex-pn": stubAllowlistCommentEverySlug(
+    US_LPN_NCLEX_PN_PREMIUM_STUB_ALLOWLIST_SLUGS,
+    US_LPN_NCLEX_PN_PREMIUM_STUB_ALLOWLIST_COMMENT,
+  ),
 };
 
 export type LessonNormalizationExclusion = {

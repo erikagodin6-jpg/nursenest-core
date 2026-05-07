@@ -1,9 +1,8 @@
-import { loadUserRoleFromDbIdentity } from "@/lib/auth/admin-role-source";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { getStaffSession } from "@/lib/auth/staff-session";
 import { resolveEntitlementForPage, type PageEntitlementResult } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
-import { marketingPathwayLessonStaffFullBodyAccess } from "@/lib/lessons/marketing-pathway-lesson-staff-bypass";
 
 export type MarketingPathwayLessonViewerContext = {
   userId: string;
@@ -20,10 +19,9 @@ export type MarketingPathwayLessonViewerContext = {
  * Marketing pathway lesson detail: resolve signed-in user id, entitlement, learnerPath, and staff bypass.
  * Centralizes session reads so public lesson pages are not forced through an anonymous entitlement path.
  *
- * Staff/admin full-lesson access uses **DB role** (`loadUserRoleFromDbIdentity`), not only {@link getStaffSession}:
- * when `auth()` is slow or flaky, JWT fallback can still yield `userId`/email while a separate `getStaffSession()`
- * read returns null — staff would incorrectly see the marketing paywall. Entitlement resolution already trusts the
- * same role row for `admin_override`.
+ * Staff/admin full-lesson access uses {@link getStaffSession()} — same DB-backed role resolution as staff chrome,
+ * including a **retry** when the first Prisma read times out (cold pool). A bare single-shot role lookup here caused
+ * intermittent paywalls for signed-in staff under load.
  */
 export async function loadMarketingPathwayLessonViewerContext(
   surface: string,
@@ -31,17 +29,13 @@ export async function loadMarketingPathwayLessonViewerContext(
   const session = await getProtectedRouteSession(surface);
   const su = session?.user as { id?: string; email?: string | null } | undefined;
   const userId = typeof su?.id === "string" && su.id.trim().length > 0 ? su.id.trim() : "";
-  const emailRaw =
-    typeof su?.email === "string" && su.email.trim().length > 0 ? su.email.trim().toLowerCase() : null;
 
-  const [entitlement, staffRoleRow] = await Promise.all([
+  const [entitlement, staffSession] = await Promise.all([
     resolveEntitlementForPage(userId),
-    userId || emailRaw
-      ? loadUserRoleFromDbIdentity({ userId: userId || null, email: emailRaw }).catch(() => null)
-      : Promise.resolve(null),
+    getStaffSession(),
   ]);
 
-  const staffFullLessonAccess = marketingPathwayLessonStaffFullBodyAccess(staffRoleRow);
+  const staffFullLessonAccess = Boolean(staffSession);
 
   let learnerPathResolved: string | null = null;
   if (userId && isDatabaseUrlConfigured()) {

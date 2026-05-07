@@ -89,6 +89,6 @@ export async function POST(req: Request, ctx: RouteContext) {
     return NextResponse.json({ ok: false, ...out }, { status });
   }
 
-  const job = await loadBlogGenerationJobForAdmin(id, { maxItems: 120 });
+  const job = await loadBlogGenerationJobForAdmin(id, { maxItems: 40 });
   return NextResponse.json({ ok: true, ...out, job });
 }
