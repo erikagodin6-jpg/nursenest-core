@@ -10650,6 +10650,31 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   gap: clamp(1rem, 2.5vw, 1.5rem);
   width: 100%;
 }
+
+/* Mobile: calmer horizontal jump-nav without wrapping into a tall chip wall. */
+.nn-dash-hub-nav-scroll {
+  margin-inline: -0.15rem;
+  padding-inline: 0.15rem;
+  max-width: 100%;
+}
+@media (max-width: 1023px) {
+  .nn-dash-hub-nav-scroll .nn-dash-hub-nav__list {
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 0.4rem;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--semantic-brand) 35%, transparent) transparent;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nn-dash-hub-nav-scroll .nn-dash-hub-nav__item {
+    flex: 0 0 auto;
+  }
+  .nn-dash-hub-nav-scroll .nn-dash-hub-nav__link {
+    white-space: nowrap;
+  }
+}
 @media (min-width: 1024px) {
   .nn-dash-hub-layout {
     display: grid;
@@ -11207,10 +11232,39 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 .nn-dash-snapshot-grid,
 .nn-dash-attention-grid,
 .nn-dash-momentum-grid,
-.nn-dash-explore-grid {
+.nn-dash-explore-grid,
+.nn-dash-goals-grid {
   display: grid;
   gap: 1rem;
   grid-template-columns: minmax(0, 1fr);
+}
+
+/* Single-column hero: avoids an empty second track when exam pacing moves to the goals band. */
+.nn-dash-priority-grid.nn-dash-priority-grid--solo {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+/* Mobile: exam pacing above daily goals; desktop: goals left, countdown rail right. */
+.nn-dash-goals-grid {
+  grid-template-areas:
+    "rail"
+    "main";
+}
+.nn-dash-goals-grid__main {
+  grid-area: main;
+  min-width: 0;
+}
+.nn-dash-goals-grid__rail {
+  grid-area: rail;
+  min-width: 0;
+}
+@media (min-width: 1180px) {
+  .nn-dash-goals-grid {
+    grid-template-columns: minmax(min(100%, 400px), 1.2fr) minmax(min(100%, 260px), 0.88fr);
+    grid-template-areas: "main rail";
+    gap: 1.1rem;
+    align-items: start;
+  }
 }
 /* Two columns only when the viewport is wide enough that each track stays ~≥360px (stack sooner on laptops). */
 @media (min-width: 1180px) {

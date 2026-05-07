@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Compass } from "lucide-react";
+import { coerceSafeLearnerNavHref } from "@/lib/learner/safe-app-href";
 import type { LearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { recommendNextActions } from "@/lib/learner/recommend-next-actions";
@@ -113,7 +114,7 @@ export async function LearnerAdaptiveFocusCard({
                   <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground [overflow-wrap:anywhere]">{r.reasonShort}</p>
                 </div>
                 <Link
-                  href={r.href}
+                  href={coerceSafeLearnerNavHref(r.href)}
                   className="inline-flex shrink-0 justify-center rounded-full bg-role-cta px-3 py-1.5 text-center text-xs font-semibold text-role-cta-foreground shadow-[0_2px_8px_var(--role-cta-shadow)]"
                 >
                   {t("learner.adaptive.suggestedCta")}
