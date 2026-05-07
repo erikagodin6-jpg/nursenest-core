@@ -52,7 +52,7 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
         aria-labelledby="home-trust-strip-heading"
         data-testid="section-home-trust-strip"
       >
-        <div className="nn-section-shell flex flex-col gap-4">
+        <div className="nn-section-shell flex flex-col gap-5">
           <h2
             id="home-trust-strip-heading"
             className="nn-marketing-h2 text-balance text-center text-[var(--palette-heading)]"
@@ -95,8 +95,8 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
     >
       <div className="nn-section-shell">
         <FadeUp whenInView once viewMargin="-24px" className="mx-auto max-w-5xl">
-        <div className="nn-marketing-trust-panel rounded-2xl px-5 py-6 sm:px-7 sm:py-8">
-          <div className="mb-4 flex flex-col items-center justify-center gap-3 text-center sm:flex-row sm:gap-4">
+        <div className="nn-marketing-trust-panel rounded-2xl px-5 pb-6 pt-7 sm:px-7 sm:pb-8 sm:pt-8">
+          <div className="mb-5 flex flex-col items-center justify-center gap-3 text-center sm:mb-6 sm:flex-row sm:gap-5">
             <Globe2 className="nn-icon-md shrink-0 text-[var(--semantic-info)]" aria-hidden />
             <h2
               id="home-trust-strip-heading"

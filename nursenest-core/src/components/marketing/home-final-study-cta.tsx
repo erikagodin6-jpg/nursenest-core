@@ -53,7 +53,7 @@ export function HomeFinalStudyCta() {
 
   return (
     <section
-      className="border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)] py-[var(--nn-rhythm-section-y)]"
+      className="nn-home-final-cta-band border-t border-[var(--header-nav-border)] py-[var(--nn-rhythm-section-y)] sm:py-[calc(var(--nn-rhythm-section-y)+0.25rem)]"
       aria-labelledby="home-final-cta-heading"
     >
       <div className="mx-auto max-w-2xl px-4 text-center sm:px-6">

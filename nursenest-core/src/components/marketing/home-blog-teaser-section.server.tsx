@@ -42,8 +42,8 @@ export function HomeBlogTeaserSectionShell({
   if (!hasTopCopy && !hasList) return null;
 
   return (
-    <section className="mx-auto mt-8 w-full max-w-7xl px-4 pb-6 sm:px-6 lg:px-8">
-      <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-5 shadow-[var(--elevation-rest)] sm:p-6">
+    <section className="mx-auto mt-10 w-full max-w-7xl px-4 pb-8 sm:mt-12 sm:px-6 sm:pb-10 lg:px-8">
+      <div className="nn-home-blog-teaser-shell rounded-2xl p-5 sm:p-6">
         {hasTopCopy ? (
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             {title || subtitle ? (

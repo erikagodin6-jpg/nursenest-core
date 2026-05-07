@@ -52,18 +52,21 @@ function HomeStableMarketingPlaceholder({
     <section
       className={`nn-home-rich-placeholder-band ${bandToneClass} border-b border-[var(--border-subtle)] px-4 py-[var(--nn-rhythm-mobile-section-y)] sm:px-6 md:py-[var(--nn-rhythm-shell-y)]`}
     >
-      <div className="nn-home-rich-placeholder-card mx-auto max-w-5xl rounded-2xl border border-[var(--border-subtle)] p-6 sm:p-8 md:p-9">
-        <h2 className="nn-marketing-h3 text-balance text-[var(--palette-heading)]">{title}</h2>
-        <p className="mt-2 max-w-prose text-pretty nn-marketing-body text-[var(--palette-text-muted)]">{body}</p>
-        <p className="mt-4">
-          <Link
-            href={href}
-            className="inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
-          >
-            {linkLabel}
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </Link>
-        </p>
+      <div className="nn-home-rich-placeholder-card mx-auto flex max-w-5xl overflow-hidden rounded-2xl border border-[var(--border-subtle)]">
+        <div className="nn-home-rich-placeholder-accent-bar shrink-0" aria-hidden />
+        <div className="min-w-0 flex-1 px-5 py-6 sm:px-8 sm:py-8 md:px-9 md:py-9">
+          <h2 className="nn-marketing-h3 text-balance text-[var(--palette-heading)]">{title}</h2>
+          <p className="mt-2 max-w-prose text-pretty nn-marketing-body text-[var(--palette-text-muted)]">{body}</p>
+          <p className="mt-5">
+            <Link
+              href={href}
+              className="inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
+            >
+              {linkLabel}
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </p>
+        </div>
       </div>
     </section>
   );
@@ -127,7 +130,6 @@ export default function HomeRestoredClient({
         body: safeHomepageMarketingT(t, "pages.home.audience.rn.description", ""),
         cta: safeHomepageMarketingT(t, "pages.home.audience.rn.cta", "Explore"),
         href: l(hubs.rn),
-        color: "var(--semantic-info)",
       },
       {
         id: "pn",
@@ -135,7 +137,6 @@ export default function HomeRestoredClient({
         body: safeHomepageMarketingT(t, "pages.home.audience.pn.description", ""),
         cta: safeHomepageMarketingT(t, "pages.home.audience.pn.cta", "Explore"),
         href: l(hubs.pn),
-        color: "var(--semantic-warning)",
       },
       {
         id: "np",
@@ -143,7 +144,6 @@ export default function HomeRestoredClient({
         body: safeHomepageMarketingT(t, "pages.home.audience.np.description", ""),
         cta: safeHomepageMarketingT(t, "pages.home.audience.np.cta", "Explore"),
         href: l(hubs.np),
-        color: "var(--semantic-brand)",
       },
       {
         id: "allied",
@@ -151,7 +151,6 @@ export default function HomeRestoredClient({
         body: safeHomepageMarketingT(t, "pages.home.audience.allied.description", ""),
         cta: safeHomepageMarketingT(t, "pages.home.audience.allied.cta", "Explore"),
         href: l(hubs.allied),
-        color: "var(--semantic-success)",
       },
     ];
   }, [locale, region, t]);
@@ -219,7 +218,7 @@ export default function HomeRestoredClient({
       {/* AUDIENCE CARDS */}
       <section className="nn-section-block nn-home-pathways-band border-b border-[var(--border-subtle)]">
         <div className="nn-section-shell">
-          <div className="mx-auto mb-10 max-w-2xl text-center md:mb-12">
+          <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10 md:mb-12">
             <h2 className="nn-marketing-h2 text-balance">
               {formatTitleCase(
                 safeHomepageMarketingT(t, "pages.home.pathwaysSection.title", "Choose your path"),
@@ -235,8 +234,7 @@ export default function HomeRestoredClient({
                 href={c.href}
                 event={PH.marketingHomeExploreHubClick}
                 eventProps={{ pathway: c.id, region }}
-                className="nn-card-system nn-card-system-pad nn-card-system--interactive group flex flex-col"
-                style={{ borderTop: `3px solid ${c.color}` }}
+                className="nn-home-pathway-card nn-card-system nn-card-system-pad nn-card-system--interactive group flex flex-col"
                 data-nn-home-tier-card={c.id}
               >
                 <span className="nn-card-system__title">

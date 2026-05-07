@@ -1665,33 +1665,115 @@ html[data-theme] .nn-marketing-surface {
 .nn-home-hero-product-band {
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--semantic-info) 5%, var(--page-bg, var(--bg-page))) 0%,
-    var(--page-bg, var(--bg-page)) 55%,
-    color-mix(in srgb, var(--semantic-brand) 4%, var(--page-bg, var(--bg-page))) 100%
+    color-mix(in srgb, var(--semantic-info) 6%, var(--page-bg, var(--bg-page))) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 4%, var(--page-bg, var(--bg-page))) 38%,
+    var(--page-bg, var(--bg-page)) 56%,
+    color-mix(in srgb, var(--semantic-brand) 5%, var(--page-bg, var(--bg-page))) 100%
   );
+}
+
+.nn-home-rich-placeholder-band {
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-home-rich-placeholder-band::before {
+  content: "";
+  position: absolute;
+  inset: -40% -20% auto auto;
+  width: min(72vw, 34rem);
+  height: min(52vw, 24rem);
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0.55;
 }
 
 .nn-home-rich-placeholder-band--tone-warm {
   background: linear-gradient(
     185deg,
-    color-mix(in srgb, var(--semantic-panel-warm) 14%, var(--page-bg, var(--bg-page))) 0%,
+    color-mix(in srgb, var(--semantic-panel-warm) 16%, var(--page-bg, var(--bg-page))) 0%,
+    color-mix(in srgb, var(--semantic-chart-4) 5%, var(--page-bg, var(--bg-page))) 52%,
     var(--page-bg, var(--bg-page)) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-warm::before {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--semantic-warning) 22%, transparent),
+    transparent 70%
   );
 }
 
 .nn-home-rich-placeholder-band--tone-positive {
   background: linear-gradient(
     188deg,
-    color-mix(in srgb, var(--semantic-panel-positive) 12%, var(--page-bg, var(--bg-page))) 0%,
+    color-mix(in srgb, var(--semantic-panel-positive) 14%, var(--page-bg, var(--bg-page))) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 6%, var(--page-bg, var(--bg-page))) 48%,
     var(--page-bg, var(--bg-page)) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-positive::before {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--semantic-success) 18%, transparent),
+    transparent 72%
   );
 }
 
 .nn-home-rich-placeholder-band--tone-cool {
   background: linear-gradient(
     182deg,
-    color-mix(in srgb, var(--semantic-panel-cool) 13%, var(--page-bg, var(--bg-page))) 0%,
+    color-mix(in srgb, var(--semantic-panel-cool) 15%, var(--page-bg, var(--bg-page))) 0%,
+    color-mix(in srgb, var(--semantic-info) 5%, var(--page-bg, var(--bg-page))) 55%,
     var(--page-bg, var(--bg-page)) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-cool::before {
+  inset: auto auto -35% -18%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--semantic-info) 20%, transparent),
+    transparent 68%
+  );
+}
+
+.nn-home-rich-placeholder-accent-bar {
+  width: 0.375rem;
+}
+
+@media (min-width: 640px) {
+  .nn-home-rich-placeholder-accent-bar {
+    width: 0.5rem;
+  }
+}
+
+.nn-home-rich-placeholder-band--tone-warm .nn-home-rich-placeholder-accent-bar {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-4) 55%, var(--semantic-warning)),
+    var(--semantic-warning),
+    color-mix(in srgb, var(--semantic-warning) 65%, var(--semantic-info))
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-positive .nn-home-rich-placeholder-accent-bar {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-2) 50%, var(--semantic-success)),
+    var(--semantic-success),
+    color-mix(in srgb, var(--semantic-success) 60%, var(--semantic-brand))
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-cool .nn-home-rich-placeholder-accent-bar {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-info)),
+    var(--semantic-info),
+    color-mix(in srgb, var(--semantic-info) 65%, var(--semantic-chart-1))
   );
 }
 
@@ -1730,9 +1812,90 @@ html[data-theme] .nn-marketing-surface {
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--semantic-brand) 5%, var(--bg-section-alt, var(--semantic-bg-soft))) 0%,
-    var(--bg-section-alt, var(--semantic-bg-soft)) 48%,
-    color-mix(in srgb, var(--semantic-success) 6%, var(--bg-section-alt, var(--semantic-bg-soft))) 100%
+    color-mix(in srgb, var(--semantic-panel-muted) 8%, var(--bg-section-alt, var(--semantic-bg-soft))) 38%,
+    var(--bg-section-alt, var(--semantic-bg-soft)) 52%,
+    color-mix(in srgb, var(--semantic-success) 7%, var(--bg-section-alt, var(--semantic-bg-soft))) 100%
   );
+}
+
+/* Pathway audience cards — distinct semantic washes + top rail (homepage marketing) */
+.nn-home-pathways-band .nn-home-pathway-card[data-nn-home-tier-card="rn"] {
+  border-top: 3px solid var(--semantic-info);
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-info) 11%, var(--bg-card)) 0%,
+    var(--bg-card) 52%,
+    color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--bg-card)) 100%
+  );
+  box-shadow:
+    var(--shadow-card, var(--elevation-rest)),
+    inset 0 1px 0 0 color-mix(in srgb, var(--semantic-info) 22%, transparent);
+}
+
+.nn-home-pathways-band .nn-home-pathway-card[data-nn-home-tier-card="pn"] {
+  border-top: 3px solid var(--semantic-warning);
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card)) 0%,
+    var(--bg-card) 50%,
+    color-mix(in srgb, var(--semantic-chart-3) 8%, var(--bg-card)) 100%
+  );
+  box-shadow:
+    var(--shadow-card, var(--elevation-rest)),
+    inset 0 1px 0 0 color-mix(in srgb, var(--semantic-warning) 20%, transparent);
+}
+
+.nn-home-pathways-band .nn-home-pathway-card[data-nn-home-tier-card="np"] {
+  border-top: 3px solid var(--semantic-brand);
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-brand) 9%, var(--bg-card)) 0%,
+    var(--bg-card) 48%,
+    color-mix(in srgb, var(--semantic-panel-positive) 9%, var(--bg-card)) 100%
+  );
+  box-shadow:
+    var(--shadow-card, var(--elevation-rest)),
+    inset 0 1px 0 0 color-mix(in srgb, var(--semantic-brand) 22%, transparent);
+}
+
+.nn-home-pathways-band .nn-home-pathway-card[data-nn-home-tier-card="allied"] {
+  border-top: 3px solid var(--semantic-success);
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--semantic-success) 10%, var(--bg-card)) 0%,
+    var(--bg-card) 50%,
+    color-mix(in srgb, var(--semantic-panel-warm) 8%, var(--bg-card)) 100%
+  );
+  box-shadow:
+    var(--shadow-card, var(--elevation-rest)),
+    inset 0 1px 0 0 color-mix(in srgb, var(--semantic-success) 22%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-home-pathways-band .nn-home-pathway-card.nn-card-system--interactive:hover {
+    border-color: color-mix(in srgb, var(--semantic-border-soft) 1, var(--border-strong));
+  }
+}
+
+/* Homepage — bottom conversion band + blog rhythm (multi-hue, token-only) */
+.nn-home-final-cta-band {
+  background: linear-gradient(
+    188deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 14%, var(--hero-branded-wash)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 7%, var(--hero-branded-wash)) 42%,
+    color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--hero-branded-wash)) 100%
+  );
+}
+
+.nn-home-blog-teaser-shell {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 1, var(--semantic-info));
+  background: linear-gradient(
+    152deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 7%, var(--theme-card-bg)) 0%,
+    var(--theme-card-bg) 48%,
+    color-mix(in srgb, var(--semantic-panel-warm) 6%, var(--theme-card-bg)) 100%
+  );
+  box-shadow: var(--shadow-card, var(--elevation-rest));
 }
 
 /* Optional: full-width section band on page canvas */
@@ -2556,6 +2719,7 @@ html[data-theme] .nn-marketing-trust-strip {
 }
 
 .nn-marketing-trust-panel {
+  position: relative;
   border: 1px solid color-mix(in srgb, var(--theme-primary) 16%, var(--border-subtle));
   background: linear-gradient(
     205deg,
@@ -2564,6 +2728,26 @@ html[data-theme] .nn-marketing-trust-strip {
     color-mix(in srgb, var(--semantic-panel-muted) 22%, var(--bg-card)) 100%
   );
   box-shadow: var(--shadow-elevated, var(--elevation-overlay));
+}
+
+.nn-marketing-trust-panel::before {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 0;
+  height: 3px;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-success) 78%, var(--semantic-border-soft)),
+    color-mix(in srgb, var(--semantic-info) 72%, var(--semantic-border-soft)),
+    color-mix(in srgb, var(--semantic-brand) 68%, var(--semantic-border-soft)),
+    color-mix(in srgb, var(--semantic-warning) 65%, var(--semantic-border-soft)),
+    color-mix(in srgb, var(--semantic-chart-3) 62%, var(--semantic-border-soft))
+  );
+  opacity: 0.92;
 }
 
 /* Practice / CAT hub — cool inset top rail on builder card (works alongside warning border states) */
