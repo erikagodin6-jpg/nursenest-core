@@ -109,7 +109,8 @@ test.describe("Premium smoke breadth (public)", () => {
   });
 
   test("homepage primary surface exposes navigable anchors", async ({ page }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    // `load` reduces flake vs `domcontentloaded` while RSC streams segment `loading.tsx` into `<main>`.
+    await page.goto("/", { waitUntil: "load" });
     await dismissMarketingScrims(page);
     const surface = primarySurface(page).first();
     await expect(surface).toBeVisible({ timeout: 60_000 });
