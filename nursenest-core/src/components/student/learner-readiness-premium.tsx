@@ -6,6 +6,7 @@ import type { RecentMock } from "@/lib/learner/load-learner-dashboard";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { remediationCatPracticeHref, remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 
 function bandStatusLabel(band: ReadinessBand, t: LearnerMarketingT): string {
   switch (band) {
@@ -59,7 +60,10 @@ function FactorCard({ factor, t }: { factor: ReadinessFactor; t: LearnerMarketin
           aria-valuemin={0}
           aria-valuemax={100}
         >
-          <div className="h-full rounded-full nn-progress-fill-semantic-brand" style={{ width: `${pct}%` }} />
+          <div
+            className={`h-full rounded-full ${semanticFillClassForAccuracyPct(pct)}`}
+            style={{ width: `${pct}%` }}
+          />
         </div>
       ) : null}
       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{factor.detail}</p>
@@ -167,7 +171,7 @@ export function LearnerReadinessPremium({
   return (
     <div className="space-y-8">
       {/* Hero: index + status + confidence */}
-      <section className="rounded-2xl border border-border/60 bg-[var(--bg-card)] p-6 shadow-sm">
+      <section className="nn-premium-readiness-page-hero rounded-2xl border border-border/60 p-6 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.readinessPage.indexLabel")}</p>

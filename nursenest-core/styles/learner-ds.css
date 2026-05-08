@@ -780,3 +780,38 @@
   color: var(--lv-text-secondary);
   margin-top: 0.15rem;
 }
+
+/* CAT premium sections use `.lv-shell.nn-premium-cat-section`; `premium-redesign-2026.css` loads
+ * before this file, so flat `.lv-shell` backgrounds must be overridden here for the gradient lift. */
+.lv-shell.nn-premium-cat-section {
+  position: relative;
+  isolation: isolate;
+  --nn-premium-cat-accent: var(--semantic-brand);
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-warm)) 100%
+    );
+  border-color: color-mix(in srgb, var(--nn-premium-cat-accent) 16%, var(--semantic-border-soft));
+  box-shadow:
+    0 22px 48px -38px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 55%, transparent) inset;
+}
+
+.lv-shell.nn-premium-cat-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(680px 240px at 0% 0%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 58%),
+    radial-gradient(520px 200px at 100% 100%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 55%);
+  z-index: 0;
+}
+
+.lv-shell.nn-premium-cat-section > * {
+  position: relative;
+  z-index: 1;
+}

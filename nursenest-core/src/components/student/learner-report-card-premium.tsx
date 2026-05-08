@@ -222,7 +222,7 @@ export function LearnerReportCardPremium({
                             aria-valuemax={100}
                           >
                             <div
-                              className={`h-full rounded-full transition-[width] duration-500 ${readinessBandProgressFillClass(data.readiness.band)}`}
+                              className={`h-full rounded-full transition-[width] duration-500 ${semanticFillClassForAccuracyPct(pct)}`}
                               style={{ width: `${pct}%` }}
                             />
                           </div>

@@ -24,9 +24,9 @@ export function LearnerAccountNav() {
   return (
     <nav
       aria-label={t("learner.account.nav.aria")}
-      className="nn-card overflow-hidden"
+      className="nn-card-cool overflow-hidden shadow-[var(--semantic-shadow-soft)]"
     >
-      <p className="border-b border-[var(--border-subtle)] bg-[var(--bg-muted)]/40 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+      <p className="border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
         {t("learner.account.nav.sidebarLabel")}
       </p>
       <div className="max-h-[min(55vh,26rem)] overflow-y-auto overflow-x-auto p-2 lg:max-h-none lg:overflow-x-visible">

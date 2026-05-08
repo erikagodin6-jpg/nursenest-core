@@ -93,6 +93,17 @@ test.describe("Learner surfaces smoke — paid subscriber", () => {
     const dashText = await mainDash.innerText().catch(() => "");
     expect(dashText.length, "dashboard main should render text").toBeGreaterThan(40);
 
+    await page.goto("/app/account/overview", { waitUntil: "domcontentloaded" });
+    await expectPaidLearnerShellReady(page, "learner-smoke account overview");
+    await expect(page.locator(".nn-learner-account-workspace, [data-testid='learner-shell']")).toBeVisible({
+      timeout: 60_000,
+    });
+
+    await page.goto("/app/account/analytics", { waitUntil: "domcontentloaded" });
+    await expectPaidLearnerShellReady(page, "learner-smoke account analytics");
+    const analyticsMain = learnerAppMainLandmark(page);
+    await expect(analyticsMain).toBeVisible({ timeout: 60_000 });
+
     await page.goto(paidLessonsHubUrl(), { waitUntil: "domcontentloaded" });
     await expect(page.locator(SEL_LEARNER_SHELL)).toBeVisible({ timeout: 60_000 });
     const first = page.locator(LESSON_HUB_CARD_LINKS).first();

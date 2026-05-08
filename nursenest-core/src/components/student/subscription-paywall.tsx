@@ -15,6 +15,10 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import {
+  MARKETING_PRIMARY_CTA_CLASS,
+  MARKETING_SECONDARY_CTA_CLASS,
+} from "@/lib/theme/marketing-hero-pattern";
 
 export type PaywallContext = "questions" | "lessons" | "exams" | "dashboard";
 
@@ -114,7 +118,7 @@ export function SubscriptionPaywall({
   }, [context, freemiumRemainingQuestions, freemiumRemainingLessons]);
 
   return (
-    <section className="nn-card space-y-5 p-6">
+    <section className="nn-paywall-premium space-y-5 rounded-2xl border p-6">
       {/* Direct answer to “Will this help me pass?” — before subscription ask */}
       <div
         className="rounded-xl border p-4"
@@ -383,13 +387,13 @@ export function SubscriptionPaywall({
       <div className="flex flex-wrap gap-3">
         <Link
           href="/pricing"
-          className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          className={MARKETING_PRIMARY_CTA_CLASS}
         >
           {t("cta.continuePlan")}
         </Link>
         <Link
           href="/app"
-          className="inline-flex items-center justify-center rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted"
+          className={MARKETING_SECONDARY_CTA_CLASS}
         >
           {t("paywall.cta.openStudyHub")}
         </Link>
