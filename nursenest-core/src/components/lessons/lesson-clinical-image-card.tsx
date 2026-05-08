@@ -63,6 +63,7 @@ export type LessonClinicalImageCardProps = {
 const SOURCE_DEFAULT_LABEL: Partial<Record<LessonImageSource, string>> = {
   exact_slug:       "Clinical image",
   override:         "Clinical image",
+  clinical_illustration: "Clinical illustration",
   map_slug:         "Clinical image",
   map_keyword:      "Topic illustration",
   map_body_system:  "Topic illustration",

@@ -58,6 +58,7 @@
     "visual-qa:capture": "node scripts/validate-visual-qa-env.mjs && node scripts/validate-visual-qa-env.mjs --require-learner-visual-storage && npx playwright test -c playwright.visual-qa.config.ts --project=visual-qa-route-pack",
     "visual-qa:critical": "node scripts/validate-visual-qa-env.mjs --require-learner-visual-storage && npx playwright test -c playwright.visual-qa.config.ts --project=visual-qa-critical-regression",
     "visual-qa:baseline": "node scripts/visual-qa-copy-baseline.mjs",
+    "ui-preview:capture": "node scripts/capture-ui-previews.mjs",
     "qa:predeploy": "npm run qa:release-gate",
     "qa:predeploy:low-memory": "npm run typecheck:critical && npm run test:unit:flashcards && npm run test:unit:practice && npm run test:unit:stripe && npm run test:unit:onboarding && npm run qa:release-gate:list",
     "test:unit:flashcards": "node --import tsx --test src/lib/practice-tests/flashcards-inventory-cat-pool-parity.contract.test.ts src/lib/flashcards/flashcards-hub-kpi-load.test.ts",

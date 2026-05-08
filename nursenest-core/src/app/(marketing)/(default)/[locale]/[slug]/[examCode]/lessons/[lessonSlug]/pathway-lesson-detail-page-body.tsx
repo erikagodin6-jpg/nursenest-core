@@ -221,6 +221,8 @@ export async function PathwayLessonDetailPageBody({
     slug: lesson.slug,
     title: lesson.title,
     topicSlug: lesson.topicSlug,
+    topic: lesson.topic,
+    bodySystem: lesson.bodySystem,
   });
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
   const marketingUiLocale = DEFAULT_MARKETING_LOCALE;
@@ -405,7 +407,8 @@ export async function PathwayLessonDetailPageBody({
             url={matchedLessonImage.url}
             alt={matchedLessonImage.alt}
             source={matchedLessonImage.source}
-          lessonTitle={displayLessonTitle}
+            caption={matchedLessonImage.caption}
+            lessonTitle={displayLessonTitle}
           />
         ) : null}
 

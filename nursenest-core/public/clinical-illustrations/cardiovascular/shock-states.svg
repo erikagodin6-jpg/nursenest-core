@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="shock-states-title shock-states-desc">
+  <title id="shock-states-title">Shock States cardiovascular clinical illustration</title>
+  <desc id="shock-states-desc">Premium educational cardiovascular diagram showing low perfusion and compensation failing.</desc>
+  <defs>
+    <linearGradient id="shock-states-bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="0.48" stop-color="#eef9fb"/>
+      <stop offset="1" stop-color="#fff7ed"/>
+    </linearGradient>
+    <linearGradient id="shock-states-heart" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fda4af"/>
+      <stop offset="0.52" stop-color="#fb7185"/>
+      <stop offset="1" stop-color="#be123c"/>
+    </linearGradient>
+    <linearGradient id="shock-states-accent" x1="0" x2="1">
+      <stop offset="0" stop-color="#e11d48"/>
+      <stop offset="1" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="shock-states-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#0f172a" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" rx="56" fill="url(#shock-states-bg)"/>
+  <circle cx="1060" cy="126" r="192" fill="#e11d48" opacity="0.08"/>
+  <circle cx="206" cy="596" r="228" fill="#d97706" opacity="0.08"/>
+  <g filter="url(#shock-states-shadow)">
+    <rect x="92" y="82" width="1096" height="556" rx="44" fill="#ffffff" opacity="0.88"/>
+    <rect x="116" y="106" width="1048" height="508" rx="34" fill="none" stroke="#e11d48" stroke-opacity="0.18" stroke-width="2"/>
+  </g>
+  <g transform="translate(430 156)">
+    <path d="M201 407C81 308 33 248 33 161C33 91 82 43 144 43C181 43 211 60 231 88C251 60 282 43 319 43C381 43 430 91 430 161C430 248 381 308 261 407L231 432L201 407Z" fill="url(#shock-states-heart)" stroke="#8f1236" stroke-opacity="0.18" stroke-width="8"/>
+    <path d="M230 87C204 130 201 181 223 236C247 296 233 348 202 407" fill="none" stroke="#fff1f2" stroke-width="14" stroke-linecap="round" opacity="0.92"/>
+    <path d="M267 82C303 132 303 189 275 249C251 302 259 354 292 388" fill="none" stroke="#7f1d1d" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
+    <path d="M145 49C130 14 152 -14 184 7C212 26 221 59 223 98" fill="none" stroke="#e11d48" stroke-width="16" stroke-linecap="round"/>
+    <path d="M318 49C333 14 311 -14 279 7C251 26 242 59 240 98" fill="none" stroke="#d97706" stroke-width="16" stroke-linecap="round"/>
+    <circle cx="231" cy="238" r="60" fill="#ffffff" opacity="0.18"/>
+    <text x="231" y="258" text-anchor="middle" font-family="DM Sans, Arial, sans-serif" font-size="58" font-weight="800" fill="#ffffff">MAP</text>
+  </g>
+  <g font-family="DM Sans, Arial, sans-serif">
+    <text x="156" y="172" font-size="46" font-weight="800" fill="#0f172a">Shock States</text>
+    <text x="157" y="215" font-size="22" font-weight="650" fill="#475569">Cardiovascular clinical visual</text>
+    <g transform="translate(154 266)">
+      <rect width="318" height="88" rx="24" fill="#e11d48" opacity="0.11" stroke="#e11d48" stroke-opacity="0.28"/>
+      <circle cx="44" cy="44" r="16" fill="#e11d48"/>
+      <text x="76" y="39" font-size="20" font-weight="800" fill="#0f172a">low perfusion</text>
+      <text x="76" y="64" font-size="15" font-weight="600" fill="#64748b">assessment cue</text>
+    </g>
+    <g transform="translate(154 374)">
+      <rect width="318" height="88" rx="24" fill="#d97706" opacity="0.11" stroke="#d97706" stroke-opacity="0.28"/>
+      <circle cx="44" cy="44" r="16" fill="#d97706"/>
+      <text x="76" y="39" font-size="20" font-weight="800" fill="#0f172a">compensation failing</text>
+      <text x="76" y="64" font-size="15" font-weight="600" fill="#64748b">clinical reasoning link</text>
+    </g>
+    <g transform="translate(840 468)">
+      <rect width="256" height="74" rx="22" fill="url(#shock-states-accent)" opacity="0.95"/>
+      <text x="128" y="46" text-anchor="middle" font-size="20" font-weight="800" fill="#ffffff">Exam-ready mechanism</text>
+    </g>
+  </g>
+  <path d="M472 316C373 300 314 308 237 321" fill="none" stroke="#e11d48" stroke-width="9" stroke-linecap="round" stroke-dasharray="2 18" opacity="0.64"/>
+  <path d="M789 383C892 393 944 425 968 468" fill="none" stroke="#d97706" stroke-width="9" stroke-linecap="round" stroke-dasharray="2 18" opacity="0.64"/>
+</svg>

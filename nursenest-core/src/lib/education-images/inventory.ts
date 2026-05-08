@@ -1,4 +1,5 @@
 import { basenameWithoutExtension } from "@/lib/education-images/normalize-concept-token";
+import educationImageInventory from "@/config/education-image-inventory.json";
 
 export type EducationImageInventory = {
   version: number;
@@ -10,7 +11,7 @@ let educationImageInventoryCache: EducationImageInventory | null = null;
 
 function getEducationImageInventory(): EducationImageInventory {
   if (educationImageInventoryCache) return educationImageInventoryCache;
-  educationImageInventoryCache = require("@/config/education-image-inventory.json") as EducationImageInventory;
+  educationImageInventoryCache = educationImageInventory as EducationImageInventory;
   return educationImageInventoryCache;
 }
 

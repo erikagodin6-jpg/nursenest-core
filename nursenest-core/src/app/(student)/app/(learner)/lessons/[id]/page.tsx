@@ -995,6 +995,7 @@ async function LessonDetailPageInner({ params }: Props) {
                 url={matchedLessonImage.url}
                 alt={matchedLessonImage.alt}
                 source={matchedLessonImage.source}
+                caption={matchedLessonImage.caption}
                 lessonTitle={displayTitle}
                 className="!mt-0 !mb-2 w-full max-w-none"
               />

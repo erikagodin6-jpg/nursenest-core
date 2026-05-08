@@ -127,6 +127,38 @@ test("resolveLessonImage: bundled NCLEX-RN DVT catalog slug maps to dvt.png (her
   assert.equal(result.source, "map_slug");
 });
 
+test("resolveLessonImage: RN cardiovascular lesson resolves curated local clinical illustration", () => {
+  const result = resolveLessonImage({
+    slug: "heart-failure-nursing-priorities-hy",
+    title: "Heart Failure Nursing Priorities",
+    topic: "Heart failure nursing priorities",
+    bodySystem: "Cardiovascular",
+  });
+  assert.equal(result.source, "clinical_illustration");
+  assert.equal(result.url, "/clinical-illustrations/cardiovascular/heart-failure.svg");
+  assert.match(result.alt, /heart failure/i);
+  assert.match(result.caption ?? "", /Heart failure/i);
+});
+
+test("resolveLessonImage: RPN and NP cardiovascular lessons reuse matching curated illustration", () => {
+  const rpn = resolveLessonImage({
+    slug: "bp26-carpn-x003-heart-failure-discharge-teaching",
+    title: "Heart failure discharge teaching",
+    topic: "Cardiovascular",
+    bodySystem: "Cardiovascular",
+  });
+  const np = resolveLessonImage({
+    slug: "np-heart-failure-primary-care-gold",
+    title: "Heart failure: outpatient management",
+    topic: "Cardiovascular",
+    bodySystem: "Cardiovascular",
+  });
+  assert.equal(rpn.source, "clinical_illustration");
+  assert.equal(np.source, "clinical_illustration");
+  assert.equal(rpn.url, "/clinical-illustrations/cardiovascular/heart-failure.svg");
+  assert.equal(np.url, "/clinical-illustrations/cardiovascular/heart-failure.svg");
+});
+
 test("resolveLessonImage: integrates map keyword — topic keyword resolves image", () => {
   const result = resolveLessonImage({
     slug: "cardiac-monitoring-overview",

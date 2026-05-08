@@ -3,12 +3,13 @@
  *
  * MATCHING PRIORITY (strictly in order):
  *   1. Manual override map    (lesson-image-overrides.ts)   → source: "override"
- *   2. Lesson image map slug  (lesson-image-map.ts slugs[]) → source: "map_slug"
- *   3. Inventory exact slug   (inventory basename === lesson.slug) → source: "exact_slug"
- *   4. Inventory topic slug   (inventory basename === lesson.topicSlug) → source: "topic_slug"
- *   5. Lesson image map keyword (topic/topicSlug contains keyword) → source: "map_keyword"
- *   6. Lesson image map body system fallback (unique system match) → source: "map_body_system"
- *   7. null                   (no image shown — safe default)
+ *   2. Clinical illustration registry (small public assets) → source: "clinical_illustration"
+ *   3. Lesson image map slug  (lesson-image-map.ts slugs[]) → source: "map_slug"
+ *   4. Inventory exact slug   (inventory basename === lesson.slug) → source: "exact_slug"
+ *   5. Inventory topic slug   (inventory basename === lesson.topicSlug) → source: "topic_slug"
+ *   6. Lesson image map keyword (topic/topicSlug contains keyword) → source: "map_keyword"
+ *   7. Lesson image map body system fallback (unique system match) → source: "map_body_system"
+ *   8. null                   (no image shown — safe default)
  *
  * EDITORIAL WORKFLOW:
  *   1. Upload image to DigitalOcean Spaces named after the lesson slug:
@@ -25,9 +26,11 @@ import { resolveImageFromLessonMap } from "@/lib/lessons/lesson-image-map";
 import { getInventoryKeys } from "@/lib/education-images/inventory";
 import { publicCdnUrlForObjectKey } from "@/lib/education-images/cdn-url";
 import { hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
+import { resolveCardiovascularClinicalIllustration } from "@/content/clinical-illustrations/cardiovascular";
 
 export type LessonImageSource =
   | "override"          // came from LESSON_IMAGE_OVERRIDES
+  | "clinical_illustration" // local premium clinical illustration registry
   | "map_slug"          // exact slug match in lesson-image-map.ts
   | "exact_slug"        // exact inventory basename match on lesson.slug
   | "topic_slug"        // exact inventory basename match on lesson.topicSlug
@@ -44,6 +47,8 @@ export type LessonImageResolution = {
   alt: string;
   /** How the image was resolved — useful for audit logging and UI labeling. */
   source: LessonImageSource;
+  /** Optional registry caption for curated local illustrations. */
+  caption?: string | null;
 };
 
 function guardResolution(
@@ -52,7 +57,7 @@ function guardResolution(
 ): LessonImageResolution {
   if (res.url && hasRenderableLessonImageUrl(res.url)) return res;
   const alt = res.alt?.trim() ? res.alt : altFallback;
-  return { url: null, objectKey: null, alt, source: "none" };
+  return { url: null, objectKey: null, alt, source: "none", caption: null };
 }
 
 export type LessonImageQuery = {
@@ -136,6 +141,26 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
   }
 
   // 2. Lesson image map — exact slug match.
+  const clinicalIllustration = resolveCardiovascularClinicalIllustration({
+    slug,
+    topic: query.topic,
+    topicSlug: query.topicSlug,
+    bodySystem: query.bodySystem,
+  });
+  if (clinicalIllustration) {
+    return guardResolution(
+      {
+        url: clinicalIllustration.publicPath,
+        objectKey: clinicalIllustration.publicPath,
+        alt: clinicalIllustration.alt,
+        source: "clinical_illustration",
+        caption: clinicalIllustration.caption,
+      },
+      alt,
+    );
+  }
+
+  // 3. Lesson image map — exact slug match.
   const mapSlugMatch = resolveImageFromLessonMap({
     slug,
     topicSlug: query.topicSlug,
