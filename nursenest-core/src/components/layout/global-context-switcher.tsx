@@ -87,7 +87,7 @@ export function CountrySelector({
 
   const containerClass =
     variant === "popover"
-      ? "w-72 max-h-[400px] overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)]"
+      ? "w-[min(100vw-1rem,22rem)] min-w-[18rem] max-w-[min(100vw-1rem,22rem)] max-h-[min(100vh-4rem,28rem)] overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-strong)] shadow-[var(--shadow-elevated)]"
       : "w-full";
 
   return (
@@ -132,15 +132,15 @@ export function CountrySelector({
                     onSelect(r.slug);
                     queueMicrotask(() => onClose?.());
                   }}
-                  className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-xs transition-colors ${
+                  className={`flex w-full items-start gap-2.5 rounded-lg px-2.5 py-2.5 text-left text-xs transition-colors ${
                     isActive
                       ? "bg-[var(--accent-surface-a)] font-semibold text-[var(--text-accent)]"
                       : "text-[var(--theme-heading-text)] hover:bg-[var(--nav-hover)]"
                   }`}
                 >
-                  <span className="text-sm leading-none">{r.flag}</span>
+                  <span className="mt-0.5 shrink-0 text-sm leading-none">{r.flag}</span>
                   <div className="min-w-0 flex-1">
-                    <span className="block truncate">{r.displayName}</span>
+                    <span className="block break-words leading-snug [overflow-wrap:anywhere]">{r.displayName}</span>
                     {(() => {
                       const cap = countryRowSupportCaption(t, r.slug);
                       return cap ? (
@@ -150,7 +150,9 @@ export function CountrySelector({
                       ) : null;
                     })()}
                   </div>
-                  {isActive && <Check className="h-3.5 w-3.5 shrink-0 text-[var(--text-accent)]" aria-hidden />}
+                  {isActive && (
+                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 self-start text-[var(--text-accent)]" aria-hidden />
+                  )}
                 </button>
               );
             })}
