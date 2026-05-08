@@ -5,6 +5,7 @@ import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-mark
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { isLabValuesModuleEnabled } from "@/lib/lab-values/lab-values-module";
 import { ALLIED_GLOBAL_PATHWAY_IDS, isAlliedGlobalPathwayId } from "@/lib/allied/allied-global-pathway";
 import { countPathwayLessonsPublic } from "@/lib/lessons/pathway-lesson-loader";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -58,7 +59,17 @@ function combineQuestionSnapshots(rows: PathwayQuestionBankSnapshot[]): PathwayQ
 }
 
 function buildAlliedModuleCards(): AlliedHubModuleCard[] {
-  return [];
+  const cards: AlliedHubModuleCard[] = [];
+  if (isLabValuesModuleEnabled()) {
+    cards.push({
+      id: "labs",
+      title: "Lab values and interpretation",
+      description: "Pattern-based lab review, nursing-action layers, and focused drills when the module is live.",
+      href: "/modules/lab-values",
+      access: "free",
+    });
+  }
+  return cards;
 }
 
 /** Safe empty shell when hub inventory loaders fail (never generic homepage fallback). */
