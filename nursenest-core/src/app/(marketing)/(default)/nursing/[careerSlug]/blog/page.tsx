@@ -88,8 +88,8 @@ export default async function NursingCareerBlogIndexPage({ params, searchParams 
         <BreadcrumbTrail items={crumbs} />
       </div>
       <header className="mb-10">
-        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">
-          {labels.h1} — exam prep blog
+        <h1 className="line-clamp-4 min-w-0 text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] [overflow-wrap:anywhere]">
+          {labels.h1}: exam prep blog
         </h1>
         <p className="mt-2 text-[var(--theme-muted-text)]">
           Pathophysiology, pharmacology, and clinical reasoning articles scoped to {labels.short} exam preparation.

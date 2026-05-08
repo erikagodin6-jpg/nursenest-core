@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
     messages["newGrad.marketing.landing.seoTitle"] ?? "New Grad nursing | Clinical work areas | NurseNest";
   const description =
     messages["newGrad.marketing.landing.seoDescription"] ??
-    "Transition-to-practice hub for first-year nurses: unit readiness, shift priorities, and study modes on the New Grad pathway — not the NCLEX-RN marketing default.";
+    "Transition-to-practice hub for first-year nurses: unit readiness, shift priorities, and study modes on the New Grad pathway (not the NCLEX-RN marketing default).";
   const ogDescription =
     messages["newGrad.marketing.landing.seoOgDescription"] ??
     "Choose a clinical work area for unit-specific readiness, then jump into New Grad lessons, flashcards, and practice questions.";

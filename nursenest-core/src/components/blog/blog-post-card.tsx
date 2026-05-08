@@ -48,7 +48,7 @@ export function BlogPostCard({
         </div>
         <h3
           className={[
-            "mt-2 min-w-0 font-semibold tracking-tight text-[var(--theme-heading-text)] group-hover:text-primary",
+            "mt-2 min-w-0 font-semibold tracking-tight text-[var(--theme-heading-text)] group-hover:text-[var(--semantic-brand)]",
             featured ? "text-xl sm:text-2xl" : "text-base sm:text-lg",
           ].join(" ")}
         >
@@ -57,7 +57,9 @@ export function BlogPostCard({
         <p className={`mt-2 min-w-0 text-sm leading-relaxed text-[var(--theme-muted-text)] [overflow-wrap:anywhere] ${featured ? "line-clamp-4" : "line-clamp-3"}`}>
           {post.excerpt}
         </p>
-        <span className="mt-3 inline-flex text-sm font-semibold text-primary group-hover:underline">Read article</span>
+        <span className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] group-hover:underline">
+          Read article
+        </span>
       </Link>
     </li>
   );

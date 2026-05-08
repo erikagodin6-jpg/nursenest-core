@@ -28,7 +28,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       const canonicalPath = page <= 1 ? "/blog/rn" : `/blog/rn?page=${page}`;
       return {
         title: `${labels.short} NCLEX prep articles | NurseNest`,
-        description: `Long-tail NCLEX study guides and practice-question articles for ${labels.h1} candidates — linked to full RN lessons.`,
+        description: `Long-tail NCLEX study guides and practice-question articles for ${labels.h1} candidates, linked to full RN lessons.`,
         alternates: { canonical: absoluteUrl(canonicalPath) },
         openGraph: {
           title: `${labels.short} NCLEX prep articles | NurseNest`,
@@ -87,8 +87,8 @@ export default async function BlogRnHubPage({ searchParams }: Props) {
         <BreadcrumbTrail items={crumbs} />
       </div>
       <header className="mb-10">
-        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">
-          {labels.h1} — NCLEX study articles
+        <h1 className="line-clamp-4 min-w-0 text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] [overflow-wrap:anywhere]">
+          {labels.h1}: NCLEX study articles
         </h1>
         <p className="mt-2 text-[var(--theme-muted-text)]">
           Topic-focused guides with practice questions, each linking back to the full pathway lesson on NurseNest.

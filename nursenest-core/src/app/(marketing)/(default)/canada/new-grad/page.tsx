@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     messages["newGrad.marketing.landing.seoTitleCanada"] ?? "New graduate nurses | Canada | NurseNest";
   const description =
     messages["newGrad.marketing.landing.seoDescriptionCanada"] ??
-    "Canadian new graduate nursing hub: clinical work-area readiness and transition-to-practice study entry — without routing you into the generic RN marketing home by default.";
+    "Canadian new graduate nursing hub: clinical work-area readiness and transition-to-practice study entry, without routing you into the generic RN marketing home by default.";
   return {
     title,
     description,

@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     async () => {
       const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/about");
       return {
-        title: "About NurseNest — Adaptive Exam Prep Built for Nurses",
+        title: "About NurseNest: Adaptive Exam Prep Built for Nurses",
         description:
           "NurseNest combines structured clinical lessons, a CAT exam engine, smart review, and adaptive study plans to help nurses pass the NCLEX and reach exam readiness faster.",
         alternates: { canonical: alt.canonical, languages: alt.languages },
@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
         openGraph: {
           title: "About NurseNest",
           description:
-            "See how NurseNest's adaptive system — lessons, practice, CAT, and smart review — helps nurses prepare for real exam success.",
+            "See how NurseNest's adaptive system (lessons, practice, CAT, and smart review) helps nurses prepare for real exam success.",
           url: alt.canonical,
           type: "website",
           siteName: "NurseNest",
@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
           card: "summary_large_image",
           title: "About NurseNest",
           description:
-            "Adaptive lessons, practice questions, CAT exams, smart review, and personalised study plans — in one place.",
+            "Adaptive lessons, practice questions, CAT exams, smart review, and personalised study plans in one place.",
         },
       };
     },

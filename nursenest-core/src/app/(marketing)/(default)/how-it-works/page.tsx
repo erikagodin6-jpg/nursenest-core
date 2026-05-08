@@ -12,7 +12,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamic = "force-dynamic";
 
-const PAGE_TITLE = "How NurseNest Works — Adaptive Exam Prep System";
+const PAGE_TITLE = "How NurseNest Works: Adaptive Exam Prep System";
 const PAGE_DESCRIPTION =
   "See how NurseNest guides you step-by-step through baseline testing, personalised study plans, smart review, and readiness tracking to help you pass your nursing exam.";
 

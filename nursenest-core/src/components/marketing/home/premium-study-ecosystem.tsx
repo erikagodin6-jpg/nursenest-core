@@ -64,7 +64,7 @@ export function PremiumStudyEcosystem() {
             {tr("pages.home.premium.studyEcosystem.eyebrow", "Study ecosystem")}
           </p>
           <h2 id="premium-study-ecosystem-heading" className="nn-marketing-h2 mt-4 text-balance text-[var(--palette-heading)]">
-            {tr("pages.home.premium.studyEcosystem.heading", "Read, recall, practice, assess — one loop.")}
+            {tr("pages.home.premium.studyEcosystem.heading", "Read, recall, practice, assess: one loop.")}
           </h2>
           <p className="nn-marketing-body mx-auto mt-3 max-w-2xl text-pretty text-[var(--palette-text-muted)]">
             {tr(

@@ -92,7 +92,7 @@ export function MarketingDefaultLayoutChromeFailsafeShell({ children }: { childr
       <footer className="mt-auto border-t border-[var(--footer-border)] bg-[var(--footer-bg)] py-5 text-[var(--footer-fg)]">
         <div className="nn-section-shell text-center text-xs text-[var(--theme-muted-text)]">
           <p className="font-medium text-[var(--theme-heading-text)]">NurseNest</p>
-          <p className="mt-1">Canada-first nursing exam prep — global pathways.</p>
+          <p className="mt-1">Canada-first nursing exam prep, with global pathways.</p>
           <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1">
             <Link href="/privacy" className="underline underline-offset-2">
               Privacy

@@ -28,7 +28,7 @@ export function localizedMarketingBlogIndexCopy(
   exam: string,
 ): LocalizedBlogIndexMarketingCopy {
   const examUpper = exam.toUpperCase();
-  const baseTitle = `${examUpper} Blog — ${regionDisplayName}`;
+  const baseTitle = `${examUpper} Blog · ${regionDisplayName}`;
 
   if (region === "canada") {
     return {

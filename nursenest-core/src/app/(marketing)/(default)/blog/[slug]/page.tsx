@@ -193,7 +193,7 @@ export default async function BlogPostPage({ params }: Props) {
             <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
             <Link
               href="/blog"
-              className="nn-premium-blog-back-link inline-flex min-h-[44px] min-w-0 items-center text-sm font-semibold text-primary hover:underline"
+              className="nn-premium-blog-back-link inline-flex min-h-[44px] min-w-0 items-center text-sm font-semibold text-[var(--semantic-brand)] hover:underline"
             >
               ← Back to blog
             </Link>
@@ -208,11 +208,11 @@ export default async function BlogPostPage({ params }: Props) {
               </div>
             ) : null}
             {post.exam ? (
-              <p className="text-xs font-medium text-primary">
+              <p className="text-xs font-medium text-[var(--semantic-brand)]">
                 Exam focus: {post.exam}
               </p>
             ) : null}
-            <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl [overflow-wrap:anywhere]">
+            <h1 className="line-clamp-5 min-w-0 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl [overflow-wrap:anywhere]">
               {post.title}
             </h1>
             <p className="text-sm text-[var(--theme-muted-text)]">

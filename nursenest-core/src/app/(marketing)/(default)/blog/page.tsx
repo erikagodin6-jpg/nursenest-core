@@ -128,7 +128,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
           >
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Blog list could not load</h2>
             <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-              We could not reach the article database. This is usually temporary — refresh the page or try again in a
+              We could not reach the article database. This is usually temporary. Refresh the page or try again in a
               moment.
             </p>
             <p className="mt-3 text-xs text-[var(--theme-muted-text)]">
@@ -138,7 +138,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
           <MarketingStudyCrossLinks className="mt-10" />
         </>
       ) : null}
-      <header className="mb-10 max-w-3xl">
+      <header className="mb-10 min-w-0 max-w-3xl">
         <EditableHeading
           as="h1"
           className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl"
@@ -181,7 +181,8 @@ export default async function BlogIndexPage({ searchParams }: Props) {
                     Pathophysiology for nursing students
                   </h2>
                   <p className="mt-2 max-w-prose text-sm text-[var(--theme-muted-text)]">
-                    Exam-style disease mechanisms and clinical reasoning — NCLEX-oriented depth with nursing scope in mind.
+                    Exam-style disease mechanisms and clinical reasoning, with NCLEX-oriented depth and nursing scope in
+                    mind.
                   </p>
                 </div>
                 <Link
