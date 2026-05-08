@@ -31,9 +31,12 @@ import { logBlogSlugPipeline } from "@/lib/observability/content-source-trace";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
 import { BlogRelatedReadingSection } from "@/components/blog/blog-related-reading-section";
+import { BlogArticleToc } from "@/components/blog/blog-article-toc";
+import { BlogTopicBadge } from "@/components/blog/blog-topic-badge";
 import { parsePublishingPackage } from "@/lib/blog/blog-publishing-package";
 import { filterRelatedBlogReadingForParentExam } from "@/lib/blog/blog-related-reading-public";
 import { filterMarketingLessonPathsForBlogExam } from "@/lib/blog/blog-marketing-lesson-path-tier";
+import { resolveBlogTopicPresentation } from "@/lib/blog/blog-post-category-visual";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -137,8 +140,23 @@ export default async function BlogPostPage({ params }: Props) {
           ? `/admin/blog?id=${encodeURIComponent(post.id)}`
           : null;
 
+      const topic = resolveBlogTopicPresentation(post.category);
+      const clinicalBlurb =
+        "shortSummary" in post && typeof post.shortSummary === "string" && post.shortSummary.trim()
+          ? post.shortSummary.trim()
+          : "schemaSummary" in post && typeof post.schemaSummary === "string" && post.schemaSummary.trim()
+            ? post.schemaSummary.trim()
+            : null;
+      const takeaways =
+        "keyTakeaways" in post && Array.isArray(post.keyTakeaways)
+          ? post.keyTakeaways.map((t) => (typeof t === "string" ? t.trim() : "")).filter((t) => t.length > 0)
+          : [];
+
       return (
-        <article className="mx-auto max-w-3xl px-4 py-12">
+        <article
+          className="nn-premium-blog-article mx-auto max-w-7xl px-4 py-12 sm:px-6"
+          data-nn-blog-topic={topic.variant}
+        >
           <BlogPostingJsonLd
             slug={slug}
             title={post.seoTitle?.trim() || post.title}
@@ -171,29 +189,34 @@ export default async function BlogPostPage({ params }: Props) {
               items={faqItems.map((f) => ({ question: f.q, answer: f.a }))}
             />
           ) : null}
-          <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
-          <Link
-            href="/blog"
-            className="text-sm font-medium text-primary hover:underline"
-          >
-            ← Blog
-          </Link>
-          <header className="mt-6 space-y-2">
-            {post.category ? (
-              <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
-                {post.category}
-              </p>
+          <div className="nn-premium-blog-article-hero">
+            <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
+            <Link
+              href="/blog"
+              className="nn-premium-blog-back-link inline-flex min-h-[44px] min-w-0 items-center text-sm font-semibold text-primary hover:underline"
+            >
+              ← Back to blog
+            </Link>
+            <header className="mt-6 space-y-3">
+            {topic.displayLabel ? (
+              <div className="flex flex-wrap gap-2">
+                <BlogTopicBadge
+                  label={topic.displayLabel}
+                  variant={topic.variant}
+                  href={topic.categoryArchiveHref}
+                />
+              </div>
             ) : null}
             {post.exam ? (
               <p className="text-xs font-medium text-primary">
                 Exam focus: {post.exam}
               </p>
             ) : null}
-            <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">
+            <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl [overflow-wrap:anywhere]">
               {post.title}
             </h1>
             <p className="text-sm text-[var(--theme-muted-text)]">
-              {publishedAt.toISOString().slice(0, 10)}
+              <time dateTime={publishedAt.toISOString()}>{publishedAt.toISOString().slice(0, 10)}</time>
             </p>
             {"workflowStatus" in post && post.workflowStatus ? (
               <p className="text-xs text-muted-foreground">
@@ -207,7 +230,8 @@ export default async function BlogPostPage({ params }: Props) {
                 {new Date(post.lastReviewedAt).toISOString().slice(0, 10)}
               </p>
             ) : null}
-          </header>
+            </header>
+          </div>
           {post.coverImage ? (
             <figure className="mt-8">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -243,10 +267,36 @@ export default async function BlogPostPage({ params }: Props) {
               }
             />
           </div>
-          <div
-            className="prose prose-neutral mt-8 max-w-none dark:prose-invert [&_a]:text-primary [&_h2]:text-[var(--theme-heading-text)] [&_h3]:text-[var(--theme-heading-text)]"
-            dangerouslySetInnerHTML={{ __html: bodyHtml }}
-          />
+          {clinicalBlurb ? (
+            <section
+              className="mt-8 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--theme-card-bg))] p-5 shadow-sm"
+              aria-label="Clinical summary"
+            >
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Clinical summary</h2>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)] [overflow-wrap:anywhere]">{clinicalBlurb}</p>
+            </section>
+          ) : null}
+          {takeaways.length > 0 ? (
+            <section
+              className="mt-6 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_7%,var(--theme-card-bg))] p-5 shadow-sm"
+              aria-label="Key takeaways"
+            >
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Key takeaways</h2>
+              <ul className="mt-3 list-inside list-disc space-y-1.5 text-sm text-[var(--theme-body-text)] [overflow-wrap:anywhere]">
+                {takeaways.map((t, i) => (
+                  <li key={`${i}-${t.slice(0, 48)}`}>{t}</li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+          <div className="mt-8 lg:grid lg:grid-cols-[minmax(0,65ch)_240px] lg:items-start lg:gap-10">
+            <div
+              id="nn-blog-article-body"
+              className="nn-premium-blog-prose prose prose-neutral min-w-0 max-w-[65ch] dark:prose-invert [&_a]:text-primary [&_h2]:text-[var(--theme-heading-text)] [&_h3]:text-[var(--theme-heading-text)]"
+              dangerouslySetInnerHTML={{ __html: bodyHtml }}
+            />
+            <BlogArticleToc containerId="nn-blog-article-body" />
+          </div>
           <BlogRelatedReadingSection items={relatedReading} />
           <BlogPostDistributionFooter
             exam={post.exam}
@@ -258,28 +308,28 @@ export default async function BlogPostPage({ params }: Props) {
           {"apaReferences" in post &&
           Array.isArray(post.apaReferences) &&
           post.apaReferences.length > 0 ? (
-            <section className="mt-10 rounded-xl border border-border/60 bg-muted/20 p-5">
+            <section className="mt-10 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-text-muted)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--theme-card-bg))] p-5">
               <h2 className="text-base font-medium text-[var(--theme-heading-text)]">
                 References (APA 7)
               </h2>
-              <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
+              <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-[var(--theme-muted-text)] [overflow-wrap:anywhere]">
                 {post.apaReferences.map((ref: string, idx: number) => (
                   <li key={`${idx}-${ref.slice(0, 24)}`}>{ref}</li>
                 ))}
               </ol>
             </section>
           ) : null}
-          <section className="mt-6 rounded-xl border border-border/60 bg-muted/10 p-4 text-xs text-muted-foreground">
+          <section className="mt-6 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_6%,var(--theme-card-bg))] p-4 text-xs text-[var(--theme-body-text)] [overflow-wrap:anywhere]">
             Educational use only. Content supports exam preparation and is not a
             substitute for professional clinical judgment or local protocols.
           </section>
           {post.tags.length > 0 ? (
-            <footer className="mt-10 flex flex-wrap gap-2 border-t border-[var(--theme-separator)] pt-6">
+            <footer className="mt-10 flex min-w-0 flex-wrap gap-2 border-t border-[var(--theme-separator)] pt-6">
               {post.tags.map((t) => (
                 <Link
                   key={t}
                   href={`/blog/tag/${encodeURIComponent(t)}`}
-                  className="rounded-full bg-[var(--theme-page-bg)] px-2 py-0.5 text-xs text-[var(--theme-muted-text)] hover:text-primary hover:underline"
+                  className="max-w-full min-w-0 rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] px-2.5 py-1 text-xs font-medium text-[var(--theme-body-text)] [overflow-wrap:anywhere] hover:border-primary/40 hover:text-primary"
                 >
                   {t}
                 </Link>

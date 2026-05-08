@@ -53,7 +53,7 @@ export function AlliedHeroProfessionScan({
   const flat = ALLIED_HUB_CATEGORY_ORDER.flatMap((id) => grouped.get(id) ?? []);
   if (flat.length === 0) return null;
   return (
-    <div className="relative mt-10 border-t border-[color-mix(in_srgb,var(--theme-primary)_18%,transparent)] pt-8">
+    <div className="relative mt-8 border-t border-[color-mix(in_srgb,var(--theme-primary)_18%,transparent)] pt-6">
       <p className="nn-marketing-label">{scanTracksLabel}</p>
       <div className="mt-3 flex flex-wrap gap-2 sm:gap-2.5">
         {flat.map((p) => (
@@ -89,7 +89,7 @@ export function AlliedHealthRegionStrip({
 }) {
   return (
     <section
-      className="mt-16 rounded-[1.75rem] border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] p-6 shadow-[var(--shadow-card)] sm:p-10"
+      className="mt-12 rounded-[1.75rem] border border-[var(--trust-surface-border)] bg-[var(--trust-surface)] p-6 shadow-[var(--shadow-card)] sm:p-10"
       aria-labelledby="allied-region-heading"
     >
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -176,7 +176,7 @@ export function AlliedHubProfessionSections({
   copy: AlliedHealthHubCopy["professions"];
 }) {
   return (
-    <section className="mt-20" aria-labelledby="allied-professions-heading">
+    <section className="mt-14" aria-labelledby="allied-professions-heading">
       <div className="max-w-2xl">
         <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-[var(--accent-soft)] px-3 py-1">
           <Sparkles className="h-3.5 w-3.5 text-[var(--theme-primary)]" aria-hidden />
@@ -187,7 +187,7 @@ export function AlliedHubProfessionSections({
         </h2>
         <p className="nn-marketing-body-sm mt-3 leading-relaxed text-[var(--theme-muted-text)]">{copy.intro}</p>
       </div>
-      <div className="mt-12 space-y-16 sm:space-y-20">
+      <div className="mt-10 space-y-12 sm:space-y-14">
         {ALLIED_HUB_CATEGORY_ORDER.map((categoryId, sectionIndex) => {
           const professions = grouped.get(categoryId) ?? [];
           if (professions.length === 0) return null;

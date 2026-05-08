@@ -4,7 +4,11 @@ import dynamic from "next/dynamic";
 import type { ToolSlug } from "@/lib/tools/tool-registry";
 
 const loading = () => (
-  <div className="min-h-[12rem] rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 text-sm text-[var(--theme-muted-text)]" />
+  <div
+    className="min-h-[12rem] animate-pulse rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-text-muted)_6%,var(--semantic-surface))] p-6"
+    aria-busy
+    aria-label="Loading calculator"
+  />
 );
 
 /** Module-level `dynamic()` keeps chunk IDs stable for Turbopack (avoid `dynamic()` inside render). */

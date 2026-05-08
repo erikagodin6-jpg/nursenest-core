@@ -151,7 +151,7 @@ export default async function AlliedCareerHubPage({ params }: Props) {
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
         <WebPageJsonLd title={prof.title} description={prof.description} path={hubPath} />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
-        <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--semantic-brand)]">
+        <p className="nn-marketing-label mb-4 font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
           Allied Health · {categoryMeta.label}
         </p>
         <AlliedHealthPathwayHub

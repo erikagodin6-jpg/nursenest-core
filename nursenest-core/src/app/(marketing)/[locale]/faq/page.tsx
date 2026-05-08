@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { FaqLegalMarketingView } from "@/components/legal/faq-legal-marketing-view";
+import { FaqProductScreenshotsSection } from "@/components/marketing/faq-product-screenshots-section";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
@@ -29,5 +30,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LocalizedFaqPage({ params }: Props) {
   const { locale } = await params;
-  return <FaqLegalMarketingView path={`/${locale}/faq`} />;
+  return (
+    <>
+      <FaqLegalMarketingView path={`/${locale}/faq`} />
+      <FaqProductScreenshotsSection />
+    </>
+  );
 }

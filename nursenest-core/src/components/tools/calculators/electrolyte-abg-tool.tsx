@@ -57,9 +57,9 @@ export default function ElectrolyteAbgTool() {
           <Input inputMode="decimal" value={hco3} onChange={(e) => setHco3(e.target.value)} placeholder={t("tools.electrolyteAbg.hco3Placeholder")} />
         </label>
       </div>
-      <div className="rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-4">
+      <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-chart-4)_7%,var(--semantic-surface))] p-4 shadow-[var(--elevation-rest)]">
         {resultKey === null ? (
-          <p className="text-sm text-amber-700">{t("tools.electrolyteAbg.validation")}</p>
+          <p className="text-sm text-[var(--semantic-warning)]">{t("tools.electrolyteAbg.validation")}</p>
         ) : (
           <p className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(resultKey)}</p>
         )}

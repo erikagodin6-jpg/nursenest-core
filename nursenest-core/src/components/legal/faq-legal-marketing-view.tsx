@@ -11,15 +11,17 @@ export async function FaqLegalMarketingView({ path }: { path: string }) {
   const faqItems = parseFaqMarkdownForJsonLd(md);
   const { crumbs, schemaItems } = simpleMarketingBreadcrumbs("FAQ", path);
   return (
-    <>
+    <div className="nn-faq-marketing-root" data-testid="marketing-faq-legal">
       <FaqJsonLd items={faqItems} />
       <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mx-auto max-w-3xl px-4 pt-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-3xl px-4 pt-6 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <article className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-        <LegalMarkdownBody markdown={md} />
+      <article className="mx-auto max-w-3xl px-4 pb-12 pt-6 sm:px-6 sm:pb-14 lg:px-8">
+        <div className="nn-premium-faq-card rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] p-6 shadow-[var(--elevation-rest)] sm:p-8">
+          <LegalMarkdownBody markdown={md} />
+        </div>
       </article>
-    </>
+    </div>
   );
 }

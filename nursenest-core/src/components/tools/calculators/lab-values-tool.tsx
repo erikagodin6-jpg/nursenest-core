@@ -49,9 +49,9 @@ export default function LabValuesTool() {
         <span className="font-medium text-[var(--theme-heading-text)]">{t("tools.labValues.search")}</span>
         <Input className="mt-1" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("tools.labValues.searchPlaceholder")} />
       </label>
-      <div className="overflow-x-auto rounded-xl border border-[var(--theme-card-border)]">
+      <div className="overflow-x-auto rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] shadow-[var(--elevation-rest)]">
         <table className="w-full min-w-[28rem] text-left text-sm">
-          <thead className="bg-[var(--theme-page-bg)] text-[var(--theme-heading-text)]">
+          <thead className="bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] text-[var(--semantic-text-primary)]">
             <tr>
               <th className="px-3 py-2 font-semibold">{t("tools.labValues.colName")}</th>
               <th className="px-3 py-2 font-semibold">{t("tools.labValues.colRange")}</th>
@@ -60,7 +60,7 @@ export default function LabValuesTool() {
           </thead>
           <tbody>
             {filtered.map((r) => (
-              <tr key={r.id} className="border-t border-[var(--theme-separator)]">
+              <tr key={r.id} className="border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))]">
                 <td className="px-3 py-2">{t(r.nameKey)}</td>
                 <td className="px-3 py-2 text-[var(--theme-muted-text)]">{t(r.rangeKey)}</td>
                 <td className="px-3 py-2 text-[var(--theme-muted-text)]">{t(r.unitKey)}</td>

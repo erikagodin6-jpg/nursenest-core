@@ -44,9 +44,6 @@ export default function IvInfusionTool() {
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-[var(--theme-muted-text)]">
-        Educational calculator. Always follow institutional policies, smart pumps, and provider orders.
-      </p>
       <div className="flex flex-wrap gap-2">
         {(
           [
@@ -59,8 +56,10 @@ export default function IvInfusionTool() {
             key={k}
             type="button"
             onClick={() => setMode(k)}
-            className={`rounded-full px-4 py-2 text-sm font-semibold ${
-              mode === k ? "bg-primary" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"
+            className={`rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--semantic-surface)] ${
+              mode === k
+                ? "bg-primary text-primary-foreground shadow-[var(--elevation-rest)]"
+                : "border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-text-muted)_5%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
             }`}
           >
             {label}
@@ -84,9 +83,9 @@ export default function IvInfusionTool() {
               <Input inputMode="decimal" value={mins} onChange={(e) => setMins(e.target.value)} />
             </label>
           </div>
-          <div className="rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-4">
+          <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-info)_6%,var(--semantic-surface))] p-4 shadow-[var(--elevation-rest)]">
             {mlHrFromVolTime === null ? (
-              <p className="text-sm text-amber-800">{t("tools.ivInfusion.validation")}</p>
+              <p className="text-sm text-[var(--semantic-warning)]">{t("tools.ivInfusion.validation")}</p>
             ) : (
               <p className="text-lg font-semibold text-[var(--theme-heading-text)]">
                 {t("tools.ivInfusion.rateMlHr")}: {mlHrFromVolTime.toFixed(1)} {t("tools.ivInfusion.unitMlHr")}
@@ -108,9 +107,9 @@ export default function IvInfusionTool() {
               <Input inputMode="decimal" value={gtt} onChange={(e) => setGtt(e.target.value)} />
             </label>
           </div>
-          <div className="rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-4">
+          <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_6%,var(--semantic-surface))] p-4 shadow-[var(--elevation-rest)]">
             {gttFromMlHr === null ? (
-              <p className="text-sm text-amber-800">{t("tools.ivInfusion.validation")}</p>
+              <p className="text-sm text-[var(--semantic-warning)]">{t("tools.ivInfusion.validation")}</p>
             ) : (
               <p className="text-lg font-semibold text-[var(--theme-heading-text)]">
                 {t("tools.ivInfusion.gttMin")}: {gttFromMlHr.toFixed(1)} gtt/min
@@ -132,9 +131,9 @@ export default function IvInfusionTool() {
               <Input inputMode="decimal" value={rateMlHr} onChange={(e) => setRateMlHr(e.target.value)} />
             </label>
           </div>
-          <div className="rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-4">
+          <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_6%,var(--semantic-surface))] p-4 shadow-[var(--elevation-rest)]">
             {durationHrs === null ? (
-              <p className="text-sm text-amber-800">{t("tools.ivInfusion.validation")}</p>
+              <p className="text-sm text-[var(--semantic-warning)]">{t("tools.ivInfusion.validation")}</p>
             ) : (
               <p className="text-lg font-semibold text-[var(--theme-heading-text)]">
                 {t("tools.ivInfusion.infuseOver")}: {durationHrs.toFixed(2)} hours ({(durationHrs * 60).toFixed(0)} min)
@@ -143,6 +142,7 @@ export default function IvInfusionTool() {
           </div>
         </div>
       ) : null}
+      <p className="text-xs text-[var(--theme-muted-text)]">{t("tools.disclaimer")}</p>
     </div>
   );
 }

@@ -1029,6 +1029,7 @@ const tagListSelect = {
   excerpt: true,
   createdAt: true,
   publishAt: true,
+  category: true,
 } satisfies Prisma.BlogPostSelect;
 
 export type BlogTagListPost = Prisma.BlogPostGetPayload<{ select: typeof tagListSelect }>;
@@ -1047,6 +1048,7 @@ export async function getPublishedBlogPostsByTagPage(
         slug: p.slug,
         title: p.title,
         excerpt: p.excerpt,
+        category: p.category ?? null,
         createdAt: new Date(`${p.createdAt}T12:00:00Z`),
         publishAt: null as Date | null,
       }));
@@ -1070,6 +1072,69 @@ export async function getPublishedBlogPostsByTagPage(
       "blog_posts_by_tag.posts",
     ),
     withBlogTimeoutFallback(() => prisma.blogPost.count({ where }), 0, "blog_posts_by_tag.total"),
+  ]);
+  return { posts, total, page: safePage, pageSize: safeSize };
+}
+
+export async function countPublishedPostsWithCategory(category: string): Promise<number> {
+  const cat = category.trim();
+  if (!cat) return 0;
+  if (shouldSkipBlogDbForProductionBuild()) {
+    return listStaticBlogPostsForIndex().filter((p) => (p.category ?? "").trim() === cat).length;
+  }
+  const now = new Date();
+  return withBlogTimeoutFallback(
+    () =>
+      prisma.blogPost.count({
+        where: { AND: [blogLiveWhere(now), { category: cat }] },
+      }),
+    0,
+    "blog_posts_by_category.count",
+  );
+}
+
+export async function getPublishedBlogPostsByCategoryPage(
+  category: string,
+  page: number,
+  pageSize: number,
+): Promise<{ posts: BlogTagListPost[]; total: number; page: number; pageSize: number }> {
+  const cat = category.trim();
+  const safePage = Math.max(1, page);
+  const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(pageSize)));
+  if (!cat) {
+    return { posts: [], total: 0, page: safePage, pageSize: safeSize };
+  }
+  if (shouldSkipBlogDbForProductionBuild()) {
+    const all = listStaticBlogPostsForIndex()
+      .filter((p) => (p.category ?? "").trim() === cat)
+      .map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        excerpt: p.excerpt,
+        category: p.category ?? null,
+        createdAt: new Date(`${p.createdAt}T12:00:00Z`),
+        publishAt: null as Date | null,
+      }));
+    const total = all.length;
+    const posts = all.slice((safePage - 1) * safeSize, (safePage - 1) * safeSize + safeSize);
+    return { posts, total, page: safePage, pageSize: safeSize };
+  }
+  const now = new Date();
+  const where = { AND: [blogLiveWhere(now), { category: cat }] };
+  const [posts, total] = await Promise.all([
+    withBlogTimeoutFallback(
+      () =>
+        prisma.blogPost.findMany({
+          where,
+          orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }, { slug: "asc" }],
+          select: tagListSelect,
+          skip: (safePage - 1) * safeSize,
+          take: safeSize,
+        }),
+      [],
+      "blog_posts_by_category.posts",
+    ),
+    withBlogTimeoutFallback(() => prisma.blogPost.count({ where }), 0, "blog_posts_by_category.total"),
   ]);
   return { posts, total, page: safePage, pageSize: safeSize };
 }

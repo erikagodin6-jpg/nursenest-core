@@ -122,7 +122,7 @@ export default async function GlobalAlliedHealthHubPage() {
   const schemaItems = crumbs.map((item) => ({ name: item.name, item: absoluteUrl(item.href) }));
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+    <div className="nn-marketing-surface mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
       <WebPageJsonLd
         title="Allied Health | NurseNest"
         description="Global Allied Health pathway with occupation-based study routes, paid/free study entry points, and unit switching."

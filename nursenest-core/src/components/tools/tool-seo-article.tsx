@@ -21,7 +21,7 @@ function Section({ block }: { block: SeoBlock }) {
   return (
     <section
       aria-labelledby={`tool-seo-${block.id}`}
-      className={`mb-8 rounded-2xl border p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6 ${panelClass[block.panel]}`}
+      className={`nn-premium-tool-seo-section mb-8 rounded-2xl border p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6 ${panelClass[block.panel]}`}
     >
       <h2 id={`tool-seo-${block.id}`} className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-xl">
         {block.title}

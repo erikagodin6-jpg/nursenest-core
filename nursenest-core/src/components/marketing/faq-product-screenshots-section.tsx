@@ -11,81 +11,51 @@
  */
 
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { MarketingChainScreenshot } from "@/components/marketing/marketing-screenshot-stack";
 import { SCREENSHOT_REGISTRY } from "@/lib/marketing/screenshot-registry";
 import { FAQ_VISUAL_QA } from "@/lib/marketing/get-screenshots";
-
-const ACCENT = "var(--theme-primary)";
-const TEXT_HEADING = "var(--theme-heading-text)";
-const TEXT_BODY = "var(--theme-body-text)";
-const TEXT_MUTED = "var(--theme-muted-text)";
-const SURFACE_ELEVATED = "color-mix(in srgb, var(--theme-primary) 4%, var(--bg-card))";
-const SURFACE_SOFT = "color-mix(in srgb, var(--theme-primary) 6%, var(--bg-card))";
-const BORDER = "var(--border-subtle)";
 
 function FaqVisualItem({
   question,
   answer,
   screenshotId,
   defaultOpen = false,
+  testId,
 }: {
   question: string;
   answer: string;
   screenshotId: (typeof FAQ_VISUAL_QA)[number]["screenshotId"];
   defaultOpen?: boolean;
+  testId?: string;
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const record = SCREENSHOT_REGISTRY.find((s) => s.id === screenshotId);
 
   return (
     <div
-      className="overflow-hidden rounded-2xl"
-      style={{ border: `1px solid ${BORDER}`, background: SURFACE_ELEVATED }}
+      data-testid={testId}
+      className="group overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] shadow-[var(--elevation-rest)]"
     >
-      {/* Question row — always visible */}
       <button
         type="button"
-        className="flex w-full items-start justify-between gap-4 px-6 py-5 text-left transition-colors hover:bg-[color-mix(in_srgb,var(--theme-primary)_3%,transparent)]"
+        className="flex w-full items-start justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] sm:px-6 sm:py-5"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
       >
-        <span
-          className="text-base font-semibold leading-snug"
-          style={{ color: TEXT_HEADING }}
-        >
-          {question}
-        </span>
-        <span
-          className="mt-0.5 shrink-0 text-xl leading-none transition-transform"
-          style={{
-            color: ACCENT,
-            transform: open ? "rotate(45deg)" : "none",
-          }}
+        <span className="nn-marketing-body-sm font-semibold text-[var(--semantic-text-primary)]">{question}</span>
+        <ChevronDown
+          className={`mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-text-muted)] transition-transform ${open ? "rotate-180" : ""}`}
           aria-hidden
-        >
-          +
-        </span>
+        />
       </button>
 
-      {/* Answer + screenshot — toggleable */}
-      {open && (
-        <div
-          className="border-t px-6 pb-7 pt-5"
-          style={{ borderColor: BORDER }}
-        >
+      {open ? (
+        <div className="border-t border-[var(--semantic-border-soft)] px-5 pb-6 pt-4 sm:px-6 sm:pb-7 sm:pt-5">
           <div className="grid items-start gap-8 md:grid-cols-2">
-            {/* Answer text */}
-            <div>
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: TEXT_BODY }}
-              >
-                {answer}
-              </p>
-            </div>
-            {/* Screenshot */}
+            <p className="nn-marketing-body-sm text-[var(--semantic-text-secondary)]">{answer}</p>
             {record ? (
-              <div>
+              <div className="min-w-0">
                 <MarketingChainScreenshot
                   objectKey={record.objectKey}
                   publicUrl={record.publicUrl}
@@ -95,17 +65,14 @@ function FaqVisualItem({
                   rounded="rounded-xl"
                   imgClassName="object-top"
                 />
-                <p
-                  className="mt-2 text-center text-xs"
-                  style={{ color: TEXT_MUTED }}
-                >
+                <p className="nn-marketing-caption mt-2 text-center text-[var(--semantic-text-muted)]">
                   {record.label} — real NurseNest interface
                 </p>
               </div>
             ) : null}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
@@ -117,63 +84,47 @@ function FaqVisualItem({
 export function FaqProductScreenshotsSection() {
   return (
     <section
-      className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8"
+      className="border-t border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--page-bg))] py-12 sm:py-14"
       aria-labelledby="product-faq-heading"
+      data-testid="marketing-faq-product"
     >
-      {/* Section header */}
-      <div
-        className="mb-8 rounded-2xl px-6 py-5"
-        style={{ background: SURFACE_SOFT, border: `1px solid ${BORDER}` }}
-      >
-        <p
-          className="text-xs font-bold uppercase tracking-widest"
-          style={{ color: ACCENT }}
-        >
-          Product questions
-        </p>
-        <h2
-          id="product-faq-heading"
-          className="nn-marketing-h3 mt-2"
-          style={{ color: TEXT_HEADING }}
-        >
-          What does the platform look like?
-        </h2>
-        <p
-          className="mt-2 text-sm leading-relaxed"
-          style={{ color: TEXT_BODY }}
-        >
-          Every screenshot below is taken from the live NurseNest platform. Click any question to see the real interface.
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] px-5 py-5 shadow-[var(--elevation-rest)] sm:px-6">
+          <p className="nn-marketing-caption font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
+            Product questions
+          </p>
+          <h2 id="product-faq-heading" className="nn-marketing-h2 mt-2">
+            What does the platform look like?
+          </h2>
+          <p className="nn-marketing-body-sm mt-2 text-[var(--semantic-text-secondary)]">
+            Every screenshot below is taken from the live NurseNest platform. Click any question to see the real interface.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {FAQ_VISUAL_QA.map((item, i) => (
+            <FaqVisualItem
+              key={item.id}
+              question={item.question}
+              answer={item.answer}
+              screenshotId={item.screenshotId}
+              defaultOpen={i === 0}
+              testId={i === 0 ? "marketing-faq-product-accordion-first" : undefined}
+            />
+          ))}
+        </div>
+
+        <p className="nn-marketing-body-sm mt-8 text-center text-[var(--semantic-text-muted)]">
+          Want to see it in action?{" "}
+          <a
+            href="/signup"
+            className="font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
+          >
+            Start for free
+          </a>{" "}
+          — no credit card required.
         </p>
       </div>
-
-      {/* Visual Q&A items */}
-      <div className="space-y-3">
-        {FAQ_VISUAL_QA.map((item, i) => (
-          <FaqVisualItem
-            key={item.id}
-            question={item.question}
-            answer={item.answer}
-            screenshotId={item.screenshotId}
-            defaultOpen={i === 0}
-          />
-        ))}
-      </div>
-
-      {/* Footer link */}
-      <p
-        className="mt-8 text-center text-sm"
-        style={{ color: TEXT_MUTED }}
-      >
-        Want to see it in action?{" "}
-        <a
-          href="/signup"
-          className="font-semibold hover:underline"
-          style={{ color: ACCENT }}
-        >
-          Start for free
-        </a>{" "}
-        — no credit card required.
-      </p>
     </section>
   );
 }

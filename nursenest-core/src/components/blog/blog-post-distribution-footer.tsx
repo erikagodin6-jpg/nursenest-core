@@ -56,14 +56,21 @@ export function BlogPostDistributionFooter({
   const hasQuestionIds = relatedQuestionIds.length > 0;
 
   return (
-    <aside className="mt-6 space-y-6 border-t border-[var(--theme-separator)] pt-6">
+    <aside className="nn-premium-blog-distribution mt-6 space-y-6 border-t border-[var(--theme-separator)] pt-6">
       {lessons.length > 0 ? (
-        <footer className="space-y-2">
+        <footer className="space-y-3">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Related lessons</h2>
-          <ul className="list-inside list-disc space-y-1 text-sm text-[var(--theme-body-text)]">
+          <ul className="grid list-none gap-2 sm:grid-cols-2">
             {lessons.map((path) => (
-              <li key={path}>
-                <BlogDistributionAnalyticsLink href={path} linkKind="related_lesson" className="font-medium text-primary hover:underline">
+              <li
+                key={path}
+                className="min-w-0 overflow-hidden rounded-xl border border-[var(--theme-card-border)] bg-[color-mix(in_srgb,var(--semantic-success)_7%,var(--theme-card-bg))] px-3 py-2.5 text-sm shadow-sm"
+              >
+                <BlogDistributionAnalyticsLink
+                  href={path}
+                  linkKind="related_lesson"
+                  className="font-semibold text-primary [overflow-wrap:anywhere] hover:underline"
+                >
                   {path.replace(/^\//, "")}
                 </BlogDistributionAnalyticsLink>
               </li>
@@ -99,18 +106,18 @@ export function BlogPostDistributionFooter({
             </li>
           </ul>
         </nav>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-3 flex min-w-0 flex-wrap gap-2">
           <BlogDistributionAnalyticsLink
             href={practiceHub}
             linkKind="practice_hub"
-            className="inline-flex rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/15"
+            className="inline-flex max-w-full min-h-[44px] items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/15 [overflow-wrap:anywhere]"
           >
             Practice questions (public hub)
           </BlogDistributionAnalyticsLink>
           <BlogDistributionAnalyticsLink
             href={catHub}
             linkKind="practice_exams_hub"
-            className="inline-flex rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-muted/80"
+            className="inline-flex max-w-full min-h-[44px] items-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-text-muted)_8%,var(--theme-card-bg))]"
           >
             CAT-style practice exams
           </BlogDistributionAnalyticsLink>
@@ -118,7 +125,7 @@ export function BlogPostDistributionFooter({
             <BlogDistributionAnalyticsLink
               href={studyHubs.practiceProgrammatic}
               linkKind="practice_programmatic"
-              className="inline-flex rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-muted/80"
+              className="inline-flex max-w-full min-h-[44px] items-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-text-muted)_8%,var(--theme-card-bg))]"
             >
               Focused practice test
             </BlogDistributionAnalyticsLink>
@@ -126,7 +133,7 @@ export function BlogPostDistributionFooter({
           <BlogDistributionAnalyticsLink
             href={loginWithCallback("/app/questions")}
             linkKind="question_bank_login"
-            className="inline-flex rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-muted/80"
+            className="inline-flex max-w-full min-h-[44px] items-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-text-muted)_8%,var(--theme-card-bg))]"
           >
             Open question bank (sign in)
           </BlogDistributionAnalyticsLink>
@@ -142,7 +149,7 @@ export function BlogPostDistributionFooter({
                 <BlogDistributionAnalyticsLink
                   href={toolPathForSlug(t)}
                   linkKind="tool_slug"
-                  className="rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-primary hover:bg-muted/80"
+                  className="rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] px-3 py-1 text-xs font-medium text-primary hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))]"
                 >
                   {t}
                 </BlogDistributionAnalyticsLink>

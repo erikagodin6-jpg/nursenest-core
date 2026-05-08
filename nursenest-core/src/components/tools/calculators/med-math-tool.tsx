@@ -39,11 +39,17 @@ export default function MedMathTool() {
 
   return (
     <div className="space-y-6">
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2" role="tablist" aria-label={t("tools.hub.title")}>
         <Button
           type="button"
           unstyled
-          className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "iv" ? "bg-primary" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"}`}
+          role="tab"
+          aria-selected={mode === "iv"}
+          className={`rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--semantic-surface)] ${
+            mode === "iv"
+              ? "bg-primary text-primary-foreground shadow-[var(--elevation-rest)]"
+              : "border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-text-muted)_5%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+          }`}
           onClick={() => setMode("iv")}
         >
           {t("tools.medMath.tabIv")}
@@ -51,7 +57,13 @@ export default function MedMathTool() {
         <Button
           type="button"
           unstyled
-          className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "dose" ? "bg-primary" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"}`}
+          role="tab"
+          aria-selected={mode === "dose"}
+          className={`rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--semantic-surface)] ${
+            mode === "dose"
+              ? "bg-primary text-primary-foreground shadow-[var(--elevation-rest)]"
+              : "border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-text-muted)_5%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+          }`}
           onClick={() => setMode("dose")}
         >
           {t("tools.medMath.tabDose")}
@@ -73,9 +85,9 @@ export default function MedMathTool() {
               <Input inputMode="numeric" value={gtt} onChange={(e) => setGtt(e.target.value)} />
             </label>
           </div>
-          <div className="rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-4">
+          <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-info)_6%,var(--semantic-surface))] p-4 shadow-[var(--elevation-rest)]">
             {ivResult === null ? (
-              <p className="text-sm text-amber-700">{t("tools.medMath.validation.iv")}</p>
+              <p className="text-sm text-[var(--semantic-warning)]">{t("tools.medMath.validation.iv")}</p>
             ) : (
               <p className="text-lg font-semibold text-[var(--theme-heading-text)]">
                 {t("tools.medMath.rate")}: {ivResult.toFixed(1)} {t("tools.medMath.unitGttMin")}
@@ -100,9 +112,9 @@ export default function MedMathTool() {
               <Input inputMode="decimal" value={per} onChange={(e) => setPer(e.target.value)} />
             </label>
           </div>
-          <div className="rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-4">
+          <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_6%,var(--semantic-surface))] p-4 shadow-[var(--elevation-rest)]">
             {doseMl === null ? (
-              <p className="text-sm text-amber-700">{t("tools.medMath.validation.dose")}</p>
+              <p className="text-sm text-[var(--semantic-warning)]">{t("tools.medMath.validation.dose")}</p>
             ) : (
               <p className="text-lg font-semibold text-[var(--theme-heading-text)]">
                 {t("tools.medMath.volumeToGive")}: {doseMl.toFixed(2)} mL

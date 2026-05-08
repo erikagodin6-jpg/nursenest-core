@@ -20,20 +20,20 @@ export function LegalMarkdownBody({ markdown }: { markdown: string }) {
           const title = block.slice(3).trim();
           const id = slugifyLegalHeading(title);
           return (
-            <h2 key={i} id={id} className="mt-10 scroll-mt-24 text-xl font-bold text-[var(--theme-heading-text)] first:mt-0">
+            <h2 key={i} id={id} className="nn-marketing-h3 mt-10 scroll-mt-24 first:mt-0">
               {title}
             </h2>
           );
         }
         if (block.startsWith("# ")) {
           return (
-            <h1 key={i} className="text-3xl font-bold text-[var(--theme-heading-text)]">
+            <h1 key={i} className="nn-marketing-h1">
               {block.slice(2).trim()}
             </h1>
           );
         }
         return (
-          <p key={i} className="mb-4 leading-relaxed text-[var(--theme-body-text)]">
+          <p key={i} className="nn-marketing-body-sm mb-4 text-[var(--palette-text)]">
             {block}
           </p>
         );

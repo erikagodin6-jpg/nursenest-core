@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
+import { BlogPostCard } from "@/components/blog/blog-post-card";
+import { BlogMarketingPostListClient } from "@/components/blog/blog-marketing-post-list-client";
 import {
   BLOG_LIST_PAGE_SIZE,
   PATHOPHYSIOLOGY_HUB_PRIMARY_TAG,
@@ -103,8 +105,18 @@ export default async function BlogIndexPage({ searchParams }: Props) {
   const showEmptyState = posts.length === 0 && !showPathophysiologySection;
   const showListLoadError = !listLoad.querySucceeded;
 
+  const featured = page === 1 && postsForList.length > 0 ? postsForList[0] : null;
+  const clientPostsRaw = featured ? postsForList.slice(1) : postsForList;
+  const clientPosts = clientPostsRaw.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    category: p.category ?? null,
+    createdAt: p.createdAt.toISOString(),
+  }));
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <div className="nn-blog-index nn-premium-blog-index mx-auto max-w-7xl px-4 py-12 sm:px-6">
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
       <RegionalBlogDiscoveryHint />
       {showListLoadError ? (
@@ -126,10 +138,10 @@ export default async function BlogIndexPage({ searchParams }: Props) {
           <MarketingStudyCrossLinks className="mt-10" />
         </>
       ) : null}
-      <header className="mb-10">
+      <header className="mb-10 max-w-3xl">
         <EditableHeading
           as="h1"
-          className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]"
+          className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl"
           contentKey="inline.marketing.blog.index.h1"
           defaultText={DEFAULT_MARKETING_BLOG_INDEX.inlineH1Default}
           preloaded={blogInlinePreloaded}
@@ -156,40 +168,41 @@ export default async function BlogIndexPage({ searchParams }: Props) {
         <>
           {showPathophysiologySection ? (
             <section
-              className="mb-12 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 shadow-sm"
+              className="nn-premium-blog-patho-spotlight nn-spectrum-rule-top mb-12 overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7"
               aria-labelledby="blog-pathophysiology-heading"
+              data-nn-blog-spotlight="pathophysiology"
             >
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                <h2
-                  id="blog-pathophysiology-heading"
-                  className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)]"
-                >
-                  Pathophysiology for Nursing Students
-                </h2>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <h2
+                    id="blog-pathophysiology-heading"
+                    className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-2xl"
+                  >
+                    Pathophysiology for nursing students
+                  </h2>
+                  <p className="mt-2 max-w-prose text-sm text-[var(--theme-muted-text)]">
+                    Exam-style disease mechanisms and clinical reasoning — NCLEX-oriented depth with nursing scope in mind.
+                  </p>
+                </div>
                 <Link
                   href={pathoTagHref}
-                  className="text-sm font-medium text-primary hover:underline"
+                  className="inline-flex min-h-[44px] shrink-0 items-center rounded-full border border-primary/35 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary shadow-sm transition hover:bg-primary/15"
                 >
                   Browse all pathophysiology articles
                 </Link>
               </div>
-              <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-                Exam-style disease mechanisms and clinical reasoning — NCLEX-oriented depth with nursing scope in mind.
-              </p>
-              <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+              <ul className="mt-6 grid list-none gap-4 sm:grid-cols-2">
                 {pathophysiologyHub.map((p) => (
-                  <li
+                  <BlogPostCard
                     key={p.slug}
-                    className="rounded-lg border border-[var(--theme-separator)] bg-[var(--theme-page-bg)] p-4"
-                  >
-                    <Link href={`/blog/${p.slug}`} className="font-semibold text-primary hover:underline">
-                      {p.title}
-                    </Link>
-                    {p.category ? (
-                      <p className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{p.category}</p>
-                    ) : null}
-                    <p className="mt-2 line-clamp-2 text-sm text-[var(--theme-muted-text)]">{p.excerpt}</p>
-                  </li>
+                    post={{
+                      slug: p.slug,
+                      title: p.title,
+                      excerpt: p.excerpt,
+                      category: p.category ?? null,
+                      createdAt: p.createdAt,
+                    }}
+                  />
                 ))}
               </ul>
             </section>
@@ -199,20 +212,27 @@ export default async function BlogIndexPage({ searchParams }: Props) {
               {page === 1 && showPathophysiologySection ? (
                 <h2 className="mb-4 text-lg font-semibold text-[var(--theme-heading-text)]">All articles</h2>
               ) : null}
-              <ul className="space-y-6">
-                {postsForList.map((p) => (
-                  <li key={p.slug} className="border-b border-[var(--theme-separator)] pb-6">
-                    <Link href={`/blog/${p.slug}`} className="text-lg font-semibold text-primary hover:underline">
-                      {p.title}
-                    </Link>
-                    {p.category ? (
-                      <p className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{p.category}</p>
-                    ) : null}
-                    <p className="mt-2 line-clamp-3 text-sm text-[var(--theme-muted-text)]">{p.excerpt}</p>
-                    <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{p.createdAt.toISOString().slice(0, 10)}</p>
-                  </li>
-                ))}
-              </ul>
+              {featured ? (
+                <div className="mb-8">
+                  <h3 className="sr-only">Featured article</h3>
+                  <ul className="grid list-none gap-4 sm:grid-cols-2">
+                    <BlogPostCard
+                      featured
+                      post={{
+                        slug: featured.slug,
+                        title: featured.title,
+                        excerpt: featured.excerpt,
+                        category: featured.category ?? null,
+                        createdAt: featured.createdAt,
+                      }}
+                    />
+                  </ul>
+                </div>
+              ) : null}
+              {clientPosts.length > 0 ? <BlogMarketingPostListClient posts={clientPosts} /> : null}
+              {featured && clientPosts.length === 0 ? (
+                <p className="text-sm text-[var(--theme-muted-text)]">More articles appear here as they publish.</p>
+              ) : null}
             </>
           ) : page === 1 && showPathophysiologySection ? (
             <p className="text-sm text-[var(--theme-muted-text)]">More clinical articles appear in the list as they publish.</p>
@@ -222,11 +242,11 @@ export default async function BlogIndexPage({ searchParams }: Props) {
               <span className="text-[var(--theme-muted-text)]">
                 Page {page} of {totalPages}
               </span>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 {page > 1 ? (
                   <Link
                     href={page === 2 ? "/blog" : `/blog?page=${page - 1}`}
-                    className="font-medium text-primary hover:underline"
+                    className="inline-flex min-h-[44px] items-center font-semibold text-primary hover:underline"
                   >
                     Previous
                   </Link>
@@ -234,7 +254,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
                   <span className="text-[var(--theme-muted-text)]">Previous</span>
                 )}
                 {page < totalPages ? (
-                  <Link href={`/blog?page=${page + 1}`} className="font-medium text-primary hover:underline">
+                  <Link href={`/blog?page=${page + 1}`} className="inline-flex min-h-[44px] items-center font-semibold text-primary hover:underline">
                     Next
                   </Link>
                 ) : (

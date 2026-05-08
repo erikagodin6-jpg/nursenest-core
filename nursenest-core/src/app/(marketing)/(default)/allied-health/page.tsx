@@ -107,13 +107,13 @@ export default async function AlliedHealthHubPage() {
 
   return (
     <>
-      <div className="mx-auto flex max-w-6xl flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page">
+      <div className="mx-auto flex max-w-6xl flex-col gap-10 sm:gap-12 lg:gap-14 nn-marketing-x nn-rhythm-page">
         <BreadcrumbJsonLd items={schemaItems} />
         <div>
           <BreadcrumbTrail items={crumbs} />
         </div>
 
-        <header className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-strong)] bg-[var(--hero-branded-wash)] px-6 py-[var(--space-hero-bottom)] shadow-[var(--shadow-elevated)] sm:px-11 sm:py-[clamp(2.5rem,5vw,3.5rem)]">
+        <header className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-strong)] bg-[var(--hero-branded-wash)] px-6 py-[var(--space-hero-bottom)] shadow-[var(--shadow-elevated)] sm:px-11 sm:py-[clamp(2.25rem,4.5vw,3.25rem)]">
           <div
             className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/15 blur-3xl"
             aria-hidden
@@ -127,19 +127,17 @@ export default async function AlliedHealthHubPage() {
             aria-hidden
           />
           <div className="relative">
-            <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-primary">
-              {t("pages.alliedHealthHub.heroKicker")}
-            </p>
-            <h1 className="mt-4 max-w-3xl text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl sm:leading-[1.12] lg:text-[2.5rem]">
+            <p className="nn-premium-home-eyebrow max-w-full whitespace-normal">{t("pages.alliedHealthHub.heroKicker")}</p>
+            <h1 className="nn-marketing-h1 mt-4 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]">
               {t("pages.alliedHealthHub.heroH1")}
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--theme-muted-text)] sm:text-lg sm:leading-relaxed">
+            <p className="nn-marketing-body mt-4 max-w-2xl text-pretty text-[var(--palette-text-muted)] sm:text-lg">
               {t("pages.alliedHealthHub.heroValueLine")}
             </p>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--theme-muted-text)] sm:text-lg sm:leading-relaxed">
+            <p className="nn-marketing-body mt-3 max-w-2xl text-pretty text-[var(--palette-text-muted)] sm:text-lg">
               {t("pages.alliedHealthHub.heroWorkflowLine")}
             </p>
-            <p className="mt-4 max-w-2xl text-sm italic leading-relaxed text-[var(--theme-muted-text)] sm:text-base">
+            <p className="nn-marketing-body mt-3 max-w-2xl text-pretty italic text-[var(--palette-text-muted)] sm:text-base">
               {t("pages.alliedHealthHub.heroTestimonial")}
             </p>
             <div className="mt-[var(--nn-rhythm-text-to-cta)] flex flex-wrap gap-[var(--nn-rhythm-btn-group-gap)] sm:gap-[calc(var(--nn-rhythm-btn-group-gap)+0.15rem)]">
