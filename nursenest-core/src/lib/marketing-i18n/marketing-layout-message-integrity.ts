@@ -6,12 +6,20 @@ import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 const REQUIRED_MARKETING_SHELL_KEYS = [
   "brand.nurseNest",
   "brand.homeAriaLabel",
-  "nav.logIn",
-  "nav.language",
-  "nav.theme",
-  "nav.pricing",
   "footer.blog",
   "footer.faq",
+  "nav.logIn",
+  "nav.language",
+  "nav.pricing",
+  "nav.preNursing",
+  "nav.tools",
+  "nav.signup",
+  "nav.theme",
+  "nav.mega.rn.label",
+  "nav.mega.pn.labelCA",
+  "nav.mega.np.label",
+  "nav.mega.newGrad.label",
+  "nav.mega.allied.label",
 ] as const;
 
 function isNonEmptyString(value: unknown): value is string {
