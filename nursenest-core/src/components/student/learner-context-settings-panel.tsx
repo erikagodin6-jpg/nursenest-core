@@ -262,7 +262,7 @@ export function LearnerContextSettingsPanel({
         title="Appearance"
         description="Choose a theme for your study experience."
       >
-        <ThemePicker className="max-w-md" />
+        <ThemePicker className="max-w-md" pickerScope="learner" />
       </SettingsSection>
 
       {/* Save button */}

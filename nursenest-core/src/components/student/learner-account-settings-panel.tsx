@@ -27,7 +27,7 @@ export function LearnerAccountSettingsPanel() {
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t("learner.account.settings.themeHeading")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t("learner.account.settings.themeBody")}</p>
         <div className="mt-4">
-          <ThemePicker className="max-w-md" />
+          <ThemePicker className="max-w-md" pickerScope="learner" />
         </div>
       </div>
       <div className="border-t border-border/60 pt-8" ref={langRef}>

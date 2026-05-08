@@ -6,12 +6,13 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import {
   NURSENEST_DEFAULT_THEME,
   THEME_OPTIONS,
+  themeOptionsForLearnerPicker,
   themeOptionsForPublicMarketingPicker,
 } from "@/lib/theme/theme-registry";
 import { getClinicalThemeMeta } from "@/lib/ui/themes/clinical-theme-tokens";
 import { computeMarketingUtilityFloatingPanelRect } from "@/components/layout/marketing-utility-floating-panel-geometry";
 
-const THEME_PANEL_WIDTH = 224;
+const THEME_PANEL_WIDTH = 240;
 const THEME_PANEL_Z = 520;
 
 const DEFAULT_THEME_LABELS = {
@@ -29,9 +30,10 @@ type ThemePickerProps = {
   dropdownPortal?: boolean;
   /**
    * `publicMarketing` — only themes in `PUBLIC_MARKETING_THEME_ALLOWLIST` (`theme-registry.ts`) appear in the menu.
-   * Learner account / exam modals use default `full`.
+   * `learner` — curated launch palettes only (`LEARNER_THEME_PICKER_ALLOWLIST`).
+   * `full` — entire registry (legacy / internal surfaces only).
    */
-  pickerScope?: "full" | "publicMarketing";
+  pickerScope?: "full" | "publicMarketing" | "learner";
 };
 
 function ThemeSwatches({ opt }: { opt: (typeof THEME_OPTIONS)[number] }) {
@@ -100,8 +102,12 @@ function ThemeMenuList({
               >
                 <ThemeSwatches opt={opt} />
                 <span className="min-w-0 flex-1 leading-snug">
-                  <span className="block">{opt.label}</span>
-                  {meta ? <span className="block text-[11px] font-medium text-[var(--palette-text-muted)]">{meta.mood}</span> : null}
+                  <span className="block break-words [overflow-wrap:anywhere]">{opt.label}</span>
+                  {meta ? (
+                    <span className="mt-0.5 block text-[11px] font-medium leading-snug text-[var(--palette-text-muted)] line-clamp-2 [overflow-wrap:anywhere]">
+                      {meta.mood}
+                    </span>
+                  ) : null}
                 </span>
               </button>
             );
@@ -127,7 +133,7 @@ function ThemeMenuList({
               }`}
             >
               <ThemeSwatches opt={opt} />
-              <span className="min-w-0 flex-1 leading-snug">{opt.label}</span>
+              <span className="min-w-0 flex-1 break-words leading-snug [overflow-wrap:anywhere]">{opt.label}</span>
             </button>
           ))}
         </div>
@@ -151,7 +157,7 @@ function ThemeMenuList({
               }`}
             >
               <ThemeSwatches opt={opt} />
-              <span className="min-w-0 flex-1 leading-snug">{opt.label}</span>
+              <span className="min-w-0 flex-1 break-words leading-snug [overflow-wrap:anywhere]">{opt.label}</span>
             </button>
           ))}
         </div>
@@ -225,7 +231,12 @@ export function ThemePicker({
   const current = mounted ? (resolvedTheme ?? theme ?? NURSENEST_DEFAULT_THEME) : NURSENEST_DEFAULT_THEME;
   const currentLabel = THEME_OPTIONS.find((o) => o.id === current)?.label ?? current;
   const L = { ...DEFAULT_THEME_LABELS, ...labels };
-  const menuOptions = pickerScope === "publicMarketing" ? themeOptionsForPublicMarketingPicker() : THEME_OPTIONS;
+  const menuOptions =
+    pickerScope === "publicMarketing"
+      ? themeOptionsForPublicMarketingPicker()
+      : pickerScope === "learner"
+        ? themeOptionsForLearnerPicker()
+        : THEME_OPTIONS;
   if (pickerScope === "publicMarketing" && menuOptions.length <= 1) {
     return null;
   }
@@ -236,7 +247,7 @@ export function ThemePicker({
         <button
           type="button"
           disabled
-          className="flex items-center gap-1.5 rounded-full border border-[var(--palette-nav-border)] bg-[var(--palette-nav-background)] px-2.5 py-1.5 text-xs font-semibold text-[var(--palette-nav-text)] opacity-80"
+          className="flex max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--palette-nav-border)] bg-[var(--palette-nav-background)] px-2.5 py-1.5 text-xs font-semibold text-[var(--palette-nav-text)] opacity-80"
           aria-label={L.navTheme}
         >
           <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--palette-primary)]" />

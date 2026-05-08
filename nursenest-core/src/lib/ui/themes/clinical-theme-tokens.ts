@@ -65,7 +65,7 @@ export const CLINICAL_THEME_META: Record<LaunchClinicalThemeId, ClinicalThemeMet
   },
   forest: {
     id: "forest",
-    label: "Forest",
+    label: "Garden",
     mood: "Grounded, focused, calm",
     group: "light",
     swatches: {

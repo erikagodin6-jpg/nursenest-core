@@ -1,0 +1,1 @@
+No automated PNG in CI; capture manually when running next dev + learner session.

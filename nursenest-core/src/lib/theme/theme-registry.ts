@@ -1,3 +1,5 @@
+import { LAUNCH_CLINICAL_THEME_IDS } from "@/lib/ui/themes/clinical-theme-tokens";
+
 /**
  * **Source of truth for theme ids** used across the app: CSS `[data-theme="…"]` palettes, the theme picker,
  * and per-theme logo paths via `resolveThemeLogo` (`src/lib/branding/resolve-theme-logo.ts`, `/public/logos/`).
@@ -75,7 +77,7 @@ export const THEME_OPTIONS: ThemeOption[] = [
   },
   {
     id: "forest",
-    label: "Forest",
+    label: "Garden",
     color: "#12805C",
     swatchSecondary: "#0F766E",
     swatchAccent: "#D9A441",
@@ -102,7 +104,7 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "deep-twilight", label: "Deep Twilight", color: "#2A1E4A", group: "dark", logoVariant: "dark", named: true },
 
   /* ── Clinical / Default ── */
-  { id: "clinical-light", label: "Clinical Light", color: "#3b82f6", group: "light", logoVariant: "blue" },
+  { id: "clinical-light", label: "Light", color: "#3b82f6", group: "light", logoVariant: "blue" },
 
   /* ── Pink family ── */
   { id: "petal-pop", label: "Petal Pop", color: "#F48FB1", group: "light", logoVariant: "rose", named: true },
@@ -158,12 +160,24 @@ export const THEME_STORAGE_KEY = "nursenest-theme";
 
 /**
  * Public marketing chrome (site header, utility strip, mobile marketing drawers) exposes only
- * approved palettes; `[data-theme="…"]` definitions and learner/account theme pickers stay full-fidelity.
+ * approved palettes. Learner shell and account settings use `themeOptionsForLearnerPicker` (launch
+ * palettes only). Internal surfaces may use the full `THEME_OPTIONS` list. `[data-theme="…"]` CSS
+ * definitions remain unchanged for every id in `THEME_OPTIONS`.
  *
- * **Primary brand palette only** on public marketing — alternate study atmospheres stay in learner
- * account / full pickers; `[data-theme="…"]` CSS definitions remain unchanged.
+ * **Primary brand palette only** on public marketing — alternate study atmospheres are chosen from
+ * the learner-curated picker; `[data-theme="…"]` CSS definitions remain unchanged.
  */
 export const PUBLIC_MARKETING_THEME_ALLOWLIST = [NURSENEST_DEFAULT_THEME] as const;
+
+/** Learner shell + account settings: curated launch palettes only (ids match `LAUNCH_CLINICAL_THEME_IDS`). */
+export const LEARNER_THEME_PICKER_ALLOWLIST = LAUNCH_CLINICAL_THEME_IDS;
+
+export function themeOptionsForLearnerPicker(all: ThemeOption[] = THEME_OPTIONS): ThemeOption[] {
+  const order = new Map<string, number>(LAUNCH_CLINICAL_THEME_IDS.map((id, i) => [id, i]));
+  return all
+    .filter((o) => order.has(o.id))
+    .sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+}
 
 export function themeOptionsForPublicMarketingPicker(all: ThemeOption[] = THEME_OPTIONS): ThemeOption[] {
   const allow = new Set(PUBLIC_MARKETING_THEME_ALLOWLIST);
