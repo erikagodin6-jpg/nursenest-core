@@ -14,6 +14,8 @@ describe("homepage-marketing-visible-copy", () => {
         value,
       );
     }
+    assert.equal(isUntranslatedHomepageMarketingCopy("Headline Premium", "pages.home.hero.headlinePremium"), true);
+    assert.equal(isUntranslatedHomepageMarketingCopy("READINESS LABEL", "pages.home.hero.panel.readinessLabel"), true);
   });
 
   it("renders caller-provided human fallback when the i18n provider returns placeholder tails", () => {
