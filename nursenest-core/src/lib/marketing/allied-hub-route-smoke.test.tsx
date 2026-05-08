@@ -25,15 +25,7 @@ const labsModuleOverview = {
     adaptiveEligibleCount: 10,
     examKeys: ["ALLIED"],
   },
-  moduleCards: [
-    {
-      id: "labs" as const,
-      title: "Lab values and interpretation",
-      description: "Pattern-based lab review.",
-      href: "/modules/lab-values",
-      access: "free" as const,
-    },
-  ],
+  moduleCards: [] as const,
 };
 
 describe("allied health pathway hub route smoke", () => {
@@ -71,15 +63,7 @@ describe("allied health pathway hub route smoke", () => {
             adaptiveEligibleCount: 55,
             examKeys: ["ALLIED"],
           },
-          moduleCards: [
-            {
-              id: "labs",
-              title: "Lab values and interpretation",
-              description: "Pattern-based lab review, nursing-action layers, and focused drills when the module is live.",
-              href: "/modules/lab-values",
-              access: "free",
-            },
-          ],
+          moduleCards: [],
         }}
       />,
     );
@@ -122,7 +106,7 @@ describe("allied health pathway hub route smoke", () => {
     );
     assert.match(html, /Study modes/);
     assert.match(html, /nn-qa-allied-hub-lessons/);
-    assert.match(html, /Lab values and interpretation/);
+    assert.doesNotMatch(html, /Specialized modules/);
   });
 
   it("allied exam hub + global hub pages load overview and measurement wiring (no Canada-only directory fork)", () => {

@@ -159,7 +159,10 @@ test("hidden ECG and lab values modules stay out of sitemap, hreflang, localized
     "reports/localized-seo-audit.json",
     "reports/localized-seo-audit.md",
   ]);
-  const navSources = readFiles(["src/lib/navigation", "src/lib/marketing"]);
+  const navSourceFiles = [...listFiles("src/lib/navigation"), ...listFiles("src/lib/marketing")].filter(
+    (absPath) => !/\.(test|spec)\.(tsx?|jsx?|mts?|cts?)$/.test(absPath),
+  );
+  const navSources = navSourceFiles.map((file) => readFileSync(file, "utf8")).join("\n");
   const pricingSources = readFiles([
     "src/app/(marketing)/(default)/pricing",
     "src/app/(marketing)/[locale]/pricing",
