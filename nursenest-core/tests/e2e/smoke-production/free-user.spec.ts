@@ -18,7 +18,10 @@ test.use({ storageState: { cookies: [], origins: [] } });
 test.describe("Free user", () => {
   test("login, dashboard, limited lessons/questions", async ({ page }, testInfo) => {
     const creds = getQaFreeCredentials();
-    test.skip(!creds, "Set QA_FREE_EMAIL + QA_FREE_PASSWORD (or E2E_FREE_*)");
+    test.skip(
+      !creds,
+      "Free learner smoke will skip: missing E2E_FREE_EMAIL + E2E_FREE_PASSWORD (or QA_FREE_EMAIL + QA_FREE_PASSWORD).",
+    );
 
     const observers = attachPageObservers(page, { profile: "app", probeAuthApi: true });
     try {

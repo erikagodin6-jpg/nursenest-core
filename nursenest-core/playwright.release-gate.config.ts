@@ -11,7 +11,16 @@ import { defineConfig, devices } from "@playwright/test";
 import { PAID_USER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
 import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credentials";
 
-const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+const baseURL =
+  process.env.BASE_URL?.trim() ||
+  process.env.PLAYWRIGHT_BASE_URL?.trim() ||
+  process.env.NURSENEST_PRODUCTION_BASE_URL?.trim();
+
+if (!baseURL) {
+  throw new Error(
+    "[release-gate] Missing BASE_URL. Set BASE_URL (preferred), PLAYWRIGHT_BASE_URL, or NURSENEST_PRODUCTION_BASE_URL before running the release gate.",
+  );
+}
 
 function localDevWebServer() {
   if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return undefined;
@@ -83,16 +92,19 @@ export default defineConfig({
   workers: 1,
   timeout: 300_000,
   expect: { timeout: 30_000 },
+  outputDir: "test-results/release-gate/artifacts",
   reporter: [
     ["list"],
+    ["json", { outputFile: "test-results/release-gate/release-gate-report.json" }],
     ["./tests/e2e/reporters/release-blocker-console-reporter.ts"],
     ["./tests/e2e/reporters/paid-user-summary-reporter.ts"],
     ["./tests/e2e/reporters/release-gate-summary-reporter.ts"],
   ],
   use: {
     baseURL,
-    trace: "on-first-retry",
+    trace: "retain-on-failure",
     screenshot: "only-on-failure",
+    video: "retain-on-failure",
   },
   projects: [
     {
@@ -111,6 +123,16 @@ export default defineConfig({
       dependencies: ["release-phase-1-guest"],
       testMatch: /tests\/e2e\/release\/phase-3-release-mobile-smoke\.spec\.ts$/,
       use: { ...devices["Pixel 7"] },
+    },
+    {
+      name: "release-free-user",
+      testMatch: /tests\/e2e\/smoke-production\/free-user\.spec\.ts$/,
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "release-admin-user",
+      testMatch: /tests\/e2e\/smoke-production\/admin-user\.spec\.ts$/,
+      use: { ...devices["Desktop Chrome"] },
     },
     ...releasePaidProjects,
     {

@@ -17,7 +17,10 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe("Admin user", () => {
   test("login, /admin loads, key pages reachable", async ({ page, baseURL }, testInfo) => {
-    test.skip(!hasAdminE2eCredentials(), "Set E2E_ADMIN_EMAIL and E2E_ADMIN_PASSWORD");
+    test.skip(
+      !hasAdminE2eCredentials(),
+      "Admin staff smoke will skip: missing E2E_ADMIN_EMAIL + E2E_ADMIN_PASSWORD.",
+    );
     const creds = getAdminE2eCredentials();
     if (!creds) return;
 

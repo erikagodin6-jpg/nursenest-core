@@ -59,7 +59,10 @@ test.describe("Phase 1 — release QA (guest / marketing entry)", () => {
 
   test("free-tier account sees clean subscription gate on lessons hub", async ({ page }) => {
     const creds = getQaFreeCredentials();
-    test.skip(!creds, "Credential-gated: set E2E_FREE_EMAIL + E2E_FREE_PASSWORD (or QA_FREE_*)");
+    test.skip(
+      !creds,
+      "Credential-gated free learner check will skip: missing E2E_FREE_EMAIL + E2E_FREE_PASSWORD (or QA_FREE_EMAIL + QA_FREE_PASSWORD).",
+    );
     await loginWithCredentials(page, creds!.email, creds!.password);
     await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "Subscription required" })).toBeVisible({
