@@ -107,7 +107,7 @@ export function PremiumHomepageCta() {
                   {tr("pages.home.premium.bottomCta.tiles.schools.label", "Schools")}
                 </span>
                 <span className="mt-1 block text-sm font-bold text-[var(--palette-heading)]">
-                  {tr("pages.home.premium.bottomCta.tiles.schools.title", "Explore partner institutions")}
+                  {tr("pages.home.premium.bottomCta.tiles.schools.title", "Built for Nursing Programs")}
                 </span>
               </MarketingTrackedLink>
               <MarketingTrackedLink
@@ -120,7 +120,7 @@ export function PremiumHomepageCta() {
                   {tr("pages.home.premium.bottomCta.tiles.practice.label", "Practice")}
                 </span>
                 <span className="mt-1 block text-sm font-bold text-[var(--palette-heading)]">
-                  {tr("pages.home.premium.bottomCta.tiles.practice.title", "Open question bank")}
+                  {tr("pages.home.premium.bottomCta.tiles.practice.title", "Exam-style readiness")}
                 </span>
               </MarketingTrackedLink>
             </div>
