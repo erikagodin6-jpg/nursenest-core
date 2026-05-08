@@ -81,20 +81,10 @@ test.describe("Homepage production smoke", () => {
       `next/image invalid src: ${nextImageSrcErrors.join(" | ")}`,
     ).toEqual([]);
 
-    const heroSection = page.getByTestId("home-hero-screenshot-section");
-    await expect(heroSection).toBeVisible();
-
-    const carouselRoot = page.getByTestId("hero-platform-carousel");
-    const heroImgs = page.locator('[data-testid^="img-hero-platform-slide-"]');
-    const staticHandoff = page.getByTestId("home-hero-carousel-static-handoff");
-    const carouselCount = await carouselRoot.count();
-    const imgCount = await heroImgs.count();
-    const handoffCount = await staticHandoff.count();
-    if (carouselCount > 0) {
-      expect(imgCount, "Carousel mounted: expect at least one hero slide image").toBeGreaterThan(0);
-    } else {
-      expect(handoffCount, "Carousel absent: expect static handoff (no slides or local error boundary)").toBeGreaterThan(0);
-    }
+    await expect(page.getByTestId("section-premium-pathway-showcase")).toBeVisible();
+    await expect(page.getByTestId("section-premium-study-ecosystem")).toBeVisible();
+    await expect(page.getByTestId("section-premium-readiness-preview")).toBeVisible();
+    await expect(page.getByTestId("section-premium-homepage-final-cta")).toBeVisible();
 
     expect(
       clientBundleDbLeakHints,

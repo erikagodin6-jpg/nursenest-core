@@ -165,6 +165,14 @@ Desktop.ini
 nursenest-core/.nn-next-build-exclusive.lock
 
 # -----------------------------------------------------------------------------
+# Local homepage redesign scratch HTML/capture scripts (not production source)
+/UICanvas/
+# Heavy full-page PNG QA captures; keep markdown under reports/ui-redesign-preview/ instead
+/preview-screenshots/
+nursenest-core/preview-screenshots/*.png
+reports/ui-redesign-preview/*.png
+nursenest-core/reports/ui-redesign-preview/*.png
+
 # Cursor / IDE / local tooling (large or machine-specific — never commit)
 # -----------------------------------------------------------------------------
 playwright-report/

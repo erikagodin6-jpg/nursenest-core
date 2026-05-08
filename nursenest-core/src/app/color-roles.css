@@ -10,7 +10,7 @@
  */
 :root {
   /* First-paint defaults (ocean/clinical-blue) — replaced once [data-theme] hydrates */
-  --role-cta: color-mix(in srgb, #1da2d8 78%, #ea580c);
+  --role-cta: color-mix(in srgb, #1aaee0 78%, #ea580c);
   --role-cta-foreground: #ffffff;
   --role-cta-hover: color-mix(in srgb, var(--role-cta) 89%, #111827);
   --role-cta-pressed: color-mix(in srgb, var(--role-cta) 76%, #111827);
@@ -20,7 +20,7 @@
   --role-secondary-action-bg: #ffffff;
   --role-secondary-action-border: #e5e7eb;
   --role-secondary-action-text: #374151;
-  --role-secondary-action-hover-bg: color-mix(in srgb, #1da2d8 11%, #ffffff);
+  --role-secondary-action-hover-bg: color-mix(in srgb, #1aaee0 12%, #ffffff);
   --role-success: #15803d;
   --role-success-soft: color-mix(in srgb, #15803d 11%, #ffffff);
   --role-success-text: #14532d;
@@ -29,18 +29,18 @@
   --role-warning-soft: color-mix(in srgb, #d97706 13%, #ffffff);
   --role-warning-text: #78350f;
   --role-warning-border: color-mix(in srgb, #f59e0b 32%, #e5e7eb);
-  --role-premium-surface: color-mix(in srgb, #1da2d8 13%, #ffffff);
-  --role-premium-border: color-mix(in srgb, #1da2d8 42%, #e0f4fc);
-  --role-premium-text: color-mix(in srgb, #1da2d8 48%, #111827);
-  --role-premium-glow: color-mix(in srgb, #1da2d8 14%, transparent);
+  --role-premium-surface: color-mix(in srgb, #1aaee0 14%, #ffffff);
+  --role-premium-border: color-mix(in srgb, #1aaee0 44%, #d8f2fc);
+  --role-premium-text: color-mix(in srgb, #1aaee0 48%, #111827);
+  --role-premium-glow: color-mix(in srgb, #1aaee0 17%, transparent);
   --role-heat-text: color-mix(in srgb, #c2410c 42%, #111827);
 
   /* Semantic UI (design system): first paint before `[data-theme]` hydrates */
-  --semantic-progress-track: #daeef9;
+  --semantic-progress-track: #d2e9fb;
   --semantic-progress-fill: var(--role-success);
-  --semantic-progress-fill-accent: #1da2d8;
-  --semantic-info-bg: color-mix(in srgb, #1da2d8 8%, #f2fbfe);
-  --semantic-info-border: color-mix(in srgb, #1da2d8 22%, #bae6fd);
+  --semantic-progress-fill-accent: #1aaee0;
+  --semantic-info-bg: color-mix(in srgb, #1aaee0 9%, #f2fbfe);
+  --semantic-info-border: color-mix(in srgb, #1aaee0 24%, #b8e4fc);
   --semantic-info-text: #111827;
 }
 

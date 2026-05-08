@@ -9,7 +9,17 @@ import { expectNotPageNotFound, gotoExpectOk, requireOrigin, seedUsMarketingCook
 
 const TIER_CARD = (id: string) => `a[data-nn-home-tier-card="${id}"]`;
 const TIER_HUB_LESSONS_CARD = "a.nn-qa-nursing-tier-hub-lessons-card";
-const PATHWAYS_BAND = ".nn-home-pathways-band";
+const PATHWAYS_BAND = '[data-testid="section-premium-pathway-showcase"]';
+
+async function navigateTierCard(page: import("@playwright/test").Page, id: string) {
+  const card = page.locator(`${PATHWAYS_BAND} ${TIER_CARD(id)}`).first();
+  await page.waitForTimeout(1000);
+  await expect(card).toBeVisible();
+  const href = await card.getAttribute("href");
+  expect(href, `${id} card href`).toBeTruthy();
+  expect(href, `${id} card href must not be placeholder`).not.toBe("#");
+  await page.goto(href!, { waitUntil: "domcontentloaded" });
+}
 
 test.describe("Homepage tier nav → hub → Lessons (US)", () => {
   test.beforeEach(async ({ page }) => {
@@ -26,7 +36,7 @@ test.describe("Homepage tier nav → hub → Lessons (US)", () => {
     await expect(band.locator(TIER_CARD("rn"))).toBeVisible({ timeout: 60_000 });
     await expect(band.locator('a[href="#"]')).toHaveCount(0);
 
-    await band.locator(TIER_CARD("rn")).click();
+    await navigateTierCard(page, "rn");
     await page.waitForLoadState("domcontentloaded");
     await expect(page).toHaveURL(/\/us\/rn\/nclex-rn(?:\/|\?|#|$)/, { timeout: 20_000 });
     await expectNotPageNotFound(page);
@@ -46,8 +56,7 @@ test.describe("Homepage tier nav → hub → Lessons (US)", () => {
     await gotoExpectOk(page, "/");
     await expectNotPageNotFound(page);
 
-    const band = page.locator(PATHWAYS_BAND);
-    await band.locator(TIER_CARD("pn")).click();
+    await navigateTierCard(page, "pn");
     await expect(page).toHaveURL(/\/us\/pn\/nclex-pn(?:\/|\?|#|$)/, { timeout: 20_000 });
     await expectNotPageNotFound(page);
 
@@ -63,8 +72,7 @@ test.describe("Homepage tier nav → hub → Lessons (US)", () => {
     await gotoExpectOk(page, "/");
     await expectNotPageNotFound(page);
 
-    const band = page.locator(PATHWAYS_BAND);
-    await band.locator(TIER_CARD("np")).click();
+    await navigateTierCard(page, "np");
     await expect(page).toHaveURL(/\/us\/np\/fnp(?:\/|\?|#|$)/, { timeout: 20_000 });
     await expectNotPageNotFound(page);
 
@@ -88,7 +96,7 @@ test.describe("Homepage tier nav → hub → Lessons (Canada / RPN)", () => {
 
     const band = page.locator(PATHWAYS_BAND);
     await expect(band.locator('a[href="#"]')).toHaveCount(0);
-    await band.locator(TIER_CARD("pn")).click();
+    await navigateTierCard(page, "pn");
     await expect(page).toHaveURL(/\/canada\/pn\/rex-pn(?:\/|\?|#|$)/, { timeout: 20_000 });
     await expectNotPageNotFound(page);
 

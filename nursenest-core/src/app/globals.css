@@ -2,6 +2,7 @@
 @import "./theme-palettes.css";
 @import "./color-roles.css";
 @import "./semantic-status-tokens.css";
+@import "./premium-redesign-2026.css";
 @import "../../styles/tokens.css";
 @import "../../styles/learner-ds.css";
 @import "./learner-surface-primitives.css";
@@ -41,7 +42,7 @@ body {
   /* Slightly rounder global radius → calmer cards without “chunky” mobile tiles */
   --radius: 0.8125rem;
   --color-warmwhite: #fdfcfa;
-  --color-softgray: #6b7280;
+  --color-softgray: #5c6b7d;
 
   --text-hero: clamp(2.25rem, 5vw, 3.5rem);
   --text-section: clamp(1.75rem, 3.5vw, 2.5rem);
@@ -119,15 +120,15 @@ body {
    */
   --theme-header-surface: #ffffff;
   /* Centralized palette roles (seeded before ThemeStateHydration applies per-theme values). */
-  --palette-primary: #1da2d8;
+  --palette-primary: #1aaee0;
   --palette-accent: #2563eb;
-  --palette-background: #f2f4f7;
+  --palette-background: #eef2f8;
   --palette-surface: #ffffff;
-  --palette-surface-alt: #e8ecf2;
-  --palette-text: #4b5563;
-  --palette-text-muted: #6b7280;
+  --palette-surface-alt: #e4eaf3;
+  --palette-text: #445063;
+  --palette-text-muted: #5c6b7d;
   --palette-heading: #111827;
-  --palette-border: #c7d8f4;
+  --palette-border: #bfd7f0;
   --palette-ring: #2563eb;
   --palette-button-primary: #2563eb;
   --palette-button-primary-text: #ffffff;
@@ -565,13 +566,22 @@ html[data-theme="midnight-indigo"],
 html[data-theme="deep-twilight"],
 html[data-theme="evergreen-steel"],
 html[data-theme="midnight-ink"],
-html[data-theme="storm-slate"] {
+html[data-theme="storm-slate"],
+html[data-theme="midnight"],
+html[data-theme="apex"] {
   --theme-luminance: dark;
   --theme-muted-foreground-readable: var(--theme-muted-text);
   --theme-card-foreground-readable: var(--theme-card-text);
   --text-primary: color-mix(in srgb, var(--theme-heading-text) 96%, #ffffff);
   --text-secondary: color-mix(in srgb, var(--theme-body-text) 90%, #ffffff);
   --text-muted: color-mix(in srgb, var(--theme-muted-text) 88%, #ffffff);
+  /*
+   * Marketing + legacy utilities often read `--palette-heading` / `--palette-text*` directly.
+   * Keep them aligned with computed dark foreground so headings are not stuck on :root slate.
+   */
+  --palette-heading: var(--text-primary);
+  --palette-text: var(--text-secondary);
+  --palette-text-muted: var(--text-muted);
   --text-on-light: color-mix(in srgb, var(--theme-heading-text) 88%, #ffffff);
   --text-on-dark: #f8fafc;
   --text-on-gradient: var(--text-on-dark);
@@ -3090,6 +3100,17 @@ html[data-theme] .nn-marketing-trust-strip {
 .nn-nav-cta:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
+}
+
+/* Marketing CTAs: keep icons from shrinking; allow label text to wrap on narrow viewports. */
+.nn-btn-primary.inline-flex,
+.nn-btn-secondary.inline-flex {
+  min-width: 0;
+}
+.nn-btn-primary.inline-flex svg,
+.nn-btn-secondary.inline-flex svg,
+.nn-link-quiet.inline-flex svg {
+  flex-shrink: 0;
 }
 
 .nn-btn-secondary {
@@ -5939,7 +5960,8 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
  * per `semantic-status-tokens.css`; ocean/clinical = #76b6c4). Scoped so `.nn-exam-hub-*` elsewhere
  * stays unchanged. Primary CTAs and `--theme-primary` emphasis remain authoritative.
  */
-[data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-hero-band {
+[data-nn-nursing-tier-hub="surface"] .nn-nursing-tier-hub-hero-band,
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"] .nn-nursing-tier-hub-hero-band {
   padding: clamp(0.85rem, 2.2vw, 1.15rem) clamp(0.75rem, 2vw, 1.1rem);
   border-radius: 1rem;
   border: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--border-subtle));

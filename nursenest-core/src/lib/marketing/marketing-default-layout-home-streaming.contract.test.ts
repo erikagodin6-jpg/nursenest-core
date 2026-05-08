@@ -41,11 +41,11 @@ test("HomeRestoredWithDeferredStats forwards children into HomeRestoredClient", 
   assert.match(stats, /<HomeRestoredClient[\s\S]*>\s*\{\s*children\s*\}\s*<\/HomeRestoredClient>/s);
 });
 
-test("HomeRestoredClient renders HomeConversionHero before children slot (global hub strip)", () => {
+test("HomeRestoredClient renders PremiumHomepageHero before children slot (global hub strip)", () => {
   const client = readSrc("components/marketing/home-restored-client.tsx");
-  const hero = client.indexOf("<HomeConversionHero");
+  const hero = client.indexOf("<PremiumHomepageHero");
   const childrenSlot = client.indexOf("{children}");
-  assert.ok(hero !== -1, "expected HomeConversionHero");
+  assert.ok(hero !== -1, "expected PremiumHomepageHero");
   assert.ok(childrenSlot !== -1, "expected children slot");
   assert.ok(hero < childrenSlot, "hero must precede children slot in source order");
 });

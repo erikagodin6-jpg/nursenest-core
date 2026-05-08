@@ -1,23 +1,23 @@
 [data-theme="mint"] {
-  --theme-primary: #66b2b2;
+  --theme-primary: #5cbdbd;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #e0f0f0;
-  --theme-secondary-foreground: #3d8a8a;
-  --theme-accent: #f0f9f9;
-  --theme-accent-foreground: #66b2b2;
-  --theme-border: #b2d8d8;
-  --theme-ring: #66b2b2;
+  --theme-secondary: #dff5f5;
+  --theme-secondary-foreground: #2d7f7f;
+  --theme-accent: #eefbf9;
+  --theme-accent-foreground: #5cbdbd;
+  --theme-border: #a8d8dc;
+  --theme-ring: #5cbdbd;
 }
 
 [data-theme="blush"] {
-  --theme-primary: #e899b0;
+  --theme-primary: #ea8fab;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #fee1e8;
-  --theme-secondary-foreground: #c4607d;
-  --theme-accent: #fcf2f3;
-  --theme-accent-foreground: #e899b0;
-  --theme-border: #f3c8d5;
-  --theme-ring: #e899b0;
+  --theme-secondary: #fde6ee;
+  --theme-secondary-foreground: #c05078;
+  --theme-accent: #fef6f8;
+  --theme-accent-foreground: #ea8fab;
+  --theme-border: #f2bdd0;
+  --theme-ring: #ea8fab;
 }
 
 [data-theme="slate"] {
@@ -41,47 +41,48 @@
 }
 
 [data-theme="ocean"] {
-  --theme-primary: #1da2d8;
+  --theme-primary: #1aaee0;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #def3f6;
+  --theme-secondary: #d9f3fa;
   --theme-secondary-foreground: #0d7aaa;
-  --theme-accent: #e8f7fc;
-  --theme-accent-foreground: #1da2d8;
-  --theme-border: #7fcdff;
-  --theme-ring: #1da2d8;
+  --theme-accent: #e6f7fd;
+  --theme-accent-foreground: #1aaee0;
+  --theme-border: #72d4f5;
+  --theme-ring: #1aaee0;
 }
 
 [data-theme="forest"] {
-  --theme-primary: #10b981;
+  --theme-primary: #12b886;
+  --theme-primary-foreground: #ffffff;
   --theme-secondary: #ecfdf5;
-  --theme-secondary-foreground: #10b981;
+  --theme-secondary-foreground: #0d9f73;
   --theme-accent: #d1fae5;
-  --theme-accent-foreground: #10b981;
-  --theme-border: #a7f3d0;
-  --theme-ring: #10b981;
+  --theme-accent-foreground: #0d9f73;
+  --theme-border: #9cf0cf;
+  --theme-ring: #12b886;
 }
 
 [data-theme="clinical-light"] {
-  --theme-primary: #3b82f6;
+  --theme-primary: #3d8efc;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #eff6ff;
-  --theme-secondary-foreground: #3b82f6;
+  --theme-secondary: #eef5ff;
+  --theme-secondary-foreground: #2563eb;
   --theme-accent: #dbeafe;
-  --theme-accent-foreground: #3b82f6;
-  --theme-border: #bfdbfe;
-  --theme-ring: #3b82f6;
+  --theme-accent-foreground: #2563eb;
+  --theme-border: #b4d4fe;
+  --theme-ring: #3d8efc;
 }
 
 [data-theme="dark-clinical"] {
   color-scheme: dark;
-  --theme-primary: #06b6d4;
+  --theme-primary: #22d3ee;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: #1e293b;
-  --theme-secondary-foreground: #06b6d4;
+  --theme-secondary-foreground: #22d3ee;
   --theme-accent: #0f172a;
-  --theme-accent-foreground: #06b6d4;
-  --theme-border: #334155;
-  --theme-ring: #06b6d4;
+  --theme-accent-foreground: #22d3ee;
+  --theme-border: #3d4f63;
+  --theme-ring: #22d3ee;
   --color-warmwhite: #0f172a;
   --color-softgray: #e2e8f0;
   --color-background: #0f172a;
@@ -97,23 +98,23 @@
   --theme-page-bg: #0f172a;
   --theme-nav-bg: #1e293b;
   --theme-nav-text: #e2e8f0;
-  --theme-nav-border: #334155;
+  --theme-nav-border: #3d4f63;
   --theme-topbar-bg: #1e293b;
-  --theme-topbar-text: #06b6d4;
+  --theme-topbar-text: #22d3ee;
   --theme-menu-text: #e2e8f0;
-  --theme-menu-hover-bg: color-mix(in srgb, #06b6d4 12%, transparent);
-  --theme-menu-hover-text: #06b6d4;
-  --theme-menu-active-bg: color-mix(in srgb, #06b6d4 18%, transparent);
+  --theme-menu-hover-bg: color-mix(in srgb, #22d3ee 14%, transparent);
+  --theme-menu-hover-text: #67e8f9;
+  --theme-menu-active-bg: color-mix(in srgb, #22d3ee 20%, transparent);
   --theme-card-bg: #1e293b;
-  --theme-card-border: #334155;
+  --theme-card-border: #3d4f63;
   --theme-card-text: #e2e8f0;
   --theme-input-bg: #1e293b;
-  --theme-input-border: #334155;
+  --theme-input-border: #3d4f63;
   --theme-heading-text: #f1f5f9;
   --theme-body-text: #e2e8f0;
   --theme-muted-text: #94a3b8;
-  --theme-focus-ring: #06b6d4;
-  --theme-separator: #334155;
+  --theme-focus-ring: #22d3ee;
+  --theme-separator: #3d4f63;
   --theme-header-surface: #1e293b;
 }
 
@@ -240,36 +241,36 @@
 }
 
 [data-theme="indigo"] {
-  --theme-primary: #6366f1;
+  --theme-primary: #5f6af5;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: #eef2ff;
-  --theme-secondary-foreground: #6366f1;
-  --theme-accent: #e0e7ff;
-  --theme-accent-foreground: #6366f1;
-  --theme-border: #c7d2fe;
-  --theme-ring: #6366f1;
+  --theme-secondary-foreground: #4f46e5;
+  --theme-accent: #e8ecff;
+  --theme-accent-foreground: #5f6af5;
+  --theme-border: #c4d0fe;
+  --theme-ring: #5f6af5;
 }
 
 [data-theme="teal"] {
-  --theme-primary: #14b8a6;
+  --theme-primary: #14c4b0;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: #f0fdfa;
-  --theme-secondary-foreground: #14b8a6;
+  --theme-secondary-foreground: #0d9488;
   --theme-accent: #ccfbf1;
-  --theme-accent-foreground: #14b8a6;
-  --theme-border: #99f6e4;
-  --theme-ring: #14b8a6;
+  --theme-accent-foreground: #0d9488;
+  --theme-border: #8af0e0;
+  --theme-ring: #14c4b0;
 }
 
 [data-theme="berry"] {
-  --theme-primary: #a855f7;
+  --theme-primary: #ae63f5;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: #faf5ff;
-  --theme-secondary-foreground: #a855f7;
-  --theme-accent: #f3e8ff;
-  --theme-accent-foreground: #a855f7;
-  --theme-border: #e9d5ff;
-  --theme-ring: #a855f7;
+  --theme-secondary-foreground: #9333ea;
+  --theme-accent: #f5eeff;
+  --theme-accent-foreground: #ae63f5;
+  --theme-border: #e4d4ff;
+  --theme-ring: #ae63f5;
 }
 
 [data-theme="pastel-lilac"] {
@@ -727,26 +728,26 @@
   --theme-header-secondary-bg: #ffffff;
   --theme-header-secondary-fg: #0f172a;
   --theme-header-divider: color-mix(in srgb, var(--theme-primary) 26%, #e5e7eb);
-  /* gray-50 — alternating sections / muted bands (no hue from --theme-primary) */
-  --theme-surface-strong: #f9fafb;
-  --theme-nav-text: #6b7280;
-  --theme-nav-border: color-mix(in srgb, var(--theme-primary) 6%, #e5e7eb);
+  /* Section alt — cool neutral with clearer separation from pure white */
+  --theme-surface-strong: #f4f7fb;
+  --theme-nav-text: #586574;
+  --theme-nav-border: color-mix(in srgb, var(--theme-primary) 8%, #e2e8f0);
   --theme-menu-text: #374151;
-  --theme-menu-hover-bg: color-mix(in srgb, var(--theme-primary) 8%, transparent);
+  --theme-menu-hover-bg: color-mix(in srgb, var(--theme-primary) 10%, transparent);
   --theme-menu-hover-text: var(--theme-primary);
-  --theme-menu-active-bg: color-mix(in srgb, var(--theme-primary) 12%, transparent);
+  --theme-menu-active-bg: color-mix(in srgb, var(--theme-primary) 15%, transparent);
   /* Cards: pure white — theme appears on CTAs / links / focus, not generic cards */
   --theme-card-bg: #ffffff;
-  --theme-card-border: color-mix(in srgb, var(--theme-border) 60%, transparent);
+  --theme-card-border: color-mix(in srgb, var(--theme-border) 68%, transparent);
   --theme-card-text: #374151;
   --theme-input-bg: #ffffff;
-  --theme-input-border: color-mix(in srgb, var(--theme-border) 70%, #e5e7eb);
+  --theme-input-border: color-mix(in srgb, var(--theme-border) 72%, #e8ecf1);
   --theme-heading-text: #111827;
-  --theme-body-text: #4b5563;
-  /* gray-500 base: consistent muted text across all light themes */
-  --theme-muted-text: #6b7280;
+  --theme-body-text: #455569;
+  /* Muted body — slightly cooler blue-gray vs flat warm gray */
+  --theme-muted-text: #5f6e82;
   --theme-focus-ring: var(--theme-primary);
-  --theme-separator: color-mix(in srgb, var(--theme-border) 30%, #f3f4f6);
+  --theme-separator: color-mix(in srgb, var(--theme-border) 34%, #eef2f6);
   --color-warmwhite: #fdfcfa;
   --color-softgray: #4b5563;
   --color-card-base: #ffffff;
@@ -1788,7 +1789,7 @@
   --theme-secondary-foreground: #bae6fd;
   --theme-accent: #60a5fa;
   --theme-accent-foreground: #07111f;
-  --theme-border: #26364d;
+  --theme-border: #314466;
   --theme-ring: #38bdf8;
   --color-warmwhite: #07111f;
   --color-softgray: #cbd5e1;
@@ -1805,23 +1806,23 @@
   --theme-page-bg: #07111f;
   --theme-nav-bg: #0b1220;
   --theme-nav-text: #dbeafe;
-  --theme-nav-border: #26364d;
+  --theme-nav-border: #314466;
   --theme-topbar-bg: #0b1220;
   --theme-topbar-text: #7dd3fc;
   --theme-menu-text: #e5edf7;
-  --theme-menu-hover-bg: color-mix(in srgb, #38bdf8 14%, transparent);
+  --theme-menu-hover-bg: color-mix(in srgb, #38bdf8 16%, transparent);
   --theme-menu-hover-text: #7dd3fc;
-  --theme-menu-active-bg: color-mix(in srgb, #38bdf8 22%, transparent);
+  --theme-menu-active-bg: color-mix(in srgb, #38bdf8 24%, transparent);
   --theme-card-bg: #111827;
-  --theme-card-border: #26364d;
+  --theme-card-border: #314466;
   --theme-card-text: #e5edf7;
   --theme-input-bg: #0b1220;
-  --theme-input-border: #26364d;
+  --theme-input-border: #314466;
   --theme-heading-text: #f8fafc;
   --theme-body-text: #cbd5e1;
   --theme-muted-text: #94a3b8;
   --theme-focus-ring: #38bdf8;
-  --theme-separator: #26364d;
+  --theme-separator: #314466;
   --theme-header-surface: #0b1220;
   --theme-brand-accent: #38bdf8;
   --theme-brand-strong: #7dd3fc;
@@ -1981,4 +1982,89 @@
   --theme-border: color-mix(in srgb, var(--theme-primary) 8%, #e5e7eb);
   --theme-topbar-bg: #ffffff;
   --theme-topbar-text: #111827;
+}
+
+/* ============================================================
+   Apex — premium clinical theme
+   Deep navy surface + violet primary + warm gold accent.
+   Reads as polished, intelligent, modern; not sterile or toy-like.
+   Distinct from Blossom / Ocean / Forest / Midnight / Sunset.
+   Accessibility: high-contrast text on dark surfaces.
+   ============================================================ */
+[data-theme="apex"] {
+  color-scheme: dark;
+  --theme-primary: #a78bfa;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #19223a;
+  --theme-secondary-foreground: #f4f1ff;
+  --theme-accent: #fbbf24;
+  --theme-accent-foreground: #3a2a05;
+  --theme-border: rgba(199, 178, 255, 0.28);
+  --theme-ring: #c4b5fd;
+  --theme-page-bg: #0b0f1a;
+  --theme-heading-text: #f4f1ff;
+  --theme-body-text: #d6dcf0;
+  --theme-muted-text: #a8b3d1;
+  --color-warmwhite: #0b0f1a;
+  --color-softgray: #d6dcf0;
+  --color-background: #0b0f1a;
+  --color-foreground: #f4f1ff;
+  --color-card: #121828;
+  --color-card-foreground: #f4f1ff;
+  --color-popover: #121828;
+  --color-popover-foreground: #f4f1ff;
+  --color-card-base: #121828;
+  --color-card-fg-base: #f4f1ff;
+  --color-popover-base: #121828;
+  --color-popover-fg-base: #f4f1ff;
+  --theme-nav-bg: #121828;
+  --theme-nav-text: #f4f1ff;
+  --theme-nav-border: rgba(199, 178, 255, 0.28);
+  --theme-topbar-bg: #121828;
+  --theme-topbar-text: #fbbf24;
+  --theme-menu-text: #f4f1ff;
+  --theme-menu-hover-bg: rgba(167, 139, 250, 0.18);
+  --theme-menu-hover-text: #f4f1ff;
+  --theme-menu-active-bg: rgba(167, 139, 250, 0.26);
+  --theme-card-bg: #121828;
+  --theme-card-border: rgba(199, 178, 255, 0.28);
+  --theme-card-text: #f4f1ff;
+  --theme-input-bg: #0b0f1a;
+  --theme-input-border: rgba(199, 178, 255, 0.28);
+  --theme-focus-ring: #c4b5fd;
+  --theme-separator: rgba(199, 178, 255, 0.22);
+  --theme-header-surface: #121828;
+
+  --lesson-summary: #1d2848;
+  --lesson-key-concepts: #1a2647;
+  --lesson-signs-symptoms: #2a1d3d;
+  --lesson-assessment: #182640;
+  --lesson-diagnostics: #2a2440;
+  --lesson-interventions: #16282b;
+  --lesson-medications: #2d2236;
+  --lesson-patient-teaching: #16252e;
+  --lesson-exam-tips: #2d2812;
+  --lesson-red-flags: #2e1822;
+  --lesson-clinical-pearls: #241a3a;
+  --lesson-notes: #131a2c;
+
+  --state-success: #14342b;
+  --state-warning: #2d2812;
+  --state-info: #1a2647;
+  --state-danger-soft: #2e1822;
+
+  --logo-primary: #a78bfa;
+  --logo-accent: #fbbf24;
+  --logo-text: #f4f1ff;
+  --theme-brand-accent: #a78bfa;
+  --theme-brand-strong: #8b5cf6;
+  --theme-nav-background: #121828;
+  --theme-nav-foreground: #f4f1ff;
+  --theme-nav-hover: rgba(167, 139, 250, 0.18);
+  --theme-nav-hover-foreground: #ffffff;
+  --theme-header-top-bg: #121828;
+  --theme-header-main-bg: #121828;
+  --theme-header-secondary-bg: #19223a;
+  --theme-header-secondary-fg: #f4f1ff;
+  --theme-header-divider: rgba(199, 178, 255, 0.22);
 }

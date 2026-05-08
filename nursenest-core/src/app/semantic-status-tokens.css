@@ -9,25 +9,25 @@
  */
 /* First-paint defaults mirror the ocean/clinical-blue default theme. [data-theme] layers override all. */
 :root {
-  --semantic-bg-base: #fffcfd;
-  --semantic-bg-soft: #f4f2f8;
-  --semantic-surface: #fffcfd;
+  --semantic-bg-base: #fefefe;
+  --semantic-bg-soft: #f3f6fb;
+  --semantic-surface: #fefefe;
   --semantic-surface-elevated: #ffffff;
-  --semantic-border-soft: #bae6fd;
+  --semantic-border-soft: #b0dcf3;
   --semantic-shadow-soft:
     0 1px 0 rgba(17, 24, 39, 0.04),
-    0 12px 36px -18px rgba(6, 66, 115, 0.07);
+    0 12px 36px -18px rgba(6, 88, 140, 0.08);
   --semantic-text-primary: #0f172a;
-  --semantic-text-secondary: #475569;
-  --semantic-text-muted: #7b8fa3;
-  --semantic-brand: #1da2d8;
-  --semantic-brand-soft: #e8f7fc;
+  --semantic-text-secondary: #455569;
+  --semantic-text-muted: #647894;
+  --semantic-brand: #1aaee0;
+  --semantic-brand-soft: #e6f6fc;
   --semantic-brand-contrast: #ffffff;
   --semantic-success: #16a34a;
   --semantic-success-soft: #ecfdf5;
   --semantic-success-contrast: #14532d;
-  --semantic-info: #76b6c4;
-  --semantic-info-soft: #def3f6;
+  --semantic-info: #4eb0ce;
+  --semantic-info-soft: #dff6fb;
   --semantic-info-contrast: #064273;
   --semantic-warning: #d97706;
   --semantic-warning-soft: #fffbeb;
@@ -38,14 +38,14 @@
   --semantic-mastery-high: #16a34a;
   --semantic-mastery-mid: #d97706;
   --semantic-mastery-low: #e11d48;
-  --semantic-chart-1: #1da2d8;
+  --semantic-chart-1: #1aaee0;
   --semantic-chart-2: #16a34a;
-  --semantic-chart-3: #76b6c4;
-  --semantic-chart-4: #f59e0b;
-  --semantic-chart-5: #e8a0b8;
+  --semantic-chart-3: #52b8d4;
+  --semantic-chart-4: #f5a524;
+  --semantic-chart-5: #e887aa;
   --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
   --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
-  --semantic-panel-muted: #f3f1f7;
+  --semantic-panel-muted: #f1f4f9;
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
   --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 11%, var(--semantic-surface));
@@ -126,8 +126,8 @@
   --semantic-success: #16a34a;
   --semantic-success-soft: color-mix(in srgb, #16a34a 12%, var(--bg-card));
   --semantic-success-contrast: #14532d;
-  --semantic-info: #0284c7;
-  --semantic-info-soft: color-mix(in srgb, #0284c7 11%, var(--bg-card));
+  --semantic-info: #0ea5dc;
+  --semantic-info-soft: color-mix(in srgb, #0ea5dc 11%, var(--bg-card));
   --semantic-info-contrast: #0c4a6e;
   --semantic-warning: #d97706;
   --semantic-warning-soft: color-mix(in srgb, #d97706 12%, var(--bg-card));
@@ -142,7 +142,7 @@
   --semantic-chart-2: var(--semantic-success);
   --semantic-chart-3: var(--semantic-info);
   --semantic-chart-4: var(--semantic-warning);
-  --semantic-chart-5: #a855f7;
+  --semantic-chart-5: #b070ea;
   /* Muted panels: neutral gray-50 — theme hue stays on controls / links */
   --semantic-panel-muted: var(--bg-section-alt, #f9fafb);
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
@@ -354,17 +354,17 @@ html[data-theme="clinical-light"] {
   --semantic-success: #16a34a;
   --semantic-success-soft: color-mix(in srgb, #16a34a 11%, var(--bg-card));
   --semantic-success-contrast: #14532d;
-  --semantic-info: #76b6c4;
-  --semantic-info-soft: color-mix(in srgb, #76b6c4 10%, var(--bg-card));
+  --semantic-info: #5ab8d4;
+  --semantic-info-soft: color-mix(in srgb, #5ab8d4 10%, var(--bg-card));
   --semantic-info-contrast: #064273;
   --semantic-warning: #f59e0b;
   --semantic-warning-soft: color-mix(in srgb, #f59e0b 11%, var(--bg-card));
   --semantic-danger: #f87171;
   --semantic-danger-soft: color-mix(in srgb, #f87171 10%, var(--bg-card));
   --semantic-chart-2: #16a34a;
-  --semantic-chart-3: #76b6c4;
+  --semantic-chart-3: #5ab8d4;
   --semantic-chart-4: #f59e0b;
-  --semantic-chart-5: #f3b0c3;
+  --semantic-chart-5: #ec8aab;
 }
 
 /* Multi-pastel — balanced across all hues; chart colors are deeper than background accents */
@@ -755,7 +755,7 @@ html[data-theme="deep-twilight"] {
 .nn-momentum-glow {
   background: radial-gradient(
     circle at 90% 0%,
-    color-mix(in srgb, var(--semantic-success) 14%, transparent),
+    color-mix(in srgb, var(--semantic-success) 17%, transparent),
     transparent 55%
   );
 }
@@ -763,7 +763,7 @@ html[data-theme="deep-twilight"] {
 .nn-readiness-hero-glow {
   background: radial-gradient(
     circle at center,
-    color-mix(in srgb, var(--semantic-brand) 18%, transparent),
+    color-mix(in srgb, var(--semantic-brand) 22%, transparent),
     transparent 65%
   );
 }
@@ -776,12 +776,12 @@ html[data-theme="deep-twilight"] {
   background:
     radial-gradient(
       ellipse 85% 65% at 100% -5%,
-      color-mix(in srgb, var(--semantic-chart-5) 14%, transparent),
+      color-mix(in srgb, var(--semantic-chart-5) 17%, transparent),
       transparent 52%
     ),
     radial-gradient(
       ellipse 70% 50% at 0% 100%,
-      color-mix(in srgb, var(--semantic-chart-3) 11%, transparent),
+      color-mix(in srgb, var(--semantic-chart-3) 14%, transparent),
       transparent 48%
     ),
     linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-mid) 48%, var(--hero-gradient-end) 100%);
