@@ -18,7 +18,7 @@
 |------|--------|
 | Marketing routes under `/pre-nursing/*` | **Published** in codebase (Next App Router); default locale + `[locale]` mirrors where present. |
 | Module count | **30** in registry; **30** mapped in `pre-nursing-module-map.tsx` (no orphan registry slugs). |
-| Static practice quizzes (`/pre-nursing/practice/[slug]`) | **10 modules** backed by `PRE_NURSING_QUESTION_BANK`; remaining registry modules are **lesson-first** (inline quizzes inside module TSX may exist; not all have bank-backed marketing practice pages). |
+| Static practice quizzes (`/pre-nursing/practice/[slug]`) | **10 modules** backed by `PRE_NURSING_QUESTION_BANK`; remaining registry modules are **lesson-first** (inline quizzes may exist in module TSX; not all have bank-backed marketing practice pages). |
 | Mini adaptive exam | **`/pre-nursing/mini-cat`** — primary bounded interactive assessment for this tier per manifest. |
 | `EXAM_PATHWAYS` / catalog pathway | **No** `TierCode.PRE_NURSING` pathway row — documented in manifest; `/app/questions` is **not** asserted as canonical pre-nursing surface. |
 | TEAS / HESI named product routes | **None** in `src/app/.../pre-nursing/**` — science readiness is expressed via modules (chemistry, anatomy-physiology, science-foundations, etc.), not separate TEAS/HESI URLs. |
@@ -39,7 +39,7 @@
 | `/flashcards` (from hub card) | Marketing flashcards entry | **Separate** marketing route (not under `/pre-nursing/` prefix); hub links here by design. |
 | `/app/flashcards` | Paid learner flashcards (suite) | **Live** app surface; asserted without `pathwayId` for PRE_NURSING in `pathway-prenursing-surfaces.ts`. |
 
-**Draft / unlinked / missing from indexes:** No evidence in routing layer of intentionally hidden pre-nursing pages; modules not in `PRE_NURSING_SLUGS` would 404 at lesson detail — registry and map stay aligned (verified by parallel slug lists in this audit).
+**Draft / unlinked / missing from indexes:** No evidence in routing layer of intentionally hidden pre-nursing pages; modules not in `PRE_NURSING_SLUGS` would 404 at lesson detail — registry and map stay aligned.
 
 ## Module ↔ lessons ↔ question bank
 
@@ -55,8 +55,8 @@
 
 | Kind | Where | Notes |
 |------|-------|------|
-| Inline lesson quizzes | Module TSX via `interactive-learning` patterns | Per-module; not centrally enumerated here. |
-| Comprehensive review | `pre-nursing-comprehensive-review-quiz.ts` | Content artifact; wired where module imports it. |
+| Inline lesson quizzes | Module TSX via `interactive-learning` patterns | Per-module. |
+| Comprehensive review | `pre-nursing-comprehensive-review-quiz.ts` | Content artifact. |
 | Marketing static practice | `pre-nursing-question-bank.ts` + practice page | 80 MCQs total across 10 modules per file header. |
 | Mini-CAT | `pre-nursing-exam-engine.ts` + `PreNursingMiniCatRunner` | Adaptive; bounded question flow. |
 
