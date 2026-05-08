@@ -797,7 +797,7 @@ async function LessonDetailPageInner({ params }: Props) {
                 <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} />
               </div>
             ) : null}
-            <article className="nn-lesson-article-flow">
+            <article className="nn-lesson-article-flow nn-premium-lesson-article">
               {displaySections.length > 0 ? (
                 displaySections.map((section) => {
                   const surfaceHeading = pathwayLessonSectionSurfaceHeading(section, pathway?.countryCode, t);
@@ -913,6 +913,16 @@ async function LessonDetailPageInner({ params }: Props) {
           examFocusLines={examFocusRailLines}
           commonMistakes={record.studyCommonTraps}
           fullAccess={entitlement.hasAccess}
+          labels={{
+            eyebrow: t("learner.lessons.quickClinical.eyebrow"),
+            title: t("learner.lessons.quickClinical.title"),
+            keyTakeaways: t("learner.lessons.quickClinical.card.keyTakeaways"),
+            redFlags: t("learner.lessons.quickClinical.card.redFlags"),
+            priorityInterventions: t("learner.lessons.quickClinical.card.priorityInterventions"),
+            examTraps: t("learner.lessons.quickClinical.card.examTraps"),
+            mustKnowLabs: t("learner.lessons.quickClinical.card.mustKnowLabs"),
+            escalationCues: t("learner.lessons.quickClinical.card.escalationCues"),
+          }}
         />
 
         <LessonNavButtons
@@ -952,7 +962,7 @@ async function LessonDetailPageInner({ params }: Props) {
     );
 
     return (
-      <div className="nn-lesson-page nn-lesson-page--learner-app">
+      <div className="nn-lesson-page nn-lesson-page--learner-app nn-premium-lesson-detail-shell">
         <StaffEditLivePageBanner
           adminHref={buildAdminPathwayLessonStableEditHref({
             pathwayId,

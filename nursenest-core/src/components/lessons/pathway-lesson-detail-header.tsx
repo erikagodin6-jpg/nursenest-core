@@ -45,7 +45,7 @@ export function PathwayLessonDetailHeaderSkeleton({ pathway }: { pathway: ExamPa
       data-nn-exam-short={examName}
       aria-busy="true"
       aria-label={`${compactExamName}, ${place} — loading lesson`}
-      className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-brand)_8%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_98%,var(--semantic-panel-muted)_2%)] px-4 py-3 sm:px-5 sm:py-4"
+      className="nn-premium-pathway-lesson-header rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-brand)_8%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_98%,var(--semantic-panel-muted)_2%)] px-4 py-3 sm:px-5 sm:py-4"
     >
       <div className="nn-skeleton mb-2 h-3 w-48 rounded" />
       <div className="nn-skeleton h-8 w-[min(100%,24rem)] rounded-lg" />
@@ -82,7 +82,7 @@ export function PathwayLessonDetailHeader({
       data-nn-exam-short={examName}
       data-nn-lesson-hero-centered={centered ? "true" : undefined}
       className={[
-        "relative overflow-hidden rounded-xl border px-4 py-3.5 sm:px-5 sm:py-4",
+        "nn-premium-pathway-lesson-header relative overflow-hidden rounded-xl border px-4 py-3.5 sm:px-5 sm:py-4",
         centered
           ? "nn-lesson-detail-hero border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-brand)_15%)] bg-[linear-gradient(165deg,color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--theme-page-bg))_0%,color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--theme-page-bg))_48%,color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--theme-page-bg))_100%)] shadow-[0_1px_0_color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)]"
           : "rounded-lg border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_97%,var(--semantic-panel-cool)_3%)]",

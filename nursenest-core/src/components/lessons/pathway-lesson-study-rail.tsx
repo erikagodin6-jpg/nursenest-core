@@ -10,29 +10,22 @@ type SectionProps = {
   children: ReactNode;
 };
 
-function RailSection({ title, subtitle, accent, children }: SectionProps) {
-  const border =
-    accent === "success"
-      ? "color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft))"
-      : accent === "info"
-        ? "color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft))"
-        : accent === "warning"
-          ? "color-mix(in srgb, var(--semantic-warning) 28%, var(--semantic-border-soft))"
-          : "color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft))";
-  const bg =
-    accent === "success"
-      ? "color-mix(in srgb, var(--semantic-panel-positive) 55%, transparent)"
-      : accent === "info"
-        ? "color-mix(in srgb, var(--semantic-panel-cool) 50%, transparent)"
-        : accent === "warning"
-          ? "color-mix(in srgb, var(--semantic-panel-warm) 45%, transparent)"
-          : "color-mix(in srgb, var(--semantic-chart-1) 12%, var(--theme-card-bg))";
+function railSectionAccentClass(accent: SectionProps["accent"]): string {
+  switch (accent) {
+    case "success":
+      return "nn-premium-rail-section nn-premium-rail-section--success";
+    case "info":
+      return "nn-premium-rail-section nn-premium-rail-section--info";
+    case "warning":
+      return "nn-premium-rail-section nn-premium-rail-section--warning";
+    default:
+      return "nn-premium-rail-section nn-premium-rail-section--brand";
+  }
+}
 
+function RailSection({ title, subtitle, accent, children }: SectionProps) {
   return (
-    <section
-      className="rounded-lg border p-3 sm:p-3.5"
-      style={{ borderColor: border, background: bg }}
-    >
+    <section className={["rounded-lg border p-3 sm:p-3.5", railSectionAccentClass(accent)].join(" ")}>
       <h2 className="text-sm font-semibold tracking-tight text-[var(--theme-heading-text)]">{title}</h2>
       {subtitle ? <p className="mt-1 text-xs leading-relaxed text-[var(--theme-muted-text)]">{subtitle}</p> : null}
       <div className="mt-2.5">{children}</div>

@@ -46,6 +46,7 @@ import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -121,8 +122,10 @@ export async function MarketingLessonsHubCategoryFirstIndex({
 
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
-  const pageTitle = "Lessons";
-  const headerDescription = `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
+  const pageTitle = formatTitleCase("Lessons");
+  const headerDescription = formatSentenceCase(
+    `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`,
+  );
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
@@ -185,6 +188,8 @@ export async function MarketingLessonsHubCategoryFirstIndex({
       <LessonsPageShell
         title={pageTitle}
         subtitle={headerDescription}
+        eyebrow={pathway.shortName.trim() || pathway.displayName}
+        pathwayTrack={pathway.roleTrack}
         toolbar={toolbar}
         backLink={{ label: `${examName} overview`, href: overviewHref }}
       >
@@ -224,6 +229,8 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     <LessonsPageShell
       title={pageTitle}
       subtitle={headerDescription}
+      eyebrow={pathway.shortName.trim() || pathway.displayName}
+      pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
       backLink={{ label: `${examName} overview`, href: overviewHref }}
     >
@@ -258,7 +265,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         aria-labelledby="lesson-library-heading"
       >
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
-          <h2 id="lesson-library-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
+          <h2 id="lesson-library-heading" className="nn-marketing-h3 max-w-[min(100%,36rem)]">
             Lesson library
           </h2>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">

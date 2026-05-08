@@ -275,7 +275,7 @@ export function PricingPageSkeleton() {
 /** Blog article: prose column + title/meta strip (marketing blog slug + tag pages). */
 export function BlogPostPageSkeleton() {
   return (
-    <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6" aria-busy="true" aria-label="Loading article…">
+    <article className="nn-premium-blog-loading mx-auto max-w-3xl px-4 py-12 sm:px-6" aria-busy="true" aria-label="Loading article…">
       <Bar w="40%" h="0.75rem" className="rounded-full" />
       <Bar w="85%" h="2rem" className="mt-8 rounded-xl" />
       <div className="mt-4 flex flex-wrap gap-3">
@@ -291,10 +291,93 @@ export function BlogPostPageSkeleton() {
   );
 }
 
+/** Tools hub: hero band + tool card grid. */
+export function ToolsHubPageSkeleton() {
+  return (
+    <div
+      className="nn-tools-marketing-hero relative isolate overflow-x-clip border-b border-[var(--border-subtle)]"
+      aria-busy="true"
+      aria-label="Loading tools…"
+    >
+      <div className="mx-auto max-w-5xl px-4 pb-12 pt-10 sm:px-6 sm:pb-14 lg:px-8">
+        <Bar w="55%" h="2rem" className="rounded-xl" />
+        <Bar w="80%" h="0.875rem" className="mt-4" />
+        <Bar w="60%" h="0.875rem" className="mt-2" />
+        <ul className="mt-10 grid list-none gap-4 sm:grid-cols-1 md:grid-cols-2" aria-hidden>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <li
+              key={i}
+              className="nn-tools-hub-card flex min-h-[5.5rem] gap-4 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] p-5 shadow-[var(--elevation-rest)]"
+            >
+              <Bar w="3rem" h="3rem" className="shrink-0 rounded-xl" />
+              <div className="min-w-0 flex-1 space-y-2">
+                <Bar w="55%" h="1rem" />
+                <Bar w="92%" h="0.75rem" />
+                <Bar w="78%" h="0.75rem" />
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+/** Tool detail: back pill + title + calculator panel. */
+export function ToolDetailPageSkeleton() {
+  return (
+    <div
+      className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8"
+      aria-busy="true"
+      aria-label="Loading tool…"
+    >
+      <Bar w="9rem" h="2.5rem" className="rounded-full" />
+      <div className="mt-8">
+        <Bar w="60%" h="2rem" className="rounded-xl" />
+      </div>
+      <div className="nn-tools-calculator-surface mt-8 space-y-4 p-5 sm:p-8" aria-hidden>
+        <Bar w="40%" h="1rem" />
+        <Bar w="100%" h="2.75rem" className="rounded-xl" />
+        <Bar w="100%" h="2.75rem" className="rounded-xl" />
+        <Bar w="100%" h="2.75rem" className="rounded-xl" />
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Bar w="8rem" h="2.75rem" className="rounded-full" />
+          <Bar w="8rem" h="2.75rem" className="rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** FAQ marketing page: legal card + product strip. */
+export function FaqMarketingPageSkeleton() {
+  return (
+    <div
+      className="nn-faq-marketing-root"
+      aria-busy="true"
+      aria-label="Loading FAQ…"
+    >
+      <div className="mx-auto max-w-3xl px-4 pt-6 sm:px-6 lg:px-8">
+        <Bar w="14rem" h="0.75rem" className="rounded-full" />
+      </div>
+      <article className="mx-auto max-w-3xl px-4 pb-12 pt-6 sm:px-6 sm:pb-14 lg:px-8" aria-hidden>
+        <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] p-6 shadow-[var(--elevation-rest)] sm:p-8">
+          <Bar w="55%" h="1.75rem" className="rounded-xl" />
+          <div className="mt-6 space-y-3">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Bar key={i} w={i % 4 === 3 ? "55%" : "100%"} h="0.875rem" />
+            ))}
+          </div>
+        </div>
+      </article>
+    </div>
+  );
+}
+
 /** Blog index: list of cards. */
 export function BlogIndexPageSkeleton() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12" aria-busy="true" aria-label="Loading blog…">
+    <div className="nn-premium-blog-loading mx-auto max-w-5xl px-4 py-12" aria-busy="true" aria-label="Loading blog…">
       <Bar w="50%" h="2rem" className="rounded-xl" />
       <div className="mt-10 grid gap-6 sm:grid-cols-2">
         {Array.from({ length: 6 }).map((_, i) => (
@@ -311,9 +394,14 @@ export function BlogIndexPageSkeleton() {
 }
 
 /** Learner practice test runner initial load (matches nn-card shell). */
-export function PracticeTestRunPageSkeleton() {
+export function PracticeTestRunPageSkeleton(props: { withRouteAria?: boolean } = {}) {
+  const { withRouteAria = true } = props;
+  const routeShellProps = withRouteAria
+    ? ({ "aria-busy": true as const, "aria-label": "Loading practice test…" } as const)
+    : ({ "aria-hidden": true as const } as const);
+
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6" aria-busy="true" aria-label="Loading practice test…">
+    <div className="mx-auto max-w-4xl px-4 py-6" {...routeShellProps}>
       <Bar w="12rem" h="0.75rem" className="rounded-full" />
       <div className="nn-card mt-6 space-y-4 p-6">
         <Bar w="40%" h="1rem" />
@@ -334,9 +422,14 @@ export function PracticeTestRunPageSkeleton() {
 }
 
 /** Single learner lesson document (article + sidebar hints). */
-export function LearnerLessonDetailSkeleton() {
+export function LearnerLessonDetailSkeleton(props: { withRouteAria?: boolean } = {}) {
+  const { withRouteAria = true } = props;
+  const routeShellProps = withRouteAria
+    ? ({ "aria-busy": true as const, "aria-label": "Loading lesson…" } as const)
+    : ({ "aria-hidden": true as const } as const);
+
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8" aria-busy="true" aria-label="Loading lesson…">
+    <div className="mx-auto max-w-4xl px-4 py-8" {...routeShellProps}>
       <Bar w="14rem" h="0.75rem" className="rounded-full" />
       <Bar w="90%" h="2rem" className="mt-6 rounded-xl" />
       <div className="mt-8 space-y-4">
@@ -347,6 +440,87 @@ export function LearnerLessonDetailSkeleton() {
       <div className="nn-card mt-10 space-y-3 p-5">
         <Bar w="30%" h="1rem" />
         <Bar w="100%" h="3rem" className="rounded-xl" />
+      </div>
+    </div>
+  );
+}
+
+/** Flashcards hub (`/app/flashcards`) — mirrors hero + builder bands. */
+export function FlashcardsHubSkeleton(props: { withRouteAria?: boolean } = {}) {
+  const { withRouteAria = true } = props;
+  const routeShellProps = withRouteAria
+    ? ({ "aria-busy": true as const, "aria-label": "Loading flashcards…" } as const)
+    : ({ "aria-hidden": true as const } as const);
+
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6" {...routeShellProps}>
+      <Bar w="55%" h="2rem" className="rounded-xl" />
+      <Bar w="85%" h="0.875rem" className="mt-3" />
+      <div className="nn-card mt-8 space-y-4 border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+        <Bar w="40%" h="0.75rem" className="rounded-full" />
+        <div className="flex flex-wrap gap-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Bar key={i} w="5.5rem" h="2rem" className="rounded-full" />
+          ))}
+        </div>
+        <Bar w="100%" h="0.5rem" className="rounded-full" />
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Bar w="100%" h="3rem" className="rounded-xl" />
+          <Bar w="100%" h="3rem" className="rounded-xl" />
+        </div>
+      </div>
+      <div className="mt-6 space-y-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            className="nn-study-card nn-study-card--wash flex flex-col gap-3 p-4 sm:p-5"
+            aria-hidden
+          >
+            <Bar w="60%" h="1.125rem" />
+            <Bar w="90%" h="0.75rem" />
+            <div className="flex gap-2">
+              <Bar w="5rem" h="1.5rem" className="rounded-full" />
+              <Bar w="5rem" h="1.5rem" className="rounded-full" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Deck study session — split prompt / rationale columns. */
+export function FlashcardStudySessionSkeleton(props: { withRouteAria?: boolean } = {}) {
+  const { withRouteAria = true } = props;
+  const routeShellProps = withRouteAria
+    ? ({ "aria-busy": true as const, "aria-label": "Loading flashcard session…" } as const)
+    : ({ "aria-hidden": true as const } as const);
+
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-6" {...routeShellProps}>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <Bar w="8rem" h="0.75rem" className="rounded-full" />
+        <Bar w="10rem" h="0.875rem" className="rounded-full" />
+      </div>
+      <div className="nn-exam-session rounded-2xl border border-[var(--semantic-border-soft)] p-3 sm:p-4">
+        <Bar w="100%" h="0.375rem" className="rounded-full" />
+        <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_320px]">
+          <div className="space-y-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+            <Bar w="30%" h="0.625rem" className="rounded-full" />
+            <Bar w="95%" h="1.25rem" />
+            <Bar w="100%" h="5rem" className="rounded-xl" />
+            <Bar w="88%" h="0.875rem" />
+          </div>
+          <div className="space-y-3 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+            <Bar w="45%" h="0.625rem" className="rounded-full" />
+            <Bar w="100%" h="4rem" className="rounded-xl" />
+            <Bar w="100%" h="3rem" className="rounded-xl" />
+          </div>
+        </div>
+        <div className="mt-4 flex flex-wrap justify-between gap-2">
+          <Bar w="6.5rem" h="2.75rem" className="rounded-xl" />
+          <Bar w="6.5rem" h="2.75rem" className="rounded-xl" />
+        </div>
       </div>
     </div>
   );

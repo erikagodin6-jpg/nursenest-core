@@ -269,7 +269,7 @@ export async function PathwayLessonDetailPageBody({
     <PathwayLessonDetailMarketingI18nLayer messages={marketingMessages}>
     <div className="mx-auto w-full max-w-[100rem] px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell nn-premium-lesson-detail-shell px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <MarketingPathwayLessonDetailViewBeacon
           pathway={pathway}
@@ -432,7 +432,7 @@ export async function PathwayLessonDetailPageBody({
               <div className="mb-2 flex w-full justify-end px-0">
                 <LessonRecallToggle />
               </div>
-              <article className="nn-lesson-article-flow nn-lesson-article-grid grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+              <article className="nn-lesson-article-flow nn-lesson-article-grid nn-premium-lesson-article grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5">
                 {displaySections.map((section) => {
                   const wide = pathwayLessonSectionPrefersWideColumn(section.kind, {
                     hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
@@ -507,6 +507,16 @@ export async function PathwayLessonDetailPageBody({
             examFocusLines={examFocusRailLines}
             commonMistakes={fullAccess ? lesson.studyCommonTraps : undefined}
             fullAccess={fullAccess}
+            labels={{
+              eyebrow: t("learner.lessons.quickClinical.eyebrow"),
+              title: t("learner.lessons.quickClinical.title"),
+              keyTakeaways: t("learner.lessons.quickClinical.card.keyTakeaways"),
+              redFlags: t("learner.lessons.quickClinical.card.redFlags"),
+              priorityInterventions: t("learner.lessons.quickClinical.card.priorityInterventions"),
+              examTraps: t("learner.lessons.quickClinical.card.examTraps"),
+              mustKnowLabs: t("learner.lessons.quickClinical.card.mustKnowLabs"),
+              escalationCues: t("learner.lessons.quickClinical.card.escalationCues"),
+            }}
           />
 
           <PathwayLessonActions

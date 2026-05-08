@@ -20,6 +20,7 @@ import { getLessonSectionTheme } from "@/lib/ui/lesson-section-theme";
 import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { lessonStudyPhaseLabel, lessonStudyProgressPercent } from "@/components/lessons/lesson-study-phase-progress";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 type SectionEntry = {
   id: string;
@@ -54,6 +55,7 @@ export function LessonSectionNav({
   progress?: PathwayLessonProgressStatus | null;
   progressVisible?: boolean;
 }) {
+  const { t } = useMarketingI18n();
   const [activeId, setActiveId] = useState<string | null>(sections[0]?.id ?? null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -148,11 +150,11 @@ export function LessonSectionNav({
 
   return (
     <>
-      <details className="nn-lesson-section-nav-mobile lg:hidden">
-        <summary className="nn-lesson-section-nav-mobile__summary">
-          <span className="flex items-center gap-2">
+      <details className="nn-lesson-section-nav-mobile min-w-0 lg:hidden">
+        <summary className="nn-lesson-section-nav-mobile__summary min-w-0">
+          <span className="flex min-w-0 items-center gap-2">
             <BookOpen className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
-            Lesson contents
+            {t("learner.lessons.nav.contentsLabel")}
           </span>
           <ChevronDown className="nn-lesson-section-nav-mobile__chevron h-4 w-4 shrink-0 opacity-70" aria-hidden />
         </summary>
@@ -161,19 +163,23 @@ export function LessonSectionNav({
         </div>
       </details>
 
-      <aside className="nn-lesson-section-nav" aria-label="Lesson sections">
+      <aside className="nn-lesson-section-nav" aria-label={t("learner.lessons.nav.ariaSectionsNav")}>
         <div className="nn-lesson-section-nav__header">
-          <p>On this page</p>
-          <span>{sections.length} sections</span>
+          <p>{t("learner.lessons.nav.onThisPage")}</p>
+          <span>{t("learner.lessons.nav.sectionsCount", { count: sections.length })}</span>
         </div>
         <div className="nn-lesson-section-nav__progress" aria-label="Study phase">
           <span>{lessonStudyPhaseLabel(progressVisible ? progress : "not_started")}</span>
-          <strong>{progressVisible ? `${lessonStudyProgressPercent(progress)}%` : "Local"}</strong>
+          <strong>{progressVisible ? `${lessonStudyProgressPercent(progress)}%` : t("learner.lessons.nav.progressLocal")}</strong>
         </div>
         <nav>{navList}</nav>
-        <div className="nn-lesson-section-nav__jump" aria-label="Lesson jump controls">
-          <button type="button" onClick={() => goTo(sections[0]!.id)}>Top</button>
-          <button type="button" onClick={() => goTo(sections[sections.length - 1]!.id)}>Review</button>
+        <div className="nn-lesson-section-nav__jump" aria-label={t("learner.lessons.nav.ariaJumpControls")}>
+          <button type="button" onClick={() => goTo(sections[0]!.id)}>
+            {t("learner.lessons.nav.jumpTop")}
+          </button>
+          <button type="button" onClick={() => goTo(sections[sections.length - 1]!.id)}>
+            {t("learner.lessons.nav.jumpReview")}
+          </button>
         </div>
       </aside>
     </>

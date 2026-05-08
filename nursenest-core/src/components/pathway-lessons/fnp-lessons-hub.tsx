@@ -133,6 +133,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
         lessonsBasePath={lessonsBasePath}
         topicClusters={topicClusters}
         pathwayShortName={pathway.shortName}
+        tone="np"
       />
 
       {/* Lifespan quick nav + counts */}

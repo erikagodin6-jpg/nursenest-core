@@ -150,6 +150,7 @@ export function PathwayLessonsGroupedHub({
         lessonsBasePath={lessonsBasePath}
         topicClusters={topicClusters}
         pathwayShortName={pathway.shortName}
+        tone={isNp ? "np" : "default"}
       />
 
       <div className="space-y-12">

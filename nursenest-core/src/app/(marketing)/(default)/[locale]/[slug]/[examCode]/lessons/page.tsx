@@ -98,6 +98,7 @@ import {
   normalizeAlliedTaxonomySlugForProfession,
 } from "@/lib/allied/allied-profession-taxonomy";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 /** Canonical Canada RN hub path (used for legacy ops grep + optional verbose console). */
 const RN_CANADA_NCLEX_LESSONS_HUB_PATH = "/canada/rn/nclex-rn/lessons" as const;
@@ -592,6 +593,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           : topicClusterFallbackLabel != null
             ? `Lessons in “${topicClusterFallbackLabel}” for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
             : `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
+    const heroTitle = formatTitleCase(pageTitle);
+    const heroSubtitle = formatSentenceCase(headerDescription);
     const overviewHref = marketingExamHubBasePath(pathway);
     const questionsHref = buildExamPathwayPath(pathway, "questions");
     const catHref = buildExamPathwayPath(pathway, "cat");
@@ -689,8 +692,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           }}
         />
         <MarketingLessonsHubRetryableErrorShell
-          title={pageTitle}
-          subtitle={headerDescription}
+          title={heroTitle}
+          subtitle={heroSubtitle}
+          eyebrow={pathway.shortName.trim() || pathway.displayName}
+          pathwayTrack={pathway.roleTrack}
           toolbar={toolbar}
           backLabel={`${examName} overview`}
           backHref={overviewHref}
@@ -1068,6 +1073,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           ? `Lessons in “${topicClusterLabel}” for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
           : `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
 
+  const heroTitle = formatTitleCase(pageTitle);
+  const heroSubtitle = formatSentenceCase(headerDescription);
+
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
@@ -1178,8 +1186,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             }}
           />
           <MarketingLessonsHubRetryableErrorShell
-            title={pageTitle}
-            subtitle={headerDescription}
+            title={heroTitle}
+            subtitle={heroSubtitle}
+            eyebrow={pathway.shortName.trim() || pathway.displayName}
+            pathwayTrack={pathway.roleTrack}
             toolbar={toolbar}
             backLabel={`${examName} overview`}
             backHref={overviewHref}
@@ -1245,8 +1255,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     }
     return (
       <LessonsPageShell
-        title={pageTitle}
-        subtitle={headerDescription}
+        title={heroTitle}
+        subtitle={heroSubtitle}
+        eyebrow={pathway.shortName.trim() || pathway.displayName}
+        pathwayTrack={pathway.roleTrack}
         toolbar={toolbar}
         backLink={{ label: `${examName} overview`, href: overviewHref }}
       >
@@ -1363,8 +1375,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   return (
     <LessonsPageShell
-      title={pageTitle}
-      subtitle={headerDescription}
+      title={heroTitle}
+      subtitle={heroSubtitle}
+      eyebrow={pathway.shortName.trim() || pathway.displayName}
+      pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
       backLink={{ label: `${examName} overview`, href: overviewHref }}
     >
@@ -1416,7 +1430,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       >
         {/* Section toolbar: heading + count badge */}
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
-          <h2 id="lesson-library-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
+          <h2 id="lesson-library-heading" className="nn-marketing-h3 max-w-[min(100%,36rem)]">
             {alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)
               ? `${alliedProfessionTrackChipLabel(alliedProfessionResolved)} lesson library`
               : "Lesson library"}

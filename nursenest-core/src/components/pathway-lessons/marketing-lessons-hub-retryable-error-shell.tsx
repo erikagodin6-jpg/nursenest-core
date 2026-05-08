@@ -8,6 +8,8 @@ import type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb
 export type MarketingLessonsHubRetryableErrorShellProps = {
   title: string;
   subtitle: string;
+  eyebrow?: string;
+  pathwayTrack?: string;
   toolbar: ReactNode;
   backLabel: string;
   backHref: string;
@@ -36,6 +38,8 @@ export function MarketingLessonsHubRetryableErrorShell(props: MarketingLessonsHu
   const {
     title,
     subtitle,
+    eyebrow,
+    pathwayTrack,
     toolbar,
     backLabel,
     backHref,
@@ -54,7 +58,14 @@ export function MarketingLessonsHubRetryableErrorShell(props: MarketingLessonsHu
   } = props;
 
   return (
-    <LessonsPageShell title={title} subtitle={subtitle} toolbar={toolbar} backLink={{ label: backLabel, href: backHref }}>
+    <LessonsPageShell
+      title={title}
+      subtitle={subtitle}
+      eyebrow={eyebrow}
+      pathwayTrack={pathwayTrack}
+      toolbar={toolbar}
+      backLink={{ label: backLabel, href: backHref }}
+    >
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <LessonHubSurfaceChips links={surfaceChips} />
       <div

@@ -443,15 +443,34 @@ export function blogPostBreadcrumbsWithOptionalCategory(
   const cat = category?.trim();
   if (!cat) return base;
   const blogKey = "breadcrumbs.blog" as const;
+  const catHref = `/blog/category/${encodeURIComponent(cat)}`;
   return {
     crumbs: [
       HOME,
       { name: "Blog", href: "/blog", i18nKey: blogKey },
-      { name: cat, href: undefined },
+      { name: cat, href: catHref },
       { name: title, href: undefined },
     ],
     schemaItems: base.schemaItems,
   };
+}
+
+/** Blog category archive (matches `BlogPost.category` exactly). */
+export function blogCategoryBreadcrumbs(category: string): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
+  const catPath = `/blog/category/${encodeURIComponent(category)}`;
+  const catLabel = `Category: ${category}`;
+  const blogKey = "breadcrumbs.blog" as const;
+  const crumbs: BreadcrumbCrumb[] = [
+    HOME,
+    { name: "Blog", href: "/blog", i18nKey: blogKey },
+    { name: catLabel, href: undefined },
+  ];
+  const schemaItems: BreadcrumbSchemaItem[] = [
+    HOME_ITEM,
+    { name: "Blog", item: toAbsoluteSiteUrl("/blog"), i18nKey: blogKey },
+    { name: catLabel, item: toAbsoluteSiteUrl(catPath) },
+  ];
+  return { crumbs, schemaItems };
 }
 
 /** Blog tag page. */

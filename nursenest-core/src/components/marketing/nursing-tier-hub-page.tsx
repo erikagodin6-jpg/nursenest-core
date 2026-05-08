@@ -10,6 +10,7 @@ import { StudyCard } from "@/components/ui/study-card";
 import type { NursingTierHubActionId, NursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 import { resolveNursingTierHubStudyCardHref } from "@/lib/marketing/nursing-tier-hub-content";
 import type { PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   lessons: BookOpen,
@@ -74,19 +75,38 @@ export function NursingTierHubPage({
     .map((id) => actionsById.get(id))
     .filter(Boolean);
 
-  const title = content.title || pathway.shortName;
+  const rawTitle = content.title || pathway.shortName;
+  const heading = formatTitleCase(rawTitle);
+  const introRaw = content.intro?.trim();
+  const intro = introRaw ? formatSentenceCase(introRaw) : "";
+  const eyebrow = pathway.shortName.trim() || pathway.displayName;
 
   return (
     <>
       <FunnelExamHubViewBeacon pathway={pathway} hubPath={hubPath} />
 
-      <div data-nn-nursing-tier-hub="surface">
-        <section>
-          <h1>{title}</h1>
+      <div
+        className="nn-premium-pathway-hub"
+        data-nn-nursing-tier-hub="surface"
+        data-pathway-track={pathway.roleTrack}
+      >
+        <section aria-labelledby="nn-nursing-tier-hub-title">
+          <div className="nn-nursing-tier-hub-hero-band">
+            <p className="nn-premium-home-eyebrow">{eyebrow}</p>
+            <h1
+              id="nn-nursing-tier-hub-title"
+              className="nn-marketing-h1 mt-4 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]"
+            >
+              {heading}
+            </h1>
+            {intro ? (
+              <p className="nn-marketing-body mt-4 max-w-3xl text-pretty text-[var(--palette-text-muted)]">
+                {intro}
+              </p>
+            ) : null}
+          </div>
 
-          <p>{content.intro || ""}</p>
-
-          <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
             {orderedActions.map((action) => {
               if (!action) return null;
 

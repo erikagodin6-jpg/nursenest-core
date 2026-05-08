@@ -10,11 +10,20 @@ import { PathwayLessonDetailHeaderSkeleton } from "@/components/lessons/pathway-
 export function PathwayLessonDetailPageLoadingFallback({ pathway }: { pathway: ExamPathwayDefinition }) {
   const shellNp = pathway.examFamily === ExamFamily.NP;
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
+    <div className="nn-premium-lesson-detail-loading mx-auto w-full max-w-[100rem] px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell px-3 py-3 sm:px-6 sm:py-5${shellNp ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell nn-premium-lesson-detail-shell px-3 py-3 sm:px-6 sm:py-5${shellNp ? " nn-lesson-page-shell--np" : ""}`}
       >
         <PathwayLessonDetailHeaderSkeleton pathway={pathway} />
+        <div
+          className="nn-lesson-leaf-loader mt-5"
+          data-testid="pathway-lesson-detail-leaf-loader"
+          aria-hidden="true"
+        >
+          <span className="nn-lesson-leaf-loader__leaf" />
+          <span className="nn-lesson-leaf-loader__leaf nn-lesson-leaf-loader__leaf--d1" />
+          <span className="nn-lesson-leaf-loader__leaf nn-lesson-leaf-loader__leaf--d2" />
+        </div>
         <div className="mt-6 space-y-3" aria-hidden>
           <div className="nn-skeleton h-4 w-2/3 max-w-md rounded-md" />
           <div className="nn-skeleton h-4 w-full max-w-2xl rounded-md" />

@@ -8,6 +8,28 @@ function cleanLines(lines: readonly string[] | null | undefined, limit: number):
     .slice(0, limit);
 }
 
+export type QuickClinicalSummaryLabels = {
+  eyebrow: string;
+  title: string;
+  keyTakeaways: string;
+  redFlags: string;
+  priorityInterventions: string;
+  examTraps: string;
+  mustKnowLabs: string;
+  escalationCues: string;
+};
+
+const DEFAULT_LABELS: QuickClinicalSummaryLabels = {
+  eyebrow: "Final rapid review before practice",
+  title: "Quick Clinical Summary",
+  keyTakeaways: "Key Takeaways",
+  redFlags: "Red Flags",
+  priorityInterventions: "Priority Interventions",
+  examTraps: "Exam Traps",
+  mustKnowLabs: "Must-Know Labs",
+  escalationCues: "Escalation Cues",
+};
+
 function SummaryCard({
   title,
   lines,
@@ -42,12 +64,17 @@ export function PathwayLessonQuickClinicalSummary({
   examFocusLines,
   commonMistakes,
   fullAccess,
+  labels: labelsProp,
 }: {
   quickReviewLines: readonly string[];
   examFocusLines: readonly string[];
   commonMistakes?: readonly string[] | null;
   fullAccess: boolean;
+  /** i18n labels — prefer passing `t("learner.lessons.quickClinical.*")` from route loaders. */
+  labels?: Partial<QuickClinicalSummaryLabels>;
 }) {
+  const lb = { ...DEFAULT_LABELS, ...labelsProp };
+
   const takeaways = cleanLines(quickReviewLines, 3);
   const redFlags = cleanLines(
     quickReviewLines.filter((line) => /\b(red flag|urgent|worsen|unstable|declin|emergency|report|notify)\b/i.test(line)),
@@ -76,18 +103,27 @@ export function PathwayLessonQuickClinicalSummary({
   if (!hasAny) return null;
 
   return (
-    <section className="nn-lesson-quick-summary" aria-labelledby="quick-clinical-summary">
+    <section
+      className="nn-lesson-quick-summary nn-premium-lesson-quick-summary"
+      aria-labelledby="quick-clinical-summary"
+      data-testid="pathway-lesson-quick-clinical-summary"
+    >
       <div className="nn-lesson-quick-summary__header">
-        <p>Final rapid review before practice</p>
-        <h2 id="quick-clinical-summary">Quick Clinical Summary</h2>
+        <p>{lb.eyebrow}</p>
+        <h2 id="quick-clinical-summary">{lb.title}</h2>
       </div>
       <div className="nn-lesson-quick-summary__grid">
-        <SummaryCard title="Key Takeaways" lines={takeaways} icon={Lightbulb} accent="var(--lesson-pearls-accent)" />
-        <SummaryCard title="Red Flags" lines={redFlags.length ? redFlags : fallbackExam.slice(0, 2)} icon={ShieldAlert} accent="var(--lesson-red-flags-accent)" />
-        <SummaryCard title="Priority Interventions" lines={interventions.length ? interventions : takeaways.slice(0, 2)} icon={Stethoscope} accent="var(--lesson-interventions-accent)" />
-        <SummaryCard title="Exam Traps" lines={traps.length ? traps : fallbackExam} icon={AlertTriangle} accent="var(--lesson-exam-focus-accent)" />
-        <SummaryCard title="Must-Know Labs" lines={labs.length ? labs : fallbackExam.slice(0, 2)} icon={FlaskConical} accent="var(--lesson-diagnostics-accent)" />
-        <SummaryCard title="Escalation Cues" lines={escalation.length ? escalation : redFlags.slice(0, 2)} icon={ClipboardCheck} accent="var(--lesson-next-steps-accent)" />
+        <SummaryCard title={lb.keyTakeaways} lines={takeaways} icon={Lightbulb} accent="var(--lesson-pearls-accent)" />
+        <SummaryCard title={lb.redFlags} lines={redFlags.length ? redFlags : fallbackExam.slice(0, 2)} icon={ShieldAlert} accent="var(--lesson-red-flags-accent)" />
+        <SummaryCard
+          title={lb.priorityInterventions}
+          lines={interventions.length ? interventions : takeaways.slice(0, 2)}
+          icon={Stethoscope}
+          accent="var(--lesson-interventions-accent)"
+        />
+        <SummaryCard title={lb.examTraps} lines={traps.length ? traps : fallbackExam} icon={AlertTriangle} accent="var(--lesson-exam-focus-accent)" />
+        <SummaryCard title={lb.mustKnowLabs} lines={labs.length ? labs : fallbackExam.slice(0, 2)} icon={FlaskConical} accent="var(--lesson-diagnostics-accent)" />
+        <SummaryCard title={lb.escalationCues} lines={escalation.length ? escalation : redFlags.slice(0, 2)} icon={ClipboardCheck} accent="var(--lesson-next-steps-accent)" />
       </div>
     </section>
   );

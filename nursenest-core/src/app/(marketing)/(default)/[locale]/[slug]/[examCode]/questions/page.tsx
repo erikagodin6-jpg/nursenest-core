@@ -357,9 +357,10 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         </div>
       ) : null}
 
-      {!isTopicNarrowed && !(questionSnapshot?.status === "ok" && questionSnapshot.pathwayScopedCount === 0) ? (
+      {/* Keep hub mounted when bank count is 0 so gated CAT/linear modes stay co-visible with ramping copy (E2E + consistency). */}
+      {!isTopicNarrowed ? (
         <div className="mt-8">
-            <MarketingPracticeQuestionsHubClient
+          <MarketingPracticeQuestionsHubClient
             pathway={pathway}
             examDisplayName={examName}
             aggregates={hubAggregates}

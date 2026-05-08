@@ -94,7 +94,7 @@ export function LessonPageHeader({
   const bodyLabel = bodySystem ? bodySystem.replace(/_/g, " ") : null;
 
   return (
-    <header className="nn-lesson-page-header">
+    <header className="nn-lesson-page-header nn-premium-learner-lesson-hero">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div className="min-w-0 flex-1">
           {breadcrumbSlot ? <div className="mb-1.5 min-w-0">{breadcrumbSlot}</div> : null}
