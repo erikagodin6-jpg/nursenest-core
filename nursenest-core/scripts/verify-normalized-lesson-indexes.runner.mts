@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import {
   getCatalogLessonsRaw,
+  getCatalogLessonsRawFromBundledOnly,
   getLessonCatalogMemoizationStats,
   getLessonSummariesIndex,
   getMarketingHubEffectiveCatalogSlugSet,
@@ -17,6 +18,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { parsePathwayLessonGeneratedIndexV1 } from "@/lib/lessons/pathway-lesson-generated-index";
 import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
+import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lessons-hubs";
 import { getMarketingLessonsHubCatalogLessons } from "@/lib/lessons/marketing-lessons-hub-category";
 import { buildLessonNormalizationCoverageReport } from "./lesson-normalization-coverage.mts";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -34,27 +36,22 @@ function listGeneratedJsonFiles(): string[] {
   return fs.readdirSync(realIndexDir).filter((f) => f.endsWith(".json") && f !== "package.json");
 }
 
-function liveSummariesWithoutDiskIndex(pathwayId: string): ReturnType<typeof getLessonSummariesIndex> {
+/**
+ * Single “no disk index” session per pathway: avoids duplicating expensive
+ * `normalized_pathway_catalog` work (previously two tmpdirs + two normalizes per file).
+ */
+function liveLessonIndexParityWithoutDisk(pathwayId: string): {
+  summaries: ReturnType<typeof getLessonSummariesIndex>;
+  marketingEffectiveSlugs: Set<string>;
+} {
   const emptyDir = fs.mkdtempSync(path.join(os.tmpdir(), "nn-lesson-index-live-"));
   const prev = process.env.NN_PATHWAY_LESSON_INDEX_DIR;
   process.env.NN_PATHWAY_LESSON_INDEX_DIR = emptyDir;
   try {
     resetCatalogLessonsRawMergeCacheForTests();
-    return getLessonSummariesIndex(pathwayId);
-  } finally {
-    if (prev === undefined) delete process.env.NN_PATHWAY_LESSON_INDEX_DIR;
-    else process.env.NN_PATHWAY_LESSON_INDEX_DIR = prev;
-    resetCatalogLessonsRawMergeCacheForTests();
-  }
-}
-
-function liveMarketingSlugSetWithoutDisk(pathwayId: string): Set<string> {
-  const emptyDir = fs.mkdtempSync(path.join(os.tmpdir(), "nn-lesson-index-live-"));
-  const prev = process.env.NN_PATHWAY_LESSON_INDEX_DIR;
-  process.env.NN_PATHWAY_LESSON_INDEX_DIR = emptyDir;
-  try {
-    resetCatalogLessonsRawMergeCacheForTests();
-    return getMarketingHubEffectiveCatalogSlugSet(pathwayId);
+    const summaries = getLessonSummariesIndex(pathwayId);
+    const marketingEffectiveSlugs = getMarketingHubEffectiveCatalogSlugSet(pathwayId);
+    return { summaries, marketingEffectiveSlugs };
   } finally {
     if (prev === undefined) delete process.env.NN_PATHWAY_LESSON_INDEX_DIR;
     else process.env.NN_PATHWAY_LESSON_INDEX_DIR = prev;
@@ -124,6 +121,25 @@ async function main(): Promise<void> {
     );
   }
 
+  for (const alliedId of ALLIED_MARKETING_CORE_PATHWAY_IDS) {
+    const bundledLen = getCatalogLessonsRawFromBundledOnly(alliedId).length;
+    if (bundledLen === 0) {
+      throw new Error(
+        `[verify:lesson-indexes] FATAL: allied bundled catalog has zero merged lessons for ${alliedId} — cannot validate allied index pipeline.`,
+      );
+    }
+    const rawLen = getCatalogLessonsRaw(alliedId).length;
+    const expected = path.join(realIndexDir, `${alliedId}.json`);
+    if (!fs.existsSync(expected)) {
+      throw new Error(
+        `[verify:lesson-indexes] FATAL: required allied index file is missing (would cause ENOENT for consumers).\n` +
+          `  expectedPath=${expected}\n` +
+          `  pathwayId=${alliedId} mergedRawLessons=${rawLen} bundledOnlyLessons=${bundledLen}\n` +
+          `  Run \`npm run build:lesson-indexes\` from the app package root; allied pathways run first — ensure the build phase completes.`,
+      );
+    }
+  }
+
   const catalogIds = new Set(listCatalogPathwayIdsWithLessonsSync());
   const verifyStarted = performance.now();
   let totalLessonRowsVerified = 0;
@@ -146,7 +162,9 @@ async function main(): Promise<void> {
       );
     }
 
-    const liveSummaries = liveSummariesWithoutDiskIndex(pathwayId);
+    const { summaries: liveSummaries, marketingEffectiveSlugs: liveEff } = liveLessonIndexParityWithoutDisk(
+      pathwayId,
+    );
     if (liveSummaries.length !== parsed.summaries.length) {
       throw new Error(
         `[verify:lesson-indexes] summary count mismatch pathway=${pathwayId} live=${liveSummaries.length} file=${parsed.summaries.length}`,
@@ -158,7 +176,6 @@ async function main(): Promise<void> {
       throw new Error(`[verify:lesson-indexes] slug set mismatch pathway=${pathwayId}`);
     }
 
-    const liveEff = liveMarketingSlugSetWithoutDisk(pathwayId);
     const fileEff = new Set(parsed.marketingEffectiveSlugsLowercase.map((s) => s.toLowerCase()));
     if (liveEff.size !== fileEff.size) {
       throw new Error(
@@ -177,7 +194,10 @@ async function main(): Promise<void> {
   }
   console.info(`[verify:lesson-indexes] all ${files.length} file(s) validated.`);
 
-  const coverage = buildLessonNormalizationCoverageReport();
+  const verifiedPathwayIds = [...new Set(files.map((f) => f.replace(/\.json$/i, "")))].sort((a, b) =>
+    a.localeCompare(b),
+  );
+  const coverage = buildLessonNormalizationCoverageReport({ pathwayIds: verifiedPathwayIds });
   for (const pathway of coverage.pathways) {
     if (pathway.rawCount > 0 && pathway.renderableCount === 0) {
       throw new Error(

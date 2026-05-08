@@ -22,10 +22,16 @@ function runLessonIndexesForBuild() {
   mkdirSync(indexDir, { recursive: true });
 
   if (isNNSkipLessonIndexBuild()) {
+    console.error(
+      "[lesson-indexes] WARN: NN_SKIP_LESSON_INDEX_BUILD is set — skipping generated-indexes " +
+        "(us-allied-core.json / ca-allied-core.json will not be produced). " +
+        "Full builds expect these files unless you deploy precomputed indexes separately.",
+    );
     console.log("[lesson-indexes] skipped reason=NN_SKIP_LESSON_INDEX_BUILD");
     return 0;
   }
 
+  console.log(`[lesson-indexes] indexDir=${indexDir}`);
   console.log("[lesson-indexes] generating");
   const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
   const genStarted = Date.now();

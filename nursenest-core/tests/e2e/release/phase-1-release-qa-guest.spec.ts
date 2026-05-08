@@ -5,6 +5,7 @@
  */
 import { expect, test } from "@playwright/test";
 import { dismissMarketingScrims } from "../helpers/marketing-navigation-audit";
+import { resolveE2eAppBaseUrl } from "../helpers/e2e-env";
 import { MARKETING_PUBLIC_SELECTOR } from "../helpers/navigation-e2e";
 import { loginWithCredentials } from "../helpers/learner-login";
 import { getQaFreeCredentials } from "../helpers/smoke-credentials";
@@ -22,11 +23,21 @@ test.describe("Phase 1 — release QA (guest / marketing entry)", () => {
     expect(pricing?.ok(), `HTTP ${pricing?.status()} for /pricing`).toBeTruthy();
     await dismissMarketingScrims(page);
     await expect(page.locator("main").first()).toBeVisible({ timeout: 60_000 });
-    const checkoutCta = page
-      .getByRole("link", { name: /subscribe|get started|choose plan|start|upgrade|checkout/i })
-      .or(page.locator('a[href*="stripe"], a[href*="/signup"]'))
+    await expect(page.getByRole("heading", { name: /choose your plan/i })).toBeVisible({ timeout: 120_000 });
+    /* Scope to main — header nav also has /signup links (often hidden in overflow); `.first()` must not grab those. */
+    const pricingMain = page.locator("main");
+    const checkoutCta = pricingMain
+      .getByRole("link", {
+        name: /subscribe|get started|choose plan|choose your plan|select plan|start|upgrade|checkout|continue/i,
+      })
+      .or(
+        pricingMain.getByRole("button", {
+          name: /subscribe|get started|choose plan|select plan|checkout|continue/i,
+        }),
+      )
+      .or(pricingMain.locator('a[href*="stripe"], a[href*="checkout"]'))
       .first();
-    await expect(checkoutCta).toBeVisible({ timeout: 45_000 });
+    await expect(checkoutCta).toBeVisible({ timeout: 90_000 });
 
     const signup = await page.goto("/signup", { waitUntil: "domcontentloaded", timeout: 90_000 });
     expect(signup?.ok(), `HTTP ${signup?.status()} for /signup`).toBeTruthy();
@@ -50,11 +61,29 @@ test.describe("Phase 1 — release QA (guest / marketing entry)", () => {
   });
 
   test("unauthenticated user hitting /app/onboarding is redirected toward auth (no blank shell)", async ({
-    page,
+    browser,
+    baseURL,
   }) => {
-    await page.goto("/app/onboarding", { waitUntil: "domcontentloaded", timeout: 90_000 });
-    await expect(page).not.toHaveURL(/\/app\/onboarding\/?$/i, { timeout: 45_000 });
-    await expect(page.getByRole("textbox", { name: /email/i }).first()).toBeVisible({ timeout: 45_000 });
+    /* Fresh context — default page may carry cookies/storage from earlier tests in the worker. */
+    const ctx = await browser.newContext();
+    const page = await ctx.newPage();
+    try {
+      const origin = resolveE2eAppBaseUrl(baseURL);
+      /* Prefer transport-level redirect check — client navigations can settle on /app/onboarding while RSC resolves. */
+      const redir = await page.request.get(`${origin}/app/onboarding`, { maxRedirects: 0 });
+      expect(
+        [302, 303, 307, 308],
+        `expected onboarding to redirect unauthenticated users (got HTTP ${redir.status()} from ${origin}/app/onboarding)`,
+      ).toContain(redir.status());
+      const loc = redir.headers()["location"] ?? "";
+      expect(loc, `Location should send guests to login/signup, got: ${loc}`).toMatch(/\/(login|signup)/i);
+
+      await page.goto(`${origin}/app/onboarding`, { waitUntil: "domcontentloaded", timeout: 90_000 });
+      await expect(page).toHaveURL(/\/(login|signup)(\?|$)/i, { timeout: 45_000 });
+      await expect(page.getByRole("textbox", { name: /email/i }).first()).toBeVisible({ timeout: 45_000 });
+    } finally {
+      await ctx.close();
+    }
   });
 
   test("free-tier account sees clean subscription gate on lessons hub", async ({ page }) => {

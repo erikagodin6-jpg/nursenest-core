@@ -5,8 +5,9 @@
  * - Writes `scripts/.node-memory-exports.sh` so shells can `source` merged NODE_OPTIONS (npm `dev` / `build` / `start`).
  * - When `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` is set, it wins: any existing `--max-old-space-size=…` in
  *   `NODE_OPTIONS` is replaced (DigitalOcean may inject a larger heap; low-memory builds set 4096).
- * - When `BUILD_NODE_*` is unset, preserves an existing heap flag in `NODE_OPTIONS`; if none, defaults to 8192 MB.
- * - Warn-only when total RAM < 8 GiB (no behavior change).
+ * - When `BUILD_NODE_*` is unset, preserves an existing heap flag in `NODE_OPTIONS`; if none, defaults to 8192 MB on
+ *   large hosts, or a capped value (~55% of RAM, 2048–6144) on <=9GiB RAM machines to reduce OOM kills during `next build`.
+ * - Warn-only when total RAM < 8 GiB (heap cap is separate — avoids SIGKILL, not a QA bypass).
  *
  * Idempotent: safe to run multiple times.
  */
@@ -22,6 +23,14 @@ const exportsPath = path.join(packageRoot, "scripts", ".node-memory-exports.sh")
 const HEAP_RE = /--max-old-space-size=\d+/;
 const DEFAULT_HEAP_MB = 8192;
 const EIGHT_GIB = 8 * 1024 ** 3;
+
+/** Align with `run-next-prod-build.mjs` — requesting ~8GiB heap on a ~8GiB host invites SIGKILL during `next build`. */
+function defaultHeapMbForHost() {
+  const totalMb = Math.max(512, Math.floor(os.totalmem() / 1024 / 1024));
+  if (totalMb > 9216) return DEFAULT_HEAP_MB;
+  /** Same formula as `scripts/run-next-prod-build.mjs` capV8HeapForPhysicalRam (single mental model). */
+  return Math.max(2048, Math.min(6144, Math.floor(totalMb * 0.55)));
+}
 
 function heapFlagFromBuildEnvMb() {
   const raw = process.env.BUILD_NODE_MAX_OLD_SPACE_SIZE_MB;
@@ -39,7 +48,8 @@ function mergeNodeOptions() {
     return withoutHeap ? `${withoutHeap} ${buildHeap}` : buildHeap;
   }
   if (HEAP_RE.test(raw)) return raw;
-  const heap = `--max-old-space-size=${DEFAULT_HEAP_MB}`;
+  const heapMb = defaultHeapMbForHost();
+  const heap = `--max-old-space-size=${heapMb}`;
   return raw ? `${raw} ${heap}` : heap;
 }
 

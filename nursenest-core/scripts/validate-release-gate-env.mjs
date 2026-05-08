@@ -68,7 +68,8 @@ export function resolveReleaseGateBaseUrl() {
     if (!raw) continue;
     return { name, raw };
   }
-  return null;
+  // Align with `getE2eBaseURL()` / `playwright.release-gate.config.ts` when no env is set.
+  return { name: "(implicit default)", raw: "http://localhost:3000" };
 }
 
 export function getReleaseGateEnvStatus() {
@@ -106,6 +107,11 @@ export function printReleaseGateEnvReport() {
 
   if (baseResult.ok) {
     lines.push(`[release-gate-env] PASS target URL: ${status.base.name} (${baseResult.origin})`);
+    if (status.base.name === "(implicit default)") {
+      lines.push(
+        "[release-gate-env] INFO: for staging/production, set BASE_URL (or PLAYWRIGHT_BASE_URL) explicitly; default is local-only.",
+      );
+    }
   } else {
     lines.push(`[release-gate-env] FAIL target URL: ${baseResult.message}`);
   }

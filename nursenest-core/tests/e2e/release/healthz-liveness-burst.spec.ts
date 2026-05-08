@@ -7,6 +7,7 @@
  * ```
  */
 import { expect, test } from "@playwright/test";
+import { resolveE2eAppBaseUrl } from "../helpers/e2e-env";
 
 const HEALTHZ_MAX_MS = 200;
 const BURST_COUNT = 10;
@@ -16,7 +17,7 @@ test.describe("Release — /healthz liveness burst", () => {
     request,
     baseURL,
   }) => {
-    const origin = baseURL ?? "http://127.0.0.1:3000";
+    const origin = resolveE2eAppBaseUrl(baseURL);
     const url = `${origin}/healthz`;
 
     const warm = await request.get(url);

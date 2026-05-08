@@ -76,3 +76,63 @@ This package does not define a root `npm test` script; use **`npm run test:unit:
 ## Audit inputs
 
 Prior handoff referenced audit markdown under `reports/`; full re-read of every audit file was not repeated in this session.
+
+---
+
+## Phase 1 stabilization pass (2026-05-08)
+
+### Release gate wiring (verified)
+
+- **`playwright.release-gate.config.ts`** projects include:
+  - `release-health` — `release-health-apis`, `healthz-liveness-burst`
+  - **`release-phase-1-guest`** — `phase-1-release-qa-guest.spec.ts`
+  - `release-mobile` — depends on guest; `phase-3-release-mobile-smoke.spec.ts`
+  - `release-free-user`, `release-admin-user`, smoke-production specs
+  - **`release-blocking-paid`** — regex includes `paid-user-00-fast-sanity`, `paid-user-entitlements`, `paid-user-api-health`, `paid-user-cat-smoke`, **`phase-1-paid-learner-workflows`**, `release-account-billing-smoke`
+  - `release-synthetic-paid-smoke` — depends on `release-blocking-paid`
+- **`BASE_URL`** (or `PLAYWRIGHT_BASE_URL` / `NURSENEST_PRODUCTION_BASE_URL`) is **required** — config throws if unset.
+- Scripts from **`nursenest-core/`** package root: **`npm run qa:release-gate`** (= `validate-release-gate-env.mjs` + Playwright), **`npm run qa:predeploy`** (same). Repo root: **`npm run qa:release-gate`** delegates via `--prefix nursenest-core`.
+- Low-memory predeploy: **`npm run qa:predeploy:low-memory`** runs `typecheck:critical` + unit scripts + **`qa:release-gate:list`** (same validator + `--list`).
+
+### Commands run (stabilization)
+
+| Command | Result |
+| --- | --- |
+| `npm run typecheck:critical` | **PASS** (EXIT 0) |
+| `npm run test:unit:flashcards` | **PASS** |
+| `npm run test:unit:practice` | **PASS** |
+| `npm run test:unit:stripe` | **PASS** |
+| `npm run test:unit:onboarding` | **PASS** |
+| `BASE_URL=http://127.0.0.1:3000 npx playwright test -c playwright.release-gate.config.ts --list` | **PASS** (lists projects; without paid creds, `release-blocking-paid` shows stub `paid-e2e-requires-env` only) |
+
+**Not executed:** full `npm run qa:release-gate` / browser E2E (needs running app + secrets).
+
+### Skip / credential clarity
+
+- **`phase-1-paid-learner-workflows.spec.ts`**: nested **`subscriber journeys`** block uses `test.skip(!hasPaidTestCredentials(), …)` with explicit env var list. **`optional admin smoke`** is separate — skips only with **`SKIP_ADMIN_REASON`** (`E2E_ADMIN_EMAIL` + `E2E_ADMIN_PASSWORD`), not blocked by missing paid vars.
+- **`paid-e2e-requires-env.spec.ts`**: skip message names **`phase-1-paid-learner-workflows`** and other paid specs when unpaid.
+- **`phase-1-release-qa-guest.spec.ts`**: free-tier test skips with **`E2E_FREE_EMAIL` + `E2E_FREE_PASSWORD`** (or **`QA_FREE_*`**).
+
+### `parsed.summary` / flashcards hub
+
+- **`parseFlashcardInventoryResponse`** success type allows `summary: FlashcardCustomSessionSummary | null`; inventory path uses **`const invSummary = parsed.summary`** then **`invSummary != null`** before reading `matchingCards`. No extra guard added — aligns with **`npm run typecheck:critical`** (clean).
+
+### Full `tsc` / OOM
+
+- Prefer **`npm run typecheck:critical`** in CI/agents. For full **`npm run typecheck`**, use **`NODE_OPTIONS=--max-old-space-size=8192`** (or higher) if the process exits **137** or **OOM**.
+
+### Browser / gate artifacts
+
+- Release config **`outputDir`**: `test-results/release-gate/artifacts`; JSON report: `test-results/release-gate/release-gate-report.json`.
+
+### How to run full release gate locally / staging
+
+```bash
+cd nursenest-core
+export BASE_URL=https://your-staging.example   # or http://127.0.0.1:3000
+# Optional: export E2E_PAID_EMAIL / E2E_PAID_PASSWORD, E2E_FREE_*, E2E_ADMIN_*
+npm run qa:release-gate
+# Or list only:
+npm run qa:release-gate:list
+```
+

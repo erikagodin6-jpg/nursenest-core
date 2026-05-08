@@ -1,5 +1,7 @@
 # Release QA and deploy safety
 
+**Runbook (commands, BASE_URL, staging):** [`docs/testing/release-gate-runbook.md`](./testing/release-gate-runbook.md).
+
 This document defines **what must be green before production**, how to run it, and what environment is required. It complements static checks in [`release-safety-checks.md`](./release-safety-checks.md) (content/registry validation).
 
 **Rules:** Do not weaken auth, entitlements, or paid-access assertions to “go green.” Fix the product or test data (e.g. QA seed).
@@ -72,6 +74,30 @@ Demoting a test from “important” to “informational” requires review and 
 
 ## 4. Commands
 
+### Execution modes (local dev vs staging vs production-like)
+
+All modes require **`BASE_URL`** (or **`PLAYWRIGHT_BASE_URL`** / **`NURSENEST_PRODUCTION_BASE_URL`**) so Playwright `use.baseURL` matches the app under test. Specs use **relative** URLs; `http://127.0.0.1:3000` fallbacks in tests are **fallback-only** when `baseURL` is missing.
+
+| Mode | When | Typical env |
+|------|------|-------------|
+| **Local dev (auto webServer)** | Host is `localhost` or `127.0.0.1` and you want Playwright to run **`npm run dev`** | `BASE_URL=http://127.0.0.1:3000` — omit **`PLAYWRIGHT_SKIP_WEB_SERVER`** |
+| **Local app already running** | Dev or **`npm run build && npm run start`** on same machine | `PLAYWRIGHT_SKIP_WEB_SERVER=1` |
+| **Staging / preview** | HTTPS candidate | `BASE_URL=https://…` + **`PLAYWRIGHT_SKIP_WEB_SERVER=1`** |
+
+Copy/paste commands and credential tables: **`reports/release-gate-checklist.md`**.
+
+**Slice scripts** (same `BASE_URL` rules):
+
+| Script | Projects run |
+|--------|----------------|
+| `npm run qa:release-gate:list` | Preflight + list tests only |
+| `npm run qa:release-gate:guest` | `release-health`, `release-phase-1-guest` |
+| `npm run qa:release-gate:paid` | `release-blocking-paid`, `release-synthetic-paid-smoke` (runs **`setup-paid-auth`** first) |
+| `npm run qa:release-gate:mobile` | `release-mobile` (runs **`release-phase-1-guest`** first) |
+| `npm run qa:release-gate:all` | Same as full **`npm run qa:release-gate`** |
+
+**Artifacts:** failures land under **`test-results/release-gate/artifacts/`**; JSON at **`test-results/release-gate/release-gate-report.json`**. Optional HTML: set **`RELEASE_GATE_HTML_REPORT=1`** → **`test-results/release-gate/playwright-report/`**, then `npx playwright show-report test-results/release-gate/playwright-report`.
+
 ### Pre-deploy (candidate environment)
 
 ```bash
@@ -127,7 +153,12 @@ npm run test:e2e:paid-fast-sanity
 
 | Script | Purpose |
 |--------|---------|
-| `npm run qa:release-gate` | Full release gate (contract + health + paid blockers) |
+| `npm run qa:release-gate` | Full release gate (all projects in `playwright.release-gate.config.ts`) |
+| `npm run qa:release-gate:list` | Preflight env + list tests (`--list`) |
+| `npm run qa:release-gate:guest` | Health + phase-1 guest marketing only |
+| `npm run qa:release-gate:paid` | Paid blocking + synthetic paid smoke |
+| `npm run qa:release-gate:mobile` | Mobile Pixel smoke (runs phase-1 guest dependency) |
+| `npm run qa:release-gate:all` | Same as `qa:release-gate` |
 | `npm run qa:predeploy` | Same as `qa:release-gate` |
 | `npm run qa:release-gate:health` | `/api/health` + `/api/health/ready` only |
 | `npm run qa:important-regression` | CI master paid bundle + public pre-deploy |
@@ -147,10 +178,13 @@ npm run test:e2e:paid-fast-sanity
 | Variable / artifact | Purpose |
 |---------------------|---------|
 | `BASE_URL` | Playwright `use.baseURL`; must match the app under test (include scheme, no trailing slash path). |
-| `E2E_PAID_EMAIL` + `E2E_PAID_PASSWORD` **or** `PLAYWRIGHT_TEST_EMAIL` + `PLAYWRIGHT_TEST_PASSWORD` | Paid E2E user; see `tests/e2e/helpers/paid-test-credentials.ts`. |
+| **Paid learner** — `E2E_PAID_EMAIL` + `E2E_PAID_PASSWORD` **or** `QA_PAID_EMAIL` + `QA_PAID_PASSWORD` **or** `PLAYWRIGHT_TEST_EMAIL` + `PLAYWRIGHT_TEST_PASSWORD` | Paid E2E user; see `tests/e2e/helpers/paid-test-credentials.ts`. |
+| **Free learner** — `E2E_FREE_EMAIL` + `E2E_FREE_PASSWORD` **or** `QA_FREE_EMAIL` + `QA_FREE_PASSWORD` | Used by `release-free-user` smoke; skips if unset. |
+| **Admin staff** — `E2E_ADMIN_EMAIL` + `E2E_ADMIN_PASSWORD` | Used by `release-admin-user`; skips if unset. |
 | `tests/e2e/.auth/paid-user.json` | Written by `setup-paid-auth`; path override via `NN_PAID_AUTH_FILE` if needed (`auth-state-paths.ts`). |
 | `NEXTAUTH_SECRET` / `AUTH_URL` / `NEXTAUTH_URL` | Local webServer in Playwright config so Auth.js works in dev. |
 | `PLAYWRIGHT_SKIP_WEB_SERVER=1` | Do not start `npm run dev` (use when app already running or remote URL). |
+| `RELEASE_GATE_HTML_REPORT=1` | Append HTML reporter output to **`test-results/release-gate/playwright-report/`** (see checklist). |
 | `E2E_RELEASE_SKIP_BILLING=1` | Skip account/billing smoke in `release-account-billing-smoke.spec.ts` only. |
 | Health endpoints | `GET /api/health` (liveness), `GET /api/health/ready` (DB readiness; may return 503 if DB down). |
 

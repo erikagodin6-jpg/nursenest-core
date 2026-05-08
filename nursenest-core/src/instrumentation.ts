@@ -10,11 +10,6 @@
 import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import {
-  emitNnHomePerfDiagLine,
-  isNnTraceHomePerfTrue,
-  safeProcessPid,
-} from "@/lib/observability/home-perf-diag";
 
 export async function register() {
   try {
@@ -25,6 +20,11 @@ export async function register() {
     // -----------------------------
     if (runtime === "nodejs") {
       try {
+        // Dynamic import keeps `home-perf-diag` → `server-stderr-line` out of the Edge
+        // instrumentation bundle (avoids pulling Node stderr helpers into edge graphs).
+        const { emitNnHomePerfDiagLine, isNnTraceHomePerfTrue, safeProcessPid } = await import(
+          "@/lib/observability/home-perf-diag"
+        );
         if (isNnTraceHomePerfTrue()) {
           emitNnHomePerfDiagLine({
             tag: "nn_home_perf_boot",

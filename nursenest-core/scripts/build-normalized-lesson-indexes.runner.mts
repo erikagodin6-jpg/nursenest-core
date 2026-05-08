@@ -6,10 +6,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lessons-hubs";
 import { LESSON_CATEGORIES } from "@/lib/lessons/lesson-taxonomy";
 import { countMarketingHubLessonsByDisplayCategoryForPathway } from "@/lib/lessons/marketing-lessons-hub-category";
 import {
   getCatalogLessonsRaw,
+  getCatalogLessonsRawFromBundledOnly,
   getCatalogPathwayLessonsSync,
   getLessonCatalogMemoizationStats,
   getLessonSummariesIndex,
@@ -29,6 +31,14 @@ const SCHEMA_V1 = 1;
 
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = path.join(coreRoot, "src", "content", "pathway-lessons", "generated-indexes");
+
+function sortPathwayIdsAlliedFirst(ids: readonly string[]): string[] {
+  const set = new Set(ids);
+  const alliedFirst = ALLIED_MARKETING_CORE_PATHWAY_IDS.filter((id) => set.has(id));
+  const rest = [...set].filter((id) => !(ALLIED_MARKETING_CORE_PATHWAY_IDS as readonly string[]).includes(id));
+  rest.sort((a, b) => a.localeCompare(b));
+  return [...alliedFirst, ...rest];
+}
 
 function warnHighLessonCatalogMemoMissRates(memo: ReturnType<typeof getLessonCatalogMemoizationStats>): void {
   const raw = process.env.NN_LESSON_CATALOG_MEMO_MISS_WARN_RATE ?? "0.35";
@@ -76,7 +86,24 @@ async function main(): Promise<void> {
   stripExistingJson();
   resetCatalogLessonsRawMergeCacheForTests();
 
-  const ids = listCatalogPathwayIdsWithLessonsSync();
+  const fromCatalog = listCatalogPathwayIdsWithLessonsSync();
+  /** Fail fast if allied-bundled merge yields nothing (sparse checkout, corrupt JSON, merge regression). */
+  for (const alliedId of ALLIED_MARKETING_CORE_PATHWAY_IDS) {
+    const bundledOnly = getCatalogLessonsRawFromBundledOnly(alliedId);
+    if (bundledOnly.length === 0) {
+      throw new Error(
+        `[build:lesson-indexes] FATAL: allied bundled catalog produced zero merged rows for ${alliedId}. ` +
+          `Verify src/content/pathway-lessons/allied-bundled-catalog.json and pathway-lesson-catalog-sync merge.`,
+      );
+    }
+  }
+  /** Defensive union: allied hubs must not be dropped if merge/catalog enumeration drifts. */
+  const mandatoryAllied = ALLIED_MARKETING_CORE_PATHWAY_IDS.filter((id) => getCatalogLessonsRaw(id).length > 0);
+  const ids = sortPathwayIdsAlliedFirst([...new Set([...mandatoryAllied, ...fromCatalog])]);
+  console.info(
+    `[build:lesson-indexes] plan outputDir=${outDir} pathwayCount=${ids.length} ` +
+      `mandatoryAlliedWithLessons=${mandatoryAllied.join(",") || "(none)"}`,
+  );
   const generatedAt = new Date().toISOString();
   const buildStarted = performance.now();
   let totalIndexedLessons = 0;
@@ -116,13 +143,28 @@ async function main(): Promise<void> {
       categoryCounts,
     };
 
-    fs.writeFileSync(path.join(outDir, `${safe}.json`), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+    // Compact JSON: smaller on-disk + faster parse in `next build` (schema unchanged).
+    fs.writeFileSync(path.join(outDir, `${safe}.json`), `${JSON.stringify(payload)}\n`, "utf8");
     const pathwayMs = Math.round(performance.now() - pathwayStarted);
     totalIndexedLessons += summaries.length;
     console.info(
-      `[build:lesson-indexes] wrote ${safe}.json lessons=${summaries.length} raw=${rawCount} pathwayMs=${pathwayMs}`,
+      `[build:lesson-indexes] wrote ${path.join(outDir, `${safe}.json`)} lessons=${summaries.length} raw=${rawCount} pathwayMs=${pathwayMs}`,
     );
   }
+
+  for (const alliedId of ALLIED_MARKETING_CORE_PATHWAY_IDS) {
+    const rawN = getCatalogLessonsRaw(alliedId).length;
+    const fp = path.join(outDir, `${alliedId}.json`);
+    if (rawN > 0 && !fs.existsSync(fp)) {
+      throw new Error(
+        `[build:lesson-indexes] FATAL: allied marketing pathway index missing after generation.\n` +
+          `  expectedFile=${fp}\n` +
+          `  pathwayId=${alliedId} mergedRawLessons=${rawN}\n` +
+          `  Fix catalog merge / allied-bundled-catalog.json visibility, or index build order.`,
+      );
+    }
+  }
+
   const memo = getLessonCatalogMemoizationStats();
   warnHighLessonCatalogMemoMissRates(memo);
   safeServerLog("lesson_indexes", "lesson_index_generation_memoization", {

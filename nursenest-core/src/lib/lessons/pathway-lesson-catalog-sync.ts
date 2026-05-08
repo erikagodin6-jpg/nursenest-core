@@ -11,6 +11,7 @@
  * still skipping `expandToStandardFiveSections` in `normalizeLesson`.
  */
 import { createRequire } from "node:module";
+import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lessons-hubs";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
 import { buildLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
 import { deriveLessonHighYieldStudyFields } from "@/lib/lessons/lesson-high-yield-study-fields";
@@ -2083,7 +2084,13 @@ export function listCatalogPathwayIdsWithLessonsSync(): string[] {
   ]);
   /** Canadian NP hub rows can live only in `lesson-library.json` (no `catalog.json` pathway bucket). */
   ids.add("ca-np-cnple");
-  return [...ids].filter((id) => getCatalogLessonsRaw(id).length > 0);
+  /** Ensure allied marketing pathways are always candidates for merged catalog discovery (bundled JSON keys + explicit). */
+  for (const id of ALLIED_MARKETING_CORE_PATHWAY_IDS) {
+    ids.add(id);
+  }
+  /** Stable ordering for reproducible tooling (same membership as unsorted Set iteration). */
+  const sorted = [...ids].sort((a, b) => a.localeCompare(b));
+  return sorted.filter((id) => getCatalogLessonsRaw(id).length > 0);
 }
 
 /**

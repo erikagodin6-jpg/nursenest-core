@@ -29,7 +29,7 @@ function localDevWebServer() {
    */
   const readyUrl = `${origin.origin}/api/auth/csrf`;
   return {
-    command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
+    command: `npx next dev --hostname 127.0.0.1 --port ${port}`,
     url: readyUrl,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

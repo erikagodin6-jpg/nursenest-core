@@ -29,7 +29,7 @@ function localDevWebServer() {
   const secret = process.env.NEXTAUTH_SECRET?.trim() || "playwright-e2e-local-secret";
   const bindHost = host;
   return {
-    command: `npm run dev -- --hostname ${bindHost} --port ${port}`,
+    command: `npx next dev --hostname ${bindHost} --port ${port}`,
     url: origin.origin,
     reuseExistingServer: !process.env.CI,
     timeout: 420_000,

@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { resolveE2eOrigin } from "../helpers/e2e-env";
 import { attachPageObservers } from "../helpers/attach-observers";
 import { attachSmokeProductionFailure } from "../helpers/smoke-production-diagnostics";
 import { getQaPaidCredentials, hasAdminE2eCredentials, getAdminE2eCredentials } from "../helpers/smoke-credentials";
@@ -112,12 +113,12 @@ async function verifyPaidLearnerRoute(
 
 test.describe("Critical production routes", () => {
   test("guest /", async ({ page, baseURL }) => {
-    const origin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+    const origin = resolveE2eOrigin(baseURL);
     await verifyPublicRoute(page, origin, "/", { minMainChars: 80 });
   });
 
   test("guest /login", async ({ page, baseURL }) => {
-    const origin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+    const origin = resolveE2eOrigin(baseURL);
     await verifyPublicRoute(page, origin, "/login", {
       minMainChars: 40,
       extra: async (p) => {
@@ -128,7 +129,7 @@ test.describe("Critical production routes", () => {
   });
 
   test("guest /signup", async ({ page, baseURL }) => {
-    const origin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+    const origin = resolveE2eOrigin(baseURL);
     await verifyPublicRoute(page, origin, "/signup", {
       minMainChars: 40,
       extra: async (p) => {
@@ -138,7 +139,7 @@ test.describe("Critical production routes", () => {
   });
 
   test("guest public lesson preview", async ({ page, baseURL }) => {
-    const origin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+    const origin = resolveE2eOrigin(baseURL);
     await verifyPublicRoute(page, origin, defaultMarketingLessonPath(), {
       minMainChars: 120,
       extra: async (p) => {
@@ -148,12 +149,12 @@ test.describe("Critical production routes", () => {
   });
 
   test("paid /app", async ({ page, baseURL }) => {
-    const origin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+    const origin = resolveE2eOrigin(baseURL);
     await verifyPaidLearnerRoute(page, origin, "/app", { expectedPathname: /\/app(?:\?.*)?$/, minMainChars: 80 });
   });
 
   test("paid /app/lessons", async ({ page, baseURL }) => {
-    const origin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+    const origin = resolveE2eOrigin(baseURL);
     await verifyPaidLearnerRoute(page, origin, "/app/lessons", {
       expectedPathname: /\/app\/lessons(?:\?.*)?$/,
       minMainChars: 80,
@@ -161,7 +162,7 @@ test.describe("Critical production routes", () => {
   });
 
   test("paid /app/flashcards", async ({ page, baseURL }) => {
-    const origin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+    const origin = resolveE2eOrigin(baseURL);
     await verifyPaidLearnerRoute(page, origin, "/app/flashcards", {
       expectedPathname: /\/app\/flashcards(?:\?.*)?$/,
       minMainChars: 60,
@@ -169,7 +170,7 @@ test.describe("Critical production routes", () => {
   });
 
   test("paid /app/practice-tests?cat=1", async ({ page, baseURL }) => {
-    const origin = new URL(baseURL ?? "http://127.0.0.1:3000").origin;
+    const origin = resolveE2eOrigin(baseURL);
     await verifyPaidLearnerRoute(page, origin, "/app/practice-tests?cat=1", {
       expectedPathname: /\/app\/practice-tests(?:\?.*)?$/,
       minMainChars: 60,
@@ -181,7 +182,7 @@ test.describe("Critical production routes", () => {
     const creds = getAdminE2eCredentials();
     if (!creds) return;
 
-    const origin = new URL(page.context()._options.baseURL ?? "http://127.0.0.1:3000").origin;
+    const origin = resolveE2eOrigin(page.context()._options.baseURL as string | undefined);
     const observers = attachPageObservers(page, { profile: "app", captureConsoleContext: true, probeAuthApi: true });
     const responseObserver = attachServerErrorObserver(page, origin);
     try {

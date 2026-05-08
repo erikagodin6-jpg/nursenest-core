@@ -3,6 +3,7 @@
  * @see docs/RELEASE_QA.md
  */
 import { expect, test, type APIRequestContext } from "@playwright/test";
+import { resolveE2eAppBaseUrl } from "../helpers/e2e-env";
 
 async function getOrExplainConnect(request: APIRequestContext, url: string, label: string) {
   try {
@@ -16,23 +17,21 @@ async function getOrExplainConnect(request: APIRequestContext, url: string, labe
 }
 
 test.describe("Release — health APIs", () => {
-  test("US RN NCLEX marketing hub overview permanently redirects to /lessons", async ({ request, baseURL }) => {
-    const origin = baseURL ?? "http://127.0.0.1:3000";
+  test("US RN NCLEX marketing hub overview responds (canonical pathway hub)", async ({ request, baseURL }) => {
+    const origin = resolveE2eAppBaseUrl(baseURL);
     const url = `${origin}/us/rn/nclex-rn`;
     let r;
     try {
-      r = await request.fetch(url, { maxRedirects: 0 });
+      r = await request.get(url);
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
-      throw new Error(`RN hub redirect: cannot reach ${url}. category=health underlying=${msg}`);
+      throw new Error(`RN hub: cannot reach ${url}. category=health underlying=${msg}`);
     }
-    expect([301, 308], `expected redirect from obsolete hub, got ${r.status()}`).toContain(r.status());
-    const loc = r.headers()["location"] ?? "";
-    expect(loc.endsWith("/lessons") || loc.includes("/lessons"), `Location should target /lessons, got ${loc}`).toBeTruthy();
+    expect(r.status(), `expected 200 from canonical RN hub ${url}, got ${r.status()}`).toBe(200);
   });
 
   test("/api/health returns ok (liveness)", async ({ request, baseURL }) => {
-    const origin = baseURL ?? "http://127.0.0.1:3000";
+    const origin = resolveE2eAppBaseUrl(baseURL);
     const res = await getOrExplainConnect(request, `${origin}/api/health`, "API health (liveness)");
     const status = res.status();
     const body = (await res.json().catch(() => ({}))) as { ok?: boolean; live?: boolean };
@@ -47,7 +46,7 @@ test.describe("Release — health APIs", () => {
   });
 
   test("/api/health/ready (readiness / database)", async ({ request, baseURL }) => {
-    const origin = baseURL ?? "http://127.0.0.1:3000";
+    const origin = resolveE2eAppBaseUrl(baseURL);
     const url = `${origin}/api/health/ready`;
     const res = await getOrExplainConnect(request, url, "API readiness");
     const status = res.status();

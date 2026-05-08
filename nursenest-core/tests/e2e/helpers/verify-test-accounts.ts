@@ -1,18 +1,11 @@
 import { expect, type Browser, type Page } from "@playwright/test";
 import { getAdminE2eCredentials, hasAdminE2eCredentials } from "./admin-e2e-credentials";
+import { resolveE2eOrigin } from "./e2e-env";
 import { marketingLoginSubmitButton } from "./marketing-login-locators";
 import { getQaFreeCredentials } from "./smoke-credentials";
 
 const LOGIN_TIMEOUT_MS = 120_000;
 const ADMIN_ROLE_NAMES = new Set(["ADMIN", "SUPER_ADMIN", "CONTENT_ADMIN", "SUPPORT_ADMIN"]);
-
-function resolveOrigin(baseURL?: string): string {
-  try {
-    return new URL(baseURL ?? "http://127.0.0.1:3000").origin;
-  } catch {
-    return "http://127.0.0.1:3000";
-  }
-}
 
 async function loginThroughMarketingForm(
   page: Page,
@@ -56,7 +49,7 @@ export async function verifyTestAccounts(browser: Browser, baseURL?: string): Pr
   const free = getQaFreeCredentials();
   if (!hasAdminE2eCredentials() || !admin || !free) return;
 
-  const origin = resolveOrigin(baseURL);
+  const origin = resolveE2eOrigin(baseURL);
 
   const adminContext = await browser.newContext({ storageState: { cookies: [], origins: [] } });
   try {

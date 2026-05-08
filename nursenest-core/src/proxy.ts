@@ -154,7 +154,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       return forwardRequest(forwarded);
     }
 
-    // Ensure headers are forwarded
+    /* NextAuth continues with x-middleware-next; real redirects (sign-in) must not be replaced by NextResponse.next(). */
     if (res.headers.get("x-middleware-next") === "1") {
       const next = NextResponse.next({
         request: { headers: forwarded.headers },
@@ -164,7 +164,10 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       return next;
     }
 
-    // Final fallback
+    if (res.status >= 300 && res.status < 400) {
+      return res as NextResponse;
+    }
+
     const final = NextResponse.next({
       request: { headers: forwarded.headers },
     });

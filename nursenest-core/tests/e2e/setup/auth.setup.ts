@@ -16,6 +16,7 @@ import {
   describePaidCredentialResolution,
   getPaidTestCredentials,
 } from "../helpers/paid-test-credentials";
+import { getE2eBaseURL } from "../helpers/e2e-env";
 import { learnerAppMainLandmark } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 
@@ -32,7 +33,7 @@ setup("authenticate paid test account and save storage state", async ({ page, re
   }
 
   const credResolution = describePaidCredentialResolution();
-  const baseURL = process.env.BASE_URL?.trim() || "http://127.0.0.1:3000";
+  const baseURL = getE2eBaseURL();
   console.log("[setup-paid-auth] --- env (no secrets) ---");
   console.log(
     `[setup-paid-auth] baseURL=${baseURL} AUTH_URL=${process.env.AUTH_URL?.trim() ? "set" : "unset"} NEXTAUTH_URL=${process.env.NEXTAUTH_URL?.trim() ? "set" : "unset"}`,
@@ -77,7 +78,7 @@ setup("authenticate paid test account and save storage state", async ({ page, re
     }
     const artifact = {
       category: "setup-paid-auth",
-      baseURL: process.env.BASE_URL ?? "http://localhost:3000",
+      baseURL: getE2eBaseURL(),
       credentialSource: credResolution.source,
       credentialEmailPresent: credResolution.emailPresent,
       credentialPasswordPresent: credResolution.passwordPresent,

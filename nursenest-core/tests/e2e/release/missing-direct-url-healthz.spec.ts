@@ -14,10 +14,11 @@
  * ```
  */
 import { expect, test } from "@playwright/test";
+import { resolveE2eAppBaseUrl } from "../helpers/e2e-env";
 
 test.describe("Release — DATABASE_URL without DIRECT_URL (env-bootstrap)", () => {
   test("app boots and Prisma health succeeds on /api/healthz", async ({ request, baseURL }) => {
-    const origin = baseURL ?? "http://127.0.0.1:3000";
+    const origin = resolveE2eAppBaseUrl(baseURL);
 
     const live = await request.get(`${origin}/healthz`);
     expect(live.status(), `/healthz → ${live.status()}`).toBe(200);

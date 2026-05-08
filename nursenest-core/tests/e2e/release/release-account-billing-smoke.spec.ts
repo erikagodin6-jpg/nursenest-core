@@ -11,8 +11,7 @@ test.describe("Release — account / billing smoke", () => {
   test("account overview shell", async ({ page, baseURL }) => {
     test.skip(process.env.E2E_RELEASE_SKIP_BILLING === "1", "E2E_RELEASE_SKIP_BILLING=1");
 
-    const origin = baseURL ?? "http://127.0.0.1:3000";
-    await page.goto(`${new URL(origin).origin}/app/account/overview`, { waitUntil: "domcontentloaded" });
+    await page.goto("/app/account/overview", { waitUntil: "domcontentloaded" });
     expectNotLoginUrl(page);
     await expectPaidLearnerShellReady(page, "release account/overview");
     await expectNoSubscriberPaywallSurface(page, "release account overview");

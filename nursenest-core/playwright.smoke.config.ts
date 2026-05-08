@@ -25,7 +25,7 @@ function localDevWebServer() {
   const port = origin.port || "3000";
   const secret = process.env.NEXTAUTH_SECRET?.trim() || "playwright-e2e-local-secret";
   return {
-    command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
+    command: `npx next dev --hostname 127.0.0.1 --port ${port}`,
     url: origin.origin,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,

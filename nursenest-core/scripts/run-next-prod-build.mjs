@@ -14,6 +14,19 @@ const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
 const nextOutDir = path.join(packageRoot, ".next");
 
+/** Structured timing + RSS-ish heap for CI log parsers (`phase_ms` stays grep-friendly). */
+function logPhaseMs(name, durationMs) {
+  const m = process.memoryUsage();
+  console.error(
+    `[next-prod-build] phase_ms ${JSON.stringify({
+      name,
+      durationMs,
+      heapUsedMb: Math.round(m.heapUsed / (1024 * 1024)),
+      rssMb: Math.round(m.rss / (1024 * 1024)),
+    })}`,
+  );
+}
+
 function ensureBuildCacheVersionEnv() {
   if (String(process.env.BUILD_CACHE_VERSION ?? "").trim()) return;
 
@@ -150,28 +163,34 @@ console.log(
 
 /** Site-wide production gates (marketing JSON, route manifest, theme chrome, forbidden copy). */
 const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
+const t0 = Date.now();
 console.log("[next-prod-build] validate:production-surface_start");
 const validateSurface = spawnSync(npmCmd, ["run", "validate:production-surface"], {
   cwd: packageRoot,
   stdio: "inherit",
   env: process.env,
 });
+const validateSurfaceMs = Date.now() - t0;
 if ((validateSurface.status ?? 1) !== 0) {
   console.error("[next-prod-build] FATAL: validate:production-surface failed");
   process.exit(validateSurface.status ?? 1);
 }
 console.log("[next-prod-build] validate:production-surface_ok");
+logPhaseMs("validate_production_surface", validateSurfaceMs);
 
 const lessonIndexesForBuild = path.join(packageRoot, "scripts", "run-lesson-indexes-for-build.mjs");
+const tLesson = Date.now();
 const lessonIndexes = spawnSync(process.execPath, [lessonIndexesForBuild], {
   cwd: packageRoot,
   stdio: "inherit",
   env: process.env,
 });
+const lessonIndexesMs = Date.now() - tLesson;
 if ((lessonIndexes.status ?? 1) !== 0) {
   console.error("[next-prod-build] FATAL: pathway lesson index build/verify failed (see [lesson-indexes] logs)");
   process.exit(lessonIndexes.status ?? 1);
 }
+logPhaseMs("lesson_indexes_gate", lessonIndexesMs);
 
 if (!String(process.env.NEXT_TELEMETRY_DISABLED ?? "").trim()) {
   process.env.NEXT_TELEMETRY_DISABLED = "1";
@@ -197,6 +216,7 @@ try {
  * REMOVE "--webpack"
  */
 console.log(`[next-prod-build] next_cli_invocation_start pid=${process.pid}`);
+const tNext = Date.now();
 let r;
 try {
   r = spawnSync(process.execPath, [nextBin, "build"], {
@@ -210,9 +230,11 @@ try {
     buildLockHeld = false;
   }
 }
+const nextBuildMs = Date.now() - tNext;
 console.log(
   `[next-prod-build] next_cli_invocation_end status=${r.status ?? "null"} signal=${r.signal ?? "null"}`,
 );
+logPhaseMs("next_build", nextBuildMs);
 
 if (r.error) {
   console.error("[next-prod-build] FATAL: failed to spawn `next build`", r.error);
@@ -273,26 +295,32 @@ console.log(`[next-prod-build] next_build_artifacts_ok=1 standalone_server=${sta
 
 /** Every `output: "standalone"` build must sync `.next/static` next to `server.js` before `npm run start` or smoke tests (idempotent). */
 const ensureStandaloneStatic = path.join(packageRoot, "scripts", "ensure-standalone-static.mjs");
+const tStand = Date.now();
 const sync = spawnSync(process.execPath, [ensureStandaloneStatic], {
   cwd: packageRoot,
   stdio: "inherit",
   env: process.env,
 });
+const ensureStandaloneMs = Date.now() - tStand;
 if (sync.status !== 0) {
   process.exit(sync.status ?? 1);
 }
 console.log("[next-prod-build] ensure_standalone_static_ok=1");
+logPhaseMs("ensure_standalone_static", ensureStandaloneMs);
 
 const verifyStandaloneScript = path.join(packageRoot, "scripts", "verify-standalone-artifact.mjs");
+const tVerify = Date.now();
 const verifyStandalone = spawnSync(process.execPath, [verifyStandaloneScript], {
   cwd: packageRoot,
   stdio: "inherit",
   env: process.env,
 });
+const verifyStandaloneMs = Date.now() - tVerify;
 if ((verifyStandalone.status ?? 1) !== 0) {
   console.error("[next-prod-build] FATAL: verify-standalone-artifact failed");
   process.exit(verifyStandalone.status ?? 1);
 }
 console.log("[next-prod-build] verify_standalone_artifact_ok=1");
+logPhaseMs("verify_standalone_artifact", verifyStandaloneMs);
 
 process.exit(0);

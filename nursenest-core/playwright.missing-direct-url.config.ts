@@ -49,7 +49,7 @@ function localDevWebServer() {
   env.NEXTAUTH_URL = origin.origin;
 
   return {
-    command: `npm run dev -- --hostname ${bindHost} --port ${port}`,
+    command: `npx next dev --hostname ${bindHost} --port ${port}`,
     url: origin.origin,
     reuseExistingServer: !process.env.CI,
     timeout: 420_000,

@@ -1,26 +1,23 @@
 /**
  * **Production release gate** — curated blockers only (health → paid auth seed → paid surfaces).
  *
+ * **Target URL:** `use.baseURL` matches `tests/e2e/helpers/e2e-env.ts` (`getE2eBaseURL`):
+ * `BASE_URL` → `PLAYWRIGHT_BASE_URL` → `NURSENEST_PRODUCTION_BASE_URL` → `http://localhost:3000`.
+ * Specs should use relative `page.goto('/path')` where possible; use `resolveE2eAppBaseUrl` from `e2e-env.ts` for absolute URLs.
+ *
  * Does not replace full `chromium-paid`; it is the minimum revenue-critical slice.
  *
  * Run: `npm run qa:release-gate`
  * @see docs/RELEASE_QA.md
+ * @see reports/release-gate-checklist.md
  */
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
+import { getE2eBaseURL } from "./tests/e2e/helpers/e2e-env";
 import { PAID_USER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
 import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credentials";
 
-const baseURL =
-  process.env.BASE_URL?.trim() ||
-  process.env.PLAYWRIGHT_BASE_URL?.trim() ||
-  process.env.NURSENEST_PRODUCTION_BASE_URL?.trim();
-
-if (!baseURL) {
-  throw new Error(
-    "[release-gate] Missing BASE_URL. Set BASE_URL (preferred), PLAYWRIGHT_BASE_URL, or NURSENEST_PRODUCTION_BASE_URL before running the release gate.",
-  );
-}
+const baseURL = getE2eBaseURL();
 
 function localDevWebServer() {
   if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return undefined;
@@ -34,16 +31,20 @@ function localDevWebServer() {
   if (host !== "127.0.0.1" && host !== "localhost") return undefined;
   const port = origin.port || "3000";
   const secret = process.env.NEXTAUTH_SECRET?.trim() || "playwright-e2e-local-secret";
+  const dbUrl = process.env.DATABASE_URL?.trim();
   return {
-    command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
-    url: origin.origin,
+    /* `npm run dev` targets monolith `server/index.ts` (not in this package); E2E uses Next — see `playwright.mobile.config.ts`. */
+    command: `npx next dev --hostname ${host} --port ${port}`,
+    url: `${origin.origin}/api/auth/csrf`,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
     env: {
       RUN_HEAVY_BUILD_TASKS: "false",
       NEXTAUTH_SECRET: secret,
+      AUTH_SECRET: process.env.AUTH_SECRET?.trim() || secret,
       AUTH_URL: origin.origin,
       NEXTAUTH_URL: origin.origin,
+      ...(dbUrl ? { DATABASE_URL: dbUrl } : {}),
     },
   } as const;
 }
@@ -99,10 +100,21 @@ export default defineConfig({
     ["./tests/e2e/reporters/release-blocker-console-reporter.ts"],
     ["./tests/e2e/reporters/paid-user-summary-reporter.ts"],
     ["./tests/e2e/reporters/release-gate-summary-reporter.ts"],
+    ...(process.env.RELEASE_GATE_HTML_REPORT === "1"
+      ? ([
+          [
+            "html",
+            {
+              outputFolder: "test-results/release-gate/playwright-report",
+              open: "never",
+            },
+          ],
+        ] as const)
+      : []),
   ],
   use: {
     baseURL,
-    trace: "retain-on-failure",
+    trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
   },
