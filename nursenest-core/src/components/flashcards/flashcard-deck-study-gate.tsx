@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatTitleCase } from "@/lib/format/text-case";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 export function FlashcardDeckStudyGate({ deckRef }: { deckRef: string }) {
+  const { t } = useMarketingI18n();
   const router = useRouter();
   const sp = useSearchParams();
-  const [title, setTitle] = useState<string>("Flashcard deck");
+  const [title, setTitle] = useState<string>(() => t("learner.flashcards.hub.title"));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,39 +50,38 @@ export function FlashcardDeckStudyGate({ deckRef }: { deckRef: string }) {
   )}?${startQs.toString()}`;
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-16">
-      <div className="rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+    <div className="mx-auto max-w-xl px-4 py-12 sm:py-16">
+      <div className="nn-premium-flashcard-gate-card rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8">
         {/* Title */}
-        <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">
-          {loading ? "Loading deck…" : title}
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)]">
+          {loading ? t("learner.flashcards.hub.loadingDecks") : title}
         </h1>
 
         {/* Description */}
         <p className="mt-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-          Customize your study session with filters, weak areas, and spacing —
-          or jump straight into this deck for focused review.
+          {t("learner.flashcards.hub.customStudyIntro")}
         </p>
 
         {/* CTA Buttons */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link
             href="/app/flashcards#study-session"
-            className="inline-flex min-h-[48px] flex-1 items-center justify-center rounded-full border-2 border-[var(--semantic-border-soft)] bg-white px-5 py-3 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] hover:shadow-md"
+            className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border-2 border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-3 text-center text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-info)_40%,transparent)]"
           >
-            Configure session
+            {t("flashcards.configuration")}
           </Link>
 
           <button
             type="button"
             onClick={() => router.push(startHref)}
-            className="inline-flex min-h-[48px] flex-1 items-center justify-center rounded-full px-5 py-3 text-sm font-bold shadow-md transition hover:scale-[1.02] hover:opacity-95 active:scale-[0.98]"
+            className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full px-5 py-3 text-sm font-bold shadow-md transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] motion-reduce:transition-none"
             style={{
               background: "var(--role-cta, var(--semantic-brand))",
               color:
                 "var(--role-cta-foreground, var(--semantic-text-on-brand, #fff))",
             }}
           >
-            Start now
+            {t("flashcards.startSession")}
           </button>
         </div>
 

@@ -39,7 +39,9 @@ export async function submitFirstLinearPracticeAnswerAndExpectRationale(page: Pa
     .first();
   await expect(rationaleRegion).toBeVisible({ timeout: 60_000 });
   await expect(
-    rationaleRegion.locator(".nn-rationale-prose, .nn-question-rationale-card__body").first(),
+    rationaleRegion
+      .locator(".nn-rationale-prose, .nn-question-rationale-card__body, .nn-practice-rsection__body")
+      .first(),
   ).toBeVisible({ timeout: 30_000 });
 }
 

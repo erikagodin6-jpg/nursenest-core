@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ExamSessionShell } from "@/components/exam/exam-session-shell";
+import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
+import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import {
   ActiveStudySession,
   type ActiveStudyCard,
@@ -206,9 +208,9 @@ export function FlashcardCustomStudyClient() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-10 text-sm text-muted-foreground">
-        {t("learner.loading.flashcards")}
-      </div>
+      <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
+        <FlashcardStudySessionSkeleton withRouteAria={false} />
+      </BrandedPageLoader>
     );
   }
 

@@ -29,6 +29,7 @@ import { PracticeExamProgressHeader } from "@/components/student/practice-exam/p
 import { PracticeExamRationalePanel } from "@/components/student/practice-exam/practice-exam-rationale-panel";
 import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-test-teaching-review-panel";
 import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
+import type { PracticeRationaleFullPanelCopy } from "@/components/study/practice-rationale-full-panel.types";
 import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-study-loop-next";
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
@@ -2807,6 +2808,40 @@ export function PracticeTestRunnerClient({
   const linearFooterSubmitLabel = tx("learner.practiceTests.run.linearFooterSubmitAnswer", "Submit answer");
   const linearFooterFinishLabel = tx("learner.practiceTests.run.linearFooterFinishTest", "Finish test");
 
+  const linearRationalePanelCopy = useMemo(
+    (): PracticeRationaleFullPanelCopy => ({
+      panelTitle: tx("learner.practiceTests.run.rationaleReviewHeading", "Rationale & Review"),
+      waitingPrimary: tx("learner.practiceTests.run.rationaleWaitingPrimary", "Review appears after you answer."),
+      waitingSecondary: tx(
+        "learner.practiceTests.run.rationaleWaitingSecondary",
+        "Submit your response to see the correct answer, teaching rationale, distractor review, and optional references. Prioritize airway, breathing, and circulation when choosing the most urgent option.",
+      ),
+      lockedTitle: tx("learner.practiceTests.run.rationaleLockedTitle", "Answer Locked"),
+      lockedBody: tx(
+        "learner.practiceTests.run.rationaleLockedBody",
+        "Your answer is submitted. Explanations and correct keys are revealed when you finish the full exam.",
+      ),
+      correctAnswer: tx("learner.practiceTests.run.rationaleCorrectAnswer", "Correct Answer"),
+      whyCorrect: tx("learner.practiceTests.run.rationaleWhyCorrect", "Why This Is Correct"),
+      whyOthersIncorrect: tx(
+        "learner.practiceTests.run.rationaleWhyOthersIncorrect",
+        "Why The Other Options Are Incorrect",
+      ),
+      clinicalPearl: tx("learner.practiceTests.run.rationaleClinicalPearl", "Clinical Pearl"),
+      keyTakeawayHeading: tx("learner.practiceTests.run.rationaleKeyTakeawayHeading", "Key Takeaway"),
+      referencesSource: tx("learner.practiceTests.run.rationaleReferencesSource", "References / Source"),
+      relatedLessonsSection: tx(
+        "learner.practiceTests.run.rationaleRelatedLessonsSection",
+        "Related Lessons",
+      ),
+      missingDistractorFallback: tx(
+        "learner.practiceTests.run.rationaleMissingDistractorFallback",
+        "No separate rationale is available for this option.",
+      ),
+    }),
+    [tx],
+  );
+
   const linearQuestionStem =
     typeof current.stem === "string" && current.stem.trim().length > 0
       ? current.stem
@@ -2894,6 +2929,7 @@ export function PracticeTestRunnerClient({
           keyTakeaway={linearFeedback?.keyTakeaway}
           relatedLessons={linearFeedback?.relatedLessons ?? []}
           confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
+          copy={linearRationalePanelCopy}
         />
       ) : null}
     </>
@@ -2930,7 +2966,7 @@ export function PracticeTestRunnerClient({
 
   const linearBoardFooter = (
     <footer
-      className={`nn-cat-exam-board-footer flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]${linearCatShellPresentation ? " nn-cat-exam-board-footer--adaptive" : ""}`}
+      className={`nn-cat-exam-board-footer nn-premium-practice-exam-footer flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]${linearCatShellPresentation ? " nn-cat-exam-board-footer--adaptive" : ""}`}
     >
       <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-3 px-3 py-2.5 sm:px-4">
         <button
@@ -3022,6 +3058,27 @@ export function PracticeTestRunnerClient({
               <PracticeExamProgressHeader
                 questionIndexOneBased={idx + 1}
                 total={Math.max(total, 1)}
+                progressLead={
+                  <>
+                    {tx("learner.practiceTests.run.question", "Question")}{" "}
+                    <span className="tabular-nums">{idx + 1}</span>{" "}
+                    {tx("learner.practiceTests.run.of", "of")}{" "}
+                    <span className="tabular-nums">{Math.max(total, 1)}</span>
+                  </>
+                }
+                sessionProgressAriaLabel={tx(
+                  "learner.practiceTests.run.sessionProgressMeterAria",
+                  "Question {{current}} of {{total}}, {{pct}} percent through this session",
+                  {
+                    current: String(idx + 1),
+                    total: String(Math.max(total, 1)),
+                    pct: String(
+                      Math.round(
+                        (Math.min(idx + 1, Math.max(total, 1)) / Math.max(total, 1)) * 100,
+                      ),
+                    ),
+                  },
+                )}
                 toolbar={
                   <div className="flex flex-wrap items-center justify-end gap-2">
                     <ExamSessionThemeTrigger variant="pill" />
@@ -3046,7 +3103,9 @@ export function PracticeTestRunnerClient({
                   <div className="nn-practice-exam-split__primary flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                     {linearExamQuestionCard}
                   </div>
-                  <PracticeExamRationalePanel>
+                  <PracticeExamRationalePanel
+                    ariaLabel={tx("learner.practiceTests.run.rationaleColumnAria", "Rationale and review")}
+                  >
                     <PracticeRationaleFullPanel
                       status={rationaleFullStatus}
                       correctKeys={linearFeedback?.correctKeys}
@@ -3061,6 +3120,7 @@ export function PracticeTestRunnerClient({
                       clinicalPearlDisplay={linearFeedback?.clinicalPearlDisplay ?? null}
                       referenceSource={linearFeedback?.referenceSource ?? null}
                       showDistractorFallback={Boolean(currentCommitted && rationaleFullStatus !== "waiting" && rationaleFullStatus !== null)}
+                      copy={linearRationalePanelCopy}
                     />
                     {practiceAdaptivePostMiss?.questionId === current.id ? (
                       <PracticeAdaptivePostMissPanel

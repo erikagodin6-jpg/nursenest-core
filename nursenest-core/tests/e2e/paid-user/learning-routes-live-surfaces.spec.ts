@@ -12,6 +12,7 @@ import {
   learnerAppMainLandmark,
 } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
+import { resolveE2eAppBaseUrl } from "../helpers/e2e-env";
 import { expectNotLoginUrl } from "../helpers/paid-user-suite";
 
 const pathwayId =
@@ -20,7 +21,7 @@ const pathwayId =
 test.describe("Learning routes — live flashcards + practice builder", () => {
   test("flashcards hub: heading, body-system cards, multi-select, start review", async ({ page, baseURL }) => {
     test.setTimeout(150_000);
-    const url = new URL(paidFlashcardsHubUrl(pathwayId), baseURL ?? "http://127.0.0.1:3000").toString();
+    const url = new URL(paidFlashcardsHubUrl(pathwayId), resolveE2eAppBaseUrl(baseURL)).toString();
     await page.goto(url, { waitUntil: "domcontentloaded" });
     expectNotLoginUrl(page);
     await expectPaidLearnerShellReady(page, "learning-routes flashcards");
@@ -49,7 +50,7 @@ test.describe("Learning routes — live flashcards + practice builder", () => {
     test.setTimeout(150_000);
     const url = new URL(
       `/app/practice-tests?pathwayId=${encodeURIComponent(pathwayId)}`,
-      baseURL ?? "http://127.0.0.1:3000",
+      resolveE2eAppBaseUrl(baseURL),
     ).toString();
     await page.goto(url, { waitUntil: "domcontentloaded" });
     expectNotLoginUrl(page);
@@ -72,7 +73,7 @@ test.describe("Learning routes — live flashcards + practice builder", () => {
     test.setTimeout(90_000);
     const from = new URL(
       `/app/practice-exams?pathwayId=${encodeURIComponent(pathwayId)}`,
-      baseURL ?? "http://127.0.0.1:3000",
+      resolveE2eAppBaseUrl(baseURL),
     ).toString();
     await page.goto(from, { waitUntil: "domcontentloaded" });
     await page.waitForURL(/\/app\/practice-tests/, { timeout: 60_000 });

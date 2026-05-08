@@ -18,7 +18,7 @@ export function CatResultsCoachSection({
   return (
     <div className="space-y-3">
       {missingPersistedCoach ? (
-        <div className="rounded-xl border border-dashed border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)]/40 px-4 py-3 text-sm text-muted-foreground">
+        <div className="rounded-xl border border-dashed border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
           Detailed CAT coaching was not stored for this session. We are showing a safe fallback summary instead.
         </div>
       ) : null}

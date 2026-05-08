@@ -744,7 +744,7 @@ export function PracticeTestsHubClient({
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(240px,280px)] lg:items-start lg:gap-10">
         <div className="min-w-0 space-y-9">
       <header
-        className="relative overflow-hidden rounded-[1.75rem] border-2 border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))_0%,var(--semantic-surface)_38%,color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))_100%)] p-6 text-[var(--semantic-text-primary)] shadow-[0_22px_48px_color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--semantic-info)_22%,transparent)] sm:p-8"
+        className="nn-premium-practice-hub-hero relative overflow-hidden rounded-[1.75rem] border-2 border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))_0%,var(--semantic-surface)_38%,color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))_100%)] p-6 text-[var(--semantic-text-primary)] shadow-[0_22px_48px_color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--semantic-info)_22%,transparent)] sm:p-8"
         data-nn-e2e-practice-exam-first-hero
       >
         <div
@@ -936,7 +936,7 @@ export function PracticeTestsHubClient({
         id="practice-exam-builder"
         data-nn-e2e-practice-exams-builder
         className={[
-          "scroll-mt-20 space-y-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-cool))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7",
+          "nn-premium-practice-hub-builder scroll-mt-20 space-y-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-cool))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7",
           isPriorityWinner(hubPriority, "weak_focus")
             ? "border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] shadow-[var(--semantic-shadow-soft)]"
             : "",

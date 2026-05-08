@@ -7,6 +7,7 @@
  * Run: `npx playwright test -c playwright.learning-routes.config.ts tests/e2e/paid-user/flashcards-live-route-tiers.spec.ts`
  */
 import { expect, test } from "@playwright/test";
+import { resolveE2eAppBaseUrl } from "../helpers/e2e-env";
 import { paidFlashcardsHubUrl } from "../helpers/paid-content-discovery";
 import { expectPaidLearnerShellReady, learnerAppMainLandmark } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
@@ -38,7 +39,7 @@ test.describe("Flashcards live route — tier pathway matrix", () => {
         }
       });
 
-      const url = new URL(paidFlashcardsHubUrl(row.pathwayId), baseURL ?? "http://127.0.0.1:3000").toString();
+      const url = new URL(paidFlashcardsHubUrl(row.pathwayId), resolveE2eAppBaseUrl(baseURL)).toString();
       await page.goto(url, { waitUntil: "domcontentloaded" });
       expectNotLoginUrl(page);
       await expectPaidLearnerShellReady(page, `flashcards tiers ${row.pathwayId}`);

@@ -108,12 +108,8 @@ export function CategoryMasterySection({ topics }: { topics: AnalyticsLoadResult
   return (
     <div className="space-y-6">
       <section
-        className="rounded-2xl border p-5 sm:p-6"
-        style={{
-          background: "var(--semantic-surface)",
-          borderColor: "var(--semantic-border-soft)",
-          boxShadow: "var(--semantic-shadow-soft)",
-        }}
+        className="nn-premium-category-performance-shell rounded-2xl border p-5 sm:p-6"
+        style={{ boxShadow: "var(--semantic-shadow-soft)" }}
       >
         <div className="mb-5">
           <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Category performance</h2>
@@ -159,7 +155,7 @@ export function CategoryMasterySection({ topics }: { topics: AnalyticsLoadResult
                   </div>
                   <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-2">
                     <div
-                      className={`h-full rounded-full ${fill} transition-[width] duration-500`}
+                      className={`h-full rounded-full ${fill} motion-safe:transition-[width] motion-safe:duration-500`}
                       style={{ width: `${Math.min(100, row.accuracyPct)}%` }}
                     />
                   </div>

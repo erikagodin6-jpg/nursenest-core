@@ -1,4 +1,6 @@
 import { Suspense } from "react";
+import { BrandedPageLoader } from "@/components/ui/premium-loader";
+import { FlashcardsHubSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
@@ -277,7 +279,13 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
   return (
     <div className="space-y-2">
       <LearnerRenderTraceBanner data-route="flashcards" label="NN_RENDER_TRACE: flashcards live route" />
-      <Suspense fallback={<div className="p-4">{t("learner.loading.flashcards")}</div>}>
+      <Suspense
+        fallback={
+          <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
+            <FlashcardsHubSkeleton withRouteAria={false} />
+          </BrandedPageLoader>
+        }
+      >
         <FlashcardsHubClient
           scopedPathwayId={scopedPathwayId}
           pathwayDisplayName={pathwayDisplayName}

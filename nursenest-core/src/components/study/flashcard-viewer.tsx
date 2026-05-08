@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
+import { BrandedInlineLoader } from "@/components/ui/premium-loader/branded-inline-loader";
 
 // ── Shared card type ──────────────────────────────────────────────────────────
 
@@ -56,8 +57,7 @@ export function FlashcardFront({ card, onReveal }: FlashcardFrontProps) {
         background:
           "color-mix(in srgb, var(--surface-soft-a, var(--theme-primary)) 8%, var(--bg-card, var(--theme-card-bg)))",
         border: "1px solid var(--border-subtle, var(--theme-card-border))",
-        boxShadow:
-          "0 2px 16px -4px rgba(0,0,0,0.07), 0 1px 4px -1px rgba(0,0,0,0.05)",
+        boxShadow: "var(--semantic-shadow-soft)",
       }}
       role="region"
       aria-label="Flashcard front"
@@ -146,8 +146,7 @@ export function FlashcardBack({ card, onRate, submitting }: FlashcardBackProps) 
         background:
           "color-mix(in srgb, var(--surface-soft-b, var(--theme-primary)) 8%, var(--bg-card, var(--theme-card-bg)))",
         border: "1px solid var(--border-subtle, var(--theme-card-border))",
-        boxShadow:
-          "0 2px 16px -4px rgba(0,0,0,0.07), 0 1px 4px -1px rgba(0,0,0,0.05)",
+        boxShadow: "var(--semantic-shadow-soft)",
       }}
       role="region"
       aria-label="Flashcard back"
@@ -229,11 +228,7 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
   return (
     <div className="flex min-w-0 items-center gap-3">
       <div
-        className="relative h-1.5 min-w-0 flex-1 overflow-hidden rounded-full"
-        style={{
-          background:
-            "color-mix(in srgb, var(--theme-primary) 12%, var(--bg-page, #f9fafb))",
-        }}
+        className="nn-progress-track-semantic nn-progress-track-semantic--xs min-w-0 flex-1"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
@@ -241,11 +236,8 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
         aria-label={`Progress: card ${current} of ${total}`}
       >
         <div
-          className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
-          style={{
-            width: `${pct}%`,
-            background: "var(--theme-primary)",
-          }}
+          className="h-full nn-progress-fill-semantic-readiness motion-reduce:transition-none transition-[width] duration-500 ease-out"
+          style={{ width: `${pct}%` }}
         />
       </div>
       <span
@@ -263,7 +255,7 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
 function DoneScreen({ onReset, deckRef }: { onReset: () => void; deckRef?: string }) {
   return (
     <div
-      className="mx-auto flex w-full max-w-full min-w-0 flex-col items-center gap-5 rounded-2xl px-4 py-10 text-center sm:px-8 sm:py-12"
+      className="mx-auto flex w-full max-w-full min-w-0 flex-col items-center gap-5 rounded-2xl px-4 py-10 text-center shadow-[var(--semantic-shadow-soft)] sm:px-8 sm:py-12"
       style={{
         background:
           "color-mix(in srgb, var(--semantic-success, #22c55e) 8%, var(--bg-card, var(--theme-card-bg)))",
@@ -468,25 +460,27 @@ export function FlashcardViewer({
 
       {/* Card (flip between front and back) */}
       <div className="mx-auto w-full min-w-0 max-w-full">
-        {!revealed ? (
-          <FlashcardFront card={currentCard} onReveal={handleReveal} />
-        ) : (
-          <FlashcardBack
-            card={currentCard}
-            onRate={handleRate}
-            submitting={submitting}
-          />
-        )}
+        <div
+          key={`${cardIndex}-${revealed ? "b" : "f"}`}
+          className="nn-flashcard-face-animate"
+        >
+          {!revealed ? (
+            <FlashcardFront card={currentCard} onReveal={handleReveal} />
+          ) : (
+            <FlashcardBack
+              card={currentCard}
+              onRate={handleRate}
+              submitting={submitting}
+            />
+          )}
+        </div>
       </div>
 
       {/* Load-more indicator */}
       {loadingMore ? (
-        <p
-          className="text-center text-xs"
-          style={{ color: "var(--theme-muted-text)" }}
-        >
-          Loading next batch…
-        </p>
+        <div className="flex justify-center py-1">
+          <BrandedInlineLoader label="Loading next batch…" delayMs={200} />
+        </div>
       ) : null}
 
       {/* Keyboard hint */}

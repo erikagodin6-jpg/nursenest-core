@@ -5,6 +5,7 @@ import {
   PracticeRationaleFullPanel,
   type PracticeRationaleFullPanelStatus,
 } from "@/components/study/practice-rationale-full-panel";
+import type { PracticeRationaleFullPanelCopy } from "@/components/study/practice-rationale-full-panel.types";
 
 /**
  * Per-item rationale block for linear Practice Tests — rendered inside the CAT
@@ -22,6 +23,7 @@ export function PracticeTestPerItemRationale({
   keyTakeaway,
   relatedLessons,
   confidenceLevel,
+  copy,
 }: {
   status: PracticeRationaleFullPanelStatus;
   correctKeys?: string[];
@@ -33,6 +35,7 @@ export function PracticeTestPerItemRationale({
   keyTakeaway?: string | null;
   relatedLessons?: { title: string; href: string }[];
   confidenceLevel?: ConfidenceLevel | null;
+  copy?: Partial<PracticeRationaleFullPanelCopy>;
 }) {
   return (
     <div
@@ -51,6 +54,7 @@ export function PracticeTestPerItemRationale({
           keyTakeaway={keyTakeaway}
           relatedLessons={relatedLessons}
           confidenceLevel={confidenceLevel}
+          copy={copy}
         />
       </div>
     </div>

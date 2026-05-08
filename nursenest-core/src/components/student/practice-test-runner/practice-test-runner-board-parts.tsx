@@ -62,7 +62,7 @@ export function PracticeTestFlagForReviewButton({
       aria-pressed={flagged}
       disabled={disabled}
       title={flagged ? titleFlagged : titleUnflagged}
-      className={`rounded-md p-2 transition ${
+      className={`rounded-md p-2 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)] ${
         flagged
           ? "text-[var(--semantic-brand)]"
           : "text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-text-primary)_6%,var(--semantic-surface))]"
@@ -177,7 +177,7 @@ export function PracticeTestCatAdaptiveExamFooter({
   return (
     <footer
       data-nn-qa-cat-adaptive-exam-footer
-      className="nn-cat-exam-board-footer nn-cat-exam-board-footer--adaptive flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]"
+      className="nn-premium-cat-adaptive-footer nn-cat-exam-board-footer nn-cat-exam-board-footer--adaptive flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]"
     >
       <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-2 px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
         {children}

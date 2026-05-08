@@ -93,14 +93,21 @@ export function FlashcardStudyQuestionStack({
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_360px]">
-      <div className="rounded-2xl border bg-white p-6 shadow">
-        <div className="mb-3 text-xs uppercase text-gray-400">{sessionModeLabel}</div>
+    <div
+      className="nn-premium-flashcard-stack mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_360px]"
+      data-nn-revealed={revealed ? "1" : "0"}
+    >
+      <div className="nn-premium-flashcard-prompt-panel rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
+        <div className="mb-3 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+          {sessionModeLabel}
+        </div>
 
-        {topicLine ? <div className="mb-2 text-sm text-gray-500">{topicLine}</div> : null}
+        {topicLine ? (
+          <div className="mb-2 text-sm text-[var(--semantic-text-secondary)]">{topicLine}</div>
+        ) : null}
 
         {itemKindCaption ? (
-          <div className="mb-3 inline-block rounded-full border bg-blue-50 px-2 py-1 text-xs text-blue-600">
+          <div className="mb-3 inline-block rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-2.5 py-1 text-xs font-semibold text-[var(--semantic-info)]">
             {itemKindCaption}
           </div>
         ) : null}
@@ -133,26 +140,28 @@ export function FlashcardStudyQuestionStack({
         ) : null}
       </div>
 
-      <div className="flex flex-col gap-4 rounded-2xl border bg-white p-6 shadow">
+      <div className="nn-premium-flashcard-answer-panel flex flex-col gap-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
         {!revealed ? (
-          <div className="py-10 text-center text-sm text-gray-400">
+          <div className="py-10 text-center text-sm text-[var(--semantic-text-secondary)]">
             {labels?.revealHint ?? "Reveal the answer to review the rationale."}
           </div>
         ) : (
           <>
-            <div className="rounded-xl border bg-green-50 p-4">
-              <div className="mb-1 text-xs font-bold uppercase text-green-600">
+            <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] p-4">
+              <div className="mb-1 text-xs font-bold uppercase text-[var(--semantic-success)]">
                 {labels?.answerHeading ?? "Answer"}
               </div>
 
               <div className="flex items-start gap-2">
                 {exam?.correctLetter ? (
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-xs nn-text-on-solid-fill">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--semantic-success)] text-xs nn-text-on-solid-fill">
                     {exam.correctLetter}
                   </span>
                 ) : null}
 
-                <span className="text-sm font-medium">{correctOptionText || answer}</span>
+                <span className="text-sm font-medium text-[var(--semantic-text-primary)]">
+                  {correctOptionText || answer}
+                </span>
               </div>
             </div>
 
@@ -162,8 +171,8 @@ export function FlashcardStudyQuestionStack({
                 (exam?.rationaleCorrect && String(exam.rationaleCorrect).trim()) ||
                 "";
               return whyCorrect ? (
-                <div className="rounded-xl border p-4">
-                  <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] p-4">
+                  <div className="mb-1 text-xs font-semibold uppercase text-[var(--semantic-text-secondary)]">
                     {labels?.whyCorrectHeading ?? "Why this is correct"}
                   </div>
                   <FlashcardRichContent text={whyCorrect} />
@@ -172,12 +181,12 @@ export function FlashcardStudyQuestionStack({
             })()}
 
             {exam?.rationaleIncorrect?.length ? (
-              <div className="rounded-xl border p-4">
-                <div className="mb-2 text-xs font-semibold uppercase text-gray-500">
+              <div className="rounded-xl border border-[var(--semantic-border-soft)] p-4">
+                <div className="mb-2 text-xs font-semibold uppercase text-[var(--semantic-text-secondary)]">
                   {labels?.whyIncorrectHeading ?? "Why the others are incorrect"}
                 </div>
 
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2 text-sm text-[var(--semantic-text-primary)]">
                   {exam.rationaleIncorrect.map((r: any) => (
                     <div key={r.letter}>
                       <strong>{r.letter}</strong>: {r.rationale}
@@ -188,8 +197,10 @@ export function FlashcardStudyQuestionStack({
             ) : null}
 
             {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
-              <div className="rounded-xl border p-4">
-                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">Figure</div>
+              <div className="rounded-xl border border-[var(--semantic-border-soft)] p-4">
+                <div className="mb-1 text-xs font-semibold uppercase text-[var(--semantic-text-secondary)]">
+                  Figure
+                </div>
                 <img
                   src={clinicalImageUrl}
                   alt=""
@@ -200,8 +211,8 @@ export function FlashcardStudyQuestionStack({
             ) : null}
 
             {pearl ? (
-              <div className="rounded-xl border bg-yellow-50 p-4">
-                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
+              <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_65%,var(--semantic-surface))] p-4">
+                <div className="mb-1 text-xs font-semibold uppercase text-[var(--semantic-warning)]">
                   {labels?.takeawayHeading ?? "Clinical pearl"}
                 </div>
                 <FlashcardRichContent text={String(pearl)} />

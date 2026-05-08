@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard, type ActiveStudyHeader } from "@/components/study/active-study-session";
+import { BrandedPageLoader } from "@/components/ui/premium-loader";
+import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
@@ -140,16 +142,16 @@ export function FlashcardStudyClient({
 
   if (loading) {
     return (
-      <div className="text-center py-16 text-sm text-muted">
-        Preparing your study session…
-      </div>
+      <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
+        <FlashcardStudySessionSkeleton withRouteAria={false} />
+      </BrandedPageLoader>
     );
   }
 
   if (queue.length === 0) {
     return (
-      <div className="text-center py-16 text-sm text-muted">
-        No flashcards available
+      <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--semantic-text-secondary)]">
+        {t("flashcards.noCardsMatch")}
       </div>
     );
   }
@@ -157,55 +159,67 @@ export function FlashcardStudyClient({
   // 🟡 RESUME UI (cleaner)
   if (resumeGateOpen) {
     return (
-      <div className="max-w-lg mx-auto mt-12 p-6 rounded-2xl border bg-white shadow">
-        <h2 className="font-semibold text-lg">Resume session?</h2>
+      <div className="mx-auto mt-10 max-w-lg px-4">
+        <div className="nn-premium-flashcard-resume-card p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">
+            {t("learner.dailyGoal.resumeHeading")}?
+          </h2>
 
-        <p className="text-sm text-muted mt-2">
-          Continue where you left off or start fresh.
-        </p>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Continue where you left off or start a new session.
+          </p>
 
-        <div className="flex gap-3 mt-6">
-          <button
-            className="flex-1 bg-blue-600 nn-text-on-solid-fill rounded-full py-2 font-semibold"
-            onClick={() => {
-              setResumeGateOpen(false);
-              setSessionKey((k) => k + 1);
-            }}
-          >
-            Resume
-          </button>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+              style={{
+                background: "var(--role-cta, var(--semantic-brand))",
+              }}
+              onClick={() => {
+                setResumeGateOpen(false);
+                setSessionKey((k) => k + 1);
+              }}
+            >
+              {t("learner.dailyGoal.resumeHeading")}
+            </button>
 
-          <button
-            className="flex-1 border rounded-full py-2 font-semibold"
-            onClick={() => {
-              clearDeckSessionCheckpoint(deckRef);
-              setResumeInitial({ index: 0, revealed: false });
-              setResumeGateOpen(false);
-              setSessionKey((k) => k + 1);
-            }}
-          >
-            Start fresh
-          </button>
+            <button
+              type="button"
+              className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-info)_40%,transparent)]"
+              onClick={() => {
+                clearDeckSessionCheckpoint(deckRef);
+                setResumeInitial({ index: 0, revealed: false });
+                setResumeGateOpen(false);
+                setSessionKey((k) => k + 1);
+              }}
+            >
+              Start fresh
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
+    <div className="mx-auto max-w-6xl px-4 py-6">
       {/* header */}
-      <div className="flex justify-between items-center mb-4">
-        <Link href="/app/flashcards" className="text-sm text-blue-600">
-          ← Back
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <Link
+          href="/app/flashcards"
+          className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+        >
+          ← {t("learner.flashcards.hub.title")}
         </Link>
 
-        <div className="text-sm font-medium">
-          {title || "Flashcards"}
+        <div className="max-w-[min(100%,14rem)] truncate text-sm font-semibold text-[var(--semantic-text-primary)] sm:max-w-md">
+          {title || t("learner.flashcards.hub.title")}
         </div>
       </div>
 
       {/* session */}
-      <ExamSessionShell>
+      <ExamSessionShell className="nn-premium-flashcard-session-root">
         <ActiveStudySession
           key={sessionKey}
           cards={activeCards}

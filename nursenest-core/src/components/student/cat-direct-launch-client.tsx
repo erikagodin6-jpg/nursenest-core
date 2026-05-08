@@ -75,7 +75,7 @@ export function CatDirectLaunchClient({
 
   if (phase === "error") {
     return (
-      <div className="mx-auto max-w-lg rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-sm shadow-[var(--semantic-shadow-soft)]">
+      <div className="nn-premium-cat-direct-card mx-auto max-w-lg rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-sm shadow-[var(--semantic-shadow-soft)]">
         <h1 className="text-lg font-bold text-[var(--theme-heading-text)]">Exam could not start</h1>
         <p className="mt-2 text-[var(--semantic-text-secondary)]">{message}</p>
         <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
@@ -110,7 +110,7 @@ export function CatDirectLaunchClient({
   }
 
   return (
-    <div className="mx-auto max-w-lg rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-8 text-center shadow-[var(--semantic-shadow-soft)]">
+    <div className="nn-premium-cat-direct-card mx-auto max-w-lg rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-8 text-center shadow-[var(--semantic-shadow-soft)]">
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">Exam session</p>
       <h1 className="mt-2 text-xl font-bold text-[var(--theme-heading-text)]">Preparing your exam</h1>
       <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">

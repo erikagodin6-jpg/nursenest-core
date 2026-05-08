@@ -235,7 +235,7 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
         </p>
       ) : null}
 
-      <section className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+      <section className="nn-premium-marketing-cat-card mt-6 rounded-2xl border border-[var(--semantic-border-soft)] p-5">
         <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">Session setup</h2>
         <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
           <li>
@@ -263,7 +263,7 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
         </ul>
       </section>
 
-      <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+      <section className="nn-premium-marketing-cat-card mt-4 rounded-2xl border border-[var(--semantic-border-soft)] p-5">
         <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">How CAT works</h2>
         <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
           {howItWorksItems.map((item) => (
@@ -272,7 +272,7 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
         </ul>
       </section>
 
-      <section className="mt-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+      <section className="nn-premium-marketing-cat-card mt-4 rounded-2xl border border-[var(--semantic-border-soft)] p-5">
         <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">After the session</h2>
         <p className="mt-2 text-sm text-[var(--theme-body-text)]">
           In the app you get a report-style breakdown: estimate band, category performance, strengths, focus areas, and
@@ -283,8 +283,8 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
       <PathwayLiveInventoryStrip pathway={pathway} questionSnapshot={questionSnapshot} variant="cat" />
 
       <section
-        className={`mt-6 rounded-2xl border border-[var(--semantic-border-soft)] p-5 ${
-          isCatAvailable ? "bg-[var(--semantic-panel-positive)]" : "bg-[var(--semantic-surface)]"
+        className={`nn-premium-marketing-cat-card mt-6 rounded-2xl border border-[var(--semantic-border-soft)] p-5 ${
+          isCatAvailable ? "nn-premium-marketing-cat-card--cta-ready" : ""
         }`}
         aria-label="CAT access and next steps"
       >

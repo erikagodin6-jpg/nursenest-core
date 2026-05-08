@@ -30,6 +30,18 @@ export const BAND_HELPER: Record<ReadinessBand, string> = {
     "Your performance is strong and stable enough to continue exam-style training.",
 };
 
+/** Semantic stroke color for charts/donuts — multi-hue by readiness band (not brand-only). */
+export function catReadinessAccentStrokeVar(band: ReadinessBand | null | undefined): string {
+  if (!band) return "var(--semantic-brand)";
+  const map: Record<ReadinessBand, string> = {
+    not_ready: "var(--semantic-danger)",
+    building: "var(--semantic-warning)",
+    approaching: "var(--semantic-info)",
+    exam_ready: "var(--semantic-success)",
+  };
+  return map[band];
+}
+
 const BAND_CSS: Record<ReadinessBand, string> = {
   not_ready: "nn-cat-readiness-badge--not-ready",
   building: "nn-cat-readiness-badge--building",

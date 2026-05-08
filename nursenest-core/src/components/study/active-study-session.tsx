@@ -2,15 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useReducer, useState } from "react";
-import { AlertCircle, CheckCircle2, ChevronLeft, ChevronRight, Home, RefreshCw, Sparkles, Star, XCircle } from "lucide-react";
+import { AlertCircle, CheckCircle2, ChevronLeft, ChevronRight, Home, RefreshCw, Star, XCircle } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getStudyItemState, setStudyItemState } from "@/lib/flashcards/study-session-persistence";
-import {
-  ExamSessionProgressStrip,
-  ExamSessionStickyChrome,
-  ExamSessionTopBar,
-} from "@/components/exam/exam-session-shell";
+import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
 import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
+import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-skeleton";
+import { BrandedPageLoader } from "@/components/ui/premium-loader";
+import { SuccessLeaf } from "@/components/ui/success-leaf";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
@@ -148,27 +147,58 @@ export function ActiveStudySession({
     return () => clearInterval(id);
   }, [sessionMode, completed]);
 
+  const progressPct =
+    sessionCards.length > 0 ? Math.min(100, Math.round(((index + 1) / sessionCards.length) * 100)) : 0;
+
   if (loading) {
-    return <div className="p-4 text-sm">Loading session...</div>;
+    return (
+      <BrandedPageLoader message={t("learner.loading.flashcards")} contentClassName="!p-0">
+        <FlashcardStudySessionSkeleton withRouteAria={false} />
+      </BrandedPageLoader>
+    );
   }
 
   if (!current) {
-    return <div className="p-4 text-sm">No cards available.</div>;
+    return (
+      <div className="mx-auto max-w-lg rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-6 text-sm text-[var(--semantic-text-secondary)]">
+        {t("flashcards.noCardsMatch")}
+      </div>
+    );
   }
 
   if (completed) {
     return (
-      <div className="p-6">
-        <h2 className="text-lg font-bold">Session complete</h2>
-        <button
-          onClick={() => {
-            onSessionRestart?.();
-            setIndex(0);
-            setCompleted(false);
-          }}
-        >
-          Restart
-        </button>
+      <div className="nn-premium-flashcard-completion mx-auto flex max-w-lg flex-col items-center gap-5 px-6 py-10 text-center sm:px-8">
+        <SuccessLeaf show size={40} />
+        <div>
+          <h2 className="text-xl font-bold text-[var(--semantic-text-primary)]">{t("flashcards.sessionComplete")}</h2>
+          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("flashcards.sessionProgress")}</p>
+        </div>
+        <div className="flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
+          <button
+            type="button"
+            className="inline-flex min-h-11 min-w-[11rem] items-center justify-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold nn-text-on-solid-fill shadow-md transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+            style={{
+              background: "var(--role-cta, var(--semantic-brand))",
+            }}
+            onClick={() => {
+              onSessionRestart?.();
+              setIndex(0);
+              setCompleted(false);
+            }}
+          >
+            <RefreshCw className="h-4 w-4" aria-hidden />
+            {t("flashcards.newSession")}
+          </button>
+          <Link
+            href={header.exitHref}
+            className="nn-premium-flashcard-nav-btn !min-h-11 !justify-center !no-underline px-6"
+            onClick={onExit}
+          >
+            <Home className="h-4 w-4" aria-hidden />
+            {t("flashcards.backToMyCards")}
+          </Link>
+        </div>
       </div>
     );
   }
@@ -192,12 +222,15 @@ export function ActiveStudySession({
 
   return (
     <div className="space-y-4">
+      <ExamSessionProgressStrip pct={progressPct} />
 
       {/* HEADER */}
-      <div className="flex items-center justify-between border p-3 rounded-xl">
-        <div>
-          <h1 className="font-bold">{header.sessionTitle}</h1>
-          <p className="text-xs text-[var(--semantic-text-secondary)]">
+      <div className="nn-premium-flashcard-session-header flex flex-wrap items-start justify-between gap-3 p-3 sm:p-4">
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate text-base font-bold text-[var(--semantic-text-primary)] sm:text-lg">
+            {header.sessionTitle}
+          </h1>
+          <p className="mt-0.5 text-xs text-[var(--semantic-text-secondary)]">
             {index + 1} / {sessionCards.length}
             {sessionMeta?.returnedCount != null || sessionMeta?.totalAvailable != null ? (
               <span className="ml-1.5 text-[var(--semantic-text-secondary)]">
@@ -209,13 +242,23 @@ export function ActiveStudySession({
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           {sessionMode === "test" && (
-            <span className="font-mono text-sm">{formatElapsed(elapsed)}</span>
+            <span
+              className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-2 py-1 font-mono text-xs text-[var(--semantic-text-primary)]"
+              aria-live="polite"
+            >
+              {formatElapsed(elapsed)}
+            </span>
           )}
 
-          <Link href={header.exitHref} onClick={onExit}>
-            <Home />
+          <Link
+            href={header.exitHref}
+            onClick={onExit}
+            aria-label={t("flashcards.exitSession")}
+            className="rounded-lg p-2 text-[var(--semantic-brand)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_90%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+          >
+            <Home className="h-5 w-5" aria-hidden />
           </Link>
         </div>
       </div>
@@ -233,12 +276,12 @@ export function ActiveStudySession({
         revealed={revealed}
         onReveal={() => setRevealed(true)}
         labels={{
-          revealHint: "Tap to reveal",
-          answerHeading: "Answer",
-          whyCorrectHeading: "Why correct",
-          whyIncorrectHeading: "Why incorrect",
-          takeawayHeading: "Clinical pearl",
-          answerChoicesHeading: "Choices",
+          revealHint: t("flashcards.tapToReveal"),
+          answerHeading: t("flashcards.answer"),
+          whyCorrectHeading: t("flashcards.rationale"),
+          whyIncorrectHeading: t("pages.flashcards.whyOtherOptionsAreIncorrect"),
+          takeawayHeading: t("pages.flashcards.pearl"),
+          answerChoicesHeading: "Answer choices",
         }}
       />
 
@@ -361,15 +404,23 @@ export function ActiveStudySession({
       )}
 
       {/* NAV */}
-      <div className="flex justify-between">
-        <button onClick={() => setIndex((i) => Math.max(0, i - 1))}>
-          <ChevronLeft /> Prev
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--semantic-border-soft)] pt-3">
+        <button
+          type="button"
+          className="nn-premium-flashcard-nav-btn"
+          onClick={() => setIndex((i) => Math.max(0, i - 1))}
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden />
+          {t("flashcards.previous")}
         </button>
         <button
+          type="button"
+          className="nn-premium-flashcard-nav-btn"
           onClick={() => setIndex((i) => Math.min(sessionCards.length - 1, i + 1))}
           disabled={!revealed}
         >
-          Next <ChevronRight />
+          {t("flashcards.next")}
+          <ChevronRight className="h-4 w-4" aria-hidden />
         </button>
       </div>
     </div>

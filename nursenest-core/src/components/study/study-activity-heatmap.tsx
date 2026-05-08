@@ -1,6 +1,35 @@
+import type { CSSProperties } from "react";
 import type { DailyActivityCell } from "@/lib/study/analytics-data";
 import type { AnalyticsLoadResult } from "@/lib/study/analytics-load-result";
 import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
+
+/** Semantic chart hues — avoids a single-brand monochrome heat tile wall. */
+const HEAT_HUES = [
+  "var(--semantic-chart-1)",
+  "var(--semantic-chart-2)",
+  "var(--semantic-chart-3)",
+  "var(--semantic-chart-4)",
+  "var(--semantic-chart-5)",
+] as const;
+
+/**
+ * Presentation-only cell fill: intensity selects saturation; index rotates hue band.
+ */
+function studyHeatmapCellStyle(intensity: number, count: number, index: number): CSSProperties {
+  const borderSoft = "color-mix(in srgb, var(--semantic-border-soft) 82%, transparent)";
+  if (count <= 0) {
+    return {
+      borderColor: borderSoft,
+      background: "color-mix(in srgb, var(--semantic-panel-muted) 38%, var(--semantic-surface))",
+    };
+  }
+  const hue = HEAT_HUES[index % HEAT_HUES.length]!;
+  const mixPct = 14 + Math.round(intensity * 76);
+  return {
+    borderColor: `color-mix(in srgb, ${hue} 22%, var(--semantic-border-soft))`,
+    background: `color-mix(in srgb, ${hue} ${mixPct}%, var(--semantic-surface))`,
+  };
+}
 
 /**
  * GitHub-style 7×4 heatmap of recent daily question volume (UTC buckets).
@@ -44,7 +73,7 @@ export function StudyActivityHeatmap({
 
   return (
     <section
-      className="flex h-full flex-col rounded-2xl border p-5 sm:p-6"
+      className="nn-premium-study-activity-heatmap flex h-full flex-col rounded-2xl border p-5 sm:p-6"
       style={{
         background: "var(--semantic-surface)",
         borderColor: "var(--semantic-border-soft)",
@@ -66,15 +95,14 @@ export function StudyActivityHeatmap({
         role="img"
         aria-label={`Daily activity heatmap, about ${avgDaily} questions per day on average`}
       >
-        {cells.map((c) => {
+        {cells.map((c, cellIndex) => {
           const intensity = c.questionsAnswered / max;
-          const alpha = 0.12 + intensity * 0.88;
           return (
             <div
               key={c.dateKey}
-              className="aspect-square rounded-md border border-[var(--semantic-border-soft)]"
+              className="aspect-square rounded-md border"
               style={{
-                background: `color-mix(in srgb, var(--semantic-brand) ${Math.round(alpha * 100)}%, var(--semantic-surface))`,
+                ...studyHeatmapCellStyle(intensity, c.questionsAnswered, cellIndex),
               }}
               title={`${c.dateKey}: ${c.questionsAnswered} question${c.questionsAnswered !== 1 ? "s" : ""}`}
             />

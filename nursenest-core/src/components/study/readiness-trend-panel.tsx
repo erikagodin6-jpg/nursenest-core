@@ -14,7 +14,7 @@
  * Only the chart SVG requires client-side rendering; the data can be passed as props.
  */
 
-import { useState, useTransition } from "react";
+import { useId, useState, useTransition } from "react";
 import { getReadinessBand, BAND_LABELS } from "./cat-readiness-hero";
 import type { AnalyticsReadinessTrendWindow, ReadinessTrendPoint } from "@/lib/study/analytics-data";
 import type { AnalyticsLoadResult } from "@/lib/study/analytics-load-result";
@@ -134,7 +134,9 @@ export function ReadinessTrendPanel({
       ) : (
         <div className="space-y-5">
           {/* SVG trend chart */}
-          <TrendChart points={points} />
+          <div className="nn-premium-readiness-trend-chart min-w-0 overflow-x-auto">
+            <TrendChart points={points} />
+          </div>
 
           {/* Session list (compact) */}
           <div className="divide-y divide-[var(--semantic-border-soft)]">
@@ -170,6 +172,8 @@ export function ReadinessTrendPanel({
 }
 
 function TrendChart({ points }: { points: ReadinessTrendPoint[] }) {
+  const gradientId = useId().replace(/:/g, "");
+
   if (points.length < 2) {
     return (
       <div
@@ -246,21 +250,26 @@ function TrendChart({ points }: { points: ReadinessTrendPoint[] }) {
 
         {/* Area fill */}
         <defs>
-          <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--semantic-brand)" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="var(--semantic-brand)" stopOpacity="0.02" />
+          <linearGradient id={`trend-fill-${gradientId}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--semantic-chart-2)" stopOpacity="0.2" />
+            <stop offset="55%" stopColor="var(--semantic-chart-3)" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="var(--semantic-chart-4)" stopOpacity="0.03" />
+          </linearGradient>
+          <linearGradient id={`trend-line-${gradientId}`} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="var(--semantic-chart-2)" />
+            <stop offset="100%" stopColor="var(--semantic-chart-4)" />
           </linearGradient>
         </defs>
         <polygon
           points={`${PAD.left},${toY(minScore)} ${polyPoints} ${W - PAD.right},${toY(minScore)}`}
-          fill="url(#trend-fill)"
+          fill={`url(#trend-fill-${gradientId})`}
         />
 
         {/* Trend line */}
         <polyline
           points={polyPoints}
           fill="none"
-          stroke="var(--semantic-brand)"
+          stroke={`url(#trend-line-${gradientId})`}
           strokeWidth="2"
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -273,7 +282,7 @@ function TrendChart({ points }: { points: ReadinessTrendPoint[] }) {
             cx={toX(i)}
             cy={toY(p.score)}
             r="3.5"
-            fill="var(--semantic-brand)"
+            fill="var(--semantic-chart-3)"
             stroke="var(--semantic-surface)"
             strokeWidth="2"
           >

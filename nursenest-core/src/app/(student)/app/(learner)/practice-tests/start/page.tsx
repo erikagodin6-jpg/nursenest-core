@@ -179,7 +179,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
         </p>
       ) : null}
       {waitlistOnlyPathways.length > 0 && catEligiblePathways.length === 0 ? (
-        <aside className="nn-card mt-6 border-amber-200/80 bg-amber-50/70 p-4 text-sm text-foreground dark:border-amber-900/40 dark:bg-amber-950/30">
+        <aside className="nn-card mt-6 border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))] p-4 text-sm text-[var(--semantic-text-primary)]">
           <p className="font-semibold">Adaptive (CAT) is not open for your current pathway yet</p>
           <p className="mt-1 text-muted-foreground">
             Your plan matches one or more tracks that are still on waitlist or ramp-up. Use{" "}

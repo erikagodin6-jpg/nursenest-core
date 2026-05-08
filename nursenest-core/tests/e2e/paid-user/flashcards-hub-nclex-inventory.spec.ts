@@ -4,6 +4,7 @@
  * Run: `npm run test:e2e -- --grep "flashcards hub CA RN inventory"`
  */
 import { expect, test } from "@playwright/test";
+import { resolveE2eAppBaseUrl } from "../helpers/e2e-env";
 import { paidFlashcardsHubUrl } from "../helpers/paid-content-discovery";
 import { expectPaidLearnerShellReady, learnerAppMainLandmark } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
@@ -16,7 +17,7 @@ test.describe("flashcards hub CA RN inventory", () => {
   }) => {
     test.setTimeout(180_000);
     const pathwayId = "ca-rn-nclex-rn";
-    const url = new URL(paidFlashcardsHubUrl(pathwayId), baseURL ?? "http://127.0.0.1:3000").toString();
+    const url = new URL(paidFlashcardsHubUrl(pathwayId), resolveE2eAppBaseUrl(baseURL)).toString();
     await page.goto(url, { waitUntil: "domcontentloaded" });
     expectNotLoginUrl(page);
     await expectPaidLearnerShellReady(page, `flashcards inventory ${pathwayId}`);

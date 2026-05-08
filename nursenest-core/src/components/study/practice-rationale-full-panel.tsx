@@ -1,22 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { BookOpen, CheckCircle2, Lightbulb, Ban, Sparkles, Star } from "lucide-react";
+import {
+  PRACTICE_RATIONALE_FULL_PANEL_COPY_DEFAULTS,
+  type PracticeRationaleFullPanelCopy,
+} from "@/components/study/practice-rationale-full-panel.types";
+import { ConfidenceChip, type ConfidenceLevel } from "./confidence-selector";
 
 /** Shown when a distractor row has no stored per-option rationale (never invent clinical text). */
 export const PRACTICE_EXAM_MISSING_DISTRACTOR_FALLBACK =
-  "No separate rationale is available for this option.";
+  PRACTICE_RATIONALE_FULL_PANEL_COPY_DEFAULTS.missingDistractorFallback;
 
-function RationaleReviewBoardHeader() {
+function RationaleReviewBoardHeader({ title }: { title: string }) {
   return (
-    <div className="mb-2 flex items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-2.5">
+    <div className="nn-premium-cat-rationale-head mb-2 flex items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-2.5">
       <BookOpen className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
-      <h2 className="m-0 text-sm font-semibold text-[var(--semantic-brand)]">Rationale & Review</h2>
+      <h2 className="m-0 text-sm font-semibold text-[var(--semantic-brand)]">{title}</h2>
     </div>
   );
 }
-import type { ReactNode } from "react";
-import { ConfidenceChip, type ConfidenceLevel } from "./confidence-selector";
 
 /** Shared scroll frame for linear practice and CAT study rationale columns. */
 export function RationaleFullFrame({ children }: { children: ReactNode }) {
@@ -120,13 +124,15 @@ export function PracticeIncorrectOptionRow({
  */
 export function PracticeRelatedLessons({
   lessons,
+  sectionLabel = PRACTICE_RATIONALE_FULL_PANEL_COPY_DEFAULTS.relatedLessonsSection,
 }: {
   lessons: { title: string; href: string }[];
+  sectionLabel?: string;
 }) {
   if (lessons.length === 0) return null;
   return (
     <div>
-      <p className="nn-practice-rsection__label mb-2">Related Lessons</p>
+      <p className="nn-practice-rsection__label mb-2">{sectionLabel}</p>
       <div className="nn-practice-lessons">
         {lessons.map(({ title, href }) => (
           <Link
@@ -185,6 +191,8 @@ export interface PracticeRationaleFullPanelProps {
   referenceSource?: string | null;
   /** When true, incorrect option rows without stored text show {@link PRACTICE_EXAM_MISSING_DISTRACTOR_FALLBACK}. */
   showDistractorFallback?: boolean;
+  /** Resolved UI strings — typically from `tx()` in the practice test runner. */
+  copy?: Partial<PracticeRationaleFullPanelCopy>;
 }
 
 /**
@@ -214,7 +222,10 @@ export function PracticeRationaleFullPanel({
   clinicalPearlDisplay,
   referenceSource,
   showDistractorFallback = false,
+  copy: copyOverrides,
 }: PracticeRationaleFullPanelProps) {
+  const c: PracticeRationaleFullPanelCopy = { ...PRACTICE_RATIONALE_FULL_PANEL_COPY_DEFAULTS, ...copyOverrides };
+
   // ── Waiting / not-yet-submitted ──────────────────────────────────────────
   if (status === "waiting" || status === null) {
     return (
@@ -224,11 +235,8 @@ export function PracticeRationaleFullPanel({
             className="h-6 w-6 text-[var(--semantic-text-muted)]"
             aria-hidden
           />
-          <p className="nn-practice-rationale-waiting__text">Review appears after you answer.</p>
-          <p className="nn-practice-rationale-waiting__sub">
-            Submit your response to see the correct answer, teaching rationale, distractor review, and optional
-            references. Prioritize airway, breathing, and circulation when choosing the most urgent option.
-          </p>
+          <p className="nn-practice-rationale-waiting__text">{c.waitingPrimary}</p>
+          <p className="nn-practice-rationale-waiting__sub">{c.waitingSecondary}</p>
         </div>
       </RationaleFullFrame>
     );
@@ -239,11 +247,8 @@ export function PracticeRationaleFullPanel({
     return (
       <RationaleFullFrame>
         <div className="nn-practice-rationale-locked">
-          <p className="nn-practice-rationale-locked__title">Answer Locked</p>
-          <p className="nn-practice-rationale-locked__body">
-            Your answer is submitted. Explanations and correct keys are revealed
-            when you finish the full exam.
-          </p>
+          <p className="nn-practice-rationale-locked__title">{c.lockedTitle}</p>
+          <p className="nn-practice-rationale-locked__body">{c.lockedBody}</p>
         </div>
       </RationaleFullFrame>
     );
@@ -263,7 +268,7 @@ export function PracticeRationaleFullPanel({
 
   return (
     <RationaleFullFrame>
-      <RationaleReviewBoardHeader />
+      <RationaleReviewBoardHeader title={c.panelTitle} />
       {/* Confidence chip — shown when user rated their confidence */}
       {confidenceLevel ? (
         <div className="flex items-center gap-2">
@@ -274,7 +279,7 @@ export function PracticeRationaleFullPanel({
       {/* 1 ─ Correct Answer (info panel — matches CAT / UWorld review boards) */}
       <PracticeRationaleSection
         variant="info"
-        label="Correct Answer"
+        label={c.correctAnswer}
         icon={<CheckCircle2 className="h-3.5 w-3.5 text-[var(--semantic-info)]" aria-hidden />}
       >
         <p>{correctDisplayTexts || "—"}</p>
@@ -284,7 +289,7 @@ export function PracticeRationaleFullPanel({
       {whyCorrectText ? (
         <PracticeRationaleSection
           variant="muted"
-          label="Why This Is Correct"
+          label={c.whyCorrect}
           icon={<Lightbulb className="h-3.5 w-3.5 text-[var(--semantic-warning)]" aria-hidden />}
         >
           <p>{whyCorrectText}</p>
@@ -295,7 +300,7 @@ export function PracticeRationaleFullPanel({
       {incorrectKeys.length > 0 ? (
         <PracticeRationaleSection
           variant="muted"
-          label="Why The Other Options Are Incorrect"
+          label={c.whyOthersIncorrect}
           icon={<Ban className="h-3.5 w-3.5 text-[var(--semantic-danger)]" aria-hidden />}
         >
           {incorrectKeys.map((key, i) => {
@@ -309,7 +314,9 @@ export function PracticeRationaleFullPanel({
                 optionText={optionText}
                 explanation={explanation}
                 optionTextTone="danger"
-                missingExplanationFallback={showDistractorFallback ? PRACTICE_EXAM_MISSING_DISTRACTOR_FALLBACK : null}
+                missingExplanationFallback={
+                  showDistractorFallback ? c.missingDistractorFallback : null
+                }
               />
             );
           })}
@@ -319,7 +326,7 @@ export function PracticeRationaleFullPanel({
       {clinicalPearlDisplay?.trim() ? (
         <PracticeRationaleSection
           variant="pearl"
-          label="Clinical Pearl"
+          label={c.clinicalPearl}
           icon={<Star className="h-3.5 w-3.5 text-[var(--semantic-warning)]" aria-hidden />}
         >
           <p>{clinicalPearlDisplay.trim()}</p>
@@ -330,7 +337,7 @@ export function PracticeRationaleFullPanel({
       {keyTakeaway ? (
         <PracticeRationaleSection
           variant="takeaway"
-          label="Key Takeaway"
+          label={c.keyTakeawayHeading}
           icon={<Sparkles className="h-3.5 w-3.5 text-[var(--semantic-brand)]" aria-hidden />}
         >
           <p>{keyTakeaway}</p>
@@ -338,14 +345,14 @@ export function PracticeRationaleFullPanel({
       ) : null}
 
       {referenceSource?.trim() ? (
-        <PracticeRationaleSection variant="muted" label="References / Source">
+        <PracticeRationaleSection variant="muted" label={c.referencesSource}>
           <p className="m-0 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{referenceSource.trim()}</p>
         </PracticeRationaleSection>
       ) : null}
 
       {/* 5 ─ Related Lessons ─────────────────────────────────────────────── */}
       {relatedLessons.length > 0 ? (
-        <PracticeRelatedLessons lessons={relatedLessons} />
+        <PracticeRelatedLessons lessons={relatedLessons} sectionLabel={c.relatedLessonsSection} />
       ) : null}
     </RationaleFullFrame>
   );

@@ -15,7 +15,7 @@ const PRIMARY_LINKS = [
 export function EcgModulePage({ config }: { config: EcgRouteConfig }) {
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
-      <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950">
+      <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] p-4 text-sm text-[var(--semantic-warning-contrast)]">
         <strong>Hidden / Admin Preview Only.</strong> Not visible to public users. Not in sitemap, hreflang, public
         navigation, pricing, or checkout.
       </div>

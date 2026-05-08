@@ -48,17 +48,32 @@ export function AnalyticsNextSteps({
             Loading confidence signals for personalized recommendations…
           </p>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
-          {[0, 1, 2].map((i) => (
+        <div className="nn-analytics-panel-skeleton grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
+          {(
+            [
+              "var(--semantic-chart-1)",
+              "var(--semantic-chart-3)",
+              "var(--semantic-chart-5)",
+            ] as const
+          ).map((hue, i) => (
             <div
               key={i}
-              className="h-40 animate-pulse rounded-2xl border"
+              className="flex h-40 flex-col gap-3 rounded-2xl border p-4"
               style={{
-                borderColor: "var(--semantic-border-soft)",
-                background: "color-mix(in srgb, var(--semantic-panel-cool) 40%, var(--semantic-surface))",
+                borderColor: `color-mix(in srgb, ${hue} 26%, var(--semantic-border-soft))`,
+                background: `color-mix(in srgb, ${hue} 9%, var(--semantic-surface))`,
               }}
               aria-hidden
-            />
+            >
+              <div
+                className="nn-analytics-skeleton-block h-3 w-24 rounded-md"
+                style={{ background: `color-mix(in srgb, ${hue} 18%, var(--semantic-border-soft))` }}
+              />
+              <div
+                className="nn-analytics-skeleton-block flex-1 rounded-xl"
+                style={{ background: `color-mix(in srgb, ${hue} 12%, var(--semantic-border-soft))` }}
+              />
+            </div>
           ))}
         </div>
         <span className="sr-only">Loading recommendations</span>

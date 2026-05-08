@@ -26,7 +26,7 @@ import {
 } from "@/components/student/pathway-cat-start-payload";
 
 function sectionShell(children: ReactNode, className = "") {
-  return <section className={`lv-shell ${className}`.trim()}>{children}</section>;
+  return <section className={`lv-shell nn-premium-cat-section ${className}`.trim()}>{children}</section>;
 }
 
 export function PathwayCatSessionStartClient({
@@ -261,7 +261,7 @@ export function PathwayCatSessionStartClient({
 
   if (pathwayOptions.length === 0) {
     return (
-      <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-sm text-[var(--semantic-text-secondary)]">
+      <div className="lv-shell nn-premium-cat-section p-6 text-sm text-[var(--semantic-text-secondary)]">
         <p>No exam pathways match your subscription region and tier.</p>
         <Link
           href="/app/practice-tests"
@@ -274,7 +274,7 @@ export function PathwayCatSessionStartClient({
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-7 text-[var(--semantic-text-primary)]">
+    <div className="mx-auto max-w-3xl space-y-7 px-3 text-[var(--semantic-text-primary)] sm:px-0">
       <nav aria-label="Pathway context" className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
         <div className="min-w-0 space-y-1">
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
@@ -311,11 +311,11 @@ export function PathwayCatSessionStartClient({
           </p>
         </div>
         {heroChips.length > 0 ? (
-          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <dl className="nn-premium-cat-hero-chips grid grid-cols-2 gap-2 sm:grid-cols-4">
             {heroChips.map((chip) => (
               <div
                 key={chip.id}
-                className="rounded-md border border-[color-mix(in_srgb,var(--semantic-border-soft)_100%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))] px-3 py-2.5"
+                className="rounded-md border bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))] px-3 py-2.5"
               >
                 <dt className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">{chip.label}</dt>
                 <dd className="mt-0.5 text-sm font-semibold leading-snug text-[var(--theme-heading-text)]">{chip.value}</dd>
@@ -542,8 +542,7 @@ export function PathwayCatSessionStartClient({
               type="button"
               data-nn-qa-cat-start-session
               disabled={creating || uiState.startDisabled || isHardBlockingReadinessCode(readinessCode)}
-              className="inline-flex min-h-11 min-w-[200px] items-center justify-center rounded-md px-6 text-sm font-semibold text-[var(--role-cta-foreground,var(--theme-primary-foreground))] shadow-sm transition hover:opacity-[0.94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)] disabled:cursor-not-allowed disabled:opacity-45"
-              style={{ background: "var(--role-cta, var(--semantic-text-primary))" }}
+              className="nn-btn-primary inline-flex min-h-11 min-w-[min(100%,12.5rem)] items-center justify-center px-6 text-sm disabled:cursor-not-allowed sm:min-w-[12.5rem]"
               onClick={() => void start()}
             >
               {creating ? "Starting…" : readinessLoading ? "Checking pool…" : "Start exam simulation"}
@@ -588,7 +587,7 @@ export function PathwayCatSessionStartClient({
         </div>,
       )}
 
-      <div className="rounded-lg border border-dashed border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_30%,var(--semantic-surface))] px-4 py-4">
+      <div className="nn-premium-cat-tools-rail rounded-lg border border-dashed border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_30%,var(--semantic-surface))] px-4 py-4">
         <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">More study tools</p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Link

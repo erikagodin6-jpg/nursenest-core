@@ -10,7 +10,11 @@ import {
   Target,
   Zap,
 } from "lucide-react";
-import { BAND_HELPER } from "./cat-readiness-hero";
+import {
+  BAND_HELPER,
+  catReadinessAccentStrokeVar,
+  type ReadinessBand as CatReadinessBand,
+} from "./cat-readiness-hero";
 import { ReadinessTrendPanel } from "./readiness-trend-panel";
 import { StudyActivityHeatmap } from "./study-activity-heatmap";
 import type {
@@ -55,7 +59,14 @@ function weakTopicHints(rows: TopicRow[]): string {
   return cand.join(" and ");
 }
 
-function ReadinessDonut({ pct }: { pct: number | null }) {
+function ReadinessDonut({
+  pct,
+  band,
+}: {
+  pct: number | null;
+  band: CatReadinessBand | null;
+}) {
+  const accent = catReadinessAccentStrokeVar(band);
   const clamped = pct != null ? Math.min(100, Math.max(0, pct)) : null;
   const offset = clamped != null ? RING_CIRC - (clamped / 100) * RING_CIRC : RING_CIRC;
   const cx = RING_SIZE / 2;
@@ -63,7 +74,7 @@ function ReadinessDonut({ pct }: { pct: number | null }) {
 
   return (
     <div className="relative mx-auto shrink-0" style={{ width: RING_SIZE, height: RING_SIZE }}>
-      <svg width={RING_SIZE} height={RING_SIZE} className="-rotate-90" aria-hidden>
+      <svg width={RING_SIZE} height={RING_SIZE} className="-rotate-90 nn-readiness-donut-svg" aria-hidden>
         <circle
           cx={cx}
           cy={cy}
@@ -75,23 +86,23 @@ function ReadinessDonut({ pct }: { pct: number | null }) {
         />
         {clamped != null && (
           <circle
+            className="nn-readiness-donut-arc motion-safe:transition-[stroke-dashoffset] motion-safe:duration-700 motion-safe:ease-out"
             cx={cx}
             cy={cy}
             r={RING_R}
             fill="none"
-            stroke="var(--semantic-brand)"
+            stroke={accent}
             strokeWidth={RING_STROKE}
             strokeDasharray={RING_CIRC}
             strokeDashoffset={offset}
             strokeLinecap="round"
-            style={{ transition: "stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)" }}
           />
         )}
       </svg>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
         {clamped != null ? (
           <>
-            <span className="text-4xl font-extrabold tabular-nums leading-none text-[var(--semantic-brand)]">
+            <span className="text-4xl font-extrabold tabular-nums leading-none" style={{ color: accent }}>
               {clamped}%
             </span>
             <span className="mt-1 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[var(--semantic-text-muted)]">
@@ -160,9 +171,9 @@ export function AnalyticsPerformanceReport({
 
   return (
     <div
-      className="space-y-6 rounded-3xl border p-4 sm:p-8"
+      data-nn-premium-analytics="performance-report"
+      className="nn-premium-analytics-report space-y-6 rounded-3xl border p-4 sm:p-8"
       style={{
-        background: "color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface))",
         borderColor: "var(--semantic-border-soft)",
         boxShadow: "var(--semantic-shadow-soft)",
       }}
@@ -251,14 +262,14 @@ export function AnalyticsPerformanceReport({
       {/* Readiness + KPI grid */}
       <div className="grid items-stretch gap-4 xl:grid-cols-[minmax(0,340px)_1fr]">
         <div
-          className="flex flex-col gap-4 rounded-2xl border p-5 sm:p-6"
+          className="nn-premium-analytics-chart-column flex min-h-[12rem] flex-col gap-4 rounded-2xl border p-5 sm:p-6"
           style={{
             background: "var(--semantic-surface)",
             borderColor: "var(--semantic-border-soft)",
             boxShadow: "var(--semantic-shadow-soft)",
           }}
         >
-          <ReadinessDonut pct={score} />
+          <ReadinessDonut pct={score} band={band} />
           <p className="text-center text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{narrativeBody}</p>
         </div>
 
@@ -442,10 +453,14 @@ function KpiTile({
       <div className="flex items-center justify-between gap-2">
         <p className="text-[0.65rem] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">{label}</p>
         <span
-          className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--semantic-border-soft)]"
-          style={{ background: "color-mix(in srgb, var(--semantic-surface) 70%, transparent)" }}
+          className="flex h-8 w-8 items-center justify-center rounded-lg border"
+          style={{
+            borderColor: border,
+            background: `color-mix(in srgb, ${valueColor} 16%, var(--semantic-surface))`,
+            color: valueColor,
+          }}
         >
-          <Icon className="h-4 w-4 text-[var(--semantic-text-secondary)]" aria-hidden />
+          <Icon className="h-4 w-4 opacity-95" aria-hidden strokeWidth={2.25} />
         </span>
       </div>
       <p className="text-2xl font-extrabold tabular-nums" style={{ color: valueColor }}>
