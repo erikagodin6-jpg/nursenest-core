@@ -17,6 +17,7 @@ import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { isStaffRole } from "@/lib/auth/staff-roles";
 import { MarketingUtilityFloatingPanel } from "@/components/layout/marketing-utility-floating-panel";
+import { publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
 
 const COUNTRY_PANEL_WIDTH_PX = 288; /* matches CountrySelector popover w-72 */
 const LANGUAGE_PANEL_WIDTH_PX = 208; /* w-52 */
@@ -212,23 +213,26 @@ export function MarketingHeaderUtilityStrip({
             </div>
           </MarketingUtilityFloatingPanel>
 
-          <div
-            className={
-              variant === "dark-bar"
-                ? "text-[var(--theme-heading-text)] [&_button]:h-[26px] [&_button]:min-h-0 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
-                : "text-[var(--header-utility-text)] [&_button]:min-h-0 [&_button]:border-[var(--header-utility-border)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]"
-            }
-          >
-            <ThemePicker
-              className="shrink-0"
-              dropdownPortal
-              labels={{
-                navTheme: t("nav.theme"),
-                themeGroupLight: t("nav.themeGroupLight"),
-                themeGroupDark: t("nav.themeGroupDark"),
-              }}
-            />
-          </div>
+          {publicMarketingThemeChoiceCount() > 1 ? (
+            <div
+              className={
+                variant === "dark-bar"
+                  ? "text-[var(--theme-heading-text)] [&_button]:h-[26px] [&_button]:min-h-0 [&_button]:rounded-lg [&_button]:border [&_button]:border-[color-mix(in_srgb,var(--theme-heading-text)_14%,#cbd5e1)] [&_button]:bg-white [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:text-[var(--theme-heading-text)] [&_button]:shadow-[0_1px_2px_rgba(15,23,42,0.05)] [&_button]:hover:bg-[color-mix(in_srgb,white_88%,var(--theme-heading-text))]"
+                  : "text-[var(--header-utility-text)] [&_button]:min-h-0 [&_button]:border-[var(--header-utility-border)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]"
+              }
+            >
+              <ThemePicker
+                className="shrink-0"
+                dropdownPortal
+                pickerScope="publicMarketing"
+                labels={{
+                  navTheme: t("nav.theme"),
+                  themeGroupLight: t("nav.themeGroupLight"),
+                  themeGroupDark: t("nav.themeGroupDark"),
+                }}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

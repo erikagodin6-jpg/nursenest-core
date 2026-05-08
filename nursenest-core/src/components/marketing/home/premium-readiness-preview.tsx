@@ -36,7 +36,7 @@ export function PremiumReadinessPreview() {
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
             <p className="nn-premium-home-eyebrow">
-              {tr("pages.home.premium.readiness.eyebrow", "Readiness Dashboard")}
+              {tr("pages.home.premium.readiness.eyebrow", "Readiness dashboard")}
             </p>
             <h2 id="premium-readiness-heading" className="nn-marketing-h2 mt-4 text-balance text-[var(--palette-heading)]">
               {tr("pages.home.premium.readiness.heading", "Know where to study next without guessing.")}
@@ -56,7 +56,7 @@ export function PremiumReadinessPreview() {
                 className={MARKETING_SECONDARY_CTA_CLASS}
                 data-testid="premium-readiness-dashboard-link"
               >
-                {tr("pages.home.premium.readiness.dashboardCta", "Open Dashboard")}
+                {tr("pages.home.premium.readiness.dashboardCta", "Open dashboard")}
                 <ArrowRight className="ml-2 h-4 w-4 shrink-0" aria-hidden />
               </MarketingTrackedLink>
               <MarketingTrackedLink
@@ -65,7 +65,7 @@ export function PremiumReadinessPreview() {
                 eventProps={{ region, surface: "premium_readiness_preview", choice: "practice_exams" }}
                 className={MARKETING_TERTIARY_LINK_CLASS}
               >
-                {tr("pages.home.premium.readiness.catCta", "See CAT Practice")}
+                {tr("pages.home.premium.readiness.catCta", "See CAT practice")}
               </MarketingTrackedLink>
             </div>
           </div>
@@ -98,7 +98,7 @@ export function PremiumReadinessPreview() {
                   {tr("pages.home.premium.readiness.metricNext.label", "Next 30 min")}
                 </p>
                 <p className="text-xs text-[var(--palette-text-muted)]">
-                  {tr("pages.home.premium.readiness.metricNext.value", "Peds asthma set")}
+                  {tr("pages.home.premium.readiness.metricNext.value", "Pediatric asthma set")}
                 </p>
               </div>
               <div className="nn-premium-mini-metric rounded-2xl border p-4">

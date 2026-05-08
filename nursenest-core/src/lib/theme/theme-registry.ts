@@ -157,6 +157,25 @@ export const THEME_OPTIONS: ThemeOption[] = [
 export const THEME_STORAGE_KEY = "nursenest-theme";
 
 /**
+ * Public marketing chrome (site header, utility strip, mobile marketing drawers) exposes only
+ * approved palettes; `[data-theme="…"]` definitions and learner/account theme pickers stay full-fidelity.
+ *
+ * **Primary brand palette only** on public marketing — alternate study atmospheres stay in learner
+ * account / full pickers; `[data-theme="…"]` CSS definitions remain unchanged.
+ */
+export const PUBLIC_MARKETING_THEME_ALLOWLIST = [NURSENEST_DEFAULT_THEME] as const;
+
+export function themeOptionsForPublicMarketingPicker(all: ThemeOption[] = THEME_OPTIONS): ThemeOption[] {
+  const allow = new Set(PUBLIC_MARKETING_THEME_ALLOWLIST);
+  return all.filter((o) => allow.has(o.id));
+}
+
+/** When ≤1, public marketing surfaces hide the theme control (no redundant single-option UI). */
+export function publicMarketingThemeChoiceCount(): number {
+  return themeOptionsForPublicMarketingPicker().length;
+}
+
+/**
  * Map from theme id to logo variant — convenience lookup for logo resolution.
  * Populated lazily from THEME_OPTIONS at runtime; do not import THEME_OPTIONS directly in hot paths.
  */

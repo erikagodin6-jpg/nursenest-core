@@ -8,6 +8,15 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 
 import { usePremiumHomepageRoutes } from "./premium-homepage-routes";
 
+/** Compact pathway badge inside cards (avoids odd first-word clipping from titles). */
+const PATHWAY_ICON_ABBR: Record<string, string> = {
+  rn: "RN",
+  pn: "PN",
+  np: "NP",
+  "international-rn": "IRN",
+  allied: "AH",
+};
+
 export function PremiumPathwayShowcase() {
   const { region, pathwayCards } = usePremiumHomepageRoutes();
   const { t } = useMarketingI18n();
@@ -52,7 +61,7 @@ export function PremiumPathwayShowcase() {
               style={{ ["--premium-card-accent" as string]: `var(--nn-premium-tone-${card.tone})` }}
             >
               <span className="nn-premium-pathway-card__icon" aria-hidden>
-                {card.title.split(" ")[0]}
+                {PATHWAY_ICON_ABBR[card.id] ?? card.title.slice(0, 4)}
               </span>
               <span className="nn-marketing-caption mt-5 font-bold uppercase tracking-wide text-[var(--palette-text-muted)]">
                 {card.subtitle}

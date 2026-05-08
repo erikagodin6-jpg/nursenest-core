@@ -40,7 +40,7 @@ export function PricingLearnerFaq() {
           {DETAIL_KEYS.map((key) => (
             <details
               key={key}
-              className="group rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] px-4 py-3.5 shadow-[var(--elevation-rest)]"
+              className="nn-pricing-faq-card group rounded-xl border px-4 py-3.5 shadow-[var(--elevation-rest)]"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-left marker:content-none [&::-webkit-details-marker]:hidden">
                 <span className="text-sm font-semibold text-[var(--semantic-text-primary)]">

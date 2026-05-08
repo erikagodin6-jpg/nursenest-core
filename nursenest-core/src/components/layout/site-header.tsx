@@ -39,7 +39,7 @@ import { strippedPathActivatesMegaMenuKey } from "@/lib/navigation/marketing-meg
 import { buildMarketingTierHubStrip } from "@/lib/navigation/marketing-tier-hub-strip";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
-import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { THEME_OPTIONS, publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
 
 const MarketingHeaderUtilityStrip = dynamic(
   () =>
@@ -1137,15 +1137,18 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 ) : null}
               </div>
 
-              <div className="mb-2">
-                <ThemePicker
-                  labels={{
-                    navTheme: t("nav.theme"),
-                    themeGroupLight: t("nav.themeGroupLight"),
-                    themeGroupDark: t("nav.themeGroupDark"),
-                  }}
-                />
-              </div>
+              {publicMarketingThemeChoiceCount() > 1 ? (
+                <div className="mb-2">
+                  <ThemePicker
+                    pickerScope="publicMarketing"
+                    labels={{
+                      navTheme: t("nav.theme"),
+                      themeGroupLight: t("nav.themeGroupLight"),
+                      themeGroupDark: t("nav.themeGroupDark"),
+                    }}
+                  />
+                </div>
+              ) : null}
             </div>
           </div>
         </div>,

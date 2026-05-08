@@ -37,6 +37,7 @@ import {
   ProfessionSelector,
   ExamSelector,
 } from "./global-context-switcher";
+import { publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -195,11 +196,13 @@ export function MobileContextDrawer({
             </section>
           )}
 
-          {/* Theme */}
-          <section>
-            <SectionLabel>Appearance</SectionLabel>
-            <ThemePicker labels={themeLabels} />
-          </section>
+          {/* Theme — omitted when public marketing exposes only the default palette */}
+          {publicMarketingThemeChoiceCount() > 1 ? (
+            <section>
+              <SectionLabel>Appearance</SectionLabel>
+              <ThemePicker labels={themeLabels} pickerScope="publicMarketing" />
+            </section>
+          ) : null}
         </div>
       </div>
     </div>

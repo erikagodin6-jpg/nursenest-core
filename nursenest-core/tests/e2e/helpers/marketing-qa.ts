@@ -205,26 +205,39 @@ export async function assertMarketingHeroHeadingContrast(page: Page, headingSele
   expect(result.ok, "detail" in result ? result.detail : "").toBe(true);
 }
 
+const NURSENEST_THEME_STORAGE_KEY = "nursenest-theme";
+
 /**
- * Open the header theme picker (desktop) and select **Midnight** when present.
+ * Apply **Midnight** for contrast/visual checks.
+ * Prefer the header theme picker when multiple public palettes exist; otherwise set `data-theme`
+ * + storage directly (public marketing may hide the picker when only the default theme is offered).
  * @returns whether `data-theme` became `midnight`
  */
 export async function applyMidnightThemeFromPicker(page: Page): Promise<boolean> {
-  /** Matches visible `nav.theme` label (English default: "Theme"). */
   const themeBtn = page.getByRole("button", { name: /^theme$/i }).first();
-  if (!(await themeBtn.isVisible({ timeout: 2500 }).catch(() => false))) return false;
-
-  await themeBtn.click();
-
-  const midnight = page.getByRole("option", { name: /^midnight$/i }).first();
-  if (!(await midnight.isVisible({ timeout: 3000 }).catch(() => false))) {
+  if (await themeBtn.isVisible({ timeout: 2500 }).catch(() => false)) {
+    await themeBtn.click();
+    const midnight = page.getByRole("option", { name: /^midnight$/i }).first();
+    if (await midnight.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await midnight.click();
+      await page.waitForTimeout(400);
+      const attr = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
+      return attr === "midnight";
+    }
     await page.keyboard.press("Escape").catch(() => {});
-    return false;
   }
 
-  await midnight.click();
-  await page.waitForTimeout(400);
-
+  const set = await page.evaluate((key) => {
+    try {
+      localStorage.setItem(key, "midnight");
+      document.documentElement.setAttribute("data-theme", "midnight");
+      return true;
+    } catch {
+      return false;
+    }
+  }, NURSENEST_THEME_STORAGE_KEY);
+  if (!set) return false;
+  await page.waitForTimeout(200);
   const attr = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
   return attr === "midnight";
 }

@@ -61,10 +61,10 @@ export function PremiumStudyEcosystem() {
       <div className="nn-section-shell">
         <div className="mx-auto max-w-3xl text-center">
           <p className="nn-premium-home-eyebrow">
-            {tr("pages.home.premium.studyEcosystem.eyebrow", "Study Ecosystem")}
+            {tr("pages.home.premium.studyEcosystem.eyebrow", "Study ecosystem")}
           </p>
           <h2 id="premium-study-ecosystem-heading" className="nn-marketing-h2 mt-4 text-balance text-[var(--palette-heading)]">
-            {tr("pages.home.premium.studyEcosystem.heading", "Read, Recall, Practice, Assess. One Loop.")}
+            {tr("pages.home.premium.studyEcosystem.heading", "Read, recall, practice, assess — one loop.")}
           </h2>
           <p className="nn-marketing-body mx-auto mt-3 max-w-2xl text-pretty text-[var(--palette-text-muted)]">
             {tr(

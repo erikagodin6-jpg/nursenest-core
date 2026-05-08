@@ -1,3 +1,5 @@
+import { emitServerStderrLine } from "@/lib/observability/server-stderr-line";
+
 /**
  * Temporary home perf diagnostics — safe in Node and Edge (no `server-only`).
  * @see NN_TRACE_HOME_PERF
@@ -27,11 +29,11 @@ export function isNnTraceHomePerfTrue(): boolean {
 export function emitNnHomePerfDiagLine(payload: Record<string, unknown>): void {
   const line = { ...payload, home_perf_version: HOME_PERF_DIAG_VERSION, wall_ms: Date.now() };
   try {
-    console.error(JSON.stringify(line));
+    emitServerStderrLine(JSON.stringify(line));
   } catch {
     try {
       const pid = safeProcessPid();
-      console.error(
+      emitServerStderrLine(
         `nn_home_perf_diag_plain tag=${String(payload.tag)} v=${HOME_PERF_DIAG_VERSION} pid=${pid ?? "n/a"}`,
       );
     } catch {

@@ -16,6 +16,8 @@
  * unless `NN_HOME_ALLOW_DEGRADED_PATHS_IN_PRODUCTION=true` (prevents accidental fallback homepage /
  * stripped chrome). Next's static generation phase still honors those env vars when set.
  */
+import { emitServerStderrLine } from "@/lib/observability/server-stderr-line";
+
 const NEXT_STATIC_GENERATION_PHASE = "phase-production-build";
 
 function envFlagTrue(raw: string | undefined): boolean {
@@ -70,10 +72,10 @@ export function emitNnHomeRouteDiag(payload: Record<string, unknown>): void {
   if (!shouldEmitNnHomeRouteDiag()) return;
   const line = { tag: "nn_home_route_diag", wall_ms: nnHomeDiagNowMs(), ...payload };
   try {
-    console.error(JSON.stringify(line));
+    emitServerStderrLine(JSON.stringify(line));
   } catch {
     try {
-      console.error(`nn_home_route_diag_plain segment=${String(payload.segment)}`);
+      emitServerStderrLine(`nn_home_route_diag_plain segment=${String(payload.segment)}`);
     } catch {
       /* noop */
     }

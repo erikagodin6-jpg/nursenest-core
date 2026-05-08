@@ -68,22 +68,46 @@ function formatMarketingInteger(n: number, locale: string): string {
   }
 }
 
+/**
+ * Single-beat path for one RR interval — stylized Lead II–like NSR (upright P, narrow QRS, upright T).
+ * Proportions are exaggerated for legibility at marketing scale; not for measurement or diagnosis.
+ */
+function singleNsrBeatPath(offset: number, baselineY: number, beatWidth: number): string {
+  const y = baselineY;
+  const o = offset;
+  // Baseline → small rounded P → isoelectric PR → QRS (qR pattern) → ST → asymmetric T → baseline
+  return [
+    `M${o},${y}`,
+    `L${o + 12},${y}`,
+    `C${o + 16},${y} ${o + 18},${y - 4} ${o + 22},${y - 4.5}`,
+    `C${o + 26},${y - 5} ${o + 30},${y} ${o + 34},${y}`,
+    `L${o + 44},${y}`,
+    `L${o + 46},${y + 2.5}`,
+    `L${o + 48},${y}`,
+    `L${o + 50},${y - 3}`,
+    `L${o + 52},${y - 22}`,
+    `L${o + 54},${y + 8}`,
+    `L${o + 57},${y}`,
+    `L${o + 62},${y}`,
+    `C${o + 68},${y} ${o + 74},${y - 10} ${o + 82},${y - 2}`,
+    `C${o + 90},${y + 4} ${o + 98},${y} ${o + 108},${y}`,
+    `L${o + beatWidth},${y}`,
+  ].join(" ");
+}
+
 function buildSinusRhythmPath(beats: number, beatWidth: number, baselineY: number): string {
   const parts: string[] = [];
   for (let b = 0; b < beats; b++) {
-    const o = b * beatWidth;
-    const y = baselineY;
-    parts.push(
-      `M${o},${y} L${o + 10},${y} C${o + 14},${y} ${o + 16},${y - 5.5} ${o + 21},${y - 5.5} C${o + 25},${y - 5.5} ${o + 27},${y} ${o + 33},${y} L${o + 42},${y} L${o + 44},${y + 1.2} L${o + 46},${y} L${o + 49},${y - 30} L${o + 53},${y + 5} L${o + 57},${y} L${o + 66},${y} C${o + 70},${y} ${o + 74},${y - 9} ${o + 83},${y} L${o + beatWidth},${y}`,
-    );
+    parts.push(singleNsrBeatPath(b * beatWidth, baselineY, beatWidth));
   }
   return parts.join(" ");
 }
 
 /* ──────────────────────────────────────────────────────────────────
    Inline rhythm strip — educational / illustrative only (not diagnostic).
-   Simplified normal sinus–style P–QRS–T pattern for marketing context; not
-   a substitute for clinical ECG interpretation. No animation.
+   Decorative NSR-style silhouette (Lead II–like): upright P, narrow QRS,
+   upright T; rates/shapes are not calibrated. Not a substitute for
+   clinical ECG interpretation. Static (no animation).
    ────────────────────────────────────────────────────────────────── */
 function HeroEcgStrip({ ariaLabel }: { ariaLabel: string }) {
   const beatW = 138;
@@ -248,7 +272,7 @@ export function PremiumHomepageHero(props: {
   );
 
   const primaryCtaLabel = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start Practice Questions"),
+    safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start Practice"),
     locale,
   );
   const secondaryCtaLabel = formatTitleCase(
@@ -293,7 +317,7 @@ export function PremiumHomepageHero(props: {
   // Right-panel copy — all overridable via i18n, with safe defaults that
   // never claim a specific learner / outcome / institution.
   const panelCopy = {
-    panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Readiness preview"),
+    panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Sample readiness snapshot"),
     panelLive: safeHomepageMarketingT(t, "pages.home.hero.panel.live", "Live"),
     readinessLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessLabel", "Pass probability"),
     readinessValue: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessValue", "78%"),
@@ -336,7 +360,7 @@ export function PremiumHomepageHero(props: {
       className="nn-hero-bridge nn-home-marketing-rich-hero border-b border-[var(--header-nav-border)]"
       aria-labelledby="home-conversion-hero-heading"
     >
-      <div className="mx-auto max-w-6xl px-4 py-[var(--nn-rhythm-page-y)] sm:px-6 md:py-[var(--nn-rhythm-section-y)] lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 py-[calc(var(--nn-rhythm-page-y)*0.9)] sm:px-6 md:py-[calc(var(--nn-rhythm-section-y)*0.92)] lg:px-8">
         <div className="nn-premium-hero-grid">
           {/* ── Copy column ───────────────────────────────────────── */}
           <div>

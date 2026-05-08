@@ -794,7 +794,7 @@ export function PricingPageClient({
   }, [authStatus, checkoutIntentHandled, initialSearchParamsString, localize, pathname, region]);
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
+    <div className="nn-pricing-premium-root mx-auto flex w-full max-w-6xl flex-col gap-12 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
 
       {/* ── Section 1: Hero ── */}
       <PricingHero
@@ -860,11 +860,8 @@ export function PricingPageClient({
                     marketing_region: region,
                   });
                 }}
-                className={`rounded-full px-4 py-2.5 text-sm font-semibold transition-[background-color,color,box-shadow,transform,border-color] duration-150 ease-out ${
-                  segment === id
-                    ? "bg-role-cta text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
-                    : "border border-[var(--border-medium)] bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
-                }`}
+                className="nn-pricing-pill-control px-4 py-2.5 text-sm font-semibold transition-[background-color,color,box-shadow,transform,border-color] duration-150 ease-out"
+                data-active={segment === id ? "true" : "false"}
               >
                 {segmentLabels[id]}
               </button>
@@ -891,11 +888,8 @@ export function PricingPageClient({
                       marketing_region: region,
                     });
                   }}
-                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out ${
-                    selectedAlliedCareer === career
-                      ? "bg-[var(--semantic-brand)] text-[var(--semantic-brand-contrast)] shadow-[var(--elevation-rest)]"
-                      : "border border-[var(--border-medium)] bg-card text-[var(--palette-text)] hover:-translate-y-px hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--elevation-hover)]"
-                  }`}
+                  className="nn-pricing-pill-control px-3 py-1.5 text-xs font-semibold transition-[background-color,color,box-shadow,transform] duration-150 ease-out"
+                  data-active={selectedAlliedCareer === career ? "true" : "false"}
                 >
                   {ALLIED_CAREER_DISPLAY_NAMES[career]}
                 </button>
@@ -939,20 +933,21 @@ export function PricingPageClient({
             return (
               <article
                 key={duration}
-                className={`nn-card-interactive nn-motion-standard relative flex flex-col rounded-2xl transition-shadow duration-200 ${
+                className={`nn-card-interactive nn-motion-standard nn-pricing-plan-card relative flex flex-col rounded-2xl border transition-shadow duration-200 ${
                   isPop
-                    ? "z-10 border-2 border-[var(--semantic-info)] bg-[color-mix(in_srgb,var(--semantic-info)_5%,var(--color-card))] p-7 shadow-[0_8px_32px_-4px_color-mix(in_srgb,var(--semantic-info)_20%,transparent)] xl:-my-3 xl:p-8"
+                    ? "z-10 p-7 xl:-my-3 xl:p-8"
                     : isBest
-                      ? "border-2 border-primary bg-[color-mix(in_srgb,var(--palette-primary)_4%,var(--color-card))] p-7 shadow-[0_4px_20px_-4px_color-mix(in_srgb,var(--palette-primary)_14%,transparent)]"
-                      : "border border-[var(--palette-border)] bg-card p-6 shadow-[var(--elevation-rest)] hover:shadow-[var(--elevation-hover)]"
+                      ? "p-7"
+                      : "p-6 hover:shadow-[var(--elevation-hover)]"
                 }`}
+                data-highlight={isPop ? "popular" : isBest ? "value" : undefined}
               >
                 {isPop ? (
-                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)] shadow-[0_2px_8px_color-mix(in_srgb,var(--semantic-info)_30%,transparent)]">
+                  <span className="nn-pricing-badge absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)]">
                     Most Popular
                   </span>
                 ) : isBest ? (
-                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-primary-foreground shadow-[0_2px_8px_color-mix(in_srgb,var(--palette-primary)_24%,transparent)]">
+                  <span className="nn-pricing-badge absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-success)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)]">
                     Best Value
                   </span>
                 ) : null}
@@ -1067,7 +1062,7 @@ export function PricingPageClient({
 
         {showConsentPrompt ? (
           <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 px-4 pb-4 pt-24 sm:items-center sm:pb-6">
-            <div className="w-full max-w-xl rounded-2xl border border-[var(--accent-surface-b-border)] bg-[var(--color-card)] p-5 shadow-[var(--elevation-hover)] sm:p-6">
+            <div className="nn-pricing-consent-modal w-full max-w-xl rounded-2xl border p-5 shadow-[var(--elevation-hover)] sm:p-6">
               <h3 className="text-lg font-semibold text-[var(--palette-heading)]">
                 Confirm before checkout
               </h3>
@@ -1152,7 +1147,7 @@ export function PricingPageClient({
 
         {/* Trial callout */}
         {trialDays > 0 && (
-          <div className="mx-auto max-w-xl rounded-2xl border border-[var(--semantic-success)]/20 bg-[color-mix(in_srgb,var(--semantic-success)_5%,var(--color-card))] px-8 py-6 text-center shadow-[var(--elevation-rest)]">
+          <div className="nn-pricing-trial-card mx-auto max-w-xl rounded-2xl border px-8 py-6 text-center shadow-[var(--elevation-rest)]">
             <p className="text-lg font-semibold text-[var(--palette-heading)]">
               Try Everything Free for {trialDays} Days
             </p>
@@ -1229,6 +1224,6 @@ export function PricingPageClient({
           <p className="mt-3 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
         )}
       </div>
-    </main>
+    </div>
   );
 }

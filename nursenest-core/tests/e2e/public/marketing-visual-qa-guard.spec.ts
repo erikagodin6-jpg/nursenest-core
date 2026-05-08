@@ -25,6 +25,15 @@ async function gotoMarketing(page: Page, path: string): Promise<void> {
   await page.waitForTimeout(600);
 }
 
+test.describe("Marketing visual QA guard — public theme chrome", () => {
+  test("theme picker hidden when public marketing exposes a single palette", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await gotoMarketing(page, "/");
+    const themeButtons = page.getByRole("button", { name: /^theme$/i });
+    await expect(themeButtons).toHaveCount(0);
+  });
+});
+
 test.describe("Marketing visual QA guard — shared routes", () => {
   for (const route of SHARED_ROUTES) {
     test(`no placeholder / junk copy in main (${route})`, async ({ page }) => {

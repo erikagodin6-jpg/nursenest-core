@@ -7,6 +7,7 @@ import {
   HOME_PERF_DIAG_VERSION,
   isNnTraceHomePerfTrue,
 } from "@/lib/observability/home-perf-diag";
+import { emitServerStderrLine } from "@/lib/observability/server-stderr-line";
 import { NN_HOME_PERF_ANCHOR_HEADER, NN_HOME_PERF_REQUEST_KIND_HEADER } from "@/lib/observability/home-perf-headers";
 
 const MARKETING_BUILD_PHASE = "phase-production-build";
@@ -86,7 +87,7 @@ export async function homePerfLogForGetRoot(
   const segment_ms = now - segmentT0;
 
   try {
-    console.error(
+    emitServerStderrLine(
       JSON.stringify({
         tag: "nn_home_perf",
         phase,
@@ -134,7 +135,7 @@ export async function homePerfFinalForGetRoot(
   const duration_ms = now - anchor;
 
   try {
-    console.error(
+    emitServerStderrLine(
       JSON.stringify({
         tag: "nn_home_perf",
         phase: "home.server.final",

@@ -184,8 +184,10 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
 
       if (hpEarly === "/") {
         try {
-          console.error(
-            "[nursenest-core] NN_HOME_STATIC_MARKETING_LAYOUT=1: minimal default marketing layout for / (no Sentry span, no chrome shards)",
+          layoutStderrTrace(
+            "marketing_layout",
+            "NN_HOME_STATIC_MARKETING_LAYOUT minimal shell for /",
+            { note: "no Sentry span, no chrome shards" },
           );
         } catch {}
 

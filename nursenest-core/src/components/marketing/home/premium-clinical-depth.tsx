@@ -63,7 +63,7 @@ export function PremiumClinicalDepth() {
         <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
           <div>
             <p className="nn-premium-home-eyebrow">
-              {tr("pages.home.premium.clinicalDepth.eyebrow", "Adaptive Lessons")}
+              {tr("pages.home.premium.clinicalDepth.eyebrow", "Adaptive lessons")}
             </p>
             <h2 id="premium-clinical-depth-heading" className="nn-marketing-h2 mt-4 text-balance text-[var(--palette-heading)]">
               {tr("pages.home.premium.clinicalDepth.heading", "Clinical depth without the textbook fog.")}

@@ -3,7 +3,11 @@
 import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import {
+  NURSENEST_DEFAULT_THEME,
+  THEME_OPTIONS,
+  themeOptionsForPublicMarketingPicker,
+} from "@/lib/theme/theme-registry";
 import { getClinicalThemeMeta } from "@/lib/ui/themes/clinical-theme-tokens";
 import { computeMarketingUtilityFloatingPanelRect } from "@/components/layout/marketing-utility-floating-panel-geometry";
 
@@ -23,6 +27,11 @@ type ThemePickerProps = {
   labels?: ThemePickerLabels;
   /** Render the menu in a fixed portal (marketing utility strip — avoids overlapping the row below). */
   dropdownPortal?: boolean;
+  /**
+   * `publicMarketing` — only themes in `PUBLIC_MARKETING_THEME_ALLOWLIST` (`theme-registry.ts`) appear in the menu.
+   * Learner account / exam modals use default `full`.
+   */
+  pickerScope?: "full" | "publicMarketing";
 };
 
 function ThemeSwatches({ opt }: { opt: (typeof THEME_OPTIONS)[number] }) {
@@ -50,61 +59,59 @@ function ThemeSwatches({ opt }: { opt: (typeof THEME_OPTIONS)[number] }) {
 }
 
 function ThemeMenuList({
+  options,
   current,
   currentLabel,
   L,
   setTheme,
   setOpen,
 }: {
+  options: typeof THEME_OPTIONS;
   current: string;
   currentLabel: string;
   L: Record<keyof typeof DEFAULT_THEME_LABELS, string>;
   setTheme: (id: string) => void;
   setOpen: (v: boolean) => void;
 }) {
+  const named = options.filter((o) => o.named);
+  const lightRest = options.filter((o) => o.group === "light" && !o.named);
+  const darkRest = options.filter((o) => o.group === "dark" && !o.named);
   return (
     <>
-      {(() => {
-        const named = THEME_OPTIONS.filter((o) => o.named);
-        return named.length > 0 ? (
-          <div>
-            <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--palette-text-muted)]">Featured</p>
-            {named.map((opt) => (
-              (() => {
-                const meta = getClinicalThemeMeta(opt.id);
-                return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    role="option"
-                    aria-selected={opt.id === current}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setTheme(opt.id);
-                      setOpen(false);
-                    }}
-                    className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-[background-color,color] duration-150 ease-out hover:bg-[var(--palette-nav-hover)] ${
-                      opt.id === current ? "font-semibold text-[var(--palette-accent)]" : "text-[var(--palette-nav-text)]"
-                    }`}
-                  >
-                    <ThemeSwatches opt={opt} />
-                    <span className="min-w-0 flex-1 leading-snug">
-                      <span className="block">{opt.label}</span>
-                      {meta ? <span className="block text-[11px] font-medium text-[var(--palette-text-muted)]">{meta.mood}</span> : null}
-                    </span>
-                  </button>
-                );
-              })()
-            ))}
-          </div>
-        ) : null;
-      })()}
-      {(["light", "dark"] as const).map((group) => (
-        <div key={group}>
-          <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--palette-text-muted)]">
-            {group === "light" ? L.themeGroupLight : L.themeGroupDark}
-          </p>
-          {THEME_OPTIONS.filter((o) => o.group === group && !o.named).map((opt) => (
+      {named.length > 0 ? (
+        <div>
+          <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--palette-text-muted)]">Featured</p>
+          {named.map((opt) => {
+            const meta = getClinicalThemeMeta(opt.id);
+            return (
+              <button
+                key={opt.id}
+                type="button"
+                role="option"
+                aria-selected={opt.id === current}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setTheme(opt.id);
+                  setOpen(false);
+                }}
+                className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-[background-color,color] duration-150 ease-out hover:bg-[var(--palette-nav-hover)] ${
+                  opt.id === current ? "font-semibold text-[var(--palette-accent)]" : "text-[var(--palette-nav-text)]"
+                }`}
+              >
+                <ThemeSwatches opt={opt} />
+                <span className="min-w-0 flex-1 leading-snug">
+                  <span className="block">{opt.label}</span>
+                  {meta ? <span className="block text-[11px] font-medium text-[var(--palette-text-muted)]">{meta.mood}</span> : null}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+      {lightRest.length > 0 ? (
+        <div>
+          <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--palette-text-muted)]">{L.themeGroupLight}</p>
+          {lightRest.map((opt) => (
             <button
               key={opt.id}
               type="button"
@@ -124,14 +131,43 @@ function ThemeMenuList({
             </button>
           ))}
         </div>
-      ))}
+      ) : null}
+      {darkRest.length > 0 ? (
+        <div>
+          <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--palette-text-muted)]">{L.themeGroupDark}</p>
+          {darkRest.map((opt) => (
+            <button
+              key={opt.id}
+              type="button"
+              role="option"
+              aria-selected={opt.id === current}
+              onClick={(e) => {
+                e.stopPropagation();
+                setTheme(opt.id);
+                setOpen(false);
+              }}
+              className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition-[background-color,color] duration-150 ease-out hover:bg-[var(--palette-nav-hover)] ${
+                opt.id === current ? "font-semibold text-[var(--palette-accent)]" : "text-[var(--palette-nav-text)]"
+              }`}
+            >
+              <ThemeSwatches opt={opt} />
+              <span className="min-w-0 flex-1 leading-snug">{opt.label}</span>
+            </button>
+          ))}
+        </div>
+      ) : null}
       <p className="border-t border-[var(--header-nav-border)] px-3 py-1.5 text-[10px] text-[var(--palette-text-muted)]">{currentLabel}</p>
     </>
   );
 }
 
 /** Lightweight theme control. Pass `labels` from marketing `useMarketingI18n`; learner shell omits labels (English defaults, no marketing JSON). */
-export function ThemePicker({ className = "", labels, dropdownPortal = false }: ThemePickerProps) {
+export function ThemePicker({
+  className = "",
+  labels,
+  dropdownPortal = false,
+  pickerScope = "full",
+}: ThemePickerProps) {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -189,6 +225,10 @@ export function ThemePicker({ className = "", labels, dropdownPortal = false }: 
   const current = mounted ? (resolvedTheme ?? theme ?? NURSENEST_DEFAULT_THEME) : NURSENEST_DEFAULT_THEME;
   const currentLabel = THEME_OPTIONS.find((o) => o.id === current)?.label ?? current;
   const L = { ...DEFAULT_THEME_LABELS, ...labels };
+  const menuOptions = pickerScope === "publicMarketing" ? themeOptionsForPublicMarketingPicker() : THEME_OPTIONS;
+  if (pickerScope === "publicMarketing" && menuOptions.length <= 1) {
+    return null;
+  }
 
   if (!mounted) {
     return (
@@ -207,7 +247,16 @@ export function ThemePicker({ className = "", labels, dropdownPortal = false }: 
     );
   }
 
-  const menu = <ThemeMenuList current={current} currentLabel={currentLabel} L={L} setTheme={setTheme} setOpen={setOpen} />;
+  const menu = (
+    <ThemeMenuList
+      options={menuOptions}
+      current={current}
+      currentLabel={currentLabel}
+      L={L}
+      setTheme={setTheme}
+      setOpen={setOpen}
+    />
+  );
 
   return (
     <div className={`relative ${className}`} ref={ref}>

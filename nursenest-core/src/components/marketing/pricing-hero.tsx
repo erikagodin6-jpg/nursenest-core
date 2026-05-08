@@ -28,7 +28,7 @@ export function PricingHero({
   return (
     <section
       data-testid="pricing-marketing-hero"
-      className="nn-gradient-safe relative overflow-hidden rounded-3xl px-6 pt-14 pb-10 text-center sm:px-14 sm:pt-10 sm:pb-14"
+      className="nn-gradient-safe nn-pricing-hero-premium relative overflow-hidden rounded-3xl px-6 pt-14 pb-10 text-center sm:px-14 sm:pt-10 sm:pb-14"
       style={{
         background: `
           linear-gradient(
@@ -53,11 +53,11 @@ export function PricingHero({
 
       <div className="relative mx-auto max-w-2xl">
         <p
-          className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider"
+          className="nn-premium-home-eyebrow mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wide"
           style={{
-            background: "color-mix(in srgb, var(--theme-primary) 10%, var(--semantic-surface))",
-            border: "1px solid color-mix(in srgb, var(--theme-primary) 22%, var(--semantic-border-soft))",
-            color: "var(--semantic-text-muted)",
+            background: "color-mix(in srgb, var(--semantic-surface) 88%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--theme-primary) 24%, var(--semantic-border-soft))",
+            color: "color-mix(in srgb, var(--theme-primary) 86%, var(--semantic-text-primary))",
           }}
         >
           Exam prep + clinical thinking + early-career support
@@ -74,7 +74,7 @@ export function PricingHero({
         </p>
 
         <p
-          className="mx-auto mt-6 inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold tracking-wide shadow-sm"
+          className="mx-auto mt-6 inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full px-5 py-2 text-center text-sm font-semibold tracking-wide shadow-sm"
           style={{
             background: "color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface))",
             border: "1px solid color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft))",

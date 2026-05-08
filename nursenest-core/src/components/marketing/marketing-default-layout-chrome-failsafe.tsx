@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { HeaderBrandLockup } from "@/components/brand/header-brand-lockup";
 import { ThemePicker } from "@/components/theme/theme-picker";
+import { publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
 import { SUPPORT_RESPONSE_TIME_COPY, supportMailtoHref } from "@/lib/support/support-policy";
 
 const PRIMARY_LINKS = [
@@ -51,7 +52,9 @@ export function MarketingDefaultLayoutChromeFailsafeShell({ children }: { childr
           </nav>
           <div className="flex shrink-0 items-center gap-2">
             <span className="hidden text-xs font-medium text-[var(--theme-muted-text)] sm:inline">EN</span>
-            <ThemePicker className="shrink-0" />
+            {publicMarketingThemeChoiceCount() > 1 ? (
+              <ThemePicker className="shrink-0" pickerScope="publicMarketing" />
+            ) : null}
             <Link
               href="/login"
               className="rounded-lg border border-[var(--nav-border)] px-2.5 py-1.5 text-xs font-semibold sm:text-sm"
