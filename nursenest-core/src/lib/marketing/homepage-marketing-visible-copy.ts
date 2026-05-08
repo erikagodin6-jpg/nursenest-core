@@ -3,10 +3,13 @@
  * when the provider echoes a key, omits a translation, or throws.
  */
 
+import { humanizedMarketingKeyFallback } from "@/lib/marketing-i18n/marketing-message-value-policy";
+
 type MarketingT = (key: string, params?: Record<string, string | number | undefined>) => string;
 
 const HOMEPAGE_PLACEHOLDER_LEAVES = new Set(
   [
+    "eyebrow",
     "kicker",
     "lead",
     "title",
@@ -51,6 +54,20 @@ export function isUntranslatedHomepageMarketingCopy(resolved: string, key: strin
   if (/^\[missing:/iu.test(r)) return true;
   if (HOMEPAGE_PLACEHOLDER_LEAVES.has(r.toLowerCase())) return true;
   if (/^(KICKER|LEAD|TITLE|BODY|LINK|LABEL|HEADING|CTA|BUTTON)$/u.test(r)) return true;
+
+  // Editor / stub titles that slipped into flat `pages.json` (camelCase tail humanization).
+  if (/\bheadline\s+premium\b/iu.test(r)) return true;
+  if (/\bsubheading\s+premium\b/iu.test(r)) return true;
+  if (/\breadiness\s+label\b/iu.test(r)) return true;
+
+  // MarketingI18n returns {@link humanizedMarketingKeyFallback} for missing keys — treat as untranslated
+  // so homepage sections keep their authored fallbacks (and never show "Eyebrow", "Headline premium", etc.).
+  try {
+    const humanized = humanizedMarketingKeyFallback(key).trim();
+    if (humanized && r.toLowerCase() === humanized.toLowerCase()) return true;
+  } catch {
+    /* ignore */
+  }
 
   return false;
 }
