@@ -11,6 +11,7 @@ const DEFAULT_LOCALE = "en";
 const MARKETING_LOCALE_RE = /^[a-z]{2}(-[a-z]{2})?$/i;
 const KNOWN_I18N_ROOTS = Array.from(
   new Set([
+    path.resolve(/* turbopackIgnore: true */ process.cwd(), "nursenest-core", "public", "i18n"),
     path.resolve(/* turbopackIgnore: true */ process.cwd(), "public", "i18n"),
     path.resolve(/* turbopackIgnore: true */ process.cwd(), ".next", "static", "i18n"),
     path.resolve(/* turbopackIgnore: true */ process.cwd(), "..", "client", "public", "i18n"),
@@ -24,9 +25,27 @@ function isWithinAllowedRoot(resolvedPath: string, allowedRoot: string): boolean
 /**
  * SAFE: resolve i18n dir across environments
  */
+function hasEnglishMarketingShardTree(root: string): boolean {
+  try {
+    return existsSync(path.join(root, "en", "pages.json"));
+  } catch {
+    return false;
+  }
+}
+
 function resolveI18nDir(): string | null {
   try {
-    for (const p of KNOWN_I18N_ROOTS) {
+    const ordered = Array.from(
+      new Set(KNOWN_I18N_ROOTS.map((candidate) => path.resolve(candidate))),
+    );
+
+    for (const p of ordered) {
+      try {
+        if (hasEnglishMarketingShardTree(p)) return p;
+      } catch {}
+    }
+
+    for (const p of ordered) {
       try {
         if (existsSync(p)) return p;
       } catch {}

@@ -1,5 +1,8 @@
 import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { NextResponse } from "next/server";
+
+import { resolveMarketingShardI18nRoot } from "@/lib/marketing-i18n/load-marketing-message-shards";
 
 /** Must match `script/compile-i18n.ts` / `script/merge-marketing-i18n.ts`. */
 const ALLOWED = new Set<string>([
@@ -7,12 +10,9 @@ const ALLOWED = new Set<string>([
   "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru",
 ]);
 
-/** Scoped to `public/i18n` under the app root (matches `source_dir` / `process.cwd()` on DO App Platform). */
-const I18N_DIR = /* turbopackIgnore: true */ `${process.cwd()}/public/i18n`;
-
 function resolveMergedBundle(lang: string): Record<string, string> | null {
   if (!ALLOWED.has(lang)) return null;
-  const file = `${I18N_DIR}/${lang}.json`;
+  const file = path.join(resolveMarketingShardI18nRoot(), `${lang}.json`);
   try {
     if (!existsSync(file)) return null;
     const parsed = JSON.parse(readFileSync(file, "utf8"));

@@ -1,18 +1,22 @@
 import "server-only";
 
 import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
+
+import { resolveMarketingShardI18nRoot } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { ProgrammaticPageOverlay } from "@/lib/seo/programmatic-overlay-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 type OverlayBundle = Record<string, ProgrammaticPageOverlay>;
-const PROGRAMMATIC_OVERLAY_DIR =
-  /* turbopackIgnore: true */ `${process.cwd()}/public/i18n/programmatic-overlays`;
+function programmaticOverlayDir(): string {
+  return path.join(resolveMarketingShardI18nRoot(), "programmatic-overlays");
+}
 
 const bundleCache = new Map<string, OverlayBundle | null>();
 
 function readBundleFromDisk(locale: string): OverlayBundle | null {
-  const single = `${PROGRAMMATIC_OVERLAY_DIR}/${locale}.json`;
+  const single = path.join(programmaticOverlayDir(), `${locale}.json`);
   if (existsSync(single)) {
     try {
       return JSON.parse(readFileSync(single, "utf8")) as OverlayBundle;

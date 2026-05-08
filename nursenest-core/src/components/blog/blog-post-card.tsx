@@ -52,7 +52,7 @@ export function BlogPostCard({
             featured ? "text-xl sm:text-2xl" : "text-base sm:text-lg",
           ].join(" ")}
         >
-          <span className="line-clamp-3 [overflow-wrap:anywhere]">{post.title}</span>
+          <span className="line-clamp-3 break-words [overflow-wrap:anywhere]">{post.title}</span>
         </h3>
         <p className={`mt-2 min-w-0 text-sm leading-relaxed text-[var(--theme-muted-text)] [overflow-wrap:anywhere] ${featured ? "line-clamp-4" : "line-clamp-3"}`}>
           {post.excerpt}
