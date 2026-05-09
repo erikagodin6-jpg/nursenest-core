@@ -73,6 +73,7 @@ export default async function AlliedCareerHubPage({ params }: Props) {
 
   let alliedInitialMeasurement: MeasurementPreference | null = null;
   let alliedMeasurementSync = false;
+  let viewerSignedIn = false;
   try {
     const fromCookie = readMeasurementPreferenceFromCookieStore(await cookies());
     if (fromCookie) alliedInitialMeasurement = fromCookie;
@@ -85,6 +86,7 @@ export default async function AlliedCareerHubPage({ params }: Props) {
       surface: "marketing.default.allied.career",
     });
     const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
+    viewerSignedIn = Boolean(userId);
     if (userId && isDatabaseUrlConfigured()) {
       alliedMeasurementSync = true;
       const row = await prisma.user.findUnique({
@@ -162,6 +164,7 @@ export default async function AlliedCareerHubPage({ params }: Props) {
           overview={overview}
           initialMeasurementPreference={alliedInitialMeasurement}
           syncMeasurementPreferenceToProfile={alliedMeasurementSync}
+          viewerSignedIn={viewerSignedIn}
         />
       </div>
     </div>

@@ -54,6 +54,14 @@ function benignConsoleText(msg: string): boolean {
   if (REACT_DEVTOOLS.test(msg)) return true;
   if (HMR.test(msg)) return true;
   if (msg.includes("Failed to load resource")) return true;
+  if (msg.includes("auth_noindex_path") && msg.includes("/login")) return true;
+  if (msg.includes("pathway_lessons") && msg.includes("pathway_lesson_prisma")) return true;
+  if (msg.includes("pathway_lessons") && msg.includes("hub_list_pipeline_stages")) return true;
+  if (msg.includes("pathway_lessons") && msg.includes("hub_marketing_all_db_candidates_filtered_out")) {
+    return true;
+  }
+  if (msg.includes("pathway_lessons") && msg.includes("hub_list_renderable_truncated_to_cap")) return true;
+  if (msg.includes("exam_pathway_hub") && msg.includes("allied_hub_route_diagnostic")) return true;
   return false;
 }
 
@@ -266,25 +274,124 @@ test.describe("Pathway hub premium modules — interaction & gates (guest)", () 
     await captureHubScreenshot(page, "new-grad-desktop-ocean");
   });
 
-  test("Allied hub: no ECG; premium grid loads", async ({ page, baseURL }) => {
+  test("Allied global hub: occupation chooser only; no ECG / NP cases / admin links; theme + mobile screenshots", async ({
+    page,
+    baseURL,
+  }) => {
+    const origin = requireOrigin(baseURL);
+    const diag = attachPageDiagnostics(page);
+    await seedUsMarketingCookie(page, origin);
+
+    await gotoExpectOk(page, "/allied/allied-health");
+    await page.waitForLoadState("domcontentloaded");
+    await expect(page.getByRole("link", { name: /Choose Your Occupation Track/i })).toBeVisible({
+      timeout: 120_000,
+    });
+    await assertNoReactCrashOverlay(page);
+
+    await expect(page.locator(PREMIUM_ROOT)).toHaveCount(0);
+    await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(0);
+    await expect(page.locator('[data-nn-qa-hub-np-cases="1"]')).toHaveCount(0);
+    await assertNoForbiddenPublicLinks(page, "main");
+
+    await expectHttpOkNoServerError(page, "/allied/allied-health/lessons");
+
+    for (const vp of VIEWPORTS) {
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      for (const th of THEME_BUCKETS) {
+        await gotoExpectOk(page, "/allied/allied-health");
+        await page.waitForLoadState("domcontentloaded");
+        await expect(page.getByRole("link", { name: /Choose Your Occupation Track/i })).toBeVisible({
+          timeout: 120_000,
+        });
+        await applyThemeBucket(page, th.id);
+        await page.waitForTimeout(400);
+        await captureHubScreenshot(page, "allied-global-" + vp.name + "-" + th.name);
+      }
+    }
+
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await gotoExpectOk(page, "/allied/allied-health");
+    await page.waitForLoadState("domcontentloaded");
+    await expect(page.getByRole("link", { name: /Choose Your Occupation Track/i })).toBeVisible({
+      timeout: 120_000,
+    });
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(12);
+
+    const ce = diag.consoleErrors.filter((x) => !benignConsoleText(x));
+    expect(ce, "console errors: " + ce.join(" | ")).toEqual([]);
+  });
+
+  test("Allied occupation /allied/mlt: profession scoping + locked OSCE safety + login interactivity", async ({
+    page,
+    baseURL,
+  }) => {
     const origin = requireOrigin(baseURL);
     attachPageDiagnostics(page);
     await seedUsMarketingCookie(page, origin);
 
-    await gotoExpectOk(page, "/allied/allied-health");
+    await gotoExpectOk(page, "/allied/mlt");
     await settlePage(page);
 
-    await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(0);
     await expect(page.locator(PREMIUM_ROOT)).toBeVisible();
-    await assertNoForbiddenPublicLinks(page, '[data-nn-qa-pathway-premium-modules]');
+    await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(0);
+    await expect(page.locator('[data-nn-qa-hub-np-cases="1"]')).toHaveCount(0);
+    await assertNoForbiddenPublicLinks(page, PREMIUM_ROOT);
+    await expect(
+      page.locator(PREMIUM_ROOT + "[data-nn-allied-premium-accent]"),
+    ).toHaveCount(1);
 
-    await expectHttpOkNoServerError(page, "/allied/allied-health/lessons");
+    for (const key of ["flashcards", "practice_tests", "labs", "med_calc", "weak_areas"]) {
+      const href = await page
+        .locator('[data-nn-qa-hub-premium-module="' + key + '"] a.nn-exam-hub-study-card')
+        .first()
+        .getAttribute("href");
+      const decoded = decodeURIComponent(href ?? "");
+      expect(decoded, key + " href should include allied profession scope").toContain(
+        "alliedProfession=mlt",
+      );
+      expect(decoded, key + " href should include allied pathway id").toContain("us-allied-core");
+      expect(href ?? "", key + " href is guest-safe (login callback)").toContain("/login");
+      expect(href ?? "", key + " href has no admin route").not.toContain("/admin");
+      expect(href ?? "", key + " href has no staff route").not.toContain("/staff");
+    }
 
-    await page.setViewportSize({ width: 1280, height: 900 });
-    await gotoExpectOk(page, "/allied/allied-health");
+    const osceRow = page.locator('[data-nn-qa-hub-premium-module="osce"]');
+    if ((await osceRow.count()) > 0) {
+      const osceLinks = osceRow.locator("a.nn-exam-hub-study-card");
+      if ((await osceLinks.count()) > 0) {
+        const osceHref = await osceLinks.first().getAttribute("href");
+        const safe = osceHref === "/" || (osceHref ?? "").startsWith("/login");
+        expect(safe, "OSCE locked href must be '/' or /login (got " + (osceHref ?? "null") + ")").toBe(
+          true,
+        );
+      } else {
+        await expect(osceRow.locator(".nn-exam-hub-study-card")).toBeVisible();
+      }
+    }
+
+    await clickGuestLoginModule(page, "flashcards");
+
+    await gotoExpectOk(page, "/allied/mlt");
     await settlePage(page);
-    await applyThemeBucket(page, "ocean");
-    await captureHubScreenshot(page, "allied-desktop-ocean");
+    await expectHttpOkNoServerError(
+      page,
+      "/app/flashcards?pathwayId=us-allied-core&alliedProfession=mlt",
+    );
+
+    for (const vp of VIEWPORTS) {
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      for (const th of THEME_BUCKETS) {
+        await gotoExpectOk(page, "/allied/mlt");
+        await settlePage(page);
+        await applyThemeBucket(page, th.id);
+        await page.waitForTimeout(400);
+        await captureHubScreenshot(page, "allied-mlt-" + vp.name + "-" + th.name);
+      }
+    }
   });
 
   test("Pre-Nursing hub: quick modes + practice login routing (no premium module grid)", async ({

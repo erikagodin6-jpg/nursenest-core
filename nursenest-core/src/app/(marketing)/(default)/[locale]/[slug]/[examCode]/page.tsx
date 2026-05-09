@@ -248,6 +248,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
             overview={alliedOverview}
             initialMeasurementPreference={alliedInitialMeasurement}
             syncMeasurementPreferenceToProfile={alliedMeasurementSync}
+            viewerSignedIn={viewerSignedIn}
           />
         ) : content ? (
           <NursingTierHubPage

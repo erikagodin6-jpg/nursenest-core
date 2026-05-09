@@ -1,20 +1,17 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import {
-  Activity,
-  BookOpen,
   ClipboardCheck,
   FileBarChart,
   GraduationCap,
   HeartHandshake,
-  Layers,
   Sparkles,
   Stethoscope,
-  Target,
 } from "lucide-react";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import { StudyCard } from "@/components/ui/study-card";
+import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import {
@@ -79,6 +76,7 @@ export function AlliedHealthPathwayHub({
   overview = null,
   initialMeasurementPreference = null,
   syncMeasurementPreferenceToProfile = false,
+  viewerSignedIn = false,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
@@ -91,6 +89,7 @@ export function AlliedHealthPathwayHub({
   initialMeasurementPreference?: MeasurementPreference | null;
   /** When true and the viewer is signed in, unit toggle PATCHes `/api/learner/personal-profile` (cookie/localStorage still apply for guests). */
   syncMeasurementPreferenceToProfile?: boolean;
+  viewerSignedIn?: boolean;
 }) {
   const isGlobalAlliedHub = hubPath === buildAlliedGlobalHubPath();
   const countryLine = isGlobalAlliedHub ? "Global" : pathway.countrySlug === "canada" ? "Canada" : "United States";
@@ -521,7 +520,6 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={lessonsHref}
               className="nn-exam-hub-study-card--lessons nn-qa-allied-hub-lessons"
-              icon={BookOpen}
               title="Lessons by category"
               description="Pathway-scoped modules aligned to discipline clusters — same card layout as the lessons hub."
               cta="Open Lessons"
@@ -533,7 +531,6 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={questionsHref}
               className="nn-exam-hub-study-card--questions nn-qa-allied-hub-questions"
-              icon={Target}
               title="Practice questions"
               description="Vignettes and rationales filtered to your allied authorization lane — no RN-only depth mixed in."
               cta="Practice Questions Hub"
@@ -545,7 +542,6 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={flashcardsHref}
               className="nn-exam-hub-study-card--flashcards nn-qa-allied-hub-flashcards"
-              icon={Layers}
               title="Flashcards"
               description="High-yield recall for terminology, protocols, and safety edges. Opens the in-app flashcard builder for this pathway."
               cta="Open Flashcards"
@@ -557,7 +553,6 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={practiceTestsHref}
               className="nn-exam-hub-study-card--practice nn-qa-allied-hub-practice-exams"
-              icon={ClipboardCheck}
               title="Practice exams"
               description="Longer exam-style sets with pathway-aware pacing and sign-in callbacks that keep the allied tier in scope."
               cta="Open Practice Exams"
@@ -569,7 +564,6 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={catHref}
               className="nn-exam-hub-study-card--cat nn-qa-allied-hub-cat"
-              icon={Activity}
               title="Adaptive readiness"
               description="CAT-style practice where difficulty responds to performance — use this when you are ready for longer, exam-shaped sessions."
               cta="Explore Adaptive Hub"
@@ -577,6 +571,14 @@ export function AlliedHealthPathwayHub({
           </li>
         </ul>
       </section>
+      ) : null}
+
+      {showFullStudySurface ? (
+        <ExamPathwayHubPremiumModules
+          pathway={pathway}
+          isSignedIn={viewerSignedIn}
+          alliedProfessionKey={profKey || null}
+        />
       ) : null}
 
       {showFullStudySurface && overview && overview.moduleCards.length > 0 ? (
