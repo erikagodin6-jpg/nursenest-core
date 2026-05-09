@@ -1,36 +1,51 @@
-# Footer premium implementation — report
+# Footer premium (Figma-aligned) — implementation report
 
-## Summary
+## Audit (pre-change)
 
-Marketing `SiteFooter` was restructured: brand + trust on the left; three columns (Nursing pathways, Study tools, Support & company with regional hubs); Account band; email banner; compact bottom meta (copyright, country, languages, theme, trust line). New helper **`publicMarketingFooterStudyToolsDestinations`** in `canonical-destinations.ts` centralizes RN-default links for CAT, ECG, OSCE, labs, med-calculations, pharmacology, and `/tools/med-math`.
-
-## Token / CSS
-
-- TSX: existing `--footer-*` and `color-mix` with semantic tokens only.
-- `premium-redesign-2026.css`: `.nn-footer-premium-top`, `.nn-footer-panel--bottom-meta` gradient wash.
+- Primary marketing footer: `nursenest-core/src/components/layout/site-footer.tsx` (marketing + admin chrome).
+- Footer shell styling: `nursenest-core/src/app/premium-redesign-2026.css` under `[data-nn-footer-layout="marketing"]`.
+- Playwright: `tests/e2e/public/footer-premium-responsive.spec.ts`, `tests/e2e/navigation/footer-marketing-premium.spec.ts`.
 
 ## Truthpack
 
-`.vibecheck/truthpack/` not present in clone; routes aligned to existing navigation modules.
+Requested `.vibecheck/truthpack/ui-pages.json`, `copy.json`, and `routes.json` were **not present** in this clone. Labels and hrefs follow `canonical-destinations.ts`, `marketing-chrome-href`, and existing i18n keys.
 
 ## Figma
 
-No file key in-repo; MCP `get_design_context` not run. Frames TBD.
+`figma-use` / MCP frame creation was not executed in this environment. Layout follows the task brief and existing premium marketing tokens.
+
+## Implementation notes
+
+- **Columns:** Nursing pathways; Study tools (dropped extra “More study tools” link); Support & company (About → Pricing → FAQ → Blog → Contact → Privacy → Terms → For institutions), then regional featured links.
+- **Mobile:** Scoped `nn-footer-premium-accordion` `<details>` per column; desktop uses `hidden md:block` heading + CSS forces panel visible at `md+` (no `matchMedia` hydration split).
+- **Bottom meta:** Removed duplicate trust paragraph; kept copyright, country, languages, theme picker, legal disclaimer.
+- **Tokens:** New `nn-footer-premium-*` rules in `premium-redesign-2026.css`; language chips no longer use long inline color classes.
+- **`data-nn-footer-root`** on `<footer>` for tests.
 
 ## Screenshots
 
-`docs/screenshots/footer-figma-premium/README.md` (repo root). Playwright `footer-marketing-premium.spec.ts` writes PNGs there.
+Directory: `docs/screenshots/footer-figma-premium/` — naming policy in `README.md` there. Playwright optional test adds **tablet** captures (`*-tablet.png`).
 
 ## Playwright
 
-- New: `tests/e2e/public/footer-premium-responsive.spec.ts` (serial, 240s timeout).
-- Updated screenshot dir in `footer-marketing-premium.spec.ts`.
+- `footer-premium-responsive.spec.ts`: all footer `a[href]` non-empty and not exactly `#`.
+- `footer-marketing-premium.spec.ts`: href smoke + optional full-page screenshots (desktop/tablet/mobile × themes).
 
-**Blocker (this env):** `npx playwright test …` failed — webServer env validation (missing AI keys).
+## Validation commands (from `nursenest-core/` app dir)
 
-## Commands
+```bash
+npm run typecheck:critical
+npm run test:homepage
+npx playwright test tests/e2e/public/footer-premium-responsive.spec.ts --project=chromium
+```
 
-- `npm run typecheck:critical` → 0
-- `npm run test:homepage` → 0
-- `node --import tsx --test src/lib/marketing/marketing-route-integrity.test.ts` → 0
+Record exit codes from your local/CI run.
 
+## Blockers
+
+- Truthpack JSON missing locally if your workflow requires it.
+- Figma automation unavailable here.
+
+## Verdict
+
+Footer stays on semantic + footer tokens; mobile accordions reduce visual density while keeping links in the DOM for SEO.

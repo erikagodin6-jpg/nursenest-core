@@ -133,6 +133,28 @@ test.describe("Marketing footer — premium layout", () => {
         fullPage: true,
       });
 
+      await page.setViewportSize({ width: 820, height: 1100 });
+      await page.evaluate((id) => document.documentElement.setAttribute("data-theme", id), themeId);
+      await expect(page.locator("html")).toHaveAttribute("data-theme", themeId);
+      await gotoExpectOk(page, "/");
+      await dismissMarketingScrims(page);
+      await page.locator(FOOTER).scrollIntoViewIfNeeded();
+      await expect(page.locator(FOOTER)).toBeVisible({ timeout: 45_000 });
+      await page.screenshot({
+        path: join(SCREENSHOT_OUT, `footer-home-${themeId}-tablet.png`),
+        fullPage: true,
+      });
+
+      await gotoExpectOk(page, CANONICAL_PATHWAY_HUB.usRn);
+      await dismissMarketingScrims(page);
+      await page.evaluate((id) => document.documentElement.setAttribute("data-theme", id), themeId);
+      await page.locator(FOOTER).scrollIntoViewIfNeeded();
+      await expect(page.locator(FOOTER)).toBeVisible({ timeout: 60_000 });
+      await page.screenshot({
+        path: join(SCREENSHOT_OUT, `footer-rn-hub-${themeId}-tablet.png`),
+        fullPage: true,
+      });
+
       await page.evaluate(() => document.documentElement.removeAttribute("data-theme"));
     }
   });

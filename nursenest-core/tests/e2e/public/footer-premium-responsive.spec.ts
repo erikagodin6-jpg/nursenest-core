@@ -82,19 +82,20 @@ test.describe("Marketing footer — premium responsive", () => {
     await dismissMarketingScrims(page);
     await expectMarketingPublicShell(page);
 
-    for (const themeId of ["ocean", "blossom", "midnight"] as const) {
-      await applyTheme(page, themeId);
-      const footer = page.locator(FOOTER).first();
-      await footer.scrollIntoViewIfNeeded();
-      await expect(footer).toBeVisible({ timeout: 45_000 });
+      for (const themeId of ["ocean", "blossom", "midnight"] as const) {
+        await applyTheme(page, themeId);
+        const footer = page.locator(FOOTER).first();
+        await footer.scrollIntoViewIfNeeded();
+        await expect(footer).toBeVisible({ timeout: 45_000 });
 
-      const anchors = footer.locator("a[href]");
-      const count = await anchors.count();
-      expect(count, "footer should expose links").toBeGreaterThan(4);
-      for (let i = 0; i < Math.min(count, 14); i += 1) {
-        const href = await anchors.nth(i).getAttribute("href");
-        expect(href?.trim().length ?? 0, `anchor ${i} href`).toBeGreaterThan(1);
-      }
+        const anchors = footer.locator("a[href]");
+        const count = await anchors.count();
+        expect(count, "footer should expose links").toBeGreaterThan(4);
+        for (let i = 0; i < count; i += 1) {
+          const href = (await anchors.nth(i).getAttribute("href"))?.trim() ?? "";
+          expect(href.length, `anchor ${i} href`).toBeGreaterThan(1);
+          expect(href, `anchor ${i} should not be placeholder`).not.toMatch(/^#$/);
+        }
 
       const heading = footer.locator(".nn-footer-col-heading").first();
       const fg = await heading.evaluate((el) => getComputedStyle(el).color);

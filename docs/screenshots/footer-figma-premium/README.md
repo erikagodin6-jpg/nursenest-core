@@ -1,27 +1,19 @@
-# Footer premium — screenshots
+# Footer premium — screenshot naming
 
-Store Playwright and manual captures for the marketing **SiteFooter** refresh (`data-nn-footer-layout="marketing"`).
+Captures are written by Playwright (`tests/e2e/navigation/footer-marketing-premium.spec.ts`) when the optional evidence test runs with a live `baseURL`.
 
-## Expected layout
+## Naming policy
 
-- **Homepage** `/` and **RN hub** `/us/rn/nclex-rn` (US cookie), themes **ocean**, **blossom**, **midnight**, viewports **desktop (1280+)**, **tablet (~820)**, **mobile (390)**.
+- **Surface:** `footer-home-*` (marketing homepage `/`) or `footer-rn-hub-*` (US RN exam hub from `CANONICAL_PATHWAY_HUB.usRn`).
+- **Theme:** `ocean`, `blossom`, or `midnight` (`data-theme` on `<html>`).
+- **Viewport suffix:** `desktop` (1440×900 in spec), `tablet` (820×1100), `mobile` (390×844).
 
-## Automated captures
+## Examples
 
-With dev server or `baseURL` set:
+- `footer-home-ocean-desktop.png`
+- `footer-home-blossom-tablet.png`
+- `footer-rn-hub-midnight-mobile.png`
 
-```bash
-cd nursenest-core
-npx playwright test tests/e2e/navigation/footer-marketing-premium.spec.ts --project=chromium
-npx playwright test tests/e2e/public/footer-premium-responsive.spec.ts --project=chromium
-```
+Re-run capture test from app package:
 
-Artifacts are written here by `footer-marketing-premium.spec.ts` (full-page PNGs per theme × viewport).
-
-## Manual / Figma
-
-If Figma frames are not yet linked in-repo, attach exports under this folder using the same naming pattern: `footer-home-{theme}-{viewport}.png`, `footer-rn-hub-{theme}-{viewport}.png`.
-
-## Blockers
-
-- CI without a reachable `baseURL` skips overflow/theme evidence runs; document `SKIP` in the implementation report when that applies.
+`cd nursenest-core && npx playwright test tests/e2e/navigation/footer-marketing-premium.spec.ts -g "optional data-theme"`
