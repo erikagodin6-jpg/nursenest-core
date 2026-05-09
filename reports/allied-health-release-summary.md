@@ -37,3 +37,9 @@ Workspace: `/root/nursenest-core` (app: `nursenest-core/`)
 
 Commit selective docs + e2e + screenshot readme when ready; verify `git push` after local gates.
 
+
+## Recorded revision
+
+- **Commit (deliverable bundle):** `8306509537cff4afed8255a6bfa30e3d60ea6b60`
+- **Revert of accidental follow-up:** `131708a6c` (removed unrelated regression/WIP files)
+- **Remote:** `origin/main` — verify post-push with `git pull`
