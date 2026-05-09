@@ -10,6 +10,10 @@ import { MarketingPublicLessonsHubAnonymousUpgradeStrip } from "@/components/pat
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CURRICULUM_HUB = path.resolve(__dirname, "../../components/pathway-lessons/pathway-lessons-curriculum-hub.tsx");
+const LESSONS_HUB_PAGE = path.resolve(
+  __dirname,
+  "../../app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx",
+);
 
 const BLOCKLIST = [
   "debug",
@@ -79,5 +83,11 @@ describe("public lessons hub — anonymous marketing surfaces", () => {
     const src = fs.readFileSync(CURRICULUM_HUB, "utf8");
     assert.ok(src.includes("NN_MARKETING_HUB_PIPELINE_DIAGNOSTICS"));
     assert.ok(src.includes("pipelineDiagAllowed"));
+  });
+
+  it("hub route source avoids restored arch graphic markers", () => {
+    const src = fs.readFileSync(LESSONS_HUB_PAGE, "utf8");
+    assert.equal(src.includes("nn-arch"), false);
+    assert.equal(src.toLowerCase().includes("archgraphic"), false);
   });
 });
