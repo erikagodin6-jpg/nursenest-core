@@ -112,3 +112,13 @@ Unique title/meta; canonical; Article JSON-LD; verified internal links; alt text
 ## Mandatory policy statement
 
 **~300 long-tail pathophysiology/pharmacology posts require editorial and clinical QA before production.** Bulk publishing unreviewed medical content is out of scope. **No broken links policy** applies to curated internal links—verify against a lesson/route registry on staging before go-live.
+
+## Appendix: Inventory → admin batch (tooling, 2026-05-09)
+
+**Markdown table:** Run `npm run blog:longtail:inventory-md` from `nursenest-core/` to regenerate `reports/longtail-patho-pharm-topic-inventory.md` from `longtail-patho-pharm-topic-inventory.csv` (300 rows).
+
+**Paste-many topics:** `npm run blog:longtail:topics-for-batch` prints one title per line for `/admin/blog/topic-batch`. Use `--print-preview-body` on `longtail-inventory-topics-batch.mts` for a sample JSON body matching `POST /api/admin/blog/batch-schedule/preview`.
+
+**Read-only slug collisions:** `npm run blog:longtail:slugs-db-check` (requires `DATABASE_URL`).
+
+**Publishing status:** See `reports/longtail-seo-blog-publishing-report.md`.
