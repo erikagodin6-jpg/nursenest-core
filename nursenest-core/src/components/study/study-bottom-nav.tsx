@@ -11,20 +11,22 @@ type Props = {
   next?: NavLink;
   /** Related quick-links shown in the bottom row */
   relatedLinks?: NavLink[];
+  /** Tighter spacing for dense marketing hub shells */
+  compact?: boolean;
 };
 
 /**
  * Shared bottom navigation block used on both Lessons and Questions hub pages.
  * Shows prev/next page-level navigation and a row of related surface links.
  */
-export function StudyBottomNav({ prev, next, relatedLinks }: Props) {
+export function StudyBottomNav({ prev, next, relatedLinks, compact }: Props) {
   if (!prev && !next && (!relatedLinks || relatedLinks.length === 0)) return null;
 
+  const edge = compact ? "mt-8 pt-6" : "mt-12 pt-8";
+  const relatedGap = compact ? "mt-4" : "mt-6";
+
   return (
-    <nav
-      aria-label="Page navigation"
-      className="mt-12 border-t border-[var(--semantic-border-soft)] pt-8"
-    >
+    <nav aria-label="Page navigation" className={`border-t border-[var(--semantic-border-soft)] ${edge}`}>
       {(prev ?? next) ? (
         <div className="flex items-center justify-between gap-4">
           {prev ? (
@@ -51,7 +53,7 @@ export function StudyBottomNav({ prev, next, relatedLinks }: Props) {
       ) : null}
 
       {relatedLinks && relatedLinks.length > 0 ? (
-        <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2">
+        <div className={`${relatedGap} flex flex-wrap gap-x-4 gap-y-2`}>
           <span className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
             Also on this pathway:
           </span>

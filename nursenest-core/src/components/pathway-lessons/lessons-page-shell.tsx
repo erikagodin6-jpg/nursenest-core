@@ -53,7 +53,7 @@ export function LessonsPageShell({
       data-nn-lessons-marketing-hub="1"
       {...(pathwayTrack ? { "data-pathway-track": pathwayTrack } : {})}
     >
-      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8">
         <section aria-labelledby="nn-lessons-hub-title">
           <div className="nn-nursing-tier-hub-hero-band">
             {backLink ? (
@@ -98,7 +98,7 @@ export function LessonsPageShell({
           </div>
         </section>
 
-        <section className="nn-premium-lessons-hub-body mt-4 rounded-[2rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-[0_14px_40px_color-mix(in_srgb,var(--palette-heading)_8%,transparent)] sm:mt-5 sm:p-4 lg:p-5">
+        <section className="nn-premium-lessons-hub-body mt-3 rounded-[2rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-[0_14px_40px_color-mix(in_srgb,var(--palette-heading)_8%,transparent)] sm:mt-4 sm:p-4 lg:p-5">
           {children}
         </section>
       </div>

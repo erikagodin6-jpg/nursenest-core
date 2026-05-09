@@ -65,7 +65,6 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import type { HubDbFailureCategory } from "@/lib/db/safe-database";
-import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
@@ -1366,13 +1365,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     progressMap = map;
   }
 
-  const studyCards = defaultLessonModeCards({
-    lessonsHref: base,
-    questionsHref,
-    catHref,
-    pathwayShortName: pathway.shortName,
-  });
-
   return (
     <LessonsPageShell
       title={heroTitle}
@@ -1424,7 +1416,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
       <section
         id="pathway-lesson-library"
-        className="nn-qa-pathway-lessons-hub mt-4 scroll-mt-24"
+        className="nn-qa-pathway-lessons-hub mt-2 scroll-mt-24"
         data-nn-qa-pathway-lessons-hub="true"
         aria-labelledby="lesson-library-heading"
       >
@@ -1517,11 +1509,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         lessonsOnPage={lessonsOnPageForPagination}
       />
 
-      <section className="mt-10">
-        <StudyModeCards heading="Other ways to study" cards={studyCards} />
-      </section>
-
       <StudyBottomNav
+        compact
         relatedLinks={[
           { label: "Practice questions", href: questionsHref },
           { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },

@@ -2118,6 +2118,28 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
   color: var(--semantic-info);
 }
 
+.nn-premium-hero-stats--rail {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 0;
+  gap: 8px;
+}
+
+.nn-premium-hero-stats--rail .nn-premium-hero-stat {
+  padding: 10px 12px;
+}
+
+.nn-premium-hero-stats--rail .nn-premium-hero-stat__value {
+  font-size: 17px;
+}
+
+.nn-flashcard-session-rail .nn-premium-hero-stat__label {
+  color: var(--semantic-text-muted);
+}
+
+.nn-flashcard-session-rail .nn-premium-hero-stat__value {
+  color: var(--semantic-text-primary);
+}
+
 /* Optional: simple study surface — `FlashcardViewer` (batch / API cursors) */
 .nn-flashcard-face-animate {
   animation: nn-flashcard-face-in 220ms ease-out both;

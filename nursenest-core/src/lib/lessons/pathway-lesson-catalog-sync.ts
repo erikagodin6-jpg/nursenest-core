@@ -1525,6 +1525,11 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   const usePremium = lessonQualifiesForPremiumNormalization(incoming);
   const isPremiumPath = usePremium;
   const usedFallback = !usePremium;
+  /** Dev-safe: authoritative canonical legacy five-block lessons must not hit `expandToStandardFiveSections` (throws when authoritative). */
+  const legacyAuthoritativePassThrough =
+    !usePremium &&
+    lessonSectionsQualifyAsAuthoritativeSoleSource(incoming) &&
+    lessonSectionsAreCanonicalLegacyMarketingShape(incoming);
 
   if (process.env.PATHWAY_LESSON_RENDER_DECISION === "1") {
     safeServerLog("pathway_lesson", "[LESSON_RENDER]", {
@@ -1535,7 +1540,11 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     });
   }
 
-  let expanded = usePremium ? finalizePremiumSections(incoming) : expandToStandardFiveSections(incoming);
+  let expanded = usePremium
+    ? finalizePremiumSections(incoming)
+    : legacyAuthoritativePassThrough
+      ? incoming.map((s) => ({ ...s }))
+      : expandToStandardFiveSections(incoming);
   const lessonSlugEarly = typeof raw.slug === "string" ? raw.slug : "";
   let premiumOmittedMerged: PathwayLessonOmittedPremiumSection[] | undefined = Array.isArray(
     raw.premiumOmittedSections,
@@ -1635,7 +1644,7 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     sections: expanded,
     normalizeTrace: {
       usedPremiumPath: usePremium,
-      usedLegacyFiveBlockExpander: !usePremium,
+      usedLegacyFiveBlockExpander: !usePremium && !legacyAuthoritativePassThrough,
       incomingSectionCount: incoming.length,
       totalWordCount: incomingWordCount,
       meaningfulClinicalBypass: meaningfulBypass,
