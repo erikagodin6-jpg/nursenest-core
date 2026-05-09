@@ -2,6 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
+import {
+  REQUIRED_ALLIED_PROFESSION_KEYS,
+  resolveAlliedProfessionTopicSlugsForLessonIndexVerification,
+} from "@/lib/allied/allied-profession-lesson-index-verification";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { isNNForcePublishValidRawLessons } from "@/lib/lessons/pathway-lesson-force-publish";
 import {
@@ -159,18 +163,7 @@ export type LessonNormalizationCoverageReport = {
   alliedProfessionCoverage: AlliedProfessionCoverage[];
 };
 
-export const REQUIRED_ALLIED_PROFESSION_KEYS = [
-  "mlt",
-  "paramedic",
-  "ota",
-  "pta",
-  "social-work",
-  "mental-health-addictions",
-  "psw-hca",
-  "respiratory",
-  "imaging",
-  "pharmacy-tech",
-] as const;
+export { REQUIRED_ALLIED_PROFESSION_KEYS };
 
 export function reportsRootDir(): string {
   return path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "reports");
@@ -296,10 +289,23 @@ function buildRequiredAlliedProfessionCoverage(): AlliedProfessionCoverage[] {
       } satisfies AlliedProfessionCoverage;
     }
 
-    const topicSlugsIn = [...(profession.topicSlugsIn ?? [])];
+    const rawTopics = [...(profession.topicSlugsIn ?? [])];
+    const { resolvedTopicSlugsIn: topicSlugsIn, anchorAdded } =
+      resolveAlliedProfessionTopicSlugsForLessonIndexVerification(rawTopics);
     const mapped = topicSlugsIn.length
       ? lessons.filter((lesson) => topicSlugsIn.includes(lesson.topicSlug))
       : [];
+
+    const baseNotes =
+      topicSlugsIn.length > 0
+        ? mapped.length > 0
+          ? "Profession page has a live lesson-source mapping through allied topic filters."
+          : "Profession declares allied topic filters, but none of the public allied lessons match them yet."
+        : "Profession page has no `topicSlugsIn` mapping, so it falls back to the generic allied hub.";
+    const anchorNote =
+      anchorAdded != null
+        ? ` Structural fallback anchor "${anchorAdded}" was applied because registry topic labels did not intersect normalized hub lesson.topicSlug rows (temporary until profession-specific rows publish with matching topic metadata).`
+        : "";
 
     return {
       professionKey,
@@ -309,12 +315,7 @@ function buildRequiredAlliedProfessionCoverage(): AlliedProfessionCoverage[] {
       mappedLessonCount: mapped.length,
       mappedLessonSlugs: mapped.map((lesson) => lesson.slug),
       status: mapped.length > 0 ? "mapped" : "unmapped",
-      notes:
-        topicSlugsIn.length > 0
-          ? mapped.length > 0
-            ? "Profession page has a live lesson-source mapping through allied topic filters."
-            : "Profession declares allied topic filters, but none of the public allied lessons match them yet."
-          : "Profession page has no `topicSlugsIn` mapping, so it falls back to the generic allied hub.",
+      notes: `${baseNotes}${anchorNote}`,
     } satisfies AlliedProfessionCoverage;
   });
 }

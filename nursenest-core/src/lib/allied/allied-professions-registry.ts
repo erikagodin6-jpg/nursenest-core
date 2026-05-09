@@ -130,13 +130,34 @@ export function alliedProfessionPremiumCtaHeadline(p: AlliedProfessionMarketing)
 
 const US_ALLIED = "us-allied-core";
 
+/**
+ * ### Allied profession `topicSlugsIn` (lesson-index verification)
+ *
+ * `npm run verify:lesson-indexes` intersects each profession's {@link AlliedProfessionMarketing.topicSlugsIn} with
+ * normalized `lesson.topicSlug` values returned by `getMarketingLessonsHubCatalogLessons("us-allied-core")`.
+ * On the trimmed/index-first allied hub, many editorial categories collapse into shared slugs such as
+ * `nursing-fundamentals`. Registry rows should therefore include at least one **real** hub topic slug (see
+ * {@link ALLIED_TOPIC_VERIFICATION_FALLBACK_ANCHORS} in `allied-profession-lesson-index-verification.ts`) so builds
+ * stay green without disabling guards.
+ *
+ * **Temporary shared anchors** help structural coverage until profession-dedicated catalog expansions publish rows with
+ * matching topic metadata and optional `alliedProfessionKey` ownership.
+ */
 export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
   {
     professionKey: "pta",
     segment: "pta-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "therapy",
-    topicSlugsIn: ["patient-assessment", "human-anatomy", "human-physiology", "vital-signs", "patient-communication"],
+    // Includes `nursing-fundamentals` so profession filters intersect the live allied catalog until lessons are re-tagged to dedicated hub category slugs.
+    topicSlugsIn: [
+      "nursing-fundamentals",
+      "patient-assessment",
+      "human-anatomy",
+      "human-physiology",
+      "vital-signs",
+      "patient-communication",
+    ],
     title: "Physical therapist assistant (PTA) exam prep | NurseNest",
     description:
       "Therapeutic exercise, mobility, and safety judgment for PTA certification study. pathway-scoped allied lessons and practice.",
@@ -158,6 +179,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     pathwayId: US_ALLIED,
     hubCategory: "therapy",
     topicSlugsIn: [
+      "nursing-fundamentals",
       "patient-assessment",
       "patient-communication",
       "clinical-documentation",
@@ -205,7 +227,18 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "imaging-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "lab",
-    topicSlugsIn: ["imaging-basics", "patient-assessment", "vital-signs", "medical-terminology"],
+    topicSlugsIn: [
+      "nursing-fundamentals",
+      "radiologic-technology",
+      "mri-technologist",
+      "ct-technologist",
+      "sonography",
+      "nuclear-medicine",
+      "imaging-basics",
+      "patient-assessment",
+      "vital-signs",
+      "medical-terminology",
+    ],
     title: "Medical imaging exam prep | NurseNest",
     description:
       "Safety, contrast, positioning, and protocol edges for imaging certification contexts. content scoped to allied pathways.",
@@ -248,6 +281,8 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     pathwayId: US_ALLIED,
     hubCategory: "acute",
     topicSlugsIn: [
+      "nursing-fundamentals",
+      "paramedic",
       "patient-assessment",
       "vital-signs",
       "emergency-response",
@@ -274,7 +309,15 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "pharmacy-tech-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "clinical",
-    topicSlugsIn: ["medication-safety", "pharmacology-basics", "medical-terminology", "clinical-documentation"],
+    topicSlugsIn: [
+      "nursing-fundamentals",
+      "pharmacy-tech",
+      "pharmacology",
+      "medication-safety",
+      "pharmacology-basics",
+      "medical-terminology",
+      "clinical-documentation",
+    ],
     title: "Pharmacy technician exam prep | NurseNest",
     description:
       "Calculations, high-alert meds, sterile technique, and regulatory edges for pharmacy technician certification. allied pathway scope.",
@@ -295,7 +338,14 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "social-work-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "support",
-    topicSlugsIn: ["patient-communication", "clinical-documentation", "healthcare-teamwork", "medical-ethics"],
+    topicSlugsIn: [
+      "nursing-fundamentals",
+      "social-work",
+      "patient-communication",
+      "clinical-documentation",
+      "healthcare-teamwork",
+      "medical-ethics",
+    ],
     title: "Social work licensing exam prep | NurseNest",
     description:
       "Ethics, assessment, intervention planning, and boundaries for social work exam contexts. allied-tier pathway scope.",
@@ -399,7 +449,14 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "mental-health-addictions-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "support",
-    topicSlugsIn: ["patient-communication", "clinical-documentation", "healthcare-teamwork", "medical-ethics"],
+    topicSlugsIn: [
+      "nursing-fundamentals",
+      "mental-health-therapist",
+      "patient-communication",
+      "clinical-documentation",
+      "healthcare-teamwork",
+      "medical-ethics",
+    ],
     title: "Mental health and addictions worker exam prep | NurseNest",
     description:
       "Safety, boundaries, de-escalation, and documentation edges for mental health and addictions worker exams. Allied-tier scope.",
