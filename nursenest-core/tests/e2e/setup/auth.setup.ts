@@ -19,10 +19,18 @@ import {
 import { getE2eBaseURL } from "../helpers/e2e-env";
 import { learnerAppMainLandmark } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
+import { waitForStableLearnerPathname } from "../helpers/redirect-loop-guard";
+import { formatPaidE2eFailureTaxonomy } from "../helpers/paid-e2e-failure-taxonomy";
 
 setup("authenticate paid test account and save storage state", async ({ page, request }, testInfo) => {
   const { spawnWaitForAppReady } = await import("../helpers/spawn-wait-for-app-ready");
   spawnWaitForAppReady();
+
+  if (!process.env.DATABASE_URL?.trim()) {
+    console.warn(
+      "[setup-paid-auth] DATABASE_URL unset — Prisma auth and paywall checks may fail. Export DATABASE_URL or rely on Playwright webServer env injection.",
+    );
+  }
 
   const creds = getPaidTestCredentials();
   if (!creds) {
@@ -79,8 +87,14 @@ setup("authenticate paid test account and save storage state", async ({ page, re
     if (shot) {
       await testInfo.attach("setup-paid-auth-failure.png", { body: shot, contentType: "image/png" });
     }
+    const taxonomy = formatPaidE2eFailureTaxonomy({
+      thrownMessage: msg,
+      failedRequestCount: observers.failedRequests.length,
+      consoleErrorCount: observers.consoleErrors.length,
+    });
     const artifact = {
       category: "setup-paid-auth",
+      paidE2eTaxonomy: taxonomy,
       baseURL: getE2eBaseURL(),
       credentialSource: credResolution.source,
       credentialEmailPresent: credResolution.emailPresent,
@@ -102,6 +116,7 @@ setup("authenticate paid test account and save storage state", async ({ page, re
       [
         `Paid auth setup failed: login did not complete after submit. email=${creds.email}`,
         msg,
+        `paidE2eTaxonomy=${taxonomy}`,
         "category=auth",
         "Check BASE_URL, DATABASE_URL (Prisma must connect — password auth / sslmode for managed Postgres), QA account exists with ACTIVE subscription (`scripts/qa-paid-test-account-reset.mts`), and credentials.",
         diag,
@@ -119,6 +134,7 @@ setup("authenticate paid test account and save storage state", async ({ page, re
   // redirects incomplete users from /app → /app/onboarding. Hit /app here so storage state is only
   // saved when onboarding is complete (otherwise downstream specs fail after goto("/app")).
   await page.goto("/app", { waitUntil: "domcontentloaded" });
+  await waitForStableLearnerPathname(page, { label: "post-login /app" });
   await expect
     .poll(
       () => new URL(page.url()).pathname.includes("/app/onboarding"),

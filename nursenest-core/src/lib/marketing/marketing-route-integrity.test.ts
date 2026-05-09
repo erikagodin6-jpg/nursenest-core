@@ -17,6 +17,7 @@ import {
   publicMarketingCatHrefForOffering,
 } from "@/lib/marketing/marketing-exam-navigation";
 import { isWellFormedExamHubPath } from "@/lib/marketing/nursing-exam-nav-validation";
+import { publicMarketingFooterStudyToolsDestinations } from "@/lib/navigation/canonical-destinations";
 
 describe("marketing route integrity", () => {
   const dir = dirname(fileURLToPath(import.meta.url));
@@ -39,6 +40,22 @@ describe("marketing route integrity", () => {
         assert.ok(cat.startsWith("/") && !cat.includes("//"), cat);
         assert.equal(isValidPath(cat), true, cat);
       }
+    }
+  });
+
+  it("marketing footer study-tool deep links stay on canonical /app and /modules paths", () => {
+    for (const region of ["US", "CA"] as const) {
+      const d = publicMarketingFooterStudyToolsDestinations(region);
+      assert.ok(d.cat.startsWith("/"), d.cat);
+      assert.equal(isValidPath(d.cat), true, d.cat);
+      assert.match(d.ecg, /^\/modules\/ecg\//);
+      assert.match(d.osce, /^\/app\/osce\?/);
+      assert.match(d.labs, /^\/app\/lab-drills\?/);
+      assert.match(d.medicationMathApp, /^\/app\/med-calculations\?/);
+      assert.equal(d.medicationMathTool, "/tools/med-math");
+      assert.match(d.pharmacology, /^\/app\/questions\?/);
+      const pid = new URLSearchParams(d.labs.split("?")[1] ?? "").get("pathwayId");
+      assert.ok(pid && pid.length > 4, d.labs);
     }
   });
 

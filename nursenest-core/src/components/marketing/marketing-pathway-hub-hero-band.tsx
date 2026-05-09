@@ -9,14 +9,12 @@ export function MarketingPathwayHubHeroBand({
   eyebrow,
   title,
   intro,
-  titleId,
   children,
   className = "",
 }: {
   eyebrow: ReactNode;
   title: ReactNode;
   intro?: ReactNode | null;
-  titleId?: string;
   /** CTAs, measurement toggle, etc. */
   children?: ReactNode;
   className?: string;

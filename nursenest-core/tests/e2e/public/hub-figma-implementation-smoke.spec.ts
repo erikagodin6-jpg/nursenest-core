@@ -27,7 +27,7 @@ test.describe("Hub Figma implementation — shell smoke", () => {
     mkdirSync(SCREENSHOT_OUT, { recursive: true });
   });
 
-  test("RN + allied global: identity hero + premium zone, no /admin in premium HTML", async ({ page, baseURL }) => {
+  test("RN + allied occupation hub: identity hero + premium zone, no /admin in premium HTML", async ({ page, baseURL }) => {
     const origin = requireOrigin(baseURL);
     await seedUsMarketingCookie(page, origin);
 
@@ -38,7 +38,8 @@ test.describe("Hub Figma implementation — shell smoke", () => {
     const rnHtml = (await page.locator(PREMIUM).innerHTML()).toLowerCase();
     expect(rnHtml.includes("/admin")).toBe(false);
 
-    await gotoExpectOk(page, "/allied/allied-health");
+    /** Global chooser hub omits the premium module grid; occupation hubs mount {@link ExamPathwayHubPremiumModules}. */
+    await gotoExpectOk(page, "/allied/respiratory");
     await expectNotPageNotFound(page);
     await expect(page.locator('[data-nn-hub-section="identity-hero"]')).toBeVisible({ timeout: 90_000 });
     await expect(page.locator(PREMIUM)).toBeVisible();

@@ -85,6 +85,9 @@ const OVERLAY_MARKERS = [
   "Next.js is compiling",
   "webpack building",
   "Application error: a client-side exception has occurred",
+  "NO_SECRET",
+  "NEXTAUTH_SECRET",
+  "MissingSecret",
 ];
 
 function statusAcceptable(code, strictHttp200) {
@@ -492,15 +495,36 @@ export async function waitForAppReady(opts = {}) {
     await new Promise((r) => setTimeout(r, POLL_MS));
   }
 
+  const failureBlob = failures.join(" | ");
   console.error("[wait-for-app-ready] TIMEOUT — common causes:");
   console.error("  • Wrong base URL — set PLAYWRIGHT_BASE_URL or SCREENSHOT_BASE_URL or APP_READY_BASE_URL.");
-  console.error("  • Port clash — another process bound; free the port or change PLAYWRIGHT_BASE_URL.");
-  console.error("  • Next dev still compiling — wait longer or raise APP_READY_TIMEOUT_MS.");
+  console.error("  • Port clash / duplicate Next — ECONNREFUSED can mean nothing listening; two `next dev` on one port → EADDRINUSE in the server terminal. Prefer one process + PLAYWRIGHT_SKIP_WEB_SERVER=1.");
+  console.error("  • Next dev still compiling — wait longer or raise APP_READY_TIMEOUT_MS (targeted bump, not global test timeouts).");
   console.error("  • Guest mode: use APP_READY_CHECK_REDIRECT_LOOPS=1 if a protected path redirect chain loops.");
   console.error("  • Authenticated mode: missing/invalid cookies — refresh APP_READY_STORAGE_STATE or APP_READY_AUTH_COOKIE.");
-  console.error("  • AUTH_SECRET / NEXTAUTH_SECRET missing — use npm run dev:next:3000 or assert-local-auth-secret.");
+  console.error("  • AUTH_SECRET / NEXTAUTH_SECRET missing — use npm run dev:next (not raw next without assert) or assert-local-auth-secret.");
   console.error("  • Env validation failed during boot — inspect the Next server terminal.");
-  console.error(`Last probe failures: ${failures.join(" | ")}`);
+  console.error(`Last probe failures: ${failureBlob}`);
+  /** Triage hints derived from last round (not a substitute for reading server logs). */
+  const triage = [];
+  if (/html_marker:.*(compil|webpack|Next\.js is compiling)/i.test(failureBlob)) {
+    triage.push("classification=ssr_cold_or_compile — first-hit compile; pre-warm / or wait for overlay to clear.");
+  }
+  if (/NEXTAUTH_SECRET|NO_SECRET|MissingSecret|missing required secret/i.test(failureBlob)) {
+    triage.push("classification=env_missing_secret — align secrets with dev:next / Playwright webServer env.");
+  }
+  if (/\/api\/auth\/csrf/i.test(failureBlob) && !/MissingSecret/i.test(failureBlob)) {
+    triage.push("classification=auth_bootstrap — CSRF not 200; check AUTH_URL/NEXTAUTH_URL match PLAYWRIGHT_BASE_URL origin.");
+  }
+  if (/ECONNREFUSED|ENOTFOUND/.test(failureBlob)) {
+    triage.push("classification=runtime_transport — server down, wrong host, or IPv4/localhost mismatch.");
+  }
+  if (/redirect_loop|max_hops_exceeded/.test(failureBlob)) {
+    triage.push("classification=redirect_loop — middleware/session conflict; compare with Playwright redirect-loop guard.");
+  }
+  if (triage.length) {
+    console.error("[wait-for-app-ready] Triage:", triage.join(" "));
+  }
   throw new Error("wait-for-app-ready: timeout");
 }
 

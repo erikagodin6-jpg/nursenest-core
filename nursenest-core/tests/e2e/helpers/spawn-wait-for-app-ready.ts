@@ -10,12 +10,18 @@ export function spawnWaitForAppReady(): void {
     return;
   }
 
+  if (!process.env.DATABASE_URL?.trim()) {
+    console.warn(
+      "[spawn-wait-for-app-ready] DATABASE_URL unset — app may boot without Prisma; paid setup will likely fail after this probe.",
+    );
+  }
+
   const env = {
     ...process.env,
     APP_READY_MODE: process.env.APP_READY_MODE?.trim() || "guest",
     APP_READY_PATHS:
       process.env.APP_READY_PATHS?.trim() ||
-      "/,/login,/app,/pre-nursing,/app/practice-tests",
+      "/,/login,/app,/pre-nursing,/app/practice-tests,/app/osce",
     APP_READY_TIMEOUT_MS: process.env.APP_READY_TIMEOUT_MS || "300000",
     APP_READY_AUTH_CSRF: process.env.APP_READY_AUTH_CSRF ?? "1",
   };

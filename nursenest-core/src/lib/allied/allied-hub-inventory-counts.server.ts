@@ -65,6 +65,79 @@ function pathwayLessonWherePublished(profession: AlliedProfessionMarketing): Pri
   };
 }
 
+/** When `pathway_lessons.allied_profession_key` is not migrated yet — topic-slug scope only. */
+function pathwayLessonWherePublishedTopicSlugOnly(
+  profession: AlliedProfessionMarketing,
+): Prisma.PathwayLessonWhereInput | null {
+  const topicSlugs = profession.topicSlugsIn?.filter(Boolean) ?? [];
+  if (topicSlugs.length === 0) return null;
+  return {
+    status: ContentStatus.PUBLISHED,
+    pathwayId: profession.pathwayId,
+    topicSlug: { in: topicSlugs },
+  };
+}
+
+function isLikelyMissingDbColumnError(e: unknown, columnHint: string): boolean {
+  const msg = e instanceof Error ? e.message : String(e);
+  const lower = msg.toLowerCase();
+  return lower.includes("does not exist") && lower.includes(columnHint.toLowerCase());
+}
+
+async function countPathwayLessonsPublishedForProfession(profession: AlliedProfessionMarketing): Promise<number> {
+  try {
+    return await prisma.pathwayLesson.count({ where: pathwayLessonWherePublished(profession) });
+  } catch (e) {
+    if (!isLikelyMissingDbColumnError(e, "allied_profession_key")) throw e;
+    const fb = pathwayLessonWherePublishedTopicSlugOnly(profession);
+    if (!fb) throw e;
+    return prisma.pathwayLesson.count({ where: fb });
+  }
+}
+
+/** Upper bound for `id IN (...)` when joining flashcards to exam questions (no Prisma relation on Flashcard). */
+const MAX_EXAM_QUESTION_IDS_FOR_FLASHCARD_POOL = 12_000;
+
+async function countPublishedAlliedFlashcardsForProfession(
+  profession: AlliedProfessionMarketing,
+  pool: Prisma.ExamQuestionWhereInput | null,
+): Promise<number> {
+  const byDeckTag = await prisma.flashcard.count({
+    where: {
+      status: ContentStatus.PUBLISHED,
+      tier: "ALLIED",
+      deck: {
+        pathwayId: { in: [...ALLIED_GLOBAL_PATHWAY_IDS] },
+        tags: { some: { tag: { slug: profession.professionKey } } },
+      },
+    },
+  });
+
+  if (!pool) return byDeckTag;
+
+  const idRows = await prisma.examQuestion.findMany({
+    where: pool,
+    select: { id: true },
+    take: MAX_EXAM_QUESTION_IDS_FOR_FLASHCARD_POOL + 1,
+  });
+  if (idRows.length > MAX_EXAM_QUESTION_IDS_FOR_FLASHCARD_POOL) {
+    throw new Error(
+      `allied_flashcard_exam_pool_overflow: pool has more than ${MAX_EXAM_QUESTION_IDS_FOR_FLASHCARD_POOL} exam questions; widen raw join or raise the cap`,
+    );
+  }
+  if (idRows.length === 0) return byDeckTag;
+
+  const byExamLink = await prisma.flashcard.count({
+    where: {
+      status: ContentStatus.PUBLISHED,
+      tier: "ALLIED",
+      examQuestionId: { in: idRows.map((r) => r.id) },
+    },
+  });
+
+  return byDeckTag + byExamLink;
+}
+
 function examQuestionBaseWhere(): Prisma.ExamQuestionWhereInput | null {
   const pathway = getExamPathwayById(US_ALLIED_CORE_PATHWAY_ID);
   if (!pathway) return null;
@@ -113,33 +186,13 @@ export async function loadAlliedOccupationInventoryRows(
 
     const lessonsPublished = await safeCount(
       `lessons:${p.professionKey}`,
-      () => prisma.pathwayLesson.count({ where: pathwayLessonWherePublished(p) }),
+      () => countPathwayLessonsPublishedForProfession(p),
       "lessons count failed",
     );
 
     const flashPublished = await safeCount(
       `flashcards_tag_or_exam:${p.professionKey}`,
-      async () => {
-        const byDeckTag = await prisma.flashcard.count({
-          where: {
-            status: ContentStatus.PUBLISHED,
-            tier: "ALLIED",
-            deck: {
-              pathwayId: { in: [...ALLIED_GLOBAL_PATHWAY_IDS] },
-              tags: { some: { tag: { slug: p.professionKey } } },
-            },
-          },
-        });
-        if (!pool) return byDeckTag;
-        const byExam = await prisma.flashcard.count({
-          where: {
-            status: ContentStatus.PUBLISHED,
-            tier: "ALLIED",
-            examQuestion: { is: pool },
-          },
-        });
-        return byDeckTag + byExam;
-      },
+      () => countPublishedAlliedFlashcardsForProfession(p, pool),
       "flashcard count failed",
     );
 
@@ -248,7 +301,7 @@ export function formatAlliedHubInventoryMarkdown(rows: AlliedOccupationInventory
   lines.push("## Part 3 — Bounded inventory (DB-backed, per occupation)");
   lines.push("");
   lines.push(
-    "Counts use `pathwayExamQuestionMarketingHubInventoryWhere(us-allied-core)` intersected with `prismaWhereForAlliedProfessionExamQuestions` where the legacy career/tag map exists. Flashcards: published ALLIED cards in decks tagged with the `professionKey` slug **or** linked `ExamQuestion` rows in the scoped pool. Lessons: published `PathwayLesson` with `alliedProfessionKey` OR `topicSlug ∈ topicSlugsIn`.",
+    "Counts use `pathwayExamQuestionMarketingHubInventoryWhere(us-allied-core)` intersected with `prismaWhereForAlliedProfessionExamQuestions` where the legacy career/tag map exists. Flashcards: published ALLIED cards in decks tagged with the `professionKey` slug **or** rows whose `examQuestionId` matches exam questions in the scoped pool (bounded `id IN (...)` materialization; see `MAX_EXAM_QUESTION_IDS_FOR_FLASHCARD_POOL`). Lessons: published `PathwayLesson` with `alliedProfessionKey` OR `topicSlug ∈ topicSlugsIn`; when `allied_profession_key` is missing from the database, counts fall back to topic-slug scope only (occupations without `topicSlugsIn` then surface as DB errors / unavailable).",
   );
   lines.push("");
   lines.push(
@@ -260,20 +313,22 @@ export function formatAlliedHubInventoryMarkdown(rows: AlliedOccupationInventory
 
   for (const r of rows) {
     lines.push(
-      [
-        `\`${r.professionKey}\``,
-        formatCell(r.lessonsPublished),
-        formatCell(r.flashcardsPublished),
-        formatCell(r.practiceQuestionsPublished),
-        formatCell(r.catAdaptiveEligiblePublished),
-        formatCell(r.scenarioCaseQuestionsPublished),
-        formatCell(r.labDiagnosticTaggedPublished),
-        formatCell(r.medCalcTaggedPublished),
-        formatCell(r.skillsRefresherRegistry),
-        formatCell(r.practiceExamsOrSets),
-        r.readinessSurface.readinessKeys.length >= 2 ? "progress+plan" : "—",
-        r.weakStrongSurfacePresent ? "present" : "not on hub grid",
-      ].join(" | "),
+      "| " +
+        [
+          `\`${r.professionKey}\``,
+          formatCell(r.lessonsPublished),
+          formatCell(r.flashcardsPublished),
+          formatCell(r.practiceQuestionsPublished),
+          formatCell(r.catAdaptiveEligiblePublished),
+          formatCell(r.scenarioCaseQuestionsPublished),
+          formatCell(r.labDiagnosticTaggedPublished),
+          formatCell(r.medCalcTaggedPublished),
+          formatCell(r.skillsRefresherRegistry),
+          formatCell(r.practiceExamsOrSets),
+          r.readinessSurface.readinessKeys.length >= 2 ? "progress+plan" : "—",
+          r.weakStrongSurfacePresent ? "present" : "not on hub grid",
+        ].join(" | ") +
+        " |",
     );
   }
 
@@ -305,20 +360,22 @@ export function formatAlliedHubInventoryMarkdown(rows: AlliedOccupationInventory
     const W = r.weakStrongSurfacePresent;
 
     lines.push(
-      [
-        `\`${r.professionKey}\``,
-        cmpMinimum(L),
-        cmpMinimum(F),
-        cmpMinimum(P),
-        alliedHubCatSurfaceUnlocked(r.professionKey) ? cmpMinimum(!!C) : "n/a (CAT locked)",
-        cmpMinimum(S),
-        cmpMinimum(LB),
-        cmpMinimum(M),
-        cmpMinimum(SK),
-        PE ? "meets" : "below (no inventory)",
-        RS ? "meets" : "below",
-        W ? "meets" : "below (tile absent)",
-      ].join(" | "),
+      "| " +
+        [
+          `\`${r.professionKey}\``,
+          cmpMinimum(L),
+          cmpMinimum(F),
+          cmpMinimum(P),
+          alliedHubCatSurfaceUnlocked(r.professionKey) ? cmpMinimum(!!C) : "n/a (CAT locked)",
+          cmpMinimum(S),
+          cmpMinimum(LB),
+          cmpMinimum(M),
+          cmpMinimum(SK),
+          PE ? "meets" : "below (no inventory)",
+          RS ? "meets" : "below",
+          W ? "meets" : "below (tile absent)",
+        ].join(" | ") +
+        " |",
     );
   }
 

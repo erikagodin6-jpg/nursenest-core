@@ -1,5 +1,5 @@
 /**
- * Authenticated learner PNG baselines (Ocean / Blossom / Midnight + desktop + one mobile).
+ * Authenticated learner PNG baselines (Ocean / Blossom / Midnight + desktop + mobile).
  *
  * Requires the same paid credentials + storage as `setup-visual-qa-auth` (see `docs/visual-qa.md`).
  * Prerequisite data: run `npm run seed:auth-qa` against the same DB as `DATABASE_URL` for weak areas,
@@ -92,6 +92,36 @@ test.describe("Authenticated learner visual baseline", () => {
         timeout: 90_000,
       });
     });
+
+    test(`CAT practice hub — ${theme} — desktop`, async ({ page, baseURL }) => {
+      const origin = baseURL?.replace(/\/$/, "") ?? "http://127.0.0.1:3000";
+      const url = `${origin}/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(pid)}`;
+      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 120_000 });
+      await applyTheme(page, theme);
+      await settleLearner(page);
+
+      await expect(page).toHaveScreenshot(path.join(outDir, `auth-cat-practice-${theme}-desktop.png`), {
+        animations: "disabled",
+        maxDiffPixelRatio: 0.05,
+        timeout: 90_000,
+      });
+    });
+  }
+
+  for (const theme of ["blossom", "midnight"] as const) {
+    test(`dashboard /app — ${theme} — mobile`, async ({ page, baseURL }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      const origin = baseURL?.replace(/\/$/, "") ?? "http://127.0.0.1:3000";
+      await page.goto(`${origin}/app`, { waitUntil: "domcontentloaded", timeout: 120_000 });
+      await applyTheme(page, theme);
+      await settleLearner(page);
+
+      await expect(page).toHaveScreenshot(path.join(outDir, `auth-dashboard-${theme}-mobile.png`), {
+        animations: "disabled",
+        maxDiffPixelRatio: 0.06,
+        timeout: 90_000,
+      });
+    });
   }
 
   test("dashboard /app — ocean — mobile", async ({ page, baseURL }) => {
@@ -102,6 +132,21 @@ test.describe("Authenticated learner visual baseline", () => {
     await settleLearner(page);
 
     await expect(page).toHaveScreenshot(path.join(outDir, "auth-dashboard-ocean-mobile.png"), {
+      animations: "disabled",
+      maxDiffPixelRatio: 0.06,
+      timeout: 90_000,
+    });
+  });
+
+  test("CAT practice hub — ocean — mobile", async ({ page, baseURL }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const origin = baseURL?.replace(/\/$/, "") ?? "http://127.0.0.1:3000";
+    const url = `${origin}/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(pid)}`;
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 120_000 });
+    await applyTheme(page, "ocean");
+    await settleLearner(page);
+
+    await expect(page).toHaveScreenshot(path.join(outDir, "auth-cat-practice-ocean-mobile.png"), {
       animations: "disabled",
       maxDiffPixelRatio: 0.06,
       timeout: 90_000,

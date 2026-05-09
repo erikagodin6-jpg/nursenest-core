@@ -1,6 +1,6 @@
 /**
  * New Grad marketing + pathway hubs — premium modules, no ECG, public safety, screenshots.
- * Output: `nursenest-core/docs/screenshots/new-grad-e2e/`
+ * Screenshots: monorepo `docs/screenshots/allied-newgrad-figma/`.
  *
  * Run: `cd nursenest-core && npx playwright test tests/e2e/public/new-grad-hubs.spec.ts`
  */
@@ -20,7 +20,7 @@ import {
   seedUsMarketingCookie,
 } from "../helpers/navigation-e2e";
 
-const OUT_DIR = join(process.cwd(), "docs", "screenshots", "new-grad-e2e");
+const OUT_DIR = join(process.cwd(), "..", "docs", "screenshots", "allied-newgrad-figma");
 const PREMIUM_ROOT = '[data-nn-qa-pathway-premium-modules]';
 const TRANSITION_HUB = "/us/rn/new-grad-transition";
 
@@ -119,6 +119,7 @@ test.describe("New Grad hubs — pathway premium modules & gates", () => {
     await settleTransitionHub(page);
     await assertNoReactCrashOverlay(page);
 
+    await expect(page.locator('[data-nn-marketing-hub-guided-path="1"]')).toBeVisible({ timeout: 120_000 });
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(0);
     await expect(page.locator('[data-nn-qa-hub-np-cases="1"]')).toHaveCount(0);
     await expect(page.locator('[data-nn-qa-hub-premium-module="clinical_cases"]')).toHaveCount(0);
@@ -182,9 +183,11 @@ test.describe("New Grad hubs — pathway premium modules & gates", () => {
     await seedUsMarketingCookie(page, origin);
     await gotoExpectOk(page, US_NEW_GRAD_MARKETING_HUB_PATH);
     await expect(page.locator('[data-nn-new-grad-marketing-landing="1"]')).toBeVisible({ timeout: 120_000 });
+    await expect(page.locator('[data-nn-marketing-hub-guided-path="1"]')).toBeVisible({ timeout: 120_000 });
     await seedCaMarketingCookie(page, origin);
     await gotoExpectOk(page, CANADA_NEW_GRAD_MARKETING_HUB_PATH);
     await expect(page.locator('[data-nn-new-grad-marketing-landing="1"]')).toBeVisible({ timeout: 120_000 });
+    await expect(page.locator('[data-nn-marketing-hub-guided-path="1"]')).toBeVisible({ timeout: 120_000 });
   });
 
   test("work-area hubs respond OK (US + Canada shells)", async ({ page, baseURL }) => {

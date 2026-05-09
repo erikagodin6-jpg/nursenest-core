@@ -47,13 +47,15 @@ Pre-Nursing hub config uses `dev:next:3000` internally so local port matches `PL
 
 ## Readiness before tests (`wait-for-app-ready`)
 
-Strict HTTP **200** checks (and optional `/api/auth/csrf`) are implemented in:
+HTTP checks (and optional `/api/auth/csrf`) live in:
 
 ```text
 nursenest-core/scripts/qa/wait-for-app-ready.mjs
 ```
 
 (Path is relative to **git root**; from app root it is `scripts/qa/wait-for-app-ready.mjs`.)
+
+**Default `APP_READY_MODE=guest`:** marketing paths need **200**; **`/app`** may **302/307** to login without failing the gate. Use **`APP_READY_MODE=authenticated`** with **`APP_READY_STORAGE_STATE`** or **`APP_READY_AUTH_COOKIE`** when the gate must prove a signed-in session (expects **200** on `/app` + JSON user on `/api/auth/session` unless disabled).
 
 **npm script (from app root):**
 
@@ -69,7 +71,13 @@ cd /root/nursenest-core/nursenest-core
 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000 node scripts/qa/wait-for-app-ready.mjs
 ```
 
-Use this after you start the server manually, or when diagnosing “Playwright says ready but pages show compile overlay”. The script logs markers such as `Failed to compile` when `strictHttp200` body capture applies.
+Use this after you start the server manually, or when diagnosing “Playwright says ready but pages show compile overlay”. The script logs markers such as `Failed to compile` when body capture applies.
+
+## Exit code **143** (`SIGTERM`)
+
+Playwright child processes (integrated `webServer` **or** `wait-for-app-ready` via `spawnSync`) may exit **143** when the runner sends **SIGTERM** (timeouts, CI cancel, OOM killer, manual stop). It is not a TypeScript “exit 143” bug — treat it as **process lifecycle**.
+
+**Mitigations:** one dev server (`PLAYWRIGHT_SKIP_WEB_SERVER=1` + manual `npm run dev:next:3000`), free **:3000**, raise timeouts, capture **`tee`** logs. See `nursenest-core/docs/runtime/local-runtime-modes.md` § Playwright Web Server.
 
 ---
 
@@ -91,8 +99,6 @@ To **force** Playwright to own the server lifecycle from a clean slate, stop the
 
 ## `PLAYWRIGHT_SKIP_WEB_SERVER=1` — when to set it
 
-Set **`PLAYWRIGHT_NO_REUSE_WEB_SERVER=1`** when you want Playwright to **always spawn** a new `webServer` locally instead of reusing an existing listener (debugging stale processes; default is reuse when not CI).
-
 Set **`PLAYWRIGHT_SKIP_WEB_SERVER=1`** when:
 
 1. You **already** started Next yourself (`dev:next` / `dev:next:3000` / standalone) and want Playwright to **not** spawn another server.
@@ -101,6 +107,10 @@ Set **`PLAYWRIGHT_SKIP_WEB_SERVER=1`** when:
    `npm run dev:next:3000 2>&1 | tee /tmp/nn-next-dev.log`
 
 This flag does **not** relax test assertions; it only disables the config’s `webServer` block.
+
+## `PLAYWRIGHT_NO_REUSE_WEB_SERVER=1` — when to set it
+
+Set **`PLAYWRIGHT_NO_REUSE_WEB_SERVER=1`** when you want Playwright to **always spawn** a new integrated `webServer` locally instead of **reusing** a listener that already answers the ready URL (debugging stale/wrong processes; default is reuse when not CI). Does **not** replace `PLAYWRIGHT_SKIP_WEB_SERVER=1` for “I already started dev myself”.
 
 ---
 

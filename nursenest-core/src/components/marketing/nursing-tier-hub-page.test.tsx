@@ -89,6 +89,21 @@ describe("NursingTierHubPage", () => {
     assert.equal(link.getAttribute("href"), "/app/flashcards?pathwayId=ca-rn-nclex-rn");
   });
 
+  it("New Grad transition hub renders guided study path strip", () => {
+    const pathway = getExamPathwayById("us-rn-new-grad-transition");
+    assert.ok(pathway);
+    const content = buildNursingTierHubContent(pathway);
+    const { container } = renderHub(
+      <NursingTierHubPage pathway={pathway} hubPath="/us/rn/new-grad-transition" content={content} viewerSignedIn={false} />,
+      {
+        data: null,
+        status: "unauthenticated",
+        update: async () => {},
+      },
+    );
+    assert.ok(container.querySelector('[data-nn-marketing-hub-guided-path="1"]'));
+  });
+
   it("Flashcards card is interactive link for signed-in SSR, not locked article", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);

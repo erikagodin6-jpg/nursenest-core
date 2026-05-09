@@ -5,6 +5,7 @@
 **Next app:** `/root/nursenest-core/nursenest-core`  
 **Purpose:** Single authoritative consolidation of completed slices and operational status. Facts below are taken from existing reports and this workspace's validation runs unless marked **unknown**.
 
+**Convergence report:** [release-candidate-convergence-2026-05-10.md](./release-candidate-convergence-2026-05-10.md)
 ---
 
 ## A. Subscription notifications
@@ -392,3 +393,7 @@ b8abea625 fix(marketing): show premium pathway hub modules on public hubs
 $ ls -la docs/reports/release-reconciliation-2026-05-10.md
 -rw-r--r-- 1 root root 28392 May  9 21:04 docs/reports/release-reconciliation-2026-05-10.md
 ```
+
+## NurseNest learner QA / release hardening (addendum)
+
+- See [release-hardening-status-2026-05-10.md](./release-hardening-status-2026-05-10.md) for authenticated Playwright hardening, `seed:auth-qa` extensions, visual QA scope, and validation commands.

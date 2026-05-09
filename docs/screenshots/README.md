@@ -10,6 +10,7 @@ Generated PNGs and manifests for **marketing slot capture**, **hub evidence**, a
 | `nav-audit-2026/` | Navigation parity / header audits | Keep before/after pairs with identical viewports; cite Figma frame IDs in PRs per `docs/governance/figma-premium-ui-mandatory-process.md`. |
 | `visual-regression-baseline/` | `npm run test:e2e:visual-qa-guest-baseline` (first run with `--update-snapshots`) | Guest marketing baselines; **default repo policy gitignores `*.png` here** — keep reviewed copies outside git or relax ignore intentionally. |
 | `authenticated-qa-matrix/` | `npm run test:e2e:visual-qa-authenticated-baseline` (with `--update-snapshots` on first capture) | Paid learner dashboard / practice / flashcards; run `npm run seed:auth-qa` first — see nested `README.md`. |
+| `rc-theme-matrix-2026/` | Manual / scripted capture (themes × pathways × surfaces) | Checklist + `captured/` output folder; see nested `README.md`. |
 | `final-qa-2026-05-09/` | Ad hoc final QA bundles | See nested `README.md` when present. |
 
 ## Viewports and themes

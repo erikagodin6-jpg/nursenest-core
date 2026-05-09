@@ -62,3 +62,23 @@ test("practice tests hub hero", async ({ page }) => {
   expect(page.url()).not.toMatch(/\/login/i);
   await captureWhenReady(page, "critical-practice-tests", page.locator("[data-route='practice-tests']").first());
 });
+
+test("practice hub — CAT entry surface", async ({ page }) => {
+  await page.goto(`/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(pid)}`, { waitUntil: "domcontentloaded" });
+  expect(page.url()).not.toMatch(/\/login/i);
+  await captureWhenReady(
+    page,
+    "critical-practice-cat-surface",
+    page.locator("[data-nn-e2e-practice-hub-cat-exam]").or(page.locator("[data-nn-qa-practice-hub-start-test]")).first(),
+  );
+});
+
+test("OSCE stations index", async ({ page }) => {
+  await page.goto("/app/osce", { waitUntil: "domcontentloaded" });
+  expect(page.url()).not.toMatch(/\/login/i);
+  await captureWhenReady(
+    page,
+    "critical-osce-index",
+    page.locator("#nn-learner-main").or(page.locator("[data-nn-learner-main]")).or(page.locator(".nn-learner-app main").first()),
+  );
+});

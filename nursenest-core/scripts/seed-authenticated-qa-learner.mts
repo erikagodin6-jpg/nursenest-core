@@ -31,6 +31,12 @@
  * - **CAT-mode bank attempts:** when `AUTH_QA_SEED_RESET=1`, replaces prior `ExamQuestionPracticeAnswerAttempt`
  *   rows this script created for the user (mode `cat` + matching pathway); otherwise skips if any exist
  *   (avoids unbounded duplicate rows).
+ * - **Learner notes (dashboard “recent notes”):** one `LearnerNote` scoped to question bank with a
+ *   deterministic `contextId` prefix — visible on premium dashboard / account surfaces when those
+ *   panels query notes.
+ * - **Multi-pathway / multi-tier RN vs RPN vs NP vs Allied:** still requires **separate** DB users and
+ *   `qa-paid-test-account-reset.mts` runs (`QA_PAID_TEST_TIER`, pathway envs). This script never
+ *   overrides `User.tier` / `learnerPath` — it only seeds rows for the resolved email.
  */
 import "./load-dotenv-for-cli.mts";
 import { assertDatabaseUrlPresentOrExit } from "./lib/database-env-assert.mts";
@@ -40,6 +46,7 @@ assertDatabaseUrlPresentOrExit("seed-authenticated-qa-learner requires DATABASE_
 import {
   ContentStatus,
   ExamSessionStatus,
+  LearnerNoteScope,
   PracticeQuestionAnswerMode,
   PracticeTestStatus,
   type Prisma,
@@ -127,6 +134,10 @@ async function cleanupTaggedRows(userId: string): Promise<void> {
 
   await prisma.ecgVideoQuestionPracticeAnswerAttempt.deleteMany({
     where: { userId, selectedOptionId: ECG_SEED_OPTION_ID },
+  });
+
+  await prisma.learnerNote.deleteMany({
+    where: { userId, contextId: { startsWith: `${SEED_TAG}:` } },
   });
 }
 
@@ -285,7 +296,7 @@ async function main(): Promise<void> {
           pathwayId,
           visibility: "SUBSCRIBER",
           status: ContentStatus.PUBLISHED,
-          cardCount: 2,
+          cardCount: 3,
         },
         create: {
           slug: DECK_SLUG,
@@ -296,7 +307,7 @@ async function main(): Promise<void> {
           pathwayId,
           visibility: "SUBSCRIBER",
           status: ContentStatus.PUBLISHED,
-          cardCount: 2,
+          cardCount: 3,
         },
       });
 
@@ -307,11 +318,19 @@ async function main(): Promise<void> {
           sourceKey: `${SEED_TAG}:card:text`,
           front: "Normal saline isotonic use",
           back: "Volume resuscitation and maintenance; monitor for fluid overload.",
+          position: 0,
         },
         {
           sourceKey: `${SEED_TAG}:card:image`,
           front: `![ECG lead placement reference](${imgUrl})`,
           back: "Verify lead placement before interpreting rhythm strips.",
+          position: 1,
+        },
+        {
+          sourceKey: `${SEED_TAG}:card:text_plain`,
+          front: "Auscultate before auscultation charting",
+          back: "Confirm lung sounds with proper technique; document findings objectively.",
+          position: 2,
         },
       ] as const;
 
@@ -326,7 +345,7 @@ async function main(): Promise<void> {
             status: ContentStatus.PUBLISHED,
             deckId: deck.id,
             categoryId: cat.id,
-            positionInDeck: def.sourceKey.endsWith("text") ? 0 : 1,
+            positionInDeck: def.position,
           },
           create: {
             sourceKey: def.sourceKey,
@@ -337,7 +356,7 @@ async function main(): Promise<void> {
             status: ContentStatus.PUBLISHED,
             deckId: deck.id,
             categoryId: cat.id,
-            positionInDeck: def.sourceKey.endsWith("text") ? 0 : 1,
+            positionInDeck: def.position,
           },
         });
       }
@@ -592,6 +611,31 @@ async function main(): Promise<void> {
         tier: String(user.tier).toLowerCase(),
       },
     });
+
+    await tx.learnerNote.upsert({
+      where: {
+        userId_scope_contextId: {
+          userId: user.id,
+          scope: LearnerNoteScope.QUESTION_BANK,
+          contextId: `${SEED_TAG}:dashboard-note`,
+        },
+      },
+      create: {
+        userId: user.id,
+        scope: LearnerNoteScope.QUESTION_BANK,
+        contextId: `${SEED_TAG}:dashboard-note`,
+        pathwayId,
+        topic: "Fundamentals",
+        title: "Auth QA — review weak pharmacology",
+        body: "Seeded learner note for premium dashboard / account summaries (idempotent upsert).",
+      },
+      update: {
+        pathwayId,
+        topic: "Fundamentals",
+        title: "Auth QA — review weak pharmacology",
+        body: "Seeded learner note for premium dashboard / account summaries (idempotent upsert).",
+      },
+    });
   });
 
   await prisma.osceStation.upsert({
@@ -666,7 +710,7 @@ async function main(): Promise<void> {
 
   console.log(`[seed-auth-qa] OK — seeded study artifacts for ${email} (user ${user.id.slice(0, 8)}…).`);
   console.log(
-    "[seed-auth-qa] Weak/strong topic stats, pathway progress, flashcards, readiness row, planner, practice rows, OSCE seed station, CAT-mode bank attempts.",
+    "[seed-auth-qa] Weak/strong topic stats, pathway progress, flashcards (text + image + text), readiness row, planner, practice rows, OSCE seed station, CAT-mode bank attempts, learner note.",
   );
 }
 

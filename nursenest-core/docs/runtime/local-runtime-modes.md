@@ -142,13 +142,27 @@ PLAYWRIGHT_SKIP_WEB_SERVER=1 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000 npm run t
 
 ```bash
 PLAYWRIGHT_SKIP_WEB_SERVER=1 PLAYWRIGHT_BASE_URL=https://preview.example.com npm run test:e2e:pre-nursing-hub
+# Or keep Playwright’s webServer but avoid reusing a stale local listener:
+PLAYWRIGHT_NO_REUSE_WEB_SERVER=1 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000 npm run test:e2e:pre-nursing-hub
 ```
 
 If `PLAYWRIGHT_SKIP_WEB_SERVER` is not set and the base URL is local, `playwright.pre-nursing-hub.config.ts` starts `npm run dev:next:3000`. That path still requires a real auth secret because the dev script runs `scripts/assert-local-auth-secret.mjs`.
 
 ## Readiness
 
-`scripts/qa/wait-for-app-ready.mjs` (via `npm run wait:app:ready`) uses **strict HTTP 200** per path. Default paths are **`/`, `/login`, `/pre-nursing`** (guest-safe: `/app` often returns **307** to sign-in when unauthenticated). Optionally still probes **`GET /api/auth/csrf`** unless `APP_READY_AUTH_CSRF=0`.
+`scripts/qa/wait-for-app-ready.mjs` (via `npm run wait:app:ready`) gates HTTP readiness before Playwright.
+
+### Guest mode (default)
+
+`APP_READY_MODE=guest` (default): public paths (`/`, `/login`, `/pre-nursing`, …) must return **HTTP 200**. Paths under **`APP_READY_PROTECTED_PREFIXES`** (default `/app`) may return **302/303/307/308** when `Location` targets sign-in (`/login`, `/api/auth`, …) — **not** a failure. Optional **`APP_READY_CHECK_REDIRECT_LOOPS=1`** follows redirect chains to catch loops.
+
+### Authenticated mode
+
+`APP_READY_MODE=authenticated` + **`APP_READY_AUTH_COOKIE`** and/or **`APP_READY_STORAGE_STATE`** (Playwright `storageState` JSON): the same path list must return **200** on `/app`, etc. Unless `APP_READY_SESSION_PROBE=0`, the script also **`GET /api/auth/session`** and expects JSON with a non-null `user` (flags stale cookies).
+
+Optional extra probe: **`APP_READY_ENTITLEMENT_URL`** (e.g. `/api/debug/me` when `PLAYWRIGHT_DEBUG_ME=1` on the server) after paths succeed.
+
+Default paths: **`/`, `/login`, `/app`, `/pre-nursing`**. Optionally still probes **`GET /api/auth/csrf`** unless `APP_READY_AUTH_CSRF=0`.
 
 Run:
 
@@ -170,11 +184,21 @@ Useful overrides:
 
 ```bash
 APP_READY_TIMEOUT_MS=600000 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000 npm run wait:app:ready
-APP_READY_PATHS="/,/login,/pre-nursing,/app" PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000 npm run wait:app:ready
+APP_READY_MODE=authenticated APP_READY_STORAGE_STATE=playwright/.auth/learner-paid.json \\
+  PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000 npm run wait:app:ready
 APP_READY_AUTH_CSRF=0 PLAYWRIGHT_BASE_URL=http://127.0.0.1:3000 npm run wait:app:ready
 ```
 
-Pre-Nursing Playwright global setup defaults to the same guest-safe path list. Add `/app` to `APP_READY_PATHS` only when you expect a **200** (for example after seeding a session).
+Pre-Nursing Playwright global setup defaults **`APP_READY_MODE=guest`** with the same path list (`/app` may redirect when unauthenticated).
+
+## Deterministic QA seeds (minimal)
+
+| Command / artifact | Purpose |
+|---------------------|---------|
+| `npm run seed:local-verify` (`../scripts/seed-local-verify-data.mjs`) | RN exam template `local-rn-template-01`, published `exam_questions`, flashcard deck `nursenest-verify-smoke-deck` — supports verify-core-api style flows (no full learner account). |
+| `ALLOW_QA_PAID_TEST_RESET=1 npx tsx scripts/qa-paid-test-account-reset.mts` then `npm run seed:auth-qa` | Paid Playwright user: dashboard / CAT / flashcards tagged data (`nn_auth_qa` / `nnAuthQaSeed`, deck `nn-auth-qa-e2e-deck`). Requires existing paid email env + `DATABASE_URL`. |
+
+Gap if you only run **`seed:local-verify`**: no authenticated session, `/app` stays redirect in guest readiness — use guest mode or seed auth + storage state for authenticated gates.
 
 ## Port Conflicts
 

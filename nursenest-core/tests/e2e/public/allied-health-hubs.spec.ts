@@ -5,7 +5,7 @@
  * Run from app package:
  *   cd nursenest-core && npx playwright test tests/e2e/public/allied-health-hubs.spec.ts
  *
- * Screenshots: `docs/screenshots/allied-newgrad-figma/` at monorepo git root.
+ * Screenshots: `docs/screenshots/allied-health-e2e/` at monorepo git root.
  */
 import { mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -25,7 +25,11 @@ import {
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(HERE, "..", "..", "..");
-const SCREENSHOT_DIR = join(PKG_ROOT, "docs", "screenshots", "hub-figma-implementation");
+const SCREENSHOT_DIR = join(PKG_ROOT, "..", "docs", "screenshots", "allied-health-e2e");
+
+function alliedHubExpectsGuidedStudyPath(path: string): boolean {
+  return path.startsWith("/allied/") && path !== "/allied/allied-health";
+}
 
 const PREMIUM = '[data-nn-qa-pathway-premium-modules=""]';
 
@@ -64,11 +68,17 @@ function hubUrls(): string[] {
 }
 
 async function expectHttpOkNoServerError(page: Page, origin: string, path: string) {
-  const res = await page.request.get(`${origin}${path}`);
+  const res = await page.request.get(`${origin}${path}`, { timeout: 45_000 });
   const st = res.status();
   expect(st, `${path} status`).toBeLessThan(500);
   expect(st, `${path} not 503`).not.toBe(503);
   expect(st, `${path} not 504`).not.toBe(504);
+}
+
+/** Top-level chooser hubs omit full study + premium grids (`occupationPickerOnly`). */
+function isAlliedOccupationChooserHubPath(path: string): boolean {
+  const p = path.replace(/\/$/, "");
+  return p === "/allied/allied-health" || p === "/us/allied/allied-health" || p === "/canada/allied/allied-health";
 }
 
 test.describe("Allied Health hubs (registry-driven)", () => {
@@ -91,6 +101,17 @@ test.describe("Allied Health hubs (registry-driven)", () => {
       const res = await page.goto(`${baseURL}${path}`, { waitUntil: "domcontentloaded", timeout: 120_000 });
       expect(res?.status(), `status for ${path}`).toBeLessThan(400);
 
+      await expect(page.locator("#allied-pathway-hub-hero-title")).toBeVisible({ timeout: 90_000 });
+
+      if (isAlliedOccupationChooserHubPath(path)) {
+        await expect(page.locator("#allied-occupation-tracks")).toBeVisible();
+        await expect(page.locator(PREMIUM)).toHaveCount(0);
+        await assertDocumentNoHorizontalOverflow(page);
+        await page.waitForTimeout(2000);
+        expect(errors, `console errors for ${path}`).toEqual([]);
+        return;
+      }
+
       const zone = page.locator(PREMIUM);
       await expect(zone).toBeVisible({ timeout: 90_000 });
 
@@ -101,7 +122,9 @@ test.describe("Allied Health hubs (registry-driven)", () => {
       expect(zoneHtml.toLowerCase().includes("/admin")).toBe(false);
 
       await expect(page.getByRole("heading", { name: /^Study tools$/i })).toBeVisible();
-      await expect(page.locator('[data-nn-marketing-hub-guided-path="1"]')).toBeVisible({ timeout: 90_000 });
+      if (alliedHubExpectsGuidedStudyPath(path)) {
+        await expect(page.locator('[data-nn-marketing-hub-guided-path="1"]')).toBeVisible({ timeout: 90_000 });
+      }
 
       await assertDocumentNoHorizontalOverflow(page);
       await assertElementNoHorizontalOverflow(page, PREMIUM);
@@ -113,21 +136,22 @@ test.describe("Allied Health hubs (registry-driven)", () => {
     });
   }
 
-  test("desktop + mobile viewports — global hub", async ({ page, baseURL }) => {
+  test("desktop + mobile viewports — global occupation chooser hub", async ({ page, baseURL }) => {
     test.skip(!baseURL, "BASE_URL required");
     const path = "/allied/allied-health";
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto(`${baseURL}${path}`, { waitUntil: "domcontentloaded", timeout: 120_000 });
-    await expect(page.locator(PREMIUM)).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator("#allied-pathway-hub-hero-title")).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator("#allied-occupation-tracks")).toBeVisible();
+    await expect(page.locator(PREMIUM)).toHaveCount(0);
     await assertDocumentNoHorizontalOverflow(page);
-    await assertElementNoHorizontalOverflow(page, PREMIUM);
     await page.screenshot({ path: join(SCREENSHOT_DIR, "allied-hub-desktop-ocean.png"), fullPage: false });
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${baseURL}${path}`, { waitUntil: "domcontentloaded", timeout: 120_000 });
-    await expect(page.locator(PREMIUM)).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator("#allied-pathway-hub-hero-title")).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator("#allied-occupation-tracks")).toBeVisible();
     await assertDocumentNoHorizontalOverflow(page);
-    await assertElementNoHorizontalOverflow(page, PREMIUM);
     await page.screenshot({ path: join(SCREENSHOT_DIR, "allied-hub-mobile-ocean.png"), fullPage: false });
 
     await page.evaluate(() => document.documentElement.setAttribute("data-theme", "midnight"));

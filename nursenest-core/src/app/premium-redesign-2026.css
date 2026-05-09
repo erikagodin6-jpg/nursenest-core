@@ -3290,9 +3290,9 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
   backdrop-filter: saturate(130%) blur(14px);
   -webkit-backdrop-filter: saturate(130%) blur(14px);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 8%, transparent),
-    0 18px 44px -32px color-mix(in srgb, var(--semantic-chart-3) 14%, transparent),
-    0 14px 36px -30px color-mix(in srgb, var(--semantic-info) 10%, transparent);
+    inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 7%, transparent),
+    0 16px 40px -34px color-mix(in srgb, var(--semantic-border-soft) 55%, transparent),
+    0 12px 32px -30px color-mix(in srgb, var(--footer-fg) 6%, transparent);
 }
 
 [data-theme="midnight"] [data-nn-footer-layout="marketing"] .nn-footer-panel,
@@ -3305,8 +3305,9 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
     );
   border-color: color-mix(in srgb, var(--footer-border) 75%, var(--semantic-border-soft));
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 9%, transparent),
-    0 18px 44px -32px color-mix(in srgb, var(--semantic-chart-5) 12%, transparent);
+    inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 8%, transparent),
+    0 16px 40px -34px color-mix(in srgb, var(--semantic-border-soft) 48%, transparent),
+    0 12px 32px -30px color-mix(in srgb, var(--footer-fg) 7%, transparent);
 }
 
 [data-theme="blossom"] [data-nn-footer-layout="marketing"] .nn-footer-panel {
@@ -3321,6 +3322,18 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
 [data-nn-footer-layout="marketing"] .nn-footer-columns {
   column-gap: clamp(1.75rem, 3.2vw, 2.35rem);
   row-gap: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-top {
+  align-items: start;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-panel--bottom-meta {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 6%, var(--footer-bg)),
+    color-mix(in srgb, var(--footer-fg) 4%, var(--footer-bg))
+  );
 }
 
 [data-nn-footer-layout="marketing"] .nn-footer-col-heading {
@@ -3341,5 +3354,29 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
 
 [data-nn-footer-layout="marketing"] .nn-footer-panel--email {
   border-radius: calc(var(--nn-footer-panel-radius) - 0.125rem);
+}
+
+/* Footer account CTAs — calmer than header chrome (no high-chroma brand/neon wash on large panels). */
+[data-nn-footer-layout="marketing"] .nn-nav-cta {
+  background-image: linear-gradient(
+    125deg,
+    color-mix(in srgb, var(--semantic-brand) 72%, var(--footer-bg)),
+    color-mix(in srgb, var(--semantic-info) 38%, var(--footer-bg))
+  );
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, var(--footer-fg) 10%, transparent) inset,
+    0 8px 22px -14px color-mix(in srgb, var(--semantic-brand) 28%, transparent);
+}
+[data-nn-footer-layout="marketing"] .nn-nav-cta:hover {
+  filter: brightness(1.03);
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, var(--footer-fg) 12%, transparent) inset,
+    0 10px 26px -14px color-mix(in srgb, var(--semantic-brand) 34%, transparent);
+}
+[data-nn-footer-layout="marketing"] .nn-nav-cta:focus-visible {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--semantic-info) 22%, transparent),
+    0 1px 0 0 color-mix(in srgb, var(--footer-fg) 12%, transparent) inset,
+    0 10px 26px -14px color-mix(in srgb, var(--semantic-brand) 34%, transparent);
 }
 
