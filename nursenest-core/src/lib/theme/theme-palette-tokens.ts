@@ -2665,10 +2665,10 @@ const CANONICAL_SURFACE_TOKEN_OVERRIDES: Readonly<Record<string, ThemeSurfaceCon
     textOnBrand: "#FFFFFF",
     brand: "#6F4CCF",
     brandStrong: "#5C3DB4",
-    navBackground: "#6F4CCF",
-    navForeground: "#FFFFFF",
+    navBackground: "#FFFFFF",
+    navForeground: "#2F2547",
     navHover: "#F3ECFF",
-    navBorder: "#5C3DB4",
+    navBorder: "#E4D8F5",
     primaryButtonBg: "#6F4CCF",
     primaryButtonText: "#FFFFFF",
     primaryButtonHover: "#5C3DB4",
@@ -2695,10 +2695,10 @@ const CANONICAL_SURFACE_TOKEN_OVERRIDES: Readonly<Record<string, ThemeSurfaceCon
     textOnBrand: "#FFFFFF",
     brand: "#7B5AC8",
     brandStrong: "#6848B0",
-    navBackground: "#7B5AC8",
-    navForeground: "#FFFFFF",
+    navBackground: "#FFFFFF",
+    navForeground: "#302742",
     navHover: "#F4EEFF",
-    navBorder: "#6848B0",
+    navBorder: "#E8DDF8",
     primaryButtonBg: "#7B5AC8",
     primaryButtonText: "#FFFFFF",
     primaryButtonHover: "#6848B0",
@@ -2725,10 +2725,10 @@ const CANONICAL_SURFACE_TOKEN_OVERRIDES: Readonly<Record<string, ThemeSurfaceCon
     textOnBrand: "#FFFFFF",
     brand: "#D96C93",
     brandStrong: "#BF557C",
-    navBackground: "#D96C93",
-    navForeground: "#FFFFFF",
+    navBackground: "#FFFFFF",
+    navForeground: "#402934",
     navHover: "#FFF0F5",
-    navBorder: "#BF557C",
+    navBorder: "#F0CDDA",
     primaryButtonBg: "#D96C93",
     primaryButtonText: "#FFFFFF",
     primaryButtonHover: "#BF557C",
@@ -2960,11 +2960,12 @@ function normalizedSurfaceKey(themeId: string): string {
 }
 
 function deriveSurfaceTokensFromPalette(palette: ThemePaletteTokens): ThemeSurfaceContrastTokens {
-  const navBackground =
-    palette.navBackground.trim().toLowerCase() === "#ffffff" ? palette.primaryDeep : palette.navBackground;
-  const navForeground = relativeLuminanceFromHex(navBackground) < 0.45 ? "#FFFFFF" : palette.heading;
+  /** Respect palette white/off-white nav — do not force saturated primary bars on marketing chrome. */
+  const navBackground = palette.navBackground;
+  const navLum = relativeLuminanceFromHex(navBackground);
+  const navForeground = navLum < 0.45 ? "#FFFFFF" : palette.navText;
   const secondaryButtonBg =
-    navBackground === palette.primaryDeep && relativeLuminanceFromHex(palette.background) < 0.45
+    navLum < 0.45 && relativeLuminanceFromHex(palette.background) < 0.45
       ? "transparent"
       : palette.buttonSecondary;
 
@@ -2978,7 +2979,8 @@ function deriveSurfaceTokensFromPalette(palette: ThemePaletteTokens): ThemeSurfa
     text: palette.text,
     textMuted: palette.textMuted,
     heading: palette.heading,
-    textOnBrand: navForeground,
+    /** Text on filled primary actions — independent of nav band luminance. */
+    textOnBrand: palette.buttonPrimaryText,
     brand: palette.primary,
     brandStrong: palette.primaryDeep,
     navBackground,
