@@ -6,6 +6,7 @@ import "../../../scripts/stub-server-only.cjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadPathwayLessonsHubPageWithTelemetry } from "@/lib/exam-pathways/marketing-hub-lessons-page-fetch";
+import { isNextRedirectError } from "@/lib/next/navigation-abort";
 import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
 import type { PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
 import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
@@ -371,14 +372,14 @@ test("primary payload missing renderableAll while total exceeds items is invalid
 });
 
 test("NEXT_REDIRECT from primary lessons fetch is rethrown (not treated as hub load failure)", async () => {
-  const { getRedirectError, isRedirectError, RedirectType } = await import("next/dist/client/components/redirect");
-  const redirectErr = getRedirectError("/us/rn/nclex-rn/lessons?n=1", RedirectType.replace);
   const mockFetch = async () => {
-    throw redirectErr;
+    const err = new Error("NEXT_REDIRECT");
+    Object.assign(err, { digest: "NEXT_REDIRECT;replace;/us/rn/nclex-rn/lessons?n=1" });
+    throw err;
   };
 
   await assert.rejects(
     () => loadPathwayLessonsHubPageWithTelemetry(ctx.pathwayId, args, ctx, mockFetch),
-    (e: unknown) => isRedirectError(e),
+    (e: unknown) => isNextRedirectError(e),
   );
 });

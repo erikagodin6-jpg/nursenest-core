@@ -1,7 +1,11 @@
 import { emptyPathwayLessonsPageResult } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import type { MarketingHubDataLoadContext } from "@/lib/exam-pathways/marketing-hub-data-context";
 import type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
-import { getPathwayLessonsPageFresh, type PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
+import {
+  getPathwayLessonsPage,
+  getPathwayLessonsPageFresh,
+  type PathwayLessonsPageResult,
+} from "@/lib/lessons/pathway-lesson-loader";
 import { classifyHubDbFailure, type HubDbFailureCategory } from "@/lib/db/safe-database";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { logRouteDataPipeline, routeDataDiagnosticsEnabled } from "@/lib/observability/route-data-pipeline-log";
@@ -14,6 +18,29 @@ import { snapshotAgeMs as computeSnapshotAgeMs } from "@/lib/study-content-failo
 import type { StudyDataSourceUsed, StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
 
 export type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
+
+/**
+ * Default marketing hub list fetch: Next.js Data Cache (`getPathwayLessonsPage`) for lower TTFB on filtered hubs.
+ * Set `NN_MARKETING_HUB_USE_FRESH_LIST=1` to bypass cache and call {@link getPathwayLessonsPageFresh} (editorial immediacy).
+ */
+export function defaultMarketingHubLessonsPageFetch(
+  pathwayId: string,
+  page: number,
+  pageSize: number,
+  marketingLocale?: string,
+  listOpts?: import("@/lib/exam-pathways/marketing-hub-lessons-page-args").MarketingHubLessonsListOptions,
+): Promise<PathwayLessonsPageResult> {
+  if (process.env.NN_MARKETING_HUB_USE_FRESH_LIST === "1") {
+    return getPathwayLessonsPageFresh(pathwayId, page, pageSize, marketingLocale, listOpts);
+  }
+  return getPathwayLessonsPage(pathwayId, page, pageSize, marketingLocale, listOpts);
+}
+
+function hubPrimaryCacheTelemetryLabel(): "cached_getPathwayLessonsPage" | "live_getPathwayLessonsPageFresh" {
+  return process.env.NN_MARKETING_HUB_USE_FRESH_LIST === "1"
+    ? "live_getPathwayLessonsPageFresh"
+    : "cached_getPathwayLessonsPage";
+}
 
 /** Snapshot read outcome for Canada RN hub diagnostics (`RN_LESSONS_HUB_ACTUAL_COUNTS`). */
 export type LessonsHubSnapshotDiagnostics = {
@@ -143,7 +170,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
   pathwayId: string,
   args: LoadPathwayLessonsHubPageArgs,
   ctx: MarketingHubDataLoadContext,
-  fetchImpl: typeof getPathwayLessonsPageFresh = getPathwayLessonsPageFresh,
+  fetchImpl: typeof defaultMarketingHubLessonsPageFetch = defaultMarketingHubLessonsPageFetch,
   deps?: {
     readHubSnapshot?: (
       pid: string,
@@ -257,7 +284,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
           pathwayId: ctx.pathwayId,
           finalItemCount: primaryCoerced.items.length,
           finalTotal: primaryCoerced.total,
-          cacheSource: "live_getPathwayLessonsPageFresh",
+          cacheSource: hubPrimaryCacheTelemetryLabel(),
           fetchDurationMs: Math.round(fetchDurationMsPrimary),
         },
       });

@@ -1878,9 +1878,8 @@ export const getPathwayLesson = pathwayLoaderAsyncMemo(getPathwayLessonWithDataC
 
 /**
  * Uncached lesson read for **marketing hub row integrity** (`verifyMarketingHubLessonRowsResolve`).
- * Hub lists use {@link getPathwayLessonsPageFresh} (no `unstable_cache`); verifying against cached
- * {@link getPathwayLesson} can incorrectly empty the hub right after a publish when the list already
- * reflects `publicComplete` but the per-slug cache entry is still stale.
+ * Per-slug checks bypass {@link getPathwayLesson} data cache so publish/review flows see fresh rows;
+ * hub **lists** use {@link getPathwayLessonsPage} (Next Data Cache) for performance by default.
  */
 export async function getPathwayLessonForMarketingHubVerify(
   pathwayId: string,

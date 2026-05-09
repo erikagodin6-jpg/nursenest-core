@@ -5,6 +5,7 @@ import type {
   MarketingHubLessonsListOptions,
 } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import {
+  defaultMarketingHubLessonsPageFetch,
   loadPathwayLessonsHubPageWithTelemetry,
   type LessonsHubSnapshotDiagnostics,
   type PathwayLessonsHubPageLoadState,
@@ -19,6 +20,7 @@ import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-qu
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import {
   countPathwayLessonsPublic,
+  getPathwayLessonsPage,
   getPathwayLessonsPageFresh,
   listTopicClustersForPublicNavigation,
   resolvePathwayLaunchBundle,
@@ -184,7 +186,8 @@ export async function loadPathwayLessonsHubAggregates(
   },
   ctx: MarketingHubDataLoadContext,
   deps?: {
-    fetchLessonsPageFresh?: typeof getPathwayLessonsPageFresh;
+    /** Override hub list fetch (tests). Default uses Next Data Cache unless `NN_MARKETING_HUB_USE_FRESH_LIST=1`. */
+    fetchLessonsPageFresh?: typeof getPathwayLessonsPageFresh | typeof getPathwayLessonsPage;
     readHubLessonsSnapshot?: (
       pathwayId: string,
       args: LoadPathwayLessonsHubPageArgs,
@@ -202,7 +205,7 @@ export async function loadPathwayLessonsHubAggregates(
     includeTopics = true,
   } = args;
 
-  const fetchLessons = deps?.fetchLessonsPageFresh ?? getPathwayLessonsPageFresh;
+  const fetchLessons = deps?.fetchLessonsPageFresh ?? defaultMarketingHubLessonsPageFetch;
   const { pageResult, lessonsPageLoad, snapshotDiagnostics: lessonsHubSnapshotDiagnostics } =
     await loadPathwayLessonsHubPageWithTelemetry(
       pathway.id,
