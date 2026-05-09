@@ -1503,7 +1503,14 @@
   --theme-accent-foreground: #121621;
   --theme-border: color-mix(in srgb, #121621 10%, #e8e6ef);
   --theme-ring: #8e75ff;
-  --theme-page-bg: #faf8fc;
+  /* Continuous bloom canvas — soft lavender base (not flat neutral gray) */
+  --theme-page-bg: color-mix(in srgb, #e8e0f7 9%, color-mix(in srgb, #fce8f2 8%, #faf9fc));
+  /* Marketing / section alt — pink → sky wash so stripes feel like one story */
+  --theme-surface-strong: color-mix(
+    in srgb,
+    #4a90e2 5%,
+    color-mix(in srgb, #e35699 5%, var(--theme-page-bg))
+  );
   --theme-heading-text: #121621;
   --theme-body-text: color-mix(in srgb, #121621 88%, #ffffff);
   --theme-muted-text: color-mix(in srgb, #121621 52%, #ffffff);
@@ -1537,7 +1544,8 @@
   --theme-nav-hover-foreground: #ffffff;
   --theme-header-top-bg: #121621;
   --theme-header-main-bg: #121621;
-  --theme-header-secondary-bg: #ffffff;
+  /* Primary marketing band paper — whisper rose/violet so glass nav reads with page bloom */
+  --theme-header-secondary-bg: color-mix(in srgb, #e35699 4%, color-mix(in srgb, #8e75ff 5%, #ffffff));
   --theme-header-secondary-fg: #121621;
   --theme-header-divider: color-mix(in srgb, #121621 22%, transparent);
 }

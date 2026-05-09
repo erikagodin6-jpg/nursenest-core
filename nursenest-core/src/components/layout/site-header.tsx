@@ -642,7 +642,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
             <nav
               aria-label={t("nav.marketingExplore")}
-              className="nav flex min-w-0 flex-wrap items-center justify-center gap-0.5 px-2 sm:px-3 xl:gap-1"
+              className="nav flex min-w-0 flex-wrap items-center justify-center gap-1 px-3 sm:gap-1.5 sm:px-4 xl:gap-2.5"
             >
               {marketingMoreLinks.map((item) => (
                 <Link

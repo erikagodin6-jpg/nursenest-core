@@ -11,6 +11,7 @@ import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-f
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { ExamPathwayHubPrimaryStudyCards, type HubLessonProgress } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
+import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -85,6 +86,8 @@ export function ExamPathwayHubBody({
         hubProgress={hubProgress}
         pathwayLessonCount={pathwayLessonCount}
       />
+
+      <ExamPathwayHubPremiumModules pathway={pathway} isSignedIn={isSignedIn} npSeoAliasSegment={npSeoAliasSegment} />
 
       {usNpSiblings.length > 0 ? (
         <aside className="nn-study-card nn-study-card--wash mt-8 px-4 py-4 sm:px-5" aria-labelledby="us-np-sibling-tracks">
