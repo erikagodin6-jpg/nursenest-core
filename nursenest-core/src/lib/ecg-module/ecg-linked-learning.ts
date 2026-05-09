@@ -16,13 +16,16 @@ const ECG_LINK_SIGNAL =
 
 /**
  * RN/NP premium ECG module aligns with {@link canAccessEcgModuleForTier} and
- * {@link assertNoEcgForRpn} — PN/RPN and REx-PN pathways do not get deep-links.
+ * {@link assertNoEcgForRpn} — PN/RPN, REx-PN, New Grad transition, and non-RN/NP tiers
+ * do not get marketing-hub ECG tiles or deep-links.
  */
 export function pathwayAllowsEcgLinkedLearning(pathway: ExamPathwayDefinition): boolean {
   const tier = pathway.stripeTier as TierCode;
   if (tier !== "RN" && tier !== "NP") return false;
   const pid = pathway.id.toLowerCase();
   if (pid.includes("rex-pn")) return false;
+  /** Defense-in-depth alongside {@link TierCode.NEW_GRAD} — hub id always carries `new-grad`. */
+  if (pid.includes("new-grad")) return false;
   return true;
 }
 

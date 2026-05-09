@@ -7,16 +7,18 @@ import {
   pathwayAllowsEcgLinkedLearning,
 } from "@/lib/ecg-module/ecg-linked-learning";
 
-test("pathwayAllowsEcgLinkedLearning: RN/NP yes; REx-PN and PN no", () => {
+test("pathwayAllowsEcgLinkedLearning: RN/NP yes; REx-PN, PN, and New Grad no", () => {
   const rn = getExamPathwayById("us-rn-nclex-rn");
   const np = getExamPathwayById("us-np-fnp");
   const rex = getExamPathwayById("ca-rpn-rex-pn");
   const pn = getExamPathwayById("us-lpn-nclex-pn");
-  assert.ok(rn && np && rex && pn);
+  const newGrad = getExamPathwayById("us-rn-new-grad-transition");
+  assert.ok(rn && np && rex && pn && newGrad);
   assert.equal(pathwayAllowsEcgLinkedLearning(rn), true);
   assert.equal(pathwayAllowsEcgLinkedLearning(np), true);
   assert.equal(pathwayAllowsEcgLinkedLearning(rex), false);
   assert.equal(pathwayAllowsEcgLinkedLearning(pn), false);
+  assert.equal(pathwayAllowsEcgLinkedLearning(newGrad), false);
 });
 
 test("lessonSignalsEcgLinkedLearning detects cardiac + ECG terminology", () => {
