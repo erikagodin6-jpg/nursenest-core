@@ -25,8 +25,8 @@ import {
 import { coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-slug";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import type { Prisma } from "@prisma/client";
+import { openRouterErrorIndicatesInvalidModelSlug } from "@/lib/ai/openai-env";
 import { prisma } from "@/lib/db";
-import { openRouterErrorIndicatesInvalidModelSlug } from "@/lib/ai/blog-ai-provider";
 
 /** Multi-topic batches can run for many minutes (sequential provider calls + persistence). */
 export const maxDuration = 300;

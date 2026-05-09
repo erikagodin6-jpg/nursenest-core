@@ -11,6 +11,21 @@ export const OPENROUTER_DEFAULT_CHAT_MODEL = "openai/gpt-4o-mini";
 export const OPENROUTER_MODELS_URL = "https://openrouter.ai/models";
 
 /**
+ * True when an error string indicates OpenRouter rejected the configured model slug (404 / no route / no endpoints).
+ * Do not treat as a transient throttle class error.
+ */
+export function openRouterErrorIndicatesInvalidModelSlug(message: string): boolean {
+  const m = message.toLowerCase();
+  return (
+    m.includes("could not route this model") ||
+    m.includes("no endpoints") ||
+    m.includes("no providers found") ||
+    m.includes("no endpoints found") ||
+    (m.includes("http 404") && m.includes("openrouter"))
+  );
+}
+
+/**
  * Resolved model slug: `OPENROUTER_MODEL` → `BLOG_OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
  */
 export function resolveOpenRouterModelSlugFromEnv(): string {
