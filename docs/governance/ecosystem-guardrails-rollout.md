@@ -59,3 +59,4 @@ Permanent guardrails so engineering, Cursor, Figma handoff, and AI-generated UI 
 |------|--------|
 | 2026-05-09 | Added `docs/planning/clinical-readiness-ecosystem-implementation-directive.md` — homepage placement, hub patterns, `/app/account/report`, CAT/flashcards, marketing + subscription positioning, adaptive integration; linked from `ecosystem-platform-guardrails.mdc`, `AGENTS.md`, `docs/ecosystem-design-system-convergence.md`, `subscription-clinical-readiness-ecosystem.md`. |
 | 2026-05-09 | Added `docs/planning/bls-acls-pals-emergency-readiness-pathways.md` and `.cursor/rules/bls-acls-pals-emergency-readiness.mdc` — future BLS/ACLS/PALS as integrated emergency-readiness ecosystems; homepage row G + cross-links. |
+| 2026-05-09 | Added `docs/governance/ecosystem-qa-master-program.md`, report templates, `playwright.ecosystem-audit.config.ts`, `npm run test:e2e:ecosystem-audit` / `qa:ecosystem:matrix`, `.cursor/rules/ecosystem-qa-governance.mdc`. |

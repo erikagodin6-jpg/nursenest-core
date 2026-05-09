@@ -85,6 +85,7 @@ Support ICU, ER, telemetry, peds, surgery, dialysis, oncology, LTC, neuro, med-s
 
 - `docs/planning/clinical-readiness-ecosystem-implementation-directive.md` — homepage, hubs, report card, CAT, flashcards, marketing language, adaptive loops  
 - `docs/planning/bls-acls-pals-emergency-readiness-pathways.md` — future BLS/ACLS/PALS as integrated emergency-readiness ecosystems  
+- `docs/governance/ecosystem-qa-master-program.md` — recurring QA matrix + entitlement/adaptive audits  
 - `docs/ecosystem-design-system-convergence.md` — primitives, themes, duplicate-system audit  
 - `docs/planning/osce-medication-dosage-ecosystem.md` — OSCE + dosage placement  
 - `docs/planning/transfusion-clinical-readiness-ecosystem.md` — transfusion safety + reactions across hubs, labs, telemetry, OSCE, cases  

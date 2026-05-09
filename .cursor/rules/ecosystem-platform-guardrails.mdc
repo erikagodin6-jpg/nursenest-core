@@ -69,5 +69,6 @@ Applies to Cursor implementation, Figma-to-code handoff, AI-generated UI, and hu
 
 - `docs/planning/clinical-readiness-ecosystem-implementation-directive.md` — homepage, hubs, dashboard, CAT, flashcards, marketing, subscriptions, adaptive integration.
 - `docs/planning/bls-acls-pals-emergency-readiness-pathways.md` — future BLS/ACLS/PALS placement (integrated ecosystems, not isolated cert apps).
+- `docs/governance/ecosystem-qa-master-program.md` — recurring Playwright matrix, cohesion, entitlement, adaptive, performance audits + report templates.
 - `docs/ecosystem-design-system-convergence.md` — primitive registry, duplicate-system audit, theme/token convergence.
 - `docs/governance/ecosystem-guardrails-rollout.md` — changelog and enforcement notes.
