@@ -26,6 +26,7 @@ import { coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-sl
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { openRouterErrorIndicatesInvalidModelSlug } from "@/lib/ai/blog-ai-provider";
 
 /** Multi-topic batches can run for many minutes (sequential provider calls + persistence). */
 export const maxDuration = 300;
@@ -39,6 +40,7 @@ const TRANSIENT_PROVIDER_ERR =
   /rate|429|timeout|timed out|econnreset|overloaded|temporarily unavailable|too many requests|context length|resource_exhausted|throttl|503|service unavailable/i;
 
 function isTransientProviderErrorMessage(message: string): boolean {
+  if (openRouterErrorIndicatesInvalidModelSlug(message)) return false;
   return TRANSIENT_PROVIDER_ERR.test(message.toLowerCase());
 }
 
