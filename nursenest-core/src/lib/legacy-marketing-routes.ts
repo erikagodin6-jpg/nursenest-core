@@ -123,13 +123,16 @@ function getLegacyRoutes(): Record<string, string> {
    ========================= */
 
 export function isCoreAlliedMarketingPath(href: string): boolean {
+  const pathOnly = href.split("?")[0] ?? "";
   return (
-    href === "/allied-health" ||
-    href.startsWith("/allied-health/") ||
-    href.startsWith("/us/allied/") ||
-    href.startsWith("/canada/allied/") ||
-    href === "/allied-health-exam-prep" ||
-    href.startsWith("/allied-health-exam-prep/")
+    pathOnly === "/allied-health" ||
+    pathOnly.startsWith("/allied-health/") ||
+    pathOnly.startsWith("/us/allied/") ||
+    pathOnly.startsWith("/canada/allied/") ||
+    /** Canonical allied lessons hub from {@link alliedHealthLessonsIndexPath} (`/allied/allied-health/lessons?…`). */
+    pathOnly.startsWith("/allied/allied-health/") ||
+    pathOnly === "/allied-health-exam-prep" ||
+    pathOnly.startsWith("/allied-health-exam-prep/")
   );
 }
 

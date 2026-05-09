@@ -1,50 +1,46 @@
-# Learner dashboard + settings UI audit (2026-05-08)
+# Learner dashboard / settings UI audit — 2026-05-08
 
+## Guest behavior (verified)
 
-## Branch
+Unauthenticated requests to learner alias routes (`/app/dashboard`, `/app/settings`, `/app/report-card`) **hit the auth gate first**. The browser lands on **`/login`** with a **`callbackUrl`** query parameter.
 
-`feat/learner-dashboard-settings-ui-audit` (not pushed)
+- **`callbackUrl`** preserves the **original alias path** (e.g. `/app/dashboard`), including query string if present.
+- **`callbackUrl` host variance**: middleware/auth may emit an absolute URL (`http://127.0.0.1:3000/app/dashboard` vs `http://localhost:3000/...`). Assertions normalize via URL parsing and compare **pathname + search** only — **not** hostname.
+- **Raw i18n keys**: the login/auth surface body text must not expose raw `learner.*.*.*` key patterns.
 
-## Summary
+Canonical redirects to `/app`, `/app/account/settings`, and `/app/account/report` apply **after** authentication (see signed-in E2E when QA credentials are present).
 
-- **Canonical aliases**: App Router redirects: `/app/dashboard` → `/app`, `/app/settings` → `/app/account/settings`, top-level `/app/report-card` → `/app/account/report` (existing `/app/account/report-card` unchanged).
-- **Settings hub**: Exam plan card → `/app/exam-plan` using existing keys `learner.personalPage.section.examPlan` / `learner.personalPage.section.examPlanSub`. CTA arrow uses `var(--semantic-brand)` instead of `text-primary`.
-- **Account shell**: Account hub back link + analytics teaser use semantic tokens; account header CTAs `sm:flex-wrap`; cross-link chips use `--semantic-text-primary`.
-- **Performance nav**: Active state includes `/app/report-card` for report.
+## Allied marketing URL resolution (contract fix)
 
-## Files changed
+`resolveMarketingHref("/allied-health/:profession/lessons")` maps to `alliedHealthLessonsIndexPath`, which returns **`/allied/allied-health/lessons?…`**. Those paths must stay **on-origin** (not prefixed with `marketingPublicSiteOrigin()`). `isCoreAlliedMarketingPath` now recognizes `/allied/allied-health/…` and compares pathname without tripping on `?…` query suffixes.
 
-- `nursenest-core/src/app/(student)/app/(learner)/dashboard/page.tsx` (new)
-- `nursenest-core/src/app/(student)/app/(learner)/settings/page.tsx` (new)
-- `nursenest-core/src/app/(student)/app/(learner)/report-card/page.tsx` (new)
-- `nursenest-core/src/app/(student)/app/(learner)/account/settings/page.tsx`
-- `nursenest-core/src/components/student/learner-account-center-overview.tsx`
-- `nursenest-core/src/components/student/learner-account-shell-header.tsx`
-- `nursenest-core/src/components/student/learner-account-cross-links.tsx`
-- `nursenest-core/src/components/student/learner-performance-workspace-nav.tsx`
-- `nursenest-core/src/lib/learner/learner-account-center.contract.test.ts`
-- `nursenest-core/tests/e2e/learner-surfaces/learner-dashboard-settings-audit.spec.ts` (new)
-- `reports/learner-dashboard-settings-ui-audit-2026-05-08.md` (this file)
+## Verification commands (from `nursenest-core/` package root)
 
-## Screenshot output path
+```bash
+npm run typecheck:critical
+npm run test:learner-account
+```
 
-`reports/learner-dashboard-settings-ui-audit-2026-05-08/screenshots/` when `LEARNER_UI_AUDIT_SCREENSHOTS=1` and paid QA creds are set (see e2e spec header).
+Playwright guest slice (requires dev server at `BASE_URL`; reuse with `PLAYWRIGHT_SKIP_WEB_SERVER=1`):
 
-## Commands
+```bash
+PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=http://127.0.0.1:3000 \
+  LEARNER_UI_AUDIT_SCREENSHOTS=1 \
+  node node_modules/@playwright/test/cli.js test \
+  -c playwright.learner-surfaces-smoke.config.ts \
+  --grep 'auth gate \+ callbackUrl \(guest\)'
+```
 
-| Command | Result |
-|---------|--------|
-| `npm run typecheck:critical` | Pass |
-| `npm run test:learner-account` | New contract tests pass; `learner-legacy-parity.contract.test.ts` still fails (pre-existing allied health URL expectation) |
+**Results (local run):** `typecheck:critical` PASS; `test:learner-account` PASS (14 tests); guest Playwright slice PASS (3 tests).
 
-Playwright: not fully run (port 3000 EADDRINUSE). Use `PLAYWRIGHT_SKIP_WEB_SERVER=1` + `BASE_URL` for remote smoke.
+Authenticated sections skip without QA paid credentials (`QA_PAID_EMAIL` / `QA_PAID_PASSWORD` or `E2E_PAID_*` / `PLAYWRIGHT_TEST_*`).
 
-## Truthpack
+## Screenshots
 
-`.vibecheck/truthpack/` not found in this workspace; exam-plan copy uses existing generated marketing keys only.
+Under app package (`cwd` = `nursenest-core/`):
 
-## Deploy / readiness
+- `reports/learner-dashboard-settings-ui-audit-2026-05-08/screenshots/guest-login-app_dashboard.png`
+- `reports/learner-dashboard-settings-ui-audit-2026-05-08/screenshots/guest-login-app_settings.png`
+- `reports/learner-dashboard-settings-ui-audit-2026-05-08/screenshots/guest-login-app_report-card.png`
 
-No auth/entitlement/billing/schema changes. Push manually when ready.
-
-*Verified By VibeCheck ✅*
+Repo-root copies: `reports/learner-dashboard-settings-ui-audit-2026-05-08/screenshots/` (same filenames + `.gitkeep`).
