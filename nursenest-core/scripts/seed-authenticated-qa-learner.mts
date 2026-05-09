@@ -42,6 +42,7 @@ import {
   ExamSessionStatus,
   PracticeQuestionAnswerMode,
   PracticeTestStatus,
+  type Prisma,
 } from "@prisma/client";
 import { answerMatches } from "../src/lib/exams/score-session-answers";
 import { questionAccessWhere } from "../src/lib/entitlements/content-access-scope";
@@ -526,15 +527,23 @@ async function main(): Promise<void> {
         },
       });
 
-      for (const qid of ids.slice(0, 3)) {
-        const q = questions.find((x) => x.id === qid);
-        const ok = q && Array.isArray(q.correctAnswer) ? String(q.correctAnswer[0] ?? "") : String(q?.correctAnswer ?? "");
+      const catSlice = ids.slice(0, Math.min(3, ids.length));
+      for (let i = 0; i < catSlice.length; i++) {
+        const qid = catSlice[i]!;
+        const q = questions[i];
+        if (!q) break;
+        const wantCorrect = i !== 1;
+        const pick = wantCorrect
+          ? Array.isArray(q.correctAnswer)
+            ? String(q.correctAnswer[0] ?? "")
+            : String(q.correctAnswer ?? "")
+          : "__auth_qa_cat_wrong__";
         await tx.examQuestionPracticeAnswerAttempt.create({
           data: {
             userId: user.id,
             questionId: qid,
-            selectedOptionKey: `${SEED_TAG}:${qid}`,
-            isCorrect: Boolean(q && answerMatches(q.questionType, q.correctAnswer, ok)),
+            selectedOptionKey: `${SEED_TAG}:${pick}`,
+            isCorrect: answerMatches(q.questionType, q.correctAnswer, pick),
             mode: PracticeQuestionAnswerMode.cat,
             pathwayId,
           },
@@ -585,8 +594,80 @@ async function main(): Promise<void> {
     });
   });
 
+  await prisma.osceStation.upsert({
+    where: { slug: OSCE_SEED_SLUG },
+    create: {
+      slug: OSCE_SEED_SLUG,
+      title: "Auth QA — hand hygiene station",
+      description: "Deterministic OSCE row for QA / Playwright visibility when dev DBs lack imported stations.",
+      scenarioIntro:
+        "You enter an isolation room to assess a stable patient. Demonstrate appropriate hand hygiene before touching the patient.",
+      candidateInstructions: "Introduce yourself; perform hand hygiene; explain each step briefly.",
+      patientScript: "Patient is cooperative and asks what you are doing.",
+      steps: [
+        {
+          id: "intro",
+          instruction: "Introduce yourself and confirm patient identity.",
+          rationale: "Establishes rapport and safety.",
+        },
+        {
+          id: "hygiene",
+          instruction: "Perform hand hygiene before patient contact.",
+          rationale: "Prevents transmission of pathogens.",
+        },
+      ] as unknown as Prisma.InputJsonValue,
+      examinerChecklist: [],
+      criticalFails: [],
+      rationales: [],
+      timeLimit: "8 min",
+      difficulty: "beginner",
+      category: "infection_control",
+      pathwayId,
+      isPublished: true,
+      domain: "Fundamentals",
+      roleTrack: "RN",
+      sourceLegacyPath: "seed-authenticated-qa-learner.mts",
+      extensions: { seedTag: SEED_TAG, importSource: "auth-qa-seed" },
+    },
+    update: {
+      title: "Auth QA — hand hygiene station",
+      description:
+        "Deterministic OSCE row for QA / Playwright visibility when dev DBs lack imported stations.",
+      scenarioIntro:
+        "You enter an isolation room to assess a stable patient. Demonstrate appropriate hand hygiene before touching the patient.",
+      isPublished: true,
+      pathwayId,
+      extensions: { seedTag: SEED_TAG, importSource: "auth-qa-seed" },
+    },
+  });
+
+  const ecgQuestion = await prisma.ecgVideoQuestion.findFirst({
+    orderBy: { createdAt: "asc" },
+    select: { id: true },
+  });
+  if (ecgQuestion) {
+    await prisma.ecgVideoQuestionPracticeAnswerAttempt.deleteMany({
+      where: { userId: user.id, selectedOptionId: ECG_SEED_OPTION_ID },
+    });
+    await prisma.ecgVideoQuestionPracticeAnswerAttempt.create({
+      data: {
+        userId: user.id,
+        questionId: ecgQuestion.id,
+        selectedOptionId: ECG_SEED_OPTION_ID,
+        isCorrect: false,
+        mode: PracticeQuestionAnswerMode.practice,
+        pathwayId,
+      },
+    });
+    console.log(`[seed-auth-qa] ECG practice attempt linked to question ${ecgQuestion.id.slice(0, 8)}…`);
+  } else {
+    console.warn("[seed-auth-qa] No EcgVideoQuestion rows — skipping ECG practice attempt (optional).");
+  }
+
   console.log(`[seed-auth-qa] OK — seeded study artifacts for ${email} (user ${user.id.slice(0, 8)}…).`);
-  console.log("[seed-auth-qa] Weak/strong topic stats, pathway progress, flashcards, readiness row, planner, practice rows.");
+  console.log(
+    "[seed-auth-qa] Weak/strong topic stats, pathway progress, flashcards, readiness row, planner, practice rows, OSCE seed station, CAT-mode bank attempts.",
+  );
 }
 
 main()
