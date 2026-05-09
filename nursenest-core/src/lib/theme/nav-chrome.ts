@@ -542,7 +542,9 @@ export function getNavChrome(themeId?: string | null): NavChromeTheme {
 }
 
 /** CSS custom properties only — no direct backgroundColor/color. Use on wrapper elements that
- *  need to propagate chrome vars to siblings/children without overriding their own backgrounds. */
+ *  need to propagate chrome vars to siblings/children without overriding their own backgrounds.
+ *  Marketing SiteHeader: dark themes merge {@link getNavChromeStyle} onto the sticky outer wrapper
+ *  so full-bleed backgrounds are not clipped by inner max-width shells. */
 export function getNavChromeVars(themeId?: string | null): CSSProperties {
   const t = getNavChrome(themeId);
   return {
