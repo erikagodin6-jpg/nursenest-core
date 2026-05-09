@@ -5,7 +5,6 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
-import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
@@ -23,15 +22,13 @@ import {
   pathwayMarketingHubCategories,
   pickReviewRequiredCatalogLessons,
 } from "@/lib/lessons/marketing-lessons-hub-category";
-import {
-  getPathwayLessonListWarehouseLocaleForHub,
-  PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
-} from "@/lib/lessons/pathway-lesson-loader";
+import { PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP } from "@/lib/lessons/pathway-lesson-loader";
 import { prepareLessonsForHubCurriculumWithDiagnostics } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
-import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import { resolveMarketingHubCategoryLessonRowsWithDbResilience } from "@/lib/lessons/marketing-hub-category-rows-db-resilient";
 import {
   pathwayLessonHasRenderableHubSlug,
   pathwayLessonMarketingHubVerifiedCardHref,
+  type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -40,12 +37,12 @@ import {
   loadMarketingPathwayLessonProgressSessionContext,
 } from "@/lib/lessons/marketing-pathway-lesson-progress-server";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
-import { getLessonProgressForPathwayUser } from "@/lib/lessons/get-lesson-progress-for-pathway-user";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { loadMarketingHubLessonProgressMapWithTimeout } from "@/lib/lessons/marketing-hub-progress-safe";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -74,6 +71,14 @@ export async function MarketingLessonsHubCategoryFirstIndex({
   const catalog = getMarketingLessonsHubCatalogLessons(pathway.id);
   const hubCategories = pathwayMarketingHubCategories(pathway.id);
   const counts = countPathwayMarketingHubLessonsByCategoryForPathway(pathway.id);
+
+  const progressCtx = await loadMarketingPathwayLessonProgressSessionContext({
+    sessionPathname: routePathLessons,
+    sessionSurface: "marketing.exam_hub.lessons",
+  });
+  /** Anonymous public hubs: index/catalog only — no warehouse locale query or per-slug DB verify. */
+  const skipMarketingHubDbVerify = !progressCtx.userId.trim();
+
   const reviewPick = pickReviewRequiredCatalogLessons(
     catalog,
     pathway.id,
@@ -83,31 +88,32 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     reviewPick.filter(pathwayLessonHasRenderableHubSlug),
     { pathwayId: pathway.id, lessonsBasePath: base },
   );
-  const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
   lessonsPerfMark("catalog_size", {
     surface: "category_index_pre_verify",
     pathwayId: pathway.id,
     review_pick: reviewPick.length,
     elapsed_ms: Math.round(performance.now() - categoryIndexT0),
   });
-  const vrReview = await verifyMarketingHubLessonRowsResolve(
-    pathway,
-    reviewPrepared.lessons,
-    lessonContentLocale,
+
+  const reviewRows = await resolveMarketingHubCategoryLessonRowsWithDbResilience(
     {
-      listWarehouseLocale,
+      pathway,
+      lessonContentLocale,
+      skipDbVerify: skipMarketingHubDbVerify,
+      preparedLessons: reviewPrepared.lessons,
       prepareStages: reviewPrepared.prepareStages,
       maxUniqueSlugsToVerify: Math.min(
         PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
         MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX * 2,
       ),
+      surface: "category_first_index",
     },
   );
-  const reviewRows = vrReview.kept;
   lessonsPerfMark("route_end", {
     surface: "marketing_lessons_category_index",
     pathwayId: pathway.id,
     kept: reviewRows.length,
+    verify_skipped: skipMarketingHubDbVerify ? "anonymous_index_only" : "db_verify_or_resilient_fallback",
     elapsed_ms: Math.round(performance.now() - categoryIndexT0),
   });
 
@@ -161,18 +167,17 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     />
   );
 
-  const progressCtx = await loadMarketingPathwayLessonProgressSessionContext({
-    sessionPathname: routePathLessons,
-    sessionSurface: "marketing.exam_hub.lessons",
-  });
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
+  let showPaidProgressChrome = false;
   if (canShowResume && catalog.length > 0) {
-    progressMap = await getLessonProgressForPathwayUser({
+    const pr = await loadMarketingHubLessonProgressMapWithTimeout({
       userId: progressCtx.userId,
       pathwayId: pathway.id,
       lessonSlugs: catalog.map((l) => l.slug),
     });
+    progressMap = pr.map;
+    showPaidProgressChrome = !pr.timedOut;
   }
 
   if (catalog.length === 0) {
@@ -287,7 +292,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
                         className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm font-medium text-primary hover:underline"
                       >
                         <span className="min-w-0 flex-1">{label}</span>
-                        {canShowResume ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
+                        {showPaidProgressChrome ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
                       </Link>
                     ) : (
                       <span className="text-sm text-[var(--theme-muted-text)]">{label}</span>
@@ -303,7 +308,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
           {hubCategories.map((cat) => {
             const n = counts.get(cat.id) ?? 0;
             const href = marketingPathwayLessonsCategoryPath(pathway, cat.slug);
-            const categoryProgress = canShowResume
+            const categoryProgress = showPaidProgressChrome
               ? buildLessonCategoryProgress({
                   lessons: catalog.filter((lesson) => displayCategoryForPathwayMarketingHubLesson(lesson, pathway.id).id === cat.id),
                   progressMap,
@@ -319,7 +324,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
                   {cat.label}
                 </span>
                 <span className="mt-1 text-xs text-[var(--theme-muted-text)]">
-                  {canShowResume && categoryProgress ? (
+                  {showPaidProgressChrome && categoryProgress ? (
                     <>
                       <span className="hidden sm:inline">
                         {categoryProgress.percentComplete}% complete ·{" "}
@@ -336,7 +341,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
                     `${n.toLocaleString()} ${n === 1 ? "lesson" : "lessons"}`
                   )}
                 </span>
-                {canShowResume && categoryProgress ? (
+                {showPaidProgressChrome && categoryProgress ? (
                   <CategoryProgressBar
                     completedCount={categoryProgress.completedCount}
                     inProgressCount={categoryProgress.inProgressCount}

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import {
   getCatalogLessonsRaw,
+  getLessonSummariesIndex,
   normalizeLesson,
   sortAndFilterLessonsForPathwayContext,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
@@ -80,6 +81,11 @@ async function attachPathwayLessonIdsToAdjacent(
  */
 export function loadPathwayLessonAdjacentFromCatalog(pathwayId: string, lessonSlug: string): PathwayLessonAdjacentSlugs {
   try {
+    const summaries = getLessonSummariesIndex(pathwayId);
+    if (summaries.length > 0) {
+      const ordered = summaries.map((s) => ({ slug: s.slug, title: s.title }));
+      return pathwayLessonAdjacentFromOrderedSlugs(ordered, lessonSlug);
+    }
     const raw = getCatalogLessonsRaw(pathwayId);
     const sorted = sortAndFilterLessonsForPathwayContext(
       pathwayId,

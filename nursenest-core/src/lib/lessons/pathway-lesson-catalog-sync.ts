@@ -72,6 +72,7 @@ import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/sc
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { ALLIED_PROFESSION_DEDICATED_CATALOGS } from "@/content/pathway-lessons/allied-professions/registry";
 import {
+  lessonCategoryToSlug,
   normalizeLessonCategory,
   premiumizeLessonDisplayTitle,
   type LessonCategory,
@@ -81,6 +82,7 @@ import {
   clearGeneratedPathwayLessonIndexCacheForTests,
   getOptionalGeneratedPathwayLessonIndex,
   type PathwayLessonGeneratedIndexFileV1,
+  type PathwayLessonSummaryIndexJsonRow,
 } from "@/lib/lessons/pathway-lesson-generated-index";
 import {
   computePathwayLessonLinkedLearningSignals,
@@ -709,6 +711,47 @@ function tryTrustedGeneratedLessonIndex(pathwayId: string): PathwayLessonGenerat
   }
   trustedGeneratedLessonIndexByPathway.set(key, idx);
   return idx;
+}
+
+/**
+ * True when a validated on-disk `generated-indexes/{pathwayId}.json` exists and matches merged raw slugs
+ * (same trust gate as {@link getLessonSummariesIndex} / {@link getMarketingHubEffectiveCatalogSlugSet}).
+ */
+export function hasTrustedGeneratedMarketingLessonIndex(pathwayId: string): boolean {
+  return tryTrustedGeneratedLessonIndex(pathwayId.trim()) !== null;
+}
+
+/**
+ * Build minimal hub-list {@link PathwayLessonRecord} rows from a precomputed index (no full catalog JSON merge).
+ * Must pass the same marketing pathway context filter as the live catalog path.
+ */
+function hubPathwayLessonRecordFromTrustedSummary(
+  row: PathwayLessonSummaryIndexJsonRow,
+  displayTitle: string,
+): PathwayLessonRecord {
+  const topicSlug = lessonCategoryToSlug(row.category);
+  return {
+    slug: row.slug,
+    title: displayTitle,
+    topic: row.category,
+    topicSlug,
+    bodySystem: topicSlug,
+    system: topicSlug,
+    previewSectionCount: 0,
+    seoTitle: displayTitle,
+    seoDescription: row.shortDescription,
+    sections: [],
+    structuralQuality: {
+      structureMode: "legacy",
+      publicComplete: true,
+      issues: [],
+      warnings: [],
+      internalStudyLinkCount: 0,
+    },
+    exams: [],
+    countries: [],
+    examMeta: [],
+  };
 }
 
 function ensurePathwayCatalogIndexes(pathwayId: string): void {
@@ -2008,6 +2051,19 @@ export function getEffectiveCatalogLessonsForPathwaySync(pathwayId: string): Pat
     return hit;
   }
   lessonCatalogMemoStats.effectiveHubMisses++;
+  const trusted = tryTrustedGeneratedLessonIndex(key);
+  if (trusted) {
+    const synthetic = trusted.summaries.map((row) =>
+      hubPathwayLessonRecordFromTrustedSummary(row, trusted.slugToDisplayTitle[row.slug]?.trim() || row.title),
+    );
+    const trustedBuilt = sortAndFilterLessonsForPathwayContext(key, synthetic).map(stripPathwayLessonToHubListShape);
+    if (trustedBuilt.length > 0) {
+      effectiveHubCatalogLessonsByPathway.set(key, trustedBuilt);
+      lessonsPerfMark("effective_hub_catalog", { pathwayId: key, source: "trusted_generated_index", count: trustedBuilt.length });
+      return trustedBuilt;
+    }
+  }
+
   ensurePathwayCatalogIndexes(key);
   const normalized = pathwayNormalizedCatalogRows.get(key) ?? [];
   const built = sortAndFilterLessonsForPathwayContext(key, normalized).map(stripPathwayLessonToHubListShape);

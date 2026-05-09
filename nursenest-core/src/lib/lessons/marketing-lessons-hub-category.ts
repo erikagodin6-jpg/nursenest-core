@@ -31,7 +31,8 @@ const MARKETING_HUB_CATEGORY_PATH_SLUG_ALIASES: ReadonlyMap<string, LessonCatego
   ["fundamentals", "Fundamentals"],
 ]);
 
-export const MARKETING_HUB_CATEGORY_PAGE_SIZE = 24;
+/** Paginated category drill-down — keep initial marketing hub cards bounded (~40–60 per page). */
+export const MARKETING_HUB_CATEGORY_PAGE_SIZE = 48;
 
 export const MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX = 8;
 

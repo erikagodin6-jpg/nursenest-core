@@ -19,22 +19,20 @@ import {
   sortLessonsForMarketingCategoryPage,
   type MarketingHubCategoryDescriptor,
 } from "@/lib/lessons/marketing-lessons-hub-category";
-import {
-  getPathwayLessonListWarehouseLocaleForHub,
-  PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
-} from "@/lib/lessons/pathway-lesson-loader";
+import { PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP } from "@/lib/lessons/pathway-lesson-loader";
 import { prepareLessonsForHubCurriculumWithDiagnostics } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
-import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import { resolveMarketingHubCategoryLessonRowsWithDbResilience } from "@/lib/lessons/marketing-hub-category-rows-db-resilient";
 import {
   pathwayLessonMarketingHubVerifiedCardHref,
   pathwayLessonHasRenderableHubSlug,
+  type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsDisplayCategoryBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
-import { getLessonProgressForPathwayUser } from "@/lib/lessons/get-lesson-progress-for-pathway-user";
+import { loadMarketingHubLessonProgressMapWithTimeout } from "@/lib/lessons/marketing-hub-progress-safe";
 import {
   canShowPaidPathwayLessonProgress,
   loadMarketingPathwayLessonProgressSessionContext,
@@ -79,16 +77,27 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
     pageSlice.filter(pathwayLessonHasRenderableHubSlug),
     { pathwayId: pathway.id, lessonsBasePath: base },
   );
-  const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
-  const vr = await verifyMarketingHubLessonRowsResolve(pathway, prepared.lessons, lessonContentLocale, {
-    listWarehouseLocale,
-    prepareStages: prepared.prepareStages,
-    maxUniqueSlugsToVerify: Math.min(
-      PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
-      Math.max(60, pageSize * 2),
-    ),
+
+  const progressCtx = await loadMarketingPathwayLessonProgressSessionContext({
+    sessionPathname: routePathLessonsCategory,
+    sessionSurface: "marketing.exam_hub.lessons_category",
   });
-  const rows = vr.kept;
+  const skipMarketingHubDbVerify = !progressCtx.userId.trim();
+
+  const rows = await resolveMarketingHubCategoryLessonRowsWithDbResilience(
+    {
+      pathway,
+      lessonContentLocale,
+      skipDbVerify: skipMarketingHubDbVerify,
+      preparedLessons: prepared.lessons,
+      prepareStages: prepared.prepareStages,
+      maxUniqueSlugsToVerify: Math.min(
+        PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
+        Math.max(60, pageSize * 2),
+      ),
+      surface: "category_lessons_surface",
+    },
+  );
 
   let questionSnapshot = EMPTY_QUESTION_SNAPSHOT;
   let questionSnapshotLoadRejected = false;
@@ -141,21 +150,22 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
     />
   );
 
-  const progressCtx = await loadMarketingPathwayLessonProgressSessionContext({
-    sessionPathname: routePathLessonsCategory,
-    sessionSurface: "marketing.exam_hub.lessons_category",
-  });
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
-  if (canShowResume && filtered.length > 0) {
-    progressMap = await getLessonProgressForPathwayUser({
+  let showPaidProgressChrome = false;
+  if (canShowResume && rows.length > 0) {
+    const pr = await loadMarketingHubLessonProgressMapWithTimeout({
       userId: progressCtx.userId,
       pathwayId: pathway.id,
-      lessonSlugs: filtered.map((l) => l.slug).filter(Boolean),
+      lessonSlugs: rows.map((l) => l.slug).filter(Boolean),
     });
+    progressMap = pr.map;
+    showPaidProgressChrome = !pr.timedOut;
   }
   const categoryProgressSnapshot =
-    canShowResume && filtered.length > 0 ? buildLessonCategoryProgress({ lessons: filtered, progressMap }) : null;
+    showPaidProgressChrome && rows.length > 0
+      ? buildLessonCategoryProgress({ lessons: rows, progressMap })
+      : null;
 
   const subtitle = formatSentenceCase(`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`);
 
@@ -266,7 +276,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
                       className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm font-medium text-primary shadow-[var(--semantic-shadow-soft)] transition-colors hover:border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))]"
                     >
                       <span className="min-w-0 flex-1">{label}</span>
-                      {canShowResume ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
+                      {showPaidProgressChrome ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
                     </Link>
                   ) : (
                     <span className="text-sm text-[var(--theme-muted-text)]">{label}</span>
