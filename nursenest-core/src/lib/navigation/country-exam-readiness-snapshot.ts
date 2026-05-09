@@ -2,7 +2,7 @@
  * Committed pathway lesson/question counts for **public** launch checks (no DB).
  * Regenerate via `npm run readiness:emit-snapshot`.
  */
-import pathwayReadinessSnapshot from "@/config/pathway-readiness-snapshot.json" with { type: "json" };
+import pathwayReadinessSnapshot from "@/config/pathway-readiness-snapshot.json";
 
 type SnapshotRow = { lessons?: number; questions?: number };
 type SnapshotDocument = Record<string, SnapshotRow | string | undefined>;

@@ -37,8 +37,3 @@ Workspace: `/root/nursenest-core` (app: `nursenest-core/`)
 
 Commit selective docs + e2e + screenshot readme when ready; verify `git push` after local gates.
 
-
-## Recorded revision
-
-- **Commit:** `8306509537cff4afed8255a6bfa30e3d60ea6b60`
-- **Push:** `origin/main` (success)

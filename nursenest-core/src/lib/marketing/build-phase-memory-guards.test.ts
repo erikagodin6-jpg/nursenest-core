@@ -230,20 +230,15 @@ test("remaining pre-nursing and interactive content modules avoid top-level JSON
   }
 });
 
-test("server-facing readiness and inventory helpers use JSON import attributes (Node ESM)", () => {
+test("server-facing readiness and inventory helpers avoid top-level JSON imports", () => {
   const inventorySource = readAppFile("lib/education-images/inventory.ts");
-  assert.match(
-    inventorySource,
-    /import\s+.+\s+from\s+["']@\/config\/education-image-inventory\.json["']\s+with\s*\{\s*type:\s*["']json["']\s*\}/,
-  );
+  assert.doesNotMatch(inventorySource, /import\s+.+\s+from\s+["']@\/(config|content|data)\/.+\.json["']/);
+  assert.match(inventorySource, /require\(["']@\/config\/.+\.json["']\)/);
 });
 
 test("country exam readiness snapshot stays bundler-safe for route rendering", () => {
   const source = readAppFile("lib/navigation/country-exam-readiness-snapshot.ts");
   assert.doesNotMatch(source, /node:module/);
   assert.doesNotMatch(source, /createRequire/);
-  assert.match(
-    source,
-    /import\s+.+\s+from\s+["']@\/config\/pathway-readiness-snapshot\.json["'].*type:\s*["']json["']/,
-  );
+  assert.match(source, /import\s+.+\s+from\s+["']@\/config\/pathway-readiness-snapshot\.json["']/);
 });
