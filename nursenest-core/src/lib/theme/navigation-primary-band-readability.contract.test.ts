@@ -31,9 +31,9 @@ describe("navigation primary band readability (CSS contracts)", () => {
     const css = fs.readFileSync(PREMIUM_CSS, "utf8");
     const phase3 = css.slice(css.indexOf("Phase 3 — Premium global navigation"));
     const shellBlock = phase3.match(
-      /\.nn-header-logo-row\[data-nn-header-band="primary"\],\s*\.nn-section-shell\[data-nn-header-band="primary"\]\s*\{[^}]+}/s,
+      /\[data-nn-header-layout="marketing-row4"\]\s+\[data-nn-header-band="primary"\]\s*\{[^}]+}/s,
     );
-    assert.ok(shellBlock, "expected phase-3 .nn-section-shell[data-nn-header-band=primary] block");
+    assert.ok(shellBlock, "expected phase-3 marketing-row4 [data-nn-header-band=primary] block");
     assert.doesNotMatch(shellBlock[0], /var\(\s*--nav-bg/, "phase-3 primary shell must not use var(--nav-bg)");
     assert.match(shellBlock[0], /--nn-header-primary-bg/, "phase-3 primary shell must use neutral header paper");
   });

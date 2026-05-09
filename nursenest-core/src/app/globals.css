@@ -2406,7 +2406,7 @@ html[data-theme] .nn-marketing-surface {
     /* Equal `1fr` side tracks keep the auto-width nav cluster at true horizontal center (logo left, auth right). */
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    column-gap: 0.75rem;
+    column-gap: 1rem;
     row-gap: 0.375rem;
     width: 100%;
     min-height: 3.625rem;
@@ -2597,8 +2597,12 @@ html[data-theme] .nn-marketing-surface {
   }
 }
 
-/* Dark-theme headers need explicit nav token rebinding so text stays white on the dark chrome surface. */
+/* Dark-theme headers need explicit nav token rebinding so text stays white on the dark chrome surface.
+ * Applied on the sticky chrome wrapper (full viewport width), not only on <header>, so glass/gradient
+ * bands are never cropped by inner `.nn-section-shell` / grid columns. */
 .nn-header-dark-surface {
+  /* Premium header gradient + mobile rows use `--nav-bg`; align with injected `--nn-nav-*` chrome. */
+  --nav-bg: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
   --nav-fg: var(--nn-nav-fg, #ffffff);
   --nav-link: var(--nn-nav-fg, #ffffff);
   --nav-link-hover: var(--nn-nav-hover-fg, #ffffff);

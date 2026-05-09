@@ -129,8 +129,6 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const pathname = usePathname() ?? "/";
   const searchParams = useSearchParams();
   const { theme } = useTheme();
-  const navChromeStyle = getNavChromeStyle(theme);
-  const navChromeVars = getNavChromeVars(theme);
   // Default to light (ocean, the app default, is a light theme) so SSR and first paint match.
   const isLightTheme = useMemo(() => {
     if (!theme) return true;
@@ -440,8 +438,19 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     return () => controller.abort();
   }, [isMarketingEntitledLearner, locale]);
 
+  /** Dark themes: paint nav chrome + `.nn-header-dark-surface` on this wrapper so glass/gradient is
+   *  full-viewport width; `header` stays layout-only (avoids a “slab” cropped with inner shells). */
+  const stickyChromeStyle = useMemo(() => {
+    if (isLightTheme) return getNavChromeVars(theme);
+    return { ...getNavChromeStyle(theme), boxShadow: darkHeaderShadow };
+  }, [isLightTheme, theme, darkHeaderShadow]);
+
   return (
-    <div style={navChromeVars} className="sticky top-0 z-50" ref={headerRef}>
+    <div
+      style={stickyChromeStyle}
+      className={`sticky top-0 z-50 w-full min-w-0${isLightTheme ? "" : " nn-header-dark-surface"}`}
+      ref={headerRef}
+    >
       {/*
         Keep enter animation on <header> only. `nn-header-animate-in` ends with a transform, which
         creates a fixed-position containing block — mobile drawers are siblings after </header> and
@@ -450,16 +459,20 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       <header
         data-nn-nav-mode="public"
         data-nn-header-layout={isLightTheme ? "marketing-row4" : undefined}
-        style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: darkHeaderShadow }}
         className={`nn-header-animate-in relative flex w-full flex-col border-b${
           isLightTheme
             ? ` nn-header-logo-row nn-header-marketing-v31${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
-            : " nn-header-dark-surface"
+            : ""
         } overflow-visible`}
       >
-        <div className="nn-marketing-nav-v31-frame">
+        <div className="nn-marketing-nav-v31-frame w-full min-w-0">
         {/* Utility cluster is rendered once: Bar A (light, xl+) or main-row cluster (dark). */}
-        <div className="nn-section-shell flex flex-col overflow-visible" data-nn-header-band="primary">
+        {/* Full-width band: primary gradient/glass must not live on `.nn-section-shell` (max-width crop). */}
+        <div
+          className="nn-header-marketing-primary-band flex w-full min-w-0 flex-col overflow-visible"
+          data-nn-header-band="primary"
+        >
+        <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
           <div className="top-bar nn-header-mobile-only-flex min-h-0 w-full items-center justify-between gap-2 overflow-visible border-b border-[var(--header-border)] py-1.5 pt-[max(0.25rem,env(safe-area-inset-top,0px))] sm:min-h-[4.5rem] sm:gap-3 sm:py-0">
             <div className="nn-header-mobile-brand-auth-cluster flex min-w-0 flex-1 items-center gap-2 overflow-hidden sm:gap-3">
@@ -612,7 +625,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
           {/* ── Desktop main header row: left logo | center core public links | right auth (utility on Bar A when light row4) ── */}
           <div className="nn-header-desktop-grid overflow-visible">
-            <div className="nn-header-brand-cluster flex shrink-0 items-center gap-2.5">
+            <div className="nn-header-brand-cluster flex shrink-0 items-center gap-3 min-[1280px]:gap-3.5">
               <Link
                 href={localizeHref("/")}
                 className="nn-header-logo-link group flex shrink-0 items-center overflow-visible bg-transparent"
@@ -750,7 +763,8 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               )}
             </div>
           </div>{/* /nav-row */}
-        </div>{/* /shell */}
+        </div>{/* /.nn-section-shell */}
+        </div>{/* /.nn-header-marketing-primary-band */}
         <div
           className="nn-marketing-nav-v31-tier-rail nn-header-hide-until-xl w-full nn-header-nav-row"
           data-nn-header-band="tier"
@@ -765,11 +779,13 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   key={menu.key}
                   href={localizeHref(menu.hubHref)}
                   data-active={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) || undefined}
-                  className={`${NAV_TIER_LINK_CLASS} px-2 py-1.5 text-center transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
-                    strippedPathActivatesMegaMenuKey(menu.key, strippedPath)
-                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--nav-border))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--nav-hover))] font-semibold text-[var(--nav-link-active)]"
-                      : "border-[color-mix(in_srgb,var(--nav-fg)_18%,var(--nav-border))] bg-[color-mix(in_srgb,var(--nav-fg)_07%,var(--nav-bg))] text-[var(--nav-fg)]"
-                  }`}
+                  // Visual chrome (bg/border/text) for the tier chips lives in CSS
+                  // (premium-redesign-2026.css `.nn-marketing-tier-chip` + globals.css `.nn-header-nav-row`).
+                  // Inlining `text-[var(--nav-fg)]` / `bg-[color-mix(...,var(--nav-bg))]` here washes
+                  // labels out: `--nav-fg`/`--nav-bg` cascade from theme nav chrome (white/dark navy)
+                  // because the `.nn-header-logo-row > .nn-header-nav-row` token override does not
+                  // match through the intermediate `.nn-marketing-nav-v31-frame` div.
+                  className={`${NAV_TIER_LINK_CLASS} nn-marketing-tier-chip px-2 py-1.5 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]`}
                   onClick={() => {
                     trackClientEvent(PH.marketingNavClick, {
                       actor: navActor,

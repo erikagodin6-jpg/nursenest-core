@@ -387,37 +387,27 @@
   font-weight: 800;
 }
 
+/* Primary marketing band: neutral paper + whisper tint — never `--nav-bg`; full-width wrapper, not `.nn-section-shell`. */
 /* ---------------------------------------------------------------------
    Premium glass enhancement for the marketing header — CSS only.
-   Uses the existing wrapper classes; does not change site-header.tsx.
+
+   Primary marketing band: neutral paper tokens + whisper tint — never `--nav-bg` (sticky injects
+   saturated theme chrome). Paint targets full-width `data-nn-header-band="primary"`, not
+   `.nn-section-shell` (max-width + auto margins crop the gradient into a centered slab).
+
+   Gradient tokens: `--nn-header-primary-bg`, `--semantic-info`, `--semantic-brand` (Phase 3 block).
    --------------------------------------------------------------------- */
 
 .nn-header-nav-row,
-.nn-section-shell[data-nn-header-band="primary"] {
-  /* Subtle elevated band feel for the primary header band. */
+[data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] {
   position: relative;
 }
 
-/* Primary marketing band: neutral paper + whisper tint — never `--nav-bg` (sticky injects saturated theme chrome). */
-[data-nn-header-band="primary"] {
-  background:
-    linear-gradient(
-      180deg,
-      var(--nn-header-primary-bg, #ffffff) 0%,
-      color-mix(in srgb, var(--nn-header-primary-bg, #ffffff) 96%, var(--semantic-info, #0ea5e9) 4%) 100%
-    );
-  backdrop-filter: blur(12px) saturate(102%);
-  -webkit-backdrop-filter: blur(12px) saturate(102%);
-}
-
-/* Figma Option 4 — primary band: whisper lavender (brand) + cool floor; still anchored to header paper tokens. */
-[data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] {
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--semantic-brand) 7%, var(--nn-header-primary-bg)) 0%,
-      color-mix(in srgb, var(--nn-header-primary-bg) 92%, var(--semantic-info) 8%) 100%
-    );
+/* Dark unified header: one full-width surface on `<header>` — inner primary wrapper stays transparent. */
+.nn-header-dark-surface [data-nn-header-band="primary"] {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* Add a soft elevation when the sticky wrapper has scrolled past the top.
@@ -499,6 +489,17 @@
   color: var(--nav-fg) !important;
 }
 
+/*
+ * NOTE: the historical selector `.nn-header-logo-row > .nn-header-nav-row` does
+ * NOT match the rendered DOM in `site-header.tsx` because `.nn-marketing-nav-v31-frame`
+ * sits between the header (`.nn-header-logo-row`) and the tier rail (`.nn-header-nav-row`).
+ * So `--nav-fg` for the tier strip falls back to the literal `#ffffff` set on
+ * `.nn-header-nav-row` in globals.css, which produced WHITE chip labels on the
+ * light sky band — the contrast bug. Re-bind tier-strip tokens here on the rail
+ * itself (it always exists in marketing-row4) so dark labels render on the light
+ * pill chips.
+ */
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
 [data-nn-header-layout="marketing-row4"] .nn-header-logo-row > .nn-header-nav-row {
   background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg));
   border-top: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--header-border));
@@ -508,9 +509,9 @@
   --nav-link-hover: var(--nn-header-primary-fg);
   --nav-muted: color-mix(in srgb, var(--nn-header-primary-fg) 62%, transparent);
   --nav-border: color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
-  --nav-hover: color-mix(in srgb, var(--semantic-info) 7%, var(--nn-header-primary-bg));
-  --nav-active: color-mix(in srgb, var(--semantic-info) 16%, var(--nn-header-primary-bg));
-  --nav-link-active: var(--semantic-brand);
+  --nav-hover: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg));
+  --nav-active: color-mix(in srgb, var(--semantic-info) 22%, var(--nn-header-primary-bg));
+  --nav-link-active: var(--nn-header-primary-fg);
   --nav-on-active-fg: var(--nn-header-primary-fg);
   --header-background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg));
   --header-border: color-mix(in srgb, var(--semantic-info) 14%, var(--header-border));
@@ -518,22 +519,26 @@
 
 [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link {
   border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-info) 10%, var(--nn-header-primary-bg));
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 12%, var(--nn-header-primary-bg));
+  color: var(--nn-header-primary-fg);
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link[data-active] {
-  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-info));
+  border-color: color-mix(in srgb, var(--semantic-brand) 38%, var(--semantic-info));
   background: color-mix(
     in srgb,
-    var(--semantic-info) 18%,
-    color-mix(in srgb, var(--semantic-brand) 8%, var(--nn-header-primary-bg))
+    var(--semantic-brand) 14%,
+    color-mix(in srgb, var(--semantic-info) 18%, var(--nn-header-primary-bg))
   );
+  color: var(--nn-header-primary-fg);
   font-weight: 650;
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link:hover {
-  background: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg));
+  background: color-mix(in srgb, var(--semantic-info) 18%, var(--nn-header-primary-bg));
+  border-color: color-mix(in srgb, var(--semantic-info) 32%, var(--semantic-border-soft));
+  color: var(--nn-header-primary-fg);
   transform: none;
 }
 
@@ -559,24 +564,37 @@
   font-weight: 650;
 }
 
-/* Tier hub links — pill chips (NAV_TIER_LINK_CLASS does not include `.nn-marketing-nav-link`). */
-[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a {
+/*
+ * Tier hub chips (RN / PN / NP / New grad / Allied). NAV_TIER_LINK_CLASS DOES
+ * include `.nn-marketing-nav-link`, but we also pin styles via `nav a` so the
+ * chip chrome holds even if the marker class is removed. `color` is set
+ * explicitly so chips read as dark ink on the light sky band — never inheriting
+ * the literal white from the base `.nn-header-nav-row` rule in globals.css.
+ */
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
   border-radius: 9999px;
   border: 1px solid color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
   background: color-mix(in srgb, var(--semantic-info) 12%, var(--nn-header-primary-bg));
+  color: var(--nn-header-primary-fg);
 }
 
-[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a:hover {
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a:hover,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip:hover {
   background: color-mix(in srgb, var(--semantic-info) 18%, var(--nn-header-primary-bg));
+  border-color: color-mix(in srgb, var(--semantic-info) 32%, var(--semantic-border-soft));
+  color: var(--nn-header-primary-fg);
 }
 
-[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active] {
-  border-color: color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-info));
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 38%, var(--semantic-info));
   background: color-mix(
     in srgb,
-    var(--semantic-info) 22%,
-    color-mix(in srgb, var(--semantic-brand) 12%, var(--nn-header-primary-bg))
+    var(--semantic-brand) 14%,
+    color-mix(in srgb, var(--semantic-info) 22%, var(--nn-header-primary-bg))
   );
+  color: var(--nn-header-primary-fg);
   font-weight: 650;
 }
 
@@ -905,12 +923,10 @@
 
 /* -------- 3.1  Floating glass primary band (light themes) -------- */
 
-/* The primary band already has saturate(140%) blur(10px) above. Strengthen
-   the effect and add a subtle inset highlight + soft outer ring. The ring
-   is brand-tinted via the active theme variables. */
-.nn-header-logo-row[data-nn-header-band="primary"],
-.nn-section-shell[data-nn-header-band="primary"] {
-  /* Refined elevation on the same neutral base as `[data-nn-header-band="primary"]` (no theme chrome wash). */
+/* The primary band already has saturate/blur above. Strengthen glass + refined gradient on the
+   full-width `.nn-header-marketing-primary-band`, not a max-width shell. */
+[data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] {
+  /* Refined elevation on the same neutral base (no theme chrome wash). */
   background:
     linear-gradient(
       180deg,
@@ -938,8 +954,8 @@
   background:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--nav-bg, #0b0f1a) 92%, transparent) 0%,
-      color-mix(in srgb, var(--nav-bg, #0b0f1a) 76%, transparent) 100%
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b0f1a)) 92%, transparent) 0%,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b0f1a)) 76%, transparent) 100%
     );
   backdrop-filter: saturate(170%) blur(16px);
   -webkit-backdrop-filter: saturate(170%) blur(16px);

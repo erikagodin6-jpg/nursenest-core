@@ -48,5 +48,5 @@ test("marketing homepage bundle avoids obvious debug blog placeholders", () => {
 
 test("tier hub links use bordered inactive affordance (readable on light nav wash)", () => {
   const header = read("src/components/layout/site-header.tsx");
-  assert.match(header, /nav-fg\)_07%/);
+  assert.match(header, /nn-marketing-tier-chip/);
 });
