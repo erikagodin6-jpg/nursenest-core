@@ -9,6 +9,9 @@ import { isOsceScenariosPubliclyEnabled } from "@/lib/scenarios/osce-scenarios-f
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 import { isStudyToolsPubliclyEnabled } from "@/lib/study-tools/study-tools-feature-flag";
 
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { ecgUrlSegmentFromPathwayId } from "@/lib/ecg/ecg-pathway";
+
 export const CANONICAL_LEARNER_ROUTES = {
   lessons: "/app/lessons",
   practice: "/app/questions",
@@ -51,12 +54,16 @@ export const CLINICAL_SCENARIOS_SHELL_NAV_ID = "clinical_scenarios" as const;
 /** Shown only when {@link isPrintableStorePublicNavEnabled} is true (passed from learner layout). */
 export const PRINTOUTS_SHELL_NAV_ID = "printouts" as const;
 
+/** Appended when ECG learner surfaces are enabled for the pathway segment (RN/NP/PN). */
+export const ECG_SHELL_NAV_ID = "ecg" as const;
+
 export type LearnerShellStudyNavRowId =
   | LearnerPrimaryNavItem["key"]
   | typeof STUDY_TOOLS_SHELL_NAV_ID
   | typeof PRINTOUTS_SHELL_NAV_ID
   | typeof OSCE_SHELL_NAV_ID
-  | typeof CLINICAL_SCENARIOS_SHELL_NAV_ID;
+  | typeof CLINICAL_SCENARIOS_SHELL_NAV_ID
+  | typeof ECG_SHELL_NAV_ID;
 
 /** Whether this nav row is the designated primary study entry (visual emphasis in header + shell). */
 export function isLearnerPrimaryNavKey(key: LearnerShellStudyNavRowId | string): boolean {
@@ -180,5 +187,24 @@ export function buildOptionalPrintablesShellNavItem(
     href: withPathwayQuery(CANONICAL_LEARNER_ROUTES.printables, pathwayId),
     matchPrefix: "/app/printables",
     labelKey: "learner.shell.nav.printouts",
+  };
+}
+
+export function buildOptionalEcgShellNavItem(pathwayId: string | null): {
+  id: typeof ECG_SHELL_NAV_ID;
+  href: string;
+  matchPrefix: string;
+  labelKey: string;
+} | null {
+  const trimmed = pathwayId?.trim();
+  if (!trimmed) return null;
+  if (!getExamPathwayById(trimmed)) return null;
+  const segment = ecgUrlSegmentFromPathwayId(trimmed);
+  const href = `/app/${segment}/ecg`;
+  return {
+    id: ECG_SHELL_NAV_ID,
+    href,
+    matchPrefix: href,
+    labelKey: "learner.shell.nav.ecg",
   };
 }

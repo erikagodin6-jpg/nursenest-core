@@ -29,5 +29,5 @@ test("RN catalog includes advanced topics", () => {
 });
 
 test("catalog size matches curriculum checklist", () => {
-  assert.equal(ECG_CATALOG.length, 16);
+  assert.equal(ECG_CATALOG.length, 17);
 });
