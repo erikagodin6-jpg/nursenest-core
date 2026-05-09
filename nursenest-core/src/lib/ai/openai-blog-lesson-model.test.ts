@@ -26,6 +26,7 @@ const KEYS = [
   "BLOG_AI_PROVIDER",
   "OPENROUTER_API_KEY",
   "OPENROUTER_MODEL",
+  "BLOG_OPENROUTER_MODEL",
 ] as const;
 
 function snapshotEnv(): Record<string, string | undefined> {
@@ -47,6 +48,7 @@ function clearProviderSelectionEnv(): void {
   delete process.env.BLOG_AI_PROVIDER;
   delete process.env.OPENROUTER_API_KEY;
   delete process.env.OPENROUTER_MODEL;
+  delete process.env.BLOG_OPENROUTER_MODEL;
 }
 
 describe("OPENAI_DEFAULT_BLOG_LESSON_MODEL", () => {

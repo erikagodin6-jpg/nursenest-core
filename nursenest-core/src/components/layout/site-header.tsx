@@ -40,6 +40,7 @@ import { buildMarketingTierHubStrip } from "@/lib/navigation/marketing-tier-hub-
 import { formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS, publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
+import { MarketingHeaderUtilityCluster } from "@/components/layout/marketing-header-utility-strip";
 
 const MarketingHeaderUtilityStrip = dynamic(
   () =>
@@ -464,23 +465,24 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       */}
       <header
         data-nn-nav-mode="public"
+        data-nn-header-layout={isLightTheme ? "marketing-row4" : undefined}
         style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: darkHeaderShadow }}
         className={`nn-header-animate-in relative flex w-full flex-col border-b${
           isLightTheme
-            ? ` nn-header-logo-row${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
+            ? ` nn-header-logo-row nn-header-marketing-v31${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
             : " nn-header-dark-surface"
         } overflow-visible`}
       >
-        {/*
-          Desktop (`xl+`): preferences rail — country, language, and theme.
-          Light: dark-bar surface; dark: recessive utility surface. Middle row keeps logo/links/auth only.
-        */}
-        <div className="nn-header-hide-until-xl w-full">
-          <MarketingHeaderUtilityStrip
-            variant={isLightTheme ? "dark-bar" : "standard"}
-            includeUnpublishedRegions={isAdminAuthenticated}
-          />
-        </div>
+        <div className="nn-marketing-nav-v31-frame">
+        {/* Dark themes: legacy xl utility rail. Light v3.1: Bar A inside capsule (MarketingHeaderUtilityCluster). */}
+        {!isLightTheme ? (
+          <div className="nn-header-hide-until-xl w-full">
+            <MarketingHeaderUtilityStrip
+              variant="standard"
+              includeUnpublishedRegions={isAdminAuthenticated}
+            />
+          </div>
+        ) : null}
         <div className="nn-section-shell flex flex-col overflow-visible" data-nn-header-band="primary">
           {/* ── Mobile brand row ── */}
           <div className="top-bar nn-header-mobile-only-flex min-h-0 w-full items-center justify-between gap-2 overflow-visible border-b border-[var(--header-border)] py-1.5 pt-[max(0.25rem,env(safe-area-inset-top,0px))] sm:min-h-[4.5rem] sm:gap-3 sm:py-0">
@@ -619,7 +621,20 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             </div>
           ) : null}
 
-          {/* ── Desktop main header row: left logo | center core public links | right utilities + auth ── */}
+          {/* Bar A — utility (desktop xl+); theme-token triggers via MarketingHeaderUtilityCluster row4 */}
+          {isLightTheme ? (
+            <div
+              data-nn-header-band="utility"
+              className="nn-marketing-nav-v31-bar-a nn-header-hide-until-xl-flex w-full min-w-0 items-center justify-end gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_55%,var(--header-border))] py-2 pe-1 ps-1 md:py-2.5"
+            >
+              <MarketingHeaderUtilityCluster
+                chromeMode="row4"
+                includeUnpublishedRegions={isAdminAuthenticated}
+              />
+            </div>
+          ) : null}
+
+          {/* ── Desktop main header row: left logo | center core public links | right auth (utility on Bar A when light row4) ── */}
           <div className="nn-header-desktop-grid overflow-visible">
             <div className="nn-header-brand-cluster flex shrink-0 items-center gap-2.5">
               <Link
@@ -750,10 +765,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
           </div>{/* /nav-row */}
         </div>{/* /shell */}
         <div
-          className="nn-header-hide-until-xl w-full nn-header-nav-row"
+          className="nn-marketing-nav-v31-tier-rail nn-header-hide-until-xl w-full nn-header-nav-row"
           data-nn-header-band="tier"
         >
-          <div className="nn-section-shell flex min-h-[30px] flex-wrap items-center gap-x-1 gap-y-0 py-0 md:min-h-[32px] md:py-0 lg:gap-x-2">
+          <div className="nn-marketing-nav-v31-tier-inner nn-section-shell flex min-h-[30px] flex-wrap items-center gap-x-1 gap-y-0 py-1 md:min-h-[32px] md:py-1.5 lg:gap-x-2">
             <nav
               aria-label={t("nav.marketingExplore")}
               className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 xl:gap-1.5"
@@ -783,6 +798,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             </nav>
           </div>
         </div>
+        </div>{/* /.nn-marketing-nav-v31-frame */}
       </header>
 
       {/* Mobile context/settings drawer — chunk loads only after user opens settings (heavy REGION_CONFIG + pathway helpers). */}
