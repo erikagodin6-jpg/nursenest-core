@@ -4,7 +4,7 @@
 `hotfix/restore-homepage-nav-copy-2026-05-08`
 
 ## Latest SHA (tip)
-After `git fetch origin`, run `git rev-parse origin/hotfix/restore-homepage-nav-copy-2026-05-08` for the remote tip (advances with docs-only updates after validation baseline below).
+After `git fetch origin`, `origin/hotfix/restore-homepage-nav-copy-2026-05-08` tip was **`317150cd85685733cfea563285b1774bcf06dbe4`** at last push (docs-only atop validated `c8ef183cf`).
 
 **Validated application tree (automated checks):** `c8ef183cf88b83163a8e06e7632cb4d39439c3bd`
 
