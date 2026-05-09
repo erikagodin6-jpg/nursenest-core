@@ -3,12 +3,19 @@
 ## Branch
 `hotfix/restore-homepage-nav-copy-2026-05-08`
 
-## Latest SHA (after push)
-`bb97dec8ceeb72d1723af7c1ebc8d96d81bf04bb`
+## Latest SHA (tip)
+After `git fetch origin`, run `git rev-parse origin/hotfix/restore-homepage-nav-copy-2026-05-08` for the remote tip (advances with docs-only updates after validation baseline below).
 
-## Commits verified on remote before extra commit
+**Validated application tree (automated checks):** `c8ef183cf88b83163a8e06e7632cb4d39439c3bd`
+
+## Commits on `origin/hotfix/restore-homepage-nav-copy-2026-05-08` (recent)
+Includes (among others):
+- `c8ef183cf` docs(qa): hotfix homepage nav PR status report 2026-05-08
+- `bb97dec8c` test(marketing): restore homepage smoke test reference
 - `ab4597167` fix(nav): restore readable premium header band
 - `a34b2d53e` docs(qa): homepage nav hotfix recovery report and screenshots
+- `207d025b5` fix(marketing): restore production nav and homepage copy
+
 
 ## Extra commit (test restore)
 **YES** — `bb97dec8c` test(marketing): restore homepage smoke test reference  
@@ -16,19 +23,25 @@
 - Appends that file to `npm run test:homepage` in `nursenest-core/package.json`.
 - `origin/main` does **not** contain `nursenest-core/src/lib/theme/theme-registry.public-marketing.contract.test.ts` at that path (`git show origin/main:...` → missing).
 
-## Verification (canonical VM `/root/nursenest-core`)
-Blocked initially: STEP 1 branch was not hotfix (local drift / concurrent sessions). Isolated clone at `/tmp/nursenest-core-hotfix-clone` used for reproducible runs; `node_modules` symlinked from existing app install.
+## Verification (VM `/root/nursenest-core`, 2026-05-09)
 
-| Check | Result |
-|--------|--------|
-| `npm run test:homepage` (from `nursenest-core/nursenest-core`) | **PASS** |
-| `npm run typecheck:critical` | **PASS** |
+Executed at `HEAD` = `c8ef183cf` (clean working tree). Commands run from `nursenest-core/nursenest-core` — **in-repo**, no isolated clone / symlink.
+
+| Check | Result | Exit code |
+|--------|--------|-----------|
+| `npm run test:homepage` | **PASS** | 0 |
+| `npm run typecheck:critical` | **PASS** | 0 |
+
+### Isolated clone workflow (if needed later)
+If the shared workspace is dirty or checkout races occur: clone under `/tmp`, check out this hotfix branch, symlink `node_modules` from an existing app install at `nursenest-core/nursenest-core/node_modules`, then run the same two commands from `nursenest-core/nursenest-core`.
+
+### Playwright (optional narrow smoke)
+No dedicated `package.json` script for homepage/nav-only E2E. Related coverage includes `tests/e2e/public/marketing-header-bands.spec.ts` (run via `npx playwright test …` only when dev server / Playwright env is available). **Not executed** in this preparation pass.
 
 ## Push
-**YES** — `git push origin hotfix/restore-homepage-nav-copy-2026-05-08` (no force).
+`git push origin hotfix/restore-homepage-nav-copy-2026-05-08` (no `--force`).
 
-## Pull request
-`gh` CLI not available / not authenticated in this environment — open manually:
+## Pull request — open manually
 
 https://github.com/erikagodin6-jpg/nursenest-core/pull/new/hotfix/restore-homepage-nav-copy-2026-05-08
 
@@ -38,6 +51,5 @@ https://github.com/erikagodin6-jpg/nursenest-core/pull/new/hotfix/restore-homepa
 **Untouched** — no merge to `main`; no push to `main`.
 
 ## Blockers / notes
-- Concurrent branch checkout races on shared `/root/nursenest-core` working tree required isolated clone + `node_modules` symlink for stable `npm run test:homepage` / `typecheck:critical`.
-- Prior `npm run typecheck:critical` from main workspace reported missing `checkout-subscription-guard.server.ts`; **PASS** from isolated clone after symlink (workspace-dependent).
-
+- None for automated checks (`test:homepage`, `typecheck:critical`) on application tree at `c8ef183cf`.
+- Prior isolated-clone notes remain valid when the workspace is dirty or another branch is checked out concurrently.
