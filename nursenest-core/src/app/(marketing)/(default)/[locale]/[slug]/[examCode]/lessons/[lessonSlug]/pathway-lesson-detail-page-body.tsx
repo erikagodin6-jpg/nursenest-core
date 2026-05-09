@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ExamFamily, type TierCode } from "@prisma/client";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
-import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
+import { LessonReadingScrollProgress } from "@/components/lessons/lesson-reading-scroll-progress";
+import { LessonSectionCard, lessonSectionSurface } from "@/components/lessons/lesson-section-card";
 import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
@@ -76,6 +77,7 @@ import {
   pathwayLessonSectionPrefersWideColumn,
   shouldRenderPathwayLessonSection,
 } from "@/lib/lessons/lesson-section-page-layout";
+import { refineChipLabelFromHeading } from "@/lib/ui/lesson-section-heading-accent";
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
@@ -269,7 +271,7 @@ export async function PathwayLessonDetailPageBody({
     <PathwayLessonDetailMarketingI18nLayer messages={marketingMessages}>
     <div className="mx-auto w-full max-w-[100rem] px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell nn-premium-lesson-detail-shell px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <MarketingPathwayLessonDetailViewBeacon
           pathway={pathway}
@@ -291,6 +293,7 @@ export async function PathwayLessonDetailPageBody({
           aboutOccupation={seoSurface.structuredAboutOccupation}
         />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
+        <LessonReadingScrollProgress />
         <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4 hidden md:grid" />
         <PathwayLessonProgressTracker
           pathwayId={pathway.id}
@@ -392,14 +395,14 @@ export async function PathwayLessonDetailPageBody({
           )
         ) : null}
 
-        <div className="nn-lesson-layout nn-lesson-layout--triple mt-5">
+        <div className="nn-lesson-layout nn-lesson-layout--triple mt-5" data-nn-lesson-reading-columns>
           <LessonSectionNav
             sections={tocNavSections}
             progress={lessonProgress}
             progressVisible={Boolean(userId) && fullAccess}
           />
           <div
-            className="nn-lesson-main min-w-0"
+            className="nn-lesson-main nn-lesson-main--blossom min-w-0"
             data-testid="pathway-lesson-main-column"
           >
         {matchedLessonImage.url && hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
@@ -432,11 +435,17 @@ export async function PathwayLessonDetailPageBody({
               <div className="mb-2 flex w-full justify-end px-0">
                 <LessonRecallToggle />
               </div>
-              <article className="nn-lesson-article-flow nn-lesson-article-grid nn-premium-lesson-article grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+              <article
+                data-nn-lesson-article
+                className="nn-lesson-article-flow nn-lesson-article-grid nn-premium-lesson-article grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5"
+              >
                 {displaySections.map((section) => {
                   const wide = pathwayLessonSectionPrefersWideColumn(section.kind, {
                     hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
                   });
+                  const surface = lessonSectionSurface(section.kind);
+                  const rhythmIdx = surface === "editorial" ? editorialRhythmCounter++ : undefined;
+                  const headingChip = refineChipLabelFromHeading(section.heading, section.kind);
                   return (
                     <LessonSectionCard
                       key={section.id}
@@ -444,6 +453,8 @@ export async function PathwayLessonDetailPageBody({
                       heading={section.heading}
                       kind={section.kind}
                       className={wide ? "md:col-span-2" : undefined}
+                      editorialRhythmIndex={rhythmIdx}
+                      chipLabel={headingChip}
                     >
                       {section.audioUrl ? (
                         <LessonSectionAudioButton

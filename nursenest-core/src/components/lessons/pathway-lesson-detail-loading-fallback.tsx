@@ -12,7 +12,7 @@ export function PathwayLessonDetailPageLoadingFallback({ pathway }: { pathway: E
   return (
     <div className="nn-premium-lesson-detail-loading mx-auto w-full max-w-[100rem] px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell nn-premium-lesson-detail-shell px-3 py-3 sm:px-6 sm:py-5${shellNp ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom px-3 py-3 sm:px-6 sm:py-5${shellNp ? " nn-lesson-page-shell--np" : ""}`}
       >
         <PathwayLessonDetailHeaderSkeleton pathway={pathway} />
         <div

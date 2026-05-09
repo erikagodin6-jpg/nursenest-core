@@ -150,7 +150,10 @@ export function LessonSectionNav({
 
   return (
     <>
-      <details className="nn-lesson-section-nav-mobile min-w-0 lg:hidden">
+      <details
+        className="nn-lesson-section-nav-mobile nn-lesson-section-nav-mobile--sticky-lane min-w-0 lg:hidden"
+        data-nn-lesson-toc-mobile
+      >
         <summary className="nn-lesson-section-nav-mobile__summary min-w-0">
           <span className="flex min-w-0 items-center gap-2">
             <BookOpen className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
@@ -163,7 +166,11 @@ export function LessonSectionNav({
         </div>
       </details>
 
-      <aside className="nn-lesson-section-nav" aria-label={t("learner.lessons.nav.ariaSectionsNav")}>
+      <aside
+        className="nn-lesson-section-nav nn-lesson-section-nav--blossom"
+        aria-label={t("learner.lessons.nav.ariaSectionsNav")}
+        data-nn-lesson-toc-desktop
+      >
         <div className="nn-lesson-section-nav__header">
           <p>{t("learner.lessons.nav.onThisPage")}</p>
           <span>{t("learner.lessons.nav.sectionsCount", { count: sections.length })}</span>
