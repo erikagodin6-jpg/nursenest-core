@@ -56,9 +56,9 @@ export function BrandedPageLoader({
           <div className={cn(styles.glassStrip, styles.deferredChromeEnter)}>
             <div className={styles.leafDriftTrack} aria-hidden>
               <div className={styles.leafDrone}>
-                <span className={styles.pulseRing} />
+                <span className={styles.pulseRing} aria-hidden />
                 <span className={styles.leafMotion}>
-                  <BrandedLeafMark className={styles.pageLoaderLeafSvg} />
+                  <BrandedLeafMark />
                 </span>
               </div>
             </div>

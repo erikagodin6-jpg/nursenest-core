@@ -33,8 +33,10 @@
   backdrop-filter: blur(10px);
 }
 
-/* Horizontal drift lane: leaf travels most of the strip (storyboard: drift across). */
+/* Horizontal drift lane — leaf travels the strip (storyboard: drift across). */
 .leafDriftTrack {
+  container-type: inline-size;
+  container-name: nn-loader-drift;
   position: relative;
   flex: 1 1 auto;
   min-width: 10rem;
@@ -50,13 +52,12 @@
   left: 0;
   width: var(--nn-loader-leaf-box);
   height: var(--nn-loader-leaf-box);
-  margin-top: calc(var(--nn-loader-leaf-box) / -2);
   animation: nn-premium-loader-leaf-drift-x 2.85s var(--brand-motion-ease-calm-out, cubic-bezier(0.45, 0.05, 0.25, 1)) infinite
     alternate;
-  will-change: left, transform;
+  will-change: transform;
 }
 
-.pageLoaderLeafSvg {
+.leafMotion :global(svg) {
   width: 1.85rem;
   height: 2.25rem;
 }
@@ -66,7 +67,7 @@
     --nn-loader-leaf-box: 3.35rem;
   }
 
-  .pageLoaderLeafSvg {
+  .leafMotion :global(svg) {
     width: 2.2rem;
     height: 2.65rem;
   }
@@ -104,22 +105,6 @@
     animation: none;
     will-change: auto;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .leafMotion {
-    animation: none;
-  }
-}
-
-.leafCluster {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  flex-shrink: 0;
 }
 
 .pulseRing {
@@ -164,9 +149,9 @@
   }
 
   .leafDrone {
-    left: 12px;
     animation: nn-premium-loader-leaf-breathe 2.4s ease-in-out infinite;
     will-change: opacity;
+    transform: translateY(-50%);
   }
 
   .leafMotion::after {
@@ -176,13 +161,11 @@
 
 @keyframes nn-premium-loader-leaf-drift-x {
   0% {
-    left: 0;
-    transform: rotate(-11deg);
+    transform: translateY(-50%) translateX(0) rotate(-11deg);
   }
 
   100% {
-    left: calc(100% - var(--nn-loader-leaf-box));
-    transform: rotate(9deg);
+    transform: translateY(-50%) translateX(calc(100cqw - 100%)) rotate(9deg);
   }
 }
 
@@ -253,14 +236,36 @@
 }
 
 .inlineLeafMotion {
-  animation: nn-premium-loader-leaf-drift 3s ease-in-out infinite;
+  animation: nn-premium-loader-inline-leaf 2.65s var(--brand-motion-ease-calm-out, cubic-bezier(0.45, 0.05, 0.25, 1)) infinite
+    alternate;
   will-change: transform;
+}
+
+@keyframes nn-premium-loader-inline-leaf {
+  0% {
+    transform: translateX(0) rotate(-8deg);
+  }
+
+  100% {
+    transform: translateX(14px) rotate(7deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .inlineLeafMotion {
-    animation: none;
-    will-change: auto;
+    animation: nn-premium-loader-inline-breathe 2.4s ease-in-out infinite;
+    will-change: opacity;
+  }
+}
+
+@keyframes nn-premium-loader-inline-breathe {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+
+  50% {
+    opacity: 1;
   }
 }
 
