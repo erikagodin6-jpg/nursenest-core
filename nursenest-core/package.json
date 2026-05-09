@@ -85,6 +85,7 @@
     "test:e2e:tier-matrix": "npx playwright test -c playwright.tier-matrix.config.ts",
     "test:e2e:clinical-scenarios": "npx playwright test -c playwright.clinical-scenarios.config.ts",
     "test:e2e:ecosystem-audit": "npx playwright test -c playwright.ecosystem-audit.config.ts",
+    "test:e2e:hub-modules": "npx playwright test -c playwright.hub-modules.config.ts",
     "test:e2e:site-wide-audit": "npx playwright test -c playwright.site-wide-audit.config.ts",
     "test:e2e:ci-master": "npx playwright test -c playwright.ci-master.config.ts",
     "qa:ecosystem:matrix": "node scripts/ecosystem-qa-matrix.mjs",
