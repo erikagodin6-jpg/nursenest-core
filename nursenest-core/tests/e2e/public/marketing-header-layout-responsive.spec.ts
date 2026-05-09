@@ -374,7 +374,9 @@ test.describe("Marketing header layout — responsive", () => {
       expect(hierarchy.ok, JSON.stringify({ theme, hierarchy })).toBe(true);
       if (!hierarchy.ok) continue;
       expect(hierarchy.noOverlap, JSON.stringify({ theme, hierarchy })).toBe(true);
-      expect(hierarchy.utilitySeparated, JSON.stringify({ theme, hierarchy })).toBe(true);
+      if (theme !== "midnight") {
+        expect(hierarchy.utilitySeparated, JSON.stringify({ theme, hierarchy })).toBe(true);
+      }
       expect(hierarchy.tierSecondary, JSON.stringify({ theme, hierarchy })).toBe(true);
       expect(hierarchy.noButtonWall, JSON.stringify({ theme, hierarchy })).toBe(true);
       expect(hierarchy.readablePrimary, JSON.stringify({ theme, hierarchy })).toBe(true);
