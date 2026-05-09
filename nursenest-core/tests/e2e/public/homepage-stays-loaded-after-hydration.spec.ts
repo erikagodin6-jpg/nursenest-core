@@ -53,6 +53,7 @@ test.describe("Homepage stays loaded after hydration", () => {
     const bodyText = (await page.locator("body").innerText()).trim();
     expect(bodyText).not.toMatch(/page cannot load/i);
     expect(bodyText).not.toMatch(/something went wrong/i);
+    expect(bodyText).not.toMatch(/something went wrong loading this section/i);
     expect(bodyText).not.toMatch(/application error/i);
 
     await expect(page.getByText(/NurseNest/i).first()).toBeVisible({ timeout: 15_000 });
