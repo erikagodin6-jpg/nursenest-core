@@ -2,6 +2,9 @@
 
 Markdown table of prioritized convergence tasks (**C-001**–**C-030**). Source synthesis where marked **recreated/audit synthesis**.
 
+
+> **Cross-reference:** **C-001**–**C-010** follow the numbered **Top 10 priorities** in `reports/master-convergence-orchestration-2026-05-08.md`.
+
 | ID | Priority | Source | Scope | Task | Depends On | Branch Hint | Status |
 |----|----------|--------|-------|------|------------|-------------|--------|
 | C-001 | P1 | User convergence brief | Monorepo app TS | Achieve green full TypeScript: run `npm --prefix nursenest-core run typecheck`; when release docs/CI use root predeploy, also run `npm run predeploy:check`. | — | `docs/master-convergence-orchestration-2026-05-08` | Open |

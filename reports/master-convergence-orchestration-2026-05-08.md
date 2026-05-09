@@ -8,6 +8,22 @@ This document orchestrates **main-branch convergence** for the NurseNest monorep
 
 ---
 
+## Top 10 priorities
+
+Numbered convergence priorities (maps to backlog **C-001**–**C-010**):
+
+1. **Green full TypeScript** — `npm --prefix nursenest-core run typecheck`; include root `npm run predeploy:check` when CI/release docs require it (**C-001**).
+2. **Release gate E2E on staging** — `qa:release-gate:check-env`, then `qa:release-gate` plus guest/paid/mobile slices (**C-002**).
+3. **Env drift** — Root `npm run env:validate` and `npm run prisma:health` (**C-003**).
+4. **SEO sitemap** — `npm --prefix nursenest-core run test:seo-sitemap` (**C-004**).
+5. **Design-system slice** — Learner surfaces use semantic tokens and shared patterns, not ad hoc hex (**C-005**).
+6. **Billing staging confidence** — Stripe → entitlement correctness on staging (**C-006**).
+7. **i18n gate (RC)** — Root `npm run i18n:compile`, `npm run i18n:validate:production`, `npm run i18n:ci` (**C-007**).
+8. **Lesson hub health** — Bounded list/detail payloads and hub correctness (**C-008**).
+9. **A11y evidence** — VoiceOver/TalkBack and contrast on tinted mobile surfaces (**C-009**).
+10. **Integration hygiene** — Documented merge order; avoid orphan long-lived branches (**C-010**).
+
+
 ## Deduped risk matrix
 
 | Risk area | Symptom | Primary mitigation | Owner hint |
