@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from "react";
@@ -40,21 +39,7 @@ import { buildMarketingTierHubStrip } from "@/lib/navigation/marketing-tier-hub-
 import { formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS, publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
-
-const MarketingHeaderUtilityStrip = dynamic(
-  () =>
-    import("@/components/layout/marketing-header-utility-strip").then((mod) => ({
-      default: mod.MarketingHeaderUtilityStrip,
-    })),
-  {
-    loading: () => (
-      <div
-        className="nn-header-hide-until-xl w-full min-h-[40px] border-b border-transparent"
-        aria-busy="true"
-      />
-    ),
-  },
-);
+import { MarketingHeaderUtilityCluster } from "@/components/layout/marketing-header-utility-strip";
 
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
 const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta nn-text-on-solid-fill";
@@ -70,9 +55,9 @@ const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-lg border border-transparent px-2.5 text-center font-medium leading-[1.2] tracking-normal transition-colors sm:px-3";
 const HEADER_SECONDARY_ACTION_CLASS =
   "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
-/** Guest marketing header: match primary CTA horizontal padding for consistent pill width. */
-const HEADER_GUEST_SECONDARY_ACTION_CLASS =
-  "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+/** Desktop guest Log In — transparent / ghost (row-4 marketing header). */
+const HEADER_DESKTOP_LOGIN_GHOST_CLASS =
+  "nav-item nn-marketing-body-sm inline-flex min-h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-lg border border-transparent bg-transparent px-2.5 font-medium text-[var(--nav-fg)] shadow-none underline-offset-4 transition-colors hover:bg-[color-mix(in_srgb,var(--nav-fg)_7%,var(--nn-header-primary-bg))] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type HeaderResumeCta = { href: string; label: string } | null;
 type HeaderNavLink = { key: string; href: string; label: string; matchBase: string };
@@ -464,6 +449,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       */}
       <header
         data-nn-nav-mode="public"
+        data-nn-header-layout={isLightTheme ? "marketing-row4" : undefined}
         style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: darkHeaderShadow }}
         className={`nn-header-animate-in relative flex w-full flex-col border-b${
           isLightTheme
@@ -471,16 +457,6 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             : " nn-header-dark-surface"
         } overflow-visible`}
       >
-        {/*
-          Desktop (`xl+`): preferences rail — country, language, and theme.
-          Light: dark-bar surface; dark: recessive utility surface. Middle row keeps logo/links/auth only.
-        */}
-        <div className="nn-header-hide-until-xl w-full">
-          <MarketingHeaderUtilityStrip
-            variant={isLightTheme ? "dark-bar" : "standard"}
-            includeUnpublishedRegions={isAdminAuthenticated}
-          />
-        </div>
         <div className="nn-section-shell flex flex-col overflow-visible" data-nn-header-band="primary">
           {/* ── Mobile brand row ── */}
           <div className="top-bar nn-header-mobile-only-flex min-h-0 w-full items-center justify-between gap-2 overflow-visible border-b border-[var(--header-border)] py-1.5 pt-[max(0.25rem,env(safe-area-inset-top,0px))] sm:min-h-[4.5rem] sm:gap-3 sm:py-0">
@@ -660,7 +636,16 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               ))}
             </nav>
 
-            <div className="nn-header-desktop-auth-cluster relative z-[130] flex shrink-0 items-center justify-end gap-2 xl:gap-2">
+            <div className="nn-header-desktop-auth-cluster relative z-[130] flex min-w-0 max-w-full shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1.5 xl:gap-x-2">
+              <div
+                data-nn-header-band="utility"
+                className="nn-header-desktop-marketing-utility-cluster flex min-w-0 max-w-full shrink items-center"
+              >
+                <MarketingHeaderUtilityCluster
+                  chromeMode={isLightTheme ? "row4" : "dark-marketing"}
+                  includeUnpublishedRegions={isAdminAuthenticated}
+                />
+              </div>
               {isSessionPending ? (
                 <div className="flex shrink-0 items-center gap-2" aria-busy="true" aria-label={t("nav.logIn")}>
                   <div className="h-10 w-20 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />
@@ -670,7 +655,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                    className={`${HEADER_GUEST_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}
+                    className={`${HEADER_DESKTOP_LOGIN_GHOST_CLASS} shrink-0 whitespace-nowrap`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Log in to your NurseNest account"
                   >

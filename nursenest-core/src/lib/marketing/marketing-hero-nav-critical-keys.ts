@@ -33,7 +33,7 @@ export const MARKETING_NAV_SUB_STRIP_KEYS = [
   "nav.tools",
 ] as const;
 
-/** Desktop header, mobile drawer, utility strip ({@link SiteHeader}, {@link MarketingHeaderUtilityStrip}). */
+/** Desktop header, mobile drawer, marketing utility cluster ({@link SiteHeader}, {@link MarketingHeaderUtilityCluster}). */
 export const MARKETING_NAV_HEADER_CHROME_KEYS = [
   "footer.faq",
   "footer.blog",
