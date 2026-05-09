@@ -52,6 +52,7 @@ import {
 import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
 import { isOsceScenariosPubliclyEnabled } from "@/lib/scenarios/osce-scenarios-feature-flag";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
+import { applyAlliedOccupationPremiumModuleLocks } from "@/lib/marketing/allied-hub-premium-module-policy";
 
 export type PremiumHubModuleKey =
   | "labs"
@@ -688,6 +689,9 @@ export function buildPremiumMarketingModuleCards(
 
   const studyTools: PremiumModuleCardModel[] = [];
   pushCoreStudyToolCards(pathway, clinicalOn, osceOn, studyTools, alliedProf);
+  if (pathway.roleTrack === "allied") {
+    applyAlliedOccupationPremiumModuleLocks(alliedProf, studyTools);
+  }
 
   const readiness: PremiumModuleCardModel[] = [
     {

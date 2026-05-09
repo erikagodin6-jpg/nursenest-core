@@ -171,15 +171,19 @@ export function ExamPathwayHubPrimaryStudyCards({
   ];
 
   return (
-    <section className="nn-exam-hub-conversion" aria-labelledby="exam-hub-primary-study-heading">
-      <h2 id="exam-hub-primary-study-heading" className="nn-marketing-h2">
+    <section
+      className="nn-hub-primary-study-modes nn-exam-hub-conversion"
+      aria-labelledby="exam-hub-primary-study-heading"
+      data-nn-hub-section="primary-study"
+    >
+      <h2 id="exam-hub-primary-study-heading" className="nn-marketing-h2 text-balance text-[var(--palette-heading)]">
         {t("components.examPathwayHub.studyModes.heading")}
       </h2>
-      <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
+      <p className="nn-marketing-body-sm mt-3 max-w-2xl text-pretty leading-relaxed text-[var(--semantic-text-secondary)]">
         {t("components.examPathwayHub.studyModes.subhead")}
       </p>
 
-      <ul className="mt-8 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-3 md:gap-6">
+      <ul className="mt-8 grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {cardDefs.map((card) => {
           const trackEvent = () => {
             const props = {

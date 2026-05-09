@@ -1367,6 +1367,110 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketin
   );
 }
 
+/* ---------------------------------------------------------------------
+   Nursing / exam pathway hubs — premium module bands + primary study shell.
+   Token-only washes; aligns with homepage premium radial language.
+   --------------------------------------------------------------------- */
+
+.nn-hub-premium-modules-root {
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-hub-premium-section-panel::before {
+  content: "";
+  position: absolute;
+  inset: -42% -18% auto -18%;
+  height: 58%;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.88;
+  z-index: 0;
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="study"]::before {
+  background:
+    radial-gradient(420px 200px at 12% 0%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent), transparent 68%),
+    radial-gradient(380px 180px at 88% 10%, color-mix(in srgb, var(--semantic-info) 14%, transparent), transparent 72%);
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="readiness"]::before {
+  background:
+    radial-gradient(420px 200px at 8% 0%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent), transparent 70%),
+    radial-gradient(360px 160px at 92% 12%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 72%);
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="newGrad"]::before {
+  background:
+    radial-gradient(400px 190px at 18% 0%, color-mix(in srgb, var(--semantic-success) 14%, transparent), transparent 70%),
+    radial-gradient(340px 150px at 82% 10%, color-mix(in srgb, var(--semantic-chart-1) 12%, transparent), transparent 72%);
+}
+
+.nn-hub-premium-section-head,
+.nn-hub-premium-modules-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-hub-premium-modules-grid > li {
+  min-width: 0;
+}
+
+.nn-hub-premium-section-accent {
+  width: 4px;
+  min-height: 3.25rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-2) 52%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-info) 44%, var(--semantic-border-soft)) 100%
+  );
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="readiness"] .nn-hub-premium-section-accent {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-3) 50%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-chart-4) 46%, var(--semantic-border-soft)) 100%
+  );
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="newGrad"] .nn-hub-premium-section-accent {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-success) 52%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft)) 100%
+  );
+}
+
+.nn-hub-tier-study-band {
+  padding-bottom: 0.25rem;
+}
+
+.nn-hub-primary-study-modes {
+  position: relative;
+  padding: 1.65rem 1.15rem 1.85rem;
+  margin-inline: -0.15rem;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 85%, var(--semantic-chart-2));
+  background:
+    linear-gradient(155deg, color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--semantic-surface)) 0%, transparent 58%),
+    var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (min-width: 640px) {
+  .nn-hub-primary-study-modes {
+    padding: 1.85rem 1.65rem 2.1rem;
+  }
+}
+
+[data-theme="midnight"] .nn-hub-primary-study-modes,
+[data-theme="apex"] .nn-hub-primary-study-modes {
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+}
+
 /* =====================================================================
    Pricing / paywall vertical slice — homepage premium system alignment.
 

@@ -40,6 +40,7 @@ import {
 } from "@/lib/allied/allied-global-pathway";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { AlliedPathwayHubCatCard } from "@/components/marketing/allied-pathway-hub-cat-card";
 import { marketingTierHubStudyActionHref } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
 import { ALLIED_PROFESSION_QUERY_PARAM, isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayAndProfessionQuery } from "@/lib/scenarios/scenario-routes";
@@ -559,15 +560,7 @@ export function AlliedHealthPathwayHub({
             />
           </li>
           <li>
-            <StudyCard
-              surface="hub"
-              variant="featured"
-              href={catHref}
-              className="nn-exam-hub-study-card--cat nn-qa-allied-hub-cat"
-              title="Adaptive readiness"
-              description="CAT-style practice where difficulty responds to performance — use this when you are ready for longer, exam-shaped sessions."
-              cta="Explore Adaptive Hub"
-            />
+            <AlliedPathwayHubCatCard professionKey={profKey || null} catHref={catHref} />
           </li>
         </ul>
       </section>

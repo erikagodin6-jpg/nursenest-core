@@ -4,7 +4,7 @@
  * Run: `cd nursenest-core && npx playwright test tests/e2e/public/nursing-tier-hub-premium-modules-smoke.spec.ts`
  */
 import { expect, test } from "@playwright/test";
-import { seedUsMarketingCookie } from "../helpers/navigation-e2e";
+import { seedCaMarketingCookie, seedUsMarketingCookie } from "../helpers/navigation-e2e";
 
 const PREMIUM_ZONE = '[data-nn-qa-pathway-premium-modules=""]';
 
@@ -21,7 +21,8 @@ test.describe("Nursing tier hub — premium modules smoke", () => {
 
   test("Canada RPN — no ECG marker in premium modules", async ({ page, baseURL }) => {
     test.skip(!baseURL, "BASE_URL required");
-    await page.goto(`${baseURL}/canada/rpn/rex-pn`);
+    await seedCaMarketingCookie(page, baseURL);
+    await page.goto(`${baseURL}/canada/pn/rex-pn`);
     await expect(page.locator(PREMIUM_ZONE)).toBeVisible({ timeout: 60_000 });
     await expect(page.locator(`${PREMIUM_ZONE} [data-nn-qa-hub-ecg]`)).toHaveCount(0);
   });

@@ -105,7 +105,7 @@ export function NursingTierHubPage({
         data-nn-nursing-tier-hub="surface"
         data-pathway-track={pathway.roleTrack}
       >
-        <section aria-labelledby="nn-nursing-tier-hub-title">
+        <section className="nn-hub-tier-study-band" aria-labelledby="nn-nursing-tier-hub-title">
           <div className="nn-nursing-tier-hub-hero-band">
             <p className="nn-premium-home-eyebrow">{eyebrow}</p>
             <h1
@@ -121,7 +121,10 @@ export function NursingTierHubPage({
             ) : null}
           </div>
 
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+          <ul
+            className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5"
+            data-nn-hub-section="quick-actions"
+          >
             {orderedActions.map((action) => {
               if (!action) return null;
 

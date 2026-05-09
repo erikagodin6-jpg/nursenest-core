@@ -17,7 +17,7 @@ export function HeaderBrandLockup() {
   const showLeafRaster = Boolean(leafUrl) && !leafLoadFailed;
 
   return (
-    <span className="relative inline-flex items-center gap-1 overflow-visible align-middle leading-none">
+    <span className="relative inline-flex items-center gap-0.5 overflow-visible align-middle leading-none">
       <span className="logo-container relative z-[20] inline-flex h-[46px] w-[46px] shrink-0 items-center justify-center sm:h-[50px] sm:w-[50px] lg:h-[54px] lg:w-[54px]">
         {showLeafRaster ? (
           <img

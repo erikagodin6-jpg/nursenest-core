@@ -202,15 +202,100 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     ctaLine: "Start from lessons, then drill questions in the same topic cluster.",
   },
   {
+    professionKey: "occupational-therapy",
+    segment: "occupational-therapy-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "therapy",
+    topicSlugsIn: [
+      "nursing-fundamentals",
+      "occupational-therapy",
+      "patient-assessment",
+      "patient-communication",
+      "clinical-documentation",
+      "human-anatomy",
+      "human-physiology",
+    ],
+    title: "Occupational therapy (OT) exam prep | NurseNest",
+    description:
+      "Activity analysis, ADLs, cognitive strategies, and documentation for occupational therapy certification and licensure contexts. Allied pathway scope.",
+    h1: "Occupational therapy exam prep",
+    examOverview: [
+      "OT exams blend clinical reasoning with occupation-based interventions and safety sequencing.",
+      "Alternate short reading blocks with pathway-scoped questions so rationales stay in your lane.",
+    ],
+    features: [
+      "Pathway-scoped lesson hubs with honest readiness language.",
+      "Strict isolation from RN/PN/NP-only nursing hubs at the data layer.",
+      "Paginated lesson lists as the catalog grows.",
+    ],
+    ctaLine: "Open lessons for your track, then reinforce with practice on an allied plan.",
+  },
+  {
+    professionKey: "physiotherapy",
+    segment: "physiotherapy-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "therapy",
+    topicSlugsIn: [
+      "nursing-fundamentals",
+      "patient-assessment",
+      "human-anatomy",
+      "human-physiology",
+      "vital-signs",
+      "patient-communication",
+    ],
+    title: "Physiotherapy / physical therapy exam prep | NurseNest",
+    description:
+      "Movement assessment, therapeutic exercise, and rehab progression judgment for physiotherapy and PT certification study. Allied pathway scope.",
+    h1: "Physiotherapy exam prep",
+    examOverview: [
+      "Physiotherapy exams stress biomechanics, red flags, and progression within scope.",
+      "Use short lesson blocks, then return to pathway-scoped questions for feedback in your authorization lane.",
+    ],
+    features: [
+      "Metadata and breadcrumbs on public marketing routes.",
+      "404 on unknown lessons instead of soft failures.",
+      "No cross-profession leakage when a profession filter is set.",
+    ],
+    ctaLine: "Browse lessons, then open the question bank on a matching allied plan.",
+  },
+  {
+    professionKey: "psychotherapy",
+    segment: "psychotherapy-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "support",
+    topicSlugsIn: [
+      "nursing-fundamentals",
+      "mental-health-therapist",
+      "patient-communication",
+      "clinical-documentation",
+      "healthcare-teamwork",
+      "medical-ethics",
+    ],
+    title: "Psychotherapy licensing exam prep | NurseNest",
+    description:
+      "Ethics, boundaries, modalities, and case formulation for psychotherapy and counseling exam contexts. Allied-tier pathway scope.",
+    h1: "Psychotherapy exam prep",
+    examOverview: [
+      "Licensing items often test judgment under ambiguity and therapeutic frame.",
+      "Alternate reading with short question bursts to keep context switching realistic.",
+    ],
+    features: [
+      "Breadcrumb UI and structured public metadata on marketing routes.",
+      "Profession-scoped recommendations when your allied track is set in settings.",
+      "Private dashboards stay noindex; marketing hubs stay indexable where intended.",
+    ],
+    ctaLine: "Start from lessons, then align questions with your plan.",
+  },
+  {
     professionKey: "mlt",
     segment: "mlt-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "lab",
     topicSlugsIn: ["lab-values", "infection-control", "medical-terminology", "clinical-documentation"],
-    title: "Medical lab (MLT / MLS) exam prep | NurseNest",
+    title: "Medical laboratory technology (MLT / MLS) exam prep | NurseNest",
     description:
-      "Laboratory reasoning, quality control, and safety edges for medical laboratory certification study. allied-tier scoped.",
-    h1: "Medical laboratory exam prep",
+      "Laboratory reasoning, quality control, and safety edges for medical laboratory technology and MLS certification study. Allied-tier scoped.",
+    h1: "Medical laboratory technology exam prep",
     examOverview: [
       "Lab exams mix interpretation with pre-analytical and analytical control concepts. alternate reading with question blocks.",
       "Keep sessions bounded; accuracy matters more than marathon length.",
@@ -723,6 +808,8 @@ export function getAlliedProfessionByProfessionKey(key: string): AlliedProfessio
 const ALLIED_ROUTE_PROFESSION_KEY_ALIASES: Record<string, string> = {
   "medical-lab-technology": "mlt",
   "respiratory-therapy": "respiratory",
+  ot: "occupational-therapy",
+  pt: "physiotherapy",
 };
 
 export function isAlliedHeroExamPrepSlug(slug: string): boolean {

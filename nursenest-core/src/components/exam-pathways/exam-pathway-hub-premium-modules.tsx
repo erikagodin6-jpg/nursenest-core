@@ -81,20 +81,23 @@ function PremiumModuleGrid({
   if (cards.length === 0) return null;
 
   return (
-    <section className="space-y-4" aria-labelledby={sectionId}>
+    <section className="space-y-4 nn-hub-premium-module-section" aria-labelledby={sectionId}>
       <div
         data-nn-hub-premium-tone={tone}
-        className={`rounded-2xl border p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6 ${premiumSectionSurfaceClass(tone)}`}
+        className={`nn-hub-premium-section-panel relative overflow-hidden rounded-2xl border p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6 ${premiumSectionSurfaceClass(tone)}`}
       >
-        <div>
-          <h2 id={sectionId} className="nn-marketing-h2 text-[var(--palette-heading)]">
-            {t(headingKey)}
-          </h2>
-          <p className="nn-marketing-body-sm mt-2 max-w-2xl text-pretty text-[var(--semantic-text-secondary)]">
-            {t(leadKey)}
-          </p>
+        <div className="nn-hub-premium-section-head flex gap-4 sm:items-start sm:gap-5">
+          <span className="nn-hub-premium-section-accent mt-1 hidden sm:block" aria-hidden />
+          <div className="min-w-0 flex-1">
+            <h2 id={sectionId} className="nn-marketing-h2 text-balance text-[var(--palette-heading)]">
+              {t(headingKey)}
+            </h2>
+            <p className="nn-marketing-body-sm mt-3 max-w-2xl text-pretty leading-relaxed text-[var(--semantic-text-secondary)]">
+              {t(leadKey)}
+            </p>
+          </div>
         </div>
-        <ul className="mt-6 grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="nn-hub-premium-modules-grid mt-7 grid list-none grid-cols-1 gap-5 p-0 min-[520px]:grid-cols-2 xl:grid-cols-3 xl:gap-6">
           {cards.map((card) => {
             const href = resolvePremiumCardHref(card, isSignedIn);
             const locked = Boolean(card.locked);
@@ -123,7 +126,7 @@ function PremiumModuleGrid({
                   ? { "data-nn-qa-hub-np-cases": "1" as const }
                   : {};
             return (
-              <li key={card.key} data-nn-qa-hub-premium-module={card.key} {...qaAttrs}>
+              <li key={card.key} className="min-w-0" data-nn-qa-hub-premium-module={card.key} {...qaAttrs}>
                 <StudyCard
                   surface="hub"
                   variant={locked ? "locked" : card.variant}
@@ -177,7 +180,7 @@ export function ExamPathwayHubPremiumModules({
 
   return (
     <div
-      className={`mt-14 space-y-11 sm:mt-16 sm:space-y-12${alliedHub ? " rounded-[1.25rem] pt-6 sm:pt-8" : ""} ${rootClassName ?? ""}`.trim()}
+      className={`nn-hub-premium-modules-root mt-14 space-y-12 sm:mt-16 sm:space-y-14${alliedHub ? " rounded-[1.25rem] pt-6 sm:pt-8" : ""} ${rootClassName ?? ""}`.trim()}
       style={alliedBandStyle}
       data-nn-qa-pathway-premium-modules=""
       {...(alliedHub ? { "data-nn-allied-premium-accent": accentVar } : {})}
