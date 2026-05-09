@@ -2148,7 +2148,7 @@ export function PracticeTestRunnerClient({
             neutralPalette
             immersive
             examMode={learnerExamShellMode}
-            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome nn-cat-adaptive-exam-session" : ""}`}
+            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome nn-cat-exam-chrome--premium nn-cat-adaptive-exam-session" : ""}`}
           >
             {isExamStyle ? (
               <>
@@ -3159,7 +3159,7 @@ export function PracticeTestRunnerClient({
           neutralPalette
           immersive
           examMode={learnerExamShellMode}
-          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}${linearPracticeSplitReview ? " nn-practice-exam-runner" : ""}`}
+          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome nn-cat-exam-chrome--premium${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}${linearPracticeSplitReview ? " nn-practice-exam-runner" : ""}`}
         >
           {linearPracticeSplitReview ? (
             <>
@@ -3207,7 +3207,7 @@ export function PracticeTestRunnerClient({
               <div
                 className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
               >
-                <div className="nn-practice-exam-split mx-auto flex min-h-0 w-full min-w-0 max-w-full flex-1 flex-col gap-4 px-2 pb-1 pt-1 lg:flex-row lg:items-stretch lg:gap-5 lg:px-4 lg:pb-2">
+                <div className="nn-practice-exam-split nn-practice-exam-split--premium mx-auto flex min-h-0 w-full min-w-0 max-w-full flex-1 flex-col gap-4 px-2 pb-1 pt-1 lg:flex-row lg:items-stretch lg:gap-5 lg:px-4 lg:pb-2">
                   <div className="nn-practice-exam-split__primary flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                     {linearExamQuestionCard}
                   </div>

@@ -121,7 +121,7 @@ export function PracticeQuestionCard({
 }) {
   const hasMeta = Boolean(topic ?? subtopic ?? difficultyLabel);
   return (
-    <div className="nn-practice-q-card" data-question-surface={mode}>
+    <div className="nn-practice-q-card nn-practice-q-card--premium" data-question-surface={mode}>
       {hasMeta ? (
         <div className="nn-practice-q-card__meta">
           {topic ? (

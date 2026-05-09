@@ -663,7 +663,7 @@ export function ExamPracticeClient({
 
   if (phase === "ready" && sessionPhase === "review") {
     return (
-      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive>
+      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive examMode="review">
         <ExamSessionTopBar
           left={<span className="font-medium text-foreground">Review before scoring</span>}
           center={<span>Pre-submit checklist</span>}
@@ -750,7 +750,7 @@ export function ExamPracticeClient({
 
   if (!q && (qLoading || !qid)) {
     return (
-      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive>
+      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive examMode="cat">
         <ExamSessionTopBar
           left={examTitle ? <span className="font-medium text-foreground">{examTitle}</span> : null}
           center={<span>Loading</span>}
@@ -781,7 +781,7 @@ export function ExamPracticeClient({
   const raw = answers[q.id];
 
   return (
-      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive>
+      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette immersive examMode="cat">
         <ExamSessionTopBar
           left={
             <div>

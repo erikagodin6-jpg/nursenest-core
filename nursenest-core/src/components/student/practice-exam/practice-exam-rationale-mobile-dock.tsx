@@ -94,7 +94,7 @@ function MobileBottomSheet({
         aria-hidden={!open}
       >
         <div
-          className={`flex min-h-0 flex-1 flex-col overflow-hidden rounded-t-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)] transition-transform duration-300 ease-out motion-reduce:transition-none ${
+          className={`nn-practice-exam-rationale-sheet--premium flex min-h-0 flex-1 flex-col overflow-hidden rounded-t-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)] transition-transform duration-300 ease-out motion-reduce:transition-none ${
             open ? "translate-y-0" : "translate-y-full"
           }`}
           role="dialog"

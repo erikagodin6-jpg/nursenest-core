@@ -1,0 +1,201 @@
+/**
+ * Learner CAT + practice exam premiumization — presentation only.
+ * Builds on `learner-exam-shell.css` + globals CAT chrome; semantic tokens only.
+ */
+
+/* ── Shell ambient (calmer overlays than base exam-shell) ─────────────────── */
+.nn-exam-session-premium.nn-learner-exam-shell[data-nn-exam-mode="cat"]::before {
+  opacity: 0.62;
+}
+
+.nn-exam-session-premium.nn-learner-exam-shell[data-nn-exam-mode="practice"]::before {
+  opacity: 0.72;
+}
+
+.nn-exam-session-premium.nn-learner-exam-shell[data-nn-exam-mode="review"]::before {
+  opacity: 0.68;
+}
+
+/* Midnight / deep themes — reduce glow, keep workstation focus */
+html[data-theme="midnight-indigo"] .nn-exam-session-premium.nn-learner-exam-shell[data-nn-exam-mode="cat"]::before,
+html[data-theme="deep-twilight"] .nn-exam-session-premium.nn-learner-exam-shell[data-nn-exam-mode="cat"]::before {
+  opacity: 0.38;
+}
+
+/* ── Shared top chrome (ExamSessionTopBar + CAT board top) ─────────────────── */
+.nn-exam-session-topbar {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-exam-session-topbar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+.nn-cat-exam-chrome--premium .nn-cat-exam-board-top {
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+}
+
+/* Content well: subtle lift for item focus (CAT) */
+.nn-cat-exam-chrome--premium .nn-cat-exam-content-well {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 55%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 55%, transparent);
+}
+
+/* Adaptive progress — slightly calmer track inside premium chrome */
+.nn-cat-exam-chrome--premium .nn-exam-progress-premium.nn-exam-progress--cat-exam-adaptive {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 88%, var(--semantic-surface));
+}
+
+.nn-cat-exam-chrome--premium .nn-exam-progress-premium .nn-progress-track-semantic--md {
+  border-radius: 9999px;
+}
+
+/* ── Timer readout (exam-authentic; practice gets soft pill) ───────────────── */
+.nn-exam-timer-readout {
+  padding: 0.125rem 0;
+}
+
+.nn-learner-exam-shell[data-nn-exam-mode="practice"] .nn-exam-timer-readout {
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-info) 18%);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--semantic-surface));
+}
+
+/* ── Linear practice split (rationale + stem) ─────────────────────────────── */
+.nn-practice-exam-split--premium {
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+@media (min-width: 1024px) {
+  .nn-practice-exam-split--premium {
+    gap: clamp(1rem, 2.2vw, 1.65rem);
+  }
+}
+
+.nn-practice-exam-split--premium .nn-practice-exam-split__primary {
+  min-height: min(70dvh, 44rem);
+}
+
+/* ── Practice progress header ─────────────────────────────────────────────── */
+.nn-practice-exam-progress-premium {
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 65%, transparent);
+}
+
+.nn-practice-exam-progress-premium .nn-practice-exam-progress__track {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 40%, transparent);
+}
+
+/* ── Rationale column (educational, rationale-forward) ─────────────────────── */
+.nn-practice-exam-rationale-premium .nn-practice-exam-rationale-panel__card {
+  border-radius: 1.125rem;
+  border-left-width: 3px;
+  border-left-color: color-mix(in srgb, var(--semantic-info) 32%, var(--semantic-border-soft));
+  background: color-mix(
+    in srgb,
+    var(--semantic-panel-cool) 10%,
+    var(--nn-review-panel-bg, var(--semantic-surface))
+  );
+}
+
+.nn-practice-exam-rationale-premium .nn-practice-rationale-full__scroll {
+  padding-inline: clamp(0.65rem, 1.8vw, 1rem);
+  padding-block: 0.5rem 0.85rem;
+}
+
+.nn-practice-exam-rationale-premium .nn-practice-rsection__body {
+  line-height: 1.58;
+  font-size: 0.9375rem;
+}
+
+.nn-practice-exam-rationale-premium .nn-practice-rsection__body p {
+  margin-block: 0 0.65em;
+}
+
+.nn-practice-exam-rationale-premium .nn-confidence-chip {
+  border-radius: 9999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 75%, var(--semantic-chart-3) 25%);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface));
+  color: var(--semantic-text-secondary);
+}
+
+/* Mobile rationale sheet handle zone */
+.nn-practice-exam-rationale-sheet--premium {
+  box-shadow:
+    0 -12px 40px -28px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent),
+    var(--semantic-shadow-soft);
+}
+
+/* ── Progress bar (shared ExamProgressBar) ─────────────────────────────────── */
+.nn-exam-progress-premium .nn-progress-track-semantic--md {
+  min-height: 0.45rem;
+}
+
+.nn-learner-exam-shell[data-nn-exam-mode="practice"] .nn-exam-progress-premium .nn-progress-fill-reveal {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-surface) 55%, transparent) inset;
+}
+
+/* ── Practice question card (linear / tutor surfaces) ─────────────────────── */
+.nn-practice-q-card--premium[data-question-surface="practice"] {
+  border-radius: 1.05rem;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 90%, var(--semantic-chart-2) 10%);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-practice-q-card--premium[data-question-surface="practice"] .nn-practice-q-card__stem {
+  line-height: 1.58;
+  letter-spacing: -0.01em;
+}
+
+/* CAT / exam-style study cards — flatter, less “marketing card” */
+.nn-practice-q-card--premium[data-question-surface="cat"],
+.nn-practice-q-card--premium[data-question-surface="exam"] {
+  border-radius: 0.85rem;
+  box-shadow: none;
+}
+
+/* CAT / exam stack uses QuestionCard not PracticeQuestionCard — no change required */
+
+/* ── NGN Bowtie — mobile ergonomics + calmer bank spacing ─────────────────── */
+.bowtie-ngn.bowtie-ngn--premium > div {
+  gap: clamp(1rem, 3vw, 1.75rem);
+}
+
+@media (max-width: 1023px) {
+  .bowtie-ngn.bowtie-ngn--premium .order-2.grid {
+    gap: 0.85rem;
+  }
+
+  .bowtie-ngn.bowtie-ngn--premium .order-2.grid button[type="button"][aria-pressed] {
+    min-height: 5.75rem;
+  }
+}
+
+.bowtie-ngn.bowtie-ngn--premium .order-3 [role="listbox"] {
+  gap: 0.5rem 0.45rem;
+}
+
+/* ── Mock exam (ExamPracticeClient) — align with exam question tokens ─────── */
+.nn-exam-session-premium .nn-question-stem-card {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-info) 12%);
+  background: color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted));
+  padding: clamp(0.85rem, 2vw, 1.15rem);
+}
+
+.nn-exam-session-premium .nn-qopt-surface {
+  transition:
+    border-color 0.16s ease,
+    background-color 0.16s ease,
+    box-shadow 0.16s ease;
+}
