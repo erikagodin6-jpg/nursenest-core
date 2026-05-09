@@ -13,6 +13,7 @@ test.describe("lesson detail premium shells", () => {
     await page.waitForSelector("h1.nn-lesson-page-title", { timeout: 120_000 });
     await expect(page.locator("article.nn-lesson-article-flow")).toBeVisible();
     await expect(page.locator(".nn-premium-pathway-lesson-header")).toBeVisible();
+    await expect(page.locator("[data-nn-lesson-progress]")).toBeVisible();
 
     const summary = page.getByTestId("pathway-lesson-quick-clinical-summary");
     if (await summary.count()) {
