@@ -397,6 +397,16 @@
   -webkit-backdrop-filter: blur(12px) saturate(102%);
 }
 
+/* Figma Option 4 — primary band: whisper lavender (brand) + cool floor; still anchored to header paper tokens. */
+[data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--semantic-brand) 7%, var(--nn-header-primary-bg)) 0%,
+      color-mix(in srgb, var(--nn-header-primary-bg) 92%, var(--semantic-info) 8%) 100%
+    );
+}
+
 /* Add a soft elevation when the sticky wrapper has scrolled past the top.
    Detected via `:has()` on the immediate parent that holds `sticky top-0`.
    Falls back gracefully when :has() is unsupported. */
@@ -503,6 +513,49 @@
 [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link:hover {
   background: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg));
   transform: none;
+}
+
+/* Main desktop strip (Pricing…Tools) — same sky chip language as tier row; lives in `.nn-header-desktop-grid`, not `.nn-header-nav-row`. */
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 10%, var(--nn-header-primary-bg));
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link:hover {
+  background: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg));
+  transform: none;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link[aria-current="page"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-info));
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 18%,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--nn-header-primary-bg))
+  );
+  font-weight: 650;
+}
+
+/* Tier hub links — pill chips (NAV_TIER_LINK_CLASS does not include `.nn-marketing-nav-link`). */
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 12%, var(--nn-header-primary-bg));
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a:hover {
+  background: color-mix(in srgb, var(--semantic-info) 18%, var(--nn-header-primary-bg));
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-info));
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 22%,
+    color-mix(in srgb, var(--semantic-brand) 12%, var(--nn-header-primary-bg))
+  );
+  font-weight: 650;
 }
 
 /* ---------------------------------------------------------------------

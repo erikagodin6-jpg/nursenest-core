@@ -55,9 +55,9 @@ const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-lg border border-transparent px-2.5 text-center font-medium leading-[1.2] tracking-normal transition-colors sm:px-3";
 const HEADER_SECONDARY_ACTION_CLASS =
   "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
-/** Desktop guest Log In — transparent / ghost (row-4 marketing header). */
-const HEADER_DESKTOP_LOGIN_GHOST_CLASS =
-  "nav-item nn-marketing-body-sm inline-flex min-h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-lg border border-transparent bg-transparent px-2.5 font-medium text-[var(--nav-fg)] shadow-none underline-offset-4 transition-colors hover:bg-[color-mix(in_srgb,var(--nav-fg)_7%,var(--nn-header-primary-bg))] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]";
+/** Desktop guest Log In — secondary outline; same min-height, radius, and padding rhythm as Start Free. */
+const HEADER_DESKTOP_LOGIN_OUTLINE_CLASS =
+  "nav-item inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl border border-[var(--nav-border)] bg-transparent px-4 py-2 text-sm font-medium text-[var(--nav-fg)] shadow-none transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type HeaderResumeCta = { href: string; label: string } | null;
 type HeaderNavLink = { key: string; href: string; label: string; matchBase: string };
@@ -655,7 +655,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                    className={`${HEADER_DESKTOP_LOGIN_GHOST_CLASS} shrink-0 whitespace-nowrap`}
+                    className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Log in to your NurseNest account"
                   >

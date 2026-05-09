@@ -103,6 +103,12 @@ test.describe("Marketing header bands — desktop", () => {
 
     const brandHome = page.locator("header.nn-header-logo-row .nn-header-desktop-grid a.nn-header-logo-link").first();
     await expect(brandHome, "header brand home link (logo + wordmark)").toBeVisible();
+    if (bands.row4) {
+      const logIn = page.locator(".nn-header-desktop-auth-cluster").getByRole("link", { name: /^log in$/i }).first();
+      await expect(logIn, "desktop guest Log In control").toBeVisible();
+      const loginBorder = await logIn.evaluate((el) => getComputedStyle(el).borderTopWidth);
+      expect(parseFloat(loginBorder), "Log In uses outline button (non-zero border)").toBeGreaterThan(0);
+    }
     await expect(page.getByRole("button", { name: /language/i }).first()).toBeVisible();
     const themePickerBtn = page.locator('[data-nn-header-band="utility"] button[aria-haspopup="listbox"]');
     if ((await themePickerBtn.count()) > 0) {
