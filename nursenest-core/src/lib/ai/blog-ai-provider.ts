@@ -16,7 +16,8 @@ import {
   getBlogOpenAiChatModel,
   getBlogOpenRouterChatModel,
   getOpenAiBaseUrl,
-  getOpenRouterChatModel,
+  OPENROUTER_MODELS_URL,
+  resolveOpenRouterModelSlugFromEnv,
 } from "@/lib/ai/openai-env";
 
 export type { BlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
@@ -32,6 +33,34 @@ function logBlogAiInvocation(provider: BlogAiChatProvider, model: string): void 
   console.info(`[BlogAI] provider=${provider} model=${model}`);
 }
 
+let loggedOpenRouterResolvedModelSlug = false;
+
+/** Once per process: confirms which OpenRouter slug is in use (no secrets). */
+function logOpenRouterResolvedModelOnce(model: string): void {
+  if (loggedOpenRouterResolvedModelSlug) return;
+  loggedOpenRouterResolvedModelSlug = true;
+  console.info(`[OpenRouter] Resolved chat model slug: ${model}`);
+}
+
+function openRouterModelRoutingFailed(status: number, rawText: string): boolean {
+  if (status === 404) return true;
+  const m = rawText.toLowerCase();
+  return (
+    m.includes("no endpoints") ||
+    m.includes("no providers") ||
+    m.includes("model not found") ||
+    m.includes("invalid model") ||
+    m.includes("unknown model") ||
+    m.includes("does not exist")
+  );
+}
+
+function formatOpenRouterModelRoutingError(status: number, rawText: string): string {
+  const hint = `OpenRouter could not route this model (HTTP ${status}). Set OPENROUTER_MODEL or BLOG_OPENROUTER_MODEL to a valid slug from ${OPENROUTER_MODELS_URL} (account must have access to that model).`;
+  const tail = rawText.trim() ? ` Response (truncated): ${rawText.slice(0, 500)}` : "";
+  return `${hint}${tail}`;
+}
+
 async function mapProviderError<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
@@ -41,11 +70,11 @@ async function mapProviderError<T>(fn: () => Promise<T>): Promise<T> {
 }
 
 function normalizeOpenRouterModel(explicit: string | undefined, fallback: string): string {
-  const configured = process.env.OPENROUTER_MODEL?.trim();
-  if (configured) return configured;
+  const fromEnv = process.env.OPENROUTER_MODEL?.trim() || process.env.BLOG_OPENROUTER_MODEL?.trim();
+  if (fromEnv) return fromEnv;
   const candidate = explicit?.trim();
   if (candidate && candidate.includes("/")) return candidate;
-  return fallback.includes("/") ? fallback : getOpenRouterChatModel();
+  return fallback.includes("/") ? fallback : resolveOpenRouterModelSlugFromEnv();
 }
 
 function normalizeOpenRouterApiKey(raw: string | undefined): string {
@@ -76,7 +105,8 @@ export async function openRouterChatCompletion(params: {
 }): Promise<ChatCompletionResult> {
   const apiKey = normalizeOpenRouterApiKey(process.env.OPENROUTER_API_KEY);
   const user = params.user ? String(params.user).slice(0, 128) : undefined;
-  const model = normalizeOpenRouterModel(params.model, getOpenRouterChatModel());
+  const model = normalizeOpenRouterModel(params.model, resolveOpenRouterModelSlugFromEnv());
+  logOpenRouterResolvedModelOnce(model);
   const resp = await mapProviderError(async () => {
     const res = await fetch(`${OPENROUTER_BASE_URL}/chat/completions`, {
       method: "POST",
@@ -98,6 +128,9 @@ export async function openRouterChatCompletion(params: {
     if (!res.ok) {
       if (res.status === 401) {
         throw new Error(`${OPENROUTER_401_MESSAGE}${rawText ? ` OpenRouter response: ${rawText.slice(0, 500)}` : ""}`);
+      }
+      if (openRouterModelRoutingFailed(res.status, rawText)) {
+        throw new Error(formatOpenRouterModelRoutingError(res.status, rawText));
       }
       throw new Error(`OpenRouter HTTP ${res.status}${rawText ? `: ${rawText.slice(0, 500)}` : ""}`);
     }

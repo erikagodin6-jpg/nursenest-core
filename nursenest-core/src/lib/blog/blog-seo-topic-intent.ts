@@ -5,7 +5,40 @@
  */
 
 const FORBIDDEN_TITLE_START =
-  /^(understanding|overview of|the overview of|a quick overview of|guide to|a guide to|complete guide to|the complete guide to|introduction to|an introduction to|exploring|discovering|everything about|all about)\b/i;
+  /^(understanding|overview of|the overview of|a quick overview of|guide to|a guide to|complete guide to|the complete guide to|complete guide\b|introduction to|an introduction to|exploring|discovering|everything about|all about)\b/i;
+
+/** One repeated chunk at the title start (case-insensitive). Used to peel generic SEO prefixes before re-validation. */
+const LEADING_GENERIC_BLOG_TOPIC_PREFIX = new RegExp(
+  "^(?:" +
+    "understanding|overview of|the overview of|a quick overview of|guide to|a guide to|" +
+    "complete guide to|the complete guide to|complete guide|introduction to|an introduction to|" +
+    "exploring|discovering|everything about|all about|tips for|things to know about|important information about" +
+    ")\\b[:,\\s\\-–—]*",
+  "i",
+);
+
+const MAX_GENERIC_TITLE_PREFIX_REPAIR_DEPTH = 5;
+
+/**
+ * Strips leading/colloquial SEO filler ("Guide to…", "Understanding…") and common ": Guide to …" segments
+ * so the remainder can be normalized into bedside-specific nursing titles.
+ */
+function stripLeadingGenericBlogTopicPrefixes(topic: string): string {
+  let t = topic.replace(/\s+/g, " ").trim();
+  for (let i = 0; i < 6; i++) {
+    const next = t.replace(LEADING_GENERIC_BLOG_TOPIC_PREFIX, "").trim();
+    if (next === t) break;
+    t = next;
+  }
+  for (let j = 0; j < 4; j++) {
+    const next2 = t
+      .replace(/:\s*(?:an?\s+)?(?:understanding|guide to|a guide to|complete guide to|complete guide|overview of)\s+/gi, ": ")
+      .trim();
+    if (next2 === t) break;
+    t = next2;
+  }
+  return t;
+}
 
 const FORBIDDEN_WEAK_PREFIX = /^(tips for|things to know about|important information about)\b/i;
 
@@ -180,6 +213,10 @@ export type NormalizeBlogTopicIntentResult = {
 /** When `legacyCompatible` is true, broad-but-safe nursing seeds can pass with normalization (batch/CLI tooling). */
 export type NormalizeBlogTopicIntentOptions = {
   legacyCompatible?: boolean;
+  /**
+   * @internal Recursion guard for generic-title prefix repair — do not set from product code.
+   */
+  __genericTitleRepairDepth?: number;
 };
 
 function matchesHighIntentShape(topic: string): boolean {
@@ -453,6 +490,7 @@ export function normalizeBlogTopicIntent(
   scheduleExam?: string | null,
   options?: NormalizeBlogTopicIntentOptions,
 ): NormalizeBlogTopicIntentResult {
+  const repairDepth = options?.__genericTitleRepairDepth ?? 0;
   const raw = inputTopic.trim();
   if (!raw) {
     return {
@@ -479,6 +517,15 @@ export function normalizeBlogTopicIntent(
     };
   }
   if (FORBIDDEN_TITLE_START.test(raw) || FORBIDDEN_WEAK_PREFIX.test(raw) || /\b(complete guide|ultimate guide|everything you need)\b/i.test(raw)) {
+    if (repairDepth < MAX_GENERIC_TITLE_PREFIX_REPAIR_DEPTH) {
+      const peeled = stripLeadingGenericBlogTopicPrefixes(raw);
+      if (peeled !== raw && peeled.length >= 6) {
+        return normalizeBlogTopicIntent(peeled, scheduleExam, {
+          ...options,
+          __genericTitleRepairDepth: repairDepth + 1,
+        });
+      }
+    }
     return {
       accepted: false,
       normalizedTopic: raw,
@@ -498,6 +545,20 @@ export function normalizeBlogTopicIntent(
       bodySystem: template?.bodySystem,
       nclexCategory: template?.nclexCategory,
     };
+  }
+
+  if (
+    !specific.ok &&
+    repairDepth < MAX_GENERIC_TITLE_PREFIX_REPAIR_DEPTH &&
+    /generic pattern|Understanding|Guide to|Overview of|complete guide|guide-style filler|Avoid .Understanding/i.test(specific.reason)
+  ) {
+    const peeled = stripLeadingGenericBlogTopicPrefixes(raw);
+    if (peeled !== raw && peeled.length >= 6) {
+      return normalizeBlogTopicIntent(peeled, scheduleExam, {
+        ...options,
+        __genericTitleRepairDepth: repairDepth + 1,
+      });
+    }
   }
 
   const template = detectTemplate(raw);

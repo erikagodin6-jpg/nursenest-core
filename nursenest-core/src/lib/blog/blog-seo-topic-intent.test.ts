@@ -106,17 +106,22 @@ describe("validateBlogTopicForSeoArticleGeneration", () => {
     assert.equal(v.ok, true);
   });
 
-  it("rejects generic Understanding prefix", () => {
-    const r = validateBlogTopicForSeoArticleGeneration(
-      "Understanding fluid balance for nursing students in the hospital",
-      "NCLEX-RN",
-    );
-    assert.equal(r.ok, false);
+  it("repairs generic Understanding prefix into a clinical, exam-grounded title", () => {
+    const topic = "Understanding fluid balance for nursing students in the hospital";
+    const n = normalizeBlogTopicIntent(topic, "NCLEX-RN");
+    assert.equal(n.accepted, true);
+    assert.doesNotMatch(n.normalizedTopic, /^understanding\b/i);
+    const r = validateBlogTopicForSeoArticleGeneration(topic, "NCLEX-RN");
+    assert.equal(r.ok, true);
   });
 
-  it("rejects Guide to style", () => {
-    const r = validateBlogTopicForSeoArticleGeneration("Guide to cardiac output for beginners", "NCLEX-RN");
-    assert.equal(r.ok, false);
+  it("repairs Guide to style into a bedside-specific normalized title", () => {
+    const topic = "Guide to cardiac output for beginners";
+    const n = normalizeBlogTopicIntent(topic, "NCLEX-RN");
+    assert.equal(n.accepted, true);
+    assert.doesNotMatch(n.normalizedTopic, /^guide to\b/i);
+    const r = validateBlogTopicForSeoArticleGeneration(topic, "NCLEX-RN");
+    assert.equal(r.ok, true);
   });
 
   it("rejects topics with no clinical anchor", () => {

@@ -2402,7 +2402,7 @@ html[data-theme] .nn-marketing-surface {
 @media (min-width: 1280px) {
   .nn-header-desktop-grid {
     display: grid;
-    /* Equal side tracks pull logo + auth toward the centered nav instead of pinning them to far edges. */
+    /* Equal `1fr` side tracks keep the auto-width nav cluster at true horizontal center (logo left, auth right). */
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
     column-gap: 0.75rem;
@@ -2412,8 +2412,9 @@ html[data-theme] .nn-marketing-surface {
     padding-block: 0.45rem;
   }
 
+  /* 1fr | auto | 1fr: main link cluster stays geometrically centered; logo left, utilities+auth right. */
   .nn-header-desktop-grid > .nn-header-brand-cluster {
-    justify-self: end;
+    justify-self: start;
     margin-inline-start: 0;
   }
 
@@ -2423,7 +2424,7 @@ html[data-theme] .nn-marketing-surface {
   }
 
   .nn-header-desktop-grid > .nn-header-desktop-auth-cluster {
-    justify-self: start;
+    justify-self: end;
   }
 }
 

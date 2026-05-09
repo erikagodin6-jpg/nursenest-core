@@ -51,6 +51,7 @@ test.describe("Marketing header bands — desktop", () => {
       const t = document.querySelector("[data-nn-header-band='tier']");
       const h = document.querySelector("header.nn-header-logo-row");
       const primary = document.querySelector("[data-nn-header-band='primary']");
+      const row4 = Boolean(document.querySelector('header[data-nn-header-layout="marketing-row4"]'));
       const p = Array.from(document.querySelectorAll("a")).find((a) => /^pricing$/i.test((a.textContent ?? "").trim()));
       if (!u || !t || !h || !p || !primary) {
         return {
@@ -63,23 +64,30 @@ test.describe("Marketing header bands — desktop", () => {
       const hBg = getComputedStyle(h).backgroundColor;
       const primaryBgImage = getComputedStyle(primary).backgroundImage;
       const pColor = getComputedStyle(p).color;
-      return { ok: true as const, uBg, tBg, hBg, primaryBgImage, pColor };
+      return { ok: true as const, uBg, tBg, hBg, primaryBgImage, pColor, row4 };
     });
 
     expect(bands.ok, JSON.stringify(bands)).toBe(true);
     if (!bands.ok) return;
 
-    expect(bands.uBg, "utility bg === tier bg").toBe(bands.tBg);
+    if (!bands.row4) {
+      expect(bands.uBg, "utility bg === tier bg (legacy stacked bands)").toBe(bands.tBg);
+      const uRgb = parseRgb(bands.uBg);
+      const hRgb = parseRgb(bands.hBg);
+      expect(uRgb && hRgb, "parse header backgrounds").toBeTruthy();
+      if (!uRgb || !hRgb) return;
+      const uLum = (0.2126 * uRgb.r + 0.7152 * uRgb.g + 0.0722 * uRgb.b) / 255;
+      const hLum = (0.2126 * hRgb.r + 0.7152 * hRgb.g + 0.0722 * hRgb.b) / 255;
+      expect(hLum, "middle/header surface lighter than utility+tier").toBeGreaterThan(uLum + 0.15);
+    } else {
+      const tRgb = parseRgb(bands.tBg);
+      expect(tRgb, "tier strip paints a solid chip rail").toBeTruthy();
+      if (tRgb) {
+        expect(tRgb.a, "tier band not fully transparent").toBeGreaterThan(0.2);
+      }
+    }
 
-    const uRgb = parseRgb(bands.uBg);
-    const hRgb = parseRgb(bands.hBg);
     const pRgb = parseRgb(bands.pColor);
-    expect(uRgb && hRgb, "parse header backgrounds").toBeTruthy();
-    if (!uRgb || !hRgb) return;
-
-    const uLum = (0.2126 * uRgb.r + 0.7152 * uRgb.g + 0.0722 * uRgb.b) / 255;
-    const hLum = (0.2126 * hRgb.r + 0.7152 * hRgb.g + 0.0722 * hRgb.b) / 255;
-    expect(hLum, "middle/header surface lighter than utility+tier").toBeGreaterThan(uLum + 0.15);
 
     expect(bands.primaryBgImage, "primary band uses neutral paper gradient").toMatch(/linear-gradient/i);
     expect(bands.primaryBgImage, "primary band must not read as hot pink chrome").not.toMatch(
@@ -95,6 +103,12 @@ test.describe("Marketing header bands — desktop", () => {
 
     const brandHome = page.locator("header.nn-header-logo-row .nn-header-desktop-grid a.nn-header-logo-link").first();
     await expect(brandHome, "header brand home link (logo + wordmark)").toBeVisible();
+    if (bands.row4) {
+      const logIn = page.locator(".nn-header-desktop-auth-cluster").getByRole("link", { name: /^log in$/i }).first();
+      await expect(logIn, "desktop guest Log In control").toBeVisible();
+      const loginBorder = await logIn.evaluate((el) => getComputedStyle(el).borderTopWidth);
+      expect(parseFloat(loginBorder), "Log In uses outline button (non-zero border)").toBeGreaterThan(0);
+    }
     await expect(page.getByRole("button", { name: /language/i }).first()).toBeVisible();
     const themePickerBtn = page.locator('[data-nn-header-band="utility"] button[aria-haspopup="listbox"]');
     if ((await themePickerBtn.count()) > 0) {
@@ -141,14 +155,19 @@ test.describe("Marketing header bands — desktop", () => {
     const utility = page.locator("[data-nn-header-band='utility']").first();
     await expect(utility).toBeVisible({ timeout: 60_000 });
 
-    const { uBg, tBg } = await page.evaluate(() => {
+    const { uBg, tBg, row4 } = await page.evaluate(() => {
       const u = document.querySelector("[data-nn-header-band='utility']");
       const t = document.querySelector("[data-nn-header-band='tier']");
       return {
         uBg: u ? getComputedStyle(u).backgroundColor : "",
         tBg: t ? getComputedStyle(t).backgroundColor : "",
+        row4: Boolean(document.querySelector('header[data-nn-header-layout="marketing-row4"]')),
       };
     });
-    expect(uBg).toBe(tBg);
+    if (!row4) {
+      expect(uBg).toBe(tBg);
+    } else {
+      expect(tBg.length).toBeGreaterThan(3);
+    }
   });
 });

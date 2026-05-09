@@ -4,8 +4,22 @@ import { getOpenAiApiKeyFromRuntimeEnv } from "@/lib/env/runtime-env";
 /** Default for blog + RN lesson expansion when no env overrides are set. */
 export const OPENAI_DEFAULT_BLOG_LESSON_MODEL = "gpt-4.1-mini";
 
-/** Documentation-only fallback for non-blog OpenRouter callers that have not opted into strict model config. */
+/** Default OpenRouter slug when `OPENROUTER_MODEL` and `BLOG_OPENROUTER_MODEL` are both unset. */
 export const OPENROUTER_DEFAULT_CHAT_MODEL = "openai/gpt-4o-mini";
+
+/** Public catalog for choosing a valid model slug (blog + admin diagnostics). */
+export const OPENROUTER_MODELS_URL = "https://openrouter.ai/models";
+
+/**
+ * Resolved model slug: `OPENROUTER_MODEL` → `BLOG_OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
+ */
+export function resolveOpenRouterModelSlugFromEnv(): string {
+  return (
+    process.env.OPENROUTER_MODEL?.trim() ||
+    process.env.BLOG_OPENROUTER_MODEL?.trim() ||
+    OPENROUTER_DEFAULT_CHAT_MODEL
+  );
+}
 
 /** Shared OpenAI-compatible HTTP config (server-only). */
 export function getOpenAiChatModel(): string {
@@ -25,22 +39,16 @@ export function getBlogOpenAiChatModel(): string {
 }
 
 /**
- * Model slug for OpenRouter blog chat. Blog generation requires an explicit OpenRouter model so
- * it does not silently select an unavailable OpenAI-branded route on OpenRouter accounts.
+ * Model slug for OpenRouter blog chat.
+ * Resolution: `OPENROUTER_MODEL` → `BLOG_OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
  */
 export function getBlogOpenRouterChatModel(): string {
-  const model = process.env.OPENROUTER_MODEL?.trim();
-  if (!model) {
-    throw new Error(
-      "OPENROUTER_MODEL is required for OpenRouter blog generation. Set it to a model available on your OpenRouter account, for example anthropic/claude-3.5-sonnet.",
-    );
-  }
-  return model;
+  return resolveOpenRouterModelSlugFromEnv();
 }
 
-/** OpenRouter chat model for shared admin/content AI callers. */
+/** OpenRouter chat model for shared admin/content AI callers (same env resolution as blog). */
 export function getOpenRouterChatModel(): string {
-  return process.env.OPENROUTER_MODEL?.trim() || OPENROUTER_DEFAULT_CHAT_MODEL;
+  return resolveOpenRouterModelSlugFromEnv();
 }
 
 /**
