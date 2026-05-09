@@ -57,7 +57,11 @@ function FlashcardSessionLivePreviewInner() {
       <p className="mb-4 text-center text-xs font-medium text-[var(--semantic-text-muted)]">
         QA preview · mock cards · theme <span className="tabular-nums">{theme}</span>
       </p>
-      <ExamSessionShell immersive className="nn-premium-flashcard-session-root">
+      <ExamSessionShell
+        immersive
+        examMode="practice"
+        className="nn-premium-flashcard-session-root nn-flashcard-study-premium"
+      >
         <ActiveStudySession
           cards={MOCK_CARDS}
           header={{

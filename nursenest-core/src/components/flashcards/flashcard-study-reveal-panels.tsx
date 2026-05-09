@@ -36,7 +36,7 @@ export function FlashcardStudyRevealPanels({
     "";
 
   return (
-    <div className="nn-flashcard-reveal-stack space-y-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300">
+    <div className="nn-flashcard-reveal-stack nn-flashcard-reveal-stack--premium space-y-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300">
       <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] p-4 shadow-sm">
         <div className="mb-1 text-xs font-bold uppercase tracking-wide text-[var(--semantic-success)]">
           {labels?.answerHeading ?? "Answer"}

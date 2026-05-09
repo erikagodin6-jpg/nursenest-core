@@ -121,7 +121,7 @@ export function FlashcardStudyQuestionStack({
   const showPlainRevealCta = !exam && !revealed && typeof onReveal === "function";
 
   return (
-    <div className="nn-premium-flashcard-stack-outer mx-auto flex w-full max-w-6xl flex-col gap-4">
+    <div className="nn-premium-flashcard-stack-outer nn-flashcard-study-stack-premium mx-auto flex w-full max-w-6xl flex-col gap-4">
       <div className="nn-flashcard-session-ambient" aria-hidden />
       <div
         className="nn-flashcard-session-layout nn-premium-flashcard-stack mx-auto w-full"
@@ -191,11 +191,7 @@ export function FlashcardStudyQuestionStack({
               <button
                 type="button"
                 onClick={() => onReveal?.()}
-                className="nn-flashcard-reveal-cta inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill shadow-lg transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)] motion-safe:active:scale-[0.99]"
-                style={{
-                  background:
-                    "linear-gradient(135deg, color-mix(in srgb, var(--semantic-brand) 92%, var(--semantic-chart-3)), color-mix(in srgb, var(--semantic-chart-3) 78%, var(--semantic-brand)))",
-                }}
+                className="nn-flashcard-reveal-cta nn-flashcard-reveal-cta--premium inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
               >
                 {labels?.revealHint ?? "Tap to reveal"}
               </button>

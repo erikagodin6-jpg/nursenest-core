@@ -33,7 +33,7 @@ export function FlashcardExamMcqAnswerList({
   }
 
   return (
-    <div className="mt-4 space-y-3">
+    <div className="nn-flashcard-exam-mcq-premium mt-4 space-y-3">
       {/* Heading */}
       <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
         {answerChoicesHeading}

@@ -282,7 +282,7 @@ export function FlashcardCustomStudyClient() {
         </Link>
       </div>
 
-      <ExamSessionShell>
+      <ExamSessionShell examMode="practice" className="nn-premium-flashcard-session-root nn-flashcard-study-premium">
         <ActiveStudySession
           cards={activeCards}
           header={header}

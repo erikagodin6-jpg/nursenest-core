@@ -286,7 +286,7 @@ export function ActiveStudySession({
   const readinessLabel = Math.min(100, progressPct);
 
   return (
-    <div className="space-y-4">
+    <div className="nn-active-flashcard-session space-y-4">
       <ExamSessionProgressStrip pct={progressPct} />
 
       {/* HEADER */}
