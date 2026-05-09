@@ -41,7 +41,10 @@ export function LearnerPerformanceWorkspaceNav({
             pathname === href ||
             (href !== "/app" && pathname.startsWith(href)) ||
             (href === "/app/account/report" &&
-              (pathname === "/app/account/report-card" || pathname.startsWith("/app/account/report-card")));
+              (pathname === "/app/account/report-card" ||
+                pathname.startsWith("/app/account/report-card") ||
+                pathname === "/app/report-card" ||
+                pathname.startsWith("/app/report-card")));
           return (
             <li key={href}>
               <Link

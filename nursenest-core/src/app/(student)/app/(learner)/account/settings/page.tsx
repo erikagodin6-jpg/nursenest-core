@@ -22,6 +22,11 @@ const SETTING_DESTINATIONS: readonly { href: string; titleKey: string; bodyKey: 
     bodyKey: "learner.account.settingsPage.cardPersonal",
   },
   {
+    href: "/app/exam-plan",
+    titleKey: "learner.personalPage.section.examPlan",
+    bodyKey: "learner.personalPage.section.examPlanSub",
+  },
+  {
     href: "/app/account/security",
     titleKey: "learner.account.nav.security",
     bodyKey: "learner.account.settingsPage.cardSecurity",
@@ -72,7 +77,7 @@ export default async function AccountSettingsHubPage() {
         title={t("learner.account.settingsPage.title")}
         description={t("learner.account.settingsPage.intro")}
       />
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
         {SETTING_DESTINATIONS.map((item) => (
           <li key={item.href}>
             <Link
@@ -81,7 +86,7 @@ export default async function AccountSettingsHubPage() {
             >
               <span className="text-base font-semibold text-[var(--semantic-text-primary)]">{t(item.titleKey)}</span>
               <span className="mt-2 text-sm text-muted-foreground">{t(item.bodyKey)}</span>
-              <span className="mt-4 text-sm font-semibold text-primary">{t("learner.account.settingsPage.open")} →</span>
+              <span className="mt-4 text-sm font-semibold text-[var(--semantic-brand)]">{t("learner.account.settingsPage.open")} →</span>
             </Link>
           </li>
         ))}

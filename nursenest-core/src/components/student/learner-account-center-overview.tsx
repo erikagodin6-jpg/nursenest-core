@@ -85,7 +85,7 @@ export async function LearnerAccountCenterOverview({
         actions={
           <Link
             href="/app"
-            className="inline-flex items-center rounded-lg border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground shadow-sm hover:bg-muted/60"
+            className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand))] bg-[var(--semantic-surface)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)]"
           >
             {t("learner.account.shell.backToDashboard")}
           </Link>
@@ -191,8 +191,11 @@ export async function LearnerAccountCenterOverview({
             </li>
           ))}
         </ul>
-        <p className="text-xs text-muted-foreground">
-          <Link href="/app/account/overview" className="font-medium text-primary underline">
+        <p className="text-xs text-[var(--semantic-text-secondary)]">
+          <Link
+            href="/app/account/overview"
+            className="font-semibold text-[var(--semantic-brand)] underline decoration-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] underline-offset-2 hover:decoration-[var(--semantic-brand)]"
+          >
             {t("learner.account.center.moreAnalytics")}
           </Link>
         </p>

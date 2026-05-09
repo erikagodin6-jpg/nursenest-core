@@ -103,7 +103,7 @@ export function LearnerAccountCrossLinks({
           <li key={`${l.href}|${l.label}`}>
             <Link
               href={l.href}
-              className="nn-premium-action-chip inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 py-2 text-sm font-semibold text-foreground hover:bg-[var(--semantic-panel-muted)]"
+              className="nn-premium-action-chip inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))]"
             >
               {l.label}
             </Link>

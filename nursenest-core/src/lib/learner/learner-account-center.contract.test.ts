@@ -7,6 +7,7 @@ import test from "node:test";
 const here = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(here, "..", "..");
 const accountDir = join(appRoot, "app", "(student)", "app", "(learner)", "account");
+const learnerDir = join(appRoot, "app", "(student)", "app", "(learner)");
 
 const pages = [
   "page.tsx",
@@ -31,6 +32,15 @@ test("account index wires Account Center overview", () => {
 test("legacy report-card route redirects to /app/account/report", () => {
   const src = readFileSync(join(accountDir, "report-card", "page.tsx"), "utf8");
   assert.match(src, /permanentRedirect\("\/app\/account\/report"\)/);
+});
+
+test("top-level learner alias routes redirect to canonical destinations", () => {
+  const dash = readFileSync(join(learnerDir, "dashboard", "page.tsx"), "utf8");
+  assert.match(dash, /permanentRedirect\("\/app"\)/);
+  const settings = readFileSync(join(learnerDir, "settings", "page.tsx"), "utf8");
+  assert.match(settings, /permanentRedirect\("\/app\/account\/settings"\)/);
+  const reportCard = readFileSync(join(learnerDir, "report-card", "page.tsx"), "utf8");
+  assert.match(reportCard, /permanentRedirect\("\/app\/account\/report"\)/);
 });
 
 test("account center pages avoid raw Prisma enum leakage in markup strings", () => {
