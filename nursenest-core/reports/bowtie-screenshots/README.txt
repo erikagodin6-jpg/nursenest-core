@@ -1,0 +1,1 @@
+Screenshots for Phase 7 were not auto-captured in this environment (no themed learner session + seeded bowtie bank row). Recommended manual captures: desktop CAT pre-submit, desktop Practice post-submit with rationale, mobile viewport, themes Midnight/Ocean/Garden — save PNGs here.

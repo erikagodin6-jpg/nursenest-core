@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import type { Prisma } from "@prisma/client";
 import { BaselineAssessmentAttemptStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -12,27 +11,9 @@ import { withRetry } from "@/lib/resilience/with-retry";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { JSON_BODY_BASELINE_SUBMIT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
+import { correctAnswerIsConfigured, gradeMatches } from "@/lib/questions/grade-answer-match";
 
 export const dynamic = "force-dynamic";
-
-function normalizeCorrect(correctAnswer: Prisma.JsonValue | null | undefined): string[] {
-  if (correctAnswer == null) return [];
-  if (Array.isArray(correctAnswer)) return correctAnswer.map((x) => String(x));
-  if (typeof correctAnswer === "string") return [correctAnswer];
-  return [String(correctAnswer)];
-}
-
-function gradeMatches(questionType: string, correct: string[], userAnswer: unknown): boolean {
-  const t = questionType.toUpperCase();
-  if (t === "SATA" || t === "SELECT_ALL_THAT_APPLY") {
-    const u = Array.isArray(userAnswer) ? userAnswer.map((x) => String(x)).sort() : [];
-    const c = [...correct].map(String).sort();
-    if (u.length !== c.length) return false;
-    return u.every((v, i) => v === c[i]);
-  }
-  const u = userAnswer == null ? "" : String(userAnswer);
-  return correct.length > 0 && u === String(correct[0]);
-}
 
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/learner/baseline-assessment/submit", "content", async () => {
@@ -105,12 +86,11 @@ export async function POST(req: Request) {
       if (!row) {
         return NextResponse.json({ error: "Missing question in batch", code: "bank_mismatch" }, { status: 400 });
       }
-      const expected = normalizeCorrect(row.correctAnswer);
-      if (expected.length === 0) {
+      if (!correctAnswerIsConfigured(row.questionType, row.correctAnswer)) {
         return NextResponse.json({ error: "Question missing answer key", questionId: qid }, { status: 422 });
       }
       const ans = Object.prototype.hasOwnProperty.call(answers, qid) ? answers[qid] : undefined;
-      const ok = gradeMatches(row.questionType, expected, ans);
+      const ok = gradeMatches(row.questionType, row.correctAnswer, ans);
       if (ok) correctCount += 1;
       const topic = normalizeTopicLabel(row.topic);
       outcomes.push({ topic, correct: ok });

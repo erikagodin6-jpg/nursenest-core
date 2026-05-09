@@ -63,6 +63,12 @@ import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens"
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 import type { StudySettings } from "@/lib/learner/study-settings";
+import { BowtieQuestionRenderer } from "@/components/exams/questions/bowtie-question-renderer";
+import {
+  coerceBowtieDraftAnswer,
+  isBowtieAnswerComplete,
+  tryNormalizeBowtiePayload,
+} from "@/lib/questions/bowtie-adapter";
 import { EcgVideoQuestionMedia } from "@/components/study/ecg-video-question-media";
 
 export type { QuestionBankDifficultyBand, QuestionBankPreset, SavedQuestionBankPreset } from "@/lib/questions/question-bank-client-types";
@@ -738,6 +744,12 @@ export function QuestionBankPracticeClient({
   ]);
 
   const optsCanonical = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
+  const bowtiePayload = useMemo(
+    () =>
+      current ? tryNormalizeBowtiePayload(current.questionType, current.stem, current.options) : null,
+    [current],
+  );
+  const isBowtie = Boolean(bowtiePayload);
   const optsDisplay = useMemo(() => {
     if (!current) return [];
     const d = current.displayOptions;
@@ -906,7 +918,11 @@ export function QuestionBankPracticeClient({
 
   async function checkAnswer() {
     if (!current) return;
-    if (answer === null || (Array.isArray(answer) && answer.length === 0)) return;
+    if (isBowtie) {
+      if (!isBowtieAnswerComplete(answer)) return;
+    } else if (answer === null || (Array.isArray(answer) && answer.length === 0)) {
+      return;
+    }
     setGrading(true);
     try {
       const res = await fetch("/api/questions/grade", {
@@ -1474,11 +1490,33 @@ export function QuestionBankPracticeClient({
 
               <div>
                 <p className="nn-question-options-label">{t("learner.qbank.examUi.answersHeading")}</p>
-                {!g ? (
+                {!g && !isBowtie ? (
                   <p className="mb-3 text-xs text-muted-foreground">{t("learner.qbank.examUi.toolsHint")}</p>
                 ) : null}
 
-                {isSata ? (
+                {isBowtie && bowtiePayload ? (
+                  <BowtieQuestionRenderer
+                    payload={bowtiePayload}
+                    value={raw}
+                    showScenarioBanner={false}
+                    disabled={!!g}
+                    onChange={(next) => setAnswer(next)}
+                    reveal={
+                      g?.correctKeys && g.correctKeys.length >= 3
+                        ? {
+                            correct: {
+                              correctIds: [g.correctKeys[0]!, g.correctKeys[1]!, g.correctKeys[2]!] as [
+                                string,
+                                string,
+                                string,
+                              ],
+                            },
+                            selectedIds: coerceBowtieDraftAnswer(raw),
+                          }
+                        : null
+                    }
+                  />
+                ) : isSata ? (
                 <ul
                   className={`nn-qopt-list${g ? " nn-qopt-feedback-phase" : ""}`}
                   role="group"
@@ -1654,7 +1692,12 @@ export function QuestionBankPracticeClient({
                   ) : null}
                   <button
                     type="button"
-                    disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
+                    disabled={
+                      grading ||
+                      (isBowtie
+                        ? !isBowtieAnswerComplete(answer)
+                        : answer === null || (Array.isArray(answer) && answer.length === 0))
+                    }
                     className="nn-btn-primary inline-flex min-h-[3rem] w-full items-center justify-center rounded-full px-8 text-base font-semibold shadow-none disabled:opacity-50 sm:w-auto sm:px-10"
                     onClick={() => void checkAnswer()}
                   >

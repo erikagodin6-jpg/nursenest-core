@@ -53,6 +53,9 @@ function questionFormatHint(questionType: string): string {
   if (u.includes("SATA") || u.includes("SELECT_ALL")) {
     return "This is a select-all-that-apply item: decide each option on its own merits before submitting.";
   }
+  if (u.includes("BOWTIE") || u === "TREND") {
+    return "This is a bowtie item: place one best option in each row (condition, action, and monitoring) before submitting.";
+  }
   if (u.includes("PRIOR")) {
     return "This is a prioritization item: identify the most urgent problem or first action before comparing distractors.";
   }

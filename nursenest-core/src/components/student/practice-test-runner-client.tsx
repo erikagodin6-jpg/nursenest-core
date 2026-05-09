@@ -103,6 +103,12 @@ import {
   buildExamOptionDisplayOrder,
   shouldDisableOptionShuffleMcq,
 } from "@/lib/practice-tests/exam-option-display-order";
+import { BowtieQuestionRenderer } from "@/components/exams/questions/bowtie-question-renderer";
+import {
+  coerceBowtieDraftAnswer,
+  isBowtieAnswerComplete,
+  tryNormalizeBowtiePayload,
+} from "@/lib/questions/bowtie-adapter";
 import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
 import { ChevronLeft, ChevronRight, Flag, LayoutGrid, Send, Shield } from "lucide-react";
 
@@ -683,6 +689,12 @@ export function PracticeTestRunnerClient({
       (current.questionType.toUpperCase() === "SATA" ||
         current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY"),
   );
+  const bowtiePayload = useMemo(
+    () =>
+      current ? tryNormalizeBowtiePayload(current.questionType, current.stem, current.options) : null,
+    [current],
+  );
+  const isBowtie = Boolean(bowtiePayload);
   const raw = current ? answers[current.id] : undefined;
 
   useEffect(() => {
@@ -750,6 +762,7 @@ export function PracticeTestRunnerClient({
   const allowMcqOptionShuffle =
     !Boolean(testConfig?.disableOptionShuffle) &&
     !isSata &&
+    !isBowtie &&
     (catFeedbackStudy || isExamStyle || (!catMode && testConfig?.linearDeliveryMode === "exam"));
 
   const optsOrderCanonical = useMemo(() => {
@@ -791,6 +804,7 @@ export function PracticeTestRunnerClient({
   const hasMeaningfulAnswer = (qid: string): boolean => {
     const v = answersRef.current[qid];
     if (v === undefined || v === null) return false;
+    if (isBowtieAnswerComplete(v)) return true;
     if (typeof v === "string") return v.trim().length > 0;
     if (Array.isArray(v)) return v.length > 0;
     return true;
@@ -1983,7 +1997,29 @@ export function PracticeTestRunnerClient({
 
     // Build CAT-specific option rows using AnswerOptionRow
     const catOptions =
-      optsCanonical.length === 0 ? (
+      isBowtie && bowtiePayload ? (
+        <BowtieQuestionRenderer
+          payload={bowtiePayload}
+          value={raw}
+          showScenarioBanner={false}
+          disabled={optionsInteractionLocked}
+          onChange={(next) => setAnswerForCurrent(next)}
+          reveal={
+            catFeedbackStudy && catStudyFeedback && catStudyFeedback.questionId === current?.id
+              ? (() => {
+                  const ck = catStudyFeedback.correctKeys;
+                  if (ck.length < 3) return null;
+                  return {
+                    correct: {
+                      correctIds: [ck[0]!, ck[1]!, ck[2]!] as [string, string, string],
+                    },
+                    selectedIds: coerceBowtieDraftAnswer(raw),
+                  };
+                })()
+              : null
+          }
+        />
+      ) : optsCanonical.length === 0 ? (
         mcqNoChoicesFallback
       ) : isSata ? (
         <ul
@@ -2248,17 +2284,23 @@ export function PracticeTestRunnerClient({
                           />
                         ) : null}
 
-                        <PracticeTestMcqChoicesInstruction
-                          isSata={Boolean(isSata)}
-                          selectAllLabel={tx(
-                            "learner.practiceTests.run.selectAllThatApply",
-                            "Select all that apply",
-                          )}
-                          selectBestLabel={tx(
-                            "learner.practiceTests.run.selectBestAnswer",
-                            "Select the best answer",
-                          )}
-                        />
+                        {!isBowtie ? (
+                          <PracticeTestMcqChoicesInstruction
+                            isSata={Boolean(isSata)}
+                            selectAllLabel={tx(
+                              "learner.practiceTests.run.selectAllThatApply",
+                              "Select all that apply",
+                            )}
+                            selectBestLabel={tx(
+                              "learner.practiceTests.run.selectBestAnswer",
+                              "Select the best answer",
+                            )}
+                          />
+                        ) : (
+                          <p className="nn-cat-options-label">
+                            {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
+                          </p>
+                        )}
 
                         {catOptions}
                       </QuestionCard>
@@ -2429,17 +2471,23 @@ export function PracticeTestRunnerClient({
                             mode={isExamStyle ? "cat" : "practice"}
                             phase={catStudyFeedback ? "post_submit" : "pre_submit"}
                           />
-                          <PracticeTestMcqChoicesInstruction
-                            isSata={Boolean(isSata)}
-                            selectAllLabel={tx(
-                              "learner.practiceTests.run.selectAllThatApply",
-                              "Select all that apply",
-                            )}
-                            selectBestLabel={tx(
-                              "learner.practiceTests.run.selectBestAnswer",
-                              "Select the best answer",
-                            )}
-                          />
+                          {!isBowtie ? (
+                            <PracticeTestMcqChoicesInstruction
+                              isSata={Boolean(isSata)}
+                              selectAllLabel={tx(
+                                "learner.practiceTests.run.selectAllThatApply",
+                                "Select all that apply",
+                              )}
+                              selectBestLabel={tx(
+                                "learner.practiceTests.run.selectBestAnswer",
+                                "Select the best answer",
+                              )}
+                            />
+                          ) : (
+                            <p className="nn-cat-options-label">
+                              {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
+                            </p>
+                          )}
                           {catOptions}
                           {confidenceTrackingEnabled && hasMeaningfulAnswer(current.id) ? (
                             <div className="mt-4">
@@ -2492,7 +2540,16 @@ export function PracticeTestRunnerClient({
     }
 
     const legacyCatOptions =
-      optsCanonical.length === 0 ? (
+      isBowtie && bowtiePayload ? (
+        <BowtieQuestionRenderer
+          payload={bowtiePayload}
+          value={raw}
+          showScenarioBanner={false}
+          disabled={false}
+          onChange={(next) => setAnswerForCurrent(next)}
+          reveal={null}
+        />
+      ) : optsCanonical.length === 0 ? (
         mcqNoChoicesFallback
       ) : isSata ? (
         <ul
@@ -2586,17 +2643,23 @@ export function PracticeTestRunnerClient({
             )}
           />
         ) : null}
-        <PracticeTestMcqChoicesInstruction
-          isSata={Boolean(isSata)}
-          selectAllLabel={tx(
-            "learner.practiceTests.run.selectAllThatApply",
-            "Select all that apply",
-          )}
-          selectBestLabel={tx(
-            "learner.practiceTests.run.selectBestAnswer",
-            "Select the best answer",
-          )}
-        />
+        {!isBowtie ? (
+          <PracticeTestMcqChoicesInstruction
+            isSata={Boolean(isSata)}
+            selectAllLabel={tx(
+              "learner.practiceTests.run.selectAllThatApply",
+              "Select all that apply",
+            )}
+            selectBestLabel={tx(
+              "learner.practiceTests.run.selectBestAnswer",
+              "Select the best answer",
+            )}
+          />
+        ) : (
+          <p className="nn-cat-options-label">
+            {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
+          </p>
+        )}
         {legacyCatOptions}
         {confidenceTrackingEnabled ? (
           <div className="mt-4">
@@ -2755,7 +2818,29 @@ export function PracticeTestRunnerClient({
   };
 
   const linearCatOptions =
-    optsCanonical.length === 0 ? (
+    isBowtie && bowtiePayload ? (
+      <BowtieQuestionRenderer
+        payload={bowtiePayload}
+        value={raw}
+        showScenarioBanner={false}
+        disabled={optionsInteractionLocked}
+        onChange={(next) => setAnswerForCurrent(next)}
+        reveal={
+          linearFeedback && currentCommitted
+            ? (() => {
+                const ck = linearFeedback.correctKeys;
+                if (ck.length < 3) return null;
+                return {
+                  correct: {
+                    correctIds: [ck[0]!, ck[1]!, ck[2]!] as [string, string, string],
+                  },
+                  selectedIds: coerceBowtieDraftAnswer(raw),
+                };
+              })()
+            : null
+        }
+      />
+    ) : optsCanonical.length === 0 ? (
       mcqNoChoicesFallback
     ) : isSata ? (
       <ul
@@ -2904,17 +2989,23 @@ export function PracticeTestRunnerClient({
           )}
         />
       ) : null}
-      <PracticeTestMcqChoicesInstruction
-        isSata={Boolean(isSata)}
-        selectAllLabel={tx(
-          "learner.practiceTests.run.selectAllThatApply",
-          "Select all that apply",
-        )}
-        selectBestLabel={tx(
-          "learner.practiceTests.run.selectBestAnswer",
-          "Select the best answer",
-        )}
-      />
+      {!isBowtie ? (
+        <PracticeTestMcqChoicesInstruction
+          isSata={Boolean(isSata)}
+          selectAllLabel={tx(
+            "learner.practiceTests.run.selectAllThatApply",
+            "Select all that apply",
+          )}
+          selectBestLabel={tx(
+            "learner.practiceTests.run.selectBestAnswer",
+            "Select the best answer",
+          )}
+        />
+      ) : (
+        <p className="nn-cat-options-label">
+          {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
+        </p>
+      )}
       {linearCatOptions}
       {confidenceTrackingEnabled ? (
         <div className="mt-4">
