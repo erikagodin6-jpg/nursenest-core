@@ -60,7 +60,8 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     blog:      { min: 0, max: 1 },
     /** One pathway-scoped CAT landing is enough; avoids zero-output when registry has no CAT targets. */
     cat:       { min: 0, max: 1 },
-    hub:       { min: 0, max: 0 },
+    /** ECG mastery entry (cardiac lessons, RN/NP pathways) — merged in automatic-internal-links. */
+    hub:       { min: 0, max: 1 },
     totalMax: 4,
   },
   flashcard: {

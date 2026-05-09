@@ -3,6 +3,9 @@
 import type { ReactNode } from "react";
 import { useExamStudyThemeOptional } from "@/components/exam/exam-study-theme-context";
 
+/** CAT vs practice vs post-session review — drives ambient shell styling only (see `learner-exam-shell.css`). */
+export type LearnerExamShellMode = "cat" | "practice" | "review";
+
 /**
  * Focused, low-chrome container for timed tests, CAT, and exam-style practice.
  * Theme primary is used only for thin accents (progress fill, selection rings)—surfaces stay neutral.
@@ -16,18 +19,22 @@ export function ExamSessionShell({
   neutralPalette = false,
   /** Larger radius, stronger shadow — reference “full-screen study” chrome. */
   immersive = false,
+  /** Ambient shell personality: immersive CAT exam vs brighter practice vs review (visual/CSS only). */
+  examMode,
 }: {
   children: ReactNode;
   className?: string;
   neutralPalette?: boolean;
   immersive?: boolean;
+  examMode?: LearnerExamShellMode;
 }) {
   const examTheme = useExamStudyThemeOptional();
   const scoped = examTheme?.sessionTheme ?? undefined;
   return (
     <div
-      className={`nn-exam-session rounded-2xl border ${neutralPalette ? "nn-exam-session--neutral" : ""} ${immersive ? "nn-exam-session--immersive" : ""} ${className}`.trim()}
+      className={`nn-exam-session nn-learner-exam-shell rounded-2xl border ${neutralPalette ? "nn-exam-session--neutral" : ""} ${immersive ? "nn-exam-session--immersive" : ""} ${className}`.trim()}
       data-theme={scoped}
+      data-nn-exam-mode={examMode}
     >
       {children}
     </div>

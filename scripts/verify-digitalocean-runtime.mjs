@@ -22,6 +22,34 @@ function fail(message) {
   failures.push(message);
 }
 
+/**
+ * Bootstrap (`scripts/start-standalone.mjs`) calls `validateRuntimeEnvOrThrow` before binding PORT.
+ * GENERAL vars declared in the DO spec without `value:` can be empty at runtime → process exits → no healthy upstream.
+ */
+function assertRunTimeGeneralKeyHasLiteralValue(specText, key) {
+  const needle = `- key: ${key}`;
+  const idx = specText.indexOf(needle);
+  if (idx === -1) {
+    fail(`app spec must declare "${needle}" (bootstrap runtime-env guard)`);
+    return;
+  }
+  const tail = specText.slice(idx).split(/\r?\n/);
+  let sawValue = false;
+  for (let i = 1; i < tail.length; i += 1) {
+    const line = tail[i];
+    if (/^\s*-\s*key:/.test(line)) break;
+    if (/^\s*value\s*:/.test(line)) {
+      sawValue = true;
+      break;
+    }
+  }
+  if (!sawValue) {
+    fail(
+      `RUN_TIME env "${key}" must declare explicit value: in app spec — empty GENERAL vars crash bootstrap (DigitalOcean: no_healthy_upstream / 503).`,
+    );
+  }
+}
+
 function read(file) {
   if (!existsSync(file)) {
     fail(`missing ${rel(file)}`);
@@ -129,6 +157,8 @@ function verifyStartScript({ label, command, baseDir, allowRootStandalone = fals
 }
 
 console.log("[verify:do-runtime] checking DigitalOcean Dockerfile runtime contract");
+
+assertRunTimeGeneralKeyHasLiteralValue(spec, "AI_ADMIN_GENERATION_ENABLED");
 
 if (scalar(lines, "dockerfile_path") !== "Dockerfile") {
   fail(`expected dockerfile_path: Dockerfile, found ${scalar(lines, "dockerfile_path") ?? "missing"}`);

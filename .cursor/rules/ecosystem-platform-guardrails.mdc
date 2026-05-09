@@ -1,0 +1,74 @@
+---
+description: Platform ecosystem guardrails — one NurseNest product, shared primitives, tokens, navigation, adaptive loops.
+alwaysApply: true
+---
+
+# Ecosystem platform guardrails
+
+**North star:** NurseNest is **one** cohesive premium adaptive clinical learning ecosystem — not disconnected apps, isolated study tools, mini-products, or unrelated redesigns stitched together.
+
+Applies to Cursor implementation, Figma-to-code handoff, AI-generated UI, and human contributors. Does **not** replace task-specific safety rules (`global-engineering-constraints`, `nursenest-production-governance`, `semantic-color-guardrails`, `truthpack-first-protocol`).
+
+---
+
+## 1. Platform-level ecosystem
+
+- Converge new work toward **shared primitives**, **learner shells** (e.g. `nn-learner-page-hero`, `LearnerSurfaceCard`, `SectionContainer`, `.lv-*`), **semantic tokens**, **canonical navigation**, and **adaptive study loops**.
+- **Primitive vocabulary (reuse / extend — do not duplicate):** ClinicalPanel, SignalCard, TelemetryStrip, AdaptiveRecommendationRail, StudyLoopDock, ScenarioTimeline, NGNDecisionPanel, MasteryProgressBand — anchor to existing components first (`docs/ecosystem-design-system-convergence.md`).
+- Preserve **learner continuity** across lessons, practice, flashcards, CAT, dashboard, labs, ECG, and simulations — **no isolated vertical apps** or parallel IA for the same learner journeys.
+
+## 2. Lab Values positioning
+
+- Labs = **adaptive clinical interpretation and reasoning** integrated via **`/app/labs`** and `labs-engine` — **not** a standalone calculator, static reference sheet, or separate branded utility.
+- Link into **lessons, flashcards, practice, CAT, ECG, simulations** using existing study-loop and pathway helpers.
+- **Reject:** spreadsheet-first UX, separate lab branding, duplicate lab route ecosystems, disconnected scoring systems.
+
+## 3. ECG positioning
+
+- Core ECG learning = **integrated telemetry/clinical rhythm education** — reuse **learner shells and navigation**; premium telemetry workstation aesthetic; wired to lessons, practice, NGN, labs where clinically relevant.
+- **Reject:** disconnected ECG app/sub-brand, forked telemetry UI stacks, parallel ECG-only navigation trees.
+
+## 4. Advanced ECG product
+
+- **Advanced ECG** is a **distinct premium product line**: **separate entitlement and upgrade architecture** from core RN/PN/NP/allied pathway subscriptions unless **product explicitly** defines bundling.
+- Implementors must **avoid accidental inclusion** in default core-plan entitlement checks; keep **visual alignment** with NurseNest tokens and shells (same ecosystem identity).
+
+## 5. Case study / simulation
+
+- **Adaptive branching:** evolving patient states, meaningful branches, multiple endings; integrate telemetry, labs, and NGN-style judgment; reuse shared primitives and learner shells.
+- **Reject:** static vignettes sold as branching, fake interactive branching, isolated simulation app chrome or nav.
+
+## 6. Theme system (Aurora, Ocean, Garden, Midnight)
+
+- Themes alter **accent, glow, surface tint, chart color expression, atmospheric lighting** only — **not** layout grids, spacing scale, typography scale, component hierarchy, or navigation structure.
+- **Midnight:** immersive workstation / CAT density; **Ocean:** primary calm educational mode; **Garden / Aurora:** supportive / optimistic expression per palette.
+- **Reject:** hardcoded colors in product UI, hot pink, muddy gradients, layout forks per theme.
+
+## 7. Design tokens
+
+- **Production learner/marketing product UI:** derive styling from **semantic and theme tokens** (`semantic-status-tokens.css`, `[data-theme]` / `theme-palettes.css`); extend tokens or shared CSS classes instead of raw hex, one-off shadows, arbitrary gradients, or ad-hoc spacing scales in TSX.
+- See `.cursor/rules/semantic-color-guardrails.mdc` for multi-hue data/status rules.
+
+## 8. Navigation + shell
+
+- **One** canonical navigation and learner shell ecosystem; preserve **stable URLs**, **i18n/locale behavior**, and **server-backed entitlements**.
+- **Reject:** duplicate nav systems for ECG/labs/simulations, forked learner shells that fragment the same flows.
+
+## 9. Adaptive learning
+
+- Reinforce **linked learning**, **adaptive recommendations**, **weak-area signals**, **continue studying**, **remediation**, and **mastery progression** using existing platform wiring — compose dashboards/study APIs; **do not** introduce parallel scoring products or disconnected “lab-only” intelligence.
+
+## 10. Brand + typography
+
+- Preserve **NurseNest leaf logo**, **wordmark**, **DM Sans**, optimistic premium learner emotional tone (`nursenest-production-governance.mdc`).
+- **Reject:** serif body typography for product UI, enterprise-hospital gray slabs, gamer neon, generic SaaS dashboard clones, disconnected sub-brand visual languages.
+
+---
+
+## Related documentation
+
+- `docs/planning/clinical-readiness-ecosystem-implementation-directive.md` — homepage, hubs, dashboard, CAT, flashcards, marketing, subscriptions, adaptive integration.
+- `docs/planning/bls-acls-pals-emergency-readiness-pathways.md` — future BLS/ACLS/PALS placement (integrated ecosystems, not isolated cert apps).
+- `docs/governance/ecosystem-qa-master-program.md` — recurring Playwright matrix, cohesion, entitlement, adaptive, performance audits + report templates.
+- `docs/ecosystem-design-system-convergence.md` — primitive registry, duplicate-system audit, theme/token convergence.
+- `docs/governance/ecosystem-guardrails-rollout.md` — changelog and enforcement notes.

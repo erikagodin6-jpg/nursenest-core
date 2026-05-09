@@ -264,6 +264,7 @@ export function resolveLinks(context: LinkContext): ResolvedLinks {
     questions:  buildCandidates(rawHits, "question",  density.question.max,  counter),
     blogs:      buildCandidates(rawHits, "blog",      density.blog.max,      counter),
     cat:        buildCandidates(rawHits, "cat",        density.cat.max,       counter),
+    hubs:       [],
   };
 }
 
@@ -288,6 +289,7 @@ export function resolveLinksFlat(context: LinkContext): LinkCandidate[] {
     ...resolved.questions,
     ...resolved.blogs,
     ...resolved.cat,
+    ...resolved.hubs,
   ].sort((a, b) => a.score - b.score);
 }
 

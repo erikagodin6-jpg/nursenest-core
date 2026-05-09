@@ -60,6 +60,7 @@ test("filterResolvedLinksLessonsByPublicMarketingIntegrity: invalid href parse =
       questions: [],
       blogs: [],
       cat: [],
+      hubs: [],
     },
   });
   assert.equal(resolved.lessons.length, 0);
@@ -91,6 +92,7 @@ test("filterResolvedLinksLessonsByPublicMarketingIntegrity: unknown slug => deta
       questions: [],
       blogs: [],
       cat: [],
+      hubs: [],
     },
   });
   assert.equal(resolved.lessons.length, 0);
@@ -117,6 +119,7 @@ test("filterResolvedLinksLessonsByPublicMarketingIntegrity: no pathway drops all
     questions: [],
     blogs: [],
     cat: [],
+    hubs: [],
   };
   const { resolved, excluded } = await filterResolvedLinksLessonsByPublicMarketingIntegrity({
     pathway: null,

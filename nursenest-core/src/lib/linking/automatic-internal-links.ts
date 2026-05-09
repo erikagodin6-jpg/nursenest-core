@@ -35,6 +35,7 @@ import {
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { buildEcgModuleHubLinkCandidate } from "@/lib/ecg-module/ecg-linked-learning";
 
 const MARKETING_BUILD_PHASE = "phase-production-build";
 
@@ -109,6 +110,7 @@ function mergeResolvedForSurface(
     questions: LinkCandidate[][];
     blogs: LinkCandidate[][];
     cat: LinkCandidate[][];
+    hubs: LinkCandidate[][];
   },
 ): ResolvedLinks {
   return {
@@ -117,6 +119,7 @@ function mergeResolvedForSurface(
     questions: mergeKindLists(surface, "question", parts.questions),
     blogs: mergeKindLists(surface, "blog", parts.blogs),
     cat: mergeKindLists(surface, "cat", parts.cat),
+    hubs: mergeKindLists(surface, "hub", parts.hubs),
   };
 }
 
@@ -550,6 +553,7 @@ export async function resolveAutomaticRelatedBundleForBlogPost(
     questions: [registry.questions, hubExtras.filter((c) => c.kind === "question")],
     blogs: [dbBlogs, registry.blogs],
     cat: [registry.cat, hubExtras.filter((c) => c.kind === "cat")],
+    hubs: [[]],
   });
 }
 
@@ -654,6 +658,7 @@ export async function resolveAutomaticRelatedBundleForPathwayLesson(input: {
   });
   const dbFlashOk = dbFlash.filter((c) => c.strength !== "weak");
   const hubExtras = pathwayHubCandidates(pathway);
+  const ecgHub = buildEcgModuleHubLinkCandidate({ pathway, lesson, locale });
   const dbLessonBlogs = await fetchRelatedBlogCandidatesForPathwayLesson({
     pathway,
     lesson,
@@ -667,6 +672,7 @@ export async function resolveAutomaticRelatedBundleForPathwayLesson(input: {
     questions: [registry.questions, hubExtras.filter((c) => c.kind === "question")],
     blogs: [dbLessonBlogs, registry.blogs],
     cat: [registry.cat, hubExtras.filter((c) => c.kind === "cat")],
+    hubs: [ecgHub ? [ecgHub] : []],
   });
 }
 
@@ -679,7 +685,8 @@ export function countHighConfidenceCandidates(resolved: ResolvedLinks): number {
     q(resolved.flashcards) +
     q(resolved.questions) +
     q(resolved.blogs) +
-    q(resolved.cat)
+    q(resolved.cat) +
+    q(resolved.hubs)
   );
 }
 
@@ -708,7 +715,7 @@ export function resolveAutomaticRelatedLinksForProgrammaticQuestionTopic(
 ): ResolvedLinks {
   const pathway = getExamPathwayById(def.primaryPathwayId);
   if (!pathway) {
-    return { lessons: [], flashcards: [], questions: [], blogs: [], cat: [] };
+    return { lessons: [], flashcards: [], questions: [], blogs: [], cat: [], hubs: [] };
   }
   const topicKey = normalizeTopicKey(def.slug.replace(/-/g, " ")) ?? normalizeTopicKey(def.slug) ?? undefined;
   const ctx: LinkContext = {
@@ -727,6 +734,7 @@ export function resolveAutomaticRelatedLinksForProgrammaticQuestionTopic(
     questions: [registry.questions, hubExtras.filter((c) => c.kind === "question")],
     blogs: [registry.blogs],
     cat: [registry.cat],
+    hubs: [[]],
   });
 }
 
@@ -737,6 +745,7 @@ export function flattenResolvedLinksForAdmin(resolved: ResolvedLinks): LinkCandi
     ...resolved.questions,
     ...resolved.blogs,
     ...resolved.cat,
+    ...resolved.hubs,
   ]).sort((a, b) => a.score - b.score);
 }
 

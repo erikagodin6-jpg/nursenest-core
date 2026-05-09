@@ -50,6 +50,11 @@ Use `/vibe-help` anytime for context-aware guidance on what to do next.
 - **`SM`** Squad Mode — Bring multiple agent personas into one session to collaborate and discuss *(Maestro)*
 
 <!-- vibe-flow:end -->
+
+## NurseNest ecosystem guardrails
+
+Treat NurseNest as **one** cohesive premium adaptive clinical learning ecosystem (shared shells, semantic tokens, canonical navigation, adaptive study loops — no isolated mini-apps). Full rules: `AGENTS.md` (Platform ecosystem guardrails) and `.cursor/rules/ecosystem-platform-guardrails.mdc`. Architecture: `docs/ecosystem-design-system-convergence.md`. Implementation placement + marketing + adaptive integration: `docs/planning/clinical-readiness-ecosystem-implementation-directive.md`. Future BLS/ACLS/PALS: `docs/planning/bls-acls-pals-emergency-readiness-pathways.md`. Ecosystem QA playbook: `docs/governance/ecosystem-qa-master-program.md`.
+
 ## TRUTHPACK-FIRST PROTOCOL (MANDATORY)
 
 ### BEFORE YOU WRITE A SINGLE LINE OF CODE, YOU MUST:

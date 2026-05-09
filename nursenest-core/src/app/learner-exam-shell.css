@@ -1,0 +1,94 @@
+/**
+ * Learner exam surfaces — one canonical shell (`ExamSessionShell` / `.nn-learner-exam-shell`);
+ * themes vary accent, gradients, and glow via semantic tokens + `[data-theme]`, not layout forks.
+ */
+
+.nn-exam-session.nn-learner-exam-shell[data-nn-exam-mode="cat"] {
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-exam-session.nn-learner-exam-shell[data-nn-exam-mode="cat"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.92;
+  background:
+    radial-gradient(
+      120% 90% at 50% -8%,
+      color-mix(in srgb, var(--semantic-chart-5) 11%, transparent) 0%,
+      transparent 52%
+    ),
+    radial-gradient(
+      95% 75% at 100% 105%,
+      color-mix(in srgb, var(--semantic-chart-2) 9%, transparent) 0%,
+      transparent 48%
+    ),
+    radial-gradient(
+      80% 60% at -5% 90%,
+      color-mix(in srgb, var(--semantic-panel-cool) 14%, transparent) 0%,
+      transparent 55%
+    );
+}
+
+.nn-exam-session.nn-learner-exam-shell[data-nn-exam-mode="practice"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.88;
+  background:
+    radial-gradient(
+      100% 85% at 12% 0%,
+      color-mix(in srgb, var(--semantic-panel-positive) 14%, transparent) 0%,
+      transparent 56%
+    ),
+    radial-gradient(
+      90% 70% at 96% 100%,
+      color-mix(in srgb, var(--semantic-chart-3) 10%, transparent) 0%,
+      transparent 52%
+    );
+}
+
+.nn-exam-session.nn-learner-exam-shell[data-nn-exam-mode="review"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.85;
+  background: radial-gradient(
+    120% 80% at 50% -10%,
+    color-mix(in srgb, var(--semantic-info) 10%, transparent) 0%,
+    transparent 58%
+  );
+}
+
+.nn-exam-session.nn-learner-exam-shell[data-nn-exam-mode] > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Mobile split: tighter stack when rationale uses bottom-sheet dock */
+@media (max-width: 1023px) {
+  .nn-practice-exam-runner--rationale-dock .nn-practice-exam-split {
+    gap: 0.5rem;
+  }
+}
+
+/* Practice session progress — multi-hue fill (not single brand bar) */
+.nn-practice-exam-progress__fill {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-3) 88%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-brand) 85%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-success) 82%, var(--semantic-text-primary))
+  );
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-surface) 40%, transparent) inset;
+}
