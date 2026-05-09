@@ -12,7 +12,7 @@ Generated: 2026-05-09 (automated workflow run)
 |------|--------|
 | **Baseline HEAD** (before docs commit) | `13597d6fd` |
 | **Docs commit SHA** | *(none — target report files were not present on disk)* |
-| **Status-file commit SHA** | *(see git log after optional status-only commit)* |
+| **Status-file commit SHA** | `a329f76be04c419ab42095f17dd440aceb256d60` (`a329f76be`) |
 
 ## Files targeted for first commit
 
