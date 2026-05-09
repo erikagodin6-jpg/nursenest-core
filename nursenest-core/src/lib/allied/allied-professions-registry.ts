@@ -160,7 +160,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     ],
     title: "Physical therapist assistant (PTA) exam prep | NurseNest",
     description:
-      "Therapeutic exercise, mobility, and safety judgment for PTA certification study. pathway-scoped allied lessons and practice.",
+      "Therapeutic exercise, mobility, and safety judgment for PTA certification study. Pathway-scoped allied lessons and practice.",
     h1: "Physical therapist assistant exam prep",
     examOverview: [
       "PTA exams blend kinesiology with scope and delegation. short study loops beat long cram sessions.",
@@ -297,7 +297,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
       "Laboratory reasoning, quality control, and safety edges for medical laboratory technology and MLS certification study. Allied-tier scoped.",
     h1: "Medical laboratory technology exam prep",
     examOverview: [
-      "Lab exams mix interpretation with pre-analytical and analytical control concepts. alternate reading with question blocks.",
+      "Lab exams mix interpretation with pre-analytical and analytical control concepts. Alternate reading with question blocks.",
       "Keep sessions bounded; accuracy matters more than marathon length.",
     ],
     features: [
@@ -306,6 +306,22 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
       "404 on unknown lessons instead of soft errors.",
     ],
     ctaLine: "Open paginated lessons and add questions when you are on an allied plan.",
+    roleHero: {
+      whatYouDo: [
+        "Run and validate assays with QC awareness—specimen integrity, calibration concepts, and delta-check judgment.",
+        "Translate numeric results into clinically meaningful flags while respecting your laboratory's protocols.",
+      ],
+      whereYouWork: [
+        "Hospital core labs, outpatient diagnostics, public-health screening, research support, and specialty reference labs.",
+        "Automation and manual methods vary by site; exams test reasoning across pre-analytical through post-analytical phases.",
+      ],
+      topSkills: [
+        "Hematology and chemistry correlation basics",
+        "Infection control and sharps safety",
+        "Documentation and critical-value escalation paths",
+        "Quality control troubleshooting mindset",
+      ],
+    },
   },
   {
     professionKey: "imaging",
@@ -347,18 +363,34 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     topicSlugsIn: ["patient-assessment", "vital-signs", "emergency-response", "infection-control", "human-physiology"],
     title: "Respiratory therapy (RRT) exam prep | NurseNest",
     description:
-      "Ventilation, gas exchange, and airway management for respiratory therapy certification prep. scoped to allied pathways and US context where applicable.",
+      "Ventilation, gas exchange, and airway management for respiratory therapy certification prep. Scoped to allied pathways and US context where applicable.",
     h1: "Respiratory therapy (RRT) exam prep",
     examOverview: [
-      "Respiratory certification items often test equipment logic, safety sequencing, and escalation. keep study loops short and repeatable.",
+      "Respiratory certification items often test equipment logic, safety sequencing, and escalation. Keep study loops short and repeatable.",
       "Use lessons to anchor protocols, then drill questions in the same topic cluster.",
     ],
     features: [
-      "Pathway-scoped content lists. no cross-tier leakage.",
+      "Pathway-scoped content lists. No cross-tier leakage.",
       "Paginated lesson hubs so pages stay fast as the library grows.",
       "Internal links from hub → profession → lessons → detail for clear crawling.",
     ],
     ctaLine: "Browse lessons below or return to the Allied hub to pick another discipline.",
+    roleHero: {
+      whatYouDo: [
+        "Optimize ventilation and oxygenation plans with protocol-aware adjustments—alarms, modes, and weaning judgment.",
+        "Educate patients on devices and therapies while coordinating with physicians and nurses during deteriorations.",
+      ],
+      whereYouWork: [
+        "ICUs, emergency departments, wards, sleep labs, pulmonary rehab, and home respiratory programs.",
+        "Equipment vendors and protocols differ by hospital; boards reward physiologic reasoning under pressure.",
+      ],
+      topSkills: [
+        "ABG interpretation tied to ventilation strategy",
+        "Airway adjuncts and secretion management",
+        "Infection prevention around ventilator circuits",
+        "Clear escalation when oxygen demand spikes",
+      ],
+    },
   },
   {
     professionKey: "paramedic",
@@ -376,18 +408,34 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     ],
     title: "Paramedic exam prep | Allied health | NurseNest",
     description:
-      "Protocol-first paramedic certification study: prioritization, airway, trauma, and scope-safe judgment. pathway-scoped lessons and practice aligned to allied tier content.",
+      "Protocol-first paramedic certification study: prioritization, airway, trauma, and scope-safe judgment. Pathway-scoped lessons and practice aligned to allied tier content.",
     h1: "Paramedic certification exam prep",
     examOverview: [
-      "Allied health exams reward rapid scene judgment, scope boundaries, and protocol sequencing. not isolated facts.",
+      "Allied health exams reward rapid scene judgment, scope boundaries, and protocol sequencing—not isolated facts.",
       "Use short lesson blocks, then return to pathway-scoped questions so feedback stays relevant to your authorization context.",
     ],
     features: [
-      "Lessons and items filtered to the allied subscription tier. no RN-only depth mixed in by mistake.",
+      "Lessons and items filtered to the allied subscription tier. No RN-only depth mixed in by mistake.",
       "Preview sections stay discoverable; full lesson depth follows your plan.",
       "Pair lessons with timed practice and rationales to rehearse decision speed.",
     ],
     ctaLine: "Start with the lesson list, then open the question bank on a matching plan.",
+    roleHero: {
+      whatYouDo: [
+        "Stabilize scenes with airway, breathing, circulation, and hemorrhage priorities—then transport or hand off with clear reports.",
+        "Apply pharmacology and interventions within scope, documenting timelines that hold up in QA and medical direction.",
+      ],
+      whereYouWork: [
+        "911 EMS, fire-based EMS, critical-care transport, industrial sites, and event medicine.",
+        "Protocols and medical oversight vary by region; exams stress integration under fatigue and noise.",
+      ],
+      topSkills: [
+        "Scene safety and dynamic risk scanning",
+        "12-lead acquisition hints and STEMI recognition patterns",
+        "Pediatric dosing hooks and weight-based judgment",
+        "Radio communication and refusal documentation",
+      ],
+    },
   },
   {
     professionKey: "pharmacy-tech",

@@ -23,6 +23,9 @@ const MED_CALC_LOCKED = new Set<string>([
   "ota",
 ]);
 
+/** Medication drill refreshers — weak fit where calculation/med-admin lanes are de-emphasized (same cohort as med calc). */
+const MEDICATION_DRILLS_LOCKED = MED_CALC_LOCKED;
+
 const PHARMACOLOGY_LOCKED = new Set<string>([
   "social-work",
   "psychotherapy",
@@ -58,6 +61,8 @@ function shouldLockModule(professionKey: string, moduleKey: PremiumStudyToolKey)
       return LAB_DIAGNOSTICS_LOCKED.has(professionKey);
     case "med_calc":
       return MED_CALC_LOCKED.has(professionKey);
+    case "skills_refresher":
+      return MEDICATION_DRILLS_LOCKED.has(professionKey);
     case "pharmacology":
       return PHARMACOLOGY_LOCKED.has(professionKey);
     default:

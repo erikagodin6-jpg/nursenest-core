@@ -78,6 +78,7 @@ export function AlliedHealthPathwayHub({
   initialMeasurementPreference = null,
   syncMeasurementPreferenceToProfile = false,
   viewerSignedIn = false,
+  ecgModulePublic,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
@@ -91,6 +92,8 @@ export function AlliedHealthPathwayHub({
   /** When true and the viewer is signed in, unit toggle PATCHes `/api/learner/personal-profile` (cookie/localStorage still apply for guests). */
   syncMeasurementPreferenceToProfile?: boolean;
   viewerSignedIn?: boolean;
+  /** Passed through to premium modules (allied hubs omit ECG tiles; safe no-op). */
+  ecgModulePublic?: boolean;
 }) {
   const isGlobalAlliedHub = hubPath === buildAlliedGlobalHubPath();
   const countryLine = isGlobalAlliedHub ? "Global" : pathway.countrySlug === "canada" ? "Canada" : "United States";
@@ -177,13 +180,12 @@ export function AlliedHealthPathwayHub({
             {heroBody}
           </p>
           <div className="mt-7 flex min-w-0 flex-wrap gap-3">
-          <Link
-            href={pricingHref}
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-brand-contrast)] shadow-md transition hover:opacity-95"
-          >
-            View Plans and Pricing
-          </Link>
-          <>
+            <Link
+              href={pricingHref}
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-brand-contrast)] shadow-md transition hover:opacity-95"
+            >
+              View Plans and Pricing
+            </Link>
             <Link
               href={profession ? ALLIED_GLOBAL_HUB_PATH : `${ALLIED_GLOBAL_HUB_PATH}#allied-occupation-tracks`}
               className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
@@ -198,8 +200,7 @@ export function AlliedHealthPathwayHub({
                 {profession ? "Lessons for This Track" : "Browse Lessons Hub"}
               </Link>
             ) : null}
-          </>
-        </div>
+          </div>
         {isGlobalAlliedHub || occupationPickerOnly ? (
           <div className="mt-6 max-w-sm">
             <MeasurementSystemToggle
@@ -478,15 +479,13 @@ export function AlliedHealthPathwayHub({
                       >
                         Open study hub
                       </Link>
-                      <>
-                        <span className="text-[var(--semantic-text-secondary)]">·</span>
-                        <Link
-                          href={scopedLessons}
-                          className="text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
-                        >
-                          Lessons for this track
-                        </Link>
-                      </>
+                      <span className="text-[var(--semantic-text-secondary)]">·</span>
+                      <Link
+                        href={scopedLessons}
+                        className="text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
+                      >
+                        Lessons for this track
+                      </Link>
                     </div>
                   </article>
                 </li>
@@ -571,6 +570,7 @@ export function AlliedHealthPathwayHub({
           pathway={pathway}
           isSignedIn={viewerSignedIn}
           alliedProfessionKey={profKey || null}
+          ecgModulePublic={ecgModulePublic}
         />
       ) : null}
 
@@ -580,8 +580,8 @@ export function AlliedHealthPathwayHub({
             Specialized modules
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-            Modules only appear here when their public routes are enabled. Hidden or admin-preview-only surfaces stay out of the
-            marketing hub.
+            Modules only appear here when their public routes are enabled for this occupation. Surfaces that are not yet
+            launched for allied learners are omitted from this list.
           </p>
           <ul className="mt-6 grid gap-4 md:grid-cols-2">
             {overview.moduleCards.map((card) => (
