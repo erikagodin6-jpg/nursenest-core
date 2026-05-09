@@ -47,7 +47,7 @@ Record **exit code** for each.
 - `reports/longtail-patho-pharm-topic-inventory.csv` (300 data rows + header; **unique slugs** verified at generation)
 - `reports/longtail-patho-pharm-topic-inventory.md` (index / instructions — CSV is canonical machine table)
 
-**Git commit (blog smoke spec):** `e39c043071025b81b2b9a52a2b3c7ee888eaf9e1` — follow-up commit should add plan + CSV + `playwright.blog-smoke.config.ts` if not yet on branch.
+**Git commits:** inventory + publishing refresh `08ce97e68102918385d424b6e133d6b7f27e68e0`; blog smoke spec earlier `e39c043071025b81b2b9a52a2b3c7ee888eaf9e1`. See `git log -- reports/longtail*` for full history.
 
 **Sample URLs (code-stable patterns, not implying posts exist):**
 
