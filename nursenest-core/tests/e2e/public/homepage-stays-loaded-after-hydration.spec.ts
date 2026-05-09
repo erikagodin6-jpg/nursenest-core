@@ -23,7 +23,7 @@ test.beforeEach(async ({ context }) => {
 test.describe("Homepage stays loaded after hydration", () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
-  test("no crash UI after 5s; NurseNest + chrome visible; no pageerror", async ({
+  test("no crash UI after 10s; NurseNest + chrome visible; no pageerror", async ({
     page,
   }, testInfo) => {
     const pageErrors: string[] = [];
@@ -43,7 +43,7 @@ test.describe("Homepage stays loaded after hydration", () => {
 
     await page.goto("/", { waitUntil: "load", timeout: 120_000 });
 
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(10_000);
 
     expect(
       badStaticChunks,
@@ -74,7 +74,7 @@ test.describe("Homepage stays loaded after hydration", () => {
     expect(pageErrors, `Uncaught page errors: ${pageErrors.join(" | ")}`).toEqual([]);
 
     await page.screenshot({
-      path: testInfo.outputPath("homepage-after-5s.png"),
+      path: testInfo.outputPath("homepage-after-10s.png"),
       fullPage: false,
     });
   });
