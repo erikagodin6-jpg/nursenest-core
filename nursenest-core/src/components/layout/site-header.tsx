@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from "react";
@@ -71,9 +70,9 @@ const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-lg border border-transparent px-2.5 text-center font-medium leading-[1.2] tracking-normal transition-colors sm:px-3";
 const HEADER_SECONDARY_ACTION_CLASS =
   "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
-/** Guest marketing header: match primary CTA horizontal padding for consistent pill width. */
-const HEADER_GUEST_SECONDARY_ACTION_CLASS =
-  "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+/** Desktop guest Log In — secondary outline; same min-height, radius, and padding rhythm as Start Free. */
+const HEADER_DESKTOP_LOGIN_OUTLINE_CLASS =
+  "nav-item inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl border border-[var(--nav-border)] bg-transparent px-4 py-2 text-sm font-medium text-[var(--nav-fg)] shadow-none transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type HeaderResumeCta = { href: string; label: string } | null;
 type HeaderNavLink = { key: string; href: string; label: string; matchBase: string };
@@ -675,7 +674,16 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               ))}
             </nav>
 
-            <div className="nn-header-desktop-auth-cluster relative z-[130] flex shrink-0 items-center justify-end gap-2 xl:gap-2">
+            <div className="nn-header-desktop-auth-cluster relative z-[130] flex min-w-0 max-w-full shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1.5 xl:gap-x-2">
+              <div
+                data-nn-header-band="utility"
+                className="nn-header-desktop-marketing-utility-cluster flex min-w-0 max-w-full shrink items-center"
+              >
+                <MarketingHeaderUtilityCluster
+                  chromeMode={isLightTheme ? "row4" : "dark-marketing"}
+                  includeUnpublishedRegions={isAdminAuthenticated}
+                />
+              </div>
               {isSessionPending ? (
                 <div className="flex shrink-0 items-center gap-2" aria-busy="true" aria-label={t("nav.logIn")}>
                   <div className="h-10 w-20 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />
@@ -685,7 +693,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                    className={`${HEADER_GUEST_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}
+                    className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Log in to your NurseNest account"
                   >
