@@ -46,7 +46,7 @@ export const THEME_OPTIONS: ThemeOption[] = [
   {
     id: "blossom",
     label: "Blossom",
-    color: "#E75480",
+    color: "#C96176",
     swatchSecondary: "#3A86FF",
     swatchAccent: "#FFD166",
     group: "light",
@@ -160,10 +160,10 @@ export const THEME_STORAGE_KEY = "nursenest-theme";
  * Public marketing chrome (site header, utility strip, mobile marketing drawers) exposes only
  * approved palettes; `[data-theme="…"]` definitions and learner/account theme pickers stay full-fidelity.
  *
- * Public marketing exposes a **small** approved set so learners can switch atmosphere (e.g. Ocean vs Midnight)
+ * Public marketing exposes a **small** approved set so learners can switch atmosphere (Ocean, Midnight, Blossom)
  * without exposing the full legacy theme list.
  */
-export const PUBLIC_MARKETING_THEME_ALLOWLIST = [NURSENEST_DEFAULT_THEME, "midnight"] as const;
+export const PUBLIC_MARKETING_THEME_ALLOWLIST = [NURSENEST_DEFAULT_THEME, "midnight", "blossom"] as const;
 
 export function themeOptionsForPublicMarketingPicker(all: ThemeOption[] = THEME_OPTIONS): ThemeOption[] {
   const allow = new Set(PUBLIC_MARKETING_THEME_ALLOWLIST);

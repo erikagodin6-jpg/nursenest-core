@@ -42,6 +42,7 @@ export function PricingConversionClarity() {
     "pages.pricing.conversionClarity.notIncluded1",
     "pages.pricing.conversionClarity.notIncluded2",
     "pages.pricing.conversionClarity.notIncluded3",
+    "pages.pricing.conversionClarity.notIncluded4",
   ] as const;
 
   const reassurance = [

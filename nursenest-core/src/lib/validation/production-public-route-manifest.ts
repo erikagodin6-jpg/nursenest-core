@@ -59,7 +59,7 @@ export function getProductionSmokePublicPaths(): readonly string[] {
  * Keeps deploy gate aligned with real shipped copy — update when product copy intentionally changes.
  */
 export const PRODUCTION_ROUTE_HTML_SUBSTRING_ASSERTIONS: Readonly<Record<string, readonly string[]>> = {
-  "/": ["Canada-First Nursing Exam Prep"],
+  "/": ["Global study platform"],
   "/pricing": ["Continue to checkout"],
   "/blog": ["NurseNest"],
   "/faq": ["FAQ"],

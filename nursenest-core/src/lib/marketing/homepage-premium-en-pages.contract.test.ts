@@ -7,13 +7,15 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
 
+import { HOMEPAGE_PREMIUM_ECG_PAGES_KEYS } from "@/lib/marketing/homepage-premium-ecg-pages-keys";
+
 const PAGES_JSON = path.resolve(process.cwd(), "public/i18n/en/pages.json");
 
 const REQUIRED_KEYS: Record<string, string> = {
-  "pages.home.hero.eyebrow": "Canada-first nursing exam prep",
+  "pages.home.hero.eyebrow": "Global study platform · Canada-first exam depth",
   "pages.home.hero.headlinePremium": "Pass the boards with a calm, clinical study plan.",
   "pages.home.hero.subheadingPremium":
-    "Study with lessons, flashcards, rationales, and readiness tools built for RN, RPN, NP, and allied health learners.",
+    "Study with lessons, flashcards, rationales, and readiness tools built for RN, RPN, NP, and allied health learners worldwide.",
   "pages.home.hero.premiumPrimaryCta": "Start free",
   "pages.home.hero.premiumSecondaryCta": "View pricing",
   "pages.home.hero.panel.live": "Live readiness preview",
@@ -22,6 +24,7 @@ const REQUIRED_KEYS: Record<string, string> = {
   "pages.home.hero.panel.masteredLabel": "Mastered topics",
   "pages.home.hero.panel.ecgLabel": "ECG practice",
   "pages.home.premium.readiness.dashboardCta": "Open dashboard",
+  ...HOMEPAGE_PREMIUM_ECG_PAGES_KEYS,
 };
 
 const FORBIDDEN_SUBSTRINGS = ["placeholder", "headline premium", "subheading premium", "readiness label"] as const;

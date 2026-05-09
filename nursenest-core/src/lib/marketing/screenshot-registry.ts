@@ -15,6 +15,11 @@
  * Do NOT hardcode CDN URLs in individual components.
  * Do NOT inline base64 images.
  * Add new screenshots here when uploaded to Spaces.
+ *
+ * Governance:
+ *   - Contract tests: `src/lib/marketing/screenshot-registry.contract.test.ts` (also in `npm run test:homepage`).
+ *   - Refresh playbook + inventory: `reports/premium-marketing-screenshot-refresh.md`.
+ *   - After replacing CDN PNGs, update labels/descriptions to match current UI; verify OG image in `src/app/layout.tsx`.
  */
 
 // ── CDN base (matches HOME_HERO_CDN_BASE_URL in config/home-hero-carousel.ts) ──

@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Pricing page sections: value communication, trust, features, and CTAs.
  *
@@ -15,6 +17,7 @@
 
 import Link from "next/link";
 import type { ComponentType } from "react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import {
   BarChart3,
   BookOpen,
@@ -96,59 +99,31 @@ export function ValuePropsStrip() {
 
 // ── Section 6: What You Get (Features Grid) ─────────────────────────────────
 
-const FEATURES = [
-  {
-    icon: Layers,
-    title: "Unlimited Clinical Decision Questions",
-    desc: "Thousands of judgment-heavy items with rationales that teach safe prioritization at the bedside",
-    accent: "var(--palette-primary)",
-  },
-  {
-    icon: Eye,
-    title: "Strengthen Weak Areas",
-    desc: "Questions grouped by urgency so you close the gaps that matter most for exams and real shifts",
-    accent: "var(--semantic-warning)",
-  },
-  {
-    icon: Target,
-    title: "Adaptive Study Plan",
-    desc: "A personalized daily plan built from your readiness score, weak areas, and clinical performance signals",
-    accent: "var(--semantic-info)",
-  },
-  {
-    icon: TrendingUp,
-    title: "Clinical Readiness Score",
-    desc: "Know where you stand on a 0 to 100 scale before your exam — and what still needs bedside-level judgment",
-    accent: "var(--semantic-success)",
-  },
-  {
-    icon: ClipboardCheck,
-    title: "Adaptive NCLEX Simulation",
-    desc: "Timed, adaptive sessions that adjust difficulty in real time like the real exam",
-    accent: "var(--palette-primary)",
-  },
-  {
-    icon: BarChart3,
-    title: "Clinical Performance Tracking",
-    desc: "Confidence patterns, accuracy trends, and review recommendations focused on safe practice",
-    accent: "var(--semantic-info)",
-  },
+const FEATURE_GRID_META = [
+  { icon: Layers, titleKey: "pages.pricing.featuresGrid.f1.title", bodyKey: "pages.pricing.featuresGrid.f1.body", accent: "var(--palette-primary)" },
+  { icon: Eye, titleKey: "pages.pricing.featuresGrid.f2.title", bodyKey: "pages.pricing.featuresGrid.f2.body", accent: "var(--semantic-warning)" },
+  { icon: Target, titleKey: "pages.pricing.featuresGrid.f3.title", bodyKey: "pages.pricing.featuresGrid.f3.body", accent: "var(--semantic-info)" },
+  { icon: TrendingUp, titleKey: "pages.pricing.featuresGrid.f4.title", bodyKey: "pages.pricing.featuresGrid.f4.body", accent: "var(--semantic-success)" },
+  { icon: ClipboardCheck, titleKey: "pages.pricing.featuresGrid.f5.title", bodyKey: "pages.pricing.featuresGrid.f5.body", accent: "var(--palette-primary)" },
+  { icon: BarChart3, titleKey: "pages.pricing.featuresGrid.f6.title", bodyKey: "pages.pricing.featuresGrid.f6.body", accent: "var(--semantic-info)" },
 ] as const;
 
 export function PricingFeaturesGrid() {
+  const { t } = useMarketingI18n();
+
   return (
-    <section aria-labelledby="features-heading">
+    <section aria-labelledby="features-heading" data-testid="section-pricing-features-grid">
       <FadeUp className="mb-8 text-center">
         <h2 id="features-heading" className="nn-marketing-h2">
-          Built for the exam. Designed for real-life nursing.
+          {t("pages.pricing.featuresGrid.title")}
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
-          Every plan includes clinical decision practice, mastery lessons, adaptive simulation, and early-career support cues
+          {t("pages.pricing.featuresGrid.subtitle")}
         </p>
       </FadeUp>
       <StaggerGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" staggerMs={65} whenInView once>
-        {FEATURES.map((f) => (
-          <StaggerItem key={f.title} variant="softReveal">
+        {FEATURE_GRID_META.map((f) => (
+          <StaggerItem key={f.titleKey} variant="softReveal">
             <div
               className="nn-elevation-panel nn-motion-standard flex h-full flex-col gap-4 rounded-2xl p-7"
               style={{
@@ -165,9 +140,9 @@ export function PricingFeaturesGrid() {
               >
                 <f.icon className="h-5 w-5" style={{ color: f.accent }} aria-hidden />
               </div>
-              <h3 className="nn-marketing-h4">{f.title}</h3>
+              <h3 className="nn-marketing-h4">{t(f.titleKey)}</h3>
               <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
-                {f.desc}
+                {t(f.bodyKey)}
               </p>
             </div>
           </StaggerItem>
@@ -263,52 +238,51 @@ export function AlliedHealthClarity() {
 
 // ── Feature Comparison Table ────────────────────────────────────────────────
 
-const COMPARISON_ROWS: {
-  feature: string;
-  free: { label: string; indicator: "partial" | "none" };
-  premium: string;
-}[] = [
+/** Marketing compare rows — canonical strings live in `pages.pricing.compare.row.*` (pathway-safe). */
+const COMPARE_ROW_KEYS = [
   {
-    feature: "Adaptive Study Plan",
-    free: { label: "Day 1 preview only", indicator: "partial" },
-    premium: "Full personalized plan with lesson and practice links",
+    label: "pages.pricing.compare.row.sample.label",
+    free: "pages.pricing.compare.row.sample.free",
+    paid: "pages.pricing.compare.row.sample.paid",
+    partialFree: true,
   },
   {
-    feature: "Strengthen Weak Areas",
-    free: { label: "High Priority Fixes only", indicator: "partial" },
-    premium: "All 4 groups with filters and lesson links",
+    label: "pages.pricing.compare.row.lessons.label",
+    free: "pages.pricing.compare.row.lessons.free",
+    paid: "pages.pricing.compare.row.lessons.paid",
+    partialFree: true,
   },
   {
-    feature: "Confidence Analytics",
-    free: { label: "Summary strip only", indicator: "partial" },
-    premium: "Full patterns, focus areas, and review priority",
+    label: "pages.pricing.compare.row.rationale.label",
+    free: "pages.pricing.compare.row.rationale.free",
+    paid: "pages.pricing.compare.row.rationale.paid",
+    partialFree: true,
   },
   {
-    feature: "Adaptive NCLEX Simulation",
-    free: { label: "Limited access", indicator: "partial" },
-    premium: "Unlimited sessions with full readiness reporting",
+    label: "pages.pricing.compare.row.cat.label",
+    free: "pages.pricing.compare.row.cat.free",
+    paid: "pages.pricing.compare.row.cat.paid",
+    partialFree: true,
   },
   {
-    feature: "Practice Sessions",
-    free: { label: "Limited", indicator: "partial" },
-    premium: "Unlimited targeted and mixed practice",
+    label: "pages.pricing.compare.row.analytics.label",
+    free: "pages.pricing.compare.row.analytics.free",
+    paid: "pages.pricing.compare.row.analytics.paid",
+    partialFree: true,
   },
-  {
-    feature: "Retest Strategy",
-    free: { label: "Not included", indicator: "none" },
-    premium: "Personalized retest timing and readiness guidance",
-  },
-];
+] as const;
 
 export function FeatureComparisonTable() {
+  const { t } = useMarketingI18n();
+
   return (
-    <section aria-labelledby="real-compare-heading">
+    <section aria-labelledby="real-compare-heading" data-testid="section-pricing-feature-compare">
       <FadeUp className="mb-6 text-center">
         <h2 id="real-compare-heading" className="nn-marketing-h2">
-          What Changes When You Unlock Premium
+          {t("pages.pricing.compare.unlockPremium.title")}
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
-          Every feature below is built into the platform. See exactly what you get with full access.
+          {t("pages.pricing.compare.unlockPremium.lead")}
         </p>
       </FadeUp>
 
@@ -325,45 +299,45 @@ export function FeatureComparisonTable() {
               }}
             >
               <th scope="col" className="px-4 py-3.5 font-semibold" style={{ color: TEXT_PRIMARY }}>
-                Feature
+                {t("pages.pricing.compare.colFeature")}
               </th>
               <th scope="col" className="px-4 py-3.5 font-semibold" style={{ color: TEXT_MUTED }}>
-                Free
+                {t("pages.pricing.compare.colFree")}
               </th>
               <th
                 scope="col"
                 className="px-4 py-3.5 font-semibold"
                 style={{ color: "var(--palette-primary)" }}
               >
-                Premium
+                {t("pages.pricing.compare.colPaid")}
               </th>
             </tr>
           </thead>
           <tbody>
-            {COMPARISON_ROWS.map((row, i) => (
+            {COMPARE_ROW_KEYS.map((row, i) => (
               <tr
-                key={row.feature}
+                key={row.label}
                 style={{
-                  borderBottom: i < COMPARISON_ROWS.length - 1 ? `1px solid ${BORDER}` : "none",
+                  borderBottom: i < COMPARE_ROW_KEYS.length - 1 ? `1px solid ${BORDER}` : "none",
                 }}
               >
                 <th scope="row" className="px-4 py-3.5 align-top font-semibold" style={{ color: TEXT_PRIMARY }}>
-                  {row.feature}
+                  {t(row.label)}
                 </th>
                 <td className="px-4 py-3.5 align-top" style={{ color: TEXT_MUTED }}>
                   <span className="flex gap-2">
-                    {row.free.indicator === "partial" ? (
+                    {row.partialFree ? (
                       <Sparkles className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--semantic-info)" }} aria-hidden />
                     ) : (
                       <Lock className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--semantic-warning)" }} aria-hidden />
                     )}
-                    <span>{row.free.label}</span>
+                    <span>{t(row.free)}</span>
                   </span>
                 </td>
                 <td className="px-4 py-3.5 align-top" style={{ color: TEXT_SECONDARY }}>
                   <span className="flex gap-2">
                     <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--semantic-success)" }} aria-hidden />
-                    <span>{row.premium}</span>
+                    <span>{t(row.paid)}</span>
                   </span>
                 </td>
               </tr>

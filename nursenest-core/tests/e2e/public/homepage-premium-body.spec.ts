@@ -4,6 +4,7 @@ const SECTION_IDS = [
   "section-premium-pathway-showcase",
   "section-premium-clinical-depth",
   "section-premium-study-ecosystem",
+  "section-premium-home-ecg",
   "section-premium-readiness-preview",
   "section-premium-homepage-trust",
   "section-premium-homepage-final-cta",

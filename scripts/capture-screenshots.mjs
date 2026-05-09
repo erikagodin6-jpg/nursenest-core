@@ -69,7 +69,9 @@ const VIEWPORTS = {
 //   waitFor     — optional CSS selector to wait for before capturing
 //   notes       — context for the person running captures
 //
-// Add new targets here when new product surfaces need screenshots.
+// Add new targets when new surfaces need screenshots (includes home mobile,
+// practice-tests hub, flashcards, report card, OSCE — map PNGs editorially to
+// screenshot1..15.png on CDN).
 // Keep outputPath naming consistent with the Spaces key convention:
 //   screenshots/{category}/{slug}-{viewport}.png
 
@@ -106,6 +108,15 @@ const CAPTURE_TARGETS = [
     viewport: "desktop",
     requiresAuth: false,
   },
+  {
+    id: "home-mobile",
+    route: "/",
+    outputPath: "screenshots/home/home-mobile.png",
+    viewport: "mobile",
+    requiresAuth: false,
+    notes:
+      "Marketing homepage mobile — scroll review for PremiumHomepageEcg + hero; full-page crop optional in image editor.",
+  },
 
   // ── Product / authenticated ────────────────────────────────────────────────
 
@@ -135,6 +146,16 @@ const CAPTURE_TARGETS = [
     requiresAuth: true,
     waitFor: "[data-testid='question-list'], main",
     notes: "Question bank browse/filter view",
+  },
+
+  {
+    id: "practice-tests-hub-desktop",
+    route: "/app/practice-tests",
+    outputPath: "screenshots/practice-tests/practice-tests-hub-desktop.png",
+    viewport: "desktop",
+    requiresAuth: true,
+    waitFor: "main",
+    notes: "Practice tests / CAT launch hub — learner overview",
   },
 
   {
@@ -207,6 +228,34 @@ const CAPTURE_TARGETS = [
   },
 
   {
+    id: "report-card-desktop",
+    route: "/app/account/report",
+    outputPath: "screenshots/reports/report-card-desktop.png",
+    viewport: "desktop",
+    requiresAuth: true,
+    waitFor: "main",
+    notes: "Topic report card / accuracy — maps registry “reports” marketing shots",
+  },
+
+  {
+    id: "flashcards-desktop",
+    route: "/app/flashcards",
+    outputPath: "screenshots/flashcards/flashcards-hub-desktop.png",
+    viewport: "desktop",
+    requiresAuth: true,
+    waitFor: "main",
+    notes: "Flashcard hub / deck overview",
+  },
+  {
+    id: "flashcards-mobile",
+    route: "/app/flashcards",
+    outputPath: "screenshots/flashcards/flashcards-hub-mobile.png",
+    viewport: "mobile",
+    requiresAuth: true,
+    waitFor: "main",
+  },
+
+  {
     id: "lessons-hub-desktop",
     route: "/app/lessons",
     outputPath: "screenshots/lessons/lesson-library-desktop.png",
@@ -214,6 +263,36 @@ const CAPTURE_TARGETS = [
     requiresAuth: true,
     waitFor: "[data-testid='lessons-hub'], main",
     notes: "Lesson library browse view",
+  },
+
+  {
+    id: "labs-hub-desktop",
+    route: "/app/labs",
+    outputPath: "screenshots/labs/labs-hub-desktop.png",
+    viewport: "desktop",
+    requiresAuth: true,
+    waitFor: "main",
+    notes: "Clinical lab values hub — requires demo learner with labs access for best fidelity",
+  },
+
+  {
+    id: "med-calculations-hub-desktop",
+    route: "/app/med-calculations",
+    outputPath: "screenshots/med-calculations/med-calculations-hub-desktop.png",
+    viewport: "desktop",
+    requiresAuth: true,
+    waitFor: "main",
+    notes: "Medication dosage / med math hub",
+  },
+
+  {
+    id: "osce-desktop",
+    route: "/app/osce",
+    outputPath: "screenshots/osce/osce-hub-desktop.png",
+    viewport: "desktop",
+    requiresAuth: true,
+    waitFor: "main",
+    notes: "OSCE hub — empty/paywalled states possible; retake when entitlements match marketing story",
   },
 ];
 

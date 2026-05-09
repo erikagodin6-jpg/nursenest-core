@@ -251,7 +251,7 @@ export function PremiumHomepageHero(props: {
   // Premium hero copy. Headline + sub use NEW i18n keys so existing
   // translations of `pages.home.hero.headline` are not silently changed.
   const eyebrow = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.eyebrow", "Canada-first nursing exam prep"),
+    safeHomepageMarketingT(t, "pages.home.hero.eyebrow", "Global study platform · Canada-first exam depth"),
     locale,
   );
   const headline = formatSentenceCase(
@@ -266,7 +266,7 @@ export function PremiumHomepageHero(props: {
     safeHomepageMarketingT(
       t,
       "pages.home.hero.subheadingPremium",
-      "Study with lessons, flashcards, rationales, and readiness tools built for RN, RPN, NP, and allied health learners.",
+      "Study with lessons, flashcards, rationales, and readiness tools built for RN, RPN, NP, and allied health learners worldwide.",
     ),
     locale,
   );

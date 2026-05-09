@@ -4,7 +4,7 @@
  */
 import { expect, test } from "@playwright/test";
 import { dismissMarketingScrims } from "../helpers/marketing-navigation-audit";
-import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
+import { themeOptionsForPublicMarketingPicker } from "@/lib/theme/theme-registry";
 
 const SELECTOR_DISMISSED_LS = "nn_selector_dismissed";
 
@@ -33,7 +33,7 @@ test.describe("Marketing theme chrome (public)", () => {
 
     const samples: { id: string; navBg: string; pageBg: string }[] = [];
 
-    for (const opt of THEME_OPTIONS) {
+    for (const opt of themeOptionsForPublicMarketingPicker()) {
       await themeButton.click();
       await page.getByRole("option", { name: opt.label }).click();
       await page.waitForTimeout(150);
@@ -59,9 +59,9 @@ test.describe("Marketing theme chrome (public)", () => {
     }
 
     const ocean = samples.find((s) => s.id === "ocean");
-    const dark = samples.find((s) => s.id === "dark-clinical");
-    expect(ocean && dark, "sanity: sampled ocean + dark-clinical").toBeTruthy();
-    const paletteDiffers = ocean!.navBg !== dark!.navBg || ocean!.pageBg !== dark!.pageBg;
+    const midnight = samples.find((s) => s.id === "midnight");
+    expect(ocean && midnight, "sanity: sampled ocean + midnight").toBeTruthy();
+    const paletteDiffers = ocean!.navBg !== midnight!.navBg || ocean!.pageBg !== midnight!.pageBg;
     expect(paletteDiffers).toBe(true);
   });
 
@@ -70,10 +70,10 @@ test.describe("Marketing theme chrome (public)", () => {
     await dismissMarketingScrims(page);
     await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({ timeout: 60_000 });
 
-    const sample = ["ocean", "dark-clinical", "blossom"] as const;
+    const sample = ["ocean", "midnight", "blossom"] as const;
     const themeButton = page.getByRole("button", { name: /theme/i }).first();
     for (const id of sample) {
-      const opt = THEME_OPTIONS.find((o) => o.id === id);
+      const opt = themeOptionsForPublicMarketingPicker().find((o) => o.id === id);
       if (!opt) throw new Error(`missing theme ${id}`);
       await themeButton.click();
       await page.getByRole("option", { name: opt.label }).click();

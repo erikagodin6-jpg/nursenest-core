@@ -120,7 +120,7 @@ export function defaultFlashcardsMetaDescription(region: MarketingRegionToggle):
 export function defaultHomeMetaTitle(region: MarketingRegionToggle): string {
   return region === "US"
     ? "NurseNest | US NCLEX-RN, NCLEX-PN (LPN/LVN), NP & allied exam prep"
-    : "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health";
+    : "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health";
 }
 
 export function defaultHomeMetaDescription(region: MarketingRegionToggle): string {

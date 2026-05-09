@@ -1494,20 +1494,21 @@
 /* ── Premium clinical palettes (Blossom, Midnight, Ocean, Forest) ── */
 
 [data-theme="blossom"] {
-  --theme-primary: #e75480;
+  /* Pastel rose / coral — optimistic, no hot pink / fuchsia / magenta */
+  --theme-primary: #c96176;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: #3a86ff;
   --theme-secondary-foreground: #1e3a8a;
   --theme-accent: #ffd166;
   --theme-accent-foreground: #7c5a12;
   --theme-border: #e5e7eb;
-  --theme-ring: #d9436a;
+  --theme-ring: #a84356;
   --theme-page-bg: #f8fafc;
-  --theme-heading-text: #1f2937;
-  --theme-body-text: #4b5563;
-  --theme-muted-text: #6b7280;
+  --theme-heading-text: #1c1917;
+  --theme-body-text: #44403c;
+  --theme-muted-text: #57534e;
 
-  --lesson-summary: #fce4ec;
+  --lesson-summary: #fce8ec;
   --lesson-key-concepts: #eaf2ff;
   --lesson-signs-symptoms: #fff0f3;
   --lesson-assessment: #e6f4ea;
@@ -1525,20 +1526,20 @@
   --state-info: #eaf2ff;
   --state-danger-soft: #fde8ec;
 
-  --logo-primary: #e75480;
+  --logo-primary: #b85468;
   --logo-accent: #3a86ff;
-  --logo-text: #1f2937;
-  --theme-brand-accent: #e75480;
-  --theme-brand-strong: #D9436A;
-  --theme-nav-background: #D9436A;
-  --theme-nav-foreground: #FFFFFF;
+  --logo-text: #1c1917;
+  --theme-brand-accent: #c96176;
+  --theme-brand-strong: #9d3f52;
+  --theme-nav-background: #a84356;
+  --theme-nav-foreground: #ffffff;
   --theme-nav-hover: rgba(255, 255, 255, 0.16);
-  --theme-nav-hover-foreground: #FFFFFF;
-  --theme-header-top-bg: #D9436A;
-  --theme-header-main-bg: #D9436A;
-  --theme-header-secondary-bg: #FFFFFF;
+  --theme-nav-hover-foreground: #ffffff;
+  --theme-header-top-bg: #a84356;
+  --theme-header-main-bg: #a84356;
+  --theme-header-secondary-bg: #ffffff;
   --theme-header-secondary-fg: #111827;
-  --theme-header-divider: rgba(217, 67, 106, 0.24);
+  --theme-header-divider: rgba(168, 67, 86, 0.28);
 }
 
 [data-theme="sunset"] {

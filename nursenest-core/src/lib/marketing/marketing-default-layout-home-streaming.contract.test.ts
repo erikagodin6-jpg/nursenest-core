@@ -70,7 +70,9 @@ test("optional: homepage HTML has hero before footer marketing copy", async (t) 
   const hero = html.indexOf("home-conversion-hero-heading");
   const footer = html.indexOf("Supporting Nurses Globally");
   const globalOverview = html.indexOf("Global marketing overview");
-  const globalHeadline = html.indexOf("Canada-First Nursing Exam Prep, Built for Nurses Worldwide");
+  const globalHeadline = html.indexOf(
+    "Global Nursing Exam Prep with Canada-First Depth — Built for Nurses Worldwide",
+  );
   assert.ok(hero !== -1, "expected home hero heading in HTML");
   assert.ok(footer !== -1, "expected footer copy in HTML");
   assert.ok(hero < footer, `hero should appear before footer in HTML (hero@${hero} footer@${footer})`);

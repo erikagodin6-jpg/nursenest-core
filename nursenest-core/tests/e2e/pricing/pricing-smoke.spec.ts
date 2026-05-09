@@ -36,9 +36,12 @@ test.describe("Pricing page", () => {
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
     await expect(page.getByTestId("pricing-marketing-hero")).toBeVisible();
     await expect(page.locator("#pricing-plans-heading")).toBeVisible();
-    await expect(page.getByRole("button", { name: /RN|Registered Nurse/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: /RN\s*\/\s*NCLEX-RN/i })).toBeVisible();
     await expect(page.locator("article.nn-pricing-plan-card").first()).toBeVisible();
     await expect(page.getByTestId("section-pricing-learner-faq")).toBeVisible();
+    await expect(page.getByTestId("section-pricing-subscription-faq")).toBeVisible();
+    await expect(page.getByTestId("section-pricing-ecg-clarity")).toBeVisible();
+    await expect(page.getByTestId("section-pricing-clinical-readiness")).toBeVisible();
 
     const firstFaq = page.getByTestId("section-pricing-learner-faq").locator("details").first();
     await firstFaq.locator("summary").click();

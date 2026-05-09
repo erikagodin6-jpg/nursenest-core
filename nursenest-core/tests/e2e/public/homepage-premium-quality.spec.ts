@@ -26,6 +26,8 @@ test.describe("Homepage premium quality", () => {
     if ((await stats.count()) === 0) return;
     const text = await stats.innerText();
     if (/Updated regularly/i.test(text)) return;
+    // Deferred stats strip: comma counts arrive async; avoid flaking on intentional fallback copy.
+    if (/live counts appear (above )?when they load/i.test(text)) return;
     expect(text).toMatch(/\d{1,3}(,\d{3})*/);
     expect(text.toLowerCase()).toMatch(/practice questions/);
     expect(text.toLowerCase()).toMatch(/clinical lessons/);

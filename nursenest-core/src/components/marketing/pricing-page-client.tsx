@@ -49,9 +49,12 @@ import {
 import { getExamLabel, getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { PricingConversionClarity } from "@/components/marketing/pricing-conversion-clarity";
+import { PricingClinicalReadinessEcosystem } from "@/components/marketing/pricing-clinical-readiness-ecosystem";
+import { PricingEcgClarityBlock } from "@/components/marketing/pricing-ecg-clarity-block";
 import { PricingRegionFaq } from "@/components/marketing/pricing-region-faq";
 import { PricingReliabilityFaq } from "@/components/marketing/pricing-reliability-faq";
 import { PricingLearnerFaq } from "@/components/marketing/pricing-learner-faq";
+import { PricingSubscriptionFaq } from "@/components/marketing/pricing-subscription-faq";
 import { PricingHero } from "@/components/marketing/pricing-hero";
 import {
   ValuePropsStrip,
@@ -144,19 +147,27 @@ function tierToSegment(tier: TierCode, isUS?: boolean): Segment {
   }
 }
 
-const DURATION_LABELS: Record<BillingDuration, string> = {
-  monthly: "Monthly",
-  "3-month": "3 Month",
-  "6-month": "6 Month",
-  yearly: "12 Month",
+/** Maps billing durations to public marketing keys (`marketing-en.json`). */
+const PLAN_DURATION_LABEL_KEY: Record<BillingDuration, string> = {
+  monthly: "pages.pricing.planDuration.monthly",
+  "3-month": "pages.pricing.planDuration.3-month",
+  "6-month": "pages.pricing.planDuration.6-month",
+  yearly: "pages.pricing.planDuration.yearly",
 };
 
-const DURATION_MICROCOPY: Record<BillingDuration, string> = {
-  monthly: "Flexible access",
-  "3-month": "Most students choose this",
-  "6-month": "Build confidence at your own pace",
-  yearly: "Best value for long-term prep",
+const DURATION_TAGLINE_KEY: Record<BillingDuration, string> = {
+  monthly: "pages.pricing.duration.tagline.monthly",
+  "3-month": "pages.pricing.duration.tagline.3-month",
+  "6-month": "pages.pricing.duration.tagline.6-month",
+  yearly: "pages.pricing.duration.tagline.yearly",
 };
+
+const PLAN_CARD_BULLET_KEYS = [
+  "pages.pricing.planCard.bullet1",
+  "pages.pricing.planCard.bullet2",
+  "pages.pricing.planCard.bullet3",
+  "pages.pricing.planCard.bullet4",
+] as const;
 
 const TRIAL_SECONDARY_COPY = "No charge today. Cancel anytime before your trial ends.";
 const TRIAL_FINE_PRINT_COPY = "Billing begins automatically after 3 days unless cancelled.";
@@ -240,18 +251,24 @@ function PricingPlansStatusPanel({
   );
 }
 
-function CheckoutCancelledNotice({ searchQuery }: { searchQuery: string }) {
+function CheckoutCancelledNotice({
+  searchQuery,
+  t,
+}: {
+  searchQuery: string;
+  t: (key: string, params?: Record<string, string | number>) => string;
+}) {
   const sp = useMemo(() => new URLSearchParams(searchQuery), [searchQuery]);
   const [dismissed, setDismissed] = useState(false);
   if (dismissed || sp.get("checkout") !== "cancelled") return null;
   return (
     <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--color-card))] px-4 py-3 text-sm shadow-[var(--elevation-rest)]">
-      <p className="font-semibold text-[var(--semantic-warning-contrast)]">Checkout was cancelled</p>
+      <p className="font-semibold text-[var(--semantic-warning-contrast)]">{t("pages.pricing.checkout.cancelledHeading")}</p>
       <p className="mt-0.5 text-[color-mix(in_srgb,var(--semantic-warning-contrast)_85%,var(--semantic-text-muted))]">
-        No payment was taken. Choose a plan whenever you&apos;re ready.
+        {t("pages.pricing.checkout.cancelledBody")}
       </p>
       <button type="button" onClick={() => setDismissed(true)} className="mt-1.5 text-xs underline opacity-70 hover:opacity-100">
-        Dismiss
+        {t("pages.pricing.checkout.dismissCancelled")}
       </button>
     </div>
   );
@@ -425,13 +442,16 @@ export function PricingPageClient({
   const examLabelCountry: "US" | "CA" = region === "US" ? "US" : "CA";
   const segmentLabels: Record<Segment, string> = useMemo(
     () => ({
-      newgrad: "New Grad",
-      rn: "RN / NCLEX-RN",
-      pn: `${getNursingRoleLabel({ country: examLabelCountry, role: "PN" })} / ${getExamLabel({ country: examLabelCountry, role: "PN" })}`,
-      np: "NP",
-      allied: "Allied Health",
+      newgrad: t("pages.pricing.segmentTab.newgrad"),
+      rn: t("pages.pricing.segmentTab.rn"),
+      pn: t("pages.pricing.segmentTab.pnTemplate", {
+        role: getNursingRoleLabel({ country: examLabelCountry, role: "PN" }),
+        exam: getExamLabel({ country: examLabelCountry, role: "PN" }),
+      }),
+      np: t("pages.pricing.segmentTab.np"),
+      allied: t("pages.pricing.segmentTab.allied"),
     }),
-    [examLabelCountry],
+    [examLabelCountry, t],
   );
   const tier = segmentToTier(segment, isUS);
   const narrative = useMemo(() => {
@@ -834,7 +854,7 @@ export function PricingPageClient({
       >
         <div className="text-center">
           <h2 id="pricing-plans-heading" className="nn-marketing-h2">
-            Choose Your Plan
+            {t("pages.pricing.choosePlan.heading")}
           </h2>
           <p className="nn-marketing-body-sm mx-auto mt-2 max-w-xl text-muted-foreground">
             {narrative.subhead}
@@ -844,7 +864,7 @@ export function PricingPageClient({
         {/* Tier tabs */}
         <div className="space-y-4">
           <p className="text-center text-sm font-medium text-muted-foreground">
-            Select Your Exam Track
+            {t("pages.pricing.choosePlan.trackPrompt")}
           </p>
           <div className="flex flex-wrap justify-center gap-2">
             {SEGMENT_ORDER.map((id) => (
@@ -873,7 +893,7 @@ export function PricingPageClient({
         {isAllied && (
           <div className="mx-auto max-w-lg space-y-3">
             <p className="text-center text-sm font-medium text-muted-foreground">
-              Select Your Career Line
+              {t("pages.pricing.choosePlan.careerPrompt")}
             </p>
             <div className="flex flex-wrap justify-center gap-2">
               {ALLIED_CAREER_KEYS.map((career) => (
@@ -899,7 +919,7 @@ export function PricingPageClient({
           </div>
         )}
 
-        <CheckoutCancelledNotice searchQuery={initialSearchParamsString} />
+        <CheckoutCancelledNotice searchQuery={initialSearchParamsString} t={t} />
 
         {!plansLoaded && !loadError ? <PricingPlanGridSkeleton /> : null}
 
@@ -944,24 +964,26 @@ export function PricingPageClient({
               >
                 {isPop ? (
                   <span className="nn-pricing-badge absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-info)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)]">
-                    Most Popular
+                    {t("pages.pricing.conversion.badgePopular")}
                   </span>
                 ) : isBest ? (
                   <span className="nn-pricing-badge absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[var(--semantic-success)] px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-[var(--text-inverse)]">
-                    Best Value
+                    {t("pages.pricing.conversion.badgeBestValue")}
                   </span>
                 ) : null}
 
-                <h3 className={isPop ? "text-xl font-bold text-[var(--palette-heading)]" : "nn-marketing-h3"}>{DURATION_LABELS[duration]}</h3>
+                <h3 className={isPop ? "text-xl font-bold text-[var(--palette-heading)]" : "nn-marketing-h3"}>
+                  {t(PLAN_DURATION_LABEL_KEY[duration])}
+                </h3>
 
                 <p className={`mt-2 leading-snug text-muted-foreground ${isPop ? "text-sm font-medium" : "text-[13px]"}`}>
-                  {DURATION_MICROCOPY[duration]}
+                  {t(DURATION_TAGLINE_KEY[duration])}
                 </p>
 
                 {duration !== "monthly" && (
                   <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-[var(--semantic-success)]">
                     <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--semantic-success)]" aria-hidden />
-                    Founding Pricing
+                    {t("pages.pricing.foundingPricing.line")}
                   </p>
                 )}
 
@@ -1000,10 +1022,10 @@ export function PricingPageClient({
                     ) : null}
 
                     <ul className="mt-6 flex-1 space-y-2.5 text-sm text-[var(--palette-text)]">
-                      {["All lessons and questions", "CAT exams and practice tests", "Smart review and analytics", "Personalized study plan"].map((item) => (
-                        <li key={item} className="flex gap-2">
+                      {PLAN_CARD_BULLET_KEYS.map((key) => (
+                        <li key={key} className="flex gap-2">
                           <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                          <span>{item}</span>
+                          <span>{t(key)}</span>
                         </li>
                       ))}
                     </ul>
@@ -1064,10 +1086,10 @@ export function PricingPageClient({
           <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/45 px-4 pb-4 pt-24 sm:items-center sm:pb-6">
             <div className="nn-pricing-consent-modal w-full max-w-xl rounded-2xl border p-5 shadow-[var(--elevation-hover)] sm:p-6">
               <h3 className="text-lg font-semibold text-[var(--palette-heading)]">
-                Confirm before checkout
+                {t("pages.pricing.checkout.confirmConsentHeading")}
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Before we take you to secure checkout, please confirm your agreement to our policies, including recurring billing and cancellation rules.
+                {t("pages.pricing.checkout.confirmConsentLead")}
               </p>
 
               <div className="mt-4 rounded-xl border border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] p-4 text-sm">
@@ -1124,7 +1146,7 @@ export function PricingPageClient({
                   }}
                   disabled={checkoutLoading}
                 >
-                  Not now
+                  {t("pages.pricing.checkout.modalDismiss")}
                 </button>
                 <button
                   type="button"
@@ -1149,15 +1171,13 @@ export function PricingPageClient({
         {trialDays > 0 && (
           <div className="nn-pricing-trial-card mx-auto max-w-xl rounded-2xl border px-8 py-6 text-center shadow-[var(--elevation-rest)]">
             <p className="text-lg font-semibold text-[var(--palette-heading)]">
-              Try Everything Free for {trialDays} Days
+              {t("pages.pricing.trial.bannerTitleWithDays", { days: trialDays })}
             </p>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Full access to all lessons, practice tests, CAT exams, and analytics.
+              {t("pages.pricing.trial.bannerLead")}
               {` ${TRIAL_SECONDARY_COPY}`}
             </p>
-            <p className="mt-2 text-xs text-muted-foreground">
-              Payment method required. {TRIAL_FINE_PRINT_COPY}
-            </p>
+            <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.trial.bannerFinePrint")}</p>
           </div>
         )}
 
@@ -1178,11 +1198,17 @@ export function PricingPageClient({
 
       <PricingConversionClarity />
 
+      <PricingClinicalReadinessEcosystem />
+
+      <PricingEcgClarityBlock />
+
       <PricingRegionFaq />
 
       <PricingReliabilityFaq />
 
       <PricingLearnerFaq />
+
+      <PricingSubscriptionFaq />
 
       {/* ── Section 5 (comparison) ── */}
       <FeatureComparisonTable />
@@ -1212,7 +1238,7 @@ export function PricingPageClient({
             {paidPlanPrimaryCtaLabel}
           </Link>
           <Link href={tryQuestionsHref} className={MARKETING_TERTIARY_LINK_CLASS}>
-            Or Try Free Questions First
+            {t("pages.pricing.cta.bottomSecondaryTryQuestions")}
           </Link>
         </div>
         {trialDays > 0 ? (

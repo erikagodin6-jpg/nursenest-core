@@ -27,7 +27,7 @@ const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health",
+    default: "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health",
     template: "%s | NurseNest",
   },
   description:
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: siteUrl,
     siteName: "NurseNest",
-    title: "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health",
+    title: "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health",
     description:
       "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.",
     images: [
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NurseNest | Canada-First Nursing Exam Prep for RN, RPN, NP & Allied Health",
+    title: "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health",
     description:
       "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.",
     images: [ROOT_LAYOUT_OPEN_GRAPH_IMAGE],

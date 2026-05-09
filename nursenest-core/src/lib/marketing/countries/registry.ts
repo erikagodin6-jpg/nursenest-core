@@ -140,7 +140,7 @@ export const CANADA_HOMEPAGE: CountryHomepageContent = {
     { title: "PN in Canada", href: "/canada/pn", description: "PN tracks, lessons, and practice built for Canadian scope." },
     { title: "RN in Canada", href: "/canada/rn", description: "RN hubs, lessons, and question banks for Canadian pathways." },
   ],
-  proofStrip: ["Built for Canada", "REx-PN support", "Global learners welcome"],
+  proofStrip: ["Canada licensing depth", "Learners worldwide", "REx-PN support"],
   crossBorderCta: {
     title: "Internationally educated and heading to Canada?",
     href: "/exams/canada",
@@ -210,7 +210,7 @@ export const MIDDLE_EAST_HOMEPAGE: CountryHomepageContent = {
 
 /** Canada-first global root: same structure as country pages, tuned for `/`. */
 export const GLOBAL_ROOT_HOMEPAGE: CountryHomepageContent = {
-  headline: "Canada-First Nursing Exam Prep, Built for Nurses Worldwide",
+  headline: "Global Nursing Exam Prep with Canada-First Depth — Built for Nurses Worldwide",
   subheadline:
     "NurseNest is a global study platform with Canada-first depth: REx-PN, NCLEX-RN, PN/RN pathways, lessons, flashcards, question banks, and CAT exams.",
   brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
@@ -222,7 +222,7 @@ export const GLOBAL_ROOT_HOMEPAGE: CountryHomepageContent = {
     { title: "Philippines hub", href: "/philippines", description: "NLE plus Canada and US mobility context." },
     { title: "Middle East hub", href: "/middle-east", description: "Prometric, DHA, HAAD, and regional exam guides." },
   ],
-  proofStrip: ["Canada-first depth", "Global learners welcome", "Lessons, banks, and CAT exams"],
+  proofStrip: ["Global platform", "Canada-first depth", "Lessons, banks, and CAT exams"],
   crossBorderCta: {
     title: "Choose your country hub",
     href: "/canada",

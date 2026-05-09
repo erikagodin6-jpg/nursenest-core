@@ -7,11 +7,12 @@ import {
   themeOptionsForPublicMarketingPicker,
 } from "@/lib/theme/theme-registry";
 
-test("public marketing theme allowlist exposes Ocean + Midnight for the public Theme control", () => {
-  assert.deepEqual([...PUBLIC_MARKETING_THEME_ALLOWLIST], [NURSENEST_DEFAULT_THEME, "midnight"]);
+test("public marketing theme allowlist exposes Ocean + Midnight + Blossom for the public Theme control", () => {
+  assert.deepEqual([...PUBLIC_MARKETING_THEME_ALLOWLIST], [NURSENEST_DEFAULT_THEME, "midnight", "blossom"]);
   const opts = themeOptionsForPublicMarketingPicker();
-  assert.equal(opts.length, 2);
+  assert.equal(opts.length, 3);
   assert.ok(opts.some((o) => o.id === NURSENEST_DEFAULT_THEME));
   assert.ok(opts.some((o) => o.id === "midnight"));
-  assert.equal(publicMarketingThemeChoiceCount(), 2);
+  assert.ok(opts.some((o) => o.id === "blossom"));
+  assert.equal(publicMarketingThemeChoiceCount(), 3);
 });
