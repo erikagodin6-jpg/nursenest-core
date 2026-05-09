@@ -1,5 +1,5 @@
 /**
- * Focused Playwright config: paid learner flashcards hub + practice-tests builder smoke.
+ * Focused Playwright config: paid learner flashcards hub + premium interaction + practice-tests builder smoke.
  *
  *   npx playwright test -c playwright.learning-routes.config.ts
  */
@@ -59,6 +59,7 @@ export default defineConfig({
   testMatch: [
     /tests\/e2e\/paid-user\/learning-routes-live-surfaces\.spec\.ts$/,
     /tests\/e2e\/paid-user\/flashcards-live-route-tiers\.spec\.ts$/,
+    /tests\/e2e\/paid-user\/flashcards-premium-interaction\.spec\.ts$/,
   ],
   fullyParallel: false,
   workers: 1,

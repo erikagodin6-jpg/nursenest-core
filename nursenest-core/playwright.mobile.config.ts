@@ -9,39 +9,24 @@
  */
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
+import { localNextDevWebServer } from "./playwright/helpers/local-next-webserver";
 import { PAID_USER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
 import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credentials";
 
 const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
 
 function localDevWebServer() {
-  if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return undefined;
   let origin: URL;
   try {
     origin = new URL(baseURL);
   } catch {
     return undefined;
   }
-  const host = origin.hostname;
-  if (host !== "127.0.0.1" && host !== "localhost") return undefined;
-  const port = origin.port || "3000";
-  const secret = process.env.NEXTAUTH_SECRET?.trim() || process.env.AUTH_SECRET?.trim() || "playwright-e2e-local-secret";
-  const dbUrl = process.env.DATABASE_URL?.trim();
-  return {
-    /* `npm run dev` points at `server/index.ts` (monolith entry); Next.js for E2E is `next dev`. */
-    command: `npx next dev --hostname ${host} --port ${port}`,
-    url: `${origin.origin}/api/auth/csrf`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 300_000,
-    env: {
-      RUN_HEAVY_BUILD_TASKS: "false",
-      NEXTAUTH_SECRET: secret,
-      AUTH_SECRET: process.env.AUTH_SECRET?.trim() || secret,
-      AUTH_URL: origin.origin,
-      NEXTAUTH_URL: origin.origin,
-      ...(dbUrl ? { DATABASE_URL: dbUrl } : {}),
-    },
-  } as const;
+  return localNextDevWebServer({
+    baseURL,
+    readyUrl: `${origin.origin}/api/auth/csrf`,
+    timeoutMs: 300_000,
+  });
 }
 
 const paidAuthEnabled = hasPaidTestCredentials();

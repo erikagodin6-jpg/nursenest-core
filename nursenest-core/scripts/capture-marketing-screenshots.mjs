@@ -2,15 +2,17 @@
 /**
  * Marketing homepage CDN screenshot capture — Playwright (Chromium).
  *
- * Produces `screenshot1.png` … `screenshot15.png` under `public/marketing/screenshots/`
- * plus `capture-manifest.json`. CDN keys match DigitalOcean Spaces bucket root — **manual approval only** before upload.
+ * Produces `screenshot1.png` … `screenshot15.png` plus `capture-manifest.json` under **git-root**
+ * `docs/screenshots/marketing-slot-captures/` by default (override with `SCREENSHOT_OUTPUT_DIR`).
+ * CDN keys match DigitalOcean Spaces bucket root — **manual approval only** before upload.
  *
  * Target definitions: `capture-slot-targets.json` (single source of truth for routes, slots, notes).
  *
  * Prerequisites:
  *   1. `npx playwright install chromium`
  *   2. `DATABASE_URL=… npx tsx scripts/seed-screenshot-demo-user.ts` (from repo root — entitled demo user)
- *   3. Running app (`npm run dev` in nursenest-core; default PORT 8080 or override SCREENSHOT_BASE_URL)
+ *   3. Running app on **127.0.0.1:3000** (`npm run dev:next:3000` or `npm run dev:next` with fixed port; override `SCREENSHOT_BASE_URL`)
+ *   4. Optional: `npm run wait:app:ready` (or `capture:marketing-screenshots:qa` runs it automatically unless `SCREENSHOT_SKIP_APP_READY=1`)
  *
  * Usage:
  *   node scripts/capture-marketing-screenshots.mjs
@@ -20,8 +22,9 @@
  *   node scripts/capture-marketing-screenshots.mjs --targets=slot-14-marketing-home-desktop,slot-06-cat-launch-or-session
  *
  * Env:
- *   SCREENSHOT_BASE_URL          (default: http://localhost:8080)
- *   SCREENSHOT_OUTPUT_DIR        (default: public/marketing/screenshots)
+ *   SCREENSHOT_BASE_URL          (default: http://127.0.0.1:3000)
+ *   SCREENSHOT_OUTPUT_DIR        (default: <repo>/docs/screenshots/marketing-slot-captures)
+ *   SCREENSHOT_SKIP_APP_READY    set to "1" to skip wait-for-app-ready probes
  *   SCREENSHOT_DEMO_EMAIL / SCREENSHOT_DEMO_PASSWORD
  *   SCREENSHOT_WAIT_MS           (default: 1800)
  *   SCREENSHOT_ONLY_SLOTS        Comma-separated 1–15
@@ -38,13 +41,16 @@ import { chromium } from "@playwright/test";
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { waitForAppReady } from "./wait-for-app-ready.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const APP_ROOT = join(__dirname, "..");
+const REPO_ROOT = join(APP_ROOT, "..");
 
-const BASE_URL = process.env.SCREENSHOT_BASE_URL?.replace(/\/$/, "") ?? "http://localhost:8080";
+const BASE_URL = process.env.SCREENSHOT_BASE_URL?.replace(/\/$/, "") ?? "http://127.0.0.1:3000";
 const OUTPUT_DIR =
-  process.env.SCREENSHOT_OUTPUT_DIR ?? join(APP_ROOT, "public/marketing/screenshots");
+  process.env.SCREENSHOT_OUTPUT_DIR ??
+  join(REPO_ROOT, "docs", "screenshots", "marketing-slot-captures");
 const DEMO_EMAIL =
   process.env.SCREENSHOT_DEMO_EMAIL ?? "demo-screenshots@internal.nursenest.io";
 const DEMO_PASSWORD = process.env.SCREENSHOT_DEMO_PASSWORD ?? "DemoScreenshot2024!";
@@ -127,7 +133,7 @@ function printHelp() {
   console.log(`
 NurseNest marketing screenshot capture (Playwright Chromium)
 
-Writes screenshot1.png … screenshot15.png and capture-manifest.json under SCREENSHOT_OUTPUT_DIR.
+Writes screenshot1.png … screenshot15.png and capture-manifest.json under SCREENSHOT_OUTPUT_DIR (default: repo docs/screenshots/marketing-slot-captures).
 DigitalOcean Spaces upload is manual-approval only — see docs/SCREENSHOT_CAPTURE_TO_CDN.md.
 
 Commands:
@@ -177,9 +183,35 @@ async function applyThemeToPage(page, themeId) {
   );
 }
 
+async function settleLearnerSurface(page) {
+  await page.waitForLoadState("load");
+  try {
+    await page.waitForLoadState("networkidle", { timeout: 60_000 });
+  } catch {
+    console.warn("    ⚠ networkidle timeout — continuing (dev servers can stay chatty)");
+  }
+  await page.evaluate(() => document.fonts.ready).catch(() => {});
+  await page
+    .evaluate(
+      () =>
+        Promise.all(
+          [...document.images]
+            .filter((img) => !img.complete)
+            .map(
+              (img) =>
+                new Promise((resolve) => {
+                  img.addEventListener("load", resolve, { once: true });
+                  img.addEventListener("error", resolve, { once: true });
+                }),
+            ),
+        ),
+    )
+    .catch(() => {});
+}
+
 async function loginAsDemoUser(page) {
   console.log(`  ↳ Logging in as ${DEMO_EMAIL}…`);
-  await page.goto(`${BASE_URL}/login`, { waitUntil: "domcontentloaded", timeout: 45_000 });
+  await page.goto(`${BASE_URL}/login`, { waitUntil: "domcontentloaded", timeout: 60_000 });
 
   const emailInput = page.locator('input[type="email"], input[name="email"]').first();
   const passwordInput = page.locator('input[type="password"], input[name="password"]').first();
@@ -191,11 +223,12 @@ async function loginAsDemoUser(page) {
   await passwordInput.fill(DEMO_PASSWORD);
   await submitBtn.click();
   await page.waitForLoadState("domcontentloaded");
+  await settleLearnerSurface(page);
 
   const url = page.url();
   if (url.includes("/login") || url.includes("/signup")) {
     throw new Error(
-      `Login failed — still on auth URL (${url}). Seed demo user (scripts/seed-screenshot-demo-user.ts) or check credentials.`,
+      `Login failed — still on auth URL (${url}). Seed demo user (DATABASE_URL=… npx tsx scripts/seed-screenshot-demo-user.ts), verify DB schema matches Prisma, and check SCREENSHOT_DEMO_EMAIL / SCREENSHOT_DEMO_PASSWORD.`,
     );
   }
   console.log("  ↳ Logged in successfully.");
@@ -205,12 +238,13 @@ async function loginAsDemoUser(page) {
 async function navigateFirstLessonFromHub(page) {
   await page.goto(`${BASE_URL}/app/lessons`, {
     waitUntil: "domcontentloaded",
-    timeout: 45_000,
+    timeout: 60_000,
   });
   const link = page.locator('#nn-learner-main a[href^="/app/lessons/"]').first();
   await link.waitFor({ state: "visible", timeout: 25_000 });
   await link.click();
   await page.waitForLoadState("domcontentloaded");
+  await settleLearnerSurface(page);
 }
 
 /** Supplementary — open mobile nav drawer (learner shell). */
@@ -240,14 +274,16 @@ async function captureViewportScreenshot(page, target, relPath, resolvedRoute) {
   if (target.prepareHook === "openMobileLearnerNav") {
     await page.goto(`${BASE_URL}${target.route}`, {
       waitUntil: "domcontentloaded",
-      timeout: 45_000,
+      timeout: 60_000,
     });
     if (target.waitFor) {
       await page.waitForSelector(target.waitFor, { timeout: 15_000 }).catch(() => {
         console.warn(`    ⚠ waitFor not found: ${target.waitFor} — continuing`);
       });
     }
+    await settleLearnerSurface(page);
     await openMobileLearnerNav(page);
+    await settleLearnerSurface(page);
   } else if (resolvedRoute === "__FIRST_LESSON_FROM_HUB__") {
     await navigateFirstLessonFromHub(page);
     if (target.waitFor) {
@@ -258,13 +294,14 @@ async function captureViewportScreenshot(page, target, relPath, resolvedRoute) {
   } else {
     await page.goto(`${BASE_URL}${resolvedRoute}`, {
       waitUntil: "domcontentloaded",
-      timeout: 45_000,
+      timeout: 60_000,
     });
     if (target.waitFor) {
       await page.waitForSelector(target.waitFor, { timeout: 15_000 }).catch(() => {
         console.warn(`    ⚠ waitFor not found: ${target.waitFor} — continuing`);
       });
     }
+    await settleLearnerSurface(page);
   }
 
   if (EXTRA_WAIT_MS > 0) await page.waitForTimeout(EXTRA_WAIT_MS);
@@ -300,6 +337,19 @@ async function main() {
   console.log();
 
   mkdirSync(OUTPUT_DIR, { recursive: true });
+
+  if (process.env.SCREENSHOT_SKIP_APP_READY === "1") {
+    console.warn("[capture] SCREENSHOT_SKIP_APP_READY=1 — skipping HTTP readiness probes.");
+  } else {
+    try {
+      await waitForAppReady({ baseUrl: BASE_URL, log: (m) => console.log(m) });
+    } catch (e) {
+      console.error(
+        "[capture] App not ready — fix dev server, DATABASE_URL / Prisma alignment, AUTH_SECRET, and env validation (see Next dev terminal).",
+      );
+      throw e;
+    }
+  }
 
   let targets = targetsDoc.slots;
   if (ONLY_SLOTS) targets = targets.filter((t) => ONLY_SLOTS.has(t.screenshotSlot));

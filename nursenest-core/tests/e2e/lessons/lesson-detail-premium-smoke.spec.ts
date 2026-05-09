@@ -68,4 +68,45 @@ test.describe("lesson detail premium shells", () => {
     await page.waitForSelector("h1.nn-lesson-page-title", { timeout: 120_000 });
     await expect(page.locator(".nn-lesson-page-shell, .nn-premium-lesson-detail-shell").first()).toBeVisible();
   });
+
+  test("mobile: On this page opens and jumps; editorial metadata above disclosure", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto(`${baseURL}/us/rn/nclex-rn/lessons/us-rn-pulmonary-embolism`, {
+      waitUntil: "domcontentloaded",
+      timeout: 180_000,
+    });
+    await page.waitForSelector('[data-testid="pathway-lesson-main-column"]', { timeout: 120_000 });
+    const mobileNav = page.locator(".nn-lesson-section-nav-mobile");
+    await mobileNav.locator("summary").click();
+    await expect(mobileNav.locator("nav[aria-label='Lesson sections (mobile)']")).toBeVisible();
+    const firstLink = mobileNav.locator("a.nn-lesson-nav-item").first();
+    await firstLink.click();
+    await expect(page.locator("article.nn-lesson-article-flow .nn-lesson-section-card").first()).toBeVisible();
+
+    const editorialMeta = page.getByTestId("lesson-detail-editorial-metadata");
+    const disclosure = page.getByTestId("lesson-editorial-disclosure");
+    await expect(editorialMeta).toBeVisible();
+    await expect(disclosure).toBeVisible();
+    const metaBox = await editorialMeta.boundingBox();
+    const discBox = await disclosure.boundingBox();
+    expect(metaBox && discBox && metaBox.y < discBox.y).toBe(true);
+  });
+
+  test("palette swap: ocean, midnight, blossom stay readable ~5s", async ({ page }) => {
+    await page.goto(`${baseURL}/us/rn/nclex-rn/lessons/respiratory-assessment-ngn`, {
+      waitUntil: "domcontentloaded",
+      timeout: 180_000,
+    });
+    await page.waitForSelector("h1.nn-lesson-page-title", { timeout: 120_000 });
+    for (const theme of ["ocean", "midnight", "blossom"] as const) {
+      await page.evaluate((id) => {
+        document.documentElement.setAttribute("data-theme", id);
+      }, theme);
+      await expect(page.locator("h1.nn-lesson-page-title")).toBeVisible();
+      await expect(page.locator("article.nn-lesson-article-flow")).toBeVisible();
+      await page.waitForTimeout(400);
+    }
+    await page.waitForTimeout(1800);
+    await expect(page.locator("h1.nn-lesson-page-title")).toContainText(/./);
+  });
 });

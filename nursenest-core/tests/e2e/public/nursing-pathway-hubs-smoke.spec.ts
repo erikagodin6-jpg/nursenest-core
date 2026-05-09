@@ -49,6 +49,7 @@ test.describe("Nursing pathway hubs — public smoke", () => {
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="labs"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="med_calc"]`)).toBeVisible();
     await expect(page.locator('[data-nn-hub-section="quick-actions"]')).toBeVisible();
+    await expect(page.locator('[data-nn-hub-section="identity-hero"]')).toBeVisible();
     await expectNoAdminLinksInPremiumZone(page);
   });
 
@@ -92,7 +93,8 @@ test.describe("Nursing pathway hubs — public smoke", () => {
   });
 });
 
-const SCREENSHOT_OUT = join(process.cwd(), "docs", "screenshots", "nursing-hubs-e2e");
+/** Canonical hub visual evidence — see `reports/hub-figma-implementation-FINAL.md`. */
+const SCREENSHOT_OUT = join(process.cwd(), "docs", "screenshots", "hub-figma-implementation");
 
 const THEME_BUCKETS_E2E = [
   { id: "ocean", label: "ocean" },

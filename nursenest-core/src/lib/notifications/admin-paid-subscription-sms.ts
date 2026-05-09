@@ -56,10 +56,14 @@ function configuredProvider(env: Env): "twilio" | null {
   return provider === "twilio" ? "twilio" : null;
 }
 
+function twilioFromNumber(env: Env): string | null {
+  return env.TWILIO_FROM_NUMBER?.trim() || env.TWILIO_SMS_FROM?.trim() || null;
+}
+
 function twilioConfig(env: Env): { accountSid: string; authToken: string; from: string; to: string } | null {
   const accountSid = env.TWILIO_ACCOUNT_SID?.trim();
   const authToken = env.TWILIO_AUTH_TOKEN?.trim();
-  const from = env.TWILIO_FROM_NUMBER?.trim();
+  const from = twilioFromNumber(env);
   const to = env.ADMIN_SMS_TO_NUMBER?.trim();
   if (!accountSid || !authToken || !from || !to) return null;
   return { accountSid, authToken, from, to };
@@ -79,7 +83,7 @@ export function adminPaidSubscriptionSmsEnvStatus(env: Env = process.env): {
   if (!env.SMS_PROVIDER?.trim()) missing.push("SMS_PROVIDER");
   if (!env.TWILIO_ACCOUNT_SID?.trim()) missing.push("TWILIO_ACCOUNT_SID");
   if (!env.TWILIO_AUTH_TOKEN?.trim()) missing.push("TWILIO_AUTH_TOKEN");
-  if (!env.TWILIO_FROM_NUMBER?.trim()) missing.push("TWILIO_FROM_NUMBER");
+  if (!twilioFromNumber(env)) missing.push("TWILIO_FROM_NUMBER or TWILIO_SMS_FROM");
 
   return {
     enabled: enabled(env),

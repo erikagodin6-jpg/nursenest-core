@@ -173,6 +173,12 @@ nursenest-core/preview-screenshots/*.png
 reports/ui-redesign-preview/*.png
 nursenest-core/reports/ui-redesign-preview/*.png
 
+# -----------------------------------------------------------------------------
+# QA / marketing screenshots under git-root docs/ (PNGs are machine-local; keep README / md)
+# -----------------------------------------------------------------------------
+docs/screenshots/**/*.png
+docs/screenshots/**/*.webp
+
 # Cursor / IDE / local tooling (large or machine-specific — never commit)
 # -----------------------------------------------------------------------------
 playwright-report/

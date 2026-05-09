@@ -24,6 +24,7 @@ import {
 import { examPathwayRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { resolveMarketingHubEcgModulePublic } from "@/lib/ecg-module/ecg-marketing-hub-surface.server";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -207,6 +208,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   }
 
   return withCrawlSurfacePageRender("marketing.exam_hub", pathname, async () => {
+    const ecgModulePublicForHub = await resolveMarketingHubEcgModulePublic();
     const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
 
     let content;
@@ -249,6 +251,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
             initialMeasurementPreference={alliedInitialMeasurement}
             syncMeasurementPreferenceToProfile={alliedMeasurementSync}
             viewerSignedIn={viewerSignedIn}
+            ecgModulePublic={ecgModulePublicForHub}
           />
         ) : content ? (
           <NursingTierHubPage
@@ -260,6 +263,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
             viewerHasPathwayLessonAccess={viewerHasPathwayLessonAccess}
             npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
             emphasizeCatPracticeTests={Boolean(npPracticeSeo)}
+            ecgModulePublic={ecgModulePublicForHub}
           />
         ) : (
           <div className="text-center py-10 text-red-500">

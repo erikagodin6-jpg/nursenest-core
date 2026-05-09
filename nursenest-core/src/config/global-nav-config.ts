@@ -9,6 +9,7 @@
  *
  * ## Surface parity (intentional exclusions)
  * - **Shop** (`/shop`): `marketingDesktopDropdown` only (desktop “Guides & plans” dropdown).
+ * - **About** (`/about`): desktop “Guides & plans” dropdown and marketing mobile drawer.
  * - **FAQ** (`/faq`): desktop dropdown and marketing mobile drawer (`getMarketingMobileDrawerLeafItems`).
  * - **Generic question-bank / practice-exams** are not top-level learn-practice nav items; users
  *   reach them from exam pathway hubs and the exam strip.
@@ -116,6 +117,15 @@ export const GLOBAL_NAV_GUIDES_PLANS: GlobalNavLeafItem[] = [
     surfaces: [DD, MD],
     order: 10,
     mobileDrawerOrder: 70,
+  }),
+  LEAF({
+    id: "marketing-about",
+    labelKey: "nav.about",
+    href: "/about",
+    group: "guides-plans",
+    surfaces: [DD, MD],
+    order: 12,
+    mobileDrawerOrder: 71,
   }),
   LEAF({
     id: "marketing-tools",

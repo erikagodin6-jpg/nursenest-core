@@ -75,8 +75,13 @@ export async function requireEcgModuleAccess(): Promise<Extract<EcgModuleAccess,
 }
 
 export function ecgApiDeniedResponse(reason: Exclude<EcgModuleAccess, { ok: true }>["reason"]): Response {
-  const status = reason === "disabled" ? 404 : 404;
-  return Response.json({ ok: false, code: "not_found", detail: reason }, { status });
+  const status =
+    reason === "unauthorized"
+      ? 401
+      : reason === "tier_denied" || reason === "premium_required"
+        ? 403
+        : 404;
+  return Response.json({ ok: false, code: "ecg_access_denied", detail: reason }, { status });
 }
 
 export function ecgWorksheetPathwayForLevel(_level: EcgLevel): string {

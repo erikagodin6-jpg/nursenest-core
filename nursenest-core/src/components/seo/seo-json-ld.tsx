@@ -45,7 +45,7 @@ export function WebSiteJsonLd() {
         publisher: { "@id": ORG_ID },
         potentialAction: {
           "@type": "SearchAction",
-          target: `${absoluteUrl("/")}question-bank`,
+          target: absoluteUrl("/question-bank"),
           "query-input": "required name=topic",
         },
       }}

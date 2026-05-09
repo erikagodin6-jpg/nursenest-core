@@ -18,13 +18,25 @@ function includeTestModeOwnerNotifies(): boolean {
   return v === "1" || v === "true" || v === "yes";
 }
 
-/** Exported for unit tests — Stripe `trialing` is not a paid activation for owner alerts. */
+/**
+ * Owner alerts after checkout: Stripe `trialing` maps to ACTIVE in our DB but often has
+ * `amount_total === 0` (trial start). Previously we required `active` + positive amount only,
+ * which skipped every trial checkout and left only `invoice.payment_succeeded` — which also
+ * required `amount_paid > 0`, so **no notification** went out for common trial-first flows.
+ */
 export function shouldOwnerNotifyPaidSubscriptionCheckout(input: OwnerCheckoutNotifyEligibilityInput): boolean {
   if (input.sessionMode !== "subscription") return false;
-  if (!input.stripeSubscription || input.stripeSubStatus !== "active") return false;
+  if (!input.stripeSubscription) return false;
+  if (input.stripeSubStatus !== "active" && input.stripeSubStatus !== "trialing") return false;
   if (input.statusForDb !== SubscriptionStatus.ACTIVE) return false;
-  if (input.amountTotal == null || input.amountTotal <= 0) return false;
   if (input.planTier != null && isFreeStripeBillingNursingTier(input.planTier)) return false;
   if (!input.eventLivemode && !includeTestModeOwnerNotifies()) return false;
+
+  const hasPositiveCheckoutTotal = input.amountTotal != null && input.amountTotal > 0;
+  const trialingZeroOrUnsetTotal =
+    input.stripeSubStatus === "trialing" && (input.amountTotal == null || input.amountTotal === 0);
+  if (!hasPositiveCheckoutTotal && !trialingZeroOrUnsetTotal) return false;
+  if (input.stripeSubStatus === "active" && !hasPositiveCheckoutTotal) return false;
+
   return true;
 }

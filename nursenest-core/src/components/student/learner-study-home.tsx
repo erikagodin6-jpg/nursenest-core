@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
-import { PrimaryActionCard } from "@/components/student/dashboard/primary-action-card";
 import { ExamCountdownCard } from "@/components/student/dashboard/exam-countdown-card";
 import { ReadinessScoreCard } from "@/components/student/dashboard/readiness-score-card";
 import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
@@ -43,6 +42,7 @@ import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { LearnerStudySurfaceSection, LearnerSurface } from "@/components/learner-ui";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
+import { LearnerDashboardReadinessNextStrip } from "@/components/student/learner-dashboard-readiness-next-strip";
 import { LearnerDashboardHubLayout, type LearnerDashboardHubNavItem } from "@/components/student/learner-dashboard-hub-layout";
 import { LearnerDashboardMobileFold } from "@/components/student/learner-dashboard-mobile-fold";
 import { FocusTodayStrip } from "@/components/student/focus-today-strip";
@@ -237,22 +237,15 @@ export function LearnerStudyHome({
       navHeading={t("learner.studyHome.shortcutsNavLabel")}
       items={hubNavItems}
     >
-      {/* 1 — Continue studying: single dominant next step (exam pacing lives with daily goals) */}
-      <LearnerStudySurfaceSection
-        id="study-priority"
-        eyebrow={t(priorityEyebrowKey)}
-        title={t("learner.studyHome.sectionPriorityTitle")}
-        intro={null}
-        tone="primary"
-        surfacePadding="md"
-        className="nn-dash-band nn-dash-band--priority nn-dash-band--stack-tight"
-      >
-        <div className="nn-dash-priority-grid nn-dash-priority-grid--solo">
-          <div className="nn-dash-priority-grid__main">
-            <PrimaryActionCard action={nextAction} t={t} />
-          </div>
-        </div>
-      </LearnerStudySurfaceSection>
+      {/* 1 — Premium hero strip: readiness snapshot + optional exam/streak + primary next action */}
+      <LearnerDashboardReadinessNextStrip
+        t={t}
+        priorityEyebrowKey={priorityEyebrowKey}
+        nextAction={nextAction}
+        readiness={snapshot.readiness}
+        countdown={countdown}
+        studyStreakDays={snapshot.studyStreakDays}
+      />
 
       <LearnerStudySurfaceSection
         id="study-modes"

@@ -12,6 +12,7 @@ import { alliedHealthSegmentPath } from "@/lib/lessons/lesson-routes";
 import { alliedProfessionBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { resolveMarketingHubEcgModulePublic } from "@/lib/ecg-module/ecg-marketing-hub-surface.server";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
@@ -71,6 +72,7 @@ export default async function AlliedHealthSlugPage({ params }: Props) {
   }
 
   const { crumbs, schemaItems } = alliedProfessionBreadcrumbs(prof.h1, professionHeroPath);
+  const ecgModulePublicForHub = await resolveMarketingHubEcgModulePublic();
 
   return (
     <div className="nn-marketing-surface">
@@ -82,6 +84,7 @@ export default async function AlliedHealthSlugPage({ params }: Props) {
           hubPath={professionHeroPath}
           profession={prof}
           sampleQuestionStem={sampleStem}
+          ecgModulePublic={ecgModulePublicForHub}
         />
       </div>
     </div>

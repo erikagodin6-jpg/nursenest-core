@@ -35,12 +35,21 @@ function navAuditLocaleCodes(appRoot) {
   const source = fs.readFileSync(sourcePath, "utf8");
   const codes = [];
   const seen = new Set();
-  const entryPattern = /\{\s*code:\s*"([^"]+)"[\s\S]*?tier:\s*"(full|partial)"/g;
-  for (const match of source.matchAll(entryPattern)) {
-    const code = match[1];
+  /** Per-entry tier: non-greedy `code…tier` can span objects and mis-associate `ta` with a later `full`. */
+  const codeStarts = [...source.matchAll(/\{\s*code:\s*"([^"]+)"/g)];
+  for (let i = 0; i < codeStarts.length; i++) {
+    const code = codeStarts[i][1];
+    const from = codeStarts[i].index;
+    const to = i + 1 < codeStarts.length ? codeStarts[i + 1].index : source.length;
+    const slice = source.slice(from, to);
+    const tierM = slice.match(/\btier:\s*"(full|partial|incomplete)"/);
+    const tier = tierM?.[1];
+    if (!tier) continue;
     if (code === "en" || seen.has(code)) continue;
-    seen.add(code);
-    codes.push(code);
+    if (tier === "full" || tier === "partial") {
+      seen.add(code);
+      codes.push(code);
+    }
   }
   return codes.length > 0 ? codes : MARKETING_LOCALE_CODES;
 }

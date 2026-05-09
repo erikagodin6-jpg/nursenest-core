@@ -5,7 +5,7 @@
  * Run from app package:
  *   cd nursenest-core && npx playwright test tests/e2e/public/allied-health-hubs.spec.ts
  *
- * Screenshots (optional artifact): nursenest-core/docs/screenshots/allied-health-e2e/
+ * Screenshots: `docs/screenshots/allied-newgrad-figma/` at monorepo git root.
  */
 import { mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -25,7 +25,7 @@ import {
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(HERE, "..", "..", "..");
-const SCREENSHOT_DIR = join(PKG_ROOT, "docs", "screenshots", "allied-health-e2e");
+const SCREENSHOT_DIR = join(PKG_ROOT, "docs", "screenshots", "hub-figma-implementation");
 
 const PREMIUM = '[data-nn-qa-pathway-premium-modules=""]';
 
@@ -101,6 +101,7 @@ test.describe("Allied Health hubs (registry-driven)", () => {
       expect(zoneHtml.toLowerCase().includes("/admin")).toBe(false);
 
       await expect(page.getByRole("heading", { name: /^Study tools$/i })).toBeVisible();
+      await expect(page.locator('[data-nn-marketing-hub-guided-path="1"]')).toBeVisible({ timeout: 90_000 });
 
       await assertDocumentNoHorizontalOverflow(page);
       await assertElementNoHorizontalOverflow(page, PREMIUM);
@@ -170,6 +171,13 @@ test.describe("Allied Health hubs (registry-driven)", () => {
       });
     }
   });
+});
+
+test("allied MLT hub — guided path visible; no RN NCLEX marketing hub headline", async ({ page, baseURL }) => {
+  test.skip(!baseURL, "BASE_URL required");
+  await page.goto(`${baseURL}/allied/mlt`, { waitUntil: "domcontentloaded", timeout: 120_000 });
+  await expect(page.locator('[data-nn-marketing-hub-guided-path="1"]')).toBeVisible({ timeout: 90_000 });
+  await expect(page.getByRole("heading", { name: /nclex-rn practice questions for the us/i })).toHaveCount(0);
 });
 
 test.describe("Allied occupation hubs — hero, premium single-root, sub-routes", () => {

@@ -42,6 +42,7 @@ export const MARKETING_NAV_HEADER_CHROME_KEYS = [
   "nav.admin",
   "nav.openMenu",
   "nav.pricing",
+  "nav.about",
   "nav.signup",
   "nav.preNursing",
   "nav.tools",

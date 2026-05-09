@@ -25,6 +25,7 @@ import {
 } from "@/lib/measurements/measurement-preference";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { resolveMarketingHubEcgModulePublic } from "@/lib/ecg-module/ecg-marketing-hub-surface.server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
@@ -136,6 +137,7 @@ export default async function AlliedCareerHubPage({ params }: Props) {
   }
 
   const categoryMeta = ALLIED_HUB_CATEGORY_META[prof.hubCategory] ?? ALLIED_HUB_CATEGORY_META.clinical;
+  const ecgModulePublicForHub = await resolveMarketingHubEcgModulePublic();
 
   const crumbs = [
     { name: "Home", href: "/" },
@@ -165,6 +167,7 @@ export default async function AlliedCareerHubPage({ params }: Props) {
           initialMeasurementPreference={alliedInitialMeasurement}
           syncMeasurementPreferenceToProfile={alliedMeasurementSync}
           viewerSignedIn={viewerSignedIn}
+          ecgModulePublic={ecgModulePublicForHub}
         />
       </div>
     </div>

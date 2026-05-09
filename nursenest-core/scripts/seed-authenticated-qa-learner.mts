@@ -19,13 +19,30 @@
  * 2. `npm run seed:auth-qa`
  * 3. `npx next dev` (or Playwright webServer)
  * 4. `npx playwright test --project=setup-paid-auth …`
+ *
+ * ## Coverage / gaps (incremental)
+ * - **One QA learner email** — RN/NP/New Grad/Allied-specific *rows* require separate accounts via
+ *   `qa-paid-test-account-reset.mts` (`QA_PAID_TEST_TIER`, pathway); this script seeds **whatever user**
+ *   the env emails resolve to (no entitlement bypass).
+ * - **OSCE catalog:** upserts one published `OsceStation` with slug `nn-auth-qa-osce-seed` so `/app/osce`
+ *   always has at least one deterministic card when the list is empty in dev DBs.
+ * - **ECG history:** if any `EcgVideoQuestion` exists, records one tagged practice attempt for analytics
+ *   (does not create video questions — use `seed-ecg-premium-curated-pack.mts` for full packs).
+ * - **CAT-mode bank attempts:** when `AUTH_QA_SEED_RESET=1`, replaces prior `ExamQuestionPracticeAnswerAttempt`
+ *   rows this script created for the user (mode `cat` + matching pathway); otherwise skips if any exist
+ *   (avoids unbounded duplicate rows).
  */
 import "./load-dotenv-for-cli.mts";
 import { assertDatabaseUrlPresentOrExit } from "./lib/database-env-assert.mts";
 
 assertDatabaseUrlPresentOrExit("seed-authenticated-qa-learner requires DATABASE_URL.");
 
-import { ContentStatus, ExamSessionStatus, PracticeTestStatus } from "@prisma/client";
+import {
+  ContentStatus,
+  ExamSessionStatus,
+  PracticeQuestionAnswerMode,
+  PracticeTestStatus,
+} from "@prisma/client";
 import { answerMatches } from "../src/lib/exams/score-session-answers";
 import { questionAccessWhere } from "../src/lib/entitlements/content-access-scope";
 import { resolveEntitlement } from "../src/lib/entitlements/resolve-entitlement";
@@ -36,6 +53,9 @@ const SEED_TAG = "nn_auth_qa";
 const SEED_JSON_MARKER = "nnAuthQaSeed";
 const SEED_JSON_VERSION = 1;
 const DECK_SLUG = "nn-auth-qa-e2e-deck";
+const OSCE_SEED_SLUG = "nn-auth-qa-osce-seed";
+/** Marks synthetic `EcgVideoQuestionPracticeAnswerAttempt` rows created by this script (cleanup on reset). */
+const ECG_SEED_OPTION_ID = "nn_auth_qa_ecg_synthetic_option";
 
 function resolveTargetEmail(): string | null {
   const a =
@@ -94,6 +114,18 @@ async function cleanupTaggedRows(userId: string): Promise<void> {
   const weekKey = "auth-qa-seed-week";
   await prisma.readiness_history.deleteMany({
     where: { user_id: userId, snapshot_week: weekKey },
+  });
+
+  await prisma.examQuestionPracticeAnswerAttempt.deleteMany({
+    where: {
+      userId,
+      mode: PracticeQuestionAnswerMode.cat,
+      selectedOptionKey: { startsWith: `${SEED_TAG}:` },
+    },
+  });
+
+  await prisma.ecgVideoQuestionPracticeAnswerAttempt.deleteMany({
+    where: { userId, selectedOptionId: ECG_SEED_OPTION_ID },
   });
 }
 
@@ -155,6 +187,14 @@ async function main(): Promise<void> {
   const lastWrong = new Date(now.getTime() - 1 * 86400000);
 
   await prisma.$transaction(async (tx) => {
+    await tx.examQuestionPracticeAnswerAttempt.deleteMany({
+      where: {
+        userId: user.id,
+        mode: PracticeQuestionAnswerMode.cat,
+        selectedOptionKey: { startsWith: `${SEED_TAG}:` },
+      },
+    });
+
     const topicRows = [
       {
         topic: "Pharmacology",
@@ -485,6 +525,21 @@ async function main(): Promise<void> {
           },
         },
       });
+
+      for (const qid of ids.slice(0, 3)) {
+        const q = questions.find((x) => x.id === qid);
+        const ok = q && Array.isArray(q.correctAnswer) ? String(q.correctAnswer[0] ?? "") : String(q?.correctAnswer ?? "");
+        await tx.examQuestionPracticeAnswerAttempt.create({
+          data: {
+            userId: user.id,
+            questionId: qid,
+            selectedOptionKey: `${SEED_TAG}:${qid}`,
+            isCorrect: Boolean(q && answerMatches(q.questionType, q.correctAnswer, ok)),
+            mode: PracticeQuestionAnswerMode.cat,
+            pathwayId,
+          },
+        });
+      }
     } else if (!exam) {
       console.warn("[seed-auth-qa] No Exam titled 'Core Readiness Exam' — skipping bank sessions / practice tests.");
     }

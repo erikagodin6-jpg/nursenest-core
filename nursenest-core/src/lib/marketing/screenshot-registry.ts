@@ -251,6 +251,12 @@ const ABOUT_SHOWCASE_IDS = [14, 10, 1, 12, 6, 8, 9, 11, 3] as const;
 /** For Institutions — primary carousel / page helper order (readiness → teaching → scale). */
 const INSTITUTIONAL_SHOWCASE_IDS = [7, 12, 15, 6, 5, 2, 10, 14, 11] as const;
 
+/** About + How-it-works ecosystem narrative — Learn → Practice → Strengthen → Clinical readiness. */
+const ECOSYSTEM_NARRATIVE_IDS = [12, 1, 9, 7] as const;
+
+/** Clinical readiness interconnections — telemetry / ECG, lessons, results, study plan. */
+const CLINICAL_READINESS_IDS = [15, 12, 7, 8] as const;
+
 // ── Pre-defined groups for common surfaces ────────────────────────────────────
 //
 // Use these named groups to keep consumer components declarative.
@@ -350,4 +356,16 @@ export const SCREENSHOT_GROUPS = {
 
   /** @deprecated Use `institutionalShowcase` — kept for older imports. */
   institutionalPageCurated: INSTITUTIONAL_SHOWCASE_IDS,
+
+  /**
+   * About + How-it-works ecosystem narrative (Learn → Practice → Strengthen → Clinical readiness).
+   * Lesson content → rationale practice → smart review → CAT readiness results.
+   */
+  ecosystemNarrative: ECOSYSTEM_NARRATIVE_IDS,
+
+  /**
+   * Clinical readiness ecosystem interconnections — used on About page to show how
+   * telemetry/ECG, lessons, results, and the adaptive study plan reinforce each other.
+   */
+  clinicalReadiness: CLINICAL_READINESS_IDS,
 } satisfies Record<string, readonly ScreenshotId[]>;

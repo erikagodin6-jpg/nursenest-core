@@ -12,9 +12,10 @@ export function spawnWaitForAppReady(): void {
 
   const env = {
     ...process.env,
+    APP_READY_MODE: process.env.APP_READY_MODE?.trim() || "guest",
     APP_READY_PATHS:
       process.env.APP_READY_PATHS?.trim() ||
-      "/,/login,/app,/pre-nursing,/api/auth/csrf,/app/practice-tests",
+      "/,/login,/app,/pre-nursing,/app/practice-tests",
     APP_READY_TIMEOUT_MS: process.env.APP_READY_TIMEOUT_MS || "300000",
     APP_READY_AUTH_CSRF: process.env.APP_READY_AUTH_CSRF ?? "1",
   };

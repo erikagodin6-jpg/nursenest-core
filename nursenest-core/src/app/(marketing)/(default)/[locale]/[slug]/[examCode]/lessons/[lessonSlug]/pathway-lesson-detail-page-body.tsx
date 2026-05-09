@@ -67,6 +67,8 @@ import {
   PathwayLessonRelatedRailSkeleton,
 } from "@/components/lessons/pathway-lesson-detail-deferred";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
+import { LearnerSurfaceCard } from "@/components/ui/learner-surface-card";
+import { lessonSectionSurface } from "@/components/lessons/lesson-section-card";
 import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
@@ -261,7 +263,6 @@ export async function PathwayLessonDetailPageBody({
     heading: s.heading,
     kind: s.kind,
   }));
-  let editorialRhythmCounter = 0;
 
   if (process.env.PATHWAY_LESSON_PUBLIC_RENDER_LOG === "1") {
     const first = displaySections[0];
@@ -318,9 +319,6 @@ export async function PathwayLessonDetailPageBody({
           lessonTitle={displayLessonTitle}
           lessonTopic={lesson.topic}
           bodySystem={lesson.bodySystem}
-          metaChips={
-            <PathwayLessonRecordChips lesson={pickPathwayLessonMarketingRecordChipsSource(lesson)} omitTopic />
-          }
           trailing={
             userId && fullAccess ? (
               <PathwayLessonProgressBadgeLive
@@ -343,10 +341,6 @@ export async function PathwayLessonDetailPageBody({
             <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="top" />
           </div>
         ) : null}
-        <div className="mt-4 space-y-2">
-          {fullAccess ? <PremiumLessonPublishNotice validation={lesson.premiumValidation} /> : null}
-          {fullAccess ? <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} /> : null}
-        </div>
         {fullAccess && lesson.memoryAnchor ? (
           <div className="mt-4 max-w-5xl">
             <PathwayLessonMemoryAnchorStrip text={lesson.memoryAnchor} />
@@ -447,10 +441,14 @@ export async function PathwayLessonDetailPageBody({
                 <LessonRecallToggle />
               </div>
               <article className="nn-lesson-article-flow nn-lesson-article-grid nn-premium-lesson-article grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5">
-                {displaySections.map((section) => {
+                {(() => {
+                  let editorialRhythmIndex = 0;
+                  return displaySections.map((section) => {
                   const wide = pathwayLessonSectionPrefersWideColumn(section.kind, {
                     hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
                   });
+                  const editorialSurface = lessonSectionSurface(section.kind) === "editorial";
+                  const rhythmIdx = editorialSurface ? editorialRhythmIndex++ : undefined;
                   return (
                     <LessonSectionCard
                       key={section.id}
@@ -458,6 +456,7 @@ export async function PathwayLessonDetailPageBody({
                       heading={section.heading}
                       kind={section.kind}
                       className={wide ? "md:col-span-2" : undefined}
+                      editorialRhythmIndex={rhythmIdx}
                     >
                       {section.audioUrl ? (
                         <LessonSectionAudioButton
@@ -488,7 +487,8 @@ export async function PathwayLessonDetailPageBody({
                       ) : null}
                     </LessonSectionCard>
                   );
-                })}
+                });
+                })()}
               </article>
               {lessonQuizEmbed?.length ? (
                 <div className="mx-auto mt-8 max-w-5xl">
@@ -619,6 +619,26 @@ export async function PathwayLessonDetailPageBody({
         </div>
 
         <MarketingStudyCrossLinks className="mt-12" />
+        <LearnerSurfaceCard
+          variant="minimal"
+          data-testid="lesson-detail-editorial-metadata"
+          className="nn-lesson-detail-editorial-metadata mt-10 border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_8%)] bg-[color-mix(in_srgb,var(--semantic-surface)_93%,var(--semantic-panel-muted)_7%)] px-3 py-3 shadow-[var(--semantic-shadow-soft)] sm:px-4 sm:py-3.5"
+        >
+          <h2 className="sr-only">Catalog and editorial metadata</h2>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-[0.7rem] leading-snug text-[var(--semantic-text-secondary)] sm:text-xs">
+            <PathwayLessonRecordChips
+              lesson={pickPathwayLessonMarketingRecordChipsSource(lesson)}
+              omitTopic
+              className="gap-1"
+            />
+          </div>
+          {fullAccess ? (
+            <div className="mt-3 space-y-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,transparent)] pt-3">
+              <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
+              <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
+            </div>
+          ) : null}
+        </LearnerSurfaceCard>
         <EeatContentAttribution variant="lesson" />
         <StaffEditLivePageBanner
           adminHref={buildAdminPathwayLessonStableEditHref({

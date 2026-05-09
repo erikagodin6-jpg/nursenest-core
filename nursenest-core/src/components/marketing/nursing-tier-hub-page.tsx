@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Activity, BookOpen, ClipboardList, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -8,15 +9,21 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { catPathwayExamCodeLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
+import { MarketingPathwayHubHeroBand } from "@/components/marketing/marketing-pathway-hub-hero-band";
+import {
+  MarketingHubGuidedStudyPathStrip,
+  type MarketingHubGuidedPathTone,
+} from "@/components/marketing/marketing-hub-guided-study-path";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { StudyCard } from "@/components/ui/study-card";
+import type { PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
+import { isNewGradTransitionPathway } from "@/lib/marketing/is-new-grad-transition-pathway";
 import type { NursingTierHubActionId, NursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 import { resolveNursingTierHubStudyCardHref } from "@/lib/marketing/nursing-tier-hub-content";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import type { PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
@@ -42,15 +49,23 @@ const ACTION_HUB_ROLE_CLASS: Record<NursingTierHubActionId, string> = {
   exams: "nn-exam-hub-study-card--cat",
 };
 
+const ACTION_GUIDED_TONE: Record<NursingTierHubActionId, MarketingHubGuidedPathTone> = {
+  lessons: "success",
+  flashcards: "chart1",
+  practice_questions: "info",
+  exams: "warning",
+};
+
 export function NursingTierHubPage({
   pathway,
   hubPath,
   content,
   npSeoAliasSegment,
   emphasizeCatPracticeTests = false,
-  hubResume: _hubResume,
+  hubResume = null,
   viewerSignedIn = false,
   viewerHasPathwayLessonAccess: _viewerHasPathwayLessonAccess,
+  ecgModulePublic,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
@@ -59,9 +74,11 @@ export function NursingTierHubPage({
   npSeoAliasSegment?: string;
   /** NP SEO alias hubs: highlight CAT practice-test intent — mirrors {@link ExamPathwayHubBody}. */
   emphasizeCatPracticeTests?: boolean;
-  hubResume?: PathwayHubResumePayload | null;
+  hubResume?: PathwayHubResumePayload | null; // surfaced on New Grad transition hub when present
   viewerSignedIn?: boolean;
   viewerHasPathwayLessonAccess?: boolean;
+  /** Server-resolved ECG inventory for hub premium grid (see `resolveMarketingHubEcgModulePublic`). */
+  ecgModulePublic?: boolean;
 }) {
   const { t } = useMarketingI18n();
   const { status, data: clientSession } = useSession();
@@ -95,31 +112,95 @@ export function NursingTierHubPage({
   const introRaw = content.intro?.trim();
   const intro = introRaw ? formatSentenceCase(introRaw) : "";
   const eyebrow = pathway.shortName.trim() || pathway.displayName;
+  const isNewGradHub = isNewGradTransitionPathway(pathway);
+  const guidedSteps =
+    isNewGradHub && orderedActions.length > 0
+      ? orderedActions
+          .filter((a): a is NonNullable<typeof a> => Boolean(a))
+          .map((action) => ({
+            title: action.label || "Open",
+            hint:
+              action.disabled === true && action.disabledNote
+                ? action.disabledNote
+                : action.description || content.startHere,
+            href: resolveNursingTierHubStudyCardHref(pathway, action, {
+              viewerSignedIn: effectiveViewerSignedIn,
+            }),
+            tone: ACTION_GUIDED_TONE[action.id],
+          }))
+      : [];
 
   return (
     <>
       <FunnelExamHubViewBeacon pathway={pathway} hubPath={hubPath} />
 
       <div
-        className="nn-premium-pathway-hub"
+        className={`nn-premium-pathway-hub${isNewGradHub ? " nn-premium-pathway-hub--new-grad" : ""}`}
         data-nn-nursing-tier-hub="surface"
         data-pathway-track={pathway.roleTrack}
       >
         <section className="nn-hub-tier-study-band" aria-labelledby="nn-nursing-tier-hub-title">
-          <div className="nn-nursing-tier-hub-hero-band">
-            <p className="nn-premium-home-eyebrow">{eyebrow}</p>
-            <h1
-              id="nn-nursing-tier-hub-title"
-              className="nn-marketing-h1 mt-4 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]"
+          <MarketingPathwayHubHeroBand
+            eyebrow={<p className="nn-premium-home-eyebrow max-w-full whitespace-normal">{eyebrow}</p>}
+            title={
+              <h1
+                id="nn-nursing-tier-hub-title"
+                className="nn-marketing-h1 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]"
+              >
+                {heading}
+              </h1>
+            }
+            intro={
+              intro ? (
+                <p className="nn-marketing-body max-w-3xl text-pretty text-[var(--palette-text-muted)]">{intro}</p>
+              ) : null
+            }
+          />
+
+          {isNewGradHub && hubResume && (hubResume.nextRecommended || hubResume.lastTouched) ? (
+            <div
+              className="mt-6 rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-chart-4)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-4)_7%,var(--semantic-surface))] p-4 sm:p-5"
+              data-nn-new-grad-today-focus="1"
             >
-              {heading}
-            </h1>
-            {intro ? (
-              <p className="nn-marketing-body mt-4 max-w-3xl text-pretty text-[var(--palette-text-muted)]">
-                {intro}
+              <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-[var(--semantic-chart-4)]">
+                Today focus
               </p>
-            ) : null}
-          </div>
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+                {hubResume.nextRecommended ? (
+                  <Link
+                    href={hubResume.nextRecommended.href}
+                    className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                  >
+                    Continue: {hubResume.nextRecommended.title}
+                  </Link>
+                ) : null}
+                {hubResume.lastTouched && !hubResume.nextRecommended ? (
+                  <Link
+                    href={hubResume.lastTouched.href}
+                    className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                  >
+                    Resume: {hubResume.lastTouched.title}
+                  </Link>
+                ) : null}
+                {hubResume.lessonsInProgress > 0 ? (
+                  <span className="text-xs text-[var(--semantic-text-secondary)]">
+                    {hubResume.lessonsInProgress} lesson{hubResume.lessonsInProgress === 1 ? "" : "s"} in progress on this
+                    pathway
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+
+          {guidedSteps.length > 0 ? (
+            <MarketingHubGuidedStudyPathStrip
+              className="mt-6"
+              headingId="new-grad-guided-study-path-heading"
+              title="Guided transition flow"
+              subtitle={content.startHere}
+              steps={guidedSteps}
+            />
+          ) : null}
 
           <ul
             className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5"
@@ -166,6 +247,7 @@ export function NursingTierHubPage({
           pathway={pathway}
           isSignedIn={effectiveViewerSignedIn}
           npSeoAliasSegment={npSeoAliasSegment}
+          ecgModulePublic={ecgModulePublic}
         />
 
         {emphasizeCatPracticeTests ? (

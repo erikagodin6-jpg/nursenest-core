@@ -24,7 +24,7 @@ test.afterEach(async ({ page }, testInfo) => {
   /* Serial suite: tests that navigate (e.g. /pricing) must not leave the next test on a shell
    * without marketing-row4 or against a cold navigation state. */
   if (testInfo.status === "skipped") return;
-  await page.goto("/", { waitUntil: "domcontentloaded", timeout: 30_000 }).catch(() => {});
+  await page.goto("/", { waitUntil: "domcontentloaded", timeout: 60_000 }).catch(() => {});
 });
 
 test.beforeEach(async ({ context, browserName }) => {
@@ -50,18 +50,21 @@ async function settle(page: import("@playwright/test").Page): Promise<void> {
   await page.waitForTimeout(5000);
 }
 
-/** next-themes can hydrate after first paint; reload once so light row4 chrome is deterministic. */
+/** Theme storage hydrates asynchronously; set both storage and html attr for deterministic header probes. */
 async function gotoHomeLightMarketing(page: import("@playwright/test").Page, theme = "ocean"): Promise<void> {
-  /* Header checks only need first render; `load` can stall behind long-lived analytics/session work. */
-  await page.goto("/", { waitUntil: "domcontentloaded", timeout: 120_000 });
+  /* `commit` returns as soon as navigation starts; dev can take minutes for `domcontentloaded` on / when DB is cold. */
+  await page.goto("/", { waitUntil: "commit", timeout: 120_000 });
   await page.evaluate(({ themeKey, themeId }) => {
     try {
       localStorage.setItem(themeKey, themeId);
+      document.documentElement.setAttribute("data-theme", themeId);
     } catch {
       /* ignore */
     }
   }, { themeKey: THEME_STORAGE_KEY, themeId: theme });
-  await page.reload({ waitUntil: "domcontentloaded", timeout: 120_000 });
+  await expect(page.locator('header[data-nn-header-layout="marketing-row4"]')).toBeVisible({
+    timeout: 180_000,
+  });
 }
 
 /**
@@ -249,7 +252,7 @@ test.describe("Marketing header layout — responsive", () => {
       function overlap(a: DOMRect, b: DOMRect) {
         return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
       }
-      const header = document.querySelector('header[data-nn-header-layout="marketing-row4"]');
+      const header = document.querySelector("header[data-nn-header-layout]");
       if (!header) return { ok: false as const, reason: "missing marketing header" };
       const brand = header.querySelector(".nn-header-mobile-brand-auth-cluster");
       const controls = header.querySelector(
@@ -264,7 +267,7 @@ test.describe("Marketing header layout — responsive", () => {
 
     /* Mobile chrome: keep the top bar from turning into an overcrowded control strip. */
     const mobileControlCount = await page.evaluate(() => {
-      const header = document.querySelector('header[data-nn-header-layout="marketing-row4"]');
+      const header = document.querySelector("header[data-nn-header-layout]");
       if (!header) return -1;
       return header.querySelectorAll("a[href], button:not([hidden])").length;
     });

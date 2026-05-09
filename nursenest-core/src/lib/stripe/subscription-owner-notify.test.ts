@@ -30,16 +30,35 @@ describe("shouldOwnerNotifyPaidSubscriptionCheckout", () => {
     );
   });
 
-  it("is false when amount_total is zero or missing", () => {
+  it("is false when amount_total is zero or missing for active (non-trial) checkout", () => {
     assert.equal(shouldOwnerNotifyPaidSubscriptionCheckout({ ...livePaidActive, amountTotal: 0 }), false);
     assert.equal(shouldOwnerNotifyPaidSubscriptionCheckout({ ...livePaidActive, amountTotal: null }), false);
   });
 
-  it("is false when Stripe subscription is not active (e.g. trialing)", () => {
+  it("is true for live trialing subscription checkout with zero amount_total (trial start)", () => {
     assert.equal(
       shouldOwnerNotifyPaidSubscriptionCheckout({
         ...livePaidActive,
         stripeSubStatus: "trialing",
+        amountTotal: 0,
+      }),
+      true,
+    );
+    assert.equal(
+      shouldOwnerNotifyPaidSubscriptionCheckout({
+        ...livePaidActive,
+        stripeSubStatus: "trialing",
+        amountTotal: null,
+      }),
+      true,
+    );
+  });
+
+  it("is false when Stripe subscription is incomplete (not active/trialing)", () => {
+    assert.equal(
+      shouldOwnerNotifyPaidSubscriptionCheckout({
+        ...livePaidActive,
+        stripeSubStatus: "incomplete",
       }),
       false,
     );

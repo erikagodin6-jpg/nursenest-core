@@ -17,7 +17,6 @@ test.beforeEach(async ({ context }) => {
     ({ dismissedKey, themeKey }: { dismissedKey: string; themeKey: string }) => {
       try {
         localStorage.setItem(dismissedKey, "1");
-        /* Row4 light chrome + utility band require a light public theme (ocean default). */
         localStorage.setItem(themeKey, "ocean");
       } catch {
         /* ignore */
@@ -26,21 +25,6 @@ test.beforeEach(async ({ context }) => {
     { dismissedKey: SELECTOR_DISMISSED_LS, themeKey: THEME_STORAGE_KEY },
   );
 });
-
-/** Ocean + row4: init script seeds theme; pin storage then wait for hydrated light shell (avoid reload — can hang on dev HMR). */
-async function gotoHomeOceanMarketing(page: import("@playwright/test").Page): Promise<void> {
-  await page.goto("/", { waitUntil: "domcontentloaded", timeout: 120_000 });
-  await page.evaluate((themeKey) => {
-    try {
-      localStorage.setItem(themeKey, "ocean");
-    } catch {
-      /* ignore */
-    }
-  }, THEME_STORAGE_KEY);
-  await expect(page.locator('header[data-nn-header-layout="marketing-row4"]')).toBeVisible({
-    timeout: 120_000,
-  });
-}
 
 function parseRgb(cssColor: string): { r: number; g: number; b: number; a: number } | null {
   const m = cssColor.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)/);
@@ -76,7 +60,17 @@ test.describe("Marketing header bands — desktop", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("utility and tier backgrounds match; primary row is lighter; link colors opaque", async ({ page }) => {
-    await gotoHomeOceanMarketing(page);
+    await page.goto("/", { waitUntil: "load", timeout: 120_000 });
+    await page.evaluate((themeKey) => {
+      try {
+        localStorage.setItem(themeKey, "ocean");
+      } catch {
+        /* ignore */
+      }
+    }, THEME_STORAGE_KEY);
+    await expect(page.locator('header[data-nn-header-layout="marketing-row4"]')).toBeVisible({
+      timeout: 120_000,
+    });
 
     const utility = page.locator("[data-nn-header-band='utility']").first();
     const tier = page.locator("[data-nn-header-band='tier']").first();
@@ -145,7 +139,6 @@ test.describe("Marketing header bands — desktop", () => {
 
     expect(pRgb, "pricing color parse").toBeTruthy();
     if (pRgb) {
-      /* color(srgb … / a) can report slightly <1 for premium soft ink; still reads opaque on paper. */
       expect(pRgb.a, "pricing text not transparent").toBeGreaterThanOrEqual(0.75);
       const pLum = (0.2126 * pRgb.r + 0.7152 * pRgb.g + 0.0722 * pRgb.b) / 255;
       expect(pLum, "pricing link dark on light middle").toBeLessThan(0.45);
@@ -156,15 +149,9 @@ test.describe("Marketing header bands — desktop", () => {
     if (bands.row4) {
       const auth = page.locator(".nn-header-desktop-auth-cluster").first();
       await expect(auth, "desktop auth cluster").toBeVisible({ timeout: 10_000 });
-      /* Local auth can remain in skeleton state; either real links or skeleton affordances keep the cluster readable. */
-      const authReady = await auth.evaluate((el) => {
-        const hasLinks = el.querySelectorAll("a[href]").length > 0;
-        const hasSkeletons = Array.from(el.querySelectorAll("div")).some((node) =>
-          node.className.toString().includes("animate-pulse"),
-        );
-        return { hasLinks, hasSkeletons };
+      await expect(auth.locator("a[href]").first(), "desktop auth actions after session").toBeVisible({
+        timeout: 120_000,
       });
-      expect(authReady.hasLinks || authReady.hasSkeletons, JSON.stringify(authReady)).toBe(true);
       const logIn = auth.getByRole("link", { name: /log in/i }).first();
       if (await logIn.isVisible().catch(() => false)) {
         const loginBorder = await logIn.evaluate((el) => getComputedStyle(el).borderTopWidth);
@@ -180,7 +167,17 @@ test.describe("Marketing header bands — desktop", () => {
 
   test("mobile viewport: primary band uses neutral gradient; nav text dark; menu visible", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await gotoHomeOceanMarketing(page);
+    await page.goto("/", { waitUntil: "load", timeout: 120_000 });
+    await page.evaluate((themeKey) => {
+      try {
+        localStorage.setItem(themeKey, "ocean");
+      } catch {
+        /* ignore */
+      }
+    }, THEME_STORAGE_KEY);
+    await expect(page.locator('header[data-nn-header-layout="marketing-row4"]')).toBeVisible({
+      timeout: 120_000,
+    });
     const primary = page.locator("[data-nn-header-band='primary']").first();
     await expect(primary).toBeVisible({ timeout: 60_000 });
     const { bgImage, pricingColor } = await page.evaluate(() => {
@@ -194,7 +191,7 @@ test.describe("Marketing header bands — desktop", () => {
     expect(bgImage, "resolved gradient should not read as hot pink chrome").not.toMatch(
       /rgb\(236,\s*72,\s*153\)|rgb\(219,\s*39,\s*119\)|#ec4899|#db2777/i,
     );
-    const pRgb = parseRgb(pricingColor);
+    const pRgb = parseAnyRgb(pricingColor);
     expect(pRgb, "parse pricing color").toBeTruthy();
     if (pRgb) {
       const pLum = (0.2126 * pRgb.r + 0.7152 * pRgb.g + 0.0722 * pRgb.b) / 255;

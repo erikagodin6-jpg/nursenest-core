@@ -82,6 +82,17 @@ export const ECG_ROUTE_CONFIGS: Record<string, EcgRouteConfig> = {
   },
 };
 
+/**
+ * Client-safe rollout signal for marketing hub tiles (mirrors OSCE `NEXT_PUBLIC_ENABLE_*`).
+ * Keep in sync with {@link isEcgModuleEnabled} in production (set both when shipping inventory).
+ */
+export function isEcgModuleMarketingInventoryEnabled(
+  env: Record<string, string | undefined> = process.env as Record<string, string | undefined>,
+): boolean {
+  const pub = env.NEXT_PUBLIC_ENABLE_ECG_MODULE?.trim().toLowerCase();
+  return pub === "true" || pub === "1";
+}
+
 export function isEcgModuleEnabled(env: Record<string, string | undefined> = process.env as Record<string, string | undefined>): boolean {
   const raw = env.ENABLE_ECG_MODULE?.trim().toLowerCase();
   return raw === "true" || raw === "1";

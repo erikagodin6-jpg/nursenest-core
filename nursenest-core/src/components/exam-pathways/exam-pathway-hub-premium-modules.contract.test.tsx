@@ -23,11 +23,14 @@ function loadMarketingEn(): Record<string, string> {
   return JSON.parse(readFileSync(MARKETING_EN, "utf8")) as Record<string, string>;
 }
 
-function renderPremiumHtml(pathway: NonNullable<ReturnType<typeof getExamPathwayById>>): string {
+function renderPremiumHtml(
+  pathway: NonNullable<ReturnType<typeof getExamPathwayById>>,
+  ecgModulePublic = true,
+): string {
   const messages = loadMarketingEn();
   return renderToStaticMarkup(
     <MarketingI18nProvider locale="en" messages={messages}>
-      <ExamPathwayHubPremiumModules pathway={pathway} isSignedIn={false} />
+      <ExamPathwayHubPremiumModules pathway={pathway} isSignedIn={false} ecgModulePublic={ecgModulePublic} />
     </MarketingI18nProvider>,
   );
 }
@@ -44,6 +47,7 @@ describe("buildPremiumMarketingModuleCards", () => {
     const rnModules = buildPremiumMarketingModuleCards(usRn, {
       clinicalScenariosPublic: false,
       oscePublic: false,
+      ecgModulePublic: true,
     });
     assert.ok(!pnModules.studyTools.some((c) => c.key === "ecg"));
     assert.ok(rnModules.studyTools.some((c) => c.key === "ecg"));
@@ -61,14 +65,22 @@ describe("buildPremiumMarketingModuleCards", () => {
   it("NP omits generic clinical scenarios tile (uses clinical_cases instead)", () => {
     const np = getExamPathwayById("us-np-fnp");
     assert.ok(np);
-    const m = buildPremiumMarketingModuleCards(np, { clinicalScenariosPublic: true, oscePublic: false });
+    const m = buildPremiumMarketingModuleCards(np, {
+      clinicalScenariosPublic: true,
+      oscePublic: false,
+      ecgModulePublic: true,
+    });
     assert.ok(!m.studyTools.some((c) => c.key === "clinical_scenarios"));
   });
 
   it("includes NP clinical case tile for NP pathways", () => {
     const np = getExamPathwayById("us-np-fnp");
     assert.ok(np);
-    const m = buildPremiumMarketingModuleCards(np, { clinicalScenariosPublic: false, oscePublic: false });
+    const m = buildPremiumMarketingModuleCards(np, {
+      clinicalScenariosPublic: false,
+      oscePublic: false,
+      ecgModulePublic: true,
+    });
     assert.ok(m.studyTools.some((c) => c.key === "clinical_cases"));
     const cases = m.studyTools.find((c) => c.key === "clinical_cases");
     assert.ok(cases?.locked);
@@ -78,11 +90,27 @@ describe("buildPremiumMarketingModuleCards", () => {
   it("does not yield navigable OSCE URLs when OSCE public flag is off", () => {
     const usRn = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(usRn);
-    const { studyTools } = buildPremiumMarketingModuleCards(usRn, { oscePublic: false });
+    const { studyTools } = buildPremiumMarketingModuleCards(usRn, {
+      oscePublic: false,
+      ecgModulePublic: true,
+    });
     const osce = studyTools.find((c) => c.key === "osce");
     assert.ok(osce?.locked);
     assert.equal(resolvePremiumCardHref(osce!, true), "/");
     assert.doesNotMatch(resolvePremiumCardHref(osce!, true), /\/app\/osce/);
+  });
+
+  it("RN hub locks ECG tile when ecgModulePublic is false (matches unpublished/disabled inventory)", () => {
+    const usRn = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(usRn);
+    const { studyTools } = buildPremiumMarketingModuleCards(usRn, {
+      clinicalScenariosPublic: false,
+      oscePublic: false,
+      ecgModulePublic: false,
+    });
+    const ecg = studyTools.find((c) => c.key === "ecg");
+    assert.ok(ecg?.locked);
+    assert.equal(resolvePremiumCardHref(ecg!, true), "/");
   });
 
   it("Pre-Nursing pathway foundations ecosystem omits ECG, NGN tools, and new-grad strip", () => {

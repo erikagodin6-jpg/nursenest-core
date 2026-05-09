@@ -100,12 +100,38 @@ export function EcgQuestionList({
       signal: controller.signal,
     })
       .then(async (res) => {
-        const data = (await res.json()) as { ok?: boolean; items?: EcgQuestion[] };
-        if (!res.ok || !data.ok) throw new Error("load_failed");
+        let data: { ok?: boolean; items?: EcgQuestion[]; detail?: string } = {};
+        try {
+          data = (await res.json()) as typeof data;
+        } catch {
+          if (!controller.signal.aborted) setError("We could not read the ECG question response. Try again shortly.");
+          return;
+        }
+        if (controller.signal.aborted) return;
+        if (res.status === 401) {
+          setError("Sign in to load ECG questions.");
+          return;
+        }
+        if (res.status === 403) {
+          setError(
+            data.detail === "premium_required"
+              ? "An active subscription that includes ECG is required to view these questions."
+              : "Your plan or pathway does not include this ECG surface.",
+          );
+          return;
+        }
+        if (!res.ok || !data.ok) {
+          setError(
+            data.detail === "disabled"
+              ? "ECG questions are not enabled in this environment yet."
+              : "Unable to reach the ECG question service. Try again shortly.",
+          );
+          return;
+        }
         setItems(Array.isArray(data.items) ? data.items : []);
       })
       .catch((err) => {
-        if ((err as Error).name !== "AbortError") setError("Unable to load ECG questions right now.");
+        if ((err as Error).name !== "AbortError") setError("Unable to reach the ECG question service. Try again shortly.");
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false);
@@ -254,12 +280,38 @@ export function EcgWorksheetList({ level }: { level: EcgLevel }) {
       signal: controller.signal,
     })
       .then(async (res) => {
-        const data = (await res.json()) as { ok?: boolean; items?: EcgWorksheet[] };
-        if (!res.ok || !data.ok) throw new Error("load_failed");
+        let data: { ok?: boolean; items?: EcgWorksheet[]; detail?: string } = {};
+        try {
+          data = (await res.json()) as typeof data;
+        } catch {
+          if (!controller.signal.aborted) setError("We could not read the ECG worksheet response. Try again shortly.");
+          return;
+        }
+        if (controller.signal.aborted) return;
+        if (res.status === 401) {
+          setError("Sign in to load ECG worksheets.");
+          return;
+        }
+        if (res.status === 403) {
+          setError(
+            data.detail === "premium_required"
+              ? "An active subscription that includes ECG is required to view these worksheets."
+              : "Your plan or pathway does not include this ECG surface.",
+          );
+          return;
+        }
+        if (!res.ok || !data.ok) {
+          setError(
+            data.detail === "disabled"
+              ? "ECG worksheets are not enabled in this environment yet."
+              : "Unable to reach the ECG worksheet service. Try again shortly.",
+          );
+          return;
+        }
         setItems(Array.isArray(data.items) ? data.items : []);
       })
       .catch((err) => {
-        if ((err as Error).name !== "AbortError") setError("Unable to load ECG worksheets right now.");
+        if ((err as Error).name !== "AbortError") setError("Unable to reach the ECG worksheet service. Try again shortly.");
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false);

@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { Sparkles } from "lucide-react";
 import { NewGradMarketingCommandHero } from "@/components/marketing/new-grad/new-grad-marketing-command-hero";
+import { MarketingHubGuidedStudyPathStrip } from "@/components/marketing/marketing-hub-guided-study-path";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 import type { PublicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
@@ -29,7 +30,7 @@ export function NewGradMarketingLanding({
   const tr = (key: string, fallback: string) => safeHomepageMarketingT(t, key, fallback);
 
   return (
-    <div className="space-y-10" data-nn-new-grad-marketing-landing="1">
+    <div className="nn-premium-pathway-hub nn-premium-pathway-hub--new-grad space-y-10" data-nn-new-grad-marketing-landing="1">
       <NewGradMarketingCommandHero
         accentVar={LANDING_HERO_ACCENT}
         eyebrow={
@@ -55,6 +56,44 @@ export function NewGradMarketingLanding({
             {t("nav.mega.newGrad.hubDescription")}
           </p>
         }
+      />
+
+      <MarketingHubGuidedStudyPathStrip
+        headingId="ng-landing-guided-path-heading"
+        title="Start here on the transition pathway"
+        subtitle="Pick a unit lens for emotional context, or jump straight into the same New Grad library surfaces — always scoped away from the generic NCLEX-RN marketing hub."
+        steps={[
+          {
+            title: "Choose work area",
+            hint: "Unit-first priorities and study entry.",
+            href: `${base}#ng-work-areas-heading`,
+            tone: "brand",
+          },
+          {
+            title: "Lessons library",
+            hint: "Transition catalog on this pathway.",
+            href: study.lessons,
+            tone: "success",
+          },
+          {
+            title: "Practice questions",
+            hint: "Bank items for New Grad tier.",
+            href: study.questions,
+            tone: "info",
+          },
+          {
+            title: "Readiness exams",
+            hint: "CAT-style hub when you are ready.",
+            href: study.cat,
+            tone: "warning",
+          },
+          {
+            title: "Flashcards",
+            hint: "Recall inside the app.",
+            href: study.flashcards,
+            tone: "chart1",
+          },
+        ]}
       />
 
       <section

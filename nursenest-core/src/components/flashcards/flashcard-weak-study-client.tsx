@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
@@ -100,7 +101,10 @@ export function FlashcardWeakStudyClient({
   // 🧠 Loading
   if (loading && queue.length === 0) {
     return (
-      <div className="text-center py-20 text-sm text-gray-400">
+      <div
+        className="py-20 text-center text-sm text-[var(--semantic-text-muted)]"
+        data-nn-e2e-flashcards-weak-study-loading
+      >
         Building your weak-area session…
       </div>
     );
@@ -109,9 +113,12 @@ export function FlashcardWeakStudyClient({
   // ❌ Error
   if (error && queue.length === 0) {
     return (
-      <div className="text-center py-20">
-        <p className="text-red-600 text-sm">{error}</p>
-        <Link href={flashcardsHubHref} className="mt-4 inline-block text-blue-600">
+      <div className="py-20 text-center" data-nn-e2e-flashcards-weak-study-error>
+        <p className="text-sm text-[var(--semantic-danger)]">{error}</p>
+        <Link
+          href={flashcardsHubHref}
+          className="mt-4 inline-block text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+        >
           ← Back
         </Link>
       </div>
@@ -125,17 +132,20 @@ export function FlashcardWeakStudyClient({
       : "/app/questions";
 
     return (
-      <div className="max-w-lg mx-auto text-center py-20">
-        <h2 className="text-lg font-semibold mb-2">
+      <div
+        className="mx-auto max-w-lg py-20 text-center"
+        data-nn-e2e-flashcards-weak-study-empty
+      >
+        <h2 className="mb-2 text-lg font-semibold">
           {pathwayRequired ? "Select your exam track" : "No weak cards yet"}
         </h2>
 
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="mb-6 text-sm text-[var(--semantic-text-secondary)]">
           {hint ?? "Answer questions to build your weak-area set"}
         </p>
 
         {weakTopics.length > 0 && (
-          <p className="text-xs text-gray-400 mb-4">
+          <p className="mb-4 text-xs text-[var(--semantic-text-muted)]">
             Tracking: {weakTopics.join(", ")}
           </p>
         )}
@@ -144,17 +154,24 @@ export function FlashcardWeakStudyClient({
           {pathwayRequired && (
             <Link
               href="/app/account/study-preferences"
-              className="bg-blue-600 nn-text-on-solid-fill rounded-full py-2"
+              className="inline-flex min-h-11 items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+              style={{ background: "var(--role-cta, var(--semantic-brand))" }}
             >
               Set study preferences
             </Link>
           )}
 
-          <Link href={flashcardsHubHref} className="border rounded-full py-2">
+          <Link
+            href={flashcardsHubHref}
+            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-info)_40%,transparent)]"
+          >
             Browse decks
           </Link>
 
-          <Link href={questionsHref} className="border rounded-full py-2">
+          <Link
+            href={questionsHref}
+            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-info)_40%,transparent)]"
+          >
             Question bank
           </Link>
         </div>
@@ -183,31 +200,39 @@ export function FlashcardWeakStudyClient({
   });
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
-
+    <div className="mx-auto max-w-6xl px-4 py-6" data-nn-e2e-flashcards-weak-study-root>
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-4">
-        <Link href={flashcardsHubHref} className="text-sm text-blue-600">
+      <div className="mb-4 flex items-center justify-between">
+        <Link
+          href={flashcardsHubHref}
+          className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+        >
           ← Flashcards
         </Link>
 
-        <button onClick={load} className="text-xs text-gray-500 underline">
+        <button
+          type="button"
+          onClick={() => void load()}
+          className="text-xs text-[var(--semantic-text-muted)] underline underline-offset-2 hover:text-[var(--semantic-text-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-info)_40%,transparent)]"
+        >
           Refresh
         </button>
       </div>
 
-      {/* SESSION */}
-      <ActiveStudySession
-        cards={activeCards}
-        layout="split"
-        header={{
-          sessionTitle: "Weak Areas",
-          modeLabel: "Active Recall",
-          categoriesLabel: weakTopics.join(", ") || "Focus",
-          exitHref: flashcardsHubHref,
-        }}
-        onRate={onRate}
-      />
+      {/* SESSION — match deck/custom premium shell for visual + readiness parity */}
+      <ExamSessionShell examMode="practice" className="nn-premium-flashcard-session-root nn-flashcard-study-premium">
+        <ActiveStudySession
+          cards={activeCards}
+          layout="split"
+          header={{
+            sessionTitle: "Weak Areas",
+            modeLabel: "Active Recall",
+            categoriesLabel: weakTopics.join(", ") || "Focus",
+            exitHref: flashcardsHubHref,
+          }}
+          onRate={onRate}
+        />
+      </ExamSessionShell>
     </div>
   );
 }

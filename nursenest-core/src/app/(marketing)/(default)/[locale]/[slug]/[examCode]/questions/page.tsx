@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { buildAlliedGlobalHubPath, isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
 import { BookOpen, ClipboardList, Layers } from "lucide-react";
@@ -45,8 +46,6 @@ import { PathwayHero } from "@/components/study/pathway-hero";
 import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { MarketingPracticeQuestionsHubClient } from "@/components/marketing/marketing-practice-questions-hub-client";
-import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { loadPathwayPracticeBodySystemHubAggregates } from "@/lib/questions/pathway-practice-body-system-aggregates";
 import {
   marketingCatCompletePoolUsable,
@@ -127,12 +126,6 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
     pathwayId: pathway.id,
     roleTrack: slug,
   });
-
-  const questionsHubSession = await getOptionalPublicSession({
-    pathname: `${pathname}/questions`,
-    surface: "marketing.exam_hub.questions",
-  });
-  const questionsHubSignedIn = Boolean((questionsHubSession?.user as { id?: string })?.id);
 
   const topicFilterTrim = topicFilter.trim();
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
@@ -415,16 +408,18 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         </div>
       ) : null}
 
-      <ExamPathwayHubPremiumModules
-        pathway={pathway}
-        isSignedIn={questionsHubSignedIn}
-        npSeoAliasSegment={npAliasSegment}
-        alliedProfessionKey={alliedProfessionKey || undefined}
-        rootClassName="mt-10 sm:mt-12"
-      />
+      <p className="mt-8 text-sm text-[var(--semantic-text-secondary)]">
+        <Link
+          href={overviewHref}
+          className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+        >
+          Full study toolkit, labs, and readiness modules — on the {pathway.shortName} hub
+        </Link>
+      </p>
 
       {/* Bottom nav */}
       <StudyBottomNav
+        compact
         relatedLinks={[
           { label: "Clinical lessons", href: lessonsHrefWithProfession },
           ...(catCompletePoolUsable ? [{ label: "Adaptive CAT", href: catHrefWithProfession }] : []),

@@ -6087,6 +6087,28 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
   );
 }
 
+/* Allied occupation hubs — subtle category tint on shared hero band (tokens only; not a sub-brand). */
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="acute"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-danger) 18%, var(--border-subtle));
+}
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="lab"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-warning) 18%, var(--border-subtle));
+}
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="therapy"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 18%, var(--border-subtle));
+}
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="clinical"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-success) 16%, var(--border-subtle));
+}
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="support"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 16%, var(--border-subtle));
+}
+
+/* New Grad marketing + transition hubs — chart-4 companion tint on shared hero vocabulary. */
+.nn-premium-pathway-hub--new-grad .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 14%, var(--border-subtle));
+}
+
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-conversion {
   border-color: color-mix(in srgb, var(--semantic-info) 16%, color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle)));
   background: linear-gradient(

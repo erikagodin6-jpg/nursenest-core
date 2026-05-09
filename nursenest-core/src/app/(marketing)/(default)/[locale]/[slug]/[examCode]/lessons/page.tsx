@@ -98,10 +98,6 @@ import {
 } from "@/lib/allied/allied-profession-taxonomy";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
-import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
-
 /** Canonical Canada RN hub path (used for legacy ops grep + optional verbose console). */
 const RN_CANADA_NCLEX_LESSONS_HUB_PATH = "/canada/rn/nclex-rn/lessons" as const;
 
@@ -1270,12 +1266,6 @@ export default async function PathwayLessonsHubPage({
         },
       );
     }
-    const zeroLessonsHubSession = await getOptionalPublicSession({
-      pathname: `${pathname}/lessons`,
-      surface: "marketing.exam_hub.lessons",
-    });
-    const zeroLessonsHubSignedIn = Boolean((zeroLessonsHubSession?.user as { id?: string })?.id);
-    const lessonsNpSeoAlias = getNpPracticeTestLandingCopy(countrySlug, roleTrack, examCode) ? examCode : undefined;
     return (
       <LessonsPageShell
         title={heroTitle}
@@ -1362,13 +1352,6 @@ export default async function PathwayLessonsHubPage({
             </Link>
           </div>
         </div>
-        <ExamPathwayHubPremiumModules
-          pathway={pathway}
-          isSignedIn={zeroLessonsHubSignedIn}
-          npSeoAliasSegment={lessonsNpSeoAlias}
-          alliedProfessionKey={alliedProfessionKey || undefined}
-          rootClassName="mt-8 sm:mt-10"
-        />
       </LessonsPageShell>
     );
   }
@@ -1395,8 +1378,6 @@ export default async function PathwayLessonsHubPage({
     );
     progressMap = map;
   }
-
-  const lessonsHubNpSeoAlias = getNpPracticeTestLandingCopy(countrySlug, roleTrack, examCode) ? examCode : undefined;
 
   return (
     <LessonsPageShell
@@ -1542,13 +1523,14 @@ export default async function PathwayLessonsHubPage({
         lessonsOnPage={lessonsOnPageForPagination}
       />
 
-      <ExamPathwayHubPremiumModules
-        pathway={pathway}
-        isSignedIn={Boolean(progressCtx.userId)}
-        npSeoAliasSegment={lessonsHubNpSeoAlias}
-        alliedProfessionKey={alliedProfessionKey || undefined}
-        rootClassName="mt-10 sm:mt-12"
-      />
+      <p className="mt-8 text-sm text-[var(--semantic-text-secondary)]">
+        <Link
+          href={overviewHref}
+          className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+        >
+          Full study toolkit, labs, and readiness modules — on the {pathway.shortName} hub
+        </Link>
+      </p>
 
       <StudyBottomNav
         compact

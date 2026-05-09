@@ -38,6 +38,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-cat-start";
 import { pathwayAllowsEcgLinkedLearning } from "@/lib/ecg-module/ecg-linked-learning";
+import { isEcgModuleMarketingInventoryEnabled } from "@/lib/ecg-module/ecg-module-config";
 import {
   pathwayHubAppFlashcardsHref,
   pathwayHubAppPracticeTestsHref,
@@ -151,6 +152,11 @@ export type PremiumMarketingModuleSections = {
 export type BuildPremiumMarketingModuleCardsOpts = {
   clinicalScenariosPublic?: boolean;
   oscePublic?: boolean;
+  /**
+   * When set (e.g. from `resolveMarketingHubEcgModulePublic`), hub ECG tile matches in-app publish gate.
+   * When omitted, falls back to `isEcgModuleMarketingInventoryEnabled` for client-only surfaces.
+   */
+  ecgModulePublic?: boolean;
   alliedProfessionKey?: string | null;
 };
 
@@ -168,6 +174,7 @@ function pushCoreStudyToolCards(
   pathway: ExamPathwayDefinition,
   clinicalOn: boolean,
   osceOn: boolean,
+  ecgOn: boolean,
   studyTools: PremiumModuleCardModel[],
   alliedProfessionKey?: string | null,
 ): void {
@@ -333,6 +340,7 @@ function pushCoreStudyToolCards(
       lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
       href: scopeAlliedAppHref(pathway, "/modules/ecg/basic/lessons", alliedProfessionKey),
       wrapGuestWithLoginCallback: true,
+      locked: !ecgOn,
       qaMarker: "ecg",
     });
   }
@@ -856,6 +864,7 @@ export function buildPremiumMarketingModuleCards(
 ): PremiumMarketingModuleSections {
   const clinicalOn = opts?.clinicalScenariosPublic ?? isClinicalScenariosPubliclyEnabled();
   const osceOn = opts?.oscePublic ?? isOsceScenariosPubliclyEnabled();
+  const ecgOn = opts?.ecgModulePublic !== undefined ? opts.ecgModulePublic : isEcgModuleMarketingInventoryEnabled();
   const alliedProf = opts?.alliedProfessionKey ?? null;
 
   if (isPreNursingPremiumPathway(pathway)) {
@@ -863,7 +872,7 @@ export function buildPremiumMarketingModuleCards(
   }
 
   const studyTools: PremiumModuleCardModel[] = [];
-  pushCoreStudyToolCards(pathway, clinicalOn, osceOn, studyTools, alliedProf);
+  pushCoreStudyToolCards(pathway, clinicalOn, osceOn, ecgOn, studyTools, alliedProf);
   pushAlliedSupplementalPremiumStudyTools(pathway, clinicalOn, studyTools, alliedProf);
   if (pathway.roleTrack === "allied") {
     applyAlliedOccupationPremiumModuleLocks(alliedProf, studyTools);

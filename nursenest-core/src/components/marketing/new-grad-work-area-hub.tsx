@@ -16,6 +16,7 @@ import {
   TestTube2,
 } from "lucide-react";
 import { NewGradMarketingCommandHero } from "@/components/marketing/new-grad/new-grad-marketing-command-hero";
+import { MarketingHubGuidedStudyPathStrip } from "@/components/marketing/marketing-hub-guided-study-path";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import { StudyCard } from "@/components/ui/study-card";
@@ -69,7 +70,7 @@ export function NewGradWorkAreaHub({
 
   return (
     <div
-      className="space-y-[var(--nn-rhythm-section-y)]"
+      className="nn-premium-pathway-hub nn-premium-pathway-hub--new-grad space-y-[var(--nn-rhythm-section-y)]"
       data-nn-new-grad-work-area-hub={definition.slug}
       data-nn-nursing-tier-hub="surface"
     >
@@ -110,15 +111,64 @@ export function NewGradWorkAreaHub({
         }
       />
 
+      <MarketingHubGuidedStudyPathStrip
+        headingId={`ng-work-area-guided-${definition.slug}`}
+        title="Guided flow for this unit"
+        subtitle={tr(
+          "newGrad.marketing.workArea.guidedPathSubtitle",
+          "Move from orientation to drills to readiness — each step stays on the New Grad transition pathway id.",
+        )}
+        steps={[
+          {
+            title: tr("newGrad.marketing.workArea.guidedLessons", "Lessons"),
+            hint: tr("newGrad.marketing.workArea.guidedLessonsHint", "Topic index for transition lessons."),
+            href: lessonsHref,
+            tone: "success",
+          },
+          {
+            title: tr("newGrad.marketing.workArea.guidedQuestions", "Practice questions"),
+            hint: tr("newGrad.marketing.workArea.guidedQuestionsHint", "Judgment items on the same bank."),
+            href: questionsHref,
+            tone: "info",
+          },
+          {
+            title: tr("newGrad.marketing.workArea.guidedFlashcards", "Flashcards"),
+            hint: tr("newGrad.marketing.workArea.guidedFlashcardsHint", "App recall with pathway context."),
+            href: flashcardsHref,
+            tone: "chart1",
+          },
+          {
+            title: tr("newGrad.marketing.workArea.guidedReadiness", "Readiness"),
+            hint: tr("newGrad.marketing.workArea.guidedReadinessHint", "CAT-style hub when you are ready."),
+            href: catHref,
+            tone: "warning",
+          },
+          {
+            title: tr("newGrad.marketing.workArea.guidedPracticeExams", "Practice exams"),
+            hint: tr("newGrad.marketing.workArea.guidedPracticeExamsHint", "Timed sets in the app."),
+            href: practiceTestsHref,
+            tone: "chart5",
+          },
+        ]}
+      />
+
       {overview ? (
         <section
-          className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8"
+          className="rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 sm:p-6"
           aria-labelledby="ng-hub-live-heading"
+          data-nn-new-grad-compact-analytics="1"
         >
-          <h2 id="ng-hub-live-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
-            {tr("newGrad.marketing.workArea.snapshotTitle", "New Grad library snapshot")}
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 id="ng-hub-live-heading" className="nn-marketing-h2 text-balance">
+              {tr("newGrad.marketing.workArea.snapshotTitle", "New Grad library snapshot")}
+            </h2>
+            {overview.lessonCount > 0 ? (
+              <span className="nn-badge-semantic-success whitespace-nowrap px-2.5 py-1 text-[11px]">
+                {overview.lessonCount} lessons
+              </span>
+            ) : null}
+          </div>
+          <p className="mt-2 max-w-3xl text-xs leading-relaxed text-[var(--semantic-text-secondary)] sm:text-sm">
             {tr(
               "newGrad.marketing.workArea.snapshotBody",
               "Live counts for the transition-to-practice pathway — scoped inventory, not the full NCLEX-RN marketing corpus.",

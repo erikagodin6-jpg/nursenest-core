@@ -18,6 +18,7 @@ export const MINIMAL_MARKETING_LAYOUT_SHELL_MESSAGES: Record<string, string> = {
   "nav.language": "Language",
   "nav.theme": "Theme",
   "nav.pricing": "Pricing",
+  "nav.about": "About",
   "nav.preNursing": "Pre-Nursing",
   "nav.tools": "Tools",
   "nav.signup": "Start Free",

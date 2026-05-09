@@ -63,6 +63,12 @@ Applies to Cursor implementation, Figma-to-code handoff, AI-generated UI, and hu
 - Preserve **NurseNest leaf logo**, **wordmark**, **DM Sans**, optimistic premium learner emotional tone (`nursenest-production-governance.mdc`).
 - **Reject:** serif body typography for product UI, enterprise-hospital gray slabs, gamer neon, generic SaaS dashboard clones, disconnected sub-brand visual languages.
 
+## 11. Figma — mandatory premium UI process
+
+For **aesthetic, layout, hierarchy, spacing, navigation chrome, card systems, responsiveness, or visual-design** work: **audit live UI vs the premium homepage direction**, then **create or update Figma frames** (desktop + mobile; light + dark; Ocean / Midnight / Blossom) **before** major implementation. Preserve **routing, logo, wordmark, and canonical nav** unless the product task explicitly changes them. Implementation must **match approved Figma** and converge with RN / RPN / NP / New Grad / Pre-Nursing / Allied hubs — no ad-hoc card systems or grey/neon palettes (`semantic-color-guardrails.mdc`). **Playwright** must capture desktop + mobile + theme screenshots where hub programs require it; PRs and `reports/*-FINAL.md` must list **Figma file links, frame IDs, redesigned components/routes, and side-by-side Figma vs implementation screenshots** when visuals materially change.
+
+**Full checklist:** `docs/governance/figma-premium-ui-mandatory-process.md`.
+
 ---
 
 ## Related documentation
@@ -72,3 +78,4 @@ Applies to Cursor implementation, Figma-to-code handoff, AI-generated UI, and hu
 - `docs/governance/ecosystem-qa-master-program.md` — recurring Playwright matrix, cohesion, entitlement, adaptive, performance audits + report templates.
 - `docs/ecosystem-design-system-convergence.md` — primitive registry, duplicate-system audit, theme/token convergence.
 - `docs/governance/ecosystem-guardrails-rollout.md` — changelog and enforcement notes.
+- `docs/governance/figma-premium-ui-mandatory-process.md` — Figma-first workflow, evidence, Playwright visual QA expectations.

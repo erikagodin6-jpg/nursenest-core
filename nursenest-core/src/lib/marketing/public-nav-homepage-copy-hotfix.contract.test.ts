@@ -15,6 +15,7 @@ const MARKETING_EN = path.join(REPO_ROOT, "tools", "i18n", "marketing", "marketi
 
 const PUBLIC_NAV_LABELS = [
   "Pricing",
+  "About",
   "Blog",
   "FAQ",
   "Pre-Nursing",
@@ -30,6 +31,7 @@ const PUBLIC_NAV_LABELS = [
 
 const PUBLIC_NAV_SHELL_KEYS = [
   "nav.pricing",
+  "nav.about",
   "footer.blog",
   "footer.faq",
   "nav.preNursing",
@@ -77,6 +79,7 @@ test("desktop public header exposes required more links, tier hubs, and guest au
 
   for (const snippet of [
     'key: "pricing"',
+    'key: "about"',
     'key: "blog"',
     'key: "faq"',
     'key: "pre-nursing"',

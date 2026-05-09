@@ -6,6 +6,7 @@ import {
   canAccessEcgModuleForTier,
   ecgQuestionTierFilterForTier,
   isEcgModuleEnabled,
+  isEcgModuleMarketingInventoryEnabled,
   normalizeEcgLevel,
   normalizeEcgMode,
 } from "@/lib/ecg-module/ecg-module-config";
@@ -15,6 +16,13 @@ test("ECG module feature flag is explicit", () => {
   assert.equal(isEcgModuleEnabled({ ENABLE_ECG_MODULE: "1" }), true);
   assert.equal(isEcgModuleEnabled({ ENABLE_ECG_MODULE: "false" }), false);
   assert.equal(isEcgModuleEnabled({ ENABLE_ECG_MODULE: undefined }), false);
+});
+
+test("ECG marketing inventory flag is separate public env", () => {
+  assert.equal(isEcgModuleMarketingInventoryEnabled({ NEXT_PUBLIC_ENABLE_ECG_MODULE: "true" }), true);
+  assert.equal(isEcgModuleMarketingInventoryEnabled({ NEXT_PUBLIC_ENABLE_ECG_MODULE: "1" }), true);
+  assert.equal(isEcgModuleMarketingInventoryEnabled({ NEXT_PUBLIC_ENABLE_ECG_MODULE: "false" }), false);
+  assert.equal(isEcgModuleMarketingInventoryEnabled({}), false);
 });
 
 test("RPN cannot access ECG module while RN and NP can", () => {

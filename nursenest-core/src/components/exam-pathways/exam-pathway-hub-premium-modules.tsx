@@ -36,6 +36,11 @@ type Props = {
   npSeoAliasSegment?: string;
   /** Reserved for allied occupation hubs — analytics / future deep links; core nursing matrix ignores this. */
   alliedProfessionKey?: string | null;
+  /**
+   * When set from the marketing hub RSC, ECG tile lock state matches the in-app ECG module publish gate.
+   * Omit on client-only parents to use `NEXT_PUBLIC_ENABLE_ECG_MODULE` fallback in `buildPremiumMarketingModuleCards`.
+   */
+  ecgModulePublic?: boolean;
   /** Merged onto the outer wrapper — use e.g. `mt-0` when a parent already provides vertical rhythm. */
   rootClassName?: string;
 };
@@ -163,10 +168,12 @@ export function ExamPathwayHubPremiumModules({
   isSignedIn,
   npSeoAliasSegment,
   alliedProfessionKey = null,
+  ecgModulePublic,
   rootClassName,
 }: Props) {
   const { studyTools, readiness, newGrad } = buildPremiumMarketingModuleCards(pathway, {
     alliedProfessionKey,
+    ...(ecgModulePublic !== undefined ? { ecgModulePublic } : {}),
   });
   const preNursingHub = isPreNursingPremiumPathway(pathway);
   const alliedHub = pathway.roleTrack === "allied";

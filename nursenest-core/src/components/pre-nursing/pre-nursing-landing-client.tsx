@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen, FlaskConical, Sparkles } from "lucide-react";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 
@@ -14,8 +16,63 @@ function getPreNursingStrings(): Record<string, string> {
   return preNursingStringsCache;
 }
 
-export function PreNursingLandingClient() {
+type PreNursingLandingClientProps = {
+  /** When true, render only the foundations module card grid (for the marketing hub composition). */
+  modulesOnly?: boolean;
+  /** Marketing UI locale for localized `/[lang]/…` paths (default English). */
+  marketingLocale?: string;
+};
+
+export function PreNursingLandingClient({ modulesOnly = false, marketingLocale = DEFAULT_MARKETING_LOCALE }: PreNursingLandingClientProps) {
   const dict = getPreNursingStrings();
+  const l = (path: string) => withMarketingLocale(marketingLocale, path);
+
+  const moduleGrid = (
+    <div
+      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      data-nn-qa-pre-nursing-module-library=""
+    >
+      {PRE_NURSING_MODULE_REGISTRY.map((m) => (
+        <Link
+          key={m.slug}
+          href={l(`/pre-nursing/lessons/${m.slug}`)}
+          className="nn-card nn-card-interactive group flex flex-col p-5"
+          data-testid={`pre-nursing-card-${m.slug}`}
+          onClick={() =>
+            trackClientEvent(PH.preNursingModuleViewed, {
+              source_surface: "hub",
+              module_slug: m.slug,
+              cta_type: "module_card",
+            })
+          }
+        >
+          <h2 className="text-lg font-bold text-[var(--theme-heading-text)] group-hover:text-primary">
+            {dict[m.titleKey] ?? m.slug}
+          </h2>
+          <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--theme-body-text)]">{dict[m.subtitleKey] ?? ""}</p>
+          <p className="mt-3 text-xs font-medium text-primary">
+            {m.lessons} {dict["preNursing.interactiveLessons"] ?? "interactive lessons"}
+          </p>
+        </Link>
+      ))}
+    </div>
+  );
+
+  if (modulesOnly) {
+    return (
+      <section className="space-y-5" aria-labelledby="pre-nursing-foundations-modules-heading">
+        <h2 id="pre-nursing-foundations-modules-heading" className="nn-marketing-h2 text-balance text-[var(--palette-heading)]">
+          {dict["preNursing.hub.foundationsModulesHeading"] ?? "Foundations modules"}
+        </h2>
+        <p className="nn-marketing-body-sm max-w-2xl text-pretty text-[var(--semantic-text-secondary)]">
+          {dict["preNursing.hub.foundationsModulesLead"] ??
+            "Work through free interactive lessons by topic - always free, no subscription required."}
+        </p>
+        {moduleGrid}
+      </section>
+    );
+  }
+
   return (
     <>
       <header className="mb-10">
@@ -38,7 +95,7 @@ export function PreNursingLandingClient() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="/pre-nursing/lessons"
+              href={l("/pre-nursing/lessons")}
               className="nn-btn-primary inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold shadow-sm"
               data-testid="link-pre-nursing-lessons"
               onClick={() => trackClientEvent(PH.preNursingNextModuleClicked, { source_surface: "hub", cta_type: "start_lessons" })}
@@ -48,7 +105,7 @@ export function PreNursingLandingClient() {
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
             <Link
-              href="/pre-nursing/study-plan"
+              href={l("/pre-nursing/study-plan")}
               className="nn-btn-secondary inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
               onClick={() =>
                 trackClientEvent(PH.preNursingPathwayCtaClicked, { source_surface: "hub", cta_type: "set_readiness_target" })
@@ -58,7 +115,7 @@ export function PreNursingLandingClient() {
               Set a readiness target
             </Link>
             <Link
-              href="/tools/med-math"
+              href={l("/tools/med-math")}
               className="nn-btn-secondary inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
               onClick={() =>
                 trackClientEvent(PH.preNursingPathwayCtaClicked, { source_surface: "hub", cta_type: "med_math_tools" })
@@ -71,31 +128,7 @@ export function PreNursingLandingClient() {
         </div>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {PRE_NURSING_MODULE_REGISTRY.map((m) => (
-          <Link
-            key={m.slug}
-            href={`/pre-nursing/lessons/${m.slug}`}
-            className="nn-card nn-card-interactive group flex flex-col p-5"
-            data-testid={`pre-nursing-card-${m.slug}`}
-            onClick={() =>
-              trackClientEvent(PH.preNursingModuleViewed, {
-                source_surface: "hub",
-                module_slug: m.slug,
-                cta_type: "module_card",
-              })
-            }
-          >
-            <h2 className="text-lg font-bold text-[var(--theme-heading-text)] group-hover:text-primary">
-              {dict[m.titleKey] ?? m.slug}
-            </h2>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--theme-body-text)]">{dict[m.subtitleKey] ?? ""}</p>
-            <p className="mt-3 text-xs font-medium text-primary">
-              {m.lessons} {dict["preNursing.interactiveLessons"] ?? "interactive lessons"}
-            </p>
-          </Link>
-        ))}
-      </div>
+      {moduleGrid}
     </>
   );
 }

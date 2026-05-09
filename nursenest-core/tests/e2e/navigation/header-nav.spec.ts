@@ -32,6 +32,7 @@ test.describe("Desktop header navigation (public marketing)", () => {
     const strip = page.locator(DESKTOP_PRIMARY_STRIP_NAV).first();
     const cases: { name: RegExp; pathRe: RegExp }[] = [
       { name: /^Pricing$/, pathRe: /\/pricing(?:\/|$)/ },
+      { name: /^About$/, pathRe: /\/about(?:\/|$)/ },
       { name: /^Blog$/, pathRe: /\/blog(?:\/|$)/ },
       { name: /^FAQ$/, pathRe: /\/faq(?:\/|$)/ },
       { name: /^Tools$/, pathRe: /\/tools(?:\/|$)/ },

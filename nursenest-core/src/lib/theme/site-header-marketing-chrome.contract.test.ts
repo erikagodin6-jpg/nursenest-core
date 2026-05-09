@@ -29,8 +29,42 @@ describe("SiteHeader sticky chrome wrapper (site-header.tsx)", () => {
     );
     assert.match(
       src,
-      /\{ \.\.\.getNavChromeStyle\(theme\), boxShadow: darkHeaderShadow \}/,
-      "dark themes must merge getNavChromeStyle onto sticky wrapper for full-bleed paint",
+      /const chrome = getNavChrome\(theme\)/,
+      "dark themes must resolve chrome via getNavChrome for ink/border without inline backgroundColor",
     );
+    assert.match(
+      src,
+      /\{\s*\.\.\.getNavChromeVars\(theme\),\s*color: chrome\.foreground,\s*borderColor: chrome\.border,/s,
+      "dark sticky must spread getNavChromeVars + color/border only so premium .nn-header-dark-surface owns background",
+    );
+    assert.doesNotMatch(
+      src,
+      /getNavChromeStyle/,
+      "SiteHeader must not import getNavChromeStyle — inline backgroundColor fights full-bleed glass CSS",
+    );
+  });
+
+  it("declares marketing-unified-dark on <header> for dark themes (row4 tier CSS stays light-only)", () => {
+    const src = fs.readFileSync(siteHeaderTsx, "utf8");
+    assert.match(
+      src,
+      /data-nn-header-layout=\{isLightTheme \? "marketing-row4" : "marketing-unified-dark"\}/,
+    );
+  });
+
+  it("keeps authenticated mobile/tablet CTA row transparent — no nav-bg slab inside max-width shell", () => {
+    const src = fs.readFileSync(siteHeaderTsx, "utf8");
+    assert.match(
+      src,
+      /nn-header-mobile-only-flex relative z-\[1\] w-full[\s\S]{0,220}bg-transparent/,
+      "signed-in mobile row must not paint opaque nav-bg inside nn-section-shell",
+    );
+  });
+
+  it("places tier rail as sibling after primary band closes (full-bleed tier strip contract)", () => {
+    const src = fs.readFileSync(siteHeaderTsx, "utf8");
+    const closePrimary = src.indexOf("{/* /.nn-header-marketing-primary-band */}");
+    const tierRail = src.indexOf("nn-marketing-nav-v31-tier-rail");
+    assert.ok(closePrimary !== -1 && tierRail !== -1 && closePrimary < tierRail, "tier rail must follow primary band");
   });
 });

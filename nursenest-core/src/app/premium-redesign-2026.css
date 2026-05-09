@@ -3265,6 +3265,17 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
   --nn-footer-panel-radius: 1.5rem;
 }
 
+/* Footer shell: grounded surface from theme/footer tokens (not header chrome hex injection). */
+[data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
+  background: linear-gradient(
+    175deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 7%, var(--footer-bg)),
+    color-mix(in srgb, var(--semantic-panel-cool) 9%, var(--footer-bg)),
+    var(--footer-bg)
+  );
+  color: var(--footer-fg);
+}
+
 [data-nn-footer-layout="marketing"] .nn-footer-panel {
   position: relative;
   overflow: hidden;
@@ -3280,7 +3291,8 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
   -webkit-backdrop-filter: saturate(130%) blur(14px);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 8%, transparent),
-    0 18px 44px -32px color-mix(in srgb, var(--semantic-brand) 12%, transparent);
+    0 18px 44px -32px color-mix(in srgb, var(--semantic-chart-3) 14%, transparent),
+    0 14px 36px -30px color-mix(in srgb, var(--semantic-info) 10%, transparent);
 }
 
 [data-theme="midnight"] [data-nn-footer-layout="marketing"] .nn-footer-panel,
@@ -3292,6 +3304,18 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
       color-mix(in srgb, var(--footer-fg) 6%, var(--footer-bg))
     );
   border-color: color-mix(in srgb, var(--footer-border) 75%, var(--semantic-border-soft));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 9%, transparent),
+    0 18px 44px -32px color-mix(in srgb, var(--semantic-chart-5) 12%, transparent);
+}
+
+[data-theme="blossom"] [data-nn-footer-layout="marketing"] .nn-footer-panel {
+  background:
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--semantic-panel-warm) 9%, var(--footer-bg)),
+      color-mix(in srgb, var(--semantic-panel-positive) 8%, var(--footer-bg))
+    );
 }
 
 [data-nn-footer-layout="marketing"] .nn-footer-columns {
