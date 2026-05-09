@@ -44,3 +44,7 @@ On **search, topic, or allied-filtered** lesson hub requests (`/lessons` when no
 
 - Message: `fix(performance): optimize lesson hub and detail loading`  
 - After push, append: `git rev-parse HEAD`
+
+## Git
+
+- **SHA:** `4c3a121da`
