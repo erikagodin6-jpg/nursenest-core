@@ -1,0 +1,247 @@
+{
+  "cdnBaseDocumentation": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com",
+  "viewportPresets": {
+    "desktop": { "width": 1440, "height": 900 },
+    "mobile": { "width": 390, "height": 844 }
+  },
+  "slots": [
+    {
+      "screenshotSlot": 1,
+      "id": "slot-01-practice-rationale",
+      "route": "/app/questions/session",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "Practice session with rationale panel visible. Start a short session from /app/questions if this shows setup only.",
+      "registryScreenshotId": 1
+    },
+    {
+      "screenshotSlot": 2,
+      "id": "slot-02-flashcards-study",
+      "routeTemplate": "FLASHCARD_STUDY_PATH",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "Default: flashcard hub. For active recall + rationale on-card, set SCREENSHOT_FLASHCARD_STUDY_PATH=/app/flashcards/{deckSlug} (optional query e.g. ?shuffle=1).",
+      "registryScreenshotId": 2
+    },
+    {
+      "screenshotSlot": 3,
+      "id": "slot-03-learner-dashboard",
+      "route": "/app",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "[data-testid=\"learner-dashboard-shell\"], main",
+      "manualReviewNotes": "Learner study dashboard — streak and next-step cards visible.",
+      "registryScreenshotId": 3
+    },
+    {
+      "screenshotSlot": 4,
+      "id": "slot-04-question-bank-advanced",
+      "route": "/app/questions/bank",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "NGN / advanced formats — filter or open an item that shows matrix / extended reasoning when catalog allows.",
+      "registryScreenshotId": 4
+    },
+    {
+      "screenshotSlot": 5,
+      "id": "slot-05-progress-report",
+      "route": "/app/account/report",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "Topic report / accuracy — pathway progress improves fidelity.",
+      "registryScreenshotId": 5
+    },
+    {
+      "screenshotSlot": 6,
+      "id": "slot-06-cat-launch-or-session",
+      "routeTemplate": "CAT_SLOT_6_ROUTE",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "midnight",
+      "waitFor": "main",
+      "manualReviewNotes": "Default: CAT launch briefing for SCREENSHOT_DEMO_PATHWAY_ID. Override with SCREENSHOT_CAT_SESSION_PATH for an in-flight adaptive session (/app/practice-tests/{id}).",
+      "registryScreenshotId": 6
+    },
+    {
+      "screenshotSlot": 7,
+      "id": "slot-07-cat-results-insights",
+      "routeTemplate": "CAT_SLOT_7_ROUTE",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "midnight",
+      "waitFor": "main",
+      "manualReviewNotes": "Default: CAT insights hub. Override with SCREENSHOT_CAT_RESULTS_PATH for a specific results page (/app/practice-tests/{id}/results).",
+      "registryScreenshotId": 7
+    },
+    {
+      "screenshotSlot": 8,
+      "id": "slot-08-study-plan",
+      "route": "/app/study-plan",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "Adaptive study plan day cards — gated without subscription.",
+      "registryScreenshotId": 8
+    },
+    {
+      "screenshotSlot": 9,
+      "id": "slot-09-smart-review",
+      "route": "/app/review",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "Smart review groups — richer with answered question history.",
+      "registryScreenshotId": 9
+    },
+    {
+      "screenshotSlot": 10,
+      "id": "slot-10-question-bank-list",
+      "route": "/app/questions",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "Question bank browse — marketing hub uses practice-body-system cards when available.",
+      "registryScreenshotId": 10
+    },
+    {
+      "screenshotSlot": 11,
+      "id": "slot-11-confidence-analytics",
+      "route": "/app/analytics",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "Confidence vs accuracy — needs graded history for full charts.",
+      "registryScreenshotId": 11
+    },
+    {
+      "screenshotSlot": 12,
+      "id": "slot-12-lesson-detail",
+      "routeTemplate": "LESSON_DETAIL_PATH",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "blossom",
+      "waitFor": "main",
+      "manualReviewNotes": "Set SCREENSHOT_LESSON_DETAIL_PATH to /app/lessons/{id}. If unset, first lesson link is opened from hub (see script prepare hook).",
+      "registryScreenshotId": 12
+    },
+    {
+      "screenshotSlot": 13,
+      "id": "slot-13-lesson-library",
+      "route": "/app/lessons",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "Lesson library virtual list — scroll review for density.",
+      "registryScreenshotId": 13
+    },
+    {
+      "screenshotSlot": 14,
+      "id": "slot-14-marketing-home-desktop",
+      "route": "/",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "ocean",
+      "waitFor": "main",
+      "manualReviewNotes": "Public marketing homepage — hero + platform preview; pause carousel if needed.",
+      "registryScreenshotId": 14
+    },
+    {
+      "screenshotSlot": 15,
+      "id": "slot-15-ecg-workstation",
+      "route": "/modules/ecg/basic/lessons",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "midnight",
+      "waitFor": "main",
+      "manualReviewNotes": "ECG / telemetry lessons hub — Advanced ECG may require separate entitlement.",
+      "registryScreenshotId": 15
+    }
+  ],
+  "supplementary": [
+    {
+      "id": "extra-home-mobile",
+      "route": "/",
+      "viewport": "mobile",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/home-mobile.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Marketing homepage mobile."
+    },
+    {
+      "id": "extra-learner-nav-mobile",
+      "route": "/app",
+      "viewport": "mobile",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/mobile-learner-nav.png",
+      "waitFor": "[data-testid=\"learner-dashboard-shell\"], main",
+      "manualReviewNotes": "Opens mobile nav drawer before capture (nav.openMenu).",
+      "prepareHook": "openMobileLearnerNav"
+    },
+    {
+      "id": "extra-labs-hub",
+      "route": "/app/labs",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/labs-hub.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Clinical labs hub."
+    },
+    {
+      "id": "extra-med-calc",
+      "route": "/app/med-calculations",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/med-calculations-hub.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Medication calculations hub."
+    },
+    {
+      "id": "extra-settings-account",
+      "route": "/app/account/settings",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/settings-account.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Account settings — learner preferences."
+    },
+    {
+      "id": "extra-pricing",
+      "route": "/pricing",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/pricing.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Pricing / pathways snapshot."
+    },
+    {
+      "id": "extra-practice-tests-hub",
+      "route": "/app/practice-tests",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "ocean",
+      "filename": "supplementary/practice-tests-hub.png",
+      "waitFor": "main",
+      "manualReviewNotes": "Practice exams hub — complements slot 1 (rationale) and CAT slots 6–7."
+    }
+  ]
+}

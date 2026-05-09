@@ -269,7 +269,7 @@ function PlatformPreviewSection() {
         </div>
 
         <ScreenshotCarousel
-          group="faqAbout"
+          group="aboutShowcase"
           captionOverlay
           autoplayIntervalMs={5000}
           mediaFrame="default"

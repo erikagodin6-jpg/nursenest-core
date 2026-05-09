@@ -1,9 +1,9 @@
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import {
-  MarketingForInstitutionsLegacyClient,
-  type ForInstitutionsLegacyMessages,
-} from "@/components/marketing/marketing-for-institutions-legacy-client";
+  MarketingForInstitutionsPremiumClient,
+  type ForInstitutionsPremiumMessages,
+} from "@/components/marketing/marketing-for-institutions-premium-client";
 
 const FOR_INSTITUTIONS_MESSAGE_KEYS = [
   "pages.forInstitutions.forNursingSchoolsAndPrograms",
@@ -118,11 +118,40 @@ const FOR_INSTITUTIONS_MESSAGE_KEYS = [
   "pages.forInstitutions.requestInformation",
   "pages.forInstitutions.leadRequiredFields",
   "pages.forInstitutions.leadSubmitError",
+  "pages.forInstitutions.explorePlatform",
+  "pages.forInstitutions.heroMontageCaption",
+  "pages.forInstitutions.trustedByEyebrow",
+  "pages.forInstitutions.sectionHowItWorks",
+  "pages.forInstitutions.howItWorksLead",
+  "pages.forInstitutions.howStep1Title",
+  "pages.forInstitutions.howStep1Body",
+  "pages.forInstitutions.howStep2Title",
+  "pages.forInstitutions.howStep2Body",
+  "pages.forInstitutions.howStep3Title",
+  "pages.forInstitutions.howStep3Body",
+  "pages.forInstitutions.howStep4Title",
+  "pages.forInstitutions.howStep4Body",
+  "pages.forInstitutions.sectionPlatformDeepDive",
+  "pages.forInstitutions.sectionBenefitsCompare",
+  "pages.forInstitutions.compareProgramsHeading",
+  "pages.forInstitutions.compareLearnersHeading",
+  "pages.forInstitutions.sectionEducator",
+  "pages.forInstitutions.educatorLead",
+  "pages.forInstitutions.sectionImplementation",
+  "pages.forInstitutions.implWeeksLabel",
+  "pages.forInstitutions.implWeeksBody",
+  "pages.forInstitutions.implMonthLabel",
+  "pages.forInstitutions.implMonthBody",
+  "pages.forInstitutions.implScaleLabel",
+  "pages.forInstitutions.implScaleBody",
+  "pages.forInstitutions.sectionTrustQuality",
+  "pages.forInstitutions.finalCtaTitle",
+  "pages.forInstitutions.finalCtaLead",
 ] as const;
 
 export async function MarketingForInstitutionsPage({ locale }: { locale: string }) {
   const full = await loadMarketingMessages(locale);
-  const messages = {} as ForInstitutionsLegacyMessages;
+  const messages = {} as ForInstitutionsPremiumMessages;
   for (const key of FOR_INSTITUTIONS_MESSAGE_KEYS) {
     const v = full[key];
     if (typeof v === "string" && v.length > 0) {
@@ -130,5 +159,5 @@ export async function MarketingForInstitutionsPage({ locale }: { locale: string 
     }
   }
   const pricingHref = withMarketingLocale(locale, "/pricing");
-  return <MarketingForInstitutionsLegacyClient locale={locale} messages={messages} pricingHref={pricingHref} />;
+  return <MarketingForInstitutionsPremiumClient locale={locale} messages={messages} pricingHref={pricingHref} />;
 }

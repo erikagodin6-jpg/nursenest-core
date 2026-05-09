@@ -166,6 +166,7 @@ function HeroClinicalPanel({
     streakValue: string;
     masteredLabel: string;
     masteredValue: string;
+    masteredUnit: string;
     ecgLabel: string;
     ecgBpm: string;
     mini1Title: string;
@@ -188,17 +189,24 @@ function HeroClinicalPanel({
         <div className="nn-premium-hero-stat nn-premium-hero-stat--readiness">
           <Target className="nn-premium-hero-stat__glyph" aria-hidden />
           <span className="nn-premium-hero-stat__label">{copy.readinessLabel}</span>
-          <span className="nn-premium-hero-stat__value">{copy.readinessValue}</span>
+          <div className="nn-premium-hero-stat__figure">
+            <span className="nn-premium-hero-stat__value">{copy.readinessValue}</span>
+          </div>
         </div>
         <div className="nn-premium-hero-stat nn-premium-hero-stat--streak">
           <Flame className="nn-premium-hero-stat__glyph" aria-hidden />
           <span className="nn-premium-hero-stat__label">{copy.streakLabel}</span>
-          <span className="nn-premium-hero-stat__value">{copy.streakValue}</span>
+          <div className="nn-premium-hero-stat__figure">
+            <span className="nn-premium-hero-stat__value">{copy.streakValue}</span>
+          </div>
         </div>
         <div className="nn-premium-hero-stat nn-premium-hero-stat--mastery">
           <BookMarked className="nn-premium-hero-stat__glyph" aria-hidden />
           <span className="nn-premium-hero-stat__label">{copy.masteredLabel}</span>
-          <span className="nn-premium-hero-stat__value">{copy.masteredValue}</span>
+          <div className="nn-premium-hero-stat__figure">
+            <span className="nn-premium-hero-stat__value">{copy.masteredValue}</span>
+            <span className="nn-premium-hero-stat__unit">{copy.masteredUnit}</span>
+          </div>
         </div>
       </div>
 
@@ -327,12 +335,9 @@ export function PremiumHomepageHero(props: {
     readinessValue: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessValue", "78%"),
     streakLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.streakLabel", "Study streak"),
     streakValue: safeHomepageMarketingT(t, "pages.home.hero.panel.streakValue", "9 days"),
-    masteredLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredLabel", "Mastered topics"),
-    masteredValue: stripMustachePlaceholders(
-      safeHomepageMarketingT(t, "pages.home.hero.panel.masteredValue", "{{count}} cards", {
-        count: formatMarketingInteger(1240, locale),
-      }),
-    ),
+    masteredLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredLabel", "Mastered"),
+    masteredValue: formatMarketingInteger(124, locale),
+    masteredUnit: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredUnit", "cards"),
     ecgLabel: safeHomepageMarketingT(
       t,
       "pages.home.hero.panel.ecgLabel",

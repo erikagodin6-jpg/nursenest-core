@@ -32,6 +32,7 @@ export type ScreenshotPage =
   | "pricing"
   | "faq"
   | "about"
+  | "for-institutions"
   | "cat"
   | "practice"
   | "results"
@@ -45,10 +46,11 @@ export type ScreenshotPage =
 // First feature in the array = highest priority.
 
 const PAGE_FEATURE_MAP: Readonly<Record<ScreenshotPage, ScreenshotFeature[]>> = {
-  home: ["general", "question-bank", "rationale", "lesson", "reports"],
+  home: ["general", "question-bank", "rationale", "lesson", "reports", "ecg-workstation"],
   pricing: ["question-bank", "cat-exam", "study-plan", "smart-review", "cat-results"],
   faq: ["cat-exam", "cat-results", "rationale", "study-plan", "smart-review", "lesson"],
   about: ["general", "dashboard", "question-bank", "lesson", "reports"],
+  "for-institutions": ["general", "dashboard", "lesson", "cat-exam", "cat-results", "reports", "ecg-workstation"],
   cat: ["cat-exam", "cat-results"],
   practice: ["question-bank", "rationale", "confidence"],
   results: ["cat-results", "reports", "confidence"],
@@ -66,7 +68,8 @@ const PAGE_SCREENSHOT_MAP: Readonly<Record<ScreenshotPage, readonly ScreenshotId
   home:          SCREENSHOT_GROUPS.homepageHero,
   pricing:       SCREENSHOT_GROUPS.pricingPreview,
   faq:           SCREENSHOT_GROUPS.faqAbout,
-  about:         [14, 10, 1, 12, 6, 8, 9, 11, 3] as const,
+  about:         SCREENSHOT_GROUPS.aboutShowcase,
+  "for-institutions": SCREENSHOT_GROUPS.institutionalShowcase,
   cat:           SCREENSHOT_GROUPS.catExam,
   practice:      SCREENSHOT_GROUPS.practice,
   results:       SCREENSHOT_GROUPS.results,
@@ -218,6 +221,23 @@ export type AboutFeatureBlock = {
   readonly flip: boolean;
   readonly feature: ScreenshotFeature;
 };
+
+/** Resolved screenshot records for the institutional marketing page hero + sections. */
+export function getInstitutionalMarketingScreenshotSlots(): {
+  heroMontage: ScreenshotRecord[];
+  whyFeatures: ScreenshotRecord[];
+  workflow: ScreenshotRecord[];
+  platformBlocks: ScreenshotRecord[];
+  educator: ScreenshotRecord[];
+} {
+  return {
+    heroMontage: getScreenshotsByIds(SCREENSHOT_GROUPS.institutionalHeroMontage),
+    whyFeatures: getScreenshotsByIds(SCREENSHOT_GROUPS.institutionalWhyFeatures),
+    workflow: getScreenshotsByIds(SCREENSHOT_GROUPS.institutionalWorkflow),
+    platformBlocks: getScreenshotsByIds(SCREENSHOT_GROUPS.institutionalPlatformBlocks),
+    educator: getScreenshotsByIds(SCREENSHOT_GROUPS.institutionalEducator),
+  };
+}
 
 export const ABOUT_FEATURE_BLOCKS: readonly AboutFeatureBlock[] = [
   {

@@ -169,26 +169,58 @@
   margin-bottom: 12px;
 }
 .nn-premium-hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 112px;
   border-radius: 14px;
   padding: 12px 14px;
   background: var(--surface, #ffffff);
   border: 1px solid var(--border-subtle, #f0e6f7);
 }
 .nn-premium-hero-stat__label {
+  display: block;
+  width: 100%;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--palette-text-muted);
+  line-height: 1.25;
+}
+.nn-premium-hero-stat__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  margin-top: 6px;
+  width: 100%;
+  min-width: 0;
+}
+.nn-premium-hero-stat__label + .nn-premium-hero-stat__value {
+  margin-top: 6px;
 }
 .nn-premium-hero-stat__value {
+  display: block;
   font-size: 20px;
   font-weight: 900;
   color: var(--palette-heading);
-  margin-top: 2px;
+  margin-top: 0;
   letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.nn-premium-hero-stat__unit {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--palette-text-muted);
+  line-height: 1.2;
 }
 .nn-premium-hero-stat__glyph {
+  display: block;
+  flex-shrink: 0;
   width: 18px;
   height: 18px;
   margin-bottom: 6px;
@@ -2316,6 +2348,7 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
 }
 
 .nn-premium-hero-stats--rail .nn-premium-hero-stat {
+  min-height: 0;
   padding: 10px 12px;
 }
 
