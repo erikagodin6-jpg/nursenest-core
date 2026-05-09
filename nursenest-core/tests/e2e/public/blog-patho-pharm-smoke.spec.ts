@@ -2,7 +2,8 @@ import { expect, test, type Page } from "@playwright/test";
 
 /**
  * When set (comma / semicolon / whitespace separated), each slug is treated as a **published**
- * first-batch post: tests **fail** on 404 or missing `/blog` index link (page 1 only).
+ * first-batch post: tests **fail** on 404 or missing `/blog` list link within the first
+ * `BLOG_FIRST_BATCH_INDEX_MAX_PAGES` pages (default 5, max 10).
  *
  * @example BLOG_FIRST_BATCH_SLUGS=slug-one,slug-two npx playwright test …/blog-patho-pharm-smoke.spec.ts
  */
@@ -19,6 +20,28 @@ async function expectRequiredPublishedArticle(page: Page, slug: string): Promise
   expect(status, `${path} must not 404 when BLOG_FIRST_BATCH_SLUGS is set (got ${status})`).not.toBe(404);
   expect(res?.ok(), `${path} status ${status}`).toBeTruthy();
   await expect(page.locator("article")).toBeVisible({ timeout: 30_000 });
+}
+
+const FIRST_BATCH_INDEX_LINK_MAX_PAGES = Math.min(
+  10,
+  Math.max(1, Math.floor(Number(process.env.BLOG_FIRST_BATCH_INDEX_MAX_PAGES ?? "5")) || 5),
+);
+
+async function expectIndexLinkWithinPages(page: Page, slug: string): Promise<void> {
+  const href = `/blog/${slug}`;
+  const link = page.locator(`a[href="${href}"]`).first();
+  for (let p = 1; p <= FIRST_BATCH_INDEX_LINK_MAX_PAGES; p += 1) {
+    const listPath = p <= 1 ? "/blog" : `/blog?page=${p}`;
+    const res = await page.goto(listPath, { waitUntil: "domcontentloaded", timeout: 120_000 });
+    expect(res?.ok(), `${listPath} ${res?.status()}`).toBeTruthy();
+    if ((await link.count()) > 0) {
+      await expect(link).toBeVisible({ timeout: 15_000 });
+      return;
+    }
+  }
+  throw new Error(
+    `No index link for ${href} in first ${FIRST_BATCH_INDEX_LINK_MAX_PAGES} /blog list pages (raise BLOG_FIRST_BATCH_INDEX_MAX_PAGES if needed)`,
+  );
 }
 
 /**
@@ -139,18 +162,10 @@ const FIRST_BATCH_SLUGS = slugsFromFirstBatchEnv();
 
 if (FIRST_BATCH_SLUGS.length > 0) {
   test.describe("Blog first-batch publish (BLOG_FIRST_BATCH_SLUGS)", () => {
-    test.describe.configure({ mode: "serial" });
-
     for (const slug of FIRST_BATCH_SLUGS) {
-      test(`required live article /blog/${slug}`, async ({ page }) => {
+      test(`required live /blog/${slug} + index list link`, async ({ page }) => {
         await expectRequiredPublishedArticle(page, slug);
-      });
-
-      test(`required index link on /blog page 1 → ${slug}`, async ({ page }) => {
-        const res = await page.goto("/blog", { waitUntil: "domcontentloaded", timeout: 120_000 });
-        expect(res?.ok(), `/blog ${res?.status()}`).toBeTruthy();
-        const href = `/blog/${slug}`;
-        await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible({ timeout: 30_000 });
+        await expectIndexLinkWithinPages(page, slug);
       });
     }
   });

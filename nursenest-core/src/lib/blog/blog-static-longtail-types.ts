@@ -23,4 +23,5 @@ export type BlogStaticLongtailRecord = {
   medicalReviewerName?: string;
 };
 
+/** Origin of a row in merged public blog lists (`/blog`, tag/category hubs when merged). */
 export type BlogPostPublicListSource = "db" | "static";

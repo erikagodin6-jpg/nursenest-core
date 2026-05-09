@@ -121,7 +121,7 @@ test.describe("Allied Health hubs (registry-driven)", () => {
       const zoneHtml = await zone.innerHTML();
       expect(zoneHtml.toLowerCase().includes("/admin")).toBe(false);
 
-      await expect(page.getByRole("heading", { name: /^Study tools$/i })).toBeVisible();
+      await expect(zone.getByRole("heading", { name: /^Study tools$/i }).first()).toBeVisible();
       if (alliedHubExpectsGuidedStudyPath(path)) {
         await expect(page.locator('[data-nn-marketing-hub-guided-path="1"]')).toBeVisible({ timeout: 90_000 });
       }
