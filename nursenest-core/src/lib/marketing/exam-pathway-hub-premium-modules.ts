@@ -7,6 +7,7 @@ import {
   BookMarked,
   BookOpen,
   Brain,
+  Briefcase,
   Calculator,
   CalendarClock,
   ClipboardCheck,
@@ -19,6 +20,7 @@ import {
   Layers,
   LayoutGrid,
   LineChart,
+  ListOrdered,
   MessageSquare,
   Microscope,
   Pill,
@@ -34,6 +36,7 @@ import {
 import type { CardVariant } from "@/components/ui/study-card";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-cat-start";
 import { pathwayAllowsEcgLinkedLearning } from "@/lib/ecg-module/ecg-linked-learning";
 import {
   pathwayHubAppFlashcardsHref,
@@ -43,7 +46,9 @@ import {
   pathwayHubAppWeakAreasFlashcardsHref,
 } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { withAlliedProfessionMarketingQuery } from "@/lib/lessons/lesson-routes";
+import { alliedHealthSegmentPath, withAlliedProfessionMarketingQuery } from "@/lib/lessons/lesson-routes";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import {
   SCENARIO_LEARNER_ROUTES,
   withScenarioPathwayAndProfessionQuery,
@@ -52,7 +57,10 @@ import {
 import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
 import { isOsceScenariosPubliclyEnabled } from "@/lib/scenarios/osce-scenarios-feature-flag";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
-import { applyAlliedOccupationPremiumModuleLocks } from "@/lib/marketing/allied-hub-premium-module-policy";
+import {
+  alliedHubCatSurfaceUnlocked,
+  applyAlliedOccupationPremiumModuleLocks,
+} from "@/lib/marketing/allied-hub-premium-module-policy";
 
 export type PremiumHubModuleKey =
   | "labs"
@@ -67,6 +75,8 @@ export type PremiumHubModuleKey =
   | "exam_plan"
   | "transition"
   | "clinical_judgment"
+  /** Public marketing CAT landing for New Grad RN transition pathway (`data-nn-qa-hub-premium-module`). */
+  | "new_grad_pathway_cat"
   | "skills_refresher"
   | "ngn_tools"
   | "weak_areas"
@@ -85,7 +95,19 @@ export type PremiumHubModuleKey =
   | "pn_ethics_professional"
   | "pn_mini_cat"
   | "pn_pathway_cat"
-  | "pn_questions_hub";
+  | "pn_questions_hub"
+  /** Marketing CAT landing for allied occupation hubs when {@link alliedHubCatSurfaceUnlocked}. */
+  | "pathway_cat"
+  /** Public marketing blog deep-link for the active allied occupation track. */
+  | "allied_career_resources"
+  /** Pathway marketing lessons directory (nursing tier hubs). */
+  | "hub_lessons"
+  /** Public marketing CAT explainer route (`/us/rn/nclex-rn/cat`, etc.) — nursing pathways only. */
+  | "pathway_cat_landing"
+  /** In-app clinical scenarios for RN/RPN/LPN tracks when the public scenarios flag is on (NP uses `clinical_cases`). */
+  | "clinical_scenarios"
+  /** New Grad strip — prioritization & delegation question focus. */
+  | "new_grad_delegation";
 
 export type PremiumModuleCardModel = {
   key: PremiumHubModuleKey;
@@ -102,7 +124,7 @@ export type PremiumModuleCardModel = {
   wrapGuestWithLoginCallback: boolean;
   locked?: boolean;
   /** QA: RN/NP ECG surface — omitted entirely for PN/RPN tiers. */
-  qaMarker?: "ecg" | "np_clinical";
+  qaMarker?: "ecg" | "np_clinical" | "clinical_scenarios";
 };
 
 /** US/CA Pre-Nursing paid tier hubs (`pre-nursing`, `pre-nursing-ca`) — foundations ecosystem + subscriber apps. */
@@ -149,6 +171,21 @@ function pushCoreStudyToolCards(
   studyTools: PremiumModuleCardModel[],
   alliedProfessionKey?: string | null,
 ): void {
+  if (pathway.roleTrack !== "allied") {
+    studyTools.push({
+      key: "hub_lessons",
+      icon: BookOpen,
+      variant: "featured",
+      extraClass: "nn-exam-hub-study-card--featured",
+      titleKey: "components.examPathwayHub.premiumModules.hubLessonsTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.hubLessonsBody",
+      ctaKey: "components.examPathwayHub.premiumModules.hubLessonsCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: buildExamPathwayPath(pathway, "lessons"),
+      wrapGuestWithLoginCallback: false,
+    });
+  }
+
   studyTools.push({
     key: "flashcards",
     icon: Layers,
@@ -174,6 +211,21 @@ function pushCoreStudyToolCards(
     href: scopeAlliedAppHref(pathway, pathwayHubAppPracticeTestsHref(pathway.id), alliedProfessionKey),
     wrapGuestWithLoginCallback: true,
   });
+
+  if (pathway.roleTrack !== "allied") {
+    studyTools.push({
+      key: "pathway_cat_landing",
+      icon: Activity,
+      variant: "default",
+      extraClass: "nn-exam-hub-study-card--cat",
+      titleKey: "components.examPathwayHub.premiumModules.pathwayCatLandingTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.pathwayCatLandingBody",
+      ctaKey: "components.examPathwayHub.premiumModules.pathwayCatLandingCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: marketingCatPathForPathway(pathway),
+      wrapGuestWithLoginCallback: false,
+    });
+  }
 
   studyTools.push({
     key: "labs",
@@ -252,6 +304,23 @@ function pushCoreStudyToolCards(
     wrapGuestWithLoginCallback: true,
   });
 
+  if (pathway.roleTrack !== "allied" && !isNpPathway(pathway)) {
+    studyTools.push({
+      key: "clinical_scenarios",
+      icon: Briefcase,
+      variant: "default",
+      extraClass: "nn-exam-hub-study-card--featured",
+      titleKey: "components.examPathwayHub.premiumModules.clinicalScenariosHubTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.clinicalScenariosHubBody",
+      ctaKey: "components.examPathwayHub.premiumModules.clinicalScenariosHubCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathway.id),
+      wrapGuestWithLoginCallback: true,
+      locked: !clinicalOn,
+      qaMarker: "clinical_scenarios",
+    });
+  }
+
   if (pathwayAllowsEcgLinkedLearning(pathway)) {
     studyTools.push({
       key: "ecg",
@@ -305,9 +374,91 @@ function pushCoreStudyToolCards(
   });
 }
 
+/** Premium grid additions for allied pathway hubs — CAT landing, scenarios, drills, career blog. */
+function pushAlliedSupplementalPremiumStudyTools(
+  pathway: ExamPathwayDefinition,
+  clinicalOn: boolean,
+  studyTools: PremiumModuleCardModel[],
+  alliedProfessionKey?: string | null,
+): void {
+  if (pathway.roleTrack !== "allied") return;
+
+  studyTools.push({
+    key: "skills_refresher",
+    icon: RefreshCw,
+    variant: "default",
+    extraClass: "nn-exam-hub-study-card--cat",
+    titleKey: "components.examPathwayHub.premiumModules.skillsRefresherTitle",
+    bodyKey: "components.examPathwayHub.premiumModules.skillsRefresherBodyAllied",
+    ctaKey: "components.examPathwayHub.premiumModules.skillsRefresherCta",
+    lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+    href: scopeAlliedAppHref(
+      pathway,
+      withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.medicationDrills, pathway.id),
+      alliedProfessionKey,
+    ),
+    wrapGuestWithLoginCallback: true,
+  });
+
+  const k = alliedProfessionKey?.trim() ?? "";
+  if (!k) return;
+
+  if (alliedHubCatSurfaceUnlocked(k)) {
+    studyTools.push({
+      key: "pathway_cat",
+      icon: Activity,
+      variant: "default",
+      extraClass: "nn-exam-hub-study-card--cat",
+      titleKey: "components.examPathwayHub.premiumModules.pathwayCatTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.pathwayCatBody",
+      ctaKey: "components.examPathwayHub.premiumModules.pathwayCatCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: scopeAlliedAppHref(pathway, buildExamPathwayPath(pathway, "cat"), alliedProfessionKey),
+      wrapGuestWithLoginCallback: false,
+    });
+  }
+
+  if (isAlliedMarketingCorePathwayId(pathway.id)) {
+    studyTools.push({
+      key: "clinical_cases",
+      icon: GitBranch,
+      variant: "featured",
+      extraClass: "nn-exam-hub-study-card--featured",
+      titleKey: "components.examPathwayHub.premiumModules.alliedClinicalScenariosTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.alliedClinicalScenariosBody",
+      ctaKey: "components.examPathwayHub.premiumModules.alliedClinicalScenariosCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.alliedClinicalScenariosLockedCta",
+      href: withScenarioPathwayAndProfessionQuery(
+        SCENARIO_LEARNER_ROUTES.clinicalScenarios,
+        pathway.id,
+        alliedProfessionKey,
+      ),
+      wrapGuestWithLoginCallback: true,
+      locked: !clinicalOn,
+    });
+  }
+
+  const prof = getAlliedProfessionByProfessionKey(k);
+  if (prof) {
+    studyTools.push({
+      key: "allied_career_resources",
+      icon: Briefcase,
+      variant: "default",
+      extraClass: "nn-exam-hub-study-card--lessons",
+      titleKey: "components.examPathwayHub.premiumModules.alliedCareerResourcesTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.alliedCareerResourcesBody",
+      ctaKey: "components.examPathwayHub.premiumModules.alliedCareerResourcesCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: `${alliedHealthSegmentPath(prof.segment)}/blog`,
+      wrapGuestWithLoginCallback: false,
+    });
+  }
+}
+
 function buildNewGradOnlyCards(pathway: ExamPathwayDefinition): PremiumModuleCardModel[] {
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const questionsHref = buildExamPathwayPath(pathway, "questions");
+  const catHref = marketingCatPathForPathway(pathway);
 
   return [
     {
@@ -335,6 +486,18 @@ function buildNewGradOnlyCards(pathway: ExamPathwayDefinition): PremiumModuleCar
       wrapGuestWithLoginCallback: false,
     },
     {
+      key: "new_grad_pathway_cat",
+      icon: Activity,
+      variant: "default",
+      extraClass: "nn-exam-hub-study-card--cat",
+      titleKey: "components.examPathwayHub.premiumModules.newGradPathwayCatTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.newGradPathwayCatBody",
+      ctaKey: "components.examPathwayHub.premiumModules.newGradPathwayCatCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: catHref,
+      wrapGuestWithLoginCallback: false,
+    },
+    {
       key: "skills_refresher",
       icon: RefreshCw,
       variant: "default",
@@ -344,6 +507,18 @@ function buildNewGradOnlyCards(pathway: ExamPathwayDefinition): PremiumModuleCar
       ctaKey: "components.examPathwayHub.premiumModules.skillsRefresherCta",
       lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
       href: withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.medicationDrills, pathway.id),
+      wrapGuestWithLoginCallback: true,
+    },
+    {
+      key: "new_grad_delegation",
+      icon: ListOrdered,
+      variant: "default",
+      extraClass: "nn-exam-hub-study-card--lessons",
+      titleKey: "components.examPathwayHub.premiumModules.newGradDelegationTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.newGradDelegationBody",
+      ctaKey: "components.examPathwayHub.premiumModules.newGradDelegationCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: pathwayHubAppQuestionsHref(pathway.id, "Prioritization"),
       wrapGuestWithLoginCallback: true,
     },
   ];
@@ -689,6 +864,7 @@ export function buildPremiumMarketingModuleCards(
 
   const studyTools: PremiumModuleCardModel[] = [];
   pushCoreStudyToolCards(pathway, clinicalOn, osceOn, studyTools, alliedProf);
+  pushAlliedSupplementalPremiumStudyTools(pathway, clinicalOn, studyTools, alliedProf);
   if (pathway.roleTrack === "allied") {
     applyAlliedOccupationPremiumModuleLocks(alliedProf, studyTools);
   }

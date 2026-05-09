@@ -44,6 +44,7 @@ test.describe("Nursing pathway hubs — public smoke", () => {
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(1);
     await expect(page.getByRole("heading", { name: /^study tools$/i })).toBeVisible();
     await expect(page.getByRole("heading", { name: /^readiness & progress$/i })).toBeVisible();
+    await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="hub_lessons"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="flashcards"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="labs"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="med_calc"]`)).toBeVisible();
@@ -59,6 +60,7 @@ test.describe("Nursing pathway hubs — public smoke", () => {
     await expect(page.locator('[data-nn-nursing-tier-hub="surface"]')).toBeVisible({ timeout: 90_000 });
     await expect(page.locator(PREMIUM)).toBeVisible();
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(0);
+    await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="hub_lessons"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="flashcards"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="osce"]`)).toBeVisible();
     await expectNoAdminLinksInPremiumZone(page);
@@ -70,6 +72,7 @@ test.describe("Nursing pathway hubs — public smoke", () => {
     await gotoExpectOk(page, "/us/np/fnp");
     await expectNotPageNotFound(page);
     await expect(page.locator('[data-nn-nursing-tier-hub="surface"]')).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="hub_lessons"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-np-cases="1"]`)).toHaveCount(1);
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-ecg="1"]`)).toHaveCount(1);
     await expectNoAdminLinksInPremiumZone(page);
@@ -89,7 +92,13 @@ test.describe("Nursing pathway hubs — public smoke", () => {
   });
 });
 
-const SCREENSHOT_OUT = join(process.cwd(), "docs", "screenshots", "nursing-hubs");
+const SCREENSHOT_OUT = join(process.cwd(), "docs", "screenshots", "nursing-hubs-e2e");
+
+const THEME_BUCKETS_E2E = [
+  { id: "ocean", label: "ocean" },
+  { id: "blossom", label: "blossom" },
+  { id: "midnight", label: "midnight" },
+] as const;
 
 const SCREENSHOT_HUBS: { fileBase: string; path: string; readySelector: string; seed: "us" | "ca" }[] = [
   {
@@ -126,7 +135,7 @@ test.describe("Nursing hubs — screenshot evidence", () => {
   });
 
   for (const hub of SCREENSHOT_HUBS) {
-    test(`${hub.fileBase} — desktop light + dark`, async ({ page, baseURL }) => {
+    test(`${hub.fileBase} — desktop Ocean / Blossom / Midnight`, async ({ page, baseURL }) => {
       const origin = requireOrigin(baseURL);
       await page.setViewportSize({ width: 1440, height: 900 });
       if (hub.seed === "ca") await seedCaMarketingCookie(page, origin);
@@ -134,24 +143,23 @@ test.describe("Nursing hubs — screenshot evidence", () => {
       await gotoExpectOk(page, hub.path);
       await expectNotPageNotFound(page);
       await page.locator(hub.readySelector).waitFor({ state: "visible", timeout: 120_000 });
-      await page.screenshot({
-        path: join(SCREENSHOT_OUT, `${hub.fileBase}-desktop-light.png`),
-        fullPage: true,
-      });
 
-      await page.evaluate(() => {
-        document.documentElement.setAttribute("data-theme", "midnight");
-      });
-      await page.screenshot({
-        path: join(SCREENSHOT_OUT, `${hub.fileBase}-desktop-dark.png`),
-        fullPage: true,
-      });
+      for (const th of THEME_BUCKETS_E2E) {
+        await page.evaluate((id: string) => {
+          document.documentElement.setAttribute("data-theme", id);
+        }, th.id);
+        await page.waitForTimeout(350);
+        await page.screenshot({
+          path: join(SCREENSHOT_OUT, `${hub.fileBase}-desktop-${th.label}.png`),
+          fullPage: true,
+        });
+      }
       await page.evaluate(() => {
         document.documentElement.removeAttribute("data-theme");
       });
     });
 
-    test(`${hub.fileBase} — mobile light + dark`, async ({ page, baseURL }) => {
+    test(`${hub.fileBase} — mobile Ocean / Blossom / Midnight`, async ({ page, baseURL }) => {
       const origin = requireOrigin(baseURL);
       await page.setViewportSize({ width: 390, height: 844 });
       if (hub.seed === "ca") await seedCaMarketingCookie(page, origin);
@@ -160,17 +168,18 @@ test.describe("Nursing hubs — screenshot evidence", () => {
       await expectNotPageNotFound(page);
       await page.locator(hub.readySelector).waitFor({ state: "visible", timeout: 120_000 });
 
-      await page.screenshot({
-        path: join(SCREENSHOT_OUT, `${hub.fileBase}-mobile-light.png`),
-        fullPage: true,
-      });
-
+      for (const th of THEME_BUCKETS_E2E) {
+        await page.evaluate((id: string) => {
+          document.documentElement.setAttribute("data-theme", id);
+        }, th.id);
+        await page.waitForTimeout(350);
+        await page.screenshot({
+          path: join(SCREENSHOT_OUT, `${hub.fileBase}-mobile-${th.label}.png`),
+          fullPage: true,
+        });
+      }
       await page.evaluate(() => {
-        document.documentElement.setAttribute("data-theme", "midnight");
-      });
-      await page.screenshot({
-        path: join(SCREENSHOT_OUT, `${hub.fileBase}-mobile-dark.png`),
-        fullPage: true,
+        document.documentElement.removeAttribute("data-theme");
       });
     });
   }

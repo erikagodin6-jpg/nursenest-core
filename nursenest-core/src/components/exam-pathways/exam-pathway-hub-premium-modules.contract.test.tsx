@@ -47,9 +47,22 @@ describe("buildPremiumMarketingModuleCards", () => {
     });
     assert.ok(!pnModules.studyTools.some((c) => c.key === "ecg"));
     assert.ok(rnModules.studyTools.some((c) => c.key === "ecg"));
+    assert.ok(rnModules.studyTools.some((c) => c.key === "hub_lessons"));
+    assert.ok(rnModules.studyTools.some((c) => c.key === "pathway_cat_landing"));
+    assert.ok(rnModules.studyTools.some((c) => c.key === "clinical_scenarios"));
     assert.ok(rnModules.studyTools.some((c) => c.key === "flashcards"));
     assert.ok(rnModules.studyTools.some((c) => c.key === "practice_tests"));
     assert.ok(!rnModules.studyTools.some((c) => c.key === "clinical_cases"));
+    assert.ok(pnModules.studyTools.some((c) => c.key === "hub_lessons"));
+    assert.ok(pnModules.studyTools.some((c) => c.key === "clinical_scenarios"));
+    assert.ok(!pnModules.studyTools.some((c) => c.key === "clinical_cases"));
+  });
+
+  it("NP omits generic clinical scenarios tile (uses clinical_cases instead)", () => {
+    const np = getExamPathwayById("us-np-fnp");
+    assert.ok(np);
+    const m = buildPremiumMarketingModuleCards(np, { clinicalScenariosPublic: true, oscePublic: false });
+    assert.ok(!m.studyTools.some((c) => c.key === "clinical_scenarios"));
   });
 
   it("includes NP clinical case tile for NP pathways", () => {
@@ -99,8 +112,18 @@ describe("buildPremiumMarketingModuleCards", () => {
     const osce = studyTools.find((c) => c.key === "osce");
     assert.ok(osce?.href.includes("pathwayId=us-allied-core"));
     assert.ok(osce?.href.includes("alliedProfession=mlt"));
-    assert.ok(!studyTools.some((c) => c.key === "ecg"));
-    assert.ok(!studyTools.some((c) => c.key === "ngn_tools"));
+    assert.ok(!studyTools.some((c) => c.key === "hub_lessons"));
+    assert.ok(!studyTools.some((c) => c.key === "pathway_cat_landing"));
+    assert.ok(!studyTools.some((c) => c.key === "clinical_scenarios"));
+    assert.ok(!studyTools.some((c) => c.key === "ecg"), "no ECG tile on allied");
+    assert.ok(!studyTools.some((c) => c.key === "ngn_tools"), "no NGN tools on allied");
+    assert.ok(studyTools.some((c) => c.key === "skills_refresher"));
+    assert.ok(studyTools.some((c) => c.key === "pathway_cat"));
+    assert.ok(studyTools.some((c) => c.key === "clinical_cases"));
+    assert.ok(studyTools.some((c) => c.key === "allied_career_resources"));
+    const alliedCases = studyTools.find((c) => c.key === "clinical_cases");
+    assert.ok(alliedCases?.titleKey.endsWith("alliedClinicalScenariosTitle"));
+    assert.ok(!alliedCases?.qaMarker);
     assert.equal(/\/admin\/[^"'\s]*/i.test(JSON.stringify(studyTools)), false);
   });
 });
@@ -117,6 +140,12 @@ describe("ExamPathwayHubPremiumModules DOM contract", () => {
     assert.match(html, /Exam plan/i);
     assert.match(html, /Study tools/i);
     assert.match(html, /Readiness/i);
+    assert.match(html, /Pathway lessons/i);
+    assert.match(html, /CAT (&amp;|&) adaptive intro/i);
+    assert.match(html, /data-nn-qa-hub-premium-module="hub_lessons"/);
+    assert.match(html, /data-nn-qa-hub-premium-module="pathway_cat_landing"/);
+    assert.match(html, /data-nn-qa-hub-clinical-scenarios/);
+    assert.match(html, /Clinical scenarios/i);
     assert.match(html, /data-nn-qa-hub-premium-module="ngn_tools"/);
     assert.match(html, /data-nn-qa-hub-premium-module="weak_areas"/);
     assert.match(html, /Flashcards/i);
@@ -132,6 +161,7 @@ describe("ExamPathwayHubPremiumModules DOM contract", () => {
     assert.match(html, /Clinical case simulations/i);
     assert.match(html, /data-nn-qa-hub-ecg/);
     assert.match(html, /data-nn-qa-hub-np-cases/);
+    assert.doesNotMatch(html, /data-nn-qa-hub-clinical-scenarios/);
     assert.equal(/\/admin\/[^"'\s]*/i.test(html), false);
   });
 
@@ -164,6 +194,11 @@ describe("ExamPathwayHubPremiumModules DOM contract", () => {
     assert.match(html, /Transition roadmap/i);
     assert.match(html, /Clinical judgment/i);
     assert.match(html, /Skills refreshers/i);
+    assert.match(html, /data-nn-qa-hub-premium-module="new_grad_pathway_cat"/);
+    assert.match(html, /Adaptive readiness session/i);
+    assert.match(html, /Prioritization (&amp;|&) delegation drills/i);
+    assert.match(html, /data-nn-qa-hub-premium-module="new_grad_delegation"/);
+    assert.match(html, /data-nn-qa-hub-clinical-scenarios/);
     assert.doesNotMatch(html, /data-nn-qa-hub-ecg/);
     assert.equal(/Clinical case simulations/i.test(html.replace(/<[^>]+>/g, " ")), false);
   });
@@ -174,11 +209,15 @@ describe("ExamPathwayHubPremiumModules DOM contract", () => {
     const messages = loadMarketingEn();
     const html = renderToStaticMarkup(
       <MarketingI18nProvider locale="en" messages={messages}>
-        <ExamPathwayHubPremiumModules pathway={pathway} isSignedIn={false} alliedProfessionKey="respiratory-therapy" />
+        <ExamPathwayHubPremiumModules pathway={pathway} isSignedIn={false} alliedProfessionKey="respiratory" />
       </MarketingI18nProvider>,
     );
     assert.match(html, /Allied pathway/i);
     assert.match(html, /data-nn-allied-premium-accent/);
+    assert.match(html, /data-nn-qa-hub-premium-module="pathway_cat"/);
+    assert.match(html, /data-nn-qa-hub-premium-module="skills_refresher"/);
+    assert.match(html, /data-nn-qa-hub-premium-module="allied_career_resources"/);
+    assert.doesNotMatch(html, /data-nn-qa-hub-np-cases/);
     assert.equal(/\/admin\/[^"'\s]*/i.test(html), false);
   });
 });

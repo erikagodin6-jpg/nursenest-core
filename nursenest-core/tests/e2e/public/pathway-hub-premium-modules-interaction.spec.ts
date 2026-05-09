@@ -166,6 +166,10 @@ test.describe("Pathway hub premium modules — interaction & gates (guest)", () 
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(1);
     await expect(page.locator('[data-nn-qa-hub-np-cases="1"]')).toHaveCount(0);
 
+    await expect(page.locator('[data-nn-qa-hub-premium-module="hub_lessons"]')).toBeVisible();
+    await expect(page.locator('[data-nn-qa-hub-premium-module="pathway_cat_landing"]')).toBeVisible();
+    await expect(page.locator('[data-nn-qa-hub-clinical-scenarios="1"]')).toHaveCount(1);
+
     await assertNoForbiddenPublicLinks(page, ".nn-premium-pathway-hub");
 
     const flashHref = await page
@@ -209,6 +213,7 @@ test.describe("Pathway hub premium modules — interaction & gates (guest)", () 
 
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(0);
     await expect(page.locator('[data-nn-qa-hub-np-cases="1"]')).toHaveCount(0);
+    await expect(page.locator('[data-nn-qa-hub-clinical-scenarios="1"]')).toHaveCount(1);
     await assertNoForbiddenPublicLinks(page, ".nn-premium-pathway-hub");
 
     const labsHref = await page
@@ -235,6 +240,7 @@ test.describe("Pathway hub premium modules — interaction & gates (guest)", () 
 
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(1);
     await expect(page.locator('[data-nn-qa-hub-np-cases="1"]')).toHaveCount(1);
+    await expect(page.locator('[data-nn-qa-hub-clinical-scenarios="1"]')).toHaveCount(0);
 
     const ptHref = await page
       .locator('[data-nn-qa-hub-premium-module="practice_tests"] a.nn-exam-hub-study-card')
@@ -261,6 +267,8 @@ test.describe("Pathway hub premium modules — interaction & gates (guest)", () 
 
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(0);
     await expect(page.locator('[data-nn-qa-hub-premium-module="transition"]')).toHaveCount(1);
+    await expect(page.locator('[data-nn-qa-hub-premium-module="new_grad_delegation"]')).toHaveCount(1);
+    await expect(page.locator('[data-nn-qa-hub-clinical-scenarios="1"]')).toHaveCount(1);
 
     const medDrillHref = await page
       .locator('[data-nn-qa-hub-premium-module="skills_refresher"] a.nn-exam-hub-study-card')
