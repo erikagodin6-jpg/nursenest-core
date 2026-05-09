@@ -152,7 +152,8 @@ export function MarketingHeaderUtilityCluster({
   return (
     <div
       data-testid="marketing-header-utility-cluster"
-      className={`flex min-w-0 shrink flex-wrap items-center justify-end gap-1.5 lg:gap-2 ${className ?? ""}`}
+      data-nn-header-layer="utility-controls"
+      className={`nn-header-utility-cluster--quiet flex min-w-0 shrink flex-wrap items-center justify-end gap-1.5 lg:gap-2 ${className ?? ""}`}
     >
       <div className="shrink-0" ref={countryAnchorRef}>
         <CompactCountryTrigger

@@ -19,10 +19,10 @@ export function HeaderBrandLockup() {
   return (
     <span
       data-nn-header-brand-lockup
-      className="nn-header-brand-lockup relative inline-flex items-center gap-0 overflow-visible align-middle leading-none"
+      className="nn-header-brand-lockup nn-header-brand-lockup--compact relative inline-flex items-center gap-0 overflow-visible align-middle leading-none"
     >
       <span
-        className="logo-container relative z-[20] inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center text-current sm:h-[52px] sm:w-[52px] lg:h-[56px] lg:w-[56px]"
+        className="logo-container relative z-[20] inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center text-current sm:h-[46px] sm:w-[46px] lg:h-[50px] lg:w-[50px]"
         data-nn-header-lockup="leaf"
       >
         {showLeafRaster ? (
@@ -46,7 +46,7 @@ export function HeaderBrandLockup() {
       </span>
       <span
         data-nn-header-lockup="wordmark"
-        className="relative z-[21] text-[1.15rem] font-semibold tracking-[-0.02em] leading-none text-current sm:text-[1.22rem] lg:text-[1.34rem]"
+        className="relative z-[21] text-[1.12rem] font-semibold tracking-[-0.025em] leading-none text-current sm:text-[1.18rem] lg:text-[1.28rem]"
         style={{ fontFamily: "var(--font-sans)" }}
       >
         NurseNest

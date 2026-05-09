@@ -653,6 +653,159 @@
 }
 
 /* ---------------------------------------------------------------------
+   Nav v4 — premium framework refinement.
+   Utility stays flat, the main row becomes the floating surface, and the
+   tier rail is recessed so primary links no longer read as a bordered pill wall.
+   --------------------------------------------------------------------- */
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-frame {
+  padding-block: clamp(0.35rem, 0.8vw, 0.7rem);
+  background:
+    radial-gradient(
+      circle at 16% 0%,
+      color-mix(in srgb, var(--semantic-panel-cool) 18%, transparent),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-header-primary-bg) 90%, transparent),
+      color-mix(in srgb, var(--semantic-panel-warm) 10%, var(--nn-header-primary-bg))
+    );
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-bar-a {
+  min-height: 2rem;
+  border-bottom: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 68%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-cluster--quiet {
+  gap: clamp(0.35rem, 0.7vw, 0.65rem);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-trigger-row4,
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 :where(button) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, transparent) !important;
+  background: color-mix(in srgb, var(--nn-header-primary-bg) 44%, transparent) !important;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 70%, transparent) !important;
+  box-shadow: none !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-trigger-row4:hover,
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 :where(button:hover) {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg)) !important;
+  color: var(--nn-header-primary-fg) !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
+  min-height: 4.25rem;
+  padding: clamp(0.48rem, 0.9vw, 0.7rem) clamp(0.7rem, 1.4vw, 1.2rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+  border-radius: 9999px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-header-primary-bg) 92%, transparent),
+      color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--nn-header-primary-bg))
+    );
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 44%, transparent) inset,
+    0 18px 42px -30px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
+  backdrop-filter: saturate(150%) blur(14px);
+  -webkit-backdrop-filter: saturate(150%) blur(14px);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-brand-lockup {
+  color: color-mix(in srgb, var(--semantic-brand) 84%, var(--nn-header-primary-fg));
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav {
+  gap: clamp(0.1rem, 0.4vw, 0.35rem);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text {
+  min-height: 2.25rem;
+  border-color: transparent;
+  border-radius: 0.875rem;
+  background: transparent;
+  box-shadow: none;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 82%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text:hover {
+  border-color: color-mix(in srgb, var(--semantic-info) 14%, transparent);
+  background: color-mix(in srgb, var(--semantic-info) 9%, transparent);
+  color: var(--nn-header-primary-fg);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text[aria-current="page"] {
+  border-color: transparent;
+  background: color-mix(in srgb, var(--semantic-brand) 9%, transparent);
+  color: var(--nn-header-primary-fg);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--semantic-brand) 58%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-login-receded {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, transparent);
+  background: transparent;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 72%, transparent);
+  box-shadow: none;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-login-receded:hover {
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 8%, transparent);
+  color: var(--nn-header-primary-fg);
+}
+
+.nn-nav-cta--premium-soft {
+  border-color: color-mix(in srgb, var(--semantic-brand) 54%, var(--header-border));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 42%, transparent) inset,
+    0 14px 28px -18px color-mix(in srgb, var(--semantic-brand) 70%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail {
+  border-top: 0;
+  background: transparent;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner {
+  width: min(100%, 48rem);
+  min-height: 2.35rem;
+  margin-inline: auto;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 44%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--semantic-panel-cool) 10%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+  min-height: 1.75rem;
+  border-color: transparent;
+  background: transparent;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 58%, transparent);
+  font-weight: 600;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a:hover,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip:hover {
+  border-color: color-mix(in srgb, var(--semantic-info) 16%, transparent);
+  background: color-mix(in srgb, var(--semantic-info) 8%, transparent);
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 78%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 22%, transparent);
+  background: color-mix(in srgb, var(--semantic-brand) 10%, transparent);
+  color: var(--nn-header-primary-fg);
+}
+
+/* ---------------------------------------------------------------------
    Apex theme — token bridge.
    The full `[data-theme="apex"]` palette block lives in theme-palettes.css
    (so the deploy-gate contract test can find it). This rule only ensures

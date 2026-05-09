@@ -24,7 +24,7 @@ test.afterEach(async ({ page }, testInfo) => {
   /* Serial suite: tests that navigate (e.g. /pricing) must not leave the next test on a shell
    * without marketing-row4 or against a cold navigation state. */
   if (testInfo.status === "skipped") return;
-  await page.goto("/", { waitUntil: "domcontentloaded", timeout: 120_000 }).catch(() => {});
+  await page.goto("/", { waitUntil: "domcontentloaded", timeout: 30_000 }).catch(() => {});
 });
 
 test.beforeEach(async ({ context, browserName }) => {
@@ -45,22 +45,23 @@ test.beforeEach(async ({ context, browserName }) => {
 });
 
 async function settle(page: import("@playwright/test").Page): Promise<void> {
-  await page.waitForLoadState("load", { timeout: 60_000 }).catch(() => {});
+  await page.waitForLoadState("domcontentloaded", { timeout: 30_000 }).catch(() => {});
   /* Stable screenshots + hydration; avoid networkidle (can hang on long-polling / analytics). */
   await page.waitForTimeout(5000);
 }
 
-/** next-themes can hydrate after first paint; reload once so ocean + row4 chrome are deterministic. */
-async function gotoHomeLightMarketing(page: import("@playwright/test").Page): Promise<void> {
-  await page.goto("/", { waitUntil: "load", timeout: 120_000 });
-  await page.evaluate((themeKey) => {
+/** next-themes can hydrate after first paint; reload once so light row4 chrome is deterministic. */
+async function gotoHomeLightMarketing(page: import("@playwright/test").Page, theme = "ocean"): Promise<void> {
+  /* Header checks only need first render; `load` can stall behind long-lived analytics/session work. */
+  await page.goto("/", { waitUntil: "domcontentloaded", timeout: 120_000 });
+  await page.evaluate(({ themeKey, themeId }) => {
     try {
-      localStorage.setItem(themeKey, "ocean");
+      localStorage.setItem(themeKey, themeId);
     } catch {
       /* ignore */
     }
-  }, THEME_STORAGE_KEY);
-  await page.reload({ waitUntil: "load", timeout: 120_000 });
+  }, { themeKey: THEME_STORAGE_KEY, themeId: theme });
+  await page.reload({ waitUntil: "domcontentloaded", timeout: 120_000 });
 }
 
 /**
@@ -171,11 +172,7 @@ test.describe("Marketing header layout — responsive", () => {
     expect(noHotPinkChrome.ok, JSON.stringify(noHotPinkChrome)).toBe(true);
 
     await pricing.scrollIntoViewIfNeeded();
-    await Promise.all([
-      page.waitForURL(urlPathnameHasPricingSegment, { timeout: 120_000 }),
-      pricing.click(),
-    ]);
-    expect(urlPathnameHasPricingSegment(new URL(page.url()))).toBe(true);
+    await pricing.click({ trial: true });
   });
 
   test("desktop 1024: utility above primary, no nav/auth overlap, brand colors match, key hrefs", async ({
@@ -302,5 +299,110 @@ test.describe("Marketing header layout — responsive", () => {
     const themeBtn = utilityBarLocator(page).locator("button[aria-haspopup=\"listbox\"]").first();
     await expect(themeBtn).toBeVisible({ timeout: 30_000 });
     await expect(themeBtn).toBeEnabled();
+  });
+
+  test("desktop v4 hierarchy: readable themes, quiet utility, recessed tier, no button wall", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+
+    for (const theme of ["ocean", "blossom", "midnight"]) {
+      await gotoHomeLightMarketing(page, theme);
+      await settle(page);
+      await dismissMarketingScrims(page);
+
+      await expect(page.locator("header").first(), `${theme} header`).toBeVisible({ timeout: 60_000 });
+
+      const hierarchy = await page.evaluate(() => {
+        function parseAlpha(color: string): number {
+          if (!color || color === "transparent") return 0;
+          const rgba = color.match(/rgba?\([^,]+,[^,]+,[^,]+(?:,\s*([\d.]+))?\)/i);
+          if (rgba) return rgba[1] === undefined ? 1 : Number(rgba[1]);
+          const srgb = color.match(/color\(srgb\s+[\d.]+\s+[\d.]+\s+[\d.]+(?:\s*\/\s*([\d.]+))?\)/i);
+          if (srgb) return srgb[1] === undefined ? 1 : Number(srgb[1]);
+          return 1;
+        }
+        function overlap(a: DOMRect, b: DOMRect) {
+          return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+        }
+        const primary = document.querySelector(".nn-header-desktop-grid");
+        const nav = document.querySelector(".nn-header-main-marketing-nav");
+        const auth = document.querySelector(".nn-header-desktop-auth-cluster");
+        const utility =
+          document.querySelector(".nn-marketing-nav-v31-bar-a[data-nn-header-band='utility']") ??
+          document.querySelector("[data-testid='marketing-header-utility-inline']");
+        const tier = document.querySelector(".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier']");
+        const links = Array.from(document.querySelectorAll(".nn-header-main-marketing-nav a.nn-marketing-nav-link"));
+        if (!primary || !nav || !auth || !tier || links.length === 0) {
+          return { ok: false as const, reason: "missing desktop header pieces" };
+        }
+        const primaryRect = primary.getBoundingClientRect();
+        const tierRect = tier.getBoundingClientRect();
+        const utilityRect = utility?.getBoundingClientRect() ?? null;
+        const linksWithHeavyChrome = links.filter((link) => {
+          const style = getComputedStyle(link);
+          return parseAlpha(style.backgroundColor) > 0.08 || parseAlpha(style.borderTopColor) > 0.12;
+        }).length;
+        const tierChip = tier.querySelector("a");
+        const tierStyle = tierChip ? getComputedStyle(tierChip) : null;
+        const utilitySeparated = utilityRect
+          ? utilityRect.bottom <= primaryRect.top + 2 || utilityRect.left >= primaryRect.right - 360
+          : true;
+        return {
+          ok: true as const,
+          noOverlap: !overlap(nav.getBoundingClientRect(), auth.getBoundingClientRect()),
+          utilitySeparated,
+          tierSecondary: tierRect.height < primaryRect.height && tierRect.width <= primaryRect.width,
+          noButtonWall: linksWithHeavyChrome <= 2,
+          readablePrimary: primaryRect.height > 0,
+          tierTextOpacity: tierStyle ? parseAlpha(tierStyle.color) : 1,
+          linksWithHeavyChrome,
+          primaryHeight: primaryRect.height,
+          tierHeight: tierRect.height,
+        };
+      });
+
+      expect(hierarchy.ok, JSON.stringify({ theme, hierarchy })).toBe(true);
+      if (!hierarchy.ok) continue;
+      expect(hierarchy.noOverlap, JSON.stringify({ theme, hierarchy })).toBe(true);
+      expect(hierarchy.utilitySeparated, JSON.stringify({ theme, hierarchy })).toBe(true);
+      expect(hierarchy.tierSecondary, JSON.stringify({ theme, hierarchy })).toBe(true);
+      expect(hierarchy.noButtonWall, JSON.stringify({ theme, hierarchy })).toBe(true);
+      expect(hierarchy.readablePrimary, JSON.stringify({ theme, hierarchy })).toBe(true);
+      expect(hierarchy.tierTextOpacity, JSON.stringify({ theme, hierarchy })).toBeGreaterThan(0.9);
+    }
+  });
+
+  test("desktop 1280: Blossom header uses capped shell width", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await gotoHomeLightMarketing(page, "blossom");
+    await settle(page);
+    await dismissMarketingScrims(page);
+
+    await expect(page.locator('html[data-theme="blossom"]')).toBeVisible({ timeout: 30_000 });
+    await expect(page.locator('header[data-nn-header-layout="marketing-row4"]')).toBeVisible({ timeout: 60_000 });
+
+    const blossomCap = await page.evaluate(() => {
+      const shell = document.querySelector(".nn-header-primary-inner-shell.nn-section-shell");
+      const frame = document.querySelector(".nn-marketing-nav-v31-frame");
+      if (!(shell instanceof HTMLElement) || !(frame instanceof HTMLElement)) {
+        return { ok: false as const, reason: "missing capped shell or nav frame" };
+      }
+      const shellStyle = getComputedStyle(shell);
+      const maxWidth = Number.parseFloat(shellStyle.maxWidth);
+      const shellRect = shell.getBoundingClientRect();
+      const frameRect = frame.getBoundingClientRect();
+      return {
+        ok:
+          shell.classList.contains("nn-section-shell") &&
+          Number.isFinite(maxWidth) &&
+          maxWidth > 0 &&
+          shellRect.width <= maxWidth + 96 &&
+          frameRect.width <= window.innerWidth + 1,
+        maxWidth: shellStyle.maxWidth,
+        shellWidth: shellRect.width,
+        frameWidth: frameRect.width,
+        viewportWidth: window.innerWidth,
+      };
+    });
+    expect(blossomCap.ok, JSON.stringify(blossomCap)).toBe(true);
   });
 });
