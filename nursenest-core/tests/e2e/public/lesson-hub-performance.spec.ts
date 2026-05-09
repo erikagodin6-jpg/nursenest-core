@@ -52,7 +52,7 @@ test.describe("lesson hub — performance smoke", () => {
   }) => {
     const origin = requireOrigin(baseURL);
     await seedCaMarketingCookie(page, origin);
-    for (const path of ["/canada/rn/nclex-rn/lessons", "/canada/rpn/rex-pn/lessons"] as const) {
+    for (const path of ["/canada/rn/nclex-rn/lessons", "/canada/pn/rex-pn/lessons"] as const) {
       await gotoExpectOk(page, path);
       await expectNotPageNotFound(page);
       await expect(page.locator(LESSONS_SECTION)).toBeVisible({ timeout: HUB_TIMEOUT });

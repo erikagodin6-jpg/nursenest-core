@@ -37,7 +37,7 @@ import {
   pathwayLessonTopicClusterMetaTitle,
   pathwayRegionAwareExamName,
 } from "@/lib/lessons/pathway-lesson-hub-seo";
-import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
+import { marketingHubPaginationFromLoaderTotals } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { buildPathwayLessonSystemSections } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import {
   pathwayLessonHasRenderableHubSlug,
@@ -716,18 +716,26 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     );
   }
 
-  /** Slug-safe rows from the same loader result used for pagination (`items` / `renderableAll`). */
+  /** Full slug-safe list from loader — inventory fill + crawl “all lesson links” nav (sr-only). */
   const renderableAllIn = pageResult.renderableAll ?? pageResult.items;
-  const rawHubLessonRows = renderableAllIn.filter(pathwayLessonHasRenderableHubSlug);
-  /** Dedupe + taxonomy guard + linkable href — must match curriculum grid and toolbar count. */
+  const rawHubLessonRowsFull = renderableAllIn.filter(pathwayLessonHasRenderableHubSlug);
+  /** Current loader page only — O(pageSize) hub curriculum prepare (dedupe/organize), not full catalog. */
+  const rawHubLessonRowsPage = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
+  const effectiveHubPageSize = Math.min(
+    PATHWAY_HUB_PAGE_SIZE_MAX,
+    Math.max(pageSizeRequested, PATHWAY_HUB_PAGE_SIZE_DEFAULT, 1),
+  );
+  /** Dedupe + taxonomy guard + linkable href — must match curriculum grid for this page slice. */
   const prepareT0 = performance.now();
   const { lessons: hubCurriculumPrepared, prepareStages: hubPrepareStages } =
-    prepareLessonsForHubCurriculumWithDiagnostics(rawHubLessonRows, {
+    prepareLessonsForHubCurriculumWithDiagnostics(rawHubLessonRowsPage, {
       pathwayId: pathway.id,
       lessonsBasePath: base,
     });
   const prepareDurationMs = Math.round(performance.now() - prepareT0);
-  console.error(`[lessons-perf] prepare_done pathway=${pathway.id} prepared=${hubCurriculumPrepared.length} ms=${prepareDurationMs}`);
+  console.error(
+    `[lessons-perf] prepare_done pathway=${pathway.id} prepared=${hubCurriculumPrepared.length} page_slice_in=${rawHubLessonRowsPage.length} full_inventory=${rawHubLessonRowsFull.length} ms=${prepareDurationMs}`,
+  );
 
   const listWarehouseT0 = performance.now();
   const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
@@ -747,13 +755,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
    * Lessons beyond the cap are kept as hubMarketingDegraded="unverified_inventory_fill" so
    * the total/pagination counts remain accurate — they are just non-clickable in the card nav.
    */
-  const effectiveHubPageSizeForVerify = Math.min(
-    PATHWAY_HUB_PAGE_SIZE_MAX,
-    Math.max(pageSizeRequested, PATHWAY_HUB_PAGE_SIZE_DEFAULT, 1),
-  );
   const pageVerifyCap = Math.min(
     resolvedMarketingHubVerifySlugCap(),
-    effectiveHubPageSizeForVerify * pageRequested,
+    effectiveHubPageSize * pageRequested,
   );
 
   /** Cross-check list rows with fresh detail loads; soft failures stay as {@link PathwayLessonRecord.hubMarketingDegraded}. */
@@ -775,7 +779,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     minVisible: MARKETING_HUB_MIN_VISIBLE_LESSONS,
     verifiedKept: vr.kept,
     hubCurriculumPrepared,
-    loaderRenderable: rawHubLessonRows,
+    loaderRenderable: rawHubLessonRowsFull,
   });
   let hubCurriculumLessons = fillResult.lessons;
   const hubVerifyDiagnostics = vr.diagnostics;
@@ -868,14 +872,14 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     });
   }
   /**
-   * Pagination slice for the curriculum grid: bounded page size so first paint does not build hundreds of cards.
-   * Toolbar / badge counts still use the full verified inventory length (`hubCurriculumLessons.length`).
+   * Pagination chrome uses loader totals (`pageResult.total`). Grid rows are already this request’s verified page slice.
    */
-  const effectiveHubPageSize = Math.min(
-    PATHWAY_HUB_PAGE_SIZE_MAX,
-    Math.max(pageSizeRequested, PATHWAY_HUB_PAGE_SIZE_DEFAULT, 1),
+  const hubVerifiedPage = marketingHubPaginationFromLoaderTotals(
+    hubCurriculumLessons,
+    pageResult.total,
+    pageRequested,
+    effectiveHubPageSize,
   );
-  const hubVerifiedPage = sliceNormalizedHubLessons(hubCurriculumLessons, pageRequested, effectiveHubPageSize);
   /** Current page only — grouping, progress batching, and diagnostics stay O(page size). */
   const lessonsForCurriculumHub = hubVerifiedPage.items;
   const groupT0 = performance.now();
@@ -979,7 +983,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     loader_renderable_all_len: String(renderableAllIn.length),
     loader_page_items_len: String(pageResult.items.length),
     /** Stage 1: slug-safe rows from loader (pathway/locale scoped upstream in {@link resolveMarketingHubRenderableLessonList}). */
-    stage_1_raw_slug_safe_rows: String(rawHubLessonRows.length),
+    stage_1_raw_slug_safe_rows_full: String(rawHubLessonRowsFull.length),
+    stage_1_raw_slug_safe_rows_page_slice: String(rawHubLessonRowsPage.length),
     /** Stage 2: after {@link prepareLessonsForHubCurriculum} (dedupe, organize, href-safe). */
     stage_2_after_prepare: String(hubCurriculumPrepared.length),
     /** Stage 3: unique slugs sent to detail verify. */
@@ -992,8 +997,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     stage_6_section_model_lesson_rows: String(stage6SectionModelLessonRows),
     stage_6_linkable_lesson_rows: String(stage6LinkableLessonRows),
     effective_hub_page_size: String(effectiveHubPageSize),
-    raw_after_slug_filter: String(rawHubLessonRows.length),
-    raw_list_rows: String(rawHubLessonRows.length),
+    raw_after_slug_filter_page_slice: String(rawHubLessonRowsPage.length),
+    raw_list_rows_full: String(rawHubLessonRowsFull.length),
     after_prepare: String(hubCurriculumPrepared.length),
     after_verify_kept: String(hubCurriculumLessons.length),
     lessons_page_load_status: lessonsPageLoad.status,
@@ -1027,7 +1032,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       }),
     );
   }
-  const hubListCountForChrome = hubCurriculumLessons.length;
+  /** Loader authoritative total — matches pagination chrome when prepare runs on page slice only. */
+  const hubListCountForChrome = pageResult.total;
   if (hubVerifiedPage.total > 0 && pageRequested !== hubVerifiedPage.page) {
     const qs = new URLSearchParams();
     if (hubVerifiedPage.page > 1) qs.set("page", String(hubVerifiedPage.page));
@@ -1494,7 +1500,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           showLockedState={!canShowResume}
           hubVerifyDiagnostics={hubVerifyDiagnostics}
         />
-        <LessonHubFullLessonLinkNav lessons={hubCurriculumLessons} lessonsBasePath={base} />
+        <LessonHubFullLessonLinkNav lessons={rawHubLessonRowsFull} lessonsBasePath={base} />
       </section>
       <PathwayLessonPagination
         basePath={base}

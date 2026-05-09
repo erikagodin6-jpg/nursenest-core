@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { sliceNormalizedHubLessons } from "./pathway-lesson-hub-page-slice";
+import {
+  marketingHubPaginationFromLoaderTotals,
+  sliceNormalizedHubLessons,
+} from "./pathway-lesson-hub-page-slice";
 import type { PathwayLessonRecord } from "./pathway-lesson-types";
 
 function stubLesson(slug: string, title: string): PathwayLessonRecord {
@@ -41,5 +44,17 @@ describe("sliceNormalizedHubLessons", () => {
     assert.equal(slice.total, 0);
     assert.equal(slice.items.length, 0);
     assert.equal(slice.pageCount, 1);
+  });
+});
+
+describe("marketingHubPaginationFromLoaderTotals", () => {
+  it("uses loader total for pageCount while items are the verified page grid", () => {
+    const grid = Array.from({ length: 60 }, (_, i) => stubLesson(`s-${i}`, `Lesson ${i}`));
+    const slice = marketingHubPaginationFromLoaderTotals(grid, 500, 1, 60);
+    assert.equal(slice.items.length, 60);
+    assert.equal(slice.total, 500);
+    assert.equal(slice.page, 1);
+    assert.equal(slice.pageSize, 60);
+    assert.equal(slice.pageCount, 9);
   });
 });
