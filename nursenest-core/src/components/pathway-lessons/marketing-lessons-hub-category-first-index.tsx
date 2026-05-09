@@ -4,7 +4,6 @@ import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
-import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
@@ -176,13 +175,6 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     });
   }
 
-  const studyCards = defaultLessonModeCards({
-    lessonsHref: base,
-    questionsHref,
-    catHref,
-    pathwayShortName: pathway.shortName,
-  });
-
   if (catalog.length === 0) {
     return (
       <LessonsPageShell
@@ -260,7 +252,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
 
       <section
         id="pathway-lesson-library"
-        className="nn-qa-pathway-lessons-hub mt-4 scroll-mt-24"
+        className="nn-qa-pathway-lessons-hub mt-2 scroll-mt-24"
         data-nn-qa-pathway-lessons-hub="true"
         aria-labelledby="lesson-library-heading"
       >
@@ -357,11 +349,8 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         </div>
       </section>
 
-      <section className="mt-10">
-        <StudyModeCards heading="Other ways to study" cards={studyCards} />
-      </section>
-
       <StudyBottomNav
+        compact
         relatedLinks={[
           { label: "Practice questions", href: questionsHref },
           { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },

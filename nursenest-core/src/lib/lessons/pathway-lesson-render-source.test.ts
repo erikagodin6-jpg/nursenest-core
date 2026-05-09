@@ -171,6 +171,35 @@ describe("pathway lesson live render source (PathwayLesson.sections)", () => {
     assert.ok(!blob.includes("Why this appears on exams"), "must not inject legacy exam scaffold heading");
   });
 
+  it("canonical legacy five-block + authoritative word count skips legacy expander (dev-safe pass-through)", () => {
+    const body = filler(25);
+    const raw = {
+      slug: "fixture-canonical-legacy-authoritative",
+      title: "Canonical legacy authoritative fixture",
+      topic: "Cardiac",
+      topicSlug: "cardiac",
+      bodySystem: "cardiovascular",
+      previewSectionCount: 1,
+      seoTitle: "Canonical legacy authoritative fixture SEO title with enough words for catalog rules",
+      seoDescription:
+        "Fixture seo description with enough words to satisfy catalog description floors for normalization pathway.",
+      sections: [
+        { id: "cm", heading: "Clinical overview", kind: "clinical_meaning", body },
+        { id: "er", heading: "Exam application", kind: "exam_relevance", body },
+        { id: "cc", heading: "Mechanisms", kind: "core_concept", body },
+        { id: "cs", heading: "Vignette", kind: "clinical_scenario", body },
+        { id: "tk", heading: "Summary", kind: "takeaways", body },
+      ],
+    };
+    const n = normalizeLesson(raw as Parameters<typeof normalizeLesson>[0], "us-rn-nclex-rn");
+    assert.equal(n.normalizeTrace?.usedLegacyFiveBlockExpander, false);
+    assert.equal(n.sections.length, 5);
+    assert.deepEqual(
+      new Set(n.sections.map((s) => s.kind)),
+      new Set(["clinical_meaning", "exam_relevance", "core_concept", "clinical_scenario", "takeaways"]),
+    );
+  });
+
   it("real multi-section lesson with diagnosis keyword never runs legacy scaffold (no What this means clinically)", () => {
     const a = `${filler(160)} diagnosis and stabilization priorities. ${filler(160)}`;
     const b = filler(170);

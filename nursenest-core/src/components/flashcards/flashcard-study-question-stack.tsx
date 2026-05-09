@@ -1,9 +1,11 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
-import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
+import { FlashcardStudyRevealPanels } from "@/components/flashcards/flashcard-study-reveal-panels";
+import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 type PromptImageSplit = {
   imageHtml: string | null;
@@ -50,6 +52,15 @@ export function firstTeachingLine(text: string | null | undefined): string {
   return sentenceMatch?.[1]?.trim() ?? raw;
 }
 
+type StackLabels = {
+  revealHint?: string;
+  answerHeading?: string;
+  whyCorrectHeading?: string;
+  whyIncorrectHeading?: string;
+  takeawayHeading?: string;
+  answerChoicesHeading?: string;
+};
+
 export function FlashcardStudyQuestionStack({
   sessionModeLabel,
   topicLine,
@@ -64,7 +75,25 @@ export function FlashcardStudyQuestionStack({
   onReveal,
   mcqInteractionMode,
   labels,
-}: any) {
+  rail,
+  mainFooter,
+}: {
+  sessionModeLabel: string;
+  topicLine?: string | null;
+  examMicroQuestion?: ExamMicroQuestionPayload | null;
+  itemKindCaption?: string | null;
+  clinicalImageUrl?: string | null;
+  prompt: string;
+  answer: string;
+  explanation?: string;
+  pearl?: string | null;
+  revealed: boolean;
+  onReveal?: () => void;
+  mcqInteractionMode?: string;
+  labels?: StackLabels;
+  rail?: ReactNode;
+  mainFooter?: ReactNode;
+}) {
   const exam = examMicroQuestion;
   const tutorMcq = Boolean(exam && (mcqInteractionMode ?? "tutor_select") === "tutor_select");
 
@@ -81,145 +110,139 @@ export function FlashcardStudyQuestionStack({
     return () => cancelAnimationFrame(id);
   }, [pickedLetter, revealed, tutorMcq, exam, onReveal]);
 
-  const correctOptionText = exam
-    ? stripRedundantMcqLetterPrefix(
-        exam.answerOptions.find((o: any) => o.letter === exam.correctLetter)?.text ?? "",
-      )
-    : "";
-
   function commitPick(letter: string) {
     if (revealed || !exam || !tutorMcq) return;
     setPickedLetter(letter);
   }
 
+  const promptSplit = splitPromptLeadingImage(prompt);
+  const promptBody = promptSplit.remainingPrompt || String(prompt ?? "");
+
+  const showPlainRevealCta = !exam && !revealed && typeof onReveal === "function";
+
   return (
-    <div
-      className="nn-premium-flashcard-stack mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_360px]"
-      data-nn-revealed={revealed ? "1" : "0"}
-    >
-      <div className="nn-premium-flashcard-prompt-panel rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
-        <div className="mb-3 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-          {sessionModeLabel}
-        </div>
-
-        {topicLine ? (
-          <div className="mb-2 text-sm text-[var(--semantic-text-secondary)]">{topicLine}</div>
-        ) : null}
-
-        {itemKindCaption ? (
-          <div className="mb-3 inline-block rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-2.5 py-1 text-xs font-semibold text-[var(--semantic-info)]">
-            {itemKindCaption}
+    <div className="nn-premium-flashcard-stack-outer mx-auto flex w-full max-w-6xl flex-col gap-4">
+      <div className="nn-flashcard-session-ambient" aria-hidden />
+      <div
+        className="nn-flashcard-session-layout nn-premium-flashcard-stack mx-auto w-full"
+        data-nn-revealed={revealed ? "1" : "0"}
+      >
+        <div className="nn-flashcard-session-main min-w-0">
+          <div className="nn-flashcard-layered-stack relative w-full">
+            <div className="nn-flashcard-layered-stack__underlay" aria-hidden />
+            <article className="nn-flashcard-hero-surface nn-premium-flashcard-prompt-panel relative z-[1] overflow-hidden p-5 sm:p-7 lg:p-8">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.55]" aria-hidden>
+            <div className="nn-flashcard-hero-surface__glow absolute -left-16 top-0 h-56 w-56 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-3)_22%,transparent)] blur-3xl" />
+            <div className="nn-flashcard-hero-surface__glow absolute -right-12 bottom-0 h-48 w-48 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-5)_18%,transparent)] blur-3xl" />
           </div>
-        ) : null}
 
-        {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
-          <div className="mb-4">
-            <img
-              src={clinicalImageUrl}
-              alt=""
-              className="max-h-72 w-auto max-w-full rounded-lg border border-[var(--semantic-border-soft)] object-contain"
-              loading="lazy"
-            />
+          <div className="relative z-[1] flex flex-wrap items-center gap-2">
+            <span className="nn-flashcard-chip nn-flashcard-chip--mode">{sessionModeLabel}</span>
+            {topicLine ? (
+              <span className="nn-flashcard-chip nn-flashcard-chip--topic max-w-[min(100%,420px)] truncate">
+                {topicLine}
+              </span>
+            ) : null}
+            {itemKindCaption ? (
+              <span className="nn-flashcard-chip nn-flashcard-chip--kind">{itemKindCaption}</span>
+            ) : null}
           </div>
-        ) : null}
 
-        <div className="mb-4 text-lg font-semibold">
-          <FlashcardRichContent text={String(prompt ?? "")} />
-        </div>
+          {promptSplit.imageHtml ? (
+            <div className="relative z-[1] mb-5 mt-5 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] p-3 shadow-inner [&_img]:max-h-72 [&_img]:w-auto [&_img]:max-w-full [&_img]:rounded-lg [&_img]:object-contain">
+              <FlashcardRichContent text={promptSplit.imageHtml} />
+            </div>
+          ) : null}
 
-        {exam ? (
-          <FlashcardExamMcqAnswerList
-            exam={exam}
-            revealed={revealed}
-            pickedLetter={pickedLetter}
-            tutorMcq={tutorMcq}
-            answerChoicesHeading={labels?.answerChoicesHeading ?? "Answer choices"}
-            revealHint={labels?.revealHint ?? "Choose an answer to reveal the rationale."}
-            onPickLetter={commitPick}
-          />
-        ) : null}
-      </div>
-
-      <div className="nn-premium-flashcard-answer-panel flex flex-col gap-4 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
-        {!revealed ? (
-          <div className="py-10 text-center text-sm text-[var(--semantic-text-secondary)]">
-            {labels?.revealHint ?? "Reveal the answer to review the rationale."}
-          </div>
-        ) : (
-          <>
-            <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] p-4">
-              <div className="mb-1 text-xs font-bold uppercase text-[var(--semantic-success)]">
-                {labels?.answerHeading ?? "Answer"}
+          {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
+            <div className="relative z-[1] mb-5 mt-4">
+              <div className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                Clinical figure
               </div>
+              <img
+                src={clinicalImageUrl}
+                alt=""
+                className="max-h-72 w-auto max-w-full rounded-xl border border-[var(--semantic-border-soft)] object-contain shadow-sm"
+                loading="lazy"
+              />
+            </div>
+          ) : null}
 
-              <div className="flex items-start gap-2">
-                {exam?.correctLetter ? (
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--semantic-success)] text-xs nn-text-on-solid-fill">
-                    {exam.correctLetter}
-                  </span>
-                ) : null}
+          <div className="relative z-[1] nn-flashcard-hero-stem text-pretty text-lg font-semibold leading-snug tracking-tight text-[var(--semantic-text-primary)] sm:text-xl">
+            <FlashcardRichContent text={promptBody} />
+          </div>
 
-                <span className="text-sm font-medium text-[var(--semantic-text-primary)]">
-                  {correctOptionText || answer}
+          {exam ? (
+            <div className="relative z-[1] mt-6">
+              <FlashcardExamMcqAnswerList
+                exam={exam}
+                revealed={revealed}
+                pickedLetter={pickedLetter}
+                tutorMcq={tutorMcq}
+                answerChoicesHeading={labels?.answerChoicesHeading ?? "Answer choices"}
+                revealHint={labels?.revealHint ?? "Choose an answer to reveal the rationale."}
+                onPickLetter={commitPick}
+              />
+            </div>
+          ) : null}
+
+          {showPlainRevealCta ? (
+            <div className="relative z-[1] mt-6 flex justify-center">
+              <button
+                type="button"
+                onClick={() => onReveal?.()}
+                className="nn-flashcard-reveal-cta inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill shadow-lg transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)] motion-safe:active:scale-[0.99]"
+                style={{
+                  background:
+                    "linear-gradient(135deg, color-mix(in srgb, var(--semantic-brand) 92%, var(--semantic-chart-3)), color-mix(in srgb, var(--semantic-chart-3) 78%, var(--semantic-brand)))",
+                }}
+              >
+                {labels?.revealHint ?? "Tap to reveal"}
+              </button>
+            </div>
+          ) : null}
+            </article>
+          </div>
+
+          {revealed ? (
+            <section
+              className="nn-flashcard-reveal-zone nn-premium-flashcard-reveal-panel relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_12%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-muted))] p-5 shadow-inner sm:p-6"
+              aria-label={labels?.answerHeading ?? "Answer and rationale"}
+            >
+              <div className="pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden>
+                <div className="absolute -left-10 top-0 h-40 w-40 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_14%,transparent)] blur-3xl" />
+                <div className="absolute bottom-0 right-0 h-36 w-36 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-5)_12%,transparent)] blur-3xl" />
+              </div>
+              <div className="relative z-[1] mb-4 flex flex-wrap items-center gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pb-3">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+                  Answer & rationale
                 </span>
               </div>
-            </div>
-
-            {(() => {
-              const whyCorrect =
-                (explanation && String(explanation).trim()) ||
-                (exam?.rationaleCorrect && String(exam.rationaleCorrect).trim()) ||
-                "";
-              return whyCorrect ? (
-                <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] p-4">
-                  <div className="mb-1 text-xs font-semibold uppercase text-[var(--semantic-text-secondary)]">
-                    {labels?.whyCorrectHeading ?? "Why this is correct"}
-                  </div>
-                  <FlashcardRichContent text={whyCorrect} />
-                </div>
-              ) : null;
-            })()}
-
-            {exam?.rationaleIncorrect?.length ? (
-              <div className="rounded-xl border border-[var(--semantic-border-soft)] p-4">
-                <div className="mb-2 text-xs font-semibold uppercase text-[var(--semantic-text-secondary)]">
-                  {labels?.whyIncorrectHeading ?? "Why the others are incorrect"}
-                </div>
-
-                <div className="space-y-2 text-sm text-[var(--semantic-text-primary)]">
-                  {exam.rationaleIncorrect.map((r: any) => (
-                    <div key={r.letter}>
-                      <strong>{r.letter}</strong>: {r.rationale}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
-              <div className="rounded-xl border border-[var(--semantic-border-soft)] p-4">
-                <div className="mb-1 text-xs font-semibold uppercase text-[var(--semantic-text-secondary)]">
-                  Figure
-                </div>
-                <img
-                  src={clinicalImageUrl}
-                  alt=""
-                  className="max-h-64 w-auto max-w-full rounded-md border border-[var(--semantic-border-soft)] object-contain"
-                  loading="lazy"
+              <div className="relative z-[1]">
+                <FlashcardStudyRevealPanels
+                  exam={exam}
+                  answer={answer}
+                  explanation={explanation}
+                  pearl={pearl}
+                  labels={{
+                    answerHeading: labels?.answerHeading,
+                    whyCorrectHeading: labels?.whyCorrectHeading,
+                    whyIncorrectHeading: labels?.whyIncorrectHeading,
+                    takeawayHeading: labels?.takeawayHeading,
+                  }}
                 />
               </div>
-            ) : null}
+            </section>
+          ) : null}
 
-            {pearl ? (
-              <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_65%,var(--semantic-surface))] p-4">
-                <div className="mb-1 text-xs font-semibold uppercase text-[var(--semantic-warning)]">
-                  {labels?.takeawayHeading ?? "Clinical pearl"}
-                </div>
-                <FlashcardRichContent text={String(pearl)} />
-              </div>
-            ) : null}
-          </>
-        )}
+          {mainFooter ? <div className="nn-flashcard-session-main-footer space-y-4">{mainFooter}</div> : null}
+        </div>
+
+        {rail ? (
+          <aside className="nn-flashcard-session-rail nn-flashcard-rail-utility nn-flashcard-rail-surface relative shrink-0">
+            {rail}
+          </aside>
+        ) : null}
       </div>
     </div>
   );

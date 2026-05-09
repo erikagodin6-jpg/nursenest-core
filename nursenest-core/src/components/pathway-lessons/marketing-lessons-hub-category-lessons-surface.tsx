@@ -5,7 +5,6 @@ import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-le
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
-import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
@@ -158,13 +157,6 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
   const categoryProgressSnapshot =
     canShowResume && filtered.length > 0 ? buildLessonCategoryProgress({ lessons: filtered, progressMap }) : null;
 
-  const studyCards = defaultLessonModeCards({
-    lessonsHref: base,
-    questionsHref,
-    catHref,
-    pathwayShortName: pathway.shortName,
-  });
-
   const subtitle = formatSentenceCase(`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`);
 
   return (
@@ -202,7 +194,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
 
       <section
         id="pathway-lesson-library"
-        className="nn-qa-pathway-lessons-hub mt-4 scroll-mt-24"
+        className="nn-qa-pathway-lessons-hub mt-2 scroll-mt-24"
         data-nn-qa-pathway-lessons-category="true"
         aria-labelledby="lesson-category-heading"
       >
@@ -299,11 +291,8 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         ) : null}
       </section>
 
-      <section className="mt-10">
-        <StudyModeCards heading="Other ways to study" cards={studyCards} />
-      </section>
-
       <StudyBottomNav
+        compact
         relatedLinks={[
           { label: "Practice questions", href: questionsHref },
           { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },

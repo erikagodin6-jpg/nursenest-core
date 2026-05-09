@@ -14,7 +14,7 @@ export function LessonHubSurfaceChips({ links }: Props) {
   return (
     <nav
       aria-label="Quick study surfaces for this exam pathway"
-      className="mt-4"
+      className="mt-2"
       data-testid="lesson-hub-surface-chips"
     >
       <div className="flex flex-wrap gap-2">
