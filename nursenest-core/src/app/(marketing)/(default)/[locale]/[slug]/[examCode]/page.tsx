@@ -257,6 +257,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
             hubResume={hubResume}
             viewerSignedIn={viewerSignedIn}
             viewerHasPathwayLessonAccess={viewerHasPathwayLessonAccess}
+            npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
+            emphasizeCatPracticeTests={Boolean(npPracticeSeo)}
           />
         ) : (
           <div className="text-center py-10 text-red-500">

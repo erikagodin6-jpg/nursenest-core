@@ -5,10 +5,17 @@ import type { LucideIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { catPathwayExamCodeLabel } from "@/lib/exam-pathways/cat-pathway-labels";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
+import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { StudyCard } from "@/components/ui/study-card";
 import type { NursingTierHubActionId, NursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 import { resolveNursingTierHubStudyCardHref } from "@/lib/marketing/nursing-tier-hub-content";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
@@ -39,7 +46,8 @@ export function NursingTierHubPage({
   pathway,
   hubPath,
   content,
-  npSeoAliasSegment: _npSeoAliasSegment,
+  npSeoAliasSegment,
+  emphasizeCatPracticeTests = false,
   hubResume: _hubResume,
   viewerSignedIn = false,
   viewerHasPathwayLessonAccess: _viewerHasPathwayLessonAccess,
@@ -47,14 +55,21 @@ export function NursingTierHubPage({
   pathway: ExamPathwayDefinition;
   hubPath: string;
   content: NursingTierHubContent | null; // 🔥 allow null
+  /** When set (NP practice-test SEO alias URLs), analytics props match {@link ExamPathwayHub}. */
   npSeoAliasSegment?: string;
+  /** NP SEO alias hubs: highlight CAT practice-test intent — mirrors {@link ExamPathwayHubBody}. */
+  emphasizeCatPracticeTests?: boolean;
   hubResume?: PathwayHubResumePayload | null;
   viewerSignedIn?: boolean;
   viewerHasPathwayLessonAccess?: boolean;
 }) {
+  const { t } = useMarketingI18n();
   const { status, data: clientSession } = useSession();
   const clientSignedIn = status === "authenticated" && Boolean((clientSession?.user as { id?: string } | undefined)?.id);
   const effectiveViewerSignedIn = viewerSignedIn || clientSignedIn;
+  const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
+  const catAppStartHref = appPathwayCatSessionStartPath(pathway.id);
+  const catExamLabel = catPathwayExamCodeLabel(pathway);
 
   // 🔥 HARD GUARD — prevents ALL crashes
   if (!content || !Array.isArray(content.actions)) {
@@ -143,6 +158,52 @@ export function NursingTierHubPage({
             })}
           </ul>
         </section>
+
+        <ExamPathwayHubPremiumModules
+          pathway={pathway}
+          isSignedIn={effectiveViewerSignedIn}
+          npSeoAliasSegment={npSeoAliasSegment}
+        />
+
+        {emphasizeCatPracticeTests ? (
+          <div className="nn-study-callout mt-6 px-4 py-4 sm:px-5">
+            <p className="nn-marketing-h4">{t("components.examPathwayHub.body.catStripTitle")}</p>
+            <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{t("components.examPathwayHub.body.catStripBody")}</p>
+            {effectiveViewerSignedIn ? (
+              <MarketingTrackedLink
+                href={catAppStartHref}
+                event={PH.marketingPathwayHubCta}
+                eventProps={{
+                  ...linkCtx,
+                  surface: "cat_practice_strip",
+                  pathway_id: pathway.id,
+                  signed_in: true,
+                  destination_type: "cat_practice_tests",
+                  link_target: "app_pathway_cat_start",
+                }}
+                className="nn-marketing-body-sm mt-3 inline-flex font-semibold text-primary hover:underline"
+              >
+                {t("components.examPathwayHub.body.catCtaSignedIn", { exam: catExamLabel })}
+              </MarketingTrackedLink>
+            ) : (
+              <MarketingTrackedLink
+                href="/signup"
+                event={PH.marketingPathwayHubCta}
+                eventProps={{
+                  ...linkCtx,
+                  surface: "cat_practice_strip",
+                  pathway_id: pathway.id,
+                  signed_in: false,
+                  destination_type: "signup",
+                  link_target: "signup",
+                }}
+                className="nn-marketing-body-sm mt-3 inline-flex font-semibold text-primary hover:underline"
+              >
+                {t("components.examPathwayHub.body.catCtaSignup", { exam: catExamLabel })}
+              </MarketingTrackedLink>
+            )}
+          </div>
+        ) : null}
       </div>
     </>
   );
