@@ -123,7 +123,7 @@ export function LearnerReportCardPremium({
   const tiles = heroTiles(data, t);
 
   return (
-    <div className="flex flex-col gap-10 sm:gap-12">
+    <div className="nn-report-card-premium flex flex-col">
       {scopeBits ? (
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
           {t("learner.reportCard.scopeLabel", { scope: scopeBits })}
@@ -183,9 +183,9 @@ export function LearnerReportCardPremium({
                     </span>
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">{t("learner.reportCard.readiness.scoreLabel")}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">{t("learner.reportCard.readiness.scoreLabel")}</p>
                     <p className="mt-0.5 text-sm font-semibold text-[var(--theme-heading-text)]">{readinessBandLabel(data.readiness.band)}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{t("learner.reportCard.readiness.confidence", { level: data.readiness.confidence })}</p>
+                    <p className="mt-0.5 text-xs text-[var(--semantic-text-muted)]">{t("learner.reportCard.readiness.confidence", { level: data.readiness.confidence })}</p>
                   </div>
                 </div>
                 <div
@@ -201,7 +201,7 @@ export function LearnerReportCardPremium({
                     style={{ width: `${data.readiness.score}%` }}
                   />
                 </div>
-                {data.readiness.summary ? <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{data.readiness.summary}</p> : null}
+                {data.readiness.summary ? <p className="mt-3 text-xs leading-relaxed text-[var(--semantic-text-muted)]">{data.readiness.summary}</p> : null}
               </LearnerReportInset>
             </div>
             <LearnerReportInset tone="warm">
@@ -211,7 +211,7 @@ export function LearnerReportCardPremium({
                   const pct = f.maxPoints > 0 ? Math.round((f.points / f.maxPoints) * 100) : null;
                   return (
                     <div key={f.id} className="flex items-center gap-3">
-                      <span className="w-32 shrink-0 truncate text-xs text-muted-foreground">{f.label}</span>
+                      <span className="w-32 shrink-0 truncate text-xs text-[var(--semantic-text-muted)]">{f.label}</span>
                       <div className="flex-1">
                         {pct != null ? (
                           <div
@@ -227,10 +227,10 @@ export function LearnerReportCardPremium({
                             />
                           </div>
                         ) : (
-                          <span className="text-xs text-muted-foreground">—</span>
+                          <span className="text-xs text-[var(--semantic-text-muted)]">—</span>
                         )}
                       </div>
-                      <span className="w-8 shrink-0 text-right text-[11px] tabular-nums text-muted-foreground">
+                      <span className="w-8 shrink-0 text-right text-[11px] tabular-nums text-[var(--semantic-text-muted)]">
                         {f.points}/{f.maxPoints}
                       </span>
                     </div>
@@ -238,7 +238,7 @@ export function LearnerReportCardPremium({
                 })}
               </div>
               <div className="mt-4">
-                <Link href="/app/account/readiness" className="text-xs font-semibold text-primary underline-offset-2 hover:underline">
+                <Link href="/app/account/readiness" className="text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
                   {t("learner.reportCard.readiness.fullLink")}
                 </Link>
               </div>
@@ -290,7 +290,7 @@ export function LearnerReportCardPremium({
           </LearnerReportInset>
         </div>
         {data.bankGraded.total === 0 && data.mockAggregate.sumTotal === 0 ? (
-          <p className="mt-4 text-xs text-muted-foreground">{t("learner.reportCard.overallEmptyHint")}</p>
+          <p className="mt-4 text-xs text-[var(--semantic-text-muted)]">{t("learner.reportCard.overallEmptyHint")}</p>
         ) : null}
       </LearnerStudySurfaceSection>
 
@@ -309,8 +309,8 @@ export function LearnerReportCardPremium({
                 .map((p) => (
                   <li key={p.pathwayId}>
                     <div className="flex items-baseline justify-between gap-2 text-sm">
-                      <span className="font-medium text-foreground">{p.shortLabel}</span>
-                      <span className="shrink-0 tabular-nums text-xs text-muted-foreground">
+                      <span className="font-medium text-[var(--semantic-text-primary)]">{p.shortLabel}</span>
+                      <span className="shrink-0 tabular-nums text-xs text-[var(--semantic-text-muted)]">
                         {p.lessonsCompleted}/{p.lessonsTotal}
                       </span>
                     </div>
@@ -335,8 +335,8 @@ export function LearnerReportCardPremium({
               {data.byQuestionTier.map((b) => (
                 <li key={b.tierKey}>
                   <div className="flex items-baseline justify-between gap-2 text-sm">
-                    <span className="font-medium text-foreground">{b.displayLabel}</span>
-                    <span className="shrink-0 tabular-nums text-xs text-muted-foreground">
+                    <span className="font-medium text-[var(--semantic-text-primary)]">{b.displayLabel}</span>
+                    <span className="shrink-0 tabular-nums text-xs text-[var(--semantic-text-muted)]">
                       {b.correct}/{b.total}
                     </span>
                   </div>
@@ -362,8 +362,8 @@ export function LearnerReportCardPremium({
             {data.mockByExamTier.map((m, i) => (
               <li key={m.tierKey}>
                 <LearnerReportInset tone={i % 2 === 0 ? "supportive" : "warm"}>
-                  <p className="text-sm font-medium text-foreground">{m.displayLabel}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{t("learner.reportCard.mockTierAttempts", { n: m.attempts })}</p>
+                  <p className="text-sm font-medium text-[var(--semantic-text-primary)]">{m.displayLabel}</p>
+                  <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{t("learner.reportCard.mockTierAttempts", { n: m.attempts })}</p>
                   {pctBar(m.accuracyPct, t("learner.reportCard.accuracy"))}
                 </LearnerReportInset>
               </li>
@@ -388,10 +388,10 @@ export function LearnerReportCardPremium({
                 {data.weakTopics.map((w) => (
                   <li
                     key={w.normalizedTopic ?? w.topic}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_48%,var(--semantic-surface))] px-4 py-3.5 text-sm shadow-[var(--semantic-shadow-soft)]"
+                    className="nn-report-card-topic-signal flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 text-sm"
                   >
-                    <span className="font-medium text-foreground">{w.topic}</span>
-                    <span className="tabular-nums text-xs text-muted-foreground">
+                    <span className="font-medium text-[var(--semantic-text-primary)]">{w.topic}</span>
+                    <span className="tabular-nums text-xs text-[var(--semantic-text-muted)]">
                       {w.attempted > 0 ? t("learner.reportCard.topicMissRate", { rate: Math.round(w.missRate) }) : t("learner.common.notAvailable")}
                     </span>
                   </li>
@@ -504,12 +504,12 @@ export function LearnerReportCardPremium({
                   .map((s) => (
                     <li key={s.id} className="flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0">
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-foreground">{s.examTitle ?? t("learner.reportCard.sessionUntitled")}</p>
-                        <p className="text-[11px] text-muted-foreground">
+                        <p className="truncate text-sm font-medium text-[var(--semantic-text-primary)]">{s.examTitle ?? t("learner.reportCard.sessionUntitled")}</p>
+                        <p className="text-[11px] text-[var(--semantic-text-muted)]">
                           {s.examMode === "cat" ? "CAT" : s.examMode} · {s.updatedAt.toLocaleDateString(localeTag)}
                         </p>
                       </div>
-                      <span className="shrink-0 tabular-nums text-sm text-muted-foreground">
+                      <span className="shrink-0 tabular-nums text-sm text-[var(--semantic-text-muted)]">
                         {s.accuracyPct != null ? `${s.accuracyPct}%` : "—"} ({s.correct}/{s.total})
                       </span>
                     </li>
@@ -526,18 +526,20 @@ export function LearnerReportCardPremium({
                 {data.recentPracticeTests.map((pt) => (
                   <li key={pt.id} className="flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-foreground">
+                      <p className="truncate text-sm font-medium text-[var(--semantic-text-primary)]">
                         {pt.title?.trim() || t("learner.reportCard.practiceTestUntitled")}
                         {pt.isCat ? (
-                          <span className="ml-2 rounded-md bg-primary/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-primary">CAT</span>
+                          <span className="ml-2 rounded-md bg-[color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] px-1.5 py-0.5 text-[10px] font-semibold uppercase text-[var(--semantic-brand)]">
+                            CAT
+                          </span>
                         ) : null}
                       </p>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-[11px] text-[var(--semantic-text-muted)]">
                         {pt.completedAt.toLocaleDateString(localeTag)}
                         {pt.pathwayLabel ? ` · ${pt.pathwayLabel}` : ""}
                       </p>
                     </div>
-                    <span className="shrink-0 tabular-nums text-sm text-muted-foreground">
+                    <span className="shrink-0 tabular-nums text-sm text-[var(--semantic-text-muted)]">
                       {pt.accuracyPct != null ? `${pt.accuracyPct}%` : "—"}
                       {pt.scoreTotal > 0 ? ` · ${pt.scoreTotal} items` : ""}
                     </span>
@@ -587,11 +589,11 @@ export function LearnerReportCardPremium({
           <LearnerReportInset tone="supportive">
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-info)]">{t("learner.reportCard.next.lessons")}</p>
             {data.continueLesson ? (
-              <Link href={data.continueLesson.href} className="mt-2 block text-sm font-medium text-foreground underline-offset-2 hover:underline">
+              <Link href={data.continueLesson.href} className="mt-2 block text-sm font-medium text-[var(--semantic-text-primary)] underline-offset-2 hover:underline">
                 {data.continueLesson.title}
               </Link>
             ) : (
-              <p className="mt-2 text-sm text-muted-foreground">{t("learner.reportCard.next.lessonsNa")}</p>
+              <p className="mt-2 text-sm text-[var(--semantic-text-muted)]">{t("learner.reportCard.next.lessonsNa")}</p>
             )}
             <Link
               href="/app/lessons"
@@ -648,13 +650,13 @@ export function LearnerReportCardPremium({
               ) : (
                 data.mockLog.map((a) => (
                   <tr key={a.id} className="border-b border-border/40 last:border-0">
-                    <td className="px-4 py-3 font-medium text-foreground">{a.examTitle}</td>
-                    <td className="px-4 py-3 tabular-nums text-muted-foreground">
+                    <td className="px-4 py-3 font-medium text-[var(--semantic-text-primary)]">{a.examTitle}</td>
+                    <td className="px-4 py-3 tabular-nums text-[var(--semantic-text-muted)]">
                       {a.pct}% ({a.score}/{a.total})
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground">{a.createdAt.toLocaleDateString(localeTag)}</td>
+                    <td className="px-4 py-3 text-[var(--semantic-text-muted)]">{a.createdAt.toLocaleDateString(localeTag)}</td>
                     <td className="px-4 py-3 text-right">
-                      <Link href={`/app/exams/attempts/${a.id}`} className="font-semibold text-primary underline-offset-4 hover:underline">
+                      <Link href={`/app/exams/attempts/${a.id}`} className="font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline">
                         {t("learner.dashboard.insight.viewReport")}
                       </Link>
                     </td>

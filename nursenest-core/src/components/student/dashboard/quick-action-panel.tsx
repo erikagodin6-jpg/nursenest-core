@@ -91,7 +91,10 @@ export function QuickActionPanel({
     guided?.catDestinationKind === "app_start" && Boolean(guided?.catPathwayLabel?.trim() && guided?.catPathwayLine?.trim());
 
   return (
-    <section className="nn-surface-bubble rounded-2xl p-4 shadow-[var(--shadow-card)] sm:p-6" aria-labelledby={`${id}-heading`}>
+    <section
+      className="nn-cockpit-quick-actions nn-surface-bubble rounded-2xl p-4 shadow-[var(--semantic-shadow-soft)] sm:p-6"
+      aria-labelledby={`${id}-heading`}
+    >
       <div className="flex flex-wrap items-center gap-2">
         <Zap className="h-4 w-4 shrink-0 text-[var(--semantic-chart-4)]" aria-hidden strokeWidth={2} />
         <h2 id={`${id}-heading`} className="text-sm font-semibold text-[var(--semantic-text-primary)]">

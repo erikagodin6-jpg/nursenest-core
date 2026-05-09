@@ -26,7 +26,7 @@ export function LearnerDashboardCommandCenter({
       : t("learner.dashboard.commandCenter.lessonsPending");
 
   return (
-    <section aria-label={t("learner.dashboard.commandCenter.regionAria")}>
+    <section className="nn-cockpit-command-center" aria-label={t("learner.dashboard.commandCenter.regionAria")}>
       <ProductCard accent paddingClass="p-5 sm:p-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div>

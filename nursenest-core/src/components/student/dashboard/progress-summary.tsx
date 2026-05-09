@@ -42,7 +42,7 @@ export function ProgressSummary({ snapshot, t }: { snapshot: PremiumDashboardSna
   const hasBank = practice.gradedTotal > 0;
 
   return (
-    <section className="nn-card nn-student-card-lift border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
+    <section className="nn-cockpit-progress-summary nn-card nn-student-card-lift border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
       <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">{t("learner.dashboard.progressSummary.title")}</h3>
       <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{t("learner.dashboard.progressSummary.subtitle")}</p>
 

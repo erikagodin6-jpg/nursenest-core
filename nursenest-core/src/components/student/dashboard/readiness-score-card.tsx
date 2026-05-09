@@ -144,7 +144,7 @@ export function ReadinessScoreCard({
 
   return (
     <article
-      className={`nn-readiness-card nn-card-interactive relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] border-t-4 ${topAccent} bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_5%,var(--semantic-surface))] shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-200 ease-out`}
+      className={`nn-readiness-card nn-cockpit-readiness-card nn-card-interactive relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] border-t-4 ${topAccent} bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_5%,var(--semantic-surface))] shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-200 ease-out`}
       aria-labelledby="readiness-heading"
     >
       {/* Ambient glow */}
