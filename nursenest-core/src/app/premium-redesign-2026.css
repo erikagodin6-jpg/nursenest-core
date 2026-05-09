@@ -2122,6 +2122,18 @@ html[data-theme="ocean"] .nn-flashcard-session-ambient {
   );
 }
 
+/* Blossom — bright, white-forward marketing hero bloom.
+ * Soft pink → lilac → warm-gold radials over the new #fff8fb page surface,
+ * driven entirely by semantic tokens + color-mix (no new images, no raw hex
+ * outside guarded fallbacks). Keeps the existing dashboard panel intact. */
+html[data-theme="blossom"] .nn-home-marketing-rich-hero {
+  background:
+    radial-gradient(640px 360px at 12% 0%, color-mix(in srgb, var(--semantic-chart-1, #ec4899) 22%, transparent) 0%, transparent 60%),
+    radial-gradient(640px 360px at 100% 8%, color-mix(in srgb, var(--semantic-chart-2, #a855f7) 18%, transparent) 0%, transparent 60%),
+    radial-gradient(720px 380px at 50% 110%, color-mix(in srgb, var(--semantic-warning, #fbbf24) 16%, transparent) 0%, transparent 60%),
+    var(--theme-page-bg, #fff8fb);
+}
+
 /* Blossom — muted rose / lilac / warm accents (no loud pink blocks). */
 html[data-theme="blossom"] .nn-flashcard-session-ambient {
   background: linear-gradient(

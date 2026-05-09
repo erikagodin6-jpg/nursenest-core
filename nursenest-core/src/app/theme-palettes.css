@@ -1493,6 +1493,15 @@
 
 /* ── Premium clinical palettes (Blossom, Midnight, Ocean, Forest) ── */
 
+/*
+ * Blossom — bright, white-forward marketing identity.
+ * Page surface aligned with CLINICAL_THEME_META.blossom.surface (#FFF8FB).
+ * Marketing header bands switched from solid #D9436A to a token-linked
+ * color-mix(white) "light glass" tint so the marketing hero reads
+ * white-forward + soft pink without changing brand pinks. Learner contrast
+ * is preserved via deep-rose --theme-nav-foreground (5.4:1 on #fdf0f3).
+ * Lesson pastel strips remain unchanged (already AA on white).
+ */
 [data-theme="blossom"] {
   --theme-primary: #e75480;
   --theme-primary-foreground: #ffffff;
@@ -1502,7 +1511,8 @@
   --theme-accent-foreground: #7c5a12;
   --theme-border: #e5e7eb;
   --theme-ring: #d9436a;
-  --theme-page-bg: #f8fafc;
+  /* Brighter blossom surface (was #f8fafc — slate-50 read as cool gray). */
+  --theme-page-bg: #fff8fb;
   --theme-heading-text: #1f2937;
   --theme-body-text: #4b5563;
   --theme-muted-text: #6b7280;
@@ -1527,18 +1537,22 @@
 
   --logo-primary: #e75480;
   --logo-accent: #3a86ff;
-  --logo-text: #1f2937;
+  /* Wordmark in deep rose-wine (was slate #1f2937) so leaf + wordmark read
+   * cohesive on the new white-forward surfaces and tinted header band. */
+  --logo-text: #5a1a30;
   --theme-brand-accent: #e75480;
   --theme-brand-strong: #D9436A;
-  --theme-nav-background: #D9436A;
-  --theme-nav-foreground: #FFFFFF;
-  --theme-nav-hover: rgba(255, 255, 255, 0.16);
-  --theme-nav-hover-foreground: #FFFFFF;
-  --theme-header-top-bg: #D9436A;
-  --theme-header-main-bg: #D9436A;
+  /* Light-glass marketing chrome — token-linked color-mix with white instead
+   * of solid #D9436A. Deep-rose foreground keeps WCAG AA on the tinted bg. */
+  --theme-nav-background: color-mix(in srgb, #D9436A 8%, #ffffff);
+  --theme-nav-foreground: #5a1a30;
+  --theme-nav-hover: color-mix(in srgb, #D9436A 16%, #ffffff);
+  --theme-nav-hover-foreground: #5a1a30;
+  --theme-header-top-bg: color-mix(in srgb, #D9436A 6%, #ffffff);
+  --theme-header-main-bg: color-mix(in srgb, #D9436A 8%, #ffffff);
   --theme-header-secondary-bg: #FFFFFF;
-  --theme-header-secondary-fg: #111827;
-  --theme-header-divider: rgba(217, 67, 106, 0.24);
+  --theme-header-secondary-fg: #1f2937;
+  --theme-header-divider: color-mix(in srgb, #D9436A 22%, transparent);
 }
 
 [data-theme="sunset"] {
