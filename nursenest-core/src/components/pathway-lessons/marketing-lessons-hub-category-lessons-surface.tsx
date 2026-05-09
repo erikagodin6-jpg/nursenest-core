@@ -6,7 +6,8 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
-import { StudyBottomNav } from "@/components/study/study-bottom-nav";
+import { MarketingPublicLessonsHubAnonymousUpgradeStrip } from "@/components/pathway-lessons/marketing-public-lessons-hub-anonymous-upgrade-strip";
+import { MarketingLessonsHubStickyStudyChrome } from "@/components/pathway-lessons/marketing-lessons-hub-sticky-study-chrome";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
@@ -35,12 +36,16 @@ import { pathwayLessonsDisplayCategoryBreadcrumbs } from "@/lib/seo/pathway-brea
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
-import { getLessonProgressForPathwayUser } from "@/lib/lessons/get-lesson-progress-for-pathway-user";
 import {
   canShowPaidPathwayLessonProgress,
   loadMarketingPathwayLessonProgressSessionContext,
 } from "@/lib/lessons/marketing-pathway-lesson-progress-server";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { buildSubscriberPublicLessonsHubHeroCta } from "@/lib/marketing/public-lessons-hub-hero-cta";
+import { publicHubCategoryBrowseCardStyle } from "@/lib/marketing/public-hub-browse-accent";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
@@ -148,13 +153,22 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
   });
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
+  let subscriberHeroCta: { label: string; href: string } | undefined;
+
   if (canShowResume && filtered.length > 0) {
-    progressMap = await getLessonProgressForPathwayUser({
-      userId: progressCtx.userId,
-      pathwayId: pathway.id,
-      lessonSlugs: filtered.map((l) => l.slug).filter(Boolean),
-    });
+    const slugList = filtered.map((l) => l.slug).filter(Boolean) as string[];
+    const { progressMap: hubMap, resume } = await loadPathwayHubSubscriberData(
+      progressCtx.userId,
+      progressCtx.scope,
+      progressCtx.learnerPath,
+      pathway,
+      base,
+      slugList,
+    );
+    progressMap = hubMap;
+    subscriberHeroCta = buildSubscriberPublicLessonsHubHeroCta(resume, base);
   }
+
   const categoryProgressSnapshot =
     canShowResume && filtered.length > 0 ? buildLessonCategoryProgress({ lessons: filtered, progressMap }) : null;
 
@@ -167,6 +181,11 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
 
   const subtitle = formatSentenceCase(`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`);
 
+  const anonymousHeroCta = {
+    label: "Create a free account",
+    href: `${withMarketingLocale(lessonContentLocale, HUB.signup)}?callbackUrl=${encodeURIComponent(base)}`,
+  } as const;
+
   return (
     <LessonsPageShell
       title={pageTitle}
@@ -174,6 +193,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
       eyebrow={pathway.shortName.trim() || pathway.displayName}
       pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
+      heroPrimaryCta={subscriberHeroCta ?? anonymousHeroCta}
       backLink={{ label: "All lesson areas", href: base }}
     >
       <MarketingHubSmokeDiagnosticsJson
@@ -189,7 +209,9 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         }}
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-      <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      <MarketingLessonsHubStickyStudyChrome>
+        <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      </MarketingLessonsHubStickyStudyChrome>
       {questionSnapshotLoadRejected ? (
         <div
           className="mt-3 rounded-xl border border-[var(--semantic-warning)]/40 bg-[color-mix(in_srgb,var(--semantic-warning)_12%,transparent)] px-4 py-3 text-sm text-[var(--theme-heading-text)]"
@@ -206,11 +228,11 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         data-nn-qa-pathway-lessons-category="true"
         aria-labelledby="lesson-category-heading"
       >
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-chart-5)_12%,var(--semantic-border-soft))] pb-4">
           <h2 id="lesson-category-heading" className="nn-marketing-h3 max-w-[min(100%,36rem)]">
             {category.label}
           </h2>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-1)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_40%,var(--semantic-surface))] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
             {filtered.length.toLocaleString()} {filtered.length === 1 ? "lesson" : "lessons"}
           </span>
         </div>
@@ -235,11 +257,12 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         ) : null}
 
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--theme-muted-text)]">
-            <p className="font-medium text-[var(--theme-heading-text)]">No lessons in this area yet.</p>
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_14%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--theme-muted-text)] shadow-[var(--semantic-shadow-soft)]">
+            <p className="font-semibold text-[var(--theme-heading-text)]">No lessons in this area yet.</p>
             <p className="mt-2">
-              There are no catalog lessons mapped to <strong className="text-[var(--theme-heading-text)]">{category.label}</strong>{" "}
-              for this pathway. Try another clinical area or return to the lesson hub.
+              There are no catalog lessons mapped to{" "}
+              <strong className="text-[var(--theme-heading-text)]">{category.label}</strong> for this pathway. Try
+              another clinical area or return to the lesson hub.
             </p>
             <p className="mt-3">
               <Link href={base} className="font-semibold text-primary hover:underline">
@@ -248,8 +271,8 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
             </p>
           </div>
         ) : rows.length === 0 ? (
-          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--theme-muted-text)]">
-            <p className="font-medium text-[var(--theme-heading-text)]">No linkable lessons on this page.</p>
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_14%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--theme-muted-text)] shadow-[var(--semantic-shadow-soft)]">
+            <p className="font-semibold text-[var(--theme-heading-text)]">No linkable lessons on this page.</p>
             <p className="mt-2">
               Lessons in this area exist in the catalog, but none on this page passed public-link verification yet.
               Try another page or return to the hub.
@@ -261,8 +284,8 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
             </p>
           </div>
         ) : (
-          <ul className="space-y-2">
-            {rows.map((l) => {
+          <ul className="space-y-2.5">
+            {rows.map((l, rowIdx) => {
               const href = pathwayLessonMarketingHubVerifiedCardHref(base, l);
               const label = cleanLessonTitleForDisplay((l.seoTitle ?? "").trim() || l.title);
               const prog = progressMap[l.slug];
@@ -271,7 +294,8 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
                   {href ? (
                     <Link
                       href={href}
-                      className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm font-medium text-primary shadow-[var(--semantic-shadow-soft)] transition-colors hover:border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))]"
+                      style={publicHubCategoryBrowseCardStyle(rowIdx)}
+                      className="flex flex-wrap items-baseline justify-between gap-2 rounded-2xl border border-[color-mix(in_srgb,var(--hub-browse-accent)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--hub-browse-accent)_9%,var(--semantic-surface))] px-3.5 py-2.5 text-sm font-medium text-primary shadow-[var(--semantic-shadow-soft)] transition-colors hover:border-[color-mix(in_srgb,var(--hub-browse-accent)_38%,var(--semantic-border-soft))]"
                     >
                       <span className="min-w-0 flex-1">{label}</span>
                       {canShowResume ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
@@ -299,18 +323,16 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         ) : null}
       </section>
 
+      {!canShowResume ? (
+        <MarketingPublicLessonsHubAnonymousUpgradeStrip
+          marketingUiLocale={lessonContentLocale}
+          signupCallbackPath={base}
+        />
+      ) : null}
+
       <section className="mt-10">
         <StudyModeCards heading="Other ways to study" cards={studyCards} />
       </section>
-
-      <StudyBottomNav
-        relatedLinks={[
-          { label: "Practice questions", href: questionsHref },
-          { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
-          { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-          { label: "Exam overview", href: overviewHref },
-        ]}
-      />
     </LessonsPageShell>
   );
 }

@@ -123,8 +123,9 @@ export function PathwayLessonsCurriculumHub({
     const preparedCount = hubVerifyDiagnostics?.incomingPreparedRowCount ?? 0;
     const verifyPipelineDroppedAll =
       Boolean(hubVerifyDiagnostics) && preparedCount > 0 && (hubVerifyDiagnostics?.keptRowCount ?? 0) === 0;
+    const pipelineDiagAllowed = process.env.NN_MARKETING_HUB_PIPELINE_DIAGNOSTICS === "1";
     const diagSummary =
-      verifyPipelineDroppedAll && hubVerifyDiagnostics
+      pipelineDiagAllowed && verifyPipelineDroppedAll && hubVerifyDiagnostics
         ? `Lesson list had ${preparedCount} prepared row(s) but detail verification dropped every slug (locale ${hubVerifyDiagnostics.lessonContentLocale}). Drop reasons: ${JSON.stringify(hubVerifyDiagnostics.excludedByReason)}.`
         : null;
     if (process.env.NODE_ENV !== "production" && verifyPipelineDroppedAll && hubVerifyDiagnostics) {

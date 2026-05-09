@@ -16,6 +16,7 @@ import {
   normalizeMarketingLessonsHubTopicSlug,
 } from "@/lib/lessons/lesson-routes";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import {
   getPathwayLessonListWarehouseLocaleForHub,
   listAlliedProfessionTaxonomyClustersForPublicHub,
@@ -66,7 +67,8 @@ import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-conti
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import type { HubDbFailureCategory } from "@/lib/db/safe-database";
 import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
-import { StudyBottomNav } from "@/components/study/study-bottom-nav";
+import { MarketingPublicLessonsHubAnonymousUpgradeStrip } from "@/components/pathway-lessons/marketing-public-lessons-hub-anonymous-upgrade-strip";
+import { MarketingLessonsHubStickyStudyChrome } from "@/components/pathway-lessons/marketing-lessons-hub-sticky-study-chrome";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
@@ -78,6 +80,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-hub-pipeline-collapse-guard";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { buildSubscriberPublicLessonsHubHeroCta } from "@/lib/marketing/public-lessons-hub-hero-cta";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 import {
@@ -1353,9 +1356,15 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
   const canShowProgressMap = canShowResume && lessonsForCurriculumHub.length > 0;
 
+  const anonymousHeroCta = {
+    label: "Create a free account",
+    href: `${withMarketingLocale(lessonContentLocale, HUB.signup)}?callbackUrl=${encodeURIComponent(base)}`,
+  } as const;
+  let subscriberHeroCta: { label: string; href: string } | undefined;
+
   if (canShowResume) {
     const hubSlugs = canShowProgressMap ? lessonsForCurriculumHub.map((l) => l.slug).filter(Boolean) : [];
-    const { progressMap: map } = await loadPathwayHubSubscriberData(
+    const { progressMap: map, resume } = await loadPathwayHubSubscriberData(
       progressCtx.userId,
       progressCtx.scope,
       progressCtx.learnerPath,
@@ -1364,6 +1373,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       hubSlugs,
     );
     progressMap = map;
+    subscriberHeroCta = buildSubscriberPublicLessonsHubHeroCta(resume, base);
   }
 
   const studyCards = defaultLessonModeCards({
@@ -1380,6 +1390,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       eyebrow={pathway.shortName.trim() || pathway.displayName}
       pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
+      heroPrimaryCta={subscriberHeroCta ?? anonymousHeroCta}
       backLink={{ label: `${examName} overview`, href: overviewHref }}
     >
       <MarketingHubSmokeDiagnosticsJson
@@ -1406,8 +1417,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         }}
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-      <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
-      {lessonsPageLoad.status === "ok" && lessonsPageLoad.sourceUsed === "secondary" ? (
+      <MarketingLessonsHubStickyStudyChrome>
+        <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      </MarketingLessonsHubStickyStudyChrome>
+      {canShowResume && lessonsPageLoad.status === "ok" && lessonsPageLoad.sourceUsed === "secondary" ? (
         <div className="mt-3">
           <LearnerStudyLiveSyncBanner />
         </div>
@@ -1517,18 +1530,16 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         lessonsOnPage={lessonsOnPageForPagination}
       />
 
+      {!canShowResume ? (
+        <MarketingPublicLessonsHubAnonymousUpgradeStrip
+          marketingUiLocale={lessonContentLocale}
+          signupCallbackPath={base}
+        />
+      ) : null}
+
       <section className="mt-10">
         <StudyModeCards heading="Other ways to study" cards={studyCards} />
       </section>
-
-      <StudyBottomNav
-        relatedLinks={[
-          { label: "Practice questions", href: questionsHref },
-          { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
-          { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-          { label: "Exam overview", href: overviewHref },
-        ]}
-      />
     </LessonsPageShell>
   );
   } finally {

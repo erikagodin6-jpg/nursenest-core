@@ -16,6 +16,8 @@ type Props = {
   pathwayTrack?: string;
   toolbar?: ReactNode;
   ctas?: CtaButton[];
+  /** Single primary hero action — signup (anonymous) or resume/next lesson (subscriber). */
+  heroPrimaryCta?: { label: string; href: string };
   backLink?: { label: string; href: string };
   children: ReactNode;
 };
@@ -44,6 +46,7 @@ export function LessonsPageShell({
   pathwayTrack,
   toolbar,
   ctas,
+  heroPrimaryCta,
   backLink,
   children,
 }: Props) {
@@ -51,6 +54,7 @@ export function LessonsPageShell({
     <div
       className="nn-premium-pathway-hub"
       data-nn-lessons-marketing-hub="1"
+      data-nn-public-hub-blossom="1"
       {...(pathwayTrack ? { "data-pathway-track": pathwayTrack } : {})}
     >
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
@@ -84,6 +88,14 @@ export function LessonsPageShell({
               </p>
             ) : null}
 
+            {heroPrimaryCta ? (
+              <div className="mx-auto mt-6 flex w-full max-w-2xl justify-center sm:justify-start">
+                <Link href={heroPrimaryCta.href} className={ctaClass("primary")}>
+                  {heroPrimaryCta.label}
+                </Link>
+              </div>
+            ) : null}
+
             {toolbar ? <div className="mx-auto mt-5 w-full max-w-3xl">{toolbar}</div> : null}
 
             {ctas && ctas.length > 0 ? (
@@ -98,7 +110,7 @@ export function LessonsPageShell({
           </div>
         </section>
 
-        <section className="nn-premium-lessons-hub-body mt-4 rounded-[2rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-[0_14px_40px_color-mix(in_srgb,var(--palette-heading)_8%,transparent)] sm:mt-5 sm:p-4 lg:p-5">
+        <section className="nn-premium-lessons-hub-body mt-4 rounded-[2rem] border border-[color-mix(in_srgb,var(--semantic-chart-5)_12%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3 shadow-[0_14px_42px_color-mix(in_srgb,var(--semantic-chart-3)_10%,color-mix(in_srgb,var(--palette-heading)_7%,transparent))] sm:mt-5 sm:p-4 lg:p-5">
           {children}
         </section>
       </div>

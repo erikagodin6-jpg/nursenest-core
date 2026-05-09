@@ -22,7 +22,7 @@ export function MarketingPublicLessonsHubAnonymousUpgradeStrip({
   return (
     <aside
       data-nn-qa-public-hub-upgrade-strip
-      className="mx-auto mt-10 max-w-3xl rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_16%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5"
+      className="mx-auto mt-10 max-w-3xl rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-5)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_35%,var(--semantic-surface))] p-4 shadow-[0_12px_32px_color-mix(in_srgb,var(--semantic-chart-3)_8%,transparent)] sm:p-5"
     >
       <h2 className="nn-marketing-h3 text-balance text-[var(--theme-heading-text)]">Study with full access</h2>
       <p className="nn-marketing-body-sm mt-2 text-pretty text-[var(--theme-muted-text)]">

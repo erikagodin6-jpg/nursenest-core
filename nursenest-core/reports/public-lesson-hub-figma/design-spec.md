@@ -18,3 +18,7 @@ Use `--semantic-*`, `--theme-*`, `--palette-*`, `color-mix` only per semantic gu
 ## Pipeline diagnostics copy
 
 Technical verify empty-state copy only when `NN_MARKETING_HUB_PIPELINE_DIAGNOSTICS=1`.
+
+## Blossom homepage alignment (2026-05-08)
+
+Reference: Blossom homepage mock — white/off-white shells, soft pastel accents (lavender, mint, teal, rose), rounded cards, soft shadows, strong hierarchy. Implemented using semantic tokens and chart hues only (no raw hex in TSX).
