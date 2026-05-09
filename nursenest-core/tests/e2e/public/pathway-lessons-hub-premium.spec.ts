@@ -6,7 +6,13 @@ import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 
 import { expect, test } from "@playwright/test";
-import { expectNotPageNotFound, gotoExpectOk, requireOrigin, seedUsMarketingCookie } from "../helpers/navigation-e2e";
+import {
+  expectNotPageNotFound,
+  gotoExpectOk,
+  requireOrigin,
+  seedCaMarketingCookie,
+  seedUsMarketingCookie,
+} from "../helpers/navigation-e2e";
 
 const HUB_ROOT = '[data-nn-lessons-marketing-hub="1"]';
 const LESSONS_SECTION = '[data-nn-qa-pathway-lessons-hub="true"]';
@@ -31,14 +37,17 @@ async function captureHubScreenshot(page: import("@playwright/test").Page, fileB
 }
 
 async function expectMarketingLessonsHubLoaded(page: import("@playwright/test").Page) {
-  await expect(page.locator(HUB_ROOT)).toBeVisible({ timeout: HUB_TIMEOUT });
-  await expect(page.locator(LESSONS_SECTION)).toBeVisible();
+  const hub = page.locator(HUB_ROOT);
+  await expect(hub).toBeVisible({ timeout: HUB_TIMEOUT });
+  await expect(hub.locator(LESSONS_SECTION)).toBeVisible({ timeout: HUB_TIMEOUT });
   await expect(page.getByRole("heading", { name: /other ways to study/i })).toHaveCount(0);
 }
 
 test.describe("Pathway lessons hub — premium shell (RN / PN / NP / CA RPN / Allied)", () => {
-  test.beforeAll(async () => {
+  test.beforeAll(async ({ request }) => {
     await mkdir(SCREENSHOT_DIR, { recursive: true });
+    /** Warm Turbopack + RN hub aggregates before browser tests (reduces cold-start timeouts under serial mode). */
+    await request.get("/us/rn/nclex-rn/lessons", { timeout: 300_000 });
   });
 
   test("US RN lessons index loads premium hub + lesson section", async ({ page, baseURL }) => {
@@ -80,20 +89,13 @@ test.describe("Pathway lessons hub — premium shell (RN / PN / NP / CA RPN / Al
     await seedUsMarketingCookie(page, origin);
     await gotoExpectOk(page, "/allied/allied-health/lessons");
     await expectNotPageNotFound(page);
-
-    /**
-     * Allied category-first hub streams heavily; anchor on the lesson-library landmark + QA hub hook rather than
-     * waiting only on the outer marketing wrapper attribute.
-     */
-    await expect(page.getByRole("heading", { name: /^lesson library$/i })).toBeVisible({ timeout: HUB_TIMEOUT });
-    await expect(page.locator(LESSONS_SECTION)).toBeVisible();
-    await expect(page.getByRole("heading", { name: /other ways to study/i })).toHaveCount(0);
+    await expectMarketingLessonsHubLoaded(page);
     await captureHubScreenshot(page, "allied-allied-health-lessons");
   });
 
   test("Canada RPN (REx-PN) lessons index loads premium hub + lesson section", async ({ page, baseURL }) => {
     const origin = requireOrigin(baseURL);
-    await seedUsMarketingCookie(page, origin);
+    await seedCaMarketingCookie(page, origin);
     await gotoExpectOk(page, "/canada/pn/rex-pn/lessons");
     await expectNotPageNotFound(page);
     await expectMarketingLessonsHubLoaded(page);
