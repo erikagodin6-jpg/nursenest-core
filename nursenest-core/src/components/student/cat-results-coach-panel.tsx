@@ -30,12 +30,12 @@ function difficultySparkline(series: number[], height = 40, width = 200) {
     <svg
       width={width}
       height={height}
-      className="text-primary motion-reduce:opacity-95"
+      className="motion-reduce:opacity-95"
       aria-hidden
     >
       <polyline
         fill="none"
-        stroke="currentColor"
+        stroke="var(--semantic-chart-1)"
         strokeWidth="2"
         strokeLinejoin="round"
         points={pts.join(" ")}
@@ -63,17 +63,22 @@ export function CatResultsCoachPanel({
         : "Test Mode";
 
   return (
-    <div className="nn-semantic-inset--cool space-y-5 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-5 sm:p-6">
+    <div
+      className="nn-cat-results-coach-panel nn-semantic-inset--cool space-y-5 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
+      data-nn-cat-results-coach="true"
+    >
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Your CAT summary</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
+            Your CAT summary
+          </p>
           <p className="mt-2 text-lg font-semibold leading-snug text-[var(--semantic-text-primary)]">
             {coach.readinessHeadline}
           </p>
           <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{coach.readinessNarrative}</p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-2">
-          <span className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-3 py-1 text-xs font-semibold text-[var(--semantic-brand)]">
             {modeLabel}
           </span>
           {coach.readinessTier && coach.readinessTier !== "unknown" && (

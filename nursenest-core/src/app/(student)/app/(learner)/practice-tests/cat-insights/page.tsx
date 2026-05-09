@@ -60,7 +60,7 @@ export default function CatInsightsPage() {
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
-      <div className="nn-learner-page-hero">
+      <div className="nn-learner-page-hero nn-cat-insights-hero rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_8%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
         <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">CAT confidence dashboard</h1>
         <p className="mt-2 max-w-prose text-sm text-[var(--semantic-text-secondary)]">
           Readiness outlook and confidence are practice estimates from your adaptive sessions — not official exam
@@ -73,18 +73,18 @@ export default function CatInsightsPage() {
       ) : (
         <>
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="nn-card border-[var(--semantic-border-soft)] p-4">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Sessions listed</p>
-              <p className="mt-1 text-2xl font-bold tabular-nums">{items.length}</p>
+            <div className="nn-card border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-3)_6%,var(--semantic-surface))] p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Sessions listed</p>
+              <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--semantic-text-primary)]">{items.length}</p>
             </div>
-            <div className="nn-card border-[var(--semantic-border-soft)] p-4">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Best outlook (loaded)</p>
+            <div className="nn-card border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_8%,var(--semantic-surface))] p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Best outlook (loaded)</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--semantic-brand)]">
                 {best != null ? `${best}%` : "—"}
               </p>
             </div>
-            <div className="nn-card border-[var(--semantic-border-soft)] p-4">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Latest vs prior</p>
+            <div className="nn-card border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-4)_7%,var(--semantic-surface))] p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Latest vs prior</p>
               <p className="mt-1 text-2xl font-bold tabular-nums">
                 {delta == null ? "—" : `${delta > 0 ? "+" : ""}${delta} pts`}
               </p>
