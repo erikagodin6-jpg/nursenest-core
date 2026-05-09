@@ -11,6 +11,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { dismissMarketingScrims } from "../helpers/marketing-navigation-audit";
 import { publicMarketingThemeChoiceCount } from "../../../src/lib/theme/theme-registry";
+import { resolveE2eAppBaseUrl } from "../helpers/e2e-env";
 
 const SELECTOR_DISMISSED_LS = "nn_selector_dismissed";
 const THEME_STORAGE_KEY = "nursenest-theme";
@@ -18,6 +19,13 @@ const THEME_STORAGE_KEY = "nursenest-theme";
 const SHOT_DIR = path.join(process.cwd(), "docs", "screenshots", "marketing-header");
 
 test.describe.configure({ mode: "serial" });
+
+test.afterEach(async ({ page }, testInfo) => {
+  /* Serial suite: tests that navigate (e.g. /pricing) must not leave the next test on a shell
+   * without marketing-row4 or against a cold navigation state. */
+  if (testInfo.status === "skipped") return;
+  await page.goto("/", { waitUntil: "domcontentloaded", timeout: 120_000 }).catch(() => {});
+});
 
 test.beforeEach(async ({ context, browserName }) => {
   test.skip(browserName !== "chromium", "Marketing header layout probes run on Chromium only.");
@@ -55,6 +63,17 @@ async function gotoHomeLightMarketing(page: import("@playwright/test").Page): Pr
   await page.reload({ waitUntil: "load", timeout: 120_000 });
 }
 
+/**
+ * Marketing pricing lives at `/pricing` (EN default) or `/{locale}/pricing` (localized prefix).
+ * Some hubs use `…/pricing` as a trailing segment — treat any pathname segment exactly `pricing`.
+ */
+function urlPathnameHasPricingSegment(url: URL): boolean {
+  return url.pathname
+    .toLowerCase()
+    .split("/")
+    .some((segment) => segment === "pricing");
+}
+
 function utilityBarLocator(page: import("@playwright/test").Page) {
   return page.locator(".nn-marketing-nav-v31-bar-a[data-nn-header-band='utility']").first();
 }
@@ -70,6 +89,7 @@ function tierBandLocator(page: import("@playwright/test").Page) {
 test.describe("Marketing header layout — responsive", () => {
   test("desktop 1280: utility above primary, nav/auth no overlap, brand colors match, nav works", async ({
     page,
+    baseURL,
   }, testInfo) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await gotoHomeLightMarketing(page);
@@ -124,14 +144,38 @@ test.describe("Marketing header layout — responsive", () => {
     });
     expect(brandMatch.ok, JSON.stringify(brandMatch)).toBe(true);
 
-    const pricing = page.locator("header .nn-header-main-marketing-nav a[href*=\"pricing\"]").first();
+    const nav = page.locator("header .nn-header-main-marketing-nav");
+    const pricing = nav.getByRole("link", { name: /^pricing$/i }).first();
     await expect(pricing).toBeVisible();
-    await expect(pricing).toHaveAttribute("href", /pricing/i);
-    const navPromise = page.waitForURL(/pricing/i, { timeout: 120_000 });
+    const href = await pricing.getAttribute("href");
+    expect(href, "pricing nav link must expose href").toBeTruthy();
+    const resolved = new URL(href!, (baseURL && baseURL.trim()) || resolveE2eAppBaseUrl());
+    expect(urlPathnameHasPricingSegment(resolved), `expected pricing path segment in ${resolved.pathname}`).toBe(
+      true,
+    );
+
+    const utilityCluster = utilityBarLocator(page).locator('[data-testid="marketing-header-utility-cluster"]');
+    /* Order is stable: country trigger, language toggle (aria-expanded), optional theme control. */
+    await expect(utilityCluster.getByRole("button").first()).toBeVisible({ timeout: 30_000 });
+    await expect(utilityCluster.locator("button[aria-expanded]").first()).toBeVisible({ timeout: 30_000 });
+
+    const noHotPinkChrome = await page.evaluate(() => {
+      const HOT = "rgb(255, 105, 180)";
+      const header = document.querySelector('header[data-nn-header-layout="marketing-row4"]');
+      if (!header) return { ok: false as const, reason: "no header" };
+      const lockup = header.querySelector("[data-nn-header-brand-lockup]");
+      const fg = lockup ? getComputedStyle(lockup).color : "";
+      if (fg === HOT) return { ok: false as const, reason: "lockup color is hotpink" };
+      return { ok: true as const, fg };
+    });
+    expect(noHotPinkChrome.ok, JSON.stringify(noHotPinkChrome)).toBe(true);
+
     await pricing.scrollIntoViewIfNeeded();
-    await pricing.click();
-    await navPromise;
-    expect(page.url().toLowerCase()).toMatch(/pricing/);
+    await Promise.all([
+      page.waitForURL(urlPathnameHasPricingSegment, { timeout: 120_000 }),
+      pricing.click(),
+    ]);
+    expect(urlPathnameHasPricingSegment(new URL(page.url()))).toBe(true);
   });
 
   test("desktop 1024: utility above primary, no nav/auth overlap, brand colors match, key hrefs", async ({
@@ -208,14 +252,27 @@ test.describe("Marketing header layout — responsive", () => {
       function overlap(a: DOMRect, b: DOMRect) {
         return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
       }
-      const brand = document.querySelector(".nn-header-mobile-brand-auth-cluster");
-      const controls = document.querySelector(".top-bar.nn-header-mobile-only-flex > div.nn-header-mobile-only-flex");
+      const header = document.querySelector('header[data-nn-header-layout="marketing-row4"]');
+      if (!header) return { ok: false as const, reason: "missing marketing header" };
+      const brand = header.querySelector(".nn-header-mobile-brand-auth-cluster");
+      const controls = header.querySelector(
+        ".top-bar.nn-header-mobile-only-flex > div.nn-header-mobile-only-flex",
+      );
       if (!brand || !controls) return { ok: false as const, reason: "missing mobile clusters" };
       return { ok: !overlap(brand.getBoundingClientRect(), controls.getBoundingClientRect()) };
     });
     expect(mobileOk.ok, JSON.stringify(mobileOk)).toBe(true);
 
     await expect(page.getByRole("button", { name: /open menu|menu/i })).toBeVisible();
+
+    /* Mobile chrome: keep the top bar from turning into an overcrowded control strip. */
+    const mobileControlCount = await page.evaluate(() => {
+      const header = document.querySelector('header[data-nn-header-layout="marketing-row4"]');
+      if (!header) return -1;
+      return header.querySelectorAll("a[href], button:not([hidden])").length;
+    });
+    expect(mobileControlCount).toBeGreaterThan(0);
+    expect(mobileControlCount).toBeLessThan(24);
   });
 
   test("mobile 390: menu visible; tier/desktop rows absent", async ({ page }, testInfo) => {
