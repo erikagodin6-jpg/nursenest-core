@@ -1,5 +1,15 @@
 import { BlogPostStatus, BlogWorkflowStatus, type Prisma } from "@prisma/client";
 
+/**
+ * Automation / Playwright blog rows use this slug prefix. They must never appear on public `/blog`
+ * (lists, detail, SEO, sitemap) even if editorial status is accidentally set to live.
+ */
+export const BLOG_PUBLIC_AUTOMATION_SLUG_PREFIX = "bloge2e" as const;
+
+export function isBlogSlugHiddenFromPublicMarketingCatalog(slug: string): boolean {
+  return slug.trim().toLowerCase().startsWith(BLOG_PUBLIC_AUTOMATION_SLUG_PREFIX);
+}
+
 /** Workflows that must never appear on public blog lists, detail SEO, or sitemap slices. */
 const BLOG_WORKFLOW_FAILURES: BlogWorkflowStatus[] = [
   BlogWorkflowStatus.FAILED_GENERATION,
@@ -142,30 +152,38 @@ export function blogLiveWhere(now: Date = new Date()): Prisma.BlogPostWhereInput
   const workflowReleasedForTimedPosts: Prisma.BlogPostWhereInput = {
     workflowStatus: { notIn: [...BLOG_WORKFLOW_FAILURES, ...BLOG_WORKFLOW_PIPELINE_IN_PROGRESS] },
   };
+  const automationSlugNeverPublic: Prisma.BlogPostWhereInput = {
+    slug: { not: { startsWith: BLOG_PUBLIC_AUTOMATION_SLUG_PREFIX, mode: "insensitive" } },
+  };
   return {
-    OR: [
+    AND: [
+      automationSlugNeverPublic,
       {
-        AND: [
-          { postStatus: BlogPostStatus.PUBLISHED },
+        OR: [
           {
-            OR: [{ publishAt: null }, { publishAt: { lte: now } }],
-          },
-          { workflowStatus: BlogWorkflowStatus.PUBLISHED },
-        ],
-      },
-      {
-        AND: [{ postStatus: BlogPostStatus.APPROVED }, workflowNeverPublic],
-      },
-      {
-        AND: [
-          { postStatus: BlogPostStatus.SCHEDULED },
-          {
-            OR: [
-              { publishAt: { lte: now } },
-              { scheduledAt: { lte: now } },
+            AND: [
+              { postStatus: BlogPostStatus.PUBLISHED },
+              {
+                OR: [{ publishAt: null }, { publishAt: { lte: now } }],
+              },
+              { workflowStatus: BlogWorkflowStatus.PUBLISHED },
             ],
           },
-          workflowReleasedForTimedPosts,
+          {
+            AND: [{ postStatus: BlogPostStatus.APPROVED }, workflowNeverPublic],
+          },
+          {
+            AND: [
+              { postStatus: BlogPostStatus.SCHEDULED },
+              {
+                OR: [
+                  { publishAt: { lte: now } },
+                  { scheduledAt: { lte: now } },
+                ],
+              },
+              workflowReleasedForTimedPosts,
+            ],
+          },
         ],
       },
     ],

@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
-import { blogLiveWhere, blogPostIsLive, buildBlogPublicListWhere, isBlogPostMarketingMetaVisible } from "./blog-visibility";
+import {
+  blogLiveWhere,
+  blogPostIsLive,
+  buildBlogPublicListWhere,
+  isBlogPostMarketingMetaVisible,
+  isBlogSlugHiddenFromPublicMarketingCatalog,
+} from "./blog-visibility";
 
 test("SCHEDULED post with publishAt in the past is live (matches list/sitemap filters)", () => {
   const now = new Date("2026-06-15T12:00:00Z");
@@ -12,8 +18,9 @@ test("SCHEDULED post with publishAt in the past is live (matches list/sitemap fi
     workflowStatus: BlogWorkflowStatus.PUBLISHED,
   };
   assert.equal(blogPostIsLive(row, now), true);
-  const where = blogLiveWhere(now) as { OR: unknown[] };
-  assert.ok(Array.isArray(where.OR));
+  const where = blogLiveWhere(now) as { AND: unknown[]; OR?: unknown[] };
+  assert.ok(Array.isArray(where.AND));
+  assert.ok(JSON.stringify(where).includes('"OR"'), "blogLiveWhere should nest the live status OR inside AND");
 });
 
 test("SCHEDULED post with publishAt in the future is not live", () => {
@@ -163,6 +170,15 @@ test("SCHEDULED uses scheduledAt when publishAt is null and time has passed", ()
     ),
     true,
   );
+});
+
+test("automation bloge2e* slugs are excluded from public blogLiveWhere (lists + sitemap contract)", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(isBlogSlugHiddenFromPublicMarketingCatalog("bloge2e-runtime-draft"), true);
+  assert.equal(isBlogSlugHiddenFromPublicMarketingCatalog("BlogE2E-Upper"), true);
+  assert.equal(isBlogSlugHiddenFromPublicMarketingCatalog("clinical-nclex-tips"), false);
+  const where = blogLiveWhere(now);
+  assert.ok(JSON.stringify(where).includes("bloge2e"), "blogLiveWhere should encode the automation slug guard");
 });
 
 test("buildBlogPublicListWhere can restrict main index to global rows when env is set", () => {

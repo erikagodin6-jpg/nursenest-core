@@ -209,12 +209,16 @@ html[data-theme] {
    *   --surface         default card/container surface
    *   --surface-strong  highlighted section surface
    */
-  --background: var(--theme-background, var(--palette-background));
+  /*
+   * Page + card: prefer tokens authored in theme-palettes.css (`--theme-page-bg`, `--theme-card-bg`,
+   * `--color-background`, `--color-card`). This block uses higher specificity (`html[data-theme]`) than
+   * bare `[data-theme="…"]`, so we must NOT overwrite palette-authored surfaces with :root `--palette-*`
+   * (Midnight/Apex/etc. regressed to light gray cards + light page otherwise).
+   */
+  --background: var(--theme-page-bg, var(--theme-background, var(--color-background, var(--palette-background))));
   --background-subtle: var(--theme-background-subtle, var(--palette-surface));
-  --surface: var(--theme-surface, var(--palette-surface-alt));
+  --surface: var(--theme-surface, var(--theme-card-bg, var(--color-card, var(--palette-surface-alt))));
   --surface-strong: var(--theme-surface-strong, var(--palette-surface-alt));
-  --theme-page-bg: var(--background);
-  --theme-card-bg: var(--surface);
   --theme-nav-bg: var(--palette-nav, var(--palette-nav-background));
   --theme-nav-border: var(--palette-nav-border);
   --theme-topbar-bg: var(--palette-top-bar-background);
@@ -589,13 +593,12 @@ html[data-theme="apex"] {
   --text-on-light: color-mix(in srgb, var(--theme-heading-text) 88%, #ffffff);
   --text-on-dark: #f8fafc;
   --text-on-gradient: var(--text-on-dark);
-  /* Dark themes keep their authored base backgrounds (no whitening). */
-  --theme-page-bg: var(--theme-background, var(--palette-background));
-  --background: var(--theme-page-bg);
-  --background-subtle: var(--theme-background-subtle, var(--theme-page-bg));
-  --page-bg: var(--theme-page-bg);
-  --bg-page: var(--theme-page-bg);
-  --surface: var(--theme-surface, var(--theme-card-bg));
+  /* Dark themes keep authored page tokens from theme-palettes (never :root palette fallbacks). */
+  --background: var(--theme-page-bg, var(--theme-background, var(--color-background, var(--palette-background))));
+  --background-subtle: var(--theme-background-subtle, var(--background));
+  --page-bg: var(--theme-page-bg, var(--background));
+  --bg-page: var(--theme-page-bg, var(--background));
+  --surface: var(--theme-surface, var(--theme-card-bg, var(--color-card, var(--palette-surface-alt))));
   --surface-strong: var(--theme-surface-strong, var(--surface));
   --bg-section: var(--background-subtle);
   --bg-section-alt: var(--surface-strong);

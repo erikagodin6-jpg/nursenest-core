@@ -6,6 +6,7 @@
 import type { BlogPost } from "@prisma/client";
 import { BlogImageStatus, BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 import type { StaticBlogPostRecord } from "@/content/blog-static-posts";
+import { isBlogSlugHiddenFromPublicMarketingCatalog } from "@/lib/blog/blog-visibility";
 
 type StaticBlogPostsModule = {
   STATIC_BLOG_POSTS: StaticBlogPostRecord[];
@@ -20,10 +21,13 @@ function getStaticBlogPosts(): StaticBlogPostRecord[] {
 }
 
 export function listStaticBlogPostsForIndex(): StaticBlogPostRecord[] {
-  return [...getStaticBlogPosts()].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  return [...getStaticBlogPosts()]
+    .filter((p) => !isBlogSlugHiddenFromPublicMarketingCatalog(p.slug))
+    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 }
 
 export function getStaticBlogPost(slug: string): StaticBlogPostRecord | undefined {
+  if (isBlogSlugHiddenFromPublicMarketingCatalog(slug)) return undefined;
   return getStaticBlogPosts().find((p) => p.slug === slug);
 }
 

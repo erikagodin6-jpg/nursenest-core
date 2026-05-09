@@ -30,16 +30,6 @@
   --theme-ring: #64748b;
 }
 
-[data-theme="midnight"] {
-  --theme-primary: #1e293b;
-  --theme-secondary: #f1f5f9;
-  --theme-secondary-foreground: #1e293b;
-  --theme-accent: #f8fafc;
-  --theme-accent-foreground: #1e293b;
-  --theme-border: #cbd5e1;
-  --theme-ring: #1e293b;
-}
-
 [data-theme="ocean"] {
   --theme-primary: #1aaee0;
   --theme-primary-foreground: #ffffff;

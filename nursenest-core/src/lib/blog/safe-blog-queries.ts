@@ -14,6 +14,7 @@ import {
   blogPostIsLive,
   buildBlogPublicListWhere,
   isBlogPostMarketingMetaVisible,
+  isBlogSlugHiddenFromPublicMarketingCatalog,
 } from "@/lib/blog/blog-visibility";
 import { describeCanonicalBlogNotLiveReason } from "@/lib/blog/blog-public-pipeline-trace";
 import {
@@ -833,6 +834,7 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
 }
 
 export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPostMeta | null> {
+  if (isBlogSlugHiddenFromPublicMarketingCatalog(slug)) return null;
   if (shouldSkipBlogDbForProductionBuild()) {
     const s = getStaticBlogPost(slug);
     if (!s) return null;
@@ -909,6 +911,7 @@ export async function isBlogPostMetaVisible(slug: string, scope?: BlogQueryScope
 }
 
 export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPost | null> {
+  if (isBlogSlugHiddenFromPublicMarketingCatalog(slug)) return null;
   const now = new Date();
   if (shouldSkipBlogDbForProductionBuild()) {
     const s = getStaticBlogPost(slug);
