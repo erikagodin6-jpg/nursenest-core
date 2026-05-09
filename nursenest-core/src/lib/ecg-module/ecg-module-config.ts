@@ -1,6 +1,11 @@
 import type { TierCode } from "@prisma/client";
 import { ECG_MASTERY_PAID } from "@/lib/modules/module-entitlement-placeholders";
 
+/**
+ * Route levels (`basic` | `advanced`) are **technical** groupings today.
+ * Product architecture distinguishes **Core ECG / telemetry learning** (integrated nursing education)
+ * from the future **Advanced ECG & Telemetry Mastery** program (separate SKU). Reconcile routes + gates when shipping split entitlements — see `docs/ecg-module-integration.md`.
+ */
 export const ECG_LEVELS = ["basic", "advanced"] as const;
 export const ECG_MODES = ["lesson", "quiz", "drill"] as const;
 export const ECG_QUESTION_FORMAT = "ecg_video" as const;

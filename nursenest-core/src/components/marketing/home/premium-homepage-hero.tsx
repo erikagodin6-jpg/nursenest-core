@@ -109,7 +109,8 @@ function buildSinusRhythmPath(beats: number, beatWidth: number, baselineY: numbe
    upright T; rates/shapes are not calibrated. Not a substitute for
    clinical ECG interpretation. Static (no animation).
    ────────────────────────────────────────────────────────────────── */
-function HeroEcgStrip({ ariaLabel }: { ariaLabel: string }) {
+/** Reusable illustrative NSR-style strip for homepage marketing (not diagnostic). */
+export function MarketingHomepageEcgStripIllustration({ ariaLabel }: { ariaLabel: string }) {
   const beatW = 138;
   const beatCount = 3;
   const baseline = 46;
@@ -196,7 +197,7 @@ function HeroClinicalPanel({
           <span>{copy.ecgLabel}</span>
           <span className="nn-premium-hero-ecg__bpm">{copy.ecgBpm}</span>
         </div>
-        <HeroEcgStrip ariaLabel={copy.ecgLabel} />
+        <MarketingHomepageEcgStripIllustration ariaLabel={copy.ecgLabel} />
       </div>
 
       <div className="nn-premium-hero-mini">

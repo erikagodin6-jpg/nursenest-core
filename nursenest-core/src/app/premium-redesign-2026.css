@@ -311,6 +311,19 @@
   display: block;
 }
 
+/* Homepage ECG section — rhythm strip panel matches hero readability on dark / midnight themes */
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-root
+  .nn-premium-home-section--ecg
+  .nn-premium-hero-ecg {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-inset, var(--theme-card-bg)) 92%, #000000) 0%,
+    color-mix(in srgb, var(--semantic-chart-3) 18%, var(--bg-inset, var(--theme-card-bg))) 100%
+  );
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 42%, var(--border-subtle));
+}
+
 /* Static strip only — continuous drift reads as decorative telemetry, not clinical teaching. */
 
 /* Mini lesson cards */
