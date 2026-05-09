@@ -145,15 +145,16 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
 
   return (
     <footer
+      data-nn-footer-layout="marketing"
       style={navChromeStyle}
-      className="mt-auto border-t border-[var(--footer-border)] py-[var(--nn-rhythm-footer-y)] shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--footer-fg)_6%,transparent)]"
+      className="nn-footer-marketing-chrome mt-auto border-t border-[var(--footer-border)] py-[var(--nn-rhythm-footer-y)] shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--footer-fg)_6%,transparent)]"
     >
-      <div className="nn-section-shell">
-        <div className="relative mb-8 overflow-hidden rounded-2xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-5 py-6 sm:px-6 sm:py-7">
+      <div className="nn-section-shell nn-footer-marketing-shell">
+        <div className="nn-footer-panel nn-footer-panel--main relative mb-8 overflow-hidden px-5 py-6 sm:px-6 sm:py-7">
           <FooterLeafWatermark />
 
-          <div className="relative z-[1] space-y-6">
-            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-5">
+          <div className="relative z-[1] space-y-6 md:space-y-7">
+            <div className="nn-footer-columns grid md:grid-cols-2 lg:grid-cols-5">
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 bg-transparent">
                   <SiteBrandLogoMark variant="footer" logoVariant="leaf" />
@@ -170,9 +171,9 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                 </p>
               </div>
 
-              <div>
-                <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Exam Pathways", locale)}</h3>
-                <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+              <div className="nn-footer-col">
+                <h3 className="nn-footer-col-heading">{formatTitleCase("Exam Pathways", locale)}</h3>
+                <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                   <li>
                     <FLink href={examHubs.rn}>RN</FLink>
                   </li>
@@ -188,9 +189,9 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                 </ul>
               </div>
 
-              <div>
-                <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Explore", locale)}</h3>
-                <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+              <div className="nn-footer-col">
+                <h3 className="nn-footer-col-heading">{formatTitleCase("Explore", locale)}</h3>
+                <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                   <li>
                     <FLink href={explore.pricing}>Pricing</FLink>
                   </li>
@@ -212,11 +213,9 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                 </ul>
               </div>
 
-              <div>
-                <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">
-                  {formatTitleCase(regionalHubLinksLabel, locale)}
-                </h3>
-                <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+              <div className="nn-footer-col">
+                <h3 className="nn-footer-col-heading">{formatTitleCase(regionalHubLinksLabel, locale)}</h3>
+                <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                   {countryNav.footerFeatured.map((item) => (
                     <li key={item.href}>
                       <FLink href={item.href}>{item.label}</FLink>
@@ -225,9 +224,9 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                 </ul>
               </div>
 
-              <div>
-                <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">{formatTitleCase("Account", locale)}</h3>
-                <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
+              <div className="nn-footer-col">
+                <h3 className="nn-footer-col-heading">{formatTitleCase("Account", locale)}</h3>
+                <ul className="nn-footer-link-list text-sm text-[var(--footer-fg)]">
                   {!isSignedIn ? (
                     <>
                       <li>
@@ -323,10 +322,8 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
           </div>
         </div>
 
-        <div className="mb-6 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_4%,var(--footer-bg))] px-4 pb-6 pt-6">
-          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--footer-fg)]">
-            {formatTitleCase(t("footer.studyInYourLanguage"), locale)}
-          </h3>
+        <div className="nn-footer-panel nn-footer-panel--language mb-6 px-4 pb-6 pt-6 sm:px-5 sm:pt-7 sm:pb-7">
+          <h3 className="nn-footer-col-heading break-words">{formatTitleCase(t("footer.studyInYourLanguage"), locale)}</h3>
           <div className="mb-3 flex flex-wrap gap-2">
             <MarketingLanguagePreferenceList
               renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -349,11 +346,11 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
           </Link>
         </div>
 
-        <div className="mb-6 sm:mb-8">
-          <EmailSignupBanner />
+        <div className="nn-footer-panel nn-footer-panel--email mb-6 p-4 sm:mb-8 sm:p-5">
+          <EmailSignupBanner className="rounded-xl border-0 bg-transparent p-0 shadow-none sm:p-0" />
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-fg)_5%,var(--footer-bg))] px-4 py-5 md:flex-row md:justify-between md:gap-4">
+        <div className="nn-footer-panel nn-footer-panel--legal flex flex-col items-center justify-center gap-3 px-4 py-5 md:flex-row md:justify-between md:gap-4 sm:px-5">
           <div className="text-sm text-[var(--footer-muted)]">
             © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}
           </div>
