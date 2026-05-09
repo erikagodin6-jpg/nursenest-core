@@ -63,7 +63,8 @@ export type PrePublishCheckId =
   | "apa_verification_gating"
   | "blog_content_quality_gate"
   | "blog_publish_quality_gate"
-  | "educational_stub_language";
+  | "educational_stub_language"
+  | "generic_search_title";
 
 export type PrePublishSeverity = "block" | "warn";
 
@@ -293,6 +294,14 @@ export async function validateBlogPrePublish(
       severity: "block",
       message: "Title is missing or too short.",
       fix: "Set a clear H1-style title (at least 3 characters) in the Title section.",
+    });
+  } else if (/\b(complete\s+guide|ultimate\s+guide|overview\s+of|basics\s+of|beginners\s+guide)\b/i.test(title)) {
+    push(issues, {
+      id: "generic_search_title",
+      severity: "warn",
+      message:
+        "Title reads like a generic pillar page (“overview/basics/guide”) rather than a long-tail learner search.",
+      fix: "Prefer question-led or exam-specific phrasing (Why / How / NCLEX priority / difference between…) aligned to the target query.",
     });
   }
 

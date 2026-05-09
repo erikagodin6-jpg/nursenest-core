@@ -1,46 +1,53 @@
 /**
- * Minimal marketing blog smoke: stable routes from static corpus + hub index.
+ * Minimal marketing blog smoke: index, RN hub, tag hub, category hub (no dependency on a specific article slug;
+ * production DB may shadow bundled static slugs).
  *
  * From nursenest-core:
- *   npx playwright test tests/e2e/public/marketing-blog-smoke.spec.ts --project=chromium
- *
- * Skips when the server returns 5xx on /blog (environment/DB cold start) to avoid flaky CI noise.
+ *   npx playwright test -c playwright.blog-smoke.config.ts
+ *   PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=http://127.0.0.1:3000 npx playwright test -c playwright.blog-smoke.config.ts
  */
 import { expect, test } from "@playwright/test";
-import { STATIC_BLOG_POSTS } from "../../../src/content/blog-static-posts";
 
-const STABLE_SLUGS = STATIC_BLOG_POSTS.map((p) => p.slug).slice(0, 3);
+test.describe.configure({ mode: "serial" });
 
 test.describe("marketing blog smoke", () => {
-  test("blog index responds", async ({ page, request }) => {
-    const head = await request.get("/blog", { maxRedirects: 5 });
-    if (head.status() >= 500) {
-      test.skip(true, `/blog returned ${head.status()} (skip — server/DB)`);
+  test("blog index responds", async ({ page }) => {
+    const resp = await page.goto("/blog", { waitUntil: "domcontentloaded", timeout: 120_000 });
+    if (resp && resp.status() >= 500) {
+      test.skip(true, `/blog returned ${resp.status()} (skip — server/DB)`);
     }
-    await page.goto("/blog", { waitUntil: "domcontentloaded", timeout: 120_000 });
     await expect(page.locator(".nn-blog-index, .nn-premium-blog-index").first()).toBeVisible({
       timeout: 60_000,
     });
   });
 
-  test("RN blog hub responds", async ({ page, request }) => {
-    const head = await request.get("/blog/rn", { maxRedirects: 5 });
-    if (head.status() >= 500) {
-      test.skip(true, `/blog/rn returned ${head.status()} (skip — server/DB)`);
+  test("RN blog hub responds", async ({ page }) => {
+    const resp = await page.goto("/blog/rn", { waitUntil: "domcontentloaded", timeout: 120_000 });
+    if (resp && resp.status() >= 500) {
+      test.skip(true, `/blog/rn returned ${resp.status()} (skip — server/DB)`);
     }
-    await page.goto("/blog/rn", { waitUntil: "domcontentloaded", timeout: 120_000 });
     await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible({ timeout: 60_000 });
   });
 
-  for (const slug of STABLE_SLUGS) {
-    test(`article static slug: ${slug}`, async ({ page, request }) => {
-      const path = `/blog/${encodeURIComponent(slug)}`;
-      const res = await request.get(path, { maxRedirects: 5 });
-      if (res.status() >= 500) {
-        test.skip(true, `${path} returned ${res.status()} (skip — server/DB)`);
-      }
-      await page.goto(path, { waitUntil: "domcontentloaded", timeout: 120_000 });
-      await expect(page.locator("#nn-blog-article-body").first()).toBeVisible({ timeout: 60_000 });
+  test("pathophysiology tag hub responds", async ({ page }) => {
+    const path = "/blog/tag/pathophysiology";
+    const resp = await page.goto(path, { waitUntil: "domcontentloaded", timeout: 120_000 });
+    if (resp && resp.status() >= 500) {
+      test.skip(true, `${path} returned ${resp.status()} (skip — server/DB)`);
+    }
+    await expect(page.locator(".nn-blog-index, .nn-premium-blog-index").first()).toBeVisible({
+      timeout: 60_000,
     });
-  }
+  });
+
+  test("pharmacology category hub responds", async ({ page }) => {
+    const path = `/blog/category/${encodeURIComponent("Pharmacology")}`;
+    const resp = await page.goto(path, { waitUntil: "domcontentloaded", timeout: 120_000 });
+    if (resp && resp.status() >= 500) {
+      test.skip(true, `${path} returned ${resp.status()} (skip — server/DB)`);
+    }
+    await expect(page.locator(".nn-blog-index, .nn-premium-blog-index").first()).toBeVisible({
+      timeout: 60_000,
+    });
+  });
 });
