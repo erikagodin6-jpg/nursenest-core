@@ -171,6 +171,20 @@ function mergeRowToBlogIndexPost(row: BlogIndexMergeRow, source: BlogPostPublicL
   };
 }
 
+/** Map merged hub row to {@link BlogIndexPost} (pathophysiology spotlight). */
+function blogIndexPostFromMergeRow(row: BlogIndexMergeRow): BlogIndexPost {
+  return {
+    slug: row.slug,
+    title: row.title,
+    excerpt: row.excerpt,
+    category: row.category,
+    createdAt: row.createdAt,
+    updatedAt: row.updatedAt,
+    publishAt: row.publishAt,
+    postStatus: row.postStatus,
+  };
+}
+
 type BlogQueryScope = {
   locale?: string;
   sourceLocale?: string;
@@ -195,6 +209,38 @@ async function fetchLiveBlogSlugsOverlappingSupplementSlugs(now: Date): Promise<
       }),
     [],
     "blog_index.merge_live_slugs_overlapping_supplement",
+  );
+  return new Set(rows.map((r) => r.slug.trim()).filter(Boolean));
+}
+
+/** Bounded overlap `IN` for tag hubs: supplement slugs that may collide with live CMS. */
+async function fetchLiveBlogSlugsOverlappingTagSupplementSlugs(tag: string, now: Date): Promise<Set<string>> {
+  const slugs = supplementSlugsForTagOverlapQuery(tag);
+  if (slugs.length === 0) return new Set();
+  const rows = await withBlogTimeoutFallback(
+    () =>
+      prisma.blogPost.findMany({
+        where: { AND: [blogLiveWhere(now), { slug: { in: slugs } }] },
+        select: { slug: true },
+      }),
+    [],
+    "blog_tag.merge_live_overlap",
+  );
+  return new Set(rows.map((r) => r.slug.trim()).filter(Boolean));
+}
+
+/** Bounded overlap `IN` for category hubs. */
+async function fetchLiveBlogSlugsOverlappingCategorySupplementSlugs(category: string, now: Date): Promise<Set<string>> {
+  const slugs = supplementSlugsForCategoryOverlapQuery(category);
+  if (slugs.length === 0) return new Set();
+  const rows = await withBlogTimeoutFallback(
+    () =>
+      prisma.blogPost.findMany({
+        where: { AND: [blogLiveWhere(now), { slug: { in: slugs } }] },
+        select: { slug: true },
+      }),
+    [],
+    "blog_category.merge_live_overlap",
   );
   return new Set(rows.map((r) => r.slug.trim()).filter(Boolean));
 }
@@ -238,20 +284,12 @@ export async function getPathophysiologyBlogHubPosts(take: number = PATHOPHYSIOL
     p.slug.startsWith("pp-") || (p.tags ?? []).some((t) => t.toLowerCase() === tag);
 
   if (shouldSkipBlogDbForProductionBuild()) {
-    const rows = listStaticBlogPostsForIndex().filter(matchesPatho);
-    return rows.slice(0, safeTake).map((p) => {
-      const createdAt = new Date(`${p.createdAt}T12:00:00Z`);
-      return {
-        slug: p.slug,
-        title: p.title,
-        excerpt: p.excerpt,
-        category: p.category,
-        createdAt,
-        updatedAt: createdAt,
-        publishAt: null,
-        postStatus: BlogPostStatus.PUBLISHED,
-      };
-    });
+    const staticRows = listStaticBlogPostsForIndex().filter(matchesPatho).map(staticRecordToBlogIndexMergeRow);
+    const longRows = listBlogStaticLongtailRecords()
+      .filter((r) => matchesPatho(r) && r.slug.trim())
+      .map(blogStaticLongtailRecordToBlogIndexMergeRow);
+    const merged = mergeBlogIndexRows([], [...staticRows, ...longRows]);
+    return sliceBlogIndexPage(merged, 1, safeTake) as BlogIndexPost[];
   }
   const now = new Date();
   const where = {
@@ -283,7 +321,17 @@ export async function getPathophysiologyBlogHubPosts(take: number = PATHOPHYSIOL
   const staticPatho = listStaticBlogPostsForIndex()
     .filter((p) => matchesPatho(p) && p.slug.trim() && !liveOverlap.has(p.slug.trim()))
     .map(staticRecordToBlogIndexMergeRow);
-  const merged = mergeBlogIndexRows(dbPosts as BlogIndexMergeRow[], staticPatho);
+  const staticSlugSet = new Set(listStaticBlogPostsForIndex().map((p) => p.slug.trim()).filter(Boolean));
+  const longtailPatho = listBlogStaticLongtailRecords()
+    .filter(
+      (r) =>
+        matchesPatho(r) &&
+        r.slug.trim() &&
+        !liveOverlap.has(r.slug.trim()) &&
+        !staticSlugSet.has(r.slug.trim()),
+    )
+    .map(blogStaticLongtailRecordToBlogIndexMergeRow);
+  const merged = mergeBlogIndexRows(dbPosts as BlogIndexMergeRow[], [...staticPatho, ...longtailPatho]);
   return sliceBlogIndexPage(merged, 1, safeTake) as BlogIndexPost[];
 }
 
@@ -468,10 +516,10 @@ async function loadBlogIndexPageFromDb(
 
 export async function countPublishedBlogPosts(): Promise<number> {
   if (shouldSkipBlogDbForProductionBuild()) {
-    return listStaticBlogPostsForIndex().length;
+    return buildSupplementBlogIndexRowsExcludingLiveSlugs(new Set()).length;
   }
   if (!isDatabaseUrlConfigured()) {
-    return listStaticBlogPostsForIndex().length;
+    return buildSupplementBlogIndexRowsExcludingLiveSlugs(new Set()).length;
   }
   const now = new Date();
   const dbCount = await withBlogTimeoutFallback(
@@ -569,7 +617,7 @@ export async function getPublishedBlogPostsPage(
   if (!primary.ok) {
     const staticOnFailure =
       isGlobalUnscopedBlogIndexScope(scope) &&
-      listStaticBlogPostsForIndex().length > 0 &&
+      (listStaticBlogPostsForIndex().length > 0 || listBlogStaticLongtailRecords().length > 0) &&
       (process.env.NODE_ENV !== "production" || process.env.BLOG_INDEX_STATIC_ON_DB_ERROR === "1");
     if (staticOnFailure) {
       const built = blogIndexPostsFromStaticCorpusOnly(safePage, safeSize);
@@ -714,7 +762,13 @@ export async function getPublishedBlogPostsPage(
         listLoad: JSON.stringify(listLoadLocale),
       },
     });
-    return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize, listLoad: listLoadLocale };
+    return {
+      posts: blogIndexPostsWithDbSource(dbPosts),
+      total: dbTotal,
+      page: safePage,
+      pageSize: safeSize,
+      listLoad: listLoadLocale,
+    };
   }
 
   /**
@@ -730,7 +784,7 @@ export async function getPublishedBlogPostsPage(
     ? buildSupplementBlogIndexRowsExcludingLiveSlugs(overlap)
     : [];
 
-  let postsOut: BlogIndexPost[] = dbPosts;
+  let postsOut: BlogIndexPostWithSource[] = blogIndexPostsWithDbSource(dbPosts);
   let totalOut = dbTotal;
   let listLoadOut: BlogIndexListLoadMeta;
   let usedStaticFallbackDiag = false;
@@ -757,7 +811,10 @@ export async function getPublishedBlogPostsPage(
           : null;
     if (allDb !== null) {
       const merged = mergeBlogIndexRows(allDb as BlogIndexMergeRow[], staticOnlyRows);
-      postsOut = sliceBlogIndexPage(merged, safePage, safeSize) as BlogIndexPost[];
+      const dbSlugSet = new Set(allDb.map((p) => p.slug.trim()).filter(Boolean));
+      postsOut = sliceBlogIndexPage(merged, safePage, safeSize).map((r) =>
+        mergeRowToBlogIndexPost(r, dbSlugSet.has(r.slug.trim()) ? "db" : "static"),
+      );
       totalOut = merged.length;
       usedStaticFallbackDiag = staticOnlyRows.length > 0;
       listLoadOut = {
@@ -784,7 +841,7 @@ export async function getPublishedBlogPostsPage(
         },
       });
     } else {
-      postsOut = dbPosts;
+      postsOut = blogIndexPostsWithDbSource(dbPosts);
       totalOut = dbTotal;
       listLoadOut = {
         querySucceeded: true,
@@ -805,7 +862,7 @@ export async function getPublishedBlogPostsPage(
       });
     }
   } else if (isGlobalUnscopedBlogIndexScope(scope) && dbTotal > BLOG_INDEX_MERGE_DB_MAX) {
-    postsOut = dbPosts;
+    postsOut = blogIndexPostsWithDbSource(dbPosts);
     totalOut = dbTotal;
     listLoadOut = {
       querySucceeded: true,
@@ -827,7 +884,7 @@ export async function getPublishedBlogPostsPage(
       },
     });
   } else {
-    postsOut = dbPosts;
+    postsOut = blogIndexPostsWithDbSource(dbPosts);
     totalOut = dbTotal;
     listLoadOut = {
       querySucceeded: true,
@@ -924,6 +981,26 @@ const metaSelect = {
 
 export type BlogPostMeta = Prisma.BlogPostGetPayload<{ select: typeof metaSelect }>;
 
+function blogMetaFromLongtailRecord(lt: BlogStaticLongtailRecord): BlogPostMeta {
+  return {
+    title: lt.title,
+    excerpt: lt.excerpt,
+    postStatus: BlogPostStatus.PUBLISHED,
+    workflowStatus: BlogWorkflowStatus.PUBLISHED,
+    publishAt: null,
+    scheduledAt: null,
+    seoTitle: lt.seoTitle?.trim() || null,
+    seoDescription: lt.seoDescription?.trim() || null,
+    createdAt: new Date(`${lt.createdAt}T12:00:00Z`),
+    internalLinkPlan: null,
+    tags: lt.tags ?? [],
+    category: lt.category ?? null,
+    exam: null,
+    countryTarget: null,
+    coverImage: null,
+  };
+}
+
 async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPost | null> {
   const db = await withBlogTimeoutFallback(() => prisma.blogPost.findUnique({ where: { slug } }), null, "blog_post.by_slug");
   if (db) {
@@ -1009,45 +1086,51 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
 export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPostMeta | null> {
   if (shouldSkipBlogDbForProductionBuild()) {
     const s = getStaticBlogPost(slug);
-    if (!s) return null;
-    return {
-      title: s.title,
-      excerpt: s.excerpt,
-      postStatus: BlogPostStatus.PUBLISHED,
-      workflowStatus: BlogWorkflowStatus.PUBLISHED,
-      publishAt: null,
-      scheduledAt: null,
-      seoTitle: null,
-      seoDescription: null,
-      createdAt: new Date(`${s.createdAt}T12:00:00Z`),
-      internalLinkPlan: null,
-      tags: s.tags ?? [],
-      category: s.category ?? null,
-      exam: null,
-      countryTarget: null,
-      coverImage: null,
-    };
+    if (s) {
+      return {
+        title: s.title,
+        excerpt: s.excerpt,
+        postStatus: BlogPostStatus.PUBLISHED,
+        workflowStatus: BlogWorkflowStatus.PUBLISHED,
+        publishAt: null,
+        scheduledAt: null,
+        seoTitle: null,
+        seoDescription: null,
+        createdAt: new Date(`${s.createdAt}T12:00:00Z`),
+        internalLinkPlan: null,
+        tags: s.tags ?? [],
+        category: s.category ?? null,
+        exam: null,
+        countryTarget: null,
+        coverImage: null,
+      };
+    }
+    const lt = getBlogStaticLongtailRecord(slug);
+    return lt ? blogMetaFromLongtailRecord(lt) : null;
   }
   if (!isDatabaseUrlConfigured()) {
     const s = getStaticBlogPost(slug);
-    if (!s) return null;
-    return {
-      title: s.title,
-      excerpt: s.excerpt,
-      postStatus: BlogPostStatus.PUBLISHED,
-      workflowStatus: BlogWorkflowStatus.PUBLISHED,
-      publishAt: null,
-      scheduledAt: null,
-      seoTitle: null,
-      seoDescription: null,
-      createdAt: new Date(`${s.createdAt}T12:00:00Z`),
-      internalLinkPlan: null,
-      tags: s.tags ?? [],
-      category: s.category ?? null,
-      exam: null,
-      countryTarget: null,
-      coverImage: null,
-    };
+    if (s) {
+      return {
+        title: s.title,
+        excerpt: s.excerpt,
+        postStatus: BlogPostStatus.PUBLISHED,
+        workflowStatus: BlogWorkflowStatus.PUBLISHED,
+        publishAt: null,
+        scheduledAt: null,
+        seoTitle: null,
+        seoDescription: null,
+        createdAt: new Date(`${s.createdAt}T12:00:00Z`),
+        internalLinkPlan: null,
+        tags: s.tags ?? [],
+        category: s.category ?? null,
+        exam: null,
+        countryTarget: null,
+        coverImage: null,
+      };
+    }
+    const lt = getBlogStaticLongtailRecord(slug);
+    return lt ? blogMetaFromLongtailRecord(lt) : null;
   }
   const db = await resolveScopedBlogPostBySlug(slug, scope);
   if (db) {
@@ -1070,24 +1153,27 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
     };
   }
   const s = getStaticBlogPost(slug);
-  if (!s) return null;
-  return {
-    title: s.title,
-    excerpt: s.excerpt,
-    postStatus: BlogPostStatus.PUBLISHED,
-    workflowStatus: BlogWorkflowStatus.PUBLISHED,
-    publishAt: null,
-    scheduledAt: null,
-    seoTitle: null,
-    seoDescription: null,
-    createdAt: new Date(s.createdAt + "T12:00:00Z"),
-    internalLinkPlan: null,
-    tags: s.tags ?? [],
-    category: s.category ?? null,
-    exam: null,
-    countryTarget: null,
-    coverImage: null,
-  };
+  if (s) {
+    return {
+      title: s.title,
+      excerpt: s.excerpt,
+      postStatus: BlogPostStatus.PUBLISHED,
+      workflowStatus: BlogWorkflowStatus.PUBLISHED,
+      publishAt: null,
+      scheduledAt: null,
+      seoTitle: null,
+      seoDescription: null,
+      createdAt: new Date(s.createdAt + "T12:00:00Z"),
+      internalLinkPlan: null,
+      tags: s.tags ?? [],
+      category: s.category ?? null,
+      exam: null,
+      countryTarget: null,
+      coverImage: null,
+    };
+  }
+  const lt = getBlogStaticLongtailRecord(slug);
+  return lt ? blogMetaFromLongtailRecord(lt) : null;
 }
 
 /** True when slug should receive public metadata (SEO) and indexing. */
@@ -1106,13 +1192,15 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
   const now = new Date();
   if (shouldSkipBlogDbForProductionBuild()) {
     const s = getStaticBlogPost(slug);
-    if (!s) return null;
-    return publishedBlogPostFromStaticRecord(s);
+    if (s) return publishedBlogPostFromStaticRecord(s);
+    const lt = getBlogStaticLongtailRecord(slug);
+    return lt ? publishedBlogPostFromLongtailRecord(lt) : null;
   }
   if (!isDatabaseUrlConfigured()) {
     const s = getStaticBlogPost(slug);
-    if (!s) return null;
-    return publishedBlogPostFromStaticRecord(s);
+    if (s) return publishedBlogPostFromStaticRecord(s);
+    const lt = getBlogStaticLongtailRecord(slug);
+    return lt ? publishedBlogPostFromLongtailRecord(lt) : null;
   }
   const row = await resolveScopedBlogPostBySlug(slug, scope);
   if (!row) {
@@ -1158,8 +1246,9 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
       }
     }
     const s = getStaticBlogPost(slug);
-    if (!s) return null;
-    return publishedBlogPostFromStaticRecord(s);
+    if (s) return publishedBlogPostFromStaticRecord(s);
+    const lt = getBlogStaticLongtailRecord(slug);
+    return lt ? publishedBlogPostFromLongtailRecord(lt) : null;
   }
   if (
     scope?.careerSlug &&
