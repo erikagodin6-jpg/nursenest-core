@@ -29,6 +29,7 @@ NurseNest is **one** cohesive premium adaptive clinical learning ecosystem — n
 
 ## UI And UX Rules
 
+- **Figma-first for visual work:** Any meaningful change to **layout, hierarchy, spacing, cards, responsiveness, navigation presentation, dashboards/readiness, themes, or polish** on marketing or learner shells requires **Figma frames (desktop + mobile, light + dark)** aligned to the premium homepage direction **before** implementation, then evidence (Figma links, screenshots, route list) in the PR or program report. See `docs/governance/figma-premium-ui-mandatory-process.md` and `.cursor/rules/ecosystem-platform-guardrails.mdc` §11.
 - Header, nav, and footer changes must not clip text, wrap mid-label, or hide critical controls on mobile or desktop.
 - Preserve current IA and core CTAs unless the task explicitly changes them.
 - Do not reintroduce the arch graphic anywhere.
@@ -37,6 +38,7 @@ NurseNest is **one** cohesive premium adaptive clinical learning ecosystem — n
 
 ## Testing And Verification Rules
 
+- **Substantial ships (hubs, UI programs, multi-route features):** Before declaring work **done** to stakeholders, complete `docs/governance/post-completion-delivery-checklist.md` — including executive summary, `reports/*-FINAL.md` (or equivalent), Figma summary when in scope, and Playwright/CI artifact links when relevant.
 - After auth, dashboard, nav, lesson, or paywall changes, run focused validation for the affected flow.
 - Prefer targeted tests and route checks over broad, slow suites when the task is narrow.
 - If you cannot run a needed verification, say so clearly and explain why.
