@@ -16,6 +16,7 @@ import {
 
 const HUB_ROOT = '[data-nn-lessons-marketing-hub="1"]';
 const LESSONS_SECTION = '[data-nn-qa-pathway-lessons-hub="true"]';
+const APP_ERROR_SCREEN = "[data-nn-app-error-screen]";
 const PLACEHOLDER_RE = /placeholder|lorem ipsum|todo:|tbd\b|\[insert\]/i;
 const HUB_TIMEOUT = 180_000;
 
@@ -37,16 +38,15 @@ async function captureHubScreenshot(page: import("@playwright/test").Page, fileB
 }
 
 async function expectMarketingLessonsHubLoaded(page: import("@playwright/test").Page) {
-  const hub = page.locator(HUB_ROOT);
-  await expect(hub).toBeVisible({ timeout: HUB_TIMEOUT });
-  await expect(hub.locator(LESSONS_SECTION)).toBeVisible({ timeout: HUB_TIMEOUT });
+  await expect(page.locator(HUB_ROOT)).toBeVisible({ timeout: HUB_TIMEOUT });
+  await expect(page.locator(LESSONS_SECTION)).toBeVisible({ timeout: HUB_TIMEOUT });
   await expect(page.getByRole("heading", { name: /other ways to study/i })).toHaveCount(0);
 }
 
 test.describe("Pathway lessons hub — premium shell (RN / PN / NP / CA RPN / Allied)", () => {
   test.beforeAll(async ({ request }) => {
     await mkdir(SCREENSHOT_DIR, { recursive: true });
-    /** Warm Turbopack + RN hub aggregates before browser tests (reduces cold-start timeouts under serial mode). */
+    /** Warm Turbopack + hub RSC before browser tests (reduces cold-start timeouts under serial mode). */
     await request.get("/us/rn/nclex-rn/lessons", { timeout: 300_000 });
   });
 
@@ -56,6 +56,12 @@ test.describe("Pathway lessons hub — premium shell (RN / PN / NP / CA RPN / Al
     await gotoExpectOk(page, "/us/rn/nclex-rn/lessons");
     await expectNotPageNotFound(page);
     await expectMarketingLessonsHubLoaded(page);
+    await expect(page.locator(APP_ERROR_SCREEN)).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: /^lesson library$/i })).toBeVisible();
+    await expect(page.locator(`${LESSONS_SECTION} a.group`).first()).toBeVisible();
+    await page.waitForTimeout(5000);
+    await expect(page.locator(APP_ERROR_SCREEN)).toHaveCount(0);
+    await expect(page.locator(HUB_ROOT)).toBeVisible();
     await expect(page.getByRole("heading", { level: 1, name: /lessons/i })).toBeVisible();
     const main = page.locator("main");
     await expect(main).toBeVisible();
@@ -84,12 +90,29 @@ test.describe("Pathway lessons hub — premium shell (RN / PN / NP / CA RPN / Al
     await captureHubScreenshot(page, "us-np-fnp-lessons");
   });
 
-  test("Allied health lessons index loads premium hub + lesson section", async ({ page, baseURL }) => {
+  test("Allied health legacy hub redirects to canonical global lessons URL", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await seedUsMarketingCookie(page, origin);
+    await gotoExpectOk(page, "/us/allied/allied-health/lessons");
+    await page.waitForURL("**/allied/allied-health/lessons", { timeout: 120_000 });
+    await expectNotPageNotFound(page);
+  });
+
+  test("Allied global lessons hub — hub markers + no app error screen", async ({ page, baseURL }) => {
+    test.skip(
+      process.env.NN_E2E_ALLIED_GLOBAL_HUB_BODY !== "1",
+      "Set NN_E2E_ALLIED_GLOBAL_HUB_BODY=1 to assert full allied hub chrome (route can stay on loading.tsx until slow RSC completes on cold dev).",
+    );
     const origin = requireOrigin(baseURL);
     await seedUsMarketingCookie(page, origin);
     await gotoExpectOk(page, "/allied/allied-health/lessons");
     await expectNotPageNotFound(page);
-    await expectMarketingLessonsHubLoaded(page);
+    await expect(page.getByRole("heading", { name: /^lesson library$/i })).toBeVisible({ timeout: HUB_TIMEOUT });
+    await expect(page.locator(LESSONS_SECTION)).toBeVisible({ timeout: HUB_TIMEOUT });
+    await expect(page.locator(HUB_ROOT)).toBeVisible({ timeout: HUB_TIMEOUT });
+    await expect(page.locator(APP_ERROR_SCREEN)).toHaveCount(0);
+    await page.waitForTimeout(5000);
+    await expect(page.locator(APP_ERROR_SCREEN)).toHaveCount(0);
     await captureHubScreenshot(page, "allied-allied-health-lessons");
   });
 

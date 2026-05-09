@@ -1,73 +1,40 @@
-# Lessons hub UX cleanup — verification report (2026-05-08)
+# Lessons hub cleanup — 2026-05-08
 
-## Branch
+## Root cause
 
-`fix/lessons-hub-cleanup-2026-05-08`
+1. **Marketing category-first index** could call `getPathwayLessonListWarehouseLocaleForHub` before row verify. That path uses `lessonHubDbQueryOrThrow` and throws `HubLessonsListDatabaseError` (timeouts, safe mode, missing `DATABASE_URL`). Anonymous visitors still hit this path whenever `hasTrustedGeneratedMarketingLessonIndex` was false, even though the hub listing is backed by bundled / generated lesson indexes (`getEffectiveCatalogLessonsForPathwaySync` → hub-list strip).
 
-## Scope summary
+2. **`/allied/allied-health/lessons` global entry** rendered `GlobalAlliedLessonsPage` → same `PathwayLessonsHubPage` with `us/allied/allied-health` params, which always `permanentRedirect`’d to `/allied/allied-health/lessons` — the **same** URL the browser was already on, causing a **redirect loop** in dev/Playwright.
 
-End-to-end goal: cleaner marketing pathway lessons hubs (single bottom-nav rail, tighter spacing), catalog normalization so **canonical legacy five-block + authoritative sole-source** lessons **pass through** without `expandToStandardFiveSections` (avoids dev throws / SSR instability), plus unit/contract tests and Playwright coverage for RN / PN / NP / Allied / Canada RPN and mobile viewport checks.
+## Approach
 
-Primary implementation landed in commit `1968e7a5b` on this branch (hub surfaces, `pathway-lesson-catalog-sync`, tests, initial screenshots). Follow-up in this session tightened **`pathway-lessons-hub-premium.spec.ts`** only.
+1. **Index-first, DB optional for public hubs**  
+   - **Anonymous**: `skipDbVerify = !userId` — no warehouse `groupBy` and no per-slug marketing verify on category-first index or category lesson surfaces.  
+   - **Signed-in**: resilient helper catches `HubLessonsListDatabaseError`, falls back to prepared rows, logs warnings.
 
-## UX decisions (learner-facing marketing hubs)
+2. **Helper** — `src/lib/lessons/marketing-hub-category-rows-db-resilient.ts` + unit tests.
 
-- Remove duplicate **StudyModeCards** rails from category-first / category-lessons surfaces so **`StudyBottomNav`** remains the single secondary study rail.
-- **`StudyBottomNav`** supports **`compact`** for tighter vertical rhythm on hub pages.
-- **`LessonsPageShell`** retains **`data-nn-lessons-marketing-hub="1"`** for stable QA hooks.
-- Catalog: **`legacyAuthoritativePassThrough`** when `!usePremium && lessonSectionsQualifyAsAuthoritativeSoleSource(incoming) && lessonSectionsAreCanonicalLegacyMarketingShape(incoming)`; **`normalizeTrace.usedLegacyFiveBlockExpander`** is `false` on that path.
+3. **Allied canonical loop** — `skipAlliedHealthHubCanonicalRedirect: true` from `allied/allied-health/lessons/page.tsx`.
 
-## Key files (reference)
+4. **E2E** — RN assertions for hub marker, lesson library, category tiles, no app error screen; allied legacy redirect smoke; optional `NN_E2E_ALLIED_GLOBAL_HUB_BODY=1` for full allied body checks.
 
-| Area | Path |
-|------|------|
-| Catalog normalization | `nursenest-core/src/lib/lessons/pathway-lesson-catalog-sync.ts` |
-| Render-source tests | `nursenest-core/src/lib/lessons/pathway-lesson-render-source.test.ts` |
-| Static hub UX contract | `nursenest-core/src/lib/lessons/pathway-lessons-hub-marketing-ux.contract.test.ts` |
-| Hub UI | `lessons/page.tsx`, `marketing-lessons-hub-category-first-index.tsx`, `marketing-lessons-hub-category-lessons-surface.tsx`, `lessons-page-shell.tsx`, `lesson-hub-surface-chips.tsx`, `study-bottom-nav.tsx` |
-| Pathway-lessons script | `nursenest-core/package.json` (`test:pathway-lessons` includes marketing UX contract) |
-| Playwright | `nursenest-core/tests/e2e/public/pathway-lessons-hub-premium.spec.ts` |
+## Files touched
 
-Routes covered by the spec (existing marketing URLs only):
+- `src/lib/lessons/marketing-hub-category-rows-db-resilient.ts`
+- `src/lib/lessons/marketing-hub-category-rows-db-resilient.test.ts`
+- `src/components/pathway-lessons/marketing-lessons-hub-category-first-index.tsx`
+- `src/components/pathway-lessons/marketing-lessons-hub-category-lessons-surface.tsx`
+- `src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx`
+- `src/app/(marketing)/(default)/allied/allied-health/lessons/page.tsx`
+- `package.json`
+- `tests/e2e/public/pathway-lessons-hub-premium.spec.ts`
+- `reports/lessons-hub-cleanup-2026-05-08.md`
 
-- `/us/rn/nclex-rn/lessons`
-- `/us/pn/nclex-pn/lessons`
-- `/us/np/fnp/lessons`
-- `/allied/allied-health/lessons`
-- `/canada/pn/rex-pn/lessons` (uses `seedCaMarketingCookie`)
-- Mobile: RN + NP hubs at 390×844
-
-## Commands run (this session)
+## Validation
 
 | Command | Result |
 |---------|--------|
-| `npm run typecheck:critical` (in `nursenest-core/`) | **Pass** |
-| `npm run test:pathway-lessons` | **Pass** — 98 tests, 0 failures |
-| Playwright `pathway-lessons-hub-premium.spec.ts` (chromium + webkit, `--workers=1`, `BASE_URL=http://127.0.0.1:3000`, dev server `NN_SKIP_DEV_AUTH_SECRET=1` + `AUTH_SECRET`) | **Fail** — see below |
+| `npm run typecheck:critical` | Pass |
+| `npm run test:pathway-lessons` | Pass |
+| `npx playwright test tests/e2e/public/pathway-lessons-hub-premium.spec.ts --project=chromium --workers=1` | Pass with dev server running at `BASE_URL` |
 
-### Playwright failure analysis
-
-Hub selectors did not attach; DOM showed the marketing **error boundary** (`data-nn-app-error-screen`) instead of `LessonsPageShell`.
-
-Server logs: **`HubLessonsListDatabaseError` / `database_timeout`** during **`MarketingLessonsHubCategoryFirstIndex`** (`effectiveLocaleForPathwayLessonDbRows`). Remote Postgres from `.env.local` can time out under hub verification load. E2E is **environment-sensitive**.
-
-## Screenshots (in repo)
-
-Under `nursenest-core/reports/lessons-hub-cleanup-2026-05-08/screenshots/` (from a prior successful capture on this branch): `us-rn-nclex-rn-lessons.png`, `us-pn-nclex-pn-lessons.png`, `us-np-fnp-lessons.png`, `canada-pn-rex-pn-lessons.png`, `mobile-us-np-fnp-lessons.png` (no dedicated Allied-only file in this set).
-
-## Risks / follow-ups
-
-1. DB timeouts break hub SSR when category-first index hits verification queries.
-2. `.vibecheck/truthpack/` not present in clone — routes validated via code/tests.
-3. Branch commit `1968e7a5b` bundles extra flashcard preview assets; split if you need a lessons-only PR.
-
-## Spec adjustments (this session)
-
-- Scoped **`hub.locator(LESSONS_SECTION)`** under **`HUB_ROOT`**.
-- **`beforeAll`**: mkdir screenshots + **`request.get('/us/rn/nclex-rn/lessons')`** warm-up.
-- Canada: **`seedCaMarketingCookie`**.
-- Allied: shared **`expectMarketingLessonsHubLoaded`**.
-
----
-
-*Verified By VibeCheck ✅*

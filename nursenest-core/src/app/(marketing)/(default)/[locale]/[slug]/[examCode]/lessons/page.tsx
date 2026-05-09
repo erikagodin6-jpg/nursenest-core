@@ -198,6 +198,11 @@ type Props = {
   }>;
 };
 
+/** Prop for programmatic entry (`allied/allied-health/lessons`) — avoids redirect loop to the same canonical URL. */
+type LessonsHubPageProps = Props & {
+  skipAlliedHealthHubCanonicalRedirect?: boolean;
+};
+
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
@@ -299,7 +304,11 @@ function buildAlliedLessonsRedirectUrl(searchParams: Awaited<Props["searchParams
   return qs.size > 0 ? `${dest}?${qs.toString()}` : dest;
 }
 
-export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {
+export default async function PathwayLessonsHubPage({
+  params,
+  searchParams,
+  skipAlliedHealthHubCanonicalRedirect,
+}: LessonsHubPageProps) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
@@ -344,7 +353,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       </main>
     );
   }
-  if (isAlliedHealthPathway(pathway)) {
+  if (isAlliedHealthPathway(pathway) && !skipAlliedHealthHubCanonicalRedirect) {
     permanentRedirect(buildAlliedLessonsRedirectUrl(sp));
   }
 
