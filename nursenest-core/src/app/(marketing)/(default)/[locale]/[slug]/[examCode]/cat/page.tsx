@@ -30,6 +30,8 @@ import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MarketingPathwayCatViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
+import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
+import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -211,6 +213,8 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
       ? `Results compare your estimated ability to a pathway passing-standard band (not a government or board certificate).`
       : `Results summarize performance against this pathway’s practice simulation rules.`;
 
+  const catNpSeoAlias = getNpPracticeTestLandingCopy(countrySlug, roleTrack, examCode) ? examCode : undefined;
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <MarketingPathwayCatViewBeacon pathway={pathway} hubPath={marketingCatPath} />
@@ -353,6 +357,14 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
           </>
         )}
       </section>
+
+      <ExamPathwayHubPremiumModules
+        pathway={pathway}
+        isSignedIn={isSignedIn}
+        npSeoAliasSegment={catNpSeoAlias}
+        alliedProfessionKey={alliedProfessionKey || undefined}
+        rootClassName="mt-10 sm:mt-12"
+      />
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <Link

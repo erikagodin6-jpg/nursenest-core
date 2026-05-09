@@ -8,6 +8,9 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { pathwayPricingBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
+import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
+import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -49,6 +52,13 @@ export default async function ExamPathwayPricingPage({ params }: Props) {
   const { crumbs, schemaItems } = pathwayPricingBreadcrumbs(pathway);
   const waitlist = pathway.acquisitionMode === "waitlist" || pathway.status === "upcoming";
 
+  const pricingHubSession = await getOptionalPublicSession({
+    pathname: `/${locale}/${slug}/${examCode}/pricing`,
+    surface: "marketing.exam_hub.pricing",
+  });
+  const pricingHubSignedIn = Boolean((pricingHubSession?.user as { id?: string })?.id);
+  const pricingNpSeoAlias = getNpPracticeTestLandingCopy(locale, slug, examCode) ? examCode : undefined;
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
@@ -87,6 +97,13 @@ export default async function ExamPathwayPricingPage({ params }: Props) {
           </Link>
         </div>
       )}
+
+      <ExamPathwayHubPremiumModules
+        pathway={pathway}
+        isSignedIn={pricingHubSignedIn}
+        npSeoAliasSegment={pricingNpSeoAlias}
+        rootClassName="mt-10 sm:mt-12"
+      />
     </div>
   );
 }

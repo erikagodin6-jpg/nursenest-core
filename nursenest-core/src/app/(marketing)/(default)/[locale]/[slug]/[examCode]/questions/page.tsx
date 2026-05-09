@@ -45,6 +45,8 @@ import { PathwayHero } from "@/components/study/pathway-hero";
 import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { MarketingPracticeQuestionsHubClient } from "@/components/marketing/marketing-practice-questions-hub-client";
+import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
+import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { loadPathwayPracticeBodySystemHubAggregates } from "@/lib/questions/pathway-practice-body-system-aggregates";
 import {
   marketingCatCompletePoolUsable,
@@ -125,6 +127,12 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
     pathwayId: pathway.id,
     roleTrack: slug,
   });
+
+  const questionsHubSession = await getOptionalPublicSession({
+    pathname: `${pathname}/questions`,
+    surface: "marketing.exam_hub.questions",
+  });
+  const questionsHubSignedIn = Boolean((questionsHubSession?.user as { id?: string })?.id);
 
   const topicFilterTrim = topicFilter.trim();
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
@@ -406,6 +414,14 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
           <NpQuestionsHubBoardLinks pathwayId={pathway.id} linkContext={boardLinkContext} />
         </div>
       ) : null}
+
+      <ExamPathwayHubPremiumModules
+        pathway={pathway}
+        isSignedIn={questionsHubSignedIn}
+        npSeoAliasSegment={npAliasSegment}
+        alliedProfessionKey={alliedProfessionKey || undefined}
+        rootClassName="mt-10 sm:mt-12"
+      />
 
       {/* Bottom nav */}
       <StudyBottomNav
