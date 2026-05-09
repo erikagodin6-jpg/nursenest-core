@@ -251,14 +251,14 @@ export function PremiumHomepageHero(props: {
   // Premium hero copy. Headline + sub use NEW i18n keys so existing
   // translations of `pages.home.hero.headline` are not silently changed.
   const eyebrow = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.eyebrow", "Clinical nursing exam preparation"),
+    safeHomepageMarketingT(t, "pages.home.hero.eyebrow", "Canada-first nursing exam prep"),
     locale,
   );
   const headline = formatSentenceCase(
     safeHomepageMarketingT(
       t,
       "pages.home.hero.headlinePremium",
-      "Build exam-day readiness with clinical judgment, not cram lists.",
+      "Pass the boards with a calm, clinical study plan.",
     ),
     locale,
   );
@@ -266,24 +266,24 @@ export function PremiumHomepageHero(props: {
     safeHomepageMarketingT(
       t,
       "pages.home.hero.subheadingPremium",
-      "Structured lessons, flashcards, and item-level practice with rationales that follow real nursing priorities—safety, assessment, and therapeutic decisions—across RN, PN, NP, and allied health pathways.",
+      "Study with lessons, flashcards, rationales, and readiness tools built for RN, RPN, NP, and allied health learners.",
     ),
     locale,
   );
 
   const primaryCtaLabel = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start Practice"),
+    safeHomepageMarketingT(t, "pages.home.hero.premiumPrimaryCta", "Start free"),
     locale,
   );
   const secondaryCtaLabel = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.secondaryCta", "Browse Lessons"),
+    safeHomepageMarketingT(t, "pages.home.hero.premiumSecondaryCta", "View pricing"),
     locale,
   );
 
   const trustNoCard = safeHomepageMarketingT(
     t,
     "pages.home.hero.noCreditCard",
-    "No credit card required",
+    "No payment required",
   );
   const trustEvidence = safeHomepageMarketingT(
     t,
@@ -317,20 +317,20 @@ export function PremiumHomepageHero(props: {
   // Right-panel copy — all overridable via i18n, with safe defaults that
   // never claim a specific learner / outcome / institution.
   const panelCopy = {
-    panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Sample readiness snapshot"),
-    panelLive: safeHomepageMarketingT(t, "pages.home.hero.panel.live", "Live"),
-    readinessLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessLabel", "Pass probability"),
+    panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Readiness preview"),
+    panelLive: safeHomepageMarketingT(t, "pages.home.hero.panel.live", "Live readiness preview"),
+    readinessLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessLabel", "Readiness"),
     readinessValue: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessValue", "78%"),
     streakLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.streakLabel", "Study streak"),
     streakValue: safeHomepageMarketingT(t, "pages.home.hero.panel.streakValue", "9 days"),
-    masteredLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredLabel", "Items mastered"),
+    masteredLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredLabel", "Mastered topics"),
     masteredValue: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredValue", "{{count}} cards", {
       count: formatMarketingInteger(1240, locale),
     }),
     ecgLabel: safeHomepageMarketingT(
       t,
       "pages.home.hero.panel.ecgLabel",
-      "Lead II · normal sinus rhythm",
+      "ECG practice",
     ),
     ecgBpm: safeHomepageMarketingT(t, "pages.home.hero.panel.ecgBpm", "72 bpm"),
     mini1Title: safeHomepageMarketingT(

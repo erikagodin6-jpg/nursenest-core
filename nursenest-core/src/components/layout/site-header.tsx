@@ -64,6 +64,8 @@ const NAV_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 shrink-0 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-normal xl:px-2.5";
 /** Muted Learn / Track in the public “Learn → Practice → Track” row. */
 const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)]`;
+/** Core marketing destinations (Pricing, Blog, …) — keep on `nav-fg` for dark-mode contrast. */
+const NAV_MARKETING_MORE_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-fg)]`;
 const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-lg border border-transparent px-2.5 text-center font-medium leading-[1.2] tracking-normal transition-colors sm:px-3";
 const HEADER_SECONDARY_ACTION_CLASS =
@@ -643,7 +645,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   key={item.key}
                   href={localizeHref(item.href)}
                   aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                  className={NAV_FLOW_SECONDARY_CLASS}
+                  className={NAV_MARKETING_MORE_CLASS}
                   onClick={() =>
                     trackClientEvent(PH.marketingNavClick, {
                       actor: navActor,

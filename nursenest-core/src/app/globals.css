@@ -2551,6 +2551,8 @@ html[data-theme] .nn-marketing-surface {
   box-shadow: none;
   isolation: isolate;
   transition: box-shadow var(--motion-base) var(--motion-ease);
+  /* Wordmark + Lucide leaf fallback: high-contrast ink on paper (not theme accent / pink-adjacent tokens). */
+  --logo-primary: var(--nn-header-primary-fg);
   /* Sticky wrapper still injects per-theme --nn-nav-*; rebind for this subtree (mobile icons + middle row). */
   --nn-nav-fg: var(--nn-header-primary-fg);
   --nn-nav-border: color-mix(in srgb, var(--nn-header-primary-fg) 16%, var(--nn-header-primary-bg));

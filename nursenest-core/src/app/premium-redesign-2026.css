@@ -385,14 +385,16 @@
   position: relative;
 }
 
-/* Apply premium glass background to the primary marketing header band. */
+/* Primary marketing band: neutral paper + whisper tint — never `--nav-bg` (sticky injects saturated theme chrome). */
 [data-nn-header-band="primary"] {
   background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--nav-bg, #ffffff) 92%, transparent) 0%,
-      color-mix(in srgb, var(--nav-bg, #ffffff) 78%, transparent) 100%);
-  backdrop-filter: saturate(140%) blur(10px);
-  -webkit-backdrop-filter: saturate(140%) blur(10px);
+    linear-gradient(
+      180deg,
+      var(--nn-header-primary-bg, #ffffff) 0%,
+      color-mix(in srgb, var(--nn-header-primary-bg, #ffffff) 96%, var(--semantic-info, #0ea5e9) 4%) 100%
+    );
+  backdrop-filter: blur(12px) saturate(102%);
+  -webkit-backdrop-filter: blur(12px) saturate(102%);
 }
 
 /* Add a soft elevation when the sticky wrapper has scrolled past the top.
@@ -734,16 +736,15 @@
    is brand-tinted via the active theme variables. */
 .nn-header-logo-row[data-nn-header-band="primary"],
 .nn-section-shell[data-nn-header-band="primary"] {
-  /* override / enhance the existing background with a slightly brighter
-     gradient so the glass band reads as elevated above the page. */
+  /* Refined elevation on the same neutral base as `[data-nn-header-band="primary"]` (no theme chrome wash). */
   background:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--nav-bg, #ffffff) 96%, transparent) 0%,
-      color-mix(in srgb, var(--nav-bg, #ffffff) 84%, transparent) 100%
+      var(--nn-header-primary-bg, #ffffff) 0%,
+      color-mix(in srgb, var(--nn-header-primary-bg, #ffffff) 94%, var(--semantic-info, #0ea5e9) 6%) 100%
     );
-  backdrop-filter: saturate(160%) blur(14px);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: blur(14px) saturate(105%);
+  -webkit-backdrop-filter: blur(14px) saturate(105%);
 }
 
 /* Floating-shell feel via inset highlight + soft outer brand ring on the
