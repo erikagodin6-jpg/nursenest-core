@@ -17,8 +17,14 @@ export function HeaderBrandLockup() {
   const showLeafRaster = Boolean(leafUrl) && !leafLoadFailed;
 
   return (
-    <span className="relative inline-flex items-center gap-0.5 overflow-visible align-middle leading-none">
-      <span className="logo-container relative z-[20] inline-flex h-[46px] w-[46px] shrink-0 items-center justify-center sm:h-[50px] sm:w-[50px] lg:h-[54px] lg:w-[54px]">
+    <span
+      data-nn-header-brand-lockup
+      className="nn-header-brand-lockup relative inline-flex items-center gap-0 overflow-visible align-middle leading-none"
+    >
+      <span
+        className="logo-container relative z-[20] inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center text-current sm:h-[52px] sm:w-[52px] lg:h-[56px] lg:w-[56px]"
+        data-nn-header-lockup="leaf"
+      >
         {showLeafRaster ? (
           <img
             src={leafUrl ?? ""}
@@ -32,14 +38,15 @@ export function HeaderBrandLockup() {
           />
         ) : (
           <Leaf
-            className="h-[70%] w-[70%] shrink-0 text-[var(--theme-brand-strong,var(--theme-primary))] opacity-[0.95]"
-            strokeWidth={1.75}
+            className="h-[72%] w-[72%] shrink-0 opacity-[0.96] text-current"
+            strokeWidth={1.65}
             aria-hidden
           />
         )}
       </span>
       <span
-        className="relative z-[21] text-[1.125rem] font-medium tracking-[-0.01em] leading-none text-[var(--theme-brand-strong,var(--theme-primary))] sm:text-[1.2rem] lg:text-[1.3125rem]"
+        data-nn-header-lockup="wordmark"
+        className="relative z-[21] text-[1.15rem] font-semibold tracking-[-0.02em] leading-none text-current sm:text-[1.22rem] lg:text-[1.34rem]"
         style={{ fontFamily: "var(--font-sans)" }}
       >
         NurseNest

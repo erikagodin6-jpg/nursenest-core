@@ -2398,6 +2398,11 @@ html[data-theme] .nn-marketing-surface {
   outline-offset: 2px;
 }
 
+/* Leaf + wordmark share one semantic brand ink (SVG / Lucide use currentColor). */
+.nn-header-brand-lockup {
+  color: var(--semantic-brand);
+}
+
 /* Tablet/desktop: logo + tier | study/marketing links | utilities + auth — balanced columns, no giant gap */
 .nn-header-desktop-grid {
   display: none;
@@ -2406,29 +2411,36 @@ html[data-theme] .nn-marketing-surface {
 @media (min-width: 1280px) {
   .nn-header-desktop-grid {
     display: grid;
-    /* Equal `1fr` side tracks keep the auto-width nav cluster at true horizontal center (logo left, auth right). */
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    /*
+     * Figma v3.1 (nav redesign): logo | fluid nav | utilities+auth.
+     * Middle column is `minmax(0, 1fr)` so the link row cannot intrinsic-size past
+     * the space between brand and auth (avoids nav/auth bbox overlap at 1280px).
+     */
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    column-gap: 1rem;
+    column-gap: 0.75rem;
     row-gap: 0.375rem;
     width: 100%;
     min-height: 3.625rem;
     padding-block: 0.45rem;
   }
 
-  /* 1fr | auto | 1fr: main link cluster stays geometrically centered; logo left, utilities+auth right. */
   .nn-header-desktop-grid > .nn-header-brand-cluster {
     justify-self: start;
     margin-inline-start: 0;
+    min-width: 0;
   }
 
   .nn-header-desktop-grid > .nav {
     justify-self: center;
-    max-width: min(100%, 52rem);
+    width: min(100%, 52rem);
+    min-width: 0;
+    max-width: 100%;
   }
 
   .nn-header-desktop-grid > .nn-header-desktop-auth-cluster {
     justify-self: end;
+    min-width: 0;
   }
 }
 
@@ -2477,17 +2489,17 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-overlay-mobile-only {
   display: block;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-overlay-mobile-only {
     display: none !important;
   }
 }
 
-/* Country hub shortcuts beside desktop preferences — same 1280px gate as header chrome */
+/* Country hub shortcuts beside desktop preferences — same lg gate as header chrome */
 .nn-marketing-hub-strip--desktop {
   display: none;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-marketing-hub-strip--desktop {
     display: flex;
   }
@@ -2528,6 +2540,22 @@ html[data-theme] .nn-marketing-surface {
  *   2. nn-header-logo-row      – logo + nav links + CTA on --nn-header-primary-bg
  *   3. nn-header-nav-row (direct child) – exam tier strip, same surface as utility
  */
+
+/* Marketing header: content rhythm — slightly wider horizontal padding than page sections
+   so logo/wordmark and nav labels keep breathing room (backgrounds stay on full-bleed wrappers). */
+.nn-header-primary-inner-shell.nn-section-shell {
+  padding-inline: clamp(1.125rem, 2.5vw, 2.5rem);
+}
+@media (min-width: 640px) {
+  .nn-header-primary-inner-shell.nn-section-shell {
+    padding-inline: clamp(1.375rem, 2.8vw, 2.75rem);
+  }
+}
+@media (min-width: 1024px) {
+  .nn-header-primary-inner-shell.nn-section-shell {
+    padding-inline: clamp(1.5rem, 3vw, 3rem);
+  }
+}
 
 /* Top preferences rail — fixed navy slate; independent of getNavChromeVars / theme chrome */
 .nn-header-utility-dark {

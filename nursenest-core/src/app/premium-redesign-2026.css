@@ -435,8 +435,10 @@
   position: relative;
 }
 
-/* Dark unified header: one full-width surface on `<header>` — inner primary wrapper stays transparent. */
-.nn-header-dark-surface [data-nn-header-band="primary"] {
+/* Dark unified header: full-bleed paint lives on `.nn-header-dark-surface` (sticky); inner frame
+   and primary band stay transparent so no max-width shell reads as a cropped colour slab. */
+.nn-header-dark-surface [data-nn-header-band="primary"],
+.nn-header-dark-surface .nn-marketing-nav-v31-frame {
   background: transparent;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -471,8 +473,8 @@
   transform: translateY(-1px);
 }
 
-/* Tier hub (marketing row4, xl+): center pathway chips under the primary link column. */
-@media (min-width: 1280px) {
+/* Tier hub (marketing row4, lg+): center pathway chips under the primary link column. */
+@media (min-width: 1024px) {
   [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner > nav {
     margin-inline: auto;
     max-width: 52rem;
@@ -481,7 +483,7 @@
 }
 
 /* ---------------------------------------------------------------------
-   Marketing row 4 (desktop xl+) — utility triggers + sky tier chips.
+   Marketing row 4 (desktop lg+, ≥1024px) — utility triggers + sky tier chips.
    Token-driven so every `[data-theme]` reads correctly (no fixed lavender).
    --------------------------------------------------------------------- */
 
@@ -754,7 +756,7 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
 }
 
 /* Blossom — premium nav rhythm (scoped): airy gaps, full-width bands unchanged */
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
     column-gap: clamp(1.35rem, 2.6vw, 2.35rem);
     padding-block: 0.55rem;
@@ -762,6 +764,7 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
   }
 
   html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > .nav {
+    width: min(100%, 60rem);
     max-width: min(100%, 60rem);
     gap: clamp(0.55rem, 1.15vw, 1.05rem);
     padding-inline: clamp(1rem, 2.2vw, 2rem);
@@ -2676,6 +2679,19 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
 
 .nn-premium-lesson-detail-shell {
   overflow-x: clip;
+}
+
+@media (max-width: 1023px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-layout--triple > .nn-lesson-section-nav-mobile {
+    width: 100%;
+    max-width: 100%;
+    align-self: stretch;
+  }
+
+  .nn-premium-lesson-detail-shell .nn-lesson-layout--triple > .nn-lesson-main {
+    min-width: 0;
+    max-width: 100%;
+  }
 }
 
 @media (min-width: 1280px) {
