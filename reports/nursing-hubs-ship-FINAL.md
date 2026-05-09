@@ -1,68 +1,85 @@
 # Nursing pathway hubs — ship report (FINAL)
 
-## Git
-- Branch: `main`
-- Commit: `bec9a04c6778d5d5d5d5d5d5d5d5d5d5d5d5d5`
+## Git / deploy
+
+- **Branch:** `main`
+- **Commits:** `bec9a04c6` feat(marketing) nursing premium tiles + QA + docs; `94791dad` defensive ECG guard for new‑grad IDs in `pathwayAllowsEcgLinkedLearning`; `194bdb5e2` follow-up patches (reports).
+- **Push:** ✅ `origin` (`main`).
+- **Deploy:** unchanged by this slice (CI/production promotion not triggered from this session).
 
 ## Summary
 
-Premium module grid completes the nursing-tier marketing hubs: pathway **lessons** + **CAT explainer**, RN/RPN **clinical scenarios** tile (distinct from NP branching cases marker), expanded **New Grad** prioritization drills, QA attributes for Playwright. Figma placeholders live in `docs/reports/nursing-hubs-figma-brief.md`.
+Premium module grid completes the nursing-tier marketing hubs: pathway **lessons**, **CAT explainer**, RN/RPN **clinical scenarios** tile (distinct QA marker vs NP branching cases), **New Grad prioritization drills**, Playwright/smoke asserts, bilingual marketing overlays + manifest. Figma placeholders: `reports/nursing-hubs-figma-brief.md` and `nursenest-core/docs/reports/nursing-hubs-figma-brief.md`.
 
-## Source audit (verified)
+## Source audit
 
-Public hub render chain:
+Public tier hub chain:
 
-`nursenest-core/src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/page.tsx` → resolves pathway → **`NursingTierHubPage`** (`nursenest-core/src/components/marketing/nursing-tier-hub-page.tsx`) when not allied allied-global hub → imports **`ExamPathwayHubPremiumModules`** (`exam-pathway-hub-premium-modules.tsx`) backed by **`buildPremiumMarketingModuleCards`** (`src/lib/marketing/exam-pathway-hub-premium-modules.ts`).
+```
+nursenest-core/src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/page.tsx
+  → NursingTierHubPage (nursing-tier-hub-page.tsx)
+    → ExamPathwayHubPremiumModules (exam-pathway-hub-premium-modules.tsx)
+      → buildPremiumMarketingModuleCards (exam-pathway-hub-premium-modules.ts)
+```
 
-`exam-pathway-hub-body.tsx` exists at `nursenest-core/src/components/exam-pathways/exam-pathway-hub-body.tsx` and is consumed by **`ExamPathwayHub`** (`exam-pathway-hub.tsx`), a separate marketing shell from the tier page but sharing the same premium component.
+`exam-pathway-hub-body.tsx` exists and mounts the same **`ExamPathwayHubPremiumModules`** via **`ExamPathwayHub`** / **`ExamPathwayHubBody`** (parallel marketing shell sharing the secondary grid).
 
-## Routing verified
+## Routes verified
 
-| Tier | Route |
-|------|-------|
-| RN | `/us/rn/nclex-rn` |
+| Tier | Canonical example |
+|------|-------------------|
+| RN US | `/us/rn/nclex-rn` |
 | RPN CA | `/canada/pn/rex-pn` |
-| NP | `/us/np/fnp` |
+| NP US | `/us/np/fnp` |
 | New Grad | `/us/rn/new-grad-transition` |
 
-## Product rules
+## Product gates
 
-- ECG hub tile: **`pathwayAllowsEcgLinkedLearning`** (RN/NP tiers, not rex-pn, not allied). New Grad pathway uses **`NEW_GRAD`** tier → no ECG.
-- NP **clinical_cases** (`np_clinical` QA marker) NP-only.
-- **`clinical_scenarios`** QA marker for RN/RPN/LPN nursing grids (generic scenarios tile).
+| Rule | Enforcement |
+|------|--------------|
+| ECG RN/NP tile | Tier RN/NP (`pathwayAllowsEcgLinkedLearning`) + rex-pn guard + downstream new-grad pathway id guard (`94791dad`) |
+| ECG absent RPN/New Grad | Confirmed NEW_GRAD stripe tier + qa contracts |
+| NP clinical branching | `clinical_cases` + `data-nn-qa-hub-np-cases` |
+| Nursing scenarios RN/RPN | `clinical_scenarios` tile + `data-nn-qa-hub-clinical-scenarios` |
 
-## Exam countdown / marketing surfaces
+## Exam countdown
 
-Exam **plan + countdown copy** stays on readiness card (`exam_plan` → `/app/exam-plan`). No new public marketing countdown route invented.
+Readiness **`exam_plan`** card links **`/app/exam-plan`** (existing); no invented marketing countdown route.
 
-## Commands (from `nursenest-core/`)
+## Screenshots (`docs/screenshots/nursing-hubs-e2e/`)
 
-- `npm run test:homepage` → **PASS** (exit 0).
-- `npm run typecheck:critical` → **PASS** (exit 0).
+Playwright **`playwright.nursing-hubs.config.ts`** writes `{hub}-{desktop|mobile}-{ocean|blossom|midnight}.png`. Run locally:
 
-## i18n
-
-- Keys added under `tools/i18n/marketing/marketing-en.json`.
-- Repo root **`npm run i18n:compile`** executed (normalized locale overlays).
-
-## Playwright screenshots
-
-Smoke config: `npm run playwright` target `tests/e2e/public/nursing-pathway-hubs-smoke.spec.ts` via `playwright.nursing-hubs.config.ts`.
-
-Output directory (created empty if not run locally): **`nursenest-core/docs/screenshots/nursing-hubs-e2e/`**  
-Pattern: `{hub}-desktop-{ocean|blossom|midnight}.png`, `{hub}-mobile-{ocean|blossom|midnight}.png`.
-
-*Not executed in this agent sandbox (needs dev server + Playwright).* Run:
 `cd nursenest-core && npx playwright test -c playwright.nursing-hubs.config.ts`
 
-Secondary gate: `npm run test:e2e:hub-modules` (interaction spec assertions updated).
+(This agent did **not** host Next + capture PNGs.)
 
-## Git
+## Validation (inside `nursenest-core/` package)
 
-- Intended commit subset: pathway premium TS/TSX, contract tests, Playwright specs, English marketing baseline + localized marketing JSON + generated marketing message keys manifest.
-- **Push:** run `git push origin <branch>` from a clean workstation with credentials; sandbox may not authorize.
+| Command | Result |
+|---------|--------|
+| `npm run test:homepage` | PASS exit 0 |
+| `npm run typecheck:critical` | PASS exit 0 |
 
-## Blockers / follow-ups
+## Files shipped (canonical list)
 
-- Fill Figma file URLs + frame node IDs when design access permits.
-- If production requires compiled shards under `public/i18n/`, reconcile or re-run **`npm run i18n:compile`** on a checkout without unrelated pending edits before deploy.
+| Path |
+|------|
+| `nursenest-core/src/lib/marketing/exam-pathway-hub-premium-modules.ts` |
+| `nursenest-core/src/components/exam-pathways/exam-pathway-hub-premium-modules.tsx` |
+| `nursenest-core/src/components/exam-pathways/exam-pathway-hub-premium-modules.contract.test.tsx` |
+| `tests/e2e/public/pathway-hub-premium-modules-interaction.spec.ts` |
+| `tests/e2e/public/nursing-pathway-hubs-smoke.spec.ts` |
+| `tools/i18n/marketing/marketing-en.json` + `tools/i18n/marketing/locale/marketing-*.json` |
+| `src/lib/i18n/marketing-message-keys.generated.ts` |
+| Reports (duplicated mirror): `reports/*` & `nursenest-core/docs/reports/*` |
+
+## Related follow-up commits
+
+Additional hardening landed immediately after (`94791dad`) tightening ECG exclusions for pathways whose identifiers include **`new-grad`**.
+
+## Remaining manual work
+
+- Paste real Figma file URLs/node IDs replacing **TBD** rows in both Figma briefs.
+- Optionally run **`npm run i18n:compile`** plus stage `public/i18n/*` shards on a workstation without unrelated dirty trees if CI expects compiled bundles before deploy.
+
