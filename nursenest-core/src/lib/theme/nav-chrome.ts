@@ -122,12 +122,12 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
 
   /* ── Premium clinical palettes ── */
   blossom: {
-    chrome: "#D9436A",
+    chrome: "#121621",
     foreground: "#FFFFFF",
-    border: "rgba(255,255,255,0.22)",
-    hoverBg: "rgba(255,255,255,0.16)",
+    border: "rgba(255,255,255,0.2)",
+    hoverBg: "rgba(255,255,255,0.14)",
     hoverFg: "#FFFFFF",
-    panel: "rgba(255,255,255,0.12)",
+    panel: "rgba(255,255,255,0.1)",
   },
   meadow: {
     chrome: "#3D9A72",

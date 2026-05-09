@@ -327,8 +327,26 @@ html[data-theme="soft-sage"] {
   --semantic-chart-5: #8b5cf6;
 }
 
+/* Blossom — Figma palette (pink / purple / blue / green / orange) */
+html[data-theme="blossom"] {
+  --semantic-success: #27ba94;
+  --semantic-success-soft: color-mix(in srgb, #27ba94 11%, var(--bg-card));
+  --semantic-success-contrast: #0f5132;
+  --semantic-info: #4a90e2;
+  --semantic-info-soft: color-mix(in srgb, #4a90e2 11%, var(--bg-card));
+  --semantic-info-contrast: #1e3a8a;
+  --semantic-warning: #f5a623;
+  --semantic-warning-soft: color-mix(in srgb, #f5a623 12%, var(--bg-card));
+  --semantic-warning-contrast: #92400e;
+  --semantic-danger: #e11d48;
+  --semantic-danger-soft: color-mix(in srgb, #e11d48 10%, var(--bg-card));
+  --semantic-chart-2: #27ba94;
+  --semantic-chart-3: #4a90e2;
+  --semantic-chart-4: #f5a623;
+  --semantic-chart-5: #e35699;
+}
+
 /* Blush / rose / strawberry brand — success mint, info periwinkle */
-html[data-theme="blossom"],
 html[data-theme="blush"],
 html[data-theme="pastel-blush"],
 html[data-theme="strawberry"] {

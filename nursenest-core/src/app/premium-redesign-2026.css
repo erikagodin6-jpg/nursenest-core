@@ -580,6 +580,26 @@
   font-weight: 650;
 }
 
+/* Tier strip sits inside `.nn-marketing-nav-v31-frame` (not `.nn-header-logo-row >`), so it keeps
+   generic `.nn-header-nav-row` dark chrome + white `--nav-fg`. Row4 chip styling paints light pill
+   fills on anchors — rebind tokens to ink-on-paper so RPN/RN/NP labels meet contrast (WCAG). */
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] {
+  background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg));
+  color: var(--nn-header-primary-fg);
+  border-top: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--header-border));
+  --nav-bg: var(--nn-header-primary-bg);
+  --nav-fg: var(--nn-header-primary-fg);
+  --nav-link: var(--nn-header-primary-fg);
+  --nav-link-hover: var(--nn-header-primary-fg);
+  --nav-link-active: var(--semantic-brand);
+  --nav-muted: color-mix(in srgb, var(--nn-header-primary-fg) 62%, transparent);
+  --nav-hover: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg));
+  --nav-active: color-mix(in srgb, var(--semantic-brand) 14%, var(--nn-header-primary-bg));
+  --nav-border: color-mix(in srgb, var(--nn-header-primary-fg) 14%, var(--nn-header-primary-bg));
+  --nav-on-active-fg: var(--nn-header-primary-fg);
+  --header-background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg));
+}
+
 /* ---------------------------------------------------------------------
    Apex theme — token bridge.
    The full `[data-theme="apex"]` palette block lives in theme-palettes.css

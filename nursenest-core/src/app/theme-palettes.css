@@ -659,9 +659,9 @@
   [data-theme="arctic-frost"],
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
-  [data-theme="blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
+  [data-theme="blossom"],
   [data-theme="blush"],
   [data-theme="clinical-light"],
   [data-theme="coral"],
@@ -1494,52 +1494,52 @@
 /* ── Premium clinical palettes (Blossom, Midnight, Ocean, Forest) ── */
 
 [data-theme="blossom"] {
-  /* Pastel rose / coral — optimistic, no hot pink / fuchsia / magenta */
-  --theme-primary: #c96176;
+  /* Figma Blossom — pink / purple / blue / green / orange / ink (#121621) */
+  --theme-primary: #8e75ff;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #3a86ff;
-  --theme-secondary-foreground: #1e3a8a;
-  --theme-accent: #ffd166;
-  --theme-accent-foreground: #7c5a12;
-  --theme-border: #e5e7eb;
-  --theme-ring: #a84356;
-  --theme-page-bg: #f8fafc;
-  --theme-heading-text: #1c1917;
-  --theme-body-text: #44403c;
-  --theme-muted-text: #57534e;
+  --theme-secondary: color-mix(in srgb, #e35699 14%, #ffffff);
+  --theme-secondary-foreground: #121621;
+  --theme-accent: color-mix(in srgb, #f5a623 18%, #ffffff);
+  --theme-accent-foreground: #121621;
+  --theme-border: color-mix(in srgb, #121621 10%, #e8e6ef);
+  --theme-ring: #8e75ff;
+  --theme-page-bg: #faf8fc;
+  --theme-heading-text: #121621;
+  --theme-body-text: color-mix(in srgb, #121621 88%, #ffffff);
+  --theme-muted-text: color-mix(in srgb, #121621 52%, #ffffff);
 
-  --lesson-summary: #fce8ec;
-  --lesson-key-concepts: #eaf2ff;
-  --lesson-signs-symptoms: #fff0f3;
-  --lesson-assessment: #e6f4ea;
-  --lesson-diagnostics: #eaf2ff;
-  --lesson-interventions: #e6faf7;
-  --lesson-medications: #fff6da;
-  --lesson-patient-teaching: #e8f7f0;
-  --lesson-exam-tips: #fff6da;
-  --lesson-red-flags: #fde8ec;
-  --lesson-clinical-pearls: #f3e8ff;
-  --lesson-notes: #f1f5f9;
+  --lesson-summary: color-mix(in srgb, #e35699 12%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #4a90e2 12%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #e35699 10%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #27ba94 11%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #4a90e2 10%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #27ba94 10%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #f5a623 14%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #27ba94 9%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #f5a623 12%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #e35699 14%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #8e75ff 12%, #ffffff);
+  --lesson-notes: #f1f4f9;
 
-  --state-success: #e6f4ea;
-  --state-warning: #fff6da;
-  --state-info: #eaf2ff;
-  --state-danger-soft: #fde8ec;
+  --state-success: color-mix(in srgb, #27ba94 12%, #ffffff);
+  --state-warning: color-mix(in srgb, #f5a623 14%, #ffffff);
+  --state-info: color-mix(in srgb, #4a90e2 11%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, #e35699 12%, #ffffff);
 
-  --logo-primary: #b85468;
-  --logo-accent: #3a86ff;
-  --logo-text: #1c1917;
-  --theme-brand-accent: #c96176;
-  --theme-brand-strong: #9d3f52;
-  --theme-nav-background: #a84356;
+  --logo-primary: #8e75ff;
+  --logo-accent: #e35699;
+  --logo-text: #121621;
+  --theme-brand-accent: #e35699;
+  --theme-brand-strong: #8e75ff;
+  --theme-nav-background: #121621;
   --theme-nav-foreground: #ffffff;
-  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover: rgba(255, 255, 255, 0.14);
   --theme-nav-hover-foreground: #ffffff;
-  --theme-header-top-bg: #a84356;
-  --theme-header-main-bg: #a84356;
+  --theme-header-top-bg: #121621;
+  --theme-header-main-bg: #121621;
   --theme-header-secondary-bg: #ffffff;
-  --theme-header-secondary-fg: #111827;
-  --theme-header-divider: rgba(168, 67, 86, 0.28);
+  --theme-header-secondary-fg: #121621;
+  --theme-header-divider: color-mix(in srgb, #121621 22%, transparent);
 }
 
 [data-theme="sunset"] {
@@ -1927,7 +1927,6 @@
   [data-theme="arctic-frost"],
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
-  [data-theme="blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
   [data-theme="blush"],
