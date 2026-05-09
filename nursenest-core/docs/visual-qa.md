@@ -43,6 +43,16 @@ From `nursenest-core/` with the app reachable and env vars set:
 npm run visual-qa:auth
 ```
 
+### Deterministic paid learner data (local DB)
+
+For weak-area tiles, graded practice aggregates, flashcard deck `nn-auth-qa-e2e-deck`, and planner rows, run **after** `qa-paid-test-account-reset.mts` and **before** Playwright:
+
+```bash
+npm run seed:auth-qa
+```
+
+See `scripts/seed-authenticated-qa-learner.mts` header for `AUTH_QA_USER_EMAIL`, `AUTH_QA_SEED_RESET`, and email alias rules.
+
 Prerequisites: seeded paid QA user with completed onboarding and premium access (see `scripts/qa-paid-test-account-reset.mts` and paid E2E docs). If login fails, see attachments under `test-results/` from the setup project.
 
 ## NPM scripts (from `nursenest-core/`)
@@ -54,6 +64,7 @@ Prerequisites: seeded paid QA user with completed onboarding and premium access 
 | `npm run visual-qa:capture` | Validate + require storage file + run **route pack** PNG capture. |
 | `npm run visual-qa:critical` | Validate + require storage file + run **3× `toHaveScreenshot`** regression vs committed snapshots. |
 | `npm run visual-qa:baseline` | Copy `latest/**/*.png` → `baseline/**/*.png` under `.visual-acceptance/routes/`. |
+| `npm run test:e2e:visual-qa-guest-baseline` | Guest marketing homepage pixel baselines (ocean / blossom / midnight + mobile); writes under git-root `docs/screenshots/visual-regression-baseline/` (PNG gitignored at repo root). |
 
 Update screenshot baselines after intentional UI changes:
 
@@ -134,7 +145,9 @@ Snapshots live beside the spec under `visual-qa-critical-regression.spec.ts-snap
 
 ## Local web server
 
-`playwright.visual-qa.config.ts` starts **`npx next dev`** on localhost (not `npm run dev` / `server/index.ts`), consistent with `playwright.mobile.config.ts`. It waits on **`/api/auth/csrf`** before running tests.
+`playwright.visual-qa.config.ts` starts **`npx next dev`** on localhost (not `npm run dev` / `server/index.ts`), consistent with `playwright.mobile.config.ts`. It waits on **`/` (HTTP 200)** so `reuseExistingServer` works when you already have `next dev` on 3000 — a mismatched `AUTH_URL` can make **`/api/auth/csrf` return 5xx**, which previously caused Playwright to spawn a **second** dev server and fail with **`EADDRINUSE`**.
+
+For strict auth-route readiness before capture, run `npm run wait:app:ready` (optional `APP_READY_AUTH_CSRF=1`, default) against the same origin.
 
 ## CI note
 

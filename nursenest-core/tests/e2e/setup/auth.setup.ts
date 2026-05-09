@@ -21,6 +21,9 @@ import { learnerAppMainLandmark } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 
 setup("authenticate paid test account and save storage state", async ({ page, request }, testInfo) => {
+  const { spawnWaitForAppReady } = await import("../helpers/spawn-wait-for-app-ready");
+  spawnWaitForAppReady();
+
   const creds = getPaidTestCredentials();
   if (!creds) {
     throw new Error(
