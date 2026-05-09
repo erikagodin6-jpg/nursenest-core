@@ -150,7 +150,10 @@ export function MarketingHeaderUtilityCluster({
           : "text-[var(--header-utility-text)] [&_button]:min-h-0 [&_button]:border-[var(--header-utility-border)] [&_button]:bg-transparent [&_button]:px-2 [&_button]:py-0.5 [&_button]:text-[11px] [&_button]:font-normal [&_button]:shadow-none [&_button]:hover:bg-[var(--nav-hover)] [&_button]:hover:text-[var(--nav-fg)]";
 
   return (
-    <div className={`flex shrink-0 flex-wrap items-center justify-end gap-1.5 lg:gap-2 ${className ?? ""}`}>
+    <div
+      data-testid="marketing-header-utility-cluster"
+      className={`flex min-w-0 shrink flex-wrap items-center justify-end gap-1.5 lg:gap-2 ${className ?? ""}`}
+    >
       <div className="shrink-0" ref={countryAnchorRef}>
         <CompactCountryTrigger
           region={effectiveGlobalRegion}

@@ -2408,18 +2408,18 @@ html[data-theme] .nn-marketing-surface {
   display: none;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-desktop-grid {
     display: grid;
     /*
      * Figma v3.1 (nav redesign): logo | fluid nav | utilities+auth.
      * Middle column is `minmax(0, 1fr)` so the link row cannot intrinsic-size past
-     * the space between brand and auth (avoids nav/auth bbox overlap at 1280px).
+     * the space between brand and auth (avoids nav/auth bbox overlap on laptop widths).
      */
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     column-gap: 0.75rem;
-    row-gap: 0.375rem;
+    row-gap: 0.5rem;
     width: 100%;
     min-height: 3.625rem;
     padding-block: 0.45rem;
@@ -2429,11 +2429,12 @@ html[data-theme] .nn-marketing-surface {
     justify-self: start;
     margin-inline-start: 0;
     min-width: 0;
+    max-width: min(100%, 22rem);
   }
 
   .nn-header-desktop-grid > .nav {
-    justify-self: center;
-    width: min(100%, 52rem);
+    justify-self: stretch;
+    width: 100%;
     min-width: 0;
     max-width: 100%;
   }
@@ -2441,11 +2442,12 @@ html[data-theme] .nn-marketing-surface {
   .nn-header-desktop-grid > .nn-header-desktop-auth-cluster {
     justify-self: end;
     min-width: 0;
+    max-width: min(100%, 38rem);
   }
 }
 
 /*
- * Marketing public header — hard breakpoint at 1280px (Tailwind `xl`).
+ * Marketing public header — hard breakpoint at 1024px (Tailwind `lg`), aligned with tier rail + hub strip.
  * If responsive utilities are missing from a route’s CSS chunk, mobile + desktop
  * chrome can both paint (duplicate brand/auth, pathway reads as loose text).
  * These classes are always in globals.css so the split cannot drop them.
@@ -2453,7 +2455,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-hide-until-xl {
   display: none;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-hide-until-xl {
     display: block;
   }
@@ -2462,7 +2464,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-hide-until-xl-flex {
   display: none;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-hide-until-xl-flex {
     display: flex;
   }
@@ -2471,7 +2473,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-mobile-only-flex {
   display: flex;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-mobile-only-flex {
     display: none !important;
   }
@@ -2480,7 +2482,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-mobile-only-inline-flex {
   display: inline-flex;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-mobile-only-inline-flex {
     display: none !important;
   }
