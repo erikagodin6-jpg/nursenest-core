@@ -30,7 +30,7 @@ const KIND_TO_BODY_TOKEN = {
   exam_tips: "exam",
   exam_focus: "exam",
   clinical_manifestations: "presentation",
-  treatment_management: "intervention",
+  treatment_management: "meds",
   nursing_priorities: "action",
   complications: "trap",
 } as const satisfies Record<PathwayLessonSectionKind, string>;

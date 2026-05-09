@@ -76,6 +76,10 @@ import {
   pathwayLessonSectionPrefersWideColumn,
   shouldRenderPathwayLessonSection,
 } from "@/lib/lessons/lesson-section-page-layout";
+import {
+  pathwayLessonSectionHasRenderableTeachingContent,
+  sortPathwayLessonSectionsForClinicalDisplay,
+} from "@/lib/lessons/pathway-lesson-detail-display";
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
@@ -238,9 +242,19 @@ export async function PathwayLessonDetailPageBody({
   );
 
   const omitHighYieldIds = new Set(lesson.omitHighYieldSectionIds ?? []);
-  const displaySections = visibleForRender
-    .filter((s) => shouldRenderPathwayLessonSection(s.kind))
-    .filter((s) => !omitHighYieldIds.has(s.id));
+  const displaySections = sortPathwayLessonSectionsForClinicalDisplay(
+    visibleForRender
+      .filter((s) => shouldRenderPathwayLessonSection(s.kind))
+      .filter((s) => !omitHighYieldIds.has(s.id)),
+  ).filter((section) =>
+    pathwayLessonSectionHasRenderableTeachingContent({
+      section,
+      resolvedBodyText: typeof section.body === "string" ? section.body : "",
+      viewerTier: lessonContentTier,
+      measurementSystem: lessonMeasurementSystem,
+      linkedNextStepsUsesCardRail: false,
+    }),
+  );
 
   const tocNavSections = displaySections.map((s) => ({
     id: s.id,
@@ -459,6 +473,7 @@ export async function PathwayLessonDetailPageBody({
                         lessonWikiBasePath={base}
                         viewerTier={lessonContentTier}
                         measurementSystem={lessonMeasurementSystem}
+                        sectionKind={section.kind ?? null}
                         emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
                         figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
                       />

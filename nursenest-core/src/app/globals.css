@@ -4014,6 +4014,19 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   padding-left: 1.65rem;
 }
 
+/* Medications / treatment spine — distinct from nursing interventions (success / green family via section role) */
+.nn-lesson-section-card[data-lsc-kind="treatment_management"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--meds ul {
+  padding-left: 1.6rem;
+}
+
+.nn-lesson-section-card[data-lsc-kind="clinical_scenario"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--scenario p {
+  line-height: 1.72;
+}
+
+.nn-lesson-section-card[data-lsc-kind="related_next_steps"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--next {
+  max-width: min(72ch, 100%);
+}
+
 .nn-lesson-prose strong {
   font-weight: 600;
   color: var(--palette-heading, var(--semantic-text-primary));

@@ -124,6 +124,9 @@ const ROLE_CHIP_LABELS: Record<LessonSectionRole, string> = {
  * but should show different labels.
  */
 const KIND_CHIP_LABEL_OVERRIDES: Partial<Record<PathwayLessonSectionKind, string>> = {
+  pathophysiology_overview: "Pathophysiology",
+  labs_diagnostics: "Labs & Diagnostics",
+  treatment_management: "Pharmacology & treatment",
   clinical_pearls: "Clinical Pearls",
   exam_relevance: "Exam Relevance",
   exam_tips: "Exam Tips",

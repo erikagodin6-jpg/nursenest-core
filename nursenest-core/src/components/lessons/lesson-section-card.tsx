@@ -44,6 +44,8 @@ export function lessonSectionSurface(kind: PathwayLessonSectionKind | undefined 
     "exam_relevance",
     "clinical_scenario",
     "tier_specific_relevance",
+    /** Linked learning / continuation — framed like a study CTA without inventing content */
+    "related_next_steps",
   ];
   return callout.includes(kind) ? "callout" : "editorial";
 }

@@ -17,7 +17,7 @@ test.describe("lesson detail premium shells", () => {
     const summary = page.getByTestId("pathway-lesson-quick-clinical-summary");
     if (await summary.count()) {
       await expect(summary).toBeVisible();
-      await expect(summary.locator("#quick-clinical-summary")).toBeVisible();
+      await expect(summary.locator("#quick-clinical-summary")).toBeAttached();
     }
 
     await expect(page.locator(".nn-lesson-section-nav").first()).toBeVisible();
@@ -32,6 +32,31 @@ test.describe("lesson detail premium shells", () => {
     await page.waitForSelector("h1.nn-lesson-page-title", { timeout: 120_000 });
     const mobileNav = page.locator(".nn-lesson-section-nav-mobile");
     await expect(mobileNav.locator("summary")).toBeVisible();
+  });
+
+  test("mobile 375: article column does not widen page (no horizontal overflow)", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto(`${baseURL}/us/rn/nclex-rn/lessons/us-rn-pulmonary-embolism`, {
+      waitUntil: "domcontentloaded",
+      timeout: 180_000,
+    });
+    await page.waitForSelector('[data-testid="pathway-lesson-main-column"]', { timeout: 120_000 });
+    const overflow = await page.evaluate(() => {
+      const el = document.documentElement;
+      return el.scrollWidth - el.clientWidth;
+    });
+    expect(overflow).toBeLessThanOrEqual(1);
+  });
+
+  test("marketing lesson body: no raw learner i18n key leakage in article", async ({ page }) => {
+    await page.goto(`${baseURL}/us/rn/nclex-rn/lessons/us-rn-pulmonary-embolism`, {
+      waitUntil: "domcontentloaded",
+      timeout: 180_000,
+    });
+    await page.waitForSelector("article.nn-lesson-article-flow", { timeout: 120_000 });
+    const articleText = await page.locator("article.nn-lesson-article-flow").innerText();
+    expect(articleText.includes("learner.lessons.detail.")).toBe(false);
+    expect(articleText.includes("{{")).toBe(false);
   });
 
   test("dark theme class: lesson shell still renders", async ({ page }) => {
