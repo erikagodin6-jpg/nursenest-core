@@ -14,6 +14,7 @@ import { PremiumReadinessPreview } from "@/components/marketing/home/premium-rea
 import { PremiumHomepageEcg } from "@/components/marketing/home/premium-homepage-ecg";
 import { PremiumHomepageTrust } from "@/components/marketing/home/premium-homepage-trust";
 import { PremiumHomepageCta } from "@/components/marketing/home/premium-homepage-cta";
+import { HomeHeroScreenshotSection } from "@/components/marketing/home-hero-screenshot-section";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -84,6 +85,8 @@ export default function HomeRestoredClient({
         questionCount={questionCount}
         lessonCount={lessonCount}
       />
+
+      <HomeHeroScreenshotSection />
 
       <PremiumPathwayShowcase />
       <PremiumClinicalDepth />

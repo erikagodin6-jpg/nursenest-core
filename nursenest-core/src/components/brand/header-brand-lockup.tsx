@@ -32,14 +32,14 @@ export function HeaderBrandLockup() {
           />
         ) : (
           <Leaf
-            className="h-[70%] w-[70%] shrink-0 text-[var(--logo-primary)] opacity-[0.95]"
+            className="h-[70%] w-[70%] shrink-0 text-[var(--theme-brand-strong,var(--theme-primary))] opacity-[0.95]"
             strokeWidth={1.75}
             aria-hidden
           />
         )}
       </span>
       <span
-        className="relative z-[21] text-[1.125rem] font-medium tracking-[-0.01em] leading-none text-[var(--logo-primary)] sm:text-[1.2rem] lg:text-[1.3125rem]"
+        className="relative z-[21] text-[1.125rem] font-medium tracking-[-0.01em] leading-none text-[var(--theme-brand-strong,var(--theme-primary))] sm:text-[1.2rem] lg:text-[1.3125rem]"
         style={{ fontFamily: "var(--font-sans)" }}
       >
         NurseNest

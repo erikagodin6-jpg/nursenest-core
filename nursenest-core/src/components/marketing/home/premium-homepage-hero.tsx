@@ -68,6 +68,16 @@ function formatMarketingInteger(n: number, locale: string): string {
   }
 }
 
+/** If translations omit interpolation, never surface raw `{{count}}` tokens in marketing UI. */
+function stripMustachePlaceholders(value: string): string {
+  if (!value.includes("{{")) return value;
+  return value
+    .replace(/\{\{[^}]+\}\}/g, "")
+    .replace(/\s*·\s*·\s*/g, " · ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 /**
  * Single-beat path for one RR interval — stylized Lead II–like NSR (upright P, narrow QRS, upright T).
  * Proportions are exaggerated for legibility at marketing scale; not for measurement or diagnosis.
@@ -289,20 +299,24 @@ export function PremiumHomepageHero(props: {
   const statsSep = safeHomepageMarketingT(t, "pages.home.hero.statsLine.separator", " · ");
   const qPart =
     q > 0
-      ? safeHomepageMarketingT(t, "pages.home.hero.statsLine.questions", "{{count}} practice questions", {
-          count: formatMarketingInteger(q, locale),
-        })
+      ? stripMustachePlaceholders(
+          safeHomepageMarketingT(t, "pages.home.hero.statsLine.questions", "{{count}} practice questions", {
+            count: formatMarketingInteger(q, locale),
+          }),
+        )
       : "";
   const lPart =
     lessons > 0
-      ? safeHomepageMarketingT(t, "pages.home.hero.statsLine.lessons", "{{count}} clinical lessons", {
-          count: formatMarketingInteger(lessons, locale),
-        })
+      ? stripMustachePlaceholders(
+          safeHomepageMarketingT(t, "pages.home.hero.statsLine.lessons", "{{count}} clinical lessons", {
+            count: formatMarketingInteger(lessons, locale),
+          }),
+        )
       : "";
   const statsLine =
     q > 0 || lessons > 0
-      ? [qPart, lPart].filter(Boolean).join(statsSep)
-      : safeHomepageMarketingT(t, "pages.home.hero.statsFallback", "Updated regularly");
+      ? stripMustachePlaceholders([qPart, lPart].filter(Boolean).join(statsSep))
+      : stripMustachePlaceholders(safeHomepageMarketingT(t, "pages.home.hero.statsFallback", "Updated regularly"));
 
   // Right-panel copy — all overridable via i18n, with safe defaults that
   // never claim a specific learner / outcome / institution.
@@ -314,9 +328,11 @@ export function PremiumHomepageHero(props: {
     streakLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.streakLabel", "Study streak"),
     streakValue: safeHomepageMarketingT(t, "pages.home.hero.panel.streakValue", "9 days"),
     masteredLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredLabel", "Mastered topics"),
-    masteredValue: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredValue", "{{count}} cards", {
-      count: formatMarketingInteger(1240, locale),
-    }),
+    masteredValue: stripMustachePlaceholders(
+      safeHomepageMarketingT(t, "pages.home.hero.panel.masteredValue", "{{count}} cards", {
+        count: formatMarketingInteger(1240, locale),
+      }),
+    ),
     ecgLabel: safeHomepageMarketingT(
       t,
       "pages.home.hero.panel.ecgLabel",

@@ -13,7 +13,7 @@ function readSrc(relativeFromSrc: string): string {
 
 test("default marketing layout streams SiteFooter via MarketingMainI18nShards trailingChrome (not before deferred main)", () => {
   const layout = readSrc("app/(marketing)/(default)/layout.tsx");
-  assert.match(layout, /trailingChrome=\{\s*<SiteFooter/s);
+  assert.match(layout, /trailingChrome=\{\s*createElement\(SiteFooter/s);
   assert.match(layout, /<MarketingMainI18nShards[\s\S]*trailingChrome=/s);
 });
 
@@ -29,11 +29,10 @@ test("marketing main shards component accepts trailingChrome after children", ()
   assert.match(shards, /\{trailingChrome\}/);
 });
 
-test("homepage passes global intro as HomeRestoredWithDeferredStats children (not introAfterHero prop)", () => {
+test("homepage does not inject GlobalMarketingHomeIntro between hero and footer (removed redundant strip)", () => {
   const page = readSrc("app/(marketing)/(default)/page.tsx");
   assert.doesNotMatch(page, /introAfterHero/);
-  assert.match(page, /HomepageGlobalIntroSlot/);
-  assert.match(page, /children:\s*<HomepageGlobalIntroSlot\s*\/>/);
+  assert.doesNotMatch(page, /HomepageGlobalIntroSlot|GlobalMarketingHomeIntro/);
 });
 
 test("HomeRestoredWithDeferredStats forwards children into HomeRestoredClient", () => {

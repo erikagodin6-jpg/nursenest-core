@@ -2,7 +2,6 @@ import {
   HomeRestoredWithDeferredStats,
   type HomeRestoredWithDeferredStatsProps,
 } from "@/components/marketing/home-restored-with-deferred-stats.server";
-import { GlobalMarketingHomeIntro } from "@/components/marketing/global-marketing-home-intro.server";
 import { MarketingHomeEmergencyFallback } from "@/components/marketing/marketing-home-emergency-fallback";
 
 import {
@@ -44,15 +43,6 @@ async function safeBlog() {
   }
 }
 
-/** Server slot so global intro streams as client `children` (not a named prop) — preserves DOM order vs hero. */
-async function HomepageGlobalIntroSlot() {
-  try {
-    return await GlobalMarketingHomeIntro();
-  } catch {
-    return null;
-  }
-}
-
 /**
  * HOMEPAGE
  */
@@ -66,7 +56,6 @@ export default async function HomePage() {
         {await safeStats({
           skipOptionalDbReads: false,
           publishedGlobalRegionCardIds: cards,
-          children: <HomepageGlobalIntroSlot />,
         })}
 
         {blogSection}

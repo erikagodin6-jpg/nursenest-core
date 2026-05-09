@@ -42,7 +42,7 @@ export function PremiumHomepageEcg() {
       data-testid="section-premium-home-ecg"
     >
       <div className="nn-section-shell">
-        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:gap-12">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-12">
           {/* Core ECG — integrated capability */}
           <div className="min-w-0">
             <p className="nn-premium-home-eyebrow">

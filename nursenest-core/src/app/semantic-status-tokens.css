@@ -42,7 +42,7 @@
   --semantic-chart-2: #16a34a;
   --semantic-chart-3: #52b8d4;
   --semantic-chart-4: #f5a524;
-  --semantic-chart-5: #e887aa;
+  --semantic-chart-5: #0d9488;
   --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
   --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
   --semantic-panel-muted: #f1f4f9;
@@ -303,7 +303,7 @@ html[data-theme="lavender-dream"] {
   --semantic-chart-2: #22c55e;
   --semantic-chart-3: #38bdf8;
   --semantic-chart-4: #fbbf24;
-  --semantic-chart-5: #f472b6;
+  --semantic-chart-5: #7c3aed;
 }
 
 /* Mint / teal brand — success deeper green, info blue, danger coral */
@@ -345,7 +345,7 @@ html[data-theme="strawberry"] {
   --semantic-chart-2: #34d399;
   --semantic-chart-3: #818cf8;
   --semantic-chart-4: #fbbf24;
-  --semantic-chart-5: #f472b6;
+  --semantic-chart-5: #a855f7;
 }
 
 /* Ocean / clinical blue — keep success green distinct from brand blue */
@@ -364,7 +364,7 @@ html[data-theme="clinical-light"] {
   --semantic-chart-2: #16a34a;
   --semantic-chart-3: #5ab8d4;
   --semantic-chart-4: #f59e0b;
-  --semantic-chart-5: #ec8aab;
+  --semantic-chart-5: #0ea5e9;
 }
 
 /* Multi-pastel — balanced across all hues; chart colors are deeper than background accents */
@@ -387,7 +387,7 @@ html[data-theme="multi-pastel"] {
   --semantic-chart-2: #5aaa8e;
   --semantic-chart-3: #9585c8;
   --semantic-chart-4: #c89050;
-  --semantic-chart-5: #c0809a;
+  --semantic-chart-5: #64748b;
 }
 
 html[data-theme="dark-clinical"],
@@ -420,8 +420,8 @@ html[data-theme="deep-twilight"] {
   --semantic-chart-2: #34d399;
   --semantic-chart-3: #38bdf8;
   --semantic-chart-4: #fbbf24;
-  /* Rose/coral — matches dark-pastel accent (#c4687a) instead of mismatched bright purple */
-  --semantic-chart-5: #c4687a;
+  /* Fifth chart hue — slate-violet (avoid pink/magenta on marketing + dashboards) */
+  --semantic-chart-5: #818cf8;
   --semantic-panel-muted: color-mix(in srgb, var(--theme-primary) 10%, var(--bg-card));
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card));
