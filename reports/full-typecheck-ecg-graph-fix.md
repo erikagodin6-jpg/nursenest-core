@@ -1,35 +1,64 @@
-# Full TypeScript check — ECG graph restore (`fix/full-typecheck-ecg-graph`)
+# Full TypeScript check — ECG graph restore (isolated branch)
 
-**Date:** 2026-05-08  
+**Date:** 2026-05-09  
+**Hostname:** nursenest-vm  
 **Base:** `origin/main` @ `13597d6fd`  
-**Branch:** `fix/full-typecheck-ecg-graph`  
-**Git:** branch `fix/full-typecheck-ecg-graph`, single commit with message `fix(ecg): restore full typecheck graph` (hash changes if amended; use `git log -1` on the branch).
-**Policy:** No push (local commit only).
+**Isolated branch:** `fix/full-typecheck-ecg-graph-isolated`  
+**Original cherry-pick:** `f5ae47ca9` (`fix(ecg): restore full typecheck graph`)  
+**Backup (pre-isolation):** local branch `backup/fix-full-typecheck-ecg-graph-pre-isolation` points at prior `fix/full-typecheck-ecg-graph` tip (not force-pushed).
 
-## Root cause
+## Commits on isolated branch (newest first)
 
-`npx tsc -p tsconfig.json` reported **TS6053** for missing files under `src/lib/ecg/*` and `src/components/ecg/*` while `tsconfig.json` includes all `src/**/*.ts(x)`. On `main`, those directories were absent. No `@/lib/ecg/` or `@/components/ecg/` imports were found in `src/` at audit time; the failure matched a **broken filesystem graph** vs incremental expectations.
+| SHA | Message |
+| --- | --- |
+| `510082d44` | fix(ecg): align catalog test count and export ECG shell nav helper |
+| `1ced8489b` | docs(ecg): narrow graph recovery report scope (removed `reports/release-control-incident-2026-05-08.md`) |
+| `a0d1625b0` | fix(ecg): restore full typecheck graph (cherry-picked from `f5ae47ca9`) |
 
-**Fix:** restore trees from `feat/ecg-premium-suite`:
+## File scope
 
-`git checkout feat/ecg-premium-suite -- nursenest-core/src/lib/ecg nursenest-core/src/components/ecg`
+- **ECG sources:** `nursenest-core/src/lib/ecg/**`, `nursenest-core/src/components/ecg/**`
+- **Nav helper (minimal Option A):** `nursenest-core/src/lib/navigation/learner-primary-nav.ts` — adds `buildOptionalEcgShellNavItem` + `ECG_SHELL_NAV_ID` so `ecg-nav-policy.test.ts` resolves on `main` graph
+- **Report:** `reports/full-typecheck-ecg-graph-fix.md` (this file)
+- **Removed from cherry-pick scope for narrow PR:** `reports/release-control-incident-2026-05-08.md` (deleted on isolated branch)
 
-## Validation
-
-From `nursenest-core/`:
+## Validation (executed from `nursenest-core/` app package)
 
 | Check | Result |
 | --- | --- |
-| Full graph `npx tsc -p tsconfig.json --noEmit --pretty false` (after `rm -f node_modules/.cache/typescript/next-app.tsbuildinfo`) | **Fails** (exit 2) on **unrelated** errors only; **no TS6053**; `rg` for `ecg-rhythm-strip|ecg-catalog|ecg-rhythm-svg|TS6053` → **no matches** |
-| `npm run typecheck:critical` | **Passes** (exit 0) |
-| `node --import tsx --test src/lib/modules/hidden-module-preview.test.ts src/lib/marketing/allied-hub-route-smoke.test.tsx` | **14 passed, 0 failed** |
+| `npm run typecheck:critical` | **PASS** (exit 0) |
+| Full graph `npx tsc -p tsconfig.json --noEmit --pretty false` | **FAIL** (exit 2) — **7** unrelated errors; **no** matches for `grep -E "TS6053|ecg-rhythm-strip|ecg-catalog|ecg-rhythm-svg"` on `/tmp/full-tsc-ecg-graph.txt` |
+| `node --import tsx --test` (ECG tests: access, catalog-scope, nav-policy, pn-guard, rhythm-svg) | **PASS** — **15** tests, **0** failed |
 
-Sample unrelated full-`tsc` errors (tail): `learner-study-modes-band.tsx` (TS2322), `use-delayed-loading.ts` (TS2322), `blog-ai-provider.ts` (TS18048), `blog-generation-jobs.ts` (TS2345), `theme-registry.ts` (TS2345).
+### Full `tsc` grep (ECG / missing-file signals)
+
+```
+(no matches — TS6053 / ecg-rhythm-strip / ecg-catalog / ecg-rhythm-svg not present in output)
+```
+
+### Unrelated full-graph `tsc` errors (complete list from `/tmp/full-tsc-ecg-graph.txt`, 7 lines)
+
+```
+src/components/student/learner-study-modes-band.tsx(104,9): error TS2322: Type '"dashboard_study_modes_grid"' is not assignable to type 'StudyLoopCatSurface'.
+src/components/ui/premium-loader/use-delayed-loading.ts(27,7): error TS2322: Type 'number' is not assignable to type 'Timeout'.
+src/lib/ai/blog-ai-provider.ts(113,19): error TS18048: 'resp.choices' is possibly 'undefined'.
+src/lib/blog/blog-generation-jobs.ts(304,27): error TS2345: Argument of type '(batch: { ... }, opts?: SerializeJobOpts | undefined) => BlogGenerationJobPayload' is not assignable to parameter of type '(value: { ... }, index: number, array: ...) => BlogGenerationJobPayload'.
+src/lib/theme/theme-registry.ts(170,38): error TS2345: Argument of type 'string' is not assignable to parameter of type '"ocean"'.
+```
+
+*(blog-generation-jobs line truncated in capture; see full log on runner at `/tmp/full-tsc-ecg-graph.txt`.)*
+
+## Out of scope for this PR
+
+- Fixing unrelated full-graph errors above (learner study modes, premium loader timer typing, blog AI, blog jobs serializer, theme registry).
+- Wiring `buildOptionalEcgShellNavItem` into `learner-shell-primary-nav.tsx` (not required for restored typecheck graph / unit tests; optional follow-up).
+- `fix/full-typecheck-ecg-graph` (7-commit branch): preserved via backup branch; **no force-push** applied.
+
+## Stashes (local agent session)
+
+- `stash@{0}` or similar: `TEMP before isolated ECG branch recreation` — saved unrelated WIP before branch work.
+- Additional stashes may exist for hotfix/docs branches; see `git stash list`.
 
 ## Merge recommendation
 
-Merge **`fix/full-typecheck-ecg-graph`** after review to restore ECG sources. Address unrelated full-`tsc` errors separately or narrow CI until full graph is green.
-
-## Stash
-
-`git stash list` may contain: `wip: release-candidate status before fix/full-typecheck-ecg-graph` (used to switch branches; stash was **not** dropped).
+Merge **`fix/full-typecheck-ecg-graph-isolated`** after review. Treat full `tsc` failures as pre-existing blockers outside ECG scope unless CI gates on full graph.
