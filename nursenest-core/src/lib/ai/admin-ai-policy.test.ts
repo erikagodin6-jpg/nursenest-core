@@ -15,6 +15,8 @@ function withEnv<T>(patch: Record<string, string | undefined>, fn: () => T): T {
     AI_PROVIDER: undefined,
     BLOG_AI_PROVIDER: undefined,
     OPENROUTER_API_KEY: undefined,
+    BLOG_OPENROUTER_API_KEY: undefined,
+    AI_ADMIN_GENERation: undefined,
     NN_ENV_VALIDATION_MODE: "off",
     ...patch,
   };
@@ -67,8 +69,9 @@ test("getAdminAiGenerationGate: disabled when flag off", () => {
     assert.equal(g.diagnostics.aiAdminGenerationFlagClass, "unset");
     assert.equal(
       g.summaryLine,
-      "AI generation disabled: generation flag is unset (AI_ADMIN_GENERATION_ENABLED is not defined on this server process).",
+      "AI generation disabled: generation flag is unset (define AI_ADMIN_GENERATION_ENABLED, or the accepted typo alias AI_ADMIN_GENERation, on this server process).",
     );
+    assert.deepEqual(g.missingEnvVarNames, ["AI_ADMIN_GENERATION_ENABLED"]);
   });
 });
 
@@ -99,8 +102,9 @@ test("getAdminAiGenerationGate: misconfigured when flag on but no key", () => {
       assert.equal(g.runnable, false);
       assert.equal(
         g.summaryLine,
-        "AI generation disabled: no funded AI provider key configured (set AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or set AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY).",
+        "AI generation disabled: no funded AI provider key configured (set AI_PROVIDER=openrouter with OPENROUTER_API_KEY or BLOG_OPENROUTER_API_KEY, or set AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY).",
       );
+      assert.deepEqual(g.missingEnvVarNames, ["AI_INTEGRATIONS_OPENAI_API_KEY", "OPENAI_API_KEY"]);
     },
   );
 });
@@ -166,6 +170,51 @@ test("getAdminAiGenerationGate: blog pipeline uses OpenRouter when only OPENROUT
   );
 });
 
+test("getAdminAiGenerationGate: blog pipeline uses OpenRouter when only BLOG_OPENROUTER_API_KEY is set", () => {
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: "true",
+      AI_PROVIDER: undefined,
+      BLOG_AI_PROVIDER: undefined,
+      OPENROUTER_API_KEY: undefined,
+      BLOG_OPENROUTER_API_KEY: "or-blog-test",
+      OPENAI_API_KEY: undefined,
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+    },
+    () => {
+      const g = getAdminAiGenerationGate({ pipeline: "blog" });
+      assert.equal(g.mode, "enabled");
+      assert.equal(g.runnable, true);
+      assert.equal(g.aiProvider, "openrouter");
+      assert.equal(g.aiProviderKeyPresent, true);
+      assert.equal(g.openAiKeyPresent, false);
+      assert.equal(g.diagnostics.openRouterApiKeyPresent, true);
+      assert.equal(g.diagnostics.blogOpenRouterKeyPresent, true);
+      assert.equal(g.diagnostics.openRouterCanonicalKeyPresent, false);
+    },
+  );
+});
+
+test("getAdminAiGenerationGate: accepts AI_ADMIN_GENERation typo alias when canonical flag is absent", () => {
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: undefined,
+      AI_ADMIN_GENERation: "true",
+      BLOG_AI_PROVIDER: "openrouter",
+      BLOG_OPENROUTER_API_KEY: "or-blog-test",
+      OPENROUTER_API_KEY: undefined,
+      OPENAI_API_KEY: undefined,
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+    },
+    () => {
+      const g = getAdminAiGenerationGate({ pipeline: "blog" });
+      assert.equal(g.mode, "enabled");
+      assert.equal(g.runnable, true);
+      assert.equal(g.diagnostics.aiAdminGenerationFlagSourceKey, "AI_ADMIN_GENERation");
+    },
+  );
+});
+
 test("getAdminAiGenerationGate: blog pipeline requires OpenRouter key when BLOG_AI_PROVIDER=openrouter", () => {
   withEnv(
     {
@@ -181,6 +230,7 @@ test("getAdminAiGenerationGate: blog pipeline requires OpenRouter key when BLOG_
       assert.equal(g.runnable, false);
       assert.equal(g.aiProvider, "openrouter");
       assert.match(g.summaryLine, /OPENROUTER_API_KEY/);
+      assert.deepEqual(g.missingEnvVarNames, ["OPENROUTER_API_KEY", "BLOG_OPENROUTER_API_KEY"]);
     },
   );
 });
@@ -199,6 +249,7 @@ test("getAdminAiGenerationGate: misconfigured when AI_PROVIDER=openrouter lacks 
       assert.equal(g.mode, "misconfigured");
       assert.equal(g.runnable, false);
       assert.match(g.summaryLine, /OPENROUTER_API_KEY/);
+      assert.deepEqual(g.missingEnvVarNames, ["OPENROUTER_API_KEY", "BLOG_OPENROUTER_API_KEY"]);
     },
   );
 });

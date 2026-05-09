@@ -165,6 +165,38 @@ test("SCHEDULED uses scheduledAt when publishAt is null and time has passed", ()
   );
 });
 
+test("SCHEDULED due date with pipeline workflow (e.g. GENERATED) is not live until workflow clears", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      {
+        postStatus: BlogPostStatus.SCHEDULED,
+        publishAt: new Date("2026-06-01T12:00:00Z"),
+        scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.GENERATED,
+      },
+      now,
+    ),
+    false,
+  );
+});
+
+test("SCHEDULED due date with workflowStatus SCHEDULED is live (admin schedule must align workflow)", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      {
+        postStatus: BlogPostStatus.SCHEDULED,
+        publishAt: new Date("2026-06-01T12:00:00Z"),
+        scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.SCHEDULED,
+      },
+      now,
+    ),
+    true,
+  );
+});
+
 test("buildBlogPublicListWhere can restrict main index to global rows when env is set", () => {
   const prev = process.env.BLOG_MAIN_INDEX_EXCLUDE_SCOPED_POSTS;
   process.env.BLOG_MAIN_INDEX_EXCLUDE_SCOPED_POSTS = "1";

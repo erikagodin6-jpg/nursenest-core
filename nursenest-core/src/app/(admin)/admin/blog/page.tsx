@@ -10,6 +10,8 @@ import {
 import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
 import { AdminBlogControlPanelClient } from "@/components/admin/admin-blog-control-panel-client";
+import { AdminAiGenerationProvider } from "@/components/admin/admin-ai-generation-context";
+import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { getAdminBlogOperationsStatus } from "@/lib/blog/admin-blog-operations-status";
 import { parseBlogBatchItemRepairMeta } from "@/lib/blog/blog-generation-repair-classifier";
 import { AdminBlogRepairRetryButton } from "@/components/admin/admin-blog-repair-retry-button";
@@ -61,6 +63,7 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
   const sp = (await searchParams) ?? {};
   const initialPostId = typeof sp.id === "string" && sp.id.length > 0 ? sp.id : null;
   const initialPreviewOpen = sp.preview === "1" || sp.preview === "true";
+  const blogAiGate = getAdminAiGenerationGate({ pipeline: "blog" });
 
   const [
     opsStatus,
@@ -79,10 +82,30 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
       select: { id: true, title: true, slug: true, postStatus: true, publishAt: true, updatedAt: true },
     }),
     prisma.blogCampaignItem.findMany({
-      where: { status: { in: [BlogCampaignItemStatus.QUEUED, BlogCampaignItemStatus.GENERATING, BlogCampaignItemStatus.FAILED] } },
+      where: {
+        status: {
+          in: [
+            BlogCampaignItemStatus.QUEUED,
+            BlogCampaignItemStatus.GENERATING,
+            BlogCampaignItemStatus.SCHEDULED,
+            BlogCampaignItemStatus.PUBLISHED,
+            BlogCampaignItemStatus.GENERATED,
+            BlogCampaignItemStatus.FAILED,
+          ],
+        },
+      },
       orderBy: [{ plannedPublishAt: "asc" }, { updatedAt: "desc" }],
-      take: 8,
-      select: { id: true, plannedTitle: true, plannedKeyword: true, plannedSlug: true, plannedPublishAt: true, status: true, error: true },
+      take: 10,
+      select: {
+        id: true,
+        plannedTitle: true,
+        plannedKeyword: true,
+        plannedSlug: true,
+        plannedPublishAt: true,
+        status: true,
+        error: true,
+        post: { select: { id: true, slug: true, postStatus: true, publishAt: true } },
+      },
     }),
     prisma.blogBatchScheduleItem.findMany({
       where: { status: { in: [BlogBatchScheduleItemStatus.PENDING, BlogBatchScheduleItemStatus.GENERATING, BlogBatchScheduleItemStatus.FAILED] } },
@@ -134,7 +157,10 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
   ]);
 
   const queuedCount =
-    campaignItems.filter((item) => item.status !== BlogCampaignItemStatus.FAILED).length +
+    campaignItems.filter(
+      (item) =>
+        item.status === BlogCampaignItemStatus.QUEUED || item.status === BlogCampaignItemStatus.GENERATING,
+    ).length +
     scheduleItems.filter((item) => item.status !== BlogBatchScheduleItemStatus.FAILED).length +
     draftBatchItems.filter((item) => item.status !== BlogDraftGenerationBatchItemStatus.FAILED).length;
   const failureCount = failedPosts.length + failedActivity.length + campaignItems.filter((item) => item.status === BlogCampaignItemStatus.FAILED).length;
@@ -199,7 +225,9 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
       </nav>
 
       <section id="generate-blog-draft" className="mt-8 scroll-mt-24">
-        <AdminBlogControlPanelClient initialPostId={initialPostId} initialPreviewOpen={initialPreviewOpen} />
+        <AdminAiGenerationProvider value={blogAiGate}>
+          <AdminBlogControlPanelClient initialPostId={initialPostId} initialPreviewOpen={initialPreviewOpen} />
+        </AdminAiGenerationProvider>
       </section>
 
       <section id="scheduled-queued-posts" className="mt-10 scroll-mt-24 rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6">
@@ -239,7 +267,23 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
                   <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>
                     {formatPrismaEnumLabel(item.status)}
                   </span>
-                  <span>{fmtDate(item.plannedPublishAt)}</span>
+                  <span>Planned: {fmtDate(item.plannedPublishAt)}</span>
+                  {item.post ? (
+                    <>
+                      <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.post.postStatus)}`}>
+                        Post {formatPrismaEnumLabel(item.post.postStatus)}
+                      </span>
+                      <span>Go-live: {fmtDate(item.post.publishAt)}</span>
+                      <Link href={`/admin/blog?id=${encodeURIComponent(item.post.id)}`} className="text-primary underline">
+                        Console
+                      </Link>
+                      {item.post.postStatus === BlogPostStatus.PUBLISHED || item.post.postStatus === BlogPostStatus.SCHEDULED ? (
+                        <Link href={`/blog/${encodeURIComponent(item.post.slug)}`} className="text-primary underline" target="_blank" rel="noreferrer">
+                          /blog/{item.post.slug}
+                        </Link>
+                      ) : null}
+                    </>
+                  ) : null}
                   {item.error ? (
                     <span className="text-rose-700 dark:text-rose-300">{humanizeAdminOperationalMessage(item.error)}</span>
                   ) : null}

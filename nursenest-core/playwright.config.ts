@@ -1,12 +1,30 @@
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
 
+import { localNextDevWebServer } from "./playwright/helpers/local-next-webserver";
 import { getE2eBaseURL } from "./tests/e2e/helpers/e2e-env";
 
 const baseURL = getE2eBaseURL();
 const parsedBaseURL = new URL(baseURL);
-const shouldStartLocalWebServer = parsedBaseURL.hostname === "127.0.0.1" || parsedBaseURL.hostname === "localhost";
-const localWebServerPort = parsedBaseURL.port || (parsedBaseURL.protocol === "https:" ? "443" : "3000");
+const shouldStartLocalWebServer =
+  parsedBaseURL.hostname === "127.0.0.1" || parsedBaseURL.hostname === "localhost";
+
+const e2eWebServer = shouldStartLocalWebServer
+  ? localNextDevWebServer({
+      baseURL,
+      readyUrl: parsedBaseURL.origin,
+      timeoutMs: 300_000,
+      reuseExistingServer: !process.env.CI,
+      envExtra: {
+        /** Satisfy `validateRuntimeEnvOrThrow` when host `.env` omits AI keys (see hub-modules Playwright config). */
+        AI_ADMIN_GENERATION_ENABLED: process.env.AI_ADMIN_GENERATION_ENABLED?.trim() || "false",
+        OPENAI_API_KEY:
+          process.env.OPENAI_API_KEY?.trim() ||
+          process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim() ||
+          "playwright-placeholder-openai",
+      },
+    })
+  : undefined;
 
 export default defineConfig({
   testDir: ".",
@@ -20,14 +38,7 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
-  webServer: shouldStartLocalWebServer
-    ? {
-        command: `AUTH_SECRET='playwright-local-validation-secret-min-32-chars!!' NEXTAUTH_SECRET='playwright-local-validation-secret-min-32-chars!!' NEXTAUTH_URL='${baseURL}' AUTH_URL='${baseURL}' npm run dev:next -- --hostname ${parsedBaseURL.hostname} --port ${localWebServerPort}`,
-        url: baseURL,
-        timeout: 180_000,
-        reuseExistingServer: !process.env.CI,
-      }
-    : undefined,
+  ...(e2eWebServer ? { webServer: e2eWebServer } : {}),
   projects: [
     {
       name: "chromium",

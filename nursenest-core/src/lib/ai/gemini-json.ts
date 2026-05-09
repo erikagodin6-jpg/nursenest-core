@@ -71,7 +71,11 @@ export async function generateGeminiJson<T>(params: GeminiGenerateJsonParams<T>)
     );
   }
 
-  const model = params.model ?? process.env.GEMINI_MODEL?.trim() ?? "gemini-2.5-flash";
+  const model =
+    params.model ??
+    process.env.BLOG_GEMINI_MODEL?.trim() ??
+    process.env.GEMINI_MODEL?.trim() ??
+    "gemini-2.5-flash";
   const timeoutMs = params.timeoutMs ?? 45000;
   const malformedRetries = Math.max(0, Math.min(2, params.malformedRetries ?? 1));
   const attempts = malformedRetries + 1;

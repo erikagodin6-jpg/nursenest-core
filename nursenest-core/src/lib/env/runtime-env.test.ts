@@ -13,6 +13,8 @@ function withEnv<T>(patch: Record<string, string | undefined>, fn: () => T): T {
     AI_PROVIDER: undefined,
     BLOG_AI_PROVIDER: undefined,
     OPENROUTER_API_KEY: undefined,
+    BLOG_OPENROUTER_API_KEY: undefined,
+    AI_ADMIN_GENERation: undefined,
     ...patch,
   };
   const prev: Record<string, string | undefined> = {};
@@ -81,7 +83,61 @@ test("runtime env: OpenRouter provider key satisfies selected provider", () => {
       assert.equal(hasAiProviderKey(), true);
       assert.equal(s.aiProvider, "openrouter");
       assert.equal(s.openRouterApiKeyPresent, true);
+      assert.equal(s.openRouterCanonicalKeyPresent, true);
+      assert.equal(s.blogOpenRouterKeyPresent, false);
       assert.equal(s.hasAiProviderKey, true);
+    },
+  );
+});
+
+test("runtime env: blog-scoped OpenRouter key satisfies selected provider", () => {
+  withEnv(
+    {
+      AI_PROVIDER: "openrouter",
+      OPENROUTER_API_KEY: undefined,
+      BLOG_OPENROUTER_API_KEY: "or-blog-test",
+      AI_INTEGRATIONS_OPENAI_API_KEY: undefined,
+      OPENAI_API_KEY: undefined,
+    },
+    () => {
+      const s = getAdminAiOpenAiRuntimeSnapshot();
+      assert.equal(hasOpenAiKey(), false);
+      assert.equal(hasAiProviderKey(), true);
+      assert.equal(s.aiProvider, "openrouter");
+      assert.equal(s.openRouterApiKeyPresent, true);
+      assert.equal(s.blogOpenRouterKeyPresent, true);
+      assert.equal(s.openRouterCanonicalKeyPresent, false);
+      assert.equal(s.hasAiProviderKey, true);
+    },
+  );
+});
+
+test("runtime env: canonical admin flag wins over legacy typo alias", () => {
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: "false",
+      AI_ADMIN_GENERation: "true",
+    },
+    () => {
+      const s = getAdminAiOpenAiRuntimeSnapshot();
+      assert.equal(s.rawAiAdminGenerationEnabled, "false");
+      assert.equal(s.aiAdminGenerationFlagSourceKey, "AI_ADMIN_GENERATION_ENABLED");
+      assert.equal(s.adminAiGenerationFlagParsed, false);
+    },
+  );
+});
+
+test("runtime env: legacy typo admin flag alias is accepted when canonical flag is absent", () => {
+  withEnv(
+    {
+      AI_ADMIN_GENERATION_ENABLED: undefined,
+      AI_ADMIN_GENERation: "true",
+    },
+    () => {
+      const s = getAdminAiOpenAiRuntimeSnapshot();
+      assert.equal(s.rawAiAdminGenerationEnabled, "true");
+      assert.equal(s.aiAdminGenerationFlagSourceKey, "AI_ADMIN_GENERation");
+      assert.equal(s.adminAiGenerationFlagParsed, true);
     },
   );
 });

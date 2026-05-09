@@ -230,6 +230,7 @@
     "blog:report:ssot": "npx tsx scripts/blog/write-blog-admin-public-ssot.mts",
     "blog:write-admin-ssot": "npx tsx scripts/blog/write-blog-admin-public-ssot.mts",
     "blog:publish-generated": "npx tsx scripts/blog/publish-generated-blog-post.mts",
+    "blog:admin-control-panel-harness": "npx tsx scripts/blog/admin-control-panel-generator-harness.mts",
     "blog:publish-generated:dry-run": "npx tsx scripts/blog/publish-generated-blog-post.mts --dry-run",
     "generate:blog-posts": "npx tsx scripts/generate-blog-posts.ts",
     "seed:local-verify": "node ../scripts/seed-local-verify-data.mjs",

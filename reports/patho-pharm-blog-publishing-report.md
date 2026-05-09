@@ -109,3 +109,21 @@ All run from `nursenest-core/` (`cd nursenest-core`).
 ---
 
 *Verified By VibeCheck ✅* (truthpack absent — documented; no invented product tiers.)
+
+## 12. Follow-up validation (automated pass)
+
+| Command | Exit | Notes |
+|---------|------:|-------|
+| `npm run typecheck:critical` (from `nursenest-core/`) | **0** | ~133s |
+| `npm run test:blog-recovery` | **0** | 54 tests pass |
+| `npm run test:homepage` | **0** | 78 pass, 1 skip |
+| `npm run test:blog` | **N/A** | No such script; use `npm run test:blog-recovery` |
+| `npm run lint` | **N/A** | No `lint` script in `nursenest-core/package.json`; `npx eslint` hit local npm path ENOENT in this runner |
+| `npm run build` | **not run here** | Full Next build not executed in this pass; run before merge per policy |
+
+### Playwright
+
+- Extended `nursenest-core/tests/e2e/public/blog-patho-pharm-smoke.spec.ts` with category hub checks for static corpus categories (`Pharmacology`, `Labs & Pathophysiology`, `Exam Strategy`).
+- List-only: `npx playwright test tests/e2e/public/blog-patho-pharm-smoke.spec.ts --list` (run locally when Playwright deps resolve).
+
+Playwright list blog-patho-pharm-smoke: exit 0, Total 34 tests (chromium + webkit).

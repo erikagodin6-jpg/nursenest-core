@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 import { getBlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
 
-const KEYS = ["BLOG_AI_PROVIDER", "AI_PROVIDER", "OPENROUTER_API_KEY"] as const;
+const KEYS = ["BLOG_AI_PROVIDER", "AI_PROVIDER", "OPENROUTER_API_KEY", "BLOG_OPENROUTER_API_KEY"] as const;
 
 function snapshotEnv(): Record<string, string | undefined> {
   const out: Record<string, string | undefined> = {};
@@ -41,19 +41,30 @@ describe("getBlogAiChatProvider", () => {
     process.env.AI_PROVIDER = "openai";
     process.env.BLOG_AI_PROVIDER = "openrouter";
     delete process.env.OPENROUTER_API_KEY;
+    delete process.env.BLOG_OPENROUTER_API_KEY;
     assert.equal(getBlogAiChatProvider(), "openrouter");
   });
 
   it("uses OpenRouter when only OPENROUTER_API_KEY is present", () => {
     delete process.env.BLOG_AI_PROVIDER;
     delete process.env.AI_PROVIDER;
+    delete process.env.BLOG_OPENROUTER_API_KEY;
     process.env.OPENROUTER_API_KEY = "or-test";
+    assert.equal(getBlogAiChatProvider(), "openrouter");
+  });
+
+  it("uses OpenRouter when only BLOG_OPENROUTER_API_KEY is present", () => {
+    delete process.env.BLOG_AI_PROVIDER;
+    delete process.env.AI_PROVIDER;
+    delete process.env.OPENROUTER_API_KEY;
+    process.env.BLOG_OPENROUTER_API_KEY = "or-blog";
     assert.equal(getBlogAiChatProvider(), "openrouter");
   });
 
   it("falls back to AI_PROVIDER=openrouter when BLOG_AI_PROVIDER is unset", () => {
     delete process.env.BLOG_AI_PROVIDER;
     delete process.env.OPENROUTER_API_KEY;
+    delete process.env.BLOG_OPENROUTER_API_KEY;
     process.env.AI_PROVIDER = "openrouter";
     assert.equal(getBlogAiChatProvider(), "openrouter");
   });
@@ -62,6 +73,7 @@ describe("getBlogAiChatProvider", () => {
     delete process.env.BLOG_AI_PROVIDER;
     delete process.env.AI_PROVIDER;
     delete process.env.OPENROUTER_API_KEY;
+    delete process.env.BLOG_OPENROUTER_API_KEY;
     assert.equal(getBlogAiChatProvider(), "unconfigured");
   });
 
@@ -69,12 +81,14 @@ describe("getBlogAiChatProvider", () => {
     process.env.BLOG_AI_PROVIDER = "openrouter\r";
     delete process.env.AI_PROVIDER;
     delete process.env.OPENROUTER_API_KEY;
+    delete process.env.BLOG_OPENROUTER_API_KEY;
     assert.equal(getBlogAiChatProvider(), "openrouter");
   });
 
   it("detects OPENROUTER_API_KEY with trailing CR as present", () => {
     delete process.env.BLOG_AI_PROVIDER;
     delete process.env.AI_PROVIDER;
+    delete process.env.BLOG_OPENROUTER_API_KEY;
     process.env.OPENROUTER_API_KEY = "sk-or-test\r";
     assert.equal(getBlogAiChatProvider(), "openrouter");
   });

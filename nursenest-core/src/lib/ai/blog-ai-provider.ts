@@ -11,12 +11,14 @@ import {
 } from "@/lib/ai/blog-ai-routing";
 import { appendOpenRouterHintIfQuotaError } from "@/lib/ai/openai-quota-hint";
 import type { ChatCompletionResult } from "@/lib/ai/openai-chat-types";
+import { getOpenRouterApiKeyTrimmedFromEnv } from "@/lib/ai/blog-ai-env-keys";
 import {
   getBlogOpenAiApiKey,
   getBlogOpenAiChatModel,
   getBlogOpenRouterChatModel,
   getOpenAiBaseUrl,
   OPENROUTER_MODELS_URL,
+  resolveBlogOpenRouterModelSlugFromEnv,
   resolveOpenRouterModelSlugFromEnv,
 } from "@/lib/ai/openai-env";
 
@@ -26,7 +28,7 @@ type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
 
 const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1";
 const OPENROUTER_401_MESSAGE =
-  "OpenRouter rejected the API key. Check OPENROUTER_API_KEY, account credits, model access, and shell env loading.";
+  "OpenRouter rejected the API key. Check OPENROUTER_API_KEY or BLOG_OPENROUTER_API_KEY, account credits, model access, and shell env loading.";
 
 /** Logged on every blog pipeline completion (repair/retry uses the same entrypoint). */
 function logBlogAiInvocation(provider: BlogAiChatProvider, model: string): void {
@@ -77,21 +79,36 @@ function normalizeOpenRouterModel(explicit: string | undefined, fallback: string
   return fallback.includes("/") ? fallback : resolveOpenRouterModelSlugFromEnv();
 }
 
+/** Same as {@link normalizeOpenRouterModel} but `BLOG_OPENROUTER_MODEL` wins over `OPENROUTER_MODEL` for blog traffic. */
+function normalizeBlogOpenRouterModel(explicit: string | undefined, fallback: string): string {
+  const fromEnv = process.env.BLOG_OPENROUTER_MODEL?.trim() || process.env.OPENROUTER_MODEL?.trim();
+  if (fromEnv) return fromEnv;
+  const candidate = explicit?.trim();
+  if (candidate && candidate.includes("/")) return candidate;
+  return fallback.includes("/") ? fallback : resolveBlogOpenRouterModelSlugFromEnv();
+}
+
 function normalizeOpenRouterApiKey(raw: string | undefined): string {
   const apiKey = raw?.trim() ?? "";
   if (!apiKey) {
     throw new Error(
-      "OPENROUTER_API_KEY is required when AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter",
+      "OPENROUTER_API_KEY or BLOG_OPENROUTER_API_KEY is required when AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter",
     );
   }
   if ((apiKey.startsWith("\"") && apiKey.endsWith("\"")) || (apiKey.startsWith("'") && apiKey.endsWith("'"))) {
-    throw new Error("OPENROUTER_API_KEY appears to include wrapping quote characters. Remove the quotes from the runtime value.");
+    throw new Error(
+      "OpenRouter API key appears to include wrapping quote characters. Remove the quotes from the runtime value (OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY).",
+    );
   }
   if (/^bearer\s+/i.test(apiKey)) {
-    throw new Error("OPENROUTER_API_KEY must be the raw key only; do not include a Bearer prefix.");
+    throw new Error(
+      "OpenRouter API key must be the raw key only; do not include a Bearer prefix (OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY).",
+    );
   }
   if (apiKey === "dry-run-test" || apiKey === "test" || apiKey.includes("YOUR_OPENROUTER_API_KEY")) {
-    throw new Error("OPENROUTER_API_KEY is a placeholder value, not a live OpenRouter API key.");
+    throw new Error(
+      "OpenRouter API key is a placeholder value, not a live key (OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY).",
+    );
   }
   return apiKey;
 }
@@ -103,7 +120,7 @@ export async function openRouterChatCompletion(params: {
   user?: string;
   model?: string;
 }): Promise<ChatCompletionResult> {
-  const apiKey = normalizeOpenRouterApiKey(process.env.OPENROUTER_API_KEY);
+  const apiKey = normalizeOpenRouterApiKey(getOpenRouterApiKeyTrimmedFromEnv() || undefined);
   const user = params.user ? String(params.user).slice(0, 128) : undefined;
   const model = normalizeOpenRouterModel(params.model, resolveOpenRouterModelSlugFromEnv());
   logOpenRouterResolvedModelOnce(model);
@@ -163,13 +180,13 @@ export async function blogAiChatCompletion(params: {
   }
   if (provider === "unconfigured") {
     throw new Error(
-      "Blog AI provider is not configured. Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.",
+      "Blog AI provider is not configured. Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY (or BLOG_OPENROUTER_API_KEY), or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.",
     );
   }
 
   if (provider === "openrouter") {
-    normalizeOpenRouterApiKey(process.env.OPENROUTER_API_KEY);
-    const model = normalizeOpenRouterModel(params.model, getBlogOpenRouterChatModel());
+    normalizeOpenRouterApiKey(getOpenRouterApiKeyTrimmedFromEnv() || undefined);
+    const model = normalizeBlogOpenRouterModel(params.model, getBlogOpenRouterChatModel());
     logBlogAiInvocation(provider, model);
     return openRouterChatCompletion({
       messages: params.messages,

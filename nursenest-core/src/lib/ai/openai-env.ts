@@ -1,3 +1,4 @@
+import { getOpenRouterApiKeyTrimmedFromEnv } from "@/lib/ai/blog-ai-env-keys";
 import { aiChatUsesOpenRouter, blogChatUsesOpenRouter, getBlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
 import { getOpenAiApiKeyFromRuntimeEnv } from "@/lib/env/runtime-env";
 
@@ -26,12 +27,26 @@ export function openRouterErrorIndicatesInvalidModelSlug(message: string): boole
 }
 
 /**
- * Resolved model slug: `OPENROUTER_MODEL` → `BLOG_OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
+ * Shared (non–blog-pinned) OpenRouter slug: `OPENROUTER_MODEL` → `BLOG_OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
+ * Blog generation uses {@link resolveBlogOpenRouterModelSlugFromEnv} so operators can override with `BLOG_OPENROUTER_MODEL` alone.
  */
 export function resolveOpenRouterModelSlugFromEnv(): string {
   return (
     process.env.OPENROUTER_MODEL?.trim() ||
     process.env.BLOG_OPENROUTER_MODEL?.trim() ||
+    OPENROUTER_DEFAULT_CHAT_MODEL
+  );
+}
+
+/**
+ * Blog OpenRouter slug: `BLOG_OPENROUTER_MODEL` → `OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
+ * Precedence is intentionally the inverse of {@link resolveOpenRouterModelSlugFromEnv} so blog jobs can pin a model
+ * without changing global `OPENROUTER_MODEL`.
+ */
+export function resolveBlogOpenRouterModelSlugFromEnv(): string {
+  return (
+    process.env.BLOG_OPENROUTER_MODEL?.trim() ||
+    process.env.OPENROUTER_MODEL?.trim() ||
     OPENROUTER_DEFAULT_CHAT_MODEL
   );
 }
@@ -55,10 +70,10 @@ export function getBlogOpenAiChatModel(): string {
 
 /**
  * Model slug for OpenRouter blog chat.
- * Resolution: `OPENROUTER_MODEL` → `BLOG_OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
+ * Resolution: `BLOG_OPENROUTER_MODEL` → `OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
  */
 export function getBlogOpenRouterChatModel(): string {
-  return resolveOpenRouterModelSlugFromEnv();
+  return resolveBlogOpenRouterModelSlugFromEnv();
 }
 
 /** OpenRouter chat model for shared admin/content AI callers (same env resolution as blog). */
@@ -101,6 +116,9 @@ export function getBlogGenerationModelLabelForLogs(): string {
   const provider = getBlogAiChatProvider();
   if (provider === "openrouter") return getBlogOpenRouterChatModel();
   if (provider === "openai") return getBlogOpenAiChatModel();
+  if (provider === "gemini") {
+    return process.env.BLOG_GEMINI_MODEL?.trim() || process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+  }
   return "(unconfigured)";
 }
 
@@ -134,14 +152,14 @@ export function assertOpenAiKeyConfigured(
     (options?.pipeline === "blog" && blogChatUsesOpenRouter()) ||
     (options?.pipeline !== "blog" && aiChatUsesOpenRouter());
   if (expectsOpenRouter) {
-    const orKey = process.env.OPENROUTER_API_KEY?.trim();
+    const orKey = getOpenRouterApiKeyTrimmedFromEnv();
     if (!orKey) {
       return {
         ok: false,
         message:
           options?.pipeline === "blog"
-            ? "OPENROUTER_API_KEY is not configured (AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter)."
-            : "OPENROUTER_API_KEY is not configured (AI_PROVIDER=openrouter).",
+            ? "OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY is not configured (AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter)."
+            : "OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY is not configured (AI_PROVIDER=openrouter).",
       };
     }
     return { ok: true };
@@ -151,7 +169,7 @@ export function assertOpenAiKeyConfigured(
     return {
       ok: false,
       message:
-        "Blog AI provider is not configured. Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.",
+        "Blog AI provider is not configured. Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY (or BLOG_OPENROUTER_API_KEY), or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.",
     };
   }
 
@@ -161,7 +179,7 @@ export function assertOpenAiKeyConfigured(
       ok: false,
       message:
         options?.pipeline === "blog"
-          ? "BLOG_OPENAI_API_KEY (or AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY) is not configured. For OpenRouter, set AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter) and OPENROUTER_API_KEY."
+          ? "BLOG_OPENAI_API_KEY (or AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY) is not configured. For OpenRouter, set AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter) and OPENROUTER_API_KEY or BLOG_OPENROUTER_API_KEY."
           : "AI_INTEGRATIONS_OPENAI_API_KEY (or OPENAI_API_KEY) is not configured.",
     };
   }

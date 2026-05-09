@@ -165,17 +165,22 @@ describe("getBlogOpenRouterChatModel", () => {
     restoreEnv(saved);
   });
 
-  it("prefers OPENROUTER_MODEL", () => {
-    process.env.OPENROUTER_MODEL = "anthropic/claude-3.5-haiku";
-    process.env.BLOG_OPENAI_MODEL = "gpt-4o";
+  it("prefers BLOG_OPENROUTER_MODEL over OPENROUTER_MODEL for blog routing", () => {
+    process.env.OPENROUTER_MODEL = "openai/gpt-4o-mini";
+    process.env.BLOG_OPENROUTER_MODEL = "anthropic/claude-3.5-haiku";
     assert.equal(getBlogOpenRouterChatModel(), "anthropic/claude-3.5-haiku");
   });
 
-  it("requires OPENROUTER_MODEL when unset", () => {
+  it("falls back to OPENROUTER_MODEL when BLOG_OPENROUTER_MODEL is unset", () => {
+    delete process.env.BLOG_OPENROUTER_MODEL;
+    process.env.OPENROUTER_MODEL = "anthropic/claude-3.5-haiku";
+    assert.equal(getBlogOpenRouterChatModel(), "anthropic/claude-3.5-haiku");
+  });
+
+  it("falls back to default slug when both are unset", () => {
+    delete process.env.BLOG_OPENROUTER_MODEL;
     delete process.env.OPENROUTER_MODEL;
-    delete process.env.BLOG_OPENAI_MODEL;
-    delete process.env.AI_INTEGRATIONS_OPENAI_MODEL;
-    assert.throws(() => getBlogOpenRouterChatModel(), /OPENROUTER_MODEL is required/);
+    assert.equal(getBlogOpenRouterChatModel(), OPENROUTER_DEFAULT_CHAT_MODEL);
   });
 });
 
@@ -199,10 +204,11 @@ describe("getOpenRouterChatModel", () => {
     assert.equal(getOpenRouterChatModel(), OPENROUTER_DEFAULT_CHAT_MODEL);
   });
 
-  it("does not use blog OpenAI model fallback for OpenRouter blog routing", () => {
+  it("does not use blog OpenAI model for OpenRouter slug resolution", () => {
     delete process.env.OPENROUTER_MODEL;
+    delete process.env.BLOG_OPENROUTER_MODEL;
     process.env.BLOG_OPENAI_MODEL = "openai/gpt-4.1-mini";
-    assert.throws(() => getBlogOpenRouterChatModel(), /OPENROUTER_MODEL is required/);
+    assert.equal(getBlogOpenRouterChatModel(), OPENROUTER_DEFAULT_CHAT_MODEL);
     assert.equal(getOpenRouterChatModel(), OPENROUTER_DEFAULT_CHAT_MODEL);
   });
 });

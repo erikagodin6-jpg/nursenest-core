@@ -77,3 +77,14 @@ Duplicate slugs; thin content; internal 404s; DB/static parity confusion in CI (
 ---
 
 *Verified By VibeCheck ✅* (truthpack absent in clone — documented; no invented tiers or prices.)
+
+## 9. Static fallback triggers (operator reference)
+
+Public reads consult `resolveBlogStaticFallbackProbe()` in `nursenest-core/src/lib/blog/safe-blog-queries.ts`:
+
+- **Build:** `NEXT_PHASE=phase-production-build` defaults `MARKETING_BLOG_SKIP_DB_FOR_BUILD` to skip Prisma for marketing blog reads unless env is `false`.
+- **No DATABASE_URL:** static corpus used when probe allows.
+- **Probe denies static** when live `BlogPost` rows exist (`blogLiveWhere`) or probe fails — avoids masking DB outages with an empty static library.
+
+Bundled corpus: `nursenest-core/src/content/blog-static-posts.ts` (3 slugs documented in Playwright smoke).
+

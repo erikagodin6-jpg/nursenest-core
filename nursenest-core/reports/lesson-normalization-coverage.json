@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-09T09:23:49.733Z",
+  "generatedAt": "2026-05-09T22:32:33.234Z",
   "pathways": [
     {
       "pathwayId": "ca-allied-core",
@@ -1960,7 +1960,7 @@
   "alliedProfessionCoverage": [
     {
       "professionKey": "mlt",
-      "label": "Medical laboratory exam prep",
+      "label": "Medical laboratory technology exam prep",
       "route": "/allied/allied-health/lessons?alliedProfession=mlt",
       "topicSlugsIn": [
         "lab-values",

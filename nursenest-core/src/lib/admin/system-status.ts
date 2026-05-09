@@ -12,6 +12,7 @@ import {
 import { buildOperationalSummaryFromChecks } from "@/lib/admin/system-status-operational-summary";
 import type { SystemCheckId, SystemCheckResult, SystemStatusPayload } from "@/lib/admin/system-status-types";
 import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
+import { openRouterApiKeyEnvPresent } from "@/lib/ai/blog-ai-env-keys";
 import { getBlogOpenAiApiKey } from "@/lib/ai/openai-env";
 import { STALE_GENERATING_MS } from "@/lib/lessons/admin-ai-lesson-batch";
 import { boundedSelectOne, checkDatabaseReadiness } from "@/lib/db/prisma-readiness";
@@ -392,7 +393,7 @@ async function probeConfigSanity(): Promise<SystemCheckResult> {
       Boolean(process.env.AUTH_SECRET?.trim()) || Boolean(process.env.NEXTAUTH_SECRET?.trim());
     const authUrlPresent = Boolean(process.env.AUTH_URL?.trim() || process.env.NEXTAUTH_URL?.trim());
     const openaiKeyPresent = Boolean(getBlogOpenAiApiKey());
-    const openrouterKeyPresent = Boolean(process.env.OPENROUTER_API_KEY?.trim());
+    const openrouterKeyPresent = openRouterApiKeyEnvPresent();
     const stripeSecretPresent = Boolean(process.env.STRIPE_SECRET_KEY?.trim());
     const stripeWebhookPresent = Boolean(process.env.STRIPE_WEBHOOK_SECRET?.trim());
     const spacesCredsPresent =

@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-05-09T09:23:49.733Z
+Generated at: 2026-05-09T22:32:33.234Z
 
 ## Pathway Coverage
 
@@ -406,7 +406,7 @@ Exclusions:
 
 ### `mlt`
 
-- Label: Medical laboratory exam prep
+- Label: Medical laboratory technology exam prep
 - Route: /allied/allied-health/lessons?alliedProfession=mlt
 - Status: mapped
 - topicSlugsIn: lab-values, infection-control, medical-terminology, clinical-documentation

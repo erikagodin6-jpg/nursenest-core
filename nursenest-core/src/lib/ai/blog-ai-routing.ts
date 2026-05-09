@@ -1,7 +1,12 @@
 /**
  * Blog / marketing content chat routing (OpenAI-compatible path).
  * `BLOG_AI_PROVIDER` wins over `AI_PROVIDER` when set to a known value.
+ *
+ * OpenRouter detection also treats `BLOG_OPENROUTER_API_KEY` as funding the OpenRouter path when
+ * `BLOG_AI_PROVIDER` / `AI_PROVIDER` are unset — see `@/lib/ai/blog-ai-env-keys`.
  */
+
+import { openRouterApiKeyEnvPresent } from "@/lib/ai/blog-ai-env-keys";
 
 export type BlogAiChatProvider = "openai" | "openrouter" | "gemini" | "unconfigured";
 export type AiChatProvider = "openai" | "openrouter" | "gemini";
@@ -40,7 +45,7 @@ export function assertBlogAiExplicitOpenRouterHonored(provider: BlogAiChatProvid
   const explicit = sanitizeEnvProviderToken(process.env.BLOG_AI_PROVIDER);
   if (explicit === "openrouter" && provider !== "openrouter") {
     throw new Error(
-      `[BlogAI] BLOG_AI_PROVIDER=openrouter but resolved provider=${provider}. Ensure OPENROUTER_API_KEY is set and loaded in this Node/runtime process.`,
+      `[BlogAI] BLOG_AI_PROVIDER=openrouter but resolved provider=${provider}. Ensure OPENROUTER_API_KEY or BLOG_OPENROUTER_API_KEY is set and loaded in this Node/runtime process.`,
     );
   }
 }
@@ -59,7 +64,7 @@ export function getBlogAiChatProvider(): BlogAiChatProvider {
   if (blog === "openrouter" || blog === "gemini" || blog === "openai") {
     return blog;
   }
-  if (envSecretLooksPresent(process.env.OPENROUTER_API_KEY)) {
+  if (openRouterApiKeyEnvPresent()) {
     return "openrouter";
   }
   const ai = normalizedAiProvider();
@@ -72,6 +77,15 @@ export function getBlogAiChatProvider(): BlogAiChatProvider {
 /** True when blog chat completions should use OpenRouter (requires OPENROUTER_API_KEY). */
 export function blogChatUsesOpenRouter(): boolean {
   return getBlogAiChatProvider() === "openrouter";
+}
+
+/**
+ * Resolved blog chat provider id — alias of {@link getBlogAiChatProvider} for operators/docs.
+ * Precedence summary: explicit `BLOG_AI_PROVIDER` → OpenRouter if any OpenRouter key is set →
+ * `AI_PROVIDER` → otherwise `unconfigured`.
+ */
+export function resolveBlogAiProvider(): BlogAiChatProvider {
+  return getBlogAiChatProvider();
 }
 
 /** True when general OpenAI-compatible chat completions should use OpenRouter. */

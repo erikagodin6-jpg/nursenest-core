@@ -471,7 +471,12 @@ export async function PATCH(req: Request, { params }: Props) {
     }
     const schedGate = await runPrePublishGate();
     if (schedGate) return schedGate;
-    actionPatch = { postStatus: BlogPostStatus.SCHEDULED, publishAt: when };
+    /** Must match {@link normalizeBlogPostStatusWriteFields} for SCHEDULED — pipeline workflows block {@link blogLiveWhere}. */
+    actionPatch = {
+      postStatus: BlogPostStatus.SCHEDULED,
+      publishAt: when,
+      workflowStatus: BlogWorkflowStatus.SCHEDULED,
+    };
     logQueue.push({
       level: "info",
       event: "scheduled",
@@ -577,7 +582,7 @@ export async function PATCH(req: Request, { params }: Props) {
   }
 
   const workflowStatusUpdate =
-    d.action === "submit_for_review" || d.action === "approve" || d.action === "mark_failed"
+    actionPatch.workflowStatus !== undefined
       ? actionPatch.workflowStatus
       : d.workflowStatus !== undefined
         ? d.workflowStatus

@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { AdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 
 /**
@@ -36,6 +37,18 @@ export function AdminAiGenerationBanner({
     >
       <p className="font-semibold">{summary}</p>
 
+      {(gate.missingEnvVarNames?.length ?? 0) > 0 ? (
+        <p className="mt-2 text-xs opacity-95" data-testid="admin-ai-missing-env-vars">
+          <span className="font-medium">Check these environment variable names on the server (values never shown here):</span>{" "}
+          {(gate.missingEnvVarNames ?? []).map((name, i) => (
+            <Fragment key={name}>
+              {i > 0 ? ", " : null}
+              <code className="rounded bg-black/10 px-1 dark:bg-white/10">{name}</code>
+            </Fragment>
+          ))}
+        </p>
+      ) : null}
+
       <p className="mt-2 text-xs opacity-90">
         Live AI-backed admin tools (blog, lessons, exam questions, flashcards, batch processors) stay disabled until
         the generation flag is enabled (for example{" "}
@@ -45,7 +58,8 @@ export function AdminAiGenerationBanner({
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">on</code> — case-insensitive) and{" "}
         a funded provider key is set:{" "}
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">AI_PROVIDER=openrouter</code>{" "}
-        with <code className="rounded bg-black/10 px-1 dark:bg-white/10">OPENROUTER_API_KEY</code>, or OpenAI via{" "}
+        with <code className="rounded bg-black/10 px-1 dark:bg-white/10">OPENROUTER_API_KEY</code> /{" "}
+        <code className="rounded bg-black/10 px-1 dark:bg-white/10">BLOG_OPENROUTER_API_KEY</code>, or OpenAI via{" "}
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">AI_INTEGRATIONS_OPENAI_API_KEY</code> /{" "}
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">OPENAI_API_KEY</code>. Slot preview and precomputed
         localized imports may still work without this gate.

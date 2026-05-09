@@ -7,7 +7,7 @@ import {
   type Prisma,
 } from "@prisma/client";
 import { z } from "zod";
-import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
+import { getBlogGenerationModelLabelForLogs, getBlogGenerationProviderLabelForLogs, getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
 import {
@@ -329,6 +329,8 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     exam: input.exam,
     autoPublish: input.autoPublish ?? true,
     translationsRequested: input.generateTranslations === true,
+    blogAiProvider: getBlogGenerationProviderLabelForLogs(),
+    blogAiModel: getBlogGenerationModelLabelForLogs(),
   });
   const pipelineResult = await runBlogArticleGenerationPipeline(
     {

@@ -33,6 +33,14 @@ type ItemRow = {
   plannedPublishAt: string;
   status: string;
   failureReason: string | null;
+  blogPostId?: string | null;
+  blogPost?: {
+    id: string;
+    slug: string;
+    title: string;
+    postStatus: string;
+    publishAt: string | null;
+  } | null;
 };
 
 type ScheduleDetail = ScheduleListRow & {
@@ -496,7 +504,29 @@ export function AdminBlogTopicBatchClient({
                   </span>
                   <Badge className="rounded border border-border px-2 py-0.5 text-xs">{it.status}</Badge>
                 </div>
-                <p className="text-xs text-muted-foreground">{new Date(it.plannedPublishAt).toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground">
+                  Scheduled slot: {new Date(it.plannedPublishAt).toLocaleString()}
+                  {it.blogPost?.postStatus ? (
+                    <span className="ml-2 rounded-full bg-muted px-1.5 py-0.5 font-medium text-foreground">{it.blogPost.postStatus}</span>
+                  ) : null}
+                </p>
+                {it.blogPost?.slug ? (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    <span className="font-mono text-foreground">{it.blogPost.slug}</span>
+                    {" · "}
+                    <a className="text-primary underline" href={`/blog/${encodeURIComponent(it.blogPost.slug)}`} target="_blank" rel="noreferrer">
+                      Preview public URL
+                    </a>
+                    {it.blogPost.id ? (
+                      <>
+                        {" · "}
+                        <a className="text-primary underline" href={`/admin/blog?id=${encodeURIComponent(it.blogPost.id)}`}>
+                          Open in admin
+                        </a>
+                      </>
+                    ) : null}
+                  </p>
+                ) : null}
                 {it.failureReason ? <p className="mt-1 text-xs text-rose-700 dark:text-rose-300">{it.failureReason}</p> : null}
               </li>
             ))}
