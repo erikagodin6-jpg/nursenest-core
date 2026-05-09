@@ -1,41 +1,66 @@
-# Homepage hydration crash audit — 2026-05-09
+# Homepage flash → crash audit (hydration / client runtime)
 
-## Executive summary
+## Summary
 
-**Root cause (one line):** `PremiumHomepageHero` called `useMarketingI18n` and `useNursenestRegion` inside `try/catch`, which violates the [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks) and can yield inconsistent hook execution across renders — after hydration React can hit an invalid internal state and throw; the marketing layout `MarketingMainErrorBoundary` then replaces the main column with “Something went wrong loading this section.” (flash of SSR content, then error shell).
+**Symptom:** SSR paints, then within ~1s the marketing segment shows **`Page could not load`** (`src/app/(marketing)/(default)/error.tsx`), i.e. a **client-side error** in the `(marketing)/(default)` tree after hydration — **not** a successful load despite HTTP 200 on first response.
 
-## Evidence
+## Root cause (code)
 
-### Code
+**`src/components/layout/site-header.tsx`** lazy-loads `MarketingHeaderUtilityStrip` with **`dynamic()`** but previously omitted **`import dynamic from "next/dynamic"`**.
 
-- Before fix, hooks were wrapped in `try/catch` in `src/components/marketing/home/premium-homepage-hero.tsx` (lines ~229–246 pre-change).
-- `useNursenestRegion` throws when used outside `NursenestRegionRoot`; catching at the callsite does not make hook usage legal — hooks must run unconditionally at the top level of the component.
+After the header chunk executes on the client:
 
-### Production / automation (this environment)
+`ReferenceError: dynamic is not defined`
 
-- `curl https://www.nursenest.ca/` returned **503 / no_healthy_upstream** (DigitalOcean App Platform could not reach a healthy app instance). Live HTML showed an infrastructure error page, not the Next app — so Playwright against production could not validate UI here (earlier run also timed out waiting for `<main>`).
-- Local **`npm run start`** (production-like) failed **`runtime-env-guard-bootstrap`** (missing `AUTH_SECRET` / AI keys, etc.). Full-stack Playwright against a local prod server was **blocked by missing runtime env** in this workspace.
+That is caught by Next’s segment **`error.tsx`**, which renders **`NnErrorCard`** with title **`Page could not load`** (exact string — **not** “cannot”).
 
-### Validation that did run
+## Fix on `main`
 
-- `npm run typecheck:critical` — pass  
-- `npm run build` — pass  
-- `npm run test:homepage` — **one pre-existing failure**: `homepage-premium-en-pages.contract.test.ts` expects `pages.home.hero.eyebrow` in EN `pages.json` (missing key); **not introduced by this fix.**
+| Commit | Description |
+|--------|-------------|
+| `091fd617e` | `fix(production): repair homepage hydration crash` — add `import dynamic from "next/dynamic"` |
+| `3bc717535` | Report SHA marker for prior hydration doc |
 
-## Files changed
+Contract regression: `src/components/layout/site-header-dynamic-import.contract.test.ts` (runs under `npm run test:homepage`).
 
-| File | Change |
-|------|--------|
-| `src/components/marketing/home/premium-homepage-hero.tsx` | Call `useMarketingI18n` and `useNursenestRegion` unconditionally at component top level; remove hook-in-`try/catch`. |
-| `tests/e2e/public/homepage-stays-loaded-after-hydration.spec.ts` | New regression: 5s wait, `pageerror` + `/_next/static/` checks, no crash copy, NurseNest + `<main>` + `<h1>` + nav. |
+## Playwright / production evidence (this audit)
 
-## Git
-- Identify this fix: `git log --oneline -1 -- nursenest-core/src/components/marketing/home/premium-homepage-hero.tsx` (message begins with `fix(production): repair homepage hydration crash`).
+Run from repo **`nursenest-core/`**:
 
-- Base SHA (before this commit): `09370e8832222ed5afaa608a4e1acc142c2a8ddb` (`origin/main` at audit time).
+```bash
+BASE_URL=https://www.nursenest.ca npx playwright test tests/e2e/public/homepage-stays-loaded-after-hydration.spec.ts --project=chromium --workers=1
+```
 
-## Follow-up (operators)
+With assertions updated to match **`Page could not load`**, **`body`** inner text after 5s included:
 
-1. Restore healthy upstream on App Platform so `https://www.nursenest.ca` serves the Next app again; re-run Playwright with `BASE_URL=https://www.nursenest.ca` if desired.
-2. For CI/local full-stack E2E, supply required runtime env for `npm run start` or run against a preview deployment with secrets injected.
-3. Optionally fix `homepage-premium-en-pages.contract.test.ts` / EN `pages.json` for `pages.home.hero.eyebrow` (existing debt).
+`Page could not load` / `This page hit an unexpected error...`
+
+→ Confirms the **segment error UI** is still present on **`www.nursenest.ca`** at test time (deploy may lag `main`, or runtime env differs — **confirm Active SHA** in DigitalOcean matches **`main`** tip including **`091fd617e`**).
+
+## Local production reproduction
+
+`npm run start` exits here under **`runtime-env-guard-bootstrap`** (missing `AUTH_SECRET`, AI keys, etc.). Use **DigitalOcean runtime logs** + **browser DevTools** + Playwright against **production URL** until local env matches policy.
+
+## Tests updated
+
+- **`tests/e2e/public/homepage-stays-loaded-after-hydration.spec.ts`**
+  - Wait **5s** after load.
+  - Fail if **`body`** contains **`Page could not load`** / **`Page cannot load`** / other crash copy.
+  - Assert **`[data-nn-app-error-screen]`** count **0** (no marketing `NnErrorCard` shell).
+  - Assert **`[data-nn-header-logo]`** visible (header lockup; avoids relying on visible text **NurseNest** when error UI uses logo-only brand).
+  - Optional **diagnostic** test: screenshots at ~0ms, 500ms, 2s, 7s (`hydration-t-*.png`).
+
+## Validation commands
+
+```bash
+cd nursenest-core
+npm run typecheck:critical
+npm run test:homepage
+npm run build
+BASE_URL=https://www.nursenest.ca npx playwright test tests/e2e/public/homepage-stays-loaded-after-hydration.spec.ts --project=chromium --workers=1
+```
+
+## Deploy SHA
+
+Record after push: `git rev-parse HEAD` on **`main`**.
+
