@@ -1,5 +1,5 @@
 import { basenameWithoutExtension } from "@/lib/education-images/normalize-concept-token";
-import educationImageInventory from "@/config/education-image-inventory.json";
+import educationImageInventory from "@/config/education-image-inventory.json" with { type: "json" };
 
 export type EducationImageInventory = {
   version: number;

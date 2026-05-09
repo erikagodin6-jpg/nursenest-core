@@ -1,20 +1,9 @@
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
 
-/**
- * 🔥 FIX: inline replacement for missing helper
- */
-function hasPaidTestCredentials(): boolean {
-  return Boolean(
-    process.env.E2E_PAID_EMAIL?.trim() &&
-      process.env.E2E_PAID_PASSWORD?.trim(),
-  );
-}
+import { getE2eBaseURL } from "./tests/e2e/helpers/e2e-env";
 
-const FREE_USER_AUTH_FILE = "tests/e2e/.auth/free-user.json";
-const PAID_USER_AUTH_FILE = "tests/e2e/.auth/paid-user.json";
-
-const baseURL = process.env.BASE_URL ?? "http://localhost:3000";
+const baseURL = getE2eBaseURL();
 
 export default defineConfig({
   testDir: ".",
