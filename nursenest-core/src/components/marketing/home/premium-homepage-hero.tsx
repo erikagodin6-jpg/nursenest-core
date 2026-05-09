@@ -226,24 +226,13 @@ export function PremiumHomepageHero(props: {
   questionCount?: number;
   lessonCount?: number;
 }) {
-  // Region + i18n are wrapped in try/catch so the hero never crashes the
-  // homepage shell (mirrors the production behavior of `HomeConversionHero`).
-  let locale = "en";
-  let t: ((k: string) => string) | undefined;
-  try {
-    const ctx = useMarketingI18n();
-    locale = safeLocale(ctx.locale);
-    t = ctx.t;
-  } catch {
-    /* fall through to defaults */
-  }
-
-  let region = "CA";
-  try {
-    region = safeRegion(useNursenestRegion().region);
-  } catch {
-    /* fall through to default region */
-  }
+  // Hooks must run unconditionally at top level (never inside try/catch).
+  // Marketing layout wraps this tree with `MarketingI18nProvider` +
+  // `NursenestRegionRoot`; `useMarketingI18n` degrades safely outside provider.
+  const { locale: rawLocale, t } = useMarketingI18n();
+  const { region: rawRegion } = useNursenestRegion();
+  const locale = safeLocale(rawLocale);
+  const region = safeRegion(rawRegion);
 
   const q = props.questionCount ?? 0;
   const lessons = props.lessonCount ?? 0;
