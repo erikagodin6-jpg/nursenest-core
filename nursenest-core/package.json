@@ -67,7 +67,7 @@
     "qa:predeploy:low-memory": "npm run typecheck:critical && npm run test:unit:flashcards && npm run test:unit:practice && npm run test:unit:stripe && npm run test:unit:onboarding && npm run qa:release-gate:list",
     "test:unit:flashcards": "node --import tsx --test src/lib/practice-tests/flashcards-inventory-cat-pool-parity.contract.test.ts src/lib/flashcards/flashcards-hub-kpi-load.test.ts",
     "test:unit:practice": "node --import tsx --test src/lib/practice-tests/practice-alias-redirect.contract.test.ts",
-    "test:unit:stripe": "node --import tsx --test src/lib/stripe/stripe-webhook-signature-contract.test.ts src/lib/stripe/stripe-webhook-policy.test.ts",
+    "test:unit:stripe": "node --import tsx --test src/lib/stripe/stripe-webhook-signature-contract.test.ts src/lib/stripe/stripe-webhook-policy.test.ts src/lib/stripe/checkout-duplicate-charge-protection.test.ts src/lib/stripe/checkout-subscription-guard.test.ts",
     "smoke:paid-unlock": "node scripts/paid-unlock-smoke.mjs",
     "test:unit:onboarding": "node --import tsx --test src/lib/context/context-routing.test.ts",
     "test:unit:cta-copy": "node --import tsx --test src/lib/ui/cta-copy-policy.test.ts",

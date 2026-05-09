@@ -2,6 +2,13 @@
 export const STRIPE_PRICE_NOT_CONFIGURED_CODE = "stripe_price_not_configured";
 /** Nursing tier is free — must not create a Stripe Checkout session (e.g. Pre-Nursing). */
 export const CHECKOUT_FREE_PATHWAY_NO_STRIPE_CODE = "checkout_free_pathway_no_stripe";
+/**
+ * Active subscriber tried to start a brand-new checkout session.
+ * Returned (HTTP 409) before `stripe.checkout.sessions.create` to prevent duplicate paid
+ * subscriptions on the same Stripe `Customer`. Clients should redirect the learner to
+ * `billingPortalRedirectPath` (the customer billing page) instead of opening Stripe Checkout.
+ */
+export const CHECKOUT_ALREADY_SUBSCRIBED_CODE = "already_subscribed";
 
 /** Structured checkout error codes (POST /api/subscriptions/checkout). */
 export const CHECKOUT_UNAUTHORIZED_CODE = "checkout_unauthorized";

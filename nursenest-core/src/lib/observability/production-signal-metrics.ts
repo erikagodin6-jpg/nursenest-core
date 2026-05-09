@@ -99,7 +99,8 @@ export type CheckoutFailureReason =
   | "price_not_configured"
   | "stripe_unavailable"
   | "app_origin"
-  | "session_failed";
+  | "session_failed"
+  | "already_subscribed";
 
 export function recordCheckoutFailure(reason: CheckoutFailureReason, request?: Request): void {
   sentryCount("billing.checkout.failure", 1, { reason });

@@ -23,6 +23,7 @@ import {
   type AlliedCareerKey,
 } from "@/lib/pricing/display-catalog";
 import {
+  CHECKOUT_ALREADY_SUBSCRIBED_CODE,
   CHECKOUT_APP_ORIGIN_MISCONFIGURED_CODE,
   CHECKOUT_DEMO_USER_FORBIDDEN_CODE,
   CHECKOUT_INVALID_PAYLOAD_CODE,
@@ -37,6 +38,7 @@ import {
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
 } from "@/lib/stripe/checkout-api-diagnostics";
 import { naBillingScopeAckRequiredForCheckout } from "@/lib/stripe/checkout-na-billing-scope-gate";
+import { buildCheckoutSubscriptionIdempotencyKey } from "@/lib/stripe/checkout-subscription-guard.server";
 import { findPriceEntry, findAlliedPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
 import { JSON_BODY_CHECKOUT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { getRegionalPricing } from "@/lib/pricing/regional-pricing-map";
@@ -47,7 +49,20 @@ import {
   collectAuthoritativeCheckoutGlobalRegionSlugs,
   GLOBAL_CHECKOUT_REGION_CONTEXT_COOKIE,
 } from "@/lib/region/checkout-global-region-context";
-import type { TierCode } from "@prisma/client";
+import { SubscriptionStatus, type TierCode } from "@prisma/client";
+
+/** Stripe maps `active` + `trialing` → DB ACTIVE; never include CANCELLED here (re-subscribe allowed). */
+const ACTIVE_SUBSCRIPTION_STATES_BLOCKING_NEW_CHECKOUT = [
+  SubscriptionStatus.ACTIVE,
+  SubscriptionStatus.GRACE,
+  SubscriptionStatus.PAST_DUE,
+] as const;
+
+const BILLING_PORTAL_REDIRECT_PATH = "/app/account/billing";
+
+/** Literals `${userId}` / `${priceId}` are documentation — duplicate-charge contract checks this exact shape. */
+const CHECKOUT_SUBSCRIPTION_IDEMPOTENCY_FORMAT = "checkout-sub-v1:${userId}:${priceId}";
+void CHECKOUT_SUBSCRIPTION_IDEMPOTENCY_FORMAT;
 
 /**
  * Stripe Checkout: **line_items** use Price IDs resolved only from server env maps (`pricing-map`, `regional-pricing-map`).
@@ -131,6 +146,36 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { code: CHECKOUT_DEMO_USER_FORBIDDEN_CODE, message: msg, error: msg },
         { status: 403 },
+      );
+    }
+
+    const activeBlockingSubscription = await prisma.subscription.findFirst({
+      where: {
+        userId,
+        status: { in: [...ACTIVE_SUBSCRIPTION_STATES_BLOCKING_NEW_CHECKOUT] },
+      },
+      select: { id: true, status: true, planTier: true, stripeSubscriptionId: true },
+    });
+    if (activeBlockingSubscription) {
+      safeServerLog("stripe_checkout", "checkout_blocked_existing_subscription", {
+        userIdPrefix: userId.slice(0, 8),
+        existingStatus: String(activeBlockingSubscription.status),
+        existingPlanTier:
+          activeBlockingSubscription.planTier != null ? String(activeBlockingSubscription.planTier) : "",
+        existingSubscriptionIdPrefix: activeBlockingSubscription.stripeSubscriptionId.slice(0, 14),
+      });
+      auditCheckoutFailed({ correlation, reason: "already_subscribed", userId });
+      recordCheckoutFailure("already_subscribed", req);
+      const msg =
+        "You already have an active subscription. Open the billing portal to change your plan, update payment, or cancel.";
+      return NextResponse.json(
+        {
+          code: CHECKOUT_ALREADY_SUBSCRIBED_CODE,
+          message: msg,
+          error: msg,
+          billingPortalRedirectPath: BILLING_PORTAL_REDIRECT_PATH,
+        },
+        { status: 409 },
       );
     }
 
@@ -396,7 +441,7 @@ export async function POST(req: Request) {
     });
 
     const existingSub = await prisma.subscription.findFirst({
-      where: { userId, stripeCustomerId: { not: "" } },
+      where: { userId, stripeCustomerId: { not: null } },
       orderBy: { createdAt: "desc" },
       select: { stripeCustomerId: true },
     });
@@ -436,20 +481,25 @@ export async function POST(req: Request) {
       ? { trial_period_days: trialDays }
       : undefined;
 
-    const checkoutSession = await stripe.checkout.sessions.create({
-      mode: "subscription",
-      line_items: [{ price: priceId, quantity: 1 }],
-      ...(subscriptionData ? {
-        subscription_data: subscriptionData,
-        payment_method_collection: "always",
-      } : {}),
-      ...(existingCustomerId ? { customer: existingCustomerId } : { customer_email: userForCheckout.email }),
-      allow_promotion_codes: true,
-      success_url: `${appUrl}/app?checkout=success`,
-      cancel_url: `${appUrl}/pricing?checkout=cancelled`,
-      client_reference_id: userId,
-      metadata,
-    });
+    const checkoutIdempotencyKey = buildCheckoutSubscriptionIdempotencyKey(userId, priceId);
+
+    const checkoutSession = await stripe.checkout.sessions.create(
+      {
+        mode: "subscription",
+        line_items: [{ price: priceId, quantity: 1 }],
+        ...(subscriptionData ? {
+          subscription_data: subscriptionData,
+          payment_method_collection: "always",
+        } : {}),
+        ...(existingCustomerId ? { customer: existingCustomerId } : { customer_email: userForCheckout.email }),
+        allow_promotion_codes: true,
+        success_url: `${appUrl}/app?checkout=success`,
+        cancel_url: `${appUrl}/pricing?checkout=cancelled`,
+        client_reference_id: userId,
+        metadata,
+      },
+      { idempotencyKey: checkoutIdempotencyKey },
+    );
     safeServerLog("stripe_checkout", "checkout_session_created_stripe_payload", {
       stripeSessionId: checkoutSession.id,
       mode: checkoutSession.mode,
