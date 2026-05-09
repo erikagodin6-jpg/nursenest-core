@@ -36,11 +36,12 @@ export function LearnerLessonsVirtualList({
 
   if (lessons.length === 0) return null;
 
+  /* Avoid `contain: strict` — size containment collapsed the scroll region in the learner shell. */
   return (
     <div
       ref={parentRef}
       className="max-h-[min(70vh,880px)] overflow-auto rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_22%,var(--semantic-surface))] px-4 pb-9 pt-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:pb-10 sm:pt-5"
-      style={{ contain: "strict" }}
+      style={{ contain: "layout paint" }}
     >
       <div
         className="relative w-full"

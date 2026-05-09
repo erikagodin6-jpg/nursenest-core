@@ -2,12 +2,7 @@ import { redirect } from "next/navigation";
 
 type PageProps = { searchParams: Promise<Record<string, string | string[] | undefined>> };
 
-/**
- * Legacy/marketing `/app/cat` — CAT and adaptive flows live under `/app/practice-tests`
- * (e.g. `cat-launch`, `start`). Preserve query params so `pathwayId` deep links keep working.
- */
-export default async function CatAliasPage({ searchParams }: PageProps) {
-  const sp = await searchParams;
+function searchParamsToURLSearchParams(sp: Record<string, string | string[] | undefined>): URLSearchParams {
   const q = new URLSearchParams();
   for (const [k, v] of Object.entries(sp)) {
     if (v === undefined) continue;
@@ -17,6 +12,24 @@ export default async function CatAliasPage({ searchParams }: PageProps) {
       q.set(k, String(v));
     }
   }
+  return q;
+}
+
+/**
+ * Legacy `/app/cat` alias. Adaptive CAT lives under `/app/practice-tests` (`cat-launch`, `start`).
+ * When `pathwayId` is present, send learners to **cat-launch** (same entry as study-loop CAT CTAs),
+ * not only the generic practice hub — preserves deep links and bookmarks.
+ */
+export default async function CatAliasPage({ searchParams }: PageProps) {
+  const sp = await searchParams;
+  const q = searchParamsToURLSearchParams(sp);
   const suffix = q.toString();
+  const rawPid = q.get("pathwayId");
+  const pathwayId = typeof rawPid === "string" && rawPid.trim().length > 2 ? rawPid.trim() : null;
+
+  if (pathwayId) {
+    redirect(suffix ? `/app/practice-tests/cat-launch?${suffix}` : `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(pathwayId)}`);
+  }
+
   redirect(suffix ? `/app/practice-tests?${suffix}` : "/app/practice-tests");
 }
