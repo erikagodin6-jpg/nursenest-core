@@ -6,7 +6,7 @@ category: Pharmacology
 tags: Digoxin, Pharmacology, Heart Failure, Electrolytes, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Digoxin Toxicity Nursing Priorities for NCLEX
 seoDescription: Recognize digoxin toxicity symptoms, electrolyte risks, renal considerations, nursing assessments, dose-hold decisions, and exam traps.
 canonicalUrl: /blog/digoxin-toxicity-nursing-priorities

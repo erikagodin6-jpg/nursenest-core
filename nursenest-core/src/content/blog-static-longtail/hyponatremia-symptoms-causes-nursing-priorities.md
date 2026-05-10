@@ -6,7 +6,7 @@ category: Fluid and Electrolytes
 tags: Hyponatremia, Electrolytes, Fluid Balance, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Hyponatremia Nursing Priorities for NCLEX
 seoDescription: Learn hyponatremia symptoms, causes, neurologic risks, sodium correction safety, and nursing priorities for NCLEX-RN and REx-PN.
 canonicalUrl: /blog/hyponatremia-symptoms-causes-nursing-priorities

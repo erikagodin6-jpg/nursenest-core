@@ -6,7 +6,7 @@ category: Respiratory
 tags: Asthma, Respiratory, Emergency Nursing, Bronchodilators, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Asthma Emergency Nursing Interventions for Exams
 seoDescription: Review asthma pathophysiology, severe exacerbation signs, emergency nursing interventions, medication themes, and NCLEX traps.
 canonicalUrl: /blog/asthma-pathophysiology-emergency-nursing-interventions

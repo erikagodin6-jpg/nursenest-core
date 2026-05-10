@@ -46,6 +46,18 @@ export function validateBlogStaticLongtailRecord(
       message: `disclaimer must mention educational / exam prep / not medical advice intent`,
     });
   }
+  const loc = r.locale?.trim();
+  const lc = r.languageCode?.trim();
+  const tg = r.translationGroupId?.trim();
+  const i18nAny = Boolean(loc || lc || tg);
+  if (i18nAny) {
+    if (!tg) issues.push({ file, message: "translationGroupId required when locale/languageCode are used" });
+    if (!loc) issues.push({ file, message: "locale required when translationGroupId/languageCode are used" });
+    if (!lc) issues.push({ file, message: "languageCode required when translationGroupId/locale are used" });
+    if (lc && !/^[a-z]{2}(-[A-Za-z0-9]{2,8})?$/.test(lc)) {
+      issues.push({ file, message: `languageCode should be like en or en-US — got ${lc}` });
+    }
+  }
   return issues;
 }
 

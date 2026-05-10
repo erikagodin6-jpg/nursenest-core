@@ -6,7 +6,7 @@ category: Pharmacology
 tags: Warfarin, Heparin, Anticoagulants, Pharmacology, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Warfarin vs Heparin Nursing Comparison
 seoDescription: Compare warfarin and heparin by route, onset, monitoring, reversal, pregnancy considerations, bleeding precautions, and nursing education.
 canonicalUrl: /blog/warfarin-vs-heparin-nursing-comparison

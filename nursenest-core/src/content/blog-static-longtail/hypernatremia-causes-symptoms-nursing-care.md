@@ -6,7 +6,7 @@ category: Fluid and Electrolytes
 tags: Hypernatremia, Electrolytes, Dehydration, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Hypernatremia Nursing Care for NCLEX and REx-PN
 seoDescription: Review hypernatremia causes, dehydration clues, neurologic symptoms, fluid replacement safety, and nursing priorities for exams.
 canonicalUrl: /blog/hypernatremia-causes-symptoms-nursing-care

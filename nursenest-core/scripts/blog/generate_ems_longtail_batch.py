@@ -447,15 +447,18 @@ def paragraph_bank(seed: str, cluster: str) -> list[str]:
     return deduped
 
 
-def med_block(seed: str, cluster: str, topic_sentence: str) -> str:
+def topic_para(seed: str, cluster: str, idx: int) -> str:
     bank = paragraph_bank(seed, cluster)
-    parts: list[str] = []
-    parts.append(
-        f"<p>{h(topic_sentence)} This educational overview connects field assessment, protocol thinking, and transport "
-        f"decisions for paramedic and AEMT learners preparing for registry-style reasoning and clinical rotations.</p>"
-    )
-    for i in range(12):
-        parts.append(f"<p>{h(bank[i % len(bank)])}</p>")
+    return bank[idx % len(bank)]
+
+
+def short_section(seed: str, cluster: str, lead: str, extra_paras: int = 1) -> str:
+    parts = [
+        f"<p>{h(lead)} This educational overview connects field assessment, protocol thinking, and transport decisions "
+        f"for paramedic and AEMT learners preparing for registry-style reasoning and clinical rotations.</p>"
+    ]
+    for i in range(extra_paras):
+        parts.append(f"<p>{h(topic_para(seed, cluster, i + 5))}</p>")
     return "".join(parts)
 
 
@@ -464,17 +467,71 @@ def build_body(slug: str, title: str, knack: str, cluster: str) -> str:
         f"This article focuses on {knack.lower()} in the prehospital environment, emphasizing how EMS clinicians "
         f"translate assessment findings into time-sensitive actions."
     )
-    intro = med_block(slug + ":intro", cluster, topic_sentence)
-    patho = med_block(slug + ":patho", cluster, f"Pathophysiology for this topic centers on how {knack.lower()} links supply, demand, and compensation patterns you can observe before labs arrive.")
-    scene = med_block(slug + ":scene", cluster, "Scene safety includes traffic control, violence assessment, chemical exposure awareness, and safe patient access while preserving spinal precautions when indicated.")
-    assess = med_block(slug + ":assess", cluster, f"Primary and secondary assessment for {knack.lower()} should emphasize repeatable, broadcastable findings that improve ED and specialty team readiness.")
-    diff = med_block(slug + ":diff", cluster, f"Differential diagnosis considerations include common mimics and dangerous look-alikes that share features with {knack.lower()}, requiring disciplined reassessment.")
-    prehosp = med_block(slug + ":rx", cluster, "Prehospital interventions should align with standing orders, medical direction, and local scope. Monitor response with vitals, waveform capnography when applicable, and repeat exams.")
-    meds = med_block(slug + ":med", cluster, "Medication considerations include weight-based dosing where relevant, allergy verification, contraindications, route selection, and documentation of time, dose, and effect.")
-    transport = med_block(slug + ":txp", cluster, "Transport and escalation should name destination capability, notification triggers, reassessment intervals en route, and criteria for priority transport.")
-    peds_ger = med_block(slug + ":pg", cluster, "Pediatric and geriatric considerations include atypical vitals, communication barriers, caregiver collateral, fall risk, polypharmacy, and frailty-informed packaging and movement.")
-    doc = med_block(slug + ":doc", cluster, "Documentation pearls include quoting patient words for chief complaint, documenting decision capacity elements when applicable, and recording serial vitals with timestamps around interventions.")
-    exam = med_block(slug + ":exam", cluster, "Exam-focused review points emphasize first actions for unstable presentations, scope-safe choices, and the rationale that registry items reward patient-centered safety over trivia.")
+    intro = (
+        f"<p>{h(topic_sentence)}</p>"
+        f"<p>{h(topic_para(slug + ':i1', cluster, 1))}</p>"
+        f"<p>{h(topic_para(slug + ':i2', cluster, 2))}</p>"
+    )
+    patho = short_section(
+        slug + ":patho",
+        cluster,
+        f"Pathophysiology for this topic centers on how {knack.lower()} links supply, demand, and compensation patterns you can observe before labs arrive.",
+        2,
+    )
+    scene = short_section(
+        slug + ":scene",
+        cluster,
+        "Scene safety includes traffic control, violence assessment, chemical exposure awareness, and safe patient access while preserving spinal precautions when indicated.",
+        2,
+    )
+    assess = short_section(
+        slug + ":assess",
+        cluster,
+        f"Primary and secondary assessment for {knack.lower()} should emphasize repeatable, broadcastable findings that improve ED and specialty team readiness.",
+        2,
+    )
+    diff = short_section(
+        slug + ":diff",
+        cluster,
+        f"Differential diagnosis considerations include common mimics and dangerous look-alikes that share features with {knack.lower()}, requiring disciplined reassessment.",
+        2,
+    )
+    prehosp = short_section(
+        slug + ":rx",
+        cluster,
+        "Prehospital interventions should align with standing orders, medical direction, and local scope. Monitor response with vitals, waveform capnography when applicable, and repeat exams.",
+        2,
+    )
+    meds = short_section(
+        slug + ":med",
+        cluster,
+        "Medication considerations include weight-based dosing where relevant, allergy verification, contraindications, route selection, and documentation of time, dose, and effect.",
+        2,
+    )
+    transport = short_section(
+        slug + ":txp",
+        cluster,
+        "Transport and escalation should name destination capability, notification triggers, reassessment intervals en route, and criteria for priority transport.",
+        2,
+    )
+    peds_ger = short_section(
+        slug + ":pg",
+        cluster,
+        "Pediatric and geriatric considerations include atypical vitals, communication barriers, caregiver collateral, fall risk, polypharmacy, and frailty-informed packaging and movement.",
+        2,
+    )
+    doc = short_section(
+        slug + ":doc",
+        cluster,
+        "Documentation pearls include quoting patient words for chief complaint, documenting decision capacity elements when applicable, and recording serial vitals with timestamps around interventions.",
+        2,
+    )
+    exam = short_section(
+        slug + ":exam",
+        cluster,
+        "Exam-focused review points emphasize first actions for unstable presentations, scope-safe choices, and the rationale that registry items reward patient-centered safety over trivia.",
+        2,
+    )
 
     takeaways = f"""<h2>Key Takeaways</h2>
 <ul>

@@ -7,7 +7,8 @@ import os
 import re
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parents[1] / "src" / "content" / "blog-static-longtail"
+# Repo root: .../nursenest-core (parent of scripts/)
+OUT = Path(__file__).resolve().parents[2] / "src" / "content" / "blog-static-longtail"
 
 DISCLAIMER = (
     "This article supports educational exam preparation and clinical reasoning practice. "
@@ -320,14 +321,14 @@ def yaml_escape(s: str) -> str:
     return s
 
 
-def build_body(meta: dict, peer_slugs: list[str]) -> str:
+def build_body(meta: dict, peer_slugs: list[str], title_by_slug: dict[str, str]) -> str:
     c = meta["country"]
     e = meta["exam"]
     topic = meta["focus"]
     slug = meta["slug"]
     peers = [s for s in peer_slugs if s != slug][:4]
     peer_links = "".join(
-        f'<li><a href="/blog/{html.escape(ps)}">Related Middle East licensing prep article</a></li>\n'
+        f'<li><a href="/blog/{html.escape(ps)}">{html.escape(title_by_slug.get(ps, ps))}</a></li>\n'
         for ps in peers
     )
     int_links = "".join(
@@ -400,30 +401,77 @@ def build_body(meta: dict, peer_slugs: list[str]) -> str:
 """
 
 
-def build_frontmatter(meta: dict, wc: int) -> str:
+def clip_seo_desc(text: str, max_len: int = 158) -> str:
+    text = text.strip()
+    if len(text) <= max_len:
+        return text
+    cut = text[: max_len - 1]
+    sp = cut.rfind(" ")
+    if sp > 40:
+        cut = cut[:sp]
+    return cut.rstrip(",;:- ") + "."
+
+
+def shorten_seo_title(title: str, suffix: str = " | NurseNest", max_total: int = 70) -> str:
+    room = max_total - len(suffix)
+    if len(title) <= room:
+        return title + suffix
+    t = title[: room - 3].rsplit(" ", 1)[0].rstrip(",;:- ")
+    return t + "..." + suffix
+
+
+def tags_for(meta: dict) -> str:
+    slug = meta["slug"].lower()
+    tags = ["Middle East", "Gulf nursing", "Exam preparation", "International nurses", "Patient safety"]
+    if any(
+        x in slug
+        for x in (
+            "uae",
+            "dubai",
+            "dha",
+            "haad",
+            "doh",
+            "emirates",
+            "moh-nursing",
+            "abu-dhabi",
+            "scope-of-practice-uae",
+        )
+    ):
+        tags.append("UAE")
+    if "saudi" in slug or "scfhs" in slug:
+        tags.append("Saudi Arabia")
+    if "qatar" in slug or "qchp" in slug:
+        tags.append("Qatar")
+    if "prometric" in slug or "nclex" in slug:
+        tags.append("Prometric")
+    if "nclex" in slug:
+        tags.append("NCLEX-RN")
+    tags.append("Clinical judgment")
+    tags.append("Licensing")
+    # de-dupe preserve order
+    seen: set[str] = set()
+    out: list[str] = []
+    for t in tags:
+        if t not in seen:
+            seen.add(t)
+            out.append(t)
+    return ", ".join(out[:8])
+
+
+def build_frontmatter(meta: dict) -> str:
     title = meta["title"]
     slug = meta["slug"]
     excerpt = (
         f"Educational exam prep for nurses targeting {meta['country']} licensing discussions "
         f"({meta['exam']}): clinical safety refresh, documentation, IPC, and test strategy—verify all eligibility rules officially."
     )
-    seo_title = f"{title[:72]} | NurseNest" if len(title) < 60 else f"{title[:58]}… | NurseNest"
-    seo_desc = (
+    seo_title = shorten_seo_title(title)
+    raw_desc = (
         f"Study guide for internationally educated nurses: {meta['exam']} framing for {meta['country']}, "
         f"clinical priorities, documentation, IPC, medication safety, and exam-day strategy. Educational only."
-    )[:165]
-    tags = [
-        "Middle East",
-        meta["country"].split()[0] if meta["country"] else "Gulf",
-        "International nurses",
-        "Exam preparation",
-        "Patient safety",
-        "Clinical judgment",
-        "Prometric",
-        "Licensing",
-    ]
-    # normalize tags for YAML (comma list)
-    tags_csv = ", ".join(tags[:8])
+    )
+    seo_desc = clip_seo_desc(raw_desc)
+    tags_csv = tags_for(meta)
     cat = "International Nursing"
     lines = [
         "---",

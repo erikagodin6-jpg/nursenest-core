@@ -6,7 +6,7 @@ category: Cardiovascular
 tags: Pulmonary Embolism, VTE, Respiratory, Anticoagulation, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Pulmonary Embolism Nursing Priorities for Exams
 seoDescription: Recognize pulmonary embolism symptoms, risk factors, oxygenation and perfusion priorities, anticoagulation safety, and NCLEX traps.
 canonicalUrl: /blog/pulmonary-embolism-signs-symptoms-nursing-priorities

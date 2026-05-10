@@ -6,7 +6,7 @@ category: Neurologic
 tags: Increased ICP, Neuro, Head Injury, Stroke, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Increased Intracranial Pressure Nursing Priorities
 seoDescription: Review increased ICP symptoms, Cushing triad, positioning, neuro checks, airway safety, seizure precautions, and nursing priorities for exams.
 canonicalUrl: /blog/increased-intracranial-pressure-nursing-priorities
@@ -74,6 +74,9 @@ disclaimer: This article supports educational exam preparation and clinical reas
 <h2>Priority review before practice questions</h2>
 <p>Before moving on, name the one assessment finding you would not ignore, the one complication you are trying to prevent, and the one patient-teaching point that would reduce recurrence or delayed reporting. This short review keeps the article connected to clinical judgment instead of passive reading.</p>
 
+<h2>Study-loop prompt</h2>
+<p>To make the review active, write one sentence that links the mechanism to the priority assessment, then answer five practice questions on the same topic. If the missed answers cluster around the same cue, return to that mechanism and restate the nursing action in your own words before continuing.</p>
+
 <h2>Suggested internal links</h2>
 <ul>
 <li><a href="/blog/stroke-ischemic-vs-hemorrhagic-nursing-care">Stroke: Ischemic vs Hemorrhagic Nursing Care and Exam Priorities</a></li>
@@ -95,5 +98,4 @@ disclaimer: This article supports educational exam preparation and clinical reas
 <p>Midline positioning supports venous drainage from the brain.</p>
 
 <h2>APA-7 References</h2>
-<p>Greenberg, S. M., Ziai, W. C., Cordonnier, C., Dowlatshahi, D., Francis, B., Goldstein, J. N., Hemphill, J. C., Johnson, R., Keigher, K. M., Mack, W. J., Mocco, J., Newton, E. J., Ruff, I. M., Sansing, L. H., Schulman, S., Selim, M. H., Sheth, K. N., Sprigg, N., &amp; Sunnerhagen, K. S. (2022). 2022 guideline for the management of patients with spontaneous intracerebral hemorrhage. Stroke, 53(7), e282-e361. https://doi.org/10.1161/STR.0000000000000407</p>
-<p>American Heart Association/American Stroke Association. (2026). 2026 guideline for the early management of patients with acute ischemic stroke. https://www.stroke.org/en/about-stroke/types-of-stroke/ischemic-stroke-clots/ais-top-things-to-know</p>
+<p>Brain Trauma Foundation. (2024). Guidelines for the management of severe traumatic brain injury and intracranial pressure monitoring. https://braintrauma.org/coma/guidelines</p>

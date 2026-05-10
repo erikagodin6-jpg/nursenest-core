@@ -6,7 +6,7 @@ category: Cardiovascular
 tags: Heart Failure, Cardiovascular, Pulmonary Edema, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Left-Sided vs Right-Sided Heart Failure Nursing Guide
 seoDescription: Compare left- and right-sided heart failure with pulmonary congestion, systemic venous congestion, assessment findings, and nursing priorities.
 canonicalUrl: /blog/left-sided-vs-right-sided-heart-failure

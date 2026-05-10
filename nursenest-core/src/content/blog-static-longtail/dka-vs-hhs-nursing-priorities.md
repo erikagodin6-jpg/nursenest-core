@@ -6,7 +6,7 @@ category: Endocrine Disorders
 tags: DKA, HHS, Diabetes, Fluids, Insulin, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: DKA vs HHS Nursing Priorities for NCLEX and REx-PN
 seoDescription: Learn how DKA and HHS differ by ketones, acidosis, dehydration, mental status, labs, and safe nursing priorities for NCLEX-RN and REx-PN.
 canonicalUrl: /blog/dka-vs-hhs-nursing-priorities

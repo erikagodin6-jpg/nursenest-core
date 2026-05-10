@@ -5,7 +5,7 @@
     "tsBuildInfoFile": "./node_modules/.cache/typescript/next-app-critical.tsbuildinfo"
   },
   "include": [
-    "next-env.d.ts",
+    "next-env.typecheck-critical.d.ts",
     "src/lib/stripe/**/*.ts",
     "src/lib/auth/**/*.ts",
     "src/lib/db.ts",

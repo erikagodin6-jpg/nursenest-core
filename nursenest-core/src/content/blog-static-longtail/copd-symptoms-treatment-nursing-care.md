@@ -6,7 +6,7 @@ category: Respiratory
 tags: COPD, Respiratory, Oxygen, Inhalers, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: COPD Nursing Care, Symptoms, and Treatment Themes
 seoDescription: Review COPD symptoms, exacerbation clues, oxygen safety, inhaler teaching, pulmonary rehab themes, and nursing priorities for NCLEX-RN and REx-PN.
 canonicalUrl: /blog/copd-symptoms-treatment-nursing-care

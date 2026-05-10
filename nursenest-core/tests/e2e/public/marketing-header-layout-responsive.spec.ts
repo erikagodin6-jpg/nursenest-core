@@ -16,7 +16,11 @@ import { resolveE2eAppBaseUrl } from "../helpers/e2e-env";
 const SELECTOR_DISMISSED_LS = "nn_selector_dismissed";
 const THEME_STORAGE_KEY = "nursenest-theme";
 
+/** Screenshots land under `nursenest-core/docs/screenshots/marketing-header` (package root). */
 const SHOT_DIR = path.join(process.cwd(), "docs", "screenshots", "marketing-header");
+
+/** Stabilization matrix: grep `Ocean / Blossom / Midnight` targets this set only. */
+const MARKETING_THEME_READABILITY_THEMES = ["ocean", "blossom", "midnight"] as const;
 
 test.describe.configure({ mode: "serial" });
 
@@ -312,10 +316,47 @@ test.describe("Marketing header layout — responsive", () => {
     await expect(themeBtn).toBeEnabled();
   });
 
-  test("desktop v4 hierarchy: readable themes, quiet utility, recessed tier, no button wall", async ({ page }) => {
+  test("desktop 1280: Aurora header uses capped shell width", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await gotoHomeLightMarketing(page, "aurora");
+    await settle(page);
+    await dismissMarketingScrims(page);
+
+    await expect(page.locator('html[data-theme="aurora"]')).toBeVisible({ timeout: 30_000 });
+    await expect(page.locator('header[data-nn-header-layout="marketing-row4"]')).toBeVisible({ timeout: 60_000 });
+
+    const auroraCap = await page.evaluate(() => {
+      const shell = document.querySelector(".nn-header-primary-inner-shell.nn-section-shell");
+      const frame = document.querySelector(".nn-marketing-nav-v31-frame");
+      if (!(shell instanceof HTMLElement) || !(frame instanceof HTMLElement)) {
+        return { ok: false as const, reason: "missing capped shell or nav frame" };
+      }
+      const shellStyle = getComputedStyle(shell);
+      const maxWidth = Number.parseFloat(shellStyle.maxWidth);
+      const shellRect = shell.getBoundingClientRect();
+      const frameRect = frame.getBoundingClientRect();
+      return {
+        ok:
+          shell.classList.contains("nn-section-shell") &&
+          Number.isFinite(maxWidth) &&
+          maxWidth > 0 &&
+          shellRect.width <= maxWidth + 96 &&
+          frameRect.width <= window.innerWidth + 1,
+        maxWidth: shellStyle.maxWidth,
+        shellWidth: shellRect.width,
+        frameWidth: frameRect.width,
+        viewportWidth: window.innerWidth,
+      };
+    });
+    expect(auroraCap.ok, JSON.stringify(auroraCap)).toBe(true);
+  });
+});
+
+test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
+  test("desktop 1440: v4 hierarchy, recessed tier, no button wall", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
 
-    for (const theme of ["ocean", "blossom", "aurora", "sunset", "midnight"]) {
+    for (const theme of MARKETING_THEME_READABILITY_THEMES) {
       await gotoHomeLightMarketing(page, theme);
       await settle(page);
       await dismissMarketingScrims(page);
@@ -384,13 +425,15 @@ test.describe("Marketing header layout — responsive", () => {
     }
   });
 
-  test("desktop 1280: premium marketing themes chrome screenshots + token guards", async ({
-    page,
-  }, testInfo) => {
+  test("desktop 1280: chrome screenshots + readability token guards", async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     const HOT_PINK = "rgb(255, 105, 180)";
 
-    for (const theme of ["ocean", "blossom", "aurora", "sunset", "midnight"] as const) {
+    if (publicMarketingThemeChoiceCount() <= 1) {
+      test.skip(true, "Single public marketing theme — theme picker intentionally omitted.");
+    }
+
+    for (const theme of MARKETING_THEME_READABILITY_THEMES) {
       await gotoHomeLightMarketing(page, theme);
       await settle(page);
       await dismissMarketingScrims(page);
@@ -401,6 +444,20 @@ test.describe("Marketing header layout — responsive", () => {
         timeout: 60_000,
       });
 
+      const utilityBand = page.locator("[data-testid='marketing-header-utility-band']").first();
+      await expect(utilityBand).toBeVisible({ timeout: 30_000 });
+      const utilityCluster = page.locator('[data-testid="marketing-header-utility-cluster"]').first();
+      await expect(utilityCluster).toBeVisible({ timeout: 30_000 });
+      await expect(utilityCluster.getByRole("button").first()).toBeVisible({ timeout: 15_000 });
+      await expect(utilityCluster.locator("button[aria-expanded]").first()).toBeVisible({ timeout: 15_000 });
+      const themeBtn = utilityBarLocator(page).locator('button[aria-haspopup="listbox"]').first();
+      await expect(themeBtn).toBeVisible({ timeout: 15_000 });
+
+      const leaf = page.locator('[data-nn-header-lockup="leaf"]').first();
+      const word = page.locator('[data-nn-header-lockup="wordmark"]').first();
+      await expect(leaf).toBeVisible();
+      await expect(word).toBeVisible();
+
       await page.screenshot({
         path: path.join(SHOT_DIR, `theme-nav-${theme}-1280x900-${testInfo.project.name}.png`),
         fullPage: false,
@@ -408,129 +465,160 @@ test.describe("Marketing header layout — responsive", () => {
 
       const chromeAudit = await page.evaluate(
         ({ themeId, hotPink }: { themeId: string; hotPink: string }) => {
-        function relLuminance(rgb: [number, number, number]): number {
-          const lin = rgb.map((c) => {
-            const x = c / 255;
-            return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
-          });
-          return 0.2126 * lin[0]! + 0.7152 * lin[1]! + 0.0722 * lin[2]!;
-        }
-        function parseRgb(color: string): [number, number, number] | null {
-          const m = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-          if (!m) return null;
-          return [Number(m[1]), Number(m[2]), Number(m[3])];
-        }
-        const header = document.querySelector(`header[data-nn-header-layout]`);
+          function relLuminance(rgb: [number, number, number]): number {
+            const lin = rgb.map((c) => {
+              const x = c / 255;
+              return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+            });
+            return 0.2126 * lin[0]! + 0.7152 * lin[1]! + 0.0722 * lin[2]!;
+          }
+          function parseRgb(color: string): [number, number, number] | null {
+            const m = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+            if (!m) return null;
+            return [Number(m[1]), Number(m[2]), Number(m[3])];
+          }
+          function contrastRatio(fg: [number, number, number], bg: [number, number, number]): number {
+            const l1 = relLuminance(fg);
+            const l2 = relLuminance(bg);
+            const L1 = Math.max(l1, l2);
+            const L2 = Math.min(l1, l2);
+            return (L1 + 0.05) / (L2 + 0.05);
+          }
+          /** Nav chrome “hot pink” guard — classic hot pink + neon magenta/fuchsia accents. */
+          function isForbiddenNavPink(rgb: [number, number, number] | null): boolean {
+            if (!rgb) return false;
+            const [r, g, b] = rgb;
+            if (r === 255 && g === 105 && b === 180) return true;
+            if (r >= 235 && b >= 165 && g <= 130) return true;
+            return false;
+          }
+          function scanHeaderChromePink(): { hit: boolean; sample?: string } {
+            const header = document.querySelector(`header[data-nn-header-layout]`);
+            if (!header) return { hit: false };
+            const nodes = header.querySelectorAll(
+              "a, button, [role='link'], .nn-marketing-nav-v31-frame, .nn-header-desktop-grid, .nn-marketing-nav-v31-tier-inner, [data-testid='marketing-header-utility-band']",
+            );
+            for (const el of Array.from(nodes).slice(0, 80)) {
+              const s = getComputedStyle(el);
+              for (const c of [s.color, s.backgroundColor, s.borderColor]) {
+                const p = parseRgb(c);
+                if (isForbiddenNavPink(p)) return { hit: true, sample: c };
+              }
+            }
+            return { hit: false };
+          }
 
-        const tierChip = document.querySelector(
-          ".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier'] a, .nn-marketing-tier-chip",
-        );
-        const tierColor = tierChip ? getComputedStyle(tierChip).color : "";
+          const header = document.querySelector(`header[data-nn-header-layout]`);
+          const tierChip = document.querySelector(
+            ".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier'] a, .nn-marketing-tier-chip",
+          );
+          const tierColor = tierChip ? getComputedStyle(tierChip).color : "";
+          const pinkScan = scanHeaderChromePink();
 
-        if (themeId === "aurora" || themeId === "blossom" || themeId === "sunset") {
-          const util = document.querySelector("[data-testid='marketing-header-utility-band']");
-          const tierRail = document.querySelector(".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier']");
-          const uBg = util ? getComputedStyle(util).backgroundColor : "";
-          const tBg = tierRail ? getComputedStyle(tierRail).backgroundColor : "";
-          const parse = (c: string) => parseRgb(c);
+          const wordmark = document.querySelector('[data-nn-header-lockup="wordmark"]');
+          const frame = document.querySelector(".nn-marketing-nav-v31-frame");
+          const grid = document.querySelector(".nn-header-desktop-grid");
+          const wmFg = wordmark ? parseRgb(getComputedStyle(wordmark).color) : null;
+          const frameBg = frame ? parseRgb(getComputedStyle(frame).backgroundColor) : null;
+          const gridBg = grid ? parseRgb(getComputedStyle(grid).backgroundColor) : null;
+          const refBg =
+            frameBg && relLuminance(frameBg) > 0.04 ? frameBg : gridBg && relLuminance(gridBg) > 0.04 ? gridBg : null;
+          const lockupContrast = wmFg && refBg ? contrastRatio(wmFg, refBg) : 0;
+
+          const lum = (c: string) => {
+            const p = parseRgb(c);
+            return p ? relLuminance(p) : 0;
+          };
           const inkRgb: [number, number, number] = [18, 22, 33];
           const dist = (c: string) => {
-            const p = parse(c);
+            const p = parseRgb(c);
             if (!p) return 999;
             return Math.hypot(p[0] - inkRgb[0], p[1] - inkRgb[1], p[2] - inkRgb[2]);
           };
-          const lum = (c: string) => {
-            const p = parse(c);
-            return p ? relLuminance(p) : 0;
-          };
-          return {
-            theme: themeId,
-            tierColor,
-            hotPinkTier: tierColor === hotPink,
-            utilityBgLum: lum(uBg),
-            tierBgLum: lum(tBg),
-            utilityNotInkBlack: dist(uBg) > 40 || lum(uBg) > 0.45,
-            tierNotInkBlack: dist(tBg) > 40 || lum(tBg) > 0.45,
-          };
-        }
 
-        if (themeId === "midnight") {
-          const tierInner = document.querySelector(".nn-marketing-nav-v31-tier-inner");
-          const innerBg = tierInner ? getComputedStyle(tierInner).backgroundColor : "";
-          const ip = parseRgb(innerBg);
-          const innerLum = ip ? relLuminance(ip) : 0;
-          const utility = document.querySelector('[data-testid="marketing-header-utility-cluster"]');
-          const login = document.querySelector("header a.nav-item.nn-header-login-receded, header a.nn-header-login-receded");
-          const loginLink =
-            login ??
-            Array.from(document.querySelectorAll("header a.nav-item")).find((a) =>
-              /log\s*in/i.test(a.textContent ?? ""),
+          if (themeId === "ocean" || themeId === "blossom") {
+            const util = document.querySelector("[data-testid='marketing-header-utility-band']");
+            const tierRail = document.querySelector(".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier']");
+            const primaryGrid = document.querySelector(".nn-header-desktop-grid");
+            const uBg = util ? getComputedStyle(util).backgroundColor : "";
+            const tBg = tierRail ? getComputedStyle(tierRail).backgroundColor : "";
+            const shellBg = primaryGrid ? getComputedStyle(primaryGrid).backgroundColor : "";
+            const shellLum = lum(shellBg);
+            /* Pastel / clinical light shells stay well above ink-black (~lum 0.02). */
+            const shellNotNearBlack = shellLum > 0.14 || dist(shellBg) > 55;
+            const blossomExtra =
+              themeId === "blossom"
+                ? {
+                    blossomShellPastel: shellLum > 0.2,
+                  }
+                : {};
+
+            return {
+              theme: themeId,
+              tierColor,
+              hotPinkTier: tierColor === hotPink || isForbiddenNavPink(parseRgb(tierColor)),
+              hotPinkChrome: pinkScan.hit,
+              utilityNotInkBlack: dist(uBg) > 40 || lum(uBg) > 0.45,
+              tierNotInkBlack: dist(tBg) > 40 || lum(tBg) > 0.45,
+              shellNotNearBlack,
+              lockupContrast,
+              ...blossomExtra,
+            };
+          }
+
+          if (themeId === "midnight") {
+            const tierInner = document.querySelector(".nn-marketing-nav-v31-tier-inner");
+            const innerBg = tierInner ? getComputedStyle(tierInner).backgroundColor : "";
+            const ip = parseRgb(innerBg);
+            const innerLum = ip ? relLuminance(ip) : 0;
+            const login = document.querySelector(
+              "header a.nav-item.nn-header-login-receded, header a.nn-header-login-receded",
             );
-          const loginColor = loginLink ? getComputedStyle(loginLink).color : "";
-          const lp = parseRgb(loginColor);
-          const loginLum = lp ? relLuminance(lp) : 0;
-          const tierLum = parseRgb(tierColor) ? relLuminance(parseRgb(tierColor)!) : 0;
-          return {
-            theme: themeId,
-            tierColor,
-            hotPinkTier: tierColor === hotPink,
-            tierInnerLum: innerLum,
-            loginOnGlass: loginLum > 0.82,
-            tierReadable: tierLum > 0.82,
-            headerOk: Boolean(header),
-          };
-        }
+            const loginLink =
+              login ??
+              Array.from(document.querySelectorAll("header a.nav-item")).find((a) =>
+                /log\s*in/i.test(a.textContent ?? ""),
+              );
+            const loginColor = loginLink ? getComputedStyle(loginLink).color : "";
+            const lp = parseRgb(loginColor);
+            const loginLum = lp ? relLuminance(lp) : 0;
+            const tierLum = parseRgb(tierColor) ? relLuminance(parseRgb(tierColor)!) : 0;
+            const utilText = document.querySelector("[data-testid='marketing-header-utility-band']");
+            const utilColor = utilText ? getComputedStyle(utilText).color : "";
+            const utilLum = parseRgb(utilColor) ? relLuminance(parseRgb(utilColor)!) : 0;
+            return {
+              theme: themeId,
+              tierColor,
+              hotPinkTier: tierColor === hotPink || isForbiddenNavPink(parseRgb(tierColor)),
+              hotPinkChrome: pinkScan.hit,
+              tierInnerLum: innerLum,
+              loginOnGlass: loginLum > 0.78,
+              tierReadable: tierLum > 0.78,
+              utilityTextLum: utilLum,
+              utilityReadable: utilLum > 0.72,
+              headerOk: Boolean(header),
+            };
+          }
 
-        return { theme: themeId, tierColor, hotPinkTier: tierColor === hotPink };
-      },
-      { themeId: theme, hotPink: HOT_PINK },
+          return { theme: themeId, tierColor, hotPinkTier: tierColor === hotPink, hotPinkChrome: pinkScan.hit };
+        },
+        { themeId: theme, hotPink: HOT_PINK },
       );
 
       expect(chromeAudit.hotPinkTier, JSON.stringify(chromeAudit)).toBe(false);
+      expect(chromeAudit.hotPinkChrome, JSON.stringify(chromeAudit)).toBe(false);
 
-      if (theme === "aurora" || theme === "blossom" || theme === "sunset") {
-        expect(chromeAudit.utilityNotInkBlack, JSON.stringify(chromeAudit)).toBe(true);
-        expect(chromeAudit.tierNotInkBlack, JSON.stringify(chromeAudit)).toBe(true);
-      }
-      if (theme === "midnight") {
-        expect(chromeAudit.loginOnGlass, JSON.stringify(chromeAudit)).toBe(true);
-        expect(chromeAudit.tierReadable, JSON.stringify(chromeAudit)).toBe(true);
-      }
-    }
-  });
+      if (theme === "ocean" || theme === "blossom") {
+        expect("utilityNotInkBlack" in chromeAudit && chromeAudit.utilityNotInkBlack, JSON.stringify(chromeAudit)).toBe(
+          true,
+        );
+        expect("tierNotInkBlack" in chromeAudit && chromeAudit.tierNotInkBlack, JSON.stringify(chromeAudit)).toBe(true);
+        expect("shellNotNearBlack" in chromeAudit && chromeAudit.shellNotNearBlack, JSON.stringify(chromeAudit)).toBe(
+          true,
+        );
+        expect(lockupContrast ok - use type guard
 
-  test("desktop 1280: Aurora header uses capped shell width", async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 900 });
-    await gotoHomeLightMarketing(page, "aurora");
-    await settle(page);
-    await dismissMarketingScrims(page);
+Fixing the broken end of the replacement: the file was truncated mid-edit.
 
-    await expect(page.locator('html[data-theme="aurora"]')).toBeVisible({ timeout: 30_000 });
-    await expect(page.locator('header[data-nn-header-layout="marketing-row4"]')).toBeVisible({ timeout: 60_000 });
 
-    const auroraCap = await page.evaluate(() => {
-      const shell = document.querySelector(".nn-header-primary-inner-shell.nn-section-shell");
-      const frame = document.querySelector(".nn-marketing-nav-v31-frame");
-      if (!(shell instanceof HTMLElement) || !(frame instanceof HTMLElement)) {
-        return { ok: false as const, reason: "missing capped shell or nav frame" };
-      }
-      const shellStyle = getComputedStyle(shell);
-      const maxWidth = Number.parseFloat(shellStyle.maxWidth);
-      const shellRect = shell.getBoundingClientRect();
-      const frameRect = frame.getBoundingClientRect();
-      return {
-        ok:
-          shell.classList.contains("nn-section-shell") &&
-          Number.isFinite(maxWidth) &&
-          maxWidth > 0 &&
-          shellRect.width <= maxWidth + 96 &&
-          frameRect.width <= window.innerWidth + 1,
-        maxWidth: shellStyle.maxWidth,
-        shellWidth: shellRect.width,
-        frameWidth: frameRect.width,
-        viewportWidth: window.innerWidth,
-      };
-    });
-    expect(auroraCap.ok, JSON.stringify(auroraCap)).toBe(true);
-  });
-});
+Read

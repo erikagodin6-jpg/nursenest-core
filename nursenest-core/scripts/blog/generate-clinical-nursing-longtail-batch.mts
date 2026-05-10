@@ -54,6 +54,8 @@ const commonRefs = {
     "American Heart Association/American Stroke Association. (2026). 2026 guideline for the early management of patients with acute ischemic stroke. https://www.stroke.org/en/about-stroke/types-of-stroke/ischemic-stroke-clots/ais-top-things-to-know",
   ich:
     "Greenberg, S. M., Ziai, W. C., Cordonnier, C., Dowlatshahi, D., Francis, B., Goldstein, J. N., Hemphill, J. C., Johnson, R., Keigher, K. M., Mack, W. J., Mocco, J., Newton, E. J., Ruff, I. M., Sansing, L. H., Schulman, S., Selim, M. H., Sheth, K. N., Sprigg, N., & Sunnerhagen, K. S. (2022). 2022 guideline for the management of patients with spontaneous intracerebral hemorrhage. Stroke, 53(7), e282-e361. https://doi.org/10.1161/STR.0000000000000407",
+  icp:
+    "Brain Trauma Foundation. (2024). Guidelines for the management of severe traumatic brain injury and intracranial pressure monitoring. https://braintrauma.org/coma/guidelines",
   epilepsy:
     "National Institute for Health and Care Excellence. (2025). Epilepsies in children, young people and adults (NICE guideline NG217). https://www.nice.org.uk/guidance/ng217",
   electrolytes:
@@ -409,7 +411,7 @@ const topics: Topic[] = [
     traps: ["Waiting for Cushing triad before escalating.", "Placing the neck flexed or rotated.", "Suctioning unnecessarily or too long without oxygenation.", "Ignoring fever, pain, agitation, or CO2 retention as ICP stressors."],
     links: ["stroke-ischemic-vs-hemorrhagic-nursing-care", "seizure-disorders-treatment-nursing-care", "hyponatremia-symptoms-causes-nursing-priorities", "respiratory-acidosis-vs-respiratory-alkalosis"],
     faq: [["What is the earliest ICP clue?", "A change in level of consciousness is often the most important early clue."], ["Is Cushing triad early?", "No. It is a late and dangerous sign."], ["Why keep the head midline?", "Midline positioning supports venous drainage from the brain."]],
-    refs: [commonRefs.ich, commonRefs.stroke],
+    refs: [commonRefs.icp],
   },
   {
     slug: "seizure-disorders-treatment-nursing-care",
@@ -427,7 +429,7 @@ const topics: Topic[] = [
     traps: ["Putting an object in the patient's mouth.", "Restraining limbs.", "Leaving the patient alone after convulsions stop.", "Treating every brief focal event as less important without assessing awareness and recurrence."],
     links: ["hyponatremia-symptoms-causes-nursing-priorities", "hypocalcemia-vs-hypercalcemia-nclex-guide", "increased-intracranial-pressure-nursing-priorities", "stroke-ischemic-vs-hemorrhagic-nursing-care"],
     faq: [["What should the nurse do first during a seizure?", "Protect the patient from injury and maintain airway safety while timing the event."], ["Should anything be placed in the mouth?", "No. Nothing should be forced into the mouth during a seizure."], ["When is it an emergency?", "Prolonged seizure activity or repeated seizures without recovery require urgent treatment."]],
-    refs: [commonRefs.epilepsy, commonRefs.stroke],
+    refs: [commonRefs.epilepsy],
   },
 ];
 

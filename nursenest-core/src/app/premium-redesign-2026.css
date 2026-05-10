@@ -1062,52 +1062,7 @@
     radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 11%, transparent), transparent 60%);
 }
 
-/* Aurora — premium nav rhythm (scoped): airy gaps, full-width bands unchanged */
-@media (min-width: 1024px) {
-  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
-    column-gap: clamp(1.35rem, 2.6vw, 2.35rem);
-    padding-block: 0.55rem;
-    min-height: 3.85rem;
-  }
-
-  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > .nav {
-    width: min(100%, 60rem);
-    max-width: min(100%, 60rem);
-    gap: clamp(0.55rem, 1.15vw, 1.05rem);
-    padding-inline: clamp(1rem, 2.2vw, 2rem);
-  }
-
-  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > .nn-header-brand-cluster {
-    column-gap: clamp(0.85rem, 1.6vw, 1.5rem);
-    padding-inline-end: clamp(0.25rem, 0.8vw, 0.65rem);
-  }
-
-  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster {
-    column-gap: clamp(0.55rem, 1vw, 0.95rem);
-    row-gap: 0.5rem;
-  }
-
-  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
-    min-height: 44px;
-    padding-inline: clamp(0.65rem, 1.3vw, 1.1rem);
-  }
-}
-
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner {
-  column-gap: clamp(0.45rem, 1.1vw, 0.9rem);
-  row-gap: 0.35rem;
-}
-
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-bar-a {
-  gap: 0.65rem;
-  padding-inline: clamp(0.4rem, 1.1vw, 0.85rem);
-}
-
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
-:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
-  padding-inline: clamp(0.65rem, 1.2vw, 1rem);
-  min-height: 36px;
-}
+/* Blossom / Aurora: marketing-row4 geometry matches Ocean — token-only nav pill colors below. */
 
 /* Aurora nav pills — rose/violet/sky/mint wash vs sky-only chips (still token-driven) */
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {

@@ -934,6 +934,310 @@ const CARDS: Card[] = [
     ]),
     references: [REFS.serotoninNice, REFS.ashp, REFS.fda],
   },
+  {
+    slug: "antipsychotic-side-effects-pharmacy-clinical-guide",
+    title: "Antipsychotic Side Effects Explained: EPS, Metabolic, and QT Risks for Pharmacy Exams",
+    excerpt:
+      "D2 antagonism extrapyramidal symptoms, prolactin elevation, anticholinergic burden, metabolic syndrome monitoring, and QT prolongation with ziprasidone-like teaching anchors.",
+    seoTitle: "Antipsychotic side effects pharmacy guide | NurseNest",
+    seoDescription:
+      "First versus second generation antipsychotic adverse effect profiles, monitoring labs, tardive dyskinesia screening, and exam counseling for pharmacy students.",
+    tags: "Antipsychotics, Psychiatry, Pharmacology, Pharmacy exams",
+    classLabel: "Antipsychotic medications",
+    moaCore:
+      "Antipsychotics antagonize dopamine D2 receptors in mesolimbic pathways to reduce positive psychotic symptoms while also affecting nigrostriatal pathways (EPS), tuberoinfundibular prolactin effects, and cortical circuits tied to cognition and negative symptoms depending on agent.",
+    useSummary:
+      "Schizophrenia spectrum disorders, bipolar mania stabilization, adjunct major depression for some second-generation agents, and antiemetic dopamine antagonist crossovers appear in side-effect teaching even when not primary psychiatry.",
+    avoidSummary:
+      "Lewy body dementia antipsychotic sensitivity teaching, prolonged QT with multiple risk factors without monitoring, and seizure threshold lowering contexts with clozapine teaching.",
+    adverseSummary:
+      "Acute dystonia, akathisia, parkinsonism, tardive dyskinesia, hyperprolactinemia, metabolic weight gain and dyslipidemia, somnolence, orthostasis, anticholinergic dry mouth and constipation, and agranulocytosis with clozapine REMS.",
+    ddiSummary:
+      "CYP3A4 and 1A2 inducers or inhibitors change clozapine and olanzapine levels; QT prolonging stacks; anticholinergic burden with tricyclics in geriatrics.",
+    monitorSummary:
+      "AIMS exams for tardive dyskinesia where programs exist, fasting glucose and lipids for metabolic monitoring, prolactin if symptoms, ECG baseline for QT-risk agents, ANC for clozapine per REMS.",
+    counselSummary:
+      "Do not stop suddenly after chronic therapy without prescriber; report tongue thrusting, pill rolling tremor, fever with rigidity, or sore throat with clozapine.",
+    specialSummary:
+      "Geriatrics: stroke mortality boxed warning context for dementia-related psychosis teaching; pediatrics uses lower doses with growth monitoring; pregnancy risk categories require specialist input.",
+    examSummary:
+      "Neuroleptic malignant syndrome versus serotonin syndrome distractors using rigidity and CK; prioritize cooling and ICU pathways in NMS stems.",
+    memorySummary:
+      "High potency first gen hits EPS; many second gens hit metabolic—match the side effect to the receptor and off-target pharmacology profile.",
+    faq: faq4("Antipsychotic medications", [
+      "NMS with hyperthermia and rigidity; also severe neutropenia on clozapine.",
+      "AIMS or movement checks; metabolic panels after starting olanzapine-like agents.",
+      "Patients should report involuntary facial movements early—TD may be partially reversible if caught.",
+      "No; clozapine REMS is a legal distribution program learners must respect.",
+    ]),
+    references: [REFS.ashp, REFS.fda],
+  },
+  {
+    slug: "serotonin-syndrome-overview-pharmacy-exams",
+    title: "Serotonin Syndrome Overview: Recognition and Exam Prioritization for Pharmacy Students",
+    excerpt:
+      "Serotonergic toxidrome triad of mental status change, autonomic instability, and neuromuscular hyperactivity including clonus; common precipitants; supportive care themes; differentiation from NMS.",
+    seoTitle: "Serotonin syndrome overview pharmacy | NurseNest",
+    seoDescription:
+      "Serotonin syndrome mechanisms, Hunter criteria teaching, precipitating drug combinations, and emergency management overview for licensing exams.",
+    tags: "Serotonin syndrome, Pharmacology, Toxicology, Pharmacy exams",
+    classLabel: "Serotonin syndrome",
+    moaCore:
+      "Excessive serotonergic agonism at central and peripheral 5-HT receptors produces a spectrum from mild agitation and tremor to life-threatening hyperthermia, clonus, and autonomic storms when combinations overwhelm clearance and reuptake inhibition.",
+    useSummary:
+      "Educational focus: preventing combinations of MAOIs, SSRIs, SNRIs, triptans, linezolid, methylene blue, dextromethorphan, and MDMA in exam polypharmacy stems.",
+    avoidSummary:
+      "Do not add serotonergic agents to stable regimens without interaction review; avoid abrupt high-dose cross-titration errors in teaching scenarios.",
+    adverseSummary:
+      "Hyperreflexia and inducible clonus, hyperthermia, diarrhea, diaphoresis, mydriasis, and potential rhabdomyolysis in severe cases.",
+    ddiSummary:
+      "Classic exam stacks: SSRI plus MAOI; SSRI plus tramadol; SNRI plus triptan with additional serotonergic boosters—always read medication lists holistically.",
+    monitorSummary:
+      "Vital signs, mental status, clonus exam, CK, renal function with rhabdomyolysis, and continuous observation until improvement after stopping offenders.",
+    counselSummary:
+      "Patients should carry updated medication lists including OTC cough suppressants and herbal serotonergic supplements like St John’s wort when relevant.",
+    specialSummary:
+      "Pediatric accidental ingestions appear in poison center teaching; geriatric polypharmacy raises risk; renal failure prolongs serotonergic drug half-lives.",
+    examSummary:
+      "Differentiate NMS with lead-pipe rigidity and slower onset from serotonin syndrome with clonus and GI hyperactivity in many teaching comparisons.",
+    memorySummary:
+      "Clonus plus serotonergic stack equals syndrome until proven otherwise—cool, stop drugs, support ABCs.",
+    faq: faq4("Serotonin syndrome", [
+      "Hyperthermia and autonomic instability with neuromuscular excitation—stabilize ABCs and stop serotonergic agents.",
+      "Frequent vitals and neuro checks until sustained improvement in ED observation.",
+      "Teach patients to avoid adding OTC dextromethorphan or St John’s wort without pharmacist review.",
+      "No; cyproheptadine use is institution-specific in advanced care.",
+    ]),
+    references: [REFS.serotoninNice, REFS.ashp],
+  },
+  {
+    slug: "corticosteroids-adverse-effects-pharmacy-review",
+    title: "Corticosteroid Adverse Effects: HPA Axis, Metabolic, and Infection Risks for Pharmacy Exams",
+    excerpt:
+      "Glucocorticoid receptor genomic effects, hyperglycemia, hypertension, osteoporosis, mood changes, adrenal suppression with chronic use, and perioperative stress-dose teaching at overview depth.",
+    seoTitle: "Corticosteroid adverse effects pharmacy | NurseNest",
+    seoDescription:
+      "Steroid side effect clusters, bone protection strategies in curricula, infection vigilance, and taper concepts for pharmacy licensing review.",
+    tags: "Corticosteroids, Endocrine, Pharmacology, Pharmacy exams",
+    classLabel: "Systemic corticosteroids",
+    moaCore:
+      "Glucocorticoids bind cytosolic receptors and regulate gene transcription of anti-inflammatory proteins while suppressing pro-inflammatory mediators; mineralocorticoid activity varies by agent potency and dose.",
+    useSummary:
+      "Asthma exacerbations, COPD exacerbations, autoimmune flares, adrenal insufficiency replacement, cancer supportive care, and transplant immunosuppression in advanced curricula.",
+    avoidSummary:
+      "Uncontrolled infection without antimicrobial plan, live vaccine timing conflicts during high doses, and abrupt cessation after chronic suppression without taper teaching.",
+    adverseSummary:
+      "Hyperglycemia, hypertension, weight gain, mood lability, insomnia, cataracts, avascular necrosis, skin thinning, osteoporosis, adrenal suppression, and infection reactivation.",
+    ddiSummary:
+      "NSAIDs increase GI bleed risk; CYP3A4 inducers lower steroid exposure; oral hypoglycemic needs rise with steroid-induced hyperglycemia.",
+    monitorSummary:
+      "Glucose, blood pressure, bone density when indicated, infection signs, mood checks, eye exams with chronic use, and morning cortisol if adrenal suppression suspected.",
+    counselSummary:
+      "Never stop long-term steroids suddenly without medical guidance; take with food if gastric upset; report fever, confusion, or black stools.",
+    specialSummary:
+      "Pediatrics: growth suppression; geriatrics: fractures and glucose spikes; pregnancy: cleft lip risk in first trimester high-dose teaching items—specialist led.",
+    examSummary:
+      "Stress-dose hydrocortisone perioperatively for chronic steroid users in classic stems; match infection vigilance teaching to dose and duration.",
+    memorySummary:
+      "Steroids sweeten the blood, stiffen vessels, hollow the bones, and quiet the adrenal glands if used too long.",
+    faq: faq4("Systemic corticosteroids", [
+      "Adrenal crisis risk with abrupt stop after chronic therapy; infection with high-dose bursts.",
+      "Glucose and blood pressure during prednisone tapers and dose changes.",
+      "Patients should carry steroid cards listing daily dose and duration for emergencies.",
+      "No; stress-dose protocols are anesthesia and endocrine collaborative.",
+    ]),
+    references: [REFS.glucocorticoidBsir, REFS.fda, REFS.ashp],
+  },
+  {
+    slug: "asthma-medications-pharmacology-explained",
+    title: "Asthma Medications Explained: Relievers, Controllers, and Biologics Pathways for Pharmacy Students",
+    excerpt:
+      "SABA rescue, inhaled corticosteroid controllers, LABA combination safety framing, LAMA add-on, leukotriene modifiers, and biologic eligibility themes at overview depth for boards.",
+    seoTitle: "Asthma medications pharmacology | NurseNest",
+    seoDescription:
+      "Asthma drug classes, inhaler technique counseling, step therapy concepts, and safety around LABA monotherapy warnings in exam items.",
+    tags: "Asthma, Pulmonary, Pharmacology, Pharmacy exams",
+    classLabel: "Asthma pharmacotherapy",
+    moaCore:
+      "Short-acting beta-2 agonists relax airway smooth muscle rapidly; inhaled corticosteroids reduce airway inflammation; long-acting bronchodilators maintain dilation; leukotriene antagonists block inflammatory mediators downstream of the 5-lipoxygenase pathway in montelukast teaching.",
+    useSummary:
+      "Stepwise control per GINA-style teaching: ICS backbone, add LABA only with ICS combination in persistent asthma, add-on tiotropium in selected adults, biologics for severe eosinophilic or allergic phenotypes in advanced curricula.",
+    avoidSummary:
+      "LABA monotherapy without ICS in asthma teaching due to mortality signal historical context; over-reliance on SABA without ICS step-up in recurrent exacerbation vignettes.",
+    adverseSummary:
+      "Tremor and tachycardia with SABA, oral candidiasis with ICS, pneumonia risk discussions with high-dose ICS in some populations, neuropsychiatric montelukast warnings in labeling teaching.",
+    ddiSummary:
+      "Strong CYP interactions less central than pulmonary interactions; beta blockers may antagonize SABA in reactive airway stems—use cardioselective agents when necessary per cardiology.",
+    monitorSummary:
+      "Peak flow or spirometry trends, exacerbation frequency, inhaler technique checks, growth in children on ICS, oral thrush inspection, and eosinophil counts for biologic eligibility.",
+    counselSummary:
+      "Rinse mouth after ICS; demonstrate spacer use; distinguish rescue inhaler from daily controller physically and with color coding if possible.",
+    specialSummary:
+      "Pediatrics emphasizes growth and technique; pregnancy favors ICS controllers with good asthma control benefits; elderly may have arthritis impairing inhaler activation.",
+    examSummary:
+      "Prioritize spacer teaching when poor technique causes failure; escalate ICS before chronic high SABA use in modern quality teaching stems.",
+    memorySummary:
+      "ICS is the anti-inflammatory boss; LABA is the wingman that never flies solo in asthma.",
+    faq: faq4("Asthma pharmacotherapy", [
+      "Status asthmaticus with silent chest and fatigue—emergency pathway not outpatient refill.",
+      "Peak flow trends and exacerbation counts when stepping therapy.",
+      "Teach patients to seek help when rescue use exceeds guideline thresholds.",
+      "No; biologic choice requires phenotyping and specialist criteria.",
+    ]),
+    references: [REFS.gina2024, REFS.fda],
+  },
+  {
+    slug: "copd-inhalers-comparison-pharmacy-guide",
+    title: "COPD Inhalers Comparison: LAMA, LABA, ICS, and Triple Therapy for Pharmacy Licensing",
+    excerpt:
+      "Bronchodilator classes, inhaler device types, exacerbation reduction claims in teaching summaries, pneumonia risk discussions with ICS in COPD, and oxygen therapy reminders.",
+    seoTitle: "COPD inhalers pharmacy comparison | NurseNest",
+    seoDescription:
+      "Compare LAMA and LABA mechanisms, combination products, triple therapy indications in GOLD teaching, and device counseling for pharmacy exams.",
+    tags: "COPD, Pulmonary, Pharmacology, Pharmacy exams",
+    classLabel: "COPD inhaler therapies",
+    moaCore:
+      "LAMAs block muscarinic receptors to reduce acetylcholine-mediated bronchoconstriction; LABAs stimulate beta-2 receptors for prolonged dilation; ICS decreases airway inflammation and exacerbations in selected eosinophil-guided COPD teaching though pneumonia risk is debated in curricula.",
+    useSummary:
+      "GOLD-style stepwise bronchodilator escalation, rescue SABA or SAMA as needed, combination LAMA/LABA first-line long-acting bronchodilation in many symptomatic patients, add ICS in frequent exacerbators with higher blood eosinophils per teaching thresholds.",
+    avoidSummary:
+      "ICS in recurrent pneumonia without risk-benefit re-evaluation; continuing triple therapy when symptoms and exacerbations do not warrant complexity; device mismatch without retraining.",
+    adverseSummary:
+      "Dry mouth with LAMA, tremor with LABA, hoarseness and thrush with ICS, urinary retention in BPH with antimuscarinics, and paradoxical bronchospasm rare.",
+    ddiSummary:
+      "Anticholinergic burden stacking with oral agents; beta agonist tachycardia with other stimulants; eye exposure teaching for ipratropium contact lens irritation trivia.",
+    monitorSummary:
+      "Exacerbation frequency, inhaler refill intervals as adherence proxy, eosinophils when considering ICS, symptom scores, and oxygen saturation in chronic hypoxemia follow-up.",
+    counselSummary:
+      "Demonstrate priming new devices; teach sequential puff technique for MDIs with spacer; dry rinse mouth after ICS-containing combos in COPD using ICS.",
+    specialSummary:
+      "Geriatric arthritis favors breath-actuated devices; severe renal impairment affects some nebulized drug choices in advanced items; cognitive impairment needs caregiver training.",
+    examSummary:
+      "Triple therapy exacerbation reduction versus pneumonia risk tradeoff stems; prioritize smoking cessation as non-pharmacologic cornerstone in every COPD item.",
+    memorySummary:
+      "LAMA dries and opens; LABA shakes and opens; ICS calms inflammation when eosinophils say yes.",
+    faq: faq4("COPD inhaler therapies", [
+      "Acute hypercapnic respiratory failure—bilevel and hospital pathway, not only inhaler tweak.",
+      "Exacerbation counts and inhaler technique at each visit.",
+      "Patients should bring devices to appointments for technique verification—not photos of boxes.",
+      "No; oxygen qualification requires formal testing.",
+    ]),
+    references: [REFS.globalStrategyCopd, REFS.fda],
+  },
+  {
+    slug: "proton-pump-inhibitors-pharmacology-explained",
+    title: "Proton Pump Inhibitors Explained: Acid Suppression, CYP Interactions, and Deprescribing",
+    excerpt:
+      "Irreversible H+/K+ ATPase inhibition, GERD and PUD indications, clopidogrel interaction teaching evolution, magnesium deficiency, C difficile risk discussions, and long-term bone considerations.",
+    seoTitle: "Proton pump inhibitors pharmacology | NurseNest",
+    seoDescription:
+      "PPI mechanisms, timing before meals, major interactions, B12 and magnesium monitoring, and deprescribing criteria for pharmacy students.",
+    tags: "PPI, Gastroenterology, Pharmacology, Pharmacy exams",
+    classLabel: "Proton pump inhibitors",
+    moaCore:
+      "PPIs accumulate in the acidic parietal cell canaliculus and covalently bind the hydrogen-potassium ATPase proton pump, irreversibly blocking acid secretion until new enzyme synthesis restores capacity over days.",
+    useSummary:
+      "GERD, erosive esophagitis, H pylori eradication regimens, NSAID ulcer prophylaxis in selected patients, and hypersecretory states like Zollinger-Ellison in advanced teaching.",
+    avoidSummary:
+      "Long-term unnecessary therapy without indication review; use with rilpivirine and some oral antiretrovirals that need acid for absorption per labeling; acute interstitial nephritis rare teaching.",
+    adverseSummary:
+      "Headache, diarrhea, C difficile risk discussions, hypomagnesemia with prolonged use, B12 deficiency theoretical risk, bone fracture associations in epidemiologic teaching, and drug interactions via CYP.",
+    ddiSummary:
+      "Clopidogrel and omeprazole esomeprazole interaction debates appear historically—follow current FDA labeling snapshots; diazepam phenytoin levels may shift with some PPIs via CYP.",
+    monitorSummary:
+      "Symptom control endpoints, long-term mineral labs when indicated, bone health strategies when steroids co-administered, and medication reconciliation for OTC duplication.",
+    counselSummary:
+      "Take delayed-release products before meals as labeled; do not combine with redundant H2 blockers without reason; discuss planned duration for uncomplicated GERD.",
+    specialSummary:
+      "Pediatric formulations exist for selected agents; geriatrics deprescribe after fall or fracture if acid suppression no longer needed; pregnancy uses omeprazole teaching with specialist input.",
+    examSummary:
+      "OTC PPI overuse vignettes; magnesium replacement before blaming unrelated symptoms; H pylori quadruple therapy PPI anchor role.",
+    memorySummary:
+      "Irreversible pump burn—acid stays down until the cell rebuilds new pumps days later.",
+    faq: faq4("Proton pump inhibitors", [
+      "Severe hypomagnesemia with arrhythmia in prolonged therapy teaching stems.",
+      "Symptom recurrence after stopping—evaluate adherence versus need for maintenance.",
+      "Teach patients to disclose all OTC acid reducers at anticoagulant visits.",
+      "No; H pylori therapy requires antibiotic stewardship bundles.",
+    ]),
+    references: [REFS.ppiFda, REFS.fda, REFS.ashp],
+  },
+  {
+    slug: "statins-mechanism-monitoring-pharmacy-guide",
+    title: "Statins Mechanism and Monitoring: HMG-CoA Reductase Inhibition for Pharmacy Licensing",
+    excerpt:
+      "Cholesterol synthesis suppression, LDL lowering magnitude, hepatotoxicity monitoring teaching, myopathy and CK, drug interactions via CYP3A4, and diabetes risk discussions.",
+    seoTitle: "Statins mechanism and monitoring | NurseNest",
+    seoDescription:
+      "Statin pharmacology, intensity tiers, SAMS teaching, contraindications in pregnancy, and interaction alerts for pharmacy board review.",
+    tags: "Statins, Lipids, Pharmacology, Pharmacy exams",
+    classLabel: "HMG-CoA reductase inhibitors (statins)",
+    moaCore:
+      "Statins competitively inhibit HMG-CoA reductase, the rate-limiting step of hepatic cholesterol synthesis, upregulating LDL receptors and lowering circulating LDL particles while also providing plaque stabilization pleiotropy themes in cardiology teaching.",
+    useSummary:
+      "ASCVD secondary prevention, primary prevention when 10-year risk crosses guideline thresholds, familial hypercholesterolemia adjuncts, and post-ACS high-intensity regimens when tolerated.",
+    avoidSummary:
+      "Pregnancy and lactation; active liver disease with unexplained transaminase elevations; concomitant strong CYP3A4 inhibitors with simvastatin or lovastatin in classic exam bans.",
+    adverseSummary:
+      "Myalgia without CK rise, rhabdomyolysis rare catastrophic, transaminitis, new-onset diabetes small risk discussion, cognitive complaints patient-reported though population data mixed.",
+    ddiSummary:
+      "Gemfibrozil with statins raises myopathy risk; amiodarone with simvastatin dose caps; azole antifungals and macrolides with atorvastatin need dose limits per labeling tables.",
+    monitorSummary:
+      "Baseline hepatic panel, lipid panel 6–12 weeks after start or dose change, CK if symptomatic myopathy, A1c surveillance in diabetes teaching integration, patient-reported muscle symptoms always.",
+    counselSummary:
+      "Report dark urine, severe muscle pain, or jaundice immediately; take pravastatin or rosuvastatin timing per label less meal-dependent than lovastatin with food teaching.",
+    specialSummary:
+      "Asian ancestry may need lower rosuvastatin starting doses in labeling; elderly start moderate intensity unless ASCVD demands high intensity with tolerance checks; dialysis alters some drug selections in advanced nephrology teaching.",
+    examSummary:
+      "Rhabdomyolysis with fibrate plus statin combo stems; grapefruit with atorvastatin simvastatin CYP3A4 substrates; pregnancy contraindication always.",
+    memorySummary:
+      "Pravastatin is hydrophilic and less CYP drama; simvastatin 80 mg is basically an exam villain except rare tolerators.",
+    faq: faq4("HMG-CoA reductase inhibitors (statins)", [
+      "Rhabdomyolysis with acute kidney injury from myoglobinuria in severe cases.",
+      "Lipids after dose changes; CK only if symptomatic in many modern pathways unless special populations.",
+      "Teach patients not to start grapefruit-heavy diets with atorvastatin without review.",
+      "No; LDL targets follow ACC/AHA risk-based approach in US curricula.",
+    ]),
+    references: [REFS.statinsAcc, REFS.fda],
+  },
+  {
+    slug: "pharmacokinetics-vs-pharmacodynamics-clinical-guide",
+    title: "Pharmacokinetics vs Pharmacodynamics: Clinical Integration for Pharmacy Students",
+    excerpt:
+      "ADME versus receptor occupancy, half-life and steady state, clearance routes, EC50 and Emax teaching bridges, therapeutic windows, and how organ failure shifts both PK and PD endpoints.",
+    seoTitle: "Pharmacokinetics vs pharmacodynamics | NurseNest",
+    seoDescription:
+      "Define PK and PD, interpret concentration-time curves, explain variability, and answer licensing exam questions on effect versus exposure.",
+    tags: "Pharmacokinetics, Pharmacodynamics, Pharmacy exams, Clinical pharmacology",
+    classLabel: "Pharmacokinetics compared with pharmacodynamics",
+    moaCore:
+      "Pharmacokinetics describes what the body does to the drug—absorption, distribution, metabolism, and excretion producing concentration-time profiles—while pharmacodynamics describes what the drug does to the body through receptor binding, signal transduction, and physiologic response magnitude and timing.",
+    useSummary:
+      "Dose selection, interval selection, route selection, therapeutic drug monitoring, individualized medicine in renal and hepatic impairment, and explaining why two patients with the same dose differ in effect.",
+    avoidSummary:
+      "Ignoring PD when TDM is normal yet toxicity occurs from receptor sensitivity changes; ignoring PK when toxicity occurs solely from drug accumulation without dose change.",
+    adverseSummary:
+      "Conceptual adverse teaching: toxicity from excessive PD effect at normal concentrations when receptors are sensitized versus toxicity from excessive concentrations at normal receptor sensitivity.",
+    ddiSummary:
+      "Interactions classified as PK shifts (enzyme inhibition changing AUC) versus PD shifts (additive QT prolongation without changing parent drug concentration much) appear as separate answer families.",
+    monitorSummary:
+      "Drug levels when narrow index, clinical effect markers when wide index, organ function labs driving clearance equations in exam math items, and protein binding changes in uremia teaching.",
+    counselSummary:
+      "Explain to patients that ‘starting low and going slow’ is often PK-driven in geriatrics while effect targets like INR are PD bridges monitored clinically.",
+    specialSummary:
+      "Pediatrics alters volume of distribution and maturing enzyme systems; pregnancy alters plasma volume and hepatic enzyme induction patterns; obesity alters Vd for lipophilic drugs.",
+    examSummary:
+      "Half-life five-rule steady state questions; loading dose versus maintenance dose separation; competitive antagonist surmountable versus non-competitive teaching distinctions.",
+    memorySummary:
+      "PK is the journey of milligrams through the body; PD is the handshake with receptors that decides the clinical punch.",
+    faq: faq4("Pharmacokinetics compared with pharmacodynamics", [
+      "Toxicity from accumulation versus toxicity from synergistic PD without concentration change—pick the mechanism the stem measures.",
+      "Levels for vancomycin digoxin lithium; clinical endpoints for many antihypertensives.",
+      "Patients benefit when counselors explain delayed effect of some drugs versus immediate effect of others—adherence improves.",
+      "No; this framework supports reasoning, not bedside dosing math alone.",
+    ]),
+    references: [REFS.statinsAcc, REFS.ashp, REFS.fda],
+  },
 ];
 
 function main(): void {

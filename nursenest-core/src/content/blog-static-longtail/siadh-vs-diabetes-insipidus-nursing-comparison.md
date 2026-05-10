@@ -6,7 +6,7 @@ category: Endocrine Disorders
 tags: SIADH, Diabetes Insipidus, Electrolytes, Endocrine, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: SIADH vs Diabetes Insipidus for Nursing Students
 seoDescription: Compare SIADH and diabetes insipidus with sodium trends, urine concentration, fluid status, nursing priorities, and NCLEX-RN or REx-PN exam traps.
 canonicalUrl: /blog/siadh-vs-diabetes-insipidus-nursing-comparison

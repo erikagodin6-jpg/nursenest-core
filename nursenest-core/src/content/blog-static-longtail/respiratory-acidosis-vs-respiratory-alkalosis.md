@@ -6,7 +6,7 @@ category: Acid-Base Balance
 tags: ABG, Respiratory Acidosis, Respiratory Alkalosis, COPD, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Respiratory Acidosis vs Alkalosis ABG Nursing Guide
 seoDescription: Compare respiratory acidosis and alkalosis by CO2 direction, causes, symptoms, compensation, and nursing priorities for exams.
 canonicalUrl: /blog/respiratory-acidosis-vs-respiratory-alkalosis

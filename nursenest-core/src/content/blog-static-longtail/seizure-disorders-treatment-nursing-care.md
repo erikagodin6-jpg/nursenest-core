@@ -6,7 +6,7 @@ category: Neurologic
 tags: Seizures, Epilepsy, Neurologic, Safety, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Seizure Disorders Nursing Care for NCLEX and REx-PN
 seoDescription: Review seizure types, safety interventions, medication adherence, status epilepticus priorities, postictal care, and nursing exam traps.
 canonicalUrl: /blog/seizure-disorders-treatment-nursing-care
@@ -74,6 +74,9 @@ disclaimer: This article supports educational exam preparation and clinical reas
 <h2>Priority review before practice questions</h2>
 <p>Before moving on, name the one assessment finding you would not ignore, the one complication you are trying to prevent, and the one patient-teaching point that would reduce recurrence or delayed reporting. This short review keeps the article connected to clinical judgment instead of passive reading.</p>
 
+<h2>Study-loop prompt</h2>
+<p>To make the review active, write one sentence that links the mechanism to the priority assessment, then answer five practice questions on the same topic. If the missed answers cluster around the same cue, return to that mechanism and restate the nursing action in your own words before continuing.</p>
+
 <h2>Suggested internal links</h2>
 <ul>
 <li><a href="/blog/hyponatremia-symptoms-causes-nursing-priorities">Hyponatremia: Symptoms, Causes, and Nursing Priorities for NCLEX</a></li>
@@ -96,4 +99,3 @@ disclaimer: This article supports educational exam preparation and clinical reas
 
 <h2>APA-7 References</h2>
 <p>National Institute for Health and Care Excellence. (2025). Epilepsies in children, young people and adults (NICE guideline NG217). https://www.nice.org.uk/guidance/ng217</p>
-<p>American Heart Association/American Stroke Association. (2026). 2026 guideline for the early management of patients with acute ischemic stroke. https://www.stroke.org/en/about-stroke/types-of-stroke/ischemic-stroke-clots/ais-top-things-to-know</p>

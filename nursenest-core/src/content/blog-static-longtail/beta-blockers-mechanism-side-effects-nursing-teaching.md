@@ -6,7 +6,7 @@ category: Pharmacology
 tags: Beta Blockers, Pharmacology, Cardiovascular, Patient Teaching, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: false
+draft: true
 seoTitle: Beta Blockers Nursing Teaching and Side Effects
 seoDescription: Review beta blocker mechanism, vital sign checks, side effects, asthma and diabetes cautions, and patient teaching for nursing exams.
 canonicalUrl: /blog/beta-blockers-mechanism-side-effects-nursing-teaching
