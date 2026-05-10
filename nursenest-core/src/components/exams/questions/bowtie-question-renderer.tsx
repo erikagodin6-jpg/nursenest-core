@@ -107,7 +107,7 @@ export function BowtieQuestionRenderer({
   );
 
   return (
-    <div className="bowtie-ngn bowtie-ngn--premium font-sans">
+    <div className="bowtie-ngn bowtie-ngn--premium font-sans" data-nn-qa-exam-format="bowtie">
       <div className="flex flex-col gap-6 lg:gap-8">
         {showScenarioBanner ? <div className="order-1">{scenarioBlock}</div> : null}
 

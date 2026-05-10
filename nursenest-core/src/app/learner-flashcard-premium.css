@@ -111,3 +111,399 @@ html[data-theme="midnight-indigo"] .nn-active-flashcard-session .nn-premium-flas
 html[data-theme="deep-twilight"] .nn-active-flashcard-session .nn-premium-flashcard-session-header {
   background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
 }
+
+/* ── Premium Flashcard Convergence 2026 — ecosystem-wide study polish ───────
+   Presentation only. Keeps routes, progress persistence, local pins, and
+   adaptive weak-area logic unchanged while aligning flashcards with hubs,
+   dashboards, report cards, CAT, and practice exams. */
+
+.nn-flashcards-hub-premium,
+.nn-flashcard-study-premium,
+.nn-active-flashcard-session {
+  --nn-flashcard-accent-primary: var(--nn-module-flashcards, var(--semantic-chart-5));
+  --nn-flashcard-accent-recovery: var(--nn-module-weak-areas, var(--semantic-warning));
+  --nn-flashcard-accent-ecg: var(--nn-module-ecg, var(--semantic-chart-8));
+  --nn-flashcard-accent-labs: var(--nn-module-labs, var(--semantic-chart-7));
+  --nn-flashcard-accent-confidence: var(--semantic-chart-3);
+  --nn-flashcard-radius-card: 1.35rem;
+  --nn-flashcard-radius-control: 0.95rem;
+}
+
+html[data-theme="ocean"] .nn-flashcards-hub-premium,
+html[data-theme="ocean"] .nn-flashcard-study-premium,
+html[data-theme="blossom"] .nn-flashcards-hub-premium,
+html[data-theme="blossom"] .nn-flashcard-study-premium,
+html[data-theme="midnight"] .nn-flashcards-hub-premium,
+html[data-theme="midnight"] .nn-flashcard-study-premium,
+html[data-theme="sunset"] .nn-flashcards-hub-premium,
+html[data-theme="sunset"] .nn-flashcard-study-premium,
+html[data-theme="aurora"] .nn-flashcards-hub-premium,
+html[data-theme="aurora"] .nn-flashcard-study-premium {
+  --nn-flashcard-theme-covered: 1;
+}
+
+.nn-flashcards-hub-premium[data-nn-premium-flashcard-convergence] {
+  position: relative;
+}
+
+.nn-flashcards-hub-premium[data-nn-premium-flashcard-convergence]::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -1.5rem -0.75rem auto;
+  height: min(28rem, 45vh);
+  border-radius: 9999px;
+  background:
+    radial-gradient(
+      55% 70% at 12% 0%,
+      color-mix(in srgb, var(--semantic-chart-7) 13%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      45% 62% at 92% 12%,
+      color-mix(in srgb, var(--semantic-chart-8) 10%, transparent),
+      transparent 66%
+    );
+  opacity: 0.76;
+  z-index: -1;
+}
+
+.nn-flashcards-hub-hero,
+.nn-flashcards-deck-library-surface,
+.nn-flashcards-deck-match-band,
+.nn-flashcards-recovery-filters {
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-flashcards-hub-hero::before,
+.nn-flashcards-deck-library-surface::before,
+.nn-flashcards-deck-match-band::before,
+.nn-flashcards-recovery-filters::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      520px 180px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-8) 8%, transparent),
+      transparent 64%
+    ),
+    radial-gradient(
+      440px 150px at 0% 0%,
+      color-mix(in srgb, var(--semantic-chart-7) 7%, transparent),
+      transparent 68%
+    );
+  opacity: 0.82;
+}
+
+.nn-flashcards-hub-hero > *,
+.nn-flashcards-deck-library-surface > *,
+.nn-flashcards-deck-match-band > *,
+.nn-flashcards-recovery-filters > * {
+  position: relative;
+}
+
+.nn-flashcards-deck-library-surface {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--nn-flashcard-accent-primary) 20%);
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--semantic-surface)),
+      color-mix(in srgb, var(--semantic-panel-lavender) 12%, var(--semantic-surface))
+    );
+}
+
+.nn-flashcards-deck-match-band {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-flashcard-accent-confidence) 18%);
+}
+
+.nn-flashcards-recovery-filters {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--nn-flashcard-accent-recovery) 18%);
+  background: color-mix(in srgb, var(--semantic-panel-warm) 18%, var(--semantic-surface));
+}
+
+.nn-active-flashcard-session[data-nn-premium-flashcard-active-session] {
+  position: relative;
+}
+
+.nn-active-flashcard-session[data-nn-premium-flashcard-active-session]::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -1rem -0.5rem auto;
+  height: 18rem;
+  border-radius: 9999px;
+  background:
+    radial-gradient(
+      56% 70% at 18% 0%,
+      color-mix(in srgb, var(--semantic-chart-7) 12%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      48% 62% at 98% 4%,
+      color-mix(in srgb, var(--semantic-chart-8) 10%, transparent),
+      transparent 64%
+    );
+  opacity: 0.74;
+  z-index: -1;
+}
+
+.nn-active-flashcard-session .nn-premium-flashcard-session-header {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 66%, var(--nn-flashcard-accent-primary) 18%);
+  background:
+    radial-gradient(
+      440px 160px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-8) 8%, transparent),
+      transparent 64%
+    ),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+}
+
+.nn-flashcard-session-layout[data-nn-premium-flashcard-study] {
+  perspective: 1400px;
+}
+
+.nn-flashcard-layered-stack__underlay {
+  transform: translateY(10px) scale(0.985);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--semantic-chart-7) 12%, var(--semantic-surface)),
+      color-mix(in srgb, var(--semantic-chart-8) 9%, var(--semantic-surface))
+    );
+  opacity: 0.78;
+}
+
+.nn-flashcard-hero-surface,
+.nn-premium-flashcard-reveal-panel {
+  border-radius: var(--nn-flashcard-radius-card);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 66%, var(--nn-flashcard-accent-primary) 16%);
+}
+
+.nn-flashcard-hero-surface {
+  background:
+    radial-gradient(
+      540px 210px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-7) 10%, transparent),
+      transparent 64%
+    ),
+    radial-gradient(
+      420px 160px at 0% 100%,
+      color-mix(in srgb, var(--semantic-chart-8) 8%, transparent),
+      transparent 68%
+    ),
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+  transform-style: preserve-3d;
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.nn-flashcard-session-layout[data-nn-revealed="1"] .nn-flashcard-hero-surface {
+  transform: rotateX(1.2deg) translateY(-2px);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 56%, var(--nn-flashcard-accent-confidence) 24%);
+}
+
+.nn-flashcard-chip {
+  min-height: 1.65rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 66%, var(--nn-flashcard-accent-primary) 18%);
+  background: color-mix(in srgb, var(--semantic-panel-muted) 42%, var(--semantic-surface));
+}
+
+.nn-flashcard-chip--mode {
+  background: color-mix(in srgb, var(--nn-flashcard-accent-primary) 12%, var(--semantic-surface));
+  color: color-mix(in srgb, var(--nn-flashcard-accent-primary) 74%, var(--semantic-text-primary));
+}
+
+.nn-flashcard-image-card,
+[data-nn-flashcard-media="image"] {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 56%, var(--nn-flashcard-accent-labs) 26%);
+  background:
+    radial-gradient(
+      420px 150px at 50% 0%,
+      color-mix(in srgb, var(--nn-flashcard-accent-labs) 10%, transparent),
+      transparent 70%
+    ),
+    color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface));
+}
+
+.nn-flashcard-image-card img,
+[data-nn-flashcard-media="image"] img {
+  touch-action: manipulation;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 58%, transparent),
+    var(--semantic-shadow-soft);
+}
+
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button,
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li .flex.w-full {
+  border-radius: var(--nn-flashcard-radius-control);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--nn-flashcard-accent-primary) 16%);
+  background:
+    radial-gradient(
+      280px 90px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-7) 7%, transparent),
+      transparent 66%
+    ),
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+}
+
+.nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button:hover {
+  transform: translateY(-1px);
+}
+
+.nn-premium-flashcard-reveal-panel[data-nn-premium-flashcard-reveal] {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--nn-flashcard-accent-confidence) 20%);
+  background:
+    radial-gradient(
+      520px 180px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-8) 9%, transparent),
+      transparent 66%
+    ),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  animation: nn-flashcard-reveal-lift 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nn-flashcard-reveal-stack--premium > div:nth-of-type(4n + 1) {
+  border-color: color-mix(in srgb, var(--semantic-success) 34%, var(--semantic-border-soft));
+}
+
+.nn-flashcard-reveal-stack--premium > div:nth-of-type(4n + 2) {
+  border-color: color-mix(in srgb, var(--semantic-chart-7) 26%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-7) 8%, var(--semantic-surface));
+}
+
+.nn-flashcard-reveal-stack--premium > div:nth-of-type(4n + 3) {
+  border-color: color-mix(in srgb, var(--semantic-chart-8) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-8) 7%, var(--semantic-surface));
+}
+
+.nn-flashcard-reveal-stack--premium > div:nth-of-type(4n) {
+  border-color: color-mix(in srgb, var(--semantic-warning) 30%, var(--semantic-border-soft));
+}
+
+.nn-flashcard-confidence-controls button,
+.nn-flashcard-bookmark-controls button,
+.nn-premium-flashcard-nav-btn,
+.nn-flashcard-reveal-cta.nn-flashcard-reveal-cta--premium {
+  touch-action: manipulation;
+  transition:
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.nn-flashcard-confidence-controls button:hover,
+.nn-flashcard-bookmark-controls button:hover,
+.nn-premium-flashcard-nav-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+[data-nn-flashcard-rating="incorrect"] {
+  border-color: color-mix(in srgb, var(--semantic-danger) 42%, var(--semantic-border-soft)) !important;
+}
+
+[data-nn-flashcard-rating="unsure"] {
+  border-color: color-mix(in srgb, var(--semantic-warning) 38%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-warning) 9%, var(--semantic-surface)) !important;
+}
+
+[data-nn-flashcard-rating="known"] {
+  border-color: color-mix(in srgb, var(--semantic-success) 42%, var(--semantic-border-soft)) !important;
+}
+
+[data-nn-flashcard-control="star"] {
+  border-color: color-mix(in srgb, var(--semantic-warning) 32%, var(--semantic-border-soft));
+}
+
+[data-nn-flashcard-control="weak"] {
+  border-color: color-mix(in srgb, var(--nn-flashcard-accent-recovery) 32%, var(--semantic-border-soft));
+}
+
+.nn-flashcard-rail-surface,
+.nn-flashcard-rail-tile {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-chart-8) 14%);
+}
+
+.nn-flashcard-rail-surface {
+  background:
+    radial-gradient(
+      360px 130px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-8) 8%, transparent),
+      transparent 68%
+    ),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+}
+
+.nn-premium-flashcard-completion {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 68%, var(--semantic-success) 18%);
+  border-radius: var(--nn-flashcard-radius-card);
+  background:
+    radial-gradient(
+      420px 160px at 50% 0%,
+      color-mix(in srgb, var(--semantic-success) 10%, transparent),
+      transparent 70%
+    ),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@keyframes nn-flashcard-reveal-lift {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.992);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 639px) {
+  .nn-flashcard-session-layout[data-nn-premium-flashcard-study] {
+    gap: 0.9rem;
+  }
+
+  .nn-flashcard-hero-surface,
+  .nn-premium-flashcard-reveal-panel {
+    border-radius: 1.1rem;
+  }
+
+  .nn-flashcard-session-main-footer {
+    position: sticky;
+    bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+    z-index: 4;
+    border-radius: 1rem;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--semantic-surface) 84%, transparent),
+        color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted))
+      );
+    box-shadow: 0 -16px 36px -30px color-mix(in srgb, var(--semantic-text-primary) 30%, transparent);
+  }
+
+  .nn-flashcard-confidence-controls button {
+    min-height: 3.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-flashcard-hero-surface,
+  .nn-flashcard-session-layout[data-nn-revealed="1"] .nn-flashcard-hero-surface,
+  .nn-premium-flashcard-reveal-panel[data-nn-premium-flashcard-reveal],
+  .nn-flashcard-confidence-controls button,
+  .nn-flashcard-bookmark-controls button,
+  .nn-premium-flashcard-nav-btn,
+  .nn-flashcard-reveal-cta.nn-flashcard-reveal-cta--premium,
+  .nn-flashcard-exam-mcq-premium[data-nn-premium-flashcard-mcq] li button {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

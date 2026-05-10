@@ -286,7 +286,7 @@ export function ActiveStudySession({
   const readinessLabel = Math.min(100, progressPct);
 
   return (
-    <div className="nn-active-flashcard-session space-y-4">
+    <div className="nn-active-flashcard-session space-y-4" data-nn-premium-flashcard-active-session>
       <ExamSessionProgressStrip pct={progressPct} />
 
       {/* HEADER */}
@@ -497,9 +497,13 @@ export function ActiveStudySession({
         mainFooter={
           <>
             {revealed && enableLocalStudyPins && current?.id ? (
-              <div className="flex flex-wrap gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
+              <div
+                className="nn-flashcard-bookmark-controls flex flex-wrap gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3"
+                data-nn-premium-flashcard-bookmarks
+              >
                 <button
                   type="button"
+                  data-nn-flashcard-control="star"
                   className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${
                     pinState.starred
                       ? "border-[color-mix(in_srgb,var(--semantic-warning)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
@@ -515,6 +519,7 @@ export function ActiveStudySession({
                 </button>
                 <button
                   type="button"
+                  data-nn-flashcard-control="weak"
                   className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${
                     pinState.confusing
                       ? "border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
@@ -535,9 +540,10 @@ export function ActiveStudySession({
             ) : null}
 
             {revealed ? (
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+              <div className="nn-flashcard-confidence-controls grid grid-cols-1 gap-2 sm:grid-cols-3" data-nn-premium-flashcard-confidence>
                 <button
                   type="button"
+                  data-nn-flashcard-rating="incorrect"
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
                   onClick={() => submitRating("incorrect")}
                   disabled={saving}
@@ -546,6 +552,7 @@ export function ActiveStudySession({
                 </button>
                 <button
                   type="button"
+                  data-nn-flashcard-rating="unsure"
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
                   onClick={() => submitRating("unsure")}
                   disabled={saving}
@@ -554,6 +561,7 @@ export function ActiveStudySession({
                 </button>
                 <button
                   type="button"
+                  data-nn-flashcard-rating="known"
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
                   onClick={() => submitRating("known")}
                   disabled={saving}

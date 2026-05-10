@@ -692,6 +692,7 @@ export function FlashcardsHubClient({
   return (
     <LearnerStudyPageShell
       className="nn-flashcards-hub-premium space-y-4 py-4 sm:space-y-5 sm:py-5"
+      data-nn-premium-flashcard-convergence
       data-nn-e2e-flashcards-hub
     >
       {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
@@ -699,7 +700,7 @@ export function FlashcardsHubClient({
       <h1 className="sr-only">{heroTitle}</h1>
 
       <header
-        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_10%,var(--semantic-surface))] px-4 py-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:py-4"
+        className="nn-flashcards-hub-hero rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_10%,var(--semantic-surface))] px-4 py-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:py-4"
         data-nn-e2e-flashcards-compact-header
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -731,7 +732,7 @@ export function FlashcardsHubClient({
       ) : null}
 
       <section
-        className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5"
+        className="nn-flashcards-deck-library-surface relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5"
         aria-labelledby="nn-flashcards-categories-heading"
         data-nn-e2e-flashcards-canonical-grid
       >
@@ -750,7 +751,7 @@ export function FlashcardsHubClient({
       {hubContextualNotice}
 
       <div
-        className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 shadow-[var(--semantic-shadow-soft)] sm:px-5"
+        className="nn-flashcards-deck-match-band rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 shadow-[var(--semantic-shadow-soft)] sm:px-5"
         data-nn-e2e-flashcards-deck-band
       >
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -776,7 +777,7 @@ export function FlashcardsHubClient({
       </div>
 
       <details
-        className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 sm:px-4"
+        className="nn-flashcards-recovery-filters rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 sm:px-4"
         data-nn-e2e-flashcards-secondary
       >
         <summary className="cursor-pointer text-sm font-semibold text-[var(--semantic-text-primary)]">

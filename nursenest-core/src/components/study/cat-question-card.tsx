@@ -281,6 +281,7 @@ export function AnswerOptionRow({
   if (isCheckbox) {
     return (
       <label
+        data-nn-qa-exam-format="sata"
         className={`nn-cat-opt nn-cat-opt--multi ${stateClass} ${interactiveClass} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
         <input
@@ -313,6 +314,7 @@ export function AnswerOptionRow({
   return (
     <button
       type="button"
+      data-nn-qa-exam-format="mcq"
       disabled={disabled}
       onClick={onClick}
       className={`nn-cat-opt ${stateClass} ${interactiveClass}`}

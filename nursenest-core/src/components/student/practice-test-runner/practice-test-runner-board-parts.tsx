@@ -14,9 +14,10 @@ const MCQ_OPTION_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 export function PracticeTestClinicalFigure({ src, className }: { src: string; className?: string }) {
   return (
     <div
+      data-nn-qa-exam-format="hotspot"
       className={
         className ??
-        "nn-cat-exam-clinical-figure mb-4 flex justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] p-3"
+        "nn-cat-exam-clinical-figure nn-premium-exam-clinical-figure mb-4 flex justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] p-3"
       }
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- stems may reference CDN URLs from trusted exam content */}
@@ -159,7 +160,15 @@ export function PracticeTestQuestionMediaBlock({
   mode: EcgMode;
   phase: EcgPhase;
 }) {
-  return <EcgVideoQuestionMedia exhibitData={exhibitData} images={images} mode={mode} phase={phase} />;
+  return (
+    <EcgVideoQuestionMedia
+      exhibitData={exhibitData}
+      images={images}
+      mode={mode}
+      phase={phase}
+      className="nn-premium-exam-ecg-media"
+    />
+  );
 }
 
 /** Radiogroup MCQ option list (presentational); parent supplies row state and selection handler. */

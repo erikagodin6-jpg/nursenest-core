@@ -126,6 +126,7 @@ export function FlashcardStudyQuestionStack({
       <div
         className="nn-flashcard-session-layout nn-premium-flashcard-stack mx-auto w-full"
         data-nn-revealed={revealed ? "1" : "0"}
+        data-nn-premium-flashcard-study
       >
         <div className="nn-flashcard-session-main min-w-0">
           <div className="nn-flashcard-layered-stack relative w-full">
@@ -149,13 +150,16 @@ export function FlashcardStudyQuestionStack({
           </div>
 
           {promptSplit.imageHtml ? (
-            <div className="relative z-[1] mb-5 mt-5 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] p-3 shadow-inner [&_img]:max-h-72 [&_img]:w-auto [&_img]:max-w-full [&_img]:rounded-lg [&_img]:object-contain">
+            <div
+              className="nn-flashcard-image-card relative z-[1] mb-5 mt-5 overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] p-3 shadow-inner [&_img]:max-h-72 [&_img]:w-auto [&_img]:max-w-full [&_img]:rounded-lg [&_img]:object-contain"
+              data-nn-flashcard-media="image"
+            >
               <FlashcardRichContent text={promptSplit.imageHtml} />
             </div>
           ) : null}
 
           {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
-            <div className="relative z-[1] mb-5 mt-4">
+            <div className="nn-flashcard-image-card relative z-[1] mb-5 mt-4" data-nn-flashcard-media="image">
               <div className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
                 Clinical figure
               </div>
@@ -204,6 +208,7 @@ export function FlashcardStudyQuestionStack({
             <section
               className="nn-flashcard-reveal-zone nn-premium-flashcard-reveal-panel relative overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_94%,var(--semantic-panel-muted))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
               aria-label={labels?.answerHeading ?? "Answer and rationale"}
+              data-nn-premium-flashcard-reveal
             >
               <div className="pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden>
                 <div className="absolute -left-10 top-0 h-40 w-40 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_14%,transparent)] blur-3xl" />

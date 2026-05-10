@@ -121,7 +121,7 @@ test.describe("Flashcards premium interaction (paid)", () => {
       await expect(start).toBeVisible({ timeout: 90_000 });
       await expect(start).toBeEnabled();
 
-      for (const theme of ["ocean", "aurora", "midnight"] as const) {
+      for (const theme of ["ocean", "blossom", "midnight", "sunset", "aurora"] as const) {
         await page.evaluate((t) => document.documentElement.setAttribute("data-theme", t), theme);
         await assertLearnerMainNoHorizontalOverflow(page);
       }
@@ -134,6 +134,7 @@ test.describe("Flashcards premium interaction (paid)", () => {
       const shell = page.locator(".nn-premium-flashcard-session-root.nn-flashcard-study-premium");
       await expect(shell).toBeVisible({ timeout: 120_000 });
       await expect(shell.locator(".nn-exam-session-premium.nn-learner-exam-shell")).toBeVisible();
+      await expect(shell.locator("[data-nn-premium-flashcard-study]")).toBeVisible();
 
       const noCards = page.getByRole("heading", { name: /no cards for this pathway yet/i });
       if (await noCards.isVisible().catch(() => false)) {
@@ -147,6 +148,8 @@ test.describe("Flashcards premium interaction (paid)", () => {
       if (await revealBtn.isVisible().catch(() => false)) {
         await revealBtn.click();
         await expect(layout).toHaveAttribute("data-nn-revealed", "1", { timeout: 30_000 });
+        await expect(page.locator("[data-nn-premium-flashcard-reveal]").first()).toBeVisible({ timeout: 30_000 });
+        await expect(page.locator("[data-nn-premium-flashcard-confidence]").first()).toBeVisible({ timeout: 30_000 });
         const known = page.getByRole("button", { name: /^Known$/ });
         await expect(known).toBeVisible({ timeout: 30_000 });
         await expect(known).toBeEnabled();

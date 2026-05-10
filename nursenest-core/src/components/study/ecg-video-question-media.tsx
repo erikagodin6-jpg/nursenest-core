@@ -35,7 +35,8 @@ export function EcgVideoQuestionMedia({
   return (
     <section
       data-testid="ecg-video-question-media"
-      className={`mb-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-3 sm:p-4 ${className}`}
+      data-nn-qa-exam-format="ecg"
+      className={`nn-premium-exam-ecg-card mb-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-3 sm:p-4 ${className}`}
       aria-label="ECG rhythm clip"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
