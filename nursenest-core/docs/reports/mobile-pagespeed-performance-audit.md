@@ -99,3 +99,41 @@ The changes intentionally target invisible performance waste rather than removin
 - Run `PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=https://www.nursenest.ca npx playwright test tests/e2e/public/homepage-pagespeed-stability.spec.ts` after deploy.
 - Re-run `npm run build` on the production-like builder or a machine with more memory to separate environment capacity from application compile errors.
 - Continue splitting large learner/practice client islands in separate, focused slices, preserving server-side entitlement checks and route cache semantics.
+
+
+## Next Phase Remediation Update — 2026-05-10
+
+This phase moved from audit-only evidence into targeted remediation for mobile TBT, hydration, CLS, image handling, forced reflow, and local Playwright reliability. The changes preserve the premium visual system: gradients, semantic theme color, shadows, and dimensional surfaces remain intact.
+
+### Remediation Applied
+
+- Restored the marketing narrow-viewport request header in `src/proxy.ts` so server-rendered marketing shells can avoid unnecessary desktop motion hydration on narrow/mobile requests.
+- Changed the marketing page transition shell dynamic import to `ssr: false`, keeping Framer route transitions out of the initial server-rendered mobile marketing path.
+- Prioritized the header leaf logo image with eager loading, async decoding, and high fetch priority for the header/LCP path.
+- Added `content-visibility: auto`, intrinsic size reservation, and paint containment to premium homepage sections/cards to reduce below-fold rendering and repaint cost without removing premium gradients.
+- Removed hover transform work for selected premium cards on mobile/reduced-motion while preserving color, shadow, and surface transitions.
+- Added `images.qualities: [68, 75]` in `next.config.mjs` so the existing reduced-quality marketing screenshot budget is accepted by Next image optimization.
+- Expanded Playwright mobile QA to guard severe post-idle CLS, mobile overflow, sticky header stability, drawer overflow, theme parity, reduced-motion support, and lesson detail stability.
+- Seeded mobile audit themes before navigation so theme parity screenshots and assertions measure the requested Ocean, Midnight, Blossom, Aurora, and Sunset states instead of the provider default.
+
+### Fresh Verification
+
+- `node --import tsx --test src/lib/marketing/homepage-pagespeed-performance.contract.test.ts src/components/layout/site-header-dynamic-import.contract.test.ts` — 13 passed, 0 failed.
+- `npm run typecheck:critical` — passed.
+- `npm run audit:large-client-components` — passed in warn-only mode; top remaining hotspots include `practice-test-runner-client.tsx`, `admin-blog-control-panel-client.tsx`, `question-bank-practice-client.tsx`, `practice-tests-hub-client.tsx`, and `site-header.tsx`.
+- `npm run report:hydration-risk-routes` — wrote `reports/hydration-risk-routes.md` and `.json`; highest current route risks remain medium/lower and centered on large client learner/admin components.
+- `npm run report:mobile-route-payloads` — passed; one learner route file remains above 45 KB: `src/app/(student)/app/(learner)/lessons/[id]/page.tsx`.
+- `npm run audit:runtime-payloads` — passed; giant content JSON shards remain server-only/lazy-load concerns and are documented in `reports/runtime-payload-audit.md`.
+- `PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=https://www.nursenest.ca npx playwright test -c playwright.config.ts tests/e2e/public/lesson-hub-performance.spec.ts --project=chromium` — 5 passed.
+- `PLAYWRIGHT_SKIP_WEB_SERVER=1 BASE_URL=https://www.nursenest.ca npx playwright test -c playwright.mobile.config.ts tests/e2e/mobile/premium-mobile-performance-audit.spec.ts --project=mobile-pixel` — public captures and homepage stability passed; production lesson-detail TOC selector failed because production does not yet include this branch's `data-nn-premium-lessons-mobile-nav` markup.
+
+### Screenshot Evidence
+
+Refreshed mobile public PNGs were written under `docs/screenshots/premium-mobile-performance-audit/` for homepage, pricing, login, signup, RN hub, RN lessons hub, and RN lesson detail across Ocean, Midnight, Blossom, Aurora, and Sunset where the partial local/production runs reached those surfaces. The local full run is not marked green because the dev server became unstable under the full capture load.
+
+### Remaining Bottlenecks / Blockers
+
+- Local `next dev` Playwright remains unstable under the full public mobile capture: after clearing `.next`, the run still hit a pricing visibility timeout and then `ERR_CONNECTION_REFUSED`, with local logs showing DB timeout fallbacks and slow homepage stats. This needs a separate local-dev reliability pass before local full-suite screenshot verification can be considered reliable.
+- Production mobile audit still cannot fully validate the branch-only lesson mobile TOC selector until the branch is deployed or the test is run against a stable local preview/prod build.
+- Google PageSpeed / Lighthouse API data was not refreshed in this phase because prior PSI quota/auth blockers remain. Current evidence is from contracts, static audits, and Playwright.
+- Large client components and giant content JSON shards remain the next high-impact TBT/hydration targets. This phase reduced high-confidence mobile shell/rendering costs without attempting risky large-component splits.

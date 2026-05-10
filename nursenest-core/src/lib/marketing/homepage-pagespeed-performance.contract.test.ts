@@ -66,6 +66,16 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.match(nextConfig, /source:\s*"\/:path\*\\\\\.:assetExt\(png\|jpg\|jpeg\|webp\|avif\|svg\|ico\|woff2\)"/);
   });
 
+  it("allows the reduced marketing screenshot image quality used by below-fold screenshots", () => {
+    const nextConfig = source("next.config.mjs");
+    const screenshotStack = source("src/components/marketing/marketing-screenshot-stack.tsx");
+    const heroCarousel = source("src/components/marketing/marketing-hero-carousel.tsx");
+
+    assert.match(nextConfig, /qualities:\s*\[\s*68,\s*75\s*\]/);
+    assert.match(screenshotStack, /MARKETING_PHOTO_QUALITY_BELOW_FOLD/);
+    assert.match(heroCarousel, /quality=\{photoQuality\}/);
+  });
+
   it("sets the marketing narrow viewport header before the mobile motion shell hydrates", () => {
     const proxy = source("src/proxy.ts");
     const shell = source("src/lib/ui/marketing-mobile-motion-shell.tsx");
