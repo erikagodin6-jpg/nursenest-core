@@ -1,7 +1,9 @@
 import type { Session } from "next-auth";
 
+import { isDeletedAccountEmail } from "@/lib/account/delete-learner-account";
 import { safeAwait } from "@/lib/async/safe-await";
 import { AUTH_NODE_SESSION_READ_TIMEOUT_MS } from "@/lib/auth/auth-session-constants";
+import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   getAuthSessionWithJwtCookieFallback,
@@ -15,6 +17,36 @@ function getAuthModulePromise(): Promise<typeof import("@/lib/auth")> {
 }
 
 type LoadSession = () => Promise<Session | null | undefined>;
+
+async function activeSessionOrNull(session: Session, surface: string): Promise<Session | null> {
+  const userId = (session.user as { id?: string })?.id ?? "";
+  if (!userId) return session;
+
+  try {
+    const row = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    });
+    if (!row || isDeletedAccountEmail(row.email)) {
+      safeServerLog("auth", "protected_route_inactive_user_blocked", {
+        surface,
+        userIdPrefix: userId.slice(0, 8),
+        severity: "warning",
+      });
+      return null;
+    }
+  } catch (error) {
+    safeServerLog("auth", "protected_route_active_user_check_failed", {
+      surface,
+      userIdPrefix: userId.slice(0, 8),
+      detail: (error instanceof Error ? error.message : String(error)).slice(0, 200),
+      severity: "warning",
+    });
+    return null;
+  }
+
+  return session;
+}
 
 /**
  * Protected app/admin routes must fail closed without throwing a route-level 500
@@ -51,7 +83,7 @@ export async function getProtectedRouteSession(
     primary = null;
   }
 
-  if (sessionHasUserIdentity(primary)) return primary;
+  if (sessionHasUserIdentity(primary) && primary) return activeSessionOrNull(primary, surface);
 
   /**
    * Node `auth()` can miss the same JWT cookie that the proxy already decoded, or throw under load.
@@ -62,7 +94,7 @@ export async function getProtectedRouteSession(
 
   try {
     const fallback = await getAuthSessionWithJwtCookieFallback();
-    return sessionHasUserIdentity(fallback) ? fallback : null;
+    return sessionHasUserIdentity(fallback) && fallback ? activeSessionOrNull(fallback, surface) : null;
   } catch (error) {
     safeServerLog("auth", "protected_route_jwt_fallback_failed", {
       surface,

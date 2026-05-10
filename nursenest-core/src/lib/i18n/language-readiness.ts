@@ -41,6 +41,8 @@ import {
 
 export type LanguageStatus = "active" | "partial" | "disabled";
 
+export const SEO_BLOCKED_LOCALES = ["it", "vi", "tr", "ur", "ko", "fa", "zh", "pa", "pt"] as const;
+
 // ─── Per-tier policy ──────────────────────────────────────────────────────────
 
 interface LocaleSeoPolicy {
@@ -73,8 +75,11 @@ const DISABLED_LOCALE_POLICY: LocaleSeoPolicy = {
   sitemapIncluded: false,
 };
 
+const BLOCKED_LOCALE_OVERRIDES = new Set<string>(SEO_BLOCKED_LOCALES);
+
 function policyForLocale(localeCode: string): LocaleSeoPolicy {
   if (localeCode === DEFAULT_MARKETING_LOCALE) return ACTIVE_LOCALE_POLICY;
+  if (BLOCKED_LOCALE_OVERRIDES.has(localeCode)) return DISABLED_LOCALE_POLICY;
   const lang = MARKETING_LANGUAGES.find((l) => l.code === localeCode);
   return lang ? TIER_POLICY[lang.tier] : DISABLED_LOCALE_POLICY;
 }

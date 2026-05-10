@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   isLocalePrefixedPathnameExcludedFromSitemap,
   isLocaleSitemapIncluded,
+  SEO_BLOCKED_LOCALES,
 } from "@/lib/i18n/language-readiness";
 
 describe("isLocalePrefixedPathnameExcludedFromSitemap", () => {
@@ -11,18 +12,28 @@ describe("isLocalePrefixedPathnameExcludedFromSitemap", () => {
     assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/canada/rn/nclex-rn"), false);
   });
 
-  it("excludes partial-tier marketing locale prefixes (e.g. French, Tagalog, Hindi)", () => {
+  it("excludes partial-tier marketing locale prefixes", () => {
     assert.equal(isLocaleSitemapIncluded("fr"), false);
     assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/fr/pricing"), true);
-    assert.equal(isLocaleSitemapIncluded("tl"), false);
-    assert.equal(isLocaleSitemapIncluded("hi"), false);
-    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/tl/pricing"), true);
-    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/hi/faq"), true);
+  });
+
+  it("allows full-tier marketing locale prefixes", () => {
+    assert.equal(isLocaleSitemapIncluded("tl"), true);
+    assert.equal(isLocaleSitemapIncluded("hi"), true);
+    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/tl/pricing"), false);
+    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/hi/faq"), false);
   });
 
   it("excludes incomplete-tier marketing locale prefixes", () => {
     assert.equal(isLocaleSitemapIncluded("de"), false);
     assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/de/pricing"), true);
+  });
+
+  it("excludes explicitly blocked locales even when the language registry is ahead of production readiness", () => {
+    for (const locale of SEO_BLOCKED_LOCALES) {
+      assert.equal(isLocaleSitemapIncluded(locale), false, locale);
+      assert.equal(isLocalePrefixedPathnameExcludedFromSitemap(`/${locale}/pricing`), true, locale);
+    }
   });
 
   it("does not exclude the default locale policy", () => {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { AccountDeleteDangerZone } from "@/components/account/account-delete-danger-zone";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerAccountPageHero, LearnerAccountShell } from "@/components/learner-account-ui";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
@@ -45,6 +46,7 @@ export default async function AccountSettingsHubPage() {
   const { t } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).account.settings");
   const userId = (session?.user as { id?: string })?.id ?? "";
+  const userEmail = (session?.user as { email?: string | null })?.email ?? "";
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.settings"));
 
   if (!userId || !isDatabaseUrlConfigured()) {
@@ -86,6 +88,7 @@ export default async function AccountSettingsHubPage() {
           </li>
         ))}
       </ul>
+      <AccountDeleteDangerZone userEmail={userEmail} billingHref="/app/account/billing" />
     </LearnerAccountShell>
   );
 }

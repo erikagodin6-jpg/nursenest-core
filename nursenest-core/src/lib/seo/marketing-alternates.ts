@@ -124,3 +124,11 @@ export function marketingAlternatesEnglishOnly(enPath: string): { canonical: str
   }
   return { canonical };
 }
+
+/**
+ * Noindex auth / utility pages should be crawlable for `noindex,follow`, but they must not participate in hreflang
+ * clusters because excluded URLs should not be submitted as alternate index candidates.
+ */
+export function marketingAlternatesForNoindexUtilityPage(locale: string, enPath: string): { canonical: string } {
+  return { canonical: absoluteMarketingCanonical(locale, enPath) };
+}

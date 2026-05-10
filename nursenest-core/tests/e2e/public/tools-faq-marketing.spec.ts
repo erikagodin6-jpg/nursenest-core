@@ -33,7 +33,10 @@ test.describe("Marketing tools + FAQ redesign smoke", () => {
 
     await page.goto("/faq", { waitUntil: "load", timeout: 120_000 });
     await expect(page.getByTestId("marketing-faq-legal")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("premium-faq-shell")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("premium-faq-sticky-cta")).toBeVisible();
     await expect(page.getByTestId("marketing-faq-product")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("premium-faq-accordion-trigger").first()).toHaveAttribute("aria-expanded", "true");
     const firstAccordion = page.getByTestId("marketing-faq-product-accordion-first");
     await expect(firstAccordion.getByRole("button")).toBeVisible();
     overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);

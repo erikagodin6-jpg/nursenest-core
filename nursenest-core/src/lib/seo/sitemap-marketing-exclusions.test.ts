@@ -4,6 +4,7 @@ import {
   isAuthNoindexMarketingPathname,
   isEligiblePublicIndexSitemapLoc,
 } from "@/lib/seo/sitemap-marketing-exclusions";
+import { marketingAlternatesForNoindexUtilityPage } from "@/lib/seo/marketing-alternates";
 
 test("isAuthNoindexMarketingPathname: default-locale auth paths", () => {
   assert.equal(isAuthNoindexMarketingPathname("/login"), true);
@@ -23,4 +24,10 @@ test("isEligiblePublicIndexSitemapLoc drops auth URLs for same origin", () => {
   assert.equal(isEligiblePublicIndexSitemapLoc(`${origin}/login`, origin), false);
   assert.equal(isEligiblePublicIndexSitemapLoc(`${origin}/fr/signup`, origin), false);
   assert.equal(isEligiblePublicIndexSitemapLoc(`${origin}/pricing`, origin), true);
+});
+
+test("utility auth pages do not emit hreflang language alternates", () => {
+  const alt = marketingAlternatesForNoindexUtilityPage("en", "/forgot-password");
+  assert.match(alt.canonical, /\/forgot-password$/);
+  assert.equal("languages" in alt, false);
 });

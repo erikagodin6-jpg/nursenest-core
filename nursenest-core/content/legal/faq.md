@@ -1,4 +1,4 @@
-# NurseNest FAQ
+# NurseNest Premium FAQ
 
 ## Is NurseNest a subscription?
 
@@ -8,7 +8,7 @@ Yes. Unless clearly stated otherwise, NurseNest plans are recurring subscription
 
 Yes, unless you cancel before the next renewal date.
 
-## How do I cancel?
+## How Do I Cancel?
 
 You can cancel through your account settings if available, or by emailing support@nursenest.ca. Please allow up to 4 business days for a response. Cancellation stops future renewals.
 
@@ -20,90 +20,90 @@ Usually yes, until the end of your current paid billing term.
 
 Except where required by law or expressly stated otherwise, subscription charges are generally non-refundable and partial billing periods are not prorated.
 
-## I forgot to cancel. Can I get a refund?
+## I Forgot to Cancel. Can I Get a Refund?
 
 Generally no, though we may choose to review exceptional cases at our discretion.
 
-## Can I share my account with a friend, classmate, or study group?
+## Can I Share My Account With a Friend, Classmate, or Study Group?
 
 No. Accounts are licensed to one individual user only.
 
-## Can I log in on more than one device?
+## Can I Log In on More Than One Device?
 
 Reasonable personal use across your own devices is generally fine, but suspicious or simultaneous usage patterns may trigger security review.
 
-## Why was I asked to log in again or why is my access limited?
+## Why Was I Asked to Log In Again or Why Is My Access Limited?
 
 This can happen for account security, entitlement validation, payment issues, or unusual usage patterns.
 
-## Why can’t I copy, print, or export certain premium content?
+## Why Can’t I Copy, Print, or Export Certain Premium Content?
 
 To protect copyrighted premium materials and maintain fair access for paying users, some content may be subject to copy, print, watermarking, or access restrictions.
 
-## Can I screenshot lessons or rationales?
+## Can I Screenshot Lessons or Rationales?
 
 Personal incidental viewing is one thing, but capturing or redistributing premium content for sharing, resale, reposting, or republication is not allowed.
 
-## Can I use your questions or rationales in my tutoring materials, study group, or course?
+## Can I Use Your Questions or Rationales in My Tutoring Materials, Study Group, or Course?
 
 No, unless you have written permission from NurseNest.
 
-## Will NurseNest guarantee I pass my exam?
+## Will NurseNest Guarantee I Pass My Exam?
 
 No. NurseNest is a study tool, not a guarantee of any result.
 
-## Is the content medical advice?
+## Is the Content Medical Advice?
 
 No. The platform is educational only and is not a substitute for clinical judgment or professional guidance.
 
-## Why does my readiness score change?
+## Why Does My Readiness Score Change?
 
 Readiness or performance indicators are estimates based on your activity and are meant to support studying, not to guarantee an outcome.
 
-## I do not recognize a charge. What should I do?
+## I Do Not Recognize a Charge. What Should I Do?
 
 Email support@nursenest.ca first so we can review the transaction quickly. Please allow up to 4 business days for a response.
 
-## Should I file a chargeback with my bank?
+## Should I File a Chargeback With My Bank?
 
 Please email support@nursenest.ca first. Many issues can be resolved faster by email than through a formal dispute process. Please allow up to 4 business days for a response.
 
-## What records do you keep about purchases and usage?
+## What Records Do You Keep About Purchases and Usage?
 
 We may keep records such as checkout acceptance, billing status, receipts, access logs, session history, and product usage to operate the service, prevent abuse, and respond to disputes.
 
-## What information do you collect?
+## What Information Do You Collect?
 
 We collect information needed to provide the service, such as account, billing, usage, and support information, as described in our Privacy Policy.
 
-## Do you send marketing emails?
+## Do You Send Marketing Emails?
 
 We may send marketing messages where permitted and, where required, where we have the necessary consent. You can unsubscribe from marketing emails at any time.
 
-## Will NurseNest actually help me pass my exam?
+## Will NurseNest Actually Help Me Pass My Exam?
 
 You earn a pass on exam day—no prep platform can grant a license. NurseNest is built to train what those exams measure: clinical prioritization, safety, and scope under time, with full teaching rationales and readiness signals so you see weak areas while you can still fix them.
 
-## How do I know NurseNest is for my specific exam and country?
+## How Do I Know NurseNest Is for My Specific Exam and Country?
 
 Select United States or Canada in the product, choose your pathway (for example RN, PN, NP, or allied), and your questions, lessons, and labels stay scoped to that registration context. Checkout and pricing follow the same region and tier you selected.
 
-## Are NurseNest practice questions realistic compared with the real exam?
+## Are NurseNest Practice Questions Realistic Compared With the Real Exam?
 
 Items are original—they are not leaked test questions. They are written to match the decision style and content scope of major nursing licensure exams (including NCLEX-style prioritization and safety framing for the tracks we support). Formats include standard multiple choice plus pathway-appropriate modes where your tier includes them.
 
-## How detailed are the rationales—and are they useful on test day?
+## How Detailed Are the Rationales, and Are They Useful on Test Day?
 
 Every scored item includes a teaching rationale: why the best option is safest under the clinical framework, and why each distractor fails. The goal is transferable judgment you can apply to the next item, not memorizing a single letter pattern.
 
-## Is the NurseNest platform reliable while I study?
+## Is the NurseNest Platform Reliable While I Study?
 
 Your progress is stored with your account; access to premium content is checked on the server so your tier and pathway stay enforced. Paid checkout runs through Stripe. If you hit a technical issue, email support@nursenest.ca (please allow up to 4 business days for a response)—we treat study-time stability as core to the product.
 
-## What do I get for free before I pay for a subscription?
+## What Do I Get for Free Before I Pay for a Subscription?
 
 Free access includes lesson and question previews with limits (exact limits depend on your account and tier). Use previews to judge interface, rationale depth, and pacing before you upgrade. Paid plans unlock the full pathway-scoped bank, complete lesson bodies, exam modes, and persistent analytics—see current tiers on the Pricing page.
 
-## Why choose NurseNest over other nursing prep tools?
+## Why Choose NurseNest Over Other Nursing Prep Tools?
 
 NurseNest combines pathway-scoped lessons, a large item bank, practice exams, and readiness analytics in one workspace—aligned to the license you select instead of a generic mixed-topic quiz feed. Preview the same item quality before you subscribe; paid access adds volume, depth, and history, not a separate “mystery” product.

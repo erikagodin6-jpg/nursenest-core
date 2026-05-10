@@ -7,8 +7,10 @@ import {
   mergeCoreUrlsWithBlogEntries,
   normalizeSitemapLoc,
 } from "@/lib/seo/sitemap-public-index-filter";
+import { collectLocalizedMarketingSegmentUrls } from "@/lib/seo/sitemap-static-xml";
 
 const origin = CANONICAL_PRODUCTION_ORIGIN;
+const blockedLocales = ["it", "vi", "tr", "ur", "ko", "fa", "zh", "pa", "pt"] as const;
 
 test("normalizeSitemapLoc strips line breaks", () => {
   assert.equal(normalizeSitemapLoc(` ${origin}/pricing\n`), `${origin}/pricing`);
@@ -29,6 +31,13 @@ test("filterPublicSitemapEntries removes /login and /app paths", () => {
   assert.ok(locs.has(`${origin}/pricing`));
   assert.equal(locs.has(`${origin}/login`), false);
   assert.equal(locs.has(`${origin}/app/lessons`), false);
+});
+
+test("localized sitemap segment excludes blocked locale prefixes", () => {
+  const urls = collectLocalizedMarketingSegmentUrls(origin);
+  for (const locale of blockedLocales) {
+    assert.equal(urls.some((u) => u === `${origin}/${locale}` || u.startsWith(`${origin}/${locale}/`)), false, locale);
+  }
 });
 
 test("excludeAbsoluteUrlsMatchingBlogSitemapEntries drops overlapping blog locs from core", () => {

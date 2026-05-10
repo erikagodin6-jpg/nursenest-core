@@ -1,4 +1,9 @@
-import { getHreflangEligibleLocales, isLocaleSeoIndexable, isLocaleSitemapIncluded } from "@/lib/i18n/language-readiness";
+import {
+  getHreflangEligibleLocales,
+  isLocaleSeoIndexable,
+  isLocaleSitemapIncluded,
+  SEO_BLOCKED_LOCALES,
+} from "@/lib/i18n/language-readiness";
 import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import {
@@ -345,9 +350,10 @@ export function buildLocalizedSeoAudit(locales: readonly string[] = getLocalized
 }
 
 export function getLocalizedSeoAuditLocales(): readonly string[] {
+  const blocked = new Set<string>(SEO_BLOCKED_LOCALES);
   const supported = MARKETING_LANGUAGES.filter((language) => language.tier === "full" || language.tier === "partial").map(
     (language) => language.code,
-  );
+  ).filter((code) => !blocked.has(code));
   return supported.includes(DEFAULT_MARKETING_LOCALE) ? supported : [DEFAULT_MARKETING_LOCALE, ...supported];
 }
 

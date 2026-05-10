@@ -84,17 +84,17 @@ function FaqVisualItem({
 export function FaqProductScreenshotsSection() {
   return (
     <section
-      className="border-t border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--page-bg))] py-12 sm:py-14"
+      className="nn-premium-product-faq-section border-t border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--page-bg))] py-12 sm:py-14"
       aria-labelledby="product-faq-heading"
       data-testid="marketing-faq-product"
     >
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border))] bg-[var(--semantic-surface)] px-5 py-5 shadow-[var(--elevation-rest)] sm:px-6">
           <p className="nn-marketing-caption font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
-            Product questions
+            Product Questions
           </p>
           <h2 id="product-faq-heading" className="nn-marketing-h2 mt-2">
-            What does the platform look like?
+            What Does the Platform Look Like?
           </h2>
           <p className="nn-marketing-body-sm mt-2 text-[var(--semantic-text-secondary)]">
             Every screenshot below is taken from the live NurseNest platform. Click any question to see the real interface.
@@ -120,7 +120,7 @@ export function FaqProductScreenshotsSection() {
             href="/signup"
             className="font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
           >
-            Start for free
+            Start for Free
           </a>{" "}
           — no credit card required.
         </p>

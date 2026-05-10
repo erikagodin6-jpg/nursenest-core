@@ -4,6 +4,7 @@ import {
   buildUserAccessForAdminLearnerQa,
   getVerifiedAdminLearnerQaSimulation,
 } from "@/lib/admin/admin-learner-qa-simulation";
+import { isDeletedAccountEmail } from "@/lib/account/delete-learner-account";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import { normalizeCountryCodeForEntitlement } from "@/lib/entitlements/country-code";
 import {
@@ -181,11 +182,13 @@ async function getUserAccessCore(
         alliedProfessionKey: true,
         targetExamPathwayId: true,
         credentialVersion: true,
+        email: true,
       },
     }),
   );
 
   if (!user) return base;
+  if (isDeletedAccountEmail(user.email)) return base;
   telemetry.userFound = true;
 
   const pathwayId = user.targetExamPathwayId?.trim() || null;

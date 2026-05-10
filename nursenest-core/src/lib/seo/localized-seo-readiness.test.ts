@@ -52,8 +52,8 @@ test("localized SEO audit locales follow the supported marketing language regist
   assert.ok(locales.includes("fr"));
   assert.ok(locales.includes("es"));
   assert.ok(locales.includes("hi"));
-  assert.ok(locales.includes("pt"));
   assert.ok(locales.includes("tl"));
+  assert.equal(locales.includes("pt"), false);
 });
 
 test("shared localized marketing pages get localized canonical and hreflang policy", () => {
@@ -91,15 +91,16 @@ test("Hindi has localized SEO breadcrumbs and slug mappings for shared pages", (
   assert.equal(item.sitemapExpected, true);
 });
 
-test("Portuguese has localized SEO breadcrumbs and slug mappings for shared pages", () => {
+test("Portuguese remains blocked from indexing until production readiness is explicitly restored", () => {
   const item = buildLocalizedSeoAuditItem("pt", surface("practice-questions-hub"));
   assert.equal(item.localizedPath, "/pt/question-bank");
   assert.equal(item.localizedSlug, "questoes-de-pratica");
   assert.equal(item.breadcrumbs[0]?.label, "Início");
   assert.equal(item.breadcrumbs[1]?.label, "Questões de prática");
-  assert.equal(item.sitemapExpected, true);
-  assert.equal(item.hreflangExpected, true);
-  assert.match(item.hreflangLanguages["pt-BR"] ?? "", /\/pt\/question-bank$/);
+  assert.equal(item.sitemapExpected, false);
+  assert.equal(item.hreflangExpected, false);
+  assert.equal("pt-BR" in item.hreflangLanguages, false);
+  assert.ok(item.issues.some((issue) => issue.includes("not SEO-indexable")));
 });
 
 test("exam pathway hubs do not claim translated route slugs before routing supports them", () => {
@@ -123,14 +124,6 @@ test("sitemap safe URL collector includes indexable Spanish localized hubs", () 
   assert.ok(urls.includes("https://www.nursenest.ca/es/pricing"));
   assert.ok(urls.includes("https://www.nursenest.ca/es/lessons"));
   assert.ok(urls.includes("https://www.nursenest.ca/es/question-bank"));
-});
-
-test("sitemap safe URL collector includes indexable Portuguese localized hubs", () => {
-  const urls = collectLocaleMarketingSitemapSafeUrls("https://www.nursenest.ca", "pt");
-  assert.ok(urls.includes("https://www.nursenest.ca/pt"));
-  assert.ok(urls.includes("https://www.nursenest.ca/pt/pricing"));
-  assert.ok(urls.includes("https://www.nursenest.ca/pt/lessons"));
-  assert.ok(urls.includes("https://www.nursenest.ca/pt/question-bank"));
 });
 
 test("sitemap safe URL collector includes indexable Tagalog localized hubs", () => {

@@ -13,6 +13,7 @@ import { hashLoginIdentifierForLog } from "@/lib/auth/log-auth-identifier";
 import { nodeJwtCallback } from "@/lib/auth/node-jwt-callback";
 import { normalizeLoginIdentifier, sanitizeRawLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { normalizeStoredPasswordHash } from "@/lib/auth/normalize-stored-password-hash";
+import { isDeletedAccountEmail } from "@/lib/account/delete-learner-account";
 import { prisma } from "@/lib/db";
 import {
   getUserAccess,
@@ -219,6 +220,11 @@ export const authConfig: NextAuthConfig = {
         if (!user) {
           recordCredentialsLoginFailure("not_found", request);
           return reject("user_missing");
+        }
+
+        if (isDeletedAccountEmail(user.email)) {
+          recordCredentialsLoginFailure("no_password_hash", request);
+          return reject("account_deleted");
         }
 
         /* =========================

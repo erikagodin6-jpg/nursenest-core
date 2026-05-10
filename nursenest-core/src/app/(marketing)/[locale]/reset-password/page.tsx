@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { MarketingResetPasswordPage } from "@/components/marketing/marketing-reset-password-page";
 import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
-import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesForNoindexUtilityPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = {
@@ -18,11 +18,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const m = await loadMarketingMetadataMessages(locale, [...RESET_PASSWORD_META_KEYS]);
       const title = m["pages.resetPassword.metaTitle"] ?? "Reset password";
       const description = m["pages.resetPassword.metaDescription"] ?? "Set a new NurseNest password";
-      const alt = marketingAlternatesSharedPage(locale, "/reset-password");
+      const alt = marketingAlternatesForNoindexUtilityPage(locale, "/reset-password");
       return {
         title,
         description,
-        alternates: { canonical: alt.canonical, languages: alt.languages },
+        alternates: { canonical: alt.canonical },
         robots: { index: false, follow: true },
         openGraph: { title, url: alt.canonical, type: "website" },
       };

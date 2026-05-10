@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { MarketingLoginPage } from "@/components/marketing/marketing-login-page";
 import { resolveLoginMarketingLocaleFromUrlSegment } from "@/lib/i18n/resolve-login-marketing-locale";
 import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
-import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { marketingAlternatesForNoindexUtilityPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -15,11 +15,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
       const m = await loadMarketingMetadataMessages(resolvedLocale, [...LOGIN_META_KEYS]);
-      const alt = marketingAlternatesSharedPage(resolvedLocale, "/login");
+      const alt = marketingAlternatesForNoindexUtilityPage(resolvedLocale, "/login");
       return {
         title: m["pages.login.title"]!,
         description: m["pages.login.description"]!,
-        alternates: { canonical: alt.canonical, languages: alt.languages },
+        alternates: { canonical: alt.canonical },
         robots: { index: false, follow: true },
         openGraph: { title: m["pages.login.title"]!, url: alt.canonical, type: "website" },
       };
