@@ -18,7 +18,9 @@ import {
 const ALLOWED_THEME_IDS = new Set(THEME_OPTIONS.map((o) => o.id));
 
 function normalizeStoredThemeId(raw: string): string {
-  return raw.trim();
+  const trimmed = raw.trim();
+  if (trimmed === "blossom") return "aurora";
+  return trimmed;
 }
 
 function parseHexColor(value: string): { r: number; g: number; b: number } | null {
