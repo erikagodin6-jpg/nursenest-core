@@ -10,6 +10,15 @@ function source(path: string) {
 }
 
 describe("homepage PageSpeed performance contracts", () => {
+  it("seeds persisted marketing theme before hydration via root layout beforeInteractive script", () => {
+    const rootLayout = source("src/app/layout.tsx");
+    const seed = source("src/lib/theme/marketing-theme-before-interactive-seed.ts");
+    assert.match(rootLayout, /marketingThemeBeforeInteractiveInlineScript/);
+    assert.match(rootLayout, /strategy="beforeInteractive"/);
+    assert.match(seed, /PUBLIC_MARKETING_THEME_ALLOWLIST/);
+    assert.match(seed, /THEME_STORAGE_KEY/);
+  });
+
   it("does not force scroll position during homepage hydration", () => {
     const homeClient = source("src/components/marketing/home-restored-client.tsx");
     assert.equal(homeClient.includes("window.scrollTo"), false);
@@ -54,7 +63,7 @@ describe("homepage PageSpeed performance contracts", () => {
     const imageDelivery = source("src/lib/marketing-image-delivery.ts");
     const nextConfig = source("next.config.mjs");
 
-    assert.match(imageDelivery, /MARKETING_PHOTO_QUALITY_HOME_SCREENSHOT_SECTION\s*=\s*74/);
+    assert.match(imageDelivery, /MARKETING_PHOTO_QUALITY_HOME_SCREENSHOT_SECTION\s*=\s*68/);
     assert.match(nextConfig, /max-age=31536000, immutable/);
   });
 

@@ -8,13 +8,12 @@ import type { PropsWithChildren } from "react";
 // `@/components/marketing/home-conversion-hero` for emergency rollback —
 // import is removed here to satisfy noUnusedLocals.
 import { PremiumHomepageHero } from "@/components/marketing/home/premium-homepage-hero";
-import { HomeHeroScreenshotSection } from "@/components/marketing/home-hero-screenshot-section";
-import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
+import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 
 const PremiumPathwayShowcase = dynamic(() =>
   import("@/components/marketing/home/premium-pathway-showcase").then((m) => m.PremiumPathwayShowcase),
@@ -41,6 +40,44 @@ const PremiumHomepageCta = dynamic(() =>
   import("@/components/marketing/home/premium-homepage-cta").then((m) => m.PremiumHomepageCta),
 );
 
+/** Below-fold carousel — separate chunk; keep SSR for SEO (skeleton only covers streaming gaps). */
+const HomeHeroScreenshotSectionLazy = dynamic(
+  () =>
+    import("@/components/marketing/home-hero-screenshot-section").then((m) => ({
+      default: m.HomeHeroScreenshotSection,
+    })),
+  { loading: () => <HomeHeroScreenshotSectionSkeleton /> },
+);
+
+const FunnelHomepageViewBeaconLazy = dynamic(
+  () =>
+    import("@/components/marketing/funnel-analytics-beacons").then((m) => ({
+      default: m.FunnelHomepageViewBeacon,
+    })),
+  { ssr: false },
+);
+
+function HomeHeroScreenshotSectionSkeleton() {
+  return (
+    <section
+      className="border-b border-[var(--header-nav-border)] nn-home-hero-product-band bg-[var(--page-bg)] pt-[var(--nn-rhythm-mobile-section-y)] md:pt-[var(--nn-rhythm-shell-y)]"
+      aria-hidden
+      data-testid="home-hero-screenshot-section-skeleton"
+    >
+      <div className="nn-section-shell pb-[var(--nn-rhythm-section-y)]">
+        <div className="mx-auto mb-6 max-w-2xl space-y-3 md:mb-8">
+          <div className="mx-auto h-3 w-44 max-w-[min(100%,12rem)] rounded-full bg-[color-mix(in_srgb,var(--semantic-text-muted)_24%,var(--page-bg))]" />
+          <div className="mx-auto h-3 w-full max-w-xl rounded-full bg-[color-mix(in_srgb,var(--semantic-text-muted)_18%,var(--page-bg))]" />
+          <div className="mx-auto h-3 w-[92%] max-w-lg rounded-full bg-[color-mix(in_srgb,var(--semantic-text-muted)_16%,var(--page-bg))]" />
+        </div>
+        <div className="mx-auto w-full max-w-2xl min-h-[min(24rem,calc(100vw*0.72+6rem))]">
+          <div className="aspect-[4/3] w-full rounded-2xl border border-[color-mix(in_srgb,var(--border-subtle)_82%,white)] bg-[color-mix(in_srgb,var(--semantic-text-muted)_12%,var(--page-bg))] shadow-[0_12px_32px_-24px_color-mix(in_srgb,var(--palette-heading)_28%,transparent)]" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /**
  * Normalize numbers from server (prevents crashes + hydration issues)
  */
@@ -53,6 +90,8 @@ function safeNumber(n: unknown): number {
 export type HomeRestoredClientProps = PropsWithChildren<{
   homeMarketingStats?: HomeMarketingStats | null;
   publishedGlobalRegionCardIds?: readonly string[] | null;
+  /** Server-built carousel slides — avoids client-side slide assembly on hydration. */
+  homeHeroCarouselSlides?: readonly HomeHeroSlide[] | null;
 }>;
 
 /* ------------------ COMPONENT ------------------ */
@@ -60,6 +99,7 @@ export type HomeRestoredClientProps = PropsWithChildren<{
 export default function HomeRestoredClient({
   homeMarketingStats,
   publishedGlobalRegionCardIds: _publishedGlobalRegionCardIds,
+  homeHeroCarouselSlides,
   children,
 }: HomeRestoredClientProps) {
   const { locale } = useMarketingI18n();
@@ -76,10 +116,7 @@ export default function HomeRestoredClient({
 
   return (
     <div className="font-sans flex w-full min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)] nn-home-marketing-root">
-      <FunnelHomepageViewBeacon
-        marketingRegion={marketingRegion}
-        marketingLocale={locale}
-      />
+      <FunnelHomepageViewBeaconLazy marketingRegion={marketingRegion} marketingLocale={locale} />
 
       {/* HERO — Phase 4 premium clinical hero. The previous
           `HomeConversionHero` is preserved on disk at
@@ -97,7 +134,7 @@ export default function HomeRestoredClient({
         lessonCount={lessonCount}
       />
 
-      <HomeHeroScreenshotSection />
+      <HomeHeroScreenshotSectionLazy serverPreparedSlides={homeHeroCarouselSlides} />
 
       <PremiumPathwayShowcase />
       <PremiumClinicalDepth />

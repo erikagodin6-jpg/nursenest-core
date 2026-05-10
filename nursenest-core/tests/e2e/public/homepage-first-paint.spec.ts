@@ -47,7 +47,9 @@ async function assertVerticalOrder(page: Page) {
   const order = await page.evaluate(() => {
     const header = document.querySelector("header.nn-header-animate-in");
     const hero = document.querySelector('[data-testid="hero-section"]');
-    const screenshots = document.querySelector('[data-testid="home-hero-screenshot-section"]');
+    const screenshots =
+      document.querySelector('[data-testid="home-hero-screenshot-section"]') ??
+      document.querySelector('[data-testid="home-hero-screenshot-section-skeleton"]');
     const pathways = document.querySelector(".nn-home-pathways-band");
     const intro = document.querySelector('section[aria-label="Global marketing overview"]');
     const footer = document.querySelector("footer");

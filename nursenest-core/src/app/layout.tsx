@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
+import Script from "next/script";
 
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
+import { marketingThemeBeforeInteractiveInlineScript } from "@/lib/theme/marketing-theme-before-interactive-seed";
 
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
@@ -116,6 +118,9 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)]">
+        <Script id="nn-marketing-theme-seed" strategy="beforeInteractive">
+          {marketingThemeBeforeInteractiveInlineScript()}
+        </Script>
         <SafeProviders session={session}>{children}</SafeProviders>
       </body>
     </html>

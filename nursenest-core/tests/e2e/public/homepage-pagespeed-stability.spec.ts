@@ -111,6 +111,76 @@ test.describe("Homepage PageSpeed stability", () => {
     expect(consoleErrors, `console errors: ${consoleErrors.join(" | ")}`).toEqual([]);
   });
 
+  test("mobile layout landmarks: minimal bbox drift after 5s + strict CLS (no drawer open)", async ({ page }) => {
+    await page.addInitScript(() => {
+      (window as unknown as { __nnCumulativeLayoutShift: number }).__nnCumulativeLayoutShift = 0;
+      try {
+        const observer = new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) {
+            const layoutShift = entry as PerformanceEntry & {
+              value?: number;
+              hadRecentInput?: boolean;
+            };
+            if (!layoutShift.hadRecentInput) {
+              (window as unknown as { __nnCumulativeLayoutShift: number }).__nnCumulativeLayoutShift +=
+                Number(layoutShift.value ?? 0);
+            }
+          }
+        });
+        observer.observe({ type: "layout-shift", buffered: true });
+      } catch {
+        /* Layout Instability API may be unavailable in some browsers. */
+      }
+    });
+
+    await page.goto("/", { waitUntil: "load", timeout: 120_000 });
+    await dismissMarketingScrims(page);
+    await expect(page.locator("main")).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("hero-section")).toBeVisible({ timeout: 30_000 });
+
+    const sample = async () =>
+      page.evaluate(() => {
+        const rect = (sel: string) => {
+          const el = document.querySelector(sel);
+          if (!el) return null;
+          const r = el.getBoundingClientRect();
+          return { top: r.top, left: r.left, width: r.width, height: r.height };
+        };
+        return {
+          header: rect("header.nn-header-animate-in"),
+          hero: rect('[data-testid="hero-section"]'),
+          footer: rect("footer[data-nn-footer-root]"),
+        };
+      });
+
+    const before = await sample();
+    await page.screenshot({
+      path: join(SCREENSHOT_DIR, "homepage-mobile-layout-before.png"),
+      fullPage: false,
+    });
+
+    await page.waitForTimeout(5000);
+
+    const after = await sample();
+    await page.screenshot({
+      path: join(SCREENSHOT_DIR, "homepage-mobile-layout-after.png"),
+      fullPage: false,
+    });
+
+    const drift = (a: { top: number; height: number } | null, b: { top: number; height: number } | null) => {
+      if (!a || !b) return 999;
+      return Math.abs(a.top - b.top) + Math.abs(a.height - b.height);
+    };
+
+    expect(before.header?.height ?? 0, "header height before settle").toBeGreaterThan(40);
+    expect(drift(before.header, after.header), "header bbox drift (top+height)").toBeLessThanOrEqual(8);
+    expect(drift(before.hero, after.hero), "hero bbox drift").toBeLessThanOrEqual(12);
+    expect(drift(before.footer, after.footer), "footer bbox drift").toBeLessThanOrEqual(16);
+
+    const cls = await readLayoutShiftScore(page);
+    expect(cls, `strict homepage CLS after 5s (no user input)`).toBeLessThan(0.05);
+  });
+
   test("captures requested route/theme screenshots for the mobile performance audit", async ({ page }) => {
     for (const themeId of PUBLIC_MARKETING_THEME_ALLOWLIST) {
       await page.goto("/", { waitUntil: "load", timeout: 120_000 });
