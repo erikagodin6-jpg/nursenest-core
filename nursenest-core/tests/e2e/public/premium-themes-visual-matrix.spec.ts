@@ -1,5 +1,5 @@
 /**
- * Visual regression matrix: Ocean, Midnight, Aurora, Sunset on marketing homepage.
+ * Visual regression matrix: all public marketing themes (Ocean, Midnight, Blossom, Aurora, Sunset).
  * Screenshots → test-results/theme-matrix/ (gitignored by default).
  *
  *   npx playwright test tests/e2e/public/premium-themes-visual-matrix.spec.ts --project=chromium

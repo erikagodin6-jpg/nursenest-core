@@ -130,14 +130,6 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
     hoverFg: "#1a202c",
     panel: "color-mix(in srgb, #1a202c 6%, transparent)",
   },
-  blossom: {
-    chrome: "color-mix(in srgb, #8e75ff 8%, color-mix(in srgb, #f3e9f8 22%, color-mix(in srgb, #e6f2ff 14%, #fffdfa)))",
-    foreground: "#1f1528",
-    border: "color-mix(in srgb, #1f1528 11%, #e4daf0)",
-    hoverBg: "color-mix(in srgb, #1f1528 6%, transparent)",
-    hoverFg: "#1f1528",
-    panel: "color-mix(in srgb, #1f1528 5%, transparent)",
-  },
   meadow: {
     chrome: "#3D9A72",
     foreground: "#FFFFFF",

@@ -64,6 +64,16 @@ export const THEME_OPTIONS: ThemeOption[] = [
     named: true,
   },
   {
+    id: "blossom",
+    label: "Blossom",
+    color: "#8E75FF",
+    swatchSecondary: "#7DD3FC",
+    swatchAccent: "#E8A87C",
+    group: "light",
+    logoVariant: "rose",
+    named: true,
+  },
+  {
     id: "aurora",
     label: "Aurora",
     color: "#9B72FF",
@@ -186,8 +196,8 @@ export const THEME_STORAGE_KEY = "nursenest-theme";
 export const PUBLIC_MARKETING_THEME_ALLOWLIST = [
   NURSENEST_DEFAULT_THEME,
   "midnight",
+  "blossom",
   "aurora",
-  "apex",
   "sunset",
 ] as const;
 

@@ -1,76 +1,77 @@
 ---
 slug: increased-intracranial-pressure-nursing-priorities
 title: Increased Intracranial Pressure: Nursing Priorities and Monitoring
-excerpt: Use Cushing triad teaching, pupil checks, head-of-bed angles, and osmotherapy concepts to answer ICP items without confusing nursing scope with neurosurgery decisions.
+excerpt: Use neuro trends, Cushing triad, pupil changes, positioning, airway protection, seizure precautions, and osmotherapy concepts to answer ICP items.
 category: Neurological Disorders
-tags: ICP, Traumatic Brain Injury, Cushing Triad, Neuro Checks, NCLEX-RN, Mannitol, Hypertonic Saline, Neurologic Monitoring
-publishedAt: 2026-05-09
-updatedAt: 2026-05-09
-seoTitle: Increased ICP nursing priorities | NurseNest
-seoDescription: Increased intracranial pressure for nurses: early signs, late Cushing reflex patterns, positioning, sedation and osmotherapy as ordered, ICP waveform basics, and escalation.
+tags: ICP, Cushing Triad, Neuro Checks, NCLEX-RN, REx-PN, Traumatic Brain Injury, Mannitol
+publishedAt: 2026-05-10
+createdAt: 2026-05-10
+updatedAt: 2026-05-10
+seoTitle: Increased intracranial pressure nursing priorities | NurseNest
+seoDescription: Use neuro trends, Cushing triad, pupil changes, positioning, airway protection, seizure precautions, and osmotherapy concepts to answer ICP items.
 canonicalUrl: /blog/increased-intracranial-pressure-nursing-priorities
-authorDisplayName: NurseNest Editorial
-medicalReviewerName: Clinical review board (educational)
-disclaimer: This article supports exam preparation and clinical reasoning practice. It is not individualized medical advice, a substitute for your institution's policies, or a treatment protocol. Always follow local scope, orders, and escalation pathways in real patient care.
+medicalDisclaimer: This article is for nursing education and exam preparation only and is not individualized medical advice. Follow local policy, provider orders, and current clinical guidelines in patient care.
+authorDisplayName: NurseNest Editorial Team
+medicalReviewerName: NurseNest Clinical Review
+draft: true
 ---
 
-<h2>Clinical overview</h2>
-<p>Increased intracranial pressure threatens perfusion and can cause herniation. Exam stems often follow trauma, hemorrhage, or mass effect and test frequent neuro assessments, positioning, and preparation for ordered interventions.</p>
+<p>Increased intracranial pressure means pressure inside the skull is rising enough to threaten brain perfusion. Because the skull is rigid, swelling, blood, tumor, hydrocephalus, or trauma can reduce perfusion and lead to herniation if not treated. This guide is written for RN and RPN learners preparing for NCLEX-RN or REx-PN style questions. The goal is not to replace local policy or provider judgment; it is to help you recognize the clinical pattern, choose the safest nursing priority, and avoid distractors that sound familiar but do not match the patient in front of you.</p>
 
-<h2>Early versus late signs</h2>
-<p>Headache, nausea, altered mentation, cranial nerve deficits may be early. Late teaching includes hypertension with widened pulse pressure, bradycardia, and irregular respirations (Cushing triad) as herniation warning.</p>
+<p>The key exam move is to separate the underlying mechanism from the visible symptom. When a stem gives you labs, medications, vital signs, and a short patient story, pause long enough to ask what problem is threatening oxygenation, perfusion, neurologic safety, or medication safety first.</p>
 
-<h2>Monitoring</h2>
-<p>Pupil size and reactivity, motor strength, GCS trends, ICP numbers if monitored, CPP concepts when taught, seizure activity, and signs of diabetes insipidus or SIADH as secondary complications.</p>
+<h2>Pathophysiology in nursing language</h2>
 
-<h2>Nursing interventions within scope</h2>
-<p>Head of bed typically 30 degrees unless contraindicated, avoid neck flexion and tight collars, maintain quiet dark environment, prevent valsalva (stool softeners), cluster care to limit ICP spikes, suction briefly per protocol.</p>
+<p>The pathophysiology matters because it predicts what will change next. In this topic, the highest-yield concept is: Increased intracranial pressure means pressure inside the skull is rising enough to threaten brain perfusion. Because the skull is rigid, swelling, blood, tumor, hydrocephalus, or trauma can reduce perfusion and lead to herniation if not treated. A nurse does not need to make a medical diagnosis independently on an exam item, but the nurse does need to notice when the pattern is becoming unstable and communicate that change clearly.</p>
 
-<h2>Therapy awareness</h2>
-<p>Hyperosmolar agents, CSF drainage, sedation, seizure control, and decompressive surgery are provider-driven—nursing implements orders and watches response.</p>
+<p>Think in paired questions: What is the body failing to regulate, and what bedside sign would prove the problem is getting worse? For increased intracranial pressure: nursing priorities and monitoring, useful clues include level of consciousness and new restlessness or confusion, pupil size, equality, reactivity, and motor response, headache, vomiting, seizure activity, and Cushing triad, and blood pressure, bradycardia, irregular respirations, and oxygenation. These findings are stronger together than alone. One abnormal value may be a distractor; a trend that matches the story is usually the exam writer's signal.</p>
 
-<h2>NCLEX-style reasoning pattern</h2>
-<p>Stabilize life threats, trend objective data, match interventions to orders and protocols, teach prevention, and escalate when red flags exceed your independent nursing scope.</p>
+<h2>Assessment cues that should change your priority</h2>
 
-<h2>Key Takeaways</h2>
-<ul>
+<p>Start with airway, breathing, circulation, disability, and exposure, then narrow to the disorder. High-quality nursing questions often include one stable finding and one dangerous finding. Your job is to choose the finding that can harm the patient soonest.</p>
 
-  <li>Trending beats single-point neuro checks in exam narratives.</li>
+<ul><li>level of consciousness and new restlessness or confusion</li><li>pupil size, equality, reactivity, and motor response</li><li>headache, vomiting, seizure activity, and Cushing triad</li><li>blood pressure, bradycardia, irregular respirations, and oxygenation</li><li>drain output or ICP monitor values if present</li></ul>
 
-  <li>Avoid interventions that raise ICP: extreme hip flexion, prolonged suctioning, fever.</li>
+<p>For NCLEX-RN and REx-PN, assessment is not passive data collection. It is how you decide whether to call the provider, activate a protocol, hold a medication, prepare equipment, institute precautions, or keep teaching. If the patient has new confusion, respiratory distress, shock signs, seizure activity, active bleeding, or a rapidly worsening trend, the safest answer usually moves toward immediate assessment and escalation.</p>
 
-  <li>Cushing triad is late—do not wait for it to act on earlier deterioration.</li>
+<h2>Nursing priorities</h2>
 
-</ul>
+<p>Once the pattern is recognized, prioritize the intervention that protects life and prevents predictable harm. In many stems, the correct answer is not the most advanced treatment; it is the nursing action that keeps the patient safe while the team evaluates and treats the cause.</p>
 
-<h2>Suggested Internal Links</h2>
-<ul>
+<ul><li>protect airway and oxygenation</li><li>elevate head of bed as ordered and keep neck midline</li><li>reduce clustered stimulation when appropriate</li><li>prepare for osmotic therapy, imaging, or surgical intervention as ordered</li><li>avoid hypotension and hypoxia because both worsen brain injury</li></ul>
 
-  <li><a href="/blog/stroke-ischemic-vs-hemorrhagic-nursing-care">Stroke ischemic vs hemorrhagic nursing care</a></li>
+<p>Notice the verbs in strong nursing answers: assess, monitor, hold, clarify, report, prepare, protect, administer as prescribed, and teach after stabilization. Avoid answer choices that ask the nurse to diagnose beyond scope, independently change a high-risk therapy, or delay urgent escalation for routine education.</p>
 
-  <li><a href="/blog/seizure-disorders-treatment-nursing-care">Seizure disorders treatment and nursing care</a></li>
+<h2>NCLEX nursing priorities and clinical judgment</h2>
 
-  <li><a href="/blog/hyponatremia-symptoms-causes-nursing-priorities">Hyponatremia and neuro symptoms</a></li>
+<p>Use the clinical judgment sequence: recognize cues, analyze cues, prioritize hypotheses, generate solutions, take action, and evaluate outcomes. For this topic, the most testable cues are level of consciousness and new restlessness or confusion, pupil size, equality, reactivity, and motor response, and headache, vomiting, seizure activity, and Cushing triad. The most testable actions are protect airway and oxygenation, elevate head of bed as ordered and keep neck midline, and reduce clustered stimulation when appropriate.</p>
 
-</ul>
+<p>Evaluation is where many students stop too early. After an intervention, ask what should improve and what could worsen. Oxygen saturation, mental status, urine output, pain, blood pressure, rhythm, lab trends, and patient understanding may all be relevant depending on the scenario. A safe nurse reassesses, documents the response, and escalates if the patient does not improve.</p>
 
-<h2>Premium Lesson CTA</h2>
-<p>Build stem-ready judgment with NurseNest lessons and adaptive practice on pathophysiology, fluids and electrolytes, and emergency nursing priorities—premium loops connect reading to timed questions with the same clinical vocabulary.</p>
+<h2>Common exam traps</h2>
 
-<h2>FAQ Schema Questions</h2>
+<p>Distractors usually contain a true fact applied at the wrong time. A diet teaching point can be true and still be wrong if the patient is unstable. A medication fact can be true and still be unsafe if the relevant vital sign or lab has not been checked.</p>
 
-<h3>Why elevate the head of bed?</h3>
-<p>Promotes venous drainage from the cranium in common teaching, reducing ICP when appropriate.</p>
+<ul><li>waiting for full Cushing triad before acting</li><li>placing the neck flexed or obstructing venous drainage</li><li>treating agitation as behavioral before neuro assessment</li><li>forgetting seizure precautions</li></ul>
 
-<h3>What is the purpose of osmotic therapy?</h3>
-<p>Draws water out of brain parenchyma transiently when ordered for elevated ICP—requires monitoring renal function and volume status.</p>
+<p>When two answer choices both look reasonable, compare immediacy. Which option prevents the worst likely complication in the next few minutes to hours? Which option stays inside nursing scope? Which option matches the actual data in the stem rather than a memorized association?</p>
 
-<h3>What should you report immediately?</h3>
-<p>Sudden pupil asymmetry, posturing, or acute GCS drop—potential herniation signals.</p>
+<h2>Suggested internal links</h2>
 
-<h2>APA-7 References</h2>
+<ul><li><a href="/blog/stroke-ischemic-vs-hemorrhagic-nursing-care">stroke ischemic vs hemorrhagic nursing care</a></li><li><a href="/blog/seizure-disorders-treatment-nursing-care">seizure disorders treatment nursing care</a></li><li><a href="/blog/hyponatremia-symptoms-causes-nursing-priorities">hyponatremia symptoms causes nursing priorities</a></li></ul>
 
-<p>Carney, N., et al. (2017). Guidelines for the management of severe traumatic brain injury, fourth edition. <em>Neurosurgery</em>, 80(6), 6–15. <a href="https://doi.org/10.1227/NEU.0000000000001432">https://doi.org/10.1227/NEU.0000000000001432</a></p>
-<p>Smith, M. (2008). Physiological changes associated with brain stem death in children. <em>Paediatric Anaesthesia</em>, 18(9), 859–867. (Use institution-specific neurocritical care references for bedside practice.)</p>
+<h2>Premium lesson CTA</h2>
 
-<p><em>Follow your program’s citation requirements; links are for educational traceability.</em></p>
+<p>Practice this topic inside NurseNest premium lessons with adaptive rationales, priority-setting drills, and mixed clinical judgment questions. Use the article as your concept map, then move into timed questions so recognition becomes automatic under exam pressure.</p>
+
+<h2>FAQ schema questions</h2>
+
+<h3>What is Cushing triad?</h3><p>Hypertension with widening pulse pressure, bradycardia, and irregular respirations is a late sign of increased ICP.</p>
+
+<h3>What early change can signal ICP?</h3><p>A change in level of consciousness is often one of the most important early warning signs.</p>
+
+<h2>APA-7 references</h2>
+
+<ul><li>Brain Trauma Foundation. (2016). Guidelines for the management of severe traumatic brain injury.</li><li>Greenberg, S. M., et al. (2022). Guideline for spontaneous intracerebral hemorrhage. Stroke.</li><li>Neurocritical Care Society. (2020). Guidelines for acute treatment of cerebral edema.</li></ul>
+
+<p><strong>Clinical safety note:</strong> This content supports exam preparation and clinical reasoning practice. It does not provide individualized diagnosis, treatment, or medication instructions. In practice, follow current orders, facility policy, and escalation pathways.</p>

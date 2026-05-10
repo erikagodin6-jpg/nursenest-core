@@ -315,7 +315,7 @@ test.describe("Marketing header layout — responsive", () => {
   test("desktop v4 hierarchy: readable themes, quiet utility, recessed tier, no button wall", async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
 
-    for (const theme of ["ocean", "aurora", "sunset", "midnight"]) {
+    for (const theme of ["ocean", "blossom", "aurora", "sunset", "midnight"]) {
       await gotoHomeLightMarketing(page, theme);
       await settle(page);
       await dismissMarketingScrims(page);
@@ -384,13 +384,13 @@ test.describe("Marketing header layout — responsive", () => {
     }
   });
 
-  test("desktop 1280: Ocean / Aurora / Midnight marketing chrome screenshots + token guards", async ({
+  test("desktop 1280: premium marketing themes chrome screenshots + token guards", async ({
     page,
   }, testInfo) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     const HOT_PINK = "rgb(255, 105, 180)";
 
-    for (const theme of ["ocean", "aurora", "midnight"] as const) {
+    for (const theme of ["ocean", "blossom", "aurora", "sunset", "midnight"] as const) {
       await gotoHomeLightMarketing(page, theme);
       await settle(page);
       await dismissMarketingScrims(page);

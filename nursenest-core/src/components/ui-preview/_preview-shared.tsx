@@ -30,12 +30,11 @@ import { Card } from "@/components/ui/card";
 // Theme typing + palettes
 // ---------------------------------------------------------------------------
 
-export type PreviewTheme = "ocean" | "midnight" | "blossom" | "aurora" | "sunset" | "forest" | "apex";
+export type PreviewTheme = "ocean" | "midnight" | "aurora" | "sunset" | "forest" | "apex";
 
 export const themeLabels: Record<PreviewTheme, string> = {
   ocean: "Ocean",
   midnight: "Midnight",
-  blossom: "Blossom",
   aurora: "Aurora",
   sunset: "Sunset",
   forest: "Forest",
@@ -46,7 +45,6 @@ export function isPreviewTheme(value: string | null): value is PreviewTheme {
   return (
     value === "ocean" ||
     value === "midnight" ||
-    value === "blossom" ||
     value === "aurora" ||
     value === "sunset" ||
     value === "forest" ||
@@ -78,18 +76,6 @@ export const themeVars: Record<PreviewTheme, Record<string, string>> = {
     "--preview-accent": "#38bdf8",
     "--preview-accent-2": "#818cf8",
     "--preview-accent-soft": "rgba(56, 189, 248, 0.13)",
-  },
-  blossom: {
-    "--preview-bg": "#faf7fc",
-    "--preview-surface": "#ffffff",
-    "--preview-surface-2": "#efe8f7",
-    "--preview-elevated": "#fefdff",
-    "--preview-text": "#1f1528",
-    "--preview-muted": "#5c4d6e",
-    "--preview-border": "rgba(142, 117, 255, 0.2)",
-    "--preview-accent": "#8e75ff",
-    "--preview-accent-2": "#7dd3fc",
-    "--preview-accent-soft": "#f3e9f6",
   },
   aurora: {
     "--preview-bg": "#faf8ff",
