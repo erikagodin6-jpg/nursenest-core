@@ -91,7 +91,7 @@ export function LearnerDashboardAnalytics({
   );
 
   return (
-    <div className="space-y-6" aria-label={t("learner.dashboard.insight.regionLabel")}>
+    <div className="nn-learner-cockpit-analytics" aria-label={t("learner.dashboard.insight.regionLabel")}>
       {/* ── 1. Quick actions — primary call to action, always above fold ── */}
       <QuickActionPanel
         t={t}
@@ -135,7 +135,7 @@ export function LearnerDashboardAnalytics({
             maxRows={MAX_WEAK}
             pathwayId={preferredPathwayForWeak}
           />
-          <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
+          <div className="nn-cockpit-mastery-key px-4 py-3">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">{t("learner.dashboard.masteryKey.title")}</p>
             <MasteryLegend t={t} className="mt-2" />
           </div>

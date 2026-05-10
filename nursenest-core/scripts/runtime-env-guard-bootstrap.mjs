@@ -12,16 +12,15 @@ import path from "node:path";
 const DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER = "127.0.0.1:5432/postgres";
 const REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS = "postgres:postgres@127.0.0.1";
 
-const REQUIRED_RUNTIME_ENVS = ["AI_ADMIN_GENERATION_ENABLED"];
-
 const OPENAI_KEY_GROUP = ["AI_INTEGRATIONS_OPENAI_API_KEY", "OPENAI_API_KEY"];
+const ADMIN_AI_GENERATION_FLAG_GROUP = ["AI_ADMIN_GENERATION_ENABLED", "AI_ADMIN_GENERation"];
 
 /** Keep in sync with `blogChatUsesOpenRouter` in `src/lib/ai/blog-ai-routing.ts`. */
 function blogChatUsesOpenRouterMjs() {
   const b = process.env["BLOG_AI_PROVIDER"]?.trim().toLowerCase();
   if (b === "openrouter") return true;
   if (b === "openai" || b === "gemini") return false;
-  if (hasTrimmedEnvMjs("OPENROUTER_API_KEY")) return true;
+  if (hasTrimmedEnvMjs("OPENROUTER_API_KEY") || hasTrimmedEnvMjs("BLOG_OPENROUTER_API_KEY")) return true;
   return process.env["AI_PROVIDER"]?.trim().toLowerCase() === "openrouter";
 }
 
@@ -32,7 +31,7 @@ function hasTrimmedEnvMjs(key) {
 
 function satisfiesAiFundingContractMjs() {
   if (OPENAI_KEY_GROUP.some((k) => hasTrimmedEnvMjs(k))) return true;
-  return blogChatUsesOpenRouterMjs() && hasTrimmedEnvMjs("OPENROUTER_API_KEY");
+  return blogChatUsesOpenRouterMjs() && (hasTrimmedEnvMjs("OPENROUTER_API_KEY") || hasTrimmedEnvMjs("BLOG_OPENROUTER_API_KEY"));
 }
 
 function isNextProductionBuildPhase() {
@@ -213,16 +212,13 @@ function isAuthSecretConfiguredMjs() {
 function collectMissingRuntimeEnvIssues() {
   const missing = [];
 
-  for (const key of REQUIRED_RUNTIME_ENVS) {
-    const v = process.env[key];
-    if (!v || v.trim() === "") {
-      missing.push(key);
-    }
+  if (!ADMIN_AI_GENERATION_FLAG_GROUP.some((k) => hasTrimmedEnvMjs(k))) {
+    missing.push("AI_ADMIN_GENERATION_ENABLED (or accepted typo alias AI_ADMIN_GENERation)");
   }
 
   if (!satisfiesAiFundingContractMjs()) {
     missing.push(
-      `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
+      `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
     );
   }
 
@@ -245,7 +241,8 @@ export function logRuntimeEnvSnapshot() {
     AI_ADMIN_GENERATION_ENABLED_value: process.env["AI_ADMIN_GENERATION_ENABLED"] ?? null,
     AI_INTEGRATIONS_OPENAI_API_KEY_present: Boolean(process.env["AI_INTEGRATIONS_OPENAI_API_KEY"]),
     OPENAI_API_KEY_present: Boolean(process.env["OPENAI_API_KEY"]),
-    OPENROUTER_API_KEY_present: Boolean(process.env["OPENROUTER_API_KEY"]),
+    OPENROUTER_API_KEY_present: Boolean(process.env["OPENROUTER_API_KEY"]?.trim()),
+    BLOG_OPENROUTER_API_KEY_present: Boolean(process.env["BLOG_OPENROUTER_API_KEY"]?.trim()),
     AI_PROVIDER: process.env["AI_PROVIDER"] ?? null,
     BLOG_AI_PROVIDER: process.env["BLOG_AI_PROVIDER"] ?? null,
     NN_ENV_VALIDATION_MODE: process.env["NN_ENV_VALIDATION_MODE"] ?? null,

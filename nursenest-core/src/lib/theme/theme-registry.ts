@@ -44,13 +44,13 @@ export type ThemeOption = {
 export const THEME_OPTIONS: ThemeOption[] = [
   /* ── Launch study atmospheres ── */
   {
-    id: "blossom",
-    label: "Blossom",
-    color: "#E75480",
-    swatchSecondary: "#3A86FF",
-    swatchAccent: "#FFD166",
+    id: "ocean",
+    label: "Ocean",
+    color: "#1D9BD7",
+    swatchSecondary: "#14B8A6",
+    swatchAccent: "#7DD3FC",
     group: "light",
-    logoVariant: "rose",
+    logoVariant: "blue",
     named: true,
   },
   {
@@ -64,13 +64,33 @@ export const THEME_OPTIONS: ThemeOption[] = [
     named: true,
   },
   {
-    id: "ocean",
-    label: "Ocean",
-    color: "#1D9BD7",
-    swatchSecondary: "#14B8A6",
-    swatchAccent: "#7DD3FC",
+    id: "blossom",
+    label: "Blossom",
+    color: "#8E75FF",
+    swatchSecondary: "#7DD3FC",
+    swatchAccent: "#E8A87C",
     group: "light",
-    logoVariant: "blue",
+    logoVariant: "rose",
+    named: true,
+  },
+  {
+    id: "aurora",
+    label: "Aurora",
+    color: "#9B72FF",
+    swatchSecondary: "#4A90E2",
+    swatchAccent: "#E14D8F",
+    group: "light",
+    logoVariant: "rose",
+    named: true,
+  },
+  {
+    id: "sunset",
+    label: "Sunset",
+    color: "#E07862",
+    swatchSecondary: "#38BDF8",
+    swatchAccent: "#E8B44F",
+    group: "light",
+    logoVariant: "rose",
     named: true,
   },
   {
@@ -147,6 +167,16 @@ export const THEME_OPTIONS: ThemeOption[] = [
   { id: "neutral-slate", label: "Cool Slate", color: "#708090", group: "light", logoVariant: "neutral" },
 
   /* ── Dark ── */
+  {
+    id: "apex",
+    label: "Apex",
+    color: "#A78BFA",
+    swatchSecondary: "#38BDF8",
+    swatchAccent: "#FBBF24",
+    group: "dark",
+    logoVariant: "dark",
+    named: true,
+  },
   { id: "midnight-ink", label: "Midnight Ink", color: "#2C4263", group: "dark", logoVariant: "dark", named: true },
   { id: "storm-slate", label: "Storm Slate", color: "#51657D", group: "dark", logoVariant: "dark", named: true },
   { id: "dark-mode", label: "Dark Pastel", color: "#4a6fa5", group: "dark", logoVariant: "dark" },
@@ -160,10 +190,16 @@ export const THEME_STORAGE_KEY = "nursenest-theme";
  * Public marketing chrome (site header, utility strip, mobile marketing drawers) exposes only
  * approved palettes; `[data-theme="…"]` definitions and learner/account theme pickers stay full-fidelity.
  *
- * **Primary brand palette only** on public marketing — alternate study atmospheres stay in learner
- * account / full pickers; `[data-theme="…"]` CSS definitions remain unchanged.
+ * Public marketing exposes a **small** approved set so learners can switch atmosphere (Ocean, Midnight, Aurora, …)
+ * without exposing the full legacy theme list.
  */
-export const PUBLIC_MARKETING_THEME_ALLOWLIST = [NURSENEST_DEFAULT_THEME] as const;
+export const PUBLIC_MARKETING_THEME_ALLOWLIST = [
+  NURSENEST_DEFAULT_THEME,
+  "midnight",
+  "blossom",
+  "aurora",
+  "sunset",
+] as const;
 
 export function themeOptionsForPublicMarketingPicker(all: ThemeOption[] = THEME_OPTIONS): ThemeOption[] {
   const allow = new Set(PUBLIC_MARKETING_THEME_ALLOWLIST);

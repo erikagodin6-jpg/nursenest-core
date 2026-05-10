@@ -10,6 +10,7 @@ import { ExamHubComparisonLink } from "@/components/marketing/exam-hub-compariso
 import { MarketingTrustSignalsStrip } from "@/components/marketing/marketing-trust-signals-strip";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
+import { MarketingPathwayHubHeroBand } from "@/components/marketing/marketing-pathway-hub-hero-band";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-analytics";
 import { validateLearnerCopyForExamContext } from "@/lib/learner/validate-learner-copy-context";
@@ -63,7 +64,11 @@ export function ExamPathwayHub({
   const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 sm:py-8" data-nn-nursing-tier-hub="surface">
+    <div
+      className="nn-premium-pathway-hub mx-auto max-w-4xl px-4 py-6 sm:py-8"
+      data-nn-nursing-tier-hub="surface"
+      data-pathway-track={pathway.roleTrack}
+    >
       <FunnelExamHubViewBeacon pathway={pathway} hubPath={marketingHubPath} />
       {npSeoAliasSegment ? (
         <NpSeoAliasHubAnalytics
@@ -76,15 +81,20 @@ export function ExamPathwayHub({
       ) : null}
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <FaqJsonLd items={pathwayHubFaqSchema(pathway)} />
-      <div className="nn-nursing-tier-hub-hero-band mt-1">
-        <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
-          {countryLine} · {pathway.boardLabel ?? pathway.roleTrack.toUpperCase()}
-        </p>
-        <h1 className="nn-marketing-h1 mt-2">{heroTitle ?? pathway.displayName}</h1>
-        <p className="nn-marketing-body mt-4 max-w-2xl text-[var(--theme-muted-text)] sm:text-[1.0625rem] sm:leading-relaxed">
-          {heroLead ?? pathway.seoDescription}
-        </p>
-      </div>
+      <MarketingPathwayHubHeroBand
+        className="mt-1"
+        eyebrow={
+          <p className="nn-premium-home-eyebrow max-w-full whitespace-normal">
+            {countryLine} · {pathway.boardLabel ?? pathway.roleTrack.toUpperCase()}
+          </p>
+        }
+        title={<h1 className="nn-marketing-h1 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]">{heroTitle ?? pathway.displayName}</h1>}
+        intro={
+          <p className="nn-marketing-body max-w-2xl text-pretty text-[var(--palette-text-muted)] sm:text-lg">
+            {heroLead ?? pathway.seoDescription}
+          </p>
+        }
+      />
 
       <div className="mt-4 max-w-2xl">
         <MarketingTrustSignalsStrip variant="compact" examHub />

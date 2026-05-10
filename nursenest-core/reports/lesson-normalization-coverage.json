@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-08T09:57:24.240Z",
+  "generatedAt": "2026-05-10T01:30:06.918Z",
   "pathways": [
     {
       "pathwayId": "ca-allied-core",
@@ -1960,7 +1960,7 @@
   "alliedProfessionCoverage": [
     {
       "professionKey": "mlt",
-      "label": "Medical laboratory exam prep",
+      "label": "Medical laboratory technology exam prep",
       "route": "/allied/allied-health/lessons?alliedProfession=mlt",
       "topicSlugsIn": [
         "lab-values",
@@ -1983,6 +1983,8 @@
       "label": "Paramedic certification exam prep",
       "route": "/allied/allied-health/lessons?alliedProfession=paramedic",
       "topicSlugsIn": [
+        "nursing-fundamentals",
+        "paramedic",
         "patient-assessment",
         "vital-signs",
         "emergency-response",
@@ -2005,6 +2007,7 @@
       "label": "Occupational therapy assistant exam prep",
       "route": "/allied/allied-health/lessons?alliedProfession=ota",
       "topicSlugsIn": [
+        "nursing-fundamentals",
         "patient-assessment",
         "patient-communication",
         "clinical-documentation",
@@ -2027,6 +2030,7 @@
       "label": "Physical therapist assistant exam prep",
       "route": "/allied/allied-health/lessons?alliedProfession=pta",
       "topicSlugsIn": [
+        "nursing-fundamentals",
         "patient-assessment",
         "human-anatomy",
         "human-physiology",
@@ -2049,6 +2053,8 @@
       "label": "Social work exam prep",
       "route": "/allied/allied-health/lessons?alliedProfession=social-work",
       "topicSlugsIn": [
+        "nursing-fundamentals",
+        "social-work",
         "patient-communication",
         "clinical-documentation",
         "healthcare-teamwork",
@@ -2069,6 +2075,8 @@
       "label": "Mental health and addictions worker exam prep",
       "route": "/allied/allied-health/lessons?alliedProfession=mental-health-addictions",
       "topicSlugsIn": [
+        "nursing-fundamentals",
+        "mental-health-therapist",
         "patient-communication",
         "clinical-documentation",
         "healthcare-teamwork",
@@ -2133,6 +2141,12 @@
       "label": "Medical imaging exam prep",
       "route": "/allied/allied-health/lessons?alliedProfession=imaging",
       "topicSlugsIn": [
+        "nursing-fundamentals",
+        "radiologic-technology",
+        "mri-technologist",
+        "ct-technologist",
+        "sonography",
+        "nuclear-medicine",
         "imaging-basics",
         "patient-assessment",
         "vital-signs",
@@ -2153,6 +2167,9 @@
       "label": "Pharmacy technician exam prep",
       "route": "/allied/allied-health/lessons?alliedProfession=pharmacy-tech",
       "topicSlugsIn": [
+        "nursing-fundamentals",
+        "pharmacy-tech",
+        "pharmacology",
         "medication-safety",
         "pharmacology-basics",
         "medical-terminology",

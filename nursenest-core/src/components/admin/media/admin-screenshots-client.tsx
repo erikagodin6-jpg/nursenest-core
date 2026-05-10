@@ -89,15 +89,15 @@ function WorkflowPanel() {
     {
       n: "3",
       title: "Run the capture script",
-      code: "node scripts/capture-screenshots.mjs",
+      code: "npm run capture:marketing-screenshots",
       detail:
-        "Captures all targets defined in the script. Filter with:\nSCREENSHOT_ONLY_IDS=cat-exam-desktop,smart-review-desktop node scripts/capture-screenshots.mjs",
+        "Run from the nursenest-core package with the dev server up.\nSubset slots:\nSCREENSHOT_ONLY_SLOTS=6,7,14 SCREENSHOT_BASE_URL=http://localhost:8080 npm run capture:marketing-screenshots\nOutputs land in public/marketing/screenshots/ — see docs/SCREENSHOT_CAPTURE_TO_CDN.md",
     },
     {
       n: "4",
       title: "Review output and upload to Spaces",
-      code: "ls screenshots/",
-      detail: `Upload files to DigitalOcean Spaces under the 'screenshots/' prefix.\nCDN base: ${SCREENSHOT_CDN_BASE}`,
+      code: "ls public/marketing/screenshots/",
+      detail: `Upload approved PNGs to Spaces at **bucket root** as screenshot1.png … screenshot15.png (same URLs as registry).\nCDN base: ${SCREENSHOT_CDN_BASE}\nDo not overwrite production keys until explicitly approved.`,
     },
     {
       n: "5",

@@ -124,7 +124,7 @@ export async function AutomaticRelatedContentForPublic(props: AutomaticRelatedCo
             context={context}
             resolvedLinks={resolved}
             heading="Related study on this pathway"
-            showKinds={["lesson", "flashcard", "question", "blog", "cat"]}
+            showKinds={["lesson", "flashcard", "question", "blog", "cat", "hub"]}
           />
         </div>
       );

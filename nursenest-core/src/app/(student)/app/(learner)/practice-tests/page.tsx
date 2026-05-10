@@ -24,6 +24,7 @@ import {
   type ResolvedQuestionBankPathways,
 } from "@/lib/learner/tier-scoped-study-routes";
 import { prisma } from "@/lib/db";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failover/practice-tests-hub-bootstrap-snapshot-read";
 import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
@@ -56,8 +57,13 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
         <div className="mb-5">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <div className="nn-card rounded-2xl border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm leading-relaxed text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
-          {t("learner.entitlement.verifyFailed")}
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
+            {t("learner.practiceTests.title")}
+          </h1>
+          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
+            {t("learner.entitlement.verifyFailed")}
+          </p>
         </div>
       </div>
     );
@@ -232,11 +238,18 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
 
   if (pathwayResolution?.state !== "scoped") {
     return (
-      <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
-        <div className="mb-4">
+      <div className="mx-auto w-full max-w-6xl space-y-6 px-4 py-8 sm:px-6">
+        <div className="mb-1">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
+            {t("learner.practiceTests.title")}
+          </h1>
+          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
+            {t("learner.entitlement.verifyFailed")}
+          </p>
+        </div>
       </div>
     );
   }
@@ -253,24 +266,23 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       ? await getPathwayLessonPracticeHubSnapshot(defaultPathwayId.trim())
       : null;
 
+  const scopedPid = defaultPathwayId?.trim() ?? "";
+  const catalogPathway = scopedPid ? getExamPathwayById(scopedPid) : undefined;
+  const pathwayLabelFromOptions = pathwayOptions.find((p) => p.id === scopedPid)?.label;
+  const pathwayDisplayName =
+    catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPid;
+
   return (
-    <div className="space-y-6">
-      <div className="mb-4">
+    <div className="space-y-2">
+      <div className="mb-1">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
       <LearnerRenderTraceBanner data-route="practice-tests" label="NN_RENDER_TRACE: practice live route" />
-      <div className="nn-learner-page-hero">
-        <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
-          {t("learner.practiceTests.title")}
-        </h1>
-        <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
-          {t("learner.practiceTests.subtitle.subscriber")}
-        </p>
-      </div>
       <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>
         <PracticeTestsHubClient
           pathwayOptions={pathwayOptions}
           defaultPathwayId={defaultPathwayId}
+          pathwayDisplayName={pathwayDisplayName}
           catEligiblePathwayIds={catEligiblePathwayIds}
           examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
           hubBootstrapSource={hubBootstrapSource}

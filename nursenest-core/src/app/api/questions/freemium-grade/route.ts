@@ -15,7 +15,11 @@ import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sent
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
 import { enforceQuestionGradeProtection } from "@/lib/http/api-protection";
-import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
+import {
+  canonicalCorrectKeysForGrade,
+  correctAnswerIsConfigured,
+  gradeMatches,
+} from "@/lib/questions/grade-answer-match";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
@@ -108,15 +112,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Not found", code: "not_found" }, { status: 404 });
     }
 
-    const expected = normalizeCorrect(row.correctAnswer);
-    if (expected.length === 0) {
+    if (!correctAnswerIsConfigured(row.questionType, row.correctAnswer)) {
       return NextResponse.json(
         { error: "Question is missing an answer key in the bank.", questionId: row.id, code: "missing_answer_key" },
         { status: 422 },
       );
     }
 
-    const correct = gradeMatches(row.questionType, expected, body.answer);
+    const correct = gradeMatches(row.questionType, row.correctAnswer, body.answer);
+    const expected = canonicalCorrectKeysForGrade(row.questionType, row.correctAnswer);
 
     await prisma.user.update({
       where: { id: userId },

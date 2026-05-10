@@ -3,15 +3,25 @@
 import { useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MARKETING_PRIMARY_CTA_COMPACT_CLASS } from "@/lib/theme/marketing-hero-pattern";
+import { cn } from "@/lib/utils";
+
+export type EmailSignupBannerProps = {
+  className?: string;
+};
 
 /** Legacy `EmailSignupPrompt` banner variant — structure parity; submit wired in PHASE 2. */
-export function EmailSignupBanner() {
+export function EmailSignupBanner({ className }: EmailSignupBannerProps = {}) {
   const { t } = useMarketingI18n();
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
 
   return (
-    <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4 text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)] sm:p-6">
+    <div
+      className={cn(
+        "rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4 text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)] sm:p-6",
+        className,
+      )}
+    >
       <div className="mx-auto flex max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="nn-marketing-h3">{t("footer.emailBannerTitle")}</h3>

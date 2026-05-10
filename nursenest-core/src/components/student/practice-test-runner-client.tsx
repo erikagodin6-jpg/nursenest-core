@@ -9,6 +9,7 @@ import {
   ExamSessionShell,
   ExamSessionTopBar,
   ExamTimerReadout,
+  type LearnerExamShellMode,
 } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import { difficultyBandLabel } from "@/lib/questions/difficulty-label";
@@ -26,7 +27,9 @@ import { CatStudyFeedbackPanel } from "@/components/student/cat-study-feedback-p
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 import { PracticeExamProgressHeader } from "@/components/student/practice-exam/practice-exam-progress-header";
+import { PracticeExamRemediationLinks } from "@/components/student/practice-exam/practice-exam-remediation-links";
 import { PracticeExamRationalePanel } from "@/components/student/practice-exam/practice-exam-rationale-panel";
+import { PracticeExamRationaleMobileDock } from "@/components/student/practice-exam/practice-exam-rationale-mobile-dock";
 import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-test-teaching-review-panel";
 import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
 import type { PracticeRationaleFullPanelCopy } from "@/components/study/practice-rationale-full-panel.types";
@@ -101,6 +104,12 @@ import {
   buildExamOptionDisplayOrder,
   shouldDisableOptionShuffleMcq,
 } from "@/lib/practice-tests/exam-option-display-order";
+import { BowtieQuestionRenderer } from "@/components/exams/questions/bowtie-question-renderer";
+import {
+  coerceBowtieDraftAnswer,
+  isBowtieAnswerComplete,
+  tryNormalizeBowtiePayload,
+} from "@/lib/questions/bowtie-adapter";
 import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
 import { ChevronLeft, ChevronRight, Flag, LayoutGrid, Send, Shield } from "lucide-react";
 
@@ -224,6 +233,7 @@ export function PracticeTestRunnerClient({
   const [linearPracticeFeedback, setLinearPracticeFeedback] = useState<
     Record<string, {
       isCorrect: boolean;
+      topic?: string | null;
       rationale: string | null;
       correctKeys: string[];
       correctAnswerExplanation?: string | null;
@@ -259,6 +269,7 @@ export function PracticeTestRunnerClient({
   const abandonInFlightRef = useRef(false);
   const navInFlightRef = useRef(false);
   const catExamNavigatorDialogRef = useRef<HTMLDialogElement>(null);
+  const catExamNavigatorTriggerRef = useRef<HTMLButtonElement | null>(null);
   const persistInFlightRef = useRef(false);
   const pendingPersistRef = useRef<{ answers: Record<string, unknown>; cursorIndex: number } | null>(null);
   const answersRef = useRef<Record<string, unknown>>({});
@@ -403,10 +414,10 @@ export function PracticeTestRunnerClient({
       setLinearPracticeFeedback({});
       setConfidence({});
       setCatFinalStudyFeedback(null);
+      /** Mid-session rationale fetch is only for guided adaptive ("practice" session type), not licensing CAT. */
       const catStudyAwaiting =
         Boolean(data.catMode) &&
-        ((data.config?.catAdaptiveSessionType ?? "cat") === "practice" ||
-          (data.config?.catExamFeedbackMode ?? "test") === "study") &&
+        (data.config?.catAdaptiveSessionType ?? "cat") === "practice" &&
         astObj?.catStudyAwaitingContinue === true;
       if (catStudyAwaiting && data.status === "IN_PROGRESS") {
         void (async () => {
@@ -631,12 +642,11 @@ export function PracticeTestRunnerClient({
   const chromeClass = `nn-exam-variant--${chromeVariant}`;
   const guidedPracticeCat = Boolean(catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice");
   /**
-   * Adaptive CAT stays exam-like: no per-item rationale column during the session (rationales belong in
-   * post-run review). `catExamFeedbackMode: "study"` no longer re-enables split-pane teaching for CAT.
+   * Guided adaptive (`catAdaptiveSessionType: "practice"`) uses the split tutor shell + transparency strip.
+   * Standard licensing CAT stays exam-like: no per-item rationale during the session (post-run review only).
    */
-  const catFeedbackStudy = false;
-  // isExamStyle — CAT test mode: single-column exam shell; explicit submit then lock then next.
-  // CAT study mode uses split layout; rationale panel unlocks after submit (see explanation flow).
+  const catFeedbackStudy = guidedPracticeCat;
+  /** Licensing-style CAT: single-column exam shell; submit → lock → next; phase machine matches `catAdvance`. */
   const isExamStyle = catMode && !catFeedbackStudy;
   const catExamLeakWarnedRef = useRef<string | null>(null);
 
@@ -681,6 +691,12 @@ export function PracticeTestRunnerClient({
       (current.questionType.toUpperCase() === "SATA" ||
         current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY"),
   );
+  const bowtiePayload = useMemo(
+    () =>
+      current ? tryNormalizeBowtiePayload(current.questionType, current.stem, current.options) : null,
+    [current],
+  );
+  const isBowtie = Boolean(bowtiePayload);
   const raw = current ? answers[current.id] : undefined;
 
   useEffect(() => {
@@ -716,13 +732,21 @@ export function PracticeTestRunnerClient({
   const isLinearEngine = Boolean(!catMode && linearDelivery);
   const linearAllowReviewNavigation = testConfig?.linearAllowReviewNavigation === true;
   const linearIsExamShell = isLinearEngine && linearDelivery === "exam";
-  /** Linear practice with per-item rationale: reuse CAT exam shell chrome (header/progress/density) without exam-only rationale deferral. */
-  const linearCatShellPresentation =
-    linearIsExamShell ||
-    (isLinearEngine && linearDelivery === "practice" && linearRationaleVisibility === "after_each");
+  /**
+   * Timed linear mock only — reuse CAT-style minimal board chrome (progress density, option strip).
+   * Tutor / practice delivery uses {@link PracticeExamProgressHeader} + split rationale instead.
+   */
+  const linearCatShellPresentation = linearIsExamShell;
   /** Desktop/tablet split: question left, rationale right (mobile stacks). */
   const linearPracticeSplitReview =
     isLinearEngine && linearDelivery === "practice" && linearRationaleVisibility === "after_each";
+  /** Visual mode for `ExamSessionShell` — one shell, token-driven surfaces (not layout forks). */
+  const learnerExamShellMode = useMemo((): LearnerExamShellMode => {
+    if (status !== "IN_PROGRESS") return "review";
+    if (linearPracticeSplitReview) return "practice";
+    if (catMode || linearCatShellPresentation) return "cat";
+    return "practice";
+  }, [status, linearPracticeSplitReview, catMode, linearCatShellPresentation]);
   const linearEngineUiKind = resolveLinearEngineRunnerUiKind({
     catMode,
     linearDeliveryMode: linearDelivery,
@@ -741,6 +765,7 @@ export function PracticeTestRunnerClient({
   const allowMcqOptionShuffle =
     !Boolean(testConfig?.disableOptionShuffle) &&
     !isSata &&
+    !isBowtie &&
     (catFeedbackStudy || isExamStyle || (!catMode && testConfig?.linearDeliveryMode === "exam"));
 
   const optsOrderCanonical = useMemo(() => {
@@ -782,6 +807,7 @@ export function PracticeTestRunnerClient({
   const hasMeaningfulAnswer = (qid: string): boolean => {
     const v = answersRef.current[qid];
     if (v === undefined || v === null) return false;
+    if (isBowtieAnswerComplete(v)) return true;
     if (typeof v === "string") return v.trim().length > 0;
     if (Array.isArray(v)) return v.length > 0;
     return true;
@@ -885,12 +911,7 @@ export function PracticeTestRunnerClient({
   function setAnswerForCurrent(next: unknown) {
     if (!current) return;
     if (submitInFlightRef.current || catAdvanceInFlightRef.current || linearCommitInFlightRef.current) return;
-    if (
-      catMode &&
-      (testConfig?.catExamFeedbackMode ?? "test") !== "study" &&
-      (testConfig?.catAdaptiveSessionType ?? "cat") !== "practice" &&
-      !catExamCanChangeAnswer(catExamUiPhaseRef.current)
-    ) {
+    if (catMode && isExamStyle && !catExamCanChangeAnswer(catExamUiPhaseRef.current)) {
       return;
     }
     if (isLinearEngine && committedSet.has(current.id)) return;
@@ -929,6 +950,7 @@ export function PracticeTestRunnerClient({
         committedQuestionIds?: string[];
         feedback?: {
           isCorrect: boolean;
+          topic?: string | null;
           rationale: string | null;
           correctKeys: string[];
           correctAnswerExplanation?: string | null;
@@ -948,6 +970,7 @@ export function PracticeTestRunnerClient({
           ...prev,
           [current.id]: {
             isCorrect: data.feedback!.isCorrect,
+            topic: data.feedback!.topic ?? null,
             rationale: data.feedback!.rationale,
             correctKeys: data.feedback!.correctKeys ?? [],
             correctAnswerExplanation: data.feedback!.correctAnswerExplanation ?? null,
@@ -1018,10 +1041,7 @@ export function PracticeTestRunnerClient({
     if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
     if (!current || !hasMeaningfulAnswer(current.id)) return;
 
-    const feedbackStudy =
-      catMode &&
-      ((testConfig?.catAdaptiveSessionType ?? "cat") === "practice" ||
-        (testConfig?.catExamFeedbackMode ?? "test") === "study");
+    const feedbackStudy = catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice";
     const examStyle = catMode && !feedbackStudy;
     if (examStyle && !catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) {
       return;
@@ -1225,11 +1245,7 @@ export function PracticeTestRunnerClient({
   async function goNext() {
     if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
     if (catMode) {
-      const guided = (testConfig?.catAdaptiveSessionType ?? "cat") === "practice";
-      const feedbackStudy = guided || (testConfig?.catExamFeedbackMode ?? "test") === "study";
-      if (feedbackStudy) {
-        /* Strict adaptive CAT: next only from the latest delivered item. Guided practice can advance from any index. */
-        if (!guided && idx < total - 1) return;
+      if (guidedPracticeCat) {
         await catAdvance();
         return;
       }
@@ -1289,7 +1305,7 @@ export function PracticeTestRunnerClient({
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
       const target = e.target as HTMLElement | null;
-      if (target?.closest?.('[role="dialog"]')) return;
+      if (target?.closest?.("dialog[open]") || target?.closest?.('[role="dialog"]')) return;
       if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
         return;
       }
@@ -1577,6 +1593,12 @@ export function PracticeTestRunnerClient({
       }
     }
 
+    const linearFbCount = Object.keys(linearPracticeFeedback).length;
+    const linearFbCorrect = Object.values(linearPracticeFeedback).filter((f) => f.isCorrect).length;
+    const linearFbMissed = linearFbCount - linearFbCorrect;
+    const linearFbAccuracyPct =
+      linearFbCount > 0 ? Math.round((linearFbCorrect / linearFbCount) * 100) : 0;
+
     return (
       <div>
         {/* ── Spec §7 structured results ─────────────────────────── */}
@@ -1587,10 +1609,39 @@ export function PracticeTestRunnerClient({
           pathwayId={testConfig?.pathwayId ?? null}
         />
 
+        {!results.catReport && linearFbCount > 0 ? (
+          <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-6">
+            <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-5 sm:p-6">
+              <p className="m-0 text-xs font-bold uppercase tracking-wide text-[var(--semantic-brand)]">
+                {tx("learner.practiceTests.run.sessionStudyPulseTitle", "Session study pulse")}
+              </p>
+              <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
+                {tx(
+                  "learner.practiceTests.run.sessionStudyPulseAccuracy",
+                  "Accuracy on committed items",
+                )}
+                :{" "}
+                <span className="font-semibold tabular-nums text-[var(--semantic-text-primary)]">
+                  {linearFbAccuracyPct}%
+                </span>{" "}
+                <span className="text-[var(--semantic-text-muted)]">
+                  ({linearFbCorrect}/{linearFbCount})
+                </span>
+              </p>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+                {tx("learner.practiceTests.run.sessionStudyPulseMissed", "Missed items")}:{" "}
+                <span className="font-semibold tabular-nums text-[var(--semantic-text-primary)]">
+                  {linearFbMissed}
+                </span>
+              </p>
+            </div>
+          </div>
+        ) : null}
+
         {/* ── Confidence analytics (shown when rated questions exist) ── */}
         {confidenceTrackingEnabled && Object.keys(confidence).length > 0 ? (
           <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
-            <div className="nn-cat-question-card">
+            <div className="nn-cat-question-card nn-premium-cat-results-panel border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_16%,var(--semantic-surface))] shadow-sm">
               <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
                 Confidence Analysis
               </h3>
@@ -1630,7 +1681,7 @@ export function PracticeTestRunnerClient({
           }
           return (
             <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
-              <div className="nn-cat-question-card">
+              <div className="nn-cat-question-card nn-premium-cat-results-panel border border-[color-mix(in_srgb,var(--semantic-chart-4)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_14%,var(--semantic-surface))] shadow-sm">
                 <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
                   Smart Review
                 </h3>
@@ -1664,7 +1715,7 @@ export function PracticeTestRunnerClient({
 
           return (
             <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
-              <div className="nn-cat-question-card">
+              <div className="nn-cat-question-card nn-premium-cat-results-panel border border-[color-mix(in_srgb,var(--semantic-chart-1)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--semantic-surface))] shadow-sm">
                   <StudyPlanFromResults
                   readinessScore={readinessScore}
                   byTopic={results.byTopic}
@@ -1725,14 +1776,14 @@ export function PracticeTestRunnerClient({
 
         {/* ── Teaching review (post-exam rationale access) ─────────── */}
         <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
-          <div className="nn-cat-question-card space-y-3">
+          <div className="nn-cat-question-card nn-premium-cat-results-panel space-y-3 border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] shadow-sm">
             <h3 className="font-semibold text-[var(--semantic-text-primary)]">
               Teaching review
             </h3>
             <p className="text-sm text-[var(--semantic-text-secondary)]">
-              {results.catExamFeedbackMode === "study"
-                ? "You saw explanations after each item. Open the full breakdown for consolidated distractors, strategy, and figures."
-                : "Test Mode keeps rationales hidden until the end. Open the full breakdown below."}
+              {testConfig?.catAdaptiveSessionType === "practice"
+                ? "Guided adaptive sessions may show teaching notes between items. Open the full breakdown for consolidated review, distractors, and figures."
+                : "Licensing-style CAT keeps rationales and answer keys out of the live session. Open the full breakdown below when you are ready to debrief."}
             </p>
             {teachingReviewItems === null ? (
               <button
@@ -1855,7 +1906,12 @@ export function PracticeTestRunnerClient({
     }
     return (
       <div className="space-y-4" aria-busy="true">
-        <ExamSessionShell neutralPalette immersive className="overflow-hidden shadow-md">
+        <ExamSessionShell
+          neutralPalette
+          immersive
+          examMode={learnerExamShellMode}
+          className="overflow-hidden shadow-md"
+        >
           <ExamSessionTopBar
             left={
               <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
@@ -1969,7 +2025,29 @@ export function PracticeTestRunnerClient({
 
     // Build CAT-specific option rows using AnswerOptionRow
     const catOptions =
-      optsCanonical.length === 0 ? (
+      isBowtie && bowtiePayload ? (
+        <BowtieQuestionRenderer
+          payload={bowtiePayload}
+          value={raw}
+          showScenarioBanner={false}
+          disabled={optionsInteractionLocked}
+          onChange={(next) => setAnswerForCurrent(next)}
+          reveal={
+            catFeedbackStudy && catStudyFeedback && catStudyFeedback.questionId === current?.id
+              ? (() => {
+                  const ck = catStudyFeedback.correctKeys;
+                  if (ck.length < 3) return null;
+                  return {
+                    correct: {
+                      correctIds: [ck[0]!, ck[1]!, ck[2]!] as [string, string, string],
+                    },
+                    selectedIds: coerceBowtieDraftAnswer(raw),
+                  };
+                })()
+              : null
+          }
+        />
+      ) : optsCanonical.length === 0 ? (
         mcqNoChoicesFallback
       ) : isSata ? (
         <ul
@@ -2097,7 +2175,8 @@ export function PracticeTestRunnerClient({
           <ExamSessionShell
             neutralPalette
             immersive
-            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome nn-cat-adaptive-exam-session" : ""}`}
+            examMode={learnerExamShellMode}
+            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome nn-cat-exam-chrome--premium nn-cat-adaptive-exam-session" : ""}`}
           >
             {isExamStyle ? (
               <>
@@ -2118,11 +2197,25 @@ export function PracticeTestRunnerClient({
                         {tx("learner.practiceTests.run.catExamStrictBadge", "Strict")}
                       </span>
                     ) : null}
+                    {adaptiveSe != null &&
+                    Number.isFinite(adaptiveSe) &&
+                    adaptiveDifficultyHistory.length >= 2 ? (
+                      <span
+                        className="hidden max-w-[11rem] truncate rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_12%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-semibold uppercase leading-tight tracking-wide text-[var(--semantic-text-secondary)] sm:inline-flex sm:items-center"
+                        title={tx(
+                          "learner.practiceTests.run.catExamAdaptivePrecisionHint",
+                          "The adaptive engine is refining your ability estimate as you progress. This is not a pass/fail prediction.",
+                        )}
+                      >
+                        {tx("learner.practiceTests.run.catExamAdaptivePrecisionShort", "Estimate updating")}
+                      </span>
+                    ) : null}
                     <ExamSessionThemeTrigger variant="pill" />
                     <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
                     <button
                       type="button"
-                      className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))]"
+                      ref={catExamNavigatorTriggerRef}
+                      className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_55%,transparent)]"
                       onClick={() => catExamNavigatorDialogRef.current?.showModal()}
                     >
                       <LayoutGrid className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
@@ -2233,17 +2326,23 @@ export function PracticeTestRunnerClient({
                           />
                         ) : null}
 
-                        <PracticeTestMcqChoicesInstruction
-                          isSata={Boolean(isSata)}
-                          selectAllLabel={tx(
-                            "learner.practiceTests.run.selectAllThatApply",
-                            "Select all that apply",
-                          )}
-                          selectBestLabel={tx(
-                            "learner.practiceTests.run.selectBestAnswer",
-                            "Select the best answer",
-                          )}
-                        />
+                        {!isBowtie ? (
+                          <PracticeTestMcqChoicesInstruction
+                            isSata={Boolean(isSata)}
+                            selectAllLabel={tx(
+                              "learner.practiceTests.run.selectAllThatApply",
+                              "Select all that apply",
+                            )}
+                            selectBestLabel={tx(
+                              "learner.practiceTests.run.selectBestAnswer",
+                              "Select the best answer",
+                            )}
+                          />
+                        ) : (
+                          <p className="nn-cat-options-label">
+                            {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
+                          </p>
+                        )}
 
                         {catOptions}
                       </QuestionCard>
@@ -2308,11 +2407,15 @@ export function PracticeTestRunnerClient({
                 </div>
                 <dialog
                   ref={catExamNavigatorDialogRef}
+                  aria-labelledby="nn-cat-exam-navigator-title"
                   aria-describedby="nn-cat-exam-navigator-status-hint"
                   className="nn-cat-exam-navigator-dialog w-[min(22rem,calc(100vw-2rem))] rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-0 text-[var(--semantic-text-primary)] shadow-lg backdrop:bg-black/20"
+                  onClose={() => {
+                    catExamNavigatorTriggerRef.current?.focus();
+                  }}
                 >
                   <div className="border-b border-[var(--semantic-border-soft)] px-4 py-3">
-                    <p className="m-0 text-sm font-semibold">
+                    <p id="nn-cat-exam-navigator-title" className="m-0 text-sm font-semibold">
                       {tx("learner.practiceTests.run.navigatorTitle", "Session outline")}
                     </p>
                     <p id="nn-cat-exam-navigator-status-hint" className="mt-1 text-xs text-[var(--semantic-text-muted)]">
@@ -2341,7 +2444,7 @@ export function PracticeTestRunnerClient({
                   <div className="border-t border-[var(--semantic-border-soft)] p-2">
                     <button
                       type="button"
-                      className="w-full rounded-md bg-[color-mix(in_srgb,var(--semantic-text-primary)_6%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold"
+                      className="w-full rounded-md bg-[color-mix(in_srgb,var(--semantic-text-primary)_6%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_55%,transparent)]"
                       onClick={() => catExamNavigatorDialogRef.current?.close()}
                     >
                       {tx("learner.practiceTests.run.close", "Close")}
@@ -2414,17 +2517,23 @@ export function PracticeTestRunnerClient({
                             mode={isExamStyle ? "cat" : "practice"}
                             phase={catStudyFeedback ? "post_submit" : "pre_submit"}
                           />
-                          <PracticeTestMcqChoicesInstruction
-                            isSata={Boolean(isSata)}
-                            selectAllLabel={tx(
-                              "learner.practiceTests.run.selectAllThatApply",
-                              "Select all that apply",
-                            )}
-                            selectBestLabel={tx(
-                              "learner.practiceTests.run.selectBestAnswer",
-                              "Select the best answer",
-                            )}
-                          />
+                          {!isBowtie ? (
+                            <PracticeTestMcqChoicesInstruction
+                              isSata={Boolean(isSata)}
+                              selectAllLabel={tx(
+                                "learner.practiceTests.run.selectAllThatApply",
+                                "Select all that apply",
+                              )}
+                              selectBestLabel={tx(
+                                "learner.practiceTests.run.selectBestAnswer",
+                                "Select the best answer",
+                              )}
+                            />
+                          ) : (
+                            <p className="nn-cat-options-label">
+                              {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
+                            </p>
+                          )}
                           {catOptions}
                           {confidenceTrackingEnabled && hasMeaningfulAnswer(current.id) ? (
                             <div className="mt-4">
@@ -2477,7 +2586,16 @@ export function PracticeTestRunnerClient({
     }
 
     const legacyCatOptions =
-      optsCanonical.length === 0 ? (
+      isBowtie && bowtiePayload ? (
+        <BowtieQuestionRenderer
+          payload={bowtiePayload}
+          value={raw}
+          showScenarioBanner={false}
+          disabled={false}
+          onChange={(next) => setAnswerForCurrent(next)}
+          reveal={null}
+        />
+      ) : optsCanonical.length === 0 ? (
         mcqNoChoicesFallback
       ) : isSata ? (
         <ul
@@ -2571,17 +2689,23 @@ export function PracticeTestRunnerClient({
             )}
           />
         ) : null}
-        <PracticeTestMcqChoicesInstruction
-          isSata={Boolean(isSata)}
-          selectAllLabel={tx(
-            "learner.practiceTests.run.selectAllThatApply",
-            "Select all that apply",
-          )}
-          selectBestLabel={tx(
-            "learner.practiceTests.run.selectBestAnswer",
-            "Select the best answer",
-          )}
-        />
+        {!isBowtie ? (
+          <PracticeTestMcqChoicesInstruction
+            isSata={Boolean(isSata)}
+            selectAllLabel={tx(
+              "learner.practiceTests.run.selectAllThatApply",
+              "Select all that apply",
+            )}
+            selectBestLabel={tx(
+              "learner.practiceTests.run.selectBestAnswer",
+              "Select the best answer",
+            )}
+          />
+        ) : (
+          <p className="nn-cat-options-label">
+            {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
+          </p>
+        )}
         {legacyCatOptions}
         {confidenceTrackingEnabled ? (
           <div className="mt-4">
@@ -2656,6 +2780,7 @@ export function PracticeTestRunnerClient({
           <ExamSessionShell
             neutralPalette
             immersive
+            examMode={learnerExamShellMode}
             className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome"
           >
             <header className="nn-cat-exam-board-top flex min-h-[3.5rem] shrink-0 items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-2 sm:px-4">
@@ -2739,7 +2864,29 @@ export function PracticeTestRunnerClient({
   };
 
   const linearCatOptions =
-    optsCanonical.length === 0 ? (
+    isBowtie && bowtiePayload ? (
+      <BowtieQuestionRenderer
+        payload={bowtiePayload}
+        value={raw}
+        showScenarioBanner={false}
+        disabled={optionsInteractionLocked}
+        onChange={(next) => setAnswerForCurrent(next)}
+        reveal={
+          linearFeedback && currentCommitted
+            ? (() => {
+                const ck = linearFeedback.correctKeys;
+                if (ck.length < 3) return null;
+                return {
+                  correct: {
+                    correctIds: [ck[0]!, ck[1]!, ck[2]!] as [string, string, string],
+                  },
+                  selectedIds: coerceBowtieDraftAnswer(raw),
+                };
+              })()
+            : null
+        }
+      />
+    ) : optsCanonical.length === 0 ? (
       mcqNoChoicesFallback
     ) : isSata ? (
       <ul
@@ -2807,6 +2954,17 @@ export function PracticeTestRunnerClient({
     : tx("learner.practiceTests.run.linearFooterRevealNext", "Next item");
   const linearFooterSubmitLabel = tx("learner.practiceTests.run.linearFooterSubmitAnswer", "Submit answer");
   const linearFooterFinishLabel = tx("learner.practiceTests.run.linearFooterFinishTest", "Finish test");
+
+  const linearRemediationCopy = useMemo(
+    () => ({
+      title: tx("learner.practiceTests.run.remediationCardTitle", "Strengthen weak areas"),
+      topicLabel: tx("learner.practiceTests.run.remediationTopicLabel", "Focus topic"),
+      flashcardsCta: tx("learner.practiceTests.run.remediationFlashcardsCta", "Open flashcards hub"),
+      topicDrillCta: tx("learner.practiceTests.run.remediationTopicDrillCta", "Drill questions on this topic"),
+      weakFlashcardsCta: tx("learner.practiceTests.run.remediationWeakFlashcardsCta", "Weak-area flashcards"),
+    }),
+    [tx],
+  );
 
   const linearRationalePanelCopy = useMemo(
     (): PracticeRationaleFullPanelCopy => ({
@@ -2888,17 +3046,23 @@ export function PracticeTestRunnerClient({
           )}
         />
       ) : null}
-      <PracticeTestMcqChoicesInstruction
-        isSata={Boolean(isSata)}
-        selectAllLabel={tx(
-          "learner.practiceTests.run.selectAllThatApply",
-          "Select all that apply",
-        )}
-        selectBestLabel={tx(
-          "learner.practiceTests.run.selectBestAnswer",
-          "Select the best answer",
-        )}
-      />
+      {!isBowtie ? (
+        <PracticeTestMcqChoicesInstruction
+          isSata={Boolean(isSata)}
+          selectAllLabel={tx(
+            "learner.practiceTests.run.selectAllThatApply",
+            "Select all that apply",
+          )}
+          selectBestLabel={tx(
+            "learner.practiceTests.run.selectBestAnswer",
+            "Select the best answer",
+          )}
+        />
+      ) : (
+        <p className="nn-cat-options-label">
+          {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
+        </p>
+      )}
       {linearCatOptions}
       {confidenceTrackingEnabled ? (
         <div className="mt-4">
@@ -2947,7 +3111,28 @@ export function PracticeTestRunnerClient({
     />
   );
 
-  const linearExamQuestionCard = (
+  const linearPrimaryTutorLayout = Boolean(linearPracticeSplitReview);
+  const linearExamQuestionCard = linearPrimaryTutorLayout ? (
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="flex shrink-0 justify-end pb-1 pt-0.5">{linearExamFlagSlot}</div>
+      <div className="min-h-0 flex-1 overflow-hidden">
+        <QuestionCard
+          stem={stemBodyForLinearCard}
+          topic={current.topic}
+          subtopic={current.subtopic}
+          difficultyLabel={current.difficulty != null ? difficultyBandLabel(current.difficulty) : null}
+          examStackedLayout={false}
+          examDetachedFooter={false}
+          examStemScrollPartition={false}
+          examCategoryLabel={null}
+          examHeaderRightSlot={undefined}
+          examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
+        >
+          {linearQuestionCardInner}
+        </QuestionCard>
+      </div>
+    </div>
+  ) : (
     <QuestionCard
       stem={stemBodyForLinearCard}
       topic={null}
@@ -3045,13 +3230,14 @@ export function PracticeTestRunnerClient({
       telemetrySurface="practice_test"
     >
       <PracticeSessionLayout
-        className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
+        className={`flex min-h-0 flex-1 flex-col ${chromeClass}${linearPracticeSplitReview ? " nn-practice-exam-runner--rationale-dock" : ""}`}
         {...(linearCatShellPresentation ? { "data-cat-exam-root": true } : {})}
       >
         <ExamSessionShell
           neutralPalette
           immersive
-          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}${linearPracticeSplitReview ? " nn-practice-exam-runner" : ""}`}
+          examMode={learnerExamShellMode}
+          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome nn-cat-exam-chrome--premium${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}${linearPracticeSplitReview ? " nn-practice-exam-runner" : ""}`}
         >
           {linearPracticeSplitReview ? (
             <>
@@ -3079,6 +3265,11 @@ export function PracticeTestRunnerClient({
                     ),
                   },
                 )}
+                sessionBadge={
+                  <span className="inline-flex max-w-full items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--semantic-surface))] px-2.5 py-0.5 text-[11px] font-bold uppercase leading-snug tracking-wide text-[var(--semantic-text-secondary)]">
+                    {modeLabel}
+                  </span>
+                }
                 toolbar={
                   <div className="flex flex-wrap items-center justify-end gap-2">
                     <ExamSessionThemeTrigger variant="pill" />
@@ -3099,38 +3290,49 @@ export function PracticeTestRunnerClient({
               <div
                 className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
               >
-                <div className="nn-practice-exam-split mx-auto flex min-h-0 w-full min-w-0 max-w-full flex-1 flex-col gap-4 px-2 pb-1 pt-1 lg:flex-row lg:items-stretch lg:gap-5 lg:px-4 lg:pb-2">
+                <div className="nn-practice-exam-split nn-practice-exam-split--premium mx-auto flex min-h-0 w-full min-w-0 max-w-full flex-1 flex-col gap-4 px-2 pb-1 pt-1 lg:flex-row lg:items-stretch lg:gap-5 lg:px-4 lg:pb-2">
                   <div className="nn-practice-exam-split__primary flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                     {linearExamQuestionCard}
                   </div>
-                  <PracticeExamRationalePanel
-                    ariaLabel={tx("learner.practiceTests.run.rationaleColumnAria", "Rationale and review")}
+                  <PracticeExamRationaleMobileDock
+                    openLabel={tx("learner.practiceTests.run.rationaleOpenMobile", "Rationale")}
+                    sheetTitle={tx("learner.practiceTests.run.rationaleReviewHeading", "Rationale & Review")}
                   >
-                    <PracticeRationaleFullPanel
-                      status={rationaleFullStatus}
-                      correctKeys={linearFeedback?.correctKeys}
-                      optionDisplayMap={optionDisplayMap}
-                      allOptionKeys={optsOrderCanonical}
-                      correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
-                      rationale={linearFeedback?.rationale}
-                      distractorRationalesMap={linearFeedback?.distractorRationalesMap}
-                      keyTakeaway={linearFeedback?.keyTakeaway}
-                      relatedLessons={linearFeedback?.relatedLessons ?? []}
-                      confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
-                      clinicalPearlDisplay={linearFeedback?.clinicalPearlDisplay ?? null}
-                      referenceSource={linearFeedback?.referenceSource ?? null}
-                      showDistractorFallback={Boolean(currentCommitted && rationaleFullStatus !== "waiting" && rationaleFullStatus !== null)}
-                      copy={linearRationalePanelCopy}
-                    />
-                    {practiceAdaptivePostMiss?.questionId === current.id ? (
-                      <PracticeAdaptivePostMissPanel
-                        payload={practiceAdaptivePostMiss.payload}
-                        testConfig={testConfig}
-                        pathwaySurface={pathwaySurface}
-                        tx={(key, fallback) => tx(key, fallback)}
+                    <PracticeExamRationalePanel
+                      ariaLabel={tx("learner.practiceTests.run.rationaleColumnAria", "Rationale and review")}
+                    >
+                      <PracticeRationaleFullPanel
+                        status={rationaleFullStatus}
+                        correctKeys={linearFeedback?.correctKeys}
+                        optionDisplayMap={optionDisplayMap}
+                        allOptionKeys={optsOrderCanonical}
+                        correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
+                        rationale={linearFeedback?.rationale}
+                        distractorRationalesMap={linearFeedback?.distractorRationalesMap}
+                        keyTakeaway={linearFeedback?.keyTakeaway}
+                        relatedLessons={linearFeedback?.relatedLessons ?? []}
+                        confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
+                        clinicalPearlDisplay={linearFeedback?.clinicalPearlDisplay ?? null}
+                        referenceSource={linearFeedback?.referenceSource ?? null}
+                        showDistractorFallback={Boolean(currentCommitted && rationaleFullStatus !== "waiting" && rationaleFullStatus !== null)}
+                        copy={linearRationalePanelCopy}
                       />
-                    ) : null}
-                  </PracticeExamRationalePanel>
+                      <PracticeExamRemediationLinks
+                        pathwayId={testConfig?.pathwayId ?? pathwaySurface?.id ?? null}
+                        topicLabel={linearFeedback?.topic ?? current.topic}
+                        visible={Boolean(currentCommitted && linearFeedback)}
+                        copy={linearRemediationCopy}
+                      />
+                      {practiceAdaptivePostMiss?.questionId === current.id ? (
+                        <PracticeAdaptivePostMissPanel
+                          payload={practiceAdaptivePostMiss.payload}
+                          testConfig={testConfig}
+                          pathwaySurface={pathwaySurface}
+                          tx={(key, fallback) => tx(key, fallback)}
+                        />
+                      ) : null}
+                    </PracticeExamRationalePanel>
+                  </PracticeExamRationaleMobileDock>
                 </div>
                 {linearBoardFooter}
               </div>
@@ -3142,7 +3344,7 @@ export function PracticeTestRunnerClient({
               >
                 <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
                   {linearCatShellPresentation
-                    ? tx("learner.practiceTests.run.itemInProgress", "Question in progress")
+                    ? tx("learner.practiceTests.run.linearTimedItemLead", "Timed practice item")
                     : `${tx("learner.practiceTests.run.question", "Question")} ${idx + 1} ${tx("learner.practiceTests.run.of", "of")} ${total}`}
                 </p>
                 <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">

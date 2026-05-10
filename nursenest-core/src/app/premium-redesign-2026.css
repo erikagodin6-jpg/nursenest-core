@@ -169,26 +169,58 @@
   margin-bottom: 12px;
 }
 .nn-premium-hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 112px;
   border-radius: 14px;
   padding: 12px 14px;
   background: var(--surface, #ffffff);
   border: 1px solid var(--border-subtle, #f0e6f7);
 }
 .nn-premium-hero-stat__label {
+  display: block;
+  width: 100%;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--palette-text-muted);
+  line-height: 1.25;
+}
+.nn-premium-hero-stat__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  margin-top: 6px;
+  width: 100%;
+  min-width: 0;
+}
+.nn-premium-hero-stat__label + .nn-premium-hero-stat__value {
+  margin-top: 6px;
 }
 .nn-premium-hero-stat__value {
+  display: block;
   font-size: 20px;
   font-weight: 900;
   color: var(--palette-heading);
-  margin-top: 2px;
+  margin-top: 0;
   letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.nn-premium-hero-stat__unit {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--palette-text-muted);
+  line-height: 1.2;
 }
 .nn-premium-hero-stat__glyph {
+  display: block;
+  flex-shrink: 0;
   width: 18px;
   height: 18px;
   margin-bottom: 6px;
@@ -311,6 +343,19 @@
   display: block;
 }
 
+/* Homepage ECG section — rhythm strip panel matches hero readability on dark / midnight themes */
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-root
+  .nn-premium-home-section--ecg
+  .nn-premium-hero-ecg {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-inset, var(--theme-card-bg)) 92%, #000000) 0%,
+    color-mix(in srgb, var(--semantic-chart-3) 18%, var(--bg-inset, var(--theme-card-bg))) 100%
+  );
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 42%, var(--border-subtle));
+}
+
 /* Static strip only — continuous drift reads as decorative telemetry, not clinical teaching. */
 
 /* Mini lesson cards */
@@ -374,25 +419,56 @@
   font-weight: 800;
 }
 
+/* Primary marketing band: neutral paper + whisper tint — never `--nav-bg`; full-width wrapper, not `.nn-section-shell`. */
+/* =====================================================================
+   === THEME ARCHITECTURE CONTRACT (marketing) ===
+   Ocean is the canonical structural theme for the marketing header
+   layout `[data-nn-header-layout="marketing-row4"]`. Blossom and Midnight
+   inherit Ocean's structure and may ONLY override the visual layer.
+
+   Themes MAY override (color/visual layer):
+     - colors, gradients, shadows, borders, opacity, hover/focus states.
+
+   Themes MUST NOT override (structural layer):
+     - display
+     - flex-direction / flex-wrap (nav direction + wrapping)
+     - grid-template / grid-template-columns / grid-template-rows /
+       grid-template-areas
+     - width / max-width / min-width
+     - spacing rhythm (padding/margin) that shifts structural rhythm
+     - responsive breakpoints (no theme-scoped media-query forks)
+     - container hierarchy / DOM ordering / header row ordering
+
+   Enforced by a static guard test that scans this file's text:
+     tests/contracts/theme-marketing-row4-contract.test.ts
+
+   Escape hatch (use rarely, document the reason): place a CSS block
+   comment whose body starts with `theme-contract:allow <reason>`
+   immediately before a declaration to suppress that one violation.
+   ===================================================================== */
+
 /* ---------------------------------------------------------------------
    Premium glass enhancement for the marketing header — CSS only.
-   Uses the existing wrapper classes; does not change site-header.tsx.
+
+   Primary marketing band: neutral paper tokens + whisper tint — never `--nav-bg` (sticky injects
+   saturated theme chrome). Paint targets full-width `data-nn-header-band="primary"`, not
+   `.nn-section-shell` (max-width + auto margins crop the gradient into a centered slab).
+
+   Gradient tokens: `--nn-header-primary-bg`, `--semantic-info`, `--semantic-brand` (Phase 3 block).
    --------------------------------------------------------------------- */
 
 .nn-header-nav-row,
-.nn-section-shell[data-nn-header-band="primary"] {
-  /* Subtle elevated band feel for the primary header band. */
+[data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] {
   position: relative;
 }
 
-/* Apply premium glass background to the primary marketing header band. */
-[data-nn-header-band="primary"] {
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--nav-bg, #ffffff) 92%, transparent) 0%,
-      color-mix(in srgb, var(--nav-bg, #ffffff) 78%, transparent) 100%);
-  backdrop-filter: saturate(140%) blur(10px);
-  -webkit-backdrop-filter: saturate(140%) blur(10px);
+/* Dark unified header: full-bleed paint lives on `.nn-header-dark-surface` (sticky); inner frame
+   and primary band stay transparent so no max-width shell reads as a cropped colour slab. */
+.nn-header-dark-surface [data-nn-header-band="primary"],
+.nn-header-dark-surface .nn-marketing-nav-v31-frame {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* Add a soft elevation when the sticky wrapper has scrolled past the top.
@@ -424,6 +500,528 @@
   transform: translateY(-1px);
 }
 
+/* Tier hub (marketing row4, lg+): center pathway chips under the primary link column. */
+@media (min-width: 1024px) {
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner > nav {
+    margin-inline: auto;
+    max-width: 52rem;
+    justify-content: center;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Marketing row 4 (desktop lg+, ≥1024px) — utility triggers + sky tier chips.
+   Token-driven so every `[data-theme]` reads correctly (no fixed lavender).
+   --------------------------------------------------------------------- */
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-marketing-utility-cluster {
+  padding-inline-end: 0.35rem;
+  margin-inline-end: 0.15rem;
+  border-inline-end: 1px solid color-mix(in srgb, var(--semantic-border-soft) 50%, var(--header-border));
+}
+
+.nn-header-utility-trigger-row4 {
+  border-style: solid;
+  border-width: 1px;
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--nn-header-primary-bg)) 0%,
+    color-mix(in srgb, var(--semantic-panel-warm) 10%, var(--nn-header-primary-bg)) 100%
+  );
+  color: var(--nav-fg);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 40%, transparent);
+}
+
+.nn-header-utility-trigger-row4:hover {
+  border-color: color-mix(in srgb, var(--semantic-info) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 11%, var(--nn-header-primary-bg));
+}
+
+.nn-header-utility-theme-row4 :where(button) {
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft)) !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--nn-header-primary-bg)) 0%,
+    color-mix(in srgb, var(--semantic-panel-warm) 10%, var(--nn-header-primary-bg)) 100%
+  ) !important;
+  color: var(--nav-fg) !important;
+}
+
+/*
+ * NOTE: the historical selector `.nn-header-logo-row > .nn-header-nav-row` does
+ * NOT match the rendered DOM in `site-header.tsx` because `.nn-marketing-nav-v31-frame`
+ * sits between the header (`.nn-header-logo-row`) and the tier rail (`.nn-header-nav-row`).
+ * So `--nav-fg` for the tier strip falls back to the literal `#ffffff` set on
+ * `.nn-header-nav-row` in globals.css, which produced WHITE chip labels on the
+ * light sky band — the contrast bug. Re-bind tier-strip tokens here on the rail
+ * itself (it always exists in marketing-row4) so dark labels render on the light
+ * pill chips.
+ */
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
+[data-nn-header-layout="marketing-row4"] .nn-header-logo-row > .nn-header-nav-row {
+  background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg));
+  border-top: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--header-border));
+  color: var(--nn-header-primary-fg);
+  --nav-fg: var(--nn-header-primary-fg);
+  --nav-link: var(--nn-header-primary-fg);
+  --nav-link-hover: var(--nn-header-primary-fg);
+  --nav-muted: color-mix(in srgb, var(--nn-header-primary-fg) 62%, transparent);
+  --nav-border: color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+  --nav-hover: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg));
+  --nav-active: color-mix(in srgb, var(--semantic-info) 22%, var(--nn-header-primary-bg));
+  --nav-link-active: var(--nn-header-primary-fg);
+  --nav-on-active-fg: var(--nn-header-primary-fg);
+  --header-background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg));
+  --header-border: color-mix(in srgb, var(--semantic-info) 14%, var(--header-border));
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 12%, var(--nn-header-primary-bg));
+  color: var(--nn-header-primary-fg);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link[data-active] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 38%, var(--semantic-info));
+  background: color-mix(
+    in srgb,
+    var(--semantic-brand) 14%,
+    color-mix(in srgb, var(--semantic-info) 18%, var(--nn-header-primary-bg))
+  );
+  color: var(--nn-header-primary-fg);
+  font-weight: 650;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link:hover {
+  background: color-mix(in srgb, var(--semantic-info) 18%, var(--nn-header-primary-bg));
+  border-color: color-mix(in srgb, var(--semantic-info) 32%, var(--semantic-border-soft));
+  color: var(--nn-header-primary-fg);
+  transform: none;
+}
+
+/* Main desktop strip (Pricing…Tools) — same sky chip language as tier row; lives in `.nn-header-desktop-grid`, not `.nn-header-nav-row`. */
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 10%, var(--nn-header-primary-bg));
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link:hover {
+  background: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg));
+  transform: none;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link[aria-current="page"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-info));
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 18%,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--nn-header-primary-bg))
+  );
+  font-weight: 650;
+}
+
+/*
+ * Tier hub chips (RN / PN / NP / New grad / Allied). NAV_TIER_LINK_CLASS DOES
+ * include `.nn-marketing-nav-link`, but we also pin styles via `nav a` so the
+ * chip chrome holds even if the marker class is removed. `color` is set
+ * explicitly so chips read as dark ink on the light sky band — never inheriting
+ * the literal white from the base `.nn-header-nav-row` rule in globals.css.
+ */
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 12%, var(--nn-header-primary-bg));
+  color: var(--nn-header-primary-fg);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a:hover,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip:hover {
+  background: color-mix(in srgb, var(--semantic-info) 18%, var(--nn-header-primary-bg));
+  border-color: color-mix(in srgb, var(--semantic-info) 32%, var(--semantic-border-soft));
+  color: var(--nn-header-primary-fg);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 38%, var(--semantic-info));
+  background: color-mix(
+    in srgb,
+    var(--semantic-brand) 14%,
+    color-mix(in srgb, var(--semantic-info) 22%, var(--nn-header-primary-bg))
+  );
+  color: var(--nn-header-primary-fg);
+  font-weight: 650;
+}
+
+/* Tier strip sits inside `.nn-marketing-nav-v31-frame` (not `.nn-header-logo-row >`), so it keeps
+   generic `.nn-header-nav-row` dark chrome + white `--nav-fg`. Row4 chip styling paints light pill
+   fills on anchors — rebind tokens to ink-on-paper so RPN/RN/NP labels meet contrast (WCAG). */
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] {
+  background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg));
+  color: var(--nn-header-primary-fg);
+  border-top: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--header-border));
+  --nav-bg: var(--nn-header-primary-bg);
+  --nav-fg: var(--nn-header-primary-fg);
+  --nav-link: var(--nn-header-primary-fg);
+  --nav-link-hover: var(--nn-header-primary-fg);
+  --nav-link-active: var(--semantic-brand);
+  --nav-muted: color-mix(in srgb, var(--nn-header-primary-fg) 62%, transparent);
+  --nav-hover: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg));
+  --nav-active: color-mix(in srgb, var(--semantic-brand) 14%, var(--nn-header-primary-bg));
+  --nav-border: color-mix(in srgb, var(--nn-header-primary-fg) 14%, var(--nn-header-primary-bg));
+  --nav-on-active-fg: var(--nn-header-primary-fg);
+  --header-background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg));
+}
+
+/* ---------------------------------------------------------------------
+   Nav v4 — premium framework refinement.
+   Utility stays flat, the main row becomes the floating surface, and the
+   tier rail is recessed so primary links no longer read as a bordered pill wall.
+   --------------------------------------------------------------------- */
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-frame {
+  padding-block: clamp(0.35rem, 0.8vw, 0.7rem);
+  background:
+    radial-gradient(
+      circle at 16% 0%,
+      color-mix(in srgb, var(--semantic-panel-cool) 18%, transparent),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-header-primary-bg) 90%, transparent),
+      color-mix(in srgb, var(--semantic-panel-warm) 10%, var(--nn-header-primary-bg))
+    );
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-bar-a {
+  min-height: 2rem;
+  border-bottom: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 68%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-cluster--quiet {
+  gap: clamp(0.35rem, 0.7vw, 0.65rem);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-trigger-row4,
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 :where(button) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, transparent) !important;
+  background: color-mix(in srgb, var(--nn-header-primary-bg) 44%, transparent) !important;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 70%, transparent) !important;
+  box-shadow: none !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-trigger-row4:hover,
+[data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 :where(button:hover) {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info) 8%, var(--nn-header-primary-bg)) !important;
+  color: var(--nn-header-primary-fg) !important;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
+  min-height: 4.25rem;
+  padding: clamp(0.48rem, 0.9vw, 0.7rem) clamp(0.7rem, 1.4vw, 1.2rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+  border-radius: 9999px;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-header-primary-bg) 92%, transparent),
+      color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--nn-header-primary-bg))
+    );
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 44%, transparent) inset,
+    0 18px 42px -30px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
+  backdrop-filter: saturate(150%) blur(14px);
+  -webkit-backdrop-filter: saturate(150%) blur(14px);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-brand-lockup {
+  color: color-mix(in srgb, var(--semantic-brand) 84%, var(--nn-header-primary-fg));
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav {
+  gap: clamp(0.1rem, 0.4vw, 0.35rem);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text {
+  min-height: 2.25rem;
+  border-color: transparent;
+  border-radius: 0.875rem;
+  background: transparent;
+  box-shadow: none;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 82%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text:hover {
+  border-color: color-mix(in srgb, var(--semantic-info) 14%, transparent);
+  background: color-mix(in srgb, var(--semantic-info) 9%, transparent);
+  color: var(--nn-header-primary-fg);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text[aria-current="page"] {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 44%, var(--semantic-brand));
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 22%,
+    color-mix(in srgb, var(--semantic-brand) 9%, var(--nn-header-primary-bg))
+  );
+  color: var(--nn-header-primary-fg);
+  font-weight: 650;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 55%, transparent) inset,
+    0 8px 22px -14px color-mix(in srgb, var(--semantic-info) 36%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-login-receded {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, transparent);
+  background: transparent;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 72%, transparent);
+  box-shadow: none;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-login-receded:hover {
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 8%, transparent);
+  color: var(--nn-header-primary-fg);
+}
+
+.nn-nav-cta--premium-soft {
+  border-color: color-mix(in srgb, var(--semantic-brand) 54%, var(--header-border));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 42%, transparent) inset,
+    0 14px 28px -18px color-mix(in srgb, var(--semantic-brand) 70%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail {
+  border-top: 0;
+  background: transparent;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner {
+  width: min(100%, 48rem);
+  min-height: 2.35rem;
+  margin-inline: auto;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 44%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--semantic-panel-cool) 10%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+  min-height: 1.75rem;
+  border-color: transparent;
+  background: transparent;
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 58%, transparent);
+  font-weight: 600;
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a:hover,
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip:hover {
+  border-color: color-mix(in srgb, var(--semantic-info) 16%, transparent);
+  background: color-mix(in srgb, var(--semantic-info) 8%, transparent);
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 78%, transparent);
+}
+
+[data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
+[data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 22%, transparent);
+  background: color-mix(in srgb, var(--semantic-brand) 10%, transparent);
+  color: var(--nn-header-primary-fg);
+}
+
+/* ---------------------------------------------------------------------
+   Marketing unified dark (Midnight, Apex, …) — Figma-style floating shell
+   for desktop: mirrors row4 geometry while keeping `--nn-nav-*` ink on the
+   glass surface (row4 rules above are `[data-nn-header-layout="marketing-row4"]` only).
+   --------------------------------------------------------------------- */
+
+.nn-header-dark-surface header[data-nn-header-layout="marketing-unified-dark"] {
+  /* Slightly brighter muted labels on deep navy (utility hints, secondary copy). */
+  --nav-muted: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 88%, transparent);
+}
+
+[data-theme="midnight"] .nn-header-dark-surface header[data-nn-header-layout="marketing-unified-dark"],
+[data-theme="midnight-indigo"] .nn-header-dark-surface header[data-nn-header-layout="marketing-unified-dark"],
+[data-theme="midnight-ink"] .nn-header-dark-surface header[data-nn-header-layout="marketing-unified-dark"] {
+  --nav-muted: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 91%, transparent);
+}
+
+[data-nn-header-layout="marketing-unified-dark"] .nn-header-brand-lockup {
+  /* Wordmark + leaf read as premium ink on chrome — pure `--semantic-brand` can dip on saturated blues. */
+  color: color-mix(in srgb, var(--semantic-brand) 24%, var(--nn-nav-fg, #f8fafc));
+}
+
+[data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-marketing-utility-cluster {
+  padding-inline-end: 0.35rem;
+  margin-inline-end: 0.2rem;
+  border-inline-end: 1px solid color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 12%, var(--nn-nav-bg, var(--semantic-panel-cool)));
+}
+
+@media (min-width: 1024px) {
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-frame {
+    padding-block: clamp(0.35rem, 0.85vw, 0.65rem);
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
+    min-height: 4.25rem;
+    padding: clamp(0.48rem, 0.9vw, 0.72rem) clamp(0.7rem, 1.4vw, 1.15rem);
+    border: 1px solid color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 14%, var(--nn-nav-bg, var(--semantic-panel-cool)));
+    border-radius: 9999px;
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--nn-nav-bg, var(--semantic-panel-cool)) 92%, transparent) 0%,
+        color-mix(in srgb, var(--semantic-info) 9%, var(--nn-nav-bg, var(--semantic-panel-cool))) 100%
+      );
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 8%, transparent) inset,
+      0 18px 44px -30px color-mix(in srgb, var(--semantic-brand) 32%, transparent);
+    backdrop-filter: saturate(165%) blur(14px);
+    -webkit-backdrop-filter: saturate(165%) blur(14px);
+  }
+
+  /* Primary strip: calm text-first links inside the glass capsule (matches row4 `--primary-text`). */
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text {
+    min-height: 2.25rem;
+    border-color: transparent;
+    border-radius: 0.875rem;
+    background: transparent;
+    box-shadow: none;
+    color: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 93%, transparent);
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text:hover {
+    border-color: color-mix(in srgb, var(--semantic-info) 28%, transparent);
+    background: color-mix(in srgb, var(--semantic-info) 14%, transparent);
+    color: var(--nn-nav-fg, #f8fafc);
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text[aria-current="page"] {
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 22%, var(--semantic-info));
+    background: color-mix(
+      in srgb,
+      var(--nn-nav-fg, #f8fafc) 11%,
+      color-mix(in srgb, var(--semantic-info) 18%, var(--nn-nav-bg, var(--semantic-panel-cool)))
+    );
+    color: var(--nn-nav-fg, #f8fafc);
+    font-weight: 650;
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 12%, transparent) inset,
+      0 0 26px -10px color-mix(in srgb, var(--semantic-brand) 48%, transparent),
+      0 10px 28px -16px color-mix(in srgb, var(--semantic-info) 32%, transparent);
+    backdrop-filter: saturate(165%) blur(10px);
+    -webkit-backdrop-filter: saturate(165%) blur(10px);
+  }
+
+  :is(html[data-theme="midnight"], html[data-theme="midnight-indigo"], html[data-theme="midnight-ink"])
+    [data-nn-header-layout="marketing-unified-dark"]
+    .nn-header-desktop-grid
+    > nav
+    a.nn-marketing-nav-link--primary-text[aria-current="page"] {
+    border-color: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 34%, var(--semantic-info));
+    background: color-mix(
+      in srgb,
+      var(--nn-nav-fg, #f8fafc) 14%,
+      color-mix(in srgb, var(--semantic-info) 24%, var(--nn-nav-bg, var(--semantic-panel-cool)))
+    );
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 16%, transparent) inset,
+      0 0 40px -10px color-mix(in srgb, var(--semantic-brand) 58%, transparent),
+      0 16px 44px -18px color-mix(in srgb, var(--semantic-info) 44%, transparent);
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-login-receded {
+    border-color: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 16%, var(--nn-nav-bg, transparent));
+    background: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 5%, transparent);
+    color: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 94%, transparent);
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-login-receded:hover {
+    border-color: color-mix(in srgb, var(--semantic-info) 30%, var(--nn-nav-fg, #f8fafc));
+    background: color-mix(in srgb, var(--semantic-info) 12%, transparent);
+    color: var(--nn-nav-fg, #f8fafc);
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-rail {
+    border-top: 0;
+    background: transparent;
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-inner {
+    width: min(100%, 48rem);
+    min-height: 2.35rem;
+    margin-inline: auto;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 11%, var(--nn-nav-bg, var(--semantic-panel-cool)));
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 5%, transparent);
+    backdrop-filter: saturate(150%) blur(10px);
+    -webkit-backdrop-filter: saturate(150%) blur(10px);
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-tier-chip {
+    border-color: transparent;
+    background: transparent;
+    color: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 90%, transparent);
+    font-weight: 600;
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-nav-row[data-nn-header-band="tier"] nav a:hover,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-tier-chip:hover {
+    border-color: color-mix(in srgb, var(--semantic-info) 22%, transparent);
+    background: color-mix(in srgb, var(--semantic-info) 12%, transparent);
+    color: var(--nn-nav-fg, #f8fafc);
+  }
+
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-tier-chip[data-active] {
+    border-color: color-mix(in srgb, var(--semantic-brand) 35%, transparent);
+    background: color-mix(in srgb, var(--semantic-brand) 14%, transparent);
+    color: var(--nn-nav-fg, #f8fafc);
+  }
+
+  /* Midnight — stronger capsule + tier legibility (WCAG) without changing row4 / Ocean */
+  html[data-theme="midnight"] [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--nn-nav-bg, var(--semantic-panel-cool)) 86%, transparent) 0%,
+        color-mix(in srgb, var(--semantic-info) 11%, var(--nn-nav-bg, var(--semantic-panel-cool))) 100%
+      );
+  }
+
+  html[data-theme="midnight"] [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-inner {
+    background: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 12%, var(--nn-nav-bg, var(--semantic-panel-cool)));
+    border-color: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 16%, var(--nn-nav-bg, var(--semantic-panel-cool)));
+  }
+
+  html[data-theme="midnight"] [data-nn-header-layout="marketing-unified-dark"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+  html[data-theme="midnight"] [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-tier-chip {
+    color: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 97%, transparent);
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-inner {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
 /* ---------------------------------------------------------------------
    Apex theme — token bridge.
    The full `[data-theme="apex"]` palette block lives in theme-palettes.css
@@ -441,7 +1039,7 @@
 
 /* ---------------------------------------------------------------------
    Phase 5 — Premium homepage body below the hero.
-   Small TSX sections share this token bridge so Blossom, Ocean, Forest,
+   Small TSX sections share this token bridge so Aurora, Ocean, Forest,
    Midnight, and Apex inherit the active theme without one-off palettes.
    --------------------------------------------------------------------- */
 
@@ -468,6 +1066,250 @@
   --nn-premium-meter-success: linear-gradient(90deg, var(--semantic-success, #16a34a), var(--semantic-info, #0284c7));
   --nn-premium-meter-warning: linear-gradient(90deg, var(--semantic-warning, #d97706), var(--semantic-chart-5, #ec4899));
   --nn-premium-meter-danger: linear-gradient(90deg, var(--semantic-danger, #e11d48), var(--semantic-chart-5, #ec4899));
+}
+
+/* ---------------------------------------------------------------------
+   Aurora / Blossom — full-page pastel canvas + folded sections (Figma homepage mockups).
+   Rose / violet / sky / mint blobs via semantic tokens — no neon magenta slabs.
+   --------------------------------------------------------------------- */
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-root {
+  background-color: var(--theme-page-bg);
+  background-image:
+    radial-gradient(ellipse 130% 92% at -8% -18%, color-mix(in srgb, var(--semantic-chart-5) 19%, transparent), transparent 56%),
+    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-brand) 16%, transparent), transparent 56%),
+    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-2) 15%, transparent), transparent 60%),
+    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-info) 13%, transparent), transparent 60%),
+    linear-gradient(
+      192deg,
+      color-mix(in srgb, var(--semantic-chart-5) 8%, var(--theme-page-bg)) 0%,
+      var(--theme-page-bg) 38%,
+      color-mix(in srgb, var(--semantic-brand) 7%, var(--theme-page-bg)) 62%,
+      color-mix(in srgb, var(--semantic-chart-2) 6%, var(--theme-page-bg)) 100%
+    );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-rich-hero {
+  background:
+    radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-5) 26%, transparent), transparent 58%),
+    radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-brand) 20%, transparent), transparent 56%),
+    radial-gradient(740px 400px at 52% 108%, color-mix(in srgb, var(--semantic-chart-2) 19%, transparent), transparent 56%),
+    radial-gradient(700px 360px at 0% 72%, color-mix(in srgb, var(--semantic-info) 16%, transparent), transparent 56%),
+    var(--page-bg, var(--theme-page-bg));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-rich-hero.nn-hero-bridge {
+  background-color: transparent;
+  background-image:
+    radial-gradient(ellipse 130% 90% at 12% -28%, color-mix(in srgb, var(--semantic-chart-5) 17%, transparent), transparent 54%),
+    radial-gradient(ellipse 108% 80% at 98% -5%, color-mix(in srgb, var(--semantic-brand) 15%, transparent), transparent 56%),
+    radial-gradient(ellipse 102% 74% at 48% 118%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent), transparent 56%),
+    linear-gradient(
+      176deg,
+      color-mix(in srgb, var(--semantic-chart-5) 9%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-brand) 8%, var(--theme-page-bg)) 44%,
+      color-mix(in srgb, var(--semantic-info) 7%, var(--theme-page-bg)) 100%
+    );
+  background-repeat: no-repeat;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-premium-home-section {
+  background: transparent;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-premium-home-section::before {
+  background:
+    radial-gradient(760px 400px at 0% 0%, color-mix(in srgb, var(--semantic-chart-5) 14%, transparent), transparent 60%),
+    radial-gradient(740px 380px at 100% 18%, color-mix(in srgb, var(--semantic-brand) 11%, transparent), transparent 58%),
+    radial-gradient(720px 360px at 100% 22%, color-mix(in srgb, var(--semantic-info) 12%, transparent), transparent 58%),
+    radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 11%, transparent), transparent 60%);
+}
+
+/* =====================================================================
+   === THEME ARCHITECTURE CONTRACT (marketing) — Blossom / Aurora ===
+   Blossom inherits Ocean's `marketing-row4` structure. Rules below are
+   color-only (border-color, background, color). No structural overrides
+   (display / flex-direction / flex-wrap / grid-template* / width* /
+   spacing rhythm / breakpoints / DOM ordering) are permitted. Enforced
+   by tests/contracts/theme-marketing-row4-contract.test.ts. Escape
+   hatch: a CSS block comment whose body starts with
+   `theme-contract:allow <reason>` immediately before a declaration.
+   ===================================================================== */
+/* Blossom / Aurora: marketing-row4 geometry matches Ocean — token-only nav pill colors below. */
+
+/* Aurora nav pills — rose/violet/sky/mint wash vs sky-only chips (still token-driven) */
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-brand) 24%,
+    color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))
+  );
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-5) 9%,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--nn-header-primary-bg))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link:hover {
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-5) 11%,
+    color-mix(in srgb, var(--semantic-info) 12%, var(--nn-header-primary-bg))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link[aria-current="page"] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-info));
+  background: color-mix(
+    in srgb,
+    var(--semantic-brand) 12%,
+    color-mix(in srgb, var(--semantic-chart-5) 8%, var(--nn-header-primary-bg))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-brand) 22%,
+    color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft))
+  );
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-5) 8%,
+    color-mix(in srgb, var(--semantic-brand) 7%, var(--nn-header-primary-bg))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link:hover {
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 14%,
+    color-mix(in srgb, var(--semantic-chart-5) 8%, var(--nn-header-primary-bg))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 24%, var(--semantic-chart-5));
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-5) 10%,
+    color-mix(in srgb, var(--semantic-info) 8%, transparent)
+  );
+  color: var(--nn-header-primary-fg);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link--primary-text[aria-current="page"] {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-chart-5));
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-5) 15%,
+    color-mix(in srgb, var(--semantic-brand) 11%, var(--nn-header-primary-bg))
+  );
+  color: var(--nn-header-primary-fg);
+  font-weight: 650;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-5) 32%, transparent) inset,
+    0 6px 20px -12px color-mix(in srgb, var(--semantic-brand) 26%, transparent);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+  border-color: color-mix(
+    in srgb,
+    var(--semantic-chart-5) 18%,
+    color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))
+  );
+  background: color-mix(
+    in srgb,
+    var(--semantic-chart-2) 9%,
+    color-mix(in srgb, var(--semantic-chart-5) 7%, var(--nn-header-primary-bg))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
+  border-color: color-mix(in srgb, var(--semantic-brand) 36%, var(--semantic-info));
+  background: color-mix(
+    in srgb,
+    var(--semantic-brand) 12%,
+    color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg))
+  );
+}
+
+/* =====================================================================
+   === THEME ARCHITECTURE CONTRACT (marketing) — Midnight ===
+   Midnight inherits Ocean's `marketing-row4` structure. Rules below are
+   color-only (background, color, border-color, box-shadow). No
+   structural overrides (display / flex-direction / flex-wrap /
+   grid-template* / width* / spacing rhythm / breakpoints / DOM
+   ordering) are permitted. Enforced by
+   tests/contracts/theme-marketing-row4-contract.test.ts. Escape hatch:
+   a CSS block comment whose body starts with `theme-contract:allow
+   <reason>` immediately before a declaration.
+   ===================================================================== */
+/* Midnight + marketing-row4 — same Ocean hierarchy; dark header paper + full-strength ink/sky on controls */
+html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-bar-a {
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 90%, transparent);
+}
+
+html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-trigger-row4,
+html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 :where(button) {
+  border-color: color-mix(in srgb, var(--semantic-info) 38%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info) 14%, var(--nn-header-primary-bg)) !important;
+  color: var(--nn-header-primary-fg) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-trigger-row4:hover,
+html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-utility-theme-row4 :where(button:hover) {
+  border-color: color-mix(in srgb, var(--semantic-info) 48%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-info) 22%, var(--nn-header-primary-bg)) !important;
+  color: var(--nn-header-primary-fg) !important;
+}
+
+:is(html[data-theme="midnight"], html[data-theme="midnight-indigo"], html[data-theme="midnight-ink"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text {
+  color: color-mix(in srgb, var(--nn-header-primary-fg) 94%, transparent);
+}
+
+:is(html[data-theme="midnight"], html[data-theme="midnight-indigo"], html[data-theme="midnight-ink"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text:hover {
+  color: var(--nn-header-primary-fg);
+}
+
+:is(html[data-theme="midnight"], html[data-theme="midnight-indigo"], html[data-theme="midnight-ink"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-desktop-grid
+  > nav
+  a.nn-marketing-nav-link--primary-text[aria-current="page"] {
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 52%, var(--semantic-brand));
+  background: color-mix(
+    in srgb,
+    var(--semantic-info) 26%,
+    color-mix(in srgb, var(--semantic-brand) 11%, var(--nn-header-primary-bg))
+  );
+  color: var(--nn-header-primary-fg);
+  font-weight: 650;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 48%, transparent) inset,
+    0 0 28px -10px color-mix(in srgb, var(--semantic-brand) 42%, transparent),
+    0 12px 32px -18px color-mix(in srgb, var(--semantic-info) 38%, transparent);
+  backdrop-filter: saturate(160%) blur(10px);
+  -webkit-backdrop-filter: saturate(160%) blur(10px);
+}
+
+html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+  color: var(--nn-header-primary-fg);
 }
 
 .nn-premium-home-section {
@@ -729,21 +1571,18 @@
 
 /* -------- 3.1  Floating glass primary band (light themes) -------- */
 
-/* The primary band already has saturate(140%) blur(10px) above. Strengthen
-   the effect and add a subtle inset highlight + soft outer ring. The ring
-   is brand-tinted via the active theme variables. */
-.nn-header-logo-row[data-nn-header-band="primary"],
-.nn-section-shell[data-nn-header-band="primary"] {
-  /* override / enhance the existing background with a slightly brighter
-     gradient so the glass band reads as elevated above the page. */
+/* The primary band already has saturate/blur above. Strengthen glass + refined gradient on the
+   full-width `.nn-header-marketing-primary-band`, not a max-width shell. */
+[data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] {
+  /* Refined elevation on the same neutral base (no theme chrome wash). */
   background:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--nav-bg, #ffffff) 96%, transparent) 0%,
-      color-mix(in srgb, var(--nav-bg, #ffffff) 84%, transparent) 100%
+      var(--nn-header-primary-bg, #ffffff) 0%,
+      color-mix(in srgb, var(--nn-header-primary-bg, #ffffff) 94%, var(--semantic-info, #0ea5e9) 6%) 100%
     );
-  backdrop-filter: saturate(160%) blur(14px);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: blur(14px) saturate(105%);
+  -webkit-backdrop-filter: blur(14px) saturate(105%);
 }
 
 /* Floating-shell feel via inset highlight + soft outer brand ring on the
@@ -763,8 +1602,8 @@
   background:
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--nav-bg, #0b0f1a) 92%, transparent) 0%,
-      color-mix(in srgb, var(--nav-bg, #0b0f1a) 76%, transparent) 100%
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b0f1a)) 92%, transparent) 0%,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b0f1a)) 76%, transparent) 100%
     );
   backdrop-filter: saturate(170%) blur(16px);
   -webkit-backdrop-filter: saturate(170%) blur(16px);
@@ -777,6 +1616,16 @@
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.10),
     0 18px 60px -32px color-mix(in srgb, var(--theme-primary, #a78bfa) 50%, transparent);
+}
+
+/* Midnight: slightly denser glass on the sticky shell so marketing chrome never reads as empty/transparent */
+html[data-theme="midnight"] .nn-header-dark-surface {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b1220)) 97%, transparent) 0%,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b1220)) 88%, transparent) 100%
+    );
 }
 
 /* -------- 3.3  Nav links — refined hover (no layout shift) -------- */
@@ -803,26 +1652,13 @@
     0 0 0 2px color-mix(in srgb, var(--theme-primary, #2563eb) 32%, transparent);
 }
 
-/* Active page link gets a subtle bottom accent rule that tracks the link
-   width — premium and clinical without overpowering. */
+/* Active page: entire chip reads as selected (fill + border + weight).
+   Bottom rules / ::after underlines removed — capsule state comes from
+   globals.css + marketing-row4 scoped rules. */
 .nn-marketing-nav-link[aria-current="page"] {
   font-weight: 600;
   color: var(--nav-link-active, var(--theme-brand-strong, var(--theme-primary)));
-}
-.nn-marketing-nav-link[aria-current="page"]::after {
-  content: "";
-  position: absolute;
-  left: 12%;
-  right: 12%;
-  bottom: 4px;
-  height: 2px;
-  border-radius: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--theme-primary, #2563eb),
-    color-mix(in srgb, var(--theme-primary, #2563eb) 60%, var(--theme-accent, #fbbf24))
-  );
-  opacity: 0.85;
+  text-decoration: none;
 }
 
 /* -------- 3.4  Premium CTA polish -------- */
@@ -963,6 +1799,110 @@
     color-mix(in srgb, var(--semantic-info) 4%, var(--theme-page-bg, #0b1220)) 48%,
     transparent 100%
   );
+}
+
+/* ---------------------------------------------------------------------
+   Nursing / exam pathway hubs — premium module bands + primary study shell.
+   Token-only washes; aligns with homepage premium radial language.
+   --------------------------------------------------------------------- */
+
+.nn-hub-premium-modules-root {
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-hub-premium-section-panel::before {
+  content: "";
+  position: absolute;
+  inset: -42% -18% auto -18%;
+  height: 58%;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.88;
+  z-index: 0;
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="study"]::before {
+  background:
+    radial-gradient(420px 200px at 12% 0%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent), transparent 68%),
+    radial-gradient(380px 180px at 88% 10%, color-mix(in srgb, var(--semantic-info) 14%, transparent), transparent 72%);
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="readiness"]::before {
+  background:
+    radial-gradient(420px 200px at 8% 0%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent), transparent 70%),
+    radial-gradient(360px 160px at 92% 12%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 72%);
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="newGrad"]::before {
+  background:
+    radial-gradient(400px 190px at 18% 0%, color-mix(in srgb, var(--semantic-success) 14%, transparent), transparent 70%),
+    radial-gradient(340px 150px at 82% 10%, color-mix(in srgb, var(--semantic-chart-1) 12%, transparent), transparent 72%);
+}
+
+.nn-hub-premium-section-head,
+.nn-hub-premium-modules-grid {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-hub-premium-modules-grid > li {
+  min-width: 0;
+}
+
+.nn-hub-premium-section-accent {
+  width: 4px;
+  min-height: 3.25rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-2) 52%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-info) 44%, var(--semantic-border-soft)) 100%
+  );
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="readiness"] .nn-hub-premium-section-accent {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-chart-3) 50%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-chart-4) 46%, var(--semantic-border-soft)) 100%
+  );
+}
+
+.nn-hub-premium-section-panel[data-nn-hub-premium-tone="newGrad"] .nn-hub-premium-section-accent {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-success) 52%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft)) 100%
+  );
+}
+
+.nn-hub-tier-study-band {
+  padding-bottom: 0.25rem;
+}
+
+.nn-hub-primary-study-modes {
+  position: relative;
+  padding: 1.65rem 1.15rem 1.85rem;
+  margin-inline: -0.15rem;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 85%, var(--semantic-chart-2));
+  background:
+    linear-gradient(155deg, color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--semantic-surface)) 0%, transparent 58%),
+    var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (min-width: 640px) {
+  .nn-hub-primary-study-modes {
+    padding: 1.85rem 1.65rem 2.1rem;
+  }
+}
+
+[data-theme="midnight"] .nn-hub-primary-study-modes,
+[data-theme="apex"] .nn-hub-primary-study-modes {
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
 }
 
 /* =====================================================================
@@ -1218,8 +2158,9 @@
    Scope: marketing NP hubs + NP lesson hubs (`.nn-np-hub-root`). Tokens only.
    ===================================================================== */
 
-/* NP tier overview hub — hero reads “advanced practice” without flattening to grey. */
-[data-pathway-track="np"].nn-premium-pathway-hub .nn-nursing-tier-hub-hero-band {
+/* NP tier overview hub — hero reads “advanced practice” without flattening to grey.
+   Premium convergence hubs use `.nn-np-pathway-hero-premium` + `--np-convergence` instead (below). */
+[data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence) .nn-nursing-tier-hub-hero-band {
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -1240,7 +2181,7 @@
     );
 }
 
-[data-pathway-track="np"].nn-premium-pathway-hub .nn-nursing-tier-hub-hero-band::after {
+[data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence) .nn-nursing-tier-hub-hero-band::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -1255,13 +2196,253 @@
   z-index: 0;
 }
 
-[data-pathway-track="np"].nn-premium-pathway-hub .nn-nursing-tier-hub-hero-band > * {
+[data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence) .nn-nursing-tier-hub-hero-band > * {
   position: relative;
   z-index: 1;
 }
 
-[data-theme="midnight"] [data-pathway-track="np"].nn-premium-pathway-hub .nn-nursing-tier-hub-hero-band,
-[data-theme="apex"] [data-pathway-track="np"].nn-premium-pathway-hub .nn-nursing-tier-hub-hero-band {
+/* ---------------------------------------------------------------------
+   RN NCLEX / registered-nurse marketing hubs — premium clinical entry
+   (mirrors NP depth; distinct cool + success radials; excludes New Grad + PN shells).
+   --------------------------------------------------------------------- */
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  border-color: color-mix(in srgb, var(--semantic-info) 18%, var(--border-subtle));
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--palette-heading) 26%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-info) 16%, transparent) inset;
+  background:
+    radial-gradient(520px 240px at 6% 0%, color-mix(in srgb, var(--semantic-success) 11%, transparent), transparent 56%),
+    radial-gradient(480px 220px at 96% 8%, color-mix(in srgb, var(--semantic-chart-2) 11%, transparent), transparent 56%),
+    radial-gradient(400px 200px at 48% 100%, color-mix(in srgb, var(--semantic-info) 9%, transparent), transparent 58%),
+    linear-gradient(
+      128deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-info) 5%, var(--theme-page-bg)) 45%,
+      transparent 100%
+    );
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--semantic-text-muted) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-text-muted) 5%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at 12% 0%, rgba(0, 0, 0, 0.32), transparent 64%);
+  -webkit-mask-image: radial-gradient(circle at 12% 0%, rgba(0, 0, 0, 0.32), transparent 64%);
+  z-index: 0;
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band
+  > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="midnight"]
+  [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band,
+[data-theme="apex"]
+  [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-info) 20%, var(--border-subtle));
+  background:
+    radial-gradient(520px 240px at 4% 0%, color-mix(in srgb, var(--semantic-success) 12%, transparent), transparent 58%),
+    radial-gradient(460px 220px at 98% 6%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 56%),
+    linear-gradient(
+      125deg,
+      color-mix(in srgb, var(--semantic-info) 9%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-4) 5%, var(--theme-page-bg)) 52%,
+      transparent 100%
+    );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )
+  .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 14%, var(--border-subtle));
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--palette-heading) 24%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-5) 12%, transparent) inset;
+}
+
+/* ---------------------------------------------------------------------
+   PN / RPN practical nursing hub hero — warm prioritization + bedside-forward glow
+   (distinct from RN cool/info ribbon; same hero DOM as other tier hubs).
+   --------------------------------------------------------------------- */
+.nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 18%, var(--border-subtle));
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--palette-heading) 24%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-success) 13%, transparent) inset;
+  background:
+    radial-gradient(520px 240px at 8% 0%, color-mix(in srgb, var(--semantic-panel-warm) 52%, transparent), transparent 58%),
+    radial-gradient(460px 220px at 94% 10%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 56%),
+    radial-gradient(400px 200px at 48% 100%, color-mix(in srgb, var(--semantic-warning) 9%, transparent), transparent 58%),
+    linear-gradient(
+      132deg,
+      color-mix(in srgb, var(--semantic-panel-positive) 11%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-5) 6%, var(--theme-page-bg)) 46%,
+      transparent 100%
+    );
+}
+
+.nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image: radial-gradient(
+    circle at 72% 16%,
+    color-mix(in srgb, var(--semantic-brand) 9%, transparent),
+    transparent 54%
+  );
+  opacity: 0.9;
+  z-index: 0;
+}
+
+.nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="midnight"] .nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band,
+[data-theme="apex"] .nn-premium-pathway-hub--pn-rpn .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 16%, var(--border-subtle));
+  background:
+    radial-gradient(520px 240px at 6% 0%, color-mix(in srgb, var(--semantic-success) 12%, transparent), transparent 56%),
+    radial-gradient(460px 210px at 96% 8%, color-mix(in srgb, var(--semantic-chart-3) 11%, transparent), transparent 54%),
+    linear-gradient(
+      125deg,
+      color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-5) 7%, var(--theme-page-bg)) 52%,
+      transparent 100%
+    );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-premium-pathway-hub--pn-rpn
+  .nn-pn-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 15%, var(--border-subtle));
+  box-shadow:
+    0 22px 50px -34px color-mix(in srgb, var(--palette-heading) 22%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-5) 13%, transparent) inset;
+}
+
+@media (max-width: 1023px) {
+  .nn-premium-pathway-hub--pn-rpn .nn-hub-tier-study-band > div[class*="grid"] {
+    gap: clamp(1.25rem, 4vw, 1.75rem);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   NP premium convergence — practitioner workstation hero
+   (chart-4 + diagnostics emphasis; denser mesh than RN; token-only Midnight/Blossom).
+   --------------------------------------------------------------------- */
+.nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 22%, var(--border-subtle));
+  box-shadow:
+    0 24px 52px -34px color-mix(in srgb, var(--palette-heading) 30%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-4) 14%, transparent) inset;
+  background:
+    radial-gradient(520px 240px at 6% 0%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 56%),
+    radial-gradient(480px 220px at 98% 10%, color-mix(in srgb, var(--semantic-info) 11%, transparent), transparent 54%),
+    radial-gradient(420px 200px at 44% 100%, color-mix(in srgb, var(--semantic-brand) 9%, transparent), transparent 58%),
+    linear-gradient(
+      128deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 11%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-4) 6%, var(--theme-page-bg)) 46%,
+      transparent 100%
+    );
+}
+
+.nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--semantic-text-muted) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-text-muted) 7%, transparent) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(circle at 14% 0%, rgba(0, 0, 0, 0.38), transparent 62%);
+  -webkit-mask-image: radial-gradient(circle at 14% 0%, rgba(0, 0, 0, 0.38), transparent 62%);
+  z-index: 0;
+}
+
+.nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="midnight"] .nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band,
+[data-theme="apex"] .nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 18%, var(--border-subtle));
+  background:
+    radial-gradient(520px 240px at 4% 0%, color-mix(in srgb, var(--semantic-chart-4) 13%, transparent), transparent 56%),
+    radial-gradient(460px 210px at 96% 8%, color-mix(in srgb, var(--semantic-info) 12%, transparent), transparent 54%),
+    linear-gradient(
+      124deg,
+      color-mix(in srgb, var(--semantic-brand) 10%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-2) 6%, var(--theme-page-bg)) 52%,
+      transparent 100%
+    );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-premium-pathway-hub--np-convergence
+  .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 18%, var(--border-subtle));
+  box-shadow:
+    0 22px 48px -32px color-mix(in srgb, var(--palette-heading) 24%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-chart-4) 12%, transparent) inset;
+}
+
+@media (max-width: 1023px) {
+  .nn-premium-pathway-hub--np-convergence .nn-hub-tier-study-band {
+    gap: clamp(1.35rem, 4.5vw, 2rem);
+  }
+}
+
+[data-theme="midnight"]
+  [data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence)
+  .nn-nursing-tier-hub-hero-band,
+[data-theme="apex"]
+  [data-pathway-track="np"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--np-convergence)
+  .nn-nursing-tier-hub-hero-band {
   border-color: color-mix(in srgb, var(--semantic-brand) 22%, var(--border-subtle));
   background:
     radial-gradient(520px 240px at 4% 0%, color-mix(in srgb, var(--semantic-brand) 14%, transparent), transparent 58%),
@@ -1789,28 +2970,28 @@
   z-index: 1;
 }
 
-.nn-premium-flashcard-stack[data-nn-revealed="0"] .nn-premium-flashcard-answer-panel {
-  opacity: 0.9;
+.nn-premium-flashcard-stack[data-nn-revealed="0"] .nn-flashcard-session-rail.nn-flashcard-rail-utility {
+  opacity: 0.92;
   transform: translate3d(0, 3px, 0);
 }
 
-.nn-premium-flashcard-stack[data-nn-revealed="1"] .nn-premium-flashcard-answer-panel {
+.nn-premium-flashcard-stack[data-nn-revealed="1"] .nn-flashcard-session-rail.nn-flashcard-rail-utility {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
-.nn-premium-flashcard-answer-panel {
+.nn-flashcard-session-rail.nn-flashcard-rail-utility {
   transition: opacity 180ms ease-out, transform 180ms ease-out;
   will-change: transform, opacity;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nn-premium-flashcard-answer-panel {
+  .nn-flashcard-session-rail.nn-flashcard-rail-utility {
     transition: none;
     will-change: auto;
   }
 
-  .nn-premium-flashcard-stack[data-nn-revealed="0"] .nn-premium-flashcard-answer-panel {
+  .nn-premium-flashcard-stack[data-nn-revealed="0"] .nn-flashcard-session-rail.nn-flashcard-rail-utility {
     transform: none;
   }
 }
@@ -1896,6 +3077,283 @@
   }
 }
 
+/* Flashcard deck session — dominant main column + narrower utility rail (Figma ~72/28). */
+.nn-premium-flashcard-stack-outer {
+  width: 100%;
+}
+
+.nn-flashcard-session-ambient {
+  height: clamp(72px, 12vw, 120px);
+  width: 100%;
+  flex-shrink: 0;
+  border-radius: 1.15rem;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-3) 14%, transparent),
+    color-mix(in srgb, var(--semantic-chart-5) 8%, transparent) 45%,
+    color-mix(in srgb, var(--semantic-chart-4) 10%, transparent)
+  );
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 35%, transparent);
+}
+
+.nn-flashcard-layered-stack__underlay {
+  height: 2.25rem;
+  margin-bottom: -0.4rem;
+  border-radius: 1.15rem;
+  background: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--semantic-panel-muted));
+}
+
+.nn-flashcard-session-layout {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.nn-flashcard-session-main {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.nn-flashcard-rail-surface {
+  border-radius: 1.15rem;
+}
+
+@media (min-width: 1024px) {
+  .nn-flashcard-session-layout {
+    grid-template-columns: minmax(0, 2.35fr) minmax(272px, 336px);
+    gap: 1.5rem;
+  }
+
+  .nn-flashcard-session-main {
+    grid-column: 1;
+  }
+
+  .nn-flashcard-session-rail {
+    position: sticky;
+    top: 0.75rem;
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: start;
+    max-width: 336px;
+  }
+}
+
+.nn-flashcard-rail-utility {
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-3) 12%, var(--semantic-border-soft));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted))
+  );
+  box-shadow: var(--semantic-shadow-soft);
+  padding: 0.85rem;
+}
+
+/* Ocean — cool ambient wash (default tokens lean clinical blue). */
+html[data-theme="ocean"] .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-3) 16%, transparent),
+    color-mix(in srgb, var(--semantic-chart-5) 9%, transparent) 48%,
+    color-mix(in srgb, var(--semantic-chart-4) 11%, transparent)
+  );
+}
+
+/* Aurora / Blossom — muted rose / lilac / mint accents (no neon pink blocks). */
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-1) 11%, transparent),
+    color-mix(in srgb, var(--semantic-chart-2) 9%, transparent) 50%,
+    color-mix(in srgb, var(--semantic-warning) 7%, transparent)
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-layered-stack__underlay {
+  background: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-panel-warm));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-hero-surface {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 14%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted))
+  );
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-rail-utility {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 14%, var(--semantic-border-soft));
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-chart-2) 7%, var(--semantic-panel-muted)),
+    color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-muted))
+  );
+}
+
+/* Sunset — warm coral wash + sky lift (semantic multi-hue). */
+html[data-theme="sunset"] .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-1) 10%, transparent),
+    color-mix(in srgb, var(--semantic-chart-3) 11%, transparent) 48%,
+    color-mix(in srgb, var(--semantic-chart-4) 8%, transparent)
+  );
+}
+
+html[data-theme="sunset"] .nn-flashcard-layered-stack__underlay {
+  background: color-mix(in srgb, var(--semantic-chart-3) 10%, var(--semantic-panel-warm));
+}
+
+html[data-theme="sunset"] .nn-flashcard-hero-surface {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 16%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-cool))
+  );
+}
+
+html[data-theme="sunset"] .nn-flashcard-rail-utility {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-border-soft));
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--semantic-panel-muted)),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted))
+  );
+}
+
+/* Midnight — depth + clinical cyan/teal glow (not flat black). */
+html[data-theme="midnight"] .nn-premium-flashcard-session-root::before {
+  background:
+    radial-gradient(620px 260px at 8% 0%, color-mix(in srgb, var(--semantic-info) 14%, transparent), transparent 58%),
+    radial-gradient(540px 220px at 96% 92%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 52%);
+}
+
+html[data-theme="midnight"] .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-info) 22%, transparent),
+    color-mix(in srgb, var(--semantic-chart-3) 14%, transparent) 55%,
+    transparent
+  );
+}
+
+html[data-theme="midnight"] .nn-flashcard-layered-stack__underlay {
+  background: color-mix(in srgb, var(--semantic-chart-3) 24%, var(--semantic-panel-muted));
+}
+
+html[data-theme="midnight"] .nn-flashcard-hero-surface {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-cool))
+  );
+  box-shadow:
+    0 28px 60px -34px color-mix(in srgb, var(--semantic-info) 28%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 22%, transparent);
+}
+
+html[data-theme="midnight"] .nn-flashcard-rail-utility {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft));
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 65%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 82%, var(--semantic-panel-cool))
+  );
+}
+
+html[data-theme="midnight"] .nn-flashcard-rail-tile {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--semantic-border-soft)) !important;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 45%, var(--semantic-surface)) !important;
+}
+
+.nn-flashcard-kbd {
+  display: inline-block;
+  border-radius: 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 85%, var(--semantic-chart-3));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
+  padding: 0.1rem 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--semantic-text-primary);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 55%, transparent);
+}
+
+.nn-premium-flashcard-reveal-panel {
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-flashcard-hero-surface {
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-3) 18%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-cool)),
+    color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-muted))
+  );
+  box-shadow:
+    0 28px 56px -36px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated) 65%, transparent);
+}
+
+.nn-flashcard-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  border-radius: 999px;
+  padding: 0.28rem 0.72rem;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nn-flashcard-chip--mode {
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 45%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+}
+
+.nn-flashcard-chip--topic {
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-2) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-2) 8%, var(--semantic-surface));
+  color: var(--semantic-text-secondary);
+}
+
+.nn-flashcard-chip--kind {
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
+  color: var(--semantic-info);
+}
+
+.nn-premium-hero-stats--rail {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 0;
+  gap: 8px;
+}
+
+.nn-premium-hero-stats--rail .nn-premium-hero-stat {
+  min-height: 0;
+  padding: 10px 12px;
+}
+
+.nn-premium-hero-stats--rail .nn-premium-hero-stat__value {
+  font-size: 17px;
+}
+
+.nn-flashcard-session-rail .nn-premium-hero-stat__label {
+  color: var(--semantic-text-muted);
+}
+
+.nn-flashcard-session-rail .nn-premium-hero-stat__value {
+  color: var(--semantic-text-primary);
+}
+
 /* Optional: simple study surface — `FlashcardViewer` (batch / API cursors) */
 .nn-flashcard-face-animate {
   animation: nn-flashcard-face-in 220ms ease-out both;
@@ -1925,6 +3383,19 @@
 
 .nn-premium-lesson-detail-shell {
   overflow-x: clip;
+}
+
+@media (max-width: 1023px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-layout--triple > .nn-lesson-section-nav-mobile {
+    width: 100%;
+    max-width: 100%;
+    align-self: stretch;
+  }
+
+  .nn-premium-lesson-detail-shell .nn-lesson-layout--triple > .nn-lesson-main {
+    min-width: 0;
+    max-width: 100%;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -2333,6 +3804,271 @@
   .nn-premium-blog-post-card:hover,
   .nn-tools-hub-card:hover {
     transform: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Marketing footer — large-radius glass panels (nav v3.1 visual family).
+   Scoped to `[data-nn-footer-layout="marketing"]`; tokens + color-mix only.
+   --------------------------------------------------------------------- */
+
+[data-nn-footer-layout="marketing"] {
+  --nn-footer-panel-radius: 1.5rem;
+}
+
+/* Footer shell: grounded surface from theme/footer tokens (not header chrome hex injection). */
+[data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
+  background: linear-gradient(
+    175deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 7%, var(--footer-bg)),
+    color-mix(in srgb, var(--semantic-panel-cool) 9%, var(--footer-bg)),
+    var(--footer-bg)
+  );
+  color: var(--footer-fg);
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--nn-footer-panel-radius);
+  border: 1px solid color-mix(in srgb, var(--footer-border) 88%, var(--semantic-border-soft));
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--footer-fg) 5%, var(--footer-bg)),
+      color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--footer-bg))
+    );
+  backdrop-filter: saturate(130%) blur(14px);
+  -webkit-backdrop-filter: saturate(130%) blur(14px);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 7%, transparent),
+    0 16px 40px -34px color-mix(in srgb, var(--semantic-border-soft) 55%, transparent),
+    0 12px 32px -30px color-mix(in srgb, var(--footer-fg) 6%, transparent);
+}
+
+[data-theme="midnight"] [data-nn-footer-layout="marketing"] .nn-footer-panel,
+[data-theme="apex"] [data-nn-footer-layout="marketing"] .nn-footer-panel {
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 16%, var(--footer-bg)),
+      color-mix(in srgb, var(--footer-fg) 6%, var(--footer-bg))
+    );
+  border-color: color-mix(in srgb, var(--footer-border) 75%, var(--semantic-border-soft));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--footer-fg) 8%, transparent),
+    0 16px 40px -34px color-mix(in srgb, var(--semantic-border-soft) 48%, transparent),
+    0 12px 32px -30px color-mix(in srgb, var(--footer-fg) 7%, transparent);
+}
+
+[data-theme="aurora"] [data-nn-footer-layout="marketing"] .nn-footer-panel {
+  background:
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--semantic-panel-warm) 9%, var(--footer-bg)),
+      color-mix(in srgb, var(--semantic-panel-positive) 8%, var(--footer-bg))
+    );
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-columns {
+  column-gap: clamp(1.75rem, 3.2vw, 2.35rem);
+  row-gap: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-top {
+  align-items: start;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-panel--bottom-meta {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 6%, var(--footer-bg)),
+    color-mix(in srgb, var(--footer-fg) 4%, var(--footer-bg))
+  );
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-col-heading {
+  margin-bottom: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--footer-muted) 35%, var(--footer-fg));
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-link-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-panel--email {
+  border-radius: calc(var(--nn-footer-panel-radius) - 0.125rem);
+}
+
+/* Footer account CTAs — calmer than header chrome (no high-chroma brand/neon wash on large panels). */
+[data-nn-footer-layout="marketing"] .nn-nav-cta {
+  background-image: linear-gradient(
+    125deg,
+    color-mix(in srgb, var(--semantic-brand) 72%, var(--footer-bg)),
+    color-mix(in srgb, var(--semantic-info) 38%, var(--footer-bg))
+  );
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, var(--footer-fg) 10%, transparent) inset,
+    0 8px 22px -14px color-mix(in srgb, var(--semantic-brand) 28%, transparent);
+}
+[data-nn-footer-layout="marketing"] .nn-nav-cta:hover {
+  filter: brightness(1.03);
+  box-shadow:
+    0 1px 0 0 color-mix(in srgb, var(--footer-fg) 12%, transparent) inset,
+    0 10px 26px -14px color-mix(in srgb, var(--semantic-brand) 34%, transparent);
+}
+[data-nn-footer-layout="marketing"] .nn-nav-cta:focus-visible {
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--semantic-info) 22%, transparent),
+    0 1px 0 0 color-mix(in srgb, var(--footer-fg) 12%, transparent) inset,
+    0 10px 26px -14px color-mix(in srgb, var(--semantic-brand) 34%, transparent);
+}
+
+/* —— Footer premium: mobile accordions + language chips (tokens only) —— */
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-nav-grid {
+  align-items: start;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-accordion {
+  border-bottom: 1px solid color-mix(in srgb, var(--footer-border) 78%, var(--semantic-border-soft));
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-nav-grid > .nn-footer-premium-col:last-child .nn-footer-premium-accordion {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  [data-nn-footer-layout="marketing"] .nn-footer-premium-accordion {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  [data-nn-footer-layout="marketing"] .nn-footer-premium-accordion .nn-footer-premium-accordion-panel {
+    display: block !important;
+  }
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-accordion-summary {
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.35rem 0 0.5rem;
+  margin: 0;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-accordion-summary::-webkit-details-marker {
+  display: none;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-accordion-title {
+  font-size: 0.8125rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--footer-muted) 35%, var(--footer-fg));
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-accordion-icon {
+  flex-shrink: 0;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid color-mix(in srgb, var(--footer-muted) 70%, var(--footer-border));
+  border-bottom: 2px solid color-mix(in srgb, var(--footer-muted) 70%, var(--footer-border));
+  transform: rotate(45deg) translateY(-1px);
+  opacity: 0.85;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-accordion[open] .nn-footer-premium-accordion-icon {
+  transform: rotate(225deg) translateY(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-nn-footer-layout="marketing"] .nn-footer-premium-accordion-icon {
+    transition: none;
+  }
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-accordion-panel {
+  padding-top: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  [data-nn-footer-layout="marketing"] .nn-footer-premium-accordion-panel {
+    padding-top: 0;
+  }
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-link {
+  text-decoration-color: color-mix(in srgb, var(--footer-muted) 40%, transparent);
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-lang-btn {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--footer-border) 75%, transparent);
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  line-height: 1.25;
+  color: var(--footer-muted);
+  background: color-mix(in srgb, var(--footer-bg) 88%, transparent);
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background-color 0.18s ease;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-lang-btn:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--footer-border));
+  color: var(--footer-fg);
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-lang-btn--active {
+  font-weight: 600;
+  color: var(--footer-fg);
+  border-color: color-mix(in srgb, var(--semantic-info) 28%, var(--footer-border));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--footer-bg));
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-lang-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-premium-lang-all {
+  margin-top: 0.25rem;
+}
+
+[data-nn-footer-layout="marketing"] .nn-footer-panel--bottom-meta .nn-footer-premium-theme-rail {
+  border-top: 1px solid color-mix(in srgb, var(--footer-border) 70%, transparent);
+}
+
+@media (min-width: 1024px) {
+  [data-nn-footer-layout="marketing"] .nn-footer-panel--bottom-meta .nn-footer-premium-theme-rail {
+    border-top: none;
+    border-left: 1px solid color-mix(in srgb, var(--footer-border) 70%, transparent);
+    padding-left: 1.5rem;
+    padding-top: 0;
   }
 }
 

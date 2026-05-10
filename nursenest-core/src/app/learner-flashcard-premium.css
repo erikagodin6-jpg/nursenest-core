@@ -1,0 +1,113 @@
+/**
+ * Flashcard study premium layer — rapid-recall clinical micro-learning.
+ * Presentation only; complements `premium-redesign-2026.css` flashcard blocks.
+ */
+
+/* ── Hub shell ─────────────────────────────────────────────────────────────── */
+.nn-flashcards-hub-premium[data-nn-learner-study-page-shell] {
+  scroll-padding-top: 0.75rem;
+}
+
+/* ── Deck study chrome (wraps ActiveStudySession) ─────────────────────────── */
+.nn-flashcard-study-premium.nn-premium-flashcard-session-root {
+  border-radius: 1.25rem;
+}
+
+.nn-flashcard-study-premium .nn-active-flashcard-session {
+  padding-bottom: 0.25rem;
+}
+
+/* Session strip + header rhythm */
+.nn-active-flashcard-session .nn-premium-flashcard-session-header {
+  border-radius: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-info) 12%);
+  background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+/* ── Question stack ─────────────────────────────────────────────────────────── */
+.nn-flashcard-study-stack-premium .nn-flashcard-hero-stem {
+  line-height: 1.52;
+  letter-spacing: -0.012em;
+}
+
+@media (max-width: 639px) {
+  .nn-flashcard-study-stack-premium .nn-flashcard-hero-surface {
+    padding: 1.1rem 1rem;
+  }
+}
+
+/* Leading / clinical images — thumb-safe framing */
+.nn-flashcard-study-stack-premium .nn-flashcard-hero-surface img {
+  touch-action: manipulation;
+}
+
+.nn-flashcard-study-stack-premium .nn-flashcard-hero-surface [class*="rounded-xl"][class*="border"] {
+  border-radius: 1rem;
+}
+
+/* Reveal zone entrance — respect reduced motion (motion utilities may still apply) */
+@media (prefers-reduced-motion: reduce) {
+  .nn-flashcard-study-stack-premium .nn-flashcard-reveal-zone {
+    animation: none !important;
+  }
+}
+
+/* ── MCQ list (calm focus, no scale gimmicks) ──────────────────────────────── */
+.nn-flashcard-exam-mcq-premium ul {
+  gap: 0.65rem;
+}
+
+.nn-flashcard-exam-mcq-premium li button,
+.nn-flashcard-exam-mcq-premium li .flex.w-full {
+  min-height: 3rem;
+}
+
+@media (min-width: 640px) {
+  .nn-flashcard-exam-mcq-premium li button,
+  .nn-flashcard-exam-mcq-premium li .flex.w-full {
+    min-height: 3.125rem;
+  }
+}
+
+.nn-flashcard-exam-mcq-premium li button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
+}
+
+/* ── Rationale stack ───────────────────────────────────────────────────────── */
+.nn-flashcard-reveal-stack--premium {
+  gap: 1rem;
+}
+
+.nn-flashcard-reveal-stack--premium > div {
+  border-radius: 1rem;
+  padding: clamp(0.9rem, 2.2vw, 1.1rem);
+}
+
+.nn-flashcard-reveal-stack--premium .nn-marketing-body-sm {
+  line-height: 1.58;
+}
+
+/* ── Reveal CTA (token solid — no loud multi-stop gradients) ─────────────── */
+.nn-flashcard-reveal-cta.nn-flashcard-reveal-cta--premium {
+  background: color-mix(in srgb, var(--semantic-brand) 90%, var(--semantic-surface));
+  box-shadow: var(--semantic-shadow-soft);
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-brand) 30%);
+}
+
+.nn-flashcard-reveal-cta.nn-flashcard-reveal-cta--premium:hover {
+  background: color-mix(in srgb, var(--semantic-brand) 94%, var(--semantic-surface));
+}
+
+/* ── Rail polish (readiness + confidence read as clinical telemetry) ─────── */
+.nn-flashcard-study-stack-premium .nn-flashcard-rail-surface .nn-progress-track-semantic--xs {
+  border-radius: 9999px;
+}
+
+html[data-theme="midnight-indigo"] .nn-active-flashcard-session .nn-premium-flashcard-session-header,
+html[data-theme="deep-twilight"] .nn-active-flashcard-session .nn-premium-flashcard-session-header {
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+}

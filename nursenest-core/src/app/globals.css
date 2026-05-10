@@ -2,7 +2,11 @@
 @import "./theme-palettes.css";
 @import "./color-roles.css";
 @import "./semantic-status-tokens.css";
+@import "./learner-exam-shell.css";
+@import "./learner-exam-session-premium.css";
+@import "./learner-flashcard-premium.css";
 @import "./premium-redesign-2026.css";
+@import "./learner-cockpit-premium.css";
 @import "../../styles/tokens.css";
 @import "../../styles/learner-ds.css";
 @import "./learner-surface-primitives.css";
@@ -2204,7 +2208,7 @@ html[data-theme] .nn-marketing-surface {
   }
 }
 
-/* Marketing header: nav links — accent underline on hover, stronger contrast */
+/* Marketing header: capsule nav links — token hover/active fills (no text underlines). */
 .nn-marketing-nav-link {
   display: inline-flex;
   min-height: 2rem;
@@ -2394,41 +2398,56 @@ html[data-theme] .nn-marketing-surface {
   outline-offset: 2px;
 }
 
+/* Leaf + wordmark share one semantic brand ink (SVG / Lucide use currentColor). */
+.nn-header-brand-lockup {
+  color: var(--semantic-brand);
+}
+
 /* Tablet/desktop: logo + tier | study/marketing links | utilities + auth — balanced columns, no giant gap */
 .nn-header-desktop-grid {
   display: none;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-desktop-grid {
     display: grid;
-    /* Equal side tracks pull logo + auth toward the centered nav instead of pinning them to far edges. */
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    /*
+     * Figma v3.1 (nav redesign): logo | fluid nav | utilities+auth.
+     * Middle column is `minmax(0, 1fr)` so the link row cannot intrinsic-size past
+     * the space between brand and auth (avoids nav/auth bbox overlap on laptop widths).
+     */
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     column-gap: 0.75rem;
-    row-gap: 0.375rem;
+    row-gap: 0.5rem;
     width: 100%;
     min-height: 3.625rem;
     padding-block: 0.45rem;
   }
 
   .nn-header-desktop-grid > .nn-header-brand-cluster {
-    justify-self: end;
+    justify-self: start;
     margin-inline-start: 0;
+    min-width: 0;
+    max-width: min(100%, 22rem);
   }
 
   .nn-header-desktop-grid > .nav {
-    justify-self: center;
-    max-width: min(100%, 52rem);
+    justify-self: stretch;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .nn-header-desktop-grid > .nn-header-desktop-auth-cluster {
-    justify-self: start;
+    justify-self: end;
+    min-width: 0;
+    max-width: min(100%, 38rem);
   }
 }
 
 /*
- * Marketing public header — hard breakpoint at 1280px (Tailwind `xl`).
+ * Marketing public header — hard breakpoint at 1024px (Tailwind `lg`), aligned with tier rail + hub strip.
  * If responsive utilities are missing from a route’s CSS chunk, mobile + desktop
  * chrome can both paint (duplicate brand/auth, pathway reads as loose text).
  * These classes are always in globals.css so the split cannot drop them.
@@ -2436,7 +2455,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-hide-until-xl {
   display: none;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-hide-until-xl {
     display: block;
   }
@@ -2445,7 +2464,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-hide-until-xl-flex {
   display: none;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-hide-until-xl-flex {
     display: flex;
   }
@@ -2454,7 +2473,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-mobile-only-flex {
   display: flex;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-mobile-only-flex {
     display: none !important;
   }
@@ -2463,7 +2482,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-mobile-only-inline-flex {
   display: inline-flex;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-mobile-only-inline-flex {
     display: none !important;
   }
@@ -2472,17 +2491,17 @@ html[data-theme] .nn-marketing-surface {
 .nn-header-overlay-mobile-only {
   display: block;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-header-overlay-mobile-only {
     display: none !important;
   }
 }
 
-/* Country hub shortcuts beside desktop preferences — same 1280px gate as header chrome */
+/* Country hub shortcuts beside desktop preferences — same lg gate as header chrome */
 .nn-marketing-hub-strip--desktop {
   display: none;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nn-marketing-hub-strip--desktop {
     display: flex;
   }
@@ -2524,6 +2543,22 @@ html[data-theme] .nn-marketing-surface {
  *   3. nn-header-nav-row (direct child) – exam tier strip, same surface as utility
  */
 
+/* Marketing header: content rhythm — slightly wider horizontal padding than page sections
+   so logo/wordmark and nav labels keep breathing room (backgrounds stay on full-bleed wrappers). */
+.nn-header-primary-inner-shell.nn-section-shell {
+  padding-inline: clamp(1.125rem, 2.5vw, 2.5rem);
+}
+@media (min-width: 640px) {
+  .nn-header-primary-inner-shell.nn-section-shell {
+    padding-inline: clamp(1.375rem, 2.8vw, 2.75rem);
+  }
+}
+@media (min-width: 1024px) {
+  .nn-header-primary-inner-shell.nn-section-shell {
+    padding-inline: clamp(1.5rem, 3vw, 3rem);
+  }
+}
+
 /* Top preferences rail — fixed navy slate; independent of getNavChromeVars / theme chrome */
 .nn-header-utility-dark {
   background: var(--nn-header-utility-bg);
@@ -2551,6 +2586,8 @@ html[data-theme] .nn-marketing-surface {
   box-shadow: none;
   isolation: isolate;
   transition: box-shadow var(--motion-base) var(--motion-ease);
+  /* Wordmark + Lucide leaf fallback: high-contrast ink on paper (not theme accent / pink-adjacent tokens). */
+  --logo-primary: var(--nn-header-primary-fg);
   /* Sticky wrapper still injects per-theme --nn-nav-*; rebind for this subtree (mobile icons + middle row). */
   --nn-nav-fg: var(--nn-header-primary-fg);
   --nn-nav-border: color-mix(in srgb, var(--nn-header-primary-fg) 16%, var(--nn-header-primary-bg));
@@ -2593,8 +2630,12 @@ html[data-theme] .nn-marketing-surface {
   }
 }
 
-/* Dark-theme headers need explicit nav token rebinding so text stays white on the dark chrome surface. */
+/* Dark-theme headers need explicit nav token rebinding so text stays white on the dark chrome surface.
+ * Applied on the sticky chrome wrapper (full viewport width), not only on <header>, so glass/gradient
+ * bands are never cropped by inner `.nn-section-shell` / grid columns. */
 .nn-header-dark-surface {
+  /* Premium header gradient + mobile rows use `--nav-bg`; align with injected `--nn-nav-*` chrome. */
+  --nav-bg: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
   --nav-fg: var(--nn-nav-fg, #ffffff);
   --nav-link: var(--nn-nav-fg, #ffffff);
   --nav-link-hover: var(--nn-nav-hover-fg, #ffffff);
@@ -4008,6 +4049,19 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   .nn-lesson-content.nn-lesson-prose.nn-lesson-body--intervention
   ol {
   padding-left: 1.65rem;
+}
+
+/* Medications / treatment spine — distinct from nursing interventions (success / green family via section role) */
+.nn-lesson-section-card[data-lsc-kind="treatment_management"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--meds ul {
+  padding-left: 1.6rem;
+}
+
+.nn-lesson-section-card[data-lsc-kind="clinical_scenario"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--scenario p {
+  line-height: 1.72;
+}
+
+.nn-lesson-section-card[data-lsc-kind="related_next_steps"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--next {
+  max-width: min(72ch, 100%);
 }
 
 .nn-lesson-prose strong {
@@ -6031,6 +6085,28 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
     color-mix(in srgb, var(--semantic-info) 2.5%, var(--theme-page-bg)) 48%,
     transparent 100%
   );
+}
+
+/* Allied occupation hubs — subtle category tint on shared hero band (tokens only; not a sub-brand). */
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="acute"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-danger) 18%, var(--border-subtle));
+}
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="lab"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-warning) 18%, var(--border-subtle));
+}
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="therapy"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 18%, var(--border-subtle));
+}
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="clinical"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-success) 16%, var(--border-subtle));
+}
+.nn-premium-pathway-hub[data-nn-allied-pathway-hub="1"][data-nn-allied-hub-tone="support"] .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 16%, var(--border-subtle));
+}
+
+/* New Grad marketing + transition hubs — chart-4 companion tint on shared hero vocabulary. */
+.nn-premium-pathway-hub--new-grad .nn-nursing-tier-hub-hero-band {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 14%, var(--border-subtle));
 }
 
 [data-nn-nursing-tier-hub="surface"] .nn-exam-hub-conversion {

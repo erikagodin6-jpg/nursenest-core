@@ -46,6 +46,9 @@ export function professionKeyToCareerKey(professionKey: string): AlliedCareerKey
     imaging: "imaging",
     pta: "ota_pta",
     ota: "ota_pta",
+    "occupational-therapy": "ota_pta",
+    physiotherapy: "ota_pta",
+    psychotherapy: "socialwork",
     "pharmacy-tech": "pharmtech",
     "social-work": "socialwork",
     /** Marketing tracks map onto the closest billed allied career (shared Stripe prices). */

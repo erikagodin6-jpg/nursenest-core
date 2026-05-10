@@ -56,14 +56,14 @@ test("ECG answer route records isolated ECG analytics instead of grading through
   assert.match(service, /ecgVideoQuestionPerformanceAggregate/);
 });
 
-test("hidden ECG routes are admin-preview-only and emit noindex nofollow", () => {
+test("ECG learner layout uses dynamic robots metadata; legacy interpretation stays noindex nofollow", () => {
   const layout = read("src/app/modules/ecg/layout.tsx");
   const legacyLayout = read("src/app/modules/ecg-interpretation/layout.tsx");
   const access = read("src/lib/ecg-module/ecg-module.server.ts");
-  for (const source of [layout, legacyLayout]) {
-    assert.match(source, /index:\s*false/);
-    assert.match(source, /follow:\s*false/);
-  }
+  assert.match(layout, /index:\s*false/);
+  assert.match(layout, /generateMetadata/);
+  assert.match(legacyLayout, /index:\s*false/);
+  assert.match(legacyLayout, /follow:\s*false/);
   assert.match(access, /auth\.ecg_module_preview/);
   assert.match(access, /notFound\(\)/);
 });

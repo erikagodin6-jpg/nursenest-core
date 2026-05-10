@@ -120,11 +120,27 @@ export function explainMissingPathoPharmTopicalMatch(row: PathoPharmRowShape): s
   return reasons;
 }
 
-/** Raw SQL fragment: public “live” rows aligned with `blogLiveWhere(now)` (includes APPROVED). */
+/**
+ * SQL fragment aligned with {@link blogPublicExcludeE2eTestArtifactsWhere} / `isBlogPublicE2eTestArtifact`
+ * (E2E slug/title patterns must not inflate public counts).
+ */
+export function sqlBlogPublicExcludeE2eTestArtifacts(alias = "p"): string {
+  return `(
+  NOT (
+    COALESCE(${alias}."slug", '') ILIKE '%bloge2e%'
+    OR COALESCE(${alias}."title", '') ILIKE '%bloge2e%'
+    OR COALESCE(${alias}."title", '') ILIKE '%runtime draft scheduled%'
+    OR COALESCE(${alias}."title", '') ILIKE '%runtime en scheduled%'
+    OR COALESCE(${alias}."title", '') ILIKE '%runtime en published%'
+  )
+)`;
+}
+
+/** Raw SQL fragment: public “live” rows aligned with `blogLiveWhere(now)` (includes APPROVED + E2E exclusion). */
 export function sqlBlogLiveWhere(alias = "p", nowParam = "$1"): string {
   const wfFail = `'FAILED_GENERATION','FAILED_IMAGE'`;
   const wfPipeline = `'GENERATED','OUTLINE_READY','NEEDS_SOURCE_REVIEW','NEEDS_MEDICAL_REVIEW','NEEDS_SEO_REVIEW','NEEDS_METADATA','NEEDS_REFERENCES'`;
-  return `(
+  const liveCore = `(
   (
     ${alias}."postStatus" = 'PUBLISHED'
     AND (${alias}."publishAt" IS NULL OR ${alias}."publishAt" <= ${nowParam}::timestamptz)
@@ -143,6 +159,7 @@ export function sqlBlogLiveWhere(alias = "p", nowParam = "$1"): string {
     AND ${alias}."workflowStatus"::text NOT IN (${wfFail}, ${wfPipeline})
   )
 )`;
+  return `(${liveCore}) AND ${sqlBlogPublicExcludeE2eTestArtifacts(alias)}`;
 }
 
 export function sqlPathoPharmTopical(alias = "p"): string {

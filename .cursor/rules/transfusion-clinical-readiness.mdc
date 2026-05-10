@@ -1,0 +1,36 @@
+---
+description: Blood transfusion + reactions — integrated clinical safety ecosystem (not checklist mini-app).
+globs:
+  - nursenest-core/src/components/labs/**/*
+  - nursenest-core/src/lib/labs/**/*
+  - nursenest-core/src/components/scenarios/**/*
+  - nursenest-core/src/lib/scenarios/**/*
+alwaysApply: false
+---
+
+# Transfusion clinical readiness
+
+Blood transfusion education is **premium adaptive safety and judgment training** integrated across NurseNest — **not** an isolated checklist app, shallow exam sheet, or generic CE module.
+
+## Teach (across lessons, labs correlations, scenarios, cases)
+
+- Safety, monitoring, reaction recognition, prioritization, emergency response, pathophysiology, judgment, escalation, communication, documentation, NGN-style reasoning.
+
+## Integrate (reuse shells, nav, tokens — see ecosystem guardrails)
+
+- **Labs:** Hgb/Hct, iron studies, platelets, coagulation, hemolysis, DIC, sepsis, inflammatory markers — indications, trends, thresholds, clinical significance.  
+- **ECG / telemetry:** Deterioration, shock, vitals/dysrhythmia during reactions.  
+- **OSCE:** Consent, education, escalation, rapid response communication.  
+- **Branching cases:** Evolving reactions, delayed recognition, multiple outcomes (`adaptive-case-study-ecosystem.md`).  
+- **Med / infusion:** Timing, compatibility, rates, emergency meds, verification.  
+- **Dashboard / adaptive:** Mastery and remediation via **existing** recommendation architecture — no parallel transfusion-only scoring product.
+
+## Tier scaling
+
+RN full workflow + NGN readiness; PN/RPN bedside monitoring and escalation; NP advanced management; New Grad specialty/unit readiness — **pathway/content**, not separate `/app` trees.
+
+## Related
+
+- `docs/planning/transfusion-clinical-readiness-ecosystem.md`  
+- `docs/planning/transfusion-ecosystem-figma-brief.md` — Figma frames, themes, mobile, export specs  
+- `.cursor/rules/ecosystem-platform-guardrails.mdc`

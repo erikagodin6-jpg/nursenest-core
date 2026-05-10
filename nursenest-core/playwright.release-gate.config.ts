@@ -13,6 +13,7 @@
  */
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
+import { localNextDevWebServer } from "./playwright/helpers/local-next-webserver";
 import { getE2eBaseURL } from "./tests/e2e/helpers/e2e-env";
 import { PAID_USER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
 import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credentials";
@@ -20,33 +21,18 @@ import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credential
 const baseURL = getE2eBaseURL();
 
 function localDevWebServer() {
-  if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return undefined;
   let origin: URL;
   try {
-    origin = new URL(baseURL);
+    origin = new URL(baseURL.trim());
   } catch {
     return undefined;
   }
-  const host = origin.hostname;
-  if (host !== "127.0.0.1" && host !== "localhost") return undefined;
-  const port = origin.port || "3000";
-  const secret = process.env.NEXTAUTH_SECRET?.trim() || "playwright-e2e-local-secret";
-  const dbUrl = process.env.DATABASE_URL?.trim();
-  return {
-    /* `npm run dev` targets monolith `server/index.ts` (not in this package); E2E uses Next — see `playwright.mobile.config.ts`. */
-    command: `npx next dev --hostname ${host} --port ${port}`,
-    url: `${origin.origin}/api/auth/csrf`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
-    env: {
-      RUN_HEAVY_BUILD_TASKS: "false",
-      NEXTAUTH_SECRET: secret,
-      AUTH_SECRET: process.env.AUTH_SECRET?.trim() || secret,
-      AUTH_URL: origin.origin,
-      NEXTAUTH_URL: origin.origin,
-      ...(dbUrl ? { DATABASE_URL: dbUrl } : {}),
-    },
-  } as const;
+  /** Root `/` readiness: matches `playwright.visual-qa.config.ts` (avoids second dev server on port clash). */
+  return localNextDevWebServer({
+    baseURL,
+    readyUrl: `${origin.origin}/`,
+    timeoutMs: 300_000,
+  });
 }
 
 const paidAuthEnabled = hasPaidTestCredentials();

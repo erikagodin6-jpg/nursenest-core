@@ -33,6 +33,15 @@ export async function GET(req: NextRequest, context: RouteContext) {
           blogPostId: true,
           failureReason: true,
           updatedAt: true,
+          blogPost: {
+            select: {
+              id: true,
+              slug: true,
+              title: true,
+              postStatus: true,
+              publishAt: true,
+            },
+          },
         },
       },
     },

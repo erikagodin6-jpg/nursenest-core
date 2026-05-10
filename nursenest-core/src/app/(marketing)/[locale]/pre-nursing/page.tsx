@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Activity, BookOpen, Layers, Target } from "lucide-react";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
+import { PreNursingMarketingHubMain } from "@/components/pre-nursing/pre-nursing-marketing-hub-main";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
-import { StudyCard } from "@/components/ui/study-card";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
@@ -62,81 +60,18 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
 
   return (
     <div className="nn-marketing-surface">
-      <div
-        className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8"
-        data-nn-nursing-tier-hub="surface"
-      >
-        <PreNursingSurfaceAnalytics surface="hub" />
-        <WebPageJsonLd
-          title={pageTitle}
-          description={pageDescription}
-          path={`/${locale}/pre-nursing`}
-          inLanguage={locale}
-        />
-
-        <section aria-labelledby="pre-nursing-actions-heading">
-          <h1 id="pre-nursing-actions-heading" className="nn-marketing-h1 max-w-3xl text-balance">
-            {msgs["preNursing.hub.heroLabel"] ?? "Pre-Nursing"}
-          </h1>
-          <p className="nn-marketing-body mt-2 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
-            {msgs["preNursing.hub.heroSubtitle"] ?? "Choose how you want to study today."}
-          </p>
-          <ul className="mt-6 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4">
-            <li>
-              <StudyCard
-                surface="hub"
-                variant="featured"
-                className="nn-exam-hub-study-card--lessons"
-                href={l("/pre-nursing/lessons")}
-                icon={BookOpen}
-                title="Lessons"
-                description="Review concepts by topic."
-                cta="Lessons"
-                ctaVariant="primary"
-              />
-            </li>
-            <li>
-              <StudyCard
-                surface="hub"
-                variant="featured"
-                className="nn-exam-hub-study-card--flashcards"
-                href={l("/flashcards")}
-                icon={Layers}
-                title="Flashcards"
-                description="Strengthen recall quickly."
-                cta="Flashcards"
-                ctaVariant="primary"
-              />
-            </li>
-            <li>
-              <StudyCard
-                surface="hub"
-                variant="featured"
-                className="nn-exam-hub-study-card--practice"
-                href={l("/question-bank")}
-                icon={Target}
-                title="Practice"
-                description="Drill by topic or weakness."
-                cta="Practice"
-                ctaVariant="primary"
-              />
-            </li>
-            <li>
-              <StudyCard
-                surface="hub"
-                variant="featured"
-                className="nn-exam-hub-study-card--cat"
-                href={l("/pre-nursing/mini-cat")}
-                icon={Activity}
-                title="Exams"
-                description="Take longer exam-style sessions."
-                cta="Exams"
-                ctaVariant="primary"
-              />
-            </li>
-          </ul>
-        </section>
-      </div>
+      <WebPageJsonLd
+        title={pageTitle}
+        description={pageDescription}
+        path={`/${locale}/pre-nursing`}
+        inLanguage={locale}
+      />
+      <PreNursingMarketingHubMain
+        heroTitle={msgs["preNursing.hub.heroLabel"] ?? "Pre-Nursing"}
+        heroSubtitle={msgs["preNursing.hub.heroSubtitle"] ?? "Choose how you want to study today."}
+        linkHref={(p) => l(p)}
+        marketingLocale={locale}
+      />
     </div>
   );
 }

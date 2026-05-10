@@ -37,7 +37,7 @@ import {
   pathwayLessonTopicClusterMetaTitle,
   pathwayRegionAwareExamName,
 } from "@/lib/lessons/pathway-lesson-hub-seo";
-import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
+import { marketingHubPaginationFromLoaderTotals } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { buildPathwayLessonSystemSections } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import {
   pathwayLessonHasRenderableHubSlug,
@@ -65,8 +65,8 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import type { HubDbFailureCategory } from "@/lib/db/safe-database";
-import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
+import { LessonHubClinicalModulesStrip } from "@/components/pathway-lessons/lesson-hub-clinical-modules-strip";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
@@ -99,7 +99,6 @@ import {
 } from "@/lib/allied/allied-profession-taxonomy";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-
 /** Canonical Canada RN hub path (used for legacy ops grep + optional verbose console). */
 const RN_CANADA_NCLEX_LESSONS_HUB_PATH = "/canada/rn/nclex-rn/lessons" as const;
 
@@ -197,6 +196,11 @@ type Props = {
     alliedProfession?: string;
     alliedTaxonomy?: string;
   }>;
+};
+
+/** Prop for programmatic entry (`allied/allied-health/lessons`) — avoids redirect loop to the same canonical URL. */
+type LessonsHubPageProps = Props & {
+  skipAlliedHealthHubCanonicalRedirect?: boolean;
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
@@ -300,7 +304,11 @@ function buildAlliedLessonsRedirectUrl(searchParams: Awaited<Props["searchParams
   return qs.size > 0 ? `${dest}?${qs.toString()}` : dest;
 }
 
-export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {
+export default async function PathwayLessonsHubPage({
+  params,
+  searchParams,
+  skipAlliedHealthHubCanonicalRedirect,
+}: LessonsHubPageProps) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
@@ -345,7 +353,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       </main>
     );
   }
-  if (isAlliedHealthPathway(pathway)) {
+  if (isAlliedHealthPathway(pathway) && !skipAlliedHealthHubCanonicalRedirect) {
     permanentRedirect(buildAlliedLessonsRedirectUrl(sp));
   }
 
@@ -717,18 +725,26 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     );
   }
 
-  /** Slug-safe rows from the same loader result used for pagination (`items` / `renderableAll`). */
+  /** Full slug-safe list from loader — inventory fill + crawl “all lesson links” nav (sr-only). */
   const renderableAllIn = pageResult.renderableAll ?? pageResult.items;
-  const rawHubLessonRows = renderableAllIn.filter(pathwayLessonHasRenderableHubSlug);
-  /** Dedupe + taxonomy guard + linkable href — must match curriculum grid and toolbar count. */
+  const rawHubLessonRowsFull = renderableAllIn.filter(pathwayLessonHasRenderableHubSlug);
+  /** Current loader page only — O(pageSize) hub curriculum prepare (dedupe/organize), not full catalog. */
+  const rawHubLessonRowsPage = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
+  const effectiveHubPageSize = Math.min(
+    PATHWAY_HUB_PAGE_SIZE_MAX,
+    Math.max(pageSizeRequested, PATHWAY_HUB_PAGE_SIZE_DEFAULT, 1),
+  );
+  /** Dedupe + taxonomy guard + linkable href — must match curriculum grid for this page slice. */
   const prepareT0 = performance.now();
   const { lessons: hubCurriculumPrepared, prepareStages: hubPrepareStages } =
-    prepareLessonsForHubCurriculumWithDiagnostics(rawHubLessonRows, {
+    prepareLessonsForHubCurriculumWithDiagnostics(rawHubLessonRowsPage, {
       pathwayId: pathway.id,
       lessonsBasePath: base,
     });
   const prepareDurationMs = Math.round(performance.now() - prepareT0);
-  console.error(`[lessons-perf] prepare_done pathway=${pathway.id} prepared=${hubCurriculumPrepared.length} ms=${prepareDurationMs}`);
+  console.error(
+    `[lessons-perf] prepare_done pathway=${pathway.id} prepared=${hubCurriculumPrepared.length} page_slice_in=${rawHubLessonRowsPage.length} full_inventory=${rawHubLessonRowsFull.length} ms=${prepareDurationMs}`,
+  );
 
   const listWarehouseT0 = performance.now();
   const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
@@ -748,13 +764,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
    * Lessons beyond the cap are kept as hubMarketingDegraded="unverified_inventory_fill" so
    * the total/pagination counts remain accurate — they are just non-clickable in the card nav.
    */
-  const effectiveHubPageSizeForVerify = Math.min(
-    PATHWAY_HUB_PAGE_SIZE_MAX,
-    Math.max(pageSizeRequested, PATHWAY_HUB_PAGE_SIZE_DEFAULT, 1),
-  );
   const pageVerifyCap = Math.min(
     resolvedMarketingHubVerifySlugCap(),
-    effectiveHubPageSizeForVerify * pageRequested,
+    effectiveHubPageSize * pageRequested,
   );
 
   /** Cross-check list rows with fresh detail loads; soft failures stay as {@link PathwayLessonRecord.hubMarketingDegraded}. */
@@ -776,7 +788,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     minVisible: MARKETING_HUB_MIN_VISIBLE_LESSONS,
     verifiedKept: vr.kept,
     hubCurriculumPrepared,
-    loaderRenderable: rawHubLessonRows,
+    loaderRenderable: rawHubLessonRowsFull,
   });
   let hubCurriculumLessons = fillResult.lessons;
   const hubVerifyDiagnostics = vr.diagnostics;
@@ -869,14 +881,14 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     });
   }
   /**
-   * Pagination slice for the curriculum grid: bounded page size so first paint does not build hundreds of cards.
-   * Toolbar / badge counts still use the full verified inventory length (`hubCurriculumLessons.length`).
+   * Pagination chrome uses loader totals (`pageResult.total`). Grid rows are already this request’s verified page slice.
    */
-  const effectiveHubPageSize = Math.min(
-    PATHWAY_HUB_PAGE_SIZE_MAX,
-    Math.max(pageSizeRequested, PATHWAY_HUB_PAGE_SIZE_DEFAULT, 1),
+  const hubVerifiedPage = marketingHubPaginationFromLoaderTotals(
+    hubCurriculumLessons,
+    pageResult.total,
+    pageRequested,
+    effectiveHubPageSize,
   );
-  const hubVerifiedPage = sliceNormalizedHubLessons(hubCurriculumLessons, pageRequested, effectiveHubPageSize);
   /** Current page only — grouping, progress batching, and diagnostics stay O(page size). */
   const lessonsForCurriculumHub = hubVerifiedPage.items;
   const groupT0 = performance.now();
@@ -980,7 +992,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     loader_renderable_all_len: String(renderableAllIn.length),
     loader_page_items_len: String(pageResult.items.length),
     /** Stage 1: slug-safe rows from loader (pathway/locale scoped upstream in {@link resolveMarketingHubRenderableLessonList}). */
-    stage_1_raw_slug_safe_rows: String(rawHubLessonRows.length),
+    stage_1_raw_slug_safe_rows_full: String(rawHubLessonRowsFull.length),
+    stage_1_raw_slug_safe_rows_page_slice: String(rawHubLessonRowsPage.length),
     /** Stage 2: after {@link prepareLessonsForHubCurriculum} (dedupe, organize, href-safe). */
     stage_2_after_prepare: String(hubCurriculumPrepared.length),
     /** Stage 3: unique slugs sent to detail verify. */
@@ -993,8 +1006,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     stage_6_section_model_lesson_rows: String(stage6SectionModelLessonRows),
     stage_6_linkable_lesson_rows: String(stage6LinkableLessonRows),
     effective_hub_page_size: String(effectiveHubPageSize),
-    raw_after_slug_filter: String(rawHubLessonRows.length),
-    raw_list_rows: String(rawHubLessonRows.length),
+    raw_after_slug_filter_page_slice: String(rawHubLessonRowsPage.length),
+    raw_list_rows_full: String(rawHubLessonRowsFull.length),
     after_prepare: String(hubCurriculumPrepared.length),
     after_verify_kept: String(hubCurriculumLessons.length),
     lessons_page_load_status: lessonsPageLoad.status,
@@ -1028,7 +1041,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       }),
     );
   }
-  const hubListCountForChrome = hubCurriculumLessons.length;
+  /** Loader authoritative total — matches pagination chrome when prepare runs on page slice only. */
+  const hubListCountForChrome = pageResult.total;
   if (hubVerifiedPage.total > 0 && pageRequested !== hubVerifiedPage.page) {
     const qs = new URLSearchParams();
     if (hubVerifiedPage.page > 1) qs.set("page", String(hubVerifiedPage.page));
@@ -1253,6 +1267,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         },
       );
     }
+    const progressCtxZeroTotal = await loadMarketingPathwayLessonProgressSessionContext({
+      sessionPathname: `${pathname}/lessons`,
+      sessionSurface: "marketing.exam_hub.lessons",
+    });
+    const viewerSignedInZeroTotal = Boolean(progressCtxZeroTotal.userId.trim());
     return (
       <LessonsPageShell
         title={heroTitle}
@@ -1287,6 +1306,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
         <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+        <LessonHubClinicalModulesStrip
+          pathway={pathway}
+          marketingLocale={lessonContentLocale}
+          signedIn={viewerSignedInZeroTotal}
+        />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             {qEffective
@@ -1351,6 +1375,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
 
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
+  const viewerSignedInLessonsHub = Boolean(progressCtx.userId.trim());
   const canShowProgressMap = canShowResume && lessonsForCurriculumHub.length > 0;
 
   if (canShowResume) {
@@ -1365,13 +1390,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     );
     progressMap = map;
   }
-
-  const studyCards = defaultLessonModeCards({
-    lessonsHref: base,
-    questionsHref,
-    catHref,
-    pathwayShortName: pathway.shortName,
-  });
 
   return (
     <LessonsPageShell
@@ -1407,6 +1425,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      <LessonHubClinicalModulesStrip
+        pathway={pathway}
+        marketingLocale={lessonContentLocale}
+        signedIn={viewerSignedInLessonsHub}
+      />
       {lessonsPageLoad.status === "ok" && lessonsPageLoad.sourceUsed === "secondary" ? (
         <div className="mt-3">
           <LearnerStudyLiveSyncBanner />
@@ -1424,7 +1447,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
       <section
         id="pathway-lesson-library"
-        className="nn-qa-pathway-lessons-hub mt-4 scroll-mt-24"
+        className="nn-qa-pathway-lessons-hub mt-2 scroll-mt-24"
         data-nn-qa-pathway-lessons-hub="true"
         aria-labelledby="lesson-library-heading"
       >
@@ -1502,7 +1525,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           showLockedState={!canShowResume}
           hubVerifyDiagnostics={hubVerifyDiagnostics}
         />
-        <LessonHubFullLessonLinkNav lessons={hubCurriculumLessons} lessonsBasePath={base} />
+        <LessonHubFullLessonLinkNav lessons={rawHubLessonRowsFull} lessonsBasePath={base} />
       </section>
       <PathwayLessonPagination
         basePath={base}
@@ -1517,11 +1540,17 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         lessonsOnPage={lessonsOnPageForPagination}
       />
 
-      <section className="mt-10">
-        <StudyModeCards heading="Other ways to study" cards={studyCards} />
-      </section>
+      <p className="mt-8 text-sm text-[var(--semantic-text-secondary)]">
+        <Link
+          href={overviewHref}
+          className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+        >
+          Full study toolkit, labs, and readiness modules — on the {pathway.shortName} hub
+        </Link>
+      </p>
 
       <StudyBottomNav
+        compact
         relatedLinks={[
           { label: "Practice questions", href: questionsHref },
           { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },

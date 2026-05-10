@@ -9,7 +9,7 @@ export function MarketingHomeEmergencyFallback() {
   return (
     <main style={{ padding: "40px", fontFamily: "system-ui" }}>
       <h1>NurseNest</h1>
-      <p>Canada-first nursing exam prep platform.</p>
+      <p>Global nursing exam prep with Canada-first depth — built for nurses worldwide.</p>
 
       <div style={{ marginTop: "20px" }}>
         <a href="/login">Log in</a> |{" "}

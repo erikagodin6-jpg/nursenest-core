@@ -152,8 +152,10 @@ services:
         type: GENERAL
       # --- Runtime AI admin gate + env guard (`src/lib/env/runtime-env-guard.ts`, `scripts/start-standalone.mjs`) ---
       # `AI_ADMIN_GENERATION_ENABLED` must be non-empty at runtime (use `false` / `0` / `off` to disable generation).
+      # **Explicit default:** without `value:`, App Platform can ship an empty GENERAL var → bootstrap `validateRuntimeEnvOrThrow` exits → no healthy upstream.
       # At least one of the OpenAI key envs must be set (SECRET). Staging may set `NN_ENV_VALIDATION_MODE=warn` or `off`.
       - key: AI_ADMIN_GENERATION_ENABLED
+        value: "false"
         scope: RUN_TIME
         type: GENERAL
       - key: AI_INTEGRATIONS_OPENAI_API_KEY

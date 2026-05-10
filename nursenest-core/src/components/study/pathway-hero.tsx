@@ -8,6 +8,8 @@ type CtaButton = {
 };
 
 type Props = {
+  /** Optional kicker above H1 (pathway + region, etc.) */
+  eyebrow?: ReactNode;
   /** Page H1 */
   title: string;
   /** One-line subtitle, max 120 chars */
@@ -24,7 +26,7 @@ type Props = {
  * Shared hero header for marketing study hubs (e.g. practice questions).
  * The public lessons library hub uses `LessonsPageShell` with a centered hero layout instead.
  */
-export function PathwayHero({ title, subtitle, toolbar, ctas, backLink }: Props) {
+export function PathwayHero({ eyebrow, title, subtitle, toolbar, ctas, backLink }: Props) {
   return (
     <header className="nn-gradient-safe relative overflow-hidden rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[var(--hero-gradient-start)] via-[var(--semantic-surface)] to-[var(--hero-gradient-end)] p-3 shadow-[var(--semantic-shadow-soft)] sm:p-3.5">
       <div className="relative">
@@ -36,6 +38,8 @@ export function PathwayHero({ title, subtitle, toolbar, ctas, backLink }: Props)
             ← {backLink.label}
           </Link>
         ) : null}
+
+        {eyebrow ? <div className={backLink ? "mb-1" : "mb-1.5"}>{eyebrow}</div> : null}
 
         <h1 className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-[1.7rem]">
           {title}

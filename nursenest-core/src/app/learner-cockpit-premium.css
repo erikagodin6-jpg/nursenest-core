@@ -1,0 +1,227 @@
+/**
+ * Phase 1 — Learner dashboard + report card visual convergence.
+ * Token- and semantic-first; scoped hooks (.nn-cockpit-*, .nn-learner-cockpit-*).
+ * Does not alter routing, data, or adaptive behavior.
+ */
+
+:root {
+  --nn-cockpit-section-gap: clamp(1.35rem, 2.8vw, 1.85rem);
+  --nn-cockpit-card-radius: 1.15rem;
+  --nn-cockpit-glass-blur: 14px;
+}
+
+/* ── Dashboard analytics column: calmer vertical rhythm than generic space-y-6 ── */
+.nn-learner-cockpit-analytics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nn-cockpit-section-gap);
+}
+
+/* Mastery key inset — same language as readiness rail, less “floating grey box” */
+.nn-cockpit-mastery-key {
+  border-radius: var(--nn-cockpit-card-radius);
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface)) 100%
+  );
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 55%, transparent);
+}
+
+/* Priority strip: slightly more editorial air without changing grid structure */
+.nn-cockpit-readiness-strip .nn-dash-page-header__title,
+.nn-cockpit-readiness-strip h2 {
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 1024px) {
+  .nn-cockpit-readiness-strip {
+    scroll-margin-top: 5.5rem;
+  }
+}
+
+/* Dashboard hero: clinical cockpit depth — stays under .nn-learner-page-hero base wash */
+.nn-learner-cockpit-hero.nn-learner-dashboard-hero.nn-dash-page-header--learner-hub {
+  border-radius: var(--nn-cockpit-card-radius);
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface)) 42%,
+    var(--semantic-surface) 100%
+  );
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 70%, transparent),
+    0 18px 44px -28px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent);
+  backdrop-filter: blur(var(--nn-cockpit-glass-blur));
+  -webkit-backdrop-filter: blur(var(--nn-cockpit-glass-blur));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-learner-cockpit-hero.nn-learner-dashboard-hero.nn-dash-page-header--learner-hub {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Quick actions: premium = confident stillness (no micro-bounce on every tile) */
+.nn-cockpit-quick-actions a:hover,
+.nn-cockpit-quick-actions a:focus-visible {
+  transform: none;
+}
+
+.nn-cockpit-quick-actions a .transition-transform {
+  transition: transform var(--motion-base) var(--motion-ease);
+}
+
+.nn-cockpit-quick-actions a:hover .transition-transform,
+.nn-cockpit-quick-actions a:focus-visible .transition-transform {
+  transform: none;
+}
+
+/* Readiness KPI card: calmer elevation, same structure */
+.nn-cockpit-readiness-card.nn-readiness-card {
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 65%, transparent),
+    0 20px 48px -32px color-mix(in srgb, var(--semantic-brand) 12%, transparent);
+}
+
+/* Progress summary + weak areas: subtle grouping */
+.nn-cockpit-progress-summary,
+.nn-cockpit-weak-areas {
+  border-radius: var(--nn-cockpit-card-radius);
+}
+
+/* Report card root rhythm (spacing owned here — avoid competing Tailwind gap utilities) */
+.nn-report-card-premium {
+  gap: var(--nn-cockpit-section-gap);
+}
+
+@media (min-width: 640px) {
+  .nn-report-card-premium {
+    gap: clamp(1.5rem, 3vw, 2.25rem);
+  }
+}
+
+/* Weak-topic signals — diagnostic, not alarmist blocks */
+.nn-report-card-topic-signal {
+  border-radius: var(--nn-cockpit-card-radius);
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 18%, var(--semantic-border-soft));
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 36%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted)) 100%
+  );
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 50%, transparent);
+}
+
+/* Midnight: keep glass readable, soften chart rail contrast */
+html[data-theme="midnight"] .nn-learner-cockpit-hero.nn-learner-dashboard-hero.nn-dash-page-header--learner-hub {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-text-primary) 6%, transparent),
+    0 22px 50px -34px color-mix(in srgb, var(--semantic-text-primary) 14%, transparent);
+}
+
+html[data-theme="midnight"] .nn-cockpit-mastery-key {
+  border-color: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
+}
+
+/* Aurora / Blossom: slightly warmer panel seams (uses existing semantic chart tokens) */
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-learner-cockpit-hero.nn-learner-dashboard-hero.nn-dash-page-header--learner-hub {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 10%, var(--semantic-border-soft));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-cockpit-mastery-key {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 12%, var(--semantic-border-soft));
+}
+
+/* ── /app study hub: Ocean-canonical priority matrix (Blossom/Midnight inherit same DOM) ── */
+.nn-dash-hub-priority-matrix__grid {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.35rem);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .nn-dash-hub-priority-matrix__grid {
+    grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .nn-dash-hub-priority-matrix__signals {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Quick-launch rail: horizontal thumb strip on small screens, even grid on desktop */
+.nn-dash-hub-quick-launch {
+  scroll-snap-type: x mandatory;
+}
+
+.nn-dash-hub-quick-launch > a {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 640px) {
+  .nn-dash-hub-quick-launch {
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  }
+}
+
+/* ── /app priority matrix: clinical workstation frame (Ocean layout unchanged; themes = tokens only) ── */
+.nn-dash-hub-priority-matrix.nn-cockpit-readiness-strip {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(1rem, 2.4vw, 1.35rem);
+  border-radius: calc(var(--nn-cockpit-card-radius) + 0.1rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 16%, var(--semantic-border-soft));
+  background:
+    radial-gradient(620px 280px at 6% -8%, color-mix(in srgb, var(--semantic-panel-cool) 50%, transparent), transparent 62%),
+    radial-gradient(520px 240px at 94% 4%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 58%),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted)) 0%,
+      var(--semantic-surface) 100%
+    );
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 62%, transparent),
+    0 24px 58px -36px color-mix(in srgb, var(--semantic-info) 18%, transparent);
+}
+
+.nn-dash-hub-priority-matrix.nn-cockpit-readiness-strip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.55;
+  background-image: radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--semantic-brand) 10%, transparent), transparent 52%);
+}
+
+.nn-dash-hub-priority-matrix.nn-cockpit-readiness-strip > * {
+  position: relative;
+  z-index: 1;
+}
+
+html[data-theme="midnight"] .nn-dash-hub-priority-matrix.nn-cockpit-readiness-strip {
+  border-color: color-mix(in srgb, var(--semantic-info) 14%, var(--semantic-border-soft));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-text-primary) 5%, transparent),
+    0 26px 60px -38px color-mix(in srgb, var(--semantic-text-primary) 16%, transparent);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-dash-hub-priority-matrix.nn-cockpit-readiness-strip {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 14%, var(--semantic-border-soft));
+  background:
+    radial-gradient(620px 280px at 8% -6%, color-mix(in srgb, var(--semantic-panel-warm) 42%, transparent), transparent 60%),
+    radial-gradient(480px 220px at 92% 6%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 56%),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted)) 0%,
+      var(--semantic-surface) 100%
+    );
+}

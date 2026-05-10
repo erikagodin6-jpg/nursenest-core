@@ -34,12 +34,18 @@ describe("marketingTierHubStudyActionHref", () => {
   it("never returns empty or fragment-only paths for core actions", () => {
     const caRn = getExamPathwayById("ca-rn-nclex-rn");
     assert.ok(caRn);
-    for (const id of ["lessons", "practice_questions", "exams"] as const) {
+    for (const id of ["lessons", "practice_questions", "cat", "exams"] as const) {
       const h = marketingTierHubStudyActionHref(caRn, id);
       assert.ok(h.startsWith("/"));
       assert.notEqual(h, "#");
       assert.equal(h.includes("#"), false);
     }
+  });
+
+  it("routes tier hub CAT tile to the public pathway CAT explainer", () => {
+    const caRn = getExamPathwayById("ca-rn-nclex-rn");
+    assert.ok(caRn);
+    assert.equal(marketingTierHubStudyActionHref(caRn, "cat"), "/canada/rn/nclex-rn/cat");
   });
 });
 
@@ -88,6 +94,17 @@ describe("resolveMarketingTierHubStudyActionHref", () => {
     assert.equal(
       resolveMarketingTierHubStudyActionHref(pathway, "exams", "/app/practice-tests?pathwayId=ca-rn-nclex-rn"),
       "/app/practice-tests?pathwayId=us-rn-nclex-rn",
+    );
+  });
+
+  it("preserves cat-launch override when pathwayId matches", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    const ok = "/app/practice-tests/cat-launch?pathwayId=us-rn-nclex-rn";
+    assert.equal(resolveMarketingTierHubStudyActionHref(pathway, "cat", ok), ok);
+    assert.equal(
+      resolveMarketingTierHubStudyActionHref(pathway, "cat", "/app/practice-tests/cat-launch?pathwayId=ca-rn-nclex-rn"),
+      "/us/rn/nclex-rn/cat",
     );
   });
 });

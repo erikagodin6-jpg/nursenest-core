@@ -8,9 +8,9 @@
  * `nn_marketing_locale` cookie, set by the language picker and `/[locale]/…` layouts.
  *
  * ## Surface parity (intentional exclusions)
- * - **FAQ** (`/faq`) and **Shop** (`/shop`): `marketingDesktopDropdown` only. They appear in the
- *   “Guides & plans” desktop dropdown but not in the marketing mobile drawer (space / IA: hubs +
- *   core study links first; full resources stay on desktop).
+ * - **Shop** (`/shop`): `marketingDesktopDropdown` only (desktop “Guides & plans” dropdown).
+ * - **About** (`/about`): desktop “Guides & plans” dropdown and marketing mobile drawer.
+ * - **FAQ** (`/faq`): desktop dropdown and marketing mobile drawer (`getMarketingMobileDrawerLeafItems`).
  * - **Generic question-bank / practice-exams** are not top-level learn-practice nav items; users
  *   reach them from exam pathway hubs and the exam strip.
  * - **Explore** (“Who we help”) links: desktop dropdown only; not duplicated in the mobile flat list
@@ -106,7 +106,7 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
 ];
 
 /**
- * Desktop “Guides & plans” (`nav.resources`). FAQ and shop are desktop-dropdown-only (see file header).
+ * Desktop “Guides & plans” (`nav.resources`). Shop remains desktop-dropdown-only (see file header).
  */
 export const GLOBAL_NAV_GUIDES_PLANS: GlobalNavLeafItem[] = [
   LEAF({
@@ -117,6 +117,15 @@ export const GLOBAL_NAV_GUIDES_PLANS: GlobalNavLeafItem[] = [
     surfaces: [DD, MD],
     order: 10,
     mobileDrawerOrder: 70,
+  }),
+  LEAF({
+    id: "marketing-about",
+    labelKey: "nav.about",
+    href: "/about",
+    group: "guides-plans",
+    surfaces: [DD, MD],
+    order: 12,
+    mobileDrawerOrder: 71,
   }),
   LEAF({
     id: "marketing-tools",
@@ -150,8 +159,9 @@ export const GLOBAL_NAV_GUIDES_PLANS: GlobalNavLeafItem[] = [
     labelKey: "footer.faq",
     href: "/faq",
     group: "guides-plans",
-    surfaces: [DD],
+    surfaces: [DD, MD],
     order: 50,
+    mobileDrawerOrder: 75,
   }),
   LEAF({
     id: "marketing-shop",

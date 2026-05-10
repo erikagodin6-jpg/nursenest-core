@@ -36,3 +36,22 @@ export function sliceNormalizedHubLessons(
   const items = renderableAll.slice(start, start + ps);
   return { items, total, page: safePage, pageSize: ps, pageCount };
 }
+
+/**
+ * Pagination chrome when the grid rows are **already** the current loader page (verify/fill output), but
+ * `total` / `pageCount` must follow {@link PathwayLessonsPageResult.total} from the hub loader — not
+ * `pageGridLessons.length` (which is only a slice).
+ */
+export function marketingHubPaginationFromLoaderTotals(
+  pageGridLessons: PathwayLessonRecord[],
+  loaderTotal: number,
+  page: number,
+  pageSize: number,
+): HubRenderablePageSlice {
+  const ps = clampPageSize(pageSize);
+  const p = Math.min(clampPage(page), maxSafeOffsetPage(ps));
+  const total = Math.max(0, Math.floor(loaderTotal));
+  const pageCount = total === 0 ? 1 : Math.max(1, Math.ceil(total / ps) || 1);
+  const safePage = Math.min(p, pageCount);
+  return { items: pageGridLessons, total, page: safePage, pageSize: ps, pageCount };
+}

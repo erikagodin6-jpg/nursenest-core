@@ -11,8 +11,10 @@ import { PremiumPathwayShowcase } from "@/components/marketing/home/premium-path
 import { PremiumClinicalDepth } from "@/components/marketing/home/premium-clinical-depth";
 import { PremiumStudyEcosystem } from "@/components/marketing/home/premium-study-ecosystem";
 import { PremiumReadinessPreview } from "@/components/marketing/home/premium-readiness-preview";
+import { PremiumHomepageEcg } from "@/components/marketing/home/premium-homepage-ecg";
 import { PremiumHomepageTrust } from "@/components/marketing/home/premium-homepage-trust";
 import { PremiumHomepageCta } from "@/components/marketing/home/premium-homepage-cta";
+import { HomeHeroScreenshotSection } from "@/components/marketing/home-hero-screenshot-section";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -84,9 +86,12 @@ export default function HomeRestoredClient({
         lessonCount={lessonCount}
       />
 
+      <HomeHeroScreenshotSection />
+
       <PremiumPathwayShowcase />
       <PremiumClinicalDepth />
       <PremiumStudyEcosystem />
+      <PremiumHomepageEcg />
       <PremiumReadinessPreview />
       <PremiumHomepageTrust />
 

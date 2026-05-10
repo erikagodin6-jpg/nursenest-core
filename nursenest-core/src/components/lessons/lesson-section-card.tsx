@@ -21,11 +21,32 @@ import { getLessonSectionTheme } from "@/lib/ui/lesson-section-theme";
 import { LearnerSectionContainer } from "@/components/learner-ui/learner-section-container";
 
 const SPINE_ACCENT_CLASS: Partial<Record<PathwayLessonSectionKind, string>> = {
+  /** Overview / framing — Phase 6 “why it matters” lane */
+  introduction: "nn-lesson-section-card--spine-overview",
+  intro: "nn-lesson-section-card--spine-overview",
   clinical_meaning: "nn-lesson-section-card--spine-clinical-meaning",
-  exam_relevance: "nn-lesson-section-card--spine-exam-relevance",
+  pathophysiology_overview: "nn-lesson-section-card--spine-pathophysiology",
   core_concept: "nn-lesson-section-card--spine-core-concept",
+  core: "nn-lesson-section-card--spine-core-concept",
+  signs_symptoms: "nn-lesson-section-card--spine-signs-symptoms",
+  clinical_manifestations: "nn-lesson-section-card--spine-signs-symptoms",
+  labs_diagnostics: "nn-lesson-section-card--spine-labs-diagnostics",
+  treatment_management: "nn-lesson-section-card--spine-treatment-meds",
+  nursing_assessment_interventions: "nn-lesson-section-card--spine-nursing-care",
+  nursing_priorities: "nn-lesson-section-card--spine-nursing-care",
+  clinical_application: "nn-lesson-section-card--spine-nursing-care",
+  complications: "nn-lesson-section-card--spine-complications",
+  red_flags: "nn-lesson-section-card--spine-complications",
+  client_education: "nn-lesson-section-card--spine-client-education",
+  clinical_pearls: "nn-lesson-section-card--spine-clinical-pearls",
+  exam_relevance: "nn-lesson-section-card--spine-exam-relevance",
+  exam_tips: "nn-lesson-section-card--spine-exam-focus",
+  exam_focus: "nn-lesson-section-card--spine-exam-focus",
+  tier_specific_relevance: "nn-lesson-section-card--spine-exam-focus",
   clinical_scenario: "nn-lesson-section-card--spine-clinical-scenario",
   takeaways: "nn-lesson-section-card--spine-takeaways",
+  related_next_steps: "nn-lesson-section-card--spine-related-next",
+  country_specific_notes: "nn-lesson-section-card--spine-regional",
 };
 
 function spineAccentClass(kind: PathwayLessonSectionKind | undefined | null): string {
@@ -44,6 +65,8 @@ export function lessonSectionSurface(kind: PathwayLessonSectionKind | undefined 
     "exam_relevance",
     "clinical_scenario",
     "tier_specific_relevance",
+    /** Linked learning / continuation — framed like a study CTA without inventing content */
+    "related_next_steps",
   ];
   return callout.includes(kind) ? "callout" : "editorial";
 }

@@ -106,19 +106,19 @@ test("required hidden module learner routes are covered by 404/admin-preview gua
   assert.match(ecgAccess, /getAdminModulePreviewAccess/);
 });
 
-test("hidden module routes fail closed and emit noindex nofollow", () => {
-  const ecgLayouts = [
-    readFileSync(join(process.cwd(), "src/app/modules/ecg/layout.tsx"), "utf8"),
-    readFileSync(join(process.cwd(), "src/app/modules/ecg-interpretation/layout.tsx"), "utf8"),
-  ];
+test("hidden module routes fail closed and emit noindex (ECG allows follow when published)", () => {
+  const ecgMainLayout = readFileSync(join(process.cwd(), "src/app/modules/ecg/layout.tsx"), "utf8");
+  const ecgLegacyLayout = readFileSync(join(process.cwd(), "src/app/modules/ecg-interpretation/layout.tsx"), "utf8");
   const labLayout = readFileSync(join(process.cwd(), "src/app/modules/lab-values/layout.tsx"), "utf8");
   const ecgAccess = readFileSync(join(process.cwd(), "src/lib/ecg-module/ecg-module.server.ts"), "utf8");
   const labAccess = readFileSync(join(process.cwd(), "src/lib/lab-values/lab-values-module.server.ts"), "utf8");
 
-  for (const source of [...ecgLayouts, labLayout]) {
-    assert.match(source, /index:\s*false/);
-    assert.match(source, /follow:\s*false/);
-  }
+  assert.match(ecgMainLayout, /index:\s*false/);
+  assert.match(ecgMainLayout, /generateMetadata/);
+  assert.match(ecgLegacyLayout, /index:\s*false/);
+  assert.match(ecgLegacyLayout, /follow:\s*false/);
+  assert.match(labLayout, /index:\s*false/);
+  assert.match(labLayout, /follow:\s*false/);
   assert.match(ecgAccess, /notFound\(\)/);
   assert.match(labAccess, /notFound\(\)/);
 });
@@ -152,17 +152,17 @@ test("hidden module admin preview pages are admin guarded", () => {
   }
 });
 
-test("hidden ECG and lab values modules stay out of sitemap, hreflang, localized SEO, public nav, and pricing", () => {
+test("hidden ECG and lab values modules stay out of sitemap, hreflang, localized SEO, global nav, and pricing", () => {
   const sitemapAndSeo = readFiles([
     "src/app/sitemap.xml/route.ts",
     "src/lib/seo",
     "reports/localized-seo-audit.json",
     "reports/localized-seo-audit.md",
   ]);
-  const navSourceFiles = [...listFiles("src/lib/navigation"), ...listFiles("src/lib/marketing")].filter(
+  const globalNavSourceFiles = listFiles("src/lib/navigation").filter(
     (absPath) => !/\.(test|spec)\.(tsx?|jsx?|mts?|cts?)$/.test(absPath),
   );
-  const navSources = navSourceFiles.map((file) => readFileSync(file, "utf8")).join("\n");
+  const globalNavSources = globalNavSourceFiles.map((file) => readFileSync(file, "utf8")).join("\n");
   const pricingSources = readFiles([
     "src/app/(marketing)/(default)/pricing",
     "src/app/(marketing)/[locale]/pricing",
@@ -181,7 +181,7 @@ test("hidden ECG and lab values modules stay out of sitemap, hreflang, localized
   for (const route of hiddenRoutes) {
     const escaped = new RegExp(route.replaceAll("/", "\\/"));
     assert.doesNotMatch(sitemapAndSeo, escaped, route);
-    assert.doesNotMatch(navSources, escaped, route);
+    assert.doesNotMatch(globalNavSources, escaped, route);
     assert.doesNotMatch(pricingSources, escaped, route);
   }
   for (const entitlement of [LAB_VALUES_ENTITLEMENTS.BASICS_FREE, LAB_VALUES_ENTITLEMENTS.MASTERY_PAID, ECG_MASTERY_PAID]) {

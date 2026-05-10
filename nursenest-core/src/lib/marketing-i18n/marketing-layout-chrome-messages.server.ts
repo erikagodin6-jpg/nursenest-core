@@ -52,6 +52,11 @@ export async function getMarketingDefaultLayoutChromeMessages(): Promise<Record<
   const shards = defaultLayoutShardList();
   const key = shards.join(",");
 
+  /** Dev ergonomics: `npm run i18n:compile` updates shard JSON; drop resolved cache so new keys load without restarting `next dev`. */
+  if (process.env.NODE_ENV === "development") {
+    defaultChromeState.resolved = null;
+  }
+
   if (defaultChromeState.shardKey !== key) {
     defaultChromeState.shardKey = key;
     defaultChromeState.resolved = null;

@@ -31,11 +31,14 @@ import { buildOutline, detectRiskFlags, slugify, thinDraftWarning } from "@/lib/
 import { prisma } from "@/lib/db";
 import { evaluateBlogGenerationOutputGate } from "@/lib/blog/blog-generation-output-gate";
 import { logBlogGenerationRejected } from "@/lib/blog/blog-generation-log";
+import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
 
 const schema = z.object({
   limit: z.number().int().min(1).max(10).default(3),
   mode: z.enum(["generate", "schedule_only"]).default("generate"),
   exactPublishAt: z.string().datetime().optional(),
+  /** When true, creates a live `PUBLISHED` row (same visibility contract as automation immediate publish). */
+  publishNow: z.boolean().optional(),
 });
 
 type Props = { params: Promise<{ id: string }> };
@@ -65,7 +68,15 @@ export async function POST(req: Request, { params }: Props) {
     return NextResponse.json({ ok: true, processed: 0, message: "No queued items remaining." });
   }
 
-  const out: Array<{ itemId: string; status: string; slug?: string; error?: string }> = [];
+  const out: Array<{
+    itemId: string;
+    status: string;
+    postId?: string;
+    slug?: string;
+    publicUrl?: string;
+    scheduledFor?: string;
+    error?: string;
+  }> = [];
   for (const item of items) {
     try {
       await prisma.blogCampaignItem.update({
@@ -100,7 +111,11 @@ export async function POST(req: Request, { params }: Props) {
               error: `duplicate_topic_intent:existing_slug=${dupIntent.slug}`,
             },
           });
-          out.push({ itemId: item.id, status: "failed", error: "duplicate_topic_intent" });
+          out.push({
+            itemId: item.id,
+            status: "failed",
+            error: `duplicate_topic_intent (existing /blog/${dupIntent.slug})`,
+          });
           continue;
         }
       }
@@ -152,7 +167,11 @@ export async function POST(req: Request, { params }: Props) {
               error: `generation_output_gate:${reason}`.slice(0, 1200),
             },
           });
-          out.push({ itemId: item.id, status: "failed", error: "generation_output_gate" });
+          out.push({
+            itemId: item.id,
+            status: "failed",
+            error: `generation_output_gate: ${reason}`.slice(0, 800),
+          });
           continue;
         }
       }
@@ -181,7 +200,28 @@ export async function POST(req: Request, { params }: Props) {
       });
       const risks = detectRiskFlags({ template, keyword: item.plannedKeyword });
       const thin = thinDraftWarning(body);
-      const publishAt = d.exactPublishAt ? new Date(d.exactPublishAt) : item.plannedPublishAt;
+      const publishNow = d.publishNow === true;
+      let publishAt: Date | null = d.exactPublishAt != null && d.exactPublishAt !== "" ? new Date(d.exactPublishAt) : item.plannedPublishAt ?? null;
+      if (publishNow) {
+        publishAt = new Date();
+      }
+      /**
+       * Public `/blog/[slug]` visibility ({@link blogLiveWhere} / {@link blogPostIsLive}): scheduled rows must
+       * not stay in `BLOG_WORKFLOW_PIPELINE_IN_PROGRESS` (e.g. GENERATED) or they never unlock at `publishAt`.
+       * Aligns with {@link resolvePublishState} in `blog-automation-engine.ts`.
+       */
+      const postStatus = publishNow
+        ? BlogPostStatus.PUBLISHED
+        : publishAt
+          ? BlogPostStatus.SCHEDULED
+          : BlogPostStatus.DRAFT;
+      const workflowStatus = publishNow
+        ? BlogWorkflowStatus.PUBLISHED
+        : publishAt
+          ? BlogWorkflowStatus.SCHEDULED
+          : risks.length > 0
+            ? BlogWorkflowStatus.NEEDS_MEDICAL_REVIEW
+            : BlogWorkflowStatus.GENERATED;
       const post = await prisma.blogPost.create({
         data: {
           campaignId: campaign.id,
@@ -198,7 +238,7 @@ export async function POST(req: Request, { params }: Props) {
           targetKeyword: item.plannedKeyword ?? campaign.keywordCluster,
           keywordCluster: campaign.keywordCluster,
           countryTarget: campaign.countryTarget ?? null,
-          postStatus: publishAt ? BlogPostStatus.SCHEDULED : BlogPostStatus.DRAFT,
+          postStatus,
           publishAt,
           seoTitle: seoTitleDb,
           seoDescription: seoDescDb,
@@ -211,7 +251,7 @@ export async function POST(req: Request, { params }: Props) {
             seo: seoBundle,
           } as Prisma.InputJsonValue,
           schemaSummary: buildSchemaSummaryPayload(seoBundle),
-          workflowStatus: risks.length > 0 ? BlogWorkflowStatus.NEEDS_MEDICAL_REVIEW : BlogWorkflowStatus.GENERATED,
+          workflowStatus,
           outlineJson: buildOutline({ title, targetKeyword: item.plannedKeyword ?? campaign.keywordCluster, intent, template }),
           ctaType: cta.type,
           ctaText: cta.text,
@@ -229,12 +269,29 @@ export async function POST(req: Request, { params }: Props) {
       await prisma.blogCampaignItem.update({
         where: { id: item.id },
         data: {
-          status: publishAt ? BlogCampaignItemStatus.SCHEDULED : BlogCampaignItemStatus.GENERATED,
+          status: publishNow
+            ? BlogCampaignItemStatus.PUBLISHED
+            : publishAt
+              ? BlogCampaignItemStatus.SCHEDULED
+              : BlogCampaignItemStatus.GENERATED,
           postId: post.id,
           error: null,
         },
       });
-      out.push({ itemId: item.id, status: "ok", slug: post.slug });
+      const liveNow =
+        publishNow ||
+        (postStatus === BlogPostStatus.SCHEDULED && publishAt != null && publishAt.getTime() <= Date.now());
+      if (liveNow) {
+        revalidateBlogPublishingSurfaces({ slug: post.slug });
+      }
+      out.push({
+        itemId: item.id,
+        status: "ok",
+        postId: post.id,
+        slug: post.slug,
+        publicUrl: liveNow ? `/blog/${post.slug}` : undefined,
+        scheduledFor: !liveNow && publishAt ? publishAt.toISOString() : undefined,
+      });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       await prisma.blogCampaignItem.update({

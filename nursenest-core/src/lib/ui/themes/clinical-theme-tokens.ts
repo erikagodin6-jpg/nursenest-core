@@ -1,10 +1,18 @@
-export type LaunchClinicalThemeId = "blossom" | "midnight" | "ocean" | "forest";
+export type LaunchClinicalThemeId =
+  | "ocean"
+  | "midnight"
+  | "blossom"
+  | "aurora"
+  | "sunset"
+  | "forest";
 
 export type ClinicalThemeMood =
   | "Soft, motivating, elegant"
   | "Focused, deep, minimal"
   | "Clean, professional, clinical"
-  | "Grounded, focused, calm";
+  | "Grounded, focused, calm"
+  | "Cheerful, premium, clinically bright"
+  | "Warm, optimistic, uplifting";
 
 export type ClinicalThemeMeta = {
   id: LaunchClinicalThemeId;
@@ -19,7 +27,14 @@ export type ClinicalThemeMeta = {
   };
 };
 
-export const LAUNCH_CLINICAL_THEME_IDS = ["blossom", "midnight", "ocean", "forest"] as const;
+export const LAUNCH_CLINICAL_THEME_IDS = [
+  "ocean",
+  "midnight",
+  "blossom",
+  "aurora",
+  "sunset",
+  "forest",
+] as const;
 
 /**
  * Curated NurseNest study atmospheres.
@@ -27,16 +42,16 @@ export const LAUNCH_CLINICAL_THEME_IDS = ["blossom", "midnight", "ocean", "fores
  * should consume CSS variables / registry metadata instead of hardcoded palette values.
  */
 export const CLINICAL_THEME_META: Record<LaunchClinicalThemeId, ClinicalThemeMeta> = {
-  blossom: {
-    id: "blossom",
-    label: "Blossom",
-    mood: "Soft, motivating, elegant",
+  ocean: {
+    id: "ocean",
+    label: "Ocean",
+    mood: "Clean, professional, clinical",
     group: "light",
     swatches: {
-      primary: "#E75480",
-      secondary: "#8B7CF6",
-      accent: "#F8C85C",
-      surface: "#FFF8FB",
+      primary: "#1D9BD7",
+      secondary: "#14B8A6",
+      accent: "#7DD3FC",
+      surface: "#F6FBFF",
     },
   },
   midnight: {
@@ -51,16 +66,40 @@ export const CLINICAL_THEME_META: Record<LaunchClinicalThemeId, ClinicalThemeMet
       surface: "#111827",
     },
   },
-  ocean: {
-    id: "ocean",
-    label: "Ocean",
-    mood: "Clean, professional, clinical",
+  blossom: {
+    id: "blossom",
+    label: "Blossom",
+    mood: "Soft, motivating, elegant",
     group: "light",
     swatches: {
-      primary: "#1D9BD7",
-      secondary: "#14B8A6",
-      accent: "#7DD3FC",
-      surface: "#F6FBFF",
+      primary: "#8E75FF",
+      secondary: "#7DD3FC",
+      accent: "#E8A87C",
+      surface: "#FAF7FC",
+    },
+  },
+  aurora: {
+    id: "aurora",
+    label: "Aurora",
+    mood: "Cheerful, premium, clinically bright",
+    group: "light",
+    swatches: {
+      primary: "#9B72FF",
+      secondary: "#4A90E2",
+      accent: "#E14D8F",
+      surface: "#FAF8FF",
+    },
+  },
+  sunset: {
+    id: "sunset",
+    label: "Sunset",
+    mood: "Warm, optimistic, uplifting",
+    group: "light",
+    swatches: {
+      primary: "#E07862",
+      secondary: "#38BDF8",
+      accent: "#E8B44F",
+      surface: "#FFF8F3",
     },
   },
   forest: {

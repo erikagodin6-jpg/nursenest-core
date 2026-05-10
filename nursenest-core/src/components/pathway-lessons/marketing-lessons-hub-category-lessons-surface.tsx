@@ -4,8 +4,8 @@ import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
+import { LessonHubClinicalModulesStrip } from "@/components/pathway-lessons/lesson-hub-clinical-modules-strip";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
-import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
@@ -20,22 +20,20 @@ import {
   sortLessonsForMarketingCategoryPage,
   type MarketingHubCategoryDescriptor,
 } from "@/lib/lessons/marketing-lessons-hub-category";
-import {
-  getPathwayLessonListWarehouseLocaleForHub,
-  PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
-} from "@/lib/lessons/pathway-lesson-loader";
+import { PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP } from "@/lib/lessons/pathway-lesson-loader";
 import { prepareLessonsForHubCurriculumWithDiagnostics } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
-import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import { resolveMarketingHubCategoryLessonRowsWithDbResilience } from "@/lib/lessons/marketing-hub-category-rows-db-resilient";
 import {
   pathwayLessonMarketingHubVerifiedCardHref,
   pathwayLessonHasRenderableHubSlug,
+  type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsDisplayCategoryBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
-import { getLessonProgressForPathwayUser } from "@/lib/lessons/get-lesson-progress-for-pathway-user";
+import { loadMarketingHubLessonProgressMapWithTimeout } from "@/lib/lessons/marketing-hub-progress-safe";
 import {
   canShowPaidPathwayLessonProgress,
   loadMarketingPathwayLessonProgressSessionContext,
@@ -80,16 +78,27 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
     pageSlice.filter(pathwayLessonHasRenderableHubSlug),
     { pathwayId: pathway.id, lessonsBasePath: base },
   );
-  const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
-  const vr = await verifyMarketingHubLessonRowsResolve(pathway, prepared.lessons, lessonContentLocale, {
-    listWarehouseLocale,
-    prepareStages: prepared.prepareStages,
-    maxUniqueSlugsToVerify: Math.min(
-      PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
-      Math.max(60, pageSize * 2),
-    ),
+
+  const progressCtx = await loadMarketingPathwayLessonProgressSessionContext({
+    sessionPathname: routePathLessonsCategory,
+    sessionSurface: "marketing.exam_hub.lessons_category",
   });
-  const rows = vr.kept;
+  const skipMarketingHubDbVerify = !progressCtx.userId.trim();
+
+  const rows = await resolveMarketingHubCategoryLessonRowsWithDbResilience(
+    {
+      pathway,
+      lessonContentLocale,
+      skipDbVerify: skipMarketingHubDbVerify,
+      preparedLessons: prepared.lessons,
+      prepareStages: prepared.prepareStages,
+      maxUniqueSlugsToVerify: Math.min(
+        PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
+        Math.max(60, pageSize * 2),
+      ),
+      surface: "category_lessons_surface",
+    },
+  );
 
   let questionSnapshot = EMPTY_QUESTION_SNAPSHOT;
   let questionSnapshotLoadRejected = false;
@@ -142,28 +151,22 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
     />
   );
 
-  const progressCtx = await loadMarketingPathwayLessonProgressSessionContext({
-    sessionPathname: routePathLessonsCategory,
-    sessionSurface: "marketing.exam_hub.lessons_category",
-  });
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
-  if (canShowResume && filtered.length > 0) {
-    progressMap = await getLessonProgressForPathwayUser({
+  let showPaidProgressChrome = false;
+  if (canShowResume && rows.length > 0) {
+    const pr = await loadMarketingHubLessonProgressMapWithTimeout({
       userId: progressCtx.userId,
       pathwayId: pathway.id,
-      lessonSlugs: filtered.map((l) => l.slug).filter(Boolean),
+      lessonSlugs: rows.map((l) => l.slug).filter(Boolean),
     });
+    progressMap = pr.map;
+    showPaidProgressChrome = !pr.timedOut;
   }
   const categoryProgressSnapshot =
-    canShowResume && filtered.length > 0 ? buildLessonCategoryProgress({ lessons: filtered, progressMap }) : null;
-
-  const studyCards = defaultLessonModeCards({
-    lessonsHref: base,
-    questionsHref,
-    catHref,
-    pathwayShortName: pathway.shortName,
-  });
+    showPaidProgressChrome && rows.length > 0
+      ? buildLessonCategoryProgress({ lessons: rows, progressMap })
+      : null;
 
   const subtitle = formatSentenceCase(`${pathway.shortName} · ${pathwayCountryLabel(pathway)}`);
 
@@ -190,6 +193,11 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      <LessonHubClinicalModulesStrip
+        pathway={pathway}
+        marketingLocale={lessonContentLocale}
+        signedIn={Boolean(progressCtx.userId.trim())}
+      />
       {questionSnapshotLoadRejected ? (
         <div
           className="mt-3 rounded-xl border border-[var(--semantic-warning)]/40 bg-[color-mix(in_srgb,var(--semantic-warning)_12%,transparent)] px-4 py-3 text-sm text-[var(--theme-heading-text)]"
@@ -202,7 +210,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
 
       <section
         id="pathway-lesson-library"
-        className="nn-qa-pathway-lessons-hub mt-4 scroll-mt-24"
+        className="nn-qa-pathway-lessons-hub mt-2 scroll-mt-24"
         data-nn-qa-pathway-lessons-category="true"
         aria-labelledby="lesson-category-heading"
       >
@@ -274,7 +282,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
                       className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm font-medium text-primary shadow-[var(--semantic-shadow-soft)] transition-colors hover:border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))]"
                     >
                       <span className="min-w-0 flex-1">{label}</span>
-                      {canShowResume ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
+                      {showPaidProgressChrome ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
                     </Link>
                   ) : (
                     <span className="text-sm text-[var(--theme-muted-text)]">{label}</span>
@@ -299,11 +307,8 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         ) : null}
       </section>
 
-      <section className="mt-10">
-        <StudyModeCards heading="Other ways to study" cards={studyCards} />
-      </section>
-
       <StudyBottomNav
+        compact
         relatedLinks={[
           { label: "Practice questions", href: questionsHref },
           { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },

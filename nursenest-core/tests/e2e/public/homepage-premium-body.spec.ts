@@ -4,6 +4,7 @@ const SECTION_IDS = [
   "section-premium-pathway-showcase",
   "section-premium-clinical-depth",
   "section-premium-study-ecosystem",
+  "section-premium-home-ecg",
   "section-premium-readiness-preview",
   "section-premium-homepage-trust",
   "section-premium-homepage-final-cta",
@@ -34,6 +35,10 @@ test.describe("Premium homepage body", () => {
 
     const main = page.locator("main");
     await expect(main.getByRole("heading", { level: 1 }).first()).toBeVisible();
+
+    // Premium hero stat tiles must never concatenate label + unit (regression: "MASTERED TOPICScards").
+    const heroPanelHtml = (await page.locator(".nn-premium-hero-panel").innerHTML()).toLowerCase();
+    expect(heroPanelHtml, "hero panel HTML").not.toContain("topicscards");
 
     for (const id of SECTION_IDS) {
       await expect(page.getByTestId(id)).toBeVisible({ timeout: 30_000 });

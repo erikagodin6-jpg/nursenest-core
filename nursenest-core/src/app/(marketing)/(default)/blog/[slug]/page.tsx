@@ -37,6 +37,11 @@ import { parsePublishingPackage } from "@/lib/blog/blog-publishing-package";
 import { filterRelatedBlogReadingForParentExam } from "@/lib/blog/blog-related-reading-public";
 import { filterMarketingLessonPathsForBlogExam } from "@/lib/blog/blog-marketing-lesson-path-tier";
 import { resolveBlogTopicPresentation } from "@/lib/blog/blog-post-category-visual";
+import {
+  extractFaqPairsFromFaqSchemaSectionHtml,
+  publicBlogClinicalBlurb,
+  sanitizePublicBlogBodyHtml,
+} from "@/lib/blog/blog-public-article-html";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -102,7 +107,7 @@ export default async function BlogPostPage({ params }: Props) {
         post.category,
       );
 
-      const faqItems =
+      let faqItems =
         post.faqBlock &&
         typeof post.faqBlock === "object" &&
         "items" in post.faqBlock
@@ -111,6 +116,10 @@ export default async function BlogPostPage({ params }: Props) {
               []
             ).filter((x) => x.q?.trim() && x.a?.trim())
           : [];
+      if (faqItems.length < 2) {
+        const fromBody = extractFaqPairsFromFaqSchemaSectionHtml(post.body);
+        if (fromBody.length >= 2) faqItems = fromBody;
+      }
       const emitFaqJsonLd =
         faqItems.length >= 2 &&
         (seo === null ? true : seo.emitFaqSchema !== false);
@@ -124,8 +133,15 @@ export default async function BlogPostPage({ params }: Props) {
       const publishingPkg = linkPlanRaw ? parsePublishingPackage(linkPlanRaw.publishingPackage) : null;
       const relatedReading = filterRelatedBlogReadingForParentExam(post.exam, publishingPkg?.relatedBlogPosts ?? []);
 
+      const bodyForPublic = sanitizePublicBlogBodyHtml(post.body, {
+        hasStructuredApaReferences: Boolean(
+          "apaReferences" in post &&
+            Array.isArray(post.apaReferences) &&
+            post.apaReferences.length > 0,
+        ),
+      });
       const bodyHtml = stripBrokenOrEmptyImagesFromHtml(
-        applyAutoLinksToHtml(post.body, {
+        applyAutoLinksToHtml(bodyForPublic, {
           exam: post.exam,
           countryTarget: post.countryTarget,
           relatedLessonPaths: relatedLessonPathsFiltered,
@@ -141,12 +157,11 @@ export default async function BlogPostPage({ params }: Props) {
           : null;
 
       const topic = resolveBlogTopicPresentation(post.category);
-      const clinicalBlurb =
-        "shortSummary" in post && typeof post.shortSummary === "string" && post.shortSummary.trim()
-          ? post.shortSummary.trim()
-          : "schemaSummary" in post && typeof post.schemaSummary === "string" && post.schemaSummary.trim()
-            ? post.schemaSummary.trim()
-            : null;
+      const clinicalBlurb = publicBlogClinicalBlurb({
+        shortSummary: "shortSummary" in post ? post.shortSummary : null,
+        schemaSummary: "schemaSummary" in post ? post.schemaSummary : null,
+        seoSuggestedExcerpt: seo?.suggestedExcerpt ?? null,
+      });
       const takeaways =
         "keyTakeaways" in post && Array.isArray(post.keyTakeaways)
           ? post.keyTakeaways.map((t) => (typeof t === "string" ? t.trim() : "")).filter((t) => t.length > 0)
@@ -218,12 +233,6 @@ export default async function BlogPostPage({ params }: Props) {
             <p className="text-sm text-[var(--theme-muted-text)]">
               <time dateTime={publishedAt.toISOString()}>{publishedAt.toISOString().slice(0, 10)}</time>
             </p>
-            {"workflowStatus" in post && post.workflowStatus ? (
-              <p className="text-xs text-muted-foreground">
-                Editorial status:{" "}
-                {post.workflowStatus.replace(/_/g, " ").toLowerCase()}
-              </p>
-            ) : null}
             {"lastReviewedAt" in post && post.lastReviewedAt ? (
               <p className="text-xs text-muted-foreground">
                 Last reviewed:{" "}

@@ -79,7 +79,7 @@ export function MarketingHomeSafeMode({ layout = "embedded", onRetry }: Marketin
 
         <div className={layout === "standalone" ? "mt-10" : undefined}>
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-            Canada-first exam prep
+            Global platform · Canada-first exam depth
           </p>
           <h1 className="nn-marketing-h1 mt-2 text-[var(--theme-heading-text)]">{title}</h1>
           <p className="mt-4 max-w-2xl text-lg text-balance text-[var(--semantic-text-muted)]">{subtitle}</p>

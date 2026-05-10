@@ -122,12 +122,22 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
 
   /* ── Premium clinical palettes ── */
   blossom: {
-    chrome: "#D9436A",
-    foreground: "#FFFFFF",
-    border: "rgba(255,255,255,0.22)",
-    hoverBg: "rgba(255,255,255,0.16)",
-    hoverFg: "#FFFFFF",
-    panel: "rgba(255,255,255,0.12)",
+    /* Softer lilac + sky + peach wash — distinct from Aurora’s violet + rose emphasis. */
+    chrome: "color-mix(in srgb, #8e75ff 7%, color-mix(in srgb, #c9f0ff 22%, color-mix(in srgb, #fdeadb 12%, #fffefe)))",
+    foreground: "#1f2536",
+    border: "color-mix(in srgb, #1f2536 9%, #e3dcf0)",
+    hoverBg: "color-mix(in srgb, #1f2536 5%, transparent)",
+    hoverFg: "#1f2536",
+    panel: "color-mix(in srgb, #1f2536 5%, transparent)",
+  },
+  aurora: {
+    /* Fallback when semantic tokens absent — pastel wash + ink (matches theme-palettes Aurora). */
+    chrome: "color-mix(in srgb, #9b72ff 8%, color-mix(in srgb, #fce8f3 20%, color-mix(in srgb, #e6f2ff 18%, #fffdfa)))",
+    foreground: "#1a202c",
+    border: "color-mix(in srgb, #1a202c 12%, #e8dff0)",
+    hoverBg: "color-mix(in srgb, #1a202c 7%, transparent)",
+    hoverFg: "#1a202c",
+    panel: "color-mix(in srgb, #1a202c 6%, transparent)",
   },
   meadow: {
     chrome: "#3D9A72",
@@ -146,12 +156,12 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
     panel: "rgba(255,255,255,0.12)",
   },
   sunset: {
-    chrome: "#E85D4C",
-    foreground: "#FFFFFF",
-    border: "rgba(255,255,255,0.22)",
-    hoverBg: "rgba(255,255,255,0.16)",
-    hoverFg: "#FFFFFF",
-    panel: "rgba(255,255,255,0.12)",
+    chrome: "color-mix(in srgb, #e07862 7%, color-mix(in srgb, #ffd8c4 18%, color-mix(in srgb, #dbeafe 14%, #fffaf6)))",
+    foreground: "#1a2438",
+    border: "color-mix(in srgb, #1a2438 10%, #edd8cc)",
+    hoverBg: "color-mix(in srgb, #1a2438 6%, transparent)",
+    hoverFg: "#1a2438",
+    panel: "color-mix(in srgb, #1a2438 5%, transparent)",
   },
 
   /* ── Pink family ── */
@@ -538,11 +548,18 @@ export function getNavChrome(themeId?: string | null): NavChromeTheme {
   const resolvedId = key || NURSENEST_DEFAULT_THEME;
   const fromSemantic = navChromeFromSemantic(resolvedId);
   if (fromSemantic) return fromSemantic;
-  return NAV_CHROME_BY_THEME[key] ?? NAV_CHROME_BY_THEME[NURSENEST_DEFAULT_THEME] ?? FALLBACK;
+  return (
+    NAV_CHROME_BY_THEME[resolvedId] ??
+    NAV_CHROME_BY_THEME[NURSENEST_DEFAULT_THEME] ??
+    FALLBACK
+  );
 }
 
 /** CSS custom properties only — no direct backgroundColor/color. Use on wrapper elements that
- *  need to propagate chrome vars to siblings/children without overriding their own backgrounds. */
+ *  need to propagate chrome vars to siblings/children without overriding their own backgrounds.
+ *  Marketing SiteHeader: light themes use this alone on the sticky wrapper; **dark** themes also
+ *  use it plus explicit `color` / `borderColor` from {@link getNavChrome} so `.nn-header-dark-surface`
+ *  (globals + premium CSS) owns `background` / glass without fighting inline `backgroundColor`. */
 export function getNavChromeVars(themeId?: string | null): CSSProperties {
   const t = getNavChrome(themeId);
   return {

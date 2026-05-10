@@ -6,6 +6,7 @@
 import "./playwright.env";
 import path from "node:path";
 import { defineConfig, devices } from "@playwright/test";
+import { localNextDevWebServer } from "./playwright/helpers/local-next-webserver";
 import { VISUAL_QA_LEARNER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
 import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credentials";
 
@@ -18,36 +19,22 @@ const paidAuthEnabled = hasPaidTestCredentials();
 const visualQaStoragePath = path.resolve(VISUAL_QA_LEARNER_AUTH_FILE);
 
 function localDevWebServer() {
-  if (process.env.PLAYWRIGHT_SKIP_WEB_SERVER === "1") return undefined;
   let origin: URL;
   try {
     origin = new URL(baseURL);
   } catch {
     return undefined;
   }
-  const host = origin.hostname;
-  if (host !== "127.0.0.1" && host !== "localhost") return undefined;
-  const port = origin.port || "3000";
-  const secret =
-    process.env.NEXTAUTH_SECRET?.trim() ||
-    process.env.AUTH_SECRET?.trim() ||
-    "playwright-e2e-local-secret";
-  const dbUrl = process.env.DATABASE_URL?.trim();
-  return {
-    /** Next.js learner app — same as `playwright.mobile.config.ts` (not `npm run dev` / `server/index.ts`). */
-    command: `npx next dev --hostname ${host} --port ${port}`,
-    url: `${origin.origin}/api/auth/csrf`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 300_000,
-    env: {
-      RUN_HEAVY_BUILD_TASKS: "false",
-      NEXTAUTH_SECRET: secret,
-      AUTH_SECRET: process.env.AUTH_SECRET?.trim() || secret,
-      AUTH_URL: origin.origin,
-      NEXTAUTH_URL: origin.origin,
-      ...(dbUrl ? { DATABASE_URL: dbUrl } : {}),
-    },
-  } as const;
+  /**
+   * Root `/` readiness: avoids `/api/auth/csrf` 5xx when AUTH_URL disagrees with an already-running shell
+   * (which would make Playwright spawn a second dev server → EADDRINUSE / dead listener).
+   * For stricter probes after boot, run `npm run wait:app:ready` in CI or manually.
+   */
+  return localNextDevWebServer({
+    baseURL,
+    readyUrl: `${origin.origin}/`,
+    timeoutMs: 300_000,
+  });
 }
 
 const e2eWebServer = localDevWebServer();
@@ -70,6 +57,26 @@ export default defineConfig({
     screenshot: "off",
   },
   projects: [
+    {
+      name: "visual-qa-guest-baseline",
+      testMatch: /qa\/guest-marketing-visual-baseline\.spec\.ts$/,
+      /** Git-root `docs/screenshots/` — does not affect paid `visual-qa-critical-regression` snapshots. */
+      snapshotPathTemplate: "{testDir}/../../../docs/screenshots/visual-regression-baseline/{arg}{ext}",
+      use: {
+        ...devices["Desktop Chrome"],
+        reducedMotion: "reduce",
+      },
+    },
+    {
+      name: "visual-qa-authenticated-baseline",
+      dependencies: ["setup-visual-qa-auth"],
+      testMatch: /visual-qa\/authenticated-learner-visual-baseline\.spec\.ts$/,
+      use: {
+        ...devices["Desktop Chrome"],
+        reducedMotion: "reduce",
+        ...(paidAuthEnabled ? { storageState: visualQaStoragePath } : {}),
+      },
+    },
     {
       name: "setup-visual-qa-auth",
       testMatch: paidAuthEnabled

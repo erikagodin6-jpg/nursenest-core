@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { BookOpen, Brain, Crosshair, LayoutList } from "lucide-react";
 import { TrackedStudyLoopCatLink } from "@/components/student/tracked-study-loop-cat-link";
-import { resolveStudyLoopCatDestination } from "@/lib/exam-pathways/study-loop-cat-routing";
+import { catStartHrefFromPremiumSnapshot } from "@/lib/learner/learner-dashboard-cat-start-href";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { CANONICAL_LEARNER_ROUTES } from "@/lib/navigation/learner-primary-nav";
@@ -12,17 +12,6 @@ function withPathwayQuery(base: string, pathwayId: string | null): string {
   if (!pathwayId) return base;
   const q = `pathwayId=${encodeURIComponent(pathwayId)}`;
   return base.includes("?") ? `${base}&${q}` : `${base}?${q}`;
-}
-
-function catStartFromSnapshot(snapshot: PremiumDashboardSnapshot): string {
-  const ids = snapshot.pathways.map((p) => p.pathwayId);
-  const destination = resolveStudyLoopCatDestination({
-    authState: "signed_in",
-    pathwayId: snapshot.learnerPath,
-    availablePathwayIds: ids,
-    intent: "start",
-  });
-  return destination.href;
 }
 
 /**
@@ -45,7 +34,7 @@ export function LearnerStudyModesBand({
   const lessonsHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.lessons, pathwayId);
   const flashHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.flashcards, pathwayId);
   const practiceHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.practice, pathwayId);
-  const catHref = catStartFromSnapshot(snapshot);
+  const catHref = catStartHrefFromPremiumSnapshot(snapshot);
 
   return (
     <div className="nn-dash-study-modes-grid grid gap-3 min-[520px]:grid-cols-2 min-[1100px]:grid-cols-4">

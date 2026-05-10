@@ -1,0 +1,1 @@
+No PNG captures this run (no HTTP listener on 127.0.0.1:3000; curl exit 28 timeout). See report.

@@ -131,15 +131,16 @@ test.describe("Marketing navigation audit", () => {
 
     const themeButtons = scope.getByRole("button", { name: THEME_TOGGLE_NAME }).filter({ visible: true });
     const themeCount = await themeButtons.count();
+    // Exactly one Theme control in the header chrome; duplicates mean overlapping utility rows.
     const passTheme = themeCount === 1;
     record({
       id: nextId("dup"),
       surface: "desktop-header",
       element: "Theme toggle count",
-      expectedDestination: "1 visible",
+      expectedDestination: "exactly 1 visible",
       actualDestination: String(themeCount),
       pass: passTheme,
-      notes: passTheme ? undefined : "duplicate or missing Theme control",
+      notes: passTheme ? undefined : themeCount === 0 ? "missing Theme control" : "duplicate Theme controls",
     });
     expect(passTheme).toBe(true);
 

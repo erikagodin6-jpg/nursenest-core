@@ -21,5 +21,6 @@ export default async function GlobalAlliedLessonsPage({ searchParams }: Props) {
   return LegacyAlliedLessonsPage({
     params: GLOBAL_ALLIED_PARAMS,
     searchParams,
+    skipAlliedHealthHubCanonicalRedirect: true,
   });
 }

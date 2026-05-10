@@ -40,6 +40,13 @@ describe("stripe webhook policy (static)", () => {
     );
   });
 
+  it("subscription upsert passes real Stripe event id into admin SMS (idempotency + logs)", () => {
+    const applySrc = readFileSync(join(nursenestCoreRoot, "src", "lib", "stripe", "apply-stripe-webhook-event.ts"), "utf8");
+    assert.match(applySrc, /async function applyCustomerSubscriptionUpsert\([\s\S]*stripeEventId: string/);
+    assert.match(applySrc, /applyCustomerSubscriptionUpsert\(sub, ctx \?\? \{\}, eventIdPrefix, event\.type, event\.id\)/);
+    assert.ok(!applySrc.includes("id: \"\""), "fake Stripe event must not use empty id (breaks notify dedupe)");
+  });
+
   it("handler module covers allowlisted event types (keep in sync with stripe-webhook-event-policy)", () => {
     const applySrc = readFileSync(join(nursenestCoreRoot, "src", "lib", "stripe", "apply-stripe-webhook-event.ts"), "utf8");
     const policy = readFileSync(

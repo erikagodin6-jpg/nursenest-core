@@ -10,7 +10,7 @@ const outDir = path.join(root, "docs", "ui-canvas", "screenshots");
 const fileUrl = pathToFileURL(canvasPath).toString();
 const canvasUrl = ({ theme, device }) => `${fileUrl}?theme=${theme}&device=${device}&capture=1`;
 
-const themes = ["blossom", "ocean", "garden", "dark"];
+const themes = ["aurora", "ocean", "garden", "dark"];
 const devices = [
   { name: "desktop", width: 1440, height: 1200 },
   { name: "tablet", width: 1024, height: 1180 },
@@ -47,11 +47,11 @@ try {
 
   const reviewFrames = [
     { id: 1, name: "homepage", theme: "ocean", device: "desktop", width: 1440, height: 1100 },
-    { id: 2, name: "pricing-page", theme: "blossom", device: "desktop", width: 1440, height: 1100 },
+    { id: 2, name: "pricing-page", theme: "aurora", device: "desktop", width: 1440, height: 1100 },
     { id: 3, name: "faq-page", theme: "garden", device: "desktop", width: 1440, height: 1100 },
     { id: 4, name: "rn-hub", theme: "ocean", device: "desktop", width: 1440, height: 1100 },
     { id: 5, name: "rpn-hub", theme: "garden", device: "desktop", width: 1440, height: 1100 },
-    { id: 6, name: "np-hub", theme: "blossom", device: "desktop", width: 1440, height: 1100 },
+    { id: 6, name: "np-hub", theme: "aurora", device: "desktop", width: 1440, height: 1100 },
     { id: 9, name: "lesson-page-desktop", theme: "ocean", device: "desktop", width: 1440, height: 1100 },
     { id: 24, name: "lesson-page-mobile", theme: "dark", device: "mobile", width: 390, height: 900 },
     { id: 10, name: "learner-dashboard", theme: "garden", device: "desktop", width: 1440, height: 1100 },

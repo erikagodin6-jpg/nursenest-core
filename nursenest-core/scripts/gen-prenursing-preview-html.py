@@ -64,16 +64,16 @@ def head(title: str, theme: str) -> str:
 FOOT = "</div></body></html>"
 
 PAGES = [
-    ("hub.html", "Hub", "blossom"),
+    ("hub.html", "Hub", "aurora"),
     ("teas-prep.html", "TEAS readiness framing", "sage-garden"),
     ("hesi-prep.html", "HESI readiness framing", "ocean"),
-    ("anatomy.html", "Anatomy & Physiology module", "blossom"),
+    ("anatomy.html", "Anatomy & Physiology module", "aurora"),
     ("chemistry.html", "Chemistry module", "ocean"),
     ("math.html", "Quantitative / science foundations", "sage-garden"),
     ("biology.html", "Biology cluster", "sage-garden"),
     ("quiz-practice.html", "Practice exam", "midnight"),
     ("flashcards.html", "Flashcards", "ocean"),
-    ("mobile-hub.html", "Hub (mobile)", "blossom"),
+    ("mobile-hub.html", "Hub (mobile)", "aurora"),
 ]
 
 
@@ -87,8 +87,8 @@ def main() -> None:
     (PRE / "index.html").write_text(idx, encoding="utf-8")
 
     (PRE / "hub.html").write_text(
-        head("Pre-nursing hub", "blossom")
-        + """<span class="pill">Blossom</span><h1>Pre-Nursing</h1><p class="muted">Choose how you want to study today.</p>
+        head("Pre-nursing hub", "aurora")
+        + """<span class="pill">Aurora</span><h1>Pre-Nursing</h1><p class="muted">Choose how you want to study today.</p>
 <div class="grid cols-2 cols-4">
 <div class="card"><h2>Lessons</h2><p>Review concepts by topic across 30 modules.</p><div class="cta">Lessons →</div></div>
 <div class="card"><h2>Flashcards</h2><p>Strengthen recall quickly.</p><div class="cta">Flashcards →</div></div>
@@ -118,7 +118,7 @@ def main() -> None:
     )
 
     (PRE / "anatomy.html").write_text(
-        head("Anatomy & Physiology", "blossom")
+        head("Anatomy & Physiology", "aurora")
         + """<h1>Anatomy &amp; Physiology</h1><p class="muted">Slug <code>anatomy-physiology</code>.</p>
 <div class="card" style="max-width:40rem"><h2>Momentum</h2><p>Systems + homeostasis.</p><div class="bar"><span></span></div><div class="cta">Resume</div></div>"""
         + FOOT,
@@ -170,7 +170,7 @@ def main() -> None:
     )
 
     mob = """<!DOCTYPE html>
-<html lang="en" data-theme="blossom">
+<html lang="en" data-theme="aurora">
 <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <title>Pre-nursing hub (mobile)</title>
 <link rel="stylesheet" href="../../src/app/theme-palettes.css"/>

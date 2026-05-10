@@ -32,7 +32,7 @@ describe("Pricing conversion clarity copy smoke (en pages.json)", () => {
     assert.equal(lower.includes("pages.pricing."), false);
     assert.equal(lower.includes("conversionclarity"), false);
 
-    assert.match(blob, /Know exactly what you're getting/);
+    assert.match(blob, /Straight Answers Before You Subscribe/);
     assert.match(blob, /What's included in every paid plan/);
     assert.match(blob, /Not included/);
     assert.match(blob, /Cancel anytime/);

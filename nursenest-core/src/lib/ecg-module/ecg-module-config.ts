@@ -1,6 +1,11 @@
 import type { TierCode } from "@prisma/client";
 import { ECG_MASTERY_PAID } from "@/lib/modules/module-entitlement-placeholders";
 
+/**
+ * Route levels (`basic` | `advanced`) are **technical** groupings today.
+ * Product architecture distinguishes **Core ECG / telemetry learning** (integrated nursing education)
+ * from the future **Advanced ECG & Telemetry Mastery** program (separate SKU). Reconcile routes + gates when shipping split entitlements — see `docs/ecg-module-integration.md`.
+ */
 export const ECG_LEVELS = ["basic", "advanced"] as const;
 export const ECG_MODES = ["lesson", "quiz", "drill"] as const;
 export const ECG_QUESTION_FORMAT = "ecg_video" as const;
@@ -76,6 +81,17 @@ export const ECG_ROUTE_CONFIGS: Record<string, EcgRouteConfig> = {
     behaviors: ["Multi-strip comparison", "Clinical reasoning prompts", "Management priority review"],
   },
 };
+
+/**
+ * Client-safe rollout signal for marketing hub tiles (mirrors OSCE `NEXT_PUBLIC_ENABLE_*`).
+ * Keep in sync with {@link isEcgModuleEnabled} in production (set both when shipping inventory).
+ */
+export function isEcgModuleMarketingInventoryEnabled(
+  env: Record<string, string | undefined> = process.env as Record<string, string | undefined>,
+): boolean {
+  const pub = env.NEXT_PUBLIC_ENABLE_ECG_MODULE?.trim().toLowerCase();
+  return pub === "true" || pub === "1";
+}
 
 export function isEcgModuleEnabled(env: Record<string, string | undefined> = process.env as Record<string, string | undefined>): boolean {
   const raw = env.ENABLE_ECG_MODULE?.trim().toLowerCase();

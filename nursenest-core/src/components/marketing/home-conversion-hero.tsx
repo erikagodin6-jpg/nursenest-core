@@ -55,7 +55,7 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
           className="nn-marketing-h1 max-w-[22ch] text-[var(--palette-heading)]"
         >
           {formatTitleCase(
-            safeHomepageMarketingT(t, "pages.home.hero.headline", "Canada-First Nursing Exam Prep"),
+            safeHomepageMarketingT(t, "pages.home.hero.headline", "Global nursing exam prep · Canada-first depth"),
             locale
           )}
         </h1>

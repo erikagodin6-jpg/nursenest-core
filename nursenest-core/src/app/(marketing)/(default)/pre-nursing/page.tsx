@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
-import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
+import { PreNursingMarketingHubMain } from "@/components/pre-nursing/pre-nursing-marketing-hub-main";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
-import { StudyCard } from "@/components/ui/study-card";
-import { auth } from "@/lib/auth";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
-import { PRE_NURSING_PRACTICE_PATHWAY_QUERY_ID } from "@/lib/pre-nursing/pre-nursing-constants";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 export const revalidate = 86400;
@@ -34,85 +29,14 @@ export const metadata: Metadata = {
 };
 
 export default async function PreNursingLandingPage() {
-  const session = await auth();
-  const signedIn = Boolean((session?.user as { id?: string } | undefined)?.id);
-  const practiceAppPath = pathwayHubAppPracticeTestsHref(PRE_NURSING_PRACTICE_PATHWAY_QUERY_ID);
-  const practiceHref = signedIn ? practiceAppPath : loginWithCallback(practiceAppPath);
-
   return (
     <div className="nn-marketing-surface">
-      <div
-        className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8"
-        data-nn-nursing-tier-hub="surface"
-      >
-        <PreNursingSurfaceAnalytics surface="hub" />
-        <WebPageJsonLd
-          title={title}
-          description={description}
-          path="/pre-nursing"
-          inLanguage="en"
-        />
-
-        <section aria-labelledby="pre-nursing-actions-heading">
-          <h1 id="pre-nursing-actions-heading" className="nn-marketing-h1 max-w-3xl text-balance">
-            Pre-Nursing
-          </h1>
-          <p className="nn-marketing-body mt-2 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
-            Choose how you want to study today.
-          </p>
-          <ul className="mt-6 grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4">
-            <li>
-              <StudyCard
-                surface="hub"
-                variant="featured"
-                className="nn-exam-hub-study-card--lessons"
-                href="/pre-nursing/lessons"
-                title="Lessons"
-                description="Review concepts by topic."
-                cta="Lessons"
-                ctaVariant="primary"
-              />
-            </li>
-            <li>
-              <StudyCard
-                surface="hub"
-                variant="featured"
-                className="nn-exam-hub-study-card--flashcards"
-                href="/flashcards"
-                title="Flashcards"
-                description="Strengthen recall quickly."
-                cta="Flashcards"
-                ctaVariant="primary"
-              />
-            </li>
-            <li>
-              <StudyCard
-                surface="hub"
-                variant="featured"
-                className="nn-exam-hub-study-card--practice nn-qa-pre-nursing-hub-practice"
-                prefetch={false}
-                href={practiceHref}
-                title="Practice"
-                description="Drill by topic or weakness."
-                cta="Practice"
-                ctaVariant="primary"
-              />
-            </li>
-            <li>
-              <StudyCard
-                surface="hub"
-                variant="featured"
-                className="nn-exam-hub-study-card--cat"
-                href="/pre-nursing/mini-cat"
-                title="Exams"
-                description="Take longer exam-style sessions."
-                cta="Exams"
-                ctaVariant="primary"
-              />
-            </li>
-          </ul>
-        </section>
-      </div>
+      <WebPageJsonLd title={title} description={description} path="/pre-nursing" inLanguage="en" />
+      <PreNursingMarketingHubMain
+        heroTitle="Pre-Nursing"
+        heroSubtitle="Choose how you want to study today."
+        linkHref={(p) => p}
+      />
     </div>
   );
 }

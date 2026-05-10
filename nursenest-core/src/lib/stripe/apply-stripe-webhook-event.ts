@@ -74,13 +74,29 @@ async function notifyAdminPaidSubscriptionSms(args: {
 }): Promise<void> {
   try {
     const input = adminPaidSubscriptionSmsInputFromSubscription(args);
-    if (!input) return;
+    if (!input) {
+      safeServerLog("stripe_webhook", "admin_paid_subscription_sms_skipped_no_input", {
+        eventIdPrefix: args.event.id.slice(0, 12),
+        stripeSubStatus: args.subscription?.status ?? "",
+        hasEmail: Boolean(args.email?.trim()),
+        hasCustomerId: Boolean(args.customerId?.trim()),
+        severity: "info",
+      });
+      return;
+    }
     const result = await sendAdminPaidSubscriptionSms(input);
     if (result.status === "failed") {
       safeServerLog("stripe_webhook", "admin_paid_subscription_sms_failed_non_blocking", {
         eventIdPrefix: args.event.id.slice(0, 12),
         reason: result.reason.slice(0, 160),
         severity: "warning",
+      });
+    } else {
+      safeServerLog("stripe_webhook", "admin_paid_subscription_sms_outcome", {
+        eventIdPrefix: args.event.id.slice(0, 12),
+        outcome: result.status,
+        reason: result.status === "skipped" ? result.reason.slice(0, 120) : undefined,
+        severity: "info",
       });
     }
   } catch (e) {
@@ -153,6 +169,7 @@ async function applyCustomerSubscriptionUpsert(
   ctx: ApplyStripeWebhookContext,
   eventIdPrefix: string,
   stripeEventType: string,
+  stripeEventId: string,
 ): Promise<void> {
   const mappedStatus = mapStripeSubscriptionStatus(sub.status);
   const row = await prisma.subscription.findUnique({
@@ -264,7 +281,11 @@ async function applyCustomerSubscriptionUpsert(
     if (stripeForNotify) {
       await notifyAdminPaidSubscriptionSms({
         stripe: stripeForNotify,
-        event: { id: "", type: stripeEventType, created: Math.floor(Date.now() / 1000) } as Stripe.Event,
+        event: {
+          id: stripeEventId,
+          type: stripeEventType,
+          created: Math.floor(Date.now() / 1000),
+        } as Stripe.Event,
         userId: fresh.userId,
         email:
           fresh.user.email ?? (await resolveStripeCustomerEmail(stripeForNotify, customerIdFromFresh)),
@@ -619,7 +640,7 @@ export async function applyStripeWebhookEvent(
 
   if (event.type === "customer.subscription.created" || event.type === "customer.subscription.updated") {
     const sub = event.data.object as Stripe.Subscription;
-    await applyCustomerSubscriptionUpsert(sub, ctx ?? {}, eventIdPrefix, event.type);
+    await applyCustomerSubscriptionUpsert(sub, ctx ?? {}, eventIdPrefix, event.type, event.id);
     productEvent("stripe_webhook_ok", { eventType: event.type });
     return;
   }
@@ -922,6 +943,7 @@ export async function applyStripeWebhookEvent(
           stripe,
           event,
           invoice,
+          billingReason,
           userId: row?.userId ?? null,
           subscriptionId: subId,
           customerId: invoiceCustomerId,

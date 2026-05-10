@@ -13,7 +13,7 @@ function readSrc(relativeFromSrc: string): string {
 
 test("default marketing layout streams SiteFooter via MarketingMainI18nShards trailingChrome (not before deferred main)", () => {
   const layout = readSrc("app/(marketing)/(default)/layout.tsx");
-  assert.match(layout, /trailingChrome=\{\s*<SiteFooter/s);
+  assert.match(layout, /trailingChrome=\{\s*createElement\(SiteFooter/s);
   assert.match(layout, /<MarketingMainI18nShards[\s\S]*trailingChrome=/s);
 });
 
@@ -29,11 +29,10 @@ test("marketing main shards component accepts trailingChrome after children", ()
   assert.match(shards, /\{trailingChrome\}/);
 });
 
-test("homepage passes global intro as HomeRestoredWithDeferredStats children (not introAfterHero prop)", () => {
+test("homepage does not inject GlobalMarketingHomeIntro between hero and footer (removed redundant strip)", () => {
   const page = readSrc("app/(marketing)/(default)/page.tsx");
   assert.doesNotMatch(page, /introAfterHero/);
-  assert.match(page, /HomepageGlobalIntroSlot/);
-  assert.match(page, /children:\s*<HomepageGlobalIntroSlot\s*\/>/);
+  assert.doesNotMatch(page, /HomepageGlobalIntroSlot|GlobalMarketingHomeIntro/);
 });
 
 test("HomeRestoredWithDeferredStats forwards children into HomeRestoredClient", () => {
@@ -71,7 +70,9 @@ test("optional: homepage HTML has hero before footer marketing copy", async (t) 
   const hero = html.indexOf("home-conversion-hero-heading");
   const footer = html.indexOf("Supporting Nurses Globally");
   const globalOverview = html.indexOf("Global marketing overview");
-  const globalHeadline = html.indexOf("Canada-First Nursing Exam Prep, Built for Nurses Worldwide");
+  const globalHeadline = html.indexOf(
+    "Global Nursing Exam Prep with Canada-First Depth — Built for Nurses Worldwide",
+  );
   assert.ok(hero !== -1, "expected home hero heading in HTML");
   assert.ok(footer !== -1, "expected footer copy in HTML");
   assert.ok(hero < footer, `hero should appear before footer in HTML (hero@${hero} footer@${footer})`);

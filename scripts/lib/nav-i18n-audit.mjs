@@ -88,7 +88,7 @@ export function allowsEnglishParity(key, enVal) {
   if (v.startsWith("ApplyNest")) return true;
   if (v.includes("NurseNest")) return true;
   if (/\b(NCLEX|REx-PN|CNPLE)\b/i.test(v) || v.includes("NP (CNPLE)")) return true;
-  if (v === "Blog" || v === "FAQ" || v === "Canada" || v === "US") return true;
+  if (v === "Blog" || v === "FAQ" || v === "About" || v === "Canada" || v === "US") return true;
   if (key === "dashboard.breadcrumbDashboard" && v === "Dashboard") return true;
   if (/\bSI\b.*\bConventional\b/i.test(v) || v.includes("↔")) return true;
   const loan = new Set([

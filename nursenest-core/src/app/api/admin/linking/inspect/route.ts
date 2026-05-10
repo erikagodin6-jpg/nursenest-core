@@ -68,10 +68,15 @@ export async function GET(req: NextRequest) {
   // Gap analysis
   type GapKind = LinkTargetKind;
   const kindToKey: Record<GapKind, keyof ResolvedLinks> = {
-    lesson: "lessons", flashcard: "flashcards", question: "questions", blog: "blogs", cat: "cat", hub: "lessons",
+    lesson: "lessons",
+    flashcard: "flashcards",
+    question: "questions",
+    blog: "blogs",
+    cat: "cat",
+    hub: "hubs",
   };
   const gaps: Array<{ kind: GapKind; required: number; found: number }> = [];
-  const kinds: GapKind[] = ["lesson", "flashcard", "question", "blog", "cat"];
+  const kinds: GapKind[] = ["lesson", "flashcard", "question", "blog", "cat", "hub"];
   for (const kind of kinds) {
     const min  = minLinksFor(surface, kind);
     const found = debug.resolved[kindToKey[kind]]?.length ?? 0;
@@ -143,7 +148,12 @@ export async function POST(req: NextRequest) {
   const density = getDensityConfig(surface);
 
   const postKindToKey: Record<string, keyof ResolvedLinks> = {
-    lesson: "lessons", flashcard: "flashcards", question: "questions", blog: "blogs", cat: "cat",
+    lesson: "lessons",
+    flashcard: "flashcards",
+    question: "questions",
+    blog: "blogs",
+    cat: "cat",
+    hub: "hubs",
   };
   const gaps: Array<{ kind: string; required: number; found: number }> = [];
   for (const [kind, config] of Object.entries(density) as Array<[string, { min: number; max: number } | number]>) {

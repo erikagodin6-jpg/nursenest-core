@@ -22,7 +22,11 @@ import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/pos
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { buildAppFlashcardsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
-import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
+import {
+  canonicalCorrectKeysForGrade,
+  correctAnswerIsConfigured,
+  gradeMatches,
+} from "@/lib/questions/grade-answer-match";
 import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
 import { recordRemediationCapture } from "@/lib/remediation/record-remediation";
 import {
@@ -122,15 +126,15 @@ export async function POST(req: Request) {
     });
     const effectivePathwayIdEarly = effectivePathwayIdForGrade(body.pathwayId, userPathwayRowEarly?.learnerPath ?? null);
 
-    const expected = normalizeCorrect(row.correctAnswer);
-    if (expected.length === 0) {
+    if (!correctAnswerIsConfigured(row.questionType, row.correctAnswer)) {
       return NextResponse.json(
         { error: "Question is missing an answer key in the bank.", questionId: row.id },
         { status: 422 },
       );
     }
 
-    const correct = gradeMatches(row.questionType, expected, body.answer);
+    const correct = gradeMatches(row.questionType, row.correctAnswer, body.answer);
+    const expected = canonicalCorrectKeysForGrade(row.questionType, row.correctAnswer);
     const attemptMode = parseGradeAttemptMode(body.attemptMode);
 
     const effectivePathwayId = effectivePathwayIdEarly;

@@ -24,8 +24,7 @@ export function flashcardExamMcqOptionClass(args: McqVisualStateArgs): string {
       return `${ROW_BASE}
         border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))]
         bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))]
-        shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--semantic-brand)_18%,transparent)]
-        scale-[1.01]`;
+        shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--semantic-brand)_18%,transparent)]`;
     }
 
     if (interactive) {
@@ -33,8 +32,6 @@ export function flashcardExamMcqOptionClass(args: McqVisualStateArgs): string {
         border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-text-primary))]
         bg-[var(--semantic-surface)]
         hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_45%,var(--semantic-surface))]
-        hover:scale-[1.01]
-        active:scale-[0.99]
         cursor-pointer`;
     }
 
@@ -77,8 +74,7 @@ export function optionLetterCircleClass(args: McqVisualStateArgs): string {
       return `${LETTER_BASE}
         border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))]
         bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))]
-        text-[var(--semantic-text-primary)]
-        scale-110`;
+        text-[var(--semantic-text-primary)]`;
     }
 
     if (interactive) {
@@ -101,8 +97,7 @@ export function optionLetterCircleClass(args: McqVisualStateArgs): string {
     return `${LETTER_BASE}
       border-[color-mix(in_srgb,var(--semantic-success)_60%,transparent)]
       bg-[var(--semantic-success)]
-      text-[var(--semantic-surface)]
-      scale-110`;
+      text-[var(--semantic-surface)]`;
   }
 
   if (wasPicked) {

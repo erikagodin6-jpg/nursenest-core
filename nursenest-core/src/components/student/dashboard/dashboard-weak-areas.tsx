@@ -65,7 +65,7 @@ export function DashboardWeakAreasCard({
   return (
     <section
       id="dashboard-weak-areas"
-      className="nn-card nn-product-surface-accent nn-student-card-lift relative scroll-mt-24 overflow-hidden border-[color-mix(in_srgb,var(--semantic-danger)_18%,var(--semantic-border-soft))] bg-gradient-to-b from-[color-mix(in_srgb,var(--semantic-danger)_06%,var(--semantic-surface))] to-[var(--semantic-surface)] pt-7 shadow-[var(--semantic-shadow-soft)]"
+      className="nn-cockpit-weak-areas nn-card nn-product-surface-accent nn-student-card-lift relative scroll-mt-24 overflow-hidden border-[color-mix(in_srgb,var(--semantic-danger)_18%,var(--semantic-border-soft))] bg-gradient-to-b from-[color-mix(in_srgb,var(--semantic-danger)_06%,var(--semantic-surface))] to-[var(--semantic-surface)] pt-7 shadow-[var(--semantic-shadow-soft)]"
     >
       <div className="px-5 pb-5 sm:px-6 sm:pb-6">
         <div className="flex items-center gap-2">

@@ -11,6 +11,7 @@ const css = readFileSync(PALETTES_PATH, "utf-8");
 
 const THEME_IDS = [
   "blossom",
+  "aurora",
   "sunset",
   "ocean-air",
   "meadow",
@@ -56,7 +57,10 @@ describe("theme nav/header chrome tokens", () => {
     for (const id of THEME_IDS) {
       assert.ok(NAV_CHROME_BY_THEME[id], `missing NAV_CHROME_BY_THEME entry for ${id}`);
       const chrome = getNavChrome(id);
-      assert.ok(chrome.chrome.startsWith("#"), `${id} chrome must be a concrete color`);
+      assert.ok(
+        chrome.chrome.startsWith("#") || chrome.chrome.startsWith("color-mix"),
+        `${id} chrome must be a concrete color or color-mix()`,
+      );
       assert.ok(chrome.foreground, `${id} foreground must be set`);
       seen.add(chrome.chrome);
     }

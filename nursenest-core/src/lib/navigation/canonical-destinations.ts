@@ -18,7 +18,11 @@ import { marketingPathwaySubpathBesideExamHub } from "@/lib/lessons/lesson-route
 import {
   defaultNursingExamMarketingHub as defaultNursingExamMarketingHubFromNav,
   marketingExamPrepHubs,
+  publicMarketingCatHrefForOffering,
 } from "@/lib/marketing/marketing-exam-navigation";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayQuery } from "@/lib/scenarios/scenario-routes";
+import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 import {
   publicNewGradStudyDestinations,
   US_NEW_GRAD_TRANSITION_PATHWAY_ID,
@@ -160,6 +164,25 @@ export function publicMarketingExploreDestinations(region: MarketingRegionToggle
     practiceExams: HUB.practiceExams,
     signup: HUB.signup,
     login: HUB.login,
+  } as const;
+}
+
+/**
+ * Region-scoped study-tool deep links for the marketing footer (RN default pathway).
+ * Paths under `/app/*` and `/modules/*` are intended to be wrapped with {@link loginWithCallback}
+ * for guests so behavior matches pathway hub premium tiles.
+ */
+export function publicMarketingFooterStudyToolsDestinations(region: MarketingRegionToggle) {
+  const pathwayId = defaultPathwayIdForMarketingOffering(region, "rn");
+  return {
+    cat: publicMarketingCatHrefForOffering(region, "rn"),
+    ecg: "/modules/ecg/basic/lessons",
+    osce: withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.osce, pathwayId),
+    labs: withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.labDrills, pathwayId),
+    medicationMathApp: withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.medCalculations, pathwayId),
+    /** Public marketing med math explainer + drills hub (no `/app` gate). */
+    medicationMathTool: "/tools/med-math",
+    pharmacology: pathwayHubAppQuestionsHref(pathwayId, "Pharmacology"),
   } as const;
 }
 

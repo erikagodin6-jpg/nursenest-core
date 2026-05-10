@@ -9,6 +9,11 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildLearnerInsightSnapshot } from "@/lib/insights/learner-insight-engine";
 import type { LearnerInsightSnapshot } from "@/lib/insights/types";
 import {
+  EMPTY_EXAM_DIMENSION_BREAKDOWN,
+  loadExamAttemptDimensionBreakdown,
+  type DimensionBreakdown,
+} from "@/lib/learner/exam-attempt-dimension-breakdown";
+import {
   loadLessonContinuationRows,
   type LessonContinuationRow,
 } from "@/lib/learner/pathway-lesson-continuation";
@@ -254,6 +259,11 @@ export type PremiumDashboardSnapshot = {
   /** Pass to {@link buildLearnerStudySnapshot} to avoid a second topic-performance query on the home dashboard. */
   topicPerformance: TopicPerformanceSnapshot | null;
   /**
+   * Exam-attempt × question metadata rollup (body system, cognitive, client needs, formats).
+   * Empty object when durability skip or load failure — UI shows honest empty states.
+   */
+  examDimensions: DimensionBreakdown;
+  /**
    * Profile slice from the pathway bundle (same request as dashboard) — avoids a redundant `User`
    * read on the home page for study snapshot + exam countdown.
    */
@@ -293,7 +303,7 @@ async function loadPremiumDashboardSnapshotUncached(
 
     const skipOptional = shouldSkipNonCriticalLearnerWork();
 
-    const [pathwayLoad, streakDays, topStrongTopic] = await Promise.all([
+    const [pathwayLoad, streakDays, topStrongTopic, examDimensions] = await Promise.all([
       loadPathwayStudySummaries(userId, entitlement, {
         lessonRows: bundle.pathwayLessonRows,
         pathwayProgress: bundle.pathwayProgressScoped,
@@ -301,6 +311,9 @@ async function loadPremiumDashboardSnapshotUncached(
       }),
       skipOptional ? Promise.resolve(0) : loadStudyStreakDays(userId),
       skipOptional ? Promise.resolve(null) : topStrongTopicFromLedger(userId),
+      skipOptional
+        ? Promise.resolve(EMPTY_EXAM_DIMENSION_BREAKDOWN)
+        : loadExamAttemptDimensionBreakdown(userId).catch(() => EMPTY_EXAM_DIMENSION_BREAKDOWN),
     ]);
 
     const lessonContinuations = skipOptional
@@ -452,6 +465,7 @@ async function loadPremiumDashboardSnapshotUncached(
       insights,
       lessonContinuations,
       topicPerformance: dash.topicPerformance,
+      examDimensions,
       studyBootstrap: {
         alliedProfessionKey: bundle.user.alliedProfessionKey ?? null,
         tier: bundle.user.tier ?? null,

@@ -10,13 +10,13 @@
 
 import "server-only";
 
+import { openRouterApiKeyEnvPresent } from "@/lib/ai/blog-ai-env-keys";
 import { blogChatUsesOpenRouter } from "@/lib/ai/blog-ai-routing";
 import { isAuthSecretBuildToleranceContext, isAuthSecretConfigured } from "@/lib/auth/auth-session-signing-env";
 import { assertRuntimeDatabaseEnvContract } from "./require-database-env";
 
-const REQUIRED_RUNTIME_ENVS = ["AI_ADMIN_GENERATION_ENABLED"] as const;
-
 const OPENAI_KEY_GROUP = ["AI_INTEGRATIONS_OPENAI_API_KEY", "OPENAI_API_KEY"] as const;
+const ADMIN_AI_GENERATION_FLAG_GROUP = ["AI_ADMIN_GENERATION_ENABLED", "AI_ADMIN_GENERation"] as const;
 
 function hasTrimmedEnv(key: string): boolean {
   const v = process.env[key];
@@ -27,10 +27,14 @@ function hasOpenAiFunding(): boolean {
   return OPENAI_KEY_GROUP.some((k) => hasTrimmedEnv(k));
 }
 
+function hasAdminAiGenerationFlag(): boolean {
+  return ADMIN_AI_GENERATION_FLAG_GROUP.some((k) => hasTrimmedEnv(k));
+}
+
 /** OpenAI keys, or OpenRouter key when blog/content chat is routed to OpenRouter. */
 function satisfiesAiFundingContract(): boolean {
   if (hasOpenAiFunding()) return true;
-  return blogChatUsesOpenRouter() && hasTrimmedEnv("OPENROUTER_API_KEY");
+  return blogChatUsesOpenRouter() && openRouterApiKeyEnvPresent();
 }
 
 function isNextProductionBuildPhase(): boolean {
@@ -47,24 +51,22 @@ function getEnvValidationMode(): EnvValidationMode {
 }
 
 function isNonDevelopmentNodeEnv(): boolean {
-  const n = process.env.NODE_ENV;
-  if (n === "development" || n === "test") return false;
+  /** Treat unset NODE_ENV like local tooling (tsx scripts) — not production auth context. */
+  const n = process.env.NODE_ENV?.trim();
+  if (!n || n === "development" || n === "test") return false;
   return true;
 }
 
 function collectMissingRuntimeEnvIssues(): string[] {
   const missing: string[] = [];
 
-  for (const key of REQUIRED_RUNTIME_ENVS) {
-    const v = process.env[key];
-    if (!v || v.trim() === "") {
-      missing.push(key);
-    }
+  if (!hasAdminAiGenerationFlag()) {
+    missing.push("AI_ADMIN_GENERATION_ENABLED (or accepted typo alias AI_ADMIN_GENERation)");
   }
 
   if (!satisfiesAiFundingContract()) {
     missing.push(
-      `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
+      `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
     );
   }
 
@@ -94,7 +96,8 @@ export function logRuntimeEnvSnapshot(): void {
     AI_ADMIN_GENERATION_ENABLED_value: process.env["AI_ADMIN_GENERATION_ENABLED"] ?? null,
     AI_INTEGRATIONS_OPENAI_API_KEY_present: Boolean(process.env["AI_INTEGRATIONS_OPENAI_API_KEY"]),
     OPENAI_API_KEY_present: Boolean(process.env["OPENAI_API_KEY"]),
-    OPENROUTER_API_KEY_present: Boolean(process.env["OPENROUTER_API_KEY"]),
+    OPENROUTER_API_KEY_present: Boolean(process.env["OPENROUTER_API_KEY"]?.trim()),
+    BLOG_OPENROUTER_API_KEY_present: Boolean(process.env["BLOG_OPENROUTER_API_KEY"]?.trim()),
     AI_PROVIDER: process.env["AI_PROVIDER"] ?? null,
     BLOG_AI_PROVIDER: process.env["BLOG_AI_PROVIDER"] ?? null,
     NN_ENV_VALIDATION_MODE: process.env["NN_ENV_VALIDATION_MODE"] ?? null,

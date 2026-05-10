@@ -3,6 +3,9 @@
 import type { ReactNode } from "react";
 import { useExamStudyThemeOptional } from "@/components/exam/exam-study-theme-context";
 
+/** CAT vs practice vs post-session review — drives ambient shell styling only (see `learner-exam-shell.css`). */
+export type LearnerExamShellMode = "cat" | "practice" | "review";
+
 /**
  * Focused, low-chrome container for timed tests, CAT, and exam-style practice.
  * Theme primary is used only for thin accents (progress fill, selection rings)—surfaces stay neutral.
@@ -16,18 +19,22 @@ export function ExamSessionShell({
   neutralPalette = false,
   /** Larger radius, stronger shadow — reference “full-screen study” chrome. */
   immersive = false,
+  /** Ambient shell personality: immersive CAT exam vs brighter practice vs review (visual/CSS only). */
+  examMode,
 }: {
   children: ReactNode;
   className?: string;
   neutralPalette?: boolean;
   immersive?: boolean;
+  examMode?: LearnerExamShellMode;
 }) {
   const examTheme = useExamStudyThemeOptional();
   const scoped = examTheme?.sessionTheme ?? undefined;
   return (
     <div
-      className={`nn-exam-session rounded-2xl border ${neutralPalette ? "nn-exam-session--neutral" : ""} ${immersive ? "nn-exam-session--immersive" : ""} ${className}`.trim()}
+      className={`nn-exam-session nn-exam-session-premium nn-learner-exam-shell rounded-2xl border ${neutralPalette ? "nn-exam-session--neutral" : ""} ${immersive ? "nn-exam-session--immersive" : ""} ${className}`.trim()}
       data-theme={scoped}
+      data-nn-exam-mode={examMode}
     >
       {children}
     </div>
@@ -56,7 +63,7 @@ export function ExamSessionTopBar({
 }) {
   return (
     <div
-      className={`border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 ${className}`.trim()}
+      className={`nn-exam-session-topbar border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 ${className}`.trim()}
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="nn-marketing-body-sm min-w-0 flex-1 leading-snug text-[var(--theme-body-text)]">{left}</div>
@@ -138,7 +145,7 @@ export function ExamProgressBar({
         : `Session progress ${current} of ${total}`;
   return (
     <div
-      className={`nn-exam-progress border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-2.5 ${className}`.trim()}
+      className={`nn-exam-progress nn-exam-progress-premium border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-2.5 ${className}`.trim()}
     >
       <div className="nn-marketing-caption mb-1.5 flex justify-between gap-3 font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
         <span>{leftLabel}</span>
@@ -193,7 +200,7 @@ export function ExamTimerReadout({
 }) {
   if (remainingSec == null) {
     return (
-      <div className="flex flex-col items-end gap-0.5 text-right">
+      <div className="nn-exam-timer-readout flex flex-col items-end gap-0.5 text-right">
         <span className="nn-marketing-caption font-semibold uppercase tracking-wider">Timer</span>
         <span className="nn-marketing-body-sm font-medium text-[var(--theme-muted-text)]">{untimedLabel}</span>
       </div>
@@ -204,7 +211,7 @@ export function ExamTimerReadout({
   const m = Math.floor(remainingSec / 60);
   const s = remainingSec % 60;
   return (
-    <div className="flex flex-col items-end gap-0.5 text-right">
+    <div className="nn-exam-timer-readout flex flex-col items-end gap-0.5 text-right">
       <span className="nn-marketing-caption font-semibold uppercase tracking-wider">Time remaining</span>
       <span
         className={`font-mono text-lg font-semibold tabular-nums tracking-tight ${

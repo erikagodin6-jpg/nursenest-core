@@ -219,7 +219,10 @@ export function FlashcardStudyClient({
       </div>
 
       {/* session */}
-      <ExamSessionShell className="nn-premium-flashcard-session-root">
+      <ExamSessionShell
+        examMode="practice"
+        className="nn-premium-flashcard-session-root nn-flashcard-study-premium"
+      >
         <ActiveStudySession
           key={sessionKey}
           cards={activeCards}

@@ -108,7 +108,8 @@ export function pathwayLessonResolvedParagraphs(
   return safe.split(/\n\n/).filter((p) => p.trim().length > 0);
 }
 
-function pathwayLessonExamFocusHasStructured(examFocus?: PathwayLessonExamFocus | null): boolean {
+/** Exported for lesson-detail empty-section guards (matches PathwayLessonSectionContent). */
+export function pathwayLessonExamFocusHasStructured(examFocus?: PathwayLessonExamFocus | null): boolean {
   return Boolean(
     examFocus &&
       (examFocus.howTested?.trim() ||

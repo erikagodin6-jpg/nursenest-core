@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-05-08T09:57:24.240Z
+Generated at: 2026-05-10T01:30:06.918Z
 
 ## Pathway Coverage
 
@@ -406,7 +406,7 @@ Exclusions:
 
 ### `mlt`
 
-- Label: Medical laboratory exam prep
+- Label: Medical laboratory technology exam prep
 - Route: /allied/allied-health/lessons?alliedProfession=mlt
 - Status: mapped
 - topicSlugsIn: lab-values, infection-control, medical-terminology, clinical-documentation
@@ -419,7 +419,7 @@ Exclusions:
 - Label: Paramedic certification exam prep
 - Route: /allied/allied-health/lessons?alliedProfession=paramedic
 - Status: mapped
-- topicSlugsIn: patient-assessment, vital-signs, emergency-response, patient-communication, clinical-documentation
+- topicSlugsIn: nursing-fundamentals, paramedic, patient-assessment, vital-signs, emergency-response, patient-communication, clinical-documentation
 - Mapped lesson count: 5
 - Mapped lesson slugs: allied-clinical-documentation, allied-emergency-response, allied-patient-assessment, allied-patient-communication, allied-vital-signs
 - Notes: Profession page has a live lesson-source mapping through allied topic filters.
@@ -429,7 +429,7 @@ Exclusions:
 - Label: Occupational therapy assistant exam prep
 - Route: /allied/allied-health/lessons?alliedProfession=ota
 - Status: mapped
-- topicSlugsIn: patient-assessment, patient-communication, clinical-documentation, human-anatomy, human-physiology
+- topicSlugsIn: nursing-fundamentals, patient-assessment, patient-communication, clinical-documentation, human-anatomy, human-physiology
 - Mapped lesson count: 5
 - Mapped lesson slugs: allied-clinical-documentation, allied-human-anatomy, allied-human-physiology, allied-patient-assessment, allied-patient-communication
 - Notes: Profession page has a live lesson-source mapping through allied topic filters.
@@ -439,7 +439,7 @@ Exclusions:
 - Label: Physical therapist assistant exam prep
 - Route: /allied/allied-health/lessons?alliedProfession=pta
 - Status: mapped
-- topicSlugsIn: patient-assessment, human-anatomy, human-physiology, vital-signs, patient-communication
+- topicSlugsIn: nursing-fundamentals, patient-assessment, human-anatomy, human-physiology, vital-signs, patient-communication
 - Mapped lesson count: 5
 - Mapped lesson slugs: allied-human-anatomy, allied-human-physiology, allied-patient-assessment, allied-patient-communication, allied-vital-signs
 - Notes: Profession page has a live lesson-source mapping through allied topic filters.
@@ -449,7 +449,7 @@ Exclusions:
 - Label: Social work exam prep
 - Route: /allied/allied-health/lessons?alliedProfession=social-work
 - Status: mapped
-- topicSlugsIn: patient-communication, clinical-documentation, healthcare-teamwork, medical-ethics
+- topicSlugsIn: nursing-fundamentals, social-work, patient-communication, clinical-documentation, healthcare-teamwork, medical-ethics
 - Mapped lesson count: 4
 - Mapped lesson slugs: allied-clinical-documentation, allied-healthcare-teamwork, allied-medical-ethics, allied-patient-communication
 - Notes: Profession page has a live lesson-source mapping through allied topic filters.
@@ -459,7 +459,7 @@ Exclusions:
 - Label: Mental health and addictions worker exam prep
 - Route: /allied/allied-health/lessons?alliedProfession=mental-health-addictions
 - Status: mapped
-- topicSlugsIn: patient-communication, clinical-documentation, healthcare-teamwork, medical-ethics
+- topicSlugsIn: nursing-fundamentals, mental-health-therapist, patient-communication, clinical-documentation, healthcare-teamwork, medical-ethics
 - Mapped lesson count: 4
 - Mapped lesson slugs: allied-clinical-documentation, allied-healthcare-teamwork, allied-medical-ethics, allied-patient-communication
 - Notes: Profession page has a live lesson-source mapping through allied topic filters.
@@ -489,7 +489,7 @@ Exclusions:
 - Label: Medical imaging exam prep
 - Route: /allied/allied-health/lessons?alliedProfession=imaging
 - Status: mapped
-- topicSlugsIn: imaging-basics, patient-assessment, vital-signs, medical-terminology
+- topicSlugsIn: nursing-fundamentals, radiologic-technology, mri-technologist, ct-technologist, sonography, nuclear-medicine, imaging-basics, patient-assessment, vital-signs, medical-terminology
 - Mapped lesson count: 4
 - Mapped lesson slugs: allied-imaging-basics, allied-medical-terminology, allied-patient-assessment, allied-vital-signs
 - Notes: Profession page has a live lesson-source mapping through allied topic filters.
@@ -499,7 +499,7 @@ Exclusions:
 - Label: Pharmacy technician exam prep
 - Route: /allied/allied-health/lessons?alliedProfession=pharmacy-tech
 - Status: mapped
-- topicSlugsIn: medication-safety, pharmacology-basics, medical-terminology, clinical-documentation
+- topicSlugsIn: nursing-fundamentals, pharmacy-tech, pharmacology, medication-safety, pharmacology-basics, medical-terminology, clinical-documentation
 - Mapped lesson count: 4
 - Mapped lesson slugs: allied-clinical-documentation, allied-medical-terminology, allied-medication-safety, allied-pharmacology-basics
 - Notes: Profession page has a live lesson-source mapping through allied topic filters.

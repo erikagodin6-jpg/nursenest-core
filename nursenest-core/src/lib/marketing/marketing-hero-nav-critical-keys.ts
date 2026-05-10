@@ -19,9 +19,6 @@ export function marketingHeroCarouselCriticalKeys(): string[] {
   return keys;
 }
 
-/** Homepage carousel → pathway handoff strip (RSC + client `safeHomepageMarketingT`). */
-export const MARKETING_HOME_CAROUSEL_HANDOFF_KEYS = ["pages.home.carouselHandoff.fallbackCta"] as const;
-
 /** Pathway pill strip under the header ({@link MarketingSiteSubNav}). */
 export const MARKETING_NAV_SUB_STRIP_KEYS = [
   "nav.pathwayHubsAria",
@@ -36,13 +33,19 @@ export const MARKETING_NAV_SUB_STRIP_KEYS = [
   "nav.tools",
 ] as const;
 
-/** Desktop header, mobile drawer, utility strip ({@link SiteHeader}, {@link MarketingHeaderUtilityStrip}). */
+/** Desktop header, mobile drawer, marketing utility cluster ({@link SiteHeader}, {@link MarketingHeaderUtilityCluster}). */
 export const MARKETING_NAV_HEADER_CHROME_KEYS = [
   "footer.faq",
+  "footer.blog",
   "brand.homeAriaLabel",
   "nav.marketingExplore",
   "nav.admin",
   "nav.openMenu",
+  "nav.pricing",
+  "nav.about",
+  "nav.signup",
+  "nav.preNursing",
+  "nav.tools",
   "nav.theme",
   "nav.themeGroupLight",
   "nav.themeGroupDark",
@@ -62,6 +65,11 @@ export const MARKETING_NAV_HEADER_CHROME_KEYS = [
   "nav.mega.startHere",
   "nav.mega.openHub",
   "nav.mega.examHubSuffix",
+  "nav.mega.rn.label",
+  "nav.mega.pn.labelCA",
+  "nav.mega.np.label",
+  "nav.mega.newGrad.label",
+  "nav.mega.allied.label",
 ] as const;
 
 /** Signed-in / auth cluster in the header ({@link MarketingHeaderAuth}). */
@@ -88,7 +96,6 @@ export const MARKETING_FOOTER_CRITICAL_KEYS = [
 
 export const MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS = {
   heroCarousel: marketingHeroCarouselCriticalKeys(),
-  homeCarouselHandoff: [...MARKETING_HOME_CAROUSEL_HANDOFF_KEYS],
   navSubStrip: [...MARKETING_NAV_SUB_STRIP_KEYS],
   navHeaderChrome: [...MARKETING_NAV_HEADER_CHROME_KEYS],
   navAuth: [...MARKETING_NAV_AUTH_KEYS],
@@ -99,7 +106,6 @@ export const MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS = {
 export const MARKETING_HERO_NAV_CRITICAL_KEYS: readonly string[] = Array.from(
   new Set([
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.heroCarousel,
-    ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.homeCarouselHandoff,
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.navSubStrip,
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.navHeaderChrome,
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.navAuth,

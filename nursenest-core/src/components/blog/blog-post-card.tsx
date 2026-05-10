@@ -35,7 +35,11 @@ export function BlogPostCard({
       <Link href={href} className="block h-full min-w-0 p-4 sm:p-5">
         <div className="flex min-w-0 flex-wrap items-start justify-between gap-2 gap-y-1">
           {topic.displayLabel ? (
-            <BlogTopicBadge label={topic.displayLabel} variant={topic.variant} href={topic.categoryArchiveHref} />
+            <BlogTopicBadge
+              label={topic.displayLabel}
+              variant={topic.variant}
+              /* Avoid nested <a>: the card root is already a Link to the post. */
+            />
           ) : (
             <span className="text-xs font-medium text-[var(--theme-muted-text)]">Article</span>
           )}

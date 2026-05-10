@@ -81,6 +81,9 @@ function buildCustomSessionQuery(args: {
 export function FlashcardsHubClient({
   scopedPathwayId,
   pathwayDisplayName,
+  flashcardsHeroEyebrow,
+  flashcardsHeroTitle,
+  flashcardsHeroSubtitle,
   pathwayBootstrapSource = "primary",
   catHref,
   initialHub,
@@ -92,6 +95,12 @@ export function FlashcardsHubClient({
 }: {
   scopedPathwayId: string;
   pathwayDisplayName: string;
+  /** When set (RSC + catalog pathway), matches lessons hub: exam · country. */
+  flashcardsHeroEyebrow?: string;
+  /** Pathway-scoped H1 line; falls back to `learner.flashcards.hub.title`. */
+  flashcardsHeroTitle?: string;
+  /** Visible subtitle; falls back to `learner.flashcards.hub.subtitle`. */
+  flashcardsHeroSubtitle?: string;
   pathwayBootstrapSource?: "primary" | "secondary";
   catHref?: string;
   initialHub?: FlashcardsHubServerPayload | null;
@@ -107,6 +116,9 @@ export function FlashcardsHubClient({
   initialWeakOnly?: boolean;
 }) {
   const { t } = useMarketingI18n();
+  const heroEyebrow = flashcardsHeroEyebrow?.trim() || pathwayDisplayName;
+  const heroTitle = flashcardsHeroTitle?.trim() || t("learner.flashcards.hub.title");
+  const heroSubtitle = flashcardsHeroSubtitle?.trim() || t("learner.flashcards.hub.subtitle");
   const apForQuery =
     alliedProfessionKey?.trim() && isAlliedMarketingCorePathwayId(scopedPathwayId)
       ? alliedProfessionKey.trim().toLowerCase()
@@ -678,10 +690,13 @@ export function FlashcardsHubClient({
   const deckProgressFillClass = semanticFillClassForAccuracyPct(poolFillPct);
 
   return (
-    <LearnerStudyPageShell className="space-y-4 py-4 sm:space-y-5 sm:py-5" data-nn-e2e-flashcards-hub>
+    <LearnerStudyPageShell
+      className="nn-flashcards-hub-premium space-y-4 py-4 sm:space-y-5 sm:py-5"
+      data-nn-e2e-flashcards-hub
+    >
       {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
 
-      <h1 className="sr-only">{t("learner.flashcards.hub.title")}</h1>
+      <h1 className="sr-only">{heroTitle}</h1>
 
       <header
         className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_10%,var(--semantic-surface))] px-4 py-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:py-4"
@@ -690,12 +705,14 @@ export function FlashcardsHubClient({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <div className="min-w-0">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-              {pathwayDisplayName}
+              {heroEyebrow}
             </p>
             <h2 className="mt-1 text-xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-2xl">
-              {t("learner.flashcards.hub.title")}
+              {heroTitle}
             </h2>
-            <p className="sr-only">{t("learner.flashcards.hub.subtitle")}</p>
+            <p className="mt-1.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              {heroSubtitle}
+            </p>
           </div>
           <LearnerCtaLink
             href={startHref}

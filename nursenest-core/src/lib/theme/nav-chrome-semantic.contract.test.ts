@@ -16,7 +16,7 @@ const NEW_PREMIUM_THEMES = [
 ] as const;
 
 /** Themes with TS palette or canonical surface overrides (not CSS-only identity themes). */
-const SEMANTIC_NAV_THEMES = [...NEW_PREMIUM_THEMES, "ocean"] as const;
+const SEMANTIC_NAV_THEMES = [...NEW_PREMIUM_THEMES, "ocean", "blossom"] as const;
 
 describe("nav chrome tracks semantic surface tokens", () => {
   for (const id of SEMANTIC_NAV_THEMES) {
@@ -43,11 +43,13 @@ describe("nav chrome tracks semantic surface tokens", () => {
 });
 
 describe("CSS-only picker themes still resolve nav chrome", () => {
-  for (const id of ["blossom", "sunset", "meadow"] as const) {
+  for (const id of ["aurora", "sunset", "meadow"] as const) {
     it(`theme "${id}" uses static nav map when no surface tokens`, () => {
       assert.equal(getThemeSurfaceContrastTokens(id), null);
       const chrome = getNavChrome(id);
-      assert.match(chrome.chrome, /^#/);
+      // Static nav map may use a hex (#…) or a CSS color-mix() expression
+      // for warm pastel chromes; both are valid concrete colors.
+      assert.match(chrome.chrome, /^(#|color-mix\()/);
       assert.ok(chrome.foreground.length > 0);
     });
   }

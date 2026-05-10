@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
-import { blogLiveWhere, blogPostIsLive, buildBlogPublicListWhere, isBlogPostMarketingMetaVisible } from "./blog-visibility";
+import {
+  blogLiveWhere,
+  blogPostIsLive,
+  buildBlogPublicListWhere,
+  isBlogPostMarketingMetaVisible,
+  isBlogPublicE2eTestArtifact,
+} from "./blog-visibility";
 
 test("SCHEDULED post with publishAt in the past is live (matches list/sitemap filters)", () => {
   const now = new Date("2026-06-15T12:00:00Z");
@@ -12,8 +18,10 @@ test("SCHEDULED post with publishAt in the past is live (matches list/sitemap fi
     workflowStatus: BlogWorkflowStatus.PUBLISHED,
   };
   assert.equal(blogPostIsLive(row, now), true);
-  const where = blogLiveWhere(now) as { OR: unknown[] };
-  assert.ok(Array.isArray(where.OR));
+  const where = blogLiveWhere(now) as { AND: unknown[] };
+  assert.ok(Array.isArray(where.AND));
+  const core = where.AND[0] as { OR: unknown[] };
+  assert.ok(Array.isArray(core.OR));
 });
 
 test("SCHEDULED post with publishAt in the future is not live", () => {
@@ -163,6 +171,54 @@ test("SCHEDULED uses scheduledAt when publishAt is null and time has passed", ()
     ),
     true,
   );
+});
+
+test("SCHEDULED due date with pipeline workflow (e.g. GENERATED) is not live until workflow clears", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      {
+        postStatus: BlogPostStatus.SCHEDULED,
+        publishAt: new Date("2026-06-01T12:00:00Z"),
+        scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.GENERATED,
+      },
+      now,
+    ),
+    false,
+  );
+});
+
+test("SCHEDULED due date with workflowStatus SCHEDULED is live (admin schedule must align workflow)", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      {
+        postStatus: BlogPostStatus.SCHEDULED,
+        publishAt: new Date("2026-06-01T12:00:00Z"),
+        scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.SCHEDULED,
+      },
+      now,
+    ),
+    true,
+  );
+});
+
+test("isBlogPublicE2eTestArtifact matches slug/title bloge2e and Runtime QA title patterns", () => {
+  assert.equal(isBlogPublicE2eTestArtifact("bloge2e-smoke-1", "Hello"), true);
+  assert.equal(isBlogPublicE2eTestArtifact("any-slug", "BlogE2E title"), true);
+  assert.equal(isBlogPublicE2eTestArtifact("ok-slug", "Runtime EN Published"), true);
+  assert.equal(isBlogPublicE2eTestArtifact("ok-slug", "Runtime EN Scheduled"), true);
+  assert.equal(isBlogPublicE2eTestArtifact("ok-slug", "Runtime Draft Scheduled"), true);
+  assert.equal(isBlogPublicE2eTestArtifact("clinical-judgment-on-exam-day", "NCLEX tips"), false);
+});
+
+test("blogLiveWhere includes NOT clause excluding E2E artifact patterns", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  const json = JSON.stringify(blogLiveWhere(now));
+  assert.ok(json.includes('"NOT"'));
+  assert.ok(json.includes("bloge2e"));
 });
 
 test("buildBlogPublicListWhere can restrict main index to global rows when env is set", () => {

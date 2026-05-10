@@ -19,6 +19,7 @@ import {
 } from "@/lib/measurements/measurement-preference";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { resolveMarketingHubEcgModulePublic } from "@/lib/ecg-module/ecg-marketing-hub-surface.server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
@@ -120,6 +121,7 @@ export default async function GlobalAlliedHealthHubPage() {
     { name: "Allied Health", href: ALLIED_GLOBAL_HUB_PATH },
   ];
   const schemaItems = crumbs.map((item) => ({ name: item.name, item: absoluteUrl(item.href) }));
+  const ecgModulePublicForHub = await resolveMarketingHubEcgModulePublic();
 
   return (
     <div className="nn-marketing-surface mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
@@ -135,6 +137,7 @@ export default async function GlobalAlliedHealthHubPage() {
         overview={overview}
         initialMeasurementPreference={alliedInitialMeasurement}
         syncMeasurementPreferenceToProfile={alliedMeasurementSync}
+        ecgModulePublic={ecgModulePublicForHub}
       />
     </div>
   );

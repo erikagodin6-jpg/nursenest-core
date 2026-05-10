@@ -37,6 +37,11 @@ import {
   bestReportCardComparisonArgs,
   type PeerComparisonResult,
 } from "@/lib/study/benchmarking/peer-comparison-service";
+import {
+  EMPTY_EXAM_DIMENSION_BREAKDOWN,
+  loadExamAttemptDimensionBreakdown,
+  type DimensionBreakdown,
+} from "@/lib/learner/exam-attempt-dimension-breakdown";
 
 export type TierAccuracyBucket = {
   tierKey: string;
@@ -119,6 +124,8 @@ export type ReportCardData = {
    * Null when DB not configured or no score is available to compare.
    */
   peerBenchmark: PeerComparisonResult | null;
+  /** Exam-attempt × question metadata (same bounded loader as readiness dashboard). */
+  examDimensions: DimensionBreakdown;
   degraded?: LearnerAggregateDegradedState;
 };
 
@@ -418,12 +425,14 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
       recommendedQuizTopic: null,
       mockLog: mockSlices.mockLog,
       peerBenchmark: null,
+      examDimensions: EMPTY_EXAM_DIMENSION_BREAKDOWN,
       degraded: learnerAggregateDegradedState("durability_degraded", [
         "bank_sessions",
         "question_tier_breakdown",
         "topic_performance",
         "practice_tests",
         "peer_benchmark",
+        "exam_dimensions",
       ]),
     };
   }
@@ -614,6 +623,7 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
   const preferredPathwayId =
     pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? pathways[0]?.pathwayId ?? null;
   const skipPeerBenchmark = skipReportCardPeerBenchmarkByEnv();
+  const examDimensionsPromise = loadExamAttemptDimensionBreakdown(userId);
   let peerBenchmark: PeerComparisonResult | null = null;
   if (!skipPeerBenchmark) {
     const peerComparisonArgs = bestReportCardComparisonArgs({
@@ -624,6 +634,7 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
     });
     peerBenchmark = await computePeerComparison(peerComparisonArgs).catch(() => null);
   }
+  const examDimensions = await examDimensionsPromise.catch(() => EMPTY_EXAM_DIMENSION_BREAKDOWN);
 
   safeServerLog("learner_report_card", "report_card_load_phases", {
     userIdPrefix: userId.slice(0, 8),
@@ -658,6 +669,7 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
       recommendedQuizTopic: dash.recommendedQuizTopic,
       mockLog,
       peerBenchmark: peerBenchmark ?? null,
+      examDimensions,
       degraded: undefined,
     };
   } catch {

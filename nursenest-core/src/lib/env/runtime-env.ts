@@ -8,7 +8,10 @@
  * start; a stale snapshot would otherwise stick until restart). Bracket `process.env[key]`
  * avoids bundler static replacement of `process.env.FOO` for unknown keys.
  */
+import { openRouterApiKeyEnvPresent } from "@/lib/ai/blog-ai-env-keys";
 import { parseBooleanEnv } from "@/lib/env/parse-boolean-env";
+
+export type AdminAiGenerationFlagSourceKey = "AI_ADMIN_GENERATION_ENABLED" | "AI_ADMIN_GENERation" | null;
 
 export type AdminAiOpenAiRuntimeSnapshot = {
   /** Parsed opt-in flag (true/1/yes/on, trimmed, case-insensitive). */
@@ -19,11 +22,17 @@ export type AdminAiOpenAiRuntimeSnapshot = {
   hasAiProviderKey: boolean;
   /** Resolved key for outbound calls (integrations preferred). Null if absent. */
   openAiApiKey: string | null;
-  /** Raw `process.env.AI_ADMIN_GENERATION_ENABLED` (undefined if unset). */
+  /** Raw env value for the generation flag (canonical or accepted typo alias). Undefined if both unset. */
   rawAiAdminGenerationEnabled: string | undefined;
+  /** Which env key supplied `rawAiAdminGenerationEnabled` (canonical wins when both are set). */
+  aiAdminGenerationFlagSourceKey: AdminAiGenerationFlagSourceKey;
   aiIntegrationsOpenAiKeyPresent: boolean;
   legacyOpenAiKeyPresent: boolean;
   openRouterApiKeyPresent: boolean;
+  /** Canonical OpenRouter key set (non-empty after trim). */
+  openRouterCanonicalKeyPresent: boolean;
+  /** Blog-scoped OpenRouter alias set (non-empty after trim). */
+  blogOpenRouterKeyPresent: boolean;
   aiProvider: "openai" | "openrouter" | "gemini";
 };
 
@@ -32,26 +41,35 @@ function readAdminAiEnvString(key: string): string | undefined {
 }
 
 function buildAdminAiOpenAiRuntimeSnapshot(): AdminAiOpenAiRuntimeSnapshot {
-  const rawAiAdminGenerationEnabled = readAdminAiEnvString("AI_ADMIN_GENERATION_ENABLED");
+  const rawCanon = readAdminAiEnvString("AI_ADMIN_GENERATION_ENABLED");
+  const rawTypo = readAdminAiEnvString("AI_ADMIN_GENERation");
+  const aiAdminGenerationFlagSourceKey: AdminAiGenerationFlagSourceKey =
+    rawCanon !== undefined ? "AI_ADMIN_GENERATION_ENABLED" : rawTypo !== undefined ? "AI_ADMIN_GENERation" : null;
+  const rawAiAdminGenerationEnabled = rawCanon !== undefined ? rawCanon : rawTypo;
   const integrationsRaw = readAdminAiEnvString("AI_INTEGRATIONS_OPENAI_API_KEY");
   const legacyRaw = readAdminAiEnvString("OPENAI_API_KEY");
-  const openRouterRaw = readAdminAiEnvString("OPENROUTER_API_KEY");
+  const openRouterCanon = readAdminAiEnvString("OPENROUTER_API_KEY")?.replace(/\r|\n/g, "").trim() || null;
+  const openRouterBlog = readAdminAiEnvString("BLOG_OPENROUTER_API_KEY")?.replace(/\r|\n/g, "").trim() || null;
   const aiProviderRaw = readAdminAiEnvString("AI_PROVIDER")?.trim().toLowerCase();
   const integrations = integrationsRaw?.trim() || null;
   const legacy = legacyRaw?.trim() || null;
-  const openRouter = openRouterRaw?.trim() || null;
+  const openRouterCanonicalKeyPresent = Boolean(openRouterCanon);
+  const blogOpenRouterKeyPresent = Boolean(openRouterBlog);
+  const openRouterApiKeyPresent = openRouterApiKeyEnvPresent();
   const aiIntegrationsOpenAiKeyPresent = Boolean(integrations);
   const legacyOpenAiKeyPresent = Boolean(legacy);
-  const openRouterApiKeyPresent = Boolean(openRouter);
   const aiProvider = aiProviderRaw === "openrouter" || aiProviderRaw === "gemini" ? aiProviderRaw : "openai";
   const hasOpenAiKey = aiIntegrationsOpenAiKeyPresent || legacyOpenAiKeyPresent;
   const hasAiProviderKey = aiProvider === "openrouter" ? openRouterApiKeyPresent : hasOpenAiKey;
   return {
     rawAiAdminGenerationEnabled,
+    aiAdminGenerationFlagSourceKey,
     adminAiGenerationFlagParsed: parseBooleanEnv(rawAiAdminGenerationEnabled),
     aiIntegrationsOpenAiKeyPresent,
     legacyOpenAiKeyPresent,
     openRouterApiKeyPresent,
+    openRouterCanonicalKeyPresent,
+    blogOpenRouterKeyPresent,
     aiProvider,
     hasOpenAiKey,
     hasAiProviderKey,

@@ -42,6 +42,9 @@ describe("allied health occupation hub routing (marketing)", () => {
   it("billing career mapping still resolves for representative allied profession keys", () => {
     assert.equal(professionKeyToCareerKey("psw-hca"), "socialwork");
     assert.equal(professionKeyToCareerKey("medical-assistant"), "ota_pta");
+    assert.equal(professionKeyToCareerKey("occupational-therapy"), "ota_pta");
+    assert.equal(professionKeyToCareerKey("physiotherapy"), "ota_pta");
+    assert.equal(professionKeyToCareerKey("psychotherapy"), "socialwork");
   });
 
   it("does not change the marketing exam pathway overview wiring for nursing hubs", () => {

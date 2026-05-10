@@ -4,7 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { getMarketingLessonsHubCatalogLessons } from "@/lib/lessons/marketing-lessons-hub-category";
-import { REQUIRED_ALLIED_PROFESSION_KEYS } from "./lesson-normalization-coverage.mts";
+import { REQUIRED_ALLIED_PROFESSION_KEYS } from "@/lib/allied/allied-profession-lesson-index-verification";
 
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const reportsDir = path.join(coreRoot, "reports");

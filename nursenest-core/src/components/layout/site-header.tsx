@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import { createPortal } from "react-dom";
 import { CountryCode } from "@prisma/client";
 import { useTheme } from "next-themes";
-import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
+import { getNavChrome, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, MapPin, Menu, Settings, User, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { isStaffRole, shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
@@ -40,37 +39,25 @@ import { buildMarketingTierHubStrip } from "@/lib/navigation/marketing-tier-hub-
 import { formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS, publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
-
-const MarketingHeaderUtilityStrip = dynamic(
-  () =>
-    import("@/components/layout/marketing-header-utility-strip").then((mod) => ({
-      default: mod.MarketingHeaderUtilityStrip,
-    })),
-  {
-    loading: () => (
-      <div
-        className="nn-header-hide-until-xl w-full min-h-[40px] border-b border-transparent"
-        aria-busy="true"
-      />
-    ),
-  },
-);
+import { MarketingHeaderUtilityCluster } from "@/components/layout/marketing-header-utility-strip";
 
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
 const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta nn-text-on-solid-fill";
 
-/** Match legacy header rhythm: compact sizing with medium-weight copy, not extra-light pills. */
+/** v4 primary links: text-first with soft state chrome, not a bordered pill wall. */
 const NAV_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex h-8 shrink-0 items-center justify-center whitespace-nowrap px-2 text-center font-medium leading-none tracking-normal xl:px-2.5";
 /** Muted Learn / Track in the public “Learn → Practice → Track” row. */
 const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)]`;
+/** Core marketing destinations (Pricing, Blog, …) — keep on `nav-fg` for dark-mode contrast. */
+const NAV_MARKETING_MORE_CLASS = `${NAV_LINK_CLASS} nn-marketing-nav-link--primary-text text-[var(--nav-fg)]`;
 const NAV_TIER_LINK_CLASS =
-  "nn-marketing-body-sm nn-marketing-nav-link inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-lg border border-transparent px-2.5 text-center font-medium leading-[1.2] tracking-normal transition-colors sm:px-3";
+  "nn-marketing-body-sm nn-marketing-nav-link inline-flex min-h-8 items-center justify-center whitespace-nowrap rounded-lg border px-2.5 text-center font-semibold leading-[1.2] tracking-normal transition-colors sm:px-3";
 const HEADER_SECONDARY_ACTION_CLASS =
   "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
-/** Guest marketing header: match primary CTA horizontal padding for consistent pill width. */
-const HEADER_GUEST_SECONDARY_ACTION_CLASS =
-  "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+/** Desktop guest Log In — secondary outline; same min-height, radius, and padding rhythm as Start Free. */
+const HEADER_DESKTOP_LOGIN_OUTLINE_CLASS =
+  "nav-item nn-header-login-receded inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl border border-[var(--nav-border)] bg-transparent px-4 py-2 text-sm font-medium text-[var(--nav-fg)] shadow-none transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type HeaderResumeCta = { href: string; label: string } | null;
 type HeaderNavLink = { key: string; href: string; label: string; matchBase: string };
@@ -134,6 +121,38 @@ export type SiteHeaderProps = {
   serverHasStaffSession?: boolean;
 };
 
+/**
+ * === THEME ARCHITECTURE CONTRACT (marketing) ===
+ *
+ * `marketing-row4` is the canonical marketing header layout for **Ocean,
+ * Blossom, and Midnight**. Ocean is the canonical structural theme;
+ * Blossom and Midnight inherit Ocean's `marketing-row4` structure and may
+ * only override the visual layer.
+ *
+ * Themes MAY override (color/visual layer):
+ *   - colors, gradients, shadows, borders, opacity, hover/focus states.
+ *
+ * Themes MUST NOT override (structural layer):
+ *   - display
+ *   - flex-direction / flex-wrap
+ *   - grid-template / grid-template-columns / grid-template-rows /
+ *     grid-template-areas
+ *   - width / max-width / min-width
+ *   - spacing rhythm (padding/margin) that shifts structural rhythm
+ *   - responsive breakpoints (no theme-scoped media-query forks)
+ *   - container hierarchy / DOM ordering / header row ordering
+ *
+ * Theme-specific marketing header CSS lives in
+ * `src/app/premium-redesign-2026.css` (Blossom + Midnight blocks scoped to
+ * `[data-nn-header-layout="marketing-row4"]`). The contract is enforced
+ * statically by `tests/contracts/theme-marketing-row4-contract.test.ts`,
+ * which scans the CSS text and fails on forbidden overrides. A CSS block
+ * comment whose body starts with `theme-contract:allow <reason>` placed
+ * immediately before a declaration acts as a documented escape hatch.
+ *
+ * Visual parity release gate: `tests/e2e/visual/theme-parity/
+ * homepage-theme-parity.spec.ts` (see `docs/screenshots/theme-parity/`).
+ */
 export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const { t, locale } = useMarketingI18n();
   const tRef = useRef(t);
@@ -142,13 +161,16 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const pathname = usePathname() ?? "/";
   const searchParams = useSearchParams();
   const { theme } = useTheme();
-  const navChromeStyle = getNavChromeStyle(theme);
-  const navChromeVars = getNavChromeVars(theme);
   // Default to light (ocean, the app default, is a light theme) so SSR and first paint match.
   const isLightTheme = useMemo(() => {
     if (!theme) return true;
     return (THEME_OPTIONS.find((o) => o.id === theme)?.group ?? "light") === "light";
   }, [theme]);
+  /** Midnight uses the same marketing header DOM as Ocean (row4 + utility band); other dark themes keep unified-dark. */
+  const marketingRow4Layout = useMemo(
+    () => isLightTheme || theme === "midnight",
+    [isLightTheme, theme],
+  );
   const { data: session, status: sessionStatus } = useSession();
   const isSessionPending = sessionStatus === "loading";
   const user = session?.user;
@@ -385,6 +407,12 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
         label: formatTitleCase(t("nav.pricing"), locale),
       },
       {
+        key: "about",
+        href: "/about",
+        matchBase: "/about",
+        label: formatTitleCase(t("nav.about"), locale),
+      },
+      {
         key: "blog",
         href: "/blog",
         matchBase: "/blog",
@@ -453,8 +481,26 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     return () => controller.abort();
   }, [isMarketingEntitledLearner, locale]);
 
+  /** Dark themes: inject `--nn-nav-*` + ink on this wrapper; **no** inline `backgroundColor` so
+   *  `.nn-header-dark-surface` (premium gradient + blur) owns the full-bleed paint. Light themes
+   *  keep var-only injection — paper/row4 bands come from CSS on `<header>`. */
+  const stickyChromeStyle = useMemo(() => {
+    if (isLightTheme) return getNavChromeVars(theme);
+    const chrome = getNavChrome(theme);
+    return {
+      ...getNavChromeVars(theme),
+      color: chrome.foreground,
+      borderColor: chrome.border,
+      boxShadow: darkHeaderShadow,
+    };
+  }, [isLightTheme, theme, darkHeaderShadow]);
+
   return (
-    <div style={navChromeVars} className="sticky top-0 z-50" ref={headerRef}>
+    <div
+      style={stickyChromeStyle}
+      className={`sticky top-0 z-50 w-full min-w-0${isLightTheme ? "" : " nn-header-dark-surface"}`}
+      ref={headerRef}
+    >
       {/*
         Keep enter animation on <header> only. `nn-header-animate-in` ends with a transform, which
         creates a fixed-position containing block — mobile drawers are siblings after </header> and
@@ -462,24 +508,21 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       */}
       <header
         data-nn-nav-mode="public"
-        style={isLightTheme ? undefined : { ...navChromeStyle, boxShadow: darkHeaderShadow }}
+        data-nn-header-layout={marketingRow4Layout ? "marketing-row4" : "marketing-unified-dark"}
         className={`nn-header-animate-in relative flex w-full flex-col border-b${
-          isLightTheme
-            ? ` nn-header-logo-row${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
-            : " nn-header-dark-surface"
+          marketingRow4Layout
+            ? ` nn-header-logo-row nn-header-marketing-v31${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
+            : ""
         } overflow-visible`}
       >
-        {/*
-          Desktop (`xl+`): preferences rail — country, language, and theme.
-          Light: dark-bar surface; dark: recessive utility surface. Middle row keeps logo/links/auth only.
-        */}
-        <div className="nn-header-hide-until-xl w-full">
-          <MarketingHeaderUtilityStrip
-            variant={isLightTheme ? "dark-bar" : "standard"}
-            includeUnpublishedRegions={isAdminAuthenticated}
-          />
-        </div>
-        <div className="nn-section-shell flex flex-col overflow-visible" data-nn-header-band="primary">
+        <div className="nn-marketing-nav-v31-frame w-full min-w-0">
+        {/* Utility cluster is rendered once: Bar A (light, xl+) or main-row cluster (dark). */}
+        {/* Full-width band: primary gradient/glass must not live on `.nn-section-shell` (max-width crop). */}
+        <div
+          className="nn-header-marketing-primary-band flex w-full min-w-0 flex-col overflow-visible"
+          data-nn-header-band="primary"
+        >
+        <div className="nn-section-shell nn-header-primary-inner-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
           <div className="top-bar nn-header-mobile-only-flex min-h-0 w-full items-center justify-between gap-2 overflow-visible border-b border-[var(--header-border)] py-1.5 pt-[max(0.25rem,env(safe-area-inset-top,0px))] sm:min-h-[4.5rem] sm:gap-3 sm:py-0">
             <div className="nn-header-mobile-brand-auth-cluster flex min-w-0 flex-1 items-center gap-2 overflow-hidden sm:gap-3">
@@ -558,7 +601,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
           {/* Mobile/tablet: signed-in CTAs (learners/staff) — guests use the top row above */}
           {isAuthenticated ? (
-            <div className="nn-header-mobile-only-flex relative z-[1] items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-3 py-2 sm:px-4 sm:py-2.5">
+            <div className="nn-header-mobile-only-flex relative z-[1] w-full items-center justify-end gap-2 border-b border-[var(--header-border)] bg-transparent px-3 py-2 sm:px-4 sm:py-2.5">
               {isAdminAuthenticated ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
@@ -617,9 +660,29 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             </div>
           ) : null}
 
-          {/* ── Desktop main header row: left logo | center core public links | right utilities + auth ── */}
-          <div className="nn-header-desktop-grid overflow-visible">
-            <div className="nn-header-brand-cluster flex shrink-0 items-center gap-2.5">
+          {/* Bar A — utility (desktop xl+); theme-token triggers via MarketingHeaderUtilityCluster row4 */}
+          {marketingRow4Layout ? (
+            <div
+              data-testid="marketing-header-utility-band"
+              data-nn-header-band="utility"
+              data-nn-header-layer="utility"
+              data-nn-header-quiet="true"
+              className="nn-marketing-nav-v31-bar-a nn-header-layer-utility nn-header-hide-until-xl-flex w-full min-w-0 shrink-0 flex-wrap items-center justify-end gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_48%,var(--header-border))] py-1.5 pe-1 ps-1 md:py-2"
+            >
+              <MarketingHeaderUtilityCluster
+                chromeMode="row4"
+                includeUnpublishedRegions={isAdminAuthenticated}
+              />
+            </div>
+          ) : null}
+
+          {/* ── Desktop main header row: left logo | center core public links | right auth (utility on Bar A when light row4) ── */}
+          <div
+            className="nn-header-desktop-grid overflow-visible"
+            data-testid="marketing-header-primary-row"
+            data-nn-header-layer="main"
+          >
+            <div className="nn-header-brand-cluster flex shrink-0 items-center gap-3 lg:gap-3.5">
               <Link
                 href={localizeHref("/")}
                 className="nn-header-logo-link group flex shrink-0 items-center overflow-visible bg-transparent"
@@ -636,14 +699,14 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
             <nav
               aria-label={t("nav.marketingExplore")}
-              className="nav flex min-w-0 flex-wrap items-center justify-center gap-0.5 px-2 sm:px-3 xl:gap-1"
+              className="nav nn-header-main-marketing-nav flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-0.5 px-2 sm:gap-1 sm:px-3 xl:gap-1.5"
             >
               {marketingMoreLinks.map((item) => (
                 <Link
                   key={item.key}
                   href={localizeHref(item.href)}
                   aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                  className={NAV_FLOW_SECONDARY_CLASS}
+                  className={NAV_MARKETING_MORE_CLASS}
                   onClick={() =>
                     trackClientEvent(PH.marketingNavClick, {
                       actor: navActor,
@@ -658,7 +721,19 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               ))}
             </nav>
 
-            <div className="nn-header-desktop-auth-cluster relative z-[130] flex shrink-0 items-center justify-end gap-2 xl:gap-2">
+            <div className="nn-header-desktop-auth-cluster relative z-[130] flex min-w-0 max-w-full shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1.5 xl:gap-x-2">
+              {!marketingRow4Layout ? (
+                <div
+                  data-testid="marketing-header-utility-inline"
+                  data-nn-header-band="utility"
+                  className="nn-header-desktop-marketing-utility-cluster flex min-w-0 max-w-full shrink flex-wrap items-center justify-end gap-y-1"
+                >
+                  <MarketingHeaderUtilityCluster
+                    chromeMode="dark-marketing"
+                    includeUnpublishedRegions={isAdminAuthenticated}
+                  />
+                </div>
+              ) : null}
               {isSessionPending ? (
                 <div className="flex shrink-0 items-center gap-2" aria-busy="true" aria-label={t("nav.logIn")}>
                   <div className="h-10 w-20 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />
@@ -668,7 +743,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                    className={`${HEADER_GUEST_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}
+                    className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Log in to your NurseNest account"
                   >
@@ -676,7 +751,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   </Link>
                   <Link
                     href={guestMarketingSignupHref}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Start free account — nursing and healthcare exam prep"
                     title="Start free — no credit card required"
@@ -689,7 +764,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   <Link
                     href={ADMIN_DASHBOARD_HREF}
                     prefetch={false}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={(e) => {
                       closeMegaBeforeAuthNav();
                       navigateAdminDashboardHard(e);
@@ -709,7 +784,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
@@ -730,7 +805,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="flex shrink-0 items-center gap-2">
                   <Link
                     href={localizeHref(HUB.pricing)}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.pricing"), locale)}
@@ -746,12 +821,13 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               )}
             </div>
           </div>{/* /nav-row */}
-        </div>{/* /shell */}
+        </div>{/* /.nn-section-shell */}
+        </div>{/* /.nn-header-marketing-primary-band */}
         <div
-          className="nn-header-hide-until-xl w-full nn-header-nav-row"
+          className="nn-marketing-nav-v31-tier-rail nn-header-hide-until-xl w-full nn-header-nav-row"
           data-nn-header-band="tier"
         >
-          <div className="nn-section-shell flex min-h-[30px] flex-wrap items-center gap-x-1 gap-y-0 py-0 md:min-h-[32px] md:py-0 lg:gap-x-2">
+          <div className="nn-marketing-nav-v31-tier-inner nn-section-shell nn-header-primary-inner-shell flex min-h-[30px] flex-wrap items-center gap-x-1 gap-y-0 py-1 md:min-h-[32px] md:py-1.5 lg:gap-x-2">
             <nav
               aria-label={t("nav.marketingExplore")}
               className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 xl:gap-1.5"
@@ -761,11 +837,13 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   key={menu.key}
                   href={localizeHref(menu.hubHref)}
                   data-active={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) || undefined}
-                  className={`${NAV_TIER_LINK_CLASS} px-2 py-1.5 text-center transition-colors hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)] ${
-                    strippedPathActivatesMegaMenuKey(menu.key, strippedPath)
-                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--nav-border))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--nav-hover))] font-semibold text-[var(--nav-link-active)]"
-                      : "text-[var(--nav-fg)]"
-                  }`}
+                  // Visual chrome (bg/border/text) for the tier chips lives in CSS
+                  // (premium-redesign-2026.css `.nn-marketing-tier-chip` + globals.css `.nn-header-nav-row`).
+                  // Inlining `text-[var(--nav-fg)]` / `bg-[color-mix(...,var(--nav-bg))]` here washes
+                  // labels out: `--nav-fg`/`--nav-bg` cascade from theme nav chrome (white/dark navy)
+                  // because the `.nn-header-logo-row > .nn-header-nav-row` token override does not
+                  // match through the intermediate `.nn-marketing-nav-v31-frame` div.
+                  className={`${NAV_TIER_LINK_CLASS} nn-marketing-tier-chip px-2 py-1.5 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]`}
                   onClick={() => {
                     trackClientEvent(PH.marketingNavClick, {
                       actor: navActor,
@@ -781,6 +859,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             </nav>
           </div>
         </div>
+        </div>{/* /.nn-marketing-nav-v31-frame */}
       </header>
 
       {/* Mobile context/settings drawer — chunk loads only after user opens settings (heavy REGION_CONFIG + pathway helpers). */}
@@ -919,6 +998,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                         aria-current={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "page" : undefined}
                         data-active={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) || undefined}
                         className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                        data-nn-mobile-tier-link
                         onClick={() => {
                           trackClientEvent(PH.marketingNavClick, {
                             actor: navActor,
@@ -946,6 +1026,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                           href={localizeHref(item.href)}
                           aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
                           className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                          data-nn-mobile-primary-link
                           onClick={() => {
                             trackClientEvent(PH.marketingNavClick, {
                               actor: navActor,

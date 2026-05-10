@@ -134,4 +134,9 @@ export type ResolvedLinks = {
   blogs: LinkCandidate[];
   /** CAT / readiness page links (surface = cat_result or explicit). */
   cat: LinkCandidate[];
+  /**
+   * Registered hub targets (e.g. ECG mastery entry) — merged only on select surfaces.
+   * Empty when unused; registry resolution does not populate this bucket today.
+   */
+  hubs: LinkCandidate[];
 };

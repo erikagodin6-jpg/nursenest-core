@@ -1,0 +1,34 @@
+---
+description: Future BLS/ACLS/PALS pathways — integrated emergency-readiness ecosystems (not isolated cert apps).
+globs:
+  - nursenest-core/src/app/modules/ecg/**/*
+  - nursenest-core/src/components/scenarios/**/*
+  - nursenest-core/src/components/labs/**/*
+  - nursenest-core/src/lib/labs/**/*
+  - nursenest-core/src/components/med-calculations/**/*
+alwaysApply: false
+---
+
+# BLS / ACLS / PALS emergency readiness (future pathways)
+
+When implementing **BLS, ACLS, PALS**, or adjacent certification readiness:
+
+- Position as **adaptive clinical readiness + emergency-response ecosystems** inside the NurseNest subscription — **not** isolated certification courses, CE portals, LMS silos, or watch-and-quiz utilities.
+
+## Integrate
+
+- **ECG + telemetry** infrastructure — algorithms and rhythms as **teaching arcs**, not a second ECG product (`docs/ecg-module-integration.md`).
+- **Labs + med calc** — electrolytes, ABGs, emergency meds, titration, pediatric dosing via existing `/app/labs` and `/app/med-calculations` patterns.
+- **OSCE** — rapid response, code communication, escalation — shared scenario shells.
+- **Branching cases** — arrest, deterioration, pediatric emergencies — `adaptive-case-study-ecosystem.md`.
+- **Dashboard / report** — extend mastery and adaptive remediation on **`/app/account/report`** — no parallel cert dashboard.
+
+## Themes + Figma
+
+Same shells and tokens; Midnight may emphasize immersive ICU/ER — **expression only**, no layout fork per theme.
+
+## Related
+
+- `docs/planning/bls-acls-pals-emergency-readiness-pathways.md`  
+- `docs/planning/clinical-readiness-ecosystem-implementation-directive.md`  
+- `.cursor/rules/ecosystem-platform-guardrails.mdc`

@@ -33,6 +33,45 @@
   backdrop-filter: blur(10px);
 }
 
+/* Horizontal drift lane: leaf travels most of the strip (storyboard: drift across). */
+.leafDriftTrack {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 10rem;
+  height: 3rem;
+  align-self: stretch;
+}
+
+.leafDrone {
+  --nn-loader-leaf-box: 2.75rem;
+
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: var(--nn-loader-leaf-box);
+  height: var(--nn-loader-leaf-box);
+  margin-top: calc(var(--nn-loader-leaf-box) / -2);
+  animation: nn-premium-loader-leaf-drift-x 2.85s var(--brand-motion-ease-calm-out, cubic-bezier(0.45, 0.05, 0.25, 1)) infinite
+    alternate;
+  will-change: left, transform;
+}
+
+.pageLoaderLeafSvg {
+  width: 1.85rem;
+  height: 2.25rem;
+}
+
+@media (min-width: 768px) {
+  .leafDrone {
+    --nn-loader-leaf-box: 3.35rem;
+  }
+
+  .pageLoaderLeafSvg {
+    width: 2.2rem;
+    height: 2.65rem;
+  }
+}
+
 .bodyPadding {
   padding: 1.25rem 1.25rem 1.5rem;
 }
@@ -67,6 +106,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .leafMotion {
+    animation: none;
+  }
+}
+
 .leafCluster {
   position: relative;
   display: flex;
@@ -83,17 +128,33 @@
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--semantic-brand) 35%, transparent);
   opacity: 0.55;
-  animation: nn-premium-loader-pulse-ring 2.4s var(--brand-motion-ease-calm-out, ease-in-out) infinite;
+  animation: nn-premium-loader-pulse-ring 2.75s var(--brand-motion-ease-calm-out, ease-in-out) infinite;
   pointer-events: none;
 }
 
 .leafMotion {
   position: relative;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   color: var(--semantic-brand);
-  animation: nn-premium-loader-leaf-drift 3.2s ease-in-out infinite;
   transform-origin: 50% 60%;
-  will-change: transform;
+}
+
+/* Subtle opacity echo (trail) — same mark, no extra DOM. */
+.leafMotion::after {
+  content: "";
+  position: absolute;
+  inset: 12% 18%;
+  border-radius: 45% 55% 50% 50% / 55% 55% 45% 45%;
+  background: color-mix(in srgb, var(--semantic-brand) 22%, transparent);
+  opacity: 0;
+  transform: scale(0.92);
+  animation: nn-premium-loader-leaf-trail 2.85s ease-in-out infinite alternate;
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -102,22 +163,53 @@
     opacity: 0.35;
   }
 
-  .leafMotion {
-    animation: none;
-    will-change: auto;
+  .leafDrone {
+    left: 12px;
+    animation: nn-premium-loader-leaf-breathe 2.4s ease-in-out infinite;
+    will-change: opacity;
+  }
+
+  .leafMotion::after {
+    display: none;
   }
 }
 
-@keyframes nn-premium-loader-leaf-drift {
+@keyframes nn-premium-loader-leaf-drift-x {
+  0% {
+    left: 0;
+    transform: rotate(-11deg);
+  }
+
+  100% {
+    left: calc(100% - var(--nn-loader-leaf-box));
+    transform: rotate(9deg);
+  }
+}
+
+@keyframes nn-premium-loader-leaf-trail {
+  0% {
+    opacity: 0;
+    transform: scale(0.88) translate(2px, 2px);
+  }
+
+  45% {
+    opacity: 0.22;
+  }
+
+  100% {
+    opacity: 0.08;
+    transform: scale(1.05) translate(-4px, -3px);
+  }
+}
+
+@keyframes nn-premium-loader-leaf-breathe {
   0%,
   100% {
-    transform: translateY(0) rotate(-5deg);
+    opacity: 0.82;
   }
-  45% {
-    transform: translateY(-7px) rotate(4deg);
-  }
-  70% {
-    transform: translateY(3px) rotate(-2deg);
+
+  50% {
+    opacity: 1;
   }
 }
 

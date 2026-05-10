@@ -46,11 +46,18 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
 
   if (entitlement === "error") {
     return (
-      <div>
-        <div className="mb-4">
+      <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
+        <div className="mb-1">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
+            {t("learner.practiceTests.title")}
+          </h1>
+          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
+            {t("learner.entitlement.verifyFailed")}
+          </p>
+        </div>
       </div>
     );
   }
@@ -58,15 +65,19 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <div>
-        <div className="mb-4">
+      <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
+        <div className="mb-1">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <h1 className="sr-only">Adaptive exam simulation</h1>
-        <p className="mt-2 text-sm text-muted">
-          Subscribe for timed, one-question-at-a-time adaptive exam simulation matched to your exam track.
-        </p>
-        <div className="mt-6">
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
+            {t("learner.practiceTests.title")}
+          </h1>
+          <p className="mt-2.5 max-w-prose text-pretty text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:mt-3">
+            {t("learner.practiceTests.subtitle.locked")}
+          </p>
+        </div>
+        <div>
           <SubscriptionPaywall
             context="questions"
             freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
@@ -87,8 +98,8 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
     !catEligiblePathways.some((p) => p.id === requestedPathwayId)
   ) {
     return (
-      <div>
-        <div className="mb-4">
+      <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 sm:px-6">
+        <div className="mb-1">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
         <PremiumEmptyState
@@ -163,8 +174,8 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   );
 
   return (
-    <div>
-      <div className="mb-4">
+    <div className="mx-auto min-w-0 w-full max-w-6xl space-y-4 px-4 pb-6 sm:px-6">
+      <div className="mb-1">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
       <p className="mt-2 max-w-3xl text-sm text-[var(--semantic-text-secondary)]">
@@ -181,7 +192,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
       {waitlistOnlyPathways.length > 0 && catEligiblePathways.length === 0 ? (
         <aside className="nn-card mt-6 border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))] p-4 text-sm text-[var(--semantic-text-primary)]">
           <p className="font-semibold">Adaptive (CAT) is not open for your current pathway yet</p>
-          <p className="mt-1 text-muted-foreground">
+          <p className="mt-1 text-[var(--semantic-text-secondary)]">
             Your plan matches one or more tracks that are still on waitlist or ramp-up. Use{" "}
             <strong>lessons</strong> and the <strong>question bank</strong> from each pathway hub, join a waitlist from
             marketing pages if available, or switch to an active exam track (e.g. US RN/PN) if your subscription includes

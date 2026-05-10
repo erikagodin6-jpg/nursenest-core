@@ -1,3 +1,30 @@
+/* =====================================================================
+   === THEME ARCHITECTURE CONTRACT (marketing) ===
+   Ocean is the canonical structural theme for the marketing header
+   (`[data-nn-header-layout="marketing-row4"]`). Blossom and Midnight
+   inherit Ocean's structure and may override the visual layer only:
+     - colors, gradients, shadows, borders, opacity, hover/focus states.
+
+   Themes MUST NOT override the structural layer:
+     - display
+     - flex-direction / flex-wrap
+     - grid-template / grid-template-columns / grid-template-rows /
+       grid-template-areas
+     - width / max-width / min-width
+     - spacing rhythm (padding/margin) that shifts structural rhythm
+     - responsive breakpoints (no theme-scoped media-query forks)
+     - container hierarchy / DOM ordering / header row ordering
+
+   Header layout overrides for marketing surfaces live in
+   `premium-redesign-2026.css`. This file is for color/palette tokens
+   only. Enforced by:
+     tests/contracts/theme-marketing-row4-contract.test.ts
+
+   Escape hatch (use rarely, document the reason): place a CSS block
+   comment whose body starts with `theme-contract:allow <reason>`
+   immediately before a declaration to suppress that one violation.
+   ===================================================================== */
+
 [data-theme="mint"] {
   --theme-primary: #5cbdbd;
   --theme-primary-foreground: #ffffff;
@@ -28,16 +55,6 @@
   --theme-accent-foreground: #64748b;
   --theme-border: #e2e8f0;
   --theme-ring: #64748b;
-}
-
-[data-theme="midnight"] {
-  --theme-primary: #1e293b;
-  --theme-secondary: #f1f5f9;
-  --theme-secondary-foreground: #1e293b;
-  --theme-accent: #f8fafc;
-  --theme-accent-foreground: #1e293b;
-  --theme-border: #cbd5e1;
-  --theme-ring: #1e293b;
 }
 
 [data-theme="ocean"] {
@@ -657,6 +674,7 @@
  */
 :is(
   [data-theme="arctic-frost"],
+  [data-theme="aurora"],
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
   [data-theme="blossom"],
@@ -1491,102 +1509,181 @@
   --theme-page-bg: #ffffff;
 }
 
-/* ── Premium clinical palettes (Blossom, Midnight, Ocean, Forest) ── */
+/* ── Premium clinical palettes (Blossom, Aurora, Midnight, Ocean, Forest, Sunset) ── */
 
-[data-theme="blossom"] {
-  --theme-primary: #e75480;
+[data-theme="aurora"] {
+  /* Figma Aurora — clinical pink / violet / blue / mint / warm orange / ink (#1A202C) */
+  --theme-primary: #9b72ff;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #3a86ff;
-  --theme-secondary-foreground: #1e3a8a;
-  --theme-accent: #ffd166;
-  --theme-accent-foreground: #7c5a12;
-  --theme-border: #e5e7eb;
-  --theme-ring: #d9436a;
-  --theme-page-bg: #f8fafc;
-  --theme-heading-text: #1f2937;
-  --theme-body-text: #4b5563;
-  --theme-muted-text: #6b7280;
+  --theme-secondary: color-mix(in srgb, #e14d8f 14%, #ffffff);
+  --theme-secondary-foreground: #1a202c;
+  --theme-accent: color-mix(in srgb, #f39c12 18%, #ffffff);
+  --theme-accent-foreground: #1a202c;
+  --theme-border: color-mix(in srgb, #1a202c 10%, #eae6f5);
+  --theme-ring: #9b72ff;
+  /* Warm white / lavender bloom — soft aura, not flat gray */
+  --theme-page-bg: color-mix(in srgb, #e8e0fb 10%, color-mix(in srgb, #fce8f3 9%, #faf8ff));
+  --theme-surface-strong: color-mix(
+    in srgb,
+    #4a90e2 6%,
+    color-mix(in srgb, #e14d8f 5%, var(--theme-page-bg))
+  );
+  --theme-heading-text: #1a202c;
+  --theme-body-text: color-mix(in srgb, #1a202c 90%, #ffffff);
+  --theme-muted-text: color-mix(in srgb, #1a202c 55%, #ffffff);
 
-  --lesson-summary: #fce4ec;
-  --lesson-key-concepts: #eaf2ff;
-  --lesson-signs-symptoms: #fff0f3;
-  --lesson-assessment: #e6f4ea;
-  --lesson-diagnostics: #eaf2ff;
-  --lesson-interventions: #e6faf7;
-  --lesson-medications: #fff6da;
-  --lesson-patient-teaching: #e8f7f0;
-  --lesson-exam-tips: #fff6da;
-  --lesson-red-flags: #fde8ec;
-  --lesson-clinical-pearls: #f3e8ff;
-  --lesson-notes: #f1f5f9;
+  --lesson-summary: color-mix(in srgb, #e14d8f 12%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #4a90e2 12%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #e14d8f 10%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #2ecc71 11%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #4a90e2 10%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #2ecc71 10%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #f39c12 14%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #2ecc71 9%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #f39c12 12%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #e14d8f 14%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #9b72ff 12%, #ffffff);
+  --lesson-notes: #f3f4fb;
 
-  --state-success: #e6f4ea;
-  --state-warning: #fff6da;
-  --state-info: #eaf2ff;
-  --state-danger-soft: #fde8ec;
+  --state-success: color-mix(in srgb, #2ecc71 12%, #ffffff);
+  --state-warning: color-mix(in srgb, #f39c12 14%, #ffffff);
+  --state-info: color-mix(in srgb, #4a90e2 11%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, #e14d8f 12%, #ffffff);
 
-  --logo-primary: #e75480;
-  --logo-accent: #3a86ff;
-  --logo-text: #1f2937;
-  --theme-brand-accent: #e75480;
-  --theme-brand-strong: #D9436A;
-  --theme-nav-background: #D9436A;
-  --theme-nav-foreground: #FFFFFF;
-  --theme-nav-hover: rgba(255, 255, 255, 0.16);
-  --theme-nav-hover-foreground: #FFFFFF;
-  --theme-header-top-bg: #D9436A;
-  --theme-header-main-bg: #D9436A;
-  --theme-header-secondary-bg: #FFFFFF;
-  --theme-header-secondary-fg: #111827;
-  --theme-header-divider: rgba(217, 67, 106, 0.24);
+  --logo-primary: #9b72ff;
+  --logo-accent: #e14d8f;
+  --logo-text: #1a202c;
+  --theme-brand-accent: #e14d8f;
+  --theme-brand-strong: #9b72ff;
+  --theme-nav-background: color-mix(
+    in srgb,
+    #9b72ff 8%,
+    color-mix(in srgb, #fce8f3 20%, color-mix(in srgb, #e6f2ff 18%, #fffdfa))
+  );
+  --theme-nav-foreground: #1a202c;
+  --theme-nav-hover: color-mix(in srgb, #1a202c 6%, transparent);
+  --theme-nav-hover-foreground: #1a202c;
+  --theme-header-top-bg: color-mix(in srgb, #e8e0fb 40%, color-mix(in srgb, #fce8f3 26%, #fefdfb));
+  --theme-header-main-bg: color-mix(in srgb, #d4ecff 18%, color-mix(in srgb, #fce8f3 22%, #faf7ff));
+  --theme-header-secondary-bg: color-mix(in srgb, #e14d8f 4%, color-mix(in srgb, #9b72ff 5%, #ffffff));
+  --theme-header-secondary-fg: #1a202c;
+  --theme-header-divider: color-mix(in srgb, #1a202c 12%, transparent);
+}
+
+/* Blossom — distinct soft lilac + sky + warm peach study atmosphere (pastel, optimistic; not Aurora). */
+[data-theme="blossom"] {
+  --theme-primary: #8e75ff;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: color-mix(in srgb, #7dd3fc 18%, #ffffff);
+  --theme-secondary-foreground: #1f2536;
+  --theme-accent: color-mix(in srgb, #e8a87c 22%, #ffffff);
+  --theme-accent-foreground: #2f241c;
+  --theme-border: color-mix(in srgb, #1f2536 8%, #e4dff0);
+  --theme-ring: #8e75ff;
+  --theme-page-bg: color-mix(in srgb, #ede6ff 8%, color-mix(in srgb, #dff6ff 10%, #faf7fc));
+  --theme-surface-strong: color-mix(
+    in srgb,
+    #7dd3fc 7%,
+    color-mix(in srgb, #e8a87c 5%, var(--theme-page-bg))
+  );
+  --theme-heading-text: #1f2536;
+  --theme-body-text: color-mix(in srgb, #1f2536 88%, #ffffff);
+  --theme-muted-text: color-mix(in srgb, #1f2536 52%, #ffffff);
+
+  --lesson-summary: color-mix(in srgb, #8e75ff 11%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #7dd3fc 12%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #e8a87c 10%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #34d399 10%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #7dd3fc 9%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #34d399 9%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #e8a87c 12%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #34d399 8%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #8e75ff 9%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #e8a87c 11%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #7dd3fc 10%, #ffffff);
+  --lesson-notes: #f2eff8;
+
+  --state-success: color-mix(in srgb, #34d399 11%, #ffffff);
+  --state-warning: color-mix(in srgb, #e8a87c 12%, #ffffff);
+  --state-info: color-mix(in srgb, #7dd3fc 10%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, #e8a87c 10%, #ffffff);
+
+  --logo-primary: #8e75ff;
+  --logo-accent: #5ab0e8;
+  --logo-text: #1f2536;
+  --theme-brand-accent: #7dd3fc;
+  --theme-brand-strong: #7a63e8;
+  --theme-nav-background: color-mix(
+    in srgb,
+    #8e75ff 7%,
+    color-mix(in srgb, #c9f0ff 22%, color-mix(in srgb, #fdeadb 12%, #fffefe))
+  );
+  --theme-nav-foreground: #1f2536;
+  --theme-nav-hover: color-mix(in srgb, #1f2536 5%, transparent);
+  --theme-nav-hover-foreground: #1f2536;
+  --theme-header-top-bg: color-mix(in srgb, #e8e2fb 32%, color-mix(in srgb, #dff5ff 22%, #fefdfb));
+  --theme-header-main-bg: color-mix(in srgb, #e4ecff 14%, color-mix(in srgb, #f6edff 12%, #faf8ff));
+  --theme-header-secondary-bg: color-mix(in srgb, #8e75ff 3%, color-mix(in srgb, #7dd3fc 4%, #ffffff));
+  --theme-header-secondary-fg: #1f2536;
+  --theme-header-divider: color-mix(in srgb, #1f2536 10%, transparent);
 }
 
 [data-theme="sunset"] {
-  --theme-primary: #f97361;
+  /* Premium Sunset — warm cream, dusk navy type, coral primary, sky + golden accents */
+  --theme-primary: #e07862;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #7c8cff;
-  --theme-secondary-foreground: #3730a3;
-  --theme-accent: #f6c453;
-  --theme-accent-foreground: #78350f;
-  --theme-border: #eadfd8;
-  --theme-ring: #e85d4c;
-  --theme-page-bg: #fff9f5;
-  --theme-heading-text: #3f2d28;
-  --theme-body-text: #5c4a42;
-  --theme-muted-text: #6b5b54;
+  --theme-secondary: color-mix(in srgb, #38bdf8 22%, #ffffff);
+  --theme-secondary-foreground: #1e3a5f;
+  --theme-accent: color-mix(in srgb, #e8b44f 28%, #ffffff);
+  --theme-accent-foreground: #3a2e18;
+  --theme-border: color-mix(in srgb, #1a2438 8%, #edd8cc);
+  --theme-ring: #c45d48;
+  --theme-page-bg: color-mix(in srgb, #ffe8d9 12%, color-mix(in srgb, #fff4eb 8%, #fffdfb));
+  --theme-surface-strong: color-mix(
+    in srgb,
+    #38bdf8 6%,
+    color-mix(in srgb, #e07862 5%, var(--theme-page-bg))
+  );
+  --theme-heading-text: #1a2438;
+  --theme-body-text: color-mix(in srgb, #1a2438 88%, #ffffff);
+  --theme-muted-text: color-mix(in srgb, #1a2438 48%, #ffffff);
 
-  --lesson-summary: #ffe7df;
-  --lesson-key-concepts: #eef0ff;
-  --lesson-signs-symptoms: #fdece8;
-  --lesson-assessment: #e7f6ee;
-  --lesson-diagnostics: #e8ecff;
-  --lesson-interventions: #e8f7f0;
-  --lesson-medications: #fff4d6;
-  --lesson-patient-teaching: #f2ebe6;
-  --lesson-exam-tips: #fff4d6;
-  --lesson-red-flags: #fcdede;
-  --lesson-clinical-pearls: #f0ecff;
-  --lesson-notes: #faf6f3;
+  --lesson-summary: color-mix(in srgb, #e07862 11%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #38bdf8 10%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #e07862 9%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #34d399 10%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #38bdf8 9%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #34d399 9%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #e8b44f 14%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #34d399 8%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #e8b44f 12%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #e07862 12%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #38bdf8 10%, #ffffff);
+  --lesson-notes: #f6f1ec;
 
-  --state-success: #e7f6ee;
-  --state-warning: #fff4d6;
-  --state-info: #eef0ff;
-  --state-danger-soft: #fdece8;
+  --state-success: color-mix(in srgb, #34d399 11%, #ffffff);
+  --state-warning: color-mix(in srgb, #e8b44f 13%, #ffffff);
+  --state-info: color-mix(in srgb, #38bdf8 10%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, #e07862 11%, #ffffff);
 
-  --logo-primary: #f97361;
-  --logo-accent: #7c8cff;
-  --logo-text: #3f2d28;
-  --theme-brand-accent: #f97361;
-  --theme-brand-strong: #E85D4C;
-  --theme-nav-background: #E85D4C;
-  --theme-nav-foreground: #FFFFFF;
-  --theme-nav-hover: rgba(255, 255, 255, 0.16);
-  --theme-nav-hover-foreground: #FFFFFF;
-  --theme-header-top-bg: #E85D4C;
-  --theme-header-main-bg: #E85D4C;
-  --theme-header-secondary-bg: #FFFFFF;
-  --theme-header-secondary-fg: #2D1D18;
-  --theme-header-divider: rgba(232, 93, 76, 0.24);
+  --logo-primary: #e07862;
+  --logo-accent: #38bdf8;
+  --logo-text: #1a2438;
+  --theme-brand-accent: #e07862;
+  --theme-brand-strong: #c45d48;
+  --theme-nav-background: color-mix(
+    in srgb,
+    #e07862 7%,
+    color-mix(in srgb, #ffd8c4 18%, color-mix(in srgb, #dbeafe 14%, #fffaf6))
+  );
+  --theme-nav-foreground: #1a2438;
+  --theme-nav-hover: color-mix(in srgb, #1a2438 6%, transparent);
+  --theme-nav-hover-foreground: #1a2438;
+  --theme-header-top-bg: color-mix(in srgb, #ffe8d9 38%, color-mix(in srgb, #dbeafe 14%, #fffdfb));
+  --theme-header-main-bg: color-mix(in srgb, #ffd8c4 16%, color-mix(in srgb, #e0f2fe 12%, #fffaf8));
+  --theme-header-secondary-bg: color-mix(in srgb, #e07862 3%, color-mix(in srgb, #38bdf8 4%, #ffffff));
+  --theme-header-secondary-fg: #1a2438;
+  --theme-header-divider: color-mix(in srgb, #1a2438 12%, transparent);
 }
 
 [data-theme="ocean-air"] {
@@ -1874,8 +1971,7 @@
 [data-theme="coral"],
 [data-theme="rose-quartz"],
 [data-theme="dusty-rose"],
-[data-theme="coral-sunset"],
-[data-theme="sunset"] {
+[data-theme="coral-sunset"] {
   --theme-primary-foreground: #3d0a1a;
 }
 
@@ -1924,6 +2020,7 @@
  */
 :is(
   [data-theme="arctic-frost"],
+  [data-theme="aurora"],
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
   [data-theme="blossom"],
@@ -1988,7 +2085,7 @@
    Apex — premium clinical theme
    Deep navy surface + violet primary + warm gold accent.
    Reads as polished, intelligent, modern; not sterile or toy-like.
-   Distinct from Blossom / Ocean / Forest / Midnight / Sunset.
+   Distinct from Aurora / Ocean / Forest / Midnight / Sunset.
    Accessibility: high-contrast text on dark surfaces.
    ============================================================ */
 [data-theme="apex"] {

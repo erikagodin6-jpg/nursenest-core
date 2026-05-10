@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const globalsCss = path.join(__dirname, "../../app/globals.css");
+const premiumCss = path.join(__dirname, "../../app/premium-redesign-2026.css");
 
 describe("marketing header band tokens (globals.css)", () => {
   it("defines shared utility/tier surfaces and neutral primary row tokens", () => {
@@ -30,5 +31,19 @@ describe("marketing header band tokens (globals.css)", () => {
       /\.nn-header-logo-row\s*>\s*\.nn-header-nav-row\s*\{[^}]*--theme-header-surface/s,
       "tier strip must not use theme-header-surface wash",
     );
+  });
+
+  it("premium dark header keeps v31 frame transparent (no inner slab under sticky glass)", () => {
+    const css = fs.readFileSync(premiumCss, "utf8");
+    assert.match(
+      css,
+      /\.nn-header-dark-surface \[data-nn-header-band="primary"\],\s*\.nn-header-dark-surface \.nn-marketing-nav-v31-frame/s,
+      "dark sticky children must not introduce their own opaque marketing frame background",
+    );
+  });
+
+  it("defines header inner shell horizontal padding hook", () => {
+    const css = fs.readFileSync(globalsCss, "utf8");
+    assert.match(css, /\.nn-header-primary-inner-shell\.nn-section-shell\s*\{/s);
   });
 });

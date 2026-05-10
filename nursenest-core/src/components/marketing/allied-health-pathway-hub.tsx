@@ -1,20 +1,11 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import {
-  Activity,
-  BookOpen,
-  ClipboardCheck,
-  FileBarChart,
-  GraduationCap,
-  HeartHandshake,
-  Layers,
-  Sparkles,
-  Stethoscope,
-  Target,
-} from "lucide-react";
+import { ClipboardCheck, FileBarChart, HeartHandshake, Sparkles, Stethoscope } from "lucide-react";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
+import { MarketingPathwayHubHeroBand } from "@/components/marketing/marketing-pathway-hub-hero-band";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import { StudyCard } from "@/components/ui/study-card";
+import { ExamPathwayHubPremiumModules } from "@/components/exam-pathways/exam-pathway-hub-premium-modules";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import {
@@ -43,6 +34,8 @@ import {
 } from "@/lib/allied/allied-global-pathway";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { AlliedPathwayHubCatCard } from "@/components/marketing/allied-pathway-hub-cat-card";
+import { MarketingHubGuidedStudyPathStrip } from "@/components/marketing/marketing-hub-guided-study-path";
 import { marketingTierHubStudyActionHref } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
 import { ALLIED_PROFESSION_QUERY_PARAM, isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayAndProfessionQuery } from "@/lib/scenarios/scenario-routes";
@@ -79,6 +72,8 @@ export function AlliedHealthPathwayHub({
   overview = null,
   initialMeasurementPreference = null,
   syncMeasurementPreferenceToProfile = false,
+  viewerSignedIn = false,
+  ecgModulePublic,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
@@ -91,6 +86,9 @@ export function AlliedHealthPathwayHub({
   initialMeasurementPreference?: MeasurementPreference | null;
   /** When true and the viewer is signed in, unit toggle PATCHes `/api/learner/personal-profile` (cookie/localStorage still apply for guests). */
   syncMeasurementPreferenceToProfile?: boolean;
+  viewerSignedIn?: boolean;
+  /** Passed through to premium modules (allied hubs omit ECG tiles; safe no-op). */
+  ecgModulePublic?: boolean;
 }) {
   const isGlobalAlliedHub = hubPath === buildAlliedGlobalHubPath();
   const countryLine = isGlobalAlliedHub ? "Global" : pathway.countrySlug === "canada" ? "Canada" : "United States";
@@ -147,43 +145,39 @@ export function AlliedHealthPathwayHub({
   const skillOverlay = profession ? alliedProfessionDefaultSkillOverlay(profession) : null;
   const scenarioPrimaryHref = clinicalScenariosHref ?? questionsHref;
 
+  const alliedToneAttr = profession ? { "data-nn-allied-hub-tone": profession.hubCategory } : {};
+
   return (
     <div
       className={`nn-premium-pathway-hub space-y-10 sm:space-y-12 lg:space-y-14${occupationPickerOnly ? " nn-marketing-surface" : ""}`}
       data-nn-allied-pathway-hub="1"
       data-nn-nursing-tier-hub="surface"
+      {...alliedToneAttr}
     >
       <FunnelExamHubViewBeacon pathway={pathway} hubPath={hubPath} />
 
-      {/* Hero — aligned with NursingTierHubPage + premium homepage tokens */}
       <header className="relative">
-        <div className="nn-gradient-safe nn-nursing-tier-hub-hero-band relative overflow-hidden px-6 py-9 shadow-[var(--semantic-shadow-soft)] sm:px-10 sm:py-11">
-          <div
-            className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,transparent)] blur-3xl"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-[color-mix(in_srgb,var(--semantic-success)_12%,transparent)] blur-3xl"
-            aria-hidden
-          />
-          <p className="nn-premium-home-eyebrow max-w-full whitespace-normal">{heroKicker}</p>
-          <h1
-            id="allied-pathway-hub-hero-title"
-            className="nn-marketing-h1 mt-4 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]"
-          >
-            {heroTitle}
-          </h1>
-          <p className="nn-marketing-body mt-4 max-w-2xl text-pretty text-[var(--palette-text-muted)] sm:text-lg">
-            {heroBody}
-          </p>
-          <div className="mt-7 flex min-w-0 flex-wrap gap-3">
-          <Link
-            href={pricingHref}
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-brand-contrast)] shadow-md transition hover:opacity-95"
-          >
-            View Plans and Pricing
-          </Link>
-          <>
+        <MarketingPathwayHubHeroBand
+          eyebrow={<p className="nn-premium-home-eyebrow max-w-full whitespace-normal">{heroKicker}</p>}
+          title={
+            <h1
+              id="allied-pathway-hub-hero-title"
+              className="nn-marketing-h1 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]"
+            >
+              {heroTitle}
+            </h1>
+          }
+          intro={
+            <p className="nn-marketing-body max-w-2xl text-pretty text-[var(--palette-text-muted)] sm:text-lg">{heroBody}</p>
+          }
+        >
+          <div className="flex min-w-0 flex-wrap gap-3">
+            <Link
+              href={pricingHref}
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-brand-contrast)] shadow-md transition hover:opacity-95"
+            >
+              View Plans and Pricing
+            </Link>
             <Link
               href={profession ? ALLIED_GLOBAL_HUB_PATH : `${ALLIED_GLOBAL_HUB_PATH}#allied-occupation-tracks`}
               className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
@@ -198,72 +192,115 @@ export function AlliedHealthPathwayHub({
                 {profession ? "Lessons for This Track" : "Browse Lessons Hub"}
               </Link>
             ) : null}
-          </>
-        </div>
-        {isGlobalAlliedHub || occupationPickerOnly ? (
-          <div className="mt-6 max-w-sm">
-            <MeasurementSystemToggle
-              fallbackSystem="SI"
-              initialPreference={initialMeasurementPreference}
-              title="Units for allied study"
-              description="Allied study is global. Switch units without swapping pathways."
-              compact
-              onPreferenceCommitted={
-                syncMeasurementPreferenceToProfile
-                  ? (pref) => {
-                      void fetch("/api/learner/personal-profile", {
-                        method: "PATCH",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ measurementPreference: pref }),
-                      });
-                    }
-                  : undefined
-              }
-            />
           </div>
-        ) : null}
-        </div>
+          {isGlobalAlliedHub || occupationPickerOnly ? (
+            <div className="mt-6 max-w-sm">
+              <MeasurementSystemToggle
+                fallbackSystem="SI"
+                initialPreference={initialMeasurementPreference}
+                title="Units for allied study"
+                description="Allied study is global. Switch units without swapping pathways."
+                compact
+                onPreferenceCommitted={
+                  syncMeasurementPreferenceToProfile
+                    ? (pref) => {
+                        void fetch("/api/learner/personal-profile", {
+                          method: "PATCH",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ measurementPreference: pref }),
+                        });
+                      }
+                    : undefined
+                }
+              />
+            </div>
+          ) : null}
+        </MarketingPathwayHubHeroBand>
       </header>
+
+      {showFullStudySurface ? (
+        <MarketingHubGuidedStudyPathStrip
+          headingId="allied-guided-study-path-heading"
+          title="Guided study path"
+          subtitle={
+            profession
+              ? `A calm sequence for ${alliedProfessionTrackChipLabel(profession)} — concepts, drills, recall, then readiness checks on this pathway only.`
+              : "Start with lessons, strengthen judgment with questions, reinforce with flashcards, then open adaptive readiness and longer exam sets when you are ready."
+          }
+          steps={[
+            {
+              title: "Lessons",
+              hint: "Topic-scoped modules for this pathway.",
+              href: lessonsHref,
+              tone: "success",
+            },
+            {
+              title: "Practice questions",
+              hint: "Vignettes filtered to allied authorization.",
+              href: questionsHref,
+              tone: "info",
+            },
+            {
+              title: "Flashcards",
+              hint: "Rapid recall inside the app.",
+              href: flashcardsHref,
+              tone: "chart1",
+            },
+            {
+              title: "Adaptive readiness",
+              hint: "CAT-style hub when your plan unlocks it.",
+              href: catHref,
+              tone: "warning",
+            },
+            {
+              title: "Practice exams",
+              hint: "Longer timed sets with sign-in callback.",
+              href: practiceTestsHref,
+              tone: "chart5",
+            },
+          ]}
+        />
+      ) : null}
 
       {showFullStudySurface && overview ? (
         <section
-          className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8"
+          className="rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 sm:p-6"
           aria-labelledby="allied-pathway-live-heading"
+          data-nn-allied-hub-compact-analytics="1"
         >
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <h2 id="allied-pathway-live-heading" className="nn-marketing-h2">
-                {isGlobalAlliedHub ? "Allied Health global hub" : `${countryLine} Allied Health hub`}
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-                This pathway now resolves to the actual Allied Health hub shell{isGlobalAlliedHub ? "" : ` for ${countryLine}`}, with occupation-track links,
-                lesson inventory, question-bank readiness, and paid-study entry points scoped to{" "}
-                <span className="font-semibold text-[var(--semantic-text-primary)]">{pathway.shortName}</span>.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2 text-xs text-[var(--semantic-text-secondary)]">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 id="allied-pathway-live-heading" className="nn-marketing-h2 text-balance">
+              {isGlobalAlliedHub ? "Live pathway snapshot" : `${countryLine} · live inventory`}
+            </h2>
+            <div className="flex flex-wrap justify-end gap-2">
               {overview.lessonCount > 0 ? (
-                <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5">
+                <span className="nn-badge-semantic-success whitespace-nowrap px-2.5 py-1 text-[11px]">
                   {overview.lessonCount} lessons
                 </span>
               ) : null}
               {questionCountLine ? (
-                <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5">
-                  {questionCountLine}
-                </span>
+                <span className="nn-badge-semantic-info whitespace-nowrap px-2.5 py-1 text-[11px]">{questionCountLine}</span>
               ) : null}
               {flashcardDeckLine ? (
-                <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5">
-                  {flashcardDeckLine}
-                </span>
+                <span className="nn-badge-semantic-warning whitespace-nowrap px-2.5 py-1 text-[11px]">{flashcardDeckLine}</span>
               ) : null}
               {overview.practiceExamReady ? (
-                <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-1.5 text-[var(--semantic-success)]">
-                  Practice exam ready
-                </span>
+                <span className="nn-badge-semantic-success whitespace-nowrap px-2.5 py-1 text-[11px]">Practice exam ready</span>
               ) : null}
             </div>
           </div>
+          <p className="mt-3 max-w-3xl text-xs leading-relaxed text-[var(--semantic-text-secondary)] sm:text-sm">
+            Inventory and readiness signals for{" "}
+            <span className="font-semibold text-[var(--semantic-text-primary)]">{pathway.shortName}</span>
+            {profession ? (
+              <>
+                {" "}
+                · scoped to{" "}
+                <span className="font-semibold text-[var(--semantic-text-primary)]">{alliedProfessionTrackChipLabel(profession)}</span>
+              </>
+            ) : null}
+            .
+          </p>
           <PathwayLiveInventoryStrip
             pathway={pathway}
             questionSnapshot={overview.questionSnapshot}
@@ -478,15 +515,13 @@ export function AlliedHealthPathwayHub({
                       >
                         Open study hub
                       </Link>
-                      <>
-                        <span className="text-[var(--semantic-text-secondary)]">·</span>
-                        <Link
-                          href={scopedLessons}
-                          className="text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
-                        >
-                          Lessons for this track
-                        </Link>
-                      </>
+                      <span className="text-[var(--semantic-text-secondary)]">·</span>
+                      <Link
+                        href={scopedLessons}
+                        className="text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
+                      >
+                        Lessons for this track
+                      </Link>
                     </div>
                   </article>
                 </li>
@@ -521,7 +556,6 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={lessonsHref}
               className="nn-exam-hub-study-card--lessons nn-qa-allied-hub-lessons"
-              icon={BookOpen}
               title="Lessons by category"
               description="Pathway-scoped modules aligned to discipline clusters — same card layout as the lessons hub."
               cta="Open Lessons"
@@ -533,7 +567,6 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={questionsHref}
               className="nn-exam-hub-study-card--questions nn-qa-allied-hub-questions"
-              icon={Target}
               title="Practice questions"
               description="Vignettes and rationales filtered to your allied authorization lane — no RN-only depth mixed in."
               cta="Practice Questions Hub"
@@ -545,7 +578,6 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={flashcardsHref}
               className="nn-exam-hub-study-card--flashcards nn-qa-allied-hub-flashcards"
-              icon={Layers}
               title="Flashcards"
               description="High-yield recall for terminology, protocols, and safety edges. Opens the in-app flashcard builder for this pathway."
               cta="Open Flashcards"
@@ -557,26 +589,25 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={practiceTestsHref}
               className="nn-exam-hub-study-card--practice nn-qa-allied-hub-practice-exams"
-              icon={ClipboardCheck}
               title="Practice exams"
               description="Longer exam-style sets with pathway-aware pacing and sign-in callbacks that keep the allied tier in scope."
               cta="Open Practice Exams"
             />
           </li>
           <li>
-            <StudyCard
-              surface="hub"
-              variant="featured"
-              href={catHref}
-              className="nn-exam-hub-study-card--cat nn-qa-allied-hub-cat"
-              icon={Activity}
-              title="Adaptive readiness"
-              description="CAT-style practice where difficulty responds to performance — use this when you are ready for longer, exam-shaped sessions."
-              cta="Explore Adaptive Hub"
-            />
+            <AlliedPathwayHubCatCard professionKey={profKey || null} catHref={catHref} />
           </li>
         </ul>
       </section>
+      ) : null}
+
+      {showFullStudySurface ? (
+        <ExamPathwayHubPremiumModules
+          pathway={pathway}
+          isSignedIn={viewerSignedIn}
+          alliedProfessionKey={profKey || null}
+          ecgModulePublic={ecgModulePublic}
+        />
       ) : null}
 
       {showFullStudySurface && overview && overview.moduleCards.length > 0 ? (
@@ -585,8 +616,8 @@ export function AlliedHealthPathwayHub({
             Specialized modules
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-            Modules only appear here when their public routes are enabled. Hidden or admin-preview-only surfaces stay out of the
-            marketing hub.
+            Modules only appear here when their public routes are enabled for this occupation. Surfaces that are not yet
+            launched for allied learners are omitted from this list.
           </p>
           <ul className="mt-6 grid gap-4 md:grid-cols-2">
             {overview.moduleCards.map((card) => (
@@ -751,35 +782,6 @@ export function AlliedHealthPathwayHub({
           .
         </p>
       </section>
-
-      {/* Secondary: flashcards + exams reminder row */}
-      {showFullStudySurface ? (
-      <section className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-dashed border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-5 py-4">
-        <div className="flex items-center gap-3">
-          <GraduationCap className="h-9 w-9 shrink-0 text-[var(--semantic-info)]" aria-hidden />
-          <div>
-            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Already subscribed?</p>
-            <p className="text-xs text-[var(--semantic-text-secondary)]">
-              Jump into flashcards, practice sessions, or longer mock exams with your allied pathway id.
-            </p>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Link
-            href={flashcardsHref}
-            className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold hover:bg-[var(--semantic-panel-cool)]"
-          >
-            Flashcards
-          </Link>
-          <Link
-            href={practiceTestsHref}
-            className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold hover:bg-[var(--semantic-panel-cool)]"
-          >
-            Practice Exams
-          </Link>
-        </div>
-      </section>
-      ) : null}
     </div>
   );
 }

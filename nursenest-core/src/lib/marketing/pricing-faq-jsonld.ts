@@ -12,6 +12,16 @@ const PRICING_FAQ_KEYS: ReadonlyArray<{ q: string; a: string }> = [
   { q: "pages.pricing.learnerFaq.tryBeforePayQuestion", a: "pages.pricing.learnerFaq.tryBeforePayAnswer" },
   { q: "pages.pricing.learnerFaq.examRealismQuestion", a: "pages.pricing.learnerFaq.examRealismAnswer" },
   { q: "pages.pricing.learnerFaq.refundRemorseQuestion", a: "pages.pricing.learnerFaq.refundRemorseAnswer" },
+  { q: "pages.pricing.subscriptionFaq.q1", a: "pages.pricing.subscriptionFaq.a1" },
+  { q: "pages.pricing.subscriptionFaq.q2", a: "pages.pricing.subscriptionFaq.a2" },
+  { q: "pages.pricing.subscriptionFaq.q3", a: "pages.pricing.subscriptionFaq.a3" },
+  { q: "pages.pricing.subscriptionFaq.q4", a: "pages.pricing.subscriptionFaq.a4" },
+  { q: "pages.pricing.subscriptionFaq.q5", a: "pages.pricing.subscriptionFaq.a5" },
+  { q: "pages.pricing.subscriptionFaq.q6", a: "pages.pricing.subscriptionFaq.a6" },
+  { q: "pages.pricing.subscriptionFaq.q7", a: "pages.pricing.subscriptionFaq.a7" },
+  { q: "pages.pricing.subscriptionFaq.q8", a: "pages.pricing.subscriptionFaq.a8" },
+  { q: "pages.pricing.subscriptionFaq.q9", a: "pages.pricing.subscriptionFaq.a9" },
+  { q: "pages.pricing.subscriptionFaq.q10", a: "pages.pricing.subscriptionFaq.a10" },
 ];
 
 /** FAQPage JSON-LD entries for `/pricing` (default + localized shards). */

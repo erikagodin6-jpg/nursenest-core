@@ -1,11 +1,55 @@
+import { getOpenRouterApiKeyTrimmedFromEnv } from "@/lib/ai/blog-ai-env-keys";
 import { aiChatUsesOpenRouter, blogChatUsesOpenRouter, getBlogAiChatProvider } from "@/lib/ai/blog-ai-routing";
 import { getOpenAiApiKeyFromRuntimeEnv } from "@/lib/env/runtime-env";
 
 /** Default for blog + RN lesson expansion when no env overrides are set. */
 export const OPENAI_DEFAULT_BLOG_LESSON_MODEL = "gpt-4.1-mini";
 
-/** Documentation-only fallback for non-blog OpenRouter callers that have not opted into strict model config. */
+/** Default OpenRouter slug when `OPENROUTER_MODEL` and `BLOG_OPENROUTER_MODEL` are both unset. */
 export const OPENROUTER_DEFAULT_CHAT_MODEL = "openai/gpt-4o-mini";
+
+/** Public catalog for choosing a valid model slug (blog + admin diagnostics). */
+export const OPENROUTER_MODELS_URL = "https://openrouter.ai/models";
+
+/**
+ * True when an error string indicates OpenRouter rejected the configured model slug (404 / no route / no endpoints).
+ * Do not treat as a transient throttle class error.
+ */
+export function openRouterErrorIndicatesInvalidModelSlug(message: string): boolean {
+  const m = message.toLowerCase();
+  return (
+    m.includes("could not route this model") ||
+    m.includes("no endpoints") ||
+    m.includes("no providers found") ||
+    m.includes("no endpoints found") ||
+    (m.includes("http 404") && m.includes("openrouter"))
+  );
+}
+
+/**
+ * Shared (non–blog-pinned) OpenRouter slug: `OPENROUTER_MODEL` → `BLOG_OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
+ * Blog generation uses {@link resolveBlogOpenRouterModelSlugFromEnv} so operators can override with `BLOG_OPENROUTER_MODEL` alone.
+ */
+export function resolveOpenRouterModelSlugFromEnv(): string {
+  return (
+    process.env.OPENROUTER_MODEL?.trim() ||
+    process.env.BLOG_OPENROUTER_MODEL?.trim() ||
+    OPENROUTER_DEFAULT_CHAT_MODEL
+  );
+}
+
+/**
+ * Blog OpenRouter slug: `BLOG_OPENROUTER_MODEL` → `OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
+ * Precedence is intentionally the inverse of {@link resolveOpenRouterModelSlugFromEnv} so blog jobs can pin a model
+ * without changing global `OPENROUTER_MODEL`.
+ */
+export function resolveBlogOpenRouterModelSlugFromEnv(): string {
+  return (
+    process.env.BLOG_OPENROUTER_MODEL?.trim() ||
+    process.env.OPENROUTER_MODEL?.trim() ||
+    OPENROUTER_DEFAULT_CHAT_MODEL
+  );
+}
 
 /** Shared OpenAI-compatible HTTP config (server-only). */
 export function getOpenAiChatModel(): string {
@@ -25,22 +69,16 @@ export function getBlogOpenAiChatModel(): string {
 }
 
 /**
- * Model slug for OpenRouter blog chat. Blog generation requires an explicit OpenRouter model so
- * it does not silently select an unavailable OpenAI-branded route on OpenRouter accounts.
+ * Model slug for OpenRouter blog chat.
+ * Resolution: `BLOG_OPENROUTER_MODEL` → `OPENROUTER_MODEL` → {@link OPENROUTER_DEFAULT_CHAT_MODEL}.
  */
 export function getBlogOpenRouterChatModel(): string {
-  const model = process.env.OPENROUTER_MODEL?.trim();
-  if (!model) {
-    throw new Error(
-      "OPENROUTER_MODEL is required for OpenRouter blog generation. Set it to a model available on your OpenRouter account, for example anthropic/claude-3.5-sonnet.",
-    );
-  }
-  return model;
+  return resolveBlogOpenRouterModelSlugFromEnv();
 }
 
-/** OpenRouter chat model for shared admin/content AI callers. */
+/** OpenRouter chat model for shared admin/content AI callers (same env resolution as blog). */
 export function getOpenRouterChatModel(): string {
-  return process.env.OPENROUTER_MODEL?.trim() || OPENROUTER_DEFAULT_CHAT_MODEL;
+  return resolveOpenRouterModelSlugFromEnv();
 }
 
 /**
@@ -78,6 +116,9 @@ export function getBlogGenerationModelLabelForLogs(): string {
   const provider = getBlogAiChatProvider();
   if (provider === "openrouter") return getBlogOpenRouterChatModel();
   if (provider === "openai") return getBlogOpenAiChatModel();
+  if (provider === "gemini") {
+    return process.env.BLOG_GEMINI_MODEL?.trim() || process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
+  }
   return "(unconfigured)";
 }
 
@@ -111,14 +152,14 @@ export function assertOpenAiKeyConfigured(
     (options?.pipeline === "blog" && blogChatUsesOpenRouter()) ||
     (options?.pipeline !== "blog" && aiChatUsesOpenRouter());
   if (expectsOpenRouter) {
-    const orKey = process.env.OPENROUTER_API_KEY?.trim();
+    const orKey = getOpenRouterApiKeyTrimmedFromEnv();
     if (!orKey) {
       return {
         ok: false,
         message:
           options?.pipeline === "blog"
-            ? "OPENROUTER_API_KEY is not configured (AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter)."
-            : "OPENROUTER_API_KEY is not configured (AI_PROVIDER=openrouter).",
+            ? "OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY is not configured (AI_PROVIDER=openrouter or BLOG_AI_PROVIDER=openrouter)."
+            : "OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY is not configured (AI_PROVIDER=openrouter).",
       };
     }
     return { ok: true };
@@ -128,7 +169,7 @@ export function assertOpenAiKeyConfigured(
     return {
       ok: false,
       message:
-        "Blog AI provider is not configured. Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY, or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.",
+        "Blog AI provider is not configured. Set BLOG_AI_PROVIDER=openrouter with OPENROUTER_API_KEY (or BLOG_OPENROUTER_API_KEY), or explicitly set BLOG_AI_PROVIDER=openai with BLOG_OPENAI_API_KEY / AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY.",
     };
   }
 
@@ -138,7 +179,7 @@ export function assertOpenAiKeyConfigured(
       ok: false,
       message:
         options?.pipeline === "blog"
-          ? "BLOG_OPENAI_API_KEY (or AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY) is not configured. For OpenRouter, set AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter) and OPENROUTER_API_KEY."
+          ? "BLOG_OPENAI_API_KEY (or AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY) is not configured. For OpenRouter, set AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter) and OPENROUTER_API_KEY or BLOG_OPENROUTER_API_KEY."
           : "AI_INTEGRATIONS_OPENAI_API_KEY (or OPENAI_API_KEY) is not configured.",
     };
   }

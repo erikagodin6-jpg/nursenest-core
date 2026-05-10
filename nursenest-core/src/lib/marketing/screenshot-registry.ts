@@ -4,7 +4,8 @@
  * Every screenshot used across the marketing site, pricing page, feature sections,
  * FAQ, about page, and homepage must be registered here.
  *
- * CDN base: https://nursenest-images.tor1.cdn.digitaloceanspaces.com
+ * CDN base (must match `HOME_HERO_CDN_BASE_URL` / deploy docs — do not invent origins):
+ * https://nursenest-images.tor1.cdn.digitaloceanspaces.com
  * Objects:  screenshot1.png … screenshot15.png (existing), screenshot16+ (future)
  *
  * Usage:
@@ -15,6 +16,16 @@
  * Do NOT hardcode CDN URLs in individual components.
  * Do NOT inline base64 images.
  * Add new screenshots here when uploaded to Spaces.
+ *
+ * Governance:
+ *   - Contract tests: `src/lib/marketing/screenshot-registry.contract.test.ts` (also in `npm run test:homepage`).
+ *   - Capture routes + slots: `scripts/capture-slot-targets.json` + `docs/screenshot-capture-targets.md`.
+ *   - Upload / approval: `docs/SCREENSHOT_CAPTURE_TO_CDN.md` (DigitalOcean Spaces is manual-approval only).
+ *   - After replacing CDN PNGs, update labels/descriptions to match current UI; verify OG image in `src/app/layout.tsx`.
+ *
+ * CDN URLs are composed from {@link SCREENSHOT_CDN_BASE} + object keys — keep in sync with
+ * `HOME_HERO_CDN_BASE_URL` in `src/config/home-hero-carousel.ts`. Local Playwright output uses the same
+ * filenames under `public/marketing/screenshots/` before upload.
  */
 
 // ── CDN base (matches HOME_HERO_CDN_BASE_URL in config/home-hero-carousel.ts) ──
@@ -41,6 +52,7 @@ export type ScreenshotFeature =
   | "dashboard" // student dashboard / progress overview
   | "reports" // topic-level progress report / accuracy chart
   | "question-types" // NGN / advanced question format view
+  | "ecg-workstation" // ECG / telemetry learning workspace (rhythm education monitor chrome)
   | "general"; // platform overview / multi-feature screenshots
 
 // ── Screenshot record type ───────────────────────────────────────────────────
@@ -92,20 +104,17 @@ function entry(
 
 // ── Registry ─────────────────────────────────────────────────────────────────
 //
-// Feature mapping is based on observed slide ordering in HomePlatformPreviewSection:
-//   [9,0,11,1,2,12,4,3,5,6,7,8,10,13,14] described as
-//   "bank, rationales/lessons, flashcards, dashboard, lesson library, reports, NGN-style"
-//
-// Update the `feature` and descriptive fields when screenshots are replaced or re-ordered.
-// The CDN URLs and objectKeys are derived from id — they are the stable keys.
+// Capture pipeline + CDN slot mapping: `nursenest-core/scripts/capture-slot-targets.json`,
+// `docs/SCREENSHOT_CAPTURE_TO_CDN.md`, and `capture-marketing-screenshots.mjs`.
+// Update copy when PNGs are replaced so captions match visible UI.
 
 export const SCREENSHOT_REGISTRY: readonly ScreenshotRecord[] = [
   entry(
     1,
     "rationale",
     "Full rationale panel",
-    "Complete answer explanations — why each option is correct or wrong — visible at a glance.",
-    "NurseNest practice interface showing a full rationale panel with correct answer explanation, individual incorrect-option explanations, and a key takeaway section.",
+    "Practice session with complete explanations — why each option is correct or wrong — at a glance.",
+    "NurseNest practice runner showing a rationale panel with correct-answer explanation, incorrect-option breakdowns, and a concise takeaway.",
   ),
   entry(
     2,
@@ -194,16 +203,16 @@ export const SCREENSHOT_REGISTRY: readonly ScreenshotRecord[] = [
   entry(
     14,
     "general",
-    "Platform overview",
-    "The full NurseNest study system — lessons, practice, CAT, and analytics — in one place.",
-    "NurseNest platform overview showing the main study hub with navigation to lessons, practice questions, CAT exams, and results.",
+    "Marketing homepage",
+    "Signed-out homepage with hero messaging and a snapshot of lessons, practice, CAT, and learner analytics.",
+    "NurseNest marketing homepage showing hero messaging and a platform preview of lessons, practice, CAT, and learner analytics.",
   ),
   entry(
     15,
-    "general",
-    "Study interface",
-    "A clean, focused environment designed for long, productive study sessions.",
-    "NurseNest study interface showing a clean layout optimised for readability during extended study sessions.",
+    "ecg-workstation",
+    "ECG & telemetry workspace",
+    "Rhythm strips and clinical telemetry education — immersive monitors aligned with exam-level reasoning.",
+    "NurseNest ECG learning workspace showing rhythm-focused navigation and clinical telemetry monitor styling.",
   ),
 ];
 
@@ -233,6 +242,20 @@ export function getScreenshotsByIds(ids: readonly ScreenshotId[]): ScreenshotRec
 export function toSlideIndices(ids: readonly ScreenshotId[]): number[] {
   return ids.map((id) => id - 1);
 }
+
+// ── Shared curated lists (avoid duplicating the same ID tuple in multiple groups) ──
+
+/** About page — platform preview carousel order (breadth + core learner loops). */
+const ABOUT_SHOWCASE_IDS = [14, 10, 1, 12, 6, 8, 9, 11, 3] as const;
+
+/** For Institutions — primary carousel / page helper order (readiness → teaching → scale). */
+const INSTITUTIONAL_SHOWCASE_IDS = [7, 12, 15, 6, 5, 2, 10, 14, 11] as const;
+
+/** About + How-it-works ecosystem narrative — Learn → Practice → Strengthen → Clinical readiness. */
+const ECOSYSTEM_NARRATIVE_IDS = [12, 1, 9, 7] as const;
+
+/** Clinical readiness interconnections — telemetry / ECG, lessons, results, study plan. */
+const CLINICAL_READINESS_IDS = [15, 12, 7, 8] as const;
 
 // ── Pre-defined groups for common surfaces ────────────────────────────────────
 //
@@ -303,4 +326,46 @@ export const SCREENSHOT_GROUPS = {
    * Avoid session-specific shots that may confuse out-of-context visitors.
    */
   faqAbout: [14, 10, 12, 3] as const,
+
+  /** About page carousel — registry-only showcase distinct from FAQ selection. */
+  aboutShowcase: ABOUT_SHOWCASE_IDS,
+
+  /**
+   * For Institutions marketing — hero montage order:
+   * CAT results (readiness) → lesson → ECG → CAT session → reports → flashcards → question bank.
+   */
+  institutionalHeroMontage: [7, 12, 15, 6, 5, 2, 10] as const,
+
+  /** Paired with the six “why institutions” feature cards (same order as UI). */
+  institutionalWhyFeatures: [12, 10, 4, 5, 13, 14] as const,
+
+  /** Section: how rollout works (study plan → smart review → bank scale). */
+  institutionalWorkflow: [8, 9, 10] as const,
+
+  /** Large alternating platform showcase blocks. */
+  institutionalPlatformBlocks: [14, 15, 6, 7] as const,
+
+  /** Educator / analytics emphasis. */
+  institutionalEducator: [11, 5] as const,
+
+  /**
+   * For Institutions — full curated carousel + `getScreenshotsForPage("for-institutions")`.
+   * Alias of {@link INSTITUTIONAL_SHOWCASE_IDS} / `institutionalShowcase`.
+   */
+  institutionalShowcase: INSTITUTIONAL_SHOWCASE_IDS,
+
+  /** @deprecated Use `institutionalShowcase` — kept for older imports. */
+  institutionalPageCurated: INSTITUTIONAL_SHOWCASE_IDS,
+
+  /**
+   * About + How-it-works ecosystem narrative (Learn → Practice → Strengthen → Clinical readiness).
+   * Lesson content → rationale practice → smart review → CAT readiness results.
+   */
+  ecosystemNarrative: ECOSYSTEM_NARRATIVE_IDS,
+
+  /**
+   * Clinical readiness ecosystem interconnections — used on About page to show how
+   * telemetry/ECG, lessons, results, and the adaptive study plan reinforce each other.
+   */
+  clinicalReadiness: CLINICAL_READINESS_IDS,
 } satisfies Record<string, readonly ScreenshotId[]>;

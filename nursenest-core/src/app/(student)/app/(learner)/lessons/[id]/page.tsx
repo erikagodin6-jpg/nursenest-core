@@ -67,6 +67,10 @@ import {
   pathwayLessonPremiumSectionBodyText,
   pathwayLessonSectionSurfaceHeading,
 } from "@/lib/lessons/pathway-lesson-section-surface";
+import {
+  pathwayLessonSectionHasRenderableTeachingContent,
+  sortPathwayLessonSectionsForClinicalDisplay,
+} from "@/lib/lessons/pathway-lesson-detail-display";
 import { CoachLessonHelper } from "@/components/study/coach-lesson-helper";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
@@ -503,8 +507,30 @@ async function LessonDetailPageInner({ params }: Props) {
       });
       return <AppLessonUnavailable t={t} />;
     }
+    const pathwayId = resolvedLesson.pathwayId;
+    const pathway = getExamPathwayById(pathwayId);
+    const tier = entitlement.tier as TierCode | null;
+    const lessonViewerTier =
+      pathway != null ? contentTierForPathwayLessonRender(pathway, tier) : (tier ?? undefined);
+    const lessonMeasurementSystem = pathway != null ? getMeasurementSystemForCountry(pathway.countryCode) : null;
+
     const omitHy = new Set(record.omitHighYieldSectionIds ?? []);
-    const displaySections = visible.filter((s) => !omitHy.has(s.id));
+    const displaySections = sortPathwayLessonSectionsForClinicalDisplay(
+      visible.filter((s) => !omitHy.has(s.id)),
+    ).filter((section) =>
+      pathwayLessonSectionHasRenderableTeachingContent({
+        section,
+        resolvedBodyText:
+          pathway != null
+            ? pathwayLessonPremiumSectionBodyText(section, pathway.id, pathway.countryCode)
+            : typeof section.body === "string"
+              ? section.body
+              : "",
+        viewerTier: lessonViewerTier,
+        measurementSystem: lessonMeasurementSystem ?? undefined,
+        linkedNextStepsUsesCardRail: Boolean(pathway && section.kind === "related_next_steps"),
+      }),
+    );
     if (displaySections.length === 0) {
       safeServerLog("page_lesson_detail", "app_lesson_unavailable", {
         id,
@@ -523,9 +549,7 @@ async function LessonDetailPageInner({ params }: Props) {
         }
       }
     }
-    const pathwayId = resolvedLesson.pathwayId;
     const lessonStudyLoopCompositionEntropy = randomUUID();
-    const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
     const combinedExplicitIds = explicitLessonStudyLoopCombinedSanitizedIds(
       record.preTestQuestionIds,
@@ -640,10 +664,6 @@ async function LessonDetailPageInner({ params }: Props) {
     const examFocusRailLines =
       examFocusPrimaryRail.length > 0 ? examFocusPrimaryRail : examFocusFallbackRail;
     const pathwayQuality = classifyPathwayLesson(record);
-    const tier = entitlement.tier as TierCode | null;
-    const lessonViewerTier =
-      pathway != null ? contentTierForPathwayLessonRender(pathway, tier) : (tier ?? undefined);
-    const lessonMeasurementSystem = pathway != null ? getMeasurementSystemForCountry(pathway.countryCode) : null;
     let pathwayContinue = null;
     if (userId && pathwayId) {
       try {

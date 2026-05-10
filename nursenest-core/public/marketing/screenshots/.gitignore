@@ -1,0 +1,4 @@
+# Generated captures — opt-in to git after review (avoid accidental huge binaries)
+*.png
+capture-manifest.json
+supplementary/

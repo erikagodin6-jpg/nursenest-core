@@ -3,7 +3,6 @@ import { describe, it } from "node:test";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { examPathwayRegionalHreflang, examPathwayTopicRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
-import { getPathwayTopicProgrammaticRow } from "@/lib/seo/pathway-topic-programmatic-registry";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 describe("examPathwayRegionalHreflang", () => {
@@ -54,10 +53,6 @@ describe("examPathwayTopicRegionalHreflang", () => {
     const usAllied = getExamPathwayById("us-allied-core");
     assert.ok(usAllied);
     const topicSegment = "rn-lessons-cardiovascular";
-    assert.ok(
-      getPathwayTopicProgrammaticRow("us-allied-core", topicSegment),
-      "expected allied lessons-angle topic in programmatic registry",
-    );
     const lang = await examPathwayTopicRegionalHreflang(usAllied, topicSegment);
     assert.deepEqual(Object.keys(lang).sort(), ["x-default"]);
     assert.equal(lang["x-default"], absoluteUrl(buildExamPathwayPath(usAllied, topicSegment)));

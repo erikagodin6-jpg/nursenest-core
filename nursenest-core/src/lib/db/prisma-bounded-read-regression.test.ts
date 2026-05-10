@@ -164,7 +164,7 @@ const EXPECTATIONS: QueryExpectation[] = [
     file: "lib/learner/readiness-dashboard-data.ts",
     label: "readiness dashboard dimension breakdown uses take 60 with createdAt desc",
     pattern:
-      /function loadDimensionBreakdown[\s\S]*?prisma\.examAttempt\.findMany\(\{[\s\S]*?orderBy:\s*\{\s*createdAt:\s*"desc"\s*\}[\s\S]*?take:\s*60/m,
+      /export async function loadExamAttemptDimensionBreakdown[\s\S]*?prisma\.examAttempt\.findMany\(\{[\s\S]*?orderBy:\s*\{\s*createdAt:\s*"desc"\s*\}[\s\S]*?take:\s*60/m,
   },
   {
     file: "lib/learner/readiness-dashboard-data.ts",

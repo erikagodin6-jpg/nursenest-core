@@ -65,7 +65,7 @@ const KIND_ICONS: Record<LinkTargetKind, string> = {
 
 const DEFAULT_KINDS_FOR_SURFACE: Record<string, LinkTargetKind[]> = {
   blog:       ["lesson", "question", "flashcard", "blog"],
-  lesson:     ["flashcard", "question", "lesson"],
+  lesson:     ["flashcard", "question", "lesson", "hub"],
   flashcard:  ["lesson", "question"],
   question:   ["lesson", "flashcard"],
   cat_result: ["lesson", "flashcard", "question"],
@@ -157,6 +157,7 @@ export function RelatedContentBlock({ context, resolvedLinks: resolvedLinksOverr
         case "question":  return resolved.questions;
         case "blog":      return resolved.blogs;
         case "cat":       return resolved.cat;
+        case "hub":       return resolved.hubs;
         default:          return [];
       }
     })();

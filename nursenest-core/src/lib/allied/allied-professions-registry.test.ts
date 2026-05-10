@@ -9,7 +9,7 @@ import { professionKeyToCareerKey } from "@/lib/pricing/display-catalog";
 
 describe("allied professions registry", () => {
   it("includes expanded occupation tracks for the marketing hub", () => {
-    assert.ok(ALLIED_PROFESSIONS.length >= 18);
+    assert.ok(ALLIED_PROFESSIONS.length >= 21);
     const keys = new Set(ALLIED_PROFESSIONS.map((p) => p.professionKey));
     for (const k of [
       "psw-hca",
@@ -23,6 +23,9 @@ describe("allied professions registry", () => {
       "dietetic-technician",
       "mental-health-addictions",
       "community-health-worker",
+      "occupational-therapy",
+      "physiotherapy",
+      "psychotherapy",
     ]) {
       assert.ok(keys.has(k), `missing professionKey: ${k}`);
     }

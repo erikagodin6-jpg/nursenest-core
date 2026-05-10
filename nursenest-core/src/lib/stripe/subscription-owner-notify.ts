@@ -2,9 +2,7 @@ import "server-only";
 
 import type Stripe from "stripe";
 import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
-function after(fn: () => void | Promise<void>): void {
-  void Promise.resolve().then(fn);
-}
+import { after } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendTransactionalEmailHtml, htmlEmailShell } from "@/lib/email/resend-transactional";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -63,7 +61,7 @@ async function resolveCustomerEmail(stripe: Stripe, session: Stripe.Checkout.Ses
 async function sendTwilioSmsIfConfigured(to: string, body: string): Promise<{ ok: boolean; skippedReason?: string }> {
   const sid = process.env.TWILIO_ACCOUNT_SID?.trim();
   const token = process.env.TWILIO_AUTH_TOKEN?.trim();
-  const from = process.env.TWILIO_SMS_FROM?.trim();
+  const from = process.env.TWILIO_SMS_FROM?.trim() || process.env.TWILIO_FROM_NUMBER?.trim();
   if (!sid || !token || !from) {
     safeServerLog(LOG_SCOPE, "sms_skipped", { reason: "twilio_not_configured" });
     return { ok: false, skippedReason: "twilio_not_configured" };
@@ -125,8 +123,26 @@ export function scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible(arg
       planTier: args.planTier,
     })
   ) {
+    safeServerLog(LOG_SCOPE, "checkout_notify_skipped_ineligible", {
+      eventIdPrefix: args.event.id.slice(0, 12),
+      correlation: args.correlation,
+      stripeSubStatus: args.stripeSubStatus ?? "",
+      sessionAmountTotal: amountTotal ?? -1,
+      statusForDb: String(args.statusForDb),
+      severity: "info",
+    });
     return;
   }
+
+  safeServerLog(LOG_SCOPE, "checkout_notify_scheduled", {
+    eventIdPrefix: args.event.id.slice(0, 12),
+    correlation: args.correlation,
+    stripeSubStatus: args.stripeSubStatus ?? "",
+    sessionAmountTotal: amountTotal ?? -1,
+    subscriptionIdPrefix: args.subscriptionId.slice(0, 14),
+    customerIdPrefix: (args.customerId || "").slice(0, 12),
+    severity: "info",
+  });
 
   after(async () => {
     try {
@@ -252,6 +268,8 @@ export type ScheduleInvoicePaymentSucceededArgs = {
   stripe: Stripe;
   event: Stripe.Event;
   invoice: Stripe.Invoice;
+  /** Stripe `billing_reason` on the invoice (e.g. `subscription_create`). */
+  billingReason: string | null | undefined;
   userId: string | null;
   subscriptionId: string;
   customerId: string | null;
@@ -264,19 +282,50 @@ export type ScheduleInvoicePaymentSucceededArgs = {
   paymentKind: string;
 };
 
+/** Exported for tests — first-cycle invoices can be $0 during trial. */
+export function invoiceOwnerNotifyAmountEligible(
+  amountPaid: number | null | undefined,
+  billingReason: string | null | undefined,
+): boolean {
+  if (typeof amountPaid !== "number") return false;
+  if (amountPaid > 0) return true;
+  const br = billingReason?.trim() ?? "";
+  return amountPaid === 0 && br === "subscription_create";
+}
+
 /**
  * Owner email/SMS after `invoice.payment_succeeded` (first subscription charge path in webhook).
  * Mirrors checkout notify: dedupes by Stripe event id, never throws to webhook handler.
  */
 export function scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification(args: ScheduleInvoicePaymentSucceededArgs): void {
   if (!args.userId) return;
-  const amountPaid =
-    typeof args.invoice.amount_paid === "number" && args.invoice.amount_paid > 0 ? args.invoice.amount_paid : null;
-  if (amountPaid == null) return;
+  const rawPaid = args.invoice.amount_paid;
+  if (!invoiceOwnerNotifyAmountEligible(rawPaid, args.billingReason)) {
+    safeServerLog(LOG_SCOPE, "invoice_notify_skipped_amount", {
+      eventIdPrefix: args.event.id.slice(0, 12),
+      correlation: args.correlation,
+      amountPaid: typeof rawPaid === "number" ? rawPaid : -1,
+      billingReason: (args.billingReason ?? "").slice(0, 40),
+      severity: "info",
+    });
+    return;
+  }
+  const amountPaid = rawPaid as number;
   if (!args.event.livemode && !shouldIncludeTestModeOwnerNotifies()) return;
   if (args.subscriptionStatus && args.subscriptionStatus !== "active" && args.subscriptionStatus !== "trialing") {
     return;
   }
+
+  safeServerLog(LOG_SCOPE, "invoice_notify_scheduled", {
+    eventIdPrefix: args.event.id.slice(0, 12),
+    correlation: args.correlation,
+    subscriptionIdPrefix: args.subscriptionId.slice(0, 14),
+    customerIdPrefix: (args.customerId ?? "").slice(0, 12),
+    userIdPrefix: args.userId.slice(0, 8),
+    amountPaid,
+    billingReason: (args.billingReason ?? "").slice(0, 40),
+    severity: "info",
+  });
 
   after(async () => {
     try {

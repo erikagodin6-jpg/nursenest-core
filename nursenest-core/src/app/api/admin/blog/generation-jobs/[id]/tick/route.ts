@@ -103,7 +103,22 @@ export async function POST(req: Request, ctx: RouteContext) {
       first === "batch_not_found" ? 404
       : first === "batch_cancelled" ? 409
       : 503;
-    return NextResponse.json({ ok: false, ...out }, { status });
+    const firstItemFail = out.results.find((r) => r.outcome === "failed");
+    const message =
+      firstItemFail?.message && String(firstItemFail.message).trim() ?
+        `${first}: ${String(firstItemFail.message).slice(0, 1500)}`
+      : first;
+    return NextResponse.json(
+      {
+        ok: false,
+        processed: out.processed,
+        results: out.results,
+        errors: out.errors,
+        code: first === "batch_not_found" ? "BATCH_NOT_FOUND" : first === "batch_cancelled" ? "BATCH_CANCELLED" : "PROCESS_FAILED",
+        message,
+      },
+      { status },
+    );
   }
 
   let job;

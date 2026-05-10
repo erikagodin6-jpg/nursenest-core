@@ -91,6 +91,7 @@ export function PracticeTestsHubClient({
   examSimulationEnabled = false,
   pathwayOptions = [],
   defaultPathwayId = null,
+  pathwayDisplayName = "",
   catEligiblePathwayIds = [],
   hubBootstrapSource = "primary",
   catHref,
@@ -99,6 +100,8 @@ export function PracticeTestsHubClient({
   examSimulationEnabled?: boolean;
   pathwayOptions?: PracticeTestPathwayOption[];
   defaultPathwayId?: string | null;
+  /** Resolved pathway label for hub chrome (matches flashcards hub: catalog → options → id). */
+  pathwayDisplayName?: string;
   /** Pathway ids that support CAT adaptive start (server-aligned with POST /api/practice-tests). */
   catEligiblePathwayIds?: string[];
   /** When hub pathway bootstrap used a published snapshot (DB degraded). */
@@ -165,6 +168,17 @@ export function PracticeTestsHubClient({
   const selectedExamLabel = selectedPathway?.examCodeLabel?.trim()
     ? selectedPathway.examCodeLabel.trim()
     : null;
+  const heroPathwayEyebrow = useMemo(() => {
+    const urlDefault = (defaultPathwayId ?? "").trim();
+    const pid = pathwayId.trim();
+    if (pid === urlDefault && pathwayDisplayName.trim()) {
+      return pathwayDisplayName.trim();
+    }
+    const sp = selectedPathway;
+    if (!sp) return pathwayDisplayName.trim() || pid;
+    if (sp.label.includes("—")) return sp.label.split("—").slice(1).join("—").trim();
+    return sp.examCodeLabel?.trim() || sp.label.trim() || pid;
+  }, [defaultPathwayId, pathwayDisplayName, pathwayId, selectedPathway]);
   const selectedExamContext = useMemo(
     () => buildGlobalExamContext(pathwayId.trim() || defaultPathwayId || null, "en"),
     [defaultPathwayId, pathwayId],
@@ -735,14 +749,19 @@ export function PracticeTestsHubClient({
   ]);
 
   return (
-    <LearnerStudyPageShell data-nn-learner-area="practice-tests">
+    <LearnerStudyPageShell
+      className="nn-practice-tests-hub-premium space-y-5 py-2 sm:space-y-6 sm:py-4"
+      data-nn-learner-area="practice-tests"
+    >
       {hubBootstrapSource === "secondary" ? (
         <div className="max-w-3xl" data-nn-practice-hub-bootstrap-source="secondary">
           <LearnerStudyLiveSyncBanner />
         </div>
       ) : null}
+      <h1 className="sr-only">{t("learner.practiceTests.title")}</h1>
+
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(240px,280px)] lg:items-start lg:gap-10">
-        <div className="min-w-0 space-y-9">
+        <div className="min-w-0 space-y-6 sm:space-y-7">
       <header
         className="nn-premium-practice-hub-hero relative overflow-hidden rounded-[1.75rem] border-2 border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))_0%,var(--semantic-surface)_38%,color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))_100%)] p-6 text-[var(--semantic-text-primary)] shadow-[0_22px_48px_color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--semantic-info)_22%,transparent)] sm:p-8"
         data-nn-e2e-practice-exam-first-hero
@@ -757,7 +776,7 @@ export function PracticeTestsHubClient({
           </span>
           <div className="min-w-0 flex-1">
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color-mix(in_srgb,var(--semantic-chart-3)_85%,var(--semantic-text-secondary))]">
-              {t("learner.practiceTests.title")}
+              {heroPathwayEyebrow}
             </p>
             <h2 className="mt-2 text-3xl font-extrabold leading-[1.12] tracking-tight text-[var(--semantic-text-primary)] sm:text-4xl">
               {t("learner.practiceTests.examFirst.heroTitle")}

@@ -557,15 +557,26 @@ export function AdminBlogDraftBatchClient() {
       const json = (await res.json()) as {
         ok?: boolean;
         error?: string;
+        message?: string;
+        code?: string;
         processed?: number;
         errors?: string[];
+        results?: Array<{ outcome?: string; message?: string; topicRaw?: string }>;
         job?: GenerationJobApiPayload;
       };
       if (!res.ok) {
+        const failedItem = json.results?.find((r) => r.outcome === "failed");
+        const parts = [
+          typeof json.message === "string" ? json.message.trim() : "",
+          typeof json.code === "string" ? json.code.trim() : "",
+          typeof json.error === "string" ? json.error.trim() : "",
+          ...(Array.isArray(json.errors) ? json.errors.map((e) => String(e)) : []),
+          failedItem?.message ? `Item: ${failedItem.message}` : "",
+        ].filter(Boolean);
         setErr(
           res.status === 429
             ? formatAdminRateLimitMessageFromJson(json)
-            : (json.error ?? json.errors?.[0] ?? "Process failed"),
+            : (parts.join("\n").trim() || "Process failed"),
         );
         return;
       }
@@ -840,9 +851,22 @@ export function AdminBlogDraftBatchClient() {
                     </td>
                     <td className="py-2 pr-2 align-top">
                       {row.blogPost ? (
-                        <Link href={`/admin/blog?id=${row.blogPost.id}`} className="font-medium text-primary underline">
-                          {row.blogPost.slug}
-                        </Link>
+                        <div className="space-y-1">
+                          <span className="font-mono text-xs text-foreground">{row.blogPost.slug}</span>
+                          <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
+                            <Link href={`/admin/blog?id=${row.blogPost.id}`} className="font-medium text-primary underline">
+                              Admin
+                            </Link>
+                            <a
+                              className="text-primary underline"
+                              href={`/blog/${encodeURIComponent(row.blogPost.slug)}`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Public preview
+                            </a>
+                          </div>
+                        </div>
                       ) : null}
                       {row.repairMeta?.message || row.error ? (
                         <p className="mt-1 max-w-md text-xs text-rose-700 dark:text-rose-300">

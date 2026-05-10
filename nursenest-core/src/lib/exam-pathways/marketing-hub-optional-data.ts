@@ -5,6 +5,7 @@ import type {
   MarketingHubLessonsListOptions,
 } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import {
+  defaultMarketingHubLessonsPageFetch,
   loadPathwayLessonsHubPageWithTelemetry,
   type LessonsHubSnapshotDiagnostics,
   type PathwayLessonsHubPageLoadState,
@@ -19,6 +20,7 @@ import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-qu
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
 import {
   countPathwayLessonsPublic,
+  getPathwayLessonsPage,
   getPathwayLessonsPageFresh,
   listTopicClustersForPublicNavigation,
   resolvePathwayLaunchBundle,
@@ -66,6 +68,8 @@ function logHubDataLoadFailed(
 export type MarketingExamHubOptionalBlocks = {
   npInventory: Awaited<ReturnType<typeof loadNpCanadaInventoryGate>>;
   questionSnapshot: PathwayQuestionBankSnapshot;
+  /** True when `loadPathwayQuestionBankSnapshot` rejected — match lessons hub chip semantics; do not infer pool from defaults. */
+  questionSnapshotLoadRejected: boolean;
   pathwayLessonCount: number;
 };
 
@@ -112,10 +116,10 @@ export async function loadMarketingExamHubOptionalBlocks(
     }
   });
 
-  const questionSnapRejected = settled.some(
-    (result, i) => tasks[i]!.name === "question_snapshot" && result.status === "rejected",
-  );
-  if (questionSnapRejected || questionSnapshot.status === "unavailable") {
+  const questionSnapIndex = tasks.findIndex((t) => t.name === "question_snapshot");
+  const questionSnapshotLoadRejected =
+    questionSnapIndex >= 0 && settled[questionSnapIndex]?.status === "rejected";
+  if (questionSnapshotLoadRejected || questionSnapshot.status === "unavailable") {
     recordRouteRenderFallback({
       fallbackType: "empty_question_snapshot",
       pathname: ctx.pathname,
@@ -137,7 +141,7 @@ export async function loadMarketingExamHubOptionalBlocks(
     });
   }
 
-  return { npInventory, questionSnapshot, pathwayLessonCount };
+  return { npInventory, questionSnapshot, questionSnapshotLoadRejected, pathwayLessonCount };
 }
 
 export type {
@@ -184,7 +188,8 @@ export async function loadPathwayLessonsHubAggregates(
   },
   ctx: MarketingHubDataLoadContext,
   deps?: {
-    fetchLessonsPageFresh?: typeof getPathwayLessonsPageFresh;
+    /** Override hub list fetch (tests). Default uses Next Data Cache unless `NN_MARKETING_HUB_USE_FRESH_LIST=1`. */
+    fetchLessonsPageFresh?: typeof getPathwayLessonsPageFresh | typeof getPathwayLessonsPage;
     readHubLessonsSnapshot?: (
       pathwayId: string,
       args: LoadPathwayLessonsHubPageArgs,
@@ -202,7 +207,7 @@ export async function loadPathwayLessonsHubAggregates(
     includeTopics = true,
   } = args;
 
-  const fetchLessons = deps?.fetchLessonsPageFresh ?? getPathwayLessonsPageFresh;
+  const fetchLessons = deps?.fetchLessonsPageFresh ?? defaultMarketingHubLessonsPageFetch;
   const { pageResult, lessonsPageLoad, snapshotDiagnostics: lessonsHubSnapshotDiagnostics } =
     await loadPathwayLessonsHubPageWithTelemetry(
       pathway.id,

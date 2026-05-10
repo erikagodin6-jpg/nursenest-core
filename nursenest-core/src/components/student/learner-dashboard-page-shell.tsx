@@ -26,7 +26,7 @@ export function LearnerDashboardPageShell({
       <div className="flex min-w-0 flex-col gap-7 sm:gap-8">
         <BreadcrumbTrail items={crumbs} />
 
-        <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub nn-learner-dashboard-hero nn-product-surface-accent rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))] px-[clamp(1rem,2.8vw,1.35rem)] py-[clamp(1rem,2.5vw,1.25rem)] shadow-[var(--semantic-shadow-soft)]">
+        <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub nn-learner-page-hero nn-learner-dashboard-hero nn-learner-cockpit-hero nn-product-surface-accent min-w-0">
           <div className="nn-dash-page-header__top">
             <div className="nn-dash-page-header__titles min-w-0">
               <p className="sr-only">{t("learner.studyHome.pageEyebrow")}</p>

@@ -68,6 +68,16 @@ function formatMarketingInteger(n: number, locale: string): string {
   }
 }
 
+/** If translations omit interpolation, never surface raw `{{count}}` tokens in marketing UI. */
+function stripMustachePlaceholders(value: string): string {
+  if (!value.includes("{{")) return value;
+  return value
+    .replace(/\{\{[^}]+\}\}/g, "")
+    .replace(/\s*·\s*·\s*/g, " · ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 /**
  * Single-beat path for one RR interval — stylized Lead II–like NSR (upright P, narrow QRS, upright T).
  * Proportions are exaggerated for legibility at marketing scale; not for measurement or diagnosis.
@@ -109,7 +119,8 @@ function buildSinusRhythmPath(beats: number, beatWidth: number, baselineY: numbe
    upright T; rates/shapes are not calibrated. Not a substitute for
    clinical ECG interpretation. Static (no animation).
    ────────────────────────────────────────────────────────────────── */
-function HeroEcgStrip({ ariaLabel }: { ariaLabel: string }) {
+/** Reusable illustrative NSR-style strip for homepage marketing (not diagnostic). */
+export function MarketingHomepageEcgStripIllustration({ ariaLabel }: { ariaLabel: string }) {
   const beatW = 138;
   const beatCount = 3;
   const baseline = 46;
@@ -155,6 +166,7 @@ function HeroClinicalPanel({
     streakValue: string;
     masteredLabel: string;
     masteredValue: string;
+    masteredUnit: string;
     ecgLabel: string;
     ecgBpm: string;
     mini1Title: string;
@@ -177,17 +189,24 @@ function HeroClinicalPanel({
         <div className="nn-premium-hero-stat nn-premium-hero-stat--readiness">
           <Target className="nn-premium-hero-stat__glyph" aria-hidden />
           <span className="nn-premium-hero-stat__label">{copy.readinessLabel}</span>
-          <span className="nn-premium-hero-stat__value">{copy.readinessValue}</span>
+          <div className="nn-premium-hero-stat__figure">
+            <span className="nn-premium-hero-stat__value">{copy.readinessValue}</span>
+          </div>
         </div>
         <div className="nn-premium-hero-stat nn-premium-hero-stat--streak">
           <Flame className="nn-premium-hero-stat__glyph" aria-hidden />
           <span className="nn-premium-hero-stat__label">{copy.streakLabel}</span>
-          <span className="nn-premium-hero-stat__value">{copy.streakValue}</span>
+          <div className="nn-premium-hero-stat__figure">
+            <span className="nn-premium-hero-stat__value">{copy.streakValue}</span>
+          </div>
         </div>
         <div className="nn-premium-hero-stat nn-premium-hero-stat--mastery">
           <BookMarked className="nn-premium-hero-stat__glyph" aria-hidden />
           <span className="nn-premium-hero-stat__label">{copy.masteredLabel}</span>
-          <span className="nn-premium-hero-stat__value">{copy.masteredValue}</span>
+          <div className="nn-premium-hero-stat__figure">
+            <span className="nn-premium-hero-stat__value">{copy.masteredValue}</span>
+            <span className="nn-premium-hero-stat__unit">{copy.masteredUnit}</span>
+          </div>
         </div>
       </div>
 
@@ -196,7 +215,7 @@ function HeroClinicalPanel({
           <span>{copy.ecgLabel}</span>
           <span className="nn-premium-hero-ecg__bpm">{copy.ecgBpm}</span>
         </div>
-        <HeroEcgStrip ariaLabel={copy.ecgLabel} />
+        <MarketingHomepageEcgStripIllustration ariaLabel={copy.ecgLabel} />
       </div>
 
       <div className="nn-premium-hero-mini">
@@ -226,24 +245,13 @@ export function PremiumHomepageHero(props: {
   questionCount?: number;
   lessonCount?: number;
 }) {
-  // Region + i18n are wrapped in try/catch so the hero never crashes the
-  // homepage shell (mirrors the production behavior of `HomeConversionHero`).
-  let locale = "en";
-  let t: ((k: string) => string) | undefined;
-  try {
-    const ctx = useMarketingI18n();
-    locale = safeLocale(ctx.locale);
-    t = ctx.t;
-  } catch {
-    /* fall through to defaults */
-  }
-
-  let region = "CA";
-  try {
-    region = safeRegion(useNursenestRegion().region);
-  } catch {
-    /* fall through to default region */
-  }
+  // Hooks must run unconditionally at top level (never inside try/catch).
+  // Marketing layout wraps this tree with `MarketingI18nProvider` +
+  // `NursenestRegionRoot`; `useMarketingI18n` degrades safely outside provider.
+  const { locale: rawLocale, t } = useMarketingI18n();
+  const { region: rawRegion } = useNursenestRegion();
+  const locale = safeLocale(rawLocale);
+  const region = safeRegion(rawRegion);
 
   const q = props.questionCount ?? 0;
   const lessons = props.lessonCount ?? 0;
@@ -251,14 +259,14 @@ export function PremiumHomepageHero(props: {
   // Premium hero copy. Headline + sub use NEW i18n keys so existing
   // translations of `pages.home.hero.headline` are not silently changed.
   const eyebrow = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.eyebrow", "Clinical nursing exam preparation"),
+    safeHomepageMarketingT(t, "pages.home.hero.eyebrow", "Global study platform · Canada-first exam depth"),
     locale,
   );
   const headline = formatSentenceCase(
     safeHomepageMarketingT(
       t,
       "pages.home.hero.headlinePremium",
-      "Build exam-day readiness with clinical judgment, not cram lists.",
+      "Pass the boards with a calm, clinical study plan.",
     ),
     locale,
   );
@@ -266,24 +274,24 @@ export function PremiumHomepageHero(props: {
     safeHomepageMarketingT(
       t,
       "pages.home.hero.subheadingPremium",
-      "Structured lessons, flashcards, and item-level practice with rationales that follow real nursing priorities—safety, assessment, and therapeutic decisions—across RN, PN, NP, and allied health pathways.",
+      "Study with lessons, flashcards, rationales, and readiness tools built for RN, RPN, NP, and allied health learners worldwide.",
     ),
     locale,
   );
 
   const primaryCtaLabel = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start Practice"),
+    safeHomepageMarketingT(t, "pages.home.hero.premiumPrimaryCta", "Start free"),
     locale,
   );
   const secondaryCtaLabel = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.secondaryCta", "Browse Lessons"),
+    safeHomepageMarketingT(t, "pages.home.hero.premiumSecondaryCta", "View pricing"),
     locale,
   );
 
   const trustNoCard = safeHomepageMarketingT(
     t,
     "pages.home.hero.noCreditCard",
-    "No credit card required",
+    "No payment required",
   );
   const trustEvidence = safeHomepageMarketingT(
     t,
@@ -299,38 +307,41 @@ export function PremiumHomepageHero(props: {
   const statsSep = safeHomepageMarketingT(t, "pages.home.hero.statsLine.separator", " · ");
   const qPart =
     q > 0
-      ? safeHomepageMarketingT(t, "pages.home.hero.statsLine.questions", "{{count}} practice questions", {
-          count: formatMarketingInteger(q, locale),
-        })
+      ? stripMustachePlaceholders(
+          safeHomepageMarketingT(t, "pages.home.hero.statsLine.questions", "{{count}} practice questions", {
+            count: formatMarketingInteger(q, locale),
+          }),
+        )
       : "";
   const lPart =
     lessons > 0
-      ? safeHomepageMarketingT(t, "pages.home.hero.statsLine.lessons", "{{count}} clinical lessons", {
-          count: formatMarketingInteger(lessons, locale),
-        })
+      ? stripMustachePlaceholders(
+          safeHomepageMarketingT(t, "pages.home.hero.statsLine.lessons", "{{count}} clinical lessons", {
+            count: formatMarketingInteger(lessons, locale),
+          }),
+        )
       : "";
   const statsLine =
     q > 0 || lessons > 0
-      ? [qPart, lPart].filter(Boolean).join(statsSep)
-      : safeHomepageMarketingT(t, "pages.home.hero.statsFallback", "Updated regularly");
+      ? stripMustachePlaceholders([qPart, lPart].filter(Boolean).join(statsSep))
+      : stripMustachePlaceholders(safeHomepageMarketingT(t, "pages.home.hero.statsFallback", "Updated regularly"));
 
   // Right-panel copy — all overridable via i18n, with safe defaults that
   // never claim a specific learner / outcome / institution.
   const panelCopy = {
-    panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Sample readiness snapshot"),
-    panelLive: safeHomepageMarketingT(t, "pages.home.hero.panel.live", "Live"),
-    readinessLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessLabel", "Pass probability"),
+    panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Readiness preview"),
+    panelLive: safeHomepageMarketingT(t, "pages.home.hero.panel.live", "Live readiness preview"),
+    readinessLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessLabel", "Readiness"),
     readinessValue: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessValue", "78%"),
     streakLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.streakLabel", "Study streak"),
     streakValue: safeHomepageMarketingT(t, "pages.home.hero.panel.streakValue", "9 days"),
-    masteredLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredLabel", "Items mastered"),
-    masteredValue: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredValue", "{{count}} cards", {
-      count: formatMarketingInteger(1240, locale),
-    }),
+    masteredLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredLabel", "Mastered"),
+    masteredValue: formatMarketingInteger(124, locale),
+    masteredUnit: safeHomepageMarketingT(t, "pages.home.hero.panel.masteredUnit", "cards"),
     ecgLabel: safeHomepageMarketingT(
       t,
       "pages.home.hero.panel.ecgLabel",
-      "Lead II · normal sinus rhythm",
+      "ECG practice",
     ),
     ecgBpm: safeHomepageMarketingT(t, "pages.home.hero.panel.ecgBpm", "72 bpm"),
     mini1Title: safeHomepageMarketingT(

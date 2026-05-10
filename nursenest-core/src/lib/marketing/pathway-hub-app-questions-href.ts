@@ -26,3 +26,20 @@ export function pathwayHubAppPracticeTestsHref(pathwayId: string): string {
   q.set("pathwayId", pathwayId);
   return `/app/practice-tests?${q.toString()}`;
 }
+
+/** Weak-topic flashcard hub — pathway-scoped like other marketing deep links. */
+export function pathwayHubAppWeakAreasFlashcardsHref(pathwayId: string): string {
+  const q = new URLSearchParams();
+  q.set("pathwayId", pathwayId);
+  return `/app/flashcards/weak-areas?${q.toString()}`;
+}
+
+/**
+ * Question bank launcher with pathway context + mixed preset (parity with marketing exam-hub CTAs).
+ */
+export function pathwayHubAppQuestionsPathwayMixedHref(pathwayId: string): string {
+  const q = new URLSearchParams();
+  q.set("pathwayId", pathwayId);
+  q.set("preset", "pathway_mixed");
+  return `/app/questions?${q.toString()}`;
+}

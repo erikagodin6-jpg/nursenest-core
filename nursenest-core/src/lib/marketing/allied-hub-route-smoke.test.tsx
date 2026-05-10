@@ -1,15 +1,26 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { MarketingI18nProvider } from "@/components/i18n/marketing-i18n-provider";
 import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
 import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-pathway";
 import { resolveAlliedProfessionFromRouteSlug } from "@/lib/allied/allied-professions-registry";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const PKG_ROOT = resolve(HERE, "..", "..", "..");
+const REPO_ROOT = resolve(PKG_ROOT, "..");
+const MARKETING_EN = join(REPO_ROOT, "tools", "i18n", "marketing", "marketing-en.json");
+
+function loadMarketingEn(): Record<string, string> {
+  return JSON.parse(readFileSync(MARKETING_EN, "utf8")) as Record<string, string>;
+}
 
 const overviewPagePath = join(process.cwd(), "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/page.tsx");
 const homepagePath = join(process.cwd(), "src/app/(marketing)/(default)/page.tsx");
@@ -96,13 +107,16 @@ describe("allied health pathway hub route smoke", () => {
     assert.ok(pathway);
     const prof = resolveAlliedProfessionFromRouteSlug("medical-assistant-exam-prep");
     assert.ok(prof);
+    const messages = loadMarketingEn();
     const html = renderToStaticMarkup(
-      <AlliedHealthPathwayHub
-        pathway={pathway!}
-        hubPath={`/allied/${prof.professionKey}`}
-        profession={prof}
-        overview={labsModuleOverview}
-      />,
+      <MarketingI18nProvider locale="en" messages={messages}>
+        <AlliedHealthPathwayHub
+          pathway={pathway!}
+          hubPath={`/allied/${prof.professionKey}`}
+          profession={prof}
+          overview={labsModuleOverview}
+        />
+      </MarketingI18nProvider>,
     );
     assert.match(html, /Study modes/);
     assert.match(html, /nn-qa-allied-hub-lessons/);

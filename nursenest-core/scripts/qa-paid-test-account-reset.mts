@@ -40,7 +40,11 @@
  * and pathway-scoped hubs (`/app/lessons`, flashcards, CAT) resolve content like real subscribers
  * (mirrors `POST /api/onboarding/complete` enough for automation).
  *
- * After reset — refresh Playwright storage (path: `tests/e2e/.auth/paid-user.json` or `PLAYWRIGHT_PAID_AUTH_STATE`):
+ * After reset — optional **study fixtures** for dashboard / report card / practice aggregates:
+ *
+ *   npm run seed:auth-qa
+ *
+ * Then refresh Playwright storage (path: `tests/e2e/.auth/paid-user.json` or `PLAYWRIGHT_PAID_AUTH_STATE`):
  *
  *   rm -f tests/e2e/.auth/paid-user.json
  *   E2E_PAID_EMAIL="..." E2E_PAID_PASSWORD="..." npx playwright test \\
