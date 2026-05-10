@@ -35,7 +35,34 @@ export function PracticeTestMcqChoicesInstruction({
   selectBestLabel: string;
 }) {
   return (
-    <p className="nn-cat-options-label">{isSata ? selectAllLabel : selectBestLabel}</p>
+    <div
+      className="nn-cat-answer-instruction-stack space-y-1"
+      data-nn-qa-cat-format={isSata ? "sata" : "mcq"}
+    >
+      {isSata ? (
+        <div className="nn-cat-ngn-format-row flex flex-wrap items-center gap-2">
+          <span className="nn-cat-ngn-format-badge shrink-0">SATA</span>
+          <p className="nn-cat-options-label m-0 min-w-0 flex-1">{selectAllLabel}</p>
+        </div>
+      ) : (
+        <p className="nn-cat-options-label m-0">{selectBestLabel}</p>
+      )}
+    </div>
+  );
+}
+
+/** Bowtie / NGN — compact format label above slots (exam + practice shells). */
+export function PracticeTestBowtieChoicesInstruction({ instruction }: { instruction: string }) {
+  return (
+    <div
+      className="nn-cat-ngn-format-row mb-0.5 flex flex-wrap items-baseline gap-2"
+      data-nn-qa-cat-format="bowtie"
+    >
+      <span className="nn-cat-ngn-format-badge shrink-0" aria-hidden>
+        NGN
+      </span>
+      <p className="nn-cat-options-label m-0 min-w-0 flex-1">{instruction}</p>
+    </div>
   );
 }
 

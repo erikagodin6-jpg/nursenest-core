@@ -281,7 +281,7 @@ export function AnswerOptionRow({
   if (isCheckbox) {
     return (
       <label
-        className={`nn-cat-opt ${stateClass} ${interactiveClass} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+        className={`nn-cat-opt nn-cat-opt--multi ${stateClass} ${interactiveClass} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       >
         <input
           type="checkbox"

@@ -20,8 +20,8 @@
 /* Session strip + header rhythm */
 .nn-active-flashcard-session .nn-premium-flashcard-session-header {
   border-radius: 0.85rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-info) 12%);
-  background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 84%, var(--semantic-panel-muted));
+  background: var(--semantic-surface);
   box-shadow: var(--semantic-shadow-soft);
 }
 

@@ -38,6 +38,15 @@ export function lessonSignalsEcgLinkedLearning(lesson: EcgLinkedLearningLessonSn
   return false;
 }
 
+/**
+ * Weak-topic keys from adaptive analytics — conservative match to {@link ECG_LINK_SIGNAL}.
+ */
+export function weakTopicSuggestsEcgFocus(topicKey: string): boolean {
+  const s = topicKey?.trim() ?? "";
+  if (!s) return false;
+  return ECG_LINK_SIGNAL.test(s);
+}
+
 /** Core ECG entry — integrated nursing telemetry literacy. Not the future Advanced ECG Program vertical. */
 const ECG_MODULE_ENTRY = "/modules/ecg/basic/lessons" as const;
 

@@ -56,6 +56,7 @@ describe("buildPremiumMarketingModuleCards", () => {
     assert.ok(rnModules.studyTools.some((c) => c.key === "clinical_scenarios"));
     assert.ok(rnModules.studyTools.some((c) => c.key === "flashcards"));
     assert.ok(rnModules.studyTools.some((c) => c.key === "practice_tests"));
+    assert.ok(rnModules.studyTools.some((c) => c.key === "clinical_skills"));
     assert.ok(!rnModules.studyTools.some((c) => c.key === "clinical_cases"));
     assert.ok(pnModules.studyTools.some((c) => c.key === "hub_lessons"));
     assert.ok(pnModules.studyTools.some((c) => c.key === "clinical_scenarios"));
@@ -165,6 +166,7 @@ describe("ExamPathwayHubPremiumModules DOM contract", () => {
     assert.match(html, /Pharmacology practice/i);
     assert.match(html, /ECG/i);
     assert.match(html, /data-nn-qa-hub-ecg/);
+    assert.match(html, /data-nn-qa-hub-clinical-skills/);
     assert.match(html, /Exam plan/i);
     assert.match(html, /Study tools/i);
     assert.match(html, /Readiness/i);

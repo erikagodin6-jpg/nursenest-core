@@ -52,6 +52,7 @@ import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country
 import { collectOsceScenariosMarketingHubUrls } from "@/lib/scenarios/scenario-marketing-sitemap-urls";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 export {
+  buildSitemapIndexXml,
   buildSitemapUrlsetFromAbsoluteUrls,
   minimalUrlsetSingleHome,
   minimalSitemapXml,
@@ -280,6 +281,12 @@ export type CollectCoreUrlsOptions = {
    * Merged `/sitemap.xml` mode: no Prisma, no pathway lesson detail URLs, no content-backed study hub DB slice.
    */
   productionSafeStatic?: boolean;
+  /**
+   * When true, omit DB-backed pathway lesson URLs from this collector (`collectPathwayLessonSeoUrls` output +
+   * {@link collectPathwayLessonHubUrlsOnly} in production-safe mode). Used by `/sitemap-core.xml` while
+   * `/sitemap-lessons.xml` owns the pathway lesson urlset (see sitemap index segmentation).
+   */
+  omitPathwayLessonSeoUrls?: boolean;
 };
 
 /** Pre-Nursing public hub, lesson index, study planning, and module pages (registry-backed). */
@@ -388,6 +395,7 @@ export async function collectPathwayLessonSeoUrls(
 export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOptions): Promise<string[]> {
   const o = normalizeOrigin(origin);
   const productionSafe = opts?.productionSafeStatic === true;
+  const omitPathwayLessonSeoUrls = opts?.omitPathwayLessonSeoUrls === true;
   const add = (path: string) => {
     const p = path.startsWith("/") ? path : `/${path}`;
     return `${o}${p}`;
@@ -440,7 +448,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     add("/about"),
     add("/question-bank"),
     add("/practice-exams"),
-    add("/lessons"),
+    ...(omitPathwayLessonSeoUrls ? [] : [add("/lessons")]),
     add("/pricing"),
     add("/for-institutions"),
     add("/blog"),

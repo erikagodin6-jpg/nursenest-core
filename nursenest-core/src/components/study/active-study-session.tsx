@@ -290,7 +290,7 @@ export function ActiveStudySession({
       <ExamSessionProgressStrip pct={progressPct} />
 
       {/* HEADER */}
-      <div className="nn-premium-flashcard-session-header flex flex-wrap items-start justify-between gap-3 p-3 sm:p-4">
+      <div className="nn-premium-flashcard-session-header nn-exam-session-topbar flex flex-wrap items-start justify-between gap-3 p-3 sm:p-4">
         <div className="min-w-0 flex-1">
           <h1 className="truncate text-base font-bold text-[var(--semantic-text-primary)] sm:text-lg">
             {header.sessionTitle}

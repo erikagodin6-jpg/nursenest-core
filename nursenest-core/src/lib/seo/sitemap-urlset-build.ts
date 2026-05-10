@@ -71,3 +71,27 @@ export function minimalUrlsetSingleHome(): string {
 export function minimalSitemapXml(): string {
   return minimalUrlsetSingleHome();
 }
+
+/**
+ * Sitemap **index** (`<sitemapindex>`) listing child urlset URLs — used at `/sitemap.xml`.
+ * Each `loc` must be an absolute HTTPS URL to a child sitemap document.
+ */
+export function buildSitemapIndexXml(childAbsoluteUrls: readonly string[]): string {
+  const defaultLastmod = safeLastmodDate();
+  const body = childAbsoluteUrls
+    .map((locValue) => {
+      const loc = escapeXml(locValue);
+      const lastmod = escapeXml(defaultLastmod);
+      return `  <sitemap>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+  </sitemap>`;
+    })
+    .join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${body}
+</sitemapindex>
+`;
+}

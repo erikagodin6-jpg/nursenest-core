@@ -91,7 +91,7 @@ export function BowtieQuestionRenderer({
 
   const scenarioBlock = (
     <div
-      className="mx-auto max-w-3xl rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_14%,var(--semantic-surface))] px-4 py-5 text-center shadow-sm sm:px-8"
+      className="mx-auto max-w-3xl rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_18%,var(--semantic-surface))] px-4 py-5 text-center shadow-[var(--semantic-shadow-soft)] sm:px-8"
       role="region"
       aria-label="Clinical scenario"
     >

@@ -6,12 +6,16 @@ import {
   normalizeOrigin,
   type SitemapUrlEntry,
 } from "@/lib/seo/sitemap-static-xml";
-import { filterPublicSitemapEntries, mergeCoreUrlsWithBlogEntries } from "@/lib/seo/sitemap-public-index-filter";
+import {
+  excludeAbsoluteUrlsMatchingBlogSitemapEntries,
+  filterPublicSitemapEntries,
+  mergeCoreUrlsWithBlogEntries,
+} from "@/lib/seo/sitemap-public-index-filter";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
 /**
- * Public sitemap: {@link collectCoreUrls} (marketing + pathway hubs + verified lessons, etc.) plus
- * published blog URLs. DB failures fall back to a minimal static urlset — never 503.
+ * Public sitemap: {@link collectCoreUrls} (marketing + pathway hubs + verified lessons, etc.) **without**
+ * blog post URLs (those live in `/sitemap-blog.xml`). DB failures fall back to a minimal static urlset — never 503.
  * Every `loc` is filtered with {@link filterPublicSitemapEntries} (no `/login`, `/app`, `/api`, `/seo/`, …).
  * Origin follows {@link resolveCanonicalSiteOrigin}. Returns valid `application/xml` (200 or 304).
  */
@@ -50,8 +54,9 @@ export async function GET(request: Request): Promise<Response> {
     const { listBlogSitemapEntriesSafe } = await import("@/lib/seo/sitemap-blog-xml");
 
     const [coreUrls, blogEntries] = await Promise.all([collectCoreUrls(origin), listBlogSitemapEntriesSafe()]);
+    const coreWithoutBlog = excludeAbsoluteUrlsMatchingBlogSitemapEntries(coreUrls, blogEntries);
 
-    const merged: SitemapUrlEntry[] = mergeCoreUrlsWithBlogEntries(coreUrls, blogEntries);
+    const merged: SitemapUrlEntry[] = mergeCoreUrlsWithBlogEntries(coreWithoutBlog, []);
     const filtered = filterPublicSitemapEntries(merged, origin);
 
     const seen = new Set<string>();

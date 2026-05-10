@@ -7,8 +7,9 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 /**
  * Explicit `text/plain` robots.txt — no DB; always 200 for crawlers.
  *
- * **Sitemap:** three `Sitemap:` lines — merged marketing/urlset at `/sitemap.xml`, allied occupation hubs at
- * `/sitemap-allied.xml`, and New Grad marketing at `/sitemap-new-grad.xml`. All use `${CANONICAL_PRODUCTION_ORIGIN}`
+ * **Sitemap:** four `Sitemap:` lines — merged marketing/urlset at `/sitemap.xml` (no blog post URLs; those are in
+ * `/sitemap-blog.xml`), blog urlset at `/sitemap-blog.xml`, allied occupation hubs at `/sitemap-allied.xml`, and New Grad
+ * marketing at `/sitemap-new-grad.xml`. All use `${CANONICAL_PRODUCTION_ORIGIN}`
  * (https `www` in production). No `http:`, no legacy hostnames.
  *
  * SEO indexing policy per language status:
@@ -49,6 +50,7 @@ function buildDisallowedLocaleLines(): string {
 
 const CANONICAL_SITEMAP_LINES = [
   `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`,
+  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap-blog.xml`,
   `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap-allied.xml`,
   `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap-new-grad.xml`,
 ] as const;

@@ -37,7 +37,7 @@ export function FlashcardStudyRevealPanels({
 
   return (
     <div className="nn-flashcard-reveal-stack nn-flashcard-reveal-stack--premium space-y-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-300">
-      <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] p-4 shadow-sm">
+      <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)]">
         <div className="mb-1 text-xs font-bold uppercase tracking-wide text-[var(--semantic-success)]">
           {labels?.answerHeading ?? "Answer"}
         </div>
@@ -56,7 +56,7 @@ export function FlashcardStudyRevealPanels({
       </div>
 
       {whyCorrect ? (
-        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] p-4 shadow-sm">
+        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)]">
           <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
             {labels?.whyCorrectHeading ?? "Why this is correct"}
           </div>
@@ -67,7 +67,7 @@ export function FlashcardStudyRevealPanels({
       ) : null}
 
       {exam?.rationaleIncorrect?.length ? (
-        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-sm">
+        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)]">
           <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
             {labels?.whyIncorrectHeading ?? "Why the others are incorrect"}
           </div>
@@ -83,7 +83,7 @@ export function FlashcardStudyRevealPanels({
       ) : null}
 
       {pearl ? (
-        <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_65%,var(--semantic-surface))] p-4 shadow-sm">
+        <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_65%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)]">
           <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-warning)]">
             {labels?.takeawayHeading ?? "Clinical pearl"}
           </div>

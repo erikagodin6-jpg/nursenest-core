@@ -64,9 +64,9 @@ const LETTERS = ["A", "B", "C", "D", "E", "F"];
 
 function RationaleReviewHeader() {
   return (
-    <div className="nn-premium-cat-rationale-head mb-2 flex items-center gap-2 border-b border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] pb-2.5">
-      <BookOpen className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
-      <h2 className="m-0 text-sm font-semibold text-[var(--semantic-brand)]">Rationale & Review</h2>
+    <div className="nn-premium-cat-rationale-head mb-2 flex items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-2.5">
+      <BookOpen className="h-4 w-4 shrink-0 text-[color-mix(in_srgb,var(--semantic-info)_72%,var(--semantic-text-muted))]" aria-hidden />
+      <h2 className="m-0 text-sm font-semibold text-[var(--semantic-text-primary)]">Rationale & Review</h2>
     </div>
   );
 }

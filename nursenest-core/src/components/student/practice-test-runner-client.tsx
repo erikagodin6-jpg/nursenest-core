@@ -57,6 +57,7 @@ import {
 import { resolveLinearEngineRunnerUiKind } from "@/lib/practice-tests/linear-runner-session-mode";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
 import {
+  PracticeTestBowtieChoicesInstruction,
   PracticeTestCatAdaptiveExamFooter,
   PracticeTestCatStudyRationaleAside,
   PracticeTestClinicalFigure,
@@ -2359,9 +2360,12 @@ export function PracticeTestRunnerClient({
                             )}
                           />
                         ) : (
-                          <p className="nn-cat-options-label">
-                            {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
-                          </p>
+                          <PracticeTestBowtieChoicesInstruction
+                            instruction={tx(
+                              "learner.practiceTests.run.bowtieInstruction",
+                              "Assign one option to each row.",
+                            )}
+                          />
                         )}
 
                         {catOptions}
@@ -2550,9 +2554,12 @@ export function PracticeTestRunnerClient({
                               )}
                             />
                           ) : (
-                            <p className="nn-cat-options-label">
-                              {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
-                            </p>
+                            <PracticeTestBowtieChoicesInstruction
+                              instruction={tx(
+                                "learner.practiceTests.run.bowtieInstruction",
+                                "Assign one option to each row.",
+                              )}
+                            />
                           )}
                           {catOptions}
                           {confidenceTrackingEnabled && hasMeaningfulAnswer(current.id) ? (
@@ -2722,9 +2729,12 @@ export function PracticeTestRunnerClient({
             )}
           />
         ) : (
-          <p className="nn-cat-options-label">
-            {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
-          </p>
+          <PracticeTestBowtieChoicesInstruction
+            instruction={tx(
+              "learner.practiceTests.run.bowtieInstruction",
+              "Assign one option to each row.",
+            )}
+          />
         )}
         {legacyCatOptions}
         {confidenceTrackingEnabled ? (
@@ -3079,9 +3089,12 @@ export function PracticeTestRunnerClient({
           )}
         />
       ) : (
-        <p className="nn-cat-options-label">
-          {tx("learner.practiceTests.run.bowtieInstruction", "Assign one option to each row.")}
-        </p>
+        <PracticeTestBowtieChoicesInstruction
+          instruction={tx(
+            "learner.practiceTests.run.bowtieInstruction",
+            "Assign one option to each row.",
+          )}
+        />
       )}
       {linearCatOptions}
       {confidenceTrackingEnabled ? (

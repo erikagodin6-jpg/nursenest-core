@@ -162,7 +162,7 @@ export function FlashcardStudyQuestionStack({
               <img
                 src={clinicalImageUrl}
                 alt=""
-                className="max-h-72 w-auto max-w-full rounded-xl border border-[var(--semantic-border-soft)] object-contain shadow-sm"
+                className="max-h-72 w-auto max-w-full rounded-xl border border-[var(--semantic-border-soft)] object-contain shadow-[var(--semantic-shadow-soft)]"
                 loading="lazy"
               />
             </div>
@@ -202,7 +202,7 @@ export function FlashcardStudyQuestionStack({
 
           {revealed ? (
             <section
-              className="nn-flashcard-reveal-zone nn-premium-flashcard-reveal-panel relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_12%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-muted))] p-5 shadow-inner sm:p-6"
+              className="nn-flashcard-reveal-zone nn-premium-flashcard-reveal-panel relative overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_94%,var(--semantic-panel-muted))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
               aria-label={labels?.answerHeading ?? "Answer and rationale"}
             >
               <div className="pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden>

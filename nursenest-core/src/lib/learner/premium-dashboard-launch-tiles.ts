@@ -86,7 +86,7 @@ export function buildPremiumDashboardLaunchTiles(args: {
   const practiceTestsHref = withPathwayQuery("/app/practice-tests", pathwayId);
   const catHref = catStartHrefFromPremiumSnapshot(snapshot);
   const labsTileHref = labsHref(pathwayId);
-  const ecgHref = "/modules/ecg/basic/lessons";
+  const ecgHref = "/modules/ecg";
   const medCalcHref = withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.medCalculations, pathwayId);
   const clinicalSkillsHref = withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.clinicalSkills, pathwayId);
 
@@ -239,11 +239,11 @@ export function buildPremiumDashboardLaunchTiles(args: {
     if (clinicalCasesTile) coreTiles.push(clinicalCasesTile);
   } else {
     variant = "standard";
-    coreTiles = [...headTiles, labsTile];
+    coreTiles = [...headTiles];
     if (pathwayDef && pathwayAllowsEcgLinkedLearning(pathwayDef)) {
       coreTiles.push(ecgTile);
     }
-    coreTiles.push(medCalcTile, clinicalSkillsTile);
+    coreTiles.push(labsTile, medCalcTile, clinicalSkillsTile);
     if (pharmacologyTile) coreTiles.push(pharmacologyTile);
     if (diagnosticTile) coreTiles.push(diagnosticTile);
   }

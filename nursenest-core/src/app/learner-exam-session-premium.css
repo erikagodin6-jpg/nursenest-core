@@ -326,6 +326,17 @@ html[data-theme="apex"] .nn-practice-exam-convergence .nn-practice-exam-progress
   border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-chart-3) 22%);
 }
 
+/* NGN Bowtie inside adaptive CAT exam board — same card depth as flashcards / hubs */
+[data-cat-exam-root]
+  .nn-cat-exam-chrome.nn-cat-premium-convergence.nn-cat-adaptive-exam-session
+  .bowtie-ngn.bowtie-ngn--premium {
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-panel-muted));
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+  padding: clamp(0.65rem, 1.8vw, 0.85rem);
+}
+
 /* ── CAT licensing exam (adaptive) — typography + post-submit option states only.
    Board chrome uses the convergence rules above; no extra inset “rail” so CAT stays
    cohesive with learner-exam-shell ambient gradients. */

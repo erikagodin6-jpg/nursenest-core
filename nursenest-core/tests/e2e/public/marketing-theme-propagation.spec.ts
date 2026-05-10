@@ -1,7 +1,8 @@
 /**
  * Marketing theme propagation: every public route must respond to theme switching.
  *
- * Asserts (per Ocean / Blossom / Midnight on /, /pricing, /blog, blog post, RN hub):
+ * Asserts (per Ocean / Blossom / Midnight on /, /pricing, /blog, blog post, RN hub) plus
+ * PN pathway hub `.lv-card` (LearnerSurfaceCard) theme bridge for Ocean / Blossom / Midnight / Apex:
  *  - `html[data-theme]` actually changes when the picker is used
  *  - computed CSS variable colors (page bg, surface, heading, body text, border, brand) shift
  *    between themes
@@ -77,6 +78,102 @@ async function selectThemeViaPicker(page: Page, label: RegExp): Promise<void> {
   // `disableTransitionOnChange` keeps style writes synchronous; tiny wait covers the
   // useLayoutEffect tick where ThemeStateHydration applies inline tokens.
   await page.waitForTimeout(120);
+}
+
+/**
+ * Apply a theme id not in the public marketing picker (e.g. `apex`): persist to `localStorage` then
+ * `reload()` so `next-themes` hydrates from storage. Requires `beforeEach` init to skip clobbering
+ * when the storage key is already set (see `THEME_STORAGE_KEY` init script).
+ */
+async function persistThemeThenReload(page: Page, themeId: string): Promise<void> {
+  await page.evaluate(
+    ({ key, id }) => {
+      try {
+        localStorage.setItem(key, id);
+      } catch {
+        /* ignore */
+      }
+    },
+    { key: THEME_STORAGE_KEY, id: themeId },
+  );
+  await page.reload({ waitUntil: "load", timeout: 120_000 });
+  await dismissMarketingScrims(page);
+  await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({
+    timeout: 60_000,
+  });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", themeId, { timeout: 15_000 });
+  await page.waitForTimeout(120);
+}
+
+type LvCardComputed = {
+  backgroundColor: string;
+  color: string;
+  borderColor: string;
+  boxShadow: string;
+};
+
+async function readFirstVisibleLvCardStyles(page: Page): Promise<LvCardComputed> {
+  const handle = page.locator(".lv-card").first();
+  await expect(handle).toBeVisible({ timeout: 60_000 });
+  return handle.evaluate((el) => {
+    const cs = getComputedStyle(el);
+    return {
+      backgroundColor: cs.backgroundColor,
+      color: cs.color,
+      borderColor: cs.borderColor,
+      boxShadow: cs.boxShadow,
+    };
+  });
+}
+
+async function readBodyBackground(page: Page): Promise<string> {
+  return page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+}
+
+/** Normalize browser rgb()/rgba() for exact comparisons. */
+function rgbTripletFromCssColor(css: string): [number, number, number] | null {
+  const m = css.replace(/\s/g, "").match(/^rgba?\((\d+),(\d+),(\d+)/i);
+  if (!m) return null;
+  return [Number(m[1]), Number(m[2]), Number(m[3])];
+}
+
+const ROOT_LV_CARD_PASTEL_RGB: [number, number, number] = [255, 252, 254];
+
+function isRootPastelLvSurface(bg: string): boolean {
+  const t = rgbTripletFromCssColor(bg);
+  if (!t) return false;
+  const [r, g, b] = t;
+  const [pr, pg, pb] = ROOT_LV_CARD_PASTEL_RGB;
+  return Math.abs(r - pr) <= 2 && Math.abs(g - pg) <= 2 && Math.abs(b - pb) <= 2;
+}
+
+/** Relative luminance sRGB (WCAG); used for a loose contrast guard on .lv-card. */
+function relativeLuminance(rgb: [number, number, number]): number {
+  const channel = (c: number) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  const [r, g, b] = rgb;
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}
+
+function contrastRatio(fg: string, bg: string): number | null {
+  const fgRgb = rgbTripletFromCssColor(fg);
+  const bgRgb = rgbTripletFromCssColor(bg);
+  if (!fgRgb || !bgRgb) return null;
+  const l1 = relativeLuminance(fgRgb);
+  const l2 = relativeLuminance(bgRgb);
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  if (darker <= 0) return null;
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function rgbDistance(a: string, b: string): number {
+  const A = rgbTripletFromCssColor(a);
+  const B = rgbTripletFromCssColor(b);
+  if (!A || !B) return 0;
+  return Math.hypot(A[0] - B[0], A[1] - B[1], A[2] - B[2]);
 }
 
 async function snapshotAcrossThemes(
@@ -174,7 +271,10 @@ test.beforeEach(async ({ context }) => {
   }, SELECTOR_DISMISSED_LS);
   await context.addInitScript((key: string) => {
     try {
-      // Start every test from Ocean so first-paint values are deterministic.
+      // Fresh profiles: Ocean. If a theme id is already stored (e.g. Apex set before `reload()` for
+      // themes outside the public picker), do not overwrite — init runs before app JS on every navigation.
+      const existing = localStorage.getItem(key);
+      if (existing != null && String(existing).trim() !== "") return;
       localStorage.setItem(key, "ocean");
     } catch {
       /* ignore */
@@ -257,5 +357,79 @@ test.describe("Marketing theme propagation — public routes", () => {
         fullPage: true,
       });
     }
+  });
+
+  /**
+   * Pathway hub regression: `LearnerSurfaceCard` → `.lv-card` must track `html[data-theme]` via
+   * `styles/tokens.css` bridge (not stuck on :root pastel `--lv-bg-surface` #fffcfe).
+   *
+   * Route: `/us/pn/nclex-pn` — PN marketing tier hub renders `.lv-card` in the insight rail.
+   * `/us/rn/nclex-rn` uses `StudyCard` / `.nn-exam-hub-study-card` without `.lv-card`, so it cannot guard this bridge.
+   */
+  test("/us/pn/nclex-pn — pathway hub .lv-card tracks Ocean, Blossom, Midnight, Apex", async ({
+    page,
+  }) => {
+    const routePath = "/us/pn/nclex-pn";
+    type HubLvSnap = { lv: LvCardComputed; bodyBg: string };
+
+    await page.goto(routePath, { waitUntil: "load", timeout: 120_000 });
+    await dismissMarketingScrims(page);
+    await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({ timeout: 60_000 });
+
+    await selectThemeViaPicker(page, /^Ocean\b/);
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "ocean", { timeout: 15_000 });
+    const ocean: HubLvSnap = {
+      lv: await readFirstVisibleLvCardStyles(page),
+      bodyBg: await readBodyBackground(page),
+    };
+
+    await selectThemeViaPicker(page, /^Blossom\b/);
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "blossom", { timeout: 15_000 });
+    const blossom: HubLvSnap = {
+      lv: await readFirstVisibleLvCardStyles(page),
+      bodyBg: await readBodyBackground(page),
+    };
+
+    await selectThemeViaPicker(page, /^Midnight\b/);
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "midnight", { timeout: 15_000 });
+    const midnight: HubLvSnap = {
+      lv: await readFirstVisibleLvCardStyles(page),
+      bodyBg: await readBodyBackground(page),
+    };
+
+    await persistThemeThenReload(page, "apex");
+    const apex: HubLvSnap = {
+      lv: await readFirstVisibleLvCardStyles(page),
+      bodyBg: await readBodyBackground(page),
+    };
+
+    const snapshots = { ocean, blossom, midnight, apex };
+
+    expect(isRootPastelLvSurface(snapshots.midnight.lv.backgroundColor)).toBe(false);
+    expect(isRootPastelLvSurface(snapshots.apex.lv.backgroundColor)).toBe(false);
+
+    expect(rgbDistance(snapshots.ocean.lv.backgroundColor, snapshots.midnight.lv.backgroundColor)).toBeGreaterThan(
+      35,
+    );
+    expect(rgbDistance(snapshots.blossom.lv.backgroundColor, snapshots.midnight.lv.backgroundColor)).toBeGreaterThan(
+      35,
+    );
+    expect(rgbDistance(snapshots.ocean.lv.backgroundColor, snapshots.apex.lv.backgroundColor)).toBeGreaterThan(35);
+    expect(rgbDistance(snapshots.blossom.lv.backgroundColor, snapshots.apex.lv.backgroundColor)).toBeGreaterThan(35);
+
+    expect(rgbDistance(snapshots.ocean.lv.backgroundColor, snapshots.blossom.lv.backgroundColor)).toBeGreaterThan(4);
+
+    for (const id of ["ocean", "blossom", "midnight", "apex"] as const) {
+      const ratio = contrastRatio(snapshots[id].lv.color, snapshots[id].lv.backgroundColor);
+      expect(ratio, `${routePath} ${id}: .lv-card contrast`).not.toBeNull();
+      expect(ratio!, `${routePath} ${id}: .lv-card contrast`).toBeGreaterThanOrEqual(3);
+    }
+
+    for (const id of ["ocean", "midnight", "apex"] as const) {
+      expect(snapshots[id].lv.borderColor.length, `${routePath} ${id}: border-color`).toBeGreaterThan(0);
+    }
+
+    expect(snapshots.ocean.bodyBg.length).toBeGreaterThan(0);
+    expect(rgbDistance(snapshots.ocean.bodyBg, snapshots.midnight.bodyBg)).toBeGreaterThan(8);
   });
 });

@@ -32,6 +32,18 @@ export function filterPublicSitemapEntries(entries: readonly SitemapUrlEntry[], 
 }
 
 /**
+ * Removes core URLs that appear in the blog urlset so `/sitemap.xml` and `/sitemap-blog.xml` do not duplicate `<loc>`s.
+ */
+export function excludeAbsoluteUrlsMatchingBlogSitemapEntries(
+  coreUrls: readonly string[],
+  blogEntries: readonly SitemapUrlEntry[],
+): string[] {
+  if (blogEntries.length === 0) return [...coreUrls];
+  const blogLocs = new Set(blogEntries.map((e) => normalizeSitemapLoc(e.loc)));
+  return coreUrls.filter((u) => !blogLocs.has(normalizeSitemapLoc(u)));
+}
+
+/**
  * Merges `collectCoreUrls` strings with blog `SitemapUrlEntry` rows (blog wins `lastmod` on duplicate `loc`).
  */
 export function mergeCoreUrlsWithBlogEntries(coreUrls: readonly string[], blogEntries: readonly SitemapUrlEntry[]): SitemapUrlEntry[] {

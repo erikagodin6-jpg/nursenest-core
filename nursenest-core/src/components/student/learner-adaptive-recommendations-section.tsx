@@ -3,7 +3,7 @@ import type { AdaptiveWireBundleJson } from "@/lib/learner/build-learner-adaptiv
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
-import { Calculator, ChevronRight, FlaskConical, HeartPulse, Sparkles, Theater } from "lucide-react";
+import { Activity, Calculator, ChevronRight, FlaskConical, HeartPulse, Sparkles, Theater } from "lucide-react";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 
 type Props = {
@@ -18,7 +18,15 @@ type Props = {
 export function LearnerAdaptiveRecommendationsSection({ t, bundle }: Props) {
   if (!bundle) return null;
 
-  const { recommendations, rationaleLines, labsStudyNudge, scenariosStudyNudge, medCalcStudyNudge, clinicalSkillsStudyNudge } = bundle;
+  const {
+    recommendations,
+    rationaleLines,
+    labsStudyNudge,
+    scenariosStudyNudge,
+    medCalcStudyNudge,
+    clinicalSkillsStudyNudge,
+    ecgStudyNudge,
+  } = bundle;
   const weak = recommendations.rankedWeakTopics.slice(0, 5);
   const lessons = recommendations.lessons.slice(0, 4);
   const catHint = recommendations.practiceCat;
@@ -153,6 +161,41 @@ export function LearnerAdaptiveRecommendationsSection({ t, bundle }: Props) {
             className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-[var(--role-cta)] px-4 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)] sm:min-h-9"
           >
             {t("learner.studyHome.quickLaunch.labsCta")}
+          </Link>
+        </div>
+      ) : null}
+
+      {ecgStudyNudge ? (
+        <div
+          className="mt-4 flex flex-col gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_07%,var(--semantic-surface))] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+          data-nn-adaptive-ecg-nudge=""
+        >
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-2)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-2)_88%,var(--semantic-text-primary))]">
+              <Activity className="h-5 w-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-2)_88%,var(--semantic-text-primary))]">
+                {t("learner.studyHome.quickLaunch.ecgTitle")}
+              </p>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("learner.studyHome.quickLaunch.ecgDesc")}</p>
+              <ul className="mt-2 flex flex-wrap gap-1.5" aria-label="Topics linking to ECG telemetry study">
+                {ecgStudyNudge.matchedTopicKeys.map((k) => (
+                  <li
+                    key={k}
+                    className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-2)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_05%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-medium text-[var(--semantic-text-primary)]"
+                  >
+                    {k}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <Link
+            href={withPathwayScopeHref(ecgStudyNudge.href, pid)}
+            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-[var(--role-cta)] px-4 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)] sm:min-h-9"
+          >
+            {t("learner.studyHome.quickLaunch.ecgCta")}
           </Link>
         </div>
       ) : null}

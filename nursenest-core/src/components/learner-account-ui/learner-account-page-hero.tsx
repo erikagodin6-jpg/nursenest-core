@@ -16,7 +16,7 @@ export function LearnerAccountPageHero({
   return (
     <header
       className={[
-        "nn-study-card rounded-2xl border border-border bg-card p-6 text-foreground shadow-sm sm:p-8",
+        "nn-study-card rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-foreground shadow-[var(--semantic-shadow-soft)] sm:p-8",
         className,
       ]
         .filter(Boolean)

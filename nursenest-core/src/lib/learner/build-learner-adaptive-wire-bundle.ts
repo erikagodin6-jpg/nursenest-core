@@ -25,9 +25,11 @@ import { deriveCanonicalStudyTopicSlug } from "@/lib/lessons/pathway-lesson-link
 import type { PathwayLessonLinkedLearningSignals } from "@/lib/lessons/pathway-lesson-types";
 import type { RoleTrackSlug } from "@/lib/exam-pathways/types";
 import { weakTopicSuggestsClinicalSkillsFocus } from "@/lib/clinical-skills/clinical-skills-adaptive-signals";
+import { pathwayAllowsEcgLinkedLearning, weakTopicSuggestsEcgFocus } from "@/lib/ecg-module/ecg-linked-learning";
 import { weakTopicSuggestsLabsFocus } from "@/lib/labs/labs-adaptive-signals";
 import { weakTopicSuggestsMedCalcFocus } from "@/lib/med-calculations/med-calc-adaptive-signals";
 import { weakTopicSuggestsScenarioFocus } from "@/lib/scenarios/scenario-adaptive-signals";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 
 export type AdaptiveWireBundleJson = {
   pathwayId: string;
@@ -45,6 +47,8 @@ export type AdaptiveWireBundleJson = {
   medCalcStudyNudge: { href: "/app/med-calculations"; matchedTopicKeys: string[] } | null;
   /** When weak-topic signals align with bedside procedures, deep-link clinical skills hub. */
   clinicalSkillsStudyNudge: { href: "/app/clinical-skills"; matchedTopicKeys: string[] } | null;
+  /** When weak-topic signals align with cardiac / telemetry domains and pathway allows core ECG — RN/NP only. */
+  ecgStudyNudge: { href: "/modules/ecg"; matchedTopicKeys: string[] } | null;
 };
 
 function linkedLearningForTopWeak(
@@ -265,6 +269,17 @@ export async function loadLearnerAdaptiveWireBundle(
       ? { href: "/app/clinical-skills" as const, matchedTopicKeys: matchedClinicalSkillsTopics }
       : null;
 
+  const pathwayDef = getExamPathwayById(pathwayId);
+  const ecgPathwayAllowed = pathwayDef ? pathwayAllowsEcgLinkedLearning(pathwayDef) : false;
+  const matchedEcgTopics = recommendations.rankedWeakTopics
+    .map((w) => w.topicKey)
+    .filter((k) => weakTopicSuggestsEcgFocus(k))
+    .slice(0, 4);
+  const ecgStudyNudge =
+    ecgPathwayAllowed && matchedEcgTopics.length > 0
+      ? { href: "/modules/ecg" as const, matchedTopicKeys: matchedEcgTopics }
+      : null;
+
   return {
     pathwayId,
     roleTrack,
@@ -279,6 +294,7 @@ export async function loadLearnerAdaptiveWireBundle(
     scenariosStudyNudge,
     medCalcStudyNudge,
     clinicalSkillsStudyNudge,
+    ecgStudyNudge,
   };
 }
 
