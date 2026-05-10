@@ -45,13 +45,96 @@ export type CatPoolRow = {
   nclexClientNeedsSubcategory?: string | null;
 };
 
-export function categoryKeyForQuestion(row: Pick<CatPoolRow, "bodySystem" | "topic">): string {
-  const b = row.bodySystem?.trim();
-  const t = row.topic?.trim();
-  if (b && b.length > 0) return b;
-  if (t && t.length > 0) return t;
-  return "General";
+export type CatCategoryDiversitySource = "bodySystem" | "topic" | "nclexClientNeedsCategory" | "general";
+
+export type CatCategoryDiversityDiagnostics = {
+  sourceBreakdown: Record<CatCategoryDiversitySource, number>;
+  bodySystemOrTopicCategoryKeys: Record<string, number>;
+  nclexClientNeedsCategoryKeys: Record<string, number>;
+  finalCategoryKeys: Record<string, number>;
+  rowsCollapsingToGeneral: number;
+  rowsRescuedByNclexClientNeedsFallback: number;
+};
+
+function normalizeCategoryValue(value: string | null | undefined): string | null {
+  const normalized = value?.trim().toLowerCase().replace(/\s+/g, " ");
+  return normalized && normalized.length > 0 ? normalized : null;
 }
+
+function categorySourceForQuestion(
+  row: Pick<CatPoolRow, "bodySystem" | "topic"> & Partial<Pick<CatPoolRow, "nclexClientNeedsCategory">>,
+): { key: string; source: CatCategoryDiversitySource } {
+  const bodySystem = normalizeCategoryValue(row.bodySystem);
+  const topic = normalizeCategoryValue(row.topic);
+  const nclexClientNeedsCategory = normalizeCategoryValue(row.nclexClientNeedsCategory);
+  if (bodySystem) return { key: bodySystem, source: "bodySystem" };
+  if (topic) return { key: topic, source: "topic" };
+  if (nclexClientNeedsCategory) return { key: nclexClientNeedsCategory, source: "nclexClientNeedsCategory" };
+  return { key: "General", source: "general" };
+}
+
+export function categoryKeyForQuestion(
+  row: Pick<CatPoolRow, "bodySystem" | "topic"> & Partial<Pick<CatPoolRow, "nclexClientNeedsCategory">>,
+): string {
+  return categorySourceForQuestion(row).key;
+}
+
+function incrementRecord(record: Record<string, number>, key: string): void {
+  record[key] = (record[key] ?? 0) + 1;
+}
+
+export function buildCatCategoryDiversityDiagnostics(rows: CatPoolRow[]): CatCategoryDiversityDiagnostics {
+  const diagnostics: CatCategoryDiversityDiagnostics = {
+    sourceBreakdown: {
+      bodySystem: 0,
+      topic: 0,
+      nclexClientNeedsCategory: 0,
+      general: 0,
+    },
+    bodySystemOrTopicCategoryKeys: {},
+    nclexClientNeedsCategoryKeys: {},
+    finalCategoryKeys: {},
+    rowsCollapsingToGeneral: 0,
+    rowsRescuedByNclexClientNeedsFallback: 0,
+  };
+
+  for (const row of rows) {
+    const { key, source } = categorySourceForQuestion(row);
+    diagnostics.sourceBreakdown[source] += 1;
+    incrementRecord(diagnostics.finalCategoryKeys, key);
+    if (source === "bodySystem" || source === "topic") {
+      incrementRecord(diagnostics.bodySystemOrTopicCategoryKeys, key);
+    } else if (source === "nclexClientNeedsCategory") {
+      incrementRecord(diagnostics.nclexClientNeedsCategoryKeys, key);
+      diagnostics.rowsRescuedByNclexClientNeedsFallback += 1;
+    } else {
+      diagnostics.rowsCollapsingToGeneral += 1;
+    }
+  }
+
+  return diagnostics;
+}
+
+function validationWithDiagnostics(
+  validation: CatPoolValidation,
+  diagnostics: CatCategoryDiversityDiagnostics,
+): CatPoolValidation {
+  return validation.ok ? { ok: true, diagnostics } : { ...validation, diagnostics };
+}
+
+function categoryDiversityError(minCategories: number, practice: boolean): CatPoolValidation {
+  void minCategories;
+  return {
+    ok: false,
+    error: practice
+      ? "Adaptive practice needs at least two distinct categories (body system or topic) in the pool. Broaden topic filters."
+      : "CAT pool needs at least three distinct categories (body system or topic) for blueprint-style coverage.",
+  };
+}
+
+export type CatPoolValidation =
+  | { ok: true; diagnostics?: CatCategoryDiversityDiagnostics }
+  | { ok: false; error: string; diagnostics?: CatCategoryDiversityDiagnostics };
 
 /** Blueprint key: client-needs id when present, else body system / topic / General (legacy fallback). */
 export function blueprintKeyForPoolRow(row: CatPoolRow): string {
@@ -234,18 +317,20 @@ export function appendScoredResult(state: CatAdaptiveState, result: CatAnswerRes
   };
 }
 
-export type CatPoolValidation = { ok: true } | { ok: false; error: string };
-
 /**
  * Ensures enough adaptive-eligible items exist for a credible CAT run.
  */
 export function validateCatQuestionPool(rows: CatPoolRow[], options?: { minPoolSize?: number }): CatPoolValidation {
   const minNeed = options?.minPoolSize ?? CAT_MIN_QUESTIONS;
+  const diagnostics = buildCatCategoryDiversityDiagnostics(rows);
   if (rows.length < minNeed) {
-    return {
-      ok: false,
-      error: `CAT needs at least ${minNeed} published adaptive-eligible questions in your pool (found ${rows.length}). Add items or contact your admin.`,
-    };
+    return validationWithDiagnostics(
+      {
+        ok: false,
+        error: `CAT needs at least ${minNeed} published adaptive-eligible questions in your pool (found ${rows.length}). Add items or contact your admin.`,
+      },
+      diagnostics,
+    );
   }
 
   const byDiff = new Map<number, number>();
@@ -257,32 +342,35 @@ export function validateCatQuestionPool(rows: CatPoolRow[], options?: { minPoolS
   }
 
   if (byDiff.size < 2) {
-    return {
-      ok: false,
-      error:
-        "CAT pool needs questions tagged with at least two distinct difficulty levels (1–5). Normalize difficulty metadata.",
-    };
+    return validationWithDiagnostics(
+      {
+        ok: false,
+        error:
+          "CAT pool needs questions tagged with at least two distinct difficulty levels (1–5). Normalize difficulty metadata.",
+      },
+      diagnostics,
+    );
   }
 
   if (categories.size < 3) {
-    return {
-      ok: false,
-      error:
-        "CAT pool needs at least three distinct categories (body system or topic) for blueprint-style coverage.",
-    };
+    return validationWithDiagnostics(categoryDiversityError(3, false), diagnostics);
   }
 
-  return { ok: true };
+  return validationWithDiagnostics({ ok: true }, diagnostics);
 }
 
 /** Relaxed validation for learner practice CAT (smaller banks than full NCLEX sim). */
 export function validatePracticeCatPool(rows: CatPoolRow[]): CatPoolValidation {
   const minPool = 8;
+  const diagnostics = buildCatCategoryDiversityDiagnostics(rows);
   if (rows.length < minPool) {
-    return {
-      ok: false,
-      error: `Adaptive practice needs at least ${minPool} eligible questions in the filtered pool (found ${rows.length}). Broaden topics or difficulty.`,
-    };
+    return validationWithDiagnostics(
+      {
+        ok: false,
+        error: `Adaptive practice needs at least ${minPool} eligible questions in the filtered pool (found ${rows.length}). Broaden topics or difficulty.`,
+      },
+      diagnostics,
+    );
   }
 
   const byDiff = new Map<number, number>();
@@ -294,22 +382,21 @@ export function validatePracticeCatPool(rows: CatPoolRow[]): CatPoolValidation {
   }
 
   if (byDiff.size < 2) {
-    return {
-      ok: false,
-      error:
-        "Adaptive practice needs at least two distinct difficulty levels (1–5). Add more varied items or relax filters.",
-    };
+    return validationWithDiagnostics(
+      {
+        ok: false,
+        error:
+          "Adaptive practice needs at least two distinct difficulty levels (1–5). Add more varied items or relax filters.",
+      },
+      diagnostics,
+    );
   }
 
   if (categories.size < 2) {
-    return {
-      ok: false,
-      error:
-        "Adaptive practice needs at least two distinct categories (body system or topic) in the pool. Broaden topic filters.",
-    };
+    return validationWithDiagnostics(categoryDiversityError(2, true), diagnostics);
   }
 
-  return { ok: true };
+  return validationWithDiagnostics({ ok: true }, diagnostics);
 }
 
 function hashPickStable(candidates: CatPoolRow[], salt: string): CatPoolRow {

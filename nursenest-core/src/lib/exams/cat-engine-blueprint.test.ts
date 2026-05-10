@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
   buildCatReport,
+  categoryKeyForQuestion,
   coerceCatBlueprintDiagnostics,
   createInitialAdaptiveState,
   mergeBlueprintDiagnosticsPostScore,
+  validatePracticeCatPool,
   validateCatQuestionPool,
   type CatPoolRow,
 } from "@/lib/exams/cat-engine";
@@ -151,6 +153,58 @@ describe("validateCatQuestionPool", () => {
     const v = validateCatQuestionPool(rows, { minPoolSize: 75 });
     assert.equal(v.ok, false);
     assert.ok(v.ok === false && v.error.includes("75"));
+  });
+});
+
+describe("validatePracticeCatPool category diversity taxonomy", () => {
+  function rowsFromCategories(categories: string[]): CatPoolRow[] {
+    return categories.map((category, index) => ({
+      id: `cat-${index}`,
+      difficulty: index % 2 === 0 ? 2 : 4,
+      bodySystem: null,
+      topic: null,
+      nclexClientNeedsCategory: category,
+      nclexClientNeedsSubcategory: null,
+    }));
+  }
+
+  it("uses NCLEX client-needs categories as diversity fallback when body system and topic are absent", () => {
+    const rows = rowsFromCategories([
+      "Safe and Effective Care Environment",
+      "Safe   and Effective Care Environment",
+      "Health Promotion and Maintenance",
+      "Physiological Integrity",
+      "Psychosocial Integrity",
+      "Physiological Integrity",
+      "Health Promotion and Maintenance",
+      "Psychosocial Integrity",
+    ]);
+
+    const v = validatePracticeCatPool(rows);
+
+    assert.equal(v.ok, true);
+    assert.equal(categoryKeyForQuestion(rows[0]!), "safe and effective care environment");
+    assert.equal(categoryKeyForQuestion(rows[1]!), "safe and effective care environment");
+  });
+
+  it("keeps rows missing all taxonomy collapsed to General", () => {
+    assert.equal(
+      categoryKeyForQuestion({
+        bodySystem: null,
+        topic: "  ",
+        nclexClientNeedsCategory: null,
+      }),
+      "General",
+    );
+  });
+
+  it("still fails diversity validation for truly single-category pools", () => {
+    const rows = rowsFromCategories(Array.from({ length: 8 }, () => "Physiological Integrity"));
+
+    const v = validatePracticeCatPool(rows);
+
+    assert.equal(v.ok, false);
+    assert.match(v.ok === false ? v.error : "", /at least two distinct categories/);
   });
 });
 

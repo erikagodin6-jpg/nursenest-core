@@ -141,6 +141,7 @@
     "diagnostics:build-env": "node scripts/build-env-fingerprint.mjs",
     "build:next:timed": "node scripts/report-build-timing.mjs",
     "audit:build-stability": "node scripts/audit-build-stability.mjs",
+    "audit:question-inventory": "npx tsx scripts/audit-question-inventory.mts",
     "audit:runtime-payloads": "node scripts/audit-runtime-payloads.mjs",
     "report:mobile-route-payloads": "npx tsx scripts/report-mobile-route-payloads.mts",
     "audit:core-apis": "npx tsx scripts/audit-core-apis.mts",

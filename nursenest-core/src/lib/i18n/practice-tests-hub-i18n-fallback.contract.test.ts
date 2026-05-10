@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, it } from "node:test";
+import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
 import { humanizedMarketingKeyFallback } from "@/lib/marketing-i18n/marketing-message-value-policy";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -12,6 +13,7 @@ const hubPath = join(appRoot, "src/components/student/practice-tests-hub-client.
 const marketingEnPath = join(repoRoot, "tools/i18n/marketing/marketing-en.json");
 const appLearnerShardPath = join(appRoot, "public/i18n/en/learner.json");
 const clientEnglishBundlePath = join(repoRoot, "client/public/i18n/en.json");
+const appPublicI18nRoot = join(appRoot, "public/i18n");
 
 const knownHumanizedPracticeHubFallbacks = [
   "Hero Title",
@@ -22,24 +24,6 @@ const knownHumanizedPracticeHubFallbacks = [
   "Review Cta",
   "Row Question Count",
   "Study Tools Rail Title",
-] as const;
-
-const fallbackSensitivePracticeHubKeys = [
-  "learner.practiceTests.examFirst.heroTitle",
-  "learner.practiceTests.examFirst.heroSubtitle",
-  "learner.practiceTests.examFirst.ctaCat",
-  "learner.practiceTests.examFirst.ctaCatSublabel",
-  "learner.practiceTests.examFirst.studyToolsRailTitle",
-  "learner.practiceTests.examFirst.studyToolsRailIntro",
-  "learner.practiceTests.hub.builderHeadline",
-  "learner.practiceTests.hub.builderIntro",
-  "learner.practiceTests.hub.resumeCta",
-  "learner.practiceTests.hub.reviewCta",
-  "learner.practiceTests.hub.rowQuestionCount",
-  "learner.practiceTests.hub.rationalesShortLabel",
-  "learner.practiceTests.hub.rowInProgress",
-  "learner.practiceTests.hub.rowAbandoned",
-  "learner.practiceTests.hub.rowUntitled",
 ] as const;
 
 function loadJson(path: string): Record<string, string> {
@@ -62,7 +46,6 @@ function extractPracticeHubKeys(): string[] {
 
 function assertRequiredKeysAreResolved(catalog: Record<string, string>, label: string) {
   const failures: string[] = [];
-  const fallbackSensitive = new Set<string>(fallbackSensitivePracticeHubKeys);
   for (const key of extractPracticeHubKeys()) {
     const value = catalog[key];
     if (typeof value !== "string" || !value.trim()) {
@@ -71,12 +54,20 @@ function assertRequiredKeysAreResolved(catalog: Record<string, string>, label: s
     }
     const trimmed = value.trim();
     const humanized = humanizedMarketingKeyFallback(key);
+    if (trimmed === key) {
+      failures.push(`${label}:${key}: raw key leaked`);
+      continue;
+    }
     if (knownHumanizedPracticeHubFallbacks.includes(trimmed as never)) {
       failures.push(`${label}:${key}: fallback ${trimmed}`);
       continue;
     }
-    if (fallbackSensitive.has(key) && trimmed === humanized) {
+    if (trimmed === humanized) {
       failures.push(`${label}:${key}: fallback ${trimmed}`);
+      continue;
+    }
+    if (/^learner\.practiceTests\.(hub|examFirst)\./.test(trimmed)) {
+      failures.push(`${label}:${key}: dotted path leaked as value`);
     }
   }
   assert.deepEqual(failures, []);
@@ -90,5 +81,11 @@ describe("Practice Tests hub i18n fallback guard", () => {
   it("compiles every PracticeTestsHubClient examFirst/hub key into runtime English learner shards", () => {
     assertRequiredKeysAreResolved(loadJson(appLearnerShardPath), "app-learner-shard");
     assertRequiredKeysAreResolved(loadJson(clientEnglishBundlePath), "client-en-bundle");
+  });
+
+  it("resolves every PracticeTestsHubClient examFirst/hub key through the merged public English bundle", () => {
+    const merged = loadMergedMarketingMessagesFromNextPublicDir(appPublicI18nRoot, "en");
+    assert.ok(merged, "expected merged English public i18n bundle");
+    assertRequiredKeysAreResolved(merged, "merged-public-en");
   });
 });

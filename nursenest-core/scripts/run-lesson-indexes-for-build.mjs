@@ -7,6 +7,12 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  createBuildMetricsRun,
+  finishBuildMetricsRun,
+  persistBuildMetricsRun,
+  recordBuildPhase,
+} from "./build-runtime-metrics.mjs";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const scriptPath = fileURLToPath(import.meta.url);
@@ -19,6 +25,7 @@ export function isNNSkipLessonIndexBuild() {
 const indexDir = path.join(packageRoot, "src", "content", "pathway-lessons", "generated-indexes");
 
 function runLessonIndexesForBuild() {
+  const metricsRun = createBuildMetricsRun({ kind: "lesson-index-gate" });
   mkdirSync(indexDir, { recursive: true });
 
   if (isNNSkipLessonIndexBuild()) {
@@ -28,6 +35,8 @@ function runLessonIndexesForBuild() {
         "Full builds expect these files unless you deploy precomputed indexes separately.",
     );
     console.log("[lesson-indexes] skipped reason=NN_SKIP_LESSON_INDEX_BUILD");
+    finishBuildMetricsRun(metricsRun, { counts: { skipped: "NN_SKIP_LESSON_INDEX_BUILD" } });
+    persistBuildMetricsRun(metricsRun);
     return 0;
   }
 
@@ -41,8 +50,11 @@ function runLessonIndexesForBuild() {
     env: process.env,
   });
   const genMs = Date.now() - genStarted;
+  recordBuildPhase(metricsRun, "lesson_index_generation", genMs);
   if ((gen.status ?? 1) !== 0) {
     console.error("[lesson-indexes] FATAL: build:lesson-indexes failed");
+    finishBuildMetricsRun(metricsRun, { counts: { failedPhase: "lesson_index_generation" } });
+    persistBuildMetricsRun(metricsRun);
     return gen.status ?? 1;
   }
   console.error(
@@ -57,8 +69,19 @@ function runLessonIndexesForBuild() {
     env: process.env,
   });
   const verMs = Date.now() - verStarted;
+  recordBuildPhase(metricsRun, "lesson_index_verification", verMs, {
+    verifyMode: process.env.NN_DEEP_LESSON_VERIFY
+      ? "deep"
+      : process.env.NN_VERIFY_CHANGED_PATHWAYS_ONLY
+        ? "changed-only"
+        : process.env.NN_SKIP_HEAVY_LESSON_VERIFY
+          ? "light"
+          : "deep",
+  });
   if ((ver.status ?? 1) !== 0) {
     console.error("[lesson-indexes] FATAL: verify:lesson-indexes failed");
+    finishBuildMetricsRun(metricsRun, { counts: { failedPhase: "lesson_index_verification" } });
+    persistBuildMetricsRun(metricsRun);
     return ver.status ?? 1;
   }
   console.error(
@@ -92,6 +115,14 @@ function runLessonIndexesForBuild() {
       2,
     )}`,
   );
+  finishBuildMetricsRun(metricsRun, {
+    counts: {
+      buildLessonIndexesMs: genMs,
+      verifyLessonIndexesMs: verMs,
+      totalGateMs: genMs + verMs,
+    },
+  });
+  persistBuildMetricsRun(metricsRun);
 
   return 0;
 }

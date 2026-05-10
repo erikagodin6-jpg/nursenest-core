@@ -22,6 +22,7 @@ function createTempScriptRoot(prefix, scriptNames) {
   const requiredScripts = new Set(scriptNames);
   if (requiredScripts.has("verify-standalone-artifact.mjs") || requiredScripts.has("ensure-standalone-static.mjs")) {
     requiredScripts.add("run-lesson-indexes-for-build.mjs");
+    requiredScripts.add("build-runtime-metrics.mjs");
   }
   for (const scriptName of requiredScripts) {
     fs.copyFileSync(path.join(__dirname, scriptName), path.join(scriptsDir, scriptName));
@@ -264,10 +265,9 @@ test("ensure-standalone-static copies .next/static beside nested standalone serv
   fs.writeFileSync(standaloneEntry, "module.exports = {};\n", "utf8");
 
   const srcStatic = path.join(tempRoot, ".next", "static");
-  fs.mkdirSync(path.join(srcStatic, "css"), { recursive: true });
   fs.mkdirSync(path.join(srcStatic, "chunks"), { recursive: true });
   fs.mkdirSync(path.join(srcStatic, "media"), { recursive: true });
-  fs.writeFileSync(path.join(srcStatic, "css", "app.css"), "body{}\n", "utf8");
+  fs.writeFileSync(path.join(srcStatic, "chunks", "app.css"), "body{}\n", "utf8");
   fs.writeFileSync(path.join(srcStatic, "chunks", "main.js"), "export {}\n", "utf8");
   fs.writeFileSync(path.join(srcStatic, "media", "x.woff2"), Buffer.from([0, 1, 2, 3]), "utf8");
 
@@ -279,7 +279,7 @@ test("ensure-standalone-static copies .next/static beside nested standalone serv
       env: { ...process.env, NN_SKIP_LESSON_INDEX_BUILD: "1" },
     });
     assert.equal(result.status, 0, result.stderr + result.stdout);
-    const destCss = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "css", "app.css");
+    const destCss = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "chunks", "app.css");
     const destJs = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "chunks", "main.js");
     const destFont = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "media", "x.woff2");
     assert.ok(fs.existsSync(destCss));
@@ -304,9 +304,8 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
   fs.writeFileSync(topServer, "module.exports = {};\n", "utf8");
 
   const srcStatic = path.join(tempRoot, ".next", "static");
-  fs.mkdirSync(path.join(srcStatic, "css"), { recursive: true });
   fs.mkdirSync(path.join(srcStatic, "chunks"), { recursive: true });
-  fs.writeFileSync(path.join(srcStatic, "css", "app.css"), "body{}\n", "utf8");
+  fs.writeFileSync(path.join(srcStatic, "chunks", "app.css"), "body{}\n", "utf8");
   fs.writeFileSync(path.join(srcStatic, "chunks", "main.js"), "export {}\n", "utf8");
 
   try {
@@ -317,8 +316,8 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
       env: { ...process.env, NN_SKIP_LESSON_INDEX_BUILD: "1" },
     });
     assert.equal(result.status, 0, result.stderr + result.stdout);
-    const nestedCss = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "css", "app.css");
-    const topCss = path.join(tempRoot, ".next", "standalone", ".next", "static", "css", "app.css");
+    const nestedCss = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "chunks", "app.css");
+    const topCss = path.join(tempRoot, ".next", "standalone", ".next", "static", "chunks", "app.css");
     const topStaticDir = path.join(tempRoot, ".next", "standalone", ".next", "static");
     assert.ok(fs.existsSync(nestedCss));
     assert.ok(fs.existsSync(topCss));

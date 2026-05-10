@@ -4,6 +4,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { enforcePracticeTestsCatReadinessProtection } from "@/lib/http/api-protection";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
+import { getStaffSession } from "@/lib/auth/staff-session";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -27,7 +28,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ ok: false, code: "pathway_required", message: "pathwayId query parameter is required." }, { status: 400 });
   }
 
-  const result = await assessCatPracticeReadinessForPathway(gate.userId, gate.entitlement, pathwayId);
+  const includeStaffDiagnostics = req.nextUrl.searchParams.get("diagnostics") === "staff";
+  const staff = includeStaffDiagnostics ? await getStaffSession().catch(() => null) : null;
+  const result = await assessCatPracticeReadinessForPathway(gate.userId, gate.entitlement, pathwayId, {
+    includeStaffDiagnostics: Boolean(staff),
+  });
   logCoreApiStudyDiagnostic({
     endpoint: "GET /api/practice-tests/cat-readiness",
     pathwayId,

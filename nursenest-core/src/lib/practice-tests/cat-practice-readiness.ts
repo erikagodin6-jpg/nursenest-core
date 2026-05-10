@@ -1,4 +1,4 @@
-import { validatePracticeCatPool } from "@/lib/exams/cat-engine";
+import { buildCatCategoryDiversityDiagnostics, validatePracticeCatPool } from "@/lib/exams/cat-engine";
 import {
   pathwayAllowsCatAdaptiveStart,
   subscriptionCoversPathwayBase,
@@ -8,6 +8,14 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { catReadinessMinCompletePoolRows, fetchCatPracticePoolReadiness } from "@/lib/practice-tests/cat-pool";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
+
+export type CatPracticeReadinessStaffDiagnostics = {
+  publishedCount: number | null;
+  practiceReadyCount: number;
+  catReadyCount: number;
+  validationFailureReason: string | null;
+  categoryDiversityCounts: Record<string, number>;
+};
 
 export type CatPracticeReadinessResult =
   | {
@@ -19,6 +27,7 @@ export type CatPracticeReadinessResult =
       excludedBecauseMissingCatMetadata: number;
       excludedBecauseIncomplete: number;
       excludedBecauseWrongPathwayOrExam: number;
+      staffDiagnostics?: CatPracticeReadinessStaffDiagnostics;
     }
   | {
       ok: false;
@@ -31,7 +40,24 @@ export type CatPracticeReadinessResult =
       excludedBecauseMissingCatMetadata?: number;
       excludedBecauseIncomplete?: number;
       excludedBecauseWrongPathwayOrExam?: number;
+      staffDiagnostics?: CatPracticeReadinessStaffDiagnostics;
     };
+
+export function buildCatPracticeReadinessStaffDiagnostics(input: {
+  publishedCount?: number | null;
+  practiceReadyCount: number;
+  catReadyCount: number;
+  validation: ReturnType<typeof validatePracticeCatPool> | null;
+  categoryDiversityCounts?: Record<string, number>;
+}): CatPracticeReadinessStaffDiagnostics {
+  return {
+    publishedCount: input.publishedCount ?? null,
+    practiceReadyCount: input.practiceReadyCount,
+    catReadyCount: input.catReadyCount,
+    validationFailureReason: input.validation && !input.validation.ok ? input.validation.error : null,
+    categoryDiversityCounts: input.categoryDiversityCounts ?? input.validation?.diagnostics?.finalCategoryKeys ?? {},
+  };
+}
 
 function catReadinessDiagnosticsFromMeta(buildMeta: Awaited<ReturnType<typeof fetchCatPracticePoolReadiness>>["buildMeta"]) {
   return {
@@ -46,7 +72,15 @@ function catReadinessDiagnosticsFromMeta(buildMeta: Awaited<ReturnType<typeof fe
 export function catReadinessUnavailableMessage(diagnostics: {
   eligibleCatQuestions: number;
   completePracticeQuestions: number;
+  publishedQuestions?: number;
 }, minPool: number): string {
+  if (
+    typeof diagnostics.publishedQuestions === "number" &&
+    diagnostics.publishedQuestions > diagnostics.eligibleCatQuestions
+  ) {
+    return `${diagnostics.publishedQuestions} published questions found, but only ${diagnostics.eligibleCatQuestions} currently meet CAT readiness requirements (${minPool} required). Practice mode may still be available while CAT calibration is completed.`;
+  }
+
   if (diagnostics.completePracticeQuestions > 0) {
     return `CAT requires calibrated questions. Practice questions are available, but CAT-ready calibrated questions are ${diagnostics.eligibleCatQuestions} / ${minPool}.`;
   }
@@ -62,6 +96,7 @@ export async function assessCatPracticeReadinessForPathway(
   userId: string,
   entitlement: AccessScope,
   pathwayId: string,
+  options: { includeStaffDiagnostics?: boolean; publishedCount?: number | null } = {},
 ): Promise<CatPracticeReadinessResult> {
   const trimmed = pathwayId.trim();
   if (trimmed.length < 2) {
@@ -114,6 +149,16 @@ export async function assessCatPracticeReadinessForPathway(
 
   const { pool, buildMeta } = await fetchCatPracticePoolReadiness(userId, entitlement, poolInput);
   const diagnostics = catReadinessDiagnosticsFromMeta(buildMeta);
+  const v = pool.length >= minPool ? validatePracticeCatPool(pool) : null;
+  const staffDiagnostics = options.includeStaffDiagnostics
+    ? buildCatPracticeReadinessStaffDiagnostics({
+        publishedCount: options.publishedCount,
+        practiceReadyCount: diagnostics.completePracticeQuestions,
+        catReadyCount: diagnostics.eligibleCatQuestions,
+        validation: v,
+        categoryDiversityCounts: buildCatCategoryDiversityDiagnostics(pool).finalCategoryKeys,
+      })
+    : undefined;
   if (pool.length < minPool) {
     return {
       ok: false,
@@ -122,10 +167,10 @@ export async function assessCatPracticeReadinessForPathway(
       availableQuestions: diagnostics.eligibleCatQuestions,
       requiredQuestions: minPool,
       ...diagnostics,
+      ...(staffDiagnostics ? { staffDiagnostics } : {}),
     };
   }
 
-  const v = validatePracticeCatPool(pool);
   if (!v.ok) {
     return {
       ok: false,
@@ -134,6 +179,7 @@ export async function assessCatPracticeReadinessForPathway(
       availableQuestions: diagnostics.eligibleCatQuestions,
       requiredQuestions: minPool,
       ...diagnostics,
+      ...(staffDiagnostics ? { staffDiagnostics } : {}),
     };
   }
 
@@ -142,5 +188,6 @@ export async function assessCatPracticeReadinessForPathway(
     availableQuestions: diagnostics.eligibleCatQuestions,
     requiredQuestions: minPool,
     ...diagnostics,
+    ...(staffDiagnostics ? { staffDiagnostics } : {}),
   };
 }
