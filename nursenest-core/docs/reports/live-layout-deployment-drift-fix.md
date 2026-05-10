@@ -100,6 +100,34 @@ Runtime version endpoints already exist and are marked `Cache-Control: no-store`
 
 After deployment, compare their `commit` value to the pushed `main` SHA.
 
+## Post-Push Live Status
+
+The hotfix was pushed to `origin/main` at:
+
+```text
+06335da857cd3751808117bf5ee2a7fe4020d450
+```
+
+After that push, external HTTPS probes no longer showed a stale page; they returned service unavailable for all checked surfaces:
+
+- `/`
+- `/healthz`
+- `/readyz`
+- `/api/version`
+- `/api/runtime/version`
+- `/api/health`
+
+Because `/healthz` is served by `scripts/start-standalone.mjs` before the Next child is ready, a 503 on `/healthz` means the App Platform edge does not have a healthy process accepting traffic. That is a runtime/deployment-health problem, not a browser cache problem and not evidence that the layout CSS is missing from the promoted app.
+
+The most likely next checks are DigitalOcean deployment logs for the latest `main` deployment and App Platform runtime env values. The bootstrap process can exit before binding `/healthz` when strict runtime validation fails, especially if any required runtime values are missing or empty:
+
+- `DATABASE_URL`
+- `AUTH_SECRET` or `NEXTAUTH_SECRET`
+- `AI_ADMIN_GENERATION_ENABLED`
+- one of `AI_INTEGRATIONS_OPENAI_API_KEY`, `OPENAI_API_KEY`, or OpenRouter keys when configured for OpenRouter
+
+The DigitalOcean spec already sets `AI_ADMIN_GENERATION_ENABLED=false`; confirm the deployed app is actually using the checked-in spec and that dashboard env overrides have not left required secrets empty.
+
 ## Validation
 
 Run from the clean hotfix worktree:
@@ -113,7 +141,8 @@ Also run static layout evidence check for imports and selectors.
 Environment limits during investigation:
 
 - `doctl` exists but has no access token configured, so DigitalOcean deployments/logs could not be inspected here.
-- DNS resolution for `nursenest.ca` failed from this environment, so live endpoints could not be fetched here.
+- Live endpoint checks were limited by environment differences: the external fetch tool observed `503 Service Unavailable`, while shell `curl` could not resolve `nursenest.ca`.
+- A later validation attempt in the isolated worktree could not run `tsc` or `tsx` because dependencies were not installed there (`tsc: not found`, `ERR_MODULE_NOT_FOUND: Cannot find package 'tsx'`). Earlier focused deployment artifact tests passed before the push.
 
 ## Deploy Instructions
 
@@ -133,6 +162,27 @@ BASE_URL='https://<production-host>' node nursenest-core/scripts/deploy-determin
 ```
 
 5. Check the live pages for expected premium layout markers/classes and theme styling.
+
+If the host still returns 503, inspect the latest DigitalOcean deployment before changing cache or layout code:
+
+```bash
+doctl auth init
+doctl apps list
+doctl apps list-deployments <app-id>
+doctl apps logs <app-id> --type run --follow
+```
+
+Look specifically for startup lines from `scripts/start-standalone.mjs`:
+
+```text
+[ENV SNAPSHOT]
+[ENV VALIDATION ERROR]
+[nursenest-core] FATAL:
+[nursenest-core] startup_watchdog server_listening
+[nursenest-core] startup_watchdog handlers_ready
+```
+
+If `server_listening` never appears, fix the failing runtime env/artifact error first. If `server_listening` appears but `handlers_ready` does not, inspect the child Next startup failure.
 
 ## Rollback Notes
 
