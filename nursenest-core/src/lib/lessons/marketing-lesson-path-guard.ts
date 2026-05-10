@@ -5,6 +5,8 @@
 export function isPlausibleMarketingLessonDetailPath(path: string): boolean {
   const p = path.trim();
   if (!p.startsWith("/")) return false;
+  if (p.startsWith("/app/") || p.startsWith("/admin/") || p.startsWith("/api/") || p.startsWith("/seo/")) return false;
+  if (/[?#]/.test(p)) return false;
   if (/\/lessons\/?$/.test(p)) return false;
   const idx = p.indexOf("/lessons/");
   if (idx === -1) return false;

@@ -4,6 +4,7 @@ import { SITEMAP_FALLBACK_CORE_PATHS } from "@/lib/seo/sitemap-index-children";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
   collectCoreUrls,
+  collectExamPathwayUrls,
   normalizeOrigin,
   type SitemapUrlEntry,
 } from "@/lib/seo/sitemap-static-xml";
@@ -11,6 +12,7 @@ import {
   excludeAbsoluteUrlsMatchingBlogSitemapEntries,
   filterPublicSitemapEntries,
   mergeCoreUrlsWithBlogEntries,
+  normalizeSitemapLoc,
 } from "@/lib/seo/sitemap-public-index-filter";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
@@ -33,15 +35,19 @@ export async function GET(request: Request): Promise<Response> {
   try {
     const { listBlogSitemapEntriesSafe } = await import("@/lib/seo/sitemap-blog-xml");
 
-    const [coreUrls, blogEntries] = await Promise.all([
+    const [coreUrls, blogEntries, pathwayExamOwnedUrls] = await Promise.all([
       collectCoreUrls(origin, {
         omitPathwayLessonSeoUrls: true,
         omitLocalizedMarketingUrls: true,
         omitExamPathwayAndTopicProgrammaticUrls: true,
       }),
       listBlogSitemapEntriesSafe(),
+      collectExamPathwayUrls(origin),
     ]);
-    const coreWithoutBlog = excludeAbsoluteUrlsMatchingBlogSitemapEntries(coreUrls, blogEntries);
+    const pathwayExamOwned = new Set(pathwayExamOwnedUrls.map((u) => normalizeSitemapLoc(u)));
+    const coreUrlsWithoutPathwayExamOverlap = coreUrls.filter((u) => !pathwayExamOwned.has(normalizeSitemapLoc(u)));
+
+    const coreWithoutBlog = excludeAbsoluteUrlsMatchingBlogSitemapEntries(coreUrlsWithoutPathwayExamOverlap, blogEntries);
 
     const merged: SitemapUrlEntry[] = mergeCoreUrlsWithBlogEntries(coreWithoutBlog, []);
     const filtered = filterPublicSitemapEntries(merged, origin);

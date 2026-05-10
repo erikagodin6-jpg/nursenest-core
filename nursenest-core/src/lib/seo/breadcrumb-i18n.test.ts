@@ -56,3 +56,28 @@ test("localizeBreadcrumbResolutionForLocale localizes visible and JSON-LD breadc
   assert.equal(loc.schemaItems[1]?.name, "Preguntas de práctica");
   assert.equal(loc.schemaItems[1]?.item, "https://www.nursenest.ca/es/question-bank");
 });
+
+test("localized breadcrumb labels never fall back to raw i18n keys", () => {
+  const primary: MarketingMessages = {};
+  const loc = localizeBreadcrumbResolutionForLocale(
+    {
+      crumbs: [
+        { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
+        { name: "Lessons", href: undefined, i18nKey: "breadcrumbs.lessons" },
+      ],
+      schemaItems: [
+        { name: "Home", item: "https://www.nursenest.ca/", i18nKey: "breadcrumbs.home" },
+        { name: "Lessons", item: "https://www.nursenest.ca/lessons", i18nKey: "breadcrumbs.lessons" },
+      ],
+    },
+    primary,
+    "hi",
+  );
+
+  for (const crumb of loc.crumbs) {
+    assert.ok(!crumb.name.startsWith("breadcrumbs."), crumb.name);
+  }
+  for (const item of loc.schemaItems) {
+    assert.ok(!item.name.startsWith("breadcrumbs."), item.name);
+  }
+});

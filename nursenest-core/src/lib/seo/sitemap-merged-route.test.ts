@@ -59,6 +59,8 @@ test("sitemap-core route partitions pathway + localized + exam hubs into other s
   assert.match(routeSrc, /omitLocalizedMarketingUrls:\s*true/);
   assert.match(routeSrc, /omitExamPathwayAndTopicProgrammaticUrls:\s*true/);
   assert.match(routeSrc, /collectCoreUrls/);
+  assert.match(routeSrc, /collectExamPathwayUrls/);
+  assert.match(routeSrc, /coreUrlsWithoutPathwayExamOverlap/);
   assert.match(routeSrc, /excludeAbsoluteUrlsMatchingBlogSitemapEntries/);
   assert.match(routeSrc, /filterPublicSitemapEntries/);
   assert.match(routeSrc, /mergeCoreUrlsWithBlogEntries/);

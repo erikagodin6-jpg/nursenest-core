@@ -1,8 +1,9 @@
 /**
  * Marketing theme propagation: every public route must respond to theme switching.
  *
- * Asserts (per Ocean / Blossom / Midnight on /, /pricing, /blog, blog post, RN hub) plus
- * PN pathway hub `.lv-card` (LearnerSurfaceCard) theme bridge for Ocean / Blossom / Midnight:
+ * Asserts propagation for every id in `PUBLIC_MARKETING_THEME_ALLOWLIST` (Ocean, Midnight, Blossom, Aurora, Sunset)
+ * on `/`, `/pricing`, `/blog`, selected blog slug, and RN hub; captures pricing + blog screenshots for all five.
+ * PN pathway hub `.lv-card` (LearnerSurfaceCard) is checked across the same allowlist.
  *  - `html[data-theme]` actually changes when the picker is used
  *  - computed CSS variable colors (page bg, surface, heading, body text, border, brand) shift
  *    between themes
@@ -79,6 +80,15 @@ async function selectThemeViaPicker(page: Page, label: RegExp): Promise<void> {
   // `disableTransitionOnChange` keeps style writes synchronous; tiny wait covers the
   // useLayoutEffect tick where ThemeStateHydration applies inline tokens.
   await page.waitForTimeout(120);
+}
+
+type PublicMarketingThemeId = (typeof PUBLIC_MARKETING_THEME_ALLOWLIST)[number];
+
+function themePickerRegex(themeId: PublicMarketingThemeId): RegExp {
+  const opt = themeOptionsForPublicMarketingPicker().find((o) => o.id === themeId);
+  expect(opt, `public marketing picker must include ${themeId}`).toBeTruthy();
+  const escaped = opt!.label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`^${escaped}\\b`);
 }
 
 type LvCardComputed = {
@@ -196,29 +206,26 @@ function rgbDistance(a: string, b: string): number {
   return Math.hypot(A[0] - B[0], A[1] - B[1], A[2] - B[2]);
 }
 
-async function snapshotAcrossThemes(
+type PublicMarketingThemeSnapshots = Record<PublicMarketingThemeId, ThemeSnapshot>;
+
+async function snapshotAcrossPublicMarketingThemes(
   page: Page,
   routePath: string,
-): Promise<{ ocean: ThemeSnapshot; blossom: ThemeSnapshot; midnight: ThemeSnapshot }> {
+): Promise<PublicMarketingThemeSnapshots> {
   await page.goto(routePath, { waitUntil: "load", timeout: 120_000 });
   await dismissMarketingScrims(page);
   await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({
     timeout: 60_000,
   });
 
-  await selectThemeViaPicker(page, /^Ocean\b/);
-  const ocean = await readThemeSnapshot(page);
-  expect(ocean.dataTheme, `${routePath}: data-theme should be ocean`).toBe("ocean");
-
-  await selectThemeViaPicker(page, /^Blossom\b/);
-  const blossom = await readThemeSnapshot(page);
-  expect(blossom.dataTheme, `${routePath}: data-theme should be blossom`).toBe("blossom");
-
-  await selectThemeViaPicker(page, /^Midnight\b/);
-  const midnight = await readThemeSnapshot(page);
-  expect(midnight.dataTheme, `${routePath}: data-theme should be midnight`).toBe("midnight");
-
-  return { ocean, blossom, midnight };
+  const out = {} as PublicMarketingThemeSnapshots;
+  for (const id of PUBLIC_MARKETING_THEME_ALLOWLIST) {
+    await selectThemeViaPicker(page, themePickerRegex(id));
+    const snap = await readThemeSnapshot(page);
+    expect(snap.dataTheme, `${routePath}: data-theme should be ${id}`).toBe(id);
+    out[id] = snap;
+  }
+  return out;
 }
 
 function expectAllNonEmptyHex(snapshot: ThemeSnapshot, route: string): void {
@@ -262,14 +269,9 @@ function expectThemesDiffer(
   ).not.toBe(b.bodyBgRendered);
 }
 
-function expectLayoutStable(
-  ocean: ThemeSnapshot,
-  blossom: ThemeSnapshot,
-  midnight: ThemeSnapshot,
-  route: string,
-): void {
+function expectLayoutStable(snapshots: ThemeSnapshot[], route: string): void {
   // Heights can shift slightly when font-loading or async sections settle; stay generous but bounded.
-  const heights = [ocean.documentHeight, blossom.documentHeight, midnight.documentHeight];
+  const heights = snapshots.map((s) => s.documentHeight);
   const max = Math.max(...heights);
   const min = Math.min(...heights);
   // Up to 6% variance, capped at 240px — covers chip wrap on light vs dark themes without masking
@@ -320,61 +322,63 @@ test.describe("Marketing theme propagation — public routes", () => {
     },
     { path: "/us/rn/nclex-rn", id: "rn-hub" },
   ] as const) {
-    test(`${route.path} — Ocean / Blossom / Midnight all shift surface tokens & body bg`, async ({
-      page,
-    }) => {
-      const { ocean, blossom, midnight } = await snapshotAcrossThemes(page, route.path);
+    test(`${route.path} — public allowlist themes shift surface tokens & body bg`, async ({ page }) => {
+      const s = await snapshotAcrossPublicMarketingThemes(page, route.path);
 
-      expectAllNonEmptyHex(ocean, route.path);
-      expectAllNonEmptyHex(blossom, route.path);
-      expectAllNonEmptyHex(midnight, route.path);
+      for (const id of PUBLIC_MARKETING_THEME_ALLOWLIST) {
+        expectAllNonEmptyHex(s[id], route.path);
+      }
 
-      expectThemesDiffer(ocean, blossom, route.path, "Ocean ↔ Blossom");
-      expectThemesDiffer(ocean, midnight, route.path, "Ocean ↔ Midnight");
-      expectThemesDiffer(blossom, midnight, route.path, "Blossom ↔ Midnight");
+      expectThemesDiffer(s.ocean, s.blossom, route.path, "Ocean ↔ Blossom");
+      expectThemesDiffer(s.ocean, s.midnight, route.path, "Ocean ↔ Midnight");
+      expectThemesDiffer(s.blossom, s.midnight, route.path, "Blossom ↔ Midnight");
+      expectThemesDiffer(s.midnight, s.aurora, route.path, "Midnight ↔ Aurora");
+      expectThemesDiffer(s.midnight, s.sunset, route.path, "Midnight ↔ Sunset");
+      expectThemesDiffer(s.aurora, s.sunset, route.path, "Aurora ↔ Sunset");
 
-      expectLayoutStable(ocean, blossom, midnight, route.path);
+      expectLayoutStable(
+        PUBLIC_MARKETING_THEME_ALLOWLIST.map((id) => s[id]),
+        route.path,
+      );
     });
   }
 
-  test("/pricing — capture Ocean / Blossom / Midnight screenshot evidence", async ({ page }) => {
+  test("/pricing — capture public allowlist screenshot evidence", async ({ page }) => {
     await page.goto("/pricing", { waitUntil: "load", timeout: 120_000 });
     await dismissMarketingScrims(page);
     await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({
       timeout: 60_000,
     });
 
-    for (const themeLabel of ["Ocean", "Blossom", "Midnight"] as const) {
-      await selectThemeViaPicker(page, new RegExp(`^${themeLabel}\\b`));
+    for (const id of PUBLIC_MARKETING_THEME_ALLOWLIST) {
+      await selectThemeViaPicker(page, themePickerRegex(id));
       const themeAttr = await page.evaluate(
         () => document.documentElement.getAttribute("data-theme") ?? "",
       );
-      expect(themeAttr.toLowerCase()).toContain(themeLabel.toLowerCase());
+      expect(themeAttr).toBe(id);
       await page.waitForTimeout(200);
       await page.screenshot({
         path: join(SCREENSHOT_DIR, `pricing-${themeAttr}-1280x900-chromium.png`),
-        fullPage: true,
       });
     }
   });
 
-  test("/blog — capture Blossom / Midnight screenshot evidence", async ({ page }) => {
+  test("/blog — capture public allowlist screenshot evidence", async ({ page }) => {
     await page.goto("/blog", { waitUntil: "load", timeout: 120_000 });
     await dismissMarketingScrims(page);
     await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({
       timeout: 60_000,
     });
 
-    for (const themeLabel of ["Blossom", "Midnight"] as const) {
-      await selectThemeViaPicker(page, new RegExp(`^${themeLabel}\\b`));
+    for (const id of PUBLIC_MARKETING_THEME_ALLOWLIST) {
+      await selectThemeViaPicker(page, themePickerRegex(id));
       const themeAttr = await page.evaluate(
         () => document.documentElement.getAttribute("data-theme") ?? "",
       );
-      expect(themeAttr.toLowerCase()).toContain(themeLabel.toLowerCase());
+      expect(themeAttr).toBe(id);
       await page.waitForTimeout(200);
       await page.screenshot({
         path: join(SCREENSHOT_DIR, `blog-${themeAttr}-1280x900-chromium.png`),
-        fullPage: true,
       });
     }
   });
@@ -387,61 +391,48 @@ test.describe("Marketing theme propagation — public routes", () => {
    * Route: `/us/pn/nclex-pn` — PN marketing tier hub renders `.lv-card` in the insight rail.
    * `/us/rn/nclex-rn` uses `StudyCard` / `.nn-exam-hub-study-card` without `.lv-card`, so it cannot guard this bridge.
    */
-  test("/us/pn/nclex-pn — pathway hub .lv-card tracks Ocean, Blossom, Midnight", async ({
-    page,
-  }) => {
+  test("/us/pn/nclex-pn — pathway hub .lv-card tracks public marketing themes", async ({ page }) => {
     const routePath = "/us/pn/nclex-pn";
     type HubLvSnap = { lv: LvCardComputed; bodyBg: string };
+    type HubLvByTheme = Record<PublicMarketingThemeId, HubLvSnap>;
 
     await page.goto(routePath, { waitUntil: "load", timeout: 120_000 });
     await dismissMarketingScrims(page);
     await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({ timeout: 60_000 });
 
-    await selectThemeViaPicker(page, /^Ocean\b/);
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "ocean", { timeout: 15_000 });
-    const ocean: HubLvSnap = {
-      lv: await readFirstVisibleLvCardStyles(page),
-      bodyBg: await readBodyBackground(page),
-    };
+    const hub = {} as HubLvByTheme;
+    for (const id of PUBLIC_MARKETING_THEME_ALLOWLIST) {
+      await selectThemeViaPicker(page, themePickerRegex(id));
+      await expect(page.locator("html")).toHaveAttribute("data-theme", id, { timeout: 15_000 });
+      hub[id] = {
+        lv: await readFirstVisibleLvCardStyles(page),
+        bodyBg: await readBodyBackground(page),
+      };
+    }
 
-    await selectThemeViaPicker(page, /^Blossom\b/);
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "blossom", { timeout: 15_000 });
-    const blossom: HubLvSnap = {
-      lv: await readFirstVisibleLvCardStyles(page),
-      bodyBg: await readBodyBackground(page),
-    };
+    expect(isRootPastelLvSurface(hub.midnight.lv.backgroundColor)).toBe(false);
 
-    await selectThemeViaPicker(page, /^Midnight\b/);
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "midnight", { timeout: 15_000 });
-    const midnight: HubLvSnap = {
-      lv: await readFirstVisibleLvCardStyles(page),
-      bodyBg: await readBodyBackground(page),
-    };
+    for (const light of ["ocean", "blossom", "aurora", "sunset"] as const) {
+      expect(
+        rgbDistance(hub[light].lv.backgroundColor, hub.midnight.lv.backgroundColor),
+        `${routePath}: ${light} vs midnight .lv-card`,
+      ).toBeGreaterThan(35);
+    }
 
-    const snapshots = { ocean, blossom, midnight };
+    expect(rgbDistance(hub.ocean.lv.backgroundColor, hub.blossom.lv.backgroundColor)).toBeGreaterThan(4);
+    expect(rgbDistance(hub.aurora.lv.backgroundColor, hub.sunset.lv.backgroundColor)).toBeGreaterThan(4);
 
-    expect(isRootPastelLvSurface(snapshots.midnight.lv.backgroundColor)).toBe(false);
-
-    expect(rgbDistance(snapshots.ocean.lv.backgroundColor, snapshots.midnight.lv.backgroundColor)).toBeGreaterThan(
-      35,
-    );
-    expect(rgbDistance(snapshots.blossom.lv.backgroundColor, snapshots.midnight.lv.backgroundColor)).toBeGreaterThan(
-      35,
-    );
-
-    expect(rgbDistance(snapshots.ocean.lv.backgroundColor, snapshots.blossom.lv.backgroundColor)).toBeGreaterThan(4);
-
-    for (const id of ["ocean", "blossom", "midnight"] as const) {
-      const ratio = snapshots[id].lv.contrastApprox;
+    for (const id of PUBLIC_MARKETING_THEME_ALLOWLIST) {
+      const ratio = hub[id].lv.contrastApprox;
       expect(ratio, `${routePath} ${id}: .lv-card contrast`).not.toBeNull();
       expect(ratio!, `${routePath} ${id}: .lv-card contrast`).toBeGreaterThanOrEqual(3);
     }
 
-    for (const id of ["ocean", "midnight"] as const) {
-      expect(snapshots[id].lv.borderColor.length, `${routePath} ${id}: border-color`).toBeGreaterThan(0);
+    for (const id of PUBLIC_MARKETING_THEME_ALLOWLIST) {
+      expect(hub[id].lv.borderColor.length, `${routePath} ${id}: border-color`).toBeGreaterThan(0);
     }
 
-    expect(snapshots.ocean.bodyBg.length).toBeGreaterThan(0);
-    expect(rgbDistance(snapshots.ocean.bodyBg, snapshots.midnight.bodyBg)).toBeGreaterThan(8);
+    expect(hub.ocean.bodyBg.length).toBeGreaterThan(0);
+    expect(rgbDistance(hub.ocean.bodyBg, hub.midnight.bodyBg)).toBeGreaterThan(8);
   });
 });

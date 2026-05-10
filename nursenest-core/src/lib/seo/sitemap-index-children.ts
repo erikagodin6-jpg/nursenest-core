@@ -48,11 +48,21 @@ export const SITEMAP_FALLBACK_PATHS_ALL = [
   "/canada/np/cnple/lessons",
 ] as const;
 
-/** Core segment fallback: no `/blog` (owned by blog urlset) and no pathway-lesson `/…/lessons` URLs (owned by lessons urlset). */
+/** Core segment fallback: no `/blog`, no pathway-lesson `/…/lessons`, no exam hubs (owned by `/sitemap-pathways.xml`). */
 export const SITEMAP_FALLBACK_CORE_PATHS = SITEMAP_FALLBACK_PATHS_ALL.filter((p) => {
   if (p === "/blog") return false;
   if (p === "/lessons") return false;
   if (p.endsWith("/lessons") && p !== "/lessons") return false;
+  // Exam pathway hubs — emitted only from `/sitemap-pathways.xml` when collectors fail here.
+  const pathwayHubOnly = new Set([
+    "/us/rn/nclex-rn",
+    "/us/pn/nclex-pn",
+    "/us/np/fnp",
+    "/canada/rn/nclex-rn",
+    "/canada/pn/rex-pn",
+    "/canada/np/cnple",
+  ]);
+  if (pathwayHubOnly.has(p)) return false;
   return true;
 }) as readonly string[];
 
@@ -96,6 +106,9 @@ export const SITEMAP_FALLBACK_PATHWAYS_PATHS = [
   "/canada/np/cnple/questions",
   "/canada/np/cnple/lessons",
 ] as const;
+
+/** Localized segment fallback when DB/registry collectors throw — representative tier-full locale slice. */
+export const SITEMAP_FALLBACK_LOCALIZED_PATHS = ["/fr", "/fr/pricing", "/fr/lessons"] as const;
 
 /** Clinical-modules segment fallback — tool teasers only (OSCE pathway hubs require runtime flags). */
 export const SITEMAP_FALLBACK_CLINICAL_MODULES_PATHS = ["/tools/lab-values", "/tools/med-math"] as const;
