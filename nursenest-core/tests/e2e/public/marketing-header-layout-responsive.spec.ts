@@ -440,14 +440,22 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
         timeout: 60_000,
       });
 
-      const utilityBand = page.locator("[data-testid='marketing-header-utility-band']").first();
-      await expect(utilityBand).toBeVisible({ timeout: 30_000 });
+      if (theme === "midnight") {
+        const utilityInline = page.locator('[data-testid="marketing-header-utility-inline"]').first();
+        await expect(utilityInline).toBeVisible({ timeout: 30_000 });
+      } else {
+        const utilityBand = page.locator("[data-testid='marketing-header-utility-band']").first();
+        await expect(utilityBand).toBeVisible({ timeout: 30_000 });
+      }
       const utilityCluster = page.locator('[data-testid="marketing-header-utility-cluster"]').first();
       await expect(utilityCluster).toBeVisible({ timeout: 30_000 });
       await expect(utilityCluster.getByRole("button").first()).toBeVisible({ timeout: 15_000 });
       await expect(utilityCluster.locator("button[aria-expanded]").first()).toBeVisible({ timeout: 15_000 });
       if (publicMarketingThemeChoiceCount() > 1) {
-        const themeBtn = utilityBarLocator(page).locator('button[aria-haspopup="listbox"]').first();
+        const themeBtn =
+          theme === "midnight"
+            ? page.locator('[data-testid="marketing-header-utility-inline"] button[aria-haspopup="listbox"]').first()
+            : utilityBarLocator(page).locator('button[aria-haspopup="listbox"]').first();
         await expect(themeBtn).toBeVisible({ timeout: 15_000 });
       }
 
@@ -493,8 +501,16 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
           }
           function parseRgb(color: string): [number, number, number] | null {
             const m = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
-            if (!m) return null;
-            return [Number(m[1]), Number(m[2]), Number(m[3])];
+            if (m) return [Number(m[1]), Number(m[2]), Number(m[3])];
+            const cm = color.match(/color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+))?\s*\)/i);
+            if (cm) {
+              return [
+                Math.round(Number(cm[1]) * 255),
+                Math.round(Number(cm[2]) * 255),
+                Math.round(Number(cm[3]) * 255),
+              ];
+            }
+            return null;
           }
           function contrastRatio(fg: [number, number, number], bg: [number, number, number]): number {
             const l1 = relLuminance(fg);
@@ -541,9 +557,21 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
           const wmFg = wordmark ? parseRgb(getComputedStyle(wordmark).color) : null;
           const frameBg = frame ? parseRgb(getComputedStyle(frame).backgroundColor) : null;
           const gridBg = grid ? parseRgb(getComputedStyle(grid).backgroundColor) : null;
+          const primaryBand = header?.querySelector(".nn-header-marketing-primary-band") ?? null;
+          const bandBg = primaryBand ? parseRgb(getComputedStyle(primaryBand).backgroundColor) : null;
           const refBg =
-            frameBg && relLuminance(frameBg) > 0.04 ? frameBg : gridBg && relLuminance(gridBg) > 0.04 ? gridBg : null;
-          const lockupContrast = wmFg && refBg ? contrastRatio(wmFg, refBg) : 0;
+            frameBg && relLuminance(frameBg) > 0.04
+              ? frameBg
+              : gridBg && relLuminance(gridBg) > 0.04
+                ? gridBg
+                : bandBg && relLuminance(bandBg) > 0.04
+                  ? bandBg
+                  : null;
+          let lockupContrast = wmFg && refBg ? contrastRatio(wmFg, refBg) : 0;
+          /* Glass rows often resolve to transparent `background-color` — fall back to white page ink check. */
+          if (lockupContrast === 0 && wmFg && (themeId === "ocean" || themeId === "blossom")) {
+            lockupContrast = contrastRatio(wmFg, [255, 255, 255]);
+          }
 
           const lum = (c: string) => {
             const p = parseRgb(c);
@@ -616,7 +644,10 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
             const lp = parseRgb(loginColor);
             const loginLum = lp ? relLuminance(lp) : 0;
             const tierLum = parseRgb(tierColor) ? relLuminance(parseRgb(tierColor)!) : 0;
-            const utilText = header?.querySelector("[data-testid='marketing-header-utility-band']") ?? null;
+            const utilText =
+              header?.querySelector("[data-testid='marketing-header-utility-band']") ??
+              header?.querySelector('[data-testid="marketing-header-utility-inline"]') ??
+              null;
             const utilColor = utilText ? getComputedStyle(utilText).color : "";
             const utilLum = parseRgb(utilColor) ? relLuminance(parseRgb(utilColor)!) : 0;
             return {
