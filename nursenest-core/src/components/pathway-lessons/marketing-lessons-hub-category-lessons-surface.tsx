@@ -4,6 +4,7 @@ import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
+import { LessonHubClinicalModulesStrip } from "@/components/pathway-lessons/lesson-hub-clinical-modules-strip";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
@@ -192,6 +193,11 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      <LessonHubClinicalModulesStrip
+        pathway={pathway}
+        marketingLocale={lessonContentLocale}
+        signedIn={Boolean(progressCtx.userId.trim())}
+      />
       {questionSnapshotLoadRejected ? (
         <div
           className="mt-3 rounded-xl border border-[var(--semantic-warning)]/40 bg-[color-mix(in_srgb,var(--semantic-warning)_12%,transparent)] px-4 py-3 text-sm text-[var(--theme-heading-text)]"

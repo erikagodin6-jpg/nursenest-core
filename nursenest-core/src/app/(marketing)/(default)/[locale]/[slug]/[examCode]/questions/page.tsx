@@ -9,6 +9,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
@@ -35,8 +36,12 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
-import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
-import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
+import {
+  pathwayQuestionsMarketingHubDefaultSubtitle,
+  pathwayQuestionsMarketingHubH1,
+  pathwayQuestionsMarketingHubMetaTitle,
+} from "@/lib/lessons/pathway-questions-hub-seo";
 import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -46,6 +51,7 @@ import { PathwayHero } from "@/components/study/pathway-hero";
 import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { MarketingPracticeQuestionsHubClient } from "@/components/marketing/marketing-practice-questions-hub-client";
+import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { loadPathwayPracticeBodySystemHubAggregates } from "@/lib/questions/pathway-practice-body-system-aggregates";
 import {
   marketingCatCompletePoolUsable,
@@ -77,7 +83,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       const narrowedLabel = topicFilter || (topicSlugParam ? humanizeTopicSlug(topicSlugParam) : "");
       const title = narrowedLabel
         ? `${narrowedLabel} · Practice questions · ${pathway.displayName} | NurseNest`
-        : `Practice questions · ${pathway.displayName} | NurseNest`;
+        : pathwayQuestionsMarketingHubMetaTitle(pathway);
       const description = narrowedLabel
         ? `Board-style items for ${pathway.shortName} focused on ${narrowedLabel}. Sign in to run sets that stay inside this exam's scope.`
         : `Clinical vignettes and rationales scoped to ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to practice with your plan.`;
@@ -118,14 +124,15 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
       : null;
   const alliedProfessionKey = alliedProfessionResolved?.professionKey ?? "";
 
-  const { questionSnapshot, pathwayLessonCount } = await loadMarketingExamHubOptionalBlocks(pathway, {
-    pathname: `${pathname}/questions`,
-    locale,
-    country: locale,
-    examCode,
-    pathwayId: pathway.id,
-    roleTrack: slug,
-  });
+  const { questionSnapshot, questionSnapshotLoadRejected, pathwayLessonCount } =
+    await loadMarketingExamHubOptionalBlocks(pathway, {
+      pathname: `${pathname}/questions`,
+      locale,
+      country: locale,
+      examCode,
+      pathwayId: pathway.id,
+      roleTrack: slug,
+    });
 
   const topicFilterTrim = topicFilter.trim();
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
@@ -232,8 +239,8 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const adaptiveCount = questionSnapshot?.status === "ok" ? questionSnapshot.adaptiveEligibleCount : null;
 
   const heroSubtitle = isTopicNarrowed
-    ? `Showing questions for ${displayTopicLabel} — same scope and language as ${examName}.`
-    : "Choose a practice mode, select body systems, and review rationales after each question.";
+    ? `Showing questions for ${displayTopicLabel} — scoped to ${pathway.shortName} (${pathwayCountryLabel(pathway)}), aligned with ${examName}.`
+    : pathwayQuestionsMarketingHubDefaultSubtitle(pathway);
 
   const topicClustersForDrawer = isTopicNarrowed ? [] : await listTopicClusters(pathway.id, lessonContentLocale);
   const hubAggregates = isTopicNarrowed ? [] : await loadPathwayPracticeBodySystemHubAggregates(pathway.id);
@@ -262,6 +269,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
   const linearPracticeUsable = marketingLinearPracticeBankUsable(questionSnapshot);
   const catCompletePoolUsable = marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
+  const canStartCatChip = !questionSnapshotLoadRejected && catCompletePoolUsable;
 
   const heroPrimaryCta = linearPracticeUsable
     ? isTopicNarrowed
@@ -289,17 +297,46 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   }
   heroOutlineCtas.push({ label: "Create Account", href: "/signup", variant: "ghost" });
 
+  const heroTitle = isTopicNarrowed
+    ? `${displayTopicLabel} · ${examName} practice questions`
+    : pathwayQuestionsMarketingHubH1(pathway);
+
+  const questionHubSurfaceChips = [
+    { label: "Clinical lessons", href: lessonsHrefWithProfession },
+    {
+      label: questionSnapshotLoadRejected
+        ? "Adaptive CAT — status unavailable"
+        : canStartCatChip
+          ? "Adaptive CAT"
+          : "Adaptive CAT unavailable",
+      href: catHrefWithProfession,
+    },
+    { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
+    { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
+    { label: "Exam overview", href: overviewHref },
+  ];
+
   return (
-    <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
+    <div
+      className="nn-premium-pathway-hub mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8"
+      data-nn-qa-marketing-pathway-questions-hub="true"
+    >
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
 
-      {/* 1. Hero */}
+      {/* 1. Hero — spacing matches pathway lessons hub shell (`LessonsPageShell` → chips `mt-2`). */}
       <PathwayHero
-        title={`${examName} Practice Questions`}
+        eyebrow={
+          <p className="nn-marketing-eyebrow text-[var(--semantic-text-muted)]">
+            {(pathway.shortName.trim() || pathway.displayName) + " · " + pathwayCountryLabel(pathway)}
+          </p>
+        }
+        title={heroTitle}
         subtitle={heroSubtitle}
         backLink={{ label: `${pathway.shortName} overview`, href: overviewHref }}
         ctas={[heroPrimaryCta, ...heroOutlineCtas]}
       />
+
+      <LessonHubSurfaceChips links={questionHubSurfaceChips} />
 
       {/* 2. Stat cards — never foreground a “0 practice questions” tile */}
       {(questionCount !== null || adaptiveCount !== null || pathwayLessonCount !== undefined) ? (
@@ -427,6 +464,6 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
           { label: "Exam overview", href: overviewHref },
         ]}
       />
-    </main>
+    </div>
   );
 }

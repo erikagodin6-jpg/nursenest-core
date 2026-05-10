@@ -2208,7 +2208,7 @@ html[data-theme] .nn-marketing-surface {
   }
 }
 
-/* Marketing header: nav links — accent underline on hover, stronger contrast */
+/* Marketing header: capsule nav links — token hover/active fills (no text underlines). */
 .nn-marketing-nav-link {
   display: inline-flex;
   min-height: 2rem;

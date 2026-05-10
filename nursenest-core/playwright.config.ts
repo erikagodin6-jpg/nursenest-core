@@ -31,7 +31,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  workers: process.env.CI ? 1 : 2,
+  // Single worker: paired heavy marketing E2Es + low-memory dev can kill Next when parallelized.
+  workers: 1,
   timeout: 180_000,
   use: {
     baseURL,

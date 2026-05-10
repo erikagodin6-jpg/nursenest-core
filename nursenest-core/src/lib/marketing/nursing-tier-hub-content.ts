@@ -1,5 +1,6 @@
 import { ExamFamily } from "@prisma/client";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { getIntlRnCountrySiteMatrixRow } from "@/lib/international-rn/intl-rn-country-site-matrix";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -9,6 +10,7 @@ import {
   type MarketingTierHubStudyActionId,
 } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
 import { resolveMarketingDisplayCopy } from "@/lib/public-display-copy";
+import { isPracticalNursingMarketingPathway } from "@/lib/marketing/is-practical-nursing-marketing-pathway";
 
 /**
  * SERP-aligned hub headline (H1): primary exam keyword + country, without the brand suffix.
@@ -81,6 +83,10 @@ export function resolveNursingTierHubStudyCardHref(
     if (action.disabled) return buildExamPathwayPath(pathway);
     return opts.viewerSignedIn ? base : loginWithCallback(base);
   }
+  if (action.id === "cat") {
+    if (action.disabled) return buildExamPathwayPath(pathway);
+    return opts.viewerSignedIn ? appPathwayCatSessionStartPath(pathway.id) : base;
+  }
   if (action.id === "flashcards") {
     return opts.viewerSignedIn ? base : loginWithCallback(base);
   }
@@ -137,6 +143,33 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
   });
 
   const isGenericIntl = pathway.examFamily === ExamFamily.GENERIC;
+  const isPnHub = isPracticalNursingMarketingPathway(pathway);
+
+  const pnIntro =
+    pathway.countrySlug === "canada"
+      ? `${examLabel} prep for ${countryLabel}: build practical-nursing judgement first—prioritization, safe delegation within RPN scope, medications, and acute cues—then rehearse adaptive pacing and longer practice exams when you are ready.`
+      : `${examLabel} prep for ${countryLabel}: anchor LVN/LPN scope in lessons, sharpen prioritization and pharmacology with drills, then layer CAT-style sessions and timed practice exams as stamina grows.`;
+
+  const pnDescription = `This hub is scoped for ${audienceLabel} candidates in ${countryLabel}: pathway lessons, question bank, flashcards, labs, medication math, clinical scenarios, OSCE-style drills when enabled, and readiness analytics inside one NurseNest account.`;
+
+  const pnIncludedNote = `Practical-nursing tier: ${examLabel} lessons and items use PN/RPN-appropriate delegation language; adaptive sessions and practice exams stay pathway-tagged so you are not rehearsing RN-only stems by accident.`;
+
+  const pnStartHere =
+    "Suggested loop: stabilize concepts in Lessons → run short prioritization and safety sets in Practice Questions → reinforce with Flashcards and weak-area decks → add CAT and Practice Exam blocks once timing feels exam-realistic.";
+
+  const pnDifferenceBody =
+    "Lessons emphasize scope-safe assessment and communication; Practice Questions stress who to see first and what can wait; Flashcards keep high-yield meds and labs sticky; CAT adapts item difficulty from your last answers; Practice Exams build full-length stamina—all filtered to this PN/RPN pathway.";
+
+  const actionsPnLessons =
+    "Topic lessons framed for practical nursing—assessment, infection control, scope, and acute priorities without RN-only depth creep.";
+  const actionsPnFlash =
+    "Fast recall for meds, labs, and procedures you will reuse on the floor and on the exam.";
+  const actionsPnPractice =
+    "Prioritization, delegation within scope, pharmacology safety, and case-style drills with rationales tied to this pathway.";
+  const actionsPnCat =
+    "Adaptive sessions that adjust difficulty from your responses—exam-shaped pacing for this track, not a regulator copy.";
+  const actionsPnExams =
+    "Timed and linear practice-test sets in-app, scoped to this pathway, with performance summaries for remediation.";
 
   return {
     audienceLabel,
@@ -144,45 +177,71 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
     title,
     intro: isGenericIntl
       ? `${examLabel} preparation context for ${countryLabel}: start with lessons and drills that strengthen transferable clinical judgement, then confirm every regulatory step with your official body.`
-      : `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or adaptive CAT-style exams next.`,
+      : isPnHub
+        ? pnIntro
+        : `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or adaptive CAT-style exams next.`,
     description: isGenericIntl
       ? `This hub explains how NurseNest can support ${audienceLabel} learners targeting registration in ${countryLabel} without claiming to replace regulator materials.`
-      : `This area contains ${examLabel} learning and exam-prep resources for ${audienceLabel} learners in ${countryLabel}.`,
+      : isPnHub
+        ? pnDescription
+        : `This area contains ${examLabel} learning and exam-prep resources for ${audienceLabel} learners in ${countryLabel}.`,
     includedNote: isGenericIntl
       ? `Study tiles link to the same lesson, flashcard, and question surfaces used for North American pathways where noted; formats may include NCLEX-style items for cognitive rehearsal and are not copies of regulator-specific examinations.`
-      : `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice, and CAT readiness work for ${audienceLabel} learners in ${countryLabel}.`,
+      : isPnHub
+        ? pnIncludedNote
+        : `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice, and CAT readiness work for ${audienceLabel} learners in ${countryLabel}.`,
     startHere: isGenericIntl
       ? "Begin with Lessons for orientation, add Flashcards for recall, then use Practice Questions for drills. Treat optional adaptive sessions as reasoning practice only."
-      : "Start with Lessons, then move into Practice Questions and Exams as your confidence grows.",
-    differenceHeading: "What is the difference?",
+      : isPnHub
+        ? pnStartHere
+        : "Start with Lessons, then move into Practice Questions, CAT, and Exams as your confidence grows.",
+    differenceHeading: isPnHub ? "How the modes fit PN / RPN prep" : "What is the difference?",
     differenceBody: isGenericIntl
       ? "Lessons summarise concepts, Flashcards speed recall, Practice Questions build judgement under time pressure, and optional adaptive sessions mirror NCLEX-style pacing—not regulator-owned exam designs."
-      : "Use Lessons for core concepts, Flashcards for recall, Practice Questions for focused drills, and Exams for longer exam-style sessions.",
+      : isPnHub
+        ? pnDifferenceBody
+        : "Use Lessons for core concepts, Flashcards for recall, Practice Questions for focused drills, CAT for adaptive item-level sessions, and Exams for longer linear or timed practice-test sets.",
     actions: [
       {
         id: "lessons",
         label: resolveMarketingDisplayCopy({ curatedCopy: "Lessons" }),
-        description: "Review concepts by topic.",
+        description: isPnHub ? actionsPnLessons : "Review concepts by topic.",
         href: marketingTierHubStudyActionHref(pathway, "lessons"),
       },
       {
         id: "flashcards",
         label: resolveMarketingDisplayCopy({ curatedCopy: "Flashcards" }),
-        description: "Strengthen recall quickly.",
+        description: isPnHub ? actionsPnFlash : "Strengthen recall quickly.",
         href: marketingTierHubStudyActionHref(pathway, "flashcards"),
       },
       {
         id: "practice_questions",
         label: resolveMarketingDisplayCopy({ curatedCopy: "Practice Questions" }),
-        description: "Drill by topic or weakness.",
+        description: isPnHub ? actionsPnPractice : "Drill by topic or weakness.",
         href: marketingTierHubStudyActionHref(pathway, "practice_questions"),
+      },
+      {
+        id: "cat",
+        label: resolveMarketingDisplayCopy({ curatedCopy: "CAT" }),
+        description: isGenericIntl
+          ? "Computer-adaptive practice (NCLEX-style pacing)."
+          : isPnHub
+            ? actionsPnCat
+            : "Adaptive sessions that adjust difficulty from your answers, scoped to this pathway.",
+        href: marketingTierHubStudyActionHref(pathway, "cat"),
+        disabled: isGenericIntl,
+        disabledNote: isGenericIntl
+          ? "Adaptive sessions use NCLEX-style formats for cognitive rehearsal only. They are not the NMC CBT, AHPRA/NMBA assessments, or PRC PNLE."
+          : undefined,
       },
       {
         id: "exams",
         label: resolveMarketingDisplayCopy({ curatedCopy: isGenericIntl ? "Exams" : "Practice Exam" }),
         description: isGenericIntl
           ? "Optional adaptive sessions (NCLEX-style pacing)."
-          : "Linear and timed practice-test sets in the app, scoped to this pathway.",
+          : isPnHub
+            ? actionsPnExams
+            : "Linear and timed practice-test sets in the app, scoped to this pathway.",
         href: marketingTierHubStudyActionHref(pathway, "exams"),
         disabled: isGenericIntl,
         disabledNote: isGenericIntl

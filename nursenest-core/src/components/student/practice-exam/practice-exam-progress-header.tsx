@@ -12,6 +12,7 @@ export function PracticeExamProgressHeader({
   toolbar,
   progressLead,
   sessionProgressAriaLabel,
+  sessionBadge,
 }: {
   questionIndexOneBased: number;
   total: number;
@@ -21,6 +22,8 @@ export function PracticeExamProgressHeader({
   progressLead: ReactNode;
   /** Localized aria-label for the session progress meter. */
   sessionProgressAriaLabel: string;
+  /** Optional mode chip (e.g. tutor vs timed) — keeps practice visually distinct from CAT exam shells. */
+  sessionBadge?: ReactNode;
 }) {
   const safeTotal = Math.max(total, 1);
   const pct = Math.min(100, Math.max(0, (questionIndexOneBased / safeTotal) * 100));
@@ -28,9 +31,14 @@ export function PracticeExamProgressHeader({
   return (
     <div className="nn-practice-exam-progress nn-practice-exam-progress-premium shrink-0 border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 sm:px-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
-        <p className="m-0 text-sm font-semibold tabular-nums text-[var(--semantic-text-primary)] sm:text-base">
-          {progressLead}
-        </p>
+        <div className="min-w-0 space-y-1">
+          <p className="m-0 text-sm font-semibold tabular-nums text-[var(--semantic-text-primary)] sm:text-base">
+            {progressLead}
+          </p>
+          {sessionBadge ? (
+            <div className="flex flex-wrap items-center gap-2">{sessionBadge}</div>
+          ) : null}
+        </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
           <span
             className="text-sm font-semibold tabular-nums text-[var(--semantic-text-secondary)] sm:text-base"

@@ -66,6 +66,7 @@ import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-conti
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import type { HubDbFailureCategory } from "@/lib/db/safe-database";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
+import { LessonHubClinicalModulesStrip } from "@/components/pathway-lessons/lesson-hub-clinical-modules-strip";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
@@ -1266,6 +1267,11 @@ export default async function PathwayLessonsHubPage({
         },
       );
     }
+    const progressCtxZeroTotal = await loadMarketingPathwayLessonProgressSessionContext({
+      sessionPathname: `${pathname}/lessons`,
+      sessionSurface: "marketing.exam_hub.lessons",
+    });
+    const viewerSignedInZeroTotal = Boolean(progressCtxZeroTotal.userId.trim());
     return (
       <LessonsPageShell
         title={heroTitle}
@@ -1300,6 +1306,11 @@ export default async function PathwayLessonsHubPage({
         />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
         <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+        <LessonHubClinicalModulesStrip
+          pathway={pathway}
+          marketingLocale={lessonContentLocale}
+          signedIn={viewerSignedInZeroTotal}
+        />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             {qEffective
@@ -1364,6 +1375,7 @@ export default async function PathwayLessonsHubPage({
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
 
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
+  const viewerSignedInLessonsHub = Boolean(progressCtx.userId.trim());
   const canShowProgressMap = canShowResume && lessonsForCurriculumHub.length > 0;
 
   if (canShowResume) {
@@ -1413,6 +1425,11 @@ export default async function PathwayLessonsHubPage({
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      <LessonHubClinicalModulesStrip
+        pathway={pathway}
+        marketingLocale={lessonContentLocale}
+        signedIn={viewerSignedInLessonsHub}
+      />
       {lessonsPageLoad.status === "ok" && lessonsPageLoad.sourceUsed === "secondary" ? (
         <div className="mt-3">
           <LearnerStudyLiveSyncBanner />

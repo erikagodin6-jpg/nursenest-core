@@ -12,6 +12,7 @@ import { LearnerSurface } from "@/components/learner-ui/learner-surface";
 import { LearnerStudySurfaceSection } from "@/components/learner-ui/learner-study-surface-section";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import { LearnerReportInset, LearnerReportOutcomeStatStrip, type LearnerReportOutcomeTile } from "@/components/student/learner-report-card-primitives";
+import { PremiumNursingDimensionBands } from "@/components/student/dashboard/learner-premium-nursing-analytics";
 
 function pctBar(pct: number | null, label: string) {
   const v = pct == null ? 0 : Math.min(100, Math.max(0, pct));
@@ -349,6 +350,53 @@ export function LearnerReportCardPremium({
           )}
         </LearnerStudySurfaceSection>
       </div>
+
+      <LearnerStudySurfaceSection
+        id="rc-clinical-dimensions"
+        eyebrow={t("learner.premiumNursingAnalytics.sectionEyebrow")}
+        title={t("learner.premiumNursingAnalytics.title")}
+        intro={t("learner.premiumNursingAnalytics.intro")}
+        tone="primary"
+      >
+        <div className="mb-6 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))] p-5">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-brand)]">
+            {t("learner.premiumNursingAnalytics.passProbTitle")}
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.premiumNursingAnalytics.passProbBody")}</p>
+          <Link
+            href="/app/account/readiness"
+            className="mt-3 inline-flex text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+          >
+            {t("learner.premiumNursingAnalytics.passProbCta")}
+          </Link>
+        </div>
+        <div className="grid gap-5 min-[720px]:grid-cols-2">
+          <PremiumNursingDimensionBands
+            title={t("learner.premiumNursingAnalytics.dimension.bodySystems")}
+            stats={data.examDimensions.byBodySystem}
+            emptyHint={t("learner.premiumNursingAnalytics.dimension.empty")}
+            accuracyLabel={t("learner.premiumNursingAnalytics.dimension.accuracy")}
+          />
+          <PremiumNursingDimensionBands
+            title={t("learner.premiumNursingAnalytics.dimension.cognitive")}
+            stats={data.examDimensions.byCognitiveLevel}
+            emptyHint={t("learner.premiumNursingAnalytics.dimension.empty")}
+            accuracyLabel={t("learner.premiumNursingAnalytics.dimension.accuracy")}
+          />
+          <PremiumNursingDimensionBands
+            title={t("learner.premiumNursingAnalytics.dimension.clientNeeds")}
+            stats={data.examDimensions.byClientNeeds}
+            emptyHint={t("learner.premiumNursingAnalytics.dimension.empty")}
+            accuracyLabel={t("learner.premiumNursingAnalytics.dimension.accuracy")}
+          />
+          <PremiumNursingDimensionBands
+            title={t("learner.premiumNursingAnalytics.dimension.questionTypes")}
+            stats={data.examDimensions.byQuestionType}
+            emptyHint={t("learner.premiumNursingAnalytics.dimension.empty")}
+            accuracyLabel={t("learner.premiumNursingAnalytics.dimension.accuracy")}
+          />
+        </div>
+      </LearnerStudySurfaceSection>
 
       <LearnerStudySurfaceSection
         id="rc-mock-tier"

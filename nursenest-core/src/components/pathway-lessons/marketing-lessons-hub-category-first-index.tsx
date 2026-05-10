@@ -3,6 +3,7 @@ import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shel
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
+import { LessonHubClinicalModulesStrip } from "@/components/pathway-lessons/lesson-hub-clinical-modules-strip";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
@@ -168,6 +169,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
   );
 
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
+  const viewerSignedIn = Boolean(progressCtx.userId.trim());
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
   let showPaidProgressChrome = false;
   if (canShowResume && catalog.length > 0) {
@@ -202,6 +204,11 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
         <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+        <LessonHubClinicalModulesStrip
+          pathway={pathway}
+          marketingLocale={lessonContentLocale}
+          signedIn={viewerSignedIn}
+        />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             No lessons are indexed in the bundled catalog for this pathway yet.
@@ -245,6 +252,11 @@ export async function MarketingLessonsHubCategoryFirstIndex({
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      <LessonHubClinicalModulesStrip
+        pathway={pathway}
+        marketingLocale={lessonContentLocale}
+        signedIn={viewerSignedIn}
+      />
       {questionSnapshotLoadRejected ? (
         <div
           className="mt-3 rounded-xl border border-[var(--semantic-warning)]/40 bg-[color-mix(in_srgb,var(--semantic-warning)_12%,transparent)] px-4 py-3 text-sm text-[var(--theme-heading-text)]"

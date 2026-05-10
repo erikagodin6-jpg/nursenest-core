@@ -166,6 +166,11 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     if (!theme) return true;
     return (THEME_OPTIONS.find((o) => o.id === theme)?.group ?? "light") === "light";
   }, [theme]);
+  /** Midnight uses the same marketing header DOM as Ocean (row4 + utility band); other dark themes keep unified-dark. */
+  const marketingRow4Layout = useMemo(
+    () => isLightTheme || theme === "midnight",
+    [isLightTheme, theme],
+  );
   const { data: session, status: sessionStatus } = useSession();
   const isSessionPending = sessionStatus === "loading";
   const user = session?.user;
@@ -503,9 +508,9 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       */}
       <header
         data-nn-nav-mode="public"
-        data-nn-header-layout={isLightTheme ? "marketing-row4" : "marketing-unified-dark"}
+        data-nn-header-layout={marketingRow4Layout ? "marketing-row4" : "marketing-unified-dark"}
         className={`nn-header-animate-in relative flex w-full flex-col border-b${
-          isLightTheme
+          marketingRow4Layout
             ? ` nn-header-logo-row nn-header-marketing-v31${isScrolled ? " nn-header-logo-row--scrolled" : ""}`
             : ""
         } overflow-visible`}
@@ -656,7 +661,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
           ) : null}
 
           {/* Bar A — utility (desktop xl+); theme-token triggers via MarketingHeaderUtilityCluster row4 */}
-          {isLightTheme ? (
+          {marketingRow4Layout ? (
             <div
               data-testid="marketing-header-utility-band"
               data-nn-header-band="utility"
@@ -717,7 +722,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             </nav>
 
             <div className="nn-header-desktop-auth-cluster relative z-[130] flex min-w-0 max-w-full shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1.5 xl:gap-x-2">
-              {!isLightTheme ? (
+              {!marketingRow4Layout ? (
                 <div
                   data-testid="marketing-header-utility-inline"
                   data-nn-header-band="utility"

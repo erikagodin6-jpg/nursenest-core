@@ -1,14 +1,21 @@
 /**
- * Canonical hrefs for nursing tier hub study tiles (Lessons, Flashcards, Practice, Exams/CAT).
- * {@link resolveMarketingTierHubStudyActionHref} validates optional `href` overrides so CMS/config
- * cannot ship `#`, fragments-only, protocol tricks, or cross-tier paths onto these tiles.
+ * Canonical hrefs for nursing tier hub study tiles (Lessons, Flashcards, Practice Questions, public
+ * CAT landing, Practice Tests hub). {@link resolveMarketingTierHubStudyActionHref} validates
+ * optional `href` overrides so CMS/config cannot ship `#`, fragments-only, protocol tricks, or
+ * cross-tier paths onto these tiles.
  */
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
-export const MARKETING_TIER_HUB_STUDY_ACTION_IDS = ["lessons", "flashcards", "practice_questions", "exams"] as const;
+export const MARKETING_TIER_HUB_STUDY_ACTION_IDS = [
+  "lessons",
+  "flashcards",
+  "practice_questions",
+  "cat",
+  "exams",
+] as const;
 
 export type MarketingTierHubStudyActionId = (typeof MARKETING_TIER_HUB_STUDY_ACTION_IDS)[number];
 
@@ -53,6 +60,8 @@ export function marketingTierHubStudyActionHref(pathway: ExamPathwayDefinition, 
       return pathwayHubAppFlashcardsHref(pathway.id);
     case "practice_questions":
       return buildExamPathwayPath(pathway, "questions");
+    case "cat":
+      return buildExamPathwayPath(pathway, "cat");
     case "exams":
       /** Practice Exam tile — learner timed/linear sets hub (CAT launch is a sub-route from there). */
       return pathwayHubAppPracticeTestsHref(pathway.id);
@@ -116,6 +125,22 @@ export function resolveMarketingTierHubStudyActionHref(
       } catch {
         return canonical;
       }
+    }
+
+    if (actionId === "cat") {
+      try {
+        const u = new URL(raw, RESOLVE_URL_BASE);
+        if (u.pathname === "/app/practice-tests/cat-launch" && u.searchParams.get("pathwayId") === pathway.id) {
+          return raw;
+        }
+      } catch {
+        return canonical;
+      }
+      const catRoot = pathnameOf(buildExamPathwayPath(pathway, "cat"));
+      if (!catRoot) return canonical;
+      if (candidatePath === catRoot) return canonical;
+      if (candidatePath.startsWith(`${catRoot}/`)) return raw;
+      return canonical;
     }
 
     const hubBasePath = pathnameOf(buildExamPathwayPath(pathway));

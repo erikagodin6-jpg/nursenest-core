@@ -36,23 +36,16 @@ import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-de
 import { computeBenchmarkData, type BenchmarkData } from "@/lib/learner/benchmark-engine";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import {
+  EMPTY_EXAM_DIMENSION_BREAKDOWN,
+  loadExamAttemptDimensionBreakdown,
+  type DimensionBreakdown,
+} from "@/lib/learner/exam-attempt-dimension-breakdown";
+
+export type { DimensionStat, DimensionBreakdown } from "@/lib/learner/exam-attempt-dimension-breakdown";
+export { EMPTY_EXAM_DIMENSION_BREAKDOWN, loadExamAttemptDimensionBreakdown } from "@/lib/learner/exam-attempt-dimension-breakdown";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-
-export type DimensionStat = {
-  /** Display label — body system name, cognitive level, or question type. */
-  label: string;
-  correct: number;
-  total: number;
-  /** 0–100 */
-  accuracyPct: number;
-};
-
-export type DimensionBreakdown = {
-  byBodySystem: DimensionStat[];
-  byCognitiveLevel: DimensionStat[];
-  byQuestionType: DimensionStat[];
-};
 
 export type CatTrendPoint = {
   id: string;
@@ -71,37 +64,7 @@ export type ReadinessDashboardPayload = ReadinessPagePayload & {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const MAX_SESSIONS = 30;
-const MAX_QUESTIONS = 600;
 const MAX_CAT_TREND = 10;
-
-// ── Results JSON parsing ──────────────────────────────────────────────────────
-
-type RawResultItem = Record<string, unknown>;
-
-function parseResultItems(
-  results: unknown,
-): { questionId: string; isCorrect: boolean }[] {
-  if (!Array.isArray(results)) return [];
-  const out: { questionId: string; isCorrect: boolean }[] = [];
-  for (const item of results) {
-    if (!item || typeof item !== "object") continue;
-    const r = item as RawResultItem;
-    const questionId =
-      typeof r.questionId === "string" ? r.questionId
-      : typeof r.id === "string" ? r.id
-      : typeof r.qid === "string" ? r.qid
-      : null;
-    if (!questionId) continue;
-    const isCorrect =
-      typeof r.isCorrect === "boolean" ? r.isCorrect
-      : typeof r.correct === "boolean" ? r.correct
-      : null;
-    if (isCorrect === null) continue;
-    out.push({ questionId, isCorrect });
-  }
-  return out;
-}
 
 // ── Readiness score from PracticeTest results ─────────────────────────────────
 
@@ -117,99 +80,6 @@ function parseReadinessScore(results: unknown): number | null {
     return Math.round(((r.scoreCorrect as number) / (r.scoreTotal as number)) * 100);
   }
   return null;
-}
-
-// ── Dimension breakdown loader ────────────────────────────────────────────────
-
-async function loadDimensionBreakdown(userId: string): Promise<DimensionBreakdown> {
-  const empty: DimensionBreakdown = {
-    byBodySystem: [], byCognitiveLevel: [], byQuestionType: [],
-  };
-
-  try {
-    const since = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000); // last 60 days
-    const recentAttempts = await prisma.examAttempt.findMany({
-      where: { userId, createdAt: { gte: since } },
-      select: { results: true },
-      orderBy: { createdAt: "desc" },
-      take: 60,
-    });
-    const attempts = recentAttempts.slice(0, MAX_SESSIONS);
-
-    // Aggregate per-question correct/total across sessions
-    const questionMap = new Map<string, { correct: number; total: number }>();
-    for (const attempt of attempts) {
-      const items = parseResultItems(attempt.results);
-      for (const item of items) {
-        const existing = questionMap.get(item.questionId) ?? { correct: 0, total: 0 };
-        existing.total++;
-        if (item.isCorrect) existing.correct++;
-        questionMap.set(item.questionId, existing);
-        if (questionMap.size >= MAX_QUESTIONS) break;
-      }
-      if (questionMap.size >= MAX_QUESTIONS) break;
-    }
-
-    if (questionMap.size === 0) return empty;
-
-    // Fetch question metadata for the IDs we encountered
-    const questionIds = [...questionMap.keys()];
-    const questions = await prisma.examQuestion.findMany({
-      where: { id: { in: questionIds } },
-      select: {
-        id: true,
-        bodySystem: true,
-        cognitiveLevel: true,
-        questionType: true,
-      },
-    });
-
-    // Group by each dimension
-    const bodyMap = new Map<string, { correct: number; total: number }>();
-    const cogMap  = new Map<string, { correct: number; total: number }>();
-    const typeMap = new Map<string, { correct: number; total: number }>();
-
-    for (const q of questions) {
-      const perf = questionMap.get(q.id);
-      if (!perf) continue;
-
-      for (const [key, map] of [
-        [q.bodySystem, bodyMap],
-        [q.cognitiveLevel, cogMap],
-        [q.questionType, typeMap],
-      ] as [string | null | undefined, typeof bodyMap][]) {
-        if (!key) continue;
-        const label = key.trim();
-        if (!label) continue;
-        const existing = map.get(label) ?? { correct: 0, total: 0 };
-        existing.correct += perf.correct;
-        existing.total += perf.total;
-        map.set(label, existing);
-      }
-    }
-
-    const toStats = (map: Map<string, { correct: number; total: number }>): DimensionStat[] =>
-      [...map.entries()]
-        .filter(([, v]) => v.total >= 2)
-        .map(([label, v]) => ({
-          label,
-          correct: v.correct,
-          total: v.total,
-          accuracyPct: Math.round((v.correct / v.total) * 100),
-        }))
-        .sort((a, b) => b.accuracyPct - a.accuracyPct);
-
-    return {
-      byBodySystem:     toStats(bodyMap),
-      byCognitiveLevel: toStats(cogMap),
-      byQuestionType:   toStats(typeMap),
-    };
-  } catch {
-    safeServerLog("learner_readiness", "dimension_breakdown_block_failed", {
-      userIdPrefix: userId.slice(0, 8),
-    });
-    return empty;
-  }
 }
 
 // ── CAT trend loader ──────────────────────────────────────────────────────────
@@ -282,10 +152,10 @@ async function loadReadinessDashboardDataUncached(
     const [dimensionsResult, catTrendResult, benchmarkResult] = await Promise.all([
       skipHeavy
         ? Promise.resolve({
-            value: { byBodySystem: [], byCognitiveLevel: [], byQuestionType: [] } as DimensionBreakdown,
+            value: EMPTY_EXAM_DIMENSION_BREAKDOWN,
             degradedPanels: ["dimension_breakdown"],
           })
-        : loadDimensionBreakdown(userId).then((value) => ({ value, degradedPanels: [] as string[] })),
+        : loadExamAttemptDimensionBreakdown(userId).then((value) => ({ value, degradedPanels: [] as string[] })),
       skipHeavy
         ? Promise.resolve({ value: [] as CatTrendPoint[], degradedPanels: ["cat_trend"] })
         : loadCatTrend(userId).then((value) => ({ value, degradedPanels: [] as string[] })),

@@ -43,11 +43,16 @@ import { LearnerStudySurfaceSection, LearnerSurface } from "@/components/learner
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 import { LearnerDashboardReadinessNextStrip } from "@/components/student/learner-dashboard-readiness-next-strip";
+import { LearnerHubClinicalQuickLaunch } from "@/components/student/learner-hub-clinical-quick-launch";
 import { LearnerDashboardHubLayout, type LearnerDashboardHubNavItem } from "@/components/student/learner-dashboard-hub-layout";
 import { LearnerDashboardMobileFold } from "@/components/student/learner-dashboard-mobile-fold";
 import { FocusTodayStrip } from "@/components/student/focus-today-strip";
 import { LearnerReportCard } from "@/components/student/learner-report-card";
 import type { LearnerReportCardViewModel } from "@/lib/learner/learner-report-card-model";
+import { LearnerPremiumNursingAnalyticsSection } from "@/components/student/dashboard/learner-premium-nursing-analytics";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { isPracticalNursingMarketingPathway } from "@/lib/marketing/is-practical-nursing-marketing-pathway";
+import { isNpPremiumConvergencePathway } from "@/lib/marketing/np-premium-convergence-pathways";
 function RecentGainsBlock({
   trends,
   strongTopics,
@@ -204,6 +209,7 @@ export function LearnerStudyHome({
 
   const hubNavItems: LearnerDashboardHubNavItem[] = [
     { href: "#study-priority", label: t("learner.studyHome.sectionPriorityTitle") },
+    { href: "#study-quick-launch", label: t("learner.studyHome.quickLaunchNavLabel") },
     { href: "#study-modes", label: t("learner.studyModes.sectionNavLabel") },
   ];
   if (continueLinks.length > 0) {
@@ -214,6 +220,7 @@ export function LearnerStudyHome({
     hubNavItems.push({ href: "#study-adaptive-wired", label: t("learner.studyHome.sectionAttentionTitle") });
   }
   hubNavItems.push({ href: "#study-topic-performance", label: t("learner.dashboard.insight.categoryTitle") });
+  hubNavItems.push({ href: "#study-nursing-analytics", label: t("learner.premiumNursingAnalytics.title") });
   if (reportCard) {
     hubNavItems.push({ href: "#study-pathway", label: t("learner.account.nav.reportCard") });
   }
@@ -227,12 +234,35 @@ export function LearnerStudyHome({
   hubNavItems.push(
     { href: "#study-goals", label: t("learner.dailyGoal.title") },
     { href: "#study-momentum", label: t("learner.studyHome.sectionMomentumTitle") },
-    { href: "#study-explore", label: t("learner.studyHome.sectionExploreTitle") },
+    { href: "#study-explore", label: t("learner.studyHome.sectionAnalyticsNavLabel") },
     { href: "#user-panel-band", label: t("learner.account.nav.groupAccount") },
   );
 
+  const pnPracticalHub =
+    Boolean(preferredPathwayId) &&
+    (() => {
+      const p = preferredPathwayId ? getExamPathwayById(preferredPathwayId) : null;
+      return p ? isPracticalNursingMarketingPathway(p) : false;
+    })();
+
+  const npPremiumHub =
+    Boolean(preferredPathwayId) &&
+    (() => {
+      const p = preferredPathwayId ? getExamPathwayById(preferredPathwayId) : null;
+      return p ? isNpPremiumConvergencePathway(p) : false;
+    })();
+
   const content = (
-    <LearnerDashboardHubLayout
+    <div
+      className={
+        pnPracticalHub
+          ? "nn-dash-pn-practical-hub min-w-0"
+          : npPremiumHub
+            ? "nn-dash-np-premium-hub min-w-0"
+            : "min-w-0"
+      }
+    >
+      <LearnerDashboardHubLayout
       navAriaLabel={t("learner.studyHome.pageEyebrow")}
       navHeading={t("learner.studyHome.shortcutsNavLabel")}
       items={hubNavItems}
@@ -245,7 +275,22 @@ export function LearnerStudyHome({
         readiness={snapshot.readiness}
         countdown={countdown}
         studyStreakDays={snapshot.studyStreakDays}
+        weakTopicsPreview={studySnap?.weakTopics ?? []}
+        strongTopicsPreview={studySnap?.strongTopicsHighlight ?? []}
+        benchmark={benchmark}
       />
+
+      <LearnerStudySurfaceSection
+        id="study-quick-launch"
+        eyebrow={t("learner.studyHome.quickLaunchEyebrow")}
+        title={t("learner.studyHome.quickLaunchTitle")}
+        intro={t("learner.studyHome.quickLaunchIntro")}
+        tone="secondary"
+        surfacePadding="md"
+        className="nn-dash-band nn-dash-band--quick-launch nn-dash-band--stack-tight"
+      >
+        <LearnerHubClinicalQuickLaunch t={t} snapshot={snapshot} />
+      </LearnerStudySurfaceSection>
 
       <LearnerStudySurfaceSection
         id="study-modes"
@@ -317,13 +362,15 @@ export function LearnerStudyHome({
         <WeakAreasDashboardClient initial={snapshot.topicPerformance} />
       </section>
 
+      <LearnerPremiumNursingAnalyticsSection snapshot={snapshot} studySnap={studySnap} t={t} />
+
       {reportCard ? (
         <section
           id="study-pathway"
           className="nn-dash-band nn-dash-band--pathway nn-dash-band--stack-tight"
           aria-label={t("learner.account.nav.reportCard")}
         >
-          <LearnerReportCard model={reportCard} />
+          <LearnerReportCard model={reportCard} t={t} />
         </section>
       ) : null}
 
@@ -457,14 +504,14 @@ export function LearnerStudyHome({
 
       <LearnerStudySurfaceSection
         id="study-explore"
-        eyebrow={null}
-        title={t("learner.studyHome.sectionExploreTitle")}
-        intro={null}
+        eyebrow={t("learner.studyHome.sectionAnalyticsEyebrow")}
+        title={t("learner.studyHome.sectionAnalyticsTitle")}
+        intro={t("learner.studyHome.sectionAnalyticsIntro")}
         tone="primary"
         surfacePadding="md"
         className="nn-dash-band nn-dash-band--explore nn-dash-band--stack-tight"
       >
-        <div className="nn-dash-explore-tail">
+        <div className="nn-dash-explore-tail nn-learner-cockpit-analytics">
           <PremiumLearnerHub
             snapshot={snapshot}
             weakTopicTitles={weakTopicTitles}
@@ -495,7 +542,8 @@ export function LearnerStudyHome({
         entitlement={entitlement}
         includeStudyShortcuts={false}
       />
-    </LearnerDashboardHubLayout>
+      </LearnerDashboardHubLayout>
+    </div>
   );
 
   if (!showShell) {

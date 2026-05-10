@@ -39,10 +39,10 @@ describe("Practice test runner — CAT shell contract", () => {
       "CAT MCQ and CAT SATA must both pass catOptState(canonical) into AnswerOptionRow",
     );
     const linearStateMatches = src.match(/state=\{linearOptState\(canonical\)\}/g) ?? [];
-    assert.equal(
-      linearStateMatches.length,
-      2,
-      "Linear MCQ and linear SATA must both pass linearOptState(canonical) into AnswerOptionRow",
+    const linearRowStateMatches = src.match(/rowState=\{linearOptState\}/g) ?? [];
+    assert.ok(
+      linearStateMatches.length >= 1 && linearRowStateMatches.length >= 1,
+      "Linear SATA uses AnswerOptionRow + linearOptState; linear MCQ uses radiogroup rowState={linearOptState}",
     );
   });
 

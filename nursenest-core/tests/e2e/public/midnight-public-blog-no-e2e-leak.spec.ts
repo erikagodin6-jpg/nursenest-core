@@ -21,10 +21,15 @@ test.beforeEach(async ({ context }) => {
 });
 
 test.describe("Midnight theme + public blog E2E exclusion", () => {
+  test.describe.configure({ retries: 1 });
   test.use({ viewport: { width: 1280, height: 900 } });
 
-  test("Midnight: marketing-unified-dark header, key surfaces render, no bloge2e strings", async ({ page }, testInfo) => {
-    await page.goto("/", { waitUntil: "load", timeout: 120_000 });
+  test("Midnight: marketing-row4 header (Ocean layout parity), key surfaces render, no bloge2e strings", async ({
+    page,
+  }, testInfo) => {
+    // Multi-route marketing audit + full-page screenshots can exceed the default 180s Playwright timeout on cold dev.
+    test.setTimeout(480_000);
+    await page.goto("/", { waitUntil: "domcontentloaded", timeout: 120_000 });
     await dismissMarketingScrims(page);
 
     await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({ timeout: 60_000 });
@@ -39,7 +44,7 @@ test.describe("Midnight theme + public blog E2E exclusion", () => {
 
     const header = page.locator("header").first();
     await expect(header).toBeVisible();
-    await expect(header).toHaveAttribute("data-nn-header-layout", "marketing-unified-dark");
+    await expect(header).toHaveAttribute("data-nn-header-layout", "marketing-row4");
 
     await expect(page.getByRole("navigation").first()).toBeVisible();
 
@@ -51,7 +56,7 @@ test.describe("Midnight theme + public blog E2E exclusion", () => {
       contentType: "image/png",
     });
 
-    await page.goto("/pricing", { waitUntil: "load", timeout: 120_000 });
+    await page.goto("/pricing", { waitUntil: "domcontentloaded", timeout: 120_000 });
     await dismissMarketingScrims(page);
     await expect(page.locator("main, [role='main'], body").first()).toBeVisible({ timeout: 60_000 });
     await testInfo.attach("midnight-pricing", {
@@ -59,7 +64,7 @@ test.describe("Midnight theme + public blog E2E exclusion", () => {
       contentType: "image/png",
     });
 
-    await page.goto("/us/rn/nclex-rn/lessons", { waitUntil: "load", timeout: 120_000 });
+    await page.goto("/us/rn/nclex-rn/lessons", { waitUntil: "domcontentloaded", timeout: 120_000 });
     await dismissMarketingScrims(page);
     await expect(page.locator("body")).toBeVisible({ timeout: 60_000 });
     await testInfo.attach("midnight-rn-lessons", {
@@ -67,7 +72,7 @@ test.describe("Midnight theme + public blog E2E exclusion", () => {
       contentType: "image/png",
     });
 
-    await page.goto("/blog", { waitUntil: "load", timeout: 120_000 });
+    await page.goto("/blog", { waitUntil: "domcontentloaded", timeout: 120_000 });
     await dismissMarketingScrims(page);
     await expect(page.locator("body")).toBeVisible({ timeout: 120_000 });
     const blogLower = (await page.locator("body").innerText()).toLowerCase();
@@ -80,7 +85,7 @@ test.describe("Midnight theme + public blog E2E exclusion", () => {
       contentType: "image/png",
     });
 
-    await page.goto("/", { waitUntil: "load", timeout: 120_000 });
+    await page.goto("/", { waitUntil: "domcontentloaded", timeout: 120_000 });
     await dismissMarketingScrims(page);
     const footerBlog = page.locator('footer a[href^="/blog"]');
     const n = await footerBlog.count();

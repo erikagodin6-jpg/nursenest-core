@@ -9,6 +9,7 @@ import {
   resolvePremiumCardHref,
   type PremiumModuleCardModel,
 } from "@/lib/marketing/exam-pathway-hub-premium-modules";
+import { isPracticalNursingMarketingPathway } from "@/lib/marketing/is-practical-nursing-marketing-pathway";
 import { StudyCard } from "@/components/ui/study-card";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -177,6 +178,7 @@ export function ExamPathwayHubPremiumModules({
   });
   const preNursingHub = isPreNursingPremiumPathway(pathway);
   const alliedHub = pathway.roleTrack === "allied";
+  const pnTierHub = isPracticalNursingMarketingPathway(pathway);
 
   const accentVar = alliedPremiumAccentChartVar(alliedProfessionKey);
   const alliedBandStyle: CSSProperties | undefined = alliedHub
@@ -199,14 +201,18 @@ export function ExamPathwayHubPremiumModules({
         headingKey={
           preNursingHub
             ? "components.examPathwayHub.premiumModules.preNursingStudyToolsHeading"
-            : "components.examPathwayHub.premiumModules.studyToolsHeading"
+            : pnTierHub
+              ? "components.examPathwayHub.premiumModules.pnTierStudyToolsHeading"
+              : "components.examPathwayHub.premiumModules.studyToolsHeading"
         }
         leadKey={
           preNursingHub
             ? "components.examPathwayHub.premiumModules.preNursingStudyToolsLead"
             : alliedHub
               ? "components.examPathwayHub.premiumModules.alliedStudyToolsLead"
-              : "components.examPathwayHub.premiumModules.studyToolsLead"
+              : pnTierHub
+                ? "components.examPathwayHub.premiumModules.pnTierStudyToolsLead"
+                : "components.examPathwayHub.premiumModules.studyToolsLead"
         }
         cards={studyTools}
         pathway={pathway}
@@ -222,7 +228,9 @@ export function ExamPathwayHubPremiumModules({
             ? "components.examPathwayHub.premiumModules.preNursingReadinessLead"
             : alliedHub
               ? "components.examPathwayHub.premiumModules.alliedReadinessLead"
-              : "components.examPathwayHub.premiumModules.readinessLead"
+              : pnTierHub
+                ? "components.examPathwayHub.premiumModules.pnTierReadinessLead"
+                : "components.examPathwayHub.premiumModules.readinessLead"
         }
         cards={readiness}
         pathway={pathway}

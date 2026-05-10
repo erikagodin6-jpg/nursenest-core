@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { FlashcardsHubSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
@@ -28,6 +29,14 @@ import { flashcardLessonVirtualDiagnosticsForPathway } from "@/lib/learner-study
 import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import {
+  pathwayFlashcardsHubH1,
+  pathwayFlashcardsHubLead,
+  tryResolveExamPathwayForFlashcardsMetadataQuery,
+  pathwayFlashcardsHubMetaTitle,
+} from "@/lib/lessons/pathway-flashcards-hub-seo";
+import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
 type PageProps = {
@@ -38,6 +47,31 @@ type PageProps = {
     weakOnly?: string | string[];
   }>;
 };
+
+export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
+  return safeGenerateMetadata(
+    async () => {
+      const sp = await searchParams;
+      const rawPid = sp.pathwayId;
+      const pathwayQueryRaw =
+        typeof rawPid === "string" && rawPid.trim().length > 2
+          ? rawPid.trim()
+          : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
+            ? rawPid[0].trim()
+            : null;
+      const { t } = await getLearnerMarketingBundle();
+      const pathway = pathwayQueryRaw ? tryResolveExamPathwayForFlashcardsMetadataQuery(pathwayQueryRaw) : null;
+      const title = pathway
+        ? pathwayFlashcardsHubMetaTitle(pathway)
+        : `${t("learner.flashcards.page.title")} | NurseNest`;
+      return {
+        title,
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/flashcards", routeGroup: "student.learner.flashcards" },
+  );
+}
 
 export default async function FlashcardsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
@@ -276,6 +310,12 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
     catHref = appPathwayCatSessionStartPath(scopedPathwayId, { alliedProfession: alliedKeyForFlashcards });
   }
 
+  const flashcardsHeroEyebrow = catalogPathway
+    ? `${pathwayRegionAwareExamName(catalogPathway)} · ${pathwayCountryLabel(catalogPathway)}`
+    : undefined;
+  const flashcardsHeroTitle = catalogPathway ? pathwayFlashcardsHubH1(catalogPathway) : undefined;
+  const flashcardsHeroSubtitle = catalogPathway ? pathwayFlashcardsHubLead(catalogPathway) : undefined;
+
   return (
     <div className="space-y-2">
       <LearnerRenderTraceBanner data-route="flashcards" label="NN_RENDER_TRACE: flashcards live route" />
@@ -289,6 +329,9 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
         <FlashcardsHubClient
           scopedPathwayId={scopedPathwayId}
           pathwayDisplayName={pathwayDisplayName}
+          flashcardsHeroEyebrow={flashcardsHeroEyebrow}
+          flashcardsHeroTitle={flashcardsHeroTitle}
+          flashcardsHeroSubtitle={flashcardsHeroSubtitle}
           pathwayBootstrapSource={pathwayBootstrapSource}
           catHref={catHref}
           initialHub={initialHub}

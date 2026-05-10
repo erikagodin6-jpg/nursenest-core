@@ -68,6 +68,8 @@ function logHubDataLoadFailed(
 export type MarketingExamHubOptionalBlocks = {
   npInventory: Awaited<ReturnType<typeof loadNpCanadaInventoryGate>>;
   questionSnapshot: PathwayQuestionBankSnapshot;
+  /** True when `loadPathwayQuestionBankSnapshot` rejected — match lessons hub chip semantics; do not infer pool from defaults. */
+  questionSnapshotLoadRejected: boolean;
   pathwayLessonCount: number;
 };
 
@@ -114,10 +116,10 @@ export async function loadMarketingExamHubOptionalBlocks(
     }
   });
 
-  const questionSnapRejected = settled.some(
-    (result, i) => tasks[i]!.name === "question_snapshot" && result.status === "rejected",
-  );
-  if (questionSnapRejected || questionSnapshot.status === "unavailable") {
+  const questionSnapIndex = tasks.findIndex((t) => t.name === "question_snapshot");
+  const questionSnapshotLoadRejected =
+    questionSnapIndex >= 0 && settled[questionSnapIndex]?.status === "rejected";
+  if (questionSnapshotLoadRejected || questionSnapshot.status === "unavailable") {
     recordRouteRenderFallback({
       fallbackType: "empty_question_snapshot",
       pathname: ctx.pathname,
@@ -139,7 +141,7 @@ export async function loadMarketingExamHubOptionalBlocks(
     });
   }
 
-  return { npInventory, questionSnapshot, pathwayLessonCount };
+  return { npInventory, questionSnapshot, questionSnapshotLoadRejected, pathwayLessonCount };
 }
 
 export type {

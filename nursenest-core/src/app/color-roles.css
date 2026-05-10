@@ -44,8 +44,16 @@
   --semantic-info-text: #111827;
 }
 
-/* Theme-scoped overrides (lavender, ocean, sage, dark-*, …): same roles, hue from --theme-primary */
-:where([data-theme]) {
+/*
+ * Theme-scoped overrides (lavender, ocean, sage, dark-*, …): same roles, hue from --theme-primary.
+ *
+ * SPECIFICITY: `html[data-theme]` is (0,1,1) — beats :root's (0,1,0). Do NOT use
+ * `:where([data-theme])` here: :where() has 0 specificity, loses to :root, and the
+ * role-cta + role-success/warning/premium tokens stay frozen at the Ocean defaults for
+ * every other theme. The pink/ocean/mint/multi-pastel/dark overrides below remain at
+ * (0,2,0) and continue to win for those specific themes.
+ */
+html[data-theme] {
   /* CTA: theme + warm shift so buttons read as “action” vs decorative primary hue elsewhere */
   --role-cta: var(--palette-button-primary, color-mix(in srgb, var(--theme-primary) 78%, #ea580c));
   --role-cta-foreground: var(--palette-button-primary-text, #ffffff);

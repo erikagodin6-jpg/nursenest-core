@@ -48,7 +48,13 @@ export function localNextDevWebServer(input: LocalNextWebServerInput) {
     input.reuseExistingServer ??
     (!forceNoReuse && !process.env.CI);
 
+  const existingNodeOptions = process.env.NODE_OPTIONS?.trim();
+  const playwrightHeap = process.env.PLAYWRIGHT_NEXT_HEAP_MB?.trim() || "4096";
+  const heapFlag = `--max-old-space-size=${playwrightHeap}`;
+  const mergedNodeOptions = existingNodeOptions ? `${existingNodeOptions} ${heapFlag}` : heapFlag;
+
   const env: Record<string, string> = {
+    NODE_OPTIONS: mergedNodeOptions,
     RUN_HEAVY_BUILD_TASKS: "false",
     NEXTAUTH_SECRET: secret,
     AUTH_SECRET: process.env.AUTH_SECRET?.trim() || secret,

@@ -79,6 +79,7 @@ Use `reports/*-hub-FINAL.md` (or PR description) as the checklist carrier for hu
 
 ## Related
 
+- `docs/governance/learner-surface-delivery-sequence.md` — **mandatory five-step order** for major learner UI (Figma → mockup screenshot gate → implementation → app screenshots → Ocean/Blossom/Midnight parity); prohibitions and acceptance checklist. See also when shipping `/app/*` or study-hub surfaces.  
 - `docs/governance/figma-post-completion-summary-template.md` — post-ship summary template (see below)  
 - `docs/ecosystem-design-system-convergence.md`  
 - `reports/allied-health-figma-ui-plan.md` (Allied-specific frame list — update with real file links)  

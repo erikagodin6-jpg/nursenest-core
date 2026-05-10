@@ -415,9 +415,7 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
       expect(hierarchy.ok, JSON.stringify({ theme, hierarchy })).toBe(true);
       if (!hierarchy.ok) continue;
       expect(hierarchy.noOverlap, JSON.stringify({ theme, hierarchy })).toBe(true);
-      if (theme !== "midnight") {
-        expect(hierarchy.utilitySeparated, JSON.stringify({ theme, hierarchy })).toBe(true);
-      }
+      expect(hierarchy.utilitySeparated, JSON.stringify({ theme, hierarchy })).toBe(true);
       expect(hierarchy.tierSecondary, JSON.stringify({ theme, hierarchy })).toBe(true);
       expect(hierarchy.noButtonWall, JSON.stringify({ theme, hierarchy })).toBe(true);
       expect(hierarchy.readablePrimary, JSON.stringify({ theme, hierarchy })).toBe(true);
@@ -435,27 +433,18 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
       await dismissMarketingScrims(page);
 
       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
-      const layout = theme === "midnight" ? "marketing-unified-dark" : "marketing-row4";
-      await expect(page.locator(`header[data-nn-header-layout="${layout}"]`).first()).toBeVisible({
+      await expect(page.locator('header[data-nn-header-layout="marketing-row4"]').first()).toBeVisible({
         timeout: 60_000,
       });
 
-      if (theme === "midnight") {
-        const utilityInline = page.locator('[data-testid="marketing-header-utility-inline"]').first();
-        await expect(utilityInline).toBeVisible({ timeout: 30_000 });
-      } else {
-        const utilityBand = page.locator("[data-testid='marketing-header-utility-band']").first();
-        await expect(utilityBand).toBeVisible({ timeout: 30_000 });
-      }
+      const utilityBand = page.locator("[data-testid='marketing-header-utility-band']").first();
+      await expect(utilityBand).toBeVisible({ timeout: 30_000 });
       const utilityCluster = page.locator('[data-testid="marketing-header-utility-cluster"]').first();
       await expect(utilityCluster).toBeVisible({ timeout: 30_000 });
       await expect(utilityCluster.getByRole("button").first()).toBeVisible({ timeout: 15_000 });
       await expect(utilityCluster.locator("button[aria-expanded]").first()).toBeVisible({ timeout: 15_000 });
       if (publicMarketingThemeChoiceCount() > 1) {
-        const themeBtn =
-          theme === "midnight"
-            ? page.locator('[data-testid="marketing-header-utility-inline"] button[aria-haspopup="listbox"]').first()
-            : utilityBarLocator(page).locator('button[aria-haspopup="listbox"]').first();
+        const themeBtn = utilityBarLocator(page).locator('button[aria-haspopup="listbox"]').first();
         await expect(themeBtn).toBeVisible({ timeout: 15_000 });
       }
 
@@ -482,7 +471,7 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
           lc === wc &&
           lc !== "transparent";
         return { ok: ok as const, lr: lr.width, wr: wr.width, lc, wc };
-      }, { headerLayout: layout });
+      }, { headerLayout: "marketing-row4" });
       expect(brandRegionOk.ok, JSON.stringify(brandRegionOk)).toBe(true);
 
       await page.screenshot({
@@ -543,8 +532,7 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
             return { hit: false };
           }
 
-          const layoutSel = themeId === "midnight" ? "marketing-unified-dark" : "marketing-row4";
-          const header = document.querySelector(`header[data-nn-header-layout="${layoutSel}"]`);
+          const header = document.querySelector('header[data-nn-header-layout="marketing-row4"]');
           const tierChip = header?.querySelector(
             ".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier'] a, .nn-marketing-tier-chip",
           );

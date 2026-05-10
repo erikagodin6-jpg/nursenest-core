@@ -59,11 +59,26 @@ test.describe("Nursing pathway hubs — public smoke", () => {
     await gotoExpectOk(page, "/canada/pn/rex-pn");
     await expectNotPageNotFound(page);
     await expect(page.locator('[data-nn-nursing-tier-hub="surface"]')).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator(".nn-premium-pathway-hub--pn-rpn")).toBeVisible();
+    await expect(page.locator('[data-nn-pn-hub-insight-rail="1"]')).toBeVisible();
+    await expect(page.getByRole("heading", { name: /PN \/ RPN clinical toolkit/i })).toBeVisible();
     await expect(page.locator(PREMIUM)).toBeVisible();
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(0);
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="hub_lessons"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="flashcards"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="osce"]`)).toBeVisible();
+    await expectNoAdminLinksInPremiumZone(page);
+  });
+
+  test("US NCLEX-PN hub — PN convergence shell + insight rail", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await seedUsMarketingCookie(page, origin);
+    await gotoExpectOk(page, "/us/pn/nclex-pn");
+    await expectNotPageNotFound(page);
+    await expect(page.locator('[data-nn-nursing-tier-hub="surface"]')).toBeVisible({ timeout: 90_000 });
+    await expect(page.locator(".nn-premium-pathway-hub--pn-rpn")).toBeVisible();
+    await expect(page.locator('[data-nn-pn-hub-insight-rail="1"]')).toBeVisible();
+    await expect(page.getByRole("heading", { name: /PN \/ RPN clinical toolkit/i })).toBeVisible();
     await expectNoAdminLinksInPremiumZone(page);
   });
 

@@ -37,7 +37,7 @@ const e2eWebServer = localDevWebServer();
 export default defineConfig({
   ...(e2eWebServer ? { webServer: e2eWebServer } : {}),
   testDir: "tests/e2e/public",
-  testMatch: /nursing-pathway-hubs-smoke\.spec\.ts$/,
+  testMatch: /(nursing-pathway-hubs-smoke|practical-nursing-hub-convergence-screenshots)\.spec\.ts$/,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,

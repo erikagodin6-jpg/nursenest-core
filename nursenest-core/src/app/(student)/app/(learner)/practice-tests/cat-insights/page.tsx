@@ -56,8 +56,8 @@ export default function CatInsightsPage() {
     outlooks.length >= 2 && latest != null ? latest - (items[1]?.passOutlookPercent ?? latest) : null;
 
   return (
-    <div className="space-y-6">
-      <div className="mb-4">
+    <div className="mx-auto min-w-0 w-full max-w-6xl space-y-6 px-4 pb-6 sm:px-6">
+      <div className="mb-1">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
       <div className="nn-learner-page-hero nn-cat-insights-hero rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_8%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
@@ -69,7 +69,12 @@ export default function CatInsightsPage() {
       </div>
 
       {error ? (
-        <p className="nn-card p-4 text-sm text-destructive">{error}</p>
+        <p
+          className="nn-card border-[color-mix(in_srgb,var(--semantic-danger)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] p-4 text-sm text-[var(--semantic-danger)]"
+          role="alert"
+        >
+          {error}
+        </p>
       ) : (
         <>
           <div className="grid gap-3 sm:grid-cols-3">
@@ -94,12 +99,15 @@ export default function CatInsightsPage() {
           <div className="nn-card border-[var(--semantic-border-soft)] p-0 overflow-hidden">
             <div className="border-b border-[var(--semantic-border-soft)] px-5 py-3">
               <h2 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Recent CAT sessions</h2>
-              <p className="text-xs text-muted-foreground">Newest first</p>
+              <p className="text-xs text-[var(--semantic-text-muted)]">Newest first</p>
             </div>
             {items.length === 0 && !loading ? (
-              <p className="p-6 text-sm text-muted-foreground">
+              <p className="p-6 text-sm text-[var(--semantic-text-secondary)]">
                 No completed CAT sessions yet.{" "}
-                <Link className="font-semibold text-primary underline" href="/app/practice-tests">
+                <Link
+                  className="font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
+                  href="/app/practice-tests"
+                >
                   Start an adaptive test
                 </Link>
                 .
@@ -109,10 +117,13 @@ export default function CatInsightsPage() {
                 {items.map((r) => (
                   <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-sm">
                     <div>
-                      <Link href={`/app/practice-tests/${r.id}/results`} className="font-semibold text-primary hover:underline">
+                      <Link
+                        href={`/app/practice-tests/${r.id}/results`}
+                        className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                      >
                         {r.title?.trim() || "CAT session"}
                       </Link>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-[var(--semantic-text-muted)]">
                         {r.completedAt ? new Date(r.completedAt).toLocaleString() : "—"}
                         {r.catPresentationMode === "exam_simulation" ? " · Exam simulation" : ""}
                       </p>
@@ -121,7 +132,7 @@ export default function CatInsightsPage() {
                       <p className="font-semibold text-[var(--semantic-text-primary)]">
                         {r.passOutlookPercent != null ? `${r.passOutlookPercent}% outlook` : "—"}
                       </p>
-                      <p className="text-xs capitalize text-muted-foreground">
+                      <p className="text-xs capitalize text-[var(--semantic-text-muted)]">
                         {r.decision ?? "—"} · {r.confidenceLevel ?? "—"} confidence
                         {r.totalQuestions != null ? ` · ${r.totalQuestions} items` : ""}
                       </p>
@@ -146,8 +157,11 @@ export default function CatInsightsPage() {
         </>
       )}
 
-      <p className="text-sm">
-        <Link href="/app/practice-tests" className="font-semibold text-primary underline">
+      <p className="text-sm text-[var(--semantic-text-secondary)]">
+        <Link
+          href="/app/practice-tests"
+          className="font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
+        >
           Back to Practice Tests
         </Link>
       </p>

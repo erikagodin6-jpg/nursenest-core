@@ -78,4 +78,5 @@ For **aesthetic, layout, hierarchy, spacing, navigation chrome, card systems, re
 - `docs/governance/ecosystem-qa-master-program.md` — recurring Playwright matrix, cohesion, entitlement, adaptive, performance audits + report templates.
 - `docs/ecosystem-design-system-convergence.md` — primitive registry, duplicate-system audit, theme/token convergence.
 - `docs/governance/ecosystem-guardrails-rollout.md` — changelog and enforcement notes.
+- `docs/governance/learner-surface-delivery-sequence.md` — mandatory five-step learner UI order (Figma → mockup gate → implement → app screenshots → Ocean/Blossom/Midnight parity), prohibitions, acceptance checklist.
 - `docs/governance/figma-premium-ui-mandatory-process.md` — Figma-first workflow, evidence, Playwright visual QA expectations.

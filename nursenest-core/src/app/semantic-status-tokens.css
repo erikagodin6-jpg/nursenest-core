@@ -109,7 +109,14 @@
   --lesson-next-steps-contrast: var(--semantic-text-secondary);
 }
 
-:where([data-theme]) {
+/*
+ * SPECIFICITY: `html[data-theme]` is (0,1,1) — beats :root's (0,1,0). Required for the
+ * semantic ↔ theme remap to actually override the first-paint defaults declared on :root above.
+ * Do NOT replace with :where([data-theme]) — :where() has 0 specificity, loses to :root,
+ * and freezes every semantic token at the Ocean default for all themes.
+ * Verified by tests/contracts/marketing-theme-propagation.contract.test.ts.
+ */
+html[data-theme] {
   --semantic-bg-base: var(--bg-page);
   --semantic-bg-soft: var(--bg-section-alt);
   --semantic-surface: var(--bg-card);
@@ -486,7 +493,13 @@ html[data-theme="deep-twilight"] {
  * so soft tints stay theme-aware. Hard values are stable mid-tones chosen to read
  * clearly in both light and dark defaults; per-theme overrides follow below.
  */
-:where([data-theme]) {
+/*
+ * SPECIFICITY: `html[data-theme]` is (0,1,1) — beats :root's (0,1,0). Required so
+ * the violet/teal/cyan defaults below actually take effect under any active theme.
+ * Per-theme overrides (lavender, dark-*) below use `html[data-theme="…"]` (0,2,0)
+ * which still wins.
+ */
+html[data-theme] {
   --semantic-violet: #7c3aed;
   --semantic-violet-soft: color-mix(in srgb, #7c3aed 10%, var(--bg-card));
   --semantic-violet-contrast: #4c1d95;

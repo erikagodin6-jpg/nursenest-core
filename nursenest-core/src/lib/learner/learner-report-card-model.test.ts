@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { buildLearnerReportCardViewModel } from "@/lib/learner/learner-report-card-model";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
+import { EMPTY_EXAM_DIMENSION_BREAKDOWN } from "@/lib/learner/exam-attempt-dimension-breakdown";
 import type { LearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import { buildAppFlashcardsTopicHref } from "@/lib/learner/app-study-internal-links";
 
@@ -13,7 +14,7 @@ describe("learner report card model", () => {
       overallLessons: { completed: 2, total: 10, pct: 20 },
       readiness: {
         score: 55,
-        band: "building" as const,
+        band: "improving" as const,
         confidence: "medium" as const,
         trend: null,
         summary: "",
@@ -36,6 +37,7 @@ describe("learner report card model", () => {
       insights: null,
       lessonContinuations: [],
       topicPerformance: null,
+      examDimensions: EMPTY_EXAM_DIMENSION_BREAKDOWN,
       studyBootstrap: { alliedProfessionKey: null, tier: null, learnerPath: "p1", examDate: null, examDatePlanType: null },
     } as unknown as PremiumDashboardSnapshot;
     const studySnap = {

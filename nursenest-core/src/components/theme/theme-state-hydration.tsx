@@ -17,6 +17,119 @@ import {
 
 const ALLOWED_THEME_IDS = new Set(THEME_OPTIONS.map((o) => o.id));
 
+function paletteRoleKeyToCssVar(key: string): string {
+  return `--palette-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
+}
+
+/**
+ * Removes inline custom properties previously written by {@link ThemeStateHydration}
+ * so `[data-theme]` blocks in CSS can win after theme switches (e.g. Midnight → Blossom).
+ */
+function clearThemeHydrationInlineSlots(root: HTMLElement) {
+  for (const key of PALETTE_ROLE_KEYS) {
+    root.style.removeProperty(paletteRoleKeyToCssVar(key));
+  }
+  const slots = [
+    "--palette-nav",
+    "--text-primary",
+    "--text-muted",
+    "--text-on-accent",
+    "--border-subtle",
+    "--accent-primary",
+    "--accent-secondary",
+    "--theme-primary",
+    "--theme-secondary",
+    "--theme-accent",
+    "--theme-page-bg",
+    "--theme-card-bg",
+    "--theme-heading-text",
+    "--theme-body-text",
+    "--theme-muted-text",
+    "--theme-border",
+    "--theme-ring",
+    "--theme-nav-bg",
+    "--palette-nav-background",
+    "--theme-nav-border",
+    "--theme-nav-text",
+    "--palette-nav-text",
+    "--theme-menu-text",
+    "--theme-menu-hover-bg",
+    "--theme-menu-active-bg",
+    "--theme-menu-hover-text",
+    "--theme-topbar-bg",
+    "--theme-topbar-text",
+    "--theme-card-border",
+    "--theme-separator",
+    "--theme-focus-ring",
+    "--theme-primary-foreground",
+    "--logo-primary",
+    "--logo-text",
+    "--logo-on-dark",
+    "--header-on-dark",
+    "--state-success",
+    "--state-warning",
+    "--state-danger-soft",
+    "--theme-background",
+    "--theme-background-subtle",
+    "--theme-surface",
+    "--theme-surface-strong",
+    "--theme-border-strong",
+    "--theme-text-on-brand",
+    "--theme-brand",
+    "--theme-brand-strong",
+    "--theme-nav-background",
+    "--theme-nav-foreground",
+    "--theme-nav-hover",
+    "--theme-nav-border-strong",
+    "--theme-primary-button-bg",
+    "--theme-primary-button-text",
+    "--theme-primary-button-hover",
+    "--theme-secondary-button-bg",
+    "--theme-secondary-button-text",
+    "--theme-secondary-button-border",
+    "--theme-secondary-button-hover",
+    "--theme-pill-bg",
+    "--theme-pill-text",
+    "--theme-pill-border",
+    "--theme-logo-on-light",
+    "--theme-logo-on-dark",
+    "--theme-header-top-bg",
+    "--theme-header-main-bg",
+    "--theme-header-secondary-bg",
+    "--theme-header-secondary-fg",
+    "--role-cta",
+    "--role-cta-foreground",
+    "--role-cta-hover",
+    "--role-cta-pressed",
+    "--role-cta-shadow",
+    "--role-cta-soft",
+    "--role-cta-on-soft",
+    "--role-secondary-action-bg",
+    "--role-secondary-action-text",
+    "--role-secondary-action-border",
+    "--role-secondary-action-hover-bg",
+    "--lesson-summary",
+    "--lesson-key-concepts",
+    "--lesson-signs-symptoms",
+    "--lesson-interventions",
+    "--lesson-diagnostics",
+    "--lesson-medications",
+    "--lesson-clinical-pearls",
+    "--lesson-patient-teaching",
+    "--lesson-exam-tips",
+    "--lesson-red-flags",
+    "--nn-nav-bg",
+    "--nn-nav-fg",
+    "--nn-nav-border",
+    "--nn-nav-hover-bg",
+    "--nn-nav-hover-fg",
+    "--nn-nav-panel",
+  ] as const;
+  for (const prop of slots) {
+    root.style.removeProperty(prop);
+  }
+}
+
 /** Persists the user’s chosen theme id as-is (no alias remap; invalid ids fall back elsewhere). */
 function normalizeStoredThemeId(raw: string): string {
   return raw.trim();
@@ -75,22 +188,12 @@ export function ThemeStateHydration() {
 
   const applyPaletteRoles = (themeId: string) => {
     const root = document.documentElement;
+    clearThemeHydrationInlineSlots(root);
+
     const palette = getThemePaletteTokens(themeId);
     const semantic = getThemeSurfaceContrastTokens(themeId);
 
-    const INLINE_HEADER_CHROME = [
-      "--theme-header-top-bg",
-      "--theme-header-main-bg",
-      "--theme-header-secondary-bg",
-      "--theme-header-secondary-fg",
-      "--theme-topbar-bg",
-      "--theme-topbar-text",
-    ] as const;
-
-    if (!palette || !semantic) {
-      for (const prop of INLINE_HEADER_CHROME) {
-        root.style.removeProperty(prop);
-      }
+    if (!semantic) {
       const navChrome = getNavChrome(themeId);
       root.style.setProperty("--nn-nav-bg", navChrome.chrome);
       root.style.setProperty("--nn-nav-fg", navChrome.foreground);
@@ -100,38 +203,59 @@ export function ThemeStateHydration() {
       root.style.setProperty("--nn-nav-panel", navChrome.panel);
       return;
     }
-    const toCssVar = (key: string) =>
-      `--palette-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
-    for (const key of PALETTE_ROLE_KEYS) {
-      root.style.setProperty(toCssVar(key), palette[key]);
-    }
-
-    // Required semantic role aliases (centralized, component-safe contract).
-    root.style.setProperty("--palette-nav", palette.navBackground);
-    root.style.setProperty("--text-primary", palette.text);
-    root.style.setProperty("--text-muted", palette.textMuted);
-    root.style.setProperty("--text-on-accent", semantic.textOnBrand);
-    root.style.setProperty("--border-subtle", palette.border);
-    root.style.setProperty("--accent-primary", palette.buttonPrimary);
-    root.style.setProperty("--accent-secondary", palette.accent);
 
     const isHex = (value: string) => /^#(?:[0-9a-fA-F]{3}){1,2}$/.test(value.trim());
     const setIfHex = (name: string, value: string) => {
       if (isHex(value)) root.style.setProperty(name, value);
     };
 
-    // Bridge legacy --theme-* consumers to curated palette roles.
-    // This prevents older selectors from reintroducing monochromatic over-application.
-    setIfHex("--theme-primary", palette.primary);
-    setIfHex("--theme-secondary", palette.primaryDeep);
-    setIfHex("--theme-accent", palette.accent);
+    if (palette) {
+      for (const key of PALETTE_ROLE_KEYS) {
+        root.style.setProperty(paletteRoleKeyToCssVar(key), palette[key]);
+      }
+
+      // Required semantic role aliases (centralized, component-safe contract).
+      root.style.setProperty("--palette-nav", palette.navBackground);
+      root.style.setProperty("--text-primary", palette.text);
+      root.style.setProperty("--text-muted", palette.textMuted);
+      root.style.setProperty("--text-on-accent", semantic.textOnBrand);
+      root.style.setProperty("--border-subtle", palette.border);
+      root.style.setProperty("--accent-primary", palette.buttonPrimary);
+      root.style.setProperty("--accent-secondary", palette.accent);
+
+      // Bridge legacy --theme-* consumers to curated palette roles.
+      // This prevents older selectors from reintroducing monochromatic over-application.
+      setIfHex("--theme-primary", palette.primary);
+      setIfHex("--theme-secondary", palette.primaryDeep);
+      setIfHex("--theme-accent", palette.accent);
+      setIfHex("--theme-ring", palette.ring);
+      setIfHex("--theme-topbar-bg", palette.topBarBackground);
+      setIfHex("--theme-topbar-text", palette.topBarText);
+      setIfHex("--theme-focus-ring", palette.ring);
+      setIfHex("--logo-primary", palette.logoPrimary);
+      setIfHex("--state-success", palette.success);
+      setIfHex("--state-warning", palette.warning);
+      setIfHex("--state-danger-soft", palette.danger);
+
+      // Lesson semantic mapping (fixed roles from product requirement).
+      setIfHex("--lesson-summary", palette.box1);
+      setIfHex("--lesson-key-concepts", palette.box2);
+      setIfHex("--lesson-signs-symptoms", palette.box3);
+      setIfHex("--lesson-interventions", palette.box4);
+      setIfHex("--lesson-diagnostics", palette.box5); // labs
+      setIfHex("--lesson-medications", palette.box6); // pharmacology
+      setIfHex("--lesson-clinical-pearls", palette.box7); // complications
+      setIfHex("--lesson-patient-teaching", palette.box8);
+      setIfHex("--lesson-exam-tips", palette.box9);
+      setIfHex("--lesson-red-flags", palette.danger); // warnings
+    }
+
     setIfHex("--theme-page-bg", semantic.background);
     setIfHex("--theme-card-bg", semantic.surface);
     setIfHex("--theme-heading-text", semantic.heading);
     setIfHex("--theme-body-text", semantic.text);
     setIfHex("--theme-muted-text", semantic.textMuted);
     setIfHex("--theme-border", semantic.border);
-    setIfHex("--theme-ring", palette.ring);
     setIfHex("--theme-nav-bg", semantic.navBackground);
     setIfHex("--palette-nav-background", semantic.navBackground);
     setIfHex("--theme-nav-border", semantic.navBorder);
@@ -141,20 +265,15 @@ export function ThemeStateHydration() {
     setIfHex("--theme-menu-hover-bg", semantic.navHover);
     setIfHex("--theme-menu-active-bg", semantic.navHover);
     setIfHex("--theme-menu-hover-text", semantic.navForeground);
-    setIfHex("--theme-topbar-bg", palette.topBarBackground);
-    setIfHex("--theme-topbar-text", palette.topBarText);
     setIfHex("--theme-card-border", semantic.border);
     setIfHex("--theme-separator", semantic.borderStrong);
-    setIfHex("--theme-focus-ring", palette.ring);
     setIfHex("--theme-primary-foreground", semantic.primaryButtonText);
-    setIfHex("--logo-primary", palette.logoPrimary);
-    const logoText = pickReadableText(semantic.navBackground, semantic.logoOnLight, semantic.logoOnDark);
+    const logoText = isHex(semantic.navBackground)
+      ? pickReadableText(semantic.navBackground, semantic.logoOnLight, semantic.logoOnDark)
+      : semantic.logoOnLight;
     setIfHex("--logo-text", logoText);
     setIfHex("--logo-on-dark", semantic.logoOnDark);
     setIfHex("--header-on-dark", semantic.textOnBrand);
-    setIfHex("--state-success", palette.success);
-    setIfHex("--state-warning", palette.warning);
-    setIfHex("--state-danger-soft", palette.danger);
 
     // Canonical surface/contrast token contract (single source of truth for themed UI layers).
     setIfHex("--theme-background", semantic.background);
@@ -221,18 +340,6 @@ export function ThemeStateHydration() {
     root.style.setProperty("--role-secondary-action-text", semantic.secondaryButtonText);
     root.style.setProperty("--role-secondary-action-border", semantic.secondaryButtonBorder);
     root.style.setProperty("--role-secondary-action-hover-bg", semantic.secondaryButtonHover);
-
-    // Lesson semantic mapping (fixed roles from product requirement).
-    setIfHex("--lesson-summary", palette.box1);
-    setIfHex("--lesson-key-concepts", palette.box2);
-    setIfHex("--lesson-signs-symptoms", palette.box3);
-    setIfHex("--lesson-interventions", palette.box4);
-    setIfHex("--lesson-diagnostics", palette.box5); // labs
-    setIfHex("--lesson-medications", palette.box6); // pharmacology
-    setIfHex("--lesson-clinical-pearls", palette.box7); // complications
-    setIfHex("--lesson-patient-teaching", palette.box8);
-    setIfHex("--lesson-exam-tips", palette.box9);
-    setIfHex("--lesson-red-flags", palette.danger); // warnings
   };
 
   useLayoutEffect(() => {
