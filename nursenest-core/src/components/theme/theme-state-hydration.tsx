@@ -17,6 +17,7 @@ import {
 
 const ALLOWED_THEME_IDS = new Set(THEME_OPTIONS.map((o) => o.id));
 
+/** Persists the user’s chosen theme id as-is (no alias remap; invalid ids fall back elsewhere). */
 function normalizeStoredThemeId(raw: string): string {
   return raw.trim();
 }

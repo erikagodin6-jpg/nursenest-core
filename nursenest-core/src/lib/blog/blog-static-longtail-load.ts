@@ -66,6 +66,9 @@ function recordFromFields(bodyHtml: string, fields: Record<string, string>): Blo
   const canonicalUrl = fields.canonicalUrl?.trim() || `/blog/${slug}`;
   const disclaimer = fields.medicalDisclaimer?.trim() ?? fields.disclaimer?.trim() ?? "";
   const draft = parseDraftFlag(fields.draft);
+  const locale = fields.locale?.trim() || undefined;
+  const languageCode = fields.languageCode?.trim() || undefined;
+  const translationGroupId = fields.translationGroupId?.trim() || undefined;
   return {
     slug,
     title,
@@ -81,6 +84,9 @@ function recordFromFields(bodyHtml: string, fields: Record<string, string>): Blo
     disclaimer,
     authorDisplayName: fields.authorDisplayName?.trim() || undefined,
     medicalReviewerName: fields.medicalReviewerName?.trim() || fields.reviewerName?.trim() || undefined,
+    ...(locale ? { locale } : {}),
+    ...(languageCode ? { languageCode } : {}),
+    ...(translationGroupId ? { translationGroupId } : {}),
     ...(draft ? { draft: true } : {}),
   };
 }

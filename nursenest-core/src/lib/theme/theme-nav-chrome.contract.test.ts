@@ -10,6 +10,7 @@ const PALETTES_PATH = resolve(HERE, "../../app/theme-palettes.css");
 const css = readFileSync(PALETTES_PATH, "utf-8");
 
 const THEME_IDS = [
+  "blossom",
   "aurora",
   "sunset",
   "ocean-air",

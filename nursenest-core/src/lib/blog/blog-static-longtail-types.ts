@@ -21,6 +21,12 @@ export type BlogStaticLongtailRecord = {
   disclaimer: string;
   authorDisplayName?: string;
   medicalReviewerName?: string;
+  /** BCP 47-ish locale label for hybrid long-tail SEO (optional; frontmatter-driven). */
+  locale?: string;
+  /** Short language code aligned with authoring (optional; frontmatter-driven). */
+  languageCode?: string;
+  /** Links parallel topics across locales for editorial/SEO grouping (optional). */
+  translationGroupId?: string;
   /**
    * When true, the file is validated locally but excluded from public merge, sitemap,
    * `/blog/[slug]` static-longtail resolution, and supplement overlap lists.

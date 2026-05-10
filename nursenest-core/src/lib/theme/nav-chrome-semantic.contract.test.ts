@@ -16,7 +16,7 @@ const NEW_PREMIUM_THEMES = [
 ] as const;
 
 /** Themes with TS palette or canonical surface overrides (not CSS-only identity themes). */
-const SEMANTIC_NAV_THEMES = [...NEW_PREMIUM_THEMES, "ocean"] as const;
+const SEMANTIC_NAV_THEMES = [...NEW_PREMIUM_THEMES, "ocean", "blossom"] as const;
 
 describe("nav chrome tracks semantic surface tokens", () => {
   for (const id of SEMANTIC_NAV_THEMES) {

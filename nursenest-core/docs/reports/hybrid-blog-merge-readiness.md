@@ -12,10 +12,11 @@
 
 - Code review of visibility, static corpus wiring, long-tail validation, slug-collision script semantics, and import resolution.
 - **`npm run validate:blog-static-longtail`**, **`npm run typecheck:critical`**, **`npm run test:blog-recovery`**, and **`npm run test:homepage`** all exited **0** (see command table).
+- **`npm run typecheck` (full)** exited **2** in task **571365** — merge on full-`tsc` policy only if your pipeline is green or you accept `typecheck:critical` as the gate (see table).
 
 **Conditions / caveats:**
 
-1. **Full `npm run typecheck`** was started in this environment but **did not complete within the verification window** (full-project `tsc` can run for a long time with no stdout until finish). CI or a local follow-up should confirm full `tsc` green before treating that as proven.
+1. **Full `npm run typecheck` / `tsc`:** A follow-up run reported **exit 2** with multiple `src/` errors (including **`safe-blog-queries.ts`** / **`blog-generation-jobs.ts`**) plus other areas; a separate `npx tsc` run had also surfaced `.next/dev/types` issues when `.next` was in a bad state. **`typecheck:critical` remains the reliable green gate** here; treat full `tsc` as environment/clean-build dependent.
 2. **`.vibecheck/truthpack/`** is **absent** in this clone (see Truthpack). Product/route claims for merge messaging should still follow org truthpack policy where that bundle exists.
 3. **`test:blog-recovery`** hit a configured database in logs (`isProductionDb: true` in contract output). Ensure CI/staging uses an appropriate DB or mocks so merge gates are intentional, not accidental production reads.
 
@@ -47,7 +48,7 @@
 | `npm run typecheck:critical` | **0** | `tsc -p tsconfig.typecheck-critical.json` |
 | `npm run test:blog-recovery` | **0** | 62 tests passed (includes `hybrid-blog-static-longtail.contract.test.ts`) |
 | `npm run test:homepage` | **0** | 78 passed, 1 skipped |
-| `npm run typecheck` (full, optional) | **not recorded** | Started; no completion + exit code captured within the session window |
+| `npm run typecheck` (full) | **2** | Task **571365** completed: `npm run typecheck` → **EXIT:2** (see `/tmp/nn-typecheck.log`). Sample errors span **blog** (`src/lib/blog/safe-blog-queries.ts` — `BlogPostPublicListSource`; `blog-generation-jobs.ts`) and **non-blog** (marketing layout, bowtie, institutions CTA, allied hub, lessons perf, theme registry). Not `.next`-only in this run. |
 
 ---
 
@@ -77,7 +78,7 @@
 
 ## Remaining risks
 
-- **Full `tsc` vs critical:** `typecheck:critical` passed; full project `typecheck` may still surface errors outside the critical project graph — treat full run as an extra merge gate if your team requires it.
+- **Full `tsc` vs critical:** `typecheck:critical` passed; full `npm run typecheck` **failed (exit 2)** in task **571365** with errors **including** hybrid-related blog files — do not assume full `tsc` is green until fixed or CI differs.
 - **Production DB in tests:** Contract tests may connect to a real `DATABASE_URL`; confirm CI secrets point at a safe DB.
 - **Truthpack gap on blog-only narrative:** Absence is documented elsewhere in `docs/` but not in every blog module; align documentation if compliance requires explicit callouts per feature area.
 - **Implementation report missing:** Onboarding/reviewers lack the narrative doc until it is committed or linked from the PR description.
@@ -87,4 +88,4 @@
 ## Full `tsc` vs `typecheck:critical`
 
 - **`typecheck:critical`:** Subset project (`tsconfig.typecheck-critical.json`); **passed (exit 0)** here — good signal for blog-related critical paths included in that graph.
-- **`npm run typecheck`:** Full monolith/app `tsc --noEmit`; **not verified complete** in this run — recommend CI or a dedicated local completion before relying on it for merge.
+- **`npm run typecheck`:** Task **571365** logged **exit 2** with errors across **`src/`** (blog: `safe-blog-queries.ts`, `blog-generation-jobs.ts`; plus marketing, exams, allied, lessons, theme). Full `tsc` is **not** green in this clone; fix or scope CI before treating full `tsc` as merge-blocking vs. `typecheck:critical`.

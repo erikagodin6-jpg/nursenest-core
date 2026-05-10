@@ -335,6 +335,10 @@ async function main(): Promise<void> {
       apaReferences: n.apaReferences,
       requiresReferences: n.requiresReferences,
       relatedLessonPaths: n.relatedLessonPaths,
+      sourcesJson: n.sourcesJson,
+      internalLinkPlan: n.internalLinkPlan,
+      faqBlock: n.faqBlock,
+      schemaSummary: n.schemaSummary,
       legacySource: existing?.legacySource?.trim() || provenance,
     };
 

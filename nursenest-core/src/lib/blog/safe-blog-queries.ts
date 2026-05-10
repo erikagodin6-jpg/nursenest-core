@@ -1327,6 +1327,10 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
         scheduledAt: row.scheduledAt?.toISOString() ?? "",
       });
     }
+    const s = getStaticBlogPost(slug);
+    if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) return publishedBlogPostFromStaticRecord(s);
+    const lt = getBlogStaticLongtailRecord(slug);
+    if (lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title)) return publishedBlogPostFromLongtailRecord(lt);
     return null;
   }
   return row;

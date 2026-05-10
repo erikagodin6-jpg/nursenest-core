@@ -1,5 +1,5 @@
 blog slug collision diagnostic (live DB ∩ supplement union)
-generated: 2026-05-10T00:54:41.634Z
-supplement slug count: 31
+generated: 2026-05-10T01:14:06.623Z
+supplement slug count: 717
 
 live DB rows overlapping supplement slugs: 0

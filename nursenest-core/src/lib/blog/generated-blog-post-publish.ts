@@ -26,6 +26,10 @@ export type NormalizedGeneratedBlogPost = {
   apaReferences: string[];
   requiresReferences: boolean;
   relatedLessonPaths: string[];
+  sourcesJson: unknown;
+  internalLinkPlan: unknown;
+  faqBlock: unknown;
+  schemaSummary: string | null;
 };
 
 export type GeneratedBlogMaterializationFlags = {
@@ -107,6 +111,10 @@ export function normalizeGeneratedBlogRecord(record: Record<string, unknown>): {
   const apaReferences = toStrArray(record.apaReferences ?? record.apa_references);
   const requiresReferences = Boolean(record.requiresReferences ?? record.requires_references);
   const relatedLessonPaths = toStrArray(record.relatedLessonPaths ?? record.related_lesson_paths);
+  const sourcesJson = record.sourcesJson ?? record.sources_json ?? [];
+  const internalLinkPlan = record.internalLinkPlan ?? record.internal_link_plan ?? null;
+  const faqBlock = record.faqBlock ?? record.faq_block ?? null;
+  const schemaSummary = toStr(record.schemaSummary ?? record.schema_summary) || null;
 
   if (!title) errors.push("missing_title");
   if (!slug) errors.push("missing_slug");
@@ -145,6 +153,10 @@ export function normalizeGeneratedBlogRecord(record: Record<string, unknown>): {
       apaReferences,
       requiresReferences,
       relatedLessonPaths,
+      sourcesJson,
+      internalLinkPlan,
+      faqBlock,
+      schemaSummary,
     },
     errors: [],
   };

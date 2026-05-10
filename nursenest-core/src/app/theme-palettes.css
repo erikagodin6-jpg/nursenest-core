@@ -1492,7 +1492,7 @@
   --theme-page-bg: #ffffff;
 }
 
-/* ── Premium clinical palettes (Aurora, Midnight, Ocean, Forest; legacy `blossom` = Aurora) ── */
+/* ── Premium clinical palettes (Blossom, Aurora, Midnight, Ocean, Forest, Sunset) ── */
 
 [data-theme="aurora"] {
   /* Figma Aurora — clinical pink / violet / blue / mint / warm orange / ink (#1A202C) */
@@ -1553,64 +1553,62 @@
   --theme-header-divider: color-mix(in srgb, #1a202c 12%, transparent);
 }
 
-/* Legacy persisted id — same identity tokens as Aurora (light premium nav, no black chrome). */
+/* Blossom — distinct soft lilac + sky + warm peach study atmosphere (pastel, optimistic; not Aurora). */
 [data-theme="blossom"] {
-  /* Figma Aurora — clinical pink / violet / blue / mint / warm orange / ink (#1A202C) */
-  --theme-primary: #9b72ff;
+  --theme-primary: #8e75ff;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: color-mix(in srgb, #e14d8f 14%, #ffffff);
-  --theme-secondary-foreground: #1a202c;
-  --theme-accent: color-mix(in srgb, #f39c12 18%, #ffffff);
-  --theme-accent-foreground: #1a202c;
-  --theme-border: color-mix(in srgb, #1a202c 10%, #eae6f5);
-  --theme-ring: #9b72ff;
-  /* Warm white / lavender bloom — soft aura, not flat neutral gray */
-  --theme-page-bg: color-mix(in srgb, #e8e0fb 10%, color-mix(in srgb, #fce8f3 9%, #faf8ff));
+  --theme-secondary: color-mix(in srgb, #7dd3fc 18%, #ffffff);
+  --theme-secondary-foreground: #1f2536;
+  --theme-accent: color-mix(in srgb, #e8a87c 22%, #ffffff);
+  --theme-accent-foreground: #2f241c;
+  --theme-border: color-mix(in srgb, #1f2536 8%, #e4dff0);
+  --theme-ring: #8e75ff;
+  --theme-page-bg: color-mix(in srgb, #ede6ff 8%, color-mix(in srgb, #dff6ff 10%, #faf7fc));
   --theme-surface-strong: color-mix(
     in srgb,
-    #4a90e2 6%,
-    color-mix(in srgb, #e14d8f 5%, var(--theme-page-bg))
+    #7dd3fc 7%,
+    color-mix(in srgb, #e8a87c 5%, var(--theme-page-bg))
   );
-  --theme-heading-text: #1a202c;
-  --theme-body-text: color-mix(in srgb, #1a202c 90%, #ffffff);
-  --theme-muted-text: color-mix(in srgb, #1a202c 55%, #ffffff);
+  --theme-heading-text: #1f2536;
+  --theme-body-text: color-mix(in srgb, #1f2536 88%, #ffffff);
+  --theme-muted-text: color-mix(in srgb, #1f2536 52%, #ffffff);
 
-  --lesson-summary: color-mix(in srgb, #e14d8f 12%, #ffffff);
-  --lesson-key-concepts: color-mix(in srgb, #4a90e2 12%, #ffffff);
-  --lesson-signs-symptoms: color-mix(in srgb, #e14d8f 10%, #ffffff);
-  --lesson-assessment: color-mix(in srgb, #2ecc71 11%, #ffffff);
-  --lesson-diagnostics: color-mix(in srgb, #4a90e2 10%, #ffffff);
-  --lesson-interventions: color-mix(in srgb, #2ecc71 10%, #ffffff);
-  --lesson-medications: color-mix(in srgb, #f39c12 14%, #ffffff);
-  --lesson-patient-teaching: color-mix(in srgb, #2ecc71 9%, #ffffff);
-  --lesson-exam-tips: color-mix(in srgb, #f39c12 12%, #ffffff);
-  --lesson-red-flags: color-mix(in srgb, #e14d8f 14%, #ffffff);
-  --lesson-clinical-pearls: color-mix(in srgb, #9b72ff 12%, #ffffff);
-  --lesson-notes: #f3f4fb;
+  --lesson-summary: color-mix(in srgb, #8e75ff 11%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #7dd3fc 12%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #e8a87c 10%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #34d399 10%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #7dd3fc 9%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #34d399 9%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #e8a87c 12%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #34d399 8%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #8e75ff 9%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #e8a87c 11%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #7dd3fc 10%, #ffffff);
+  --lesson-notes: #f2eff8;
 
-  --state-success: color-mix(in srgb, #2ecc71 12%, #ffffff);
-  --state-warning: color-mix(in srgb, #f39c12 14%, #ffffff);
-  --state-info: color-mix(in srgb, #4a90e2 11%, #ffffff);
-  --state-danger-soft: color-mix(in srgb, #e14d8f 12%, #ffffff);
+  --state-success: color-mix(in srgb, #34d399 11%, #ffffff);
+  --state-warning: color-mix(in srgb, #e8a87c 12%, #ffffff);
+  --state-info: color-mix(in srgb, #7dd3fc 10%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, #e8a87c 10%, #ffffff);
 
-  --logo-primary: #9b72ff;
-  --logo-accent: #e14d8f;
-  --logo-text: #1a202c;
-  --theme-brand-accent: #e14d8f;
-  --theme-brand-strong: #9b72ff;
+  --logo-primary: #8e75ff;
+  --logo-accent: #5ab0e8;
+  --logo-text: #1f2536;
+  --theme-brand-accent: #7dd3fc;
+  --theme-brand-strong: #7a63e8;
   --theme-nav-background: color-mix(
     in srgb,
-    #9b72ff 8%,
-    color-mix(in srgb, #fce8f3 20%, color-mix(in srgb, #e6f2ff 18%, #fffdfa))
+    #8e75ff 7%,
+    color-mix(in srgb, #c9f0ff 22%, color-mix(in srgb, #fdeadb 12%, #fffefe))
   );
-  --theme-nav-foreground: #1a202c;
-  --theme-nav-hover: color-mix(in srgb, #1a202c 6%, transparent);
-  --theme-nav-hover-foreground: #1a202c;
-  --theme-header-top-bg: color-mix(in srgb, #e8e0fb 40%, color-mix(in srgb, #fce8f3 26%, #fefdfb));
-  --theme-header-main-bg: color-mix(in srgb, #d4ecff 18%, color-mix(in srgb, #fce8f3 22%, #faf7ff));
-  --theme-header-secondary-bg: color-mix(in srgb, #e14d8f 4%, color-mix(in srgb, #9b72ff 5%, #ffffff));
-  --theme-header-secondary-fg: #1a202c;
-  --theme-header-divider: color-mix(in srgb, #1a202c 12%, transparent);
+  --theme-nav-foreground: #1f2536;
+  --theme-nav-hover: color-mix(in srgb, #1f2536 5%, transparent);
+  --theme-nav-hover-foreground: #1f2536;
+  --theme-header-top-bg: color-mix(in srgb, #e8e2fb 32%, color-mix(in srgb, #dff5ff 22%, #fefdfb));
+  --theme-header-main-bg: color-mix(in srgb, #e4ecff 14%, color-mix(in srgb, #f6edff 12%, #faf8ff));
+  --theme-header-secondary-bg: color-mix(in srgb, #8e75ff 3%, color-mix(in srgb, #7dd3fc 4%, #ffffff));
+  --theme-header-secondary-fg: #1f2536;
+  --theme-header-divider: color-mix(in srgb, #1f2536 10%, transparent);
 }
 
 [data-theme="sunset"] {
@@ -1956,8 +1954,7 @@
 [data-theme="coral"],
 [data-theme="rose-quartz"],
 [data-theme="dusty-rose"],
-[data-theme="coral-sunset"],
-[data-theme="sunset"] {
+[data-theme="coral-sunset"] {
   --theme-primary-foreground: #3d0a1a;
 }
 
