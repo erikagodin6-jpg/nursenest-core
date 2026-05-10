@@ -14,6 +14,7 @@ import {
   examQuestionDraftPublishableMinimalSql,
   examQuestionDraftPublishableStrictSql,
 } from "@/lib/questions/exam-question-bank-sql";
+import { examQuestionTierInSql } from "@/lib/questions/exam-question-access-sql";
 import { draftPublishWhereSql, parseDraftPublishCli } from "@/lib/questions/exam-question-draft-publish";
 import {
   aggregateRowToDiagnostics,
@@ -166,4 +167,11 @@ test("rationale optional policy allows empty OR length >= 5", () => {
 
 test("rationale required SQL insists on non-empty trimmed rationale", () => {
   assert.ok(EXAM_QUESTION_RATIONALE_REQUIRED_SQL.strings.some((f) => f.includes("rationale")));
+});
+
+test("examQuestionTierInSql normalizes stored tier comparisons", () => {
+  const sql = examQuestionTierInSql(["RN", "rn", "np"]);
+  const text = sql.strings.join("?");
+  assert.match(text, /lower\(coalesce\(tier, ''\)\)/i);
+  assert.deepEqual(sql.values, ["rn", "np"]);
 });

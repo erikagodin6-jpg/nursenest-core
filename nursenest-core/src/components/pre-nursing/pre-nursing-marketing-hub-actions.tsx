@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Activity, ArrowRight, BookOpen, Layers, Target } from "lucide-react";
+import { Activity, ArrowRight, BookOpen, Layers, Target, TrendingUp } from "lucide-react";
 import { StudyCard } from "@/components/ui/study-card";
 
 /**
@@ -24,7 +24,7 @@ export function PreNursingMarketingHubActions({
 }) {
   return (
     <>
-      <div className="nn-pre-nursing-hub-hero">
+      <div className="nn-pre-nursing-hub-hero" data-nn-premium-prenursing-hero>
         <h1 id="pre-nursing-hero-heading" className="nn-marketing-h1 max-w-3xl text-balance">
           {heroTitle}
         </h1>
@@ -42,10 +42,45 @@ export function PreNursingMarketingHubActions({
         </div>
       </div>
 
+      <section
+        className="nn-pre-nursing-readiness-panel"
+        aria-labelledby="pre-nursing-readiness-heading"
+        data-nn-premium-prenursing-readiness
+      >
+        <div className="nn-pre-nursing-readiness-panel__copy">
+          <p className="nn-premium-home-eyebrow">Nursing School Readiness</p>
+          <h2 id="pre-nursing-readiness-heading" className="nn-marketing-h2 text-balance text-[var(--palette-heading)]">
+            Build the Foundation Before the Exam Pathway
+          </h2>
+          <p className="nn-marketing-body-sm mt-3 max-w-2xl text-pretty text-[var(--semantic-text-secondary)]">
+            Pre-Nursing now connects prerequisite mastery, dosage calculation readiness, flashcards, practice quizzes, and
+            study plans into the same NurseNest learning ecosystem used by RN, PN, NP, Allied Health, and New Grad learners.
+          </p>
+        </div>
+
+        <div className="nn-pre-nursing-readiness-panel__metrics" aria-label="Pre-Nursing readiness signals">
+          {[
+            ["64%", "Readiness Score"],
+            ["6 Days", "Study Streak"],
+            ["72%", "Dosage Readiness"],
+          ].map(([value, label]) => (
+            <div key={label} className="nn-pre-nursing-readiness-metric">
+              <TrendingUp className="h-4 w-4" aria-hidden />
+              <span className="nn-pre-nursing-readiness-metric__value">{value}</span>
+              <span className="nn-pre-nursing-readiness-metric__label">{label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <h2 id="pre-nursing-quick-modes-heading" className="nn-marketing-h2 text-balance text-[var(--palette-heading)]">
-        Quick study modes
+        Quick Study Modes
       </h2>
-      <ul className="grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4" aria-labelledby="pre-nursing-quick-modes-heading">
+      <ul
+        className="nn-pre-nursing-quick-mode-grid grid list-none gap-5 p-0 sm:grid-cols-2 lg:grid-cols-4"
+        aria-labelledby="pre-nursing-quick-modes-heading"
+        data-nn-premium-prenursing-quick-modes
+      >
         <li>
           <StudyCard
             surface="hub"
@@ -54,8 +89,8 @@ export function PreNursingMarketingHubActions({
             href={lessonsHref}
             icon={BookOpen}
             title="Lessons"
-            description="Review concepts by topic."
-            cta="Lessons"
+            description="Review prerequisites, anatomy, terminology, study skills, and nursing foundations by topic."
+            cta="Start Lessons"
             ctaVariant="primary"
           />
         </li>
@@ -67,8 +102,8 @@ export function PreNursingMarketingHubActions({
             href={flashcardsHref}
             icon={Layers}
             title="Flashcards"
-            description="Strengthen recall quickly."
-            cta="Flashcards"
+            description="Review anatomy, terminology, dosage calculations, pharmacology basics, and safety concepts."
+            cta="View Flashcards"
             ctaVariant="primary"
           />
         </li>
@@ -80,9 +115,9 @@ export function PreNursingMarketingHubActions({
             prefetch={false}
             href={practiceHref}
             icon={Target}
-            title="Practice"
-            description="Drill by topic or weakness."
-            cta="Practice"
+            title="Practice Quizzes"
+            description="Drill foundational quizzes, dosage calculations, A&P review, and nursing school prep tests."
+            cta="Start Practice"
             ctaVariant="primary"
           />
         </li>
@@ -93,9 +128,9 @@ export function PreNursingMarketingHubActions({
             className="nn-exam-hub-study-card--cat"
             href={examsHref}
             icon={Activity}
-            title="Exams"
-            description="Take longer exam-style sessions."
-            cta="Exams"
+            title="Readiness Exams"
+            description="Take longer foundation sessions that bridge into RN, PN, NP, and Allied readiness tools."
+            cta="Open Exams"
             ctaVariant="primary"
           />
         </li>

@@ -12,6 +12,12 @@ import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/s
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
+export function examQuestionTierInSql(tiers: readonly string[]): Prisma.Sql {
+  const normalized = [...new Set(tiers.map((tier) => tier.trim().toLowerCase()).filter(Boolean))];
+  if (normalized.length === 0) return Prisma.sql`FALSE`;
+  return Prisma.sql`lower(coalesce(tier, '')) IN (${Prisma.join(normalized)})`;
+}
+
 export function examQuestionAccessWhereSql(entitlement: AccessScope): Prisma.Sql {
   if (!entitlement.hasAccess) return Prisma.sql`FALSE`;
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
@@ -27,12 +33,11 @@ export function examQuestionAccessWhereSql(entitlement: AccessScope): Prisma.Sql
   const tier = entitlement.tier as TierCode | null;
   if (!country || !tier) return Prisma.sql`FALSE`;
   const tiers = examQuestionTiersForUserTier(tier);
-  if (tiers.length === 0) return Prisma.sql`FALSE`;
   const region =
     country === "CA"
       ? Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'CA_ONLY')`
       : Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'US_ONLY')`;
-  return Prisma.sql`status = ${DB_PUBLISHED} AND tier IN (${Prisma.join(tiers)}) AND ${region}`;
+  return Prisma.sql`status = ${DB_PUBLISHED} AND ${examQuestionTierInSql(tiers)} AND ${region}`;
 }
 
 export function pathwayExamKeysSql(pathway: ExamPathwayDefinition | null): Prisma.Sql {
@@ -42,9 +47,8 @@ export function pathwayExamKeysSql(pathway: ExamPathwayDefinition | null): Prism
   const scoped = examQuestionPoolWhereForContext(ctx);
   const keys = [...new Set(scoped.examIn)];
   const examNorms = examKeyNormsForPathwayPool(keys);
-  const tiers = [...new Set(scoped.tierMatches.map((tier) => tier.toLowerCase()))];
-  if (examNorms.length === 0 || tiers.length === 0) return Prisma.sql` AND FALSE`;
-  return Prisma.sql` AND (${examQuestionExamNormInSql(examNorms)}) AND lower(coalesce(tier, '')) IN (${Prisma.join(tiers)})`;
+  if (examNorms.length === 0 || scoped.tierMatches.length === 0) return Prisma.sql` AND FALSE`;
+  return Prisma.sql` AND (${examQuestionExamNormInSql(examNorms)}) AND ${examQuestionTierInSql(scoped.tierMatches)}`;
 }
 
 export function topicEqualsSql(topic: string): Prisma.Sql {
@@ -79,12 +83,11 @@ export function difficultyBoundsSql(min: number | null, max: number | null): Pri
 /** Full profile-tier pool (mirrors {@link questionBankWhereForProfile}) for baseline sampling. */
 export function profileTierExamQuestionWhereSql(country: CountryCode, tier: TierCode): Prisma.Sql {
   const tiers = examQuestionTiersForUserTier(tier);
-  if (tiers.length === 0) return Prisma.sql`FALSE`;
   const region =
     country === "CA"
       ? Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'CA_ONLY')`
       : Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'US_ONLY')`;
-  return Prisma.sql`status = ${DB_PUBLISHED} AND tier IN (${Prisma.join(tiers)}) AND ${region}`;
+  return Prisma.sql`status = ${DB_PUBLISHED} AND ${examQuestionTierInSql(tiers)} AND ${region}`;
 }
 
 /** Freemium pool — mirrors {@link freemiumQuestionWhereForProfile}. */
@@ -95,5 +98,5 @@ export function freemiumExamQuestionWhereSql(country: CountryCode, tier: TierCod
     country === "CA"
       ? Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'CA_ONLY')`
       : Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'US_ONLY')`;
-  return Prisma.sql`status = ${DB_PUBLISHED} AND tier IN (${Prisma.join(tiers)}) AND ${region}`;
+  return Prisma.sql`status = ${DB_PUBLISHED} AND ${examQuestionTierInSql(tiers)} AND ${region}`;
 }

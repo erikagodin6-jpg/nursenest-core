@@ -1,6 +1,9 @@
 import type { Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
+import {
+  examQuestionTierCaseInsensitiveWhere,
+  questionAccessWhere,
+} from "@/lib/entitlements/content-access-scope";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
@@ -48,9 +51,13 @@ export function questionAccessWhereWithPathway(
   const npSpecialtyScope = npPathwaySpecialtyWhere(pathway);
   const pathwayScope: Prisma.ExamQuestionWhereInput = npSpecialtyScope
     ? {
-        AND: [{ exam: { in: scoped.examIn } }, { tier: { in: scoped.tierMatches } }, npSpecialtyScope],
+        AND: [
+          { exam: { in: scoped.examIn } },
+          examQuestionTierCaseInsensitiveWhere(scoped.tierMatches),
+          npSpecialtyScope,
+        ],
       }
-    : { exam: { in: scoped.examIn }, tier: { in: scoped.tierMatches } };
+    : { exam: { in: scoped.examIn }, AND: [examQuestionTierCaseInsensitiveWhere(scoped.tierMatches)] };
   return {
     AND: [base, pathwayScope],
   };

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  examQuestionTierCaseInsensitiveWhere,
   examQuestionTiersForUserTier,
   publicMarketingExamQuestionWhere,
   publicMarketingLessonWhere,
@@ -11,6 +12,19 @@ describe("content-access-scope", () => {
     assert.deepEqual(examQuestionTiersForUserTier("LVN_LPN"), ["rpn", "lvn"]);
     assert.deepEqual(examQuestionTiersForUserTier("ALLIED"), ["allied"]);
     assert.deepEqual(examQuestionTiersForUserTier("NP"), ["rpn", "lvn", "rn", "np"]);
+  });
+
+  it("examQuestionTierCaseInsensitiveWhere normalizes tier strings once", () => {
+    const w = examQuestionTierCaseInsensitiveWhere(["RN", "rn", " NP "]) as {
+      OR?: Array<{ tier?: { equals?: string; mode?: string } }>;
+    };
+    assert.deepEqual(
+      w.OR?.map((entry) => entry.tier),
+      [
+        { equals: "rn", mode: "insensitive" },
+        { equals: "np", mode: "insensitive" },
+      ],
+    );
   });
 
   it("publicMarketingExamQuestionWhere excludes subscriber-only exam tiers", () => {

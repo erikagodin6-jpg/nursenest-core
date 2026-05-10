@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { ContentStatus, CountryCode, TierCode } from "@prisma/client";
 import {
+  examQuestionTierCaseInsensitiveWhere,
   lessonAccessWhere,
   questionAccessWhere,
   userCanAccessExam,
@@ -31,10 +32,16 @@ describe("questionAccessWhere + userCanAccessExam (paid learner)", () => {
   });
 
   it("active paid user: clause includes tier ladder and region", () => {
-    const w = questionAccessWhere(activePaid) as { tier?: { in: string[] }; OR?: unknown[] };
-    assert.ok(Array.isArray(w.tier?.in));
-    assert.ok(w.tier!.in.includes("rn"));
-    assert.ok(Array.isArray(w.OR));
+    const w = questionAccessWhere(activePaid) as { AND?: unknown[] };
+    assert.ok(Array.isArray(w.AND));
+    assert.match(JSON.stringify(w), /insensitive/);
+    assert.match(JSON.stringify(w), /rn/);
+    assert.match(JSON.stringify(w), /regionScope/);
+  });
+
+  it("exam question tier filter is case-insensitive for legacy uppercase stored tiers", () => {
+    const w = examQuestionTierCaseInsensitiveWhere(["rn"]) as { OR?: Array<{ tier?: { equals?: string; mode?: string } }> };
+    assert.deepEqual(w.OR?.[0]?.tier, { equals: "rn", mode: "insensitive" });
   });
 
   it("wrong country: same tier but exam in other country → denied", () => {

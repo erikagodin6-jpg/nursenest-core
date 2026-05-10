@@ -23,6 +23,16 @@ export function examQuestionTiersForUserTier(userTier: TierCode): string[] {
   return examQuestionTierStringsForProfileTier(userTier);
 }
 
+export function examQuestionTierCaseInsensitiveWhere(tiers: readonly string[]): Prisma.ExamQuestionWhereInput {
+  const normalized = [...new Set(tiers.map((tier) => tier.trim().toLowerCase()).filter(Boolean))];
+  if (normalized.length === 0) return { id: { in: [] } };
+  return {
+    OR: normalized.map((tier) => ({
+      tier: { equals: tier, mode: "insensitive" as const },
+    })),
+  };
+}
+
 /** `content_items.tier` allowlist — same ladder as questions (not only the subscriber’s nominal tier). */
 export function contentItemTiersForUserTier(userTier: TierCode): string[] {
   return contentItemTierStringsForProfileTier(userTier);
@@ -177,9 +187,11 @@ export function questionAccessWhere(entitlement: AccessScope): Prisma.ExamQuesti
   const tier = entitlement.tier as TierCode | null;
   if (!country || !tier) return { id: { in: [] } };
   return {
-    status: { in: [...DB_PUBLISHED_VARIANTS] },
-    tier: { in: examQuestionTiersForUserTier(tier) },
-    OR: examQuestionRegionOr(country),
+    AND: [
+      { status: { in: [...DB_PUBLISHED_VARIANTS] } },
+      examQuestionTierCaseInsensitiveWhere(examQuestionTiersForUserTier(tier)),
+      { OR: examQuestionRegionOr(country) },
+    ],
   };
 }
 
@@ -189,9 +201,11 @@ export function questionAccessWhere(entitlement: AccessScope): Prisma.ExamQuesti
  */
 export function questionBankWhereForProfile(country: CountryCode, tier: TierCode): Prisma.ExamQuestionWhereInput {
   return {
-    status: { in: [...DB_PUBLISHED_VARIANTS] },
-    tier: { in: examQuestionTiersForUserTier(tier) },
-    OR: examQuestionRegionOr(country),
+    AND: [
+      { status: { in: [...DB_PUBLISHED_VARIANTS] } },
+      examQuestionTierCaseInsensitiveWhere(examQuestionTiersForUserTier(tier)),
+      { OR: examQuestionRegionOr(country) },
+    ],
   };
 }
 
@@ -202,9 +216,11 @@ export function questionBankWhereForProfile(country: CountryCode, tier: TierCode
 export function freemiumQuestionWhereForProfile(country: CountryCode, tier: TierCode): Prisma.ExamQuestionWhereInput {
   const tiers = tier === "ALLIED" ? examQuestionTiersForUserTier("ALLIED") : examQuestionTiersForUserTier("LVN_LPN");
   return {
-    status: { in: [...DB_PUBLISHED_VARIANTS] },
-    tier: { in: tiers },
-    OR: examQuestionRegionOr(country),
+    AND: [
+      { status: { in: [...DB_PUBLISHED_VARIANTS] } },
+      examQuestionTierCaseInsensitiveWhere(tiers),
+      { OR: examQuestionRegionOr(country) },
+    ],
   };
 }
 

@@ -1346,6 +1346,264 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketi
     radial-gradient(720px 380px at 55% 100%, color-mix(in srgb, var(--nn-premium-tone-success) 10%, transparent), transparent 60%);
 }
 
+/* ---------------------------------------------------------------------
+   Premium Pre-Nursing convergence — public hub + learner pathway bridge
+   --------------------------------------------------------------------- */
+
+.nn-pre-nursing-marketing-hub {
+  --nn-prenursing-accent-primary: var(--nn-module-clinical-pearls, var(--semantic-brand));
+  --nn-prenursing-accent-science: var(--nn-module-labs, var(--semantic-chart-7));
+  --nn-prenursing-accent-dosage: var(--nn-module-practice, var(--semantic-chart-3));
+  --nn-prenursing-accent-safety: var(--nn-module-safety, var(--semantic-danger));
+  --nn-prenursing-accent-flashcards: var(--nn-module-flashcards, var(--semantic-chart-5));
+  position: relative;
+  isolation: isolate;
+}
+
+html[data-theme="ocean"] .nn-pre-nursing-marketing-hub,
+html[data-theme="blossom"] .nn-pre-nursing-marketing-hub,
+html[data-theme="midnight"] .nn-pre-nursing-marketing-hub,
+html[data-theme="sunset"] .nn-pre-nursing-marketing-hub,
+html[data-theme="aurora"] .nn-pre-nursing-marketing-hub {
+  --nn-prenursing-theme-covered: 1;
+}
+
+.nn-pre-nursing-marketing-hub::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -1.5rem -0.75rem auto;
+  height: min(32rem, 48vh);
+  border-radius: 9999px;
+  background:
+    radial-gradient(720px 320px at 2% 0%, color-mix(in srgb, var(--semantic-chart-7) 12%, transparent), transparent 68%),
+    radial-gradient(680px 300px at 100% 8%, color-mix(in srgb, var(--semantic-chart-8) 10%, transparent), transparent 66%),
+    radial-gradient(560px 260px at 58% 100%, color-mix(in srgb, var(--semantic-chart-6) 8%, transparent), transparent 70%);
+  opacity: 0.78;
+  z-index: -1;
+}
+
+.nn-pre-nursing-hub-shell {
+  scroll-padding-top: 1rem;
+}
+
+.nn-pre-nursing-hub-hero,
+.nn-pre-nursing-readiness-panel,
+.nn-pre-nursing-foundations-section,
+.nn-pre-nursing-module-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-pre-nursing-hub-hero {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 68%, var(--nn-prenursing-accent-primary) 18%);
+  border-radius: 1.65rem;
+  padding: clamp(1.35rem, 3vw, 2.4rem);
+  background:
+    radial-gradient(620px 240px at 100% 0%, color-mix(in srgb, var(--semantic-chart-8) 9%, transparent), transparent 64%),
+    radial-gradient(560px 220px at 0% 100%, color-mix(in srgb, var(--semantic-chart-7) 9%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-pre-nursing-hub-hero::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  right: 1.5rem;
+  top: 1.4rem;
+  width: min(18rem, 36vw);
+  height: min(18rem, 36vw);
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-7) 18%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--semantic-chart-7) 11%, transparent), transparent),
+    color-mix(in srgb, var(--semantic-surface) 36%, transparent);
+  opacity: 0.34;
+}
+
+.nn-pre-nursing-readiness-panel {
+  display: grid;
+  gap: 1.25rem;
+  align-items: stretch;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 66%, var(--nn-prenursing-accent-dosage) 18%);
+  border-radius: 1.45rem;
+  padding: clamp(1.1rem, 2.4vw, 1.55rem);
+  background:
+    radial-gradient(600px 220px at 100% 0%, color-mix(in srgb, var(--semantic-chart-8) 8%, transparent), transparent 66%),
+    color-mix(in srgb, var(--semantic-panel-cool) 13%, var(--semantic-surface));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (min-width: 900px) {
+  .nn-pre-nursing-readiness-panel {
+    grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.75fr);
+  }
+}
+
+.nn-pre-nursing-readiness-panel__metrics {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.nn-pre-nursing-readiness-metric {
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-chart-7) 18%);
+  border-radius: 1rem;
+  padding: 0.85rem;
+  background: color-mix(in srgb, var(--semantic-surface) 90%, var(--semantic-panel-muted));
+}
+
+.nn-pre-nursing-readiness-metric:nth-child(2) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-warning) 20%);
+}
+
+.nn-pre-nursing-readiness-metric:nth-child(3) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-success) 20%);
+}
+
+.nn-pre-nursing-readiness-metric__value {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: var(--semantic-text-primary);
+}
+
+.nn-pre-nursing-readiness-metric__label {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--semantic-text-muted);
+}
+
+.nn-pre-nursing-quick-mode-grid .nn-study-card,
+.nn-pre-nursing-quick-mode-grid a,
+.nn-pre-nursing-module-card {
+  border-radius: 1.2rem;
+}
+
+.nn-pre-nursing-quick-mode-grid > li:nth-child(1) .nn-study-card,
+.nn-pre-nursing-quick-mode-grid > li:nth-child(1) a {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--nn-prenursing-accent-science) 22%);
+}
+
+.nn-pre-nursing-quick-mode-grid > li:nth-child(2) .nn-study-card,
+.nn-pre-nursing-quick-mode-grid > li:nth-child(2) a {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--nn-prenursing-accent-flashcards) 22%);
+}
+
+.nn-pre-nursing-quick-mode-grid > li:nth-child(3) .nn-study-card,
+.nn-pre-nursing-quick-mode-grid > li:nth-child(3) a {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--nn-prenursing-accent-dosage) 22%);
+}
+
+.nn-pre-nursing-quick-mode-grid > li:nth-child(4) .nn-study-card,
+.nn-pre-nursing-quick-mode-grid > li:nth-child(4) a {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--semantic-chart-8) 22%);
+}
+
+.nn-pre-nursing-foundations-section {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-prenursing-accent-primary) 14%);
+  border-radius: 1.45rem;
+  padding: clamp(1.1rem, 2.4vw, 1.5rem);
+  background:
+    radial-gradient(640px 240px at 100% 0%, color-mix(in srgb, var(--semantic-chart-7) 7%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-pre-nursing-category-rail {
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding: 0.2rem 0 0.4rem;
+  scrollbar-width: thin;
+}
+
+.nn-pre-nursing-category-pill {
+  flex: 0 0 auto;
+  min-height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-chart-8) 16%);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 48%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.nn-pre-nursing-module-card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-chart-7) 14%);
+  background:
+    radial-gradient(320px 120px at 100% 0%, color-mix(in srgb, var(--semantic-chart-8) 7%, transparent), transparent 68%),
+    var(--semantic-surface);
+  transition:
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.nn-pre-nursing-module-card:nth-child(6n + 2) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-chart-3) 16%);
+}
+
+.nn-pre-nursing-module-card:nth-child(6n + 3) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-chart-5) 16%);
+}
+
+.nn-pre-nursing-module-card:nth-child(6n + 4) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-warning) 16%);
+}
+
+.nn-pre-nursing-module-card:nth-child(6n + 5) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-success) 16%);
+}
+
+.nn-pre-nursing-module-card:nth-child(6n) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-chart-8) 16%);
+}
+
+.nn-pre-nursing-module-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (max-width: 640px) {
+  .nn-pre-nursing-marketing-hub {
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .nn-pre-nursing-hub-hero {
+    border-radius: 1.2rem;
+    padding: 1.15rem;
+  }
+
+  .nn-pre-nursing-readiness-panel__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .nn-pre-nursing-foundations-section {
+    border-radius: 1.2rem;
+    padding: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-pre-nursing-module-card,
+  .nn-pre-nursing-module-card:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 .nn-premium-home-eyebrow {
   display: inline-flex;
   align-items: center;

@@ -23,20 +23,37 @@ type PreNursingLandingClientProps = {
   marketingLocale?: string;
 };
 
+const PREMIUM_CATEGORY_GROUPS = [
+  "Anatomy & Physiology",
+  "Pharmacology Basics",
+  "Medical Terminology",
+  "Dosage Calculations",
+  "Study Skills",
+  "Time Management",
+  "Nursing School Preparation",
+  "Fundamentals Foundations",
+  "Communication Basics",
+  "Safety & Infection Prevention",
+  "Basic Pathophysiology",
+  "Healthcare Ethics",
+  "Clinical Reasoning Foundations",
+] as const;
+
 export function PreNursingLandingClient({ modulesOnly = false, marketingLocale = DEFAULT_MARKETING_LOCALE }: PreNursingLandingClientProps) {
   const dict = getPreNursingStrings();
   const l = (path: string) => withMarketingLocale(marketingLocale, path);
 
   const moduleGrid = (
     <div
-      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      className="nn-pre-nursing-module-library-grid grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       data-nn-qa-pre-nursing-module-library=""
+      data-nn-premium-prenursing-module-library
     >
       {PRE_NURSING_MODULE_REGISTRY.map((m) => (
         <Link
           key={m.slug}
           href={l(`/pre-nursing/lessons/${m.slug}`)}
-          className="nn-card nn-card-interactive group flex flex-col p-5"
+          className="nn-card nn-card-interactive nn-pre-nursing-module-card group flex flex-col p-5"
           data-testid={`pre-nursing-card-${m.slug}`}
           onClick={() =>
             trackClientEvent(PH.preNursingModuleViewed, {
@@ -51,7 +68,7 @@ export function PreNursingLandingClient({ modulesOnly = false, marketingLocale =
           </h2>
           <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--theme-body-text)]">{dict[m.subtitleKey] ?? ""}</p>
           <p className="mt-3 text-xs font-medium text-primary">
-            {m.lessons} {dict["preNursing.interactiveLessons"] ?? "interactive lessons"}
+            {m.lessons} {dict["preNursing.interactiveLessons"] ?? "Interactive Lessons"}
           </p>
         </Link>
       ))}
@@ -60,14 +77,25 @@ export function PreNursingLandingClient({ modulesOnly = false, marketingLocale =
 
   if (modulesOnly) {
     return (
-      <section className="space-y-5" aria-labelledby="pre-nursing-foundations-modules-heading">
+      <section
+        className="nn-pre-nursing-foundations-section space-y-5"
+        aria-labelledby="pre-nursing-foundations-modules-heading"
+        data-nn-premium-prenursing-foundations
+      >
         <h2 id="pre-nursing-foundations-modules-heading" className="nn-marketing-h2 text-balance text-[var(--palette-heading)]">
-          {dict["preNursing.hub.foundationsModulesHeading"] ?? "Foundations modules"}
+          {dict["preNursing.hub.foundationsModulesHeading"] ?? "Foundations Modules"}
         </h2>
         <p className="nn-marketing-body-sm max-w-2xl text-pretty text-[var(--semantic-text-secondary)]">
           {dict["preNursing.hub.foundationsModulesLead"] ??
             "Work through free interactive lessons by topic - always free, no subscription required."}
         </p>
+        <div className="nn-pre-nursing-category-rail" data-nn-premium-prenursing-categories>
+          {PREMIUM_CATEGORY_GROUPS.map((label) => (
+            <span key={label} className="nn-pre-nursing-category-pill">
+              {label}
+            </span>
+          ))}
+        </div>
         {moduleGrid}
       </section>
     );
