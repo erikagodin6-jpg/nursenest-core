@@ -110,6 +110,8 @@ type LvCardComputed = {
   color: string;
   borderColor: string;
   boxShadow: string;
+  /** WCAG contrast (resolved in browser; some themes yield `transparent` / non-rgb() until parent walk). */
+  contrastApprox: number | null;
 };
 
 async function readFirstVisibleLvCardStyles(page: Page): Promise<LvCardComputed> {
@@ -117,11 +119,52 @@ async function readFirstVisibleLvCardStyles(page: Page): Promise<LvCardComputed>
   await expect(handle).toBeVisible({ timeout: 60_000 });
   return handle.evaluate((el) => {
     const cs = getComputedStyle(el);
+    let bg = cs.backgroundColor;
+    if (bg === "rgba(0, 0, 0, 0)" || bg === "transparent") {
+      let p: HTMLElement | null = el.parentElement;
+      for (let i = 0; i < 8 && p; i++) {
+        const b = getComputedStyle(p).backgroundColor;
+        if (b !== "rgba(0, 0, 0, 0)" && b !== "transparent") {
+          bg = b;
+          break;
+        }
+        p = p.parentElement;
+      }
+    }
+
+    const parseRgb = (value: string): [number, number, number] | null => {
+      const m = value.replace(/\s/g, "").match(/^rgba?\(([^)]+)\)/i);
+      if (!m) return null;
+      const parts = m[1]!.split(",").map((x) => Number.parseFloat(x.trim()));
+      if (parts.length < 3 || parts.some((n) => Number.isNaN(n))) return null;
+      return [Math.round(parts[0]!), Math.round(parts[1]!), Math.round(parts[2]!)];
+    };
+
+    const relLum = (rgb: [number, number, number]): number => {
+      const ch = (c: number) => {
+        const s = c / 255;
+        return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+      };
+      return 0.2126 * ch(rgb[0]) + 0.7152 * ch(rgb[1]) + 0.0722 * ch(rgb[2]);
+    };
+
+    const fgRgb = parseRgb(cs.color);
+    const bgRgb = parseRgb(bg);
+    let contrastApprox: number | null = null;
+    if (fgRgb && bgRgb) {
+      const l1 = relLum(fgRgb);
+      const l2 = relLum(bgRgb);
+      const lighter = Math.max(l1, l2);
+      const darker = Math.min(l1, l2);
+      if (darker > 0) contrastApprox = (lighter + 0.05) / (darker + 0.05);
+    }
+
     return {
-      backgroundColor: cs.backgroundColor,
+      backgroundColor: bg,
       color: cs.color,
       borderColor: cs.borderColor,
       boxShadow: cs.boxShadow,
+      contrastApprox,
     };
   });
 }
@@ -145,28 +188,6 @@ function isRootPastelLvSurface(bg: string): boolean {
   const [r, g, b] = t;
   const [pr, pg, pb] = ROOT_LV_CARD_PASTEL_RGB;
   return Math.abs(r - pr) <= 2 && Math.abs(g - pg) <= 2 && Math.abs(b - pb) <= 2;
-}
-
-/** Relative luminance sRGB (WCAG); used for a loose contrast guard on .lv-card. */
-function relativeLuminance(rgb: [number, number, number]): number {
-  const channel = (c: number) => {
-    const s = c / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  };
-  const [r, g, b] = rgb;
-  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
-}
-
-function contrastRatio(fg: string, bg: string): number | null {
-  const fgRgb = rgbTripletFromCssColor(fg);
-  const bgRgb = rgbTripletFromCssColor(bg);
-  if (!fgRgb || !bgRgb) return null;
-  const l1 = relativeLuminance(fgRgb);
-  const l2 = relativeLuminance(bgRgb);
-  const lighter = Math.max(l1, l2);
-  const darker = Math.min(l1, l2);
-  if (darker <= 0) return null;
-  return (lighter + 0.05) / (darker + 0.05);
 }
 
 function rgbDistance(a: string, b: string): number {
@@ -420,7 +441,7 @@ test.describe("Marketing theme propagation — public routes", () => {
     expect(rgbDistance(snapshots.ocean.lv.backgroundColor, snapshots.blossom.lv.backgroundColor)).toBeGreaterThan(4);
 
     for (const id of ["ocean", "blossom", "midnight", "apex"] as const) {
-      const ratio = contrastRatio(snapshots[id].lv.color, snapshots[id].lv.backgroundColor);
+      const ratio = snapshots[id].lv.contrastApprox;
       expect(ratio, `${routePath} ${id}: .lv-card contrast`).not.toBeNull();
       expect(ratio!, `${routePath} ${id}: .lv-card contrast`).toBeGreaterThanOrEqual(3);
     }
