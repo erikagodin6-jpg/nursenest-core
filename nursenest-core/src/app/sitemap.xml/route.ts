@@ -1,81 +1,20 @@
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
-import {
-  buildSitemapUrlsetFromAbsoluteUrls,
-  collectCoreUrls,
-  normalizeOrigin,
-  type SitemapUrlEntry,
-} from "@/lib/seo/sitemap-static-xml";
-import {
-  excludeAbsoluteUrlsMatchingBlogSitemapEntries,
-  filterPublicSitemapEntries,
-  mergeCoreUrlsWithBlogEntries,
-} from "@/lib/seo/sitemap-public-index-filter";
+import { buildSitemapIndexXmlForOrigin } from "@/lib/seo/sitemap-index-children";
+import { normalizeOrigin } from "@/lib/seo/sitemap-static-xml";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
 /**
- * Public sitemap: {@link collectCoreUrls} (marketing + pathway hubs + verified lessons, etc.) **without**
- * blog post URLs (those live in `/sitemap-blog.xml`). DB failures fall back to a minimal static urlset — never 503.
- * Every `loc` is filtered with {@link filterPublicSitemapEntries} (no `/login`, `/app`, `/api`, `/seo/`, …).
- * Origin follows {@link resolveCanonicalSiteOrigin}. Returns valid `application/xml` (200 or 304).
+ * Public **sitemap index** listing child urlsets (`sitemap-core`, `sitemap-blog`, `sitemap-lessons`,
+ * `sitemap-allied`, `sitemap-new-grad`). No DB — always 200 with valid XML (never 503).
+ * Child routes enforce {@link filterPublicSitemapEntries} and DB fallbacks.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-/** Minimal fallback when DB / heavy collectors fail — indexable marketing only (no auth noindex paths). */
-const FALLBACK_SITEMAP_PATHS = [
-  "/",
-  "/pricing",
-  "/blog",
-  "/about",
-  "/question-bank",
-  "/practice-exams",
-  "/lessons",
-  "/us/rn/nclex-rn",
-  "/us/rn/nclex-rn/lessons",
-  "/us/pn/nclex-pn",
-  "/us/pn/nclex-pn/lessons",
-  "/us/np/fnp",
-  "/us/np/fnp/lessons",
-  "/canada/rn/nclex-rn",
-  "/canada/rn/nclex-rn/lessons",
-  "/canada/pn/rex-pn",
-  "/canada/pn/rex-pn/lessons",
-  "/canada/np/cnple",
-  "/canada/np/cnple/lessons",
-] as const;
-
 export async function GET(request: Request): Promise<Response> {
   const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
-
-  let xml: string;
-
-  try {
-    const { listBlogSitemapEntriesSafe } = await import("@/lib/seo/sitemap-blog-xml");
-
-    const [coreUrls, blogEntries] = await Promise.all([collectCoreUrls(origin), listBlogSitemapEntriesSafe()]);
-    const coreWithoutBlog = excludeAbsoluteUrlsMatchingBlogSitemapEntries(coreUrls, blogEntries);
-
-    const merged: SitemapUrlEntry[] = mergeCoreUrlsWithBlogEntries(coreWithoutBlog, []);
-    const filtered = filterPublicSitemapEntries(merged, origin);
-
-    const seen = new Set<string>();
-    const unique = filtered.filter((e) => {
-      if (!e.loc || seen.has(e.loc)) return false;
-      seen.add(e.loc);
-      return true;
-    });
-
-    xml = buildSitemapUrlsetFromAbsoluteUrls(unique);
-  } catch {
-    const fallbackEntries: SitemapUrlEntry[] = FALLBACK_SITEMAP_PATHS.map((path) => ({
-      loc: `${origin}${path === "/" ? "" : path}`,
-    }));
-    const filteredFallback = filterPublicSitemapEntries(fallbackEntries, origin);
-    xml = buildSitemapUrlsetFromAbsoluteUrls(
-      filteredFallback.length > 0 ? filteredFallback : [{ loc: `${origin}/` }],
-    );
-  }
+  const xml = buildSitemapIndexXmlForOrigin(origin);
 
   const etag = buildPublicResponseEtag(xml);
   const headers = new Headers(SITEMAP_XML_HEADERS);

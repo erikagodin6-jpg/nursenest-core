@@ -484,7 +484,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
       collectExamPathwayUrls(o),
       collectNpPracticeTestHubUrls(o),
     ]);
-    const lessonHubUrls = collectPathwayLessonHubUrlsOnly(o);
+    const lessonHubUrls = omitPathwayLessonSeoUrls ? [] : collectPathwayLessonHubUrlsOnly(o);
     const osceScenarioHubUrls = collectOsceScenariosMarketingHubUrls(o);
     return [
       ...expandedBase,
@@ -508,7 +508,9 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     return Math.min(60_000, Math.max(2000, n));
   })();
   const pathwayLessonDeadlineMs = Date.now() + pathwayBudgetMs;
-  const lessonUrls = await collectPathwayLessonSeoUrls(o, { deadlineEpochMs: pathwayLessonDeadlineMs });
+  const lessonUrls = omitPathwayLessonSeoUrls
+    ? []
+    : await collectPathwayLessonSeoUrls(o, { deadlineEpochMs: pathwayLessonDeadlineMs });
   const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
   const [examHubUrls, npPracticeHubUrls, contentBackedStudyHubUrls, programmaticStudySeoUrls] = await Promise.all([
     collectExamPathwayUrls(o),

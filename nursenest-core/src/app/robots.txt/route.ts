@@ -7,10 +7,9 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 /**
  * Explicit `text/plain` robots.txt — no DB; always 200 for crawlers.
  *
- * **Sitemap:** four `Sitemap:` lines — merged marketing/urlset at `/sitemap.xml` (no blog post URLs; those are in
- * `/sitemap-blog.xml`), blog urlset at `/sitemap-blog.xml`, allied occupation hubs at `/sitemap-allied.xml`, and New Grad
- * marketing at `/sitemap-new-grad.xml`. All use `${CANONICAL_PRODUCTION_ORIGIN}`
- * (https `www` in production). No `http:`, no legacy hostnames.
+ * **Sitemap:** one `Sitemap:` line pointing at `/sitemap.xml` (**sitemap index**). Child urlsets are listed inside the
+ * index (`sitemap-core.xml`, `sitemap-blog.xml`, `sitemap-lessons.xml`, `sitemap-allied.xml`, `sitemap-new-grad.xml`).
+ * All use `${CANONICAL_PRODUCTION_ORIGIN}` (https `www` in production). No `http:`, no legacy hostnames.
  *
  * SEO indexing policy per language status:
  * - active (full tier): allowed — Google indexes the locale pages normally; locale URLs may appear in `/sitemap.xml`.
@@ -48,12 +47,7 @@ function buildDisallowedLocaleLines(): string {
   return lines.join("\n");
 }
 
-const CANONICAL_SITEMAP_LINES = [
-  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`,
-  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap-blog.xml`,
-  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap-allied.xml`,
-  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap-new-grad.xml`,
-] as const;
+const CANONICAL_SITEMAP_LINES = [`Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`] as const;
 
 const FALLBACK_BODY = [
   "User-agent: *",

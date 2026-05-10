@@ -45,6 +45,8 @@ test.describe("CAT exam mode — runner contract", () => {
       const submit = page.getByRole("button", { name: /^Submit answer$/i });
       await expect(submit).toBeDisabled();
 
+      await expect(page.locator('[data-nn-qa-cat-format="mcq"]')).toBeVisible({ timeout: 30_000 });
+
       const list = page.locator("ul.nn-cat-opt-list").first();
       await expect(list).toBeVisible({ timeout: 60_000 });
       const mcBtn = list.locator("button.nn-cat-opt").first();

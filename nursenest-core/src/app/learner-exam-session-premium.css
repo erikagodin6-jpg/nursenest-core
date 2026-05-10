@@ -95,12 +95,13 @@ html[data-theme="deep-twilight"] .nn-exam-session-premium.nn-learner-exam-shell[
 .nn-practice-exam-rationale-premium .nn-practice-exam-rationale-panel__card {
   border-radius: 1.125rem;
   border-left-width: 3px;
-  border-left-color: color-mix(in srgb, var(--semantic-info) 32%, var(--semantic-border-soft));
+  border-left-color: color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-info));
   background: color-mix(
     in srgb,
-    var(--semantic-panel-cool) 10%,
+    var(--semantic-panel-muted) 8%,
     var(--nn-review-panel-bg, var(--semantic-surface))
   );
+  box-shadow: var(--semantic-shadow-soft);
 }
 
 .nn-practice-exam-rationale-premium .nn-practice-rationale-full__scroll {
@@ -393,4 +394,49 @@ html[data-theme="apex"] .nn-practice-exam-convergence .nn-practice-exam-progress
   border: 1px solid var(--semantic-border-soft);
   border-radius: 0.75rem;
   background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+}
+
+/* NGN SATA / Bowtie — format eyebrow (CAT + linear exam-style shells; tokens only) */
+.nn-cat-exam-chrome .nn-cat-ngn-format-badge,
+[data-cat-exam-root] .nn-cat-ngn-format-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-info));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 38%, var(--semantic-surface));
+  color: var(--semantic-text-secondary);
+}
+
+.nn-cat-exam-chrome .nn-cat-ngn-format-row,
+[data-cat-exam-root] .nn-cat-ngn-format-row {
+  max-width: 100%;
+}
+
+@media (max-width: 639px) {
+  .nn-cat-exam-chrome .nn-cat-opt-list,
+  [data-cat-exam-root] .nn-cat-exam-chrome .nn-cat-opt-list,
+  [data-cat-exam-root] .nn-cat-question-card--exam-stack .nn-cat-opt-list {
+    gap: 0.5rem;
+  }
+
+  [data-cat-exam-root] .nn-cat-exam-board-footer--adaptive > div {
+    padding-left: max(0.5rem, env(safe-area-inset-left, 0px));
+    padding-right: max(0.5rem, env(safe-area-inset-right, 0px));
+  }
+}
+
+[data-nn-qa-cat-results-root] .nn-cat-readiness-hero {
+  box-shadow: var(--semantic-shadow-soft);
+  background: color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-muted));
+}
+
+[data-nn-qa-cat-results-root] .nn-cat-results__cards {
+  gap: clamp(0.65rem, 2.4vw, 1rem);
 }
