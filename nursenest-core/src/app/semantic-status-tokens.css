@@ -43,12 +43,32 @@
   --semantic-chart-3: #52b8d4;
   --semantic-chart-4: #f5a524;
   --semantic-chart-5: #0d9488;
+  --semantic-chart-6: #7c8fa6;
+  --semantic-chart-7: #a7e3d1;
+  --semantic-chart-8: #d8bd79;
+  --semantic-chart-9: #6b8fa8;
+  --semantic-accent-turquoise: #25b9b1;
+  --semantic-accent-seafoam: #81d6d1;
+  --semantic-accent-mint: #6dd7b6;
+  --semantic-accent-periwinkle: #9585c8;
+  --semantic-accent-peach: #f4b887;
+  --semantic-accent-gold: #d8bd79;
+  --semantic-accent-plum: #8e5a7f;
+  --semantic-accent-indigo: #2c3e7e;
+  --semantic-accent-lavender: #b09bff;
   --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
   --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
+  --decorative-3: color-mix(in srgb, var(--semantic-accent-turquoise) 42%, var(--semantic-accent-lavender));
+  --decorative-4: color-mix(in srgb, var(--semantic-accent-peach) 44%, var(--semantic-accent-mint));
   --semantic-panel-muted: #f1f4f9;
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
   --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 11%, var(--semantic-surface));
+  --semantic-panel-aqua: color-mix(in srgb, var(--semantic-accent-turquoise) 10%, var(--semantic-surface));
+  --semantic-panel-mint: color-mix(in srgb, var(--semantic-accent-mint) 10%, var(--semantic-surface));
+  --semantic-panel-lavender: color-mix(in srgb, var(--semantic-accent-lavender) 10%, var(--semantic-surface));
+  --semantic-panel-peach: color-mix(in srgb, var(--semantic-accent-peach) 10%, var(--semantic-surface));
+  --semantic-panel-gold: color-mix(in srgb, var(--semantic-accent-gold) 10%, var(--semantic-surface));
   --hero-gradient-start: transparent;
   --hero-gradient-mid: transparent;
   --hero-gradient-end: transparent;
@@ -203,11 +223,26 @@ html[data-theme] {
   --chart-3: var(--semantic-chart-3);
   --chart-4: var(--semantic-chart-4);
   --chart-5: var(--semantic-chart-5);
+  --chart-6: var(--semantic-chart-6);
+  --chart-7: var(--semantic-chart-7);
+  --chart-8: var(--semantic-chart-8);
+  --chart-9: var(--semantic-chart-9);
+  --accent-turquoise: var(--semantic-accent-turquoise);
+  --accent-seafoam: var(--semantic-accent-seafoam);
+  --accent-mint: var(--semantic-accent-mint);
+  --accent-periwinkle: var(--semantic-accent-periwinkle);
+  --accent-peach: var(--semantic-accent-peach);
+  --accent-gold: var(--semantic-accent-gold);
+  --accent-plum: var(--semantic-accent-plum);
+  --accent-indigo: var(--semantic-accent-indigo);
+  --accent-lavender: var(--semantic-accent-lavender);
   --mastery-high: var(--semantic-mastery-high);
   --mastery-mid: var(--semantic-mastery-mid);
   --mastery-low: var(--semantic-mastery-low);
   --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
   --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
+  --decorative-3: color-mix(in srgb, var(--semantic-accent-turquoise) 42%, var(--semantic-accent-lavender));
+  --decorative-4: color-mix(in srgb, var(--semantic-accent-peach) 44%, var(--semantic-accent-mint));
   --hero-gradient-start: transparent;
   --hero-gradient-mid: transparent;
   --hero-gradient-end: transparent;
@@ -257,6 +292,18 @@ html[data-theme] {
   --nn-mastery: var(--semantic-mastery-high);
   --nn-study: var(--semantic-info);
   --nn-reinforce: var(--semantic-chart-5);
+  --nn-module-clinical-pearls: var(--semantic-accent-lavender);
+  --nn-module-pharmacology: var(--semantic-accent-peach);
+  --nn-module-labs: var(--semantic-accent-turquoise);
+  --nn-module-ecg: var(--semantic-accent-indigo);
+  --nn-module-ngn: var(--semantic-accent-periwinkle);
+  --nn-module-safety: var(--semantic-danger);
+  --nn-module-communication: var(--semantic-accent-seafoam);
+  --nn-module-delegation: var(--semantic-accent-gold);
+  --nn-module-weak-areas: var(--semantic-warning);
+  --nn-module-flashcards: var(--semantic-chart-5);
+  --nn-module-cat: var(--semantic-chart-4);
+  --nn-module-practice: var(--semantic-chart-3);
 
   /* Lesson semantic section colors. Distinct roles, theme-aware expression. */
   --lesson-pathophysiology-accent: var(--semantic-violet);
@@ -482,6 +529,155 @@ html[data-theme="deep-twilight"] {
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card));
   --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 10%, var(--bg-card));
+}
+
+/* Premium expanded ecosystem palettes — homepage-grade richness for dense product surfaces. */
+html[data-theme="ocean"] {
+  --semantic-chart-1: #168cc7;
+  --semantic-chart-2: #25b9b1;
+  --semantic-chart-3: #81d6d1;
+  --semantic-chart-4: #d8bd79;
+  --semantic-chart-5: #0f4b6e;
+  --semantic-chart-6: #8fafc4;
+  --semantic-chart-7: #6dd7b6;
+  --semantic-chart-8: #4aa3cf;
+  --semantic-chart-9: #b9ecf2;
+  --semantic-accent-turquoise: #25b9b1;
+  --semantic-accent-seafoam: #81d6d1;
+  --semantic-accent-mint: #6dd7b6;
+  --semantic-accent-periwinkle: #7f98c8;
+  --semantic-accent-peach: #e4c783;
+  --semantic-accent-gold: #d8bd79;
+  --semantic-accent-plum: #6a7597;
+  --semantic-accent-indigo: #0f4b6e;
+  --semantic-accent-lavender: #8fa8d8;
+  --semantic-panel-aqua: color-mix(in srgb, #25b9b1 12%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #6dd7b6 11%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #8fa8d8 10%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #e4c783 12%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #d8bd79 12%, var(--bg-card));
+}
+
+html[data-theme="blossom"] {
+  --semantic-brand-soft: color-mix(in srgb, #8e75ff 12%, var(--bg-card));
+  --semantic-chart-1: #8e75ff;
+  --semantic-chart-2: #a7dcd8;
+  --semantic-chart-3: #9ccae8;
+  --semantic-chart-4: #f3df94;
+  --semantic-chart-5: #d9a9c8;
+  --semantic-chart-6: #bba5e8;
+  --semantic-chart-7: #b9d9c2;
+  --semantic-chart-8: #f4cfa8;
+  --semantic-chart-9: #d98e85;
+  --semantic-accent-turquoise: #a7dcd8;
+  --semantic-accent-seafoam: #b9d9c2;
+  --semantic-accent-mint: #a7d8bd;
+  --semantic-accent-periwinkle: #bba5e8;
+  --semantic-accent-peach: #f4cfa8;
+  --semantic-accent-gold: #f3df94;
+  --semantic-accent-plum: #9d7aaa;
+  --semantic-accent-indigo: #6f66c7;
+  --semantic-accent-lavender: #bba5e8;
+  --semantic-panel-muted: color-mix(in srgb, #8e75ff 5%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #f4cfa8 18%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #9ccae8 13%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #a7d8bd 13%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #a7dcd8 15%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #b9d9c2 15%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #bba5e8 14%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #f4cfa8 16%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #f3df94 15%, var(--bg-card));
+}
+
+html[data-theme="aurora"] {
+  --semantic-brand-soft: color-mix(in srgb, #756dff 13%, var(--bg-card));
+  --semantic-chart-1: #756dff;
+  --semantic-chart-2: #34c9d4;
+  --semantic-chart-3: #64d8a6;
+  --semantic-chart-4: #b8e986;
+  --semantic-chart-5: #b09bff;
+  --semantic-chart-6: #9ac7ff;
+  --semantic-chart-7: #45bfb1;
+  --semantic-chart-8: #d57ad4;
+  --semantic-chart-9: #2c3e7e;
+  --semantic-accent-turquoise: #34c9d4;
+  --semantic-accent-seafoam: #64d8a6;
+  --semantic-accent-mint: #b8e986;
+  --semantic-accent-periwinkle: #9ac7ff;
+  --semantic-accent-peach: #d8b777;
+  --semantic-accent-gold: #b8e986;
+  --semantic-accent-plum: #d57ad4;
+  --semantic-accent-indigo: #2c3e7e;
+  --semantic-accent-lavender: #b09bff;
+  --semantic-panel-muted: color-mix(in srgb, #756dff 6%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #d57ad4 10%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #34c9d4 13%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #64d8a6 13%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #34c9d4 15%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #64d8a6 15%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #b09bff 15%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #d57ad4 9%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #b8e986 12%, var(--bg-card));
+}
+
+html[data-theme="sunset"] {
+  --semantic-chart-1: #df704a;
+  --semantic-chart-2: #c75f78;
+  --semantic-chart-3: #b7a1d8;
+  --semantic-chart-4: #d9a44c;
+  --semantic-chart-5: #24445f;
+  --semantic-chart-6: #8e5a7f;
+  --semantic-chart-7: #f4b887;
+  --semantic-chart-8: #e7b6c1;
+  --semantic-chart-9: #f1d08a;
+  --semantic-accent-turquoise: #4f9f9a;
+  --semantic-accent-seafoam: #93c6a8;
+  --semantic-accent-mint: #7dbf9f;
+  --semantic-accent-periwinkle: #b7a1d8;
+  --semantic-accent-peach: #f4b887;
+  --semantic-accent-gold: #d9a44c;
+  --semantic-accent-plum: #8e5a7f;
+  --semantic-accent-indigo: #24445f;
+  --semantic-accent-lavender: #b7a1d8;
+  --semantic-panel-muted: color-mix(in srgb, #24445f 5%, var(--bg-section-alt, var(--bg-card)));
+  --semantic-panel-warm: color-mix(in srgb, #df704a 11%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #b7a1d8 11%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #7dbf9f 11%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #4f9f9a 10%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #7dbf9f 11%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #b7a1d8 13%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #f4b887 15%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #d9a44c 13%, var(--bg-card));
+}
+
+html[data-theme="midnight"] {
+  --semantic-chart-1: #78c7ff;
+  --semantic-chart-2: #35c6b8;
+  --semantic-chart-3: #6a83d8;
+  --semantic-chart-4: #d6b56d;
+  --semantic-chart-5: #a987d9;
+  --semantic-chart-6: #92e2c2;
+  --semantic-chart-7: #466c91;
+  --semantic-chart-8: #4dd1e1;
+  --semantic-chart-9: #203a66;
+  --semantic-accent-turquoise: #35c6b8;
+  --semantic-accent-seafoam: #92e2c2;
+  --semantic-accent-mint: #6ee7b7;
+  --semantic-accent-periwinkle: #6a83d8;
+  --semantic-accent-peach: #d6b56d;
+  --semantic-accent-gold: #d6b56d;
+  --semantic-accent-plum: #a987d9;
+  --semantic-accent-indigo: #203a66;
+  --semantic-accent-lavender: #a987d9;
+  --semantic-panel-muted: color-mix(in srgb, #78c7ff 9%, var(--bg-card));
+  --semantic-panel-warm: color-mix(in srgb, #d6b56d 12%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, #78c7ff 13%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, #35c6b8 13%, var(--bg-card));
+  --semantic-panel-aqua: color-mix(in srgb, #4dd1e1 14%, var(--bg-card));
+  --semantic-panel-mint: color-mix(in srgb, #92e2c2 13%, var(--bg-card));
+  --semantic-panel-lavender: color-mix(in srgb, #a987d9 14%, var(--bg-card));
+  --semantic-panel-peach: color-mix(in srgb, #d6b56d 12%, var(--bg-card));
+  --semantic-panel-gold: color-mix(in srgb, #d6b56d 13%, var(--bg-card));
 }
 
 /* -------------------------------------------------------------------------- */
@@ -742,7 +938,11 @@ html[data-theme="deep-twilight"] {
     var(--semantic-chart-1),
     var(--semantic-chart-2),
     var(--semantic-chart-4),
-    color-mix(in srgb, var(--semantic-chart-5) 88%, var(--semantic-chart-1))
+    var(--semantic-chart-5),
+    var(--semantic-chart-6),
+    var(--semantic-chart-7),
+    var(--semantic-chart-8),
+    color-mix(in srgb, var(--semantic-chart-9) 88%, var(--semantic-chart-1))
   );
 }
 
@@ -797,7 +997,17 @@ html[data-theme="deep-twilight"] {
 .nn-metric-tile {
   border-radius: 1rem;
   border: 1px solid var(--semantic-border-soft);
-  background: var(--semantic-surface);
+  background:
+    radial-gradient(
+      420px 180px at 100% 0%,
+      color-mix(in srgb, var(--metric-accent, var(--semantic-chart-3)) 8%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--metric-soft, var(--semantic-panel-cool)) 30%, var(--semantic-surface)),
+      var(--semantic-surface)
+    );
   box-shadow: var(--semantic-shadow-soft);
   position: relative;
   overflow: hidden;
@@ -810,8 +1020,54 @@ html[data-theme="deep-twilight"] {
   right: 0;
   top: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--semantic-brand), var(--semantic-info));
+  background: linear-gradient(90deg, var(--metric-accent, var(--semantic-brand)), var(--metric-accent-end, var(--semantic-info)));
   opacity: 0.85;
+}
+
+.nn-metric-tile:nth-of-type(9n + 1) {
+  --metric-accent: var(--semantic-chart-1);
+  --metric-accent-end: var(--semantic-chart-2);
+  --metric-soft: var(--semantic-panel-cool);
+}
+.nn-metric-tile:nth-of-type(9n + 2) {
+  --metric-accent: var(--semantic-chart-2);
+  --metric-accent-end: var(--semantic-chart-7);
+  --metric-soft: var(--semantic-panel-positive);
+}
+.nn-metric-tile:nth-of-type(9n + 3) {
+  --metric-accent: var(--semantic-chart-3);
+  --metric-accent-end: var(--semantic-chart-8);
+  --metric-soft: var(--semantic-panel-aqua);
+}
+.nn-metric-tile:nth-of-type(9n + 4) {
+  --metric-accent: var(--semantic-chart-4);
+  --metric-accent-end: var(--semantic-chart-9);
+  --metric-soft: var(--semantic-panel-warm);
+}
+.nn-metric-tile:nth-of-type(9n + 5) {
+  --metric-accent: var(--semantic-chart-5);
+  --metric-accent-end: var(--semantic-chart-6);
+  --metric-soft: var(--semantic-panel-lavender);
+}
+.nn-metric-tile:nth-of-type(9n + 6) {
+  --metric-accent: var(--semantic-chart-6);
+  --metric-accent-end: var(--semantic-chart-1);
+  --metric-soft: var(--semantic-panel-muted);
+}
+.nn-metric-tile:nth-of-type(9n + 7) {
+  --metric-accent: var(--semantic-chart-7);
+  --metric-accent-end: var(--semantic-chart-2);
+  --metric-soft: var(--semantic-panel-mint);
+}
+.nn-metric-tile:nth-of-type(9n + 8) {
+  --metric-accent: var(--semantic-chart-8);
+  --metric-accent-end: var(--semantic-chart-3);
+  --metric-soft: var(--semantic-panel-peach);
+}
+.nn-metric-tile:nth-of-type(9n + 9) {
+  --metric-accent: var(--semantic-chart-9);
+  --metric-accent-end: var(--semantic-chart-4);
+  --metric-soft: var(--semantic-panel-gold);
 }
 
 .nn-momentum-glow {
@@ -870,7 +1126,11 @@ html[data-theme="deep-twilight"] {
     var(--semantic-brand),
     var(--semantic-chart-2),
     var(--semantic-chart-4),
-    color-mix(in srgb, var(--semantic-chart-5) 92%, var(--semantic-brand))
+    var(--semantic-chart-5),
+    var(--semantic-chart-6),
+    var(--semantic-chart-7),
+    var(--semantic-chart-8),
+    color-mix(in srgb, var(--semantic-chart-9) 92%, var(--semantic-brand))
   );
   opacity: 0.9;
   pointer-events: none;
@@ -917,25 +1177,25 @@ html[data-theme="deep-twilight"] {
 }
 
 .nn-study-link-tile[data-study-accent="cat"] {
-  --study-accent: var(--semantic-chart-4);
+  --study-accent: var(--nn-module-cat);
 }
 .nn-study-link-tile[data-study-accent="exams"] {
-  --study-accent: var(--semantic-chart-1);
+  --study-accent: var(--nn-module-practice);
 }
 .nn-study-link-tile[data-study-accent="bank"] {
-  --study-accent: var(--semantic-chart-3);
+  --study-accent: var(--semantic-accent-turquoise);
 }
 .nn-study-link-tile[data-study-accent="lessons"] {
-  --study-accent: var(--semantic-chart-2);
+  --study-accent: var(--semantic-accent-mint);
 }
 .nn-study-link-tile[data-study-accent="flashcards"] {
-  --study-accent: var(--semantic-chart-5);
+  --study-accent: var(--nn-module-flashcards);
 }
 .nn-study-link-tile[data-study-accent="planner"] {
-  --study-accent: var(--semantic-info);
+  --study-accent: var(--semantic-accent-lavender);
 }
 .nn-study-link-tile[data-study-accent="report"] {
-  --study-accent: var(--decorative-1);
+  --study-accent: var(--decorative-3);
 }
 .nn-study-link-tile[data-study-accent="readiness"] {
   --study-accent: var(--semantic-success);

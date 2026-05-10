@@ -20,12 +20,19 @@
 /* Mastery key inset — same language as readiness rail, less “floating grey box” */
 .nn-cockpit-mastery-key {
   border-radius: var(--nn-cockpit-card-radius);
-  border: 1px solid color-mix(in srgb, var(--semantic-info) 14%, var(--semantic-border-soft));
-  background: linear-gradient(
-    165deg,
-    color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-surface)) 0%,
-    color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface)) 100%
-  );
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-7) 18%, var(--semantic-border-soft));
+  background:
+    radial-gradient(
+      420px 180px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-8) 8%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-panel-lavender) 18%, var(--semantic-surface)) 54%,
+      color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface)) 100%
+    );
   box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 55%, transparent);
 }
 
@@ -45,12 +52,18 @@
 .nn-learner-cockpit-hero.nn-learner-dashboard-hero.nn-dash-page-header--learner-hub {
   border-radius: var(--nn-cockpit-card-radius);
   border: 1px solid color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--semantic-surface)) 0%,
-    color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface)) 42%,
-    var(--semantic-surface) 100%
-  );
+  background:
+    radial-gradient(
+      620px 260px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-6) 9%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface)) 42%,
+      color-mix(in srgb, var(--semantic-panel-mint) 16%, var(--semantic-surface)) 100%
+    );
   box-shadow:
     0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 70%, transparent),
     0 18px 44px -28px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent);
@@ -107,13 +120,50 @@
 /* Weak-topic signals — diagnostic, not alarmist blocks */
 .nn-report-card-topic-signal {
   border-radius: var(--nn-cockpit-card-radius);
-  border: 1px solid color-mix(in srgb, var(--semantic-warning) 18%, var(--semantic-border-soft));
-  background: linear-gradient(
-    120deg,
-    color-mix(in srgb, var(--semantic-panel-warm) 36%, var(--semantic-surface)) 0%,
-    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted)) 100%
-  );
+  border: 1px solid color-mix(in srgb, var(--topic-signal-accent, var(--semantic-warning)) 18%, var(--semantic-border-soft));
+  background:
+    radial-gradient(
+      340px 160px at 100% 0%,
+      color-mix(in srgb, var(--topic-signal-glow, var(--semantic-chart-8)) 9%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--topic-signal-soft, var(--semantic-panel-warm)) 36%, var(--semantic-surface)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted)) 100%
+    );
   box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 50%, transparent);
+}
+
+.nn-report-card-topic-signal:nth-of-type(6n + 1) {
+  --topic-signal-accent: var(--semantic-warning);
+  --topic-signal-soft: var(--semantic-panel-warm);
+  --topic-signal-glow: var(--semantic-chart-4);
+}
+.nn-report-card-topic-signal:nth-of-type(6n + 2) {
+  --topic-signal-accent: var(--semantic-chart-3);
+  --topic-signal-soft: var(--semantic-panel-aqua);
+  --topic-signal-glow: var(--semantic-chart-8);
+}
+.nn-report-card-topic-signal:nth-of-type(6n + 3) {
+  --topic-signal-accent: var(--semantic-chart-5);
+  --topic-signal-soft: var(--semantic-panel-lavender);
+  --topic-signal-glow: var(--semantic-chart-6);
+}
+.nn-report-card-topic-signal:nth-of-type(6n + 4) {
+  --topic-signal-accent: var(--semantic-chart-7);
+  --topic-signal-soft: var(--semantic-panel-mint);
+  --topic-signal-glow: var(--semantic-chart-2);
+}
+.nn-report-card-topic-signal:nth-of-type(6n + 5) {
+  --topic-signal-accent: var(--semantic-chart-8);
+  --topic-signal-soft: var(--semantic-panel-peach);
+  --topic-signal-glow: var(--semantic-chart-1);
+}
+.nn-report-card-topic-signal:nth-of-type(6n + 6) {
+  --topic-signal-accent: var(--semantic-chart-9);
+  --topic-signal-soft: var(--semantic-panel-gold);
+  --topic-signal-glow: var(--semantic-chart-4);
 }
 
 /* Midnight: keep glass readable, soften chart rail contrast */

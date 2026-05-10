@@ -1387,7 +1387,62 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketi
 
 .nn-premium-pathway-card {
   background:
-    linear-gradient(160deg, color-mix(in srgb, var(--premium-card-accent) 13%, var(--surface, #fff)), color-mix(in srgb, var(--premium-card-accent) 4%, var(--surface, #fff)));
+    radial-gradient(
+      360px 180px at 100% 0%,
+      color-mix(in srgb, var(--premium-card-glow, var(--semantic-chart-6)) 11%, transparent),
+      transparent 58%
+    ),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--premium-card-accent) 13%, var(--surface, #fff)),
+      color-mix(in srgb, var(--premium-card-soft, var(--premium-card-accent)) 5%, var(--surface, #fff))
+    );
+}
+
+.nn-premium-pathway-card:nth-of-type(9n + 1) {
+  --premium-card-accent: var(--semantic-chart-1);
+  --premium-card-soft: var(--semantic-chart-7);
+  --premium-card-glow: var(--semantic-chart-3);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 2) {
+  --premium-card-accent: var(--semantic-chart-2);
+  --premium-card-soft: var(--semantic-chart-8);
+  --premium-card-glow: var(--semantic-chart-7);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 3) {
+  --premium-card-accent: var(--semantic-chart-3);
+  --premium-card-soft: var(--semantic-chart-5);
+  --premium-card-glow: var(--semantic-chart-6);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 4) {
+  --premium-card-accent: var(--semantic-chart-4);
+  --premium-card-soft: var(--semantic-chart-9);
+  --premium-card-glow: var(--semantic-chart-8);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 5) {
+  --premium-card-accent: var(--semantic-chart-5);
+  --premium-card-soft: var(--semantic-chart-6);
+  --premium-card-glow: var(--semantic-chart-1);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 6) {
+  --premium-card-accent: var(--semantic-chart-6);
+  --premium-card-soft: var(--semantic-chart-2);
+  --premium-card-glow: var(--semantic-chart-5);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 7) {
+  --premium-card-accent: var(--semantic-chart-7);
+  --premium-card-soft: var(--semantic-chart-3);
+  --premium-card-glow: var(--semantic-chart-2);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 8) {
+  --premium-card-accent: var(--semantic-chart-8);
+  --premium-card-soft: var(--semantic-chart-4);
+  --premium-card-glow: var(--semantic-chart-7);
+}
+.nn-premium-pathway-card:nth-of-type(9n + 9) {
+  --premium-card-accent: var(--semantic-chart-9);
+  --premium-card-soft: var(--semantic-chart-1);
+  --premium-card-glow: var(--semantic-chart-4);
 }
 
 .nn-premium-pathway-card__icon {
@@ -1434,7 +1489,16 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketi
     top: 32px;
     height: 6px;
     border-radius: 999px;
-    background: linear-gradient(90deg, var(--nn-premium-tone-brand), var(--nn-premium-tone-accent), var(--nn-premium-tone-info), var(--nn-premium-tone-success));
+    background: linear-gradient(
+      90deg,
+      var(--nn-premium-tone-brand),
+      var(--semantic-chart-2),
+      var(--nn-premium-tone-accent),
+      var(--semantic-chart-6),
+      var(--nn-premium-tone-info),
+      var(--semantic-chart-8),
+      var(--nn-premium-tone-success)
+    );
     opacity: 0.24;
   }
 }
@@ -2126,6 +2190,8 @@ html[data-theme="midnight"] .nn-header-dark-surface {
     radial-gradient(720px 420px at 6% 0%, color-mix(in srgb, var(--semantic-chart-1) 14%, transparent) 0%, transparent 58%),
     radial-gradient(680px 400px at 100% 4%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent) 0%, transparent 55%),
     radial-gradient(520px 320px at 50% 100%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent) 0%, transparent 60%),
+    radial-gradient(540px 320px at 88% 78%, color-mix(in srgb, var(--semantic-chart-7) 8%, transparent) 0%, transparent 58%),
+    radial-gradient(460px 280px at 18% 88%, color-mix(in srgb, var(--semantic-chart-8) 7%, transparent) 0%, transparent 58%),
     var(--semantic-bg-base, var(--semantic-surface));
 }
 
@@ -2142,6 +2208,8 @@ html[data-theme="midnight"] .nn-header-dark-surface {
   pointer-events: none;
   border-radius: inherit;
   background-image:
+    radial-gradient(520px 220px at 100% 0%, color-mix(in srgb, var(--semantic-chart-6) 9%, transparent), transparent 60%),
+    radial-gradient(460px 200px at 0% 100%, color-mix(in srgb, var(--semantic-chart-8) 8%, transparent), transparent 58%),
     linear-gradient(125deg, transparent 40%, color-mix(in srgb, var(--semantic-chart-3) 6%, transparent) 100%);
   opacity: 0.9;
 }
@@ -3122,7 +3190,8 @@ html[data-theme="midnight"] .nn-header-dark-surface {
   border-radius: inherit;
   background:
     radial-gradient(680px 240px at 0% 0%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 58%),
-    radial-gradient(520px 200px at 100% 100%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 55%);
+    radial-gradient(520px 200px at 100% 100%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 55%),
+    radial-gradient(460px 180px at 72% 4%, color-mix(in srgb, var(--semantic-chart-7) 7%, transparent), transparent 58%);
   z-index: 0;
 }
 
@@ -3235,6 +3304,7 @@ html[data-theme="midnight"] .nn-header-dark-surface {
     90deg,
     color-mix(in srgb, var(--semantic-chart-3) 86%, var(--semantic-text-primary)),
     color-mix(in srgb, var(--semantic-brand) 84%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-chart-7) 82%, var(--semantic-text-primary)),
     color-mix(in srgb, var(--semantic-success) 80%, var(--semantic-text-primary))
   );
 }
@@ -3283,6 +3353,7 @@ html[data-theme="midnight"] .nn-header-dark-surface {
     90deg,
     color-mix(in srgb, var(--semantic-chart-3) 92%, var(--semantic-text-primary)),
     color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-text-primary)),
+    color-mix(in srgb, var(--semantic-chart-6) 88%, var(--semantic-text-primary)),
     color-mix(in srgb, var(--semantic-success) 85%, var(--semantic-text-primary))
   );
 }
@@ -3432,7 +3503,8 @@ html[data-theme="midnight"] .nn-header-dark-surface {
   border-radius: inherit;
   background:
     radial-gradient(620px 260px at 8% 0%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 58%),
-    radial-gradient(540px 220px at 96% 92%, color-mix(in srgb, var(--semantic-chart-4) 9%, transparent), transparent 52%);
+    radial-gradient(540px 220px at 96% 92%, color-mix(in srgb, var(--semantic-chart-4) 9%, transparent), transparent 52%),
+    radial-gradient(460px 190px at 78% 12%, color-mix(in srgb, var(--semantic-chart-8) 8%, transparent), transparent 56%);
   z-index: 0;
 }
 
@@ -3909,6 +3981,11 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
   border-radius: 1rem;
   border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand) 12%);
   background:
+    radial-gradient(
+      560px 220px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-7) 8%, transparent),
+      transparent 58%
+    ),
     linear-gradient(
       165deg,
       color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--semantic-surface)),
@@ -3933,7 +4010,8 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
   opacity: 0.14;
   background:
     radial-gradient(560px 200px at 12% 0%, color-mix(in srgb, var(--semantic-chart-4) 24%, transparent), transparent 60%),
-    radial-gradient(480px 180px at 90% 12%, color-mix(in srgb, var(--semantic-brand) 18%, transparent), transparent 58%);
+    radial-gradient(480px 180px at 90% 12%, color-mix(in srgb, var(--semantic-brand) 18%, transparent), transparent 58%),
+    radial-gradient(440px 160px at 50% 100%, color-mix(in srgb, var(--semantic-chart-8) 16%, transparent), transparent 58%);
   z-index: 0;
 }
 
@@ -4014,6 +4092,7 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
   background:
     radial-gradient(520px 280px at 0% 0%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent), transparent 55%),
     radial-gradient(480px 260px at 100% 8%, color-mix(in srgb, var(--semantic-chart-4) 12%, transparent), transparent 52%),
+    radial-gradient(520px 260px at 78% 100%, color-mix(in srgb, var(--semantic-chart-6) 10%, transparent), transparent 58%),
     color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface));
 }
 
@@ -4024,6 +4103,7 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
 .nn-premium-category-performance-shell {
   border-color: color-mix(in srgb, var(--semantic-chart-2) 14%, var(--semantic-border-soft));
   background:
+    radial-gradient(540px 240px at 100% 0%, color-mix(in srgb, var(--semantic-chart-7) 8%, transparent), transparent 58%),
     linear-gradient(
       165deg,
       color-mix(in srgb, var(--semantic-panel-cool) 16%, var(--semantic-surface)) 0%,
@@ -4045,6 +4125,7 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
 .nn-premium-readiness-page-hero {
   border-color: color-mix(in srgb, var(--semantic-chart-3) 16%, var(--semantic-border-soft));
   background:
+    radial-gradient(620px 260px at 100% 0%, color-mix(in srgb, var(--semantic-chart-8) 8%, transparent), transparent 58%),
     linear-gradient(
       165deg,
       color-mix(in srgb, var(--semantic-panel-cool) 24%, var(--semantic-surface)) 0%,
