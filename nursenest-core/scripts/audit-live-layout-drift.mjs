@@ -2,6 +2,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { chromium } from "playwright";
 
 const packageRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const reportPath = path.join(packageRoot, "docs", "reports", "live-layout-drift-comparison.md");
@@ -193,6 +194,7 @@ async function auditRoute(base, route) {
   return {
     route,
     page: htmlResult,
+    dom: null,
     assetCount: assetUrls.length,
     cssAssetCount: cssAssets.length,
     jsAssetCount: jsAssets.length,
@@ -200,6 +202,36 @@ async function auditRoute(base, route) {
     badAssets,
     markers,
   };
+}
+
+async function auditBrowserDom(base, results) {
+  let browser;
+  try {
+    browser = await chromium.launch({ headless: true });
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    for (const result of results) {
+      await page.goto(String(cacheBustedUrl(base, result.route.path)), { waitUntil: "domcontentloaded", timeout: 60_000 });
+      await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});
+      const content = await page.content();
+      result.dom = {
+        url: page.url(),
+        title: await page.title().catch(() => ""),
+        markers: result.route.markers.map((marker) => ({
+          marker,
+          existsInDom: content.includes(marker),
+        })),
+      };
+    }
+  } catch (error) {
+    for (const result of results) {
+      result.dom = {
+        error: error instanceof Error ? error.message : String(error),
+        markers: result.route.markers.map((marker) => ({ marker, existsInDom: false })),
+      };
+    }
+  } finally {
+    await browser?.close().catch(() => {});
+  }
 }
 
 function yes(value) {
@@ -210,12 +242,16 @@ function routeConclusion(result) {
   const repoMarkers = result.markers.filter((m) => m.existsInRepo).length;
   const htmlMarkers = result.markers.filter((m) => m.existsInHtml).length;
   const cssMarkers = result.markers.filter((m) => m.existsInCss).length;
+  const domMarkers = result.dom?.markers?.filter((m) => m.existsInDom).length ?? 0;
 
   if (result.badAssets.length > 0) {
     return "D candidate: sampled static asset returned wrong status/content-type/body.";
   }
   if (repoMarkers === 0) {
     return "A candidate: configured markers were not found in repo source.";
+  }
+  if (domMarkers > 0) {
+    return "Markers present in hydrated browser DOM.";
   }
   if (htmlMarkers === 0 && cssMarkers > 0) {
     return result.route.authRequired
@@ -235,8 +271,9 @@ function renderTableRows(label, results) {
   for (const result of results) {
     for (const marker of result.markers) {
       const escapedMarker = marker.marker.replaceAll("|", "\\|");
+      const domMarker = result.dom?.markers?.find((m) => m.marker === marker.marker);
       rows.push(
-        `| ${label} | ${result.route.id} | \`${escapedMarker}\` | ${yes(marker.existsInRepo)} | n/a | ${yes(marker.existsInHtml)} | ${yes(marker.existsInCss)} | ${result.badAssets.length === 0 ? "yes" : "no"} | ${routeConclusion(result)} |`,
+        `| ${label} | ${result.route.id} | \`${escapedMarker}\` | ${yes(marker.existsInRepo)} | n/a | ${yes(marker.existsInHtml)} | ${yes(domMarker?.existsInDom)} | ${yes(marker.existsInCss)} | ${result.badAssets.length === 0 ? "yes" : "no"} | ${routeConclusion(result)} |`,
       );
     }
   }
@@ -267,6 +304,7 @@ async function auditBase(label, base) {
   for (const route of routes) {
     out.push(await auditRoute(base, route));
   }
+  await auditBrowserDom(base, out);
   return { label, base, results: out };
 }
 
@@ -292,8 +330,8 @@ const lines = [
   "",
   "## Marker Comparison",
   "",
-  "| Target | Route | Marker | Exists In Repo | Exists In Local Build | Exists In Live HTML | Exists In Live CSS | Asset Content-Type Correct | Conclusion |",
-  "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+  "| Target | Route | Marker | Exists In Repo | Exists In Local Build | Exists In Raw HTML | Exists In Browser DOM | Exists In Live CSS | Asset Content-Type Correct | Conclusion |",
+  "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
   ...audits.flatMap((audit) => renderTableRows(audit.label, audit.results)),
   "",
   "## Static Asset Content-Type Proof",

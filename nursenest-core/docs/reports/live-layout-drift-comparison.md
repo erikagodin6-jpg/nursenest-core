@@ -1,6 +1,6 @@
 # Live Layout Drift Comparison
 
-Generated: 2026-05-10T20:55:17.160Z
+Generated: 2026-05-10T20:59:11.797Z
 
 Live base: https://www.nursenest.ca
 
@@ -8,39 +8,39 @@ Local base: not provided. Set `NN_LAYOUT_AUDIT_LOCAL_BASE_URL=http://127.0.0.1:<
 
 ## Marker Comparison
 
-| Target | Route | Marker | Exists In Repo | Exists In Local Build | Exists In Live HTML | Exists In Live CSS | Asset Content-Type Correct | Conclusion |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| live | homepage | `nn-home-marketing-rich-hero` | yes | n/a | no | yes | yes | C candidate: premium CSS exists but route body marker is absent from HTML. |
-| live | homepage | `nn-premium-hero-grid` | yes | n/a | no | yes | yes | C candidate: premium CSS exists but route body marker is absent from HTML. |
-| live | homepage | `nn-premium-hero-panel` | yes | n/a | no | yes | yes | C candidate: premium CSS exists but route body marker is absent from HTML. |
-| live | learner-app | `data-nn-learner-dashboard-convergence` | yes | n/a | no | no | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
-| live | learner-app | `nn-learner-dashboard-convergence` | yes | n/a | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
-| live | practice-tests-hub | `data-nn-learner-area="practice-tests"` | yes | n/a | no | no | yes | Auth-gated anonymous shell; requires authenticated capture for final route verdict. |
-| live | practice-tests-hub | `data-nn-premium-platform-module="practice-tests"` | yes | n/a | no | no | yes | Auth-gated anonymous shell; requires authenticated capture for final route verdict. |
-| live | practice-tests-hub | `nn-practice-tests-hub-premium` | yes | n/a | no | no | yes | Auth-gated anonymous shell; requires authenticated capture for final route verdict. |
-| live | practice-tests-hub | `data-nn-practice-exam-hub-convergence` | yes | n/a | no | no | yes | Auth-gated anonymous shell; requires authenticated capture for final route verdict. |
-| live | flashcards-hub | `data-nn-premium-flashcard-convergence` | yes | n/a | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
-| live | flashcards-hub | `data-nn-premium-platform-module="flashcards"` | yes | n/a | no | no | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
-| live | flashcards-hub | `data-nn-e2e-flashcards-hub` | yes | n/a | no | no | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
-| live | flashcards-hub | `nn-flashcards-hub-premium` | yes | n/a | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
-| live | report-card | `data-nn-learner-report-card-convergence` | yes | n/a | no | no | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
-| live | report-card | `nn-learner-report-card-convergence` | yes | n/a | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
-| live | report-card | `nn-report-card-premium` | yes | n/a | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
-| live | rn-questions-hub | `MarketingPracticeQuestionsHubClient` | yes | n/a | yes | no | yes | Markers present in live response. |
-| live | rn-questions-hub | `PathwayHero` | yes | n/a | no | no | yes | Markers present in live response. |
-| live | rn-questions-hub | `Start Mix` | yes | n/a | yes | no | yes | Markers present in live response. |
-| live | rn-lessons-hub | `nn-premium-lessons-system` | yes | n/a | yes | yes | yes | Markers present in live response. |
-| live | rn-lessons-hub | `nn-premium-lessons-hub-hero` | yes | n/a | yes | yes | yes | Markers present in live response. |
-| live | rn-lessons-hub | `data-nn-premium-full-platform-convergence` | yes | n/a | no | yes | yes | Markers present in live response. |
-| live | cat-entry | `cat` | yes | n/a | yes | yes | yes | Markers present in live response. |
-| live | cat-entry | `adaptive` | yes | n/a | yes | yes | yes | Markers present in live response. |
-| live | cat-entry | `NurseNest` | yes | n/a | yes | no | yes | Markers present in live response. |
+| Target | Route | Marker | Exists In Repo | Exists In Local Build | Exists In Raw HTML | Exists In Browser DOM | Exists In Live CSS | Asset Content-Type Correct | Conclusion |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| live | homepage | `nn-home-marketing-rich-hero` | yes | n/a | no | no | yes | yes | C candidate: premium CSS exists but route body marker is absent from HTML. |
+| live | homepage | `nn-premium-hero-grid` | yes | n/a | no | no | yes | yes | C candidate: premium CSS exists but route body marker is absent from HTML. |
+| live | homepage | `nn-premium-hero-panel` | yes | n/a | no | no | yes | yes | C candidate: premium CSS exists but route body marker is absent from HTML. |
+| live | learner-app | `data-nn-learner-dashboard-convergence` | yes | n/a | no | no | no | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
+| live | learner-app | `nn-learner-dashboard-convergence` | yes | n/a | no | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
+| live | practice-tests-hub | `data-nn-learner-area="practice-tests"` | yes | n/a | no | no | no | yes | Auth-gated anonymous shell; requires authenticated capture for final route verdict. |
+| live | practice-tests-hub | `data-nn-premium-platform-module="practice-tests"` | yes | n/a | no | no | no | yes | Auth-gated anonymous shell; requires authenticated capture for final route verdict. |
+| live | practice-tests-hub | `nn-practice-tests-hub-premium` | yes | n/a | no | no | no | yes | Auth-gated anonymous shell; requires authenticated capture for final route verdict. |
+| live | practice-tests-hub | `data-nn-practice-exam-hub-convergence` | yes | n/a | no | no | no | yes | Auth-gated anonymous shell; requires authenticated capture for final route verdict. |
+| live | flashcards-hub | `data-nn-premium-flashcard-convergence` | yes | n/a | no | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
+| live | flashcards-hub | `data-nn-premium-platform-module="flashcards"` | yes | n/a | no | no | no | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
+| live | flashcards-hub | `data-nn-e2e-flashcards-hub` | yes | n/a | no | no | no | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
+| live | flashcards-hub | `nn-flashcards-hub-premium` | yes | n/a | no | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
+| live | report-card | `data-nn-learner-report-card-convergence` | yes | n/a | no | no | no | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
+| live | report-card | `nn-learner-report-card-convergence` | yes | n/a | no | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
+| live | report-card | `nn-report-card-premium` | yes | n/a | no | no | yes | yes | C/auth-gated: premium CSS exists but anonymous HTML does not render route markers. |
+| live | rn-questions-hub | `MarketingPracticeQuestionsHubClient` | yes | n/a | yes | yes | no | yes | Markers present in hydrated browser DOM. |
+| live | rn-questions-hub | `PathwayHero` | yes | n/a | no | no | no | yes | Markers present in hydrated browser DOM. |
+| live | rn-questions-hub | `Start Mix` | yes | n/a | yes | yes | no | yes | Markers present in hydrated browser DOM. |
+| live | rn-lessons-hub | `nn-premium-lessons-system` | yes | n/a | yes | yes | yes | yes | Markers present in hydrated browser DOM. |
+| live | rn-lessons-hub | `nn-premium-lessons-hub-hero` | yes | n/a | yes | yes | yes | yes | Markers present in hydrated browser DOM. |
+| live | rn-lessons-hub | `data-nn-premium-full-platform-convergence` | yes | n/a | no | no | yes | yes | Markers present in hydrated browser DOM. |
+| live | cat-entry | `cat` | yes | n/a | yes | yes | yes | yes | Markers present in hydrated browser DOM. |
+| live | cat-entry | `adaptive` | yes | n/a | yes | yes | yes | yes | Markers present in hydrated browser DOM. |
+| live | cat-entry | `NurseNest` | yes | n/a | yes | yes | no | yes | Markers present in hydrated browser DOM. |
 
 ## Static Asset Content-Type Proof
 
 ### live: homepage
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/?cb=1778446508020`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/?cb=1778446711462`
 Assets discovered: 30 (26 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -58,7 +58,7 @@ Assets discovered: 30 (26 JS, 4 CSS); sampled: 10
 
 ### live: learner-app
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app?cb=1778446509293`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app?cb=1778446712337`
 Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -76,7 +76,7 @@ Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 ### live: practice-tests-hub
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/practice-tests?pathwayId=ca-rn-nclex-rn&cb=1778446510295`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/practice-tests?pathwayId=ca-rn-nclex-rn&cb=1778446714018`
 Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -94,7 +94,7 @@ Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 ### live: flashcards-hub
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/flashcards?pathwayId=ca-rn-nclex-rn&cb=1778446511291`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/flashcards?pathwayId=ca-rn-nclex-rn&cb=1778446715263`
 Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -112,7 +112,7 @@ Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 ### live: report-card
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/account/report?cb=1778446512346`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/account/report?cb=1778446716415`
 Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -130,7 +130,7 @@ Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 ### live: rn-questions-hub
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/questions?cb=1778446513448`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/questions?cb=1778446717501`
 Assets discovered: 32 (28 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -148,7 +148,7 @@ Assets discovered: 32 (28 JS, 4 CSS); sampled: 10
 
 ### live: rn-lessons-hub
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/lessons?cb=1778446515021`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/lessons?cb=1778446718783`
 Assets discovered: 33 (29 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -166,7 +166,7 @@ Assets discovered: 33 (29 JS, 4 CSS); sampled: 10
 
 ### live: cat-entry
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/cat?cb=1778446515894`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/cat?cb=1778446719706`
 Assets discovered: 32 (28 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
