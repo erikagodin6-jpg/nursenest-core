@@ -161,6 +161,16 @@ model User {
   printableAccesses                         PrintableAccess[]
   examQuestionPracticeAnswerAttempts        ExamQuestionPracticeAnswerAttempt[]
   ecgVideoQuestionPracticeAnswerAttempts    EcgVideoQuestionPracticeAnswerAttempt[]
+  socialPrivacySetting                      SocialPrivacySetting?
+  socialInviteCodes                         SocialInviteCode[]
+  socialConnectionsRequested                SocialConnection[]            @relation("SocialConnectionRequester")
+  socialConnectionsReceived                 SocialConnection[]            @relation("SocialConnectionAddressee")
+  socialChallengesCreated                   SocialChallenge[]             @relation("SocialChallengeCreator")
+  socialChallengeParticipants               SocialChallengeParticipant[]
+  socialGroupsCreated                       SocialGroup[]                 @relation("SocialGroupCreatedBy")
+  socialGroupsOwned                         SocialGroup[]                 @relation("SocialGroupOwner")
+  socialGroupMemberships                    SocialGroupMembership[]
+  socialStatSnapshots                       SocialStatSnapshot[]
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -1976,6 +1986,165 @@ model Progress {
   @@index([userId, completed, updatedAt(sort: Desc)])
 }
 
+model SocialPrivacySetting {
+  userId                 String                  @id @map("user_id")
+  socialEnabled          Boolean                 @default(false) @map("social_enabled")
+  statsHidden            Boolean                 @default(true) @map("stats_hidden")
+  visibilityScope        SocialVisibilityScope   @default(PRIVATE) @map("visibility_scope")
+  visibleStatKeys        SocialStatKey[]         @default([]) @map("visible_stat_keys")
+  pausedUntil            DateTime?               @map("paused_until")
+  leaderboardOptIn       Boolean                 @default(false) @map("leaderboard_opt_in")
+  allowFriendChallenges  Boolean                 @default(false) @map("allow_friend_challenges")
+  allowGroupChallenges   Boolean                 @default(false) @map("allow_group_challenges")
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              DateTime                @updatedAt @map("updated_at")
+  user                   User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([socialEnabled, visibilityScope])
+  @@index([pausedUntil])
+  @@map("social_privacy_settings")
+}
+
+model SocialInviteCode {
+  id              String          @id @default(cuid())
+  userId          String          @map("user_id")
+  codeHash        String          @unique @map("code_hash") @db.VarChar(128)
+  displayCode     String          @unique @map("display_code") @db.VarChar(32)
+  enabled         Boolean         @default(false)
+  audience        SocialCodeAudience @default(FRIEND_OR_GROUP)
+  regeneratedAt   DateTime?       @map("regenerated_at")
+  disabledAt      DateTime?       @map("disabled_at")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, enabled])
+  @@index([enabled, audience])
+  @@map("social_invite_codes")
+}
+
+model SocialConnection {
+  id                String                 @id @default(cuid())
+  requesterUserId   String                 @map("requester_user_id")
+  addresseeUserId   String                 @map("addressee_user_id")
+  status            SocialConnectionStatus @default(PENDING)
+  requestedAt       DateTime               @default(now()) @map("requested_at")
+  respondedAt       DateTime?              @map("responded_at")
+  removedAt         DateTime?              @map("removed_at")
+  blockedAt         DateTime?              @map("blocked_at")
+  createdAt         DateTime               @default(now()) @map("created_at")
+  updatedAt         DateTime               @updatedAt @map("updated_at")
+  requester         User                   @relation("SocialConnectionRequester", fields: [requesterUserId], references: [id], onDelete: Cascade)
+  addressee         User                   @relation("SocialConnectionAddressee", fields: [addresseeUserId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterUserId, addresseeUserId])
+  @@index([requesterUserId, status, updatedAt])
+  @@index([addresseeUserId, status, updatedAt])
+  @@map("social_connections")
+}
+
+model SocialGroup {
+  id              String            @id @default(cuid())
+  kind            SocialGroupKind
+  name            String            @db.VarChar(160)
+  description     String?           @db.VarChar(600)
+  codeHash        String            @unique @map("code_hash") @db.VarChar(128)
+  displayCode     String            @unique @map("display_code") @db.VarChar(32)
+  active          Boolean           @default(true)
+  leaderboardEnabled Boolean        @default(false) @map("leaderboard_enabled")
+  createdByUserId String            @map("created_by_user_id")
+  ownerUserId     String?           @map("owner_user_id")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  updatedAt       DateTime          @updatedAt @map("updated_at")
+  createdBy       User              @relation("SocialGroupCreatedBy", fields: [createdByUserId], references: [id], onDelete: Cascade)
+  owner           User?             @relation("SocialGroupOwner", fields: [ownerUserId], references: [id], onDelete: SetNull)
+  memberships     SocialGroupMembership[]
+  challenges      SocialChallenge[]
+
+  @@index([kind, active, updatedAt])
+  @@index([createdByUserId, kind])
+  @@index([ownerUserId])
+  @@map("social_groups")
+}
+
+model SocialGroupMembership {
+  id          String          @id @default(cuid())
+  groupId     String          @map("group_id")
+  userId      String          @map("user_id")
+  role        SocialGroupRole @default(MEMBER)
+  active      Boolean         @default(true)
+  joinedAt    DateTime        @default(now()) @map("joined_at")
+  leftAt      DateTime?       @map("left_at")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  group       SocialGroup     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+  @@index([userId, active, updatedAt])
+  @@index([groupId, active, role])
+  @@map("social_group_memberships")
+}
+
+model SocialChallenge {
+  id              String              @id @default(cuid())
+  creatorUserId   String              @map("creator_user_id")
+  groupId         String?             @map("group_id")
+  type            SocialChallengeType
+  status          SocialChallengeStatus @default(PENDING)
+  title           String              @db.VarChar(180)
+  prompt          String?             @db.VarChar(600)
+  startsAt        DateTime            @default(now()) @map("starts_at")
+  expiresAt       DateTime            @map("expires_at")
+  completedAt     DateTime?           @map("completed_at")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+  creator         User                @relation("SocialChallengeCreator", fields: [creatorUserId], references: [id], onDelete: Cascade)
+  group           SocialGroup?        @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  participants    SocialChallengeParticipant[]
+
+  @@index([creatorUserId, status, updatedAt])
+  @@index([groupId, status, expiresAt])
+  @@index([status, expiresAt])
+  @@map("social_challenges")
+}
+
+model SocialChallengeParticipant {
+  id                String                @id @default(cuid())
+  challengeId       String                @map("challenge_id")
+  userId            String                @map("user_id")
+  status            SocialChallengeStatus @default(PENDING)
+  acceptedAt        DateTime?             @map("accepted_at")
+  declinedAt        DateTime?             @map("declined_at")
+  completedAt       DateTime?             @map("completed_at")
+  completionSummary Json?                 @map("completion_summary")
+  createdAt         DateTime              @default(now()) @map("created_at")
+  updatedAt         DateTime              @updatedAt @map("updated_at")
+  challenge         SocialChallenge       @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  user              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([challengeId, userId])
+  @@index([userId, status, updatedAt])
+  @@index([challengeId, status])
+  @@map("social_challenge_participants")
+}
+
+model SocialStatSnapshot {
+  id              String                @id @default(cuid())
+  userId          String                @map("user_id")
+  audienceScope   SocialVisibilityScope @map("audience_scope")
+  statKey         SocialStatKey         @map("stat_key")
+  value           Json
+  generatedAt     DateTime              @default(now()) @map("generated_at")
+  expiresAt       DateTime?             @map("expires_at")
+  user            User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, audienceScope, generatedAt(sort: Desc)])
+  @@index([userId, statKey, generatedAt(sort: Desc)])
+  @@index([expiresAt])
+  @@map("social_stat_snapshots")
+}
+
 model BackgroundJob {
   id           String    @id @default(cuid())
   type         String
@@ -3073,6 +3242,68 @@ enum UserRole {
   CONTENT_ADMIN
   /// * Support: user lookup, subscription/analytics read, ops health — not publishing or AI generation.
   SUPPORT_ADMIN
+}
+
+enum SocialVisibilityScope {
+  PRIVATE
+  FRIENDS
+  GROUPS_CLASSROOMS
+  FRIENDS_AND_GROUPS
+  PAUSED
+}
+
+enum SocialStatKey {
+  READINESS_BAND
+  READINESS_RANGE
+  WEEKLY_STREAK
+  PRACTICE_SCORE_RANGE
+  FLASHCARD_PROGRESS
+  WEAK_AREA_OVERLAP
+  CAT_COMPLETION
+}
+
+enum SocialConnectionStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  BLOCKED
+  REMOVED
+}
+
+enum SocialChallengeType {
+  FLASHCARD_SPRINT
+  PRACTICE_QUIZ
+  WEAK_AREA_RECOVERY
+  DAILY_STREAK
+  READINESS_IMPROVEMENT
+}
+
+enum SocialChallengeStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  COMPLETED
+  CANCELLED
+}
+
+enum SocialGroupKind {
+  GROUP
+  CLASSROOM
+}
+
+enum SocialGroupRole {
+  OWNER
+  ADMIN
+  MEMBER
+  INSTRUCTOR
+}
+
+enum SocialCodeAudience {
+  FRIEND
+  GROUP
+  CLASSROOM
+  FRIEND_OR_GROUP
 }
 
 enum TrialStatus {

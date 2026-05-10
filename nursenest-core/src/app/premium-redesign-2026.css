@@ -1688,7 +1688,27 @@ html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-det
 .nn-premium-pathway-lesson-header[data-nn-premium-lessons-reading-hero] {
   border-radius: 1.45rem;
   border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--nn-lessons-accent-primary) 18%);
-  box-shadow: var(--semantic-shadow-soft);
+  background:
+    radial-gradient(760px 260px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 8%, transparent), transparent 68%),
+    radial-gradient(640px 220px at 0% 100%, color-mix(in srgb, var(--nn-lessons-accent-progress) 7%, transparent), transparent 72%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow:
+    var(--semantic-shadow-soft),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 72%, transparent);
+}
+
+.nn-individual-lesson-study-meta > span {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-lessons-accent-primary) 16%);
+  background: color-mix(in srgb, var(--semantic-surface) 78%, var(--semantic-panel-muted));
+  padding: 0.28rem 0.7rem;
+  color: var(--theme-heading-text);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
 }
 
 .nn-lesson-main[data-nn-premium-lessons-reading-main] {
@@ -1747,6 +1767,34 @@ html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-det
   border-color: color-mix(in srgb, var(--semantic-danger) 24%, var(--semantic-border-soft));
 }
 
+.nn-lesson-section-card[data-lsc-theme="safety"] {
+  border-color: color-mix(in srgb, var(--semantic-danger) 28%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="ecgConcepts"] {
+  border-color: color-mix(in srgb, var(--semantic-info) 30%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="communication"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-7) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="documentation"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-8) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="delegation"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="culturalConsiderations"] {
+  border-color: color-mix(in srgb, var(--semantic-warning) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="ngnClinicalJudgment"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 28%, var(--semantic-border-soft));
+}
+
 .nn-lesson-section-nav[data-nn-premium-lessons-on-this-page] {
   border-radius: 1.2rem;
   border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 76%, var(--nn-lessons-accent-primary) 14%);
@@ -1789,6 +1837,58 @@ html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-det
     color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface));
 }
 
+.lv-lesson-actions[data-nn-premium-individual-lesson-actions] {
+  position: sticky;
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  z-index: 12;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.nn-individual-lesson-recommendations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: 0.5rem;
+}
+
+.nn-individual-lesson-recommendations > :is(a, span) {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-lessons-accent-primary) 18%);
+  background: color-mix(in srgb, var(--semantic-surface) 72%, var(--semantic-panel-muted));
+  padding: 0.55rem 0.85rem;
+  color: var(--theme-heading-text);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.nn-individual-lesson-recommendations > a:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--nn-lessons-accent-practice) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 46%, var(--semantic-surface));
+}
+
+.nn-individual-lesson-recommendations > span[aria-disabled="true"] {
+  opacity: 0.58;
+}
+
+.nn-lesson-phase-strip[data-nn-premium-individual-lesson-progress] {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 76%, var(--nn-lessons-accent-progress) 18%);
+  background:
+    radial-gradient(560px 180px at 0% 0%, color-mix(in srgb, var(--nn-lessons-accent-progress) 8%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
 @media (max-width: 1024px) {
   .nn-lesson-main[data-nn-premium-lessons-reading-main] {
     max-width: 100%;
@@ -1816,6 +1916,20 @@ html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-det
     padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
   }
 
+  .nn-individual-lesson-study-meta {
+    gap: 0.35rem;
+  }
+
+  .nn-individual-lesson-study-meta > span {
+    font-size: 0.67rem;
+    padding-inline: 0.55rem;
+  }
+
+  .lv-lesson-actions[data-nn-premium-individual-lesson-actions] {
+    margin-inline: -0.25rem;
+    border-radius: 1.15rem;
+  }
+
   .nn-premium-lesson-article[data-nn-premium-lessons-section-system] {
     gap: 1rem;
     line-height: 1.72;
@@ -1826,9 +1940,14 @@ html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-det
   .nn-premium-lessons-hub-body a[href*="/lessons/"],
   .nn-premium-lessons-hub-body a[href*="/lessons/"]:hover,
   .nn-lesson-section-card,
-  .nn-lesson-section-card:hover {
+  .nn-lesson-section-card:hover,
+  .lv-lesson-actions[data-nn-premium-individual-lesson-actions],
+  .nn-individual-lesson-recommendations > :is(a, span),
+  .nn-individual-lesson-recommendations > a:hover {
     transform: none !important;
     transition: none !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }
 

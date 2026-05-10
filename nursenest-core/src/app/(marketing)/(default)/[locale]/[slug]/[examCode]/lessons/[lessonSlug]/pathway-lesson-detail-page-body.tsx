@@ -218,8 +218,14 @@ export async function PathwayLessonDetailPageBody({
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, displayLessonTitle);
   const lessonQuality = classifyPathwayLesson(lesson);
   const contentDates = contentDatesRes.status === "fulfilled" ? contentDatesRes.value : null;
-  const jsonLdLessonPath = pathwayLessonPublicDetailPath(pathway, lesson.slug) ?? pathname;
   const quickReviewBullets = buildQuickReviewBullets(previewLesson);
+  const dateFormatter = new Intl.DateTimeFormat("en", { month: "short", year: "numeric" });
+  const updatedLabel = contentDates?.dateModified ? `Updated ${dateFormatter.format(new Date(contentDates.dateModified))}` : null;
+  const reviewedLabel = contentDates?.dateModified ? `Clinically Reviewed ${dateFormatter.format(new Date(contentDates.dateModified))}` : "Clinically Reviewed";
+  const estimatedStudyMinutes = quickReviewBullets.length >= 8 ? "12-18 Min Study Time" : "8-12 Min Study Time";
+  const readinessLabel = linkedLearningSignals.adaptiveLearningReadiness ? "Readiness Linked" : "Study Mode";
+  const difficultyLabel = lesson.structuralQuality?.structureMode === "premium" ? "Premium Clinical Depth" : "Core Clinical Review";
+  const jsonLdLessonPath = pathwayLessonPublicDetailPath(pathway, lesson.slug) ?? pathname;
   const examFocusPrimary = extractExamFocusHighYieldLines(previewLesson);
   const examFocusFallback = extractSecondaryExamContextLines(previewLesson.sections);
   const examFocusRailLines = examFocusPrimary.length > 0 ? examFocusPrimary : examFocusFallback;
@@ -319,6 +325,11 @@ export async function PathwayLessonDetailPageBody({
           lessonTitle={displayLessonTitle}
           lessonTopic={lesson.topic}
           bodySystem={lesson.bodySystem}
+          estimatedStudyTimeLabel={estimatedStudyMinutes}
+          readinessLabel={readinessLabel}
+          difficultyLabel={difficultyLabel}
+          updatedLabel={updatedLabel}
+          reviewedLabel={reviewedLabel}
           trailing={
             userId && fullAccess ? (
               <PathwayLessonProgressBadgeLive

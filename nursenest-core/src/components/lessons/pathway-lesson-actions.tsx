@@ -154,14 +154,36 @@ export function PathwayLessonActions({
     linkedLearningSignals?.practiceQuestionsLinked === true &&
     Boolean(pack?.questionsHref);
   const primaryLegacyActive = mode === "legacy" && Boolean(pack?.questionsHref);
+  const recommendationBlocks = [
+    { label: "Review Flashcards", href: pack?.flashcardsHref },
+    { label: "Practice Related Questions", href: pack?.questionsHref },
+    { label: "Continue Weak Area Recovery", href: pack?.adaptiveHref },
+    { label: "Recommended Next Lesson", href: allLessonsHref },
+    { label: "Take A Readiness Quiz", href: pack?.practiceTestsHref ?? pack?.adaptiveHref },
+  ];
 
   return (
     <section
       className="lv-lesson-actions rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--semantic-surface))] px-4 py-5 shadow-[var(--semantic-shadow-soft)] sm:px-5"
       aria-label="Continue studying"
       data-testid="pathway-lesson-continue-studying"
+      data-nn-premium-individual-lesson-actions
     >
       <p className="nn-lesson-module-eyebrow">{t("learner.lessons.detail.studyActionsEyebrow")}</p>
+
+      <div className="nn-individual-lesson-recommendations mt-3" data-nn-premium-individual-lesson-recommendations>
+        {recommendationBlocks.map((block) =>
+          block.href ? (
+            <Link key={block.label} href={block.href} data-nn-pathway-id={pathwayId}>
+              {block.label}
+            </Link>
+          ) : (
+            <span key={block.label} aria-disabled="true">
+              {block.label}
+            </span>
+          ),
+        )}
+      </div>
 
       <div className="lv-lesson-actions__primary mt-3">
         {primaryLinkedActive && pack?.questionsHref ? (

@@ -17,6 +17,11 @@ test.describe("lesson detail premium shells", () => {
     await expect(page.locator("[data-nn-premium-lessons-section-system]")).toBeVisible();
     await expect(page.locator("[data-nn-premium-lessons-on-this-page]")).toBeVisible();
     await expect(page.locator("[data-nn-premium-lessons-study-rail]")).toBeVisible();
+    await expect(page.locator("[data-nn-premium-individual-lesson-header-meta]")).toBeVisible();
+    await expect(page.locator("[data-nn-premium-individual-lesson-progress]")).toBeVisible();
+    await expect(page.locator("[data-nn-premium-individual-lesson-actions]")).toBeVisible();
+    await expect(page.locator("[data-nn-premium-individual-lesson-recommendations]")).toBeVisible();
+    await expect(page.getByText(/Review Flashcards|Practice Related Questions|Continue Weak Area Recovery/).first()).toBeVisible();
 
     const summary = page.getByTestId("pathway-lesson-quick-clinical-summary");
     if (await summary.count()) {
@@ -113,6 +118,7 @@ test.describe("lesson detail premium shells", () => {
       await expect(page.locator("article.nn-lesson-article-flow")).toBeVisible();
       await expect(page.locator("[data-nn-premium-lessons-reading-hero]")).toBeVisible();
       await expect(page.locator("[data-nn-premium-lessons-linked-learning]")).toBeVisible();
+      await expect(page.locator("[data-nn-premium-individual-lesson-header-meta]")).toBeVisible();
       await page.waitForTimeout(400);
     }
     await page.waitForTimeout(1800);

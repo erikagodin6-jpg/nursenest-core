@@ -42,7 +42,14 @@ export type LessonSectionThemeKey =
   | "medicationsTreatments"
   | "clinicalPearls"
   | "examFocus"
-  | "nextSteps";
+  | "nextSteps"
+  | "safety"
+  | "ecgConcepts"
+  | "communication"
+  | "documentation"
+  | "delegation"
+  | "culturalConsiderations"
+  | "ngnClinicalJudgment";
 
 /**
  * Maps each role to its `--lesson-*` CSS custom property name.
@@ -62,6 +69,22 @@ export const ROLE_LESSON_TOKEN: Record<LessonSectionRole, string> = {
   review: "--lesson-exam-tips",
   cta: "--lesson-notes",
 };
+
+const HEADING_THEME_PATTERNS: {
+  match: RegExp;
+  label: string;
+  themeKey: LessonSectionThemeKey;
+  role: LessonSectionRole;
+}[] = [
+  { match: /\bsafety|infection|isolation|precaution/i, label: "Safety Considerations", themeKey: "safety", role: "danger" },
+  { match: /\bpriority|prioritization|first action|initial action/i, label: "Priority Actions", themeKey: "examFocus", role: "review" },
+  { match: /\becg|ekg|telemetry|rhythm|dysrhythmia/i, label: "ECG Concepts", themeKey: "ecgConcepts", role: "diagnostic" },
+  { match: /\bngn|clinical judgment|bowtie|case study/i, label: "NGN Clinical Judgment", themeKey: "ngnClinicalJudgment", role: "application" },
+  { match: /\bcommunication|sbar|handoff|therapeutic/i, label: "Communication", themeKey: "communication", role: "education" },
+  { match: /\bdocumentation|charting|record/i, label: "Documentation", themeKey: "documentation", role: "info" },
+  { match: /\bdelegation|scope|assignment/i, label: "Delegation", themeKey: "delegation", role: "action" },
+  { match: /\bcultural|culture|bias|spiritual|language/i, label: "Cultural Considerations", themeKey: "culturalConsiderations", role: "education" },
+];
 
 const KIND_TO_ROLE = {
   // Premium spine sections
@@ -183,6 +206,13 @@ const THEME_ACCENTS: Record<LessonSectionThemeKey, string> = {
   clinicalPearls: "var(--lesson-pearls-accent)",
   examFocus: "var(--lesson-exam-focus-accent)",
   nextSteps: "var(--lesson-next-steps-accent)",
+  safety: "var(--semantic-danger)",
+  ecgConcepts: "var(--semantic-info)",
+  communication: "var(--semantic-chart-7)",
+  documentation: "var(--semantic-chart-8)",
+  delegation: "var(--semantic-chart-4)",
+  culturalConsiderations: "var(--semantic-warning)",
+  ngnClinicalJudgment: "var(--semantic-chart-5)",
 };
 
 export type LessonSectionTheme = {
@@ -204,17 +234,22 @@ export type LessonSectionTheme = {
  */
 export function getLessonSectionTheme(
   kind: PathwayLessonSectionKind | undefined | null,
+  heading?: string | null,
 ): LessonSectionTheme {
+  const headingTheme = heading
+    ? HEADING_THEME_PATTERNS.find((pattern) => pattern.match.test(heading))
+    : undefined;
   const role: LessonSectionRole = (kind != null && KIND_TO_ROLE[kind]) || "info";
-  const themeKey = (kind != null && KIND_THEME_KEY_OVERRIDES[kind]) || ROLE_THEME_KEY[role];
+  const effectiveRole = headingTheme?.role ?? role;
+  const themeKey = headingTheme?.themeKey ?? (kind != null && KIND_THEME_KEY_OVERRIDES[kind]) || ROLE_THEME_KEY[role];
   const roleChipLabel = ROLE_CHIP_LABELS[role];
   const kindChipLabel = kind != null ? KIND_CHIP_LABEL_OVERRIDES[kind] : undefined;
   return {
-    role,
+    role: effectiveRole,
     themeKey,
     accent: THEME_ACCENTS[themeKey],
-    chipLabel: kindChipLabel ?? roleChipLabel,
-    dataRole: role,
-    lessonToken: ROLE_LESSON_TOKEN[role],
+    chipLabel: headingTheme?.label ?? kindChipLabel ?? roleChipLabel,
+    dataRole: effectiveRole,
+    lessonToken: ROLE_LESSON_TOKEN[effectiveRole],
   };
 }

@@ -12,6 +12,11 @@ type Props = {
   lessonTitle: string;
   lessonTopic: string;
   bodySystem: string;
+  estimatedStudyTimeLabel?: string | null;
+  readinessLabel?: string | null;
+  difficultyLabel?: string | null;
+  updatedLabel?: string | null;
+  reviewedLabel?: string | null;
   /** Optional clinical hero (e.g. matched inventory image) — rendered below the title block, centered. */
   heroBelowTitle?: ReactNode;
   /** Right column: progress badge live, etc. */
@@ -61,6 +66,11 @@ export function PathwayLessonDetailHeader({
   lessonTitle,
   lessonTopic,
   bodySystem,
+  estimatedStudyTimeLabel,
+  readinessLabel,
+  difficultyLabel,
+  updatedLabel,
+  reviewedLabel,
   heroBelowTitle,
   trailing,
   metaChips,
@@ -75,6 +85,13 @@ export function PathwayLessonDetailHeader({
   const centered = heroLayout === "centered";
   validateLearnerCopyForExamContext(pathway, lessonTitle, "lesson_header");
   const displayLessonTitle = cleanLessonTitleForDisplay(lessonTitle);
+  const studyMetaChips = [
+    estimatedStudyTimeLabel,
+    readinessLabel,
+    difficultyLabel,
+    updatedLabel,
+    reviewedLabel,
+  ].filter((label): label is string => Boolean(label?.trim()));
 
   return (
     <header
@@ -154,6 +171,18 @@ export function PathwayLessonDetailHeader({
             >
               {assessmentFlowHint}
             </p>
+          ) : null}
+          {studyMetaChips.length > 0 ? (
+            <div
+              className={["nn-individual-lesson-study-meta mt-3 flex flex-wrap gap-1.5 sm:mt-3.5", centered ? "justify-center" : ""]
+                .filter(Boolean)
+                .join(" ")}
+              data-nn-premium-individual-lesson-header-meta
+            >
+              {studyMetaChips.map((label) => (
+                <span key={label}>{label}</span>
+              ))}
+            </div>
           ) : null}
           {metaChips ? (
             <div className={["mt-2.5 flex flex-wrap gap-1.5 sm:mt-3", centered ? "justify-center" : ""].filter(Boolean).join(" ")}>

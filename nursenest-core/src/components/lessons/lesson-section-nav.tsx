@@ -108,7 +108,7 @@ export function LessonSectionNav({
   const navList = (
     <ol className="space-y-1">
       {sections.map((section) => {
-        const { role, chipLabel } = getLessonSectionTheme(section.kind ?? null);
+        const { role, chipLabel } = getLessonSectionTheme(section.kind ?? null, section.heading);
         const Icon = ROLE_ICON[role];
         const activeIndex = sections.findIndex((s) => s.id === activeId);
         const index = sections.findIndex((s) => s.id === section.id);

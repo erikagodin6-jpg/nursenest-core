@@ -106,7 +106,7 @@ export function LessonSectionCard({
   sectionLeadFigure?: PathwayLessonFigure | null;
   children: ReactNode;
 }) {
-  const theme = getLessonSectionTheme(kind);
+  const theme = getLessonSectionTheme(kind, heading);
   const { chipLabel: derivedChipLabel, dataRole, role } = theme;
   const chipLabel = chipLabelOverride ?? derivedChipLabel;
   const surface = lessonSectionSurface(kind);

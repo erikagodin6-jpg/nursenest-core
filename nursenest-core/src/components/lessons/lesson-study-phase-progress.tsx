@@ -47,11 +47,12 @@ export function LessonStudyPhaseProgress({
       className={compact ? "nn-lesson-phase-strip nn-lesson-phase-strip--compact" : "nn-lesson-phase-strip"}
       aria-label="Lesson study progress"
       data-persisted={persisted ? "true" : "false"}
+      data-nn-premium-individual-lesson-progress
     >
       <div className="nn-lesson-phase-strip__top">
         <span className="nn-lesson-phase-strip__label">
           <Sparkles className="h-3.5 w-3.5" aria-hidden />
-          Lesson progress
+          Lesson Progress
         </span>
         <span className="nn-lesson-phase-strip__percent">
           {persisted ? `${percent}%` : "Local read"}
