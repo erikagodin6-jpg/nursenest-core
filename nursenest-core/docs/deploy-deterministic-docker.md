@@ -76,3 +76,20 @@ docker run --rm -e PORT=8080 nursenest-core-next:local node -e "const fs=require
 | Runtime secrets | Same as buildpack deploy (`DATABASE_URL`, NextAuth, etc.) |
 
 If App Platform logs show **“configuring build-time app environment variables”** and the list includes **`DATABASE_URL`**, remove it from the component’s build env in the DO UI (or narrow scope in spec) so only **run-time** injection applies.
+
+## Build git metadata (`nn-build-meta.json`, `/api/version`)
+
+The Docker build context **excludes `.git`**, and DigitalOcean App Platform often leaves **`SOURCE_*` / `DIGITALOCEAN_GIT_*` / `GITHUB_*` build args empty** during image builds. `prebuild` runs `scripts/write-build-git-meta.mjs`, which resolves commit/branch from env first, then `git` (which fails silently without `.git`).
+
+**Required for production traceability on App Platform:** inject **build-time** values the Dockerfile already forwards as `ARG`/`ENV`:
+
+| Variable | Scope | Purpose |
+|----------|--------|---------|
+| `NN_BUILD_COMMIT` | `BUILD_TIME` (and optionally `RUN_TIME` if you re-use the same value) | Full deployment SHA written to `public/nn-build-meta.json` |
+| `NN_BUILD_BRANCH` | `BUILD_TIME` (optional) | Branch label (e.g. `main`) for the same file |
+
+Resolution order in `write-build-git-meta.mjs` / runtime overlay (`runtime-version.ts`) matches: **`NN_BUILD_*` first**, then `SOURCE_*`, DigitalOcean, GitHub, Vercel, then git CLI.
+
+**DigitalOcean:** add both keys to the web component **envs** with `scope: BUILD_TIME` (and pass through Docker via `--build-arg` when your pipeline supports it). If the platform does not expose git SHA to Dockerfile builds, set these from your deploy pipeline (for example `doctl apps create-deployment` with spec substitution, or CI that updates the spec before apply).
+
+Build logs include JSON lines from `[write-build-git-meta]` with `scope: "commit"` / `"branch"` per provider (`provider`, `resolved`, `value`) plus a final `scope: "summary"` line with the chosen providers and values.

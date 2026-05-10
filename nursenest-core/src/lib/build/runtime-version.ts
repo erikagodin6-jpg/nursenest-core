@@ -26,17 +26,21 @@ export type RuntimeVersionPayload = {
 const missingMetaMessage = "nn-build-meta.json missing; run a production build (prebuild writes this file).";
 
 const commitEnvKeys = [
-  "GITHUB_SHA",
+  "NN_BUILD_COMMIT",
   "SOURCE_COMMIT",
   "SOURCE_VERSION",
   "DIGITALOCEAN_GIT_COMMIT_SHA",
+  "GITHUB_SHA",
+  "VERCEL_GIT_COMMIT_SHA",
   "COMMIT_SHA",
 ] as const;
 
 const branchEnvKeys = [
-  "GITHUB_REF_NAME",
+  "NN_BUILD_BRANCH",
   "SOURCE_BRANCH",
   "DIGITALOCEAN_GIT_BRANCH",
+  "GITHUB_REF_NAME",
+  "VERCEL_GIT_COMMIT_REF",
   "BRANCH_NAME",
 ] as const;
 

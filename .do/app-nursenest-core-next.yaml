@@ -87,6 +87,16 @@ services:
       - key: NN_APP_PLATFORM_BUILD
         value: "true"
         scope: BUILD_TIME
+      # Build traceability: Docker context has no `.git`; DO often omits SOURCE_/DIGITALOCEAN_* git envs during
+      # `docker build`. Set NN_BUILD_COMMIT (+ optional NN_BUILD_BRANCH) at BUILD_TIME so `write-build-git-meta.mjs`
+      # can bake `public/nn-build-meta.json` (see nursenest-core/docs/deploy-deterministic-docker.md §Build git metadata).
+      # Uncomment and wire to your platform’s commit/branch substitution when available:
+      # - key: NN_BUILD_COMMIT
+      #   value: "<full-git-sha>"
+      #   scope: BUILD_TIME
+      # - key: NN_BUILD_BRANCH
+      #   value: "main"
+      #   scope: BUILD_TIME
       # Fail-safe: guarantees `next.config.ts` low-memory worker path even if UI strips other flags.
       - key: NN_FORCE_SINGLE_BUILD_WORKER
         value: "true"

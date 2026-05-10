@@ -71,6 +71,28 @@ test("buildRuntimeEnvMeta derives commit diagnostics from deploy env when file m
   });
 });
 
+test("buildRuntimeEnvMeta prefers NN_BUILD_COMMIT and NN_BUILD_BRANCH over other deploy env keys", () => {
+  const meta = buildRuntimeEnvMeta({
+    NODE_ENV: "production",
+    DIGITALOCEAN_APP_ID: "app-123",
+    NN_BUILD_COMMIT: "nn-sha",
+    NN_BUILD_BRANCH: "release/nn",
+    DIGITALOCEAN_GIT_COMMIT_SHA: "do-sha",
+    DIGITALOCEAN_GIT_BRANCH: "main",
+    GITHUB_SHA: "gh-sha",
+    GITHUB_REF_NAME: "from-github",
+  });
+
+  assert.deepEqual(meta, {
+    commit: "nn-sha",
+    branch: "release/nn",
+    recordedAt: null,
+    environment: "production",
+    buildPlatform: "digitalocean",
+    source: "env:NN_BUILD_COMMIT",
+  });
+});
+
 test("buildRuntimeVersionPayload falls back to runtime deploy env metadata", () => {
   const payload = buildRuntimeVersionPayload(null, {
     nodeEnv: "production",

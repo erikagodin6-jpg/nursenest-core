@@ -2,6 +2,15 @@
 /**
  * Writes `public/nn-build-meta.json` for runtime `/api/version` and startup logs.
  * Resolves commit/branch from CI/App Platform env vars first, then git CLI (never throws).
+ *
+ * Commit priority (first non-empty wins): NN_BUILD_COMMIT → SOURCE_COMMIT →
+ * DIGITALOCEAN_GIT_COMMIT_SHA → GITHUB_SHA → VERCEL_GIT_COMMIT_SHA → git CLI.
+ *
+ * Branch priority: NN_BUILD_BRANCH → SOURCE_BRANCH → DIGITALOCEAN_GIT_BRANCH →
+ * GITHUB_REF_NAME → VERCEL_GIT_COMMIT_REF → git CLI.
+ *
+ * DigitalOcean Dockerfile builds often omit `.git` and leave platform git envs empty;
+ * inject `NN_BUILD_COMMIT` / `NN_BUILD_BRANCH` at build time (see deploy docs).
  */
 import { execSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -40,6 +49,7 @@ export function safeGitExecSync(args, cwd) {
 }
 
 const COMMIT_PROBES = [
+  { envKey: "NN_BUILD_COMMIT", sourceLabel: "nn_build" },
   { envKey: "SOURCE_COMMIT", sourceLabel: "sourceCommitEnv" },
   { envKey: "DIGITALOCEAN_GIT_COMMIT_SHA", sourceLabel: "digitalocean" },
   { envKey: "GITHUB_SHA", sourceLabel: "github" },
@@ -47,6 +57,7 @@ const COMMIT_PROBES = [
 ];
 
 const BRANCH_PROBES = [
+  { envKey: "NN_BUILD_BRANCH", sourceLabel: "nn_build" },
   { envKey: "SOURCE_BRANCH", sourceLabel: "sourceCommitEnv" },
   { envKey: "DIGITALOCEAN_GIT_BRANCH", sourceLabel: "digitalocean" },
   { envKey: "GITHUB_REF_NAME", sourceLabel: "github" },
@@ -76,7 +87,7 @@ function resolveFromEnvProbes(env, probes, normalizeValue = normalizeEnvString) 
       diagnostics.push({ provider: envKey, resolved: true, value: normalized });
       return { value: normalized, sourceLabel, diagnostics };
     }
-    diagnostics.push({ provider: envKey, resolved: false });
+    diagnostics.push({ provider: envKey, resolved: false, value: null });
   }
 
   return { value: null, sourceLabel: null, diagnostics };
@@ -242,6 +253,16 @@ export function resolveBuildMeta({
   }
 
   const source = effectiveSourceLabel(commitSourceLabel, branchSourceLabel);
+
+  log(
+    `[write-build-git-meta] ${JSON.stringify({
+      scope: "summary",
+      commitProvider: commitSourceLabel,
+      branchProvider: branchSourceLabel,
+      commit,
+      branch,
+    })}`,
+  );
 
   return {
     commit,

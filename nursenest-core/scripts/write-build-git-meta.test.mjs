@@ -41,6 +41,35 @@ test("resolveBuildMeta reads local git commit and branch when no build env is su
   assert.equal(meta.source, "git-cli");
 });
 
+test("resolveBuildMeta prefers NN_BUILD_COMMIT and NN_BUILD_BRANCH over all other env probes", () => {
+  const meta = resolveBuildMeta({
+    env: {
+      NODE_ENV: "production",
+      NN_APP_PLATFORM_BUILD: "true",
+      NN_BUILD_COMMIT: "nn-commit-aaa",
+      NN_BUILD_BRANCH: "nn-branch",
+      SOURCE_COMMIT: "source-commit",
+      SOURCE_BRANCH: "source-branch",
+      DIGITALOCEAN_GIT_COMMIT_SHA: "do-commit",
+      DIGITALOCEAN_GIT_BRANCH: "do-branch",
+      GITHUB_SHA: "gh-commit",
+      GITHUB_REF_NAME: "gh-branch",
+      VERCEL_GIT_COMMIT_SHA: "vercel-commit",
+      VERCEL_GIT_COMMIT_REF: "vercel-branch",
+    },
+    git: gitFrom({
+      "rev-parse HEAD": "git-commit",
+      "rev-parse --abbrev-ref HEAD": "git-branch",
+    }),
+    now: fixedNow,
+    logDiagnostics: false,
+  });
+
+  assert.equal(meta.commit, "nn-commit-aaa");
+  assert.equal(meta.branch, "nn-branch");
+  assert.equal(meta.source, "nn_build");
+});
+
 test("resolveBuildMeta lets explicit source envs override local git for Docker builds", () => {
   const meta = resolveBuildMeta({
     env: {
