@@ -70,6 +70,11 @@ test.describe("Homepage production smoke", () => {
     await expect(mainH1).toBeVisible();
     await expect(mainH1).not.toHaveText(/^\s*$/);
 
+    const mainText = await main.innerText();
+    expect(mainText.toLowerCase()).not.toContain("placeholder");
+    expect(mainText).not.toMatch(/\bHeadline Premium\b|\bSubheading Premium\b|\bDashboard Cta\b|\bReadiness Label\b/i);
+    expect(mainText).not.toMatch(/pages\.home\.[a-z0-9_.]+/i);
+
     const fatalPage = pageErrors.filter(Boolean);
     expect(fatalPage, `pageerror: ${fatalPage.join(" | ")}`).toEqual([]);
 

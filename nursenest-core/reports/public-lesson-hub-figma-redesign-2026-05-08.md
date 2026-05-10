@@ -62,3 +62,8 @@ Routes covered by shared components:
 - Not pushed, not merged, no stash dropped.
 - Did not modify unrelated homepage/i18n/globals churn present elsewhere in worktree (left unstaged).
 
+
+## Commits
+
+- `8c064d9fd` — feat(public-hub): Blossom-aligned lesson hub layout
+- `f46259482` — test(public-hub): regress clutter tokens and arch graphic guard
