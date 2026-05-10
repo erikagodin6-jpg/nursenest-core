@@ -196,6 +196,15 @@ const nextConfig = {
           },
         ],
       },
+      ...["png", "jpg", "jpeg", "webp", "avif", "svg", "ico", "woff2"].map((ext) => ({
+        source: `/:path*.${ext}`,
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      })),
     ];
   },
 

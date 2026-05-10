@@ -18,11 +18,11 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
 
 | Rank | File | Lines | Bytes | use client | Risk |
 | --- | --- | ---: | ---: | --- | --- |
-| 1 | `src/components/student/practice-test-runner-client.tsx` | 3126 | 142794 | yes | medium |
-| 2 | `src/components/admin/admin-blog-control-panel-client.tsx` | 2859 | 126702 | yes | medium |
-| 3 | `src/components/student/question-bank-practice-client.tsx` | 1898 | 86711 | yes | lower |
-| 4 | `src/components/student/practice-tests-hub-client.tsx` | 1512 | 69494 | yes | lower |
-| 5 | `src/app/(student)/app/(learner)/layout.tsx` | 371 | 18320 | no | lower |
+| 1 | `src/components/student/practice-test-runner-client.tsx` | 3422 | 158854 | yes | medium |
+| 2 | `src/components/admin/admin-blog-control-panel-client.tsx` | 2859 | 126714 | yes | medium |
+| 3 | `src/components/student/question-bank-practice-client.tsx` | 1941 | 88345 | yes | lower |
+| 4 | `src/components/student/practice-tests-hub-client.tsx` | 1865 | 92429 | yes | lower |
+| 5 | `src/app/(student)/app/(learner)/layout.tsx` | 371 | 18398 | no | lower |
 
 ## Static imports (first 12k chars)
 
@@ -46,9 +46,12 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/components/student/protected-premium-content`
   - `@/components/student/study-notes-panel`
   - `@/components/student/practice-exam/practice-exam-progress-header`
+  - `@/components/student/practice-exam/practice-exam-remediation-links`
   - `@/components/student/practice-exam/practice-exam-rationale-panel`
+  - `@/components/student/practice-exam/practice-exam-rationale-mobile-dock`
   - `@/components/student/practice-test-teaching-review-panel`
   - `@/components/study/practice-rationale-full-panel`
+  - `@/components/study/practice-rationale-full-panel.types`
   - `@/components/student/practice-test-study-loop-next`
   - `@/lib/practice-tests/build-teaching-review`
   - `@/lib/practice-tests/practice-linear-engine`
@@ -68,9 +71,6 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/components/study/confidence-selector`
   - `@/components/study/confidence-analytics`
   - `@/components/study/smart-review-screen`
-  - `@/components/study/study-plan`
-  - `@/components/study/cat-question-card`
-  - `@/components/study/cat-question-card`
 
 ### `src/components/admin/admin-blog-control-panel-client.tsx`
 
@@ -142,7 +142,7 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/exam-context/exam-registry`
   - `@/lib/exam-context/global-exam-context`
   - `@/lib/learner/study-settings`
-  - `@/components/study/ecg-video-question-media`
+  - `@/components/exams/questions/bowtie-question-renderer`
 
 ### `src/components/student/practice-tests-hub-client.tsx`
 
@@ -169,6 +169,7 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/practice-tests/practice-exam-start-payload`
   - `@/components/exam/exam-study-theme-modal`
   - `@/components/student/learner-study-live-sync-banner`
+  - `@/components/student/tracked-study-loop-cat-link`
   - `@/lib/practice-tests/types`
   - `@/lib/learner/app-study-internal-links`
   - `@/components/lessons/pathway-lesson-link-practice`
@@ -220,4 +221,4 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/marketing/load-paywall-home-stats-for-shell`
 
 
-*Generated 2026-05-06T23:34:35.855Z*
+*Generated 2026-05-10T09:32:14.980Z*

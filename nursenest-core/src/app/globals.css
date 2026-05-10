@@ -3317,16 +3317,16 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   }
 }
 
-/* Marketing carousels: clip-path + transform (inactive slides stay opacity 1 for first-paint / no-JS safety) */
+/* Marketing carousels: compositor-friendly opacity + transform transitions. */
 .nn-carousel-slide-crossfade {
-  transition-property: clip-path, transform;
+  transition-property: opacity, transform;
   transition-duration: var(--brand-motion-medium);
   transition-timing-function: var(--brand-motion-ease-calm-out);
 }
 
 /* Screenshot strip: same motion surface; optional extra transform layered in component */
 .nn-carousel-slide-crossfade.nn-carousel-slide-crossfade--depth {
-  transition-property: clip-path, transform;
+  transition-property: opacity, transform;
 }
 
 /* Transform-only: first paint stays opacity 1 (no `animation-fill-mode: both` on opacity). */

@@ -222,7 +222,8 @@ export function LoginForm({
 
   return (
     <form
-      className="mt-6 space-y-4"
+      className="nn-premium-auth-form mt-6 space-y-4"
+      data-nn-premium-auth-form="login"
       /** Default HTML form method is GET — a submit before React hydrates would put credentials in the URL. */
       method="post"
       onSubmit={(e) => {
@@ -244,7 +245,7 @@ export function LoginForm({
         </label>
         <input
           id="login-identifier"
-          className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
+          className="nn-premium-auth-input w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
           type="text"
           name="email"
           placeholder={t("pages.login.placeholderIdentifier")}
@@ -267,7 +268,7 @@ export function LoginForm({
         </div>
         <input
           id="login-password"
-          className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
+          className="nn-premium-auth-input w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
           type="password"
           name="password"
           placeholder={t("pages.login.placeholderPassword")}
@@ -278,7 +279,7 @@ export function LoginForm({
       <div className="flex items-start gap-2.5">
         <input
           id="login-remember"
-          className="mt-1 h-4 w-4 shrink-0 rounded border border-border text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
+          className="nn-premium-auth-checkbox mt-1 h-4 w-4 shrink-0 rounded border border-border text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_30%,transparent)]"
           type="checkbox"
           name="rememberMe"
           defaultChecked
@@ -297,7 +298,7 @@ export function LoginForm({
         <div
           role="alert"
           aria-live="polite"
-          className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-3 py-2.5 text-[var(--semantic-text-primary)]"
+          className="nn-premium-auth-alert rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-3 py-2.5 text-[var(--semantic-text-primary)]"
         >
           {error ? <p className="text-sm font-medium">{error}</p> : null}
           {errorHelp ? <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{errorHelp}</p> : null}
@@ -316,7 +317,7 @@ export function LoginForm({
         {t("pages.login.legalAfter")}
       </p>
       <button
-        className="w-full rounded-xl bg-role-cta px-4 py-3 text-sm font-semibold text-role-cta-foreground transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_40%,transparent)] disabled:pointer-events-none disabled:opacity-60"
+        className="nn-premium-auth-primary-button w-full rounded-xl bg-role-cta px-4 py-3 text-sm font-semibold text-role-cta-foreground transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_40%,transparent)] disabled:pointer-events-none disabled:opacity-60"
         type="submit"
         disabled={pending || !clientReady}
       >

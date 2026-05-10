@@ -70,8 +70,8 @@ export function ResetPasswordForm({
 
   if (!hasToken) {
     return (
-      <div className="mt-6 space-y-4">
-        <p className="text-sm text-red-600">{errorGeneric}</p>
+      <div className="nn-premium-auth-form mt-6 space-y-4" data-nn-premium-auth-error-state>
+        <p className="nn-premium-auth-alert rounded-xl px-3 py-2 text-sm text-[var(--semantic-text-primary)]">{errorGeneric}</p>
         <Link className="inline-block text-sm font-semibold text-primary hover:underline" href={backToLoginHref}>
           {backToLoginLabel}
         </Link>
@@ -81,7 +81,7 @@ export function ResetPasswordForm({
 
   if (done) {
     return (
-      <div className="mt-6 space-y-4">
+      <div className="nn-premium-auth-form mt-6 space-y-4">
         <p className="text-sm text-green-700">{successMessage}</p>
         <Link className="nn-btn-primary inline-flex w-full justify-center rounded-xl px-4 py-2 font-bold" href={backToLoginHref}>
           {backToLoginLabel}
@@ -91,9 +91,9 @@ export function ResetPasswordForm({
   }
 
   return (
-    <form action={onSubmit} className="mt-6 space-y-4">
+    <form action={onSubmit} className="nn-premium-auth-form mt-6 space-y-4" data-nn-premium-auth-form="reset-password">
       <input
-        className="w-full rounded-xl border border-border bg-white px-3 py-2"
+        className="nn-premium-auth-input w-full rounded-xl border border-border bg-white px-3 py-2"
         type="password"
         name="password"
         placeholder={passwordLabel}
@@ -103,7 +103,7 @@ export function ResetPasswordForm({
         disabled={loading}
       />
       <input
-        className="w-full rounded-xl border border-border bg-white px-3 py-2"
+        className="nn-premium-auth-input w-full rounded-xl border border-border bg-white px-3 py-2"
         type="password"
         name="confirm"
         placeholder={confirmLabel}
@@ -112,8 +112,8 @@ export function ResetPasswordForm({
         autoComplete="new-password"
         disabled={loading}
       />
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      <button className="w-full rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-60" type="submit" disabled={loading}>
+      {error ? <p className="nn-premium-auth-alert rounded-xl px-3 py-2 text-sm text-[var(--semantic-text-primary)]">{error}</p> : null}
+      <button className="nn-premium-auth-primary-button w-full rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-60" type="submit" disabled={loading}>
         {loading ? savingLabel : submitLabel}
       </button>
     </form>

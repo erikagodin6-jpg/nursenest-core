@@ -11,7 +11,7 @@ import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-const SETTING_DESTINATIONS: readonly { href: string; titleKey: string; bodyKey: string }[] = [
+const SETTING_DESTINATIONS: readonly { href: string; titleKey?: string; title?: string; bodyKey?: string; body?: string }[] = [
   {
     href: "/app/account/study-preferences",
     titleKey: "learner.account.nav.settingsHub",
@@ -26,6 +26,11 @@ const SETTING_DESTINATIONS: readonly { href: string; titleKey: string; bodyKey: 
     href: "/app/account/security",
     titleKey: "learner.account.nav.security",
     bodyKey: "learner.account.settingsPage.cardSecurity",
+  },
+  {
+    href: "/app/account/social",
+    title: "Social study privacy",
+    body: "Manage friends, group codes, challenges, leaderboards, and privacy-safe stat visibility.",
   },
 ] as const;
 
@@ -81,8 +86,8 @@ export default async function AccountSettingsHubPage() {
               href={item.href}
               className="flex h-full flex-col rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-sm transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:shadow-md"
             >
-              <span className="text-base font-semibold text-[var(--semantic-text-primary)]">{t(item.titleKey)}</span>
-              <span className="mt-2 text-sm text-muted-foreground">{t(item.bodyKey)}</span>
+              <span className="text-base font-semibold text-[var(--semantic-text-primary)]">{item.title ?? t(item.titleKey ?? "")}</span>
+              <span className="mt-2 text-sm text-muted-foreground">{item.body ?? t(item.bodyKey ?? "")}</span>
               <span className="mt-4 text-sm font-semibold text-primary">{t("learner.account.settingsPage.open")} →</span>
             </Link>
           </li>

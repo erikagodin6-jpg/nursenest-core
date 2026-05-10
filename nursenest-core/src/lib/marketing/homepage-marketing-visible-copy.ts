@@ -29,7 +29,7 @@ const HOMEPAGE_PLACEHOLDER_LEAVES = new Set(
 
 function warnHomepageFallbackDev(key: string, resolved: string) {
   if (process.env.NODE_ENV !== "development") return;
-  console.error("[homepage-marketing-copy] missing or placeholder copy", {
+  console.warn("[homepage-marketing-copy] missing or placeholder copy", {
     key,
     resolved: resolved.slice(0, 120),
   });

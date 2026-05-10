@@ -54,6 +54,7 @@ import { LearnerDashboardPageShell } from "@/components/student/learner-dashboar
 import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
 import { loadLearnerAdaptiveWireBundle } from "@/lib/learner/build-learner-adaptive-wire-bundle";
 import { LearnerAdaptiveRecommendationsSection } from "@/components/student/learner-adaptive-recommendations-section";
+import { SocialStudyDashboardCard } from "@/components/student/social-study-dashboard-card";
 
 type DashboardSessionLike = {
   user?: {
@@ -159,6 +160,17 @@ async function LearnerDashboardHeavyContent({
   let benchmark: BenchmarkData | null = null;
   const studySettings = await loadStudySettings(userId);
   const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
+  const [socialPrivacy, socialInviteCode] = await Promise.all([
+    prisma.socialPrivacySetting.findUnique({
+      where: { userId },
+      select: { socialEnabled: true, statsHidden: true, visibilityScope: true },
+    }),
+    prisma.socialInviteCode.findFirst({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      select: { displayCode: true, enabled: true },
+    }),
+  ]);
 
   try {
     const snap = await loadPremiumDashboardSnapshot(userId, entitlement);
@@ -335,6 +347,14 @@ async function LearnerDashboardHeavyContent({
               ) : null
             }
           />
+          <section className="nn-dash-band">
+            <SocialStudyDashboardCard
+              initialCode={socialInviteCode?.enabled ? socialInviteCode.displayCode : null}
+              socialEnabled={socialPrivacy?.socialEnabled ?? false}
+              statsHidden={socialPrivacy?.statsHidden ?? true}
+              visibilityScope={socialPrivacy?.visibilityScope ?? "PRIVATE"}
+            />
+          </section>
         </>
       );
     }

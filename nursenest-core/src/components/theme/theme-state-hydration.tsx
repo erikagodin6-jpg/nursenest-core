@@ -185,8 +185,11 @@ function pickReadableText(background: string, darkText: string, lightText: strin
 export function ThemeStateHydration() {
   const { theme, setTheme } = useTheme();
   const didSync = useRef(false);
+  const lastAppliedThemeRef = useRef<string | null>(null);
 
   const applyPaletteRoles = (themeId: string) => {
+    if (lastAppliedThemeRef.current === themeId) return;
+    lastAppliedThemeRef.current = themeId;
     const root = document.documentElement;
     clearThemeHydrationInlineSlots(root);
 

@@ -227,7 +227,8 @@ export function SignupForm({
 
   return (
     <form
-      className="mt-6 space-y-4"
+      className="nn-premium-auth-form mt-6 space-y-4"
+      data-nn-premium-auth-form="signup"
       method="post"
       onSubmit={(e) => {
         e.preventDefault();
@@ -237,7 +238,7 @@ export function SignupForm({
     >
       <div className="grid gap-3 sm:grid-cols-2">
         <input
-          className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+          className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
           type="text"
           name="firstName"
           aria-label={firstNamePlaceholder}
@@ -246,7 +247,7 @@ export function SignupForm({
           autoComplete="given-name"
         />
         <input
-          className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+          className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
           type="text"
           name="lastName"
           aria-label={lastNamePlaceholder}
@@ -255,7 +256,7 @@ export function SignupForm({
         />
       </div>
       <input
-        className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+        className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
         type="text"
         name="username"
         placeholder={t("pages.signup.placeholderUsername")}
@@ -263,14 +264,14 @@ export function SignupForm({
         autoComplete="username"
       />
       <input
-        className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+        className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
         type="email"
         name="email"
         placeholder={t("pages.signup.placeholderEmail")}
         required
       />
       <input
-        className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+        className="nn-premium-auth-input w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
         type="password"
         name="password"
         placeholder={t("pages.signup.placeholderPassword")}
@@ -278,7 +279,7 @@ export function SignupForm({
       />
       <div className="grid gap-3 sm:grid-cols-2">
         <select
-          className="rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
+          className="nn-premium-auth-input rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
           name="country"
           value={country}
           onChange={(e) => {
@@ -291,7 +292,7 @@ export function SignupForm({
           <option value="US">{t("pages.signup.countryUs")}</option>
         </select>
         <select
-          className="rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
+          className="nn-premium-auth-input rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
           name="tier"
           value={tier}
           onChange={(e) => {
@@ -307,11 +308,12 @@ export function SignupForm({
           <option value="ALLIED">{t("pages.signup.tierAllied")}</option>
         </select>
       </div>
-      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-inset)] p-4">
-        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("pages.signup.onboardingTitle")}</p>
+      <div className="nn-premium-auth-onboarding rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-inset)] p-4" data-nn-premium-auth-signup-pathway>
+        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Choose Your Pathway</p>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{t("pages.signup.onboardingTitle")}</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <select
-            className="rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
+            className="nn-premium-auth-input rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
             name="learnerPath"
             defaultValue="experienced"
           >
@@ -320,7 +322,7 @@ export function SignupForm({
             <option value="career_change">{t("pages.signup.pathCareerChange")}</option>
           </select>
           <select
-            className="rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
+            className="nn-premium-auth-input rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
             name="examFocus"
             value={examFocus}
             onChange={(e) => setExamFocus(e.target.value as SignupExamFocusValue)}
@@ -332,7 +334,7 @@ export function SignupForm({
             ))}
           </select>
           <select
-            className="rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
+            className="nn-premium-auth-input rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
             name="studyGoal"
             defaultValue="pass_first"
           >
@@ -341,7 +343,7 @@ export function SignupForm({
             <option value="speed">{t("pages.signup.studyGoalSpeed")}</option>
           </select>
           <select
-            className="rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
+            className="nn-premium-auth-input rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
             name="dailyStudyMinutes"
             defaultValue="30"
           >
@@ -357,7 +359,7 @@ export function SignupForm({
         <div
           role="alert"
           aria-live="polite"
-          className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-3 py-2.5 text-[var(--semantic-text-primary)]"
+          className="nn-premium-auth-alert rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-3 py-2.5 text-[var(--semantic-text-primary)]"
         >
           {error ? <p className="text-sm font-medium">{error}</p> : null}
           {errorHelp ? <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{errorHelp}</p> : null}
@@ -387,7 +389,7 @@ export function SignupForm({
         {t("pages.signup.legalAfter")}
       </p>
       <button
-        className="nn-btn-primary w-full px-4 py-3 text-base font-semibold disabled:pointer-events-none disabled:opacity-60"
+        className="nn-premium-auth-primary-button nn-btn-primary w-full px-4 py-3 text-base font-semibold disabled:pointer-events-none disabled:opacity-60"
         type="submit"
         disabled={pending || !clientReady || (turnstileGateActive && !captchaToken?.trim())}
       >

@@ -38,7 +38,7 @@ export function TrialBlockedCard({
   const msg = { title: t(keys.titleKey), body: t(keys.bodyKey) };
 
   return (
-    <div className="nn-trial-blocked">
+    <div className="nn-trial-blocked" data-nn-premium-auth-subscription-required>
       <ShieldAlert className="h-5 w-5 text-[var(--semantic-warning)]" aria-hidden />
       <h3 className="nn-trial-blocked__title">{msg.title}</h3>
       <p className="nn-trial-blocked__body">{msg.body}</p>

@@ -112,8 +112,8 @@
   box-shadow:
     0 30px 60px rgba(76, 29, 149, 0.18),
     0 2px 0 rgba(255, 255, 255, 0.6) inset;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .nn-premium-hero-panel::before {
   content: "";
@@ -475,7 +475,7 @@
    Detected via `:has()` on the immediate parent that holds `sticky top-0`.
    Falls back gracefully when :has() is unsupported. */
 .sticky.top-0.z-50 {
-  transition: box-shadow 220ms ease, backdrop-filter 220ms ease;
+  transition: box-shadow 220ms ease;
 }
 @supports selector(:has(*)) {
   body:has(.sticky.top-0.z-50) .sticky.top-0.z-50 {
@@ -1019,6 +1019,13 @@
   [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-inner {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+  }
+}
+
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  .nn-premium-hero-panel::before {
+    filter: none;
+    opacity: 0.72;
   }
 }
 
@@ -1948,6 +1955,357 @@ html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-det
     transition: none !important;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Premium Auth convergence — Sign In, Sign Up, reset, verification, errors
+   --------------------------------------------------------------------- */
+
+.nn-premium-auth-system {
+  --nn-auth-accent-primary: var(--semantic-brand);
+  --nn-auth-accent-secondary: var(--semantic-info);
+  --nn-auth-accent-warm: var(--semantic-warning);
+  --nn-auth-accent-success: var(--semantic-success);
+  --nn-auth-radius-card: 1.55rem;
+  --nn-auth-input-height: 3rem;
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 78rem);
+  margin-inline: auto;
+  padding-top: clamp(1rem, 2vw, 1.75rem);
+  padding-bottom: max(clamp(1.25rem, 3vw, 2rem), env(safe-area-inset-bottom, 0px));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-system,
+html[data-theme="blossom"] .nn-premium-auth-system,
+html[data-theme="midnight"] .nn-premium-auth-system,
+html[data-theme="sunset"] .nn-premium-auth-system,
+html[data-theme="aurora"] .nn-premium-auth-system {
+  --nn-auth-theme-covered: 1;
+}
+
+.nn-premium-auth-system::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -2rem -1.5rem auto;
+  height: min(34rem, 54vh);
+  border-radius: 9999px;
+  background:
+    radial-gradient(760px 340px at 0% 0%, color-mix(in srgb, var(--nn-auth-accent-secondary) 12%, transparent), transparent 66%),
+    radial-gradient(720px 320px at 100% 8%, color-mix(in srgb, var(--nn-auth-accent-warm) 10%, transparent), transparent 68%),
+    radial-gradient(640px 260px at 52% 100%, color-mix(in srgb, var(--nn-auth-accent-primary) 8%, transparent), transparent 72%);
+  opacity: 0.72;
+  z-index: -1;
+}
+
+.nn-premium-auth-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.88fr) minmax(24rem, 0.72fr);
+  gap: clamp(1rem, 2.2vw, 1.75rem);
+  align-items: stretch;
+}
+
+.nn-premium-auth-story,
+.nn-premium-auth-card {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 74%, var(--nn-auth-accent-primary) 16%);
+  border-radius: var(--nn-auth-radius-card);
+  background:
+    radial-gradient(560px 220px at 100% 0%, color-mix(in srgb, var(--nn-auth-accent-secondary) 8%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow:
+    var(--semantic-shadow-soft),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 72%, transparent);
+}
+
+.nn-premium-auth-story {
+  min-height: 39rem;
+  padding: clamp(1.4rem, 3vw, 2.35rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.nn-premium-auth-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.25rem, 2.5vw, 2.15rem);
+}
+
+.nn-premium-auth-brand-row,
+.nn-premium-auth-mobile-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nn-premium-auth-mobile-brand {
+  display: none;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+
+.nn-premium-auth-theme-pill,
+.nn-premium-auth-pathway-rail > span,
+.nn-premium-auth-ecosystem-grid > span {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-auth-accent-primary) 16%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 48%, var(--semantic-surface));
+  color: var(--theme-heading-text);
+  padding: 0.38rem 0.76rem;
+  font-size: 0.74rem;
+  font-weight: 850;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.nn-premium-auth-story-copy {
+  max-width: 34rem;
+}
+
+.nn-premium-auth-eyebrow {
+  color: var(--nn-auth-accent-primary);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nn-premium-auth-story h2,
+.nn-premium-auth-header h1 {
+  color: var(--theme-heading-text);
+  letter-spacing: -0.035em;
+}
+
+.nn-premium-auth-story h2 {
+  margin-top: 0.8rem;
+  max-width: 12em;
+  font-size: clamp(2.2rem, 5vw, 4.6rem);
+  line-height: 0.95;
+}
+
+.nn-premium-auth-story p,
+.nn-premium-auth-header p,
+.nn-premium-auth-legal,
+.nn-premium-auth-disclaimer,
+.nn-premium-auth-account-link {
+  color: var(--semantic-text-secondary);
+}
+
+.nn-premium-auth-story-copy > p:last-child {
+  margin-top: 1rem;
+  max-width: 35rem;
+  font-size: clamp(0.95rem, 1.4vw, 1.12rem);
+  line-height: 1.7;
+}
+
+.nn-premium-auth-ecosystem-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-block: 1.4rem;
+}
+
+.nn-premium-auth-disclaimer,
+.nn-premium-auth-account-link {
+  max-width: 42rem;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.nn-premium-auth-account-link a,
+.nn-premium-auth-legal a {
+  color: var(--semantic-brand);
+  font-weight: 800;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.nn-premium-auth-header {
+  text-align: left;
+}
+
+.nn-premium-auth-header h1 {
+  margin-top: 0.55rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.02;
+}
+
+.nn-premium-auth-header > p:last-child {
+  margin-top: 0.72rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.nn-premium-auth-pathway-rail {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  margin-top: 1rem;
+  padding: 0.15rem 0 0.4rem;
+  scrollbar-width: thin;
+}
+
+.nn-premium-auth-pathway-rail > span:first-child {
+  border-color: color-mix(in srgb, var(--nn-auth-accent-primary) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-auth-accent-primary) 12%, var(--semantic-surface));
+}
+
+.nn-premium-auth-form {
+  position: relative;
+}
+
+.nn-premium-auth-input {
+  min-height: var(--nn-auth-input-height);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--nn-auth-accent-primary) 12%) !important;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--semantic-surface) 96%, transparent), color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-panel-muted))) !important;
+  color: var(--theme-body-text) !important;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 80%, transparent);
+}
+
+.nn-premium-auth-input:focus-visible,
+.nn-premium-auth-checkbox:focus-visible,
+.nn-premium-auth-form a:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--nn-auth-accent-primary) 42%, transparent);
+  outline-offset: 3px;
+}
+
+.nn-premium-auth-primary-button {
+  min-height: 3.1rem;
+  border-radius: 1rem !important;
+  box-shadow: 0 16px 34px -26px color-mix(in srgb, var(--nn-auth-accent-primary) 54%, transparent);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+.nn-premium-auth-primary-button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 38px -24px color-mix(in srgb, var(--nn-auth-accent-primary) 62%, transparent);
+}
+
+.nn-premium-auth-primary-button:disabled {
+  cursor: not-allowed;
+}
+
+.nn-premium-auth-alert,
+.nn-verify-status {
+  border: 1px solid color-mix(in srgb, var(--semantic-danger) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 10%, var(--semantic-surface));
+}
+
+.nn-verify-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 0.9rem;
+  color: var(--semantic-text-primary);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.nn-verify-status--success {
+  border-color: color-mix(in srgb, var(--semantic-success) 32%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 10%, var(--semantic-surface));
+}
+
+.nn-verify-status--warning {
+  border-color: color-mix(in srgb, var(--semantic-warning) 32%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-warning) 11%, var(--semantic-surface));
+}
+
+.nn-premium-auth-onboarding {
+  background:
+    radial-gradient(420px 160px at 100% 0%, color-mix(in srgb, var(--nn-auth-accent-success) 8%, transparent), transparent 70%),
+    color-mix(in srgb, var(--semantic-panel-cool) 38%, var(--semantic-surface)) !important;
+}
+
+.nn-premium-auth-legal {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--semantic-border-soft);
+  padding-top: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.nn-premium-auth-legal p + p {
+  margin-top: 0.55rem;
+}
+
+.nn-trial-blocked[data-nn-premium-auth-subscription-required] {
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 28%, var(--semantic-border-soft));
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(420px 160px at 100% 0%, color-mix(in srgb, var(--semantic-warning) 10%, transparent), transparent 70%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (max-width: 980px) {
+  .nn-premium-auth-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .nn-premium-auth-story {
+    display: none;
+  }
+
+  .nn-premium-auth-mobile-brand {
+    display: flex;
+  }
+
+  .nn-premium-auth-system {
+    width: min(100%, 42rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .nn-premium-auth-system {
+    --nn-auth-radius-card: 1.15rem;
+    --nn-auth-input-height: 3.15rem;
+    padding-inline: max(0.75rem, env(safe-area-inset-left, 0px));
+    padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .nn-premium-auth-card {
+    padding: 1rem;
+  }
+
+  .nn-premium-auth-header {
+    text-align: center;
+  }
+
+  .nn-premium-auth-header h1 {
+    font-size: clamp(1.75rem, 8vw, 2.35rem);
+  }
+
+  .nn-premium-auth-pathway-rail {
+    margin-inline: -0.15rem;
+    padding-bottom: 0.55rem;
+  }
+
+  .nn-premium-auth-primary-button {
+    min-height: 3.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-auth-primary-button,
+  .nn-premium-auth-primary-button:not(:disabled):hover {
+    transform: none !important;
+    transition: none !important;
   }
 }
 

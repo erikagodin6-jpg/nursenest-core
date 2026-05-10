@@ -282,12 +282,24 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   }, [mobileOpen, mobileContextOpen]);
 
   useEffect(() => {
+    let raf = 0;
+    let last = window.scrollY > 8;
     const onScroll = () => {
-      setIsScrolled(window.scrollY > 8);
+      if (raf) return;
+      raf = window.requestAnimationFrame(() => {
+        raf = 0;
+        const next = window.scrollY > 8;
+        if (next === last) return;
+        last = next;
+        setIsScrolled(next);
+      });
     };
-    onScroll();
+    setIsScrolled(last);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      if (raf) window.cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   useEffect(() => {

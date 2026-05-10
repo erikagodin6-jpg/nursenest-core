@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
@@ -222,7 +222,7 @@ function MarketingHeroCarouselInteractive({
     }
   }, [failed, activeIndex, slides.length]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (slides.length === 0) return;
     if (validCount > 0) return;
     if (!unavailableReported.current) {
@@ -242,7 +242,7 @@ function MarketingHeroCarouselInteractive({
     }
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (slides.length === 0) return;
     const missing: number[] = [];
     slides.forEach((slide, index) => {
@@ -377,12 +377,12 @@ function MarketingHeroCarouselInteractive({
           const slideMotionClass = isBelowFoldSection
             ? "nn-carousel-slide-crossfade nn-carousel-slide-crossfade--depth"
             : "nn-carousel-slide-crossfade";
-          /** Inactive slides stay opacity 1; clip-path hides them (works if JS/CSS transitions never run). */
+          /** Inactive slides fade/scale with compositor-friendly properties. */
           const slideVisibilityClass = active
-            ? "z-[1] scale-100 opacity-100 [clip-path:inset(0_0_0_0)]"
+            ? "z-[1] scale-100 opacity-100"
             : isBelowFoldSection
-              ? "z-0 scale-[0.96] opacity-100 [clip-path:inset(0_100%_0_0)]"
-              : "z-0 scale-100 opacity-100 [clip-path:inset(0_100%_0_0)]";
+              ? "z-0 scale-[0.985] opacity-0"
+              : "z-0 scale-100 opacity-0";
           const slideMotionSafe = reducedMotion ? "" : slideMotionClass;
           return (
             <Image

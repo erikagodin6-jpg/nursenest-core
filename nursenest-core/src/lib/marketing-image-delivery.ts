@@ -12,8 +12,8 @@ export const MARKETING_PHOTO_QUALITY = 72;
 /** Slightly higher quality for the homepage hero product panel — crisper UI text on retina displays. */
 export const MARKETING_PHOTO_QUALITY_HERO = 78;
 
-/** Homepage screenshot strip below the hero — sharp UI text; section is below the fold so transfer cost is acceptable. */
-export const MARKETING_PHOTO_QUALITY_HOME_SCREENSHOT_SECTION = 86;
+/** Homepage screenshot strip below the hero — still crisp, but sized for mobile PageSpeed transfer budgets. */
+export const MARKETING_PHOTO_QUALITY_HOME_SCREENSHOT_SECTION = 74;
 
 /** Slightly lower quality for below-fold marketing stills; keeps layout identical, trims transfer on `/_next/image`. */
 export const MARKETING_PHOTO_QUALITY_BELOW_FOLD = 68;

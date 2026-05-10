@@ -519,6 +519,32 @@ test.describe("Marketing theme propagation — public routes", () => {
     );
   });
 
+  test("/ — social study section renders across public themes without mobile overflow", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/", { waitUntil: "load", timeout: 120_000 });
+    await dismissMarketingScrims(page);
+    await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({
+      timeout: 60_000,
+    });
+
+    const section = page.getByTestId("section-premium-social-study");
+    await expect(section.getByRole("heading", { name: "Study With Friends. Challenge Your Scores." })).toBeVisible({
+      timeout: 60_000,
+    });
+    await expect(section.getByTestId("premium-social-study-primary")).toBeVisible();
+    await expect(section.getByTestId("premium-social-study-secondary")).toBeVisible();
+    await expect(section.getByText("Hide your stats, pause visibility, or leave a challenge whenever you want.")).toBeVisible();
+
+    for (const id of PUBLIC_MARKETING_THEME_ALLOWLIST) {
+      await selectThemeViaPicker(page, themePickerRegex(id));
+      await expect(page.locator("html")).toHaveAttribute("data-theme", id, { timeout: 15_000 });
+      await expect(section).toBeVisible();
+    }
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+    expect(overflow, "social study homepage band should not horizontally overflow on mobile").toBe(false);
+  });
+
   /**
    * Pathway hub regression: `LearnerSurfaceCard` → `.lv-card` must track public marketing
    * `html[data-theme]` values via `styles/tokens.css` bridge (not stuck on :root pastel

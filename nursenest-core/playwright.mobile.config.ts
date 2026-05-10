@@ -32,9 +32,10 @@ function localDevWebServer() {
 const paidAuthEnabled = hasPaidTestCredentials();
 const e2eWebServer = localDevWebServer();
 
-const publicMobileMatch = /tests\/e2e\/mobile\/(mobile-regression|mobile-marketing-routes|mobile-learner-free-layout)\.spec\.ts$/;
+const publicMobileMatch =
+  /tests\/e2e\/mobile\/(mobile-regression|mobile-marketing-routes|mobile-learner-free-layout|premium-mobile-performance-audit)\.spec\.ts$/;
 const paidMobileMatch =
-  /tests\/e2e\/mobile\/mobile-learner-(authenticated-layout|study-interactions)\.spec\.ts$/;
+  /tests\/e2e\/mobile\/(mobile-learner-(authenticated-layout|study-interactions)|premium-mobile-performance-audit)\.spec\.ts$/;
 
 const publicProjects = [
   {

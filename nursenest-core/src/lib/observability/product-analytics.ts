@@ -55,20 +55,25 @@ export function pathwayAnalyticsDimensions(
 
 /**
  * Non-blocking, SSR-safe: no-ops on server and swallows provider errors.
- * Uses a microtask so click handlers return before network work is scheduled.
+ * Defers provider bootstrap to idle time so marketing hydration and click
+ * handlers do not parse/evaluate analytics code on the critical path.
  */
 export function trackProductEvent(
   event: string,
   props?: Record<string, ProductAnalyticsScalar>,
 ): void {
   if (typeof window === "undefined") return;
-  /** Avoid unhandled rejections if `posthog-js` dynamic import fails during homepage hydration. */
-  void initPosthogClient().catch(() => {});
-  queueMicrotask(() => {
+  const run = () => {
     try {
+      /** Avoid unhandled rejections if `posthog-js` dynamic import fails after idle. */
+      const posthogReady = initPosthogClient().catch(() => {});
+      void posthogReady;
       trackClientEvent(event, props);
     } catch {
       /* analytics must never break UX */
     }
-  });
+  };
+  const scheduleIdle =
+    window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 160));
+  scheduleIdle(run, { timeout: 1500 });
 }

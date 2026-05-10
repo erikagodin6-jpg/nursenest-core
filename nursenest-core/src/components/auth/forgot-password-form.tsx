@@ -103,7 +103,7 @@ export function ForgotPasswordForm({
 
   if (done) {
     return (
-      <div className="mt-6 space-y-4">
+      <div className="nn-premium-auth-form mt-6 space-y-4" data-nn-premium-auth-email-sent>
         <p className="text-sm text-muted">{successMessage}</p>
         {successDetail ? <p className="text-sm text-muted">{successDetail}</p> : null}
         {devUrl ? (
@@ -123,7 +123,8 @@ export function ForgotPasswordForm({
 
   return (
     <form
-      className="mt-6 space-y-4"
+      className="nn-premium-auth-form mt-6 space-y-4"
+      data-nn-premium-auth-form="forgot-password"
       onSubmit={(e) => {
         e.preventDefault();
         if (loading) return;
@@ -131,7 +132,7 @@ export function ForgotPasswordForm({
       }}
     >
       <input
-        className="w-full rounded-xl border border-border bg-white px-3 py-2"
+        className="nn-premium-auth-input w-full rounded-xl border border-border bg-white px-3 py-2"
         type="text"
         name="email"
         inputMode="email"
@@ -140,8 +141,8 @@ export function ForgotPasswordForm({
         autoComplete="email"
         disabled={loading}
       />
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      <button className="w-full rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-60" type="submit" disabled={loading}>
+      {error ? <p className="nn-premium-auth-alert rounded-xl px-3 py-2 text-sm text-[var(--semantic-text-primary)]">{error}</p> : null}
+      <button className="nn-premium-auth-primary-button w-full rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground disabled:opacity-60" type="submit" disabled={loading}>
         {loading ? sendingLabel : submitLabel}
       </button>
       <Link className="block text-center text-sm font-semibold text-primary hover:underline" href={backToLoginHref}>

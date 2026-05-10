@@ -37,7 +37,7 @@ export function VerifyStatusBanner() {
     const config = statusConfig[status];
     const Icon = config.icon;
     return (
-      <div className={`nn-verify-status ${config.className}`}>
+      <div className={`nn-verify-status ${config.className}`} data-nn-premium-auth-verification>
         <Icon className="h-4 w-4 flex-shrink-0" aria-hidden />
         <p>{config.message}</p>
       </div>
@@ -46,7 +46,7 @@ export function VerifyStatusBanner() {
 
   if (registered) {
     return (
-      <div className="nn-verify-status nn-verify-status--success mb-4">
+      <div className="nn-verify-status nn-verify-status--success mb-4" data-nn-premium-auth-email-sent>
         <CheckCircle2 className="h-4 w-4 flex-shrink-0" aria-hidden />
         <p>{t("pages.login.postSignupBanner")}</p>
       </div>
