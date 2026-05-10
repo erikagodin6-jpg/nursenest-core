@@ -1,6 +1,6 @@
 blog slug collision diagnostic (live DB ∩ supplement union)
-generated: 2026-05-10T01:38:14.124Z
-supplement slug count: 3851
+generated: 2026-05-10T01:49:27.129Z
+supplement slug count: 3891
 
 live DB rows overlapping supplement slugs: 20
 
@@ -12,9 +12,9 @@ live DB rows overlapping supplement slugs: 20
 - copd-symptoms-treatment-nursing-care (PUBLISHED) supplement=longtail
 - deep-vein-thrombosis-nursing-guide (PUBLISHED) supplement=longtail
 - hypernatremia-causes-symptoms-nursing-care (PUBLISHED) supplement=longtail
-- hypocalcemia-vs-hypercalcemia-nclex-guide (PUBLISHED) supplement=longtail
 - left-sided-vs-right-sided-heart-failure (PUBLISHED) supplement=longtail
 - hyponatremia-symptoms-causes-nursing-priorities (PUBLISHED) supplement=longtail
+- hypocalcemia-vs-hypercalcemia-nclex-guide (PUBLISHED) supplement=longtail
 - metabolic-acidosis-vs-metabolic-alkalosis (PUBLISHED) supplement=longtail
 - increased-intracranial-pressure-nursing-priorities (PUBLISHED) supplement=longtail
 - respiratory-acidosis-vs-respiratory-alkalosis (PUBLISHED) supplement=longtail

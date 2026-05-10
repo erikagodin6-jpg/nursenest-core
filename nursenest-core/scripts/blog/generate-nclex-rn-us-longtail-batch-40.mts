@@ -18,6 +18,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
+import { appendRemainingPosts } from "./generate-nclex-rn-us-longtail-batch-40-data.mts";
+
 type LinkRow = { href: string; label: string };
 type FaqRow = { q: string; a: string };
 
@@ -835,10 +837,6 @@ const POSTS: PostSpec[] = [
   },
 ];
 
-// ============================================================================
-// The remaining 35 specs are appended in the second half of this file.
-// ============================================================================
-import { appendRemainingPosts } from "./generate-nclex-rn-us-longtail-batch-40-data.mts";
 appendRemainingPosts(POSTS, LK, SHARED_TAGS, NGN_STEPS_SENTENCE);
 
 // ----------------------------------------------------------------------------
