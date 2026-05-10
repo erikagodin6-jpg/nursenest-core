@@ -17,7 +17,10 @@ import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 /**
  * Core marketing/programmatic urlset (everything from {@link collectCoreUrls} except DB pathway-lesson rows).
  * Blog `<loc>`s are excluded via {@link excludeAbsoluteUrlsMatchingBlogSitemapEntries} — blog posts remain in
- * `/sitemap-blog.xml`. Pathway lesson URLs live in `/sitemap-lessons.xml`.
+ * `/sitemap-blog.xml`. Pathway lesson **detail** URLs live in `/sitemap-lessons.xml`. Exam hubs, programmatic topics,
+ * and lesson hubs/clusters live in `/sitemap-pathways.xml`. Tier-full `/{locale}/…` marketing URLs live in
+ * `/sitemap-localized.xml`. OSCE/clinical-scenario hubs and `/tools/*` clinical teasers live in
+ * `/sitemap-clinical-modules.xml`.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,7 +34,11 @@ export async function GET(request: Request): Promise<Response> {
     const { listBlogSitemapEntriesSafe } = await import("@/lib/seo/sitemap-blog-xml");
 
     const [coreUrls, blogEntries] = await Promise.all([
-      collectCoreUrls(origin, { omitPathwayLessonSeoUrls: true }),
+      collectCoreUrls(origin, {
+        omitPathwayLessonSeoUrls: true,
+        omitLocalizedMarketingUrls: true,
+        omitExamPathwayAndTopicProgrammaticUrls: true,
+      }),
       listBlogSitemapEntriesSafe(),
     ]);
     const coreWithoutBlog = excludeAbsoluteUrlsMatchingBlogSitemapEntries(coreUrls, blogEntries);

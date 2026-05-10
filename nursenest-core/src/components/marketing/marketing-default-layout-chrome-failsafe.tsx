@@ -22,7 +22,11 @@ const PRIMARY_LINKS = [
 export function MarketingDefaultLayoutChromeFailsafeShell({ children }: { children: ReactNode }) {
   return (
     <div className="nn-marketing-surface flex min-h-screen flex-col bg-[var(--page-bg)]">
-      <header className="sticky top-0 z-[100] border-b border-[var(--header-nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)]">
+      <header
+        data-nn-nav-mode="public"
+        data-nn-header-layout="marketing-failsafe"
+        className="sticky top-0 z-[100] border-b border-[var(--header-nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)]"
+      >
         <div className="nn-section-shell flex min-h-[3.25rem] w-full min-w-0 items-center justify-between gap-3 py-2.5">
           <Link href="/" className="flex min-w-0 shrink-0 items-center gap-2" aria-label="NurseNest home">
             <HeaderBrandLockup />

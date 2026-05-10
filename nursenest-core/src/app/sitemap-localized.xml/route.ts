@@ -1,9 +1,9 @@
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
-import { SITEMAP_FALLBACK_LESSON_DETAIL_PATHS } from "@/lib/seo/sitemap-index-children";
+import { SITEMAP_FALLBACK_LOCALIZED_PATHS } from "@/lib/seo/sitemap-index-children";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
-  collectPathwayLessonDetailSeoUrls,
+  collectLocalizedMarketingSegmentUrls,
   normalizeOrigin,
   type SitemapUrlEntry,
 } from "@/lib/seo/sitemap-static-xml";
@@ -11,8 +11,8 @@ import { filterPublicSitemapEntries } from "@/lib/seo/sitemap-public-index-filte
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
 /**
- * Pathway lesson **detail** URLs (`…/lessons/{slug}`) only — hubs and topic clusters live in `/sitemap-pathways.xml`.
- * Uses `SITEMAP_PATHWAY_BUDGET_MS` wall clock budget.
+ * Tier-full (`MarketingLanguageTier === "full"`) localized marketing URLs only — same eligibility as
+ * {@link getSitemapIncludedLocales} / {@link collectLocaleMarketingSitemapSafeUrls}. Partial/incomplete locales are omitted.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -23,16 +23,8 @@ export async function GET(request: Request): Promise<Response> {
   let xml: string;
 
   try {
-    const pathwayBudgetMs = (() => {
-      const raw = process.env.SITEMAP_PATHWAY_BUDGET_MS?.trim();
-      const n = raw ? Number.parseInt(raw, 10) : 8000;
-      if (!Number.isFinite(n)) return 8000;
-      return Math.min(60_000, Math.max(2000, n));
-    })();
-    const pathwayLessonDeadlineMs = Date.now() + pathwayBudgetMs;
-
-    const lessonStrings = await collectPathwayLessonDetailSeoUrls(origin, { deadlineEpochMs: pathwayLessonDeadlineMs });
-    const entries: SitemapUrlEntry[] = lessonStrings.map((loc) => ({ loc }));
+    const localizedStrings = collectLocalizedMarketingSegmentUrls(origin);
+    const entries: SitemapUrlEntry[] = localizedStrings.map((loc) => ({ loc }));
     const filtered = filterPublicSitemapEntries(entries, origin);
 
     const seen = new Set<string>();
@@ -43,15 +35,15 @@ export async function GET(request: Request): Promise<Response> {
     });
 
     xml = buildSitemapUrlsetFromAbsoluteUrls(
-      unique.length > 0 ? unique : [{ loc: `${origin}${SITEMAP_FALLBACK_LESSON_DETAIL_PATHS[0]}` }],
+      unique.length > 0 ? unique : [{ loc: `${origin}/es` }],
     );
   } catch {
-    const fallbackEntries: SitemapUrlEntry[] = SITEMAP_FALLBACK_LESSON_DETAIL_PATHS.map((path) => ({
+    const fallbackEntries: SitemapUrlEntry[] = SITEMAP_FALLBACK_LOCALIZED_PATHS.map((path) => ({
       loc: `${origin}${path === "/" ? "" : path}`,
     }));
     const filteredFallback = filterPublicSitemapEntries(fallbackEntries, origin);
     xml = buildSitemapUrlsetFromAbsoluteUrls(
-      filteredFallback.length > 0 ? filteredFallback : [{ loc: `${origin}${SITEMAP_FALLBACK_LESSON_DETAIL_PATHS[0]}` }],
+      filteredFallback.length > 0 ? filteredFallback : [{ loc: `${origin}/es` }],
     );
   }
 

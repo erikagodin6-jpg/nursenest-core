@@ -46,16 +46,16 @@
 
 | URL | Role |
 |-----|------|
-| `/sitemap.xml` | Marketing + pathway lessons + … **without** blog `<loc>` overlap (`src/app/sitemap.xml/route.ts`) |
-| `/sitemap-blog.xml` | Blog hub + posts (`src/app/sitemap-blog.xml/route.ts`) |
+| `/sitemap.xml` | **Sitemap index** listing child urlsets (`buildSitemapIndexXmlForOrigin`) |
+| `/sitemap-core.xml` | Core urlset: `collectCoreUrls({ omitPathwayLessonSeoUrls: true })`, minus blog overlap |
+| `/sitemap-blog.xml` | Blog hub + posts (`listBlogSitemapEntriesSafe`) |
+| `/sitemap-lessons.xml` | Pathway lesson URLs (`collectPathwayLessonSeoUrls`) |
 | `/sitemap-allied.xml` | Allied occupation hubs (`collectAlliedMarketingUrls`) |
 | `/sitemap-new-grad.xml` | New Grad marketing paths (`NEW_GRAD_MARKETING_SITEMAP_PATHS`) |
 
-No `sitemap-blog.xml`, `sitemap-lessons.xml`, etc. **today**.
+### B. Core `/sitemap-core.xml` composition (`collectCoreUrls` with `omitPathwayLessonSeoUrls`)
 
-### B. Core merged `/sitemap.xml` composition (`collectCoreUrls`)
-
-High-level buckets (see `src/lib/seo/sitemap-static-xml.ts`):
+High-level buckets (see `src/lib/seo/sitemap-static-xml.ts`). **Pathway lesson** hubs/topics/detail URLs are **not** in this slice — they are emitted only from `/sitemap-lessons.xml`.
 
 1. **Marketing base (default locale):** `/`, `/about`, `/question-bank`, `/practice-exams`, `/lessons`, `/pricing`, `/for-institutions`, `/blog`, `/faq`, legal/policy/contact pages, `/tools`, `/case-studies`, …
 2. **Per-locale marketing:** `collectLocaleMarketingSitemapSafeUrls` for each locale in `getSitemapIncludedLocales()` (tier **full** only for listing).
@@ -79,7 +79,7 @@ High-level buckets (see `src/lib/seo/sitemap-static-xml.ts`):
 - `Disallow: /app/`, `/admin/`, `/internal/`, `/api/`, `/seo/`
 - Locale **disabled** tiers: `Disallow: /{code}/`
 - **Partial** tiers: crawl allowed; **not** listed in sitemap (noindex via metadata—see comments)
-- **Three** fixed `Sitemap:` origins (`CANONICAL_PRODUCTION_ORIGIN`)
+- **One** `Sitemap:` line (`CANONICAL_PRODUCTION_ORIGIN`) pointing at **`/sitemap.xml`** (index)
 
 ### D. hreflang / canonical (audit pointers)
 
@@ -96,8 +96,8 @@ Sitemap emission does **not** embed hreflang; **page metadata** does. Splitting 
 | Desired segment | Today | Notes |
 |-----------------|-------|--------|
 | `sitemap-marketing.xml` | Partially merged into core | Would extract static + locale + legal + core marketing |
-| `sitemap-blog.xml` | Inside `/sitemap.xml` | Straight extraction from `listBlogSitemapEntriesSafe` |
-| `sitemap-lessons.xml` | Inside `/sitemap.xml` | `collectPathwayLessonSeoUrls` + lesson hubs |
+| `sitemap-blog.xml` | **`/sitemap-blog.xml`** dedicated urlset | Same rows as before segmentation |
+| `sitemap-lessons.xml` | **`/sitemap-lessons.xml`** dedicated urlset | `collectPathwayLessonSeoUrls` |
 | `sitemap-questions.xml` | Partial (`/questions/*`, pathway `questions`) | Clarify overlap with pathway URLs |
 | `sitemap-flashcards.xml` | Not isolated | Confirm **marketing** flashcard hub URLs exist and are indexable before emitting |
 | `sitemap-ecg.xml` | Not typical | Public **marketing** ECG hubs vs `/modules/ecg` learner — **do not** index gated learner shells |
@@ -169,24 +169,28 @@ Sitemap emission does **not** embed hreflang; **page metadata** does. Splitting 
 ```mermaid
 flowchart TB
   subgraph robots["robots.txt"]
-    R[Sitemap directives x3]
+    R[Sitemap directive → index]
   end
-  subgraph maps["XML urlsets"]
-    M["/sitemap.xml merged"]
-    A["/sitemap-allied.xml"]
-    N["/sitemap-new-grad.xml"]
+  subgraph maps["XML"]
+    IDX["/sitemap.xml\n(sitemap index)"]
+    CO["/sitemap-core.xml"]
+    BL["/sitemap-blog.xml"]
+    LE["/sitemap-lessons.xml"]
+    AL["/sitemap-allied.xml"]
+    NG["/sitemap-new-grad.xml"]
   end
-  subgraph merged["Inside /sitemap.xml"]
-    C[collectCoreUrls]
-    B[listBlogSitemapEntriesSafe]
+  subgraph merged["Former merged slice → now core urlset"]
+    C[collectCoreUrls omit lessons + blog strip]
     F[filterPublicSitemapEntries + dedupe]
   end
-  R --> M
-  R --> A
-  R --> N
+  R --> IDX
+  IDX --> CO
+  IDX --> BL
+  IDX --> LE
+  IDX --> AL
+  IDX --> NG
   C --> F
-  B --> F
-  F --> M
+  F --> CO
 ```
 
 ### B. Target segmented architecture (proposal)

@@ -60,6 +60,7 @@
   border-radius: var(--lv-radius-lg);
   border: 1px solid color-mix(in srgb, var(--lv-border-soft) 92%, var(--lv-accent-300) 8%);
   background: var(--lv-bg-surface);
+  color: var(--lv-text-primary);
   padding: 1rem;
   box-shadow: var(--lv-shadow-soft);
   transition:

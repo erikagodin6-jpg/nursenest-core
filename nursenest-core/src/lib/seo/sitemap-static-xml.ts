@@ -10,6 +10,10 @@
  * routinely exceeds **~20–30s** / memory spikes in production.
  *
  * **Mitigations today:** `MAX_PATHWAY_DERIVED_SITEMAP_URLS` caps pathway-derived URLs; blog uses `take` cap.
+ * **Phase 2:** `/sitemap-pathways.xml` (exam hubs + programmatic topics + lesson hubs/clusters), `/sitemap-localized.xml`
+ * (tier-full `/{locale}/…` only), `/sitemap-lessons.xml` (lesson-detail slugs only); core omits those buckets.
+ * **Phase 3:** `/sitemap-clinical-modules.xml` — OSCE/clinical-scenario pathway hubs + `/tools/*` clinical teasers;
+ * core omits those URLs (see {@link collectClinicalModulesSitemapUrls}).
  *
  * **If splitting becomes necessary:** introduce additional **sitemap index + chunk urlsets** only if required by size
  * or timeouts; `robots.txt` lists the merged `/sitemap.xml` plus focused urlsets (e.g. allied, new grad) on the same origin.
@@ -49,7 +53,6 @@ import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-te
 import { stripForbiddenLocalePrefixedPathwayTopics } from "@/lib/seo/sitemap-locale-prefixed-path-guard";
 import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
-import { collectOsceScenariosMarketingHubUrls } from "@/lib/scenarios/scenario-marketing-sitemap-urls";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 export {
   buildSitemapIndexXml,
@@ -284,9 +287,19 @@ export type CollectCoreUrlsOptions = {
   /**
    * When true, omit DB-backed pathway lesson URLs from this collector (`collectPathwayLessonSeoUrls` output +
    * {@link collectPathwayLessonHubUrlsOnly} in production-safe mode). Used by `/sitemap-core.xml` while
-   * `/sitemap-lessons.xml` owns the pathway lesson urlset (see sitemap index segmentation).
+   * `/sitemap-lessons.xml` owns lesson-detail URLs and `/sitemap-pathways.xml` owns hubs/topics (see sitemap index segmentation).
    */
   omitPathwayLessonSeoUrls?: boolean;
+  /**
+   * When true, omit `/{locale}/…` marketing URLs tier-full locales emit via {@link collectLocaleMarketingSitemapSafeUrls}.
+   * Owned by `/sitemap-localized.xml`.
+   */
+  omitLocalizedMarketingUrls?: boolean;
+  /**
+   * When true, omit exam pathway hubs (`collectExamPathwayUrls`) + pathway topic programmatic long-tail
+   * (`collectPathwayTopicProgrammaticUrls`). Owned by `/sitemap-pathways.xml`.
+   */
+  omitExamPathwayAndTopicProgrammaticUrls?: boolean;
 };
 
 /** Pre-Nursing public hub, lesson index, study planning, and module pages (registry-backed). */
@@ -299,16 +312,44 @@ export function collectPreNursingSeoUrls(origin: string): string[] {
   return urls;
 }
 
-/** Pathway lesson hubs, topic clusters, and lesson detail pages (DB-first loader). */
-export async function collectPathwayLessonSeoUrls(
+/** Segment modes for pathway-derived lesson URLs (see `/sitemap-pathways.xml` vs `/sitemap-lessons.xml`). */
+export type PathwayLessonSitemapSegmentMode = "full" | "hubs-topics" | "details";
+
+/** Lesson detail pages only (`…/lessons/{slug}`) — `/sitemap-lessons.xml`. */
+export async function collectPathwayLessonDetailSeoUrls(
   origin: string,
   opts?: { deadlineEpochMs?: number },
 ): Promise<string[]> {
+  return collectPathwayLessonSeoUrls(origin, { ...opts, segment: "details" });
+}
+
+/** `/lessons`, per-pathway lesson hubs, topic clusters — `/sitemap-pathways.xml` (with exam + programmatic topics). */
+export async function collectPathwayLessonHubAndTopicSeoUrls(
+  origin: string,
+  opts?: { deadlineEpochMs?: number },
+): Promise<string[]> {
+  return collectPathwayLessonSeoUrls(origin, { ...opts, segment: "hubs-topics" });
+}
+
+/**
+ * Pathway lesson hubs, topic clusters, and lesson detail pages (DB-first loader).
+ * Use {@link segment} to emit only hubs/topics or only detail URLs for sitemap segmentation.
+ */
+export async function collectPathwayLessonSeoUrls(
+  origin: string,
+  opts?: { deadlineEpochMs?: number; segment?: PathwayLessonSitemapSegmentMode },
+): Promise<string[]> {
   const o = normalizeOrigin(origin);
+  const segment: PathwayLessonSitemapSegmentMode = opts?.segment ?? "full";
+  const includeHubsTopics = segment === "full" || segment === "hubs-topics";
+  const includeDetails = segment === "full" || segment === "details";
+
   if (shouldSkipDbBackedSitemapUrlsForBuild()) {
     safeServerLog("seo", "sitemap_pathway_urls_skipped_for_build", {
       reason: "build_time_db_skip",
+      segment,
     });
+    if (segment === "details") return [];
     return [`${o}/lessons`];
   }
   const urls: string[] = [];
@@ -320,9 +361,11 @@ export async function collectPathwayLessonSeoUrls(
     return true;
   };
 
-  if (!push(`${o}/lessons`)) {
-    safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "lessons-index" });
-    return urls;
+  if (includeHubsTopics) {
+    if (!push(`${o}/lessons`)) {
+      safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "lessons-index" });
+      return urls;
+    }
   }
 
   const { isPathwayPublishedForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
@@ -347,17 +390,23 @@ export async function collectPathwayLessonSeoUrls(
     if (!isPathwayPublishedForPublicSite(pid)) continue;
     const p = getExamPathwayById(pid);
     if (!p || p.status === "hidden") continue;
-    if (!push(`${o}${buildExamPathwayPath(p, "lessons")}`)) {
-      safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "pathway-hub" });
-      return urls;
-    }
-    const topics = await listTopicClustersForSitemap(pid);
-    for (const t of topics) {
-      if (!push(`${o}${marketingPathwayLessonTopicClusterPath(p, t.topicSlug)}`)) {
-        safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "topic" });
+
+    if (includeHubsTopics) {
+      if (!push(`${o}${buildExamPathwayPath(p, "lessons")}`)) {
+        safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "pathway-hub" });
         return urls;
       }
+      const topics = await listTopicClustersForSitemap(pid);
+      for (const t of topics) {
+        if (!push(`${o}${marketingPathwayLessonTopicClusterPath(p, t.topicSlug)}`)) {
+          safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "topic" });
+          return urls;
+        }
+      }
     }
+
+    if (!includeDetails) continue;
+
     let skip = 0;
     for (;;) {
       if (opts?.deadlineEpochMs != null && Date.now() > opts.deadlineEpochMs) {
@@ -388,6 +437,28 @@ export async function collectPathwayLessonSeoUrls(
 }
 
 /**
+ * Exam pathway hubs + programmatic topic long-tail + pathway lesson index/hubs/topic clusters — `/sitemap-pathways.xml`.
+ */
+export async function collectPathwaysSegmentUrls(
+  origin: string,
+  opts?: { deadlineEpochMs?: number },
+): Promise<string[]> {
+  const o = normalizeOrigin(origin);
+  const [examHubUrls, pathwayTopicUrls, hubTopicLessonUrls] = await Promise.all([
+    collectExamPathwayUrls(o),
+    collectPathwayTopicProgrammaticUrls(o),
+    collectPathwayLessonHubAndTopicSeoUrls(o, opts),
+  ]);
+  return [...examHubUrls, ...pathwayTopicUrls, ...hubTopicLessonUrls];
+}
+
+/** Tier-full localized marketing URLs (`/{locale}/…`) for `/sitemap-localized.xml` (same eligibility as legacy core slice). */
+export function collectLocalizedMarketingSegmentUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return SORTED_SITEMAP_LOCALES.flatMap((loc) => collectLocaleMarketingSitemapSafeUrls(o, loc));
+}
+
+/**
  * Default-locale “core” slice (merged into `/sitemap-core.xml` via `collectCoreUrls`; legacy merged `/sitemap.xml`
  * used the full collector including pathway lessons).
  *
@@ -397,6 +468,8 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
   const o = normalizeOrigin(origin);
   const productionSafe = opts?.productionSafeStatic === true;
   const omitPathwayLessonSeoUrls = opts?.omitPathwayLessonSeoUrls === true;
+  const omitLocalizedMarketingUrls = opts?.omitLocalizedMarketingUrls === true;
+  const omitExamPathwayAndTopicProgrammaticUrls = opts?.omitExamPathwayAndTopicProgrammaticUrls === true;
   const add = (path: string) => {
     const p = path.startsWith("/") ? path : `/${path}`;
     return `${o}${p}`;
@@ -472,7 +545,9 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
   }
   const expandedBase = [
     ...base,
-    ...SORTED_SITEMAP_LOCALES.flatMap((loc) => collectLocaleMarketingSitemapSafeUrls(o, loc)),
+    ...(omitLocalizedMarketingUrls
+      ? []
+      : SORTED_SITEMAP_LOCALES.flatMap((loc) => collectLocaleMarketingSitemapSafeUrls(o, loc))),
     ...getAllProgrammaticQuestionTopicSlugs().map((s) => add(`/questions/${s}`)),
     add("/tools"),
     add("/case-studies"),
@@ -480,13 +555,10 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     ...regionalTopicPaths.map((p) => add(p)),
   ];
   if (productionSafe) {
-    const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
-    const [examHubUrls, npPracticeHubUrls] = await Promise.all([
-      collectExamPathwayUrls(o),
-      collectNpPracticeTestHubUrls(o),
-    ]);
+    const pathwayTopicUrls = omitExamPathwayAndTopicProgrammaticUrls ? [] : await collectPathwayTopicProgrammaticUrls(o);
+    const examHubUrls = omitExamPathwayAndTopicProgrammaticUrls ? [] : await collectExamPathwayUrls(o);
+    const npPracticeHubUrls = await collectNpPracticeTestHubUrls(o);
     const lessonHubUrls = omitPathwayLessonSeoUrls ? [] : collectPathwayLessonHubUrlsOnly(o);
-    const osceScenarioHubUrls = collectOsceScenariosMarketingHubUrls(o);
     return [
       ...expandedBase,
       ...examHubUrls,
@@ -495,7 +567,6 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
       ...collectAlliedMarketingUrls(o),
       ...collectPreNursingSitemapHubUrlsOnly(o),
       ...lessonHubUrls,
-      ...osceScenarioHubUrls,
     ];
   }
   /**
@@ -512,14 +583,13 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
   const lessonUrls = omitPathwayLessonSeoUrls
     ? []
     : await collectPathwayLessonSeoUrls(o, { deadlineEpochMs: pathwayLessonDeadlineMs });
-  const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
-  const [examHubUrls, npPracticeHubUrls, contentBackedStudyHubUrls, programmaticStudySeoUrls] = await Promise.all([
-    collectExamPathwayUrls(o),
+  const pathwayTopicUrls = omitExamPathwayAndTopicProgrammaticUrls ? [] : await collectPathwayTopicProgrammaticUrls(o);
+  const examHubUrls = omitExamPathwayAndTopicProgrammaticUrls ? [] : await collectExamPathwayUrls(o);
+  const [npPracticeHubUrls, contentBackedStudyHubUrls, programmaticStudySeoUrls] = await Promise.all([
     collectNpPracticeTestHubUrls(o),
     collectContentBackedStudyResourceHubUrls(o),
     collectProgrammaticStudySeoUrls(o),
   ]);
-  const osceScenarioHubUrls = collectOsceScenariosMarketingHubUrls(o);
   return [
     ...expandedBase,
     ...examHubUrls,
@@ -530,7 +600,6 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     ...collectAlliedMarketingUrls(o),
     ...collectPreNursingSeoUrls(o),
     ...lessonUrls,
-    ...osceScenarioHubUrls,
   ];
 }
 

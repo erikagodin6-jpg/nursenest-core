@@ -6,8 +6,8 @@ import { buildSitemapUrlsetFromAbsoluteUrls, normalizeOrigin } from "@/lib/seo/s
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
 /**
- * Blog-only public urlset: `/blog`, published posts, RN hub when applicable — same rows as merged sitemap used,
- * but emitted separately for segmented discovery (see `/sitemap.xml` excluding these locs).
+ * Blog-only public urlset: `/blog`, published posts, RN hub when applicable — same rows as used for dedupe against
+ * `/sitemap-core.xml` (`excludeAbsoluteUrlsMatchingBlogSitemapEntries`).
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

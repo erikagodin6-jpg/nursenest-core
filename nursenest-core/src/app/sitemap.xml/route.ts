@@ -5,8 +5,8 @@ import { normalizeOrigin } from "@/lib/seo/sitemap-static-xml";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
 /**
- * Public **sitemap index** listing child urlsets (`sitemap-core`, `sitemap-blog`, `sitemap-lessons`,
- * `sitemap-allied`, `sitemap-new-grad`). No DB — always 200 with valid XML (never 503).
+ * Public **sitemap index** listing child urlsets (`sitemap-core`, `sitemap-blog`, `sitemap-pathways`, `sitemap-lessons`,
+ * `sitemap-localized`, `sitemap-clinical-modules`, `sitemap-allied`, `sitemap-new-grad`). No DB — always 200 with valid XML (never 503).
  * Child routes enforce {@link filterPublicSitemapEntries} and DB fallbacks.
  */
 export const runtime = "nodejs";

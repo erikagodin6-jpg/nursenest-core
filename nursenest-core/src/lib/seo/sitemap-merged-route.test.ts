@@ -53,18 +53,38 @@ test("sitemap.xml route serves sitemap index (no merged urlset)", () => {
   assert.match(routeSrc, /requestMatchesEtag/, "index route must support 304 via ETag");
 });
 
-test("sitemap-core route excludes pathway lesson SEO urls from core collector", () => {
+test("sitemap-core route partitions pathway + localized + exam hubs into other segments", () => {
   const routeSrc = readAppFile("app/sitemap-core.xml/route.ts");
   assert.match(routeSrc, /omitPathwayLessonSeoUrls:\s*true/);
+  assert.match(routeSrc, /omitLocalizedMarketingUrls:\s*true/);
+  assert.match(routeSrc, /omitExamPathwayAndTopicProgrammaticUrls:\s*true/);
   assert.match(routeSrc, /collectCoreUrls/);
   assert.match(routeSrc, /excludeAbsoluteUrlsMatchingBlogSitemapEntries/);
   assert.match(routeSrc, /filterPublicSitemapEntries/);
   assert.match(routeSrc, /mergeCoreUrlsWithBlogEntries/);
 });
 
-test("sitemap-lessons route uses pathway lesson collector", () => {
+test("sitemap-lessons route emits lesson-detail URLs only", () => {
   const routeSrc = readAppFile("app/sitemap-lessons.xml/route.ts");
-  assert.match(routeSrc, /collectPathwayLessonSeoUrls/);
+  assert.match(routeSrc, /collectPathwayLessonDetailSeoUrls/);
+  assert.match(routeSrc, /filterPublicSitemapEntries/);
+});
+
+test("sitemap-pathways route owns exam hubs + pathway hubs/topics slice", () => {
+  const routeSrc = readAppFile("app/sitemap-pathways.xml/route.ts");
+  assert.match(routeSrc, /collectPathwaysSegmentUrls/);
+  assert.match(routeSrc, /filterPublicSitemapEntries/);
+});
+
+test("sitemap-localized route uses tier-full locale collector only", () => {
+  const routeSrc = readAppFile("app/sitemap-localized.xml/route.ts");
+  assert.match(routeSrc, /collectLocalizedMarketingSegmentUrls/);
+  assert.match(routeSrc, /filterPublicSitemapEntries/);
+});
+
+test("sitemap-clinical-modules route serves clinical marketing urlset only", () => {
+  const routeSrc = readAppFile("app/sitemap-clinical-modules.xml/route.ts");
+  assert.match(routeSrc, /collectClinicalModulesSitemapUrls/);
   assert.match(routeSrc, /filterPublicSitemapEntries/);
 });
 

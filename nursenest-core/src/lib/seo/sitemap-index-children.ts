@@ -8,7 +8,10 @@ import { buildSitemapIndexXml } from "@/lib/seo/sitemap-urlset-build";
 export const SITEMAP_INDEX_CHILD_FILENAMES = [
   "sitemap-core.xml",
   "sitemap-blog.xml",
+  "sitemap-pathways.xml",
   "sitemap-lessons.xml",
+  "sitemap-localized.xml",
+  "sitemap-clinical-modules.xml",
   "sitemap-allied.xml",
   "sitemap-new-grad.xml",
 ] as const;
@@ -53,9 +56,46 @@ export const SITEMAP_FALLBACK_CORE_PATHS = SITEMAP_FALLBACK_PATHS_ALL.filter((p)
   return true;
 }) as readonly string[];
 
-/** Lessons segment fallback when {@link collectPathwayLessonSeoUrls} fails — minimal pathway-lesson discovery slice. */
-export const SITEMAP_FALLBACK_LESSONS_PATHS = SITEMAP_FALLBACK_PATHS_ALL.filter((p) => {
-  if (p === "/lessons") return true;
-  if (p.endsWith("/lessons") && p !== "/lessons") return true;
-  return false;
-}) as readonly string[];
+/**
+ * Lessons segment fallback when lesson-detail collector fails — representative lesson-detail URLs only
+ * (no pathway hubs or `/lessons` index; those live under `/sitemap-pathways.xml`).
+ */
+export const SITEMAP_FALLBACK_LESSON_DETAIL_PATHS = [
+  "/us/rn/nclex-rn/lessons/fluid-balance",
+  "/canada/rn/nclex-rn/lessons/fluid-balance",
+] as const;
+
+/** @deprecated Use {@link SITEMAP_FALLBACK_LESSON_DETAIL_PATHS}. */
+export const SITEMAP_FALLBACK_LESSONS_PATHS = SITEMAP_FALLBACK_LESSON_DETAIL_PATHS;
+
+/** Pathways segment fallback: `/lessons`, exam hubs, pricing, questions, per-pathway lesson index (no lesson-detail slugs). */
+export const SITEMAP_FALLBACK_PATHWAYS_PATHS = [
+  "/lessons",
+  "/us/rn/nclex-rn",
+  "/us/rn/nclex-rn/pricing",
+  "/us/rn/nclex-rn/questions",
+  "/us/rn/nclex-rn/lessons",
+  "/us/pn/nclex-pn",
+  "/us/pn/nclex-pn/pricing",
+  "/us/pn/nclex-pn/questions",
+  "/us/pn/nclex-pn/lessons",
+  "/us/np/fnp",
+  "/us/np/fnp/pricing",
+  "/us/np/fnp/questions",
+  "/us/np/fnp/lessons",
+  "/canada/rn/nclex-rn",
+  "/canada/rn/nclex-rn/pricing",
+  "/canada/rn/nclex-rn/questions",
+  "/canada/rn/nclex-rn/lessons",
+  "/canada/pn/rex-pn",
+  "/canada/pn/rex-pn/pricing",
+  "/canada/pn/rex-pn/questions",
+  "/canada/pn/rex-pn/lessons",
+  "/canada/np/cnple",
+  "/canada/np/cnple/pricing",
+  "/canada/np/cnple/questions",
+  "/canada/np/cnple/lessons",
+] as const;
+
+/** Clinical-modules segment fallback — tool teasers only (OSCE pathway hubs require runtime flags). */
+export const SITEMAP_FALLBACK_CLINICAL_MODULES_PATHS = ["/tools/lab-values", "/tools/med-math"] as const;
