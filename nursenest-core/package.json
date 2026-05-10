@@ -31,7 +31,7 @@
     "content:repair:exam-keys": "npx tsx scripts/repair-exam-question-exam-keys.ts",
     "env:check": "node ../scripts/check-required-env.mjs",
     "prebuild": "node ../scripts/ensure-build-toolchain.mjs && npm run guard:build-scripts && npm run i18n:compile && node ../scripts/root-prebuild-i18n-validate.mjs && node scripts/write-build-git-meta.mjs",
-    "build": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && node scripts/run-lesson-indexes-for-build.mjs && next build && node ../scripts/verify-dist-artifacts.mjs",
+    "build": "node scripts/run-buildpack-build.mjs && node ../scripts/verify-dist-artifacts.mjs",
     "build:verify-turbopack-safety": "node scripts/verify-turbopack-build-safety.mjs",
     "build:server": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && BUILD_TARGET=server npx tsx ../script/build.ts && node ../scripts/verify-dist-artifacts.mjs",
     "build:client": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && BUILD_TARGET=client npx tsx ../script/build.ts && node ../scripts/verify-dist-artifacts.mjs",

@@ -124,6 +124,26 @@ html[data-theme="aurora"] [data-nn-premium-full-platform-convergence] {
   .nn-pre-nursing-marketing-hub,
   .nn-new-grad-hub,
   .nn-allied-health-hub
+) {
+  position: relative;
+  isolation: isolate;
+}
+
+:is(
+  [data-nn-premium-full-platform-convergence],
+  .nn-premium-auth-system,
+  .nn-premium-lessons-system,
+  .nn-premium-lesson-detail-shell,
+  .nn-flashcards-hub-premium,
+  .nn-exam-session-premium,
+  .nn-premium-practice-hub,
+  .nn-dash--learner-home,
+  .nn-labs-hub,
+  [data-nn-med-calc-hub],
+  [data-nn-scenario-study-shell],
+  .nn-pre-nursing-marketing-hub,
+  .nn-new-grad-hub,
+  .nn-allied-health-hub
 )::before {
   content: "";
   pointer-events: none;

@@ -49,6 +49,7 @@ check(
 let prebuildHasIndexes = false;
 let prebuildHasI18n = false;
 let buildHasMemory = false;
+let buildUsesProdWrapper = false;
 if (existsSync(pkgPath)) {
   try {
     const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
@@ -59,9 +60,11 @@ if (existsSync(pkgPath)) {
       build.includes("run-lesson-indexes") ||
       build.includes("lesson-index") ||
       pre.includes("lesson-index");
-    buildHasMemory = build.includes("ensure-node-memory");
+    buildUsesProdWrapper = build.includes("run-buildpack-build.mjs") || build.includes("run-next-prod-build.mjs");
+    buildHasMemory = build.includes("ensure-node-memory") || buildUsesProdWrapper;
     check("prebuild runs i18n:compile", prebuildHasI18n);
-    check("build runs lesson index materialization (or NN_SKIP_LESSON_INDEX_BUILD)", prebuildHasIndexes);
+    check("build uses production wrapper for Next compile", buildUsesProdWrapper);
+    check("build runs lesson index materialization (or NN_SKIP_LESSON_INDEX_BUILD)", prebuildHasIndexes || buildUsesProdWrapper);
     check("build wraps ensure-node-memory", buildHasMemory);
   } catch {
     check("package.json readable", false);

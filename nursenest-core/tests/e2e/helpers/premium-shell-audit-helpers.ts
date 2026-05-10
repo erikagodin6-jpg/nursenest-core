@@ -1,10 +1,10 @@
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { expect, type Page, type TestInfo } from "@playwright/test";
-import { THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
 
 export const PREMIUM_FULL_PLATFORM_SCREENSHOT_DIR = join("docs", "screenshots", "premium-full-platform-convergence");
 const SELECTOR_DISMISSED_LS = "nn_selector_dismissed";
+const THEME_STORAGE_KEY = "nursenest-theme";
 
 mkdirSync(PREMIUM_FULL_PLATFORM_SCREENSHOT_DIR, { recursive: true });
 

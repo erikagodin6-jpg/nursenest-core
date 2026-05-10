@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { spawnSync } from "node:child_process";
-import { existsSync, readdirSync, rmSync } from "node:fs";
+import { spawn, spawnSync } from "node:child_process";
+import { existsSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
@@ -25,6 +25,102 @@ function logPhaseMs(name, durationMs) {
       rssMb: Math.round(m.rss / (1024 * 1024)),
     })}`,
   );
+}
+
+function readProcFile(pathname) {
+  try {
+    return readFileSync(pathname, "utf8");
+  } catch {
+    return "";
+  }
+}
+
+function rssMbForPid(pid) {
+  const status = readProcFile(`/proc/${pid}/status`);
+  const match = status.match(/^VmRSS:\s+(\d+)\s+kB/m);
+  if (!match) return 0;
+  return Math.round(Number(match[1]) / 1024);
+}
+
+function childPidsForPid(pid) {
+  const raw = readProcFile(`/proc/${pid}/task/${pid}/children`).trim();
+  if (!raw) return [];
+  return raw
+    .split(/\s+/)
+    .map((value) => Number.parseInt(value, 10))
+    .filter((value) => Number.isFinite(value) && value > 0);
+}
+
+function processTreeRssMb(rootPid) {
+  const seen = new Set();
+  const stack = [rootPid];
+  let total = 0;
+  while (stack.length) {
+    const pid = stack.pop();
+    if (!pid || seen.has(pid)) continue;
+    seen.add(pid);
+    total += rssMbForPid(pid);
+    stack.push(...childPidsForPid(pid));
+  }
+  return { rssMb: total, processCount: seen.size };
+}
+
+function runNextBuildWithMemorySampling() {
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, [nextBin, "build"], {
+      cwd: packageRoot,
+      stdio: "inherit",
+      env: process.env,
+    });
+    const startedAt = Date.now();
+    let peakRssMb = 0;
+    let peakProcessCount = 0;
+    let lastLogAt = 0;
+
+    const sample = () => {
+      if (!child.pid) return;
+      const sample = processTreeRssMb(child.pid);
+      if (sample.rssMb > peakRssMb) {
+        peakRssMb = sample.rssMb;
+        peakProcessCount = sample.processCount;
+      }
+      const now = Date.now();
+      if (now - lastLogAt >= 30_000) {
+        lastLogAt = now;
+        console.error(
+          `[next-prod-build] next_build_memory_sample ${JSON.stringify({
+            elapsedMs: now - startedAt,
+            rssMb: sample.rssMb,
+            processCount: sample.processCount,
+            peakRssMb,
+            peakProcessCount,
+          })}`,
+        );
+      }
+    };
+
+    const interval = setInterval(sample, 1000);
+    sample();
+
+    child.on("error", (error) => {
+      clearInterval(interval);
+      resolve({ status: null, signal: null, error, peakRssMb, peakProcessCount });
+    });
+    child.on("exit", (status, signal) => {
+      sample();
+      clearInterval(interval);
+      console.error(
+        `[next-prod-build] next_build_memory_peak ${JSON.stringify({
+          peakRssMb,
+          peakProcessCount,
+          durationMs: Date.now() - startedAt,
+          status,
+          signal,
+        })}`,
+      );
+      resolve({ status, signal, error: null, peakRssMb, peakProcessCount });
+    });
+  });
 }
 
 function ensureBuildCacheVersionEnv() {
@@ -52,8 +148,31 @@ function removeNextOutputDir() {
     return;
   }
 
-  rmSync(nextOutDir, { recursive: true, force: true });
-  console.log("[next-prod-build] clean_dot_next=ok");
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      rmSync(nextOutDir, { recursive: true, force: true, maxRetries: 3, retryDelay: 250 });
+      console.log(`[next-prod-build] clean_dot_next=ok attempt=${attempt}`);
+      return;
+    } catch (e) {
+      if (attempt === 3) {
+        console.error(
+          `[next-prod-build] FATAL: clean_dot_next failed after retries ${JSON.stringify({
+            code: e?.code ?? null,
+            path: e?.path ?? nextOutDir,
+            message: e?.message ?? String(e),
+          })}`,
+        );
+        process.exit(1);
+      }
+      console.warn(
+        `[next-prod-build] clean_dot_next_retry ${JSON.stringify({
+          attempt,
+          code: e?.code ?? null,
+          path: e?.path ?? nextOutDir,
+        })}`,
+      );
+    }
+  }
 }
 
 function enforceMarketingSkipDbForCompile() {
@@ -219,11 +338,7 @@ console.log(`[next-prod-build] next_cli_invocation_start pid=${process.pid}`);
 const tNext = Date.now();
 let r;
 try {
-  r = spawnSync(process.execPath, [nextBin, "build"], {
-    cwd: packageRoot,
-    stdio: "inherit",
-    env: process.env,
-  });
+  r = await runNextBuildWithMemorySampling();
 } finally {
   if (buildLockHeld) {
     releaseExclusiveNextBuildLock(packageRoot);

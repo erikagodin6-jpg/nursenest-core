@@ -35,7 +35,12 @@ function buildCompileChildEnv() {
   const tmpdirRaw = process.env.TMPDIR;
   const tmpdir = tmpdirRaw != null && String(tmpdirRaw).trim() !== "" ? String(tmpdirRaw).trim() : "/tmp";
   const heapRaw = process.env.BUILD_NODE_MAX_OLD_SPACE_SIZE_MB;
-  const heapMb = heapRaw != null && String(heapRaw).trim() !== "" ? String(heapRaw).trim() : "4096";
+  const heapMb = heapRaw != null && String(heapRaw).trim() !== "" ? String(heapRaw).trim() : "";
+  const rawNodeOptions = String(process.env.NODE_OPTIONS ?? "").trim();
+  const withoutHeap = rawNodeOptions.replace(/--max-old-space-size=\d+/, "").replace(/\s+/g, " ").trim();
+  const inheritedHeap = rawNodeOptions.match(/--max-old-space-size=\d+/)?.[0];
+  const heapFlag = heapMb ? `--max-old-space-size=${heapMb}` : (inheritedHeap ?? "--max-old-space-size=4096");
+  const nodeOptions = [withoutHeap, heapFlag].filter(Boolean).join(" ").trim();
   return {
     ...process.env,
     TMPDIR: tmpdir,
@@ -44,7 +49,8 @@ function buildCompileChildEnv() {
     RUN_HEAVY_BUILD_TASKS: "false",
     SKIP_I18N_PREBUILD: "1",
     SENTRY_ENABLED: "false",
-    NODE_OPTIONS: `--max-old-space-size=${heapMb}`,
+    BUILD_LOG_MEMORY_USAGE: process.env.BUILD_LOG_MEMORY_USAGE ?? "1",
+    NODE_OPTIONS: nodeOptions,
   };
 }
 

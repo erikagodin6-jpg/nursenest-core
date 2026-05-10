@@ -149,8 +149,9 @@ export function AlliedHealthPathwayHub({
 
   return (
     <div
-      className={`nn-premium-pathway-hub space-y-10 sm:space-y-12 lg:space-y-14${occupationPickerOnly ? " nn-marketing-surface" : ""}`}
+      className={`nn-premium-pathway-hub nn-allied-health-hub space-y-10 sm:space-y-12 lg:space-y-14${occupationPickerOnly ? " nn-marketing-surface" : ""}`}
       data-nn-allied-pathway-hub="1"
+      data-nn-allied-newgrad-convergence="allied"
       data-nn-nursing-tier-hub="surface"
       {...alliedToneAttr}
     >
@@ -235,7 +236,7 @@ export function AlliedHealthPathwayHub({
               tone: "success",
             },
             {
-              title: "Practice questions",
+              title: "Practice Questions",
               hint: "Vignettes filtered to allied authorization.",
               href: questionsHref,
               tone: "info",
@@ -270,12 +271,12 @@ export function AlliedHealthPathwayHub({
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 id="allied-pathway-live-heading" className="nn-marketing-h2 text-balance">
-              {isGlobalAlliedHub ? "Live pathway snapshot" : `${countryLine} · live inventory`}
+              {isGlobalAlliedHub ? "Live Pathway Snapshot" : `${countryLine} · Live Inventory`}
             </h2>
             <div className="flex flex-wrap justify-end gap-2">
               {overview.lessonCount > 0 ? (
                 <span className="nn-badge-semantic-success whitespace-nowrap px-2.5 py-1 text-[11px]">
-                  {overview.lessonCount} lessons
+                  {overview.lessonCount} Lessons
                 </span>
               ) : null}
               {questionCountLine ? (
@@ -285,7 +286,7 @@ export function AlliedHealthPathwayHub({
                 <span className="nn-badge-semantic-warning whitespace-nowrap px-2.5 py-1 text-[11px]">{flashcardDeckLine}</span>
               ) : null}
               {overview.practiceExamReady ? (
-                <span className="nn-badge-semantic-success whitespace-nowrap px-2.5 py-1 text-[11px]">Practice exam ready</span>
+                <span className="nn-badge-semantic-success whitespace-nowrap px-2.5 py-1 text-[11px]">Practice Exam Ready</span>
               ) : null}
             </div>
           </div>
@@ -460,7 +461,7 @@ export function AlliedHealthPathwayHub({
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 id="allied-tracks-heading" className="nn-marketing-h2">
-                Choose your Allied Health track
+                Choose Your Allied Health Track
               </h2>
               <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
                 Every track opens the same pathway-scoped lessons and question bank, with optional profession filters so study
@@ -513,7 +514,7 @@ export function AlliedHealthPathwayHub({
                         className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
                         data-nn-allied-occupation-card-primary="1"
                       >
-                        Open study hub
+                        Open Study Hub
                       </Link>
                       <span className="text-[var(--semantic-text-secondary)]">·</span>
                       <Link
@@ -535,7 +536,7 @@ export function AlliedHealthPathwayHub({
       {showFullStudySurface ? (
       <section aria-labelledby="allied-study-modes-heading">
         <h2 id="allied-study-modes-heading" className="nn-marketing-h2">
-          Study modes
+          Study Modes
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
           Move from concepts to recall to exam-style judgment — the same progression we use across NurseNest hubs, scoped to
@@ -556,7 +557,7 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={lessonsHref}
               className="nn-exam-hub-study-card--lessons nn-qa-allied-hub-lessons"
-              title="Lessons by category"
+              title="Lessons by Category"
               description="Pathway-scoped modules aligned to discipline clusters — same card layout as the lessons hub."
               cta="Open Lessons"
             />
@@ -567,7 +568,7 @@ export function AlliedHealthPathwayHub({
               variant="featured"
               href={questionsHref}
               className="nn-exam-hub-study-card--questions nn-qa-allied-hub-questions"
-              title="Practice questions"
+              title="Practice Questions"
               description="Vignettes and rationales filtered to your allied authorization lane — no RN-only depth mixed in."
               cta="Practice Questions Hub"
             />
@@ -647,7 +648,7 @@ export function AlliedHealthPathwayHub({
       {showFullStudySurface ? (
       <section aria-labelledby="allied-lesson-cats-heading">
         <h2 id="allied-lesson-cats-heading" className="nn-marketing-h2">
-          Lessons by category
+          Lessons by Category
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
           Categories follow the allied discipline map — tap through to the paginated lessons hub with search-friendly topic

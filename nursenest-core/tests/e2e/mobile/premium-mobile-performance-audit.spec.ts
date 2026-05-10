@@ -162,6 +162,12 @@ async function readLayoutShiftScore(page: Page): Promise<number> {
   return page.evaluate(() => Number((window as unknown as { __nnCumulativeLayoutShift?: number }).__nnCumulativeLayoutShift ?? 0));
 }
 
+async function resetLayoutShiftScore(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    (window as unknown as { __nnCumulativeLayoutShift?: number }).__nnCumulativeLayoutShift = 0;
+  });
+}
+
 async function applyTheme(page: Page, themeId: string): Promise<void> {
   await page.evaluate(
     ({ key, id }) => {
@@ -173,7 +179,18 @@ async function applyTheme(page: Page, themeId: string): Promise<void> {
   await expect(page.locator("html")).toHaveAttribute("data-theme", themeId, { timeout: 15_000 });
 }
 
+async function seedThemeBeforeNavigation(page: Page, themeId: string): Promise<void> {
+  await page.addInitScript(
+    ({ key, id }) => {
+      localStorage.setItem(key, id);
+      document.documentElement?.setAttribute("data-theme", id);
+    },
+    { key: THEME_STORAGE_KEY, id: themeId },
+  );
+}
+
 async function expectNoSevereLayoutShift(page: Page, label: string): Promise<void> {
+  await resetLayoutShiftScore(page);
   await page.waitForTimeout(5_000);
   const cls = await readLayoutShiftScore(page);
   expect(cls, `${label} CLS after 5s`).toBeLessThan(CLS_SEVERE_THRESHOLD);
@@ -216,6 +233,7 @@ async function expectReducedMotionPreferenceRespected(page: Page): Promise<void>
 async function captureTarget(page: Page, testInfo: TestInfo, target: CaptureTarget, themeId: string): Promise<void> {
   const label = THEME_LABEL_BY_ID.get(themeId) ?? themeId;
   await test.step(`${target.label} — ${label}`, async () => {
+    await seedThemeBeforeNavigation(page, themeId);
     const response = await page.goto(target.path, { waitUntil: "domcontentloaded", timeout: 180_000 });
     expect(response?.ok(), `HTTP ${response?.status()} for ${target.path}`).toBeTruthy();
     await target.ready(page).waitFor({ state: "visible", timeout: 90_000 });

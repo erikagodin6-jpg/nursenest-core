@@ -13,6 +13,10 @@ function readAppFile(relativePath: string): string {
   return readFileSync(join(appRoot, relativePath), "utf8");
 }
 
+function readPackageFile(relativePath: string): string {
+  return readFileSync(join(packageRoot, relativePath), "utf8");
+}
+
 test("default blog and lessons routes opt out of build-time static work", () => {
   /** Blog index uses ISR (`revalidate`); layout is a passthrough wrapper. */
   const blogIndexPage = readAppFile("app/(marketing)/(default)/blog/page.tsx");
@@ -80,6 +84,21 @@ test("next config pins low-memory compile settings (next.config.mjs)", async () 
   assert.equal(out.cache, false, "webpack persistent cache disabled for production builds");
 });
 
+test("npm build uses the production wrapper and emits Next compile memory diagnostics", () => {
+  const pkg = JSON.parse(readPackageFile("package.json")) as { scripts?: Record<string, string> };
+  const buildScript = pkg.scripts?.build ?? "";
+  const buildpackWrapper = readPackageFile("scripts/run-buildpack-build.mjs");
+  const nextProdWrapper = readPackageFile("scripts/run-next-prod-build.mjs");
+
+  assert.match(buildScript, /scripts\/run-buildpack-build\.mjs/);
+  assert.doesNotMatch(buildScript, /\bnext build\b/);
+  assert.match(buildpackWrapper, /BUILD_LOG_MEMORY_USAGE/);
+  assert.match(buildpackWrapper, /NODE_OPTIONS/);
+  assert.match(nextProdWrapper, /next_build_memory_sample/);
+  assert.match(nextProdWrapper, /next_build_memory_peak/);
+  assert.match(nextProdWrapper, /peakRssMb/);
+});
+
 test("pre-nursing i18n provider avoids top-level JSON imports", () => {
   const source = readAppFile("content/pre-nursing/pre-nursing-i18n.tsx");
 
@@ -131,7 +150,8 @@ test("homepage blog helpers lazy-load the static blog corpus and query layer", (
   const latestLinks = readAppFile("components/marketing/marketing-blog-latest-links.tsx");
 
   assert.doesNotMatch(staticBlogPosts, /import\s+\{\s*STATIC_BLOG_POSTS/);
-  assert.match(staticBlogPosts, /require\(["']@\/content\/blog-static-posts["']\)/);
+  assert.match(staticBlogPosts, /createRequire\(import\.meta\.url\)/);
+  assert.match(staticBlogPosts, /require\(["'][^"']*content\/blog-static-posts["']\)/);
 
   assert.doesNotMatch(homeBlogTeaser, /import\s+\{\s*getPublishedBlogPostsPage/);
   assert.match(homeBlogTeaser, /await import\(["']@\/lib\/blog\/safe-blog-queries["']\)/);

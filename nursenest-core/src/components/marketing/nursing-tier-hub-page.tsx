@@ -205,10 +205,11 @@ export function NursingTierHubPage({
       <FunnelExamHubViewBeacon pathway={pathway} hubPath={hubPath} />
 
       <div
-        className={`nn-premium-pathway-hub${isNewGradHub ? " nn-premium-pathway-hub--new-grad" : ""}${pnHub ? " nn-premium-pathway-hub--pn-rpn" : ""}${
+        className={`nn-premium-pathway-hub${isNewGradHub ? " nn-premium-pathway-hub--new-grad nn-new-grad-hub" : ""}${pnHub ? " nn-premium-pathway-hub--pn-rpn" : ""}${
           npPremiumConvergence ? " nn-premium-pathway-hub--np-convergence" : ""
         }`}
         data-nn-nursing-tier-hub="surface"
+        data-nn-new-grad-convergence={isNewGradHub ? "1" : undefined}
         data-pathway-track={pathway.roleTrack}
       >
         <section className="nn-hub-tier-study-band" aria-labelledby="nn-nursing-tier-hub-title">
