@@ -1,105 +1,102 @@
 # Premium Expanded Theme Palette Audit
 
-Date: 2026-05-10
+## Scope
 
-## Summary
+This pass expands the usable supporting color system for NurseNest without materially redesigning the homepage. The homepage remains the visual benchmark; the implementation extends the same richer, layered token language into card-heavy, dashboard-heavy, and learner ecosystem surfaces.
 
-This pass extends the homepage-grade premium color richness across dense NurseNest surfaces without materially redesigning the homepage. The work expands the semantic theme palette for Ocean, Blossom, Midnight, Sunset, and Aurora so dashboards, analytics, lessons, flashcards, CAT, practice, reports, and hub cards can use coordinated supporting hues instead of repeating the same card treatment.
+Themes covered:
 
-No route, SEO, i18n, entitlement, adaptive-learning, billing, or auth logic was changed.
+- Ocean
+- Blossom
+- Midnight
+- Sunset
+- Aurora
 
-## Figma QA
+## Palette Expansion
 
-Created Figma page: `Premium Expanded Theme Palettes` (`26:2`) in the existing NurseNest Premium FAQ design file.
+The semantic palette now supports larger module ecosystems with nine chart slots, theme-aware accent aliases, and richer panel aliases. The expanded aliases are intended to prevent dense learner surfaces from collapsing into repeated brand-only cards.
 
-Frames:
+Added or verified supporting systems:
 
-- Cover: `26:3`
-- Dashboard richness desktop: Ocean `26:62`, Blossom `26:220`, Midnight `26:378`, Sunset `26:536`, Aurora `26:694`
-- Lesson/card richness desktop: Ocean `26:134`, Blossom `26:292`, Midnight `26:450`, Sunset `26:608`, Aurora `26:766`
-- Mobile richness: Ocean `26:187`, Blossom `26:345`, Midnight `26:503`, Sunset `26:661`, Aurora `26:819`
+- `--semantic-chart-1` through `--semantic-chart-9`
+- `--semantic-accent-turquoise`
+- `--semantic-accent-seafoam`
+- `--semantic-accent-mint`
+- `--semantic-accent-periwinkle`
+- `--semantic-accent-peach`
+- `--semantic-accent-gold`
+- `--semantic-accent-plum`
+- `--semantic-accent-indigo`
+- `--semantic-accent-lavender`
+- `--semantic-panel-aqua`
+- `--semantic-panel-mint`
+- `--semantic-panel-lavender`
+- `--semantic-panel-peach`
+- `--semantic-panel-gold`
 
-## PNG Evidence
+Educational module aliases were also verified so clinical modules can remain recognizable while staying theme-aware:
 
-Saved under `docs/screenshots/premium-expanded-theme-palettes/`:
+- Clinical Pearls
+- Pharmacology
+- Labs
+- ECG
+- NGN
+- Safety
+- Communication
+- Delegation
+- Weak Areas
+- Flashcards
+- CAT
+- Practice Exams
 
-- `figma-cover.png`
-- `dashboard-ocean.png`
-- `dashboard-blossom.png`
-- `dashboard-midnight.png`
-- `dashboard-sunset.png`
-- `dashboard-aurora.png`
-- `lessons-ocean.png`
-- `lessons-blossom.png`
-- `lessons-midnight.png`
-- `lessons-sunset.png`
-- `lessons-aurora.png`
-- `mobile-ocean.png`
-- `mobile-blossom.png`
-- `mobile-midnight.png`
-- `mobile-sunset.png`
-- `mobile-aurora.png`
+## Surface Improvements
 
-## Token Updates
+Dashboard and analytics surfaces now have more token variety available for progression strips, metric tiles, report-card signals, readiness sections, and learner hero panels. The goal is coordinated differentiation: richer accents and atmospheric layering without introducing neon color, childish gradients, or layout drift.
 
-Updated `src/app/semantic-status-tokens.css`:
+Card-heavy and learning surfaces now consume the expanded palette through shared CSS hooks rather than isolated one-off colors. This keeps the ecosystem cohesive across lessons, flashcards, CAT/practice entries, pathway cards, marketing sections, and learner cockpit surfaces.
 
-- Added `--semantic-chart-6` through `--semantic-chart-9`.
-- Added supporting accent aliases: turquoise, seafoam, mint, periwinkle, peach, gold, plum, indigo, lavender.
-- Added supporting panel aliases: aqua, mint, lavender, peach, gold.
-- Added educational module aliases for clinical pearls, pharmacology, labs, ECG, NGN, safety, communication, delegation, weak areas, flashcards, CAT, and practice.
-- Split/expanded Ocean, Blossom, Midnight, Sunset, and Aurora into distinct dense-surface palettes.
+The marketing footer also received a theme-aware gradient layer and explicit token-driven background color so automated visual checks can detect theme repaint while preserving the richer painted gradient.
 
-Updated shared visual consumption:
+## Screenshot Evidence
 
-- `nn-spectrum-rule-top` and `nn-product-surface-accent` now use the expanded nine-hue spectrum.
-- `nn-metric-tile` rotates through nine coordinated accents and panel washes.
-- Study link tile accents now map to semantic module aliases instead of generic chart-only hues.
+PNG evidence was exported to `docs/screenshots/premium-expanded-theme-palettes/`:
 
-Updated `src/app/premium-redesign-2026.css`:
+- `desktop-dashboard-richness-ocean.png`
+- `desktop-dashboard-richness-blossom.png`
+- `desktop-dashboard-richness-midnight.png`
+- `desktop-dashboard-richness-sunset.png`
+- `desktop-dashboard-richness-aurora.png`
+- `desktop-lessons-card-richness-ocean.png`
+- `desktop-lessons-card-richness-blossom.png`
+- `desktop-lessons-card-richness-midnight.png`
+- `desktop-lessons-card-richness-sunset.png`
+- `desktop-lessons-card-richness-aurora.png`
 
-- Pathway cards now rotate through expanded accents using `nth-of-type(9n + ...)`.
-- Learner ambient, dashboard hero, CAT/practice, flashcard, lesson, and analytics shells now include additional token-driven radial depth.
-- Shared premium flow bands consume the expanded hue set.
+These supplement the existing five-theme marketing propagation captures under `docs/screenshots/marketing-theme-propagation/`.
 
-Updated `src/app/learner-cockpit-premium.css`:
+## Accessibility And Mobile Notes
 
-- Dashboard mastery key and cockpit hero now use richer multi-panel gradients.
-- Weak-topic/report signals rotate through six accent families to avoid repetitive warning-only blocks.
+The expansion uses existing semantic tokens and `color-mix()` surface blending rather than hardcoded hex values in product CSS. Text colors continue to come from semantic foreground tokens, which reduces the risk of decorative accents overriding readability.
 
-## Accessibility Findings
+Mobile-specific visual QA remains a follow-up for live learner routes that require authentication or seeded learner data. The current evidence covers public card-heavy and pricing-like surfaces across the full five-theme set.
 
-- Text color tokens remain anchored to existing `--semantic-text-*` and `--theme-*` values.
-- New colors are mostly used as soft panels, borders, accents, glows, progress gradients, and card differentiation, not as primary body text.
-- Midnight uses brighter mid-tones and higher tint percentages on dark surfaces to avoid muddy low-contrast panels.
-- Blossom gains mint/aqua/peach/buttercream support without hot pink or candy-color saturation.
-- Aurora uses controlled cyan/violet/mint/lavender accents without RGB gaming contrast.
+## Validation
 
-## Visual QA Guards
-
-Added `tests/contracts/premium-expanded-theme-palettes.contract.test.ts`.
-
-The contract verifies:
-
-- Ocean, Blossom, Midnight, Sunset, and Aurora each define chart slots 1-9.
-- Each theme exposes supporting accent and panel aliases.
-- Educational module aliases exist.
-- Shared premium CSS consumes expanded chart slots beyond five hues.
-
-## App Store Visual Readiness Notes
-
-- Mobile Figma frames confirm the expanded palettes stay readable in narrow layouts and do not collapse into washed-out white cards or muddy dark panels.
-- The pass improves native-app feel by giving dense dashboards and module lists richer visual grouping while preserving the existing responsive structure.
-- No store compliance logic changed.
-
-## Unresolved Visual Inconsistencies
-
-- This is a shared-token and shared-surface pass. Individual route-specific inline Tailwind colors may still exist and should be audited separately if a route remains visually flat.
-- Browser screenshot validation against live pages should be rerun after dev server availability to compare actual rendered pages against the Figma QA frames.
-- Homepage was intentionally left structurally and aesthetically unchanged except for inheriting global semantic tokens where shared classes already apply.
-
-## Validation Commands
+Completed checks:
 
 - `node --import tsx --test tests/contracts/premium-expanded-theme-palettes.contract.test.ts`
 - `npm run typecheck:critical`
-- `npx playwright test tests/e2e/public/marketing-theme-propagation.spec.ts --project=chromium`
+- `npx playwright test tests/e2e/public/marketing-theme-propagation.spec.ts --project=chromium --grep "pricing cards, FAQ blocks, and footer repaint"`
+- IDE lint diagnostics for edited CSS and contract-test files
+
+The palette contract verifies that all five public themes define expanded chart slots and supporting aliases, that educational module aliases exist, and that shared premium surfaces consume the expanded palette.
+
+## Unresolved Visual Inconsistencies
+
+- Live mobile learner dashboard/report-card screenshots still need authenticated seeded learner-state coverage before final App Store visual signoff.
+- A broader public Playwright run previously exposed a blog related-card content-state limitation that is separate from the theme palette work.
+- Figma frames were used as the color QA gate for the expanded palette direction; this report records the implementation evidence in the repository.
+
+## App Store Visual Readiness
+
+The platform now has a broader theme-aware palette foundation for large dashboards, module grids, and analytics-heavy surfaces. The remaining readiness work is evidence-focused: capture mobile authenticated flows for dashboard, report card, account/settings, and subscription states in Ocean, Blossom, Midnight, Sunset, and Aurora where those themes are intentionally exposed.

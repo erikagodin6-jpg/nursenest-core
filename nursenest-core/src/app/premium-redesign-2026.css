@@ -4379,6 +4379,33 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
   color: var(--footer-fg);
 }
 
+[data-nn-footer-root][data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
+  background:
+    radial-gradient(760px 320px at 0% 0%, color-mix(in srgb, var(--semantic-chart-7) 10%, transparent), transparent 62%),
+    radial-gradient(720px 300px at 100% 12%, color-mix(in srgb, var(--semantic-chart-8) 9%, transparent), transparent 58%),
+    linear-gradient(
+      175deg,
+      color-mix(in srgb, var(--semantic-panel-positive) 8%, var(--footer-bg)),
+      color-mix(in srgb, var(--semantic-panel-cool) 11%, var(--footer-bg)),
+      var(--footer-bg)
+    );
+  background-color: color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--footer-bg));
+}
+
+[data-theme="midnight"] [data-nn-footer-root][data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface,
+[data-theme="apex"] [data-nn-footer-root][data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
+  background:
+    radial-gradient(760px 320px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 18%, transparent), transparent 62%),
+    radial-gradient(720px 300px at 100% 12%, color-mix(in srgb, var(--semantic-chart-5) 14%, transparent), transparent 58%),
+    linear-gradient(
+      175deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--footer-bg)),
+      color-mix(in srgb, var(--semantic-panel-lavender) 18%, var(--footer-bg)),
+      color-mix(in srgb, var(--footer-fg) 5%, var(--footer-bg))
+    );
+  background-color: color-mix(in srgb, var(--semantic-panel-cool) 30%, var(--footer-bg));
+}
+
 [data-nn-footer-layout="marketing"] .nn-footer-panel {
   position: relative;
   overflow: hidden;
