@@ -5,6 +5,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import {
@@ -25,6 +26,22 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const realIndexDir = path.join(coreRoot, "src", "content", "pathway-lessons", "generated-indexes");
+const manifestPath = path.join(realIndexDir, "manifest.json");
+type LessonVerifyMode = "deep" | "light" | "changed-only";
+
+type LessonIndexManifest = {
+  schemaVersion: 1;
+  generatedAt: string;
+  entries: Array<{
+    pathwayId: string;
+    fileName: string;
+    sourceFingerprint?: string;
+    fileHash: string;
+    lessonCount: number;
+    generatedAt: string;
+    verifiedAt?: string;
+  }>;
+};
 
 /** Same semantics as `scripts/run-lesson-indexes-for-build.mjs` (build + verify gates). */
 function isNNSkipLessonIndexBuild(): boolean {
@@ -33,7 +50,80 @@ function isNNSkipLessonIndexBuild(): boolean {
 
 function listGeneratedJsonFiles(): string[] {
   if (!fs.existsSync(realIndexDir)) return [];
-  return fs.readdirSync(realIndexDir).filter((f) => f.endsWith(".json") && f !== "package.json");
+  return fs.readdirSync(realIndexDir).filter((f) => f.endsWith(".json") && f !== "package.json" && f !== "manifest.json");
+}
+
+function isTruthyEnv(value: string | undefined): boolean {
+  return /^(1|true|yes)$/i.test(String(value ?? "").trim());
+}
+
+export function getLessonVerifyMode(env: NodeJS.ProcessEnv = process.env): LessonVerifyMode {
+  if (isTruthyEnv(env.NN_DEEP_LESSON_VERIFY)) return "deep";
+  if (isTruthyEnv(env.NN_VERIFY_CHANGED_PATHWAYS_ONLY)) return "changed-only";
+  if (isTruthyEnv(env.NN_SKIP_HEAVY_LESSON_VERIFY)) return "light";
+  return "deep";
+}
+
+function changedPathwaysFromEnv(env: NodeJS.ProcessEnv = process.env): Set<string> {
+  return new Set(
+    String(env.NN_CHANGED_LESSON_PATHWAYS ?? "")
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean),
+  );
+}
+
+export function shouldDeepVerifyPathway(
+  pathwayId: string,
+  mode: LessonVerifyMode,
+  changedPathways: Set<string>,
+): boolean {
+  if (mode === "deep") return true;
+  if (mode === "light") return false;
+  if (changedPathways.size === 0) return true;
+  return changedPathways.has(pathwayId);
+}
+
+function sha256File(filePath: string): string {
+  return createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
+}
+
+function readManifest(): LessonIndexManifest | null {
+  if (!fs.existsSync(manifestPath)) return null;
+  try {
+    const parsed = JSON.parse(fs.readFileSync(manifestPath, "utf8")) as LessonIndexManifest;
+    if (parsed?.schemaVersion !== 1 || !Array.isArray(parsed.entries)) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function writeManifest(manifest: LessonIndexManifest): void {
+  fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+}
+
+function verifyManifestEntry(
+  manifest: LessonIndexManifest | null,
+  pathwayId: string,
+  fileName: string,
+  parsed: NonNullable<ReturnType<typeof parsePathwayLessonGeneratedIndexV1>>,
+): void {
+  if (!manifest) return;
+  const entry = manifest.entries.find((row) => row.pathwayId === pathwayId && row.fileName === fileName);
+  if (!entry) {
+    throw new Error(`[verify:lesson-indexes] manifest missing entry pathway=${pathwayId} file=${fileName}`);
+  }
+  const currentHash = sha256File(path.join(realIndexDir, fileName));
+  if (entry.fileHash !== currentHash) {
+    throw new Error(`[verify:lesson-indexes] manifest hash mismatch pathway=${pathwayId} file=${fileName}`);
+  }
+  if (entry.lessonCount !== parsed.summaries.length) {
+    throw new Error(
+      `[verify:lesson-indexes] manifest lesson count mismatch pathway=${pathwayId} manifest=${entry.lessonCount} file=${parsed.summaries.length}`,
+    );
+  }
+  entry.verifiedAt = new Date().toISOString();
 }
 
 /**
@@ -112,6 +202,9 @@ async function main(): Promise<void> {
     return;
   }
 
+  const verifyMode = getLessonVerifyMode();
+  const changedPathways = changedPathwaysFromEnv();
+  const manifest = readManifest();
   const files = listGeneratedJsonFiles();
   if (files.length === 0) {
     throw new Error(
@@ -143,6 +236,8 @@ async function main(): Promise<void> {
   const catalogIds = new Set(listCatalogPathwayIdsWithLessonsSync());
   const verifyStarted = performance.now();
   let totalLessonRowsVerified = 0;
+  let deepVerifiedPathways = 0;
+  let manifestVerifiedPathways = 0;
 
   for (const file of files) {
     const pathwayId = file.replace(/\.json$/i, "");
@@ -154,6 +249,8 @@ async function main(): Promise<void> {
     if (!parsed) {
       throw new Error(`[verify:lesson-indexes] invalid JSON schema: ${file}`);
     }
+    verifyManifestEntry(manifest, pathwayId, file, parsed);
+    manifestVerifiedPathways += manifest ? 1 : 0;
 
     const rawLen = getCatalogLessonsRaw(pathwayId).length;
     if (parsed.mergedRawLessonCount !== rawLen) {
@@ -162,30 +259,33 @@ async function main(): Promise<void> {
       );
     }
 
-    const { summaries: liveSummaries, marketingEffectiveSlugs: liveEff } = liveLessonIndexParityWithoutDisk(
-      pathwayId,
-    );
-    if (liveSummaries.length !== parsed.summaries.length) {
-      throw new Error(
-        `[verify:lesson-indexes] summary count mismatch pathway=${pathwayId} live=${liveSummaries.length} file=${parsed.summaries.length}`,
-      );
-    }
-    const liveSlugs = [...liveSummaries.map((r) => r.slug)].sort();
     const fileSlugs = [...parsed.summaries.map((r) => r.slug)].sort();
-    if (liveSlugs.join("\0") !== fileSlugs.join("\0")) {
-      throw new Error(`[verify:lesson-indexes] slug set mismatch pathway=${pathwayId}`);
-    }
-
-    const fileEff = new Set(parsed.marketingEffectiveSlugsLowercase.map((s) => s.toLowerCase()));
-    if (liveEff.size !== fileEff.size) {
-      throw new Error(
-        `[verify:lesson-indexes] marketing effective slug count mismatch pathway=${pathwayId} live=${liveEff.size} file=${fileEff.size}`,
+    if (shouldDeepVerifyPathway(pathwayId, verifyMode, changedPathways)) {
+      const { summaries: liveSummaries, marketingEffectiveSlugs: liveEff } = liveLessonIndexParityWithoutDisk(
+        pathwayId,
       );
-    }
-    for (const s of liveEff) {
-      if (!fileEff.has(s)) {
-        throw new Error(`[verify:lesson-indexes] marketing slug missing in file pathway=${pathwayId} slug=${s}`);
+      if (liveSummaries.length !== parsed.summaries.length) {
+        throw new Error(
+          `[verify:lesson-indexes] summary count mismatch pathway=${pathwayId} live=${liveSummaries.length} file=${parsed.summaries.length}`,
+        );
       }
+      const liveSlugs = [...liveSummaries.map((r) => r.slug)].sort();
+      if (liveSlugs.join("\0") !== fileSlugs.join("\0")) {
+        throw new Error(`[verify:lesson-indexes] slug set mismatch pathway=${pathwayId}`);
+      }
+
+      const fileEff = new Set(parsed.marketingEffectiveSlugsLowercase.map((s) => s.toLowerCase()));
+      if (liveEff.size !== fileEff.size) {
+        throw new Error(
+          `[verify:lesson-indexes] marketing effective slug count mismatch pathway=${pathwayId} live=${liveEff.size} file=${fileEff.size}`,
+        );
+      }
+      for (const s of liveEff) {
+        if (!fileEff.has(s)) {
+          throw new Error(`[verify:lesson-indexes] marketing slug missing in file pathway=${pathwayId} slug=${s}`);
+        }
+      }
+      deepVerifiedPathways += 1;
     }
 
     assertDetailHrefs(pathwayId, fileSlugs);
@@ -241,6 +341,9 @@ async function main(): Promise<void> {
         .join(", ")}`,
     );
   }
+  if (manifest) {
+    writeManifest(manifest);
+  }
 
   const memo = getLessonCatalogMemoizationStats();
   warnHighLessonCatalogMemoMissRates(memo);
@@ -248,6 +351,9 @@ async function main(): Promise<void> {
     totalMs: Math.round(performance.now() - verifyStarted),
     fileCount: files.length,
     totalLessonRowsVerified,
+    verifyMode,
+    deepVerifiedPathways,
+    manifestVerifiedPathways,
     summaryHits: memo.summaryIndexHits,
     summaryMisses: memo.summaryIndexMisses,
     pathwayNormHits: memo.pathwayNormalizeHits,
@@ -260,6 +366,9 @@ async function main(): Promise<void> {
       {
         fileCount: files.length,
         totalLessonRowsVerified,
+        verifyMode,
+        deepVerifiedPathways,
+        manifestVerifiedPathways,
         verifyMs: Math.round(performance.now() - verifyStarted),
         heapUsedMb: heapMb,
       },
@@ -269,7 +378,13 @@ async function main(): Promise<void> {
   );
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exitCode = 1;
-});
+const isMain =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
+
+if (isMain) {
+  main().catch((e) => {
+    console.error(e);
+    process.exitCode = 1;
+  });
+}

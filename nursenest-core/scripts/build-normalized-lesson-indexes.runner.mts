@@ -5,6 +5,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lessons-hubs";
 import { LESSON_CATEGORIES } from "@/lib/lessons/lesson-taxonomy";
@@ -28,9 +29,19 @@ import {
 } from "./lesson-normalization-coverage.mts";
 
 const SCHEMA_V1 = 1;
+const MANIFEST_SCHEMA_V1 = 1;
 
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = path.join(coreRoot, "src", "content", "pathway-lessons", "generated-indexes");
+const manifestPath = path.join(outDir, "manifest.json");
+
+function sha256File(filePath: string): string {
+  return createHash("sha256").update(fs.readFileSync(filePath)).digest("hex");
+}
+
+function sha256Json(value: unknown): string {
+  return createHash("sha256").update(JSON.stringify(value), "utf8").digest("hex");
+}
 
 function sortPathwayIdsAlliedFirst(ids: readonly string[]): string[] {
   const set = new Set(ids);
@@ -107,6 +118,14 @@ async function main(): Promise<void> {
   const generatedAt = new Date().toISOString();
   const buildStarted = performance.now();
   let totalIndexedLessons = 0;
+  const manifestEntries: Array<{
+    pathwayId: string;
+    fileName: string;
+    sourceFingerprint: string;
+    fileHash: string;
+    lessonCount: number;
+    generatedAt: string;
+  }> = [];
 
   for (const pathwayId of ids) {
     const safe = pathwayId.trim();
@@ -144,13 +163,44 @@ async function main(): Promise<void> {
     };
 
     // Compact JSON: smaller on-disk + faster parse in `next build` (schema unchanged).
-    fs.writeFileSync(path.join(outDir, `${safe}.json`), `${JSON.stringify(payload)}\n`, "utf8");
+    const fileName = `${safe}.json`;
+    const filePath = path.join(outDir, fileName);
+    fs.writeFileSync(filePath, `${JSON.stringify(payload)}\n`, "utf8");
+    manifestEntries.push({
+      pathwayId: safe,
+      fileName,
+      sourceFingerprint: sha256Json({
+        pathwayId: safe,
+        mergedRawLessonCount: rawCount,
+        effectiveLessonCount: summaries.length,
+        slugs: summaries.map((row) => row.slug).sort((a, b) => a.localeCompare(b)),
+        marketingEffectiveSlugsLowercase,
+        categoryCounts,
+      }),
+      fileHash: sha256File(filePath),
+      lessonCount: summaries.length,
+      generatedAt,
+    });
     const pathwayMs = Math.round(performance.now() - pathwayStarted);
     totalIndexedLessons += summaries.length;
     console.info(
       `[build:lesson-indexes] wrote ${path.join(outDir, `${safe}.json`)} lessons=${summaries.length} raw=${rawCount} pathwayMs=${pathwayMs}`,
     );
   }
+  fs.writeFileSync(
+    manifestPath,
+    `${JSON.stringify(
+      {
+        schemaVersion: MANIFEST_SCHEMA_V1,
+        generatedAt,
+        entries: manifestEntries.sort((a, b) => a.pathwayId.localeCompare(b.pathwayId)),
+      },
+      null,
+      2,
+    )}\n`,
+    "utf8",
+  );
+  console.info(`[build:lesson-indexes] wrote manifest ${manifestPath} entries=${manifestEntries.length}`);
 
   for (const alliedId of ALLIED_MARKETING_CORE_PATHWAY_IDS) {
     const rawN = getCatalogLessonsRaw(alliedId).length;

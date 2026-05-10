@@ -19,29 +19,81 @@ function git(args) {
   return o || null;
 }
 
-function pickCommitFromEnv() {
-  for (const k of [
-    "GITHUB_SHA",
-    "VERCEL_GIT_COMMIT_SHA",
-    "SOURCE_VERSION",
-    "COMMIT_SHA",
-    "NN_GIT_COMMIT_SHA",
-  ]) {
-    const v = process.env[k]?.trim();
-    if (v) return v;
+const commitEnvKeys = [
+  "SOURCE_COMMIT",
+  "SOURCE_VERSION",
+  "DIGITALOCEAN_GIT_COMMIT_SHA",
+  "GITHUB_SHA",
+  "VERCEL_GIT_COMMIT_SHA",
+  "COMMIT_SHA",
+  "NN_GIT_COMMIT_SHA",
+];
+
+const branchEnvKeys = [
+  "SOURCE_BRANCH",
+  "DIGITALOCEAN_GIT_BRANCH",
+  "GITHUB_REF_NAME",
+  "VERCEL_GIT_COMMIT_REF",
+  "BRANCH_NAME",
+  "NN_GIT_BRANCH",
+];
+
+function pickFromEnv(env, keys) {
+  for (const key of keys) {
+    const value = env[key]?.trim();
+    if (value) return { key, value };
   }
-  return null;
+  return { key: null, value: null };
 }
 
-const commit = git(["rev-parse", "HEAD"]) || pickCommitFromEnv() || null;
-const branch = git(["rev-parse", "--abbrev-ref", "HEAD"]) || null;
-const meta = {
-  commit,
-  branch,
-  recordedAt: new Date().toISOString(),
-};
+function normalizeBranch(value) {
+  if (!value || value === "HEAD") return null;
+  return value
+    .replace(/^refs\/heads\//, "")
+    .replace(/^origin\//, "")
+    .trim() || null;
+}
 
-const dest = path.join(appRoot, "public", "nn-build-meta.json");
-mkdirSync(path.dirname(dest), { recursive: true });
-writeFileSync(dest, `${JSON.stringify(meta)}\n`, "utf8");
-console.error(`[write-build-git-meta] wrote ${dest} ${JSON.stringify(meta)}`);
+function detectBuildPlatform(env) {
+  if (env.DIGITALOCEAN_APP_ID || env.DIGITALOCEAN_GIT_COMMIT_SHA || env.NN_APP_PLATFORM_BUILD === "true") {
+    return "digitalocean";
+  }
+  if (env.GITHUB_ACTIONS === "true" || env.GITHUB_SHA) return "github-actions";
+  if (env.VERCEL === "1" || env.VERCEL_GIT_COMMIT_SHA) return "vercel";
+  if (env.CI === "true") return "ci";
+  return "local";
+}
+
+export function resolveBuildMeta({
+  env = process.env,
+  git: gitCommand = git,
+  now = new Date(),
+} = {}) {
+  const gitCommit = gitCommand(["rev-parse", "HEAD"]);
+  const envCommit = pickFromEnv(env, commitEnvKeys);
+  const gitBranch = normalizeBranch(gitCommand(["rev-parse", "--abbrev-ref", "HEAD"]));
+  const envBranch = pickFromEnv(env, branchEnvKeys);
+  const commit = gitCommit || envCommit.value || null;
+  const branch = gitBranch || normalizeBranch(envBranch.value);
+
+  return {
+    commit,
+    branch,
+    recordedAt: now.toISOString(),
+    environment: env.NN_DEPLOY_ENV?.trim() || env.NODE_ENV?.trim() || null,
+    buildPlatform: detectBuildPlatform(env),
+    source: gitCommit ? "git:rev-parse HEAD" : envCommit.key ? `env:${envCommit.key}` : null,
+  };
+}
+
+function writeBuildMeta() {
+  const meta = resolveBuildMeta();
+  const dest = path.join(appRoot, "public", "nn-build-meta.json");
+  mkdirSync(path.dirname(dest), { recursive: true });
+  writeFileSync(dest, `${JSON.stringify(meta)}\n`, "utf8");
+  console.error(`[write-build-git-meta] wrote ${dest} ${JSON.stringify(meta)}`);
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  writeBuildMeta();
+}
