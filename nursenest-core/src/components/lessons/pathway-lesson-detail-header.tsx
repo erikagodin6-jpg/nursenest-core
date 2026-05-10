@@ -81,6 +81,7 @@ export function PathwayLessonDetailHeader({
       data-nn-pathway-id={pathway.id}
       data-nn-exam-short={examName}
       data-nn-lesson-hero-centered={centered ? "true" : undefined}
+      data-nn-premium-lessons-reading-hero
       className={[
         "nn-premium-pathway-lesson-header relative overflow-hidden rounded-xl border px-4 py-3.5 sm:px-5 sm:py-4",
         centered
@@ -101,7 +102,7 @@ export function PathwayLessonDetailHeader({
           href={lessonsBasePath}
           className="text-[var(--semantic-brand)] underline-offset-2 hover:text-[var(--theme-heading-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
         >
-          Lesson hub
+          Lesson Hub
         </Link>
         <span aria-hidden className="text-[var(--semantic-border-soft)]">
           /
@@ -207,7 +208,7 @@ export function PathwayLessonDetailHeader({
           href={lessonsBasePath}
           className="text-[11px] font-medium text-[var(--theme-muted-text)] underline-offset-2 hover:text-[var(--semantic-brand)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:text-xs"
         >
-          ← All lessons
+          ← All Lessons
         </Link>
       </div>
     </header>

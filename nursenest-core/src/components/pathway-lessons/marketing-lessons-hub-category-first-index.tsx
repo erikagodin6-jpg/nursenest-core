@@ -139,18 +139,18 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     !questionSnapshotLoadRejected && marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
 
   const lessonHubSurfaceChips = [
-    { label: "Practice questions", href: questionsHref },
+    { label: "Practice Questions", href: questionsHref },
     {
       label: questionSnapshotLoadRejected
-        ? "Adaptive CAT — status unavailable"
+        ? "Adaptive CAT — Status Unavailable"
         : canStartCat
           ? "Adaptive CAT"
-          : "Adaptive CAT unavailable",
+          : "Adaptive CAT Unavailable",
       href: catHref,
     },
     { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
-    { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-    { label: "Exam overview", href: overviewHref },
+    { label: "Practice Exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
+    { label: "Exam Overview", href: overviewHref },
   ];
 
   const canadaHref =
@@ -211,7 +211,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
-            No lessons are indexed in the bundled catalog for this pathway yet.
+            No Lessons Are Indexed In The Bundled Catalog For This Pathway Yet.
           </p>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
             Explore practice questions and adaptive study below while the library expands.
@@ -221,7 +221,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
               href={questionsHref}
               className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
             >
-              Explore available questions
+              Explore Available Questions
             </Link>
           </div>
         </div>
@@ -275,10 +275,10 @@ export async function MarketingLessonsHubCategoryFirstIndex({
       >
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
           <h2 id="lesson-library-heading" className="nn-marketing-h3 max-w-[min(100%,36rem)]">
-            Lesson library
+            Lesson Library
           </h2>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
-            {catalog.length.toLocaleString()} {catalog.length === 1 ? "lesson" : "lessons"} · browse by area
+            {catalog.length.toLocaleString()} {catalog.length === 1 ? "Lesson" : "Lessons"} · Browse By Area
           </span>
         </div>
 
@@ -287,7 +287,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
             className="mb-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] p-4 sm:p-5"
             data-nn-qa-lessons-review-required="true"
           >
-            <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Review required</h3>
+            <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Review Required</h3>
             <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
               These lessons still need clinical-area tagging before they appear in a category below.
             </p>
@@ -369,10 +369,10 @@ export async function MarketingLessonsHubCategoryFirstIndex({
       <StudyBottomNav
         compact
         relatedLinks={[
-          { label: "Practice questions", href: questionsHref },
-          { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
-          { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-          { label: "Exam overview", href: overviewHref },
+          { label: "Practice Questions", href: questionsHref },
+          { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT Unavailable", href: catHref },
+          { label: "Practice Exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
+          { label: "Exam Overview", href: overviewHref },
         ]}
       />
     </LessonsPageShell>

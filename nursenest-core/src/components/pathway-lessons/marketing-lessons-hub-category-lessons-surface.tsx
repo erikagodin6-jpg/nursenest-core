@@ -122,18 +122,18 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
     !questionSnapshotLoadRejected && marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
 
   const lessonHubSurfaceChips = [
-    { label: "Practice questions", href: questionsHref },
+    { label: "Practice Questions", href: questionsHref },
     {
       label: questionSnapshotLoadRejected
-        ? "Adaptive CAT — status unavailable"
+        ? "Adaptive CAT — Status Unavailable"
         : canStartCat
           ? "Adaptive CAT"
-          : "Adaptive CAT unavailable",
+          : "Adaptive CAT Unavailable",
       href: catHref,
     },
     { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
-    { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-    { label: "Exam overview", href: overviewHref },
+    { label: "Practice Exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
+    { label: "Exam Overview", href: overviewHref },
   ];
 
   const canadaHref =
@@ -177,7 +177,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
       eyebrow={pathway.shortName.trim() || pathway.displayName}
       pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
-      backLink={{ label: "All lesson areas", href: base }}
+      backLink={{ label: "All Lesson Areas", href: base }}
     >
       <MarketingHubSmokeDiagnosticsJson
         payload={{
@@ -219,7 +219,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
             {category.label}
           </h2>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
-            {filtered.length.toLocaleString()} {filtered.length === 1 ? "lesson" : "lessons"}
+            {filtered.length.toLocaleString()} {filtered.length === 1 ? "Lesson" : "Lessons"}
           </span>
         </div>
         {categoryProgressSnapshot ? (
@@ -244,27 +244,27 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
 
         {filtered.length === 0 ? (
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--theme-muted-text)]">
-            <p className="font-medium text-[var(--theme-heading-text)]">No lessons in this area yet.</p>
+            <p className="font-medium text-[var(--theme-heading-text)]">No Lessons In This Area Yet.</p>
             <p className="mt-2">
               There are no catalog lessons mapped to <strong className="text-[var(--theme-heading-text)]">{category.label}</strong>{" "}
               for this pathway. Try another clinical area or return to the lesson hub.
             </p>
             <p className="mt-3">
               <Link href={base} className="font-semibold text-primary hover:underline">
-                Back to lesson areas
+                Back To Lesson Areas
               </Link>
             </p>
           </div>
         ) : rows.length === 0 ? (
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--theme-muted-text)]">
-            <p className="font-medium text-[var(--theme-heading-text)]">No linkable lessons on this page.</p>
+            <p className="font-medium text-[var(--theme-heading-text)]">No Linkable Lessons On This Page.</p>
             <p className="mt-2">
               Lessons in this area exist in the catalog, but none on this page passed public-link verification yet.
               Try another page or return to the hub.
             </p>
             <p className="mt-3">
               <Link href={base} className="font-semibold text-primary hover:underline">
-                Back to lesson areas
+                Back To Lesson Areas
               </Link>
             </p>
           </div>
@@ -310,10 +310,10 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
       <StudyBottomNav
         compact
         relatedLinks={[
-          { label: "Practice questions", href: questionsHref },
-          { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
-          { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-          { label: "Exam overview", href: overviewHref },
+          { label: "Practice Questions", href: questionsHref },
+          { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT Unavailable", href: catHref },
+          { label: "Practice Exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
+          { label: "Exam Overview", href: overviewHref },
         ]}
       />
     </LessonsPageShell>

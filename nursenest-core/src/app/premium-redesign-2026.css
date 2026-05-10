@@ -1604,6 +1604,234 @@ html[data-theme="aurora"] .nn-pre-nursing-marketing-hub {
   }
 }
 
+/* ---------------------------------------------------------------------
+   Premium Lessons convergence — hubs, reading surfaces, section system
+   --------------------------------------------------------------------- */
+
+.nn-premium-lessons-system,
+.nn-premium-lesson-detail-shell {
+  --nn-lessons-accent-primary: var(--nn-module-clinical-pearls, var(--semantic-brand));
+  --nn-lessons-accent-progress: var(--nn-module-readiness, var(--semantic-success));
+  --nn-lessons-accent-practice: var(--nn-module-practice, var(--semantic-chart-3));
+  --nn-lessons-accent-flashcards: var(--nn-module-flashcards, var(--semantic-chart-5));
+  --nn-lessons-accent-labs: var(--nn-module-labs, var(--semantic-chart-7));
+  --nn-lessons-radius-card: 1.35rem;
+  --nn-lessons-reading-measure: 72ch;
+}
+
+html[data-theme="ocean"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell),
+html[data-theme="blossom"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell),
+html[data-theme="midnight"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell),
+html[data-theme="sunset"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell),
+html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell) {
+  --nn-lessons-theme-covered: 1;
+}
+
+.nn-premium-lessons-system,
+.nn-premium-lesson-detail-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-premium-lessons-system::before,
+.nn-premium-lesson-detail-shell::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -1.25rem -0.75rem auto;
+  height: min(30rem, 46vh);
+  border-radius: 9999px;
+  background:
+    radial-gradient(760px 340px at 4% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 10%, transparent), transparent 68%),
+    radial-gradient(720px 320px at 100% 10%, color-mix(in srgb, var(--nn-lessons-accent-flashcards) 9%, transparent), transparent 66%),
+    radial-gradient(600px 280px at 54% 100%, color-mix(in srgb, var(--nn-lessons-accent-progress) 8%, transparent), transparent 72%);
+  opacity: 0.72;
+  z-index: -1;
+}
+
+.nn-premium-lessons-hub-hero {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--nn-lessons-accent-primary) 18%);
+  box-shadow:
+    var(--semantic-shadow-soft),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 65%, transparent);
+}
+
+.nn-premium-lessons-hub-body {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(720px 300px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 6%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+}
+
+.nn-premium-lessons-hub-body [data-testid="lesson-hub-surface-chips"] {
+  border-radius: 999px;
+  padding: 0.35rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 42%, transparent);
+}
+
+.nn-premium-lessons-hub-body a[href*="/lessons/"] {
+  border-radius: var(--nn-lessons-radius-card);
+}
+
+.nn-premium-lessons-hub-body a[href*="/lessons/"]:hover {
+  transform: translateY(-1px);
+}
+
+.nn-premium-lesson-detail-shell {
+  border-radius: 2rem;
+  background:
+    radial-gradient(900px 360px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 7%, transparent), transparent 70%),
+    color-mix(in srgb, var(--theme-page-bg) 94%, var(--semantic-panel-muted));
+}
+
+.nn-premium-pathway-lesson-header[data-nn-premium-lessons-reading-hero] {
+  border-radius: 1.45rem;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--nn-lessons-accent-primary) 18%);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-lesson-main[data-nn-premium-lessons-reading-main] {
+  max-width: min(100%, calc(var(--nn-lessons-reading-measure) + 8rem));
+}
+
+.nn-premium-lesson-article[data-nn-premium-lessons-section-system] {
+  line-height: 1.78;
+  scroll-padding-top: 6rem;
+}
+
+.nn-premium-lesson-article[data-nn-premium-lessons-section-system] :is(p, li) {
+  max-width: var(--nn-lessons-reading-measure);
+}
+
+.nn-premium-lesson-article[data-nn-premium-lessons-section-system] li + li {
+  margin-top: 0.45rem;
+}
+
+.nn-lesson-section-card {
+  transition:
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.nn-lesson-section-card:hover {
+  transform: translateY(-1px);
+}
+
+.nn-lesson-section-card[data-lsc-theme="clinicalPearls"] {
+  border-color: color-mix(in srgb, var(--nn-lessons-accent-flashcards) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="pathophysiology"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-8) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="diagnosticsLabs"] {
+  border-color: color-mix(in srgb, var(--nn-lessons-accent-labs) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="medicationsTreatments"] {
+  border-color: color-mix(in srgb, var(--semantic-success) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="nursingInterventions"] {
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="patientTeaching"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-7) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="redFlags"] {
+  border-color: color-mix(in srgb, var(--semantic-danger) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-nav[data-nn-premium-lessons-on-this-page] {
+  border-radius: 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 76%, var(--nn-lessons-accent-primary) 14%);
+  background:
+    radial-gradient(420px 160px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 8%, transparent), transparent 66%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-lesson-nav-item[data-active="true"] {
+  background: color-mix(in srgb, var(--nn-lessons-accent-primary) 12%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--nn-lessons-accent-primary) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-nav-mobile__panel[data-nn-premium-lessons-mobile-nav] {
+  max-height: min(62vh, 32rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+[data-nn-premium-lessons-study-rail] {
+  border-radius: 1.25rem;
+}
+
+.nn-lesson-utilities-rail [class*="nn-premium-rail-section"],
+.nn-lesson-utility-card {
+  border-radius: 1rem;
+}
+
+[data-nn-premium-lessons-linked-learning] {
+  background:
+    radial-gradient(460px 180px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-flashcards) 7%, transparent), transparent 70%),
+    color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
+}
+
+.lv-lesson-actions[data-testid="pathway-lesson-continue-studying"] {
+  border-radius: 1.35rem;
+  background:
+    radial-gradient(560px 180px at 0% 0%, color-mix(in srgb, var(--nn-lessons-accent-practice) 8%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface));
+}
+
+@media (max-width: 1024px) {
+  .nn-lesson-main[data-nn-premium-lessons-reading-main] {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .nn-premium-lessons-system,
+  .nn-premium-lesson-detail-shell {
+    --nn-lessons-radius-card: 1.05rem;
+    --nn-lessons-reading-measure: 64ch;
+  }
+
+  .nn-premium-lessons-hub-hero,
+  .nn-premium-pathway-lesson-header[data-nn-premium-lessons-reading-hero] {
+    border-radius: 1.15rem;
+  }
+
+  .nn-premium-lessons-hub-body {
+    border-radius: 1.2rem;
+  }
+
+  .nn-premium-lesson-detail-shell {
+    border-radius: 1.25rem;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .nn-premium-lesson-article[data-nn-premium-lessons-section-system] {
+    gap: 1rem;
+    line-height: 1.72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-lessons-hub-body a[href*="/lessons/"],
+  .nn-premium-lessons-hub-body a[href*="/lessons/"]:hover,
+  .nn-lesson-section-card,
+  .nn-lesson-section-card:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 .nn-premium-home-eyebrow {
   display: inline-flex;
   align-items: center;

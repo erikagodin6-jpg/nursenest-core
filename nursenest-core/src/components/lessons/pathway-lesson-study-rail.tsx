@@ -123,7 +123,7 @@ export function PathwayLessonStudyRail({
   return (
     <div className="nn-lesson-utilities-rail space-y-3" data-nn-lesson-study-rail>
       {progressSummary?.label ? (
-        <RailSection title="Study progress" subtitle={`Status: ${progressSummary.status.replace(/_/g, " ")}`} accent="brand">
+        <RailSection title="Study Progress" subtitle={`Status: ${progressSummary.status.replace(/_/g, " ")}`} accent="brand">
           <p className="text-sm leading-relaxed text-[var(--theme-body-text)]">{progressSummary.label}</p>
         </RailSection>
       ) : null}
@@ -132,7 +132,7 @@ export function PathwayLessonStudyRail({
         <div className="nn-lesson-utility-card__row">
           <BookMarked className="h-4 w-4" aria-hidden />
           <div>
-            <h2>Saved lesson</h2>
+            <h2>Saved Lesson</h2>
             <p>Bookmark from the action bar.</p>
           </div>
         </div>
@@ -142,7 +142,7 @@ export function PathwayLessonStudyRail({
         <div className="nn-lesson-utility-card__row">
           <Clock3 className="h-4 w-4" aria-hidden />
           <div>
-            <h2>Study time</h2>
+            <h2>Study Time</h2>
             <p>{quickReviewLines.length >= 8 ? "12-18 min focused read" : "8-12 min focused read"}</p>
           </div>
         </div>
@@ -152,7 +152,7 @@ export function PathwayLessonStudyRail({
         <div className="nn-lesson-utility-card__row">
           <Brain className="h-4 w-4" aria-hidden />
           <div>
-            <h2>Quick recall</h2>
+            <h2>Quick Recall</h2>
             <p>Toggle recall prompts in the lesson body.</p>
           </div>
         </div>
@@ -160,7 +160,7 @@ export function PathwayLessonStudyRail({
 
       {focus.length > 0 ? (
         <RailSection
-          title="Exam readiness"
+          title="Exam Readiness"
           subtitle="How this topic usually tests."
           accent="info"
         >
@@ -170,7 +170,7 @@ export function PathwayLessonStudyRail({
 
       {traps.length > 0 ? (
         <RailSection
-          title="Reinforcement status"
+          title="Reinforcement Status"
           subtitle="Traps to sidestep."
           accent="warning"
         >
@@ -182,7 +182,7 @@ export function PathwayLessonStudyRail({
         <div className="nn-lesson-utility-card__row">
           <Target className="h-4 w-4" aria-hidden />
           <div>
-            <h2>Related practice</h2>
+            <h2>Related Practice</h2>
             <p>Use the practice links after the rapid review.</p>
           </div>
           <Zap className="ml-auto h-3.5 w-3.5 opacity-60" aria-hidden />

@@ -106,3 +106,31 @@ test("isBowtieQuestionType", () => {
   assert.equal(isBowtieQuestionType("Trend"), true);
   assert.equal(isBowtieQuestionType("MCQ"), false);
 });
+
+test("imported bowtie object shape normalizes and parses for rendering/grading", () => {
+  const options = {
+    format: "bowtie",
+    slotLabels: {
+      condition: "Condition",
+      intervention: "Intervention",
+      monitoring: "Monitoring",
+    },
+    bank: [
+      { id: "hypovolemia", label: "Hypovolemia" },
+      { id: "start_iv_fluids", label: "Start IV fluids" },
+      { id: "monitor_bp", label: "Monitor blood pressure" },
+    ],
+  };
+  const correctAnswer = {
+    correctMapping: {
+      condition: "hypovolemia",
+      intervention: "start_iv_fluids",
+      monitoring: "monitor_bp",
+    },
+  };
+
+  const normalized = tryNormalizeBowtiePayload("NGN_BOWTIE", "A client has low blood pressure.", options);
+  assert.ok(normalized);
+  assert.equal(normalized!.bank[0]!.id, "hypovolemia");
+  assert.deepEqual(parseBowtieCorrectMapping(correctAnswer), correctAnswer.correctMapping);
+});

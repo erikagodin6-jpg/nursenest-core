@@ -52,6 +52,8 @@ export function dbQuestionTypeToPrismaEnum(db: string): QuestionType {
   if (t === "multiple_choice" || t === "mcq") return "MCQ" as QuestionType;
   if (t === "sata" || t === "select_all_that_apply") return "SATA" as QuestionType;
   if (t === "ngn_case" || t === "ngn") return "NGN_CASE" as QuestionType;
+  if (t === "bowtie" || t === "ngn_bowtie") return "NGN_BOWTIE" as QuestionType;
+  if (t === "trend" || t === "ngn_trend") return "NGN_TREND" as QuestionType;
   if (t === "ordered" || t === "ordering") return "ORDERING" as QuestionType;
   if (t === "fill-in-blank" || t === "fib_numeric" || t === "fib") return "FIB_NUMERIC" as QuestionType;
   return "MCQ" as QuestionType;
@@ -63,6 +65,8 @@ export function adminQuestionTypeToDb(q: string): string {
   if (t === "MCQ") return "multiple_choice";
   if (t === "SATA") return "sata";
   if (t === "NGN_CASE") return "ngn_case";
+  if (t === "BOWTIE" || t === "NGN_BOWTIE") return "ngn_bowtie";
+  if (t === "TREND" || t === "NGN_TREND") return "ngn_trend";
   if (t === "ORDERING") return "ordered";
   if (t === "FIB_NUMERIC") return "fill-in-blank";
   return q.toLowerCase();

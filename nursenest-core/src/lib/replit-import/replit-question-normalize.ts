@@ -3,6 +3,8 @@ import type { Prisma } from "@prisma/client";
 import { stemHash } from "@/lib/content/stem-hash";
 import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { adminQuestionTypeToDb } from "@/lib/prisma/exam-question-maps";
+import { isBowtieQuestionType } from "@/lib/questions/bowtie-adapter";
+import { validateBowtieQuestionPayload } from "@/lib/questions/bowtie-question-schema";
 import { inferCountryFromRaw, inferTrackFromRaw, mapTrackAndCountryToExamFields } from "./replit-exam-country-map";
 import type { ImportCountry, NormalizedExamQuestion, ProductTrack } from "./replit-question-types";
 
@@ -26,7 +28,18 @@ function stemFrom(raw: Record<string, unknown>): string | null {
   return null;
 }
 
-function optionsFrom(raw: Record<string, unknown>): string[] | null {
+function objectJsonFrom(raw: unknown): Prisma.InputJsonValue | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  return raw as Prisma.InputJsonValue;
+}
+
+function optionsFrom(raw: Record<string, unknown>, questionType: string): Prisma.InputJsonValue | null {
+  if (isBowtieQuestionType(questionType)) {
+    const direct = objectJsonFrom(raw.options);
+    if (direct) return direct;
+    const nested = objectJsonFrom(raw.bowtie);
+    if (nested) return { bowtie: nested } as unknown as Prisma.InputJsonValue;
+  }
   const direct = asStringArray(raw.options ?? raw.choices ?? raw.answers ?? raw.answerChoices);
   if (direct) return direct;
   const alts = raw.alternatives;
@@ -34,13 +47,24 @@ function optionsFrom(raw: Record<string, unknown>): string[] | null {
   return null;
 }
 
-function correctAnswerFrom(raw: Record<string, unknown>, options: string[]): Prisma.InputJsonValue | null {
+function correctAnswerFrom(
+  raw: Record<string, unknown>,
+  options: Prisma.InputJsonValue,
+  questionType: string,
+): Prisma.InputJsonValue | null {
   const caRaw = raw.correctAnswer ?? raw.correctAnswers ?? raw.correct_answer;
+  if (isBowtieQuestionType(questionType)) {
+    const direct = objectJsonFrom(caRaw);
+    if (direct) return direct;
+    const mapping = objectJsonFrom(raw.correctMapping);
+    if (mapping) return { correctMapping: mapping } as unknown as Prisma.InputJsonValue;
+  }
   if (caRaw !== undefined) {
     if (Array.isArray(caRaw) && caRaw.length > 0) {
       const allNums = caRaw.every((x) => typeof x === "number" && Number.isInteger(x));
       if (allNums) {
         const texts: string[] = [];
+        if (!Array.isArray(options)) return null;
         for (const idx of caRaw as number[]) {
           if (idx < 0 || idx >= options.length) return null;
           texts.push(options[idx]!);
@@ -103,20 +127,20 @@ export function normalizeRawQuestionRecord(
   const stem = stemFrom(o);
   if (!stem) return { ok: false, message: "missing_stem" };
 
-  const options = optionsFrom(o);
-  if (!options || options.length < 2) return { ok: false, message: "options_invalid" };
+  const questionType = questionTypeFrom(o);
+  const options = optionsFrom(o, questionType);
+  if (!options) return { ok: false, message: "options_invalid" };
+  if (!isBowtieQuestionType(questionType) && (!Array.isArray(options) || options.length < 2)) {
+    return { ok: false, message: "options_invalid" };
+  }
 
-  const correctAnswer = correctAnswerFrom(o, options);
+  const correctAnswer = correctAnswerFrom(o, options, questionType);
   if (!correctAnswer) return { ok: false, message: "missing_correct_answer" };
 
   const allowShortRationale = !ctx.statusPublished;
   const rationale = rationaleFrom(o, allowShortRationale);
   if (!rationale) return { ok: false, message: "missing_rationale" };
   if (ctx.statusPublished && rationale.length < 10) return { ok: false, message: "rationale_too_short_for_publish" };
-
-  const country = inferCountryFromRaw(o, ctx.defaultCountry);
-  const track = inferTrackFromRaw(o, ctx.defaultTrack);
-  const mapped = mapTrackAndCountryToExamFields(track, country);
 
   const topic = typeof o.topic === "string" ? o.topic.trim() : typeof o.category === "string" ? o.category.trim() : null;
   const bodySystem =
@@ -125,6 +149,27 @@ export function normalizeRawQuestionRecord(
       : typeof o.body_system === "string"
         ? o.body_system.trim()
         : null;
+
+  if (isBowtieQuestionType(questionType)) {
+    const bowtie = validateBowtieQuestionPayload({
+      questionType,
+      stem,
+      options,
+      correctAnswer,
+      rationale,
+      topic,
+      bodySystem,
+      exam: typeof o.exam === "string" ? o.exam : undefined,
+      tags: Array.isArray(o.tags) && o.tags.every((x) => typeof x === "string") ? (o.tags as string[]) : [],
+      publishMode: ctx.statusPublished,
+      requireRationale: true,
+    });
+    if (!bowtie.ok) return { ok: false, message: bowtie.errors.join("; ") };
+  }
+
+  const country = inferCountryFromRaw(o, ctx.defaultCountry);
+  const track = inferTrackFromRaw(o, ctx.defaultTrack);
+  const mapped = mapTrackAndCountryToExamFields(track, country);
 
   const tagsRaw = o.tags;
   const tags =
@@ -142,7 +187,7 @@ export function normalizeRawQuestionRecord(
     stem,
     options: options as unknown as Prisma.InputJsonValue,
     correctAnswer,
-    questionType: questionTypeFrom(o),
+    questionType,
     tier: mapped.tier,
     exam: mapped.exam,
     regionScope: mapped.regionScope,

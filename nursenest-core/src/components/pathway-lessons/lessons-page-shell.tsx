@@ -49,13 +49,14 @@ export function LessonsPageShell({
 }: Props) {
   return (
     <div
-      className="nn-premium-pathway-hub"
+      className="nn-premium-pathway-hub nn-premium-lessons-system"
       data-nn-lessons-marketing-hub="1"
+      data-nn-premium-lessons-system="hub"
       {...(pathwayTrack ? { "data-pathway-track": pathwayTrack } : {})}
     >
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8">
         <section aria-labelledby="nn-lessons-hub-title">
-          <div className="nn-nursing-tier-hub-hero-band">
+          <div className="nn-nursing-tier-hub-hero-band nn-premium-lessons-hub-hero" data-nn-premium-lessons-hero>
             {backLink ? (
               <div className="mb-3 sm:mb-4">
                 <Link
@@ -98,7 +99,10 @@ export function LessonsPageShell({
           </div>
         </section>
 
-        <section className="nn-premium-lessons-hub-body mt-3 rounded-[2rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-[0_14px_40px_color-mix(in_srgb,var(--palette-heading)_8%,transparent)] sm:mt-4 sm:p-4 lg:p-5">
+        <section
+          className="nn-premium-lessons-hub-body mt-3 rounded-[2rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-[0_14px_40px_color-mix(in_srgb,var(--palette-heading)_8%,transparent)] sm:mt-4 sm:p-4 lg:p-5"
+          data-nn-premium-lessons-hub-body
+        >
           {children}
         </section>
       </div>

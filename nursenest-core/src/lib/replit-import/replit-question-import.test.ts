@@ -97,4 +97,42 @@ describe("normalizeRawQuestionRecord", () => {
       assert.deepEqual(n.row.correctAnswer, ["Assess airway and breathing first"]);
     }
   });
+
+  it("preserves bowtie options and correct_answer objects", () => {
+    const n = normalizeRawQuestionRecord(
+      {
+        stem: "A client has symptoms requiring clinical judgment in a bowtie format.",
+        question_type: "NGN_BOWTIE",
+        options: {
+          format: "bowtie",
+          bank: [
+            { id: "condition", label: "Priority condition" },
+            { id: "intervention", label: "Priority intervention" },
+            { id: "monitoring", label: "Priority monitoring" },
+          ],
+        },
+        correct_answer: {
+          correctMapping: {
+            condition: "condition",
+            intervention: "intervention",
+            monitoring: "monitoring",
+          },
+        },
+        rationale: "This rationale explains why the selected condition, intervention, and monitoring response are correct.",
+        topic: "Clinical Judgment",
+      },
+      { defaultCountry: "US", defaultTrack: "RN", statusPublished: false },
+    );
+    assert.equal(n.ok, true);
+    if (n.ok) {
+      assert.equal(n.row.questionType, "ngn_bowtie");
+      assert.deepEqual(n.row.correctAnswer, {
+        correctMapping: {
+          condition: "condition",
+          intervention: "intervention",
+          monitoring: "monitoring",
+        },
+      });
+    }
+  });
 });

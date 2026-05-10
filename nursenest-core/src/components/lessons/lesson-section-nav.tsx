@@ -158,12 +158,16 @@ export function LessonSectionNav({
           </span>
           <ChevronDown className="nn-lesson-section-nav-mobile__chevron h-4 w-4 shrink-0 opacity-70" aria-hidden />
         </summary>
-        <div className="nn-lesson-section-nav-mobile__panel">
+        <div className="nn-lesson-section-nav-mobile__panel" data-nn-premium-lessons-mobile-nav>
           <nav aria-label="Lesson sections (mobile)">{navList}</nav>
         </div>
       </details>
 
-      <aside className="nn-lesson-section-nav" aria-label={t("learner.lessons.nav.ariaSectionsNav")}>
+      <aside
+        className="nn-lesson-section-nav"
+        aria-label={t("learner.lessons.nav.ariaSectionsNav")}
+        data-nn-premium-lessons-on-this-page
+      >
         <div className="nn-lesson-section-nav__header">
           <p>{t("learner.lessons.nav.onThisPage")}</p>
           <span>{t("learner.lessons.nav.sectionsCount", { count: sections.length })}</span>

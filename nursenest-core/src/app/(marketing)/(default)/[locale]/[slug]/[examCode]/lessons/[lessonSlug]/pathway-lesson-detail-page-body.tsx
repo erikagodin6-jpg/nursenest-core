@@ -400,7 +400,7 @@ export async function PathwayLessonDetailPageBody({
           )
         ) : null}
 
-        <div className="nn-lesson-layout nn-lesson-layout--triple mt-5">
+        <div className="nn-lesson-layout nn-lesson-layout--triple mt-5" data-nn-premium-lessons-reading-layout>
           <LessonSectionNav
             sections={tocNavSections}
             progress={lessonProgress}
@@ -409,6 +409,7 @@ export async function PathwayLessonDetailPageBody({
           <div
             className="nn-lesson-main min-w-0"
             data-testid="pathway-lesson-main-column"
+            data-nn-premium-lessons-reading-main
           >
         {matchedLessonImage.url && hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
           <LessonClinicalImageCard
@@ -440,7 +441,10 @@ export async function PathwayLessonDetailPageBody({
               <div className="mb-2 flex w-full justify-end px-0">
                 <LessonRecallToggle />
               </div>
-              <article className="nn-lesson-article-flow nn-lesson-article-grid nn-premium-lesson-article grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+              <article
+                className="nn-lesson-article-flow nn-lesson-article-grid nn-premium-lesson-article grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5"
+                data-nn-premium-lessons-section-system
+              >
                 {(() => {
                   let editorialRhythmIndex = 0;
                   return displaySections.map((section) => {
@@ -551,7 +555,8 @@ export async function PathwayLessonDetailPageBody({
 
           <aside
             className="nn-lesson-study-rail-aside shrink-0 border-t border-[var(--semantic-border-soft)] pt-6 xl:sticky xl:top-24 xl:w-full xl:border-t-0 xl:pt-0 xl:self-start xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
-            aria-label="Lesson utilities"
+            aria-label="Lesson Utilities"
+            data-nn-premium-lessons-study-rail
           >
             <PathwayLessonStudyRail
               quickReviewLines={quickReviewBullets}
@@ -586,7 +591,10 @@ export async function PathwayLessonDetailPageBody({
           />
         </Suspense>
 
-        <div className="mt-8 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] px-4 py-3 text-center shadow-[var(--semantic-shadow-soft)] sm:px-5">
+        <div
+          className="mt-8 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] px-4 py-3 text-center shadow-[var(--semantic-shadow-soft)] sm:px-5"
+          data-nn-premium-lessons-linked-learning
+        >
           <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
           <Link href={blogHubPath} className="font-medium text-primary hover:underline">
             {examName} blog posts

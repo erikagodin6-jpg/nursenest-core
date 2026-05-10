@@ -18,6 +18,8 @@ import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids"
 import { seededIndexInRange, shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { ECG_QUESTION_FORMAT } from "@/lib/ecg-module/ecg-module-config";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
+import { isBowtieQuestionType } from "@/lib/questions/bowtie-adapter";
+import { validateBowtieQuestionPayload } from "@/lib/questions/bowtie-question-schema";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 
 import { catReadinessMinCompletePoolRows } from "./cat-readiness-floor";
@@ -44,7 +46,19 @@ function hasValidRationale(rationale: string | null | undefined): boolean {
   return typeof rationale === "string" && rationale.trim().length > 0;
 }
 
-function hasValidOptions(options: Prisma.JsonValue | null | undefined): boolean {
+function hasValidOptions(row: CatQuestionCompletenessFields): boolean {
+  const { options } = row;
+  if (isBowtieQuestionType(row.questionType)) {
+    return validateBowtieQuestionPayload({
+      questionType: row.questionType,
+      stem: row.stem,
+      options,
+      correctAnswer: row.correctAnswer,
+      rationale: row.rationale,
+      publishMode: false,
+      requireRationale: false,
+    }).ok;
+  }
   if (!Array.isArray(options)) return false;
   if (options.length < 2) return false;
   return options.every((opt) => {
@@ -54,8 +68,21 @@ function hasValidOptions(options: Prisma.JsonValue | null | undefined): boolean 
   });
 }
 
-function hasValidCorrectAnswer(correctAnswer: Prisma.JsonValue | null | undefined): boolean {
+function hasValidCorrectAnswer(row: CatQuestionCompletenessFields): boolean {
+  const { correctAnswer } = row;
   if (correctAnswer == null) return false;
+  if (isBowtieQuestionType(row.questionType)) {
+    return validateBowtieQuestionPayload({
+      questionType: row.questionType,
+      stem: row.stem,
+      options: row.options,
+      correctAnswer,
+      rationale: row.rationale,
+      publishMode: false,
+      requireRationale: false,
+    }).ok;
+  }
+  if (typeof correctAnswer === "object" && !Array.isArray(correctAnswer)) return false;
   if (typeof correctAnswer === "string") return correctAnswer.trim().length > 0;
   if (typeof correctAnswer === "number") return Number.isFinite(correctAnswer);
   if (Array.isArray(correctAnswer)) {
@@ -65,13 +92,14 @@ function hasValidCorrectAnswer(correctAnswer: Prisma.JsonValue | null | undefine
       return false;
     });
   }
-  return typeof correctAnswer === "object";
+  return false;
 }
 
 /** Fields required for {@link isCompleteCatQuestionRow} (subset of Prisma `ExamQuestion` selects). */
 export type CatQuestionCompletenessFields = {
   /** Matches required `ExamQuestion.stem` from Prisma selects. */
   stem: string;
+  questionType?: string | null;
   options: Prisma.JsonValue | null;
   correctAnswer: Prisma.JsonValue | null;
   rationale: string | null;
@@ -90,8 +118,8 @@ export type CompleteCatQuestionRow = CatQuestionCompletenessFields & {
 export function isCompleteCatQuestionRow(row: CatQuestionCompletenessFields): boolean {
   return (
     hasValidStem(row.stem) &&
-    hasValidOptions(row.options) &&
-    hasValidCorrectAnswer(row.correctAnswer) &&
+    hasValidOptions(row) &&
+    hasValidCorrectAnswer(row) &&
     hasValidRationale(row.rationale)
   );
 }
@@ -185,6 +213,7 @@ async function queryShuffledCompletePool(
     select: {
       id: true,
       difficulty: true,
+      questionType: true,
       bodySystem: true,
       topic: true,
       stem: true,
@@ -220,6 +249,7 @@ async function accumulateCompleteCatPoolForReadiness(
       select: {
         id: true,
         difficulty: true,
+        questionType: true,
         bodySystem: true,
         topic: true,
         stem: true,

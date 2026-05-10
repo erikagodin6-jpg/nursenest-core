@@ -149,6 +149,22 @@ test("correct_answer present SQL accepts array and scalar branches", () => {
   assert.match(t, /array/i);
 });
 
+test("correct_answer present SQL accepts object branch only for bowtie-compatible types", () => {
+  const t = EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL.strings.join(" ");
+  assert.match(t, /WHEN 'object'/i);
+  assert.match(t, /question_type/i);
+  assert.match(t, /BOWTIE/i);
+  assert.match(t, /TREND/i);
+  assert.match(t, /correctMapping/i);
+});
+
+test("minimal publish SQL keeps non-bowtie object correct_answer rejected", () => {
+  const t = examQuestionDraftPublishableMinimalSql().strings.join(" ");
+  assert.match(t, /jsonb_typeof\(correct_answer::jsonb\)/i);
+  assert.doesNotMatch(t, /WHEN 'object' THEN true/i);
+  assert.match(t, /correctMapping/i);
+});
+
 test("ECG exclusion SQL lists excluded formats", () => {
   const t = EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL.strings.join(" ");
   assert.match(t, /ecg/i);

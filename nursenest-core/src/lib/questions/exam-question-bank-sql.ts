@@ -19,7 +19,8 @@ export const EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL = Prisma.sql`(question_
 export const EXAM_QUESTION_DRAFT_STATUS_SQL = Prisma.sql`lower(trim(coalesce(status, ''))) = 'draft'`;
 
 /**
- * `correct_answer` JSON is non-null and non-empty (array with ≥1 element, or string/number/boolean scalar).
+ * `correct_answer` JSON is non-null and non-empty.
+ * Object-shaped answers are allowed only for bowtie-compatible question types with a complete correctMapping.
  */
 export const EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL = Prisma.sql`
   correct_answer IS NOT NULL
@@ -29,6 +30,17 @@ export const EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL = Prisma.sql`
       WHEN 'string' THEN length(trim(correct_answer#>>'{}')) > 0
       WHEN 'number' THEN true
       WHEN 'boolean' THEN true
+      WHEN 'object' THEN (
+        (
+          upper(trim(coalesce(question_type, ''))) LIKE '%BOWTIE%'
+          OR upper(trim(coalesce(question_type, ''))) = 'TREND'
+          OR upper(trim(coalesce(question_type, ''))) LIKE '%TREND%'
+        )
+        AND jsonb_typeof(correct_answer::jsonb -> 'correctMapping') = 'object'
+        AND length(trim(coalesce(correct_answer::jsonb #>> '{correctMapping,condition}', ''))) > 0
+        AND length(trim(coalesce(correct_answer::jsonb #>> '{correctMapping,intervention}', ''))) > 0
+        AND length(trim(coalesce(correct_answer::jsonb #>> '{correctMapping,monitoring}', ''))) > 0
+      )
       ELSE false
     END
   )
@@ -124,7 +136,7 @@ export function examQuestionDraftPublishableStrictSql(): Prisma.Sql {
   return Prisma.sql`
   ${EXAM_QUESTION_DRAFT_STATUS_SQL}
   AND coalesce(trim(stem), '') <> ''
-  AND correct_answer IS NOT NULL
+  AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
   AND coalesce(trim(rationale), '') <> ''
   AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
   AND ${EXAM_QUESTION_NON_ECG_TAG_SQL}

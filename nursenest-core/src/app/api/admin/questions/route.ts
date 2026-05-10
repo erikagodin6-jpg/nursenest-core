@@ -16,38 +16,80 @@ import {
 import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
 import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
+import { isBowtieQuestionType } from "@/lib/questions/bowtie-adapter";
+import { validateBowtieQuestionPayload } from "@/lib/questions/bowtie-question-schema";
 
 export const dynamic = "force-dynamic";
 
 const tierEnum = z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]);
-const qTypeEnum = z.enum(["MCQ", "SATA", "NGN_CASE", "ORDERING", "FIB_NUMERIC"]);
-
-const createSchema = z.object({
-  stem: z.string().min(10),
-  rationale: z.string().min(10),
-  options: z.array(z.union([z.string(), z.number()])).min(1),
-  answerKey: z.array(z.union([z.string(), z.number()])).min(1),
-  questionType: qTypeEnum,
-  country: z.enum(["CA", "US"]),
-  tier: tierEnum,
-  categoryId: z.string().min(5),
-  status: z.nativeEnum(ContentStatus).default(ContentStatus.DRAFT),
-  examFamily: z.enum(["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "ALLIED", "GENERIC"]).optional(),
-  difficulty: z.enum(["FOUNDATION", "INTERMEDIATE", "ADVANCED"]).optional(),
-  topicTag: z.string().optional(),
-  systemTag: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  questionFormat: z.string().max(80).optional(),
-  exhibitData: z.unknown().optional(),
-  images: z.unknown().optional(),
-  lessonId: z.string().optional(),
-  sourceNotes: z.string().optional(),
-  generationBatchId: z.string().optional(),
-  /** Required when rationale is below the premium word-count bar but you still need to publish. */
-  acknowledgeBelowQualityBar: z.boolean().optional(),
-  /** Explicit opt-in for severe incompleteness (e.g., missing rationale). */
-  acknowledgeSevereQualityIssue: z.boolean().optional(),
+const qTypeEnum = z.enum(["MCQ", "SATA", "NGN_CASE", "ORDERING", "FIB_NUMERIC", "BOWTIE", "NGN_BOWTIE", "TREND", "NGN_TREND"]);
+const conventionalOptionsSchema = z.array(z.union([z.string(), z.number()])).min(1);
+const conventionalAnswerKeySchema = z.array(z.union([z.string(), z.number()])).min(1);
+const bowtieOptionsSchema = z.record(z.string(), z.unknown());
+const bowtieAnswerKeySchema = z.object({
+  correctMapping: z.object({
+    condition: z.string().min(1),
+    intervention: z.string().min(1),
+    monitoring: z.string().min(1),
+  }),
 });
+
+const createSchema = z
+  .object({
+    stem: z.string().min(10),
+    rationale: z.string().min(10),
+    options: z.union([conventionalOptionsSchema, bowtieOptionsSchema]),
+    answerKey: z.union([conventionalAnswerKeySchema, bowtieAnswerKeySchema]),
+    questionType: qTypeEnum,
+    country: z.enum(["CA", "US"]),
+    tier: tierEnum,
+    categoryId: z.string().min(5),
+    status: z.nativeEnum(ContentStatus).default(ContentStatus.DRAFT),
+    examFamily: z.enum(["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "ALLIED", "GENERIC"]).optional(),
+    difficulty: z.enum(["FOUNDATION", "INTERMEDIATE", "ADVANCED"]).optional(),
+    topicTag: z.string().optional(),
+    systemTag: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    questionFormat: z.string().max(80).optional(),
+    exhibitData: z.unknown().optional(),
+    images: z.unknown().optional(),
+    lessonId: z.string().optional(),
+    sourceNotes: z.string().optional(),
+    generationBatchId: z.string().optional(),
+    /** Required when rationale is below the premium word-count bar but you still need to publish. */
+    acknowledgeBelowQualityBar: z.boolean().optional(),
+    /** Explicit opt-in for severe incompleteness (e.g., missing rationale). */
+    acknowledgeSevereQualityIssue: z.boolean().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (isBowtieQuestionType(data.questionType)) {
+      const result = validateBowtieQuestionPayload({
+        questionType: data.questionType,
+        stem: data.stem,
+        options: data.options,
+        correctAnswer: data.answerKey,
+        rationale: data.rationale,
+        topic: data.topicTag,
+        bodySystem: data.systemTag,
+        questionFormat: data.questionFormat,
+        tags: data.tags,
+        publishMode: data.status === ContentStatus.PUBLISHED,
+        requireRationale: true,
+      });
+      if (!result.ok) {
+        for (const error of result.errors) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: error });
+        }
+      }
+      return;
+    }
+    if (!Array.isArray(data.options)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["options"], message: "Non-bowtie options must be an array" });
+    }
+    if (!Array.isArray(data.answerKey)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["answerKey"], message: "Non-bowtie answerKey must be an array" });
+    }
+  });
 
 export async function GET(req: NextRequest) {
   const gate = await requireAdmin(req);
@@ -193,8 +235,8 @@ export async function POST(req: Request) {
     data: {
       stem: data.stem,
       rationale: data.rationale,
-      options: data.options,
-      correctAnswer: data.answerKey,
+      options: data.options as Prisma.InputJsonValue,
+      correctAnswer: data.answerKey as Prisma.InputJsonValue,
       questionType: adminQuestionTypeToDb(data.questionType),
       countryCode: data.country,
       tier: tierCodeToExamDbTier(data.tier),
@@ -204,7 +246,7 @@ export async function POST(req: Request) {
       topic: topic ?? undefined,
       subtopic: data.systemTag,
       tags: data.tags ?? [],
-      questionFormat: data.questionFormat,
+      questionFormat: isBowtieQuestionType(data.questionType) ? (data.questionFormat ?? "bowtie") : data.questionFormat,
       exhibitData: data.exhibitData === undefined ? undefined : (data.exhibitData as Prisma.InputJsonValue),
       images: data.images === undefined ? undefined : (data.images as Prisma.InputJsonValue),
       careerType: "nursing",

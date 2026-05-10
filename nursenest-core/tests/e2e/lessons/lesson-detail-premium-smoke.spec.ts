@@ -13,6 +13,10 @@ test.describe("lesson detail premium shells", () => {
     await page.waitForSelector("h1.nn-lesson-page-title", { timeout: 120_000 });
     await expect(page.locator("article.nn-lesson-article-flow")).toBeVisible();
     await expect(page.locator(".nn-premium-pathway-lesson-header")).toBeVisible();
+    await expect(page.locator("[data-nn-premium-lessons-reading-hero]")).toBeVisible();
+    await expect(page.locator("[data-nn-premium-lessons-section-system]")).toBeVisible();
+    await expect(page.locator("[data-nn-premium-lessons-on-this-page]")).toBeVisible();
+    await expect(page.locator("[data-nn-premium-lessons-study-rail]")).toBeVisible();
 
     const summary = page.getByTestId("pathway-lesson-quick-clinical-summary");
     if (await summary.count()) {
@@ -21,6 +25,7 @@ test.describe("lesson detail premium shells", () => {
     }
 
     await expect(page.locator(".nn-lesson-section-nav").first()).toBeVisible();
+    await expect(page.getByText(/Clinical Pearls|Pathophysiology|Labs & Diagnostics|Nursing Interventions|Patient Education/).first()).toBeVisible();
   });
 
   test("mobile 375: collapsible lesson contents control", async ({ page }) => {
@@ -32,6 +37,8 @@ test.describe("lesson detail premium shells", () => {
     await page.waitForSelector("h1.nn-lesson-page-title", { timeout: 120_000 });
     const mobileNav = page.locator(".nn-lesson-section-nav-mobile");
     await expect(mobileNav.locator("summary")).toBeVisible();
+    await mobileNav.locator("summary").click();
+    await expect(page.locator("[data-nn-premium-lessons-mobile-nav]")).toBeVisible();
   });
 
   test("mobile 375: article column does not widen page (no horizontal overflow)", async ({ page }) => {
@@ -98,12 +105,14 @@ test.describe("lesson detail premium shells", () => {
       timeout: 180_000,
     });
     await page.waitForSelector("h1.nn-lesson-page-title", { timeout: 120_000 });
-    for (const theme of ["ocean", "midnight", "aurora"] as const) {
+    for (const theme of ["ocean", "blossom", "midnight", "sunset", "aurora"] as const) {
       await page.evaluate((id) => {
         document.documentElement.setAttribute("data-theme", id);
       }, theme);
       await expect(page.locator("h1.nn-lesson-page-title")).toBeVisible();
       await expect(page.locator("article.nn-lesson-article-flow")).toBeVisible();
+      await expect(page.locator("[data-nn-premium-lessons-reading-hero]")).toBeVisible();
+      await expect(page.locator("[data-nn-premium-lessons-linked-learning]")).toBeVisible();
       await page.waitForTimeout(400);
     }
     await page.waitForTimeout(1800);
