@@ -68,9 +68,20 @@ export function compareBlogIndexMergeRowsDesc(a: BlogIndexMergeRow, b: BlogIndex
   return a.slug.localeCompare(b.slug);
 }
 
-/** CMS rows first; static-only rows appended, then globally sorted (dedupe by slug is caller’s duty). */
-export function mergeBlogIndexRows(db: BlogIndexMergeRow[], staticOnly: BlogIndexMergeRow[]): BlogIndexMergeRow[] {
-  return [...db, ...staticOnly].sort(compareBlogIndexMergeRowsDesc);
+/**
+ * Merge live CMS rows with supplement (bundled static + long-tail) rows.
+ * **DB wins on slug:** supplement entries whose slug exists on any CMS row are dropped; result is sorted
+ * for stable public `/blog` ordering.
+ */
+export function mergeBlogIndexRows(dbRows: BlogIndexMergeRow[], supplementRows: BlogIndexMergeRow[]): BlogIndexMergeRow[] {
+  const dbSlugs = new Set(dbRows.map((row) => row.slug.trim()).filter(Boolean));
+  const extras = supplementRows.filter((row) => {
+    const s = row.slug.trim();
+    return Boolean(s) && !dbSlugs.has(s);
+  });
+  const combined = [...dbRows, ...extras];
+  combined.sort(compareBlogIndexMergeRowsDesc);
+  return combined;
 }
 
 export function sliceBlogIndexPage(rows: BlogIndexMergeRow[], page: number, pageSize: number): BlogIndexMergeRow[] {

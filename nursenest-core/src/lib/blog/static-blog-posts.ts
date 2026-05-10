@@ -3,10 +3,14 @@
  * Keep this out of root/shared layouts, homepage shell chrome, and the site header;
  * shared surfaces should use smaller teaser/query helpers instead.
  */
+import { createRequire } from "node:module";
 import type { BlogPost } from "@prisma/client";
 import { BlogImageStatus, BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 import type { StaticBlogPostRecord } from "@/content/blog-static-posts";
 import type { BlogStaticLongtailRecord } from "@/lib/blog/blog-static-longtail-types";
+import { isBlogSlugHiddenFromPublicMarketingCatalog } from "@/lib/blog/blog-visibility";
+
+const require = createRequire(import.meta.url);
 
 type StaticBlogPostsModule = {
   STATIC_BLOG_POSTS: StaticBlogPostRecord[];
@@ -16,15 +20,18 @@ let staticBlogPostsCache: StaticBlogPostRecord[] | null = null;
 
 function getStaticBlogPosts(): StaticBlogPostRecord[] {
   if (staticBlogPostsCache) return staticBlogPostsCache;
-  staticBlogPostsCache = (require("@/content/blog-static-posts") as StaticBlogPostsModule).STATIC_BLOG_POSTS;
+  staticBlogPostsCache = (require("../../content/blog-static-posts") as StaticBlogPostsModule).STATIC_BLOG_POSTS;
   return staticBlogPostsCache;
 }
 
 export function listStaticBlogPostsForIndex(): StaticBlogPostRecord[] {
-  return [...getStaticBlogPosts()].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  return [...getStaticBlogPosts()]
+    .filter((p) => !isBlogSlugHiddenFromPublicMarketingCatalog(p.slug))
+    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 }
 
 export function getStaticBlogPost(slug: string): StaticBlogPostRecord | undefined {
+  if (isBlogSlugHiddenFromPublicMarketingCatalog(slug)) return undefined;
   return getStaticBlogPosts().find((p) => p.slug === slug);
 }
 

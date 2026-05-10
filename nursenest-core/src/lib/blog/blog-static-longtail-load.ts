@@ -59,7 +59,7 @@ function recordFromFields(bodyHtml: string, fields: Record<string, string>): Blo
   const seoTitle = fields.seoTitle?.trim() || title;
   const seoDescription = fields.seoDescription?.trim() || excerpt;
   const canonicalUrl = fields.canonicalUrl?.trim() || `/blog/${slug}`;
-  const disclaimer = fields.disclaimer?.trim() ?? "";
+  const disclaimer = fields.medicalDisclaimer?.trim() ?? fields.disclaimer?.trim() ?? "";
   return {
     slug,
     title,
