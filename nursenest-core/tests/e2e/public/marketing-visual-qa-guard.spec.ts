@@ -13,9 +13,17 @@ import {
   assertMarketingHeroHeadingContrast,
   assertNoHorizontalOverflow,
   assertNoPlaceholderText,
+  assertVisibleEnglishChromeCapitalization,
 } from "../helpers/marketing-qa";
 
-const SHARED_ROUTES = ["/", "/pricing", "/blog"] as const;
+const SHARED_ROUTES = ["/", "/pricing", "/blog", "/tools"] as const;
+const CHROME_CAPITALIZATION_ROUTES = [
+  "/",
+  "/pricing",
+  "/blog",
+  "/tools",
+  "/us/rn/nclex-rn/lessons",
+] as const;
 
 const MOBILE_WIDTHS = [320, 375, 390, 768] as const;
 
@@ -52,6 +60,16 @@ test.describe("Marketing visual QA guard — shared routes", () => {
         await gotoMarketing(page, route);
         await assertNoHorizontalOverflow(page, 1);
       }
+    });
+  }
+});
+
+test.describe("Marketing visual QA guard — English chrome capitalization", () => {
+  for (const route of CHROME_CAPITALIZATION_ROUTES) {
+    test(`title-case nav, CTA, controls, pills, and headings (${route})`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 900 });
+      await gotoMarketing(page, route);
+      await assertVisibleEnglishChromeCapitalization(page);
     });
   }
 });

@@ -611,19 +611,19 @@ export async function PathwayLessonDetailPageBody({
         >
           <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
           <Link href={blogHubPath} className="font-medium text-primary hover:underline">
-            {examName} blog posts
+            {examName} Blog Posts
           </Link>
           {" · "}
           <Link href={`/blog/tag/${encodeURIComponent(lesson.topicSlug)}`} className="font-medium text-primary hover:underline">
-            {lesson.topic} articles
+            {lesson.topic} Articles
           </Link>
           {" · "}
           <Link href={HUB.flashcards} className="font-medium text-primary hover:underline">
-            Flashcards hub
+            Flashcards Hub
           </Link>
           {" · "}
           <Link href={HUB.questionBank} className="font-medium text-primary hover:underline">
-            Practice questions
+            Practice Questions
           </Link>
           {" · "}
           <Link href="/tools" className="font-medium text-primary hover:underline">
@@ -631,11 +631,11 @@ export async function PathwayLessonDetailPageBody({
           </Link>
           {" · "}
           <Link href="/lessons" className="font-medium text-primary hover:underline">
-            All lesson hubs
+            All Lesson Hubs
           </Link>
           {" · "}
           <Link href={buildExamPathwayPath(pathway)} className="font-medium text-primary hover:underline">
-            {examName} exam hub
+            {examName} Exam Hub
           </Link>
           </p>
         </div>

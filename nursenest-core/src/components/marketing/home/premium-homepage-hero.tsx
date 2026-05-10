@@ -373,7 +373,7 @@ export function PremiumHomepageHero(props: {
       data-testid="hero-section"
     >
       <div className="mx-auto max-w-6xl px-4 py-[calc(var(--nn-rhythm-page-y)*0.9)] sm:px-6 md:py-[calc(var(--nn-rhythm-section-y)*0.92)] lg:px-8">
-        <div className="nn-premium-hero-grid">
+        <div className="nn-premium-hero-grid min-h-[min(22rem,72dvh)] md:min-h-[19rem]">
           {/* ── Copy column ───────────────────────────────────────── */}
           <div>
             <span className="nn-premium-hero-eyebrow">{eyebrow}</span>

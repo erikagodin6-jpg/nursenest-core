@@ -66,9 +66,9 @@ export const THEME_OPTIONS: ThemeOption[] = [
   {
     id: "blossom",
     label: "Blossom",
-    color: "#8E75FF",
-    swatchSecondary: "#7DD3FC",
-    swatchAccent: "#E8A87C",
+    color: "#B86F86",
+    swatchSecondary: "#B894D7",
+    swatchAccent: "#F0D5B8",
     group: "light",
     logoVariant: "rose",
     named: true,

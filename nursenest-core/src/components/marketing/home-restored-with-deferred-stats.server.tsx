@@ -8,6 +8,8 @@ import {
   type PublicHomeStatsPayload,
 } from "@/lib/marketing/public-home-stats-payload";
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadHomeHeroPrimaryCarouselSlidesForLocale } from "@/lib/marketing/load-home-hero-carousel-slides.server";
 
 export type HomeRestoredWithDeferredStatsProps = PropsWithChildren<{
   skipOptionalDbReads: boolean;
@@ -56,14 +58,16 @@ export async function HomeRestoredWithDeferredStats({
 }: HomeRestoredWithDeferredStatsProps) {
   const safeCardIds = safeRegionCardIds(publishedGlobalRegionCardIds);
 
-  const stats = skipOptionalDbReads
-    ? getDegradedPublicHomeStatsFallback("db_skipped")
-    : await getStatsSafe();
+  const [stats, homeHeroCarouselSlides] = await Promise.all([
+    skipOptionalDbReads ? Promise.resolve(getDegradedPublicHomeStatsFallback("db_skipped")) : getStatsSafe(),
+    loadHomeHeroPrimaryCarouselSlidesForLocale(DEFAULT_MARKETING_LOCALE),
+  ]);
 
   return (
     <HomeRestoredClient
       homeMarketingStats={homeMarketingStatsFromPayload(stats)}
       publishedGlobalRegionCardIds={safeCardIds}
+      homeHeroCarouselSlides={homeHeroCarouselSlides}
     >
       {children}
     </HomeRestoredClient>

@@ -7,6 +7,7 @@
  * - Horizontal overflow uses documentElement metrics; clipped regions inside `overflow-x-auto` may not surface.
  */
 import { expect, type Locator, type Page } from "@playwright/test";
+import { validateEnglishCapitalization } from "../../../src/lib/format/text-case";
 
 /** Forbidden fragments in visible marketing copy (case-insensitive where noted). */
 const PLACEHOLDER_SUBSTRINGS = [
@@ -98,7 +99,8 @@ function hasExtremeMixedCaseToken(s: string): boolean {
 export type CapitalizationIssue = {
   tag: string;
   text: string;
-  kind: "all_lower_multi_word" | "extreme_mixed_case";
+  kind: "all_lower_multi_word" | "extreme_mixed_case" | "not_title_case";
+  expected?: string;
 };
 
 /**
@@ -150,6 +152,102 @@ export async function assertCapitalizationHeuristics(main: Locator): Promise<voi
   expect(
     issues,
     issues.length ? `Suspicious heading capitalization:\n${issues.map((x) => `- [${x.tag}] ${x.kind}: ${x.text}`).join("\n")}` : "",
+  ).toEqual([]);
+}
+
+type VisibleChromeLabelIssue = {
+  selector: string;
+  text: string;
+  expected: string;
+};
+
+const ENGLISH_CHROME_SELECTORS = [
+  "header nav a",
+  "header button:not([aria-label*='Select Country'])",
+  "footer a",
+  "main a.inline-flex",
+  "main a.rounded-full",
+  "main button",
+  "main [role='button']",
+  "main [role='tab']",
+  "main [role='option']",
+  "main [data-nn-premium-lessons-linked-learning] a",
+  "main [class*='badge']",
+  "main [class*='pill']",
+  "main h1",
+] as const;
+
+const TITLE_CASE_SKIP_PATTERNS = [
+  /^NurseNest$/u,
+  /^FAQ$/u,
+  /^CAT$/u,
+  /^ECG$/u,
+  /^OSCE$/u,
+  /^IV$/u,
+  /^RN$/u,
+  /^RPN$/u,
+  /^NP$/u,
+  /^US$/u,
+  /^CA$/u,
+  /^\d/u,
+  /^[A-Z]{2,}(?:[-/][A-Z0-9]+)*$/u,
+  /\{\{/u,
+  /[.!?]$/u,
+] as const;
+
+function isEnglishRoute(page: Page): boolean {
+  const url = new URL(page.url());
+  const firstSegment = url.pathname.split("/").filter(Boolean)[0] ?? "";
+  return firstSegment === "" || firstSegment === "en" || !/^[a-z]{2}(?:-[a-z]{2})?$/i.test(firstSegment);
+}
+
+function shouldCheckTitleCaseLabel(text: string): boolean {
+  if (text.length < 3) return false;
+  if (TITLE_CASE_SKIP_PATTERNS.some((pattern) => pattern.test(text))) return false;
+  const words = splitWords(text);
+  if (words.length === 0) return false;
+  return true;
+}
+
+async function collectVisibleTextFromSelector(page: Page, selector: string): Promise<string[]> {
+  return page.locator(selector).evaluateAll((nodes) =>
+    nodes
+      .filter((node) => {
+        const element = node as HTMLElement;
+        const style = window.getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        return style.visibility !== "hidden" && style.display !== "none" && rect.width > 0 && rect.height > 0;
+      })
+      .map((node) => (node.textContent ?? "").replace(/\s+/g, " ").trim())
+      .filter(Boolean),
+  );
+}
+
+export async function collectVisibleEnglishChromeCapitalizationIssues(page: Page): Promise<VisibleChromeLabelIssue[]> {
+  if (!isEnglishRoute(page)) return [];
+  const issues: VisibleChromeLabelIssue[] = [];
+
+  for (const selector of ENGLISH_CHROME_SELECTORS) {
+    const texts = await collectVisibleTextFromSelector(page, selector);
+    for (const text of texts) {
+      if (!shouldCheckTitleCaseLabel(text)) continue;
+      const result = validateEnglishCapitalization(text, "nav", "en");
+      if (!result.ok) {
+        issues.push({ selector, text, expected: result.normalized });
+      }
+    }
+  }
+
+  return issues;
+}
+
+export async function assertVisibleEnglishChromeCapitalization(page: Page): Promise<void> {
+  const issues = await collectVisibleEnglishChromeCapitalizationIssues(page);
+  expect(
+    issues,
+    issues.length
+      ? `Visible English chrome capitalization issues:\n${issues.map((x) => `- ${x.selector}: "${x.text}" -> "${x.expected}"`).join("\n")}`
+      : "",
   ).toEqual([]);
 }
 

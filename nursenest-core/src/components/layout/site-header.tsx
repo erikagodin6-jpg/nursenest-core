@@ -558,12 +558,13 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               {/* Guests: keep logo + auth CTAs adjacent; settings/hamburger stay trailing (justify-between). */}
               {isSessionPending ? (
                 <div
-                  className="nn-header-mobile-public-ctas flex min-w-0 shrink items-center gap-1.5 sm:gap-2"
+                  className="nn-header-mobile-public-ctas flex min-w-0 flex-1 shrink items-center justify-end gap-1.5 sm:flex-none sm:justify-start sm:gap-2"
                   aria-busy="true"
                   aria-label={t("nav.logIn")}
                 >
-                  <div className="h-11 w-[4.5rem] shrink-0 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))] sm:w-20" />
-                  <div className="h-11 w-[min(100%,7.5rem)] shrink-0 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))] sm:w-28" />
+                  {/* Mirror guest flex-1 CTA geometry so width/height do not jump when session resolves */}
+                  <div className="h-11 min-h-[44px] min-w-0 max-w-none flex-1 shrink animate-pulse rounded-xl border border-transparent bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))] sm:max-w-none sm:flex-none sm:w-20" />
+                  <div className="h-11 min-h-[44px] min-w-0 max-w-none flex-1 shrink animate-pulse rounded-xl border border-transparent bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))] sm:max-w-none sm:flex-none sm:w-28" />
                 </div>
               ) : !isAuthenticated ? (
                 <div className="nn-header-mobile-public-ctas flex min-w-0 flex-1 shrink items-center justify-end gap-1.5 sm:flex-none sm:justify-start sm:gap-2">

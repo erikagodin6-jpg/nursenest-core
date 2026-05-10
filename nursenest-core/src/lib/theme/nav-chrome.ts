@@ -122,13 +122,13 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
 
   /* ── Premium clinical palettes ── */
   blossom: {
-    /* Softer lilac + sky + peach wash — distinct from Aurora’s violet + rose emphasis. */
-    chrome: "color-mix(in srgb, #8e75ff 7%, color-mix(in srgb, #c9f0ff 22%, color-mix(in srgb, #fdeadb 12%, #fffefe)))",
-    foreground: "#1f2536",
-    border: "color-mix(in srgb, #1f2536 9%, #e3dcf0)",
-    hoverBg: "color-mix(in srgb, #1f2536 5%, transparent)",
-    hoverFg: "#1f2536",
-    panel: "color-mix(in srgb, #1f2536 5%, transparent)",
+    /* Soft sakura + orchid wash — bright Blossom chrome without neon violet. */
+    chrome: "color-mix(in srgb, #b86f86 6%, color-mix(in srgb, #f4effb 28%, color-mix(in srgb, #fff3ee 18%, #fffdfb)))",
+    foreground: "#4d3858",
+    border: "color-mix(in srgb, #5f466c 10%, #eadfea)",
+    hoverBg: "color-mix(in srgb, #5f466c 6%, transparent)",
+    hoverFg: "#4d3858",
+    panel: "color-mix(in srgb, #5f466c 5%, transparent)",
   },
   aurora: {
     /* Fallback when semantic tokens absent — pastel wash + ink (matches theme-palettes Aurora). */

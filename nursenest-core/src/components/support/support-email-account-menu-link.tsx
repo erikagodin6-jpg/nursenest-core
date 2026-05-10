@@ -7,7 +7,7 @@ import { SUPPORT_RESPONSE_TIME_COPY, supportMailtoHref } from "@/lib/support/sup
 export function SupportEmailAccountMenuLink({
   onActivate,
   className,
-  children = "Email support",
+  children = "Email Support",
 }: {
   onActivate: () => void;
   className: string;

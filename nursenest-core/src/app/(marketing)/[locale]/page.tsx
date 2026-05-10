@@ -17,6 +17,7 @@ import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketin
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
+import { buildHomeHeroPrimarySlidesFromMessages } from "@/config/home-hero-carousel";
 
 export const dynamic = "force-dynamic";
 
@@ -99,6 +100,7 @@ export default async function LocalizedHomePage({ params }: Props) {
     defaultHomeMetaDescription(marketingRegion),
   );
   const { crumbs, schemaItems } = localizeBreadcrumbResolutionForLocale(raw, messages, locale);
+  const homeHeroCarouselSlides = buildHomeHeroPrimarySlidesFromMessages(messages);
   return (
     <>
       <WebPageJsonLd
@@ -119,6 +121,7 @@ export default async function LocalizedHomePage({ params }: Props) {
       <HomeRestoredClient
         homeMarketingStats={homeMarketingStats}
         publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+        homeHeroCarouselSlides={homeHeroCarouselSlides}
       />
     </>
   );

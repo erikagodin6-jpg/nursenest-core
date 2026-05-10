@@ -613,7 +613,7 @@ export default async function PathwayLessonsHubPage({
     const canStartCat =
       !questionSnapshotLoadRejected && marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
     const lessonHubSurfaceChips = [
-      { label: "Practice questions", href: questionsHref },
+      { label: "Practice Questions", href: questionsHref },
       {
         label: questionSnapshotLoadRejected
           ? "Adaptive CAT — status unavailable"
@@ -623,8 +623,8 @@ export default async function PathwayLessonsHubPage({
         href: catHref,
       },
       { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
-      { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
-      { label: "Exam overview", href: overviewHref },
+      { label: "Practice Exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
+      { label: "Exam Overview", href: overviewHref },
     ];
     const canadaHref =
       pathway.countrySlug === "canada"
@@ -1101,7 +1101,7 @@ export default async function PathwayLessonsHubPage({
     !questionSnapshotLoadRejected && marketingCatCompletePoolUsable(questionSnapshot, pathway.id);
 
   const lessonHubSurfaceChips = [
-    { label: "Practice questions", href: questionsHref },
+    { label: "Practice Questions", href: questionsHref },
     {
       label: questionSnapshotLoadRejected
         ? "Adaptive CAT — status unavailable"
@@ -1340,14 +1340,14 @@ export default async function PathwayLessonsHubPage({
                 href={`${base}?${new URLSearchParams({ [ALLIED_PROFESSION_QUERY_PARAM]: alliedProfessionResolved.professionKey }).toString()}`}
                 className="font-semibold text-primary hover:underline"
               >
-                View all categories for this profession
+                View All Categories for This Profession
               </Link>
             </p>
           ) : null}
           {topicSlugNorm && !qEffective && !alliedTaxonomyNorm ? (
             <p className="mt-3 text-sm">
               <Link href={base} className="font-semibold text-primary hover:underline">
-                View all lessons in this pathway
+                View All Lessons in This Pathway
               </Link>
             </p>
           ) : null}
@@ -1356,7 +1356,7 @@ export default async function PathwayLessonsHubPage({
               href={buildExamPathwayPath(pathway, "questions")}
               className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
             >
-              Explore available questions
+              Explore Available Questions
             </Link>
             <Link
               href={buildExamPathwayPath(pathway, "cat")}
@@ -1572,7 +1572,7 @@ export default async function PathwayLessonsHubPage({
       <StudyBottomNav
         compact
         relatedLinks={[
-          { label: "Practice questions", href: questionsHref },
+          { label: "Practice Questions", href: questionsHref },
           { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
           { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
           { label: "Exam overview", href: overviewHref },

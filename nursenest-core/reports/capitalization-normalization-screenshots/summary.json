@@ -1,0 +1,53 @@
+{
+  "base": "http://localhost:3100",
+  "capturedAt": "2026-05-10T21:36:02.540Z",
+  "summary": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "status": 200,
+      "file": "/root/nursenest-core/nursenest-core/reports/capitalization-normalization-screenshots/homepage-desktop.png"
+    }
+  ],
+  "issues": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "selector": "header button",
+      "text": "Select Country🇨🇦Canada",
+      "expected": "Select Country🇨🇦canada"
+    },
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "selector": "footer a",
+      "text": "Email support",
+      "expected": "Email Support"
+    },
+    {
+      "route": "/tools",
+      "viewport": "desktop",
+      "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3100/tools\nCall log:\n  - navigating to \"http://localhost:3100/tools\", waiting until \"load\"\n"
+    },
+    {
+      "route": "/us/rn/nclex-rn/lessons",
+      "viewport": "desktop",
+      "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3100/us/rn/nclex-rn/lessons\nCall log:\n  - navigating to \"http://localhost:3100/us/rn/nclex-rn/lessons\", waiting until \"load\"\n"
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3100/\nCall log:\n  - navigating to \"http://localhost:3100/\", waiting until \"load\"\n"
+    },
+    {
+      "route": "/tools",
+      "viewport": "mobile",
+      "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3100/tools\nCall log:\n  - navigating to \"http://localhost:3100/tools\", waiting until \"load\"\n"
+    },
+    {
+      "route": "/us/rn/nclex-rn/lessons",
+      "viewport": "mobile",
+      "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3100/us/rn/nclex-rn/lessons\nCall log:\n  - navigating to \"http://localhost:3100/us/rn/nclex-rn/lessons\", waiting until \"load\"\n"
+    }
+  ]
+}

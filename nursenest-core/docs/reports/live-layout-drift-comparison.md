@@ -1,6 +1,6 @@
 # Live Layout Drift Comparison
 
-Generated: 2026-05-10T20:59:11.797Z
+Generated: 2026-05-10T21:21:17.880Z
 
 Live base: https://www.nursenest.ca
 
@@ -40,7 +40,7 @@ Local base: not provided. Set `NN_LAYOUT_AUDIT_LOCAL_BASE_URL=http://127.0.0.1:<
 
 ### live: homepage
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/?cb=1778446711462`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/?cb=1778448038557`
 Assets discovered: 30 (26 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -58,7 +58,7 @@ Assets discovered: 30 (26 JS, 4 CSS); sampled: 10
 
 ### live: learner-app
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app?cb=1778446712337`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app?cb=1778448039543`
 Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -76,7 +76,7 @@ Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 ### live: practice-tests-hub
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/practice-tests?pathwayId=ca-rn-nclex-rn&cb=1778446714018`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/practice-tests?pathwayId=ca-rn-nclex-rn&cb=1778448040563`
 Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -94,7 +94,7 @@ Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 ### live: flashcards-hub
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/flashcards?pathwayId=ca-rn-nclex-rn&cb=1778446715263`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/flashcards?pathwayId=ca-rn-nclex-rn&cb=1778448041932`
 Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -112,7 +112,7 @@ Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 ### live: report-card
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/account/report?cb=1778446716415`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/app/account/report?cb=1778448042914`
 Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -130,7 +130,7 @@ Assets discovered: 31 (27 JS, 4 CSS); sampled: 10
 
 ### live: rn-questions-hub
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/questions?cb=1778446717501`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/questions?cb=1778448043877`
 Assets discovered: 32 (28 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -148,7 +148,7 @@ Assets discovered: 32 (28 JS, 4 CSS); sampled: 10
 
 ### live: rn-lessons-hub
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/lessons?cb=1778446718783`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/lessons?cb=1778448045062`
 Assets discovered: 33 (29 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |
@@ -166,7 +166,7 @@ Assets discovered: 33 (29 JS, 4 CSS); sampled: 10
 
 ### live: cat-entry
 
-Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/cat?cb=1778446719706`
+Page: `200` `text/html; charset=utf-8` `https://www.nursenest.ca/canada/rn/nclex-rn/cat?cb=1778448045826`
 Assets discovered: 32 (28 JS, 4 CSS); sampled: 10
 
 | Asset | Status | Content-Type | Correct Type | Returned HTML |

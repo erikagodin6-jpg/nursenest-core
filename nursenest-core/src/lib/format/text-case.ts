@@ -135,3 +135,28 @@ export function formatEyebrow(text: string, locale?: string): string {
   if (!compact || !isEnglishLocale(locale)) return compact;
   return formatTitleCase(compact, locale).toUpperCase();
 }
+
+export type CapitalizationPolicyContext = "title" | "nav" | "card" | "control" | "cta" | "prose";
+
+export type CapitalizationPolicyResult = {
+  ok: boolean;
+  normalized: string;
+  issues: Array<"not-title-case" | "empty">;
+};
+
+export function validateEnglishCapitalization(
+  text: string,
+  context: CapitalizationPolicyContext,
+  locale?: string,
+): CapitalizationPolicyResult {
+  const compact = normalizeWhitespace(text.replace(/→$/u, "").trim());
+  if (!compact || !isEnglishLocale(locale) || context === "prose") {
+    return { ok: true, normalized: compact, issues: compact ? [] : ["empty"] };
+  }
+
+  const normalized = formatTitleCase(compact, locale);
+  const issues: CapitalizationPolicyResult["issues"] = [];
+  if (!compact) issues.push("empty");
+  if (compact && normalized !== compact) issues.push("not-title-case");
+  return { ok: issues.length === 0, normalized, issues };
+}

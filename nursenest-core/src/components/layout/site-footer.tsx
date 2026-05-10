@@ -108,7 +108,7 @@ function FooterAccountSupportEmailBlock() {
         href={supportMailtoHref()}
         className="nn-footer-link nn-footer-premium-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
       >
-        Email support
+        Email Support
       </a>
       <span className="mt-1 block max-w-[18rem] text-xs leading-snug text-[var(--footer-muted)]">
         {SUPPORT_RESPONSE_TIME_COPY}

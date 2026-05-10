@@ -49,6 +49,7 @@ export function objectKeyFromPublicCdnUrl(cdnUrl: string): string {
 
 export function homeHeroScreenshotOptimizedVariants(
   publicPngUrl: string,
+  opts?: { widthSuffixOrder?: "largestFirst" | "smallestFirst" },
 ): Array<{ key: string; url: string }> {
   if (!isHttpImageUrl(publicPngUrl)) return [];
 
@@ -60,7 +61,12 @@ export function homeHeroScreenshotOptimizedVariants(
       return [];
     }
 
-    return HOME_HERO_SCREENSHOT_WEBP_WIDTH_SUFFIXES.map((suffix) => {
+    const suffixes =
+      opts?.widthSuffixOrder === "smallestFirst"
+        ? [...HOME_HERO_SCREENSHOT_WEBP_WIDTH_SUFFIXES].reverse()
+        : [...HOME_HERO_SCREENSHOT_WEBP_WIDTH_SUFFIXES];
+
+    return suffixes.map((suffix) => {
       const key = path.replace(/\.png$/i, suffix);
       return {
         key,
@@ -93,6 +99,11 @@ function pushOptimizedTiers(
 export function getMarketingHeroImageUrlChain(params: {
   objectKey: string;
   publicCdnUrl: string;
+  /**
+   * Narrow below-the-fold frames (e.g. homepage screenshot strip ~672px): try smaller WebP first
+   * so the browser stops at `-480w`/`-768w` when sufficient, reducing transfer vs always probing `-1200w`.
+   */
+  optimizedWidthOrder?: "largestFirst" | "smallestFirst";
 }): string[] {
   const objectKey = params.objectKey.trim();
   const publicCdnUrl = params.publicCdnUrl.trim();
@@ -101,7 +112,9 @@ export function getMarketingHeroImageUrlChain(params: {
     return [MARKETING_HERO_LOCAL_FALLBACK];
   }
 
-  const optimized = homeHeroScreenshotOptimizedVariants(publicCdnUrl);
+  const optimized = homeHeroScreenshotOptimizedVariants(publicCdnUrl, {
+    widthSuffixOrder: params.optimizedWidthOrder === "smallestFirst" ? "smallestFirst" : "largestFirst",
+  });
   const proxyPng = marketingProxyPathForKey(objectKey);
 
   const out: string[] = [];

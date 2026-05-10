@@ -105,7 +105,7 @@ export function MarketingDefaultLayoutChromeFailsafeShell({ children }: { childr
               Terms
             </Link>
             <a href={supportMailtoHref()} className="underline underline-offset-2">
-              Email support
+              Email Support
             </a>
           </div>
           <p className="mx-auto mt-2 max-w-md text-[var(--theme-muted-text)]">{SUPPORT_RESPONSE_TIME_COPY}</p>

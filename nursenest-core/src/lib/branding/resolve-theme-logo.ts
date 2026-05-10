@@ -73,7 +73,7 @@ export const THEME_LOGO_CDN_BY_THEME_ID: Readonly<Record<string, string>> = {
   "blueberry-sherbet": CDN_LEAF_URLS["blueberry-sherbet"],
   aurora: CDN_LEAF_URLS["pink-skies"],
   apex: CDN_LEAF_URLS["midnight-ink"],
-  blossom: CDN_LEAF_URLS["pink-skies"],
+  blossom: CDN_LEAF_URLS["dusty-rose"],
   blush: CDN_LEAF_URLS["petal-pop"],
   "clinical-light": CDN_LEAF_URLS["clinical-light"],
   coral: CDN_LEAF_URLS.coral,

@@ -187,6 +187,7 @@ export function LanguageSelector({
 }: LanguageSelectorProps) {
   const regionCfg = REGION_CONFIG[region];
   const locales = [...regionCfg.allowedLocales];
+  const { t } = useMarketingI18n();
 
   const containerClass =
     variant === "popover"
@@ -194,10 +195,10 @@ export function LanguageSelector({
       : "w-full";
 
   return (
-    <div className={containerClass} role="listbox" aria-label="Select language">
+    <div className={containerClass} role="listbox" aria-label={t("nav.selectLanguage")}>
       <div className="p-1.5">
         <p className="px-2 pb-1.5 pt-1 text-[9px] font-bold uppercase tracking-widest text-[var(--theme-muted-text)]">
-          Available for {regionCfg.displayName}
+          {t("nav.availableForRegion", { region: regionCfg.displayName })}
         </p>
         {locales.map((loc) => {
           const display = getLocaleDisplay(loc as GlobalLocaleCode);
@@ -226,7 +227,10 @@ export function LanguageSelector({
         })}
         {locales.length <= 1 && (
           <p className="px-2.5 py-2 text-[11px] text-[var(--theme-muted-text)]">
-            Only {getLocaleDisplay(locales[0] as GlobalLocaleCode).label} is available for {regionCfg.displayName}.
+            {t("nav.onlyLanguageAvailable", {
+              language: getLocaleDisplay(locales[0] as GlobalLocaleCode).label,
+              region: regionCfg.displayName,
+            })}
           </p>
         )}
       </div>
@@ -259,7 +263,7 @@ export function ProfessionSelector({
       : "w-full";
 
   return (
-    <div className={containerClass} role="listbox" aria-label="Select profession">
+    <div className={containerClass} role="listbox" aria-label="Select Profession">
       <div className="p-1.5">
         <p className="px-2 pb-1.5 pt-1 text-[9px] font-bold uppercase tracking-widest text-[var(--theme-muted-text)]">
           Profession
@@ -319,7 +323,7 @@ export function ExamSelector({
       : "w-full";
 
   return (
-    <div className={containerClass} role="listbox" aria-label="Select exam">
+    <div className={containerClass} role="listbox" aria-label="Select Exam">
       <div className="p-1.5">
         <p className="px-2 pb-1.5 pt-1 text-[9px] font-bold uppercase tracking-widest text-[var(--theme-muted-text)]">
           Exam Pathway
