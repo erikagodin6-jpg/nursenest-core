@@ -12,6 +12,10 @@ import {
 } from "@/lib/auth/nextauth-request-jwt";
 
 import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
+import {
+  computeMarketingNarrowViewportHintFromRequestHeaders,
+  MARKETING_NARROW_VIEWPORT_HINT_HEADER,
+} from "@/lib/marketing/marketing-narrow-viewport-hint";
 
 /**
  * -----------------------------
@@ -129,6 +133,10 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     const headers = new Headers(req.headers);
     headers.set("x-nn-request-pathname", pathname);
     headers.set("x-nn-request-url", req.url);
+    headers.set(
+      MARKETING_NARROW_VIEWPORT_HINT_HEADER,
+      computeMarketingNarrowViewportHintFromRequestHeaders(headers) ? "1" : "0",
+    );
 
     const forwarded = new NextRequest(req.url, { headers });
 

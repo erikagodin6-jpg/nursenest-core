@@ -4,7 +4,6 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerPerformanceWorkspaceNav } from "@/components/student/learner-performance-workspace-nav";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
-import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
@@ -14,7 +13,6 @@ import { ReadinessStrengthGrid } from "@/components/study/readiness-strength-gri
 import { ReadinessFocusPlan } from "@/components/study/readiness-focus-plan";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { loadReadinessDashboardData } from "@/lib/learner/readiness-dashboard-data";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -107,13 +105,6 @@ export default async function AccountReadinessPage() {
     payload?.snapshot.pathways[0]?.pathwayId ??
     null;
 
-  const catHref = resolveStudyLoopCatHref({
-    authState: "signed_in",
-    pathwayId: preferredPathwayId,
-    availablePathwayIds: payload?.snapshot.pathways.map((p) => p.pathwayId),
-    intent: "start",
-  });
-
   if (!payload || payload.degraded?.active) {
     return (
       <div className="space-y-6">
@@ -127,7 +118,6 @@ export default async function AccountReadinessPage() {
             {t("learner.account.readiness.intro")}
           </p>
         </div>
-        <LearnerStudyQuickLinksCard t={t} id="readiness-study-quick-links" catHref={catHref} />
         <LearnerSilentSectionDegradedFallback surfaceName="readiness-dashboard" />
         <LearnerAccountCrossLinks variant="readiness" t={t} />
       </div>
@@ -161,9 +151,6 @@ export default async function AccountReadinessPage() {
           {t("learner.account.readiness.intro")}
         </p>
       </div>
-
-      {/* Quick-access links */}
-      <LearnerStudyQuickLinksCard t={t} id="readiness-study-quick-links" catHref={catHref} />
 
       {/* ─── Premium Hero: gauge + score + trend + percentile ─── */}
       <ReadinessHeroCard

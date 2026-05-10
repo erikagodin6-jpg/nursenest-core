@@ -32,6 +32,9 @@ export function HeaderBrandLockup() {
             draggable={false}
             width={128}
             height={128}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
             data-nn-header-logo
             className="block h-full w-full max-h-full max-w-full bg-transparent object-contain object-center"
             onError={() => setLeafLoadFailed(true)}

@@ -13,7 +13,6 @@ import { LearnerSilentSectionDegradedFallback } from "@/components/student/learn
 import { MedCalcReportCardInset } from "@/components/med-calculations/med-calc-report-card-inset";
 import { StudyToolsReportCardInset } from "@/components/study-tools/study-tools-report-card-inset";
 import { VerifiedStudyReportCardDigest } from "@/components/verified-study/verified-study-report-card-digest";
-import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -22,7 +21,6 @@ import { aggregateTopicsByCanonicalStudyCategory } from "@/lib/learner/learner-a
 import { loadReportCardData } from "@/lib/learner/load-report-card-data";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
@@ -110,13 +108,6 @@ export async function LearnerReportCardRouteBody({
     undefined;
   const preferredPathwayId =
     report?.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? report?.pathways[0]?.pathwayId ?? null;
-  const catHref = resolveStudyLoopCatHref({
-    authState: "signed_in",
-    pathwayId: preferredPathwayId,
-    availablePathwayIds: report?.pathways.map((p) => p.pathwayId),
-    intent: "start",
-  });
-
   const reportCategoryItems = report
     ? aggregateTopicsByCanonicalStudyCategory(preferredPathwayId, [
         ...report.weakTopics.map((w) => ({ topic: w.topic, weight: Math.max(1, w.attempted) })),
@@ -133,7 +124,6 @@ export async function LearnerReportCardRouteBody({
         <BreadcrumbTrail items={crumbs} />
         <LearnerPerformanceWorkspaceNav t={t} pathname={navPathname} />
         <LearnerReportCardHero title={t("learner.account.reportCard.title")} intro={t("learner.account.reportCard.intro")} />
-        <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" catHref={catHref} />
         <StudyToolsReportCardInset userId={userId} />
         <MedCalcReportCardInset userId={userId} />
         <VerifiedStudyReportCardDigest userId={userId} />
@@ -162,8 +152,6 @@ export async function LearnerReportCardRouteBody({
       <BreadcrumbTrail items={crumbs} />
       <LearnerPerformanceWorkspaceNav t={t} pathname={navPathname} />
       <LearnerReportCardHero title={t("learner.account.reportCard.title")} intro={t("learner.account.reportCard.intro")} />
-
-      <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" catHref={catHref} />
 
       <StudyToolsReportCardInset userId={userId} />
       <MedCalcReportCardInset userId={userId} />

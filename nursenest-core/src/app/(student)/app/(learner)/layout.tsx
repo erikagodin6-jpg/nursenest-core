@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Suspense } from "react";
+import { headers } from "next/headers";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -55,6 +56,7 @@ import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stat
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
+import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
 
 import {
   bannerTitleForPayload,
@@ -68,6 +70,10 @@ import { getAdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-
 export const dynamic = "force-dynamic";
 
 export default async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
+  const requestPathname = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
+  const isFocusedExamShell = isFocusedPracticeTestSessionPath(requestPathname);
+  const normalizedLearnerPathname = requestPathname.split("?")[0]?.replace(/\/+$/, "") || "/app";
+  const isLearnerDashboardRoute = normalizedLearnerPathname === "/app";
   /** Tier 0 — session + entitlement (no safeOptional; resolveEntitlementForPage is internally fail-closed). */
   const session = await getProtectedRouteSession("(student).app.(learner)");
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -241,6 +247,7 @@ export default async function LearnerShellLayout({ children }: { children: React
             <div
               className="nn-learner-app nn-learner-ds-ambient relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+var(--nn-learner-bottom-nav-reserve))] sm:px-5 md:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
               data-nn-learner-ds
+              data-learner-exam-chrome={isFocusedExamShell ? "hidden" : undefined}
               data-testid="learner-shell"
             >
               <LearnerMainLandmarkAudit />
@@ -321,7 +328,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   printablesNavVisible={printablesNavVisible}
                 />
               </div>
-              {studyNextBlock ? (
+              {studyNextBlock && !isLearnerDashboardRoute ? (
                 <LearnerSilentSectionBoundary name="study_next">
                   <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
                     <Suspense
@@ -333,7 +340,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                       }
                     >
                       {LearnerStudyNextBlockComponent ? (
-                        <LearnerStudyNextBlockComponent model={studyNextBlock} />
+                        <LearnerStudyNextBlockComponent model={studyNextBlock} variant="pulse" />
                       ) : null}
                     </Suspense>
                   </div>

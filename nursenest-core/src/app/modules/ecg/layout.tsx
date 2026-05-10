@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { EcgModulePublicationNotice } from "@/components/ecg-module/ecg-module-publication-notice";
+import { PremiumEducationalModuleShell } from "@/components/modules/premium-educational-module-shell";
 import { requireEcgModuleAccess } from "@/lib/ecg-module/ecg-module.server";
 import { getEcgModuleStatus } from "@/lib/ecg-module/ecg-module-status";
 import { isEcgModuleEnabled } from "@/lib/ecg-module/ecg-module-config";
@@ -29,9 +30,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function EcgModuleLayout({ children }: { children: ReactNode }) {
   await requireEcgModuleAccess();
   return (
-    <>
+    <PremiumEducationalModuleShell
+      eyebrow="Telemetry Module"
+      title="ECG Clinical Readiness"
+      description="Rhythm interpretation, worksheets, video drills, and scenario practice connected back to the NurseNest learner ecosystem."
+      backHref="/app"
+    >
       <EcgModulePublicationNotice />
       {children}
-    </>
+    </PremiumEducationalModuleShell>
   );
 }

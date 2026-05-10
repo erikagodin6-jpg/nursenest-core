@@ -281,18 +281,6 @@ export function LearnerStudyHome({
       />
 
       <LearnerStudySurfaceSection
-        id="study-quick-launch"
-        eyebrow={t("learner.studyHome.quickLaunchEyebrow")}
-        title={t("learner.studyHome.quickLaunchTitle")}
-        intro={t("learner.studyHome.quickLaunchIntro")}
-        tone="secondary"
-        surfacePadding="md"
-        className="nn-dash-band nn-dash-band--quick-launch nn-dash-band--stack-tight"
-      >
-        <LearnerHubClinicalQuickLaunch t={t} snapshot={snapshot} />
-      </LearnerStudySurfaceSection>
-
-      <LearnerStudySurfaceSection
         id="study-modes"
         eyebrow={t("learner.studyModes.sectionEyebrow")}
         title={t("learner.studyModes.sectionTitle")}
@@ -300,8 +288,27 @@ export function LearnerStudyHome({
         tone="primary"
         surfacePadding="md"
         className="nn-dash-band nn-dash-band--study-modes nn-dash-band--stack-tight"
+        data-nn-dashboard-canonical-launcher=""
       >
-        <LearnerStudyModesBand t={t} snapshot={snapshot} />
+        <div className="flex flex-col gap-5">
+          <LearnerStudyModesBand t={t} snapshot={snapshot} />
+          <div className="border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_72%,transparent)] pt-4">
+            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+                  {t("learner.studyHome.quickLaunchEyebrow")}
+                </p>
+                <h3 className="mt-1 text-sm font-bold text-[var(--semantic-text-primary)]">
+                  {t("learner.studyHome.quickLaunchTitle")}
+                </h3>
+              </div>
+              <p className="max-w-xl text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+                {t("learner.studyHome.quickLaunchIntro")}
+              </p>
+            </div>
+            <LearnerHubClinicalQuickLaunch t={t} snapshot={snapshot} />
+          </div>
+        </div>
       </LearnerStudySurfaceSection>
 
       {continueLinks.length > 0 ? (

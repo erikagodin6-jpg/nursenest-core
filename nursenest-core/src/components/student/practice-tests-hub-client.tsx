@@ -68,6 +68,111 @@ import { humanizeTopicSlug } from "@/components/lessons/pathway-lesson-link-prac
 
 type SessionBuilderKind = "cat_exam" | "practice_exam" | "practice_questions";
 
+type StudyToolsRailProps = {
+  ariaLabel: string;
+  catEntryHref: string;
+  questionsHubHref: string;
+  lessonsHubHref: string;
+  flashcardsHubHref: string;
+  pathwayId: string;
+  recentCompletedSessionId: string | null;
+  t: ReturnType<typeof useMarketingI18n>["t"];
+};
+
+function StudyToolsRail({
+  ariaLabel,
+  catEntryHref,
+  questionsHubHref,
+  lessonsHubHref,
+  flashcardsHubHref,
+  pathwayId,
+  recentCompletedSessionId,
+  t,
+}: StudyToolsRailProps) {
+  const rowClass =
+    "flex min-h-10 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-surface))] px-3 py-2 text-left text-xs font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_70%,var(--semantic-surface))]";
+  const iconWrap =
+    "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--semantic-surface)] text-[var(--semantic-chart-3)] shadow-sm";
+  const recentHref = recentCompletedSessionId
+    ? `/app/practice-tests/${encodeURIComponent(recentCompletedSessionId)}${
+        pathwayId.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : ""
+      }`
+    : null;
+
+  return (
+    <nav className="space-y-2" aria-label={ariaLabel} data-nn-study-tools-rail="">
+      <TrackedStudyLoopCatLink href={catEntryHref} sourceSurface="study_quick_links" className={rowClass} studyAccent="cat">
+        <span className={iconWrap} aria-hidden>
+          <LineChart className="h-4 w-4 text-[var(--semantic-brand)]" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.catPractice")}</span>
+      </TrackedStudyLoopCatLink>
+      <Link href="/app/exams" className={rowClass}>
+        <span className={iconWrap} aria-hidden>
+          <GraduationCap className="h-4 w-4" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("nav.practiceExams")}</span>
+      </Link>
+      <Link href={questionsHubHref} className={rowClass}>
+        <span className={iconWrap} aria-hidden>
+          <LayoutList className="h-4 w-4" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("nav.questionBank")}</span>
+      </Link>
+      <Link href={lessonsHubHref} className={rowClass}>
+        <span className={iconWrap} aria-hidden>
+          <BookOpen className="h-4 w-4 text-[var(--semantic-success)]" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.lessons")}</span>
+      </Link>
+      <Link href={flashcardsHubHref} className={rowClass}>
+        <span className={iconWrap} aria-hidden>
+          <Brain className="h-4 w-4 text-[var(--semantic-info)]" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.flashcards")}</span>
+      </Link>
+      <Link href="/app/study-plan" className={rowClass}>
+        <span className={iconWrap} aria-hidden>
+          <ListTodo className="h-4 w-4 text-[var(--semantic-chart-2)]" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.studyPlanner")}</span>
+      </Link>
+      <Link href="/app/account/report" className={rowClass}>
+        <span className={iconWrap} aria-hidden>
+          <BarChart3 className="h-4 w-4 text-[var(--semantic-chart-4)]" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("learner.account.nav.report")}</span>
+      </Link>
+      <Link href="/app/account/readiness" className={rowClass}>
+        <span className={iconWrap} aria-hidden>
+          <Target className="h-4 w-4 text-[var(--semantic-warning)]" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("learner.account.nav.readiness")}</span>
+      </Link>
+      <Link href="/app/account/review-queue" className={rowClass}>
+        <span className={iconWrap} aria-hidden>
+          <ClipboardList className="h-4 w-4 text-[var(--semantic-chart-5)]" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("learner.account.nav.reviewQueue")}</span>
+      </Link>
+      <Link href="/app/practice-tests/cat-insights" className={rowClass} aria-label={t("learner.practiceTests.examFirst.ctaReviewAria")} data-nn-e2e-exam-first-cta-review>
+        <span className={iconWrap} aria-hidden>
+          <BarChart3 className="h-4 w-4 text-[var(--semantic-chart-3)]" strokeWidth={2} />
+        </span>
+        <span className="min-w-0 leading-snug">{t("learner.practiceTests.examFirst.ctaReview")}</span>
+      </Link>
+      {recentHref ? (
+        <Link href={recentHref} className={`${rowClass} border-[color-mix(in_srgb,var(--semantic-brand)_24%,var(--semantic-border-soft))]`}>
+          <span className={iconWrap} aria-hidden>
+            <PlayCircle className="h-4 w-4 text-[var(--semantic-brand)]" strokeWidth={2} />
+          </span>
+          <span className="min-w-0 leading-snug">{t("learner.practiceTests.examFirst.openLastCompleted")}</span>
+        </Link>
+      ) : null}
+    </nav>
+  );
+}
+
 type TestListRow = {
   id: string;
   title: string | null;
@@ -647,106 +752,18 @@ export function PracticeTestsHubClient({
   const flashcardsHubHref = `/app/flashcards${pathwayScopedQs}`;
   const catEntryHref = (catHref?.trim() || catExamStartHref || "/app/practice-tests/start").trim();
 
-  const studyToolsRailNav = useMemo(() => {
-    const rowClass =
-      "flex min-h-10 items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-surface))] px-3 py-2 text-left text-xs font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_70%,var(--semantic-surface))]";
-    const iconWrap = "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--semantic-surface)] text-[var(--semantic-chart-3)] shadow-sm";
-    return (
-      <nav className="space-y-2" aria-label={t("learner.practiceTests.examFirst.studyToolsRailTitle")}>
-        <TrackedStudyLoopCatLink
-          href={catEntryHref}
-          sourceSurface="study_quick_links"
-          className={rowClass}
-          studyAccent="cat"
-        >
-          <span className={iconWrap} aria-hidden>
-            <LineChart className="h-4 w-4 text-[var(--semantic-brand)]" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.catPractice")}</span>
-        </TrackedStudyLoopCatLink>
-        <Link href="/app/exams" className={rowClass}>
-          <span className={iconWrap} aria-hidden>
-            <GraduationCap className="h-4 w-4" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("nav.practiceExams")}</span>
-        </Link>
-        <Link href={questionsHubHref} className={rowClass}>
-          <span className={iconWrap} aria-hidden>
-            <LayoutList className="h-4 w-4" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("nav.questionBank")}</span>
-        </Link>
-        <Link href={lessonsHubHref} className={rowClass}>
-          <span className={iconWrap} aria-hidden>
-            <BookOpen className="h-4 w-4 text-[var(--semantic-success)]" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.lessons")}</span>
-        </Link>
-        <Link href={flashcardsHubHref} className={rowClass}>
-          <span className={iconWrap} aria-hidden>
-            <Brain className="h-4 w-4 text-[var(--semantic-info)]" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.flashcards")}</span>
-        </Link>
-        <Link href="/app/study-plan" className={rowClass}>
-          <span className={iconWrap} aria-hidden>
-            <ListTodo className="h-4 w-4 text-[var(--semantic-chart-2)]" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.studyPlanner")}</span>
-        </Link>
-        <Link href="/app/account/report" className={rowClass}>
-          <span className={iconWrap} aria-hidden>
-            <BarChart3 className="h-4 w-4 text-[var(--semantic-chart-4)]" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("learner.account.nav.report")}</span>
-        </Link>
-        <Link href="/app/account/readiness" className={rowClass}>
-          <span className={iconWrap} aria-hidden>
-            <Target className="h-4 w-4 text-[var(--semantic-warning)]" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("learner.account.nav.readiness")}</span>
-        </Link>
-        <Link href="/app/account/review-queue" className={rowClass}>
-          <span className={iconWrap} aria-hidden>
-            <ClipboardList className="h-4 w-4 text-[var(--semantic-chart-5)]" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("learner.account.nav.reviewQueue")}</span>
-        </Link>
-        <Link
-          href="/app/practice-tests/cat-insights"
-          className={rowClass}
-          aria-label={t("learner.practiceTests.examFirst.ctaReviewAria")}
-          data-nn-e2e-exam-first-cta-review
-        >
-          <span className={iconWrap} aria-hidden>
-            <BarChart3 className="h-4 w-4 text-[var(--semantic-chart-3)]" strokeWidth={2} />
-          </span>
-          <span className="min-w-0 leading-snug">{t("learner.practiceTests.examFirst.ctaReview")}</span>
-        </Link>
-        {recentCompletedSession ? (
-          <Link
-            href={`/app/practice-tests/${encodeURIComponent(recentCompletedSession.id)}${
-              pathwayId.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : ""
-            }`}
-            className={`${rowClass} border-[color-mix(in_srgb,var(--semantic-brand)_24%,var(--semantic-border-soft))]`}
-          >
-            <span className={iconWrap} aria-hidden>
-              <PlayCircle className="h-4 w-4 text-[var(--semantic-brand)]" strokeWidth={2} />
-            </span>
-            <span className="min-w-0 leading-snug">{t("learner.practiceTests.examFirst.openLastCompleted")}</span>
-          </Link>
-        ) : null}
-      </nav>
-    );
-  }, [
-    t,
-    catEntryHref,
-    questionsHubHref,
-    lessonsHubHref,
-    flashcardsHubHref,
-    pathwayId,
-    recentCompletedSession,
-  ]);
+  const studyToolsRail = (
+    <StudyToolsRail
+      ariaLabel={t("learner.practiceTests.examFirst.studyToolsRailTitle")}
+      catEntryHref={catEntryHref}
+      questionsHubHref={questionsHubHref}
+      lessonsHubHref={lessonsHubHref}
+      flashcardsHubHref={flashcardsHubHref}
+      pathwayId={pathwayId}
+      recentCompletedSessionId={recentCompletedSession?.id ?? null}
+      t={t}
+    />
+  );
 
   return (
     <LearnerStudyPageShell
@@ -1844,7 +1861,7 @@ export function PracticeTestsHubClient({
           </span>
         </summary>
         <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.examFirst.studyToolsRailIntro")}</p>
-        <div className="mt-4">{studyToolsRailNav}</div>
+        <div className="mt-4">{studyToolsRail}</div>
       </details>
         </div>
 
@@ -1859,7 +1876,7 @@ export function PracticeTestsHubClient({
             <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
               {t("learner.practiceTests.examFirst.studyToolsRailIntro")}
             </p>
-            <div className="mt-4">{studyToolsRailNav}</div>
+            <div className="mt-4">{studyToolsRail}</div>
           </div>
         </aside>
       </div>

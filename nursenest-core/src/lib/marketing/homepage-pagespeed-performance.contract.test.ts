@@ -65,4 +65,31 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.equal(headerSources.some((sourcePattern) => sourcePattern.includes("/:path*.")), false);
     assert.match(nextConfig, /source:\s*"\/:path\*\\\\\.:assetExt\(png\|jpg\|jpeg\|webp\|avif\|svg\|ico\|woff2\)"/);
   });
+
+  it("sets the marketing narrow viewport header before the mobile motion shell hydrates", () => {
+    const proxy = source("src/proxy.ts");
+    const shell = source("src/lib/ui/marketing-mobile-motion-shell.tsx");
+
+    assert.match(proxy, /MARKETING_NARROW_VIEWPORT_HINT_HEADER/);
+    assert.match(proxy, /computeMarketingNarrowViewportHintFromRequestHeaders/);
+    assert.match(shell, /serverNarrowViewportHint/);
+    assert.match(shell, /narrow\s*\?\s*children\s*:\s*<PageTransitionShellLazy/);
+  });
+
+  it("keeps framer route transitions off the initial mobile marketing bundle", () => {
+    const shell = source("src/lib/ui/marketing-mobile-motion-shell.tsx");
+
+    assert.match(shell, /dynamic\(/);
+    assert.doesNotMatch(shell, /import\s+\{\s*PageTransitionShell\s*\}\s+from/);
+    assert.match(shell, /ssr:\s*false/);
+  });
+
+  it("contains below-fold premium homepage paint while preserving gradients", () => {
+    const premiumCss = source("src/app/premium-redesign-2026.css");
+
+    assert.match(premiumCss, /\.nn-home-marketing-root \.nn-premium-home-section\s*\{[^}]*content-visibility:\s*auto/s);
+    assert.match(premiumCss, /contain-intrinsic-size:\s*auto/);
+    assert.match(premiumCss, /contain:\s*paint/);
+    assert.match(premiumCss, /\.nn-premium-final-cta\s*\{[^}]*radial-gradient/s);
+  });
 });

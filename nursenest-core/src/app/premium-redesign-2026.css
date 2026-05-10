@@ -1055,6 +1055,21 @@
   padding-block: clamp(2.35rem, 4.6vw, calc(var(--nn-rhythm-section-y, 4rem) * 0.9));
 }
 
+@supports (content-visibility: auto) {
+  .nn-home-marketing-root .nn-premium-home-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto clamp(34rem, 82vw, 54rem);
+  }
+}
+
+@media (max-width: 768px) {
+  @supports (content-visibility: auto) {
+    .nn-home-marketing-root .nn-premium-home-section {
+      contain-intrinsic-size: auto 44rem;
+    }
+  }
+}
+
 @media (max-width: 640px) {
   .nn-home-marketing-root .nn-premium-home-section {
     padding-block: clamp(2rem, 5.2vw, calc(var(--nn-rhythm-mobile-section-y, 2.75rem) * 0.95));
@@ -2346,6 +2361,7 @@ html[data-theme="aurora"] .nn-premium-auth-system {
     linear-gradient(180deg, color-mix(in srgb, var(--surface, #fff) 94%, transparent), color-mix(in srgb, var(--surface, #fff) 84%, transparent));
   border-color: color-mix(in srgb, var(--border-subtle, #e5e7eb) 78%, var(--semantic-brand, #2563eb));
   box-shadow: 0 18px 44px -34px color-mix(in srgb, var(--palette-heading, #0f172a) 30%, transparent);
+  contain: paint;
 }
 
 .nn-premium-pathway-card {
@@ -2560,6 +2576,26 @@ html[data-theme="aurora"] .nn-premium-auth-system {
 .nn-premium-cta-tile:hover {
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--semantic-brand, #2563eb) 34%, var(--border-subtle, #e5e7eb));
+}
+
+@media (max-width: 768px), (prefers-reduced-motion: reduce) {
+  .nn-home-marketing-root :is(
+    .nn-premium-pathway-card,
+    .nn-premium-flow-card,
+    .nn-premium-cta-tile,
+    .nn-premium-home-section--social-study article
+  ) {
+    transition-property: border-color, box-shadow, background-color, color;
+  }
+
+  .nn-home-marketing-root :is(
+    .nn-premium-pathway-card:hover,
+    .nn-premium-flow-card:hover,
+    .nn-premium-cta-tile:hover,
+    .nn-premium-home-section--social-study article:hover
+  ) {
+    transform: none;
+  }
 }
 
 @media (max-width: 640px) {

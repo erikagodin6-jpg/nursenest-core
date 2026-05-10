@@ -21,8 +21,8 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
 | 1 | `src/components/student/practice-test-runner-client.tsx` | 3422 | 158854 | yes | medium |
 | 2 | `src/components/admin/admin-blog-control-panel-client.tsx` | 2859 | 126714 | yes | medium |
 | 3 | `src/components/student/question-bank-practice-client.tsx` | 1941 | 88345 | yes | lower |
-| 4 | `src/components/student/practice-tests-hub-client.tsx` | 1865 | 92429 | yes | lower |
-| 5 | `src/app/(student)/app/(learner)/layout.tsx` | 371 | 18398 | no | lower |
+| 4 | `src/components/student/practice-tests-hub-client.tsx` | 1869 | 92635 | yes | lower |
+| 5 | `src/app/(student)/app/(learner)/layout.tsx` | 378 | 18988 | no | lower |
 
 ## Static imports (first 12k chars)
 
@@ -181,6 +181,7 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
 - Imports:
   - `react`
   - `react`
+  - `next/headers`
   - `@/components/i18n/marketing-i18n-provider`
   - `@/lib/i18n/marketing-locale-server`
   - `@/lib/i18n/marketing-locale-policy`
@@ -218,7 +219,6 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/ops/operational-startup-diagnostics`
   - `@/components/learner/learner-silent-section-boundary`
   - `@/components/student/paywall-home-stats-context`
-  - `@/lib/marketing/load-paywall-home-stats-for-shell`
 
 
-*Generated 2026-05-10T09:50:32.133Z*
+*Generated 2026-05-10T10:16:59.148Z*

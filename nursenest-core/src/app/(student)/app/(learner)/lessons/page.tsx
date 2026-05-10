@@ -14,7 +14,6 @@ import { accessScopeForLessonCatalogPages } from "@/lib/entitlements/staff-db-le
 import { maxSafeOffsetPage, parseLessonLibraryLimit } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
-import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import {
   pathwayLessonsAppListWhereWithTopicFilter,
   visiblePathwayIdsForAppLessons,
@@ -25,7 +24,6 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumCrossTrackNudge } from "@/components/student/freemium-cross-track-nudge";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
-import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT } from "@/lib/lessons/pathway-lesson-scale";
 import { LearnerLessonsVirtualList } from "@/components/student/learner-lessons-virtual-list";
@@ -269,13 +267,6 @@ export default async function LessonsPage({ searchParams }: Props) {
       redirect(`/app/lessons/${hit.id}`);
     }
   }
-
-  const catHref = resolveStudyLoopCatHref({
-    authState: "signed_in",
-    pathwayId: pathwayIdFilter ?? learnerPath,
-    availablePathwayIds: visiblePathwayIds,
-    intent: "start",
-  });
 
   const lessonsBlockFromDb = await withDatabaseFallbackTimeout(
     async () => {
@@ -681,8 +672,6 @@ export default async function LessonsPage({ searchParams }: Props) {
         limit={limitParsed}
         q={qEffective ?? undefined}
       />
-
-      <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" catHref={catHref} />
     </div>
   );
   } finally {

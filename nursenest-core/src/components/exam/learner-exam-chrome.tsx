@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
 
 /**
  * Suppresses the main learner marketing-style header during active CAT / practice-test sessions
@@ -13,17 +14,6 @@ import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
  * `?examShell=1` flag must NOT hide chrome globally — it leaked onto account/settings when
  * present in the URL and removed the main nav site-wide via `data-learner-exam-chrome`.
  */
-function isFocusedPracticeTestSessionPath(pathname: string): boolean {
-  // Hide learner chrome only for the live session route (`/app/practice-tests/:id`).
-  // Keep chrome visible on list, start, cat-insights, and `/practice-tests/:id/results` (4 segments).
-  const parts = pathname.split("/").filter(Boolean);
-  if (parts.length !== 3) return false;
-  if (parts[0] !== "app" || parts[1] !== "practice-tests") return false;
-  const leaf = parts[2] ?? "";
-  if (leaf === "start" || leaf === "cat-insights") return false;
-  return leaf.length > 0;
-}
-
 export function LearnerExamChromeGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? "";
   const examFocus = useMemo(() => isFocusedPracticeTestSessionPath(pathname), [pathname]);

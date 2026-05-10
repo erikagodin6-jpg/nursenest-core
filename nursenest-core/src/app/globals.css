@@ -3479,18 +3479,22 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
 
 /* Exam-style sessions: hide main learner chrome (nav, adaptive strip) — see LearnerExamChromeGate. */
 html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-target,
-html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
+html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim,
+.nn-learner-app[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-target,
+.nn-learner-app[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   display: none !important;
 }
 
 /* Live practice-test session: strip default learner shell rhythm so CAT/exam fits the viewport. */
-html[data-learner-exam-chrome="hidden"] .nn-learner-app {
+html[data-learner-exam-chrome="hidden"] .nn-learner-app,
+.nn-learner-app[data-learner-exam-chrome="hidden"] {
   padding-top: max(0.35rem, env(safe-area-inset-top, 0px));
   padding-bottom: max(0.35rem, calc(0.35rem + env(safe-area-inset-bottom, 0px)));
 }
 
 @media (min-width: 768px) {
-  html[data-learner-exam-chrome="hidden"] .nn-learner-app {
+  html[data-learner-exam-chrome="hidden"] .nn-learner-app,
+  .nn-learner-app[data-learner-exam-chrome="hidden"] {
     padding-top: 0.45rem;
     padding-bottom: 0.5rem;
   }
@@ -3506,8 +3510,18 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
     overflow: hidden;
   }
 
+  .nn-learner-exam-focus-body .nn-learner-app[data-learner-exam-chrome="hidden"] {
+    flex: 1 1 0%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
   html[data-learner-exam-chrome="hidden"] .nn-learner-app > main#nn-learner-main,
-  html[data-learner-exam-chrome="hidden"] .nn-learner-app > main[data-nn-learner-main] {
+  html[data-learner-exam-chrome="hidden"] .nn-learner-app > main[data-nn-learner-main],
+  .nn-learner-app[data-learner-exam-chrome="hidden"] > main#nn-learner-main,
+  .nn-learner-app[data-learner-exam-chrome="hidden"] > main[data-nn-learner-main] {
     flex: 1 1 0%;
     min-height: 0;
     display: flex;
@@ -3516,7 +3530,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   }
 
   /* Page root (practice test run) → error boundary children → protected shell */
-  html[data-learner-exam-chrome="hidden"] main#nn-learner-main > div:first-child {
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main > div:first-child,
+  .nn-learner-app[data-learner-exam-chrome="hidden"] main#nn-learner-main > div:first-child {
     flex: 1 1 0%;
     min-height: 0;
     display: flex;
@@ -3524,7 +3539,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
     overflow: hidden;
   }
 
-  html[data-learner-exam-chrome="hidden"] main#nn-learner-main > div:first-child > [data-nn-protected-premium-root] {
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main > div:first-child > [data-nn-protected-premium-root],
+  .nn-learner-app[data-learner-exam-chrome="hidden"] main#nn-learner-main > div:first-child > [data-nn-protected-premium-root] {
     flex: 1 1 0%;
     min-height: 0;
     display: flex;
@@ -3532,14 +3548,16 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
     min-width: 0;
   }
 
-  html[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-protected-premium-surface {
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-protected-premium-surface,
+  .nn-learner-app[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-protected-premium-surface {
     flex: 1 1 0%;
     min-height: 0;
     display: flex;
     flex-direction: column;
   }
 
-  html[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-protected-premium-surface [data-nn-protected-premium-main] {
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-protected-premium-surface [data-nn-protected-premium-main],
+  .nn-learner-app[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-protected-premium-surface [data-nn-protected-premium-main] {
     flex: 1 1 0%;
     min-height: 0;
     display: flex;
@@ -3551,7 +3569,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
    * Critical: do NOT use `calc(100dvh - …)` here — minimal nav already sits above this subtree.
    * Fill the flex-allocated column instead so `scrollHeight` stays within `innerHeight`.
    */
-  html[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-practice-session {
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-practice-session,
+  .nn-learner-app[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-practice-session {
     flex: 1 1 0%;
     min-height: 0;
     height: auto !important;

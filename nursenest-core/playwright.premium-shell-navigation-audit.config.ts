@@ -30,7 +30,7 @@ const paidAuthEnabled = hasPaidTestCredentials();
 
 export default defineConfig({
   testDir: ".",
-  testMatch: /tests\/e2e\/navigation\/premium-shell-navigation-consistency-audit\.spec\.ts$/,
+  testMatch: /tests\/e2e\/navigation\/premium-(shell-navigation-consistency-audit|learner-shell-navigation-audit)\.spec\.ts$/,
   fullyParallel: false,
   workers: 1,
   timeout: 180_000,

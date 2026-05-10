@@ -94,11 +94,49 @@ function RecommendationRow({
   );
 }
 
-export async function LearnerStudyNextBlock({ model }: { model: LearnerStudyNextBlockModel }) {
+export async function LearnerStudyNextBlock({
+  model,
+  variant = "full",
+}: {
+  model: LearnerStudyNextBlockModel;
+  variant?: "full" | "pulse";
+}) {
   const { t } = await getLearnerMarketingBundle();
   const secondary = model.secondary.slice(0, 2);
   const dailyPct = Math.min(100, Math.round((model.todayGoalCredits / Math.max(1, model.todayGoalTarget)) * 100));
   const streakBarPct = Math.min(100, model.streakDays * 12);
+
+  if (variant === "pulse") {
+    return (
+      <section
+        className="nn-surface-bubble rounded-xl px-3 py-2.5 shadow-[var(--shadow-card)] sm:px-3.5"
+        aria-label={t("learner.retention.stripPanelTitle")}
+        data-nn-study-next-pulse=""
+      >
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--semantic-text-muted)]">
+              {t("learner.retention.stripPanelTitle")}
+            </p>
+            <p className="mt-1 line-clamp-1 text-sm font-semibold text-[var(--theme-heading-text)] [overflow-wrap:anywhere]">
+              {model.continueWhere?.title ?? model.primary.title}
+            </p>
+          </div>
+          <div className="flex shrink-0 items-center gap-2 text-[11px] font-semibold text-[var(--semantic-text-secondary)]">
+            <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface-alt)] px-2 py-1 tabular-nums">
+              {t("learner.retention.stripCredits", { n: model.todayGoalCredits, target: model.todayGoalTarget })}
+            </span>
+            <Link
+              href={model.continueWhere?.href ?? model.primary.href}
+              className="inline-flex min-h-8 items-center justify-center rounded-full bg-role-cta px-3 py-1.5 text-xs font-semibold text-role-cta-foreground shadow-[0_2px_8px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
+            >
+              {model.continueWhere ? t("learner.retention.stripContinueCta") : ctaForRecommendationType(model.primary.type, t)}
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section

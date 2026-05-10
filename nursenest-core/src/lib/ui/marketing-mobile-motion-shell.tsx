@@ -13,7 +13,7 @@ const PageTransitionShellLazy = dynamic(
     import("@/lib/motion/page-transition-shell").then((mod) => ({
       default: mod.PageTransitionShell,
     })),
-  { ssr: true },
+  { ssr: false },
 );
 
 /**
