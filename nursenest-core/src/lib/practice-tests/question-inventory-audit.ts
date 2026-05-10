@@ -1,7 +1,12 @@
 import "server-only";
 
 import type { Prisma } from "@prisma/client";
-import { validatePracticeCatPool, type CatPoolRow } from "@/lib/exams/cat-engine";
+import {
+  buildCatCategoryDiversityDiagnostics,
+  validatePracticeCatPool,
+  type CatCategoryDiversityDiagnostics,
+  type CatPoolRow,
+} from "@/lib/exams/cat-engine";
 import { ECG_QUESTION_FORMAT } from "@/lib/ecg-module/ecg-module-config";
 import {
   isCompleteCatQuestionRow,
@@ -90,6 +95,7 @@ export type QuestionInventoryAuditSummary = {
     moduleExclusions: number;
     failedCompletenessReasons: Partial<Record<QuestionInventoryExclusionReason, number>>;
     categorySpread: Record<string, number>;
+    categoryDiversity: CatCategoryDiversityDiagnostics;
     difficultySpread: Record<string, number>;
     validatePracticeCatPoolResult: ReturnType<typeof validatePracticeCatPool>;
   };
@@ -103,6 +109,7 @@ export type QuestionInventoryAuditSummary = {
   };
   failedCompletenessReasons: Partial<Record<QuestionInventoryExclusionReason, number>>;
   categorySpread: Record<string, number>;
+  categoryDiversity: CatCategoryDiversityDiagnostics;
   difficultySpread: Record<string, number>;
   validatePracticeCatPool: ReturnType<typeof validatePracticeCatPool>;
   rows: QuestionInventoryClassification[];
@@ -242,6 +249,7 @@ export function buildQuestionInventorySummary(input: {
   }
   const catSourceRows = rows.filter((_, index) => classified[index]?.catReady);
   const categorySpread = spread(catSourceRows, "bodySystem");
+  const categoryDiversity = buildCatCategoryDiversityDiagnostics(catRows);
   const difficultySpread = spread(catSourceRows, "difficulty");
   const validatePracticeCatPoolResult = validatePracticeCatPool(catRows);
 
@@ -270,6 +278,7 @@ export function buildQuestionInventorySummary(input: {
       moduleExclusions: classified.filter((row) => row.exclusionReasons.includes("module-only exclusion")).length,
       failedCompletenessReasons,
       categorySpread,
+      categoryDiversity,
       difficultySpread,
       validatePracticeCatPoolResult,
     },
@@ -282,6 +291,7 @@ export function buildQuestionInventorySummary(input: {
     },
     failedCompletenessReasons,
     categorySpread,
+    categoryDiversity,
     difficultySpread,
     validatePracticeCatPool: validatePracticeCatPoolResult,
     rows: classified,

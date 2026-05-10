@@ -86,6 +86,63 @@ test("buildQuestionInventorySummary separates published, linear, and CAT-ready i
   assert.equal(summary.catReady.validatePracticeCatPoolResult.ok, false);
 });
 
+test("buildQuestionInventorySummary reports CAT category diversity source diagnostics", () => {
+  const clientNeedsOnlyRows = [
+    "Safe and Effective Care Environment",
+    "Safe   and Effective Care Environment",
+    "Health Promotion and Maintenance",
+    "Physiological Integrity",
+    "Psychosocial Integrity",
+    "Physiological Integrity",
+    "Health Promotion and Maintenance",
+    "Psychosocial Integrity",
+  ].map((category, index) =>
+    row({
+      id: `client-needs-${index}`,
+      difficulty: index % 2 === 0 ? 2 : 4,
+      bodySystem: null,
+      topic: null,
+      nclexClientNeedsCategory: category,
+    }),
+  );
+
+  const summary = buildQuestionInventorySummary({
+    pathwayId: "us-rn-nclex-rn",
+    rows: [
+      ...clientNeedsOnlyRows.map((auditRow) => ({ row: auditRow, published: true, linearPracticeReady: true })),
+      {
+        row: row({
+          id: "general-taxonomy",
+          bodySystem: null,
+          topic: "",
+          nclexClientNeedsCategory: null,
+        }),
+        published: true,
+        linearPracticeReady: true,
+      },
+      {
+        row: row({ id: "ecg-excluded", questionFormat: "ecg_video", bodySystem: null, topic: null }),
+        published: true,
+        linearPracticeReady: false,
+      },
+      {
+        row: row({ id: "module-excluded", tags: ["lab-drills-only"], bodySystem: null, topic: null }),
+        published: true,
+        linearPracticeReady: false,
+      },
+    ],
+  });
+
+  assert.equal(summary.catReady.validatePracticeCatPoolResult.ok, true);
+  assert.equal(summary.catReady.categoryDiversity.rowsRescuedByNclexClientNeedsFallback, 8);
+  assert.equal(summary.catReady.categoryDiversity.rowsCollapsingToGeneral, 1);
+  assert.equal(summary.catReady.categoryDiversity.sourceBreakdown.nclexClientNeedsCategory, 8);
+  assert.equal(summary.catReady.categoryDiversity.sourceBreakdown.general, 1);
+  assert.equal(summary.catReady.categoryDiversity.finalCategoryKeys["physiological integrity"], 2);
+  assert.equal(summary.catReady.ecgExclusions, 1);
+  assert.equal(summary.catReady.moduleExclusions, 1);
+});
+
 test("catReadinessUnavailableMessage can surface published versus CAT-ready mismatch", () => {
   const message = catReadinessUnavailableMessage(
     {

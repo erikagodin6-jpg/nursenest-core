@@ -30,6 +30,12 @@ async function main(): Promise<void> {
   console.log(
     `[question-inventory] ecg=${report.published.ecgRows} moduleOnly=${report.published.moduleOnlyRows} incomplete=${report.published.incompleteRows} catPoolValid=${report.catReady.validatePracticeCatPoolResult.ok}`,
   );
+  console.log(
+    `[question-inventory] categorySources bodySystem=${report.catReady.categoryDiversity.sourceBreakdown.bodySystem} topic=${report.catReady.categoryDiversity.sourceBreakdown.topic} nclexClientNeedsCategory=${report.catReady.categoryDiversity.sourceBreakdown.nclexClientNeedsCategory} general=${report.catReady.categoryDiversity.sourceBreakdown.general}`,
+  );
+  console.log(
+    `[question-inventory] categoryDiversity finalKeys=${Object.keys(report.catReady.categoryDiversity.finalCategoryKeys).length} bodySystemTopicKeys=${Object.keys(report.catReady.categoryDiversity.bodySystemOrTopicCategoryKeys).length} nclexClientNeedsKeys=${Object.keys(report.catReady.categoryDiversity.nclexClientNeedsCategoryKeys).length} rowsCollapsingToGeneral=${report.catReady.categoryDiversity.rowsCollapsingToGeneral} rowsRescuedByNclexFallback=${report.catReady.categoryDiversity.rowsRescuedByNclexClientNeedsFallback}`,
+  );
   console.log(`[question-inventory] wrote ${outPath}`);
 }
 
