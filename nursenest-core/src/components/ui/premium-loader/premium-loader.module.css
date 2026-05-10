@@ -61,6 +61,27 @@
   height: 2.25rem;
 }
 
+/* Jitter / Bodymovin slot — sized to match leaf chrome; SVG is generated inside Lottie. */
+.jitterLottieSlot {
+  display: flex;
+  width: var(--nn-loader-leaf-box);
+  height: var(--nn-loader-leaf-box);
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.jitterLottieCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+.jitterLottieCanvas :global(svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 @media (min-width: 768px) {
   .leafDrone {
     --nn-loader-leaf-box: 3.35rem;
@@ -184,6 +205,18 @@
     left: calc(100% - var(--nn-loader-leaf-box));
     transform: rotate(9deg);
   }
+}
+
+/* When Lottie drives motion, keep the drone centered in the drift track (no CSS path). */
+.leafDroneNnLottie {
+  animation: none;
+  left: 50%;
+  transform: translateX(-50%);
+  will-change: auto;
+}
+
+.leafMotionNnLottie::after {
+  display: none;
 }
 
 @keyframes nn-premium-loader-leaf-trail {

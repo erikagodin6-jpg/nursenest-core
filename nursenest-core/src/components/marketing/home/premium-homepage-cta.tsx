@@ -9,6 +9,7 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { LeafWatermark } from "@/components/brand/leaf-watermark";
 
 import { usePremiumHomepageRoutes } from "./premium-homepage-routes";
 
@@ -29,8 +30,13 @@ export function PremiumHomepageCta() {
       data-testid="section-premium-homepage-final-cta"
     >
       <div className="nn-section-shell">
-        <div className="nn-premium-final-cta rounded-3xl border p-6 sm:p-8 lg:p-10">
-          <div className="grid gap-8 lg:grid-cols-[1.35fr_0.65fr] lg:items-center">
+        <div className="nn-premium-final-cta relative overflow-hidden rounded-3xl border p-6 sm:p-8 lg:p-10">
+          <LeafWatermark
+            className="-right-20 -bottom-24 hidden h-[24rem] w-[24rem] items-center justify-center sm:flex"
+            imageClassName="max-h-[22rem] opacity-[0.04]"
+            size={460}
+          />
+          <div className="relative z-[1] grid gap-8 lg:grid-cols-[1.35fr_0.65fr] lg:items-center">
             <div>
               <p className="nn-premium-home-eyebrow">
                 {tr("pages.home.premium.bottomCta.eyebrow", "Start today")}

@@ -763,7 +763,7 @@ export function AlliedHealthPathwayHub({
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href={pricingHref}
-            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-success)] px-8 py-2.5 text-sm font-semibold text-[var(--semantic-success-contrast)] transition hover:opacity-95"
+            className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--role-cta)] px-8 py-2.5 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-[0_10px_22px_color-mix(in_srgb,var(--role-cta-shadow)_55%,transparent)] transition hover:bg-[var(--role-cta-hover)]"
           >
             Compare Allied Pricing
           </Link>

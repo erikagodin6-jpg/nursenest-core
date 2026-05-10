@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
@@ -12,7 +11,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { EmailSignupBanner } from "@/components/marketing/email-signup-banner";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
-import { useThemeLogo } from "@/lib/theme/use-theme-logo";
+import { LeafWatermark } from "@/components/brand/leaf-watermark";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import {
   learnerMarketingPathwayIdFromSession,
@@ -122,29 +121,6 @@ function FooterGuestAppLink({ path, children }: { path: string; children: React.
   return <FLink href={loginWithCallback(normalized)}>{children}</FLink>;
 }
 
-function FooterLeafWatermark() {
-  const { url, kind } = useThemeLogo("leaf");
-  const leafUrl = kind === "local" && typeof url === "string" && url.trim().length > 0 ? url : null;
-  if (!leafUrl) return null;
-  return (
-    <div
-      className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden select-none"
-      aria-hidden
-    >
-      <Image
-        src={leafUrl}
-        alt=""
-        width={420}
-        height={420}
-        sizes="420px"
-        unoptimized
-        className="max-h-[min(48vw,18rem)] w-auto opacity-[0.055] grayscale sm:max-h-[min(40vw,20rem)] sm:opacity-[0.065]"
-        draggable={false}
-      />
-    </div>
-  );
-}
-
 type SiteFooterProps = {
   /** Same DB-backed hint as {@link SiteHeader} — JWT role can lag after role changes. */
   serverHasStaffSession?: boolean;
@@ -195,7 +171,10 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
     >
       <div className="nn-section-shell nn-footer-marketing-shell">
         <div className="nn-footer-panel nn-footer-panel--main relative mb-6 overflow-hidden px-5 py-6 sm:px-6 sm:py-7">
-          <FooterLeafWatermark />
+          <LeafWatermark
+            className="inset-0 flex items-center justify-center"
+            imageClassName="max-h-[min(48vw,18rem)] opacity-[0.055] sm:max-h-[min(40vw,20rem)] sm:opacity-[0.065]"
+          />
 
           <div className="relative z-[1] space-y-8 md:space-y-9">
             <div className="nn-footer-premium-top nn-footer-columns grid grid-cols-1 gap-x-10 gap-y-10 xl:grid-cols-12">

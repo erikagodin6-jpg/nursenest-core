@@ -42,6 +42,7 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { LeafWatermark } from "@/components/brand/leaf-watermark";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 function safeLocale(locale?: string) {
@@ -372,8 +373,13 @@ export function PremiumHomepageHero(props: {
       aria-labelledby="home-conversion-hero-heading"
       data-testid="hero-section"
     >
-      <div className="mx-auto max-w-6xl px-4 py-[calc(var(--nn-rhythm-page-y)*0.9)] sm:px-6 md:py-[calc(var(--nn-rhythm-section-y)*0.92)] lg:px-8">
-        <div className="nn-premium-hero-grid min-h-[min(22rem,72dvh)] md:min-h-[19rem]">
+      <div className="relative mx-auto max-w-6xl overflow-hidden px-4 py-[calc(var(--nn-rhythm-page-y)*0.9)] sm:px-6 md:py-[calc(var(--nn-rhythm-section-y)*0.92)] lg:px-8">
+        <LeafWatermark
+          className="-right-24 top-4 hidden h-[24rem] w-[24rem] items-center justify-center opacity-70 md:flex lg:-right-28 lg:top-0"
+          imageClassName="max-h-[22rem] opacity-[0.035] lg:max-h-[24rem]"
+          size={460}
+        />
+        <div className="nn-premium-hero-grid relative z-[1] min-h-[min(22rem,72dvh)] md:min-h-[19rem]">
           {/* ── Copy column ───────────────────────────────────────── */}
           <div>
             <span className="nn-premium-hero-eyebrow">{eyebrow}</span>

@@ -27,7 +27,7 @@ function ctaClass(variant: CtaButton["variant"]): string {
     "inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition-colors";
   switch (variant) {
     case "primary":
-      return `${base} bg-[var(--semantic-success)] text-[var(--text-on-dark)] hover:opacity-90`;
+      return `${base} bg-[var(--role-cta)] text-[var(--role-cta-foreground)] shadow-[0_10px_22px_color-mix(in_srgb,var(--role-cta-shadow)_55%,transparent)] hover:bg-[var(--role-cta-hover)]`;
     case "outline":
       return `${base} border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))]`;
     case "ghost":

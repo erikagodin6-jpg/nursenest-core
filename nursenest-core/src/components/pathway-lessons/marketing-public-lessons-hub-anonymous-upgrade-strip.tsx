@@ -32,7 +32,7 @@ export function MarketingPublicLessonsHubAnonymousUpgradeStrip({
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <Link
           href={signupHref}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-success)] px-5 py-2 text-sm font-semibold text-[var(--text-on-dark)] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-success)_35%,transparent)]"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--role-cta)] px-5 py-2 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-[0_10px_22px_color-mix(in_srgb,var(--role-cta-shadow)_55%,transparent)] transition hover:bg-[var(--role-cta-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--role-cta)_35%,transparent)]"
         >
           Create a free account
         </Link>
