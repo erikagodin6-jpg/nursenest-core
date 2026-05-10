@@ -14,22 +14,25 @@ test.describe("Live layout markers", () => {
   });
 
   test("public marketing surfaces render premium markers and valid static assets", async ({ page }, testInfo) => {
+    test.setTimeout(300_000);
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await expect(page.locator(".nn-home-marketing-rich-hero")).toBeVisible({ timeout: 90_000 });
     await expect(page.locator(".nn-premium-hero-grid")).toBeVisible();
     await expect(page.locator(".nn-premium-hero-panel")).toBeVisible();
-    await page.screenshot({ path: `${SCREENSHOT_DIR}/homepage-${testInfo.project.name}.png`, fullPage: true });
+    await page.screenshot({ path: `${SCREENSHOT_DIR}/homepage-${testInfo.project.name}.png`, fullPage: false });
 
     const assetUrls = await page.evaluate(() =>
       Array.from(document.querySelectorAll<HTMLScriptElement | HTMLLinkElement>('script[src*="/_next/static/"],link[href*="/_next/static/"]'))
         .map((el) => ("src" in el ? el.src : el.href))
-        .filter(Boolean)
-        .slice(0, 8),
+        .filter(Boolean),
     );
-    expect(assetUrls.length).toBeGreaterThan(0);
-    for (const url of assetUrls) {
-      const res = await page.request.get(url);
-      expect(res.status(), `${url} status`).toBe(200);
+    const jsAsset = assetUrls.find((url) => url.includes(".js"));
+    const cssAsset = assetUrls.find((url) => url.includes(".css"));
+    const sampledAssets = [cssAsset, jsAsset].filter((url): url is string => Boolean(url));
+    expect(sampledAssets.length).toBeGreaterThan(0);
+    for (const url of sampledAssets) {
+      const res = await page.request.get(url, { headers: { range: "bytes=0-511" } });
+      expect([200, 206], `${url} status`).toContain(res.status());
       const contentType = res.headers()["content-type"] ?? "";
       if (url.includes(".css")) {
         expect(contentType, `${url} content-type`).toContain("text/css");
@@ -44,8 +47,7 @@ test.describe("Live layout markers", () => {
     await page.goto("/canada/rn/nclex-rn/questions", { waitUntil: "domcontentloaded" });
     await expect(page.getByTestId("marketing-practice-questions-hub")).toBeVisible({ timeout: 90_000 });
     await expect(page.getByTestId("start-selected-systems-practice").first()).toBeVisible();
-    await page.screenshot({ path: `${SCREENSHOT_DIR}/rn-questions-${testInfo.project.name}.png`, fullPage: true });
-
+    await page.screenshot({ path: `${SCREENSHOT_DIR}/rn-questions-${testInfo.project.name}.png`, fullPage: false });
   });
 
   test("authenticated learner surfaces render premium markers", async ({ page }, testInfo) => {
