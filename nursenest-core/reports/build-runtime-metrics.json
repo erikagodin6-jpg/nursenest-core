@@ -1,0 +1,374 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-05-10T12:30:55.225Z",
+  "runs": [
+    {
+      "id": "2026-05-10T12:00:00.000Z-31556",
+      "kind": "lesson-indexes",
+      "startedAt": "2026-05-10T12:00:00.000Z",
+      "finishedAt": "2026-05-10T12:12:06.201Z",
+      "host": {
+        "platform": "linux",
+        "arch": "x64",
+        "node": "v20.18.2",
+        "cpuCount": 4,
+        "totalRamMb": 7941
+      },
+      "config": {
+        "NODE_ENV": "production",
+        "NODE_OPTIONS": null,
+        "NN_LOW_MEMORY_BUILD": "1",
+        "NN_FORCE_SINGLE_BUILD_WORKER": null,
+        "BUILD_WEBPACK_PARALLELISM": null,
+        "BUILD_NODE_MAX_OLD_SPACE_SIZE_MB": null,
+        "NN_APP_PLATFORM_BUILD": null
+      },
+      "phases": [
+        {
+          "name": "verify_lesson_indexes",
+          "durationMs": 1234,
+          "heapUsedMb": 42
+        }
+      ],
+      "memory": {
+        "peakRssMb": 512,
+        "peakProcessCount": 3,
+        "heapUsedMbAtFinish": 5,
+        "rssMbAtFinish": 44
+      },
+      "counts": {
+        "lessonCount": 99
+      }
+    },
+    {
+      "id": "2026-05-10T12:11:09.214Z-29719",
+      "kind": "lesson-index-gate",
+      "startedAt": "2026-05-10T12:11:09.214Z",
+      "finishedAt": "2026-05-10T12:12:39.336Z",
+      "host": {
+        "platform": "linux",
+        "arch": "x64",
+        "node": "v20.18.2",
+        "cpuCount": 4,
+        "totalRamMb": 7941
+      },
+      "config": {
+        "NODE_ENV": null,
+        "NODE_OPTIONS": null,
+        "NN_LOW_MEMORY_BUILD": null,
+        "NN_FORCE_SINGLE_BUILD_WORKER": null,
+        "BUILD_WEBPACK_PARALLELISM": null,
+        "BUILD_NODE_MAX_OLD_SPACE_SIZE_MB": null,
+        "NN_APP_PLATFORM_BUILD": null
+      },
+      "phases": [
+        {
+          "name": "lesson_index_generation",
+          "durationMs": 86520
+        },
+        {
+          "name": "lesson_index_verification",
+          "durationMs": 3593,
+          "verifyMode": "light"
+        }
+      ],
+      "memory": {
+        "peakRssMb": null,
+        "peakProcessCount": null,
+        "heapUsedMbAtFinish": 4,
+        "rssMbAtFinish": 43
+      },
+      "counts": {
+        "buildLessonIndexesMs": 86520,
+        "verifyLessonIndexesMs": 3593,
+        "totalGateMs": 90113
+      }
+    },
+    {
+      "id": "2026-05-10T12:18:47.349Z-56001",
+      "kind": "lesson-index-gate",
+      "startedAt": "2026-05-10T12:18:47.349Z",
+      "finishedAt": "2026-05-10T12:19:59.753Z",
+      "host": {
+        "platform": "linux",
+        "arch": "x64",
+        "node": "v20.18.2",
+        "cpuCount": 4,
+        "totalRamMb": 7941
+      },
+      "config": {
+        "NODE_ENV": "production",
+        "NODE_OPTIONS": "--max-old-space-size=4367",
+        "NN_LOW_MEMORY_BUILD": null,
+        "NN_FORCE_SINGLE_BUILD_WORKER": null,
+        "BUILD_WEBPACK_PARALLELISM": null,
+        "BUILD_NODE_MAX_OLD_SPACE_SIZE_MB": null,
+        "NN_APP_PLATFORM_BUILD": null
+      },
+      "phases": [
+        {
+          "name": "lesson_index_generation",
+          "durationMs": 69949
+        },
+        {
+          "name": "lesson_index_verification",
+          "durationMs": 2447,
+          "verifyMode": "light"
+        }
+      ],
+      "memory": {
+        "peakRssMb": null,
+        "peakProcessCount": null,
+        "heapUsedMbAtFinish": 4,
+        "rssMbAtFinish": 43
+      },
+      "counts": {
+        "buildLessonIndexesMs": 69949,
+        "verifyLessonIndexesMs": 2447,
+        "totalGateMs": 72396
+      },
+      "inventoryDiagnostics": {
+        "file": "reports/question-inventory-us-rn-nclex-rn.json",
+        "generatedAt": "2026-05-10T12:19:32.154Z",
+        "pathwayId": "us-rn-nclex-rn",
+        "buckets": {
+          "publishedInventory": 10000,
+          "linearPracticeReadyInventory": 2397,
+          "catReadyInventory": 2172
+        },
+        "exclusions": {
+          "ecgRows": 0,
+          "moduleOnlyRows": 0,
+          "incompleteRows": 924,
+          "linearPracticeExcludedRows": 7603,
+          "catExcludedRows": 7828
+        }
+      }
+    },
+    {
+      "id": "2026-05-10T12:18:43.436Z-55862",
+      "kind": "next-prod-build",
+      "startedAt": "2026-05-10T12:18:43.436Z",
+      "finishedAt": "2026-05-10T12:23:58.962Z",
+      "host": {
+        "platform": "linux",
+        "arch": "x64",
+        "node": "v20.18.2",
+        "cpuCount": 4,
+        "totalRamMb": 7941
+      },
+      "config": {
+        "NODE_ENV": "production",
+        "NODE_OPTIONS": "--max-old-space-size=8192",
+        "NN_LOW_MEMORY_BUILD": null,
+        "NN_FORCE_SINGLE_BUILD_WORKER": null,
+        "BUILD_WEBPACK_PARALLELISM": null,
+        "BUILD_NODE_MAX_OLD_SPACE_SIZE_MB": null,
+        "NN_APP_PLATFORM_BUILD": null
+      },
+      "phases": [
+        {
+          "name": "validate_production_surface",
+          "durationMs": 2423,
+          "heapUsedMb": 7,
+          "rssMb": 55
+        },
+        {
+          "name": "lesson_indexes_gate",
+          "durationMs": 72650,
+          "heapUsedMb": 7,
+          "rssMb": 55
+        },
+        {
+          "name": "next_build",
+          "durationMs": 237741,
+          "heapUsedMb": 5,
+          "rssMb": 19
+        },
+        {
+          "name": "ensure_standalone_static",
+          "durationMs": 846,
+          "heapUsedMb": 4,
+          "rssMb": 21
+        },
+        {
+          "name": "verify_standalone_artifact",
+          "durationMs": 383,
+          "heapUsedMb": 4,
+          "rssMb": 21
+        }
+      ],
+      "memory": {
+        "peakRssMb": 6006,
+        "peakProcessCount": 2,
+        "heapUsedMbAtFinish": 6,
+        "rssMbAtFinish": 24
+      },
+      "counts": {
+        "staticAssetFiles": 297,
+        "standaloneFiles": 2088,
+        "peakNextProcessCount": 2
+      },
+      "inventoryDiagnostics": {
+        "file": "reports/question-inventory-us-rn-nclex-rn.json",
+        "generatedAt": "2026-05-10T12:20:22.191Z",
+        "pathwayId": "us-rn-nclex-rn",
+        "buckets": {
+          "publishedInventory": 12838,
+          "linearPracticeReadyInventory": 12838,
+          "catReadyInventory": 11660
+        },
+        "exclusions": {
+          "ecgRows": 0,
+          "moduleOnlyRows": 0,
+          "incompleteRows": 1127,
+          "linearPracticeExcludedRows": 0,
+          "catExcludedRows": 1178
+        }
+      }
+    },
+    {
+      "id": "2026-05-10T12:25:42.678Z-74687",
+      "kind": "lesson-index-gate",
+      "startedAt": "2026-05-10T12:25:42.678Z",
+      "finishedAt": "2026-05-10T12:28:06.929Z",
+      "host": {
+        "platform": "linux",
+        "arch": "x64",
+        "node": "v20.18.2",
+        "cpuCount": 4,
+        "totalRamMb": 7941
+      },
+      "config": {
+        "NODE_ENV": "production",
+        "NODE_OPTIONS": "--max-old-space-size=4367",
+        "NN_LOW_MEMORY_BUILD": null,
+        "NN_FORCE_SINGLE_BUILD_WORKER": null,
+        "BUILD_WEBPACK_PARALLELISM": null,
+        "BUILD_NODE_MAX_OLD_SPACE_SIZE_MB": null,
+        "NN_APP_PLATFORM_BUILD": null
+      },
+      "phases": [
+        {
+          "name": "lesson_index_generation",
+          "durationMs": 46631
+        },
+        {
+          "name": "lesson_index_verification",
+          "durationMs": 97612,
+          "verifyMode": "deep"
+        }
+      ],
+      "memory": {
+        "peakRssMb": null,
+        "peakProcessCount": null,
+        "heapUsedMbAtFinish": 4,
+        "rssMbAtFinish": 42
+      },
+      "counts": {
+        "buildLessonIndexesMs": 46631,
+        "verifyLessonIndexesMs": 97612,
+        "totalGateMs": 144243
+      },
+      "inventoryDiagnostics": {
+        "file": "reports/question-inventory-us-rn-nclex-rn.json",
+        "generatedAt": "2026-05-10T12:20:22.191Z",
+        "pathwayId": "us-rn-nclex-rn",
+        "buckets": {
+          "publishedInventory": 12838,
+          "linearPracticeReadyInventory": 12838,
+          "catReadyInventory": 11660
+        },
+        "exclusions": {
+          "ecgRows": 0,
+          "moduleOnlyRows": 0,
+          "incompleteRows": 1127,
+          "linearPracticeExcludedRows": 0,
+          "catExcludedRows": 1178
+        }
+      }
+    },
+    {
+      "id": "2026-05-10T12:25:39.364Z-74604",
+      "kind": "next-prod-build",
+      "startedAt": "2026-05-10T12:25:39.364Z",
+      "finishedAt": "2026-05-10T12:30:55.224Z",
+      "host": {
+        "platform": "linux",
+        "arch": "x64",
+        "node": "v20.18.2",
+        "cpuCount": 4,
+        "totalRamMb": 7941
+      },
+      "config": {
+        "NODE_ENV": "production",
+        "NODE_OPTIONS": "--max-old-space-size=8192",
+        "NN_LOW_MEMORY_BUILD": null,
+        "NN_FORCE_SINGLE_BUILD_WORKER": null,
+        "BUILD_WEBPACK_PARALLELISM": null,
+        "BUILD_NODE_MAX_OLD_SPACE_SIZE_MB": null,
+        "NN_APP_PLATFORM_BUILD": null
+      },
+      "phases": [
+        {
+          "name": "validate_production_surface",
+          "durationMs": 1751,
+          "heapUsedMb": 6,
+          "rssMb": 59
+        },
+        {
+          "name": "lesson_indexes_gate",
+          "durationMs": 144392,
+          "heapUsedMb": 6,
+          "rssMb": 59
+        },
+        {
+          "name": "next_build",
+          "durationMs": 167145,
+          "heapUsedMb": 4,
+          "rssMb": 42
+        },
+        {
+          "name": "ensure_standalone_static",
+          "durationMs": 622,
+          "heapUsedMb": 5,
+          "rssMb": 43
+        },
+        {
+          "name": "verify_standalone_artifact",
+          "durationMs": 358,
+          "heapUsedMb": 4,
+          "rssMb": 43
+        }
+      ],
+      "memory": {
+        "peakRssMb": 6054,
+        "peakProcessCount": 2,
+        "heapUsedMbAtFinish": 6,
+        "rssMbAtFinish": 47
+      },
+      "counts": {
+        "staticAssetFiles": 297,
+        "standaloneFiles": 2088,
+        "peakNextProcessCount": 2
+      },
+      "inventoryDiagnostics": {
+        "file": "reports/question-inventory-us-rn-nclex-rn.json",
+        "generatedAt": "2026-05-10T12:20:22.191Z",
+        "pathwayId": "us-rn-nclex-rn",
+        "buckets": {
+          "publishedInventory": 12838,
+          "linearPracticeReadyInventory": 12838,
+          "catReadyInventory": 11660
+        },
+        "exclusions": {
+          "ecgRows": 0,
+          "moduleOnlyRows": 0,
+          "incompleteRows": 1127,
+          "linearPracticeExcludedRows": 0,
+          "catExcludedRows": 1178
+        }
+      }
+    }
+  ]
+}

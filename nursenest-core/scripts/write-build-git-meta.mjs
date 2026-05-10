@@ -69,12 +69,12 @@ export function resolveBuildMeta({
   git: gitCommand = git,
   now = new Date(),
 } = {}) {
-  const gitCommit = gitCommand(["rev-parse", "HEAD"]);
   const envCommit = pickFromEnv(env, commitEnvKeys);
-  const gitBranch = normalizeBranch(gitCommand(["rev-parse", "--abbrev-ref", "HEAD"]));
   const envBranch = pickFromEnv(env, branchEnvKeys);
-  const commit = gitCommit || envCommit.value || null;
-  const branch = gitBranch || normalizeBranch(envBranch.value);
+  const gitCommit = envCommit.value ? null : gitCommand(["rev-parse", "HEAD"]);
+  const gitBranch = envBranch.value ? null : normalizeBranch(gitCommand(["rev-parse", "--abbrev-ref", "HEAD"]));
+  const commit = envCommit.value || gitCommit || null;
+  const branch = normalizeBranch(envBranch.value) || gitBranch;
 
   return {
     commit,
@@ -82,7 +82,7 @@ export function resolveBuildMeta({
     recordedAt: now.toISOString(),
     environment: env.NN_DEPLOY_ENV?.trim() || env.NODE_ENV?.trim() || null,
     buildPlatform: detectBuildPlatform(env),
-    source: gitCommit ? "git:rev-parse HEAD" : envCommit.key ? `env:${envCommit.key}` : null,
+    source: envCommit.key ? `env:${envCommit.key}` : gitCommit ? "git:rev-parse HEAD" : null,
   };
 }
 

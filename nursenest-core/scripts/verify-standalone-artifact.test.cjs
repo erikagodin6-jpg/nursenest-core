@@ -433,6 +433,7 @@ test("start-standalone accepts the top-level standalone server path", async (t) 
       HOSTNAME: "127.0.0.1",
       PORT: String(port),
       NN_BYPASS_BOOTSTRAP: "1",
+      NN_ENV_VALIDATION_MODE: "off",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -483,6 +484,7 @@ test("start-standalone exits fatally on readiness timeout with probe URL, timeou
       NN_BOOTSTRAP_READY_TIMEOUT_MS: "300",
       NN_CHILD_HEALTH_TIMEOUT_MS: "100",
       NN_BOOTSTRAP_READY_MAX_ATTEMPTS: "2",
+      NN_ENV_VALIDATION_MODE: "off",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -554,6 +556,7 @@ test("start-standalone reaches ready without bypass; /readyz reflects real child
       NN_CHILD_HEALTH_TIMEOUT_MS: "100",
       NN_BOOTSTRAP_READY_TIMEOUT_MS: "4000",
       NN_BOOTSTRAP_READY_MAX_ATTEMPTS: "30",
+      NN_ENV_VALIDATION_MODE: "off",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });

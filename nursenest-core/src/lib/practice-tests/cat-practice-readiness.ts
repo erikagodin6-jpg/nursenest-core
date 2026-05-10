@@ -46,7 +46,15 @@ function catReadinessDiagnosticsFromMeta(buildMeta: Awaited<ReturnType<typeof fe
 export function catReadinessUnavailableMessage(diagnostics: {
   eligibleCatQuestions: number;
   completePracticeQuestions: number;
+  publishedQuestions?: number;
 }, minPool: number): string {
+  if (
+    typeof diagnostics.publishedQuestions === "number" &&
+    diagnostics.publishedQuestions > diagnostics.eligibleCatQuestions
+  ) {
+    return `${diagnostics.publishedQuestions} published questions found, but only ${diagnostics.eligibleCatQuestions} currently meet CAT readiness requirements (${minPool} required). Practice mode may still be available while CAT calibration is completed.`;
+  }
+
   if (diagnostics.completePracticeQuestions > 0) {
     return `CAT requires calibrated questions. Practice questions are available, but CAT-ready calibrated questions are ${diagnostics.eligibleCatQuestions} / ${minPool}.`;
   }
