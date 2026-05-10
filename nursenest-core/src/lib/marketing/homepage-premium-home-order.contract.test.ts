@@ -14,7 +14,7 @@ test("HomeRestoredClient section order: hero → product screenshots → pathway
 
   const markers = [
     "<PremiumHomepageHero",
-    "<HomeHeroScreenshotSection",
+    "<HomeHeroScreenshotSectionLazy",
     "<PremiumPathwayShowcase",
     "<PremiumClinicalDepth",
     "<PremiumStudyEcosystem",

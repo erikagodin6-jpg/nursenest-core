@@ -188,6 +188,31 @@ export function buildHomepageHeroSlidesAtIndices(
   });
 }
 
+/** Same validation as `buildSafeMarketingHeroSlides` in the client carousel (kept pure for server preload). */
+export function filterRenderableHomeHeroSlides(
+  slides: readonly HomeHeroSlide[] | null | undefined,
+): HomeHeroSlide[] {
+  if (!Array.isArray(slides)) return [];
+  return slides.filter(
+    (s) =>
+      Boolean(s) &&
+      typeof s.publicUrl === "string" &&
+      s.publicUrl.trim().length > 0 &&
+      typeof s.objectKey === "string" &&
+      s.objectKey.trim().length > 0,
+  );
+}
+
+/**
+ * Build the primary homepage screenshot carousel slides from a message map (e.g. layout overlay shards).
+ * Avoids rebuilding slide strings on the client during initial hydration.
+ */
+export function buildHomeHeroPrimarySlidesFromMessages(messages: Record<string, string>): HomeHeroSlide[] {
+  const t = (key: string) => (typeof messages[key] === "string" ? messages[key]! : "");
+  const built = buildHomepageHeroSlidesAtIndices(t, HOME_HERO_PRIMARY_CAROUSEL_INDICES);
+  return filterRenderableHomeHeroSlides(built);
+}
+
 /**
  * Builds localized hero slides for `MarketingHeroCarousel`. Call from client components inside
  * `MarketingI18nProvider` and memoize on `t` / locale.

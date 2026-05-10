@@ -197,6 +197,16 @@ const nextConfig = {
         ],
       },
       {
+        /** Next.js build fingerprints — safe immutable long cache for desktop PageSpeed "cache lifetime". */
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
         /**
          * Static public assets. Keep this as a single Next-compatible matcher:
          * `/:path*.png` parses as an invalid modified wildcard, while the

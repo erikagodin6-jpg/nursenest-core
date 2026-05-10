@@ -19,14 +19,23 @@ import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { HomeMarketingHeroCarouselErrorBoundary } from "@/components/marketing/home-marketing-hero-carousel-error-boundary";
+import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 
-export function HomeHeroScreenshotSection() {
+export type HomeHeroScreenshotSectionProps = {
+  /** When set (from RSC), skip rebuilding slide copy on the client during initial paint. */
+  serverPreparedSlides?: readonly HomeHeroSlide[] | null;
+};
+
+export function HomeHeroScreenshotSection({ serverPreparedSlides }: HomeHeroScreenshotSectionProps = {}) {
   const { locale: ctxLocale, t } = useMarketingI18n();
   const { region: ctxRegion } = useNursenestRegion();
   const locale = ctxLocale || "en";
   const region = ctxRegion || "CA";
 
   const builtSlides = useMemo(() => {
+    if (serverPreparedSlides && serverPreparedSlides.length > 0) {
+      return [...serverPreparedSlides];
+    }
     try {
       return buildHomepageHeroSlidesAtIndices(t, HOME_HERO_PRIMARY_CAROUSEL_INDICES);
     } catch {
@@ -35,7 +44,7 @@ export function HomeHeroScreenshotSection() {
       }
       return [];
     }
-  }, [t]);
+  }, [t, serverPreparedSlides]);
 
   const validSlides = useMemo(
     () => buildSafeMarketingHeroSlides(builtSlides),

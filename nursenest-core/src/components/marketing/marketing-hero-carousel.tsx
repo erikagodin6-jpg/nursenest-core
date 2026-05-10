@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import type { HomeHeroSlide } from "@/config/home-hero-carousel";
+import { filterRenderableHomeHeroSlides, type HomeHeroSlide } from "@/config/home-hero-carousel";
 import {
   getMarketingHeroImageUrlChain,
   MARKETING_HERO_LOCAL_FALLBACK,
@@ -64,15 +64,6 @@ const sectionFrameChromeClass =
 const defaultFrameChromeClass =
   "rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm";
 
-/** Public CDN URL used by `next/image` for hero carousel slides (`HomeHeroSlide.publicUrl`). */
-function slideHasRenderablePublicUrl(s: HomeHeroSlide): boolean {
-  return typeof s.publicUrl === "string" && s.publicUrl.trim().length > 0;
-}
-
-function slideHasRenderableObjectKey(s: HomeHeroSlide): boolean {
-  return typeof s.objectKey === "string" && s.objectKey.trim().length > 0;
-}
-
 /**
  * Harden carousel input: never map/render raw `slides` without validation.
  * Keeps only slides with real image source fields used by `getMarketingHeroImageUrlChain` / `next/image`.
@@ -87,7 +78,7 @@ export function buildSafeMarketingHeroSlides(
     return [];
   }
   const raw = slides.filter(Boolean) as HomeHeroSlide[];
-  const safe = raw.filter((s) => slideHasRenderablePublicUrl(s) && slideHasRenderableObjectKey(s));
+  const safe = filterRenderableHomeHeroSlides(raw);
   if (process.env.NODE_ENV !== "production" && safe.length !== raw.length) {
     console.error("[MarketingHeroCarousel] Dropped invalid carousel slides", {
       incoming: raw.length,
@@ -249,6 +240,7 @@ function MarketingHeroCarouselInteractive({
       const chain = getMarketingHeroImageUrlChain({
         objectKey: slide.objectKey,
         publicCdnUrl: slide.publicUrl,
+        optimizedWidthOrder: mediaFrame === "section" ? "smallestFirst" : "largestFirst",
       });
       const maxTier = Math.max(0, chain.length - 1);
       const tier = Math.min(Math.max(0, heroTierByIndex[index] ?? 0), maxTier);
@@ -269,7 +261,7 @@ function MarketingHeroCarouselInteractive({
       }
       return changed ? next : prev;
     });
-  }, [slideFingerprint, heroTierByIndex, slides.length]);
+  }, [slideFingerprint, heroTierByIndex, slides.length, mediaFrame]);
 
   if (slides.length === 0) {
     return null;
@@ -355,6 +347,7 @@ function MarketingHeroCarouselInteractive({
           const chain = getMarketingHeroImageUrlChain({
             objectKey: slide.objectKey,
             publicCdnUrl: slide.publicUrl,
+            optimizedWidthOrder: mediaFrame === "section" ? "smallestFirst" : "largestFirst",
           });
           const maxTier = Math.max(0, chain.length - 1);
           const tier = Math.min(Math.max(0, heroTierByIndex[index] ?? 0), maxTier);
@@ -588,6 +581,7 @@ function MarketingHeroCarouselMobileLite({
   const chain = getMarketingHeroImageUrlChain({
     objectKey: slide0.objectKey,
     publicCdnUrl: slide0.publicUrl,
+    optimizedWidthOrder: mediaFrame === "section" ? "smallestFirst" : "largestFirst",
   });
   const maxTier = Math.max(0, chain.length - 1);
   const tierClamped = Math.min(Math.max(0, tier), maxTier);
