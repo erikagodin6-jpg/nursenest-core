@@ -418,6 +418,26 @@ function assertNonEmptyCssOutput(staticRoot) {
   }
 }
 
+function assertNonEmptyDir(label, dir, filter) {
+  if (!existsSync(dir)) {
+    console.error(`[next-prod-build] FATAL: next build reported success but ${label} is missing: ${dir}`);
+    process.exit(1);
+  }
+  let matches;
+  try {
+    matches = listFilesRecursive(dir, (name) => filter(name));
+  } catch (e) {
+    console.error(`[next-prod-build] FATAL: could not scan ${label} dir ${dir}`, e);
+    process.exit(1);
+  }
+  if (matches.length === 0) {
+    console.error(
+      `[next-prod-build] FATAL: next build reported success but ${label} has no matching files under ${dir}`,
+    );
+    process.exit(1);
+  }
+}
+
 const staticRoot = path.join(nextOutDir, "static");
 const standaloneRoot = path.join(nextOutDir, "standalone");
 if (!existsSync(staticRoot)) {
