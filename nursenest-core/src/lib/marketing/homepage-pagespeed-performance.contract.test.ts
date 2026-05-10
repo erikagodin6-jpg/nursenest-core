@@ -83,7 +83,7 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.match(proxy, /MARKETING_NARROW_VIEWPORT_HINT_HEADER/);
     assert.match(proxy, /computeMarketingNarrowViewportHintFromRequestHeaders/);
     assert.match(shell, /serverNarrowViewportHint/);
-    assert.match(shell, /narrow\s*\?\s*children\s*:\s*<PageTransitionShellLazy/);
+    assert.match(shell, /narrow\s*\|\|\s*!mounted\s*\?\s*children\s*:\s*<PageTransitionShellLazy/);
   });
 
   it("keeps framer route transitions off the initial mobile marketing bundle", () => {

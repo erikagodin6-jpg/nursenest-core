@@ -40,8 +40,8 @@ describe("marketing lessons hub vs lesson detail routing", () => {
   it("hub wires curriculum hub from verified prepared rows (single dataset)", () => {
     const src = readFileSync(marketingHubLessonsPage, "utf8");
     assert.match(src, /verifyMarketingHubLessonRowsResolve/);
-    assert.match(src, /const rawHubLessonRows =/);
-    assert.match(src, /sliceNormalizedHubLessons/);
+    assert.match(src, /const rawHubLessonRowsPage =/);
+    assert.match(src, /marketingHubPaginationFromLoaderTotals/);
     assert.match(src, /preparedLessons=\{hubPageLessons\}/);
   });
 
@@ -54,6 +54,14 @@ describe("marketing lessons hub vs lesson detail routing", () => {
     assert.ok(!bodySrc.includes("pathway-lessons-curriculum-hub"));
   });
 
+  it("lesson detail page defers heavy lesson body and category surface modules until runtime", () => {
+    const pageSrc = readFileSync(marketingLessonDetailPage, "utf8");
+    assert.ok(!pageSrc.includes('from "./pathway-lesson-detail-page-body"'));
+    assert.ok(!pageSrc.includes('from "@/components/pathway-lessons/marketing-lessons-hub-category-lessons-surface"'));
+    assert.match(pageSrc, /import\("\.\/pathway-lesson-detail-page-body"\)/);
+    assert.match(pageSrc, /import\(\s*[\r\n\s]*"@\/components\/pathway-lessons\/marketing-lessons-hub-category-lessons-surface"/);
+  });
+
   it("lesson detail body does not wire curriculum hub empty-state marker", () => {
     const bodySrc = readFileSync(marketingLessonDetailBody, "utf8");
     assert.ok(!bodySrc.includes("pathway-lessons-curriculum-hub"));
@@ -62,7 +70,9 @@ describe("marketing lessons hub vs lesson detail routing", () => {
 
   it("lesson detail body uses marketing locale preference (matches lessons hub loaders)", () => {
     const bodySrc = readFileSync(marketingLessonDetailBody, "utf8");
-    assert.match(bodySrc, /getMarketingLocaleForDefaultRoute/);
+    const pageSrc = readFileSync(marketingLessonDetailPage, "utf8");
+    assert.match(pageSrc, /getMarketingLocaleForDefaultRoute/);
+    assert.match(bodySrc, /lessonContentLocale/);
     assert.ok(!bodySrc.match(/const lessonContentLocale = DEFAULT_MARKETING_LOCALE/));
   });
 });

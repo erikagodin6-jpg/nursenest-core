@@ -408,44 +408,6 @@ function listFilesRecursive(dir, predicate, out = []) {
   return out;
 }
 
-function assertNonEmptyDir(label, dir, filter) {
-  if (!existsSync(dir)) {
-    console.error(`[next-prod-build] FATAL: next build reported success but ${label} is missing: ${dir}`);
-    process.exit(1);
-  }
-  let names;
-  try {
-    names = readdirSync(dir).filter(filter);
-  } catch (e) {
-    console.error(`[next-prod-build] FATAL: could not read ${label} dir ${dir}`, e);
-    process.exit(1);
-  }
-  if (names.length === 0) {
-    console.error(`[next-prod-build] FATAL: next build reported success but ${label} is empty: ${dir}`);
-    process.exit(1);
-  }
-}
-
-function listFilesRecursive(dir, predicate, out = []) {
-  if (!existsSync(dir)) {
-    return out;
-  }
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name.startsWith(".")) {
-      continue;
-    }
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      listFilesRecursive(fullPath, predicate, out);
-      continue;
-    }
-    if (predicate(entry.name, fullPath)) {
-      out.push(fullPath);
-    }
-  }
-  return out;
-}
-
 function assertNonEmptyCssOutput(staticRoot) {
   const cssFiles = listFilesRecursive(staticRoot, (name) => name.endsWith(".css"));
   if (cssFiles.length === 0) {

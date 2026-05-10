@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { PathwayLessonDetailPageLoadingFallback } from "@/components/lessons/pathway-lesson-detail-loading-fallback";
-import { MarketingLessonsHubCategoryLessonsSurface } from "@/components/pathway-lessons/marketing-lessons-hub-category-lessons-surface";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
 import {
   marketingLessonSlugFromRouteParam,
@@ -15,7 +14,6 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildAlliedAwareLessonPublicSeoSurface } from "@/lib/allied/allied-lesson-seo-differentiation";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
-import { PathwayLessonDetailPageBody } from "./pathway-lesson-detail-page-body";
 import {
   filterPathwayMarketingHubLessonsByCategory,
   getMarketingLessonsHubCatalogLessons,
@@ -166,6 +164,9 @@ export default async function PathwayLessonDetailPage({ params, searchParams }: 
         const q = qs.toString();
         redirect(q ? `${categoryBasePath}?${q}` : categoryBasePath);
       }
+      const { MarketingLessonsHubCategoryLessonsSurface } = await import(
+        "@/components/pathway-lessons/marketing-lessons-hub-category-lessons-surface"
+      );
       return (
         <MarketingLessonsHubCategoryLessonsSurface
           pathway={pathway}
@@ -178,6 +179,7 @@ export default async function PathwayLessonDetailPage({ params, searchParams }: 
       );
     }
 
+    const { PathwayLessonDetailPageBody } = await import("./pathway-lesson-detail-page-body");
     return (
       <Suspense fallback={<PathwayLessonDetailPageLoadingFallback pathway={pathway} />}>
         <PathwayLessonDetailPageBody

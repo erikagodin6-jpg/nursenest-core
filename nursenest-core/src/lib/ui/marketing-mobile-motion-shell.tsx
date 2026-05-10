@@ -28,8 +28,10 @@ export function MarketingMobileMotionShell({
   children: ReactNode;
   serverNarrowViewportHint?: boolean;
 }) {
+  const [mounted, setMounted] = useState(false);
   const [narrow, setNarrow] = useState(serverNarrowViewportHint);
   useEffect(() => {
+    setMounted(true);
     const mq = window.matchMedia("(max-width: 768px)");
     const sync = () => setNarrow(mq.matches);
     sync();
@@ -38,7 +40,7 @@ export function MarketingMobileMotionShell({
   }, []);
   return (
     <MarketingMobilePerfProvider value={narrow}>
-      {narrow ? children : <PageTransitionShellLazy>{children}</PageTransitionShellLazy>}
+      {narrow || !mounted ? children : <PageTransitionShellLazy>{children}</PageTransitionShellLazy>}
     </MarketingMobilePerfProvider>
   );
 }

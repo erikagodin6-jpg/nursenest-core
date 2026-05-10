@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-05-10T16:00:58.099Z",
+  "generatedAt": "2026-05-10T21:10:04.719Z",
   "runs": [
     {
       "id": "2026-05-10T12:00:00.000Z-31556",
@@ -498,6 +498,67 @@
       "inventoryDiagnostics": {
         "file": "reports/question-inventory-us-rn-nclex-rn.json",
         "generatedAt": "2026-05-10T16:00:23.979Z",
+        "pathwayId": "us-rn-nclex-rn",
+        "buckets": {
+          "publishedInventory": 12838,
+          "linearPracticeReadyInventory": 12838,
+          "catReadyInventory": 11660
+        },
+        "exclusions": {
+          "ecgRows": 0,
+          "moduleOnlyRows": 0,
+          "incompleteRows": 1127,
+          "linearPracticeExcludedRows": 0,
+          "catExcludedRows": 1178
+        }
+      }
+    },
+    {
+      "id": "2026-05-10T21:06:28.717Z-353497",
+      "kind": "lesson-index-gate",
+      "startedAt": "2026-05-10T21:06:28.717Z",
+      "finishedAt": "2026-05-10T21:10:04.678Z",
+      "host": {
+        "platform": "linux",
+        "arch": "x64",
+        "node": "v20.18.2",
+        "cpuCount": 4,
+        "totalRamMb": 7941
+      },
+      "config": {
+        "NODE_ENV": "production",
+        "NODE_OPTIONS": "--max-old-space-size=4367",
+        "NN_LOW_MEMORY_BUILD": null,
+        "NN_FORCE_SINGLE_BUILD_WORKER": null,
+        "BUILD_WEBPACK_PARALLELISM": null,
+        "BUILD_NODE_MAX_OLD_SPACE_SIZE_MB": null,
+        "NN_APP_PLATFORM_BUILD": null
+      },
+      "phases": [
+        {
+          "name": "lesson_index_generation",
+          "durationMs": 92340
+        },
+        {
+          "name": "lesson_index_verification",
+          "durationMs": 123520,
+          "verifyMode": "deep"
+        }
+      ],
+      "memory": {
+        "peakRssMb": null,
+        "peakProcessCount": null,
+        "heapUsedMbAtFinish": 4,
+        "rssMbAtFinish": 16
+      },
+      "counts": {
+        "buildLessonIndexesMs": 92340,
+        "verifyLessonIndexesMs": 123520,
+        "totalGateMs": 215860
+      },
+      "inventoryDiagnostics": {
+        "file": "reports/question-inventory-us-rn-nclex-rn.json",
+        "generatedAt": "2026-05-10T20:43:27.469Z",
         "pathwayId": "us-rn-nclex-rn",
         "buckets": {
           "publishedInventory": 12838,
