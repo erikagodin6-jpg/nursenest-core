@@ -11,10 +11,11 @@ import { useThemeLogo } from "@/lib/theme/use-theme-logo";
  * - Real text wordmark “NurseNest” for sharp rendering at every density.
  */
 export function HeaderBrandLockup() {
-  const { url, kind } = useThemeLogo("leaf");
+  const { url, kind, registeredThemeId } = useThemeLogo("leaf");
   const [leafLoadFailed, setLeafLoadFailed] = useState(false);
   const leafUrl = kind === "local" && typeof url === "string" && url.trim().length > 0 ? url : null;
   const showLeafRaster = Boolean(leafUrl) && !leafLoadFailed;
+  const useMonochromeLeaf = registeredThemeId === "blossom" && showLeafRaster;
 
   return (
     <span
@@ -25,7 +26,24 @@ export function HeaderBrandLockup() {
         className="logo-container relative z-[20] inline-flex h-[42px] w-[42px] shrink-0 items-center justify-center text-current sm:h-[46px] sm:w-[46px] lg:h-[50px] lg:w-[50px]"
         data-nn-header-lockup="leaf"
       >
-        {showLeafRaster ? (
+        {useMonochromeLeaf ? (
+          <span
+            role="img"
+            aria-label="NurseNest leaf logo"
+            data-nn-header-logo
+            className="block h-full w-full max-h-full max-w-full bg-current"
+            style={{
+              WebkitMaskImage: `url("${leafUrl}")`,
+              maskImage: `url("${leafUrl}")`,
+              WebkitMaskPosition: "center",
+              maskPosition: "center",
+              WebkitMaskRepeat: "no-repeat",
+              maskRepeat: "no-repeat",
+              WebkitMaskSize: "contain",
+              maskSize: "contain",
+            }}
+          />
+        ) : showLeafRaster ? (
           <img
             src={leafUrl ?? ""}
             alt="NurseNest leaf logo"

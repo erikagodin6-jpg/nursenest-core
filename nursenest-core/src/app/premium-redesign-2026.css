@@ -1155,47 +1155,58 @@
 
 html[data-theme="blossom"] .nn-home-marketing-root {
   background-image:
-    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-6) 10%, transparent), transparent 58%),
-    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-5) 9%, transparent), transparent 58%),
-    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-2) 9%, transparent), transparent 62%),
-    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-info) 7%, transparent), transparent 62%),
+    radial-gradient(ellipse 128% 88% at -8% -18%, color-mix(in srgb, var(--semantic-chart-1) 12%, transparent), transparent 58%),
+    radial-gradient(ellipse 118% 82% at 108% 2%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 58%),
+    radial-gradient(ellipse 105% 76% at 48% 112%, color-mix(in srgb, var(--semantic-chart-4) 11%, transparent), transparent 62%),
+    radial-gradient(ellipse 95% 68% at 90% 96%, color-mix(in srgb, var(--semantic-chart-2) 9%, transparent), transparent 62%),
     linear-gradient(
       192deg,
-      color-mix(in srgb, var(--semantic-chart-6) 5%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-1) 6%, var(--theme-page-bg)) 0%,
       var(--theme-page-bg) 42%,
-      color-mix(in srgb, var(--semantic-chart-5) 5%, var(--theme-page-bg)) 68%,
-      color-mix(in srgb, var(--semantic-chart-2) 4%, var(--theme-page-bg)) 100%
+      color-mix(in srgb, var(--semantic-chart-3) 5%, var(--theme-page-bg)) 68%,
+      color-mix(in srgb, var(--semantic-chart-4) 5%, var(--theme-page-bg)) 100%
     );
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero {
   background:
-    radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-6) 12%, transparent), transparent 60%),
-    radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-chart-5) 10%, transparent), transparent 58%),
-    radial-gradient(740px 400px at 52% 108%, color-mix(in srgb, var(--semantic-chart-2) 11%, transparent), transparent 58%),
-    radial-gradient(700px 360px at 0% 72%, color-mix(in srgb, var(--semantic-info) 8%, transparent), transparent 58%),
+    radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-1) 16%, transparent), transparent 60%),
+    radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-chart-3) 15%, transparent), transparent 58%),
+    radial-gradient(740px 400px at 52% 108%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 58%),
+    radial-gradient(700px 360px at 0% 72%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 58%),
     var(--page-bg, var(--theme-page-bg));
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero.nn-hero-bridge {
   background-image:
-    radial-gradient(ellipse 130% 90% at 12% -28%, color-mix(in srgb, var(--semantic-chart-6) 9%, transparent), transparent 56%),
-    radial-gradient(ellipse 108% 80% at 98% -5%, color-mix(in srgb, var(--semantic-chart-5) 8%, transparent), transparent 58%),
-    radial-gradient(ellipse 102% 74% at 48% 118%, color-mix(in srgb, var(--semantic-chart-2) 8%, transparent), transparent 58%),
+    radial-gradient(ellipse 130% 90% at 12% -28%, color-mix(in srgb, var(--semantic-chart-1) 11%, transparent), transparent 56%),
+    radial-gradient(ellipse 108% 80% at 98% -5%, color-mix(in srgb, var(--semantic-chart-3) 10%, transparent), transparent 58%),
+    radial-gradient(ellipse 102% 74% at 48% 118%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent), transparent 58%),
     linear-gradient(
       176deg,
-      color-mix(in srgb, var(--semantic-chart-6) 5%, var(--theme-page-bg)) 0%,
-      color-mix(in srgb, var(--semantic-chart-5) 5%, var(--theme-page-bg)) 44%,
-      color-mix(in srgb, var(--semantic-info) 4%, var(--theme-page-bg)) 100%
+      color-mix(in srgb, var(--semantic-chart-1) 6%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-3) 5%, var(--theme-page-bg)) 44%,
+      color-mix(in srgb, var(--semantic-chart-4) 5%, var(--theme-page-bg)) 100%
     );
 }
 
 html[data-theme="blossom"] .nn-premium-home-section::before {
   background:
-    radial-gradient(760px 400px at 0% 0%, color-mix(in srgb, var(--semantic-chart-6) 7%, transparent), transparent 62%),
-    radial-gradient(740px 380px at 100% 18%, color-mix(in srgb, var(--semantic-chart-5) 7%, transparent), transparent 60%),
-    radial-gradient(720px 360px at 100% 22%, color-mix(in srgb, var(--semantic-info) 7%, transparent), transparent 60%),
+    radial-gradient(760px 400px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 8%, transparent), transparent 62%),
+    radial-gradient(740px 380px at 100% 18%, color-mix(in srgb, var(--semantic-chart-3) 8%, transparent), transparent 60%),
+    radial-gradient(720px 360px at 100% 22%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 60%),
     radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 7%, transparent), transparent 62%);
+}
+
+html[data-theme="blossom"] .nn-home-marketing-rich-hero #home-conversion-hero-heading {
+  color: var(--theme-heading-text);
+}
+
+html[data-theme="blossom"] .nn-home-marketing-rich-hero #home-conversion-hero-heading .nn-blossom-hero-gradient-copy {
+  background: linear-gradient(92deg, var(--semantic-chart-1) 0%, var(--semantic-chart-2) 52%, var(--semantic-chart-3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* =====================================================================
@@ -1313,10 +1324,6 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
 
 html[data-theme="blossom"] .nn-header-brand-lockup {
   color: var(--logo-text);
-}
-
-html[data-theme="blossom"] [data-nn-header-lockup="leaf"] {
-  color: var(--logo-primary);
 }
 
 html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link,
@@ -5650,8 +5657,8 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
 
 [data-theme="blossom"] [data-nn-footer-root][data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
   background:
-    radial-gradient(760px 320px at 0% 0%, color-mix(in srgb, var(--semantic-chart-6) 6%, transparent), transparent 64%),
-    radial-gradient(720px 300px at 100% 12%, color-mix(in srgb, var(--semantic-chart-5) 5%, transparent), transparent 60%),
+    radial-gradient(760px 320px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 7%, transparent), transparent 64%),
+    radial-gradient(720px 300px at 100% 12%, color-mix(in srgb, var(--semantic-chart-3) 7%, transparent), transparent 60%),
     linear-gradient(
       175deg,
       color-mix(in srgb, var(--semantic-panel-lavender) 8%, var(--footer-bg)),

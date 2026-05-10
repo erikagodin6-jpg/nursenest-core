@@ -1,13 +1,7 @@
 {
   "base": "http://127.0.0.1:3100",
-  "capturedAt": "2026-05-10T21:44:41.011Z",
+  "capturedAt": "2026-05-10T21:45:22.598Z",
   "summary": [
-    {
-      "route": "/",
-      "viewport": "desktop",
-      "status": 200,
-      "file": "/root/nursenest-core/nursenest-core/reports/capitalization-normalization-screenshots/homepage-desktop.png"
-    },
     {
       "route": "/tools",
       "viewport": "desktop",
@@ -29,14 +23,19 @@
   ],
   "issues": [
     {
-      "route": "/us/rn/nclex-rn/lessons",
+      "route": "/",
       "viewport": "desktop",
-      "error": "TimeoutError: page.waitForSelector: Timeout 60000ms exceeded.\nCall log:\n  - waiting for locator('main') to be visible\n"
+      "error": "TimeoutError: page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"http://127.0.0.1:3100/\", waiting until \"domcontentloaded\"\n"
     },
     {
-      "route": "/us/rn/nclex-rn/lessons",
+      "route": "/tools",
+      "viewport": "desktop",
+      "bad": "Clinical tools"
+    },
+    {
+      "route": "/tools",
       "viewport": "mobile",
-      "error": "TimeoutError: page.goto: Timeout 120000ms exceeded.\nCall log:\n  - navigating to \"http://127.0.0.1:3100/us/rn/nclex-rn/lessons\", waiting until \"load\"\n"
+      "bad": "Clinical tools"
     }
   ]
 }

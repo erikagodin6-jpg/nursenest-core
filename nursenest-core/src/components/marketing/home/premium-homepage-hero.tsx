@@ -383,7 +383,16 @@ export function PremiumHomepageHero(props: {
               className="nn-marketing-h1 mt-3 min-w-0 max-w-[min(100%,36ch)] text-balance text-[var(--palette-heading)]"
               data-testid="text-hero-heading"
             >
-              {headline}
+              {headline.includes(" with ") ? (
+                <>
+                  {headline.slice(0, headline.indexOf(" with "))}
+                  <span className="nn-blossom-hero-gradient-copy">
+                    {headline.slice(headline.indexOf(" with "))}
+                  </span>
+                </>
+              ) : (
+                headline
+              )}
             </h1>
 
             <p className="nn-marketing-body mt-[var(--nn-rhythm-heading-sub)] max-w-[42ch] text-pretty text-[var(--palette-text-muted)]">

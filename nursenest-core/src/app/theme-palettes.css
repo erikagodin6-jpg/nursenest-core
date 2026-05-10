@@ -1578,63 +1578,62 @@ html[data-theme="aurora"] {
   --theme-header-divider: color-mix(in srgb, #1a202c 12%, transparent);
 }
 
-/* Blossom — sakura / orchid / cream study atmosphere (pastel, optimistic; not Aurora). */
+/* Blossom — bright sakura / orchid / clinical-blue study atmosphere (pastel, optimistic; not Aurora). */
 html[data-theme="blossom"] {
-  --theme-primary: #b86f86;
+  --theme-primary: #d948a8;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: color-mix(in srgb, #f3d9e3 42%, #ffffff);
-  --theme-secondary-foreground: #4d3858;
-  --theme-accent: color-mix(in srgb, #e7ddf4 46%, #ffffff);
-  --theme-accent-foreground: #5f466c;
-  --theme-border: color-mix(in srgb, #5f466c 10%, #eadfea);
-  --theme-ring: #b894d7;
-  --theme-page-bg: color-mix(in srgb, #fff7f8 54%, color-mix(in srgb, #f4effb 26%, #fffdfb));
+  --theme-secondary: color-mix(in srgb, #ddebff 48%, #ffffff);
+  --theme-secondary-foreground: #10182f;
+  --theme-accent: color-mix(in srgb, #f9d7e8 52%, #ffffff);
+  --theme-accent-foreground: #7a2364;
+  --theme-border: color-mix(in srgb, #3f5fd8 9%, #f1dff0);
+  --theme-ring: #9357f2;
+  --theme-page-bg: color-mix(in srgb, #fff1f8 42%, color-mix(in srgb, #edf6ff 26%, #fffafd));
   --theme-surface-strong: color-mix(
     in srgb,
-    #e7ddf4 38%,
-    color-mix(in srgb, #fff3ee 18%, var(--theme-page-bg))
+    #edf6ff 42%,
+    color-mix(in srgb, #fff1f8 24%, var(--theme-page-bg))
   );
-  --theme-heading-text: #4d3858;
-  --theme-body-text: color-mix(in srgb, #4d3858 86%, #ffffff);
-  /* Stronger than 58% mix for WCAG-ish body-muted contrast on cream surfaces (pastel-safe, no neon). */
-  --theme-muted-text: color-mix(in srgb, #4d3858 72%, #ffffff);
+  --theme-heading-text: #10182f;
+  --theme-body-text: color-mix(in srgb, #10182f 78%, #ffffff);
+  --theme-muted-text: color-mix(in srgb, #10182f 60%, #ffffff);
 
-  --lesson-summary: color-mix(in srgb, #b86f86 9%, #ffffff);
-  --lesson-key-concepts: color-mix(in srgb, #b894d7 10%, #ffffff);
-  --lesson-signs-symptoms: color-mix(in srgb, #d99aac 9%, #ffffff);
-  --lesson-assessment: color-mix(in srgb, #a8d5b5 11%, #ffffff);
-  --lesson-diagnostics: color-mix(in srgb, #aebde8 9%, #ffffff);
-  --lesson-interventions: color-mix(in srgb, #a8d5b5 10%, #ffffff);
-  --lesson-medications: color-mix(in srgb, #eadc92 13%, #ffffff);
-  --lesson-patient-teaching: color-mix(in srgb, #b9d9c2 9%, #ffffff);
-  --lesson-exam-tips: color-mix(in srgb, #eadc92 10%, #ffffff);
-  --lesson-red-flags: color-mix(in srgb, #d99aac 10%, #ffffff);
-  --lesson-clinical-pearls: color-mix(in srgb, #b894d7 10%, #ffffff);
-  --lesson-notes: #f6f0f6;
+  --lesson-summary: color-mix(in srgb, #d948a8 8%, #ffffff);
+  --lesson-key-concepts: color-mix(in srgb, #9357f2 9%, #ffffff);
+  --lesson-signs-symptoms: color-mix(in srgb, #f38bbf 9%, #ffffff);
+  --lesson-assessment: color-mix(in srgb, #22c7a7 10%, #ffffff);
+  --lesson-diagnostics: color-mix(in srgb, #2f80ed 8%, #ffffff);
+  --lesson-interventions: color-mix(in srgb, #22c7a7 9%, #ffffff);
+  --lesson-medications: color-mix(in srgb, #f5b84b 10%, #ffffff);
+  --lesson-patient-teaching: color-mix(in srgb, #8ce7cb 9%, #ffffff);
+  --lesson-exam-tips: color-mix(in srgb, #9357f2 8%, #ffffff);
+  --lesson-red-flags: color-mix(in srgb, #d948a8 9%, #ffffff);
+  --lesson-clinical-pearls: color-mix(in srgb, #2f80ed 8%, #ffffff);
+  --lesson-notes: #fdf4fb;
 
-  --state-success: color-mix(in srgb, #a8d5b5 14%, #ffffff);
-  --state-warning: color-mix(in srgb, #eadc92 14%, #ffffff);
-  --state-info: color-mix(in srgb, #aebde8 12%, #ffffff);
-  --state-danger-soft: color-mix(in srgb, #d99aac 10%, #ffffff);
+  --state-success: color-mix(in srgb, #22c7a7 12%, #ffffff);
+  --state-warning: color-mix(in srgb, #f5b84b 12%, #ffffff);
+  --state-info: color-mix(in srgb, #2f80ed 10%, #ffffff);
+  --state-danger-soft: color-mix(in srgb, #d948a8 9%, #ffffff);
 
-  --logo-primary: #b86f86;
-  --logo-accent: #b894d7;
-  --logo-text: #5f466c;
-  --theme-brand-accent: #b894d7;
-  --theme-brand-strong: #9b607a;
+  --logo-primary: #3f5fd8;
+  --logo-accent: #3f5fd8;
+  --logo-text: #3f5fd8;
+  --theme-brand-accent: #9357f2;
+  --theme-brand-strong: #b3359a;
   --theme-nav-background: color-mix(
     in srgb,
-    #b86f86 6%,
-    color-mix(in srgb, #f4effb 28%, color-mix(in srgb, #fff3ee 18%, #fffdfb))
+    #d948a8 5%,
+    color-mix(in srgb, #edf6ff 24%, color-mix(in srgb, #fff1f8 22%, #fffafd))
   );
-  --theme-nav-foreground: #4d3858;
-  --theme-nav-hover: color-mix(in srgb, #5f466c 6%, transparent);
-  --theme-nav-hover-foreground: #4d3858;
-  --theme-header-top-bg: color-mix(in srgb, #fff7f8 58%, color-mix(in srgb, #f4effb 28%, #fffdfb));
-  --theme-header-main-bg: color-mix(in srgb, #f3d9e3 18%, color-mix(in srgb, #f4effb 22%, #fffdfb));
-  --theme-header-secondary-bg: color-mix(in srgb, #b894d7 5%, color-mix(in srgb, #fff7f8 62%, #ffffff));
-  --theme-header-secondary-fg: #4d3858;
-  --theme-header-divider: color-mix(in srgb, #5f466c 11%, transparent);
+  --theme-nav-foreground: #10182f;
+  --theme-nav-hover: color-mix(in srgb, #d948a8 7%, transparent);
+  --theme-nav-hover-foreground: #10182f;
+  --theme-header-top-bg: color-mix(in srgb, #fff1f8 46%, color-mix(in srgb, #edf6ff 24%, #fffafd));
+  --theme-header-main-bg: color-mix(in srgb, #fff1f8 30%, color-mix(in srgb, #edf6ff 22%, #fffafd));
+  --theme-header-secondary-bg: color-mix(in srgb, #d948a8 4%, color-mix(in srgb, #edf6ff 18%, #ffffff));
+  --theme-header-secondary-fg: #10182f;
+  --theme-header-divider: color-mix(in srgb, #3f5fd8 10%, transparent);
 }
 
 html[data-theme="sunset"] {
