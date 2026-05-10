@@ -1,3 +1,30 @@
+/* =====================================================================
+   === THEME ARCHITECTURE CONTRACT (marketing) ===
+   Ocean is the canonical structural theme for the marketing header
+   (`[data-nn-header-layout="marketing-row4"]`). Blossom and Midnight
+   inherit Ocean's structure and may override the visual layer only:
+     - colors, gradients, shadows, borders, opacity, hover/focus states.
+
+   Themes MUST NOT override the structural layer:
+     - display
+     - flex-direction / flex-wrap
+     - grid-template / grid-template-columns / grid-template-rows /
+       grid-template-areas
+     - width / max-width / min-width
+     - spacing rhythm (padding/margin) that shifts structural rhythm
+     - responsive breakpoints (no theme-scoped media-query forks)
+     - container hierarchy / DOM ordering / header row ordering
+
+   Header layout overrides for marketing surfaces live in
+   `premium-redesign-2026.css`. This file is for color/palette tokens
+   only. Enforced by:
+     tests/contracts/theme-marketing-row4-contract.test.ts
+
+   Escape hatch (use rarely, document the reason): place a CSS block
+   comment whose body starts with `theme-contract:allow <reason>`
+   immediately before a declaration to suppress that one violation.
+   ===================================================================== */
+
 [data-theme="mint"] {
   --theme-primary: #5cbdbd;
   --theme-primary-foreground: #ffffff;

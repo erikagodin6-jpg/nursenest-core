@@ -420,6 +420,33 @@
 }
 
 /* Primary marketing band: neutral paper + whisper tint — never `--nav-bg`; full-width wrapper, not `.nn-section-shell`. */
+/* =====================================================================
+   === THEME ARCHITECTURE CONTRACT (marketing) ===
+   Ocean is the canonical structural theme for the marketing header
+   layout `[data-nn-header-layout="marketing-row4"]`. Blossom and Midnight
+   inherit Ocean's structure and may ONLY override the visual layer.
+
+   Themes MAY override (color/visual layer):
+     - colors, gradients, shadows, borders, opacity, hover/focus states.
+
+   Themes MUST NOT override (structural layer):
+     - display
+     - flex-direction / flex-wrap (nav direction + wrapping)
+     - grid-template / grid-template-columns / grid-template-rows /
+       grid-template-areas
+     - width / max-width / min-width
+     - spacing rhythm (padding/margin) that shifts structural rhythm
+     - responsive breakpoints (no theme-scoped media-query forks)
+     - container hierarchy / DOM ordering / header row ordering
+
+   Enforced by a static guard test that scans this file's text:
+     tests/contracts/theme-marketing-row4-contract.test.ts
+
+   Escape hatch (use rarely, document the reason): place a CSS block
+   comment whose body starts with `theme-contract:allow <reason>`
+   immediately before a declaration to suppress that one violation.
+   ===================================================================== */
+
 /* ---------------------------------------------------------------------
    Premium glass enhancement for the marketing header — CSS only.
 
@@ -1062,6 +1089,16 @@
     radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 11%, transparent), transparent 60%);
 }
 
+/* =====================================================================
+   === THEME ARCHITECTURE CONTRACT (marketing) — Blossom / Aurora ===
+   Blossom inherits Ocean's `marketing-row4` structure. Rules below are
+   color-only (border-color, background, color). No structural overrides
+   (display / flex-direction / flex-wrap / grid-template* / width* /
+   spacing rhythm / breakpoints / DOM ordering) are permitted. Enforced
+   by tests/contracts/theme-marketing-row4-contract.test.ts. Escape
+   hatch: a CSS block comment whose body starts with
+   `theme-contract:allow <reason>` immediately before a declaration.
+   ===================================================================== */
 /* Blossom / Aurora: marketing-row4 geometry matches Ocean — token-only nav pill colors below. */
 
 /* Aurora nav pills — rose/violet/sky/mint wash vs sky-only chips (still token-driven) */

@@ -121,6 +121,38 @@ export type SiteHeaderProps = {
   serverHasStaffSession?: boolean;
 };
 
+/**
+ * === THEME ARCHITECTURE CONTRACT (marketing) ===
+ *
+ * `marketing-row4` is the canonical marketing header layout for **Ocean,
+ * Blossom, and Midnight**. Ocean is the canonical structural theme;
+ * Blossom and Midnight inherit Ocean's `marketing-row4` structure and may
+ * only override the visual layer.
+ *
+ * Themes MAY override (color/visual layer):
+ *   - colors, gradients, shadows, borders, opacity, hover/focus states.
+ *
+ * Themes MUST NOT override (structural layer):
+ *   - display
+ *   - flex-direction / flex-wrap
+ *   - grid-template / grid-template-columns / grid-template-rows /
+ *     grid-template-areas
+ *   - width / max-width / min-width
+ *   - spacing rhythm (padding/margin) that shifts structural rhythm
+ *   - responsive breakpoints (no theme-scoped media-query forks)
+ *   - container hierarchy / DOM ordering / header row ordering
+ *
+ * Theme-specific marketing header CSS lives in
+ * `src/app/premium-redesign-2026.css` (Blossom + Midnight blocks scoped to
+ * `[data-nn-header-layout="marketing-row4"]`). The contract is enforced
+ * statically by `tests/contracts/theme-marketing-row4-contract.test.ts`,
+ * which scans the CSS text and fails on forbidden overrides. A CSS block
+ * comment whose body starts with `theme-contract:allow <reason>` placed
+ * immediately before a declaration acts as a documented escape hatch.
+ *
+ * Visual parity release gate: `tests/e2e/visual/theme-parity/
+ * homepage-theme-parity.spec.ts` (see `docs/screenshots/theme-parity/`).
+ */
 export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const { t, locale } = useMarketingI18n();
   const tRef = useRef(t);

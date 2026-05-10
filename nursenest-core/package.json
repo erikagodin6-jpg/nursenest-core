@@ -88,6 +88,7 @@
     "test:unit:onboarding": "node --import tsx --test src/lib/context/context-routing.test.ts",
     "test:unit:cta-copy": "node --import tsx --test src/lib/ui/cta-copy-policy.test.ts",
     "test:unit:auth-secret": "node --import tsx --test src/lib/auth/auth-secret.test.ts",
+    "test:unit:theme-contract": "node --import tsx --test tests/contracts/theme-marketing-row4-contract.test.ts",
     "test:unit:bootstrap-env-spec": "node --test scripts/bootstrap-env-spec.contract.test.mjs",
     "test:unit:mobile-subscriber-api": "node --import tsx --test src/lib/entitlements/mobile-style-subscriber-api.contract.test.ts",
     "test:unit:phase10-platform": "node --import tsx --test src/lib/platform/phase10/phase10-platform.contract.test.ts src/lib/admin/admin-ecosystem-readiness.contract.test.ts",
