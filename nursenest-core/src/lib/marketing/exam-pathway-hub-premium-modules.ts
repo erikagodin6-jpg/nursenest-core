@@ -243,9 +243,12 @@ function pushCoreStudyToolCards(
     bodyKey: "components.examPathwayHub.premiumModules.labsBody",
     ctaKey: "components.examPathwayHub.premiumModules.labsCta",
     lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+    /** Core integrated Labs workstation (`/app/labs`) — same surface as learner dashboard quick-launch. */
     href: scopeAlliedAppHref(
       pathway,
-      withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.labDrills, pathway.id),
+      pathway.id?.trim()
+        ? `/app/labs?pathwayId=${encodeURIComponent(pathway.id.trim())}`
+        : "/app/labs",
       alliedProfessionKey,
     ),
     wrapGuestWithLoginCallback: true,
@@ -710,7 +713,9 @@ function buildPreNursingPremiumMarketingModuleCards(
       bodyKey: "components.examPathwayHub.premiumModules.labsBody",
       ctaKey: "components.examPathwayHub.premiumModules.labsCta",
       lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
-      href: withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.labDrills, pathway.id),
+      href: pathway.id?.trim()
+        ? `/app/labs?pathwayId=${encodeURIComponent(pathway.id.trim())}`
+        : "/app/labs",
       wrapGuestWithLoginCallback: true,
     },
     {

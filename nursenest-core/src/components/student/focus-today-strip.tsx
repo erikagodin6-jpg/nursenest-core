@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { Calculator, FlaskConical } from "lucide-react";
+import { weakTopicSuggestsLabsFocus } from "@/lib/labs/labs-adaptive-signals";
+import { weakTopicSuggestsMedCalcFocus } from "@/lib/med-calculations/med-calc-adaptive-signals";
+import { weakTopicSuggestsScenarioFocus } from "@/lib/scenarios/scenario-adaptive-signals";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 type PlanItem = {
@@ -25,7 +29,7 @@ type StudyPlanPayload = {
  * Loads `/api/study-plan` client-side so the dashboard shell stays cache-friendly.
  */
 export function FocusTodayStrip({
-  pathwayId: _pathwayId,
+  pathwayId,
   weakTopicFallback = [],
   weakPracticeHref,
 }: {
@@ -97,6 +101,28 @@ export function FocusTodayStrip({
 
   const showRemediation = plan.enabled && remediationItems.length > 0;
 
+  const labsHref =
+    pathwayId?.trim().length && pathwayId.trim().length > 0
+      ? `/app/labs?pathwayId=${encodeURIComponent(pathwayId.trim())}`
+      : "/app/labs";
+  const labsHaystack = [
+    ...weakSlice,
+    ...remediationItems.map((it) => [it.topic, it.bodySystem].filter(Boolean).join(" ").trim()),
+  ].filter(Boolean);
+  const showLabsRemediation = labsHaystack.some((line) => weakTopicSuggestsLabsFocus(line));
+  const showMedCalcRemediation = labsHaystack.some((line) => weakTopicSuggestsMedCalcFocus(line));
+  const showScenariosRemediation = labsHaystack.some((line) => weakTopicSuggestsScenarioFocus(line));
+
+  const scenariosHref =
+    pathwayId?.trim().length && pathwayId.trim().length > 0
+      ? `/app/clinical-scenarios?pathwayId=${encodeURIComponent(pathwayId.trim())}`
+      : "/app/clinical-scenarios";
+
+  const medCalcHref =
+    pathwayId?.trim().length && pathwayId.trim().length > 0
+      ? `/app/med-calculations?pathwayId=${encodeURIComponent(pathwayId.trim())}`
+      : "/app/med-calculations";
+
   return (
     <section className="nn-dash-section" aria-label={t("learner.focusToday.title")}>
       <div className="nn-focus-today-surface rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 shadow-[var(--shadow-card)] transition-shadow duration-200 hover:shadow-[var(--shadow-card-hover)] sm:p-5">
@@ -106,6 +132,74 @@ export function FocusTodayStrip({
         <p className="mt-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
           {showRemediation ? t("learner.focusToday.intro") : t("learner.focusToday.weakFallbackIntro")}
         </p>
+
+        {showLabsRemediation ? (
+          <div
+            className="mt-4 flex flex-col gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_07%,var(--semantic-surface))] p-4 sm:flex-row sm:items-center sm:justify-between"
+            data-nn-focus-today-labs-nudge=""
+          >
+            <div className="flex items-start gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-3)_14%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-3)_88%,var(--semantic-text-primary))]">
+                <FlaskConical className="h-4 w-4" aria-hidden strokeWidth={2} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{t("learner.studyHome.quickLaunch.labsTitle")}</p>
+                <p className="mt-0.5 text-xs leading-snug text-[var(--semantic-text-secondary)]">{t("learner.studyHome.quickLaunch.labsDesc")}</p>
+              </div>
+            </div>
+            <Link
+              href={labsHref}
+              className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-3)_90%,var(--semantic-text-primary))] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-chart-3)_16%,var(--semantic-surface))] sm:min-h-9"
+            >
+              {t("learner.studyHome.quickLaunch.labsCta")}
+            </Link>
+          </div>
+        ) : null}
+
+        {showMedCalcRemediation ? (
+          <div
+            className="mt-4 flex flex-col gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-5)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_06%,var(--semantic-surface))] px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+            data-nn-focus-today-med-calc-nudge=""
+          >
+            <div className="flex items-start gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-5)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-5)_88%,var(--semantic-text-primary))]">
+                <Calculator className="h-4 w-4" aria-hidden strokeWidth={2} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+                  {t("components.examPathwayHub.premiumModules.medCalcTitle")}
+                </p>
+                <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-[var(--semantic-text-secondary)]">
+                  {t("components.examPathwayHub.premiumModules.medCalcBody")}
+                </p>
+              </div>
+            </div>
+            <Link
+              href={medCalcHref}
+              className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-5)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_08%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-5)_90%,var(--semantic-text-primary))] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-chart-5)_14%,var(--semantic-surface))] sm:min-h-9"
+            >
+              {t("components.examPathwayHub.premiumModules.medCalcCta")}
+            </Link>
+          </div>
+        ) : null}
+
+        {showScenariosRemediation ? (
+          <div
+            className="mt-4 flex flex-col gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_06%,var(--semantic-surface))] px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+            data-nn-focus-today-scenarios-nudge=""
+          >
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{t("learner.shell.nav.clinicalScenarios")}</p>
+              <p className="mt-0.5 text-xs text-[var(--semantic-text-secondary)]">{t("learner.studyHome.quickLaunch.scenariosDesc")}</p>
+            </div>
+            <Link
+              href={scenariosHref}
+              className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_08%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-2)_90%,var(--semantic-text-primary))] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-chart-2)_14%,var(--semantic-surface))] sm:min-h-9"
+            >
+              {t("learner.studyHome.quickLaunch.scenariosCta")}
+            </Link>
+          </div>
+        ) : null}
 
         {showRemediation ? (
           <ul className="mt-4 space-y-3">

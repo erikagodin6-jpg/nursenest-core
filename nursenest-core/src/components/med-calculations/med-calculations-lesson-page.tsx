@@ -117,7 +117,7 @@ export function MedCalculationsLessonPage({
   const { measurementSystem, preference } = useMeasurementPreference("SI");
 
   return (
-    <div className="min-w-0 space-y-6">
+    <div className="min-w-0 space-y-6" data-nn-med-calc-lesson="">
       <header className="nn-learner-page-hero">
         <div className="min-w-0 space-y-2">
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">

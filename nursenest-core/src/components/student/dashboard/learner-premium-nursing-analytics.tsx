@@ -148,7 +148,7 @@ export function LearnerPremiumNursingAnalyticsSection({
       intro={t("learner.premiumNursingAnalytics.intro")}
       tone="primary"
       surfacePadding="md"
-      className="nn-dash-band nn-dash-band--nursing-analytics nn-dash-band--stack-tight"
+      className="nn-dash-band nn-dash-band--nursing-analytics nn-dash-band--stack-tight nn-learner-nursing-analytics-band"
     >
       <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
         <LearnerSurface tone="secondary" padding="md" radius="lg" shadow={false} className="min-w-0 xl:col-span-1">

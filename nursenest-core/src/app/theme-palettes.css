@@ -1509,9 +1509,17 @@
   --theme-page-bg: #ffffff;
 }
 
-/* ── Premium clinical palettes (Blossom, Aurora, Midnight, Ocean, Forest, Sunset) ── */
+/* ── Premium clinical palettes (Blossom, Aurora, Midnight, Ocean, Forest, Sunset) ──
+ *
+ * SPECIFICITY HARDENING: Public marketing themes use `html[data-theme="X"]` (0,2,0)
+ * so they beat the canonical `html[data-theme]` token map in globals.css (0,1,1).
+ * Without this, that block resets `--theme-page-bg`/`--theme-surface` back to the
+ * neutral `:root` palette defaults for any theme that lacks an inline
+ * CANONICAL_SURFACE_TOKEN_OVERRIDES entry (notably aurora/sunset).
+ * Verified by tests/e2e/public/marketing-theme-propagation.spec.ts.
+ */
 
-[data-theme="aurora"] {
+html[data-theme="aurora"] {
   /* Figma Aurora — clinical pink / violet / blue / mint / warm orange / ink (#1A202C) */
   --theme-primary: #9b72ff;
   --theme-primary-foreground: #ffffff;
@@ -1571,7 +1579,7 @@
 }
 
 /* Blossom — distinct soft lilac + sky + warm peach study atmosphere (pastel, optimistic; not Aurora). */
-[data-theme="blossom"] {
+html[data-theme="blossom"] {
   --theme-primary: #8e75ff;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: color-mix(in srgb, #7dd3fc 18%, #ffffff);
@@ -1628,7 +1636,7 @@
   --theme-header-divider: color-mix(in srgb, #1f2536 10%, transparent);
 }
 
-[data-theme="sunset"] {
+html[data-theme="sunset"] {
   /* Premium Sunset — warm cream, dusk navy type, coral primary, sky + golden accents */
   --theme-primary: #e07862;
   --theme-primary-foreground: #ffffff;
@@ -1734,7 +1742,7 @@
   --theme-header-divider: rgba(37, 99, 235, 0.24);
 }
 
-[data-theme="ocean"] {
+html[data-theme="ocean"] {
   --theme-primary: #1d9bd7;
   --theme-primary-foreground: #ffffff;
   --theme-secondary: #14b8a6;
@@ -1878,7 +1886,7 @@
   --theme-header-divider: rgba(4, 120, 87, 0.24);
 }
 
-[data-theme="midnight"] {
+html[data-theme="midnight"] {
   color-scheme: dark;
   --theme-primary: #38bdf8;
   --theme-primary-foreground: #07111f;

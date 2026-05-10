@@ -146,21 +146,35 @@ export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAc
 
   if (!current) return null;
 
+  const telemetryWrap = [
+    "border-[color-mix(in_srgb,var(--semantic-chart-3)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_07%,var(--semantic-surface))]",
+    "border-[color-mix(in_srgb,var(--semantic-chart-4)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-4)_07%,var(--semantic-surface))]",
+    "border-[color-mix(in_srgb,var(--semantic-chart-5)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_06%,var(--semantic-surface))]",
+    "border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))]",
+  ] as const;
+
   return (
-    <section className="space-y-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5">
+    <section
+      className="space-y-5 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-5)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-6"
+      data-nn-med-calc-active-workflow=""
+    >
       <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
-        <div>
+        <div className="min-w-0">
           <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">Strict practice mode</h2>
-          <p className="text-sm text-[var(--semantic-text-secondary)]">
+          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
             Numeric input first, full solution review after each answer, and 100% completion required when strict mode is on.
           </p>
         </div>
-        <div className="grid w-full min-w-0 grid-cols-2 gap-2 text-sm sm:w-auto">
+        <div className="grid w-full min-w-0 grid-cols-2 gap-2 text-sm sm:w-auto sm:max-w-md">
           <button
             type="button"
             onClick={() => setStrictMode((value) => !value)}
             disabled={!hasAccess}
-            className={`min-h-11 touch-manipulation rounded-md border px-3 py-2 font-medium ${strictMode ? "bg-[var(--semantic-brand)] text-white" : ""} ${!hasAccess ? "opacity-60" : ""}`}
+            className={`min-h-11 touch-manipulation rounded-full border px-3 py-2 font-semibold transition-colors ${
+              strictMode
+                ? "border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-success)_92%,var(--semantic-text-primary))]"
+                : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_80%,var(--semantic-surface))]"
+            } ${!hasAccess ? "opacity-60" : ""}`}
           >
             Strict mode {strictMode ? "on" : "off"}
           </button>
@@ -168,7 +182,11 @@ export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAc
             type="button"
             onClick={() => setTimedMode((value) => !value)}
             disabled={!hasAccess}
-            className={`min-h-11 touch-manipulation rounded-md border px-3 py-2 font-medium ${timedMode ? "bg-[var(--semantic-brand)] text-white" : ""} ${!hasAccess ? "opacity-60" : ""}`}
+            className={`min-h-11 touch-manipulation rounded-full border px-3 py-2 font-semibold transition-colors ${
+              timedMode
+                ? "border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-info)_88%,var(--semantic-text-primary))]"
+                : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-primary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_80%,var(--semantic-surface))]"
+            } ${!hasAccess ? "opacity-60" : ""}`}
           >
             Timed mode {timedMode ? "on" : "off"}
           </button>
@@ -176,32 +194,37 @@ export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAc
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <div className="min-w-0 rounded-lg border p-3 text-sm">
-          <div className="text-[0.7rem] uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">Question</div>
-          <div className="mt-1 font-semibold text-[var(--semantic-text-primary)]">
+        <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[0]}`}>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Question</div>
+          <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">
             {index + 1} / {pool.length}
           </div>
         </div>
-        <div className="min-w-0 rounded-lg border p-3 text-sm">
-          <div className="text-[0.7rem] uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">Current streak</div>
-          <div className="mt-1 font-semibold text-[var(--semantic-text-primary)]">{currentStreak}</div>
+        <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[1]}`}>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Current streak</div>
+          <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{currentStreak}</div>
         </div>
-        <div className="min-w-0 rounded-lg border p-3 text-sm">
-          <div className="text-[0.7rem] uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">Best streak</div>
-          <div className="mt-1 font-semibold text-[var(--semantic-text-primary)]">{Math.max(lessonProgress.bestStreak, currentStreak)}</div>
+        <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[2]}`}>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Best streak</div>
+          <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{Math.max(lessonProgress.bestStreak, currentStreak)}</div>
         </div>
-        <div className="min-w-0 rounded-lg border p-3 text-sm">
-          <div className="text-[0.7rem] uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">Timer</div>
-          <div className="mt-1 font-semibold text-[var(--semantic-text-primary)]">
+        <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[3]}`}>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Timer</div>
+          <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">
             {timedMode ? `${Math.floor(remainingSec / 60)}:${String(remainingSec % 60).padStart(2, "0")}` : "Off"}
           </div>
         </div>
       </div>
 
-      <div className="space-y-3 rounded-lg border border-[var(--semantic-border-soft)] p-4">
-        <p className="text-xs uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">
-          {current.type.replaceAll("_", " ")} · {current.difficulty}
-        </p>
+      <div className="space-y-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4 shadow-inner sm:p-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_08%,var(--semantic-surface))] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-3)_88%,var(--semantic-text-primary))]">
+            {current.type.replaceAll("_", " ")}
+          </span>
+          <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-5)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_06%,var(--semantic-surface))] px-2.5 py-0.5 text-[11px] font-semibold text-[color-mix(in_srgb,var(--semantic-chart-5)_88%,var(--semantic-text-primary))]">
+            Difficulty: {current.difficulty}
+          </span>
+        </div>
         <h3 className="break-words text-balance text-base font-semibold text-[var(--semantic-text-primary)]">{current.stem}</h3>
         <p className="text-sm text-[var(--semantic-text-secondary)]">
           {current.answerFormat.roundingText} Final unit: {current.answerFormat.unit}.
@@ -214,38 +237,42 @@ export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAc
               value={attemptValue}
               onChange={(event) => setAttemptValue(event.target.value)}
               inputMode="decimal"
-              className="w-full rounded-md border border-[var(--semantic-border-soft)] px-3 py-2 text-sm"
+              className="w-full min-h-12 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-4 py-3 text-base tabular-nums text-[var(--semantic-text-primary)] shadow-[var(--semantic-shadow-soft)] outline-none ring-offset-2 transition-[box-shadow,border-color] focus-visible:border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)]"
               placeholder={`Enter ${current.answerFormat.unit}`}
             />
           </label>
         ) : (
           <div className="space-y-2">
             {current.options.map((option, optionIndex) => (
-              <label key={option} className="flex items-start gap-3 rounded-md border px-3 py-2 text-sm">
+              <label
+                key={option}
+                className="flex cursor-pointer items-start gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_95%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-surface))] px-3 py-2.5 text-sm transition-colors hover:border-[color-mix(in_srgb,var(--semantic-chart-4)_28%,var(--semantic-border-soft))]"
+              >
                 <input
                   type="radio"
                   name={current.id}
                   checked={selectedIndex === optionIndex}
                   onChange={() => setSelectedIndex(optionIndex)}
+                  className="mt-1"
                 />
-                <span>{option}</span>
+                <span className="text-[var(--semantic-text-primary)]">{option}</span>
               </label>
             ))}
           </div>
         )}
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 pt-1">
           <button
             type="button"
             onClick={submitAnswer}
-            className="min-h-11 touch-manipulation rounded-md bg-[var(--semantic-brand)] px-4 py-2 text-sm font-semibold text-white"
+            className="min-h-11 touch-manipulation rounded-full bg-[var(--role-cta)] px-5 py-2 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_12px_var(--role-cta-shadow)] transition-[filter,transform] hover:brightness-105"
           >
             Check answer
           </button>
           <button
             type="button"
             onClick={resetStrictRun}
-            className="min-h-11 touch-manipulation rounded-md border px-4 py-2 text-sm font-medium"
+            className="min-h-11 touch-manipulation rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_06%,var(--semantic-surface))] px-5 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))]"
           >
             Reset run
           </button>
@@ -295,21 +322,21 @@ export function MedCalculationsPracticeClient({ userId, lesson, questions, hasAc
       ) : null}
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <div className="min-w-0 rounded-lg border p-3 text-sm">
-          <div className="text-[0.7rem] uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">Strict attempts</div>
-          <div className="mt-1 font-semibold text-[var(--semantic-text-primary)]">{lessonProgress.strictAttempts}</div>
+        <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[0]}`}>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Strict attempts</div>
+          <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{lessonProgress.strictAttempts}</div>
         </div>
-        <div className="min-w-0 rounded-lg border p-3 text-sm">
-          <div className="text-[0.7rem] uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">Strict passes</div>
-          <div className="mt-1 font-semibold text-[var(--semantic-text-primary)]">{lessonProgress.strictPasses}</div>
+        <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[1]}`}>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Strict passes</div>
+          <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{lessonProgress.strictPasses}</div>
         </div>
-        <div className="min-w-0 rounded-lg border p-3 text-sm">
-          <div className="text-[0.7rem] uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">Session resets</div>
-          <div className="mt-1 font-semibold text-[var(--semantic-text-primary)]">{sessionResets}</div>
+        <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[2]}`}>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Session resets</div>
+          <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">{sessionResets}</div>
         </div>
-        <div className="min-w-0 rounded-lg border p-3 text-sm">
-          <div className="text-[0.7rem] uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">Overall accuracy</div>
-          <div className="mt-1 font-semibold text-[var(--semantic-text-primary)]">
+        <div className={`min-w-0 rounded-xl border p-3 text-sm shadow-[var(--semantic-shadow-soft)] ${telemetryWrap[3]}`}>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">Overall accuracy</div>
+          <div className="mt-1 font-semibold tabular-nums text-[var(--semantic-text-primary)]">
             {totals.totalAnswered > 0 ? Math.round((totals.correctAnswered / totals.totalAnswered) * 100) : 0}%
           </div>
         </div>

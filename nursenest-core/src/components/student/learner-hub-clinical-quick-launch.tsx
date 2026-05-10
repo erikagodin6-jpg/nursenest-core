@@ -22,6 +22,8 @@ import {
   buildOptionalClinicalScenariosShellNavItem,
   buildOptionalOsceScenarioShellNavItems,
   CANONICAL_LEARNER_ROUTES,
+  CLINICAL_SCENARIOS_SHELL_NAV_ID,
+  OSCE_SHELL_NAV_ID,
 } from "@/lib/navigation/learner-primary-nav";
 import { isStudyToolsPubliclyEnabled } from "@/lib/study-tools/study-tools-feature-flag";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
@@ -306,6 +308,10 @@ export function LearnerHubClinicalQuickLaunch({
             key={tile.key}
             href={tile.href}
             className={`group flex min-h-[7.5rem] min-w-[10.5rem] max-w-[14rem] shrink-0 snap-start flex-col justify-between rounded-2xl border p-3.5 shadow-[var(--semantic-shadow-soft)] transition-[transform,box-shadow] duration-200 sm:min-h-0 sm:min-w-0 sm:max-w-none sm:flex-1 sm:p-4 ${tc.wrap} hover:-translate-y-0.5 hover:shadow-md motion-reduce:transform-none`}
+            {...(tile.key === "labs" ? { "data-nn-qa-dash-labs-launch": "1" as const } : {})}
+            {...(tile.key === OSCE_SHELL_NAV_ID ? { "data-nn-qa-dash-osce-launch": "1" as const } : {})}
+            {...(tile.key === CLINICAL_SCENARIOS_SHELL_NAV_ID ? { "data-nn-qa-dash-clinical-scenarios": "1" as const } : {})}
+            {...(tile.key === "medCalculations" ? { "data-nn-qa-dash-med-calc-launch": "1" as const } : {})}
           >
             <div className="flex items-start gap-2.5">
               <span

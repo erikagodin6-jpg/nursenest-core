@@ -34,6 +34,8 @@ test.describe("CAT exam mode — runner contract", () => {
       await page.waitForURL(/\/app\/practice-tests\/[a-zA-Z0-9_-]+/, { timeout: 120_000 });
 
       await expect(page.locator("[data-cat-exam-root]")).toBeVisible({ timeout: 120_000 });
+      await expect(page.locator(".nn-cat-premium-convergence")).toBeVisible({ timeout: 120_000 });
+      await expect(page.locator("[data-nn-cat-premium-convergence]")).toBeVisible({ timeout: 120_000 });
       await expect(page.locator(".nn-question-session-rationale")).toHaveCount(0);
       await expect(page.locator("[data-nn-qa-cat-live-transparency]")).toHaveCount(0);
 

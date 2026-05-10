@@ -954,6 +954,7 @@ export function PracticeTestsHubClient({
         ref={builderSectionRef}
         id="practice-exam-builder"
         data-nn-e2e-practice-exams-builder
+        data-nn-practice-exam-hub-convergence=""
         className={[
           "nn-premium-practice-hub-builder scroll-mt-20 space-y-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-cool))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7",
           isPriorityWinner(hubPriority, "weak_focus")

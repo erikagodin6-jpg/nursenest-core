@@ -128,6 +128,12 @@ function PremiumModuleGrid({
             const qaAttrs =
               card.qaMarker === "ecg"
                 ? { "data-nn-qa-hub-ecg": "1" as const }
+                : card.key === "labs"
+                  ? { "data-nn-qa-hub-labs": "1" as const }
+                : card.key === "osce"
+                  ? { "data-nn-qa-hub-osce": "1" as const }
+                : card.key === "med_calc"
+                  ? { "data-nn-qa-hub-med-calc": "1" as const }
                 : card.qaMarker === "np_clinical"
                   ? { "data-nn-qa-hub-np-cases": "1" as const }
                   : card.qaMarker === "clinical_scenarios"

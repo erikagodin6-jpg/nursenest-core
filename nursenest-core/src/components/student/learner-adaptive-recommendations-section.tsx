@@ -3,7 +3,8 @@ import type { AdaptiveWireBundleJson } from "@/lib/learner/build-learner-adaptiv
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
-import { ChevronRight, Sparkles } from "lucide-react";
+import { Calculator, ChevronRight, FlaskConical, Sparkles, Theater } from "lucide-react";
+import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 
 type Props = {
   t: LearnerMarketingT;
@@ -17,7 +18,7 @@ type Props = {
 export function LearnerAdaptiveRecommendationsSection({ t, bundle }: Props) {
   if (!bundle) return null;
 
-  const { recommendations, rationaleLines } = bundle;
+  const { recommendations, rationaleLines, labsStudyNudge, scenariosStudyNudge, medCalcStudyNudge } = bundle;
   const weak = recommendations.rankedWeakTopics.slice(0, 5);
   const lessons = recommendations.lessons.slice(0, 4);
   const catHint = recommendations.practiceCat;
@@ -120,6 +121,113 @@ export function LearnerAdaptiveRecommendationsSection({ t, bundle }: Props) {
           )}
         </div>
       </div>
+
+      {labsStudyNudge ? (
+        <div
+          className="mt-4 flex flex-col gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_07%,var(--semantic-surface))] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+          data-nn-adaptive-labs-nudge=""
+        >
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-3)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-3)_88%,var(--semantic-text-primary))]">
+              <FlaskConical className="h-5 w-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-3)_88%,var(--semantic-text-primary))]">
+                {t("learner.studyHome.quickLaunch.labsTitle")}
+              </p>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("learner.studyHome.quickLaunch.labsDesc")}</p>
+              <ul className="mt-2 flex flex-wrap gap-1.5" aria-label="Topics linking to labs">
+                {labsStudyNudge.matchedTopicKeys.map((k) => (
+                  <li
+                    key={k}
+                    className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_05%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-medium text-[var(--semantic-text-primary)]"
+                  >
+                    {k}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <Link
+            href={withPathwayScopeHref(labsStudyNudge.href, pid)}
+            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full bg-[var(--role-cta)] px-4 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)] sm:min-h-9"
+          >
+            {t("learner.studyHome.quickLaunch.labsCta")}
+          </Link>
+        </div>
+      ) : null}
+
+      {medCalcStudyNudge ? (
+        <div
+          className="mt-4 flex flex-col gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-5)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_07%,var(--semantic-surface))] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+          data-nn-adaptive-med-calc-nudge=""
+        >
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-5)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-5)_88%,var(--semantic-text-primary))]">
+              <Calculator className="h-5 w-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-5)_88%,var(--semantic-text-primary))]">
+                {t("components.examPathwayHub.premiumModules.medCalcTitle")}
+              </p>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+                {t("components.examPathwayHub.premiumModules.medCalcBody")}
+              </p>
+              <ul className="mt-2 flex flex-wrap gap-1.5" aria-label="Topics linking to medication calculations">
+                {medCalcStudyNudge.matchedTopicKeys.map((k) => (
+                  <li
+                    key={k}
+                    className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-5)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_05%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-medium text-[var(--semantic-text-primary)]"
+                  >
+                    {k}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <Link
+            href={withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.medCalculations, pid)}
+            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-5)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-5)_92%,var(--semantic-text-primary))] shadow-[var(--semantic-shadow-soft)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-chart-5)_18%,var(--semantic-surface))] sm:min-h-9"
+          >
+            {t("components.examPathwayHub.premiumModules.medCalcCta")}
+          </Link>
+        </div>
+      ) : null}
+
+      {scenariosStudyNudge ? (
+        <div
+          className="mt-4 flex flex-col gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_07%,var(--semantic-surface))] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+          data-nn-adaptive-scenarios-nudge=""
+        >
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-2)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-2)_88%,var(--semantic-text-primary))]">
+              <Theater className="h-5 w-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-2)_88%,var(--semantic-text-primary))]">
+                {t("learner.shell.nav.clinicalScenarios")}
+              </p>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("learner.studyHome.quickLaunch.scenariosDesc")}</p>
+              <ul className="mt-2 flex flex-wrap gap-1.5" aria-label="Topics linking to scenarios">
+                {scenariosStudyNudge.matchedTopicKeys.map((k) => (
+                  <li
+                    key={k}
+                    className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-2)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_05%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-medium text-[var(--semantic-text-primary)]"
+                  >
+                    {k}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <Link
+            href={withPathwayScopeHref(scenariosStudyNudge.href, pid)}
+            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-2)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-2)_92%,var(--semantic-text-primary))] shadow-[var(--semantic-shadow-soft)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-chart-2)_18%,var(--semantic-surface))] sm:min-h-9"
+          >
+            {t("learner.studyHome.quickLaunch.scenariosCta")}
+          </Link>
+        </div>
+      ) : null}
 
       <div className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-4)_08%,var(--semantic-surface))] p-4 sm:p-5">
         <div className="flex items-start justify-between gap-2">

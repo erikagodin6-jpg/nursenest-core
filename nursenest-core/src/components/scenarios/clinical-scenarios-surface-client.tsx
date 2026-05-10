@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getPathwayBodySystemGroups } from "@/lib/learner-study-hub/body-system-data";
 import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
 import {
@@ -27,6 +28,7 @@ export function ClinicalScenariosSurfaceClient({
   /** When set on allied pathways, dev previews and copy reference this occupation only. */
   alliedProfessionKey?: string | null;
 }) {
+  const { t } = useMarketingI18n();
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const groups = useMemo(() => getPathwayBodySystemGroups(pathwayId), [pathwayId]);
   const alliedCore = Boolean(pathwayId && isAlliedMarketingCorePathwayId(pathwayId));
@@ -59,6 +61,7 @@ export function ClinicalScenariosSurfaceClient({
         title="Judgment previews for your allied track"
         subtitle="Published unfolding cases roll out on nursing pathways first. For your occupation, we surface dev layout previews only in staff builds, and always link scenario-style practice back into the question bank."
         pathwayId={pathwayId}
+        qaHubMarker
       >
         <p className="text-sm text-[var(--semantic-text-secondary)]">
           Scenario-style stems and branching rationales live in the pathway-scoped question bank. Open practice with your
@@ -121,10 +124,11 @@ export function ClinicalScenariosSurfaceClient({
 
   return (
     <ScenarioStudyShell
-      eyebrow="Clinical scenarios"
-      title="Case-based scenarios (shell)"
-      subtitle="Supports unfolding cases, vitals/labs, orders, nursing priorities, interventions, rationales, red flags, escalation criteria, SBAR practice, and deep links to lessons, questions, and flashcards once content lands."
+      eyebrow={t("learner.shell.nav.clinicalScenarios")}
+      title={t("components.examPathwayHub.premiumModules.clinicalScenariosHubTitle")}
+      subtitle={t("components.examPathwayHub.premiumModules.clinicalScenariosHubBody")}
       pathwayId={pathwayId}
+      qaHubMarker
     >
       <ScenarioCategorySelector groups={groups} value={categoryId} onChange={setCategoryId} />
       {filtered.length === 0 ? (

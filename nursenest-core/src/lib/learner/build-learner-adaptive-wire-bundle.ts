@@ -24,6 +24,9 @@ import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { deriveCanonicalStudyTopicSlug } from "@/lib/lessons/pathway-lesson-linked-learning-assets";
 import type { PathwayLessonLinkedLearningSignals } from "@/lib/lessons/pathway-lesson-types";
 import type { RoleTrackSlug } from "@/lib/exam-pathways/types";
+import { weakTopicSuggestsLabsFocus } from "@/lib/labs/labs-adaptive-signals";
+import { weakTopicSuggestsMedCalcFocus } from "@/lib/med-calculations/med-calc-adaptive-signals";
+import { weakTopicSuggestsScenarioFocus } from "@/lib/scenarios/scenario-adaptive-signals";
 
 export type AdaptiveWireBundleJson = {
   pathwayId: string;
@@ -33,6 +36,12 @@ export type AdaptiveWireBundleJson = {
   progressSummary: ReturnType<typeof buildLearnerFacingProgressSummary>;
   /** Non-sensitive deterministic hints (no stems). */
   rationaleLines: string[];
+  /** When weak-topic signals match lab interpretation domains, deep-link the Labs workstation. */
+  labsStudyNudge: { href: "/app/labs"; matchedTopicKeys: string[] } | null;
+  /** When weak-topic signals match clinical judgment / prioritization, deep-link scenarios. */
+  scenariosStudyNudge: { href: "/app/clinical-scenarios"; matchedTopicKeys: string[] } | null;
+  /** When weak-topic signals match dosing / pharmacology math, deep-link med calculations. */
+  medCalcStudyNudge: { href: "/app/med-calculations"; matchedTopicKeys: string[] } | null;
 };
 
 function linkedLearningForTopWeak(
@@ -219,6 +228,31 @@ export async function loadLearnerAdaptiveWireBundle(
     }
   }
 
+  const matchedLabsTopics = recommendations.rankedWeakTopics
+    .map((w) => w.topicKey)
+    .filter((k) => weakTopicSuggestsLabsFocus(k))
+    .slice(0, 4);
+  const labsStudyNudge =
+    matchedLabsTopics.length > 0 ? { href: "/app/labs" as const, matchedTopicKeys: matchedLabsTopics } : null;
+
+  const matchedScenarioTopics = recommendations.rankedWeakTopics
+    .map((w) => w.topicKey)
+    .filter((k) => weakTopicSuggestsScenarioFocus(k))
+    .slice(0, 4);
+  const scenariosStudyNudge =
+    matchedScenarioTopics.length > 0
+      ? { href: "/app/clinical-scenarios" as const, matchedTopicKeys: matchedScenarioTopics }
+      : null;
+
+  const matchedMedCalcTopics = recommendations.rankedWeakTopics
+    .map((w) => w.topicKey)
+    .filter((k) => weakTopicSuggestsMedCalcFocus(k))
+    .slice(0, 4);
+  const medCalcStudyNudge =
+    matchedMedCalcTopics.length > 0
+      ? { href: "/app/med-calculations" as const, matchedTopicKeys: matchedMedCalcTopics }
+      : null;
+
   return {
     pathwayId,
     roleTrack,
@@ -229,6 +263,9 @@ export async function loadLearnerAdaptiveWireBundle(
       weakestSystems: progressSummary.weakestSystems.slice(0, 5),
     },
     rationaleLines: rationaleLines.slice(0, 4),
+    labsStudyNudge,
+    scenariosStudyNudge,
+    medCalcStudyNudge,
   };
 }
 

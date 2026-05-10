@@ -96,6 +96,7 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
           title={detail.title}
           subtitle="Admin-only unpublished case engine — vitals, labs, staged judgment checks, and trajectory feedback."
           pathwayId={pathwayId}
+          activeScenarioMarker
         >
           <div className="mb-4 text-sm">
             <Link
@@ -126,8 +127,9 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
           title="Case-based judgment (catalog)"
           subtitle="Select a scenario to preview the unfolding case. Drafts are visible to staff only until publishing is enabled for learners."
           pathwayId={pathwayId}
+          qaHubMarker
         >
-          <ul className="space-y-2">
+          <ul className="space-y-3" data-nn-clinical-scenarios-catalog="">
             {catalog.map((c) => (
               <li key={c.id}>
                 <Link
@@ -140,10 +142,10 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
                     const join = base.includes("?") ? "&" : "?";
                     return `${base}${join}scenarioId=${encodeURIComponent(c.id)}`;
                   })()}
-                  className="block rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] px-3 py-2 text-sm font-medium text-[var(--semantic-text-primary)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))]"
+                  className="block rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] px-4 py-3 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-[var(--semantic-shadow-soft)] transition-[border-color,box-shadow] hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] sm:py-3.5"
                 >
                   {c.title}{" "}
-                  <span className="text-xs font-normal text-[var(--theme-body-text)]">
+                  <span className="block pt-1 text-xs font-normal text-[var(--semantic-text-secondary)] sm:inline sm:pt-0">
                     · {c.publishStatus} · {c.tierFocus}
                   </span>
                 </Link>

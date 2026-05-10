@@ -740,6 +740,8 @@ export function PracticeTestRunnerClient({
   /** Desktop/tablet split: question left, rationale right (mobile stacks). */
   const linearPracticeSplitReview =
     isLinearEngine && linearDelivery === "practice" && linearRationaleVisibility === "after_each";
+  /** Linear practice exams (tutor / study-forward) — visually distinct from licensing CAT shells. */
+  const linearPracticeExamConvergence = Boolean(isLinearEngine && linearDelivery === "practice");
   /** Visual mode for `ExamSessionShell` — one shell, token-driven surfaces (not layout forks). */
   const learnerExamShellMode = useMemo((): LearnerExamShellMode => {
     if (status !== "IN_PROGRESS") return "review";
@@ -1600,7 +1602,13 @@ export function PracticeTestRunnerClient({
       linearFbCount > 0 ? Math.round((linearFbCorrect / linearFbCount) * 100) : 0;
 
     return (
-      <div>
+      <div
+        {...(catMode
+          ? { "data-nn-qa-cat-results-root": "" }
+          : isLinearEngine
+            ? { "data-nn-qa-practice-exam-results-root": "" }
+            : {})}
+      >
         {/* ── Spec §7 structured results ─────────────────────────── */}
         <ResultsSummary
           results={results}
@@ -2170,19 +2178,31 @@ export function PracticeTestRunnerClient({
       >
         <PracticeSessionLayout
           className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
-          {...(isExamStyle ? { "data-cat-exam-root": true } : {})}
+          {...(isExamStyle
+            ? {
+                "data-cat-exam-root": true,
+                "data-nn-cat-premium-convergence": "",
+                "data-nn-cat-exam-ui-phase": catExamUiPhase,
+              }
+            : {})}
         >
           <ExamSessionShell
             neutralPalette
             immersive
             examMode={learnerExamShellMode}
-            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome nn-cat-exam-chrome--premium nn-cat-adaptive-exam-session" : ""}`}
+            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome nn-cat-exam-chrome--premium nn-cat-adaptive-exam-session nn-cat-premium-convergence" : ""}`}
           >
             {isExamStyle ? (
               <>
-                <header className="nn-cat-exam-board-top nn-cat-exam-board-top--adaptive flex shrink-0 items-center justify-between gap-2 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
-                  <p className="nn-cat-exam-board-top__progress m-0 text-xs font-semibold leading-snug text-[var(--semantic-text-secondary)] sm:text-sm">
-                    {tx("learner.practiceTests.run.itemInProgress", "Question in progress")}
+                <header className="nn-cat-exam-board-top nn-cat-exam-board-top--adaptive nn-exam-session-topbar flex shrink-0 items-center justify-between gap-2 border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
+                  <p className="nn-cat-exam-board-top__progress nn-cat-exam-board-top__progress--adaptive nn-marketing-body-sm m-0 text-xs font-semibold leading-snug text-[var(--semantic-text-secondary)] sm:text-sm">
+                    <span className="tabular-nums text-[var(--semantic-text-primary)]">
+                      {tx("learner.practiceTests.run.question", "Question")} {idx + 1}
+                    </span>
+                    <span className="mx-1.5 font-medium text-[var(--semantic-text-muted)]">·</span>
+                    <span className="font-medium">
+                      {tx("learner.practiceTests.run.adaptiveSessionShort", "Adaptive Test")}
+                    </span>
                   </p>
                   <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                     {showCatExamStrictBadge ? (
@@ -2215,7 +2235,7 @@ export function PracticeTestRunnerClient({
                     <button
                       type="button"
                       ref={catExamNavigatorTriggerRef}
-                      className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_55%,transparent)]"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_58%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_55%,transparent)]"
                       onClick={() => catExamNavigatorDialogRef.current?.showModal()}
                     >
                       <LayoutGrid className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
@@ -2224,7 +2244,7 @@ export function PracticeTestRunnerClient({
                     <button
                       type="button"
                       disabled={examPrimaryBusy}
-                      className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_58%,var(--semantic-surface))] disabled:opacity-40"
                       onClick={() => void abandon()}
                     >
                       <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
@@ -2372,7 +2392,7 @@ export function PracticeTestRunnerClient({
                           disabled={
                             examPrimaryBusy || catTimerHydrateRecovery || !hasMeaningfulAnswer(current.id)
                           }
-                          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
+                          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-[var(--role-cta)] px-4 py-2.5 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)] transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-2"
                           onClick={lockCatExamAnswer}
                         >
                           {tx("learner.practiceTests.run.submit", "Submit answer")}
@@ -2391,7 +2411,7 @@ export function PracticeTestRunnerClient({
                             catExamUiPhase !== "submitted_locked" ||
                             !hasMeaningfulAnswer(current.id)
                           }
-                          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
+                          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-full bg-[var(--role-cta)] px-4 py-2.5 text-xs font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)] transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-2"
                           onClick={() => {
                             if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
                             if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
@@ -3230,14 +3250,15 @@ export function PracticeTestRunnerClient({
       telemetrySurface="practice_test"
     >
       <PracticeSessionLayout
-        className={`flex min-h-0 flex-1 flex-col ${chromeClass}${linearPracticeSplitReview ? " nn-practice-exam-runner--rationale-dock" : ""}`}
+        className={`flex min-h-0 flex-1 flex-col ${chromeClass}${linearPracticeSplitReview ? " nn-practice-exam-runner--rationale-dock" : ""}${linearPracticeExamConvergence ? " nn-practice-exam-convergence-layout" : ""}`}
         {...(linearCatShellPresentation ? { "data-cat-exam-root": true } : {})}
+        {...(linearPracticeExamConvergence ? { "data-nn-practice-exam-convergence": "" } : {})}
       >
         <ExamSessionShell
           neutralPalette
           immersive
           examMode={learnerExamShellMode}
-          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome nn-cat-exam-chrome--premium${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}${linearPracticeSplitReview ? " nn-practice-exam-runner" : ""}`}
+          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome nn-cat-exam-chrome--premium${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}${linearPracticeSplitReview ? " nn-practice-exam-runner" : ""}${linearPracticeExamConvergence ? " nn-practice-exam-convergence" : ""}${linearPracticeSplitReview ? " nn-practice-exam-convergence--tutor-split" : ""}`}
         >
           {linearPracticeSplitReview ? (
             <>

@@ -58,7 +58,7 @@ export function PracticeExamProgressHeader({
         aria-label={sessionProgressAriaLabel}
       >
         <div
-          className="nn-practice-exam-progress__fill h-full rounded-full motion-reduce:transition-none transition-[width] duration-500 ease-out"
+          className="nn-practice-exam-progress__fill nn-progress-fill-semantic-brand h-full rounded-full motion-reduce:transition-none transition-[width] duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>

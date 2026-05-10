@@ -28,6 +28,7 @@ test("production: hub renders for paid and free (same layout, entitlement copy d
     <MedCalculationsHubPage trackLabel="RN" hasAccess={false} categories={categories} inventory={inventory} studyLinks={links} />,
   );
 
+  assert.match(paidHtml, /data-nn-med-calc-hub/);
   assert.match(paidHtml, /High-stakes med calculations training/);
   assert.match(paidHtml, />Tablets</);
   assert.match(freeHtml, /Free access includes lesson previews/);

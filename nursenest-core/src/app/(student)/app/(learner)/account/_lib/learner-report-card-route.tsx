@@ -126,7 +126,10 @@ export async function LearnerReportCardRouteBody({
 
   if (!report || report.degraded?.active) {
     return (
-      <LearnerAccountShell className="py-2">
+      <LearnerAccountShell
+        className="py-2 nn-learner-report-card-convergence"
+        data-nn-learner-report-card-convergence=""
+      >
         <BreadcrumbTrail items={crumbs} />
         <LearnerPerformanceWorkspaceNav t={t} pathname={navPathname} />
         <LearnerReportCardHero title={t("learner.account.reportCard.title")} intro={t("learner.account.reportCard.intro")} />
@@ -152,7 +155,10 @@ export async function LearnerReportCardRouteBody({
   }
 
   return (
-    <LearnerAccountShell className="py-2">
+    <LearnerAccountShell
+      className="py-2 nn-learner-report-card-convergence"
+      data-nn-learner-report-card-convergence=""
+    >
       <BreadcrumbTrail items={crumbs} />
       <LearnerPerformanceWorkspaceNav t={t} pathname={navPathname} />
       <LearnerReportCardHero title={t("learner.account.reportCard.title")} intro={t("learner.account.reportCard.intro")} />

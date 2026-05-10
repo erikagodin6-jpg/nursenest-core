@@ -199,3 +199,187 @@ html[data-theme="deep-twilight"] .nn-exam-session-premium.nn-learner-exam-shell[
     background-color 0.16s ease,
     box-shadow 0.16s ease;
 }
+
+/* ── CAT licensing convergence — workstation shell (adaptive exam only) ───
+   Scoped to .nn-cat-premium-convergence; tokens only; strengthens exam-board
+   frame + low-distraction ambient without touching practice/tutor surfaces. */
+.nn-cat-exam-chrome.nn-cat-premium-convergence.nn-cat-adaptive-exam-session .nn-cat-exam-board-frame {
+  border-radius: 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-panel-muted));
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 72%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 48%, transparent),
+    var(--semantic-shadow-soft);
+}
+
+.nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top {
+  background: var(--semantic-surface);
+}
+
+.nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-content-well {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 58%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 52%, transparent);
+}
+
+html[data-theme="midnight"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-frame,
+html[data-theme="midnight-indigo"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-frame,
+html[data-theme="midnight-ink"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-frame,
+html[data-theme="deep-twilight"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-frame,
+html[data-theme="apex"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-frame {
+  background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-panel-muted));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-text-primary) 7%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--semantic-border-soft) 52%, transparent),
+    var(--semantic-shadow-soft);
+}
+
+html[data-theme="midnight"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top,
+html[data-theme="midnight-indigo"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top,
+html[data-theme="apex"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top {
+  background: var(--semantic-surface);
+}
+
+@media (max-width: 639px) {
+  .nn-cat-exam-chrome.nn-cat-premium-convergence.nn-cat-adaptive-exam-session .nn-cat-exam-board-frame {
+    border-radius: 0.65rem;
+  }
+}
+
+/* ── Practice Exam convergence — tutor / study-forward (linear practice only) ─
+   Distinct from licensing CAT: warmer panels, educational accents, rationale-forward.
+   Scoped with .nn-practice-exam-convergence — omit when adaptive CAT exam shell is active. */
+.nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) {
+  position: relative;
+}
+
+.nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence)::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.42;
+  background:
+    radial-gradient(95% 55% at 12% 0%, color-mix(in srgb, var(--semantic-panel-warm) 22%, transparent), transparent 52%),
+    radial-gradient(80% 50% at 100% 18%, color-mix(in srgb, var(--semantic-chart-3) 14%, transparent), transparent 58%);
+  z-index: 0;
+}
+
+.nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame,
+.nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) .nn-cat-session {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame {
+  border-radius: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 58%, var(--semantic-chart-3) 22%);
+  background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-warm));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 65%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--semantic-chart-2) 18%, var(--semantic-border-soft));
+}
+
+.nn-practice-exam-convergence--tutor-split .nn-practice-exam-split--premium {
+  gap: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.nn-practice-exam-convergence--tutor-split .nn-practice-exam-rationale-panel .nn-practice-exam-rationale-panel__card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 65%, var(--semantic-chart-3) 28%);
+  border-top-width: 2px;
+  border-top-color: color-mix(in srgb, var(--semantic-chart-3) 38%, var(--semantic-border-soft));
+}
+
+.nn-practice-exam-convergence .nn-practice-exam-progress-premium {
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-warm));
+  border-bottom-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-chart-3) 14%);
+}
+
+.nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) .nn-cat-exam-board-top:not(.nn-cat-exam-board-top--adaptive) {
+  background: color-mix(in srgb, var(--semantic-surface) 90%, var(--semantic-panel-positive) 10%);
+}
+
+html[data-theme="midnight"] .nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame,
+html[data-theme="midnight-indigo"] .nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame,
+html[data-theme="midnight-ink"] .nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame,
+html[data-theme="deep-twilight"] .nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame,
+html[data-theme="apex"] .nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame {
+  background: color-mix(in srgb, var(--semantic-surface) 93%, var(--semantic-panel-warm));
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 52%, var(--semantic-chart-3) 22%);
+}
+
+html[data-theme="midnight"] .nn-practice-exam-convergence .nn-practice-exam-progress-premium,
+html[data-theme="midnight-indigo"] .nn-practice-exam-convergence .nn-practice-exam-progress-premium,
+html[data-theme="apex"] .nn-practice-exam-convergence .nn-practice-exam-progress-premium {
+  background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-practice-exam-convergence.nn-cat-exam-chrome:not(.nn-cat-premium-convergence)::before {
+    opacity: 0.28;
+  }
+}
+
+.nn-practice-exam-convergence .nn-practice-exam-rationale-sheet--premium {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-chart-3) 22%);
+}
+
+/* ── CAT licensing exam (adaptive) — typography + post-submit option states only.
+   Board chrome uses the convergence rules above; no extra inset “rail” so CAT stays
+   cohesive with learner-exam-shell ambient gradients. */
+
+/* Top bar: clearer hierarchy for question index + adaptive context */
+.nn-cat-exam-board-top--adaptive .nn-cat-exam-board-top__progress--adaptive {
+  letter-spacing: 0.01em;
+}
+
+/* After submit: selected row reads as locked/neutral (no “correct” green accent) */
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="submitted_locked"]
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session
+  .nn-cat-session.nn-cat-session--exam-single
+  .nn-cat-opt--selected,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="advancing"]
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session
+  .nn-cat-session.nn-cat-session--exam-single
+  .nn-cat-opt--selected,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="completed"]
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session
+  .nn-cat-session.nn-cat-session--exam-single
+  .nn-cat-opt--selected,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="submitted_locked"] .nn-cat-question-card--exam-stack .nn-cat-opt--selected,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="advancing"] .nn-cat-question-card--exam-stack .nn-cat-opt--selected,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="completed"] .nn-cat-question-card--exam-stack .nn-cat-opt--selected {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--semantic-text-primary));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--semantic-text-primary) 7%, transparent);
+}
+
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="submitted_locked"]
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session
+  .nn-cat-session.nn-cat-session--exam-single
+  .nn-cat-opt--selected
+  .nn-cat-opt__text,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="advancing"]
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session
+  .nn-cat-session.nn-cat-session--exam-single
+  .nn-cat-opt--selected
+  .nn-cat-opt__text,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="completed"]
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session
+  .nn-cat-session.nn-cat-session--exam-single
+  .nn-cat-opt--selected
+  .nn-cat-opt__text,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="submitted_locked"] .nn-cat-question-card--exam-stack .nn-cat-opt--selected .nn-cat-opt__text,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="advancing"] .nn-cat-question-card--exam-stack .nn-cat-opt--selected .nn-cat-opt__text,
+[data-cat-exam-root][data-nn-cat-exam-ui-phase="completed"] .nn-cat-question-card--exam-stack .nn-cat-opt--selected .nn-cat-opt__text {
+  color: var(--semantic-text-primary);
+}
+
+/* Results landing (post-CAT): slightly denser “report” band when premium root is present */
+[data-nn-qa-cat-results-root] .nn-cat-perf-card {
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+}

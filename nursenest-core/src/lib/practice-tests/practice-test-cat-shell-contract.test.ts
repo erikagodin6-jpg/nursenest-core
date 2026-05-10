@@ -58,6 +58,12 @@ describe("Practice test runner — CAT shell contract", () => {
     assert.match(helperSrc, /!linearIsExamShell/);
   });
 
+  it("ships premium convergence markers on licensing CAT (exam-style adaptive shell)", () => {
+    assert.equal(src.includes("nn-cat-premium-convergence"), true);
+    assert.equal(src.includes("data-nn-cat-premium-convergence"), true);
+    assert.equal(src.includes("data-nn-qa-cat-results-root"), true);
+  });
+
   it("keeps legacy + linear runner branches off the old split study grid (CAT study split stays earlier in file only)", () => {
     const legacyStart = src.indexOf("if (!catMode && !isLinearEngine)");
     const linearStart = src.indexOf("// LINEAR PRACTICE / EXAM");

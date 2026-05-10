@@ -177,7 +177,7 @@ export function PracticeTestCatAdaptiveExamFooter({
   return (
     <footer
       data-nn-qa-cat-adaptive-exam-footer
-      className="nn-premium-cat-adaptive-footer nn-cat-exam-board-footer nn-cat-exam-board-footer--adaptive flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]"
+      className="nn-premium-cat-adaptive-footer nn-cat-exam-board-footer nn-cat-exam-board-footer--adaptive flex shrink-0 flex-col border-t border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]"
     >
       <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-2 px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
         {children}

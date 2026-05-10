@@ -22,7 +22,11 @@ export function LearnerDashboardPageShell({
   children,
 }: LearnerDashboardPageShellProps) {
   return (
-    <div className="nn-dash nn-dash--learner-home min-w-0 overflow-x-hidden" data-testid="learner-dashboard-shell">
+    <div
+      className="nn-dash nn-dash--learner-home nn-learner-dashboard-convergence min-w-0 overflow-x-hidden"
+      data-testid="learner-dashboard-shell"
+      data-nn-learner-dashboard-convergence=""
+    >
       <div className="flex min-w-0 flex-col gap-7 sm:gap-8">
         <BreadcrumbTrail items={crumbs} />
 
