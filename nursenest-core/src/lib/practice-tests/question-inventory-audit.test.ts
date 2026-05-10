@@ -2,9 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { catReadinessUnavailableMessage } from "@/lib/practice-tests/cat-practice-readiness";
+import { buildCatPracticeReadinessStaffDiagnostics } from "@/lib/practice-tests/cat-practice-readiness";
 import {
   buildQuestionInventorySummary,
   classifyQuestionInventoryRow,
+  summarizeQuestionInventoryRows,
   type QuestionInventoryAuditRow,
 } from "@/lib/practice-tests/question-inventory-audit";
 
@@ -156,14 +158,32 @@ test("catReadinessUnavailableMessage can surface published versus CAT-ready mism
   assert.match(message, /127 published questions found/);
   assert.match(message, /only 6 currently meet CAT readiness requirements/);
 });
-import assert from "node:assert/strict";
-import test from "node:test";
 
-import {
-  classifyQuestionInventoryRow,
-  summarizeQuestionInventoryRows,
-  type QuestionInventoryAuditRow,
-} from "./question-inventory-audit";
+test("buildCatPracticeReadinessStaffDiagnostics exposes operator counts without changing learner readiness", () => {
+  const diagnostics = buildCatPracticeReadinessStaffDiagnostics({
+    publishedCount: 10_000,
+    practiceReadyCount: 2_397,
+    catReadyCount: 2_172,
+    validation: {
+      ok: false,
+      error: "Adaptive practice needs at least two distinct categories (body system or topic) in the pool. Broaden topic filters.",
+      diagnostics: {
+        sourceBreakdown: { bodySystem: 0, topic: 0, nclexClientNeedsCategory: 8, general: 1 },
+        bodySystemOrTopicCategoryKeys: {},
+        nclexClientNeedsCategoryKeys: { "physiological integrity": 4, "psychosocial integrity": 4 },
+        finalCategoryKeys: { "physiological integrity": 4, "psychosocial integrity": 4, General: 1 },
+        rowsCollapsingToGeneral: 1,
+        rowsRescuedByNclexClientNeedsFallback: 8,
+      },
+    },
+  });
+
+  assert.equal(diagnostics.publishedCount, 10_000);
+  assert.equal(diagnostics.practiceReadyCount, 2_397);
+  assert.equal(diagnostics.catReadyCount, 2_172);
+  assert.match(diagnostics.validationFailureReason ?? "", /at least two distinct categories/);
+  assert.equal(diagnostics.categoryDiversityCounts["physiological integrity"], 4);
+});
 
 const completeRow: QuestionInventoryAuditRow = {
   id: "complete",
