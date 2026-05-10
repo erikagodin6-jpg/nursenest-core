@@ -1,5 +1,5 @@
 /**
- * Authenticated learner PNG baselines (Ocean / Blossom / Midnight + desktop + mobile).
+ * Authenticated learner PNG baselines (Ocean / Aurora / Midnight + desktop + mobile).
  *
  * Requires the same paid credentials + storage as `setup-visual-qa-auth` (see `docs/visual-qa.md`).
  * Prerequisite data: run `npm run seed:auth-qa` against the same DB as `DATABASE_URL` for weak areas,
@@ -51,7 +51,7 @@ test.beforeAll(({}, testInfo) => {
 test.describe("Authenticated learner visual baseline", () => {
   test.use({ reducedMotion: "reduce" });
 
-  for (const theme of ["ocean", "blossom", "midnight"] as const) {
+  for (const theme of ["ocean", "aurora", "midnight"] as const) {
     test(`dashboard /app — ${theme} — desktop`, async ({ page, baseURL }) => {
       const origin = baseURL?.replace(/\/$/, "") ?? "http://127.0.0.1:3000";
       await page.goto(`${origin}/app`, { waitUntil: "domcontentloaded", timeout: 120_000 });
@@ -108,7 +108,7 @@ test.describe("Authenticated learner visual baseline", () => {
     });
   }
 
-  for (const theme of ["blossom", "midnight"] as const) {
+  for (const theme of ["aurora", "midnight"] as const) {
     test(`dashboard /app — ${theme} — mobile`, async ({ page, baseURL }) => {
       await page.setViewportSize({ width: 390, height: 844 });
       const origin = baseURL?.replace(/\/$/, "") ?? "http://127.0.0.1:3000";

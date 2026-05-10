@@ -70,7 +70,7 @@ test.describe("Marketing theme chrome (public)", () => {
     await dismissMarketingScrims(page);
     await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({ timeout: 60_000 });
 
-    const sample = ["ocean", "midnight", "blossom"] as const;
+    const sample = themeOptionsForPublicMarketingPicker().map((o) => o.id);
     const themeButton = page.getByRole("button", { name: /theme/i }).first();
     for (const id of sample) {
       const opt = themeOptionsForPublicMarketingPicker().find((o) => o.id === id);

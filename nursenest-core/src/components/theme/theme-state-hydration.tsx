@@ -17,6 +17,10 @@ import {
 
 const ALLOWED_THEME_IDS = new Set(THEME_OPTIONS.map((o) => o.id));
 
+function normalizeStoredThemeId(raw: string): string {
+  return raw.trim();
+}
+
 function parseHexColor(value: string): { r: number; g: number; b: number } | null {
   const hex = value.trim().replace(/^#/, "");
   if (!/^[0-9a-fA-F]{6}$/.test(hex)) return null;
@@ -240,7 +244,8 @@ export function ThemeStateHydration() {
       const fromStorage = localStorage.getItem(THEME_STORAGE_KEY);
       const fromDom = document.documentElement.getAttribute("data-theme");
       const raw = (fromStorage || fromDom || NURSENEST_DEFAULT_THEME).trim();
-      const next = ALLOWED_THEME_IDS.has(raw) ? raw : NURSENEST_DEFAULT_THEME;
+      const normalized = normalizeStoredThemeId(raw);
+      const next = ALLOWED_THEME_IDS.has(normalized) ? normalized : NURSENEST_DEFAULT_THEME;
       applyPaletteRoles(next);
       setTheme(next);
     } catch {
@@ -251,7 +256,9 @@ export function ThemeStateHydration() {
   }, [theme, setTheme]);
 
   useLayoutEffect(() => {
-    const resolved = theme && ALLOWED_THEME_IDS.has(theme) ? theme : NURSENEST_DEFAULT_THEME;
+    const normalized = theme ? normalizeStoredThemeId(theme) : "";
+    const resolved =
+      normalized && ALLOWED_THEME_IDS.has(normalized) ? normalized : NURSENEST_DEFAULT_THEME;
     applyPaletteRoles(resolved);
   }, [theme]);
 

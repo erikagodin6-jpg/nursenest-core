@@ -43,11 +43,13 @@ describe("nav chrome tracks semantic surface tokens", () => {
 });
 
 describe("CSS-only picker themes still resolve nav chrome", () => {
-  for (const id of ["blossom", "sunset", "meadow"] as const) {
+  for (const id of ["aurora", "sunset", "meadow"] as const) {
     it(`theme "${id}" uses static nav map when no surface tokens`, () => {
       assert.equal(getThemeSurfaceContrastTokens(id), null);
       const chrome = getNavChrome(id);
-      assert.match(chrome.chrome, /^#/);
+      // Static nav map may use a hex (#…) or a CSS color-mix() expression
+      // for warm pastel chromes; both are valid concrete colors.
+      assert.match(chrome.chrome, /^(#|color-mix\()/);
       assert.ok(chrome.foreground.length > 0);
     });
   }

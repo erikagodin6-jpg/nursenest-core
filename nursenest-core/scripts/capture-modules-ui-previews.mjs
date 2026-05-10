@@ -35,7 +35,7 @@ const moduleSurfaces = [
   "modules-mobile-proposed",
 ];
 
-const themes = ["blossom", "ocean", "garden", "midnight", "apex"];
+const themes = ["aurora", "ocean", "garden", "midnight", "apex"];
 
 const devices = [
   { name: "desktop", width: 1440, height: 1200 },

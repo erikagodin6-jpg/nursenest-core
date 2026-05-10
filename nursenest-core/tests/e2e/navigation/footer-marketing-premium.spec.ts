@@ -87,7 +87,7 @@ test.describe("Marketing footer — premium layout", () => {
   test("optional data-theme buckets: homepage + RN hub footer visible", async ({ page, baseURL }) => {
     const origin = requireOrigin(baseURL);
     await seedUsMarketingCookie(page, origin);
-    const themes = ["ocean", "blossom", "midnight"] as const;
+    const themes = ["ocean", "aurora", "midnight"] as const;
     for (const themeId of themes) {
       await page.setViewportSize({ width: 1440, height: 900 });
       await gotoExpectOk(page, "/");

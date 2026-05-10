@@ -121,7 +121,7 @@ test.describe("Flashcards premium interaction (paid)", () => {
       await expect(start).toBeVisible({ timeout: 90_000 });
       await expect(start).toBeEnabled();
 
-      for (const theme of ["ocean", "blossom", "midnight"] as const) {
+      for (const theme of ["ocean", "aurora", "midnight"] as const) {
         await page.evaluate((t) => document.documentElement.setAttribute("data-theme", t), theme);
         await assertLearnerMainNoHorizontalOverflow(page);
       }

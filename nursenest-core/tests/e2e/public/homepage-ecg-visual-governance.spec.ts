@@ -30,7 +30,7 @@ async function ensureDir(filePath: string) {
   await mkdir(path.dirname(filePath), { recursive: true });
 }
 
-const THEMES_SNAPSHOT = ["ocean", "midnight", "sage-garden", "blossom"] as const;
+const THEMES_SNAPSHOT = ["ocean", "midnight", "sage-garden", "aurora"] as const;
 
 test.describe("Homepage ECG visual governance", () => {
   test.describe.configure({ mode: "serial" });

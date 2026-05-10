@@ -132,7 +132,7 @@
       "routeTemplate": "LESSON_DETAIL_PATH",
       "viewport": "desktop",
       "auth": "demo",
-      "theme": "blossom",
+      "theme": "aurora",
       "waitFor": "main",
       "manualReviewNotes": "Set SCREENSHOT_LESSON_DETAIL_PATH to /app/lessons/{id}. If unset, first lesson link is opened from hub (see script prepare hook).",
       "registryScreenshotId": 12

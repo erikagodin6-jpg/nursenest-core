@@ -205,7 +205,7 @@ test.describe("New Grad hubs — pathway premium modules & gates", () => {
     }
   });
 
-  test("transition hub — desktop + mobile, ocean + midnight + blossom screenshots", async ({ page, baseURL }) => {
+  test("transition hub — desktop + mobile, ocean + midnight + aurora screenshots", async ({ page, baseURL }) => {
     const origin = requireOrigin(baseURL);
     await seedUsMarketingCookie(page, origin);
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -214,8 +214,8 @@ test.describe("New Grad hubs — pathway premium modules & gates", () => {
     await page.screenshot({ path: join(OUT_DIR, "new-grad-transition-desktop-ocean.png"), fullPage: true });
     await page.evaluate(() => document.documentElement.setAttribute("data-theme", "midnight"));
     await page.screenshot({ path: join(OUT_DIR, "new-grad-transition-desktop-midnight.png"), fullPage: true });
-    await page.evaluate(() => document.documentElement.setAttribute("data-theme", "blossom"));
-    await page.screenshot({ path: join(OUT_DIR, "new-grad-transition-desktop-blossom.png"), fullPage: true });
+    await page.evaluate(() => document.documentElement.setAttribute("data-theme", "aurora"));
+    await page.screenshot({ path: join(OUT_DIR, "new-grad-transition-desktop-aurora.png"), fullPage: true });
     await page.evaluate(() => document.documentElement.removeAttribute("data-theme"));
 
     await page.setViewportSize({ width: 390, height: 844 });
@@ -224,7 +224,7 @@ test.describe("New Grad hubs — pathway premium modules & gates", () => {
     await page.screenshot({ path: join(OUT_DIR, "new-grad-transition-mobile-ocean.png"), fullPage: true });
     await page.evaluate(() => document.documentElement.setAttribute("data-theme", "midnight"));
     await page.screenshot({ path: join(OUT_DIR, "new-grad-transition-mobile-midnight.png"), fullPage: true });
-    await page.evaluate(() => document.documentElement.setAttribute("data-theme", "blossom"));
-    await page.screenshot({ path: join(OUT_DIR, "new-grad-transition-mobile-blossom.png"), fullPage: true });
+    await page.evaluate(() => document.documentElement.setAttribute("data-theme", "aurora"));
+    await page.screenshot({ path: join(OUT_DIR, "new-grad-transition-mobile-aurora.png"), fullPage: true });
   });
 });

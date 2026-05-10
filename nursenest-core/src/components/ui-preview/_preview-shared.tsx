@@ -30,39 +30,31 @@ import { Card } from "@/components/ui/card";
 // Theme typing + palettes
 // ---------------------------------------------------------------------------
 
-export type PreviewTheme = "blossom" | "ocean" | "forest" | "midnight" | "apex";
+export type PreviewTheme = "ocean" | "midnight" | "blossom" | "aurora" | "sunset" | "forest" | "apex";
 
 export const themeLabels: Record<PreviewTheme, string> = {
-  blossom: "Blossom",
   ocean: "Ocean",
-  forest: "Forest",
   midnight: "Midnight",
+  blossom: "Blossom",
+  aurora: "Aurora",
+  sunset: "Sunset",
+  forest: "Forest",
   apex: "Apex",
 };
 
 export function isPreviewTheme(value: string | null): value is PreviewTheme {
   return (
-    value === "blossom" ||
     value === "ocean" ||
-    value === "forest" ||
     value === "midnight" ||
+    value === "blossom" ||
+    value === "aurora" ||
+    value === "sunset" ||
+    value === "forest" ||
     value === "apex"
   );
 }
 
 export const themeVars: Record<PreviewTheme, Record<string, string>> = {
-  blossom: {
-    "--preview-bg": "#fef7fb",
-    "--preview-surface": "#ffffff",
-    "--preview-surface-2": "#feeef7",
-    "--preview-elevated": "#fffafd",
-    "--preview-text": "#2d1020",
-    "--preview-muted": "#7a546b",
-    "--preview-border": "rgba(190, 90, 132, 0.22)",
-    "--preview-accent": "#db2777",
-    "--preview-accent-2": "#38bdf8",
-    "--preview-accent-soft": "#fce7f3",
-  },
   ocean: {
     "--preview-bg": "#f0faff",
     "--preview-surface": "#ffffff",
@@ -75,18 +67,6 @@ export const themeVars: Record<PreviewTheme, Record<string, string>> = {
     "--preview-accent-2": "#2563eb",
     "--preview-accent-soft": "#cffafe",
   },
-  forest: {
-    "--preview-bg": "#f3faf2",
-    "--preview-surface": "#ffffff",
-    "--preview-surface-2": "#e8f7e6",
-    "--preview-elevated": "#fafef9",
-    "--preview-text": "#122e1d",
-    "--preview-muted": "#4e6a58",
-    "--preview-border": "rgba(5, 150, 105, 0.20)",
-    "--preview-accent": "#059669",
-    "--preview-accent-2": "#0f766e",
-    "--preview-accent-soft": "#d1fae5",
-  },
   midnight: {
     "--preview-bg": "#07101e",
     "--preview-surface": "#0f1929",
@@ -98,6 +78,54 @@ export const themeVars: Record<PreviewTheme, Record<string, string>> = {
     "--preview-accent": "#38bdf8",
     "--preview-accent-2": "#818cf8",
     "--preview-accent-soft": "rgba(56, 189, 248, 0.13)",
+  },
+  blossom: {
+    "--preview-bg": "#faf7fc",
+    "--preview-surface": "#ffffff",
+    "--preview-surface-2": "#efe8f7",
+    "--preview-elevated": "#fefdff",
+    "--preview-text": "#1f1528",
+    "--preview-muted": "#5c4d6e",
+    "--preview-border": "rgba(142, 117, 255, 0.2)",
+    "--preview-accent": "#8e75ff",
+    "--preview-accent-2": "#7dd3fc",
+    "--preview-accent-soft": "#f3e9f6",
+  },
+  aurora: {
+    "--preview-bg": "#faf8ff",
+    "--preview-surface": "#ffffff",
+    "--preview-surface-2": "#f3e9f8",
+    "--preview-elevated": "#fefdff",
+    "--preview-text": "#1a202c",
+    "--preview-muted": "#5c4d6e",
+    "--preview-border": "rgba(155, 114, 255, 0.22)",
+    "--preview-accent": "#9b72ff",
+    "--preview-accent-2": "#4a90e2",
+    "--preview-accent-soft": "#ede4ff",
+  },
+  sunset: {
+    "--preview-bg": "#fff8f3",
+    "--preview-surface": "#ffffff",
+    "--preview-surface-2": "#ffefe4",
+    "--preview-elevated": "#fffdfb",
+    "--preview-text": "#1a2438",
+    "--preview-muted": "#5d6b7a",
+    "--preview-border": "rgba(224, 120, 98, 0.22)",
+    "--preview-accent": "#e07862",
+    "--preview-accent-2": "#38bdf8",
+    "--preview-accent-soft": "#fff4ed",
+  },
+  forest: {
+    "--preview-bg": "#f3faf2",
+    "--preview-surface": "#ffffff",
+    "--preview-surface-2": "#e8f7e6",
+    "--preview-elevated": "#fafef9",
+    "--preview-text": "#122e1d",
+    "--preview-muted": "#4e6a58",
+    "--preview-border": "rgba(5, 150, 105, 0.20)",
+    "--preview-accent": "#059669",
+    "--preview-accent-2": "#0f766e",
+    "--preview-accent-soft": "#d1fae5",
   },
   apex: {
     // Apex — premium clinical: deep navy + violet + warm-gold accent.

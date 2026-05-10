@@ -129,11 +129,12 @@ html[data-theme="midnight"] .nn-cockpit-mastery-key {
   background: color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
 }
 
-/* Blossom: slightly warmer panel seams (uses existing semantic chart tokens) */
-html[data-theme="blossom"] .nn-learner-cockpit-hero.nn-learner-dashboard-hero.nn-dash-page-header--learner-hub {
+/* Aurora / Blossom: slightly warmer panel seams (uses existing semantic chart tokens) */
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  .nn-learner-cockpit-hero.nn-learner-dashboard-hero.nn-dash-page-header--learner-hub {
   border-color: color-mix(in srgb, var(--semantic-chart-5) 10%, var(--semantic-border-soft));
 }
 
-html[data-theme="blossom"] .nn-cockpit-mastery-key {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-cockpit-mastery-key {
   border-color: color-mix(in srgb, var(--semantic-chart-5) 12%, var(--semantic-border-soft));
 }

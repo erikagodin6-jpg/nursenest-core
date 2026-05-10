@@ -21,6 +21,11 @@ export type BlogStaticLongtailRecord = {
   disclaimer: string;
   authorDisplayName?: string;
   medicalReviewerName?: string;
+  /**
+   * When true, the file is validated locally but excluded from public merge, sitemap,
+   * `/blog/[slug]` static-longtail resolution, and supplement overlap lists.
+   */
+  draft?: boolean;
 };
 
 /** Origin of a row in merged public blog lists (`/blog`, tag/category hubs when merged). */

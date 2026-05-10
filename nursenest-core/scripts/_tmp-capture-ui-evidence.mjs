@@ -10,7 +10,7 @@ const outDir =
   process.env.EVIDENCE_OUT_DIR?.trim() ||
   path.join(root, "reports/ui-evidence/learner-cockpit-premiumization");
 fs.mkdirSync(outDir, { recursive: true });
-const themes = ["ocean", "blossom", "midnight"];
+const themes = ["ocean", "aurora", "midnight"];
 
 async function applyTheme(page, theme) {
   await page.evaluate((t) => {

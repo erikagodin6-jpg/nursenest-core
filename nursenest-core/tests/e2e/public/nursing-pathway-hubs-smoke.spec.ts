@@ -98,7 +98,7 @@ const SCREENSHOT_OUT = join(process.cwd(), "docs", "screenshots", "hub-figma-imp
 
 const THEME_BUCKETS_E2E = [
   { id: "ocean", label: "ocean" },
-  { id: "blossom", label: "blossom" },
+  { id: "aurora", label: "aurora" },
   { id: "midnight", label: "midnight" },
 ] as const;
 
@@ -137,7 +137,7 @@ test.describe("Nursing hubs — screenshot evidence", () => {
   });
 
   for (const hub of SCREENSHOT_HUBS) {
-    test(`${hub.fileBase} — desktop Ocean / Blossom / Midnight`, async ({ page, baseURL }) => {
+    test(`${hub.fileBase} — desktop Ocean / Aurora / Midnight`, async ({ page, baseURL }) => {
       const origin = requireOrigin(baseURL);
       await page.setViewportSize({ width: 1440, height: 900 });
       if (hub.seed === "ca") await seedCaMarketingCookie(page, origin);
@@ -161,7 +161,7 @@ test.describe("Nursing hubs — screenshot evidence", () => {
       });
     });
 
-    test(`${hub.fileBase} — mobile Ocean / Blossom / Midnight`, async ({ page, baseURL }) => {
+    test(`${hub.fileBase} — mobile Ocean / Aurora / Midnight`, async ({ page, baseURL }) => {
       const origin = requireOrigin(baseURL);
       await page.setViewportSize({ width: 390, height: 844 });
       if (hub.seed === "ca") await seedCaMarketingCookie(page, origin);

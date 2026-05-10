@@ -49,6 +49,11 @@ function parseTags(raw: string | undefined): string[] {
     .filter(Boolean);
 }
 
+function parseDraftFlag(raw: string | undefined): boolean {
+  const v = raw?.trim().toLowerCase();
+  return v === "true" || v === "1" || v === "yes";
+}
+
 function recordFromFields(bodyHtml: string, fields: Record<string, string>): BlogStaticLongtailRecord {
   const slug = fields.slug?.trim() ?? "";
   const title = fields.title?.trim() ?? "";
@@ -60,6 +65,7 @@ function recordFromFields(bodyHtml: string, fields: Record<string, string>): Blo
   const seoDescription = fields.seoDescription?.trim() || excerpt;
   const canonicalUrl = fields.canonicalUrl?.trim() || `/blog/${slug}`;
   const disclaimer = fields.medicalDisclaimer?.trim() ?? fields.disclaimer?.trim() ?? "";
+  const draft = parseDraftFlag(fields.draft);
   return {
     slug,
     title,
@@ -75,18 +81,15 @@ function recordFromFields(bodyHtml: string, fields: Record<string, string>): Blo
     disclaimer,
     authorDisplayName: fields.authorDisplayName?.trim() || undefined,
     medicalReviewerName: fields.medicalReviewerName?.trim() || fields.reviewerName?.trim() || undefined,
+    ...(draft ? { draft: true } : {}),
   };
 }
 
 /**
- * Loads all `*.md` posts from `src/content/blog-static-longtail/` (server-only).
- * Cached per process.
+ * Every `*.md` row under `src/content/blog-static-longtail/`, including `draft: true`
+ * (for validators and tooling). Cached per process.
  */
-export function listBlogStaticLongtailRecords(): BlogStaticLongtailRecord[] {
-  return listBlogStaticLongtailFileRecords().map((x) => x.record);
-}
-
-export function listBlogStaticLongtailFileRecords(): { file: string; record: BlogStaticLongtailRecord }[] {
+export function listAllBlogStaticLongtailFileRecords(): { file: string; record: BlogStaticLongtailRecord }[] {
   if (cache) return cache;
   if (!existsSync(LONGTAIL_DIR)) {
     cache = [];
@@ -102,6 +105,16 @@ export function listBlogStaticLongtailFileRecords(): { file: string; record: Blo
   }
   cache = out;
   return cache;
+}
+
+/** Published long-tail records (`draft` omitted or false). */
+export function listBlogStaticLongtailRecords(): BlogStaticLongtailRecord[] {
+  return listBlogStaticLongtailFileRecords().map((x) => x.record);
+}
+
+/** Published long-tail files only (`draft` omitted or false). */
+export function listBlogStaticLongtailFileRecords(): { file: string; record: BlogStaticLongtailRecord }[] {
+  return listAllBlogStaticLongtailFileRecords().filter(({ record }) => !record.draft);
 }
 
 export function getBlogStaticLongtailRecord(slug: string): BlogStaticLongtailRecord | undefined {

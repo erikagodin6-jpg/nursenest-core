@@ -929,6 +929,26 @@
     background: color-mix(in srgb, var(--semantic-brand) 14%, transparent);
     color: var(--nn-nav-fg, #f8fafc);
   }
+
+  /* Midnight — stronger capsule + tier legibility (WCAG) without changing row4 / Ocean */
+  html[data-theme="midnight"] [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--nn-nav-bg, var(--semantic-panel-cool)) 86%, transparent) 0%,
+        color-mix(in srgb, var(--semantic-info) 11%, var(--nn-nav-bg, var(--semantic-panel-cool))) 100%
+      );
+  }
+
+  html[data-theme="midnight"] [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-inner {
+    background: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 12%, var(--nn-nav-bg, var(--semantic-panel-cool)));
+    border-color: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 16%, var(--nn-nav-bg, var(--semantic-panel-cool)));
+  }
+
+  html[data-theme="midnight"] [data-nn-header-layout="marketing-unified-dark"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+  html[data-theme="midnight"] [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-tier-chip {
+    color: color-mix(in srgb, var(--nn-nav-fg, #f8fafc) 97%, transparent);
+  }
 }
 
 @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
@@ -956,7 +976,7 @@
 
 /* ---------------------------------------------------------------------
    Phase 5 — Premium homepage body below the hero.
-   Small TSX sections share this token bridge so Blossom, Ocean, Forest,
+   Small TSX sections share this token bridge so Aurora, Ocean, Forest,
    Midnight, and Apex inherit the active theme without one-off palettes.
    --------------------------------------------------------------------- */
 
@@ -986,11 +1006,11 @@
 }
 
 /* ---------------------------------------------------------------------
-   Blossom — full-page pastel canvas + folded sections (Figma homepage mockups).
+   Aurora / Blossom — full-page pastel canvas + folded sections (Figma homepage mockups).
    Rose / violet / sky / mint blobs via semantic tokens — no neon magenta slabs.
    --------------------------------------------------------------------- */
 
-html[data-theme="blossom"] .nn-home-marketing-root {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-root {
   background-color: var(--theme-page-bg);
   background-image:
     radial-gradient(ellipse 130% 92% at -8% -18%, color-mix(in srgb, var(--semantic-chart-5) 19%, transparent), transparent 56%),
@@ -1006,7 +1026,7 @@ html[data-theme="blossom"] .nn-home-marketing-root {
     );
 }
 
-html[data-theme="blossom"] .nn-home-marketing-rich-hero {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-rich-hero {
   background:
     radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-5) 26%, transparent), transparent 58%),
     radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-brand) 20%, transparent), transparent 56%),
@@ -1015,7 +1035,7 @@ html[data-theme="blossom"] .nn-home-marketing-rich-hero {
     var(--page-bg, var(--theme-page-bg));
 }
 
-html[data-theme="blossom"] .nn-home-marketing-rich-hero.nn-hero-bridge {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-rich-hero.nn-hero-bridge {
   background-color: transparent;
   background-image:
     radial-gradient(ellipse 130% 90% at 12% -28%, color-mix(in srgb, var(--semantic-chart-5) 17%, transparent), transparent 54%),
@@ -1030,11 +1050,11 @@ html[data-theme="blossom"] .nn-home-marketing-rich-hero.nn-hero-bridge {
   background-repeat: no-repeat;
 }
 
-html[data-theme="blossom"] .nn-premium-home-section {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-premium-home-section {
   background: transparent;
 }
 
-html[data-theme="blossom"] .nn-premium-home-section::before {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-premium-home-section::before {
   background:
     radial-gradient(760px 400px at 0% 0%, color-mix(in srgb, var(--semantic-chart-5) 14%, transparent), transparent 60%),
     radial-gradient(740px 380px at 100% 18%, color-mix(in srgb, var(--semantic-brand) 11%, transparent), transparent 58%),
@@ -1042,55 +1062,55 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
     radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 11%, transparent), transparent 60%);
 }
 
-/* Blossom — premium nav rhythm (scoped): airy gaps, full-width bands unchanged */
+/* Aurora — premium nav rhythm (scoped): airy gaps, full-width bands unchanged */
 @media (min-width: 1024px) {
-  html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
+  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid {
     column-gap: clamp(1.35rem, 2.6vw, 2.35rem);
     padding-block: 0.55rem;
     min-height: 3.85rem;
   }
 
-  html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > .nav {
+  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > .nav {
     width: min(100%, 60rem);
     max-width: min(100%, 60rem);
     gap: clamp(0.55rem, 1.15vw, 1.05rem);
     padding-inline: clamp(1rem, 2.2vw, 2rem);
   }
 
-  html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > .nn-header-brand-cluster {
+  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > .nn-header-brand-cluster {
     column-gap: clamp(0.85rem, 1.6vw, 1.5rem);
     padding-inline-end: clamp(0.25rem, 0.8vw, 0.65rem);
   }
 
-  html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster {
+  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster {
     column-gap: clamp(0.55rem, 1vw, 0.95rem);
     row-gap: 0.5rem;
   }
 
-  html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
+  :is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
     min-height: 44px;
     padding-inline: clamp(0.65rem, 1.3vw, 1.1rem);
   }
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-inner {
   column-gap: clamp(0.45rem, 1.1vw, 0.9rem);
   row-gap: 0.35rem;
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-bar-a {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-bar-a {
   gap: 0.65rem;
   padding-inline: clamp(0.4rem, 1.1vw, 0.85rem);
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
   padding-inline: clamp(0.65rem, 1.2vw, 1rem);
   min-height: 36px;
 }
 
-/* Blossom nav pills — rose/lavender/mint wash vs sky-only chips (still token-driven) */
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
+/* Aurora nav pills — rose/violet/sky/mint wash vs sky-only chips (still token-driven) */
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link {
   border-color: color-mix(
     in srgb,
     var(--semantic-brand) 24%,
@@ -1103,7 +1123,7 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-d
   );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link:hover {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link:hover {
   background: color-mix(
     in srgb,
     var(--semantic-chart-5) 11%,
@@ -1111,7 +1131,7 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-d
   );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link[aria-current="page"] {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link[aria-current="page"] {
   border-color: color-mix(in srgb, var(--semantic-brand) 34%, var(--semantic-info));
   background: color-mix(
     in srgb,
@@ -1120,7 +1140,7 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-d
   );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link {
   border-color: color-mix(
     in srgb,
     var(--semantic-brand) 22%,
@@ -1133,7 +1153,7 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-n
   );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link:hover {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row .nn-marketing-nav-link:hover {
   background: color-mix(
     in srgb,
     var(--semantic-info) 14%,
@@ -1141,8 +1161,8 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-n
   );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a,
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip {
   border-color: color-mix(
     in srgb,
     var(--semantic-chart-5) 18%,
@@ -1155,8 +1175,8 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketin
   );
 }
 
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
-html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-header-nav-row[data-nn-header-band="tier"] nav a[data-active],
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) [data-nn-header-layout="marketing-row4"] .nn-marketing-tier-chip[data-active] {
   border-color: color-mix(in srgb, var(--semantic-brand) 36%, var(--semantic-info));
   background: color-mix(
     in srgb,
@@ -1469,6 +1489,16 @@ html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-marketin
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.10),
     0 18px 60px -32px color-mix(in srgb, var(--theme-primary, #a78bfa) 50%, transparent);
+}
+
+/* Midnight: slightly denser glass on the sticky shell so marketing chrome never reads as empty/transparent */
+html[data-theme="midnight"] .nn-header-dark-surface {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b1220)) 97%, transparent) 0%,
+      color-mix(in srgb, var(--nn-nav-bg, var(--nav-bg, #0b1220)) 88%, transparent) 100%
+    );
 }
 
 /* -------- 3.3  Nav links — refined hover (no layout shift) -------- */
@@ -2776,8 +2806,8 @@ html[data-theme="ocean"] .nn-flashcard-session-ambient {
   );
 }
 
-/* Blossom — muted rose / lilac / warm accents (no loud pink blocks). */
-html[data-theme="blossom"] .nn-flashcard-session-ambient {
+/* Aurora / Blossom — muted rose / lilac / mint accents (no neon pink blocks). */
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-session-ambient {
   background: linear-gradient(
     90deg,
     color-mix(in srgb, var(--semantic-chart-1) 11%, transparent),
@@ -2786,11 +2816,11 @@ html[data-theme="blossom"] .nn-flashcard-session-ambient {
   );
 }
 
-html[data-theme="blossom"] .nn-flashcard-layered-stack__underlay {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-layered-stack__underlay {
   background: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-panel-warm));
 }
 
-html[data-theme="blossom"] .nn-flashcard-hero-surface {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-hero-surface {
   border-color: color-mix(in srgb, var(--semantic-chart-1) 22%, var(--semantic-border-soft));
   background: linear-gradient(
     165deg,
@@ -2799,12 +2829,44 @@ html[data-theme="blossom"] .nn-flashcard-hero-surface {
   );
 }
 
-html[data-theme="blossom"] .nn-flashcard-rail-utility {
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-flashcard-rail-utility {
   border-color: color-mix(in srgb, var(--semantic-chart-1) 14%, var(--semantic-border-soft));
   background: linear-gradient(
     185deg,
     color-mix(in srgb, var(--semantic-chart-2) 7%, var(--semantic-panel-muted)),
     color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-muted))
+  );
+}
+
+/* Sunset — warm coral wash + sky lift (semantic multi-hue). */
+html[data-theme="sunset"] .nn-flashcard-session-ambient {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-1) 10%, transparent),
+    color-mix(in srgb, var(--semantic-chart-3) 11%, transparent) 48%,
+    color-mix(in srgb, var(--semantic-chart-4) 8%, transparent)
+  );
+}
+
+html[data-theme="sunset"] .nn-flashcard-layered-stack__underlay {
+  background: color-mix(in srgb, var(--semantic-chart-3) 10%, var(--semantic-panel-warm));
+}
+
+html[data-theme="sunset"] .nn-flashcard-hero-surface {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 16%, var(--semantic-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--semantic-surface)),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-cool))
+  );
+}
+
+html[data-theme="sunset"] .nn-flashcard-rail-utility {
+  border-color: color-mix(in srgb, var(--semantic-chart-1) 12%, var(--semantic-border-soft));
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--semantic-panel-muted)),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted))
   );
 }
 
@@ -3444,7 +3506,7 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
     0 12px 32px -30px color-mix(in srgb, var(--footer-fg) 7%, transparent);
 }
 
-[data-theme="blossom"] [data-nn-footer-layout="marketing"] .nn-footer-panel {
+[data-theme="aurora"] [data-nn-footer-layout="marketing"] .nn-footer-panel {
   background:
     linear-gradient(
       168deg,

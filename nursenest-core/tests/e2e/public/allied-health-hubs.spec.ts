@@ -45,7 +45,7 @@ const SCREENSHOT_PROFESSION_KEYS = [
   "physiotherapy",
 ] as const;
 
-async function setMarketingTheme(page: Page, theme: "ocean" | "midnight" | "blossom") {
+async function setMarketingTheme(page: Page, theme: "ocean" | "midnight" | "aurora") {
   if (theme === "ocean") {
     await page.evaluate(() => document.documentElement.removeAttribute("data-theme"));
     return;
@@ -160,14 +160,14 @@ test.describe("Allied Health hubs (registry-driven)", () => {
     await page.evaluate(() => document.documentElement.removeAttribute("data-theme"));
   });
 
-  test.describe("Representative occupations — desktop + mobile, ocean + midnight + blossom", () => {
+  test.describe("Representative occupations — desktop + mobile, ocean + midnight + aurora", () => {
     for (const key of SCREENSHOT_PROFESSION_KEYS) {
       test(`screenshots — ${key}`, async ({ page, baseURL }) => {
         test.skip(!baseURL, "BASE_URL required");
         const path = `/allied/${encodeURIComponent(key)}`;
 
         await page.setViewportSize({ width: 1280, height: 900 });
-        for (const theme of ["ocean", "midnight", "blossom"] as const) {
+        for (const theme of ["ocean", "midnight", "aurora"] as const) {
           await setMarketingTheme(page, theme);
           await page.goto(`${baseURL}${path}`, { waitUntil: "domcontentloaded", timeout: 120_000 });
           await expect(page.locator(PREMIUM)).toBeVisible({ timeout: 90_000 });

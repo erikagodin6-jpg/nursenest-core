@@ -46,7 +46,7 @@ test.describe("Paid user — dashboard Phase 1 hero + readiness strip", () => {
     const mobileOverflow = await main.evaluate((el) => el.scrollWidth > el.clientWidth + 1);
     expect(mobileOverflow, "learner main should not horizontally overflow (mobile)").toBe(false);
 
-    for (const theme of ["ocean", "midnight", "blossom"] as const) {
+    for (const theme of ["ocean", "midnight", "aurora"] as const) {
       await page.evaluate((id) => document.documentElement.setAttribute("data-theme", id), theme);
       const attr = await page.evaluate(() => document.documentElement.getAttribute("data-theme"));
       expect(attr).toBe(theme);

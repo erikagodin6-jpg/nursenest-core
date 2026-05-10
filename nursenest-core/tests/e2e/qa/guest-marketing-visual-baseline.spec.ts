@@ -51,7 +51,7 @@ test.beforeAll(() => {
 test.describe("Guest marketing visual baseline", () => {
   test.use({ reducedMotion: "reduce" });
 
-  for (const theme of ["ocean", "blossom", "midnight"] as const) {
+  for (const theme of ["ocean", "aurora", "midnight"] as const) {
     test(`homepage — ${theme} — desktop`, async ({ page, baseURL }) => {
       const origin = baseURL?.replace(/\/$/, "") ?? "http://127.0.0.1:3000";
       await page.goto(`${origin}/`, { waitUntil: "domcontentloaded", timeout: 120_000 });

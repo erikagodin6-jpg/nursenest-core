@@ -12,11 +12,13 @@ import {
 import { listBlogStaticLongtailRecords } from "@/lib/blog/blog-static-longtail-load";
 import { mergeBlogSitemapRowsDbPrimary, staticBlogSitemapSlugRows } from "@/lib/blog/safe-blog-queries";
 
-test("long-tail folder loads exactly three slugs", () => {
+test("long-tail folder loads repo-backed slugs (unique + batch1 slugs present)", () => {
   const slugs = listBlogStaticLongtailRecords()
     .map((r) => r.slug.trim())
     .filter(Boolean);
-  assert.equal(slugs.length, 3);
+  assert.equal(new Set(slugs).size, slugs.length, "long-tail slugs must be unique");
+  assert.ok(slugs.includes("hyperkalemia-ecg-changes-nursing-students"));
+  assert.ok(slugs.includes("hypokalemia-pathophysiology-nursing-priorities"));
 });
 
 test("mergeBlogIndexRows: DB slug wins over supplement with same slug", () => {

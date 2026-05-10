@@ -1,5 +1,37 @@
 import { BlogPostStatus, BlogWorkflowStatus, type Prisma } from "@prisma/client";
 
+/**
+ * Automated E2E / pipeline smoke posts that must never appear on public marketing surfaces
+ * (`/blog`, hubs, homepage teaser, sitemap, related posts), while remaining visible in admin CMS.
+ *
+ * Matches slug or title (case-insensitive): `bloge2e`, plus deterministic "Runtime …" QA titles
+ * observed leaking from scheduled/publish smoke runs.
+ */
+export function isBlogPublicE2eTestArtifact(slug: string, title?: string | null): boolean {
+  const s = slug.trim().toLowerCase();
+  const t = (title ?? "").trim().toLowerCase();
+  if (s.includes("bloge2e") || t.includes("bloge2e")) return true;
+  if (t.includes("runtime draft scheduled")) return true;
+  if (t.includes("runtime en scheduled")) return true;
+  if (t.includes("runtime en published")) return true;
+  return false;
+}
+
+/** Prisma fragment: exclude {@link isBlogPublicE2eTestArtifact} rows from all `blogLiveWhere` queries. */
+export function blogPublicExcludeE2eTestArtifactsWhere(): Prisma.BlogPostWhereInput {
+  return {
+    NOT: {
+      OR: [
+        { slug: { contains: "bloge2e", mode: "insensitive" } },
+        { title: { contains: "bloge2e", mode: "insensitive" } },
+        { title: { contains: "runtime draft scheduled", mode: "insensitive" } },
+        { title: { contains: "runtime en scheduled", mode: "insensitive" } },
+        { title: { contains: "runtime en published", mode: "insensitive" } },
+      ],
+    },
+  };
+}
+
 /** Workflows that must never appear on public blog lists, detail SEO, or sitemap slices. */
 const BLOG_WORKFLOW_FAILURES: BlogWorkflowStatus[] = [
   BlogWorkflowStatus.FAILED_GENERATION,
@@ -152,7 +184,7 @@ export function isBlogSlugHiddenFromPublicMarketingCatalog(slug: string): boolea
   return false;
 }
 
-export function blogLiveWhere(now: Date = new Date()): Prisma.BlogPostWhereInput {
+function blogLiveWhereCore(now: Date): Prisma.BlogPostWhereInput {
   const workflowNeverPublic: Prisma.BlogPostWhereInput = {
     workflowStatus: { notIn: BLOG_WORKFLOW_FAILURES },
   };
@@ -186,5 +218,12 @@ export function blogLiveWhere(now: Date = new Date()): Prisma.BlogPostWhereInput
         ],
       },
     ],
+  };
+}
+
+/** Prisma filter for list/count/sitemap/tag queries (includes E2E artifact exclusion). */
+export function blogLiveWhere(now: Date = new Date()): Prisma.BlogPostWhereInput {
+  return {
+    AND: [blogLiveWhereCore(now), blogPublicExcludeE2eTestArtifactsWhere()],
   };
 }

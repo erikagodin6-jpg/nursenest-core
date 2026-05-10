@@ -92,13 +92,13 @@ test.describe("lesson detail premium shells", () => {
     expect(metaBox && discBox && metaBox.y < discBox.y).toBe(true);
   });
 
-  test("palette swap: ocean, midnight, blossom stay readable ~5s", async ({ page }) => {
+  test("palette swap: ocean, midnight, aurora stay readable ~5s", async ({ page }) => {
     await page.goto(`${baseURL}/us/rn/nclex-rn/lessons/respiratory-assessment-ngn`, {
       waitUntil: "domcontentloaded",
       timeout: 180_000,
     });
     await page.waitForSelector("h1.nn-lesson-page-title", { timeout: 120_000 });
-    for (const theme of ["ocean", "midnight", "blossom"] as const) {
+    for (const theme of ["ocean", "midnight", "aurora"] as const) {
       await page.evaluate((id) => {
         document.documentElement.setAttribute("data-theme", id);
       }, theme);

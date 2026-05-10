@@ -80,7 +80,7 @@ export function buildNewGradHubProgramMarkdown(args: { generatedAtIso: string })
   lines.push("");
   const p = getExamPathwayById(NEW_GRAD_PUBLIC_SURFACE.primaryPathwayId);
   lines.push(`- **SEO:** Pathway \`seoTitle\` / \`seoDescription\` present on registry object: ${yesNo(Boolean(p?.seoTitle && p?.seoDescription))}.`);
-  lines.push("- **Theme:** Hubs use `[data-theme]` + semantic tokens (`ExamPathwayHubPremiumModules` surfaces). E2E captures ocean + midnight + blossom where configured.");
+  lines.push("- **Theme:** Hubs use `[data-theme]` + semantic tokens (`ExamPathwayHubPremiumModules` surfaces). E2E captures ocean + midnight + aurora where configured.");
   lines.push("- **Admin/staff leakage:** Forbidden on public hubs — verified in Playwright (`assertNoAdminLinks` / `assertNoForbiddenPublicLinks`).");
   lines.push("");
   lines.push("## Part 2 — Minimum content standards (targets vs catalog snapshot)");

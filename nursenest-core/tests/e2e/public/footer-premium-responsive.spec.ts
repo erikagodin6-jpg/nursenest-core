@@ -1,5 +1,5 @@
 /**
- * Marketing footer: responsive overflow, themes (ocean / blossom / midnight), contrast + focus sanity.
+ * Marketing footer: responsive overflow, themes (ocean / aurora / midnight), contrast + focus sanity.
  *
  * From nursenest-core:
  *   npx playwright test tests/e2e/public/footer-premium-responsive.spec.ts --project=chromium
@@ -74,7 +74,7 @@ test.describe("Marketing footer — premium responsive", () => {
     }
   });
 
-  test("themes ocean / blossom / midnight: links + contrast + focus", async ({ page, baseURL }) => {
+  test("themes ocean / aurora / midnight: links + contrast + focus", async ({ page, baseURL }) => {
     const origin = requireOrigin(baseURL);
     await seedUsMarketingCookie(page, origin);
     await page.setViewportSize({ width: 1280, height: 900 });
@@ -82,7 +82,7 @@ test.describe("Marketing footer — premium responsive", () => {
     await dismissMarketingScrims(page);
     await expectMarketingPublicShell(page);
 
-      for (const themeId of ["ocean", "blossom", "midnight"] as const) {
+      for (const themeId of ["ocean", "aurora", "midnight"] as const) {
         await applyTheme(page, themeId);
         const footer = page.locator(FOOTER).first();
         await footer.scrollIntoViewIfNeeded();

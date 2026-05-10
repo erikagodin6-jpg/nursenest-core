@@ -121,13 +121,22 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
   },
 
   /* ── Premium clinical palettes ── */
+  aurora: {
+    /* Fallback when semantic tokens absent — pastel wash + ink (matches theme-palettes Aurora). */
+    chrome: "color-mix(in srgb, #9b72ff 8%, color-mix(in srgb, #fce8f3 20%, color-mix(in srgb, #e6f2ff 18%, #fffdfa)))",
+    foreground: "#1a202c",
+    border: "color-mix(in srgb, #1a202c 12%, #e8dff0)",
+    hoverBg: "color-mix(in srgb, #1a202c 7%, transparent)",
+    hoverFg: "#1a202c",
+    panel: "color-mix(in srgb, #1a202c 6%, transparent)",
+  },
   blossom: {
-    chrome: "#121621",
-    foreground: "#FFFFFF",
-    border: "rgba(255,255,255,0.2)",
-    hoverBg: "rgba(255,255,255,0.14)",
-    hoverFg: "#FFFFFF",
-    panel: "rgba(255,255,255,0.1)",
+    chrome: "color-mix(in srgb, #8e75ff 8%, color-mix(in srgb, #f3e9f8 22%, color-mix(in srgb, #e6f2ff 14%, #fffdfa)))",
+    foreground: "#1f1528",
+    border: "color-mix(in srgb, #1f1528 11%, #e4daf0)",
+    hoverBg: "color-mix(in srgb, #1f1528 6%, transparent)",
+    hoverFg: "#1f1528",
+    panel: "color-mix(in srgb, #1f1528 5%, transparent)",
   },
   meadow: {
     chrome: "#3D9A72",
@@ -146,12 +155,12 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
     panel: "rgba(255,255,255,0.12)",
   },
   sunset: {
-    chrome: "#E85D4C",
-    foreground: "#FFFFFF",
-    border: "rgba(255,255,255,0.22)",
-    hoverBg: "rgba(255,255,255,0.16)",
-    hoverFg: "#FFFFFF",
-    panel: "rgba(255,255,255,0.12)",
+    chrome: "color-mix(in srgb, #e07862 7%, color-mix(in srgb, #ffd8c4 18%, color-mix(in srgb, #dbeafe 14%, #fffaf6)))",
+    foreground: "#1a2438",
+    border: "color-mix(in srgb, #1a2438 10%, #edd8cc)",
+    hoverBg: "color-mix(in srgb, #1a2438 6%, transparent)",
+    hoverFg: "#1a2438",
+    panel: "color-mix(in srgb, #1a2438 5%, transparent)",
   },
 
   /* ── Pink family ── */
@@ -538,7 +547,11 @@ export function getNavChrome(themeId?: string | null): NavChromeTheme {
   const resolvedId = key || NURSENEST_DEFAULT_THEME;
   const fromSemantic = navChromeFromSemantic(resolvedId);
   if (fromSemantic) return fromSemantic;
-  return NAV_CHROME_BY_THEME[key] ?? NAV_CHROME_BY_THEME[NURSENEST_DEFAULT_THEME] ?? FALLBACK;
+  return (
+    NAV_CHROME_BY_THEME[resolvedId] ??
+    NAV_CHROME_BY_THEME[NURSENEST_DEFAULT_THEME] ??
+    FALLBACK
+  );
 }
 
 /** CSS custom properties only — no direct backgroundColor/color. Use on wrapper elements that

@@ -8,7 +8,7 @@ import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 const DISALLOWED_LABEL_WORDS = /\b(girl|boy|pink theme|dark blue theme)\b/i;
 
 describe("launch clinical theme architecture", () => {
-  it("keeps four curated launch themes first in the registry", () => {
+  it("keeps curated launch themes first in the registry", () => {
     assert.deepEqual(
       THEME_OPTIONS.slice(0, LAUNCH_CLINICAL_THEME_IDS.length).map((theme) => theme.id),
       [...LAUNCH_CLINICAL_THEME_IDS],
