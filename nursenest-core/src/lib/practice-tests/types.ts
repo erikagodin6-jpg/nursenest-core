@@ -125,6 +125,16 @@ export type CatPracticePoolBuildMeta = {
   strictCompleteRowCount: number;
   usedRelaxedFilters: boolean;
   finalCompleteRowCount: number;
+  /** Complete pathway/practice rows before CAT-only calibration validation. */
+  completePracticeQuestions?: number;
+  /** Complete rows that pass the CAT calibration metadata checks. */
+  eligibleCatQuestions?: number;
+  /** Complete rows excluded because CAT calibration metadata is too thin. */
+  excludedBecauseMissingCatMetadata?: number;
+  /** Published pathway rows excluded because stem/options/answer/rationale are incomplete. */
+  excludedBecauseIncomplete?: number;
+  /** Published rows visible to the learner scope but outside the requested pathway/exam. */
+  excludedBecauseWrongPathwayOrExam?: number;
 };
 export type CatEngineType = "CAT" | "SIMULATION";
 export type CatEngineMode = "production_ready" | "beta" | "mini_adaptive" | "simulation" | "unavailable";

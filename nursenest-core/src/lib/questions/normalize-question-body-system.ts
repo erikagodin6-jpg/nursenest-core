@@ -157,6 +157,7 @@ function norm(s: string | null | undefined): string {
   return (s ?? "")
     .trim()
     .toLowerCase()
+    .replace(/[-_]+/g, " ")
     .replace(/\s+/g, " ");
 }
 
@@ -190,7 +191,10 @@ const KEYWORD_RULES: readonly MatchRule[] = [
     patterns: ["maternity", "obstetric", "pregnancy", "labor", "postpartum", "newborn", "reproductive", "prenatal", "gynecolog"],
   },
   { hub: "pediatrics", patterns: ["pediatric", "child", "infant", "adolescent", "neonatal"] },
-  { hub: "mental_health", patterns: ["mental health", "psych", "behavioral", "suicide", "anxiety", "depression", "schizo"] },
+  {
+    hub: "mental_health",
+    patterns: ["mental health", "psych", "behavioral", "suicide", "anxiety", "depression", "schizo", "eating disorder"],
+  },
   { hub: "pharmacology", patterns: ["pharmacology", "medication", "drug", "dosing", "adverse effect", "interaction"] },
   {
     hub: "fundamentals_safety",
@@ -198,7 +202,19 @@ const KEYWORD_RULES: readonly MatchRule[] = [
   },
   {
     hub: "leadership_prioritization",
-    patterns: ["leadership", "prioritization", "delegation", "management", "supervision", "legal", "ethics", "scope of practice"],
+    patterns: [
+      "leadership",
+      "prioritization",
+      "delegation",
+      "chain of command",
+      "informed consent",
+      "advance directive",
+      "management",
+      "supervision",
+      "legal",
+      "ethics",
+      "scope of practice",
+    ],
   },
   { hub: "community_public_health", patterns: ["community", "public health", "population", "screening", "immunization campaign", "epidemic"] },
   {

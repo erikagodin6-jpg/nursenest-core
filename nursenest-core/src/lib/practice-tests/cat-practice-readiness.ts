@@ -10,8 +10,49 @@ import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-tes
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 
 export type CatPracticeReadinessResult =
-  | { ok: true; availableQuestions: number; requiredQuestions: number }
-  | { ok: false; code: string; message: string; availableQuestions?: number; requiredQuestions?: number };
+  | {
+      ok: true;
+      availableQuestions: number;
+      requiredQuestions: number;
+      eligibleCatQuestions: number;
+      completePracticeQuestions: number;
+      excludedBecauseMissingCatMetadata: number;
+      excludedBecauseIncomplete: number;
+      excludedBecauseWrongPathwayOrExam: number;
+    }
+  | {
+      ok: false;
+      code: string;
+      message: string;
+      availableQuestions?: number;
+      requiredQuestions?: number;
+      eligibleCatQuestions?: number;
+      completePracticeQuestions?: number;
+      excludedBecauseMissingCatMetadata?: number;
+      excludedBecauseIncomplete?: number;
+      excludedBecauseWrongPathwayOrExam?: number;
+    };
+
+function catReadinessDiagnosticsFromMeta(buildMeta: Awaited<ReturnType<typeof fetchCatPracticePoolReadiness>>["buildMeta"]) {
+  return {
+    eligibleCatQuestions: buildMeta.eligibleCatQuestions ?? buildMeta.finalCompleteRowCount,
+    completePracticeQuestions: buildMeta.completePracticeQuestions ?? buildMeta.strictCompleteRowCount,
+    excludedBecauseMissingCatMetadata: buildMeta.excludedBecauseMissingCatMetadata ?? 0,
+    excludedBecauseIncomplete: buildMeta.excludedBecauseIncomplete ?? 0,
+    excludedBecauseWrongPathwayOrExam: buildMeta.excludedBecauseWrongPathwayOrExam ?? 0,
+  };
+}
+
+export function catReadinessUnavailableMessage(diagnostics: {
+  eligibleCatQuestions: number;
+  completePracticeQuestions: number;
+}, minPool: number): string {
+  if (diagnostics.completePracticeQuestions > 0) {
+    return `CAT requires calibrated questions. Practice questions are available, but CAT-ready calibrated questions are ${diagnostics.eligibleCatQuestions} / ${minPool}.`;
+  }
+
+  return `Adaptive exam not available yet for this pathway. We currently have ${diagnostics.completePracticeQuestions} complete practice questions; at least ${minPool} CAT-ready calibrated questions are required.`;
+}
 
 /**
  * Server-only preflight for pathway CAT practice (same gates as {@link createCatPracticeTestPayload} pool phase).
@@ -71,14 +112,16 @@ export async function assessCatPracticeReadinessForPathway(
     pathwayId: trimmed,
   };
 
-  const { pool } = await fetchCatPracticePoolReadiness(userId, entitlement, poolInput);
+  const { pool, buildMeta } = await fetchCatPracticePoolReadiness(userId, entitlement, poolInput);
+  const diagnostics = catReadinessDiagnosticsFromMeta(buildMeta);
   if (pool.length < minPool) {
     return {
       ok: false,
       code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
-      message: `Adaptive exam not available yet for this pathway. We currently have ${pool.length} complete questions; at least ${minPool} are required.`,
-      availableQuestions: pool.length,
+      message: catReadinessUnavailableMessage(diagnostics, minPool),
+      availableQuestions: diagnostics.eligibleCatQuestions,
       requiredQuestions: minPool,
+      ...diagnostics,
     };
   }
 
@@ -87,11 +130,17 @@ export async function assessCatPracticeReadinessForPathway(
     return {
       ok: false,
       code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
-      message: "Adaptive exam not available yet for this pathway. Keep practicing complete lessons and questions, then try again.",
-      availableQuestions: pool.length,
+      message: catReadinessUnavailableMessage(diagnostics, minPool),
+      availableQuestions: diagnostics.eligibleCatQuestions,
       requiredQuestions: minPool,
+      ...diagnostics,
     };
   }
 
-  return { ok: true, availableQuestions: pool.length, requiredQuestions: minPool };
+  return {
+    ok: true,
+    availableQuestions: diagnostics.eligibleCatQuestions,
+    requiredQuestions: minPool,
+    ...diagnostics,
+  };
 }

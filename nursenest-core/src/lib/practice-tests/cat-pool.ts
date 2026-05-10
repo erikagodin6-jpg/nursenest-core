@@ -238,9 +238,10 @@ async function queryShuffledCompletePool(
 async function accumulateCompleteCatPoolForReadiness(
   where: Prisma.ExamQuestionWhereInput,
   minCompleteRequired: number,
-): Promise<{ pool: CatPoolRow[]; scannedDbRows: number }> {
+): Promise<{ pool: CatPoolRow[]; scannedDbRows: number; completeRowCount: number }> {
   const pool: CatPoolRow[] = [];
   let scannedDbRows = 0;
+  let completeRowCount = 0;
   let skip = 0;
   const maxHeld = Math.min(512, Math.max(minCompleteRequired + 120, 200));
   while (skip < READINESS_SCAN_CAP) {
@@ -267,6 +268,7 @@ async function accumulateCompleteCatPoolForReadiness(
     scannedDbRows += batch.length;
     for (const r of batch) {
       if (!isCompleteCatQuestionRow(r)) continue;
+      completeRowCount += 1;
       if (pool.length >= maxHeld) pool.shift();
       pool.push({
         id: r.id,
@@ -281,7 +283,23 @@ async function accumulateCompleteCatPoolForReadiness(
     if (pool.length >= minCompleteRequired && validatePracticeCatPool(pool).ok) break;
     if (batch.length < READINESS_SCAN_BATCH) break;
   }
-  return { pool, scannedDbRows };
+  return { pool, scannedDbRows, completeRowCount };
+}
+
+function catCalibratedPool(rows: CatPoolRow[]): CatPoolRow[] {
+  return rows.filter((row) => {
+    const hasDifficulty = Number.isFinite(row.difficulty) && row.difficulty >= 1 && row.difficulty <= 5;
+    const hasCategory = Boolean(
+      row.nclexClientNeedsCategory?.trim() ||
+        row.bodySystem?.trim() ||
+        row.topic?.trim(),
+    );
+    return hasDifficulty && hasCategory;
+  });
+}
+
+async function countRawRows(where: Prisma.ExamQuestionWhereInput): Promise<number> {
+  return prisma.examQuestion.count({ where });
 }
 
 /**
@@ -301,6 +319,11 @@ export async function fetchCatPracticePoolReadiness(
     strictCompleteRowCount: strict,
     usedRelaxedFilters: false,
     finalCompleteRowCount: 0,
+    completePracticeQuestions: strict,
+    eligibleCatQuestions: 0,
+    excludedBecauseMissingCatMetadata: strict,
+    excludedBecauseIncomplete: 0,
+    excludedBecauseWrongPathwayOrExam: 0,
   });
 
   if (pathwayIdTrim && !pathway) {
@@ -313,6 +336,7 @@ export async function fetchCatPracticePoolReadiness(
   const base: Prisma.ExamQuestionWhereInput = pathway
     ? questionAccessWhereWithPathway(entitlement, pathway)
     : questionAccessWhere(entitlement);
+  const broadBase = questionAccessWhere(entitlement);
 
   const strictness = input.selectionStrictness ?? "strict";
 
@@ -336,24 +360,47 @@ export async function fetchCatPracticePoolReadiness(
   const whereStrict: Prisma.ExamQuestionWhereInput = {
     AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryStrict],
   };
-  let { pool } = await accumulateCompleteCatPoolForReadiness(whereStrict, minNeed);
-  const strictCompleteRowCount = pool.length;
+  const rawStrictCount = await countRawRows(whereStrict);
+  let strictAccumulated = await accumulateCompleteCatPoolForReadiness(whereStrict, minNeed);
+  let { pool } = strictAccumulated;
+  const strictCompleteRowCount = strictAccumulated.completeRowCount;
+  let completePracticeQuestions = strictCompleteRowCount;
+  let eligiblePool = catCalibratedPool(pool);
   let usedRelaxedFilters = false;
+  let rawFinalCount = rawStrictCount;
 
   if (strictness === "soft" && pool.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
     const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
     const whereRelaxed: Prisma.ExamQuestionWhereInput = {
       AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryRelaxed],
     };
+    rawFinalCount = await countRawRows(whereRelaxed);
     const relaxed = await accumulateCompleteCatPoolForReadiness(whereRelaxed, minNeed);
     pool = relaxed.pool;
+    completePracticeQuestions = relaxed.completeRowCount;
+    eligiblePool = catCalibratedPool(pool);
     usedRelaxedFilters = true;
   }
+
+  const wrongPathwayOrExamCount =
+    pathway
+      ? Math.max(
+          0,
+          (await countRawRows({
+            AND: [broadBase, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryStrict],
+          })) - rawStrictCount,
+        )
+      : 0;
 
   const buildMeta: CatPracticePoolBuildMeta = {
     strictCompleteRowCount: strictCompleteRowCount,
     usedRelaxedFilters,
-    finalCompleteRowCount: pool.length,
+    finalCompleteRowCount: eligiblePool.length,
+    completePracticeQuestions,
+    eligibleCatQuestions: eligiblePool.length,
+    excludedBecauseMissingCatMetadata: Math.max(0, completePracticeQuestions - eligiblePool.length),
+    excludedBecauseIncomplete: Math.max(0, rawFinalCount - completePracticeQuestions),
+    excludedBecauseWrongPathwayOrExam: wrongPathwayOrExamCount,
   };
 
   logCoreApiStudyDiagnostic({
@@ -366,10 +413,15 @@ export async function fetchCatPracticePoolReadiness(
     selectionMode: input.selectionMode,
     selectionStrictness: strictness,
     rowsFoundStrict: strictCompleteRowCount,
-    rowsReturned: pool.length,
+    rowsReturned: eligiblePool.length,
+    completePracticeQuestions,
+    eligibleCatQuestions: eligiblePool.length,
+    excludedBecauseMissingCatMetadata: buildMeta.excludedBecauseMissingCatMetadata,
+    excludedBecauseIncomplete: buildMeta.excludedBecauseIncomplete,
+    excludedBecauseWrongPathwayOrExam: buildMeta.excludedBecauseWrongPathwayOrExam,
     usedRelaxedFilters,
     reasonIfZero:
-      pool.length === 0
+      eligiblePool.length === 0
         ? pathwayIdTrim && !pathway
           ? "unknown_pathway_id"
           : pathway && !subscriptionCoversPathwayBase(entitlement, pathway)
@@ -381,7 +433,7 @@ export async function fetchCatPracticePoolReadiness(
         : undefined,
   });
 
-  return { pool, buildMeta };
+  return { pool: eligiblePool, buildMeta };
 }
 
 /**
