@@ -383,6 +383,36 @@ function assertNonEmptyDir(label, dir, filter) {
   }
 }
 
+function listFilesRecursive(dir, predicate, out = []) {
+  if (!existsSync(dir)) {
+    return out;
+  }
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith(".")) {
+      continue;
+    }
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      listFilesRecursive(fullPath, predicate, out);
+      continue;
+    }
+    if (predicate(entry.name, fullPath)) {
+      out.push(fullPath);
+    }
+  }
+  return out;
+}
+
+function assertNonEmptyCssOutput(staticRoot) {
+  const cssFiles = listFilesRecursive(staticRoot, (name) => name.endsWith(".css"));
+  if (cssFiles.length === 0) {
+    console.error(
+      `[next-prod-build] FATAL: next build reported success but no CSS assets were found under ${staticRoot}`,
+    );
+    process.exit(1);
+  }
+}
+
 const staticRoot = path.join(nextOutDir, "static");
 const standaloneRoot = path.join(nextOutDir, "standalone");
 if (!existsSync(staticRoot)) {
@@ -397,7 +427,7 @@ if (!existsSync(standaloneRoot)) {
   );
   process.exit(1);
 }
-assertNonEmptyDir("static/css", path.join(staticRoot, "css"), (n) => n.endsWith(".css"));
+assertNonEmptyCssOutput(staticRoot);
 assertNonEmptyDir("static/chunks", path.join(staticRoot, "chunks"), (n) => n.endsWith(".js"));
 const standaloneServer = resolveStandaloneServerPath(packageRoot);
 if (!standaloneServer) {

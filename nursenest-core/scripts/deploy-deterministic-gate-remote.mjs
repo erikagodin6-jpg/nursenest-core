@@ -9,7 +9,7 @@
  * Runs (in order):
  *   1) release-health (API + healthz burst)
  *   2) post-deploy smoke (public home)
- *   3) One `/_next/static/css/*.css` asset returns `text/css`
+ *   3) One `/_next/static/**/*.css` asset returns `text/css`
  *   4) `qa:verify:production:core` (guest, login, free, paid, admin — skips missing creds)
  *
  * Build-time checks (single compile, standalone on disk) belong in CI after `docker build`
@@ -48,9 +48,9 @@ async function assertCssChunk() {
     process.exit(1);
   }
   const html = await homeRes.text();
-  const m = html.match(/\/_next\/static\/css\/[^"'>\s]+\.css/);
+  const m = html.match(/\/_next\/static\/[^"'>\s]+\.css/);
   if (!m) {
-    console.error("[deploy-deterministic-gate-remote] No /_next/static/css/*.css reference in HTML.");
+    console.error("[deploy-deterministic-gate-remote] No /_next/static/**/*.css reference in HTML.");
     process.exit(1);
   }
   const cssUrl = new URL(m[0], homeRes.url).href;

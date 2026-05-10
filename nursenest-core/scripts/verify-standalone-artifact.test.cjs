@@ -19,7 +19,11 @@ function createTempScriptRoot(prefix, scriptNames) {
   const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
   const scriptsDir = path.join(tempRoot, "scripts");
   fs.mkdirSync(scriptsDir, { recursive: true });
-  for (const scriptName of scriptNames) {
+  const requiredScripts = new Set(scriptNames);
+  if (requiredScripts.has("verify-standalone-artifact.mjs") || requiredScripts.has("ensure-standalone-static.mjs")) {
+    requiredScripts.add("run-lesson-indexes-for-build.mjs");
+  }
+  for (const scriptName of requiredScripts) {
     fs.copyFileSync(path.join(__dirname, scriptName), path.join(scriptsDir, scriptName));
   }
   return tempRoot;
@@ -28,6 +32,7 @@ function createTempScriptRoot(prefix, scriptNames) {
 const STARTUP_RUNTIME_SCRIPTS = [
   "start-standalone.mjs",
   "start-standalone-runtime.cjs",
+  "runtime-env-guard-bootstrap.mjs",
   "resolve-bootstrap-mode.mjs",
   "standalone-bootstrap-probe-pathname.mjs",
   "standalone-startup-watchdog-preload.cjs",
@@ -179,11 +184,16 @@ test("verify-standalone-artifact CLI exits 0 and prints the verified nested serv
   const standaloneEntry = path.join(tempRoot, ".next", "standalone", "nursenest-core", "server.js");
   fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
   fs.writeFileSync(standaloneEntry, "module.exports = {};\n", "utf8");
+  const destStatic = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static");
+  fs.mkdirSync(path.join(destStatic, "chunks"), { recursive: true });
+  fs.writeFileSync(path.join(destStatic, "chunks", "app.css"), "body{}\n", "utf8");
+  fs.writeFileSync(path.join(destStatic, "chunks", "main.js"), "export {}\n", "utf8");
 
   try {
     const result = spawnSync(process.execPath, [path.join(tempRoot, "scripts", "verify-standalone-artifact.mjs")], {
       encoding: "utf8",
       timeout: 5000,
+      env: { ...process.env, NN_SKIP_LESSON_INDEX_BUILD: "1" },
     });
 
     assert.equal(result.status, 0, result.stderr);
@@ -219,11 +229,16 @@ test("verify-standalone-artifact CLI accepts the top-level standalone server pat
   const standaloneEntry = path.join(tempRoot, ".next", "standalone", "server.js");
   fs.mkdirSync(path.dirname(standaloneEntry), { recursive: true });
   fs.writeFileSync(standaloneEntry, "module.exports = {};\n", "utf8");
+  const destStatic = path.join(tempRoot, ".next", "standalone", ".next", "static");
+  fs.mkdirSync(path.join(destStatic, "chunks"), { recursive: true });
+  fs.writeFileSync(path.join(destStatic, "chunks", "app.css"), "body{}\n", "utf8");
+  fs.writeFileSync(path.join(destStatic, "chunks", "main.js"), "export {}\n", "utf8");
 
   try {
     const result = spawnSync(process.execPath, [path.join(tempRoot, "scripts", "verify-standalone-artifact.mjs")], {
       encoding: "utf8",
       timeout: 5000,
+      env: { ...process.env, NN_SKIP_LESSON_INDEX_BUILD: "1" },
     });
 
     assert.equal(result.status, 0, result.stderr);
@@ -235,7 +250,7 @@ test("verify-standalone-artifact CLI accepts the top-level standalone server pat
 });
 
 test("next config keeps standalone output enabled", () => {
-  const nextConfig = fs.readFileSync(path.join(__dirname, "..", "next.config.ts"), "utf8");
+  const nextConfig = fs.readFileSync(path.join(__dirname, "..", "next.config.mjs"), "utf8");
   assert.match(nextConfig, /output:\s*"standalone"/);
 });
 
@@ -261,6 +276,7 @@ test("ensure-standalone-static copies .next/static beside nested standalone serv
       encoding: "utf8",
       timeout: 5000,
       cwd: tempRoot,
+      env: { ...process.env, NN_SKIP_LESSON_INDEX_BUILD: "1" },
     });
     assert.equal(result.status, 0, result.stderr + result.stdout);
     const destCss = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "css", "app.css");
@@ -298,6 +314,7 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
       encoding: "utf8",
       timeout: 5000,
       cwd: tempRoot,
+      env: { ...process.env, NN_SKIP_LESSON_INDEX_BUILD: "1" },
     });
     assert.equal(result.status, 0, result.stderr + result.stdout);
     const nestedCss = path.join(tempRoot, ".next", "standalone", "nursenest-core", ".next", "static", "css", "app.css");
@@ -355,9 +372,21 @@ test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs c
   }
 });
 
+test("next production wrapper accepts recursive CSS assets under .next/static", () => {
+  const source = fs.readFileSync(path.join(__dirname, "run-next-prod-build.mjs"), "utf8");
+
+  assert.match(source, /function assertNonEmptyCssOutput\(staticRoot\)/);
+  assert.match(source, /listFilesRecursive\(staticRoot, \(name\) => name\.endsWith\("\.css"\)\)/);
+  assert.doesNotMatch(source, /assertNonEmptyDir\("static\/css"/);
+});
+
 test("active DigitalOcean app spec builds before runtime, starts standalone bootstrap, and routes readiness through /readyz", () => {
   const appSpec = fs.readFileSync(path.join(__dirname, "..", "..", ".do", "app-nursenest-core-next.yaml"), "utf8");
-  assert.match(appSpec, /build_command:.*npm run build.*npm run build:deploy/);
+  assert.match(appSpec, /dockerfile_path:\s*Dockerfile/);
+  assert.match(appSpec, /source_dir:\s*\./);
+  const dockerfile = fs.readFileSync(path.join(__dirname, "..", "..", "Dockerfile"), "utf8");
+  assert.match(dockerfile, /npm run heroku-postbuild/);
+  assert.match(dockerfile, /npm run build:deploy/);
   assert.match(appSpec, /run_command:.*start-standalone\.mjs/);
   assert.match(appSpec, /health_check:\n(?:.*\n)*?\s+http_path: \/readyz/);
   assert.match(appSpec, /liveness_health_check:\n(?:.*\n)*?\s+http_path: \/healthz/);
@@ -405,6 +434,7 @@ test("start-standalone accepts the top-level standalone server path", async (t) 
       HOSTNAME: "127.0.0.1",
       PORT: String(port),
       NN_BYPASS_BOOTSTRAP: "1",
+      NN_ENV_VALIDATION_MODE: "off",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -455,6 +485,7 @@ test("start-standalone exits fatally on readiness timeout with probe URL, timeou
       NN_BOOTSTRAP_READY_TIMEOUT_MS: "300",
       NN_CHILD_HEALTH_TIMEOUT_MS: "100",
       NN_BOOTSTRAP_READY_MAX_ATTEMPTS: "2",
+      NN_ENV_VALIDATION_MODE: "off",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -526,6 +557,7 @@ test("start-standalone reaches ready without bypass; /readyz reflects real child
       NN_CHILD_HEALTH_TIMEOUT_MS: "100",
       NN_BOOTSTRAP_READY_TIMEOUT_MS: "4000",
       NN_BOOTSTRAP_READY_MAX_ATTEMPTS: "30",
+      NN_ENV_VALIDATION_MODE: "off",
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
