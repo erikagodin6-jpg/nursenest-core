@@ -427,7 +427,7 @@ test.describe("Marketing header layout — responsive", () => {
         );
         const tierColor = tierChip ? getComputedStyle(tierChip).color : "";
 
-        if (themeId === "aurora" || themeId === "sunset") {
+        if (themeId === "aurora" || themeId === "blossom" || themeId === "sunset") {
           const util = document.querySelector("[data-testid='marketing-header-utility-band']");
           const tierRail = document.querySelector(".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier']");
           const uBg = util ? getComputedStyle(util).backgroundColor : "";
@@ -488,7 +488,7 @@ test.describe("Marketing header layout — responsive", () => {
 
       expect(chromeAudit.hotPinkTier, JSON.stringify(chromeAudit)).toBe(false);
 
-      if (theme === "aurora") {
+      if (theme === "aurora" || theme === "blossom" || theme === "sunset") {
         expect(chromeAudit.utilityNotInkBlack, JSON.stringify(chromeAudit)).toBe(true);
         expect(chromeAudit.tierNotInkBlack, JSON.stringify(chromeAudit)).toBe(true);
       }
