@@ -19,6 +19,7 @@ import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { HomeMarketingHeroCarouselErrorBoundary } from "@/components/marketing/home-marketing-hero-carousel-error-boundary";
+import { LeafWatermark } from "@/components/brand/leaf-watermark";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 
 export type HomeHeroScreenshotSectionProps = {
@@ -83,7 +84,7 @@ export function HomeHeroScreenshotSection({ serverPreparedSlides }: HomeHeroScre
     return (
       <section
         id="home-hero-product-carousel"
-        className="border-b border-[var(--header-nav-border)] nn-home-hero-product-band bg-[var(--page-bg)] pt-[var(--nn-rhythm-mobile-section-y)] md:pt-[var(--nn-rhythm-shell-y)]"
+        className="relative overflow-hidden border-b border-[var(--header-nav-border)] nn-home-hero-product-band bg-[var(--page-bg)] pt-[var(--nn-rhythm-mobile-section-y)] md:pt-[var(--nn-rhythm-shell-y)]"
         aria-label={safeHomepageMarketingT(
           t,
           "components.homeConversionSections.platformCarouselHeading",
@@ -92,7 +93,12 @@ export function HomeHeroScreenshotSection({ serverPreparedSlides }: HomeHeroScre
         aria-describedby="home-conversion-hero-heading"
         data-testid="home-hero-screenshot-section"
       >
-        <div className="nn-section-shell pb-[var(--nn-rhythm-section-y)]">{carouselHandoffFallback}</div>
+        <LeafWatermark
+          className="-left-28 top-8 hidden h-[22rem] w-[22rem] items-center justify-center sm:flex"
+          imageClassName="max-h-[20rem] opacity-[0.03]"
+          size={420}
+        />
+        <div className="nn-section-shell relative z-[1] pb-[var(--nn-rhythm-section-y)]">{carouselHandoffFallback}</div>
       </section>
     );
   }
@@ -100,7 +106,7 @@ export function HomeHeroScreenshotSection({ serverPreparedSlides }: HomeHeroScre
   return (
     <section
       id="home-hero-product-carousel"
-      className="border-b border-[var(--header-nav-border)] nn-home-hero-product-band bg-[var(--page-bg)] pt-[var(--nn-rhythm-mobile-section-y)] md:pt-[var(--nn-rhythm-shell-y)]"
+      className="relative overflow-hidden border-b border-[var(--header-nav-border)] nn-home-hero-product-band bg-[var(--page-bg)] pt-[var(--nn-rhythm-mobile-section-y)] md:pt-[var(--nn-rhythm-shell-y)]"
       aria-label={safeHomepageMarketingT(
         t,
         "components.homeConversionSections.platformCarouselHeading",
@@ -109,7 +115,12 @@ export function HomeHeroScreenshotSection({ serverPreparedSlides }: HomeHeroScre
       aria-describedby="home-conversion-hero-heading"
       data-testid="home-hero-screenshot-section"
     >
-      <div className="nn-section-shell pb-[var(--nn-rhythm-section-y)]">
+      <LeafWatermark
+        className="-left-28 top-8 hidden h-[22rem] w-[22rem] items-center justify-center sm:flex"
+        imageClassName="max-h-[20rem] opacity-[0.03]"
+        size={420}
+      />
+      <div className="nn-section-shell relative z-[1] pb-[var(--nn-rhythm-section-y)]">
         <div className="mx-auto mb-6 max-w-2xl text-center md:mb-8">
           <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
             {safeHomepageMarketingT(t, "pages.home.carouselHandoff.kicker", "Practice that feels like the real thing")}
