@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { Calculator, FlaskConical } from "lucide-react";
+import { Calculator, FlaskConical, HeartPulse } from "lucide-react";
+import { weakTopicSuggestsClinicalSkillsFocus } from "@/lib/clinical-skills/clinical-skills-adaptive-signals";
 import { weakTopicSuggestsLabsFocus } from "@/lib/labs/labs-adaptive-signals";
 import { weakTopicSuggestsMedCalcFocus } from "@/lib/med-calculations/med-calc-adaptive-signals";
 import { weakTopicSuggestsScenarioFocus } from "@/lib/scenarios/scenario-adaptive-signals";
@@ -112,6 +113,7 @@ export function FocusTodayStrip({
   const showLabsRemediation = labsHaystack.some((line) => weakTopicSuggestsLabsFocus(line));
   const showMedCalcRemediation = labsHaystack.some((line) => weakTopicSuggestsMedCalcFocus(line));
   const showScenariosRemediation = labsHaystack.some((line) => weakTopicSuggestsScenarioFocus(line));
+  const showClinicalSkillsRemediation = labsHaystack.some((line) => weakTopicSuggestsClinicalSkillsFocus(line));
 
   const scenariosHref =
     pathwayId?.trim().length && pathwayId.trim().length > 0
@@ -122,6 +124,11 @@ export function FocusTodayStrip({
     pathwayId?.trim().length && pathwayId.trim().length > 0
       ? `/app/med-calculations?pathwayId=${encodeURIComponent(pathwayId.trim())}`
       : "/app/med-calculations";
+
+  const clinicalSkillsHref =
+    pathwayId?.trim().length && pathwayId.trim().length > 0
+      ? `/app/clinical-skills?pathwayId=${encodeURIComponent(pathwayId.trim())}`
+      : "/app/clinical-skills";
 
   return (
     <section className="nn-dash-section" aria-label={t("learner.focusToday.title")}>
@@ -179,6 +186,33 @@ export function FocusTodayStrip({
               className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-5)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_08%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-5)_90%,var(--semantic-text-primary))] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-chart-5)_14%,var(--semantic-surface))] sm:min-h-9"
             >
               {t("components.examPathwayHub.premiumModules.medCalcCta")}
+            </Link>
+          </div>
+        ) : null}
+
+        {showClinicalSkillsRemediation ? (
+          <div
+            className="mt-4 flex flex-col gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-1)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_06%,var(--semantic-surface))] px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+            data-nn-focus-today-clinical-skills-nudge=""
+          >
+            <div className="flex items-start gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-1)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-1)_88%,var(--semantic-text-primary))]">
+                <HeartPulse className="h-4 w-4" aria-hidden strokeWidth={2} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+                  {t("components.examPathwayHub.premiumModules.skillsRefresherTitle")}
+                </p>
+                <p className="mt-0.5 line-clamp-3 text-xs leading-snug text-[var(--semantic-text-secondary)]">
+                  {t("components.examPathwayHub.premiumModules.skillsRefresherBody")}
+                </p>
+              </div>
+            </div>
+            <Link
+              href={clinicalSkillsHref}
+              className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-1)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_08%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-1)_90%,var(--semantic-text-primary))] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-chart-1)_14%,var(--semantic-surface))] sm:min-h-9"
+            >
+              {t("components.examPathwayHub.premiumModules.skillsRefresherCta")}
             </Link>
           </div>
         ) : null}

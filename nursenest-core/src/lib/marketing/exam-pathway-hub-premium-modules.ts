@@ -66,6 +66,7 @@ import {
 export type PremiumHubModuleKey =
   | "labs"
   | "med_calc"
+  | "clinical_skills"
   | "pharmacology"
   | "flashcards"
   | "practice_tests"
@@ -270,6 +271,25 @@ function pushCoreStudyToolCards(
     ),
     wrapGuestWithLoginCallback: true,
   });
+
+  if (pathway.roleTrack !== "allied") {
+    studyTools.push({
+      key: "clinical_skills",
+      icon: HeartPulse,
+      variant: "default",
+      extraClass: "nn-exam-hub-study-card--lessons",
+      titleKey: "components.examPathwayHub.premiumModules.skillsRefresherTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.skillsRefresherBody",
+      ctaKey: "components.examPathwayHub.premiumModules.skillsRefresherCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: scopeAlliedAppHref(
+        pathway,
+        withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.clinicalSkills, pathway.id),
+        alliedProfessionKey,
+      ),
+      wrapGuestWithLoginCallback: true,
+    });
+  }
 
   studyTools.push({
     key: "pharmacology",

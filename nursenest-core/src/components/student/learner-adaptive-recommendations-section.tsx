@@ -3,7 +3,7 @@ import type { AdaptiveWireBundleJson } from "@/lib/learner/build-learner-adaptiv
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
-import { Calculator, ChevronRight, FlaskConical, Sparkles, Theater } from "lucide-react";
+import { Calculator, ChevronRight, FlaskConical, HeartPulse, Sparkles, Theater } from "lucide-react";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
 export function LearnerAdaptiveRecommendationsSection({ t, bundle }: Props) {
   if (!bundle) return null;
 
-  const { recommendations, rationaleLines, labsStudyNudge, scenariosStudyNudge, medCalcStudyNudge } = bundle;
+  const { recommendations, rationaleLines, labsStudyNudge, scenariosStudyNudge, medCalcStudyNudge, clinicalSkillsStudyNudge } = bundle;
   const weak = recommendations.rankedWeakTopics.slice(0, 5);
   const lessons = recommendations.lessons.slice(0, 4);
   const catHint = recommendations.practiceCat;
@@ -190,6 +190,43 @@ export function LearnerAdaptiveRecommendationsSection({ t, bundle }: Props) {
             className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-5)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-5)_92%,var(--semantic-text-primary))] shadow-[var(--semantic-shadow-soft)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-chart-5)_18%,var(--semantic-surface))] sm:min-h-9"
           >
             {t("components.examPathwayHub.premiumModules.medCalcCta")}
+          </Link>
+        </div>
+      ) : null}
+
+      {clinicalSkillsStudyNudge ? (
+        <div
+          className="mt-4 flex flex-col gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-1)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_07%,var(--semantic-surface))] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+          data-nn-adaptive-clinical-skills-nudge=""
+        >
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-1)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-1)_88%,var(--semantic-text-primary))]">
+              <HeartPulse className="h-5 w-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-1)_88%,var(--semantic-text-primary))]">
+                {t("components.examPathwayHub.premiumModules.skillsRefresherTitle")}
+              </p>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+                {t("components.examPathwayHub.premiumModules.skillsRefresherBody")}
+              </p>
+              <ul className="mt-2 flex flex-wrap gap-1.5" aria-label="Topics linking to clinical skills">
+                {clinicalSkillsStudyNudge.matchedTopicKeys.map((k) => (
+                  <li
+                    key={k}
+                    className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-1)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_05%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-medium text-[var(--semantic-text-primary)]"
+                  >
+                    {k}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <Link
+            href={withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.clinicalSkills, pid)}
+            className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-1)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-chart-1)_92%,var(--semantic-text-primary))] shadow-[var(--semantic-shadow-soft)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-chart-1)_18%,var(--semantic-surface))] sm:min-h-9"
+          >
+            {t("components.examPathwayHub.premiumModules.skillsRefresherCta")}
           </Link>
         </div>
       ) : null}

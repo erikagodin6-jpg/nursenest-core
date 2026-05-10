@@ -24,6 +24,7 @@ import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { deriveCanonicalStudyTopicSlug } from "@/lib/lessons/pathway-lesson-linked-learning-assets";
 import type { PathwayLessonLinkedLearningSignals } from "@/lib/lessons/pathway-lesson-types";
 import type { RoleTrackSlug } from "@/lib/exam-pathways/types";
+import { weakTopicSuggestsClinicalSkillsFocus } from "@/lib/clinical-skills/clinical-skills-adaptive-signals";
 import { weakTopicSuggestsLabsFocus } from "@/lib/labs/labs-adaptive-signals";
 import { weakTopicSuggestsMedCalcFocus } from "@/lib/med-calculations/med-calc-adaptive-signals";
 import { weakTopicSuggestsScenarioFocus } from "@/lib/scenarios/scenario-adaptive-signals";
@@ -42,6 +43,8 @@ export type AdaptiveWireBundleJson = {
   scenariosStudyNudge: { href: "/app/clinical-scenarios"; matchedTopicKeys: string[] } | null;
   /** When weak-topic signals match dosing / pharmacology math, deep-link med calculations. */
   medCalcStudyNudge: { href: "/app/med-calculations"; matchedTopicKeys: string[] } | null;
+  /** When weak-topic signals align with bedside procedures, deep-link clinical skills hub. */
+  clinicalSkillsStudyNudge: { href: "/app/clinical-skills"; matchedTopicKeys: string[] } | null;
 };
 
 function linkedLearningForTopWeak(
@@ -253,6 +256,15 @@ export async function loadLearnerAdaptiveWireBundle(
       ? { href: "/app/med-calculations" as const, matchedTopicKeys: matchedMedCalcTopics }
       : null;
 
+  const matchedClinicalSkillsTopics = recommendations.rankedWeakTopics
+    .map((w) => w.topicKey)
+    .filter((k) => weakTopicSuggestsClinicalSkillsFocus(k))
+    .slice(0, 4);
+  const clinicalSkillsStudyNudge =
+    matchedClinicalSkillsTopics.length > 0
+      ? { href: "/app/clinical-skills" as const, matchedTopicKeys: matchedClinicalSkillsTopics }
+      : null;
+
   return {
     pathwayId,
     roleTrack,
@@ -266,6 +278,7 @@ export async function loadLearnerAdaptiveWireBundle(
     labsStudyNudge,
     scenariosStudyNudge,
     medCalcStudyNudge,
+    clinicalSkillsStudyNudge,
   };
 }
 

@@ -5,10 +5,11 @@ import {
   type PremiumHubModuleKey,
 } from "@/lib/marketing/exam-pathway-hub-premium-modules";
 
-/** Mirrors exam-hub premium “study tools” row: labs → math → pharm → scenarios → ECG → OSCE → NGN (order matches hub intent). */
+/** Mirrors exam-hub premium “study tools” row: labs → math → clinical skills → pharm → scenarios → ECG → OSCE → NGN (order matches hub intent). */
 const LESSON_HUB_PREMIUM_STRIP_KEYS: readonly PremiumHubModuleKey[] = [
   "labs",
   "med_calc",
+  "clinical_skills",
   "pharmacology",
   "clinical_scenarios",
   "clinical_cases",
@@ -20,6 +21,7 @@ const LESSON_HUB_PREMIUM_STRIP_KEYS: readonly PremiumHubModuleKey[] = [
 const FALLBACK_TITLE: Partial<Record<PremiumHubModuleKey, string>> = {
   labs: "Lab values",
   med_calc: "Medication math",
+  clinical_skills: "Clinical skills",
   pharmacology: "Pharmacology",
   clinical_scenarios: "Clinical scenarios",
   clinical_cases: "Clinical cases",

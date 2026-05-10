@@ -49,6 +49,25 @@
   --lv-motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+/*
+ * Theme-aware bridge: when `[data-theme]` is active, map learner-ds card surfaces
+ * (`--lv-bg-*`, text, borders, shadows) to the global tonal ladder in `globals.css`.
+ *
+ * Without this, `.lv-card` / `LearnerSurfaceCard` keep :root pastels on Midnight, Apex,
+ * Blossom, etc., so marketing pathway hubs look "stuck" while the rest of the shell tracks
+ * the picker. Specificity is (0,1,1); legacy dark overrides below still win where listed.
+ */
+html[data-theme] {
+  --lv-bg-base: var(--page-bg, var(--bg-page));
+  --lv-bg-surface: var(--bg-card);
+  --lv-bg-surface-alt: var(--bg-section-alt);
+  --lv-text-primary: var(--theme-heading-text);
+  --lv-text-secondary: var(--theme-body-text);
+  --lv-border-soft: var(--border-subtle);
+  --lv-shadow-soft: var(--shadow-card);
+  --lv-shadow-medium: var(--shadow-card-hover);
+}
+
 html[data-theme="dark-clinical"],
 html[data-theme="dark-academia"],
 html[data-theme="dark-mode"],

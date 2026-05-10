@@ -130,15 +130,17 @@ function PremiumModuleGrid({
                 ? { "data-nn-qa-hub-ecg": "1" as const }
                 : card.key === "labs"
                   ? { "data-nn-qa-hub-labs": "1" as const }
-                : card.key === "osce"
-                  ? { "data-nn-qa-hub-osce": "1" as const }
-                : card.key === "med_calc"
-                  ? { "data-nn-qa-hub-med-calc": "1" as const }
-                : card.qaMarker === "np_clinical"
-                  ? { "data-nn-qa-hub-np-cases": "1" as const }
-                  : card.qaMarker === "clinical_scenarios"
-                    ? { "data-nn-qa-hub-clinical-scenarios": "1" as const }
-                    : {};
+                  : card.key === "osce"
+                    ? { "data-nn-qa-hub-osce": "1" as const }
+                    : card.key === "med_calc"
+                      ? { "data-nn-qa-hub-med-calc": "1" as const }
+                      : card.key === "clinical_skills"
+                        ? { "data-nn-qa-hub-clinical-skills": "1" as const }
+                        : card.qaMarker === "np_clinical"
+                          ? { "data-nn-qa-hub-np-cases": "1" as const }
+                          : card.qaMarker === "clinical_scenarios"
+                            ? { "data-nn-qa-hub-clinical-scenarios": "1" as const }
+                            : {};
             return (
               <li key={card.key} className="min-w-0" data-nn-qa-hub-premium-module={card.key} {...qaAttrs}>
                 <StudyCard

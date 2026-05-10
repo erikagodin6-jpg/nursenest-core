@@ -11,6 +11,8 @@ export const STUDY_TOOL_ROUTES = {
   medicationDrills: "/app/medication-drills",
   /** High-stakes nursing medication math (lessons + strict practice). */
   medCalculations: "/app/med-calculations",
+  /** Premium clinical competency hub — procedures, steps, tracking. */
+  clinicalSkills: "/app/clinical-skills",
 } as const;
 
 export type StudyToolRouteKey = keyof typeof STUDY_TOOL_ROUTES;
