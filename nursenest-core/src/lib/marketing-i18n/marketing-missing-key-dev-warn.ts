@@ -1,7 +1,7 @@
 /**
  * Dev-only missing-key warnings for marketing `t()` — keeps production silent and dedupes noise.
  *
- * Uses `console.error` + `[nursenest-core]` prefix (no `safe-server-log` import — this module is reachable from client).
+ * Uses `console.warn` + `[nursenest-core]` prefix (no `safe-server-log` import — this module is reachable from client).
  */
 
 const warnedMissingMarketingKeys = new Set<string>();
@@ -34,7 +34,7 @@ export function warnMissingMarketingMessageKeyDev(
   missingMarketingKeySessionInvocations += 1;
   console.warn("[i18n] Missing marketing message key", { key, fallback });
   if (missingMarketingKeySessionInvocations === 1 || missingMarketingKeySessionInvocations % 25 === 0) {
-    console.error(
+    console.warn(
       `[nursenest-core] i18n marketing_missing_key_session ${JSON.stringify({
         uniqueKeys: warnedMissingMarketingKeys.size,
         invocations: missingMarketingKeySessionInvocations,

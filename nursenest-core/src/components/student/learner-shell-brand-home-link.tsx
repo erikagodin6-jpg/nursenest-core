@@ -13,7 +13,7 @@ export function LearnerShellBrandHomeLink() {
       aria-label={t("brand.homeAriaLabel")}
     >
       <SiteBrandLogoMark variant="learner" />
-      <span className="hidden font-medium sm:inline">{t("brand.nurseNest")}</span>
+      <span className="font-medium">{t("brand.nurseNest")}</span>
     </Link>
   );
 }

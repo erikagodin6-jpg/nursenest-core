@@ -370,6 +370,7 @@ export function PremiumHomepageHero(props: {
     <section
       className="nn-hero-bridge nn-home-marketing-rich-hero border-b border-[var(--header-nav-border)]"
       aria-labelledby="home-conversion-hero-heading"
+      data-testid="hero-section"
     >
       <div className="mx-auto max-w-6xl px-4 py-[calc(var(--nn-rhythm-page-y)*0.9)] sm:px-6 md:py-[calc(var(--nn-rhythm-section-y)*0.92)] lg:px-8">
         <div className="nn-premium-hero-grid">
@@ -380,6 +381,7 @@ export function PremiumHomepageHero(props: {
             <h1
               id="home-conversion-hero-heading"
               className="nn-marketing-h1 mt-3 min-w-0 max-w-[min(100%,36ch)] text-balance text-[var(--palette-heading)]"
+              data-testid="text-hero-heading"
             >
               {headline}
             </h1>

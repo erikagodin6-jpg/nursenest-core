@@ -181,7 +181,13 @@ export function LabsHubPage({ trackLabel, labTrack, hasAccess, categories, inven
   const criticalRows = buildCriticalWatchlist(categories);
 
   return (
-    <div className="nn-labs-hub space-y-10" data-nn-labs-hub="">
+    <div
+      className="nn-labs-hub space-y-10"
+      data-nn-labs-hub=""
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="clinical"
+      data-nn-premium-platform-module="labs"
+    >
       <header className="nn-learner-page-hero nn-labs-hub__hero overflow-hidden rounded-3xl border border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-2xl space-y-3">

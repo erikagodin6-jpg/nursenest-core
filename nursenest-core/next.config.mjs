@@ -196,15 +196,20 @@ const nextConfig = {
           },
         ],
       },
-      ...["png", "jpg", "jpeg", "webp", "avif", "svg", "ico", "woff2"].map((ext) => ({
-        source: `/:path*.${ext}`,
+      {
+        /**
+         * Static public assets. Keep this as a single Next-compatible matcher:
+         * `/:path*.png` parses as an invalid modified wildcard, while the
+         * separate `:assetExt(...)` param constrains only the extension.
+         */
+        source: "/:path*\\.:assetExt(png|jpg|jpeg|webp|avif|svg|ico|woff2)",
         headers: [
           {
             key: "Cache-Control",
             value: "public, max-age=31536000, immutable",
           },
         ],
-      })),
+      },
     ];
   },
 

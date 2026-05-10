@@ -16,7 +16,14 @@ export function PracticeSessionLayout({
   ...rest
 }: { children: ReactNode; className?: string } & Omit<ComponentPropsWithoutRef<"div">, "className" | "children">) {
   return (
-    <div className={`nn-practice-session ${className ?? ""}`.trim()} {...rest}>
+    <div
+      className={`nn-practice-session ${className ?? ""}`.trim()}
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="exam-study"
+      data-nn-premium-platform-module="practice-session"
+      data-nn-premium-platform-sticky-controls=""
+      {...rest}
+    >
       {children}
     </div>
   );

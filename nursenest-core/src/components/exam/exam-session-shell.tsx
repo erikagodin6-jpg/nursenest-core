@@ -35,6 +35,9 @@ export function ExamSessionShell({
       className={`nn-exam-session nn-exam-session-premium nn-learner-exam-shell rounded-2xl border ${neutralPalette ? "nn-exam-session--neutral" : ""} ${immersive ? "nn-exam-session--immersive" : ""} ${className}`.trim()}
       data-theme={scoped}
       data-nn-exam-mode={examMode}
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="exam-study"
+      data-nn-premium-platform-module="exam-session"
     >
       {children}
     </div>

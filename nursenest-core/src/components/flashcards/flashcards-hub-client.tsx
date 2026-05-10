@@ -693,6 +693,9 @@ export function FlashcardsHubClient({
     <LearnerStudyPageShell
       className="nn-flashcards-hub-premium space-y-4 py-4 sm:space-y-5 sm:py-5"
       data-nn-premium-flashcard-convergence
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="exam-study"
+      data-nn-premium-platform-module="flashcards"
       data-nn-e2e-flashcards-hub
     >
       {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}

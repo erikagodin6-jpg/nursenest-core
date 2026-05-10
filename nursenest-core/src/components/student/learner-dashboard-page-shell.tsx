@@ -26,6 +26,9 @@ export function LearnerDashboardPageShell({
       className="nn-dash nn-dash--learner-home nn-learner-dashboard-convergence min-w-0 overflow-x-hidden"
       data-testid="learner-dashboard-shell"
       data-nn-learner-dashboard-convergence=""
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="learner-account"
+      data-nn-premium-platform-module="learner-dashboard"
     >
       <div className="flex min-w-0 flex-col gap-7 sm:gap-8">
         <BreadcrumbTrail items={crumbs} />

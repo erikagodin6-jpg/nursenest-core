@@ -57,4 +57,12 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.match(imageDelivery, /MARKETING_PHOTO_QUALITY_HOME_SCREENSHOT_SECTION\s*=\s*74/);
     assert.match(nextConfig, /max-age=31536000, immutable/);
   });
+
+  it("uses Next-compatible static asset header matchers so local Playwright can start reliably", () => {
+    const nextConfig = source("next.config.mjs");
+    const headerSources = [...nextConfig.matchAll(/source:\s*"([^"]+)"/g)].map((match) => match[1]);
+
+    assert.equal(headerSources.some((sourcePattern) => sourcePattern.includes("/:path*.")), false);
+    assert.match(nextConfig, /source:\s*"\/:path\*\\\\\.:assetExt\(png\|jpg\|jpeg\|webp\|avif\|svg\|ico\|woff2\)"/);
+  });
 });

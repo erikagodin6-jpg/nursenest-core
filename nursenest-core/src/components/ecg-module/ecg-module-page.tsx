@@ -14,7 +14,12 @@ const PRIMARY_LINKS = [
 
 export function EcgModulePage({ config }: { config: EcgRouteConfig }) {
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+    <main
+      className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8"
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="clinical"
+      data-nn-premium-platform-module="ecg"
+    >
       <header className="space-y-3">
         <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
           ECG mastery / {config.level}

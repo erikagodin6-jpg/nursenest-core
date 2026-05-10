@@ -26,6 +26,9 @@ export function ScenarioStudyShell({
     <div
       className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-4 py-8 sm:gap-10 sm:py-10"
       data-nn-scenario-study-shell=""
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="clinical"
+      data-nn-premium-platform-module={activeScenarioMarker ? "clinical-scenario-detail" : "clinical-scenarios"}
       {...(qaHubMarker ? { "data-nn-clinical-scenarios-hub": "" as const } : {})}
       {...(activeScenarioMarker ? { "data-nn-active-clinical-scenario": "" as const } : {})}
     >

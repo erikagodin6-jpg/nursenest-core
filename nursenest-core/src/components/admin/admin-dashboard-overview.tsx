@@ -48,7 +48,12 @@ export function AdminDashboardOverview({
 }) {
   const tier = data.exams.byTier;
   return (
-    <div className="space-y-8">
+    <div
+      className="space-y-8"
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="admin-preview"
+      data-nn-premium-platform-module="admin-dashboard"
+    >
       {showHeader ? (
         <header className="space-y-2">
           <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] md:text-3xl">Admin Dashboard</h1>

@@ -752,6 +752,9 @@ export function PracticeTestsHubClient({
     <LearnerStudyPageShell
       className="nn-practice-tests-hub-premium space-y-5 py-2 sm:space-y-6 sm:py-4"
       data-nn-learner-area="practice-tests"
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="exam-study"
+      data-nn-premium-platform-module="practice-tests"
     >
       {hubBootstrapSource === "secondary" ? (
         <div className="max-w-3xl" data-nn-practice-hub-bootstrap-source="secondary">
@@ -765,6 +768,7 @@ export function PracticeTestsHubClient({
       <header
         className="nn-premium-practice-hub-hero relative overflow-hidden rounded-[1.75rem] border-2 border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))_0%,var(--semantic-surface)_38%,color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))_100%)] p-6 text-[var(--semantic-text-primary)] shadow-[0_22px_48px_color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--semantic-info)_22%,transparent)] sm:p-8"
         data-nn-e2e-practice-exam-first-hero
+        data-nn-premium-platform-sticky-controls
       >
         <div
           className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-1)_18%,transparent)] blur-2xl"

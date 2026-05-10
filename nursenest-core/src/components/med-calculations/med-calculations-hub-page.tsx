@@ -38,7 +38,13 @@ export function MedCalculationsHubPage({ trackLabel, hasAccess, categories, inve
   const frameworkChips = ["Dosage drills", "IV drip & pumps", "Weight-based dosing", "Dimensional analysis"] as const;
 
   return (
-    <div className="min-w-0 space-y-10" data-nn-med-calc-hub="">
+    <div
+      className="min-w-0 space-y-10"
+      data-nn-med-calc-hub=""
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="clinical"
+      data-nn-premium-platform-module="med-calculations"
+    >
       <header className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-5)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_16%,var(--semantic-surface))] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--semantic-chart-5)_65%,transparent),color-mix(in_srgb,var(--semantic-info)_50%,transparent),color-mix(in_srgb,var(--semantic-chart-3)_45%,transparent))]"

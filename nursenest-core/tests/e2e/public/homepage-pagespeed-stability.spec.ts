@@ -86,7 +86,9 @@ test.describe("Homepage PageSpeed stability", () => {
 
     await page.goto("/", { waitUntil: "load", timeout: 120_000 });
     await dismissMarketingScrims(page);
-    await expect(page.getByTestId("hero-section")).toBeVisible({ timeout: 30_000 });
+    const main = page.locator("main");
+    await expect(main).toBeVisible({ timeout: 30_000 });
+    await expect(main.getByRole("heading", { level: 1 }).first()).toBeVisible({ timeout: 30_000 });
     await assertDocumentNoHorizontalOverflow(page);
 
     const headerBefore = await page.locator("header.nn-header-animate-in").first().boundingBox();

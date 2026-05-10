@@ -25,7 +25,12 @@ export default async function AdminClinicalScenariosPage({ searchParams }: PageP
   const pathwayOptions = listExamPathways().map((p) => ({ id: p.id, title: p.displayName }));
 
   return (
-    <main className="mx-auto w-full max-w-5xl space-y-6 px-4 py-8 sm:px-6">
+    <main
+      className="mx-auto w-full max-w-5xl space-y-6 px-4 py-8 sm:px-6"
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="admin-preview"
+      data-nn-premium-platform-module="admin-clinical-scenarios"
+    >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold text-[var(--semantic-text-primary)]">Clinical scenarios</h1>

@@ -221,4 +221,4 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/marketing/load-paywall-home-stats-for-shell`
 
 
-*Generated 2026-05-10T09:32:14.980Z*
+*Generated 2026-05-10T09:50:32.133Z*

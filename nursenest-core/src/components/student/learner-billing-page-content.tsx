@@ -210,7 +210,12 @@ export function LearnerBillingPageContent({
     subscription?.status === SubscriptionStatus.PAST_DUE;
 
   return (
-    <div className="space-y-8">
+    <div
+      className="space-y-8"
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="learner-account"
+      data-nn-premium-platform-module="billing"
+    >
       {verifyFailed ? (
         <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[var(--semantic-danger-soft)] px-4 py-3 text-sm text-[var(--semantic-danger-contrast)]">
           {t("learner.billingPage.verifyFailed")}

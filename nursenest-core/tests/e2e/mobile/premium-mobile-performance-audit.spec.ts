@@ -44,6 +44,7 @@ const SELECTOR_DISMISSED_LS = "nn_selector_dismissed";
 const THEME_LABEL_BY_ID = new Map(themeOptionsForPublicMarketingPicker().map((opt) => [opt.id, opt.label]));
 const THEMES = PUBLIC_MARKETING_THEME_ALLOWLIST;
 const PATHWAY_ID = PAID_E2E_DEFAULT_PATHWAY_ID;
+const CLS_SEVERE_THRESHOLD = 0.1;
 
 type CaptureTarget = {
   label: string;
@@ -134,6 +135,33 @@ function safeFilePart(input: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+async function installLayoutShiftObserver(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    const target = window as unknown as { __nnCumulativeLayoutShift?: number };
+    target.__nnCumulativeLayoutShift = 0;
+    try {
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const shift = entry as PerformanceEntry & {
+            value?: number;
+            hadRecentInput?: boolean;
+          };
+          if (!shift.hadRecentInput) {
+            target.__nnCumulativeLayoutShift = (target.__nnCumulativeLayoutShift ?? 0) + Number(shift.value ?? 0);
+          }
+        }
+      });
+      observer.observe({ type: "layout-shift", buffered: true });
+    } catch {
+      /* Layout Instability API is Chromium-only. */
+    }
+  });
+}
+
+async function readLayoutShiftScore(page: Page): Promise<number> {
+  return page.evaluate(() => Number((window as unknown as { __nnCumulativeLayoutShift?: number }).__nnCumulativeLayoutShift ?? 0));
+}
+
 async function applyTheme(page: Page, themeId: string): Promise<void> {
   await page.evaluate(
     ({ key, id }) => {
@@ -143,6 +171,46 @@ async function applyTheme(page: Page, themeId: string): Promise<void> {
     { key: THEME_STORAGE_KEY, id: themeId },
   );
   await expect(page.locator("html")).toHaveAttribute("data-theme", themeId, { timeout: 15_000 });
+}
+
+async function expectNoSevereLayoutShift(page: Page, label: string): Promise<void> {
+  await page.waitForTimeout(5_000);
+  const cls = await readLayoutShiftScore(page);
+  expect(cls, `${label} CLS after 5s`).toBeLessThan(CLS_SEVERE_THRESHOLD);
+}
+
+async function expectMobileOverflowWithinBudget(page: Page, label: string): Promise<void> {
+  const overflow = await measureHorizontalOverflow(page);
+  expect(
+    overflow.document.excess,
+    `${label} document overflow ${overflow.document.scrollWidth}px vs ${overflow.document.clientWidth}px`,
+  ).toBeLessThanOrEqual(2);
+  expect(overflow.main?.excess ?? 0, `${label} main overflow`).toBeLessThanOrEqual(8);
+}
+
+async function expectStickyHeaderStable(page: Page, label: string): Promise<void> {
+  const header = page.locator("header.nn-header-animate-in").first();
+  await expect(header, `${label} header visible`).toBeVisible({ timeout: 30_000 });
+  const before = await header.boundingBox();
+  await page.evaluate(() => window.scrollTo(0, Math.min(480, document.documentElement.scrollHeight)));
+  await page.waitForTimeout(500);
+  const after = await header.boundingBox();
+  expect(before?.height ?? 0, `${label} header height`).toBeGreaterThan(40);
+  expect(Math.abs((after?.height ?? 0) - (before?.height ?? 0)), `${label} sticky header height delta`).toBeLessThanOrEqual(3);
+}
+
+async function expectMobileDrawerStable(page: Page): Promise<void> {
+  const open = page.getByRole("button", { name: /open menu/i }).first();
+  await expect(open).toBeVisible({ timeout: 30_000 });
+  await open.click();
+  await expect(page.getByRole("button", { name: /close menu/i }).last()).toBeVisible({ timeout: 30_000 });
+  await expectMobileOverflowWithinBudget(page, "mobile drawer open");
+  await page.getByRole("button", { name: /close menu/i }).last().click();
+}
+
+async function expectReducedMotionPreferenceRespected(page: Page): Promise<void> {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(page.locator("html")).toBeVisible();
 }
 
 async function captureTarget(page: Page, testInfo: TestInfo, target: CaptureTarget, themeId: string): Promise<void> {
@@ -181,6 +249,10 @@ test.beforeEach(async ({ context }) => {
 });
 
 test.describe("Premium mobile performance audit — public captures", () => {
+  test.beforeEach(async ({ page }) => {
+    await installLayoutShiftObserver(page);
+  });
+
   test("captures public mobile surfaces across launch themes", async ({ page }, testInfo) => {
     test.skip(!shouldRunInProject(testInfo.project.name, "public"), "Public capture runs only in public mobile projects.");
     test.setTimeout(900_000);
@@ -198,9 +270,49 @@ test.describe("Premium mobile performance audit — public captures", () => {
 
     expect(pageErrors, `No page errors during public captures: ${pageErrors.join("; ")}`).toEqual([]);
   });
+
+  test("guards public mobile CLS, overflow, sticky nav, drawer, theme parity, and reduced motion", async ({ page }) => {
+    test.skip(!shouldRunInProject(test.info().project.name, "public"), "Public stability runs only in public mobile projects.");
+    const pageErrors: string[] = [];
+    page.on("pageerror", (err) => pageErrors.push(err.message));
+
+    const response = await page.goto("/", { waitUntil: "domcontentloaded", timeout: 180_000 });
+    expect(response?.ok(), `HTTP ${response?.status()} for homepage`).toBeTruthy();
+    await dismissMarketingScrims(page);
+    await page.locator(MARKETING_PUBLIC_SELECTOR).first().waitFor({ state: "visible", timeout: 90_000 });
+    await expectMobileOverflowWithinBudget(page, "homepage");
+    await expectStickyHeaderStable(page, "homepage");
+    await expectMobileDrawerStable(page);
+
+    for (const themeId of THEMES) {
+      await applyTheme(page, themeId);
+      await expect(page.locator("html")).toHaveAttribute("data-theme", themeId, { timeout: 15_000 });
+      await expectMobileOverflowWithinBudget(page, `homepage ${themeId}`);
+    }
+
+    await expectReducedMotionPreferenceRespected(page);
+    await expectNoSevereLayoutShift(page, "homepage");
+    expect(pageErrors, `No page errors during public stability guard: ${pageErrors.join("; ")}`).toEqual([]);
+  });
+
+  test("guards marketing lesson mobile TOC stability", async ({ page }) => {
+    test.skip(!shouldRunInProject(test.info().project.name, "public"), "Public lesson stability runs only in public mobile projects.");
+    const target = PUBLIC_TARGETS.find((item) => item.label === "rn-lesson-detail");
+    expect(target).toBeTruthy();
+    const response = await page.goto(target!.path, { waitUntil: "domcontentloaded", timeout: 180_000 });
+    expect(response?.ok(), `HTTP ${response?.status()} for ${target!.path}`).toBeTruthy();
+    await target!.ready(page).waitFor({ state: "visible", timeout: 90_000 });
+    await expect(page.locator("[data-nn-premium-lessons-mobile-nav]").first()).toBeAttached({ timeout: 30_000 });
+    await expectMobileOverflowWithinBudget(page, "marketing lesson detail");
+    await expectNoSevereLayoutShift(page, "marketing lesson detail");
+  });
 });
 
 test.describe("Premium mobile performance audit — authenticated captures", () => {
+  test.beforeEach(async ({ page }) => {
+    await installLayoutShiftObserver(page);
+  });
+
   test("captures paid learner mobile surfaces across launch themes", async ({ page }, testInfo) => {
     test.skip(!shouldRunInProject(testInfo.project.name, "paid"), "Paid capture runs only in paid mobile projects.");
     test.setTimeout(900_000);
@@ -240,5 +352,23 @@ test.describe("Premium mobile performance audit — authenticated captures", () 
     }
 
     expect(pageErrors, `No page errors during paid captures: ${pageErrors.join("; ")}`).toEqual([]);
+  });
+
+  test("guards authenticated learner CLS and overflow on critical mobile surfaces", async ({ page }) => {
+    test.skip(!shouldRunInProject(test.info().project.name, "paid"), "Paid stability runs only in paid mobile projects.");
+    const targets = PAID_TARGETS.filter((target) => ["dashboard", "lessons", "flashcards", "cat-hub", "analytics"].includes(target.label));
+
+    for (const target of targets) {
+      await test.step(`${target.label} stability`, async () => {
+        const response = await page.goto(target.path, { waitUntil: "domcontentloaded", timeout: 180_000 });
+        expect(response?.ok(), `HTTP ${response?.status()} for ${target.path}`).toBeTruthy();
+        expectNotLoginUrl(page);
+        await expectNoSubscriberPaywallSurface(page, target.label);
+        await waitForAuthenticatedLearnerShell(page, { timeoutMs: 120_000 });
+        await target.ready(page).waitFor({ state: "visible", timeout: 120_000 });
+        await expectMobileOverflowWithinBudget(page, target.label);
+        await expectNoSevereLayoutShift(page, target.label);
+      });
+    }
   });
 });

@@ -241,7 +241,7 @@ export function getLessonSectionTheme(
     : undefined;
   const role: LessonSectionRole = (kind != null && KIND_TO_ROLE[kind]) || "info";
   const effectiveRole = headingTheme?.role ?? role;
-  const themeKey = headingTheme?.themeKey ?? (kind != null && KIND_THEME_KEY_OVERRIDES[kind]) || ROLE_THEME_KEY[role];
+  const themeKey = headingTheme?.themeKey ?? ((kind != null && KIND_THEME_KEY_OVERRIDES[kind]) || ROLE_THEME_KEY[role]);
   const roleChipLabel = ROLE_CHIP_LABELS[role];
   const kindChipLabel = kind != null ? KIND_CHIP_LABEL_OVERRIDES[kind] : undefined;
   return {

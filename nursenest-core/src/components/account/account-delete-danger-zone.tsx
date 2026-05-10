@@ -77,6 +77,10 @@ export function AccountDeleteDangerZone({
     <section
       aria-labelledby="delete-account-heading"
       className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-danger)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_7%,var(--semantic-surface))] p-6 shadow-sm"
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="learner-account"
+      data-nn-premium-platform-module="account-deletion"
+      data-nn-premium-platform-account-action="delete"
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl space-y-4">
@@ -127,6 +131,7 @@ export function AccountDeleteDangerZone({
           aria-modal="true"
           aria-labelledby="delete-account-modal-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4"
+        data-nn-premium-platform-mobile-safe-modal=""
         >
           <div className="w-full max-w-lg rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-2xl">
             <h3 id="delete-account-modal-title" className="text-xl font-bold text-[var(--semantic-text-primary)]">
