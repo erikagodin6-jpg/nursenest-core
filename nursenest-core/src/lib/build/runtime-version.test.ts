@@ -11,7 +11,7 @@ test("buildRuntimeVersionPayload preserves legacy version fields and adds public
       recordedAt: "2026-05-10T12:00:00.000Z",
       environment: "production",
       buildPlatform: "digitalocean",
-      source: "env:DIGITALOCEAN_GIT_COMMIT_SHA",
+      source: "digitalocean",
     },
     {
       nodeEnv: "production",
@@ -28,7 +28,7 @@ test("buildRuntimeVersionPayload preserves legacy version fields and adds public
     buildPlatform: "digitalocean",
     deploymentMode: "standalone",
     runtimeEnvironment: "production",
-    source: "env:DIGITALOCEAN_GIT_COMMIT_SHA",
+    source: "digitalocean",
   });
 });
 
