@@ -178,15 +178,60 @@ async function readFirstVisibleLvCardStyles(page: Page): Promise<LvCardComputed>
   });
 }
 
+type PaintedSurfaceSnapshot = {
+  backgroundColor: string;
+  color: string;
+  borderColor: string;
+  boxShadow: string;
+};
+
+async function readPaintedSurfaceStyles(page: Page, selector: string): Promise<PaintedSurfaceSnapshot> {
+  const target = page.locator(selector).first();
+  await expect(target, `${selector} should be visible before reading computed styles`).toBeVisible({
+    timeout: 60_000,
+  });
+  return target.evaluate((el) => {
+    const cs = getComputedStyle(el);
+    return {
+      backgroundColor: cs.backgroundColor,
+      color: cs.color,
+      borderColor: cs.borderColor,
+      boxShadow: cs.boxShadow,
+    };
+  });
+}
+
 async function readBodyBackground(page: Page): Promise<string> {
   return page.evaluate(() => getComputedStyle(document.body).backgroundColor);
 }
 
 /** Normalize browser rgb()/rgba() for exact comparisons. */
 function rgbTripletFromCssColor(css: string): [number, number, number] | null {
-  const m = css.replace(/\s/g, "").match(/^rgba?\((\d+),(\d+),(\d+)/i);
-  if (!m) return null;
-  return [Number(m[1]), Number(m[2]), Number(m[3])];
+  const compact = css.replace(/\s/g, "");
+  const rgb = compact.match(/^rgba?\((\d+),(\d+),(\d+)/i);
+  if (rgb) return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])];
+
+  const hex = css.trim().match(/^#([0-9a-f]{6})$/i);
+  if (hex) {
+    const raw = hex[1]!;
+    return [
+      Number.parseInt(raw.slice(0, 2), 16),
+      Number.parseInt(raw.slice(2, 4), 16),
+      Number.parseInt(raw.slice(4, 6), 16),
+    ];
+  }
+
+  // Chromium may preserve color-mix() computed output as `color(srgb r g b / a)`.
+  const srgb = css.trim().match(/^color\(\s*srgb\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)/i);
+  if (srgb) {
+    return [
+      Math.round(Number(srgb[1]) * 255),
+      Math.round(Number(srgb[2]) * 255),
+      Math.round(Number(srgb[3]) * 255),
+    ];
+  }
+
+  return null;
 }
 
 const ROOT_LV_CARD_PASTEL_RGB: [number, number, number] = [255, 252, 254];
@@ -204,6 +249,30 @@ function rgbDistance(a: string, b: string): number {
   const B = rgbTripletFromCssColor(b);
   if (!A || !B) return 0;
   return Math.hypot(A[0] - B[0], A[1] - B[1], A[2] - B[2]);
+}
+
+function expectPaintedSurfaceChanges(
+  route: string,
+  selector: string,
+  light: PaintedSurfaceSnapshot,
+  dark: PaintedSurfaceSnapshot,
+): void {
+  expect(
+    rgbDistance(light.backgroundColor, dark.backgroundColor),
+    `${route}: ${selector} background should repaint between light and Midnight themes`,
+  ).toBeGreaterThan(12);
+  expect(
+    rgbDistance(light.borderColor, dark.borderColor),
+    `${route}: ${selector} border should repaint between light and Midnight themes`,
+  ).toBeGreaterThan(8);
+  expect(
+    light.backgroundColor,
+    `${route}: ${selector} must render a non-transparent background`,
+  ).not.toMatch(/rgba\(0, 0, 0, 0\)|transparent/i);
+  expect(
+    dark.backgroundColor,
+    `${route}: ${selector} must render a non-transparent Midnight background`,
+  ).not.toMatch(/rgba\(0, 0, 0, 0\)|transparent/i);
 }
 
 type PublicMarketingThemeSnapshots = Record<PublicMarketingThemeId, ThemeSnapshot>;
@@ -363,6 +432,35 @@ test.describe("Marketing theme propagation — public routes", () => {
     }
   });
 
+  test("/pricing — pricing cards, FAQ blocks, and footer repaint with theme tokens", async ({ page }) => {
+    await page.goto("/pricing", { waitUntil: "load", timeout: 120_000 });
+    await dismissMarketingScrims(page);
+    await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({
+      timeout: 60_000,
+    });
+
+    type SurfaceByTheme = Record<"ocean" | "blossom" | "midnight", PaintedSurfaceSnapshot>;
+    const planCard = {} as SurfaceByTheme;
+    const faqCard = {} as SurfaceByTheme;
+    const footer = {} as SurfaceByTheme;
+
+    for (const id of ["ocean", "blossom", "midnight"] as const) {
+      await selectThemeViaPicker(page, themePickerRegex(id));
+      await expect(page.locator("html")).toHaveAttribute("data-theme", id, { timeout: 15_000 });
+      planCard[id] = await readPaintedSurfaceStyles(page, ".nn-pricing-plan-card");
+      faqCard[id] = await readPaintedSurfaceStyles(page, ".nn-pricing-faq-card");
+      footer[id] = await readPaintedSurfaceStyles(page, "[data-nn-footer-root]");
+    }
+
+    expectPaintedSurfaceChanges("/pricing", ".nn-pricing-plan-card", planCard.ocean, planCard.midnight);
+    expectPaintedSurfaceChanges("/pricing", ".nn-pricing-faq-card", faqCard.ocean, faqCard.midnight);
+    expectPaintedSurfaceChanges("/pricing", "[data-nn-footer-root]", footer.ocean, footer.midnight);
+    expect(
+      rgbDistance(planCard.ocean.backgroundColor, planCard.blossom.backgroundColor),
+      "/pricing: plan cards should visibly shift Ocean to Blossom, not stay Ocean-fixed",
+    ).toBeGreaterThan(3);
+  });
+
   test("/blog — capture public allowlist screenshot evidence", async ({ page }) => {
     await page.goto("/blog", { waitUntil: "load", timeout: 120_000 });
     await dismissMarketingScrims(page);
@@ -381,6 +479,44 @@ test.describe("Marketing theme propagation — public routes", () => {
         path: join(SCREENSHOT_DIR, `blog-${themeAttr}-1280x900-chromium.png`),
       });
     }
+  });
+
+  test("/blog and article surfaces repaint with theme tokens", async ({ page }) => {
+    await page.goto("/blog", { waitUntil: "load", timeout: 120_000 });
+    await dismissMarketingScrims(page);
+    await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({
+      timeout: 60_000,
+    });
+
+    const blogCards = {} as Record<"blossom" | "midnight", PaintedSurfaceSnapshot>;
+    for (const id of ["blossom", "midnight"] as const) {
+      await selectThemeViaPicker(page, themePickerRegex(id));
+      await expect(page.locator("html")).toHaveAttribute("data-theme", id, { timeout: 15_000 });
+      blogCards[id] = await readPaintedSurfaceStyles(page, ".nn-premium-blog-post-card");
+    }
+    expectPaintedSurfaceChanges("/blog", ".nn-premium-blog-post-card", blogCards.blossom, blogCards.midnight);
+
+    await page.goto("/blog/rt-acid-base-compensation-chronic-respiratory-disorders", {
+      waitUntil: "load",
+      timeout: 120_000,
+    });
+    await dismissMarketingScrims(page);
+    await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({
+      timeout: 60_000,
+    });
+
+    const relatedCards = {} as Record<"blossom" | "midnight", PaintedSurfaceSnapshot>;
+    for (const id of ["blossom", "midnight"] as const) {
+      await selectThemeViaPicker(page, themePickerRegex(id));
+      await expect(page.locator("html")).toHaveAttribute("data-theme", id, { timeout: 15_000 });
+      relatedCards[id] = await readPaintedSurfaceStyles(page, ".nn-premium-blog-related-card");
+    }
+    expectPaintedSurfaceChanges(
+      "/blog/rt-acid-base-compensation-chronic-respiratory-disorders",
+      ".nn-premium-blog-related-card",
+      relatedCards.blossom,
+      relatedCards.midnight,
+    );
   });
 
   /**

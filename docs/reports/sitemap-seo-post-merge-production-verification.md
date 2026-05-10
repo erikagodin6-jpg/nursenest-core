@@ -1,22 +1,53 @@
 # Sitemap SEO post-merge production verification (Phase 11)
 
-**Purpose:** Verify deployed production sitemap and SEO behavior after merge.
+**Purpose:** Verify deployed production sitemap and SEO behavior after merge, and track the deployment/artifact drift fix attempt.
 
 **Production URL checked:** `https://www.nursenest.ca`
 
-**Verification time:** 2026-05-10 06:33 UTC
+**Latest verification time:** 2026-05-10 06:49 UTC
 
-**Scope:** Production verification/report only. No runtime code, sitemap segment definitions, `robots.txt`, canonical logic, hreflang logic, route behavior, or entitlement/paywall behavior changed in this phase.
+**Scope:** Production verification and deployment/artifact readiness only. No sitemap architecture, `robots.txt` strategy, canonical logic, hreflang logic, route behavior, or entitlement/paywall behavior changed.
 
 ---
 
-## Summary
+## Current status
 
-**Status:** **No-go for final production signoff.**
+**Status:** **Blocked before production redeploy.**
 
-Local branch validation is green, but live production does not yet match the approved post-Phase-10 sitemap architecture. Production `https://www.nursenest.ca/sitemap.xml` is returning the older 5-child sitemap index instead of the approved 8-child index, and the live child sitemap set contains duplicate page loc values.
+The local deployment artifact drift was corrected by deleting stale `.next`, running a fresh production build, and confirming all approved sitemap route bundles now exist in `.next`. Local sitemap validation and SEO guardrails are green.
 
-This appears to be a deployment/state mismatch rather than a local code failure: local `seo:guardrails`, `sitemap:validate`, and `sitemap:report` all pass against the current implementation.
+Production has not yet been redeployed from this environment because DigitalOcean CLI access is not authenticated here (`doctl` reports: `access token is required`). Therefore live production may still serve the older 5-child sitemap index until an authenticated operator redeploys the fresh current branch/build and purges sitemap cache paths.
+
+---
+
+## Deployed commit SHA
+
+| Source | Value | Notes |
+|---|---|---|
+| Local git HEAD prepared for deploy | `cefa108f623874e4a4b1f0e0107e574c723e5567` | Current local `main` at build time. |
+| Fresh build metadata written locally | `cefa108f623874e4a4b1f0e0107e574c723e5567` | `npm run build` prebuild rewrote `public/nn-build-meta.json` with this commit. |
+| Production `/api/version` from previous verification | `commit:null` | Production endpoint did not expose a deployed SHA, so live SHA remains unverified. |
+
+---
+
+## Fresh local build artifact route check
+
+Before rebuilding, stale `.next` was removed with `rm -rf .next`.
+
+A fresh `npm run build` completed successfully. The rebuilt `.next/server/app` output now includes route bundles for all approved sitemap routes:
+
+| Approved route | Build artifact status |
+|---|---|
+| `sitemap.xml` | Present: `.next/server/app/sitemap.xml/route.js` |
+| `sitemap-blog.xml` | Present: `.next/server/app/sitemap-blog.xml/route.js` |
+| `sitemap-lessons.xml` | Present: `.next/server/app/sitemap-lessons.xml/route.js` |
+| `sitemap-pathways.xml` | Present: `.next/server/app/sitemap-pathways.xml/route.js` |
+| `sitemap-allied.xml` | Present: `.next/server/app/sitemap-allied.xml/route.js` |
+| `sitemap-new-grad.xml` | Present: `.next/server/app/sitemap-new-grad.xml/route.js` |
+| `sitemap-localized.xml` | Present: `.next/server/app/sitemap-localized.xml/route.js` |
+| `sitemap-clinical-modules.xml` | Present: `.next/server/app/sitemap-clinical-modules.xml/route.js` |
+
+**Result:** Pass.
 
 ---
 
@@ -24,13 +55,16 @@ This appears to be a deployment/state mismatch rather than a local code failure:
 
 | Command | Status |
 |---|---|
+| `rm -rf .next` | Pass |
 | `npm run typecheck:critical` | Pass |
+| `npm run build` | Pass |
+| Build artifact route bundle check | Pass |
 | `npm run seo:guardrails` | Pass |
 | `npm run sitemap:validate` | Pass |
 | `npm run sitemap:report` | Pass |
-| Production HTTP verification script against `https://www.nursenest.ca` | Fail: production sitemap architecture mismatch + duplicate locs |
+| `doctl apps list ...` | Blocked: DigitalOcean access token required |
 
-Local validation summary from `npm run sitemap:report`:
+Local validation summary from latest `npm run sitemap:report`:
 
 | Field | Value |
 |---|---|
@@ -42,185 +76,65 @@ Local validation summary from `npm run sitemap:report`:
 
 ---
 
-## Production sitemap index evidence
+## Production sitemap status
 
-`https://www.nursenest.ca/sitemap.xml` returned HTTP 200 with `application/xml; charset=utf-8` and root `<sitemapindex>`.
+Production was not redeployed during this update due to missing DigitalOcean authentication, so the last observed production status remains the known drift state from the earlier Phase 11 verification:
 
-Production sample:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <sitemap>
-    <loc>https://www.nursenest.ca/sitemap-core.xml</loc>
-    <lastmod>2026-05-10</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://www.nursenest.ca/sitemap-blog.xml</loc>
-    <lastmod>2026-05-10</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://www.nursenest.ca/sitemap-lessons.xml</loc>
-    <lastmod>2026-05-10</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://www.nursenest.ca/sitemap-allied.xml</loc>
-    <lastmod>2026-05-10</lastmod>
-  </sitemap>
-  <sitemap>
-    <loc>https://www.nursenest.ca/sitemap-new-grad.xml</loc>
-    <lastmod>2026-05-10</lastmod>
-  </sitemap>
-</sitemapindex>
-```
-
-Expected approved child set from the current local implementation:
-
-- `https://www.nursenest.ca/sitemap-core.xml`
-- `https://www.nursenest.ca/sitemap-blog.xml`
-- `https://www.nursenest.ca/sitemap-pathways.xml`
-- `https://www.nursenest.ca/sitemap-lessons.xml`
-- `https://www.nursenest.ca/sitemap-localized.xml`
-- `https://www.nursenest.ca/sitemap-clinical-modules.xml`
-- `https://www.nursenest.ca/sitemap-allied.xml`
-- `https://www.nursenest.ca/sitemap-new-grad.xml`
-
-**Result:** Fail. Production is missing `sitemap-pathways.xml`, `sitemap-localized.xml`, and `sitemap-clinical-modules.xml` from the index.
+| Check | Last observed production status |
+|---|---|
+| `/sitemap.xml` root XML | Pass: returns `<sitemapindex>` |
+| Production sitemap index child count | Fail: 5 children observed, expected 8 |
+| Missing children | `sitemap-pathways.xml`, `sitemap-localized.xml`, `sitemap-clinical-modules.xml` |
+| New child route XML status | Fail: missing routes returned HTML during prior check |
+| Duplicate loc count | Fail: 24 duplicate locs observed in live child set during prior check |
+| Private URL leak check | Pass: 0 private/system/query/hash locs observed in listed production children |
+| `robots.txt` strategy | Pass: index-only strategy observed |
 
 ---
 
-## robots.txt evidence
+## Deployment blocker
 
-`https://www.nursenest.ca/robots.txt` returned HTTP 200 with `text/plain; charset=utf-8`.
-
-Production sample:
+DigitalOcean deployment could not be triggered from this environment because `doctl` is unauthenticated:
 
 ```txt
-User-agent: *
-Allow: /
-Disallow: /app/
-Disallow: /admin/
-Disallow: /internal/
-Disallow: /api/
-Disallow: /seo/
-Disallow: /ta/
-Disallow: /te/
-Disallow: /bn/
-Disallow: /mr/
-Disallow: /gu/
+Error: Unable to initialize DigitalOcean API client: access token is required. (hint: run 'doctl auth init')
 ```
 
-Verification notes:
-
-- `robots.txt` includes `Disallow: /app/`, `/admin/`, `/api/`, and `/seo/`.
-- The production response contains a single sitemap directive pointing to `https://www.nursenest.ca/sitemap.xml`.
-- Strategy is correct: robots points to the index only.
-
-**Result:** Pass.
+No speculative deployment, cache purge, or runtime fix was attempted after this blocker.
 
 ---
 
-## Child sitemap production checks
+## Required authenticated deployment steps
 
-| Child sitemap | HTTP/XML status | URL count | Invalid/private locs | Sample locs |
-|---|---:|---:|---:|---|
-| `sitemap-core.xml` | 200 / valid `urlset` | 482 | 0 | `/`, `/about`, `/question-bank`, `/practice-exams`, `/pricing` |
-| `sitemap-blog.xml` | 200 / valid `urlset` | 48 | 0 | `/blog`, `/blog/acute-kidney-injury-prerenal-intrinsic-postrenal`, `/blog/asthma-pathophysiology-emergency-nursing-interventions` |
-| `sitemap-lessons.xml` | 200 / valid `urlset` | 7 | 0 | `/lessons`, `/canada/np/cnple/lessons`, `/canada/rn/nclex-rn/lessons` |
-| `sitemap-allied.xml` | 200 / valid `urlset` | 24 | 0 | `/allied/allied-health`, `/allied-health`, `/allied-health/pta-exam-prep` |
-| `sitemap-new-grad.xml` | 200 / valid `urlset` | 46 | 0 | `/us/new-grad`, `/us/new-grad/med-surg`, `/us/new-grad/emergency-department` |
+An authenticated operator should now run one of the approved production deploy paths from the current branch/commit:
 
-Production child sitemap findings:
-
-- All child sitemaps currently listed in production return HTTP 200 and valid XML.
-- No `/app`, `/admin`, `/api`, `/seo`, query, or hash locs were found in listed child sitemap URLs.
-- **Duplicate loc values across the live child sitemap set: 24.**
-
-**Result:** Fail due to duplicate locs and incomplete approved child sitemap set.
-
----
-
-## Representative page checks
-
-| Page family | Representative URL | HTTP status | Canonical | Hreflang | BreadcrumbList JSON-LD | Status |
-|---|---|---:|---|---:|---|---|
-| Blog | `https://www.nursenest.ca/blog/acute-kidney-injury-prerenal-intrinsic-postrenal` | 200 | Not found in parsed response | 0 | Present/valid | Warning |
-| Lesson | `https://www.nursenest.ca/lessons` | 200 | `https://www.nursenest.ca/lessons` | 6 | Present/valid | Pass |
-| Allied | `https://www.nursenest.ca/allied/allied-health` | 200 | `https://www.nursenest.ca/allied/allied-health` | 0 | Not found | Warning |
-| New grad | `https://www.nursenest.ca/us/new-grad` | 200 | `https://www.nursenest.ca/us/new-grad` | 0 | Present/valid | Pass |
-
-Representative pathway and localized URLs were not selected from the production sitemap because the live production index does not include the approved `sitemap-pathways.xml` or `sitemap-localized.xml` children.
-
-**Result:** Partial. Representative URLs that were available resolved, but production sitemap architecture prevented full pathway/localized verification through the approved sitemap index.
+1. Confirm the deploy source is current `main` at `cefa108f623874e4a4b1f0e0107e574c723e5567` or a later commit containing the same rebuilt sitemap architecture.
+2. Trigger a fresh DigitalOcean App Platform deployment using build command `npm run build` from source directory `nursenest-core`.
+3. Confirm the deployment log includes a fresh build and not only postbuild packaging against stale `.next` output.
+4. Confirm production `/api/version` reports the deployed commit if build metadata is available.
+5. Purge/revalidate CDN cache for:
+   - `/sitemap.xml`
+   - `/robots.txt`
+   - `/sitemap-core.xml`
+   - `/sitemap-blog.xml`
+   - `/sitemap-pathways.xml`
+   - `/sitemap-lessons.xml`
+   - `/sitemap-localized.xml`
+   - `/sitemap-clinical-modules.xml`
+   - `/sitemap-allied.xml`
+   - `/sitemap-new-grad.xml`
+6. Rerun production Phase 11 verification.
 
 ---
 
-## Pass/fail status
+## Final go/no-go status
 
-| Requirement | Status | Notes |
-|---|---|---|
-| `https://www.nursenest.ca/sitemap.xml` returns sitemap index XML | Pass | Root is `<sitemapindex>`. |
-| All child sitemap URLs return valid XML | Pass | For the 5 children currently listed in production. |
-| `robots.txt` references approved sitemap strategy | Pass | Index-only strategy retained. |
-| No private/system/query/hash URLs appear | Pass | 0 invalid/private locs found in listed production children. |
-| No duplicate loc values across child sitemaps | **Fail** | 24 duplicate locs found in the live production child set. |
-| Blog representative URL resolves | Pass with warning | 200 + BreadcrumbList; canonical not found in parsed response. |
-| Lesson representative URL resolves | Pass | 200 + canonical + hreflang + BreadcrumbList. |
-| Pathway representative URL resolves from approved segment | **Fail/blocked** | Production index lacks `sitemap-pathways.xml`. |
-| Allied representative URL resolves | Pass with warning | 200 + canonical; BreadcrumbList not found. |
-| New-grad representative URL resolves | Pass | 200 + canonical + BreadcrumbList. |
-| Localized representative URL resolves from approved segment | **Fail/blocked** | Production index lacks `sitemap-localized.xml`. |
-| Representative localized hreflang alternates | **Fail/blocked** | No localized segment available from production index. |
+**No-go for final production sitemap/Search Console signoff until redeploy completes.**
+
+The local fresh build is ready and validated, but production cannot be marked fixed until an authenticated deployment updates the live runtime and cache is purged or refreshed.
 
 ---
 
-## Blockers
+## Rollback recommendation
 
-1. **Production sitemap index is not on the approved 8-child architecture.**
-   - Live index lists only `core`, `blog`, `lessons`, `allied`, and `new-grad`.
-   - Expected index also includes `pathways`, `localized`, and `clinical-modules`.
-
-2. **Production child sitemap set has duplicate loc values.**
-   - Live verification found 24 duplicate locs across the currently listed child sitemaps.
-   - Local `sitemap:validate` reports duplicate loc count 0, which reinforces that production is behind or serving an older build.
-
-3. **Full representative pathway/localized verification is blocked by production index state.**
-   - The approved pathway and localized child sitemaps are not advertised by the live index.
-
----
-
-## Non-blocking warnings
-
-- Representative blog page resolved with valid BreadcrumbList JSON-LD, but no canonical tag was found by the lightweight parser in the sampled HTML response.
-- Representative allied page resolved with a canonical tag, but BreadcrumbList JSON-LD was not found by the lightweight parser. This may be expected for that template, but should be confirmed against the breadcrumb audit expectations.
-- Search Console submission evidence was not available in this local verification session.
-
----
-
-## Rollback / release recommendation
-
-**Do not submit the current production sitemap state to Search Console as the completed Phase 11 release.**
-
-Recommended action:
-
-1. Confirm the Phase 1-10 branch has actually deployed to production and that no CDN/application cache is serving the old sitemap index.
-2. Re-run production verification after deploy/cache confirmation.
-3. If production cannot be updated quickly and sitemap duplicates are causing crawl issues, roll back to the last known intentional sitemap policy only through the normal deployment path, preserving public URL filtering and `robots.txt` index-only behavior.
-4. Do not change runtime code during Phase 11 unless a confirmed production blocker is traced to current code rather than stale deployment state.
-
----
-
-## Search Console next steps
-
-- Do not mark Search Console handoff complete until production `https://www.nursenest.ca/sitemap.xml` lists the approved 8 child sitemaps.
-- After production matches local validation, submit only `https://www.nursenest.ca/sitemap.xml`.
-- Monitor submitted vs indexed counts, sitemap fetch status, duplicate canonical warnings, alternate/hreflang warnings, excluded URLs, and private route leakage after submission.
-- Record submission date/time and unresolved warnings in the release ticket.
-
----
-
-## Final status
-
-**Production verification failed due to deployed sitemap architecture drift.**
-
-Local implementation remains green and release-ready, but production is not yet serving the approved sitemap index and child sitemap partitioning.
+No rollback is recommended at this point because no new production deploy was performed from this session. If the authenticated redeploy later introduces sitemap 5xx errors, invalid XML, or private URL leakage, roll back through the normal DigitalOcean deployment mechanism to the last healthy release while preserving the index-only `robots.txt` strategy and public URL filtering.

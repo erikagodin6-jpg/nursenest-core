@@ -1919,10 +1919,11 @@ html[data-theme="midnight"] .nn-header-dark-surface {
   --nn-pricing-tone-success: var(--semantic-success);
   --nn-pricing-tone-warning: var(--semantic-warning);
   --nn-pricing-tone-accent: var(--semantic-chart-5, var(--theme-accent));
+  --nn-pricing-card-bg-color: var(--semantic-surface, var(--theme-card-bg));
   --nn-pricing-card-bg: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--surface, var(--semantic-surface)) 96%, transparent),
-    color-mix(in srgb, var(--surface, var(--semantic-surface)) 84%, transparent)
+    color-mix(in srgb, var(--nn-pricing-card-bg-color) 96%, transparent),
+    color-mix(in srgb, var(--nn-pricing-card-bg-color) 84%, transparent)
   );
   position: relative;
   isolation: isolate;
@@ -1988,6 +1989,7 @@ html[data-theme="midnight"] .nn-header-dark-surface {
 
 .nn-pricing-plan-card {
   background: var(--nn-pricing-card-bg);
+  background-color: var(--nn-pricing-card-bg-color);
   border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-pricing-tone-brand));
   box-shadow:
     0 18px 44px -34px color-mix(in srgb, var(--palette-heading, var(--semantic-text-primary)) 34%, transparent),
@@ -2026,6 +2028,7 @@ html[data-theme="midnight"] .nn-header-dark-surface {
 .nn-pricing-faq-card,
 .nn-paywall-premium {
   background: var(--nn-pricing-card-bg);
+  background-color: var(--nn-pricing-card-bg-color);
   border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-pricing-tone-brand));
   box-shadow:
     0 18px 44px -34px color-mix(in srgb, var(--palette-heading, var(--semantic-text-primary)) 32%, transparent),
@@ -2105,6 +2108,12 @@ html[data-theme="midnight"] .nn-header-dark-surface {
   background: color-mix(in srgb, var(--semantic-text-muted) 9%, var(--semantic-surface));
   color: var(--semantic-text-secondary);
   border: 1px solid color-mix(in srgb, var(--semantic-text-muted) 20%, var(--semantic-border-soft));
+}
+
+.nn-premium-blog-post-card,
+.nn-premium-blog-related-card {
+  background-color: var(--semantic-surface, var(--theme-card-bg));
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-brand));
 }
 
 /* ---------------------------------------------------------------------
