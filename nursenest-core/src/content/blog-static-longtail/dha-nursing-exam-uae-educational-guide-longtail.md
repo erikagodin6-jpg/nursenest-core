@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: "DHA Nursing Exam UAE: Educational Study Guide for... | NurseNest"
-seoDescription: "DHA Nursing Exam UAE — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation. Educational only;"
+seoDescription: "DHA Nursing Exam UAE: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/dha-nursing-exam-uae-educational-guide-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

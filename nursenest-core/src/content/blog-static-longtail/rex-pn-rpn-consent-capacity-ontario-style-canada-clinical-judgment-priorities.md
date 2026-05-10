@@ -6,7 +6,7 @@ category: "Professional practice & ethics"
 tags: ["Consent","Ethics","Capacity","Interprofessional collaboration","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Consent, capacity, and substitute decision-making | NurseNest"
+seoTitle: "Consent, capacity, and substitute | NurseNest"
 seoDescription: "Consent, capacity, and substitute decision-making language — Clinical judgment and prioritization drills: Canadian PN/RPN scope, REx-PN-style traps, documentation..."
 canonicalUrl: /blog/rex-pn-rpn-consent-capacity-ontario-style-canada-clinical-judgment-priorities
 authorDisplayName: NurseNest Editorial

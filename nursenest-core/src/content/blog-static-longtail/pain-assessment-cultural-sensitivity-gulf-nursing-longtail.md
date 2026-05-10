@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: Pain Assessment With Cultural Sensitivity in Gulf... | NurseNest
-seoDescription: "Pain Assessment With Cultural Sensitivity in... — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation."
+seoDescription: "Pain Assessment With Cultural...: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/pain-assessment-cultural-sensitivity-gulf-nursing-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

@@ -6,7 +6,7 @@ category: "Infection prevention & control"
 tags: ["CAUTI","Catheter care","IPAC","Gerontology","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Urinary catheter care and CAUTI prevention in Can | NurseNest"
+seoTitle: "Urinary catheter care and CAUTI prevention in | NurseNest"
 seoDescription: "Urinary catheter care and CAUTI prevention in Canadian practice — Patient teaching and health literacy for Canadian PN learners: Canadian PN/RPN scope, REx-PN-sty..."
 canonicalUrl: /blog/rex-pn-rpn-urinary-catheter-caauti-ipac-canada-patient-teaching-health-literacy
 authorDisplayName: NurseNest Editorial

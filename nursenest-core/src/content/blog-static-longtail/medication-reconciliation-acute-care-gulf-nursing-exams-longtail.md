@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: "Medication Reconciliation in Acute Care: Gulf Nursing... | NurseNest"
-seoDescription: "Medication Reconciliation in Acute Care — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation."
+seoDescription: "Medication Reconciliation in Acute Care: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/medication-reconciliation-acute-care-gulf-nursing-exams-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

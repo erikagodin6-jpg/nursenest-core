@@ -73,6 +73,10 @@ function countWords(html: string): number {
   return html.replace(/<[^>]+>/g, " ").trim().split(/\s+/).filter(Boolean).length;
 }
 
+function stripTrailingPeriod(s: string): string {
+  return s.replace(/\.\s*$/, "");
+}
+
 function narrativeDepth(c: Card): string[] {
   const A = c.classLabel;
   const lab = c.monitorSummary.split(".")[0] || c.monitorSummary;
@@ -92,7 +96,7 @@ function buildBody(c: Card): string {
   sections.push(h2("Introduction"));
   sections.push(
     p(
-      `${c.classLabel} integrate across cardiovascular, renal, infectious disease, psychiatric, pulmonary, and coagulation curricula for pharmacy students and pharmacist licensing preparation. This article emphasizes how ${c.moaCore} maps to monitoring, counseling, and exam-style prioritization without replacing drug information databases or institutional protocols.`,
+      `${c.classLabel} integrate across cardiovascular, renal, infectious disease, psychiatric, pulmonary, and coagulation curricula for pharmacy students and pharmacist licensing preparation. Core mechanism: ${stripTrailingPeriod(c.moaCore)}. That physiology maps to monitoring, counseling, and exam-style prioritization without replacing drug information databases or institutional protocols.`,
       `Use the sections below as a structured study map: first anchor mechanism, then indications, then contraindications and adverse effects, then interactions and monitoring, then population-specific adjustments. The added depth paragraphs model how to narrate a medication review aloud during rotations or licensure interviews.`,
     ),
     ...depth.map((t) => p(t)),

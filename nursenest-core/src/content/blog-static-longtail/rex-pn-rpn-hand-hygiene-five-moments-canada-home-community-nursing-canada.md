@@ -6,7 +6,7 @@ category: "Infection prevention & control"
 tags: ["Hand hygiene","PPE","IPAC","Patient safety","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Hand hygiene, moments, and audit language used in | NurseNest"
+seoTitle: "Hand hygiene, moments, and audit language used | NurseNest"
 seoDescription: "Hand hygiene, moments, and audit language used in Canadian facilities — Home and community care realities for RPN practice: Canadian PN/RPN scope, REx-PN-style tr..."
 canonicalUrl: /blog/rex-pn-rpn-hand-hygiene-five-moments-canada-home-community-nursing-canada
 authorDisplayName: NurseNest Editorial

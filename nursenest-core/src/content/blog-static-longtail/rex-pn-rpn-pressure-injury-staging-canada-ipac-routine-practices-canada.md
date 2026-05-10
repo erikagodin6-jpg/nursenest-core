@@ -6,7 +6,7 @@ category: "Wound & skin integrity"
 tags: ["Pressure injury","Wound staging","Skin assessment","LTC nursing","IPAC","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Pressure injuries and staging essentials: IPAC ro | NurseNest"
+seoTitle: "Pressure injuries and staging essentials: IPAC | NurseNest"
 seoDescription: "Pressure injuries and staging essentials — IPAC routine practices and outbreak language: Canadian PN/RPN scope, REx-PN-style traps, documentation, delegation, and..."
 canonicalUrl: /blog/rex-pn-rpn-pressure-injury-staging-canada-ipac-routine-practices-canada
 authorDisplayName: NurseNest Editorial

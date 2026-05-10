@@ -397,83 +397,114 @@ function internalLinksHtml(spec: NewGradLongtailSpec, idx: number): string {
 </ul>`;
 }
 
-/** Rich, non-repeating paragraphs per H2 using slug-seeded RNG. */
-/** Deterministic non-repeating paragraphs until min word count (plain text fragments, HTML-escaped). */
-function sectionBody(heading: string, spec: NewGradLongtailSpec, salt: string, minWords: number): string {
-  const base = hashSeed(`${spec.slug}:${heading}:${salt}`);
+/**
+ * Section-specific prose (no shared template pool across H2s) to satisfy publish-quality
+ * duplicate-sentence, repetition, and H2 Jaccard gates.
+ */
+function sectionRichHtml(
+  role:
+    | "Introduction"
+    | "KeyTakeaways"
+    | "WhyGrads"
+    | "ClinicalReasoning"
+    | "Prioritization"
+    | "Mistakes"
+    | "Communication"
+    | "Documentation"
+    | "Escalation"
+    | "ShiftOrg"
+    | "Delegation"
+    | "NGN"
+    | "Exam"
+    | "Expansion",
+  spec: NewGradLongtailSpec,
+): string {
   const S = spec.settingLabel;
   const Th = spec.themeLabel;
   const ex = spec.examFocus;
   const Ti = spec.title;
+  const h = hashSeed(spec.slug + role) % 7;
 
-  const fragments: string[] = [
-    `On ${S} units, ${Th} shows up as a pacing problem in vitals, intake and output, medication timing, and how quickly you notice when a plan is not working.`,
-    `New graduate accountability includes safe execution, timely reporting, and honest uncertainty; ${ex} stems often reward assessment before teaching or delegation.`,
-    `Pathophysiology literacy still matters when the shift feels organizational: subtle perfusion or oxygenation shifts can reorder your task list faster than a new admission.`,
-    `Translate ${Th} into a patient story: what changed first, what objective data proves it, and which intervention reduces the fastest lethal risk on ${S}.`,
-    `Pair assessment cues with mechanism language in your notes because exams test why a symptom implies an action, not only what a textbook list contains.`,
-    `Interventions stay inside orders and protocols; implement safely, observe response, document clearly, and escalate when response is absent or contradictory.`,
-    `Teaching in ${S} should name warning symptoms, timing, and who to call; avoid vague reassurance that masks deterioration while ${Th} is evolving.`,
-    `Include device safety, mobility plans, adherence barriers, and interpreter access when language changes comprehension for ${Th} teaching moments.`,
-    `Chart teaching with topics, teach-back results, and follow-up so the next nurse continues rather than repeats the same ${Th} script.`,
-    `Escalation is teamwork: you add decision bandwidth when ${Th} crosses a threshold, not a personal failure to know everything immediately.`,
-    `Red flags include sudden confusion, airway fatigue, shock patterns, uncontrolled bleeding, chest pain with instability, focal neuro change, seizures, and trends that break baseline on ${S}.`,
-    `SBAR with numbers, times, and therapy responses protects patients and mirrors what ${ex} questions reward when you call about ${Th}.`,
-    `Common mistakes: silent assumptions, copy-forward vitals, delaying report because the chart is busy, and education-first answers when the patient is unstable.`,
-    `Safety risks cluster around high-alert medications, lines and drains, falls, infection prevention, and handoff gaps when ${Th} competes with admissions on ${S}.`,
-    `Before entering the room, name the primary risk, a backup risk, and the fastest objective check for each when ${Th} is the shift theme.`,
-    `Workload spikes on ${S} tempt task switching; batch compatible tasks without abandoning timed assessments tied to ${Th}.`,
-    `Preceptor feedback sticks when you bring specific patients, timestamps, and one question about ${Th} judgment rather than vague anxiety.`,
-    `Residency portfolios strengthen when ${Th} examples include what you assessed, what you reported, and what policy you consulted on ${S}.`,
-    `Moral distress rises when ${Th} conflicts with throughput; use ethics resources and chain of command without delaying urgent patient stabilization.`,
-    `Delegation requires ongoing evaluation: reassess UAP observations, clarify expectations, and retain accountability for the overall ${Th} plan.`,
-    `Interdisciplinary huddles are chances to surface ${Th} risks early; bring one measured concern rather than a vague worry on ${S}.`,
-    `Pain reassessment and sedation safety remain nursing priorities when ${Th} includes high-acuity medication passes on ${S}.`,
-    `Documentation should show trajectory: baseline, change, intervention, response, and notification for ${Th} events on ${S}.`,
-    `Night shift ${Th} work needs light discipline, hydration, and cognitive breaks so assessment quality stays stable on ${S}.`,
-    `Orientation goals for ${Th} should be observable: I will verify X before Y on ${S} for two weeks, then raise the standard with preceptor agreement.`,
-    `Simulation and lab drills support ${Th} because they rehearse muscle memory for pumps, lines, and crisis communication before ${S} live events.`,
-    `Wellness boundaries include saying when you are at capacity; fatigue increases omission errors during ${Th} on busy ${S} assignments.`,
-    `Family communication improves when you lead with what is known, what is being done, and when you will update again about ${Th} care on ${S}.`,
-    `Incivility distorts ${Th}; use professional anchors, chain of command, and documentation when behavior threatens patient safety on ${S}.`,
-    `Scope questions after reassignment are not weakness; they protect patients when ${Th} tasks exceed your current competency on ${S}.`,
-    `Cultural humility changes how you ask assessment questions during ${Th}; slow down, listen, and verify understanding on ${S}.`,
-    `Micro-breaks of even two minutes can reset attention for ${Th} checks during long medication windows on ${S}.`,
-    `Incident reporting should focus on systems and transparent learning, not shame, when ${Th} contributed to a near miss on ${S}.`,
-    `IV stewardship and line maintenance belong inside ${Th} because central and peripheral lines change infection and hemodynamic risk on ${S}.`,
-    `Critical lab follow-through means repeating vitals, reviewing trends, and notifying per policy when ${Th} intersects lab alerts on ${S}.`,
-    `Isolation fatigue erodes PPE discipline; pair ${Th} routines with buddy checks on ${S} without shaming teammates.`,
-    `End-of-shift handoffs fail when ${Th} details are vague; include pending tasks, unstable cues, and family concerns for ${S}.`,
-    `Exam review for ${ex} should highlight priority verbs, timing words, and unstable presentations before reading answers about ${Th}.`,
-    `NGN-style practice means evaluating whether your selected action improved measurable outcomes for ${Th} scenarios on ${S}.`,
-    `Hemodynamic patterns on ${S} reward understanding preload, afterload, and contractility when ${Th} touches cardiac patients.`,
-    `Neurologic checks after protocol-driven events need repeated trending, not a single snapshot, when ${Th} includes neuro populations on ${S}.`,
-    `Respiratory patients on ${S} need work-of-breathing language in your report when ${Th} touches oxygenation plans.`,
-    `Renal considerations change fluid and electrolyte teaching when ${Th} intersects dialysis or AKI risk on ${S}.`,
-    `Postoperative patients need incision, drain, and mobility surveillance integrated into ${Th} workflows on ${S}.`,
-    `Pediatric dosing checks belong in ${Th} passes because small errors have large consequences on ${S}.`,
-    `Psychiatric safety planning is collaborative; ${Th} should include means reduction language appropriate to ${S} policy.`,
-    `Perioperative safety hinges on time-out participation and clear ${Th} communication when ${S} includes surgical patients.`,
-    `Home health ${Th} skills include environmental scanning and communication backup because ${S} is less controlled than inpatient units.`,
-    `Oncology ${Th} passes require verification steps and symptom monitoring aligned with protocol on ${S}.`,
-    `Geriatric syndromes on ${S} change how ${Th} presents; delirium may be quiet until families report a stark change.`,
-    `Telemetry literacy supports ${Th} when ${S} includes arrhythmia risk and medication effects on conduction.`,
-    `Sepsis suspicion belongs in any ${Th} discussion when infection signs appear on ${S}, even if the primary diagnosis is different.`,
-    `Transition programs succeed when ${Th} habits are rehearsed with feedback loops rather than one-time lectures on ${S}.`,
-    `Reflective practice after shifts converts ${Th} stress into learning if you name one success, one risk caught, and one improvement for ${S}.`,
-  ];
+  const p = (...lines: string[]) => lines.map((t) => `<p>${esc(t)}</p>`).join("\n");
 
-  const parts: string[] = [];
-  let words = 0;
-  let i = 0;
-  while (words < minWords && i < 48) {
-    const frag = fragments[(base + i * 17 + salt.length * 3) % fragments.length]!;
-    const para = `${frag} (${Ti.slice(0, 56)} — ${heading} focus.)`;
-    parts.push(`<p>${esc(para)}</p>`);
-    words += wordCountHtml(para);
-    i += 1;
+  switch (role) {
+    case "Introduction":
+      return p(
+        `Your first months on ${S} reward a disciplined loop: collect objective data, narrate change clearly, and align ${Th} work with orders rather than improvising care.`,
+        `This article names concrete behaviors for “${Ti}” so you can rehearse them before high-stakes moments. It is written for ${ex} learners and new graduates; it is not a substitute for supervision agreements or facility policy.`,
+        h % 2 === 0
+          ? `When ${Th} competes with admissions, use a two-minute room plan: glance monitors, scan lines, greet the patient, then decide whether the situation is stable, uncertain, or urgent.`
+          : `When ${Th} intersects complex families, pair empathy with boundaries: repeat the plan, confirm understanding, and document who agreed to what.`,
+      );
+    case "KeyTakeaways":
+      return p(
+        `Carry one sticky-note habit: after each ${Th} task, ask whether the patient’s trajectory still matches the morning plan on ${S}.`,
+        `Second, rehearse one sentence you would say to a provider if vitals drifted while you were focused on ${Th} responsibilities.`,
+      );
+    case "WhyGrads":
+      return p(
+        `Employers measure new graduates on reliability: you show up prepared, you verify instead of assuming, and you escalate ${Th} concerns with measurable detail on ${S}.`,
+        `Patients experience your competence through continuity: if ${Th} teaching contradicts what the last nurse said, trust erodes faster than any single clinical error.`,
+      );
+    case "ClinicalReasoning":
+      return p(
+        `Mechanistic curiosity protects you from “task completion” thinking. Ask what supply-and-demand mismatch could explain symptoms while you implement ${Th} workflows on ${S}.`,
+        `Link subjective complaints to objective anchors: orthopnea plus bilateral crackles suggests a different urgency than pleuritic pain with unilateral decreased sounds, even when both appear during ${Th} shifts.`,
+        `Medication mechanisms matter for safety timing: know which therapies blunt compensatory responses and which ones narrow the margin for error while you execute ${Th} tasks.`,
+      );
+    case "Prioritization":
+      return p(
+        `Use a forced rank: airway patency, adequate ventilation, perfusion and bleeding control, reversible neurologic threats, then time-bound therapies, then ${Th} routines on ${S}.`,
+        `When two patients both “need you,” compare deterioration slopes, not politeness. The patient whose trajectory leaves the fewest safe minutes should receive your next eyes-on assessment.`,
+      );
+    case "Mistakes":
+      return p(
+        `A common early error is charting reassurance without assessment: “patient resting comfortably” while work of breathing is worsening during ${Th} care on ${S}.`,
+        `Another failure mode is silent fixes: adjusting a pump without confirming the order, the concentration, and the line—especially when ${Th} overlaps high-alert medications.`,
+      );
+    case "Communication":
+      return p(
+        `SBAR is not a script to sound polished; it is a compression algorithm that reduces harm during ${Th} handoffs on ${S}. Lead with instability, then context, then question.`,
+        `With families, separate certainty from process: name what is known, what is being watched, when the team will reassess, and what symptoms should trigger an immediate call during ${Th} care.`,
+      );
+    case "Documentation":
+      return p(
+        `Write so a tired colleague can defend your judgment: quote symptoms, cite numeric trends, name notifications, and describe responses for ${Th} events on ${S}.`,
+        `Avoid diagnostic overreach in the nursing narrative; describe findings and link them to orders, protocols, and consultations relevant to ${Th}.`,
+      );
+    case "Escalation":
+      return p(
+        `Treat sudden confusion, stridor, refractory hypoxia, MAP collapse, suspected stroke onset, or uncontrolled hemorrhage as automatic triggers for rapid escalation pathways on ${S}, even if ${Th} tasks are unfinished.`,
+        `If you are unsure whether it is “urgent enough,” escalate with data: you are requesting partnership, not admitting incompetence, especially when ${Th} risk is nonlinear.`,
+      );
+    case "ShiftOrg":
+      return p(
+        `Cluster compatible work: draw labs once, bundle room entries, and align med passes with assessments so ${Th} does not fragment your attention on ${S}.`,
+        `Protect a ten-minute mid-shift scan: reopen the board, reread high-risk patients, and verify that ${Th} tasks did not crowd out trending vitals.`,
+      );
+    case "Delegation":
+      return p(
+        `Delegation is a dynamic contract: confirm understanding, set checkpoints, and reevaluate after the patient’s condition changes—especially when ${Th} spans multiple assistive roles on ${S}.`,
+        `Never delegate clinical judgment you cannot supervise in real time; retain accountability for interpreting findings that drive ${Th} decisions.`,
+      );
+    case "NGN":
+      return p(
+        `NGN-style items reward hypothesis testing: collect cues, propose the most dangerous realistic problem first, choose the least harmful immediate action, then evaluate whether ${Th} assumptions still fit ${S} data.`,
+        `Practice writing a one-line “because” for each option you eliminate; that discipline exposes hidden assumptions during ${Th} scenarios.`,
+      );
+    case "Exam":
+      return p(
+        `Underline priority verbs: initial, first, best, priority, most important. They shift the correct answer toward assessment or escalation during ${ex} practice tied to ${Th}.`,
+        `When answers include both a thorough assessment option and a helpful-but-nonurgent task, pick assessment if the stem still leaves stability uncertain on ${S}.`,
+      );
+    case "Expansion":
+      return p(
+        `Vignette debrief: compare what you assumed at door versus what objective data later proved during ${Th} care on ${S}.`,
+        `Name one systems issue (equipment, staffing communication, order clarity) and one personal skill issue (time scan, verification habit) you will adjust before the next shift.`,
+      );
+    default:
+      return "";
   }
-  return parts.join("\n");
 }
 
 export function buildNewGradLongtailBodyHtml(spec: NewGradLongtailSpec, index: number, accessDate: string): string {
@@ -486,7 +517,7 @@ export function buildNewGradLongtailBodyHtml(spec: NewGradLongtailSpec, index: n
       spec.themeLabel,
     )} skills in ${esc(spec.settingLabel)} environments. It supports ${esc(spec.examFocus)} style clinical judgment and residency habits; it does not replace your educator, preceptor, or institutional policy.</p>`,
   );
-  parts.push(sectionBody("Introduction", spec, "a", 220));
+  parts.push(sectionRichHtml("Introduction", spec));
 
   parts.push(`<h2>Key Takeaways</h2><ul>`);
   const bullets = [
@@ -498,61 +529,61 @@ export function buildNewGradLongtailBodyHtml(spec: NewGradLongtailSpec, index: n
   ];
   for (const b of bullets) parts.push(`<li>${b}</li>`);
   parts.push(`</ul>`);
-  parts.push(sectionBody("KeyTakeaways", spec, "b", 120));
+  parts.push(sectionRichHtml("KeyTakeaways", spec));
 
   parts.push(`<h2>Why this matters for new grads</h2>`);
-  parts.push(sectionBody("WhyGrads", spec, "c", 200));
+  parts.push(sectionRichHtml("WhyGrads", spec));
 
   parts.push(`<h2>Clinical reasoning considerations</h2>`);
   parts.push(
     `<p><strong>Mechanism-linked thinking.</strong> Even when the shift theme is ${esc(spec.themeLabel)}, connect symptoms to plausible physiology: oxygen delivery, volume status, neurologic perfusion, infection burden, and medication effects. That habit mirrors pathophysiology teaching and keeps you from chasing chart tasks while missing patient trajectory.</p>`,
   );
-  parts.push(sectionBody("ClinicalReasoning", spec, "d", 220));
+  parts.push(sectionRichHtml("ClinicalReasoning", spec));
 
   parts.push(`<h2>Prioritization frameworks</h2>`);
   parts.push(
     `<p><strong>Assessment and intervention sequencing.</strong> Use airway, breathing, circulation, then time-sensitive complications, then comfort and education when stability is verified. Compare Maslow only after immediate survival risks are ruled out for ${esc(spec.settingLabel)} patients.</p>`,
   );
-  parts.push(sectionBody("Prioritization", spec, "e", 200));
+  parts.push(sectionRichHtml("Prioritization", spec));
 
   parts.push(`<h2>Common mistakes and safety risks</h2>`);
-  parts.push(sectionBody("Mistakes", spec, "f", 220));
+  parts.push(sectionRichHtml("Mistakes", spec));
 
   parts.push(`<h2>Communication pearls</h2>`);
-  parts.push(sectionBody("Communication", spec, "g", 180));
+  parts.push(sectionRichHtml("Communication", spec));
 
   parts.push(`<h2>Documentation tips</h2>`);
   parts.push(
     `<p><strong>Defensible notes.</strong> Patient education entries should include teach-back, language access, barriers, and measurable outcomes. For ${esc(spec.themeLabel)} events, capture who was notified, what orders were clarified, and how the patient responded.</p>`,
   );
-  parts.push(sectionBody("Documentation", spec, "h", 200));
+  parts.push(sectionRichHtml("Documentation", spec));
 
   parts.push(`<h2>Escalation/red flag situations</h2>`);
   parts.push(
     `<p><strong>Urgent escalation.</strong> Red flags include sudden confusion, airway compromise, shock, uncontrolled pain with objective instability, suspected stroke onset, seizure activity, and massive bleeding. Use rapid response or provider escalation pathways appropriate to ${esc(spec.settingLabel)}.</p>`,
   );
-  parts.push(sectionBody("Escalation", spec, "i", 200));
+  parts.push(sectionRichHtml("Escalation", spec));
 
   parts.push(`<h2>Shift organization and workflow tips</h2>`);
-  parts.push(sectionBody("ShiftOrg", spec, "j", 200));
+  parts.push(sectionRichHtml("ShiftOrg", spec));
 
   parts.push(`<h2>Delegation considerations</h2>`);
   parts.push(
     `<p><strong>Delegation and supervision.</strong> Match tasks to competency, verify UAP observations, retain accountability for nursing judgment, and never delegate assessment that requires registered nurse interpretation when policy requires RN eyes.</p>`,
   );
-  parts.push(sectionBody("Delegation", spec, "k", 180));
+  parts.push(sectionRichHtml("Delegation", spec));
 
   parts.push(`<h2>NGN-style thinking points</h2>`);
   parts.push(
     `<p><strong>Next-generation NCLEX style practice.</strong> Practice recognizing cues, generating hypotheses, prioritizing actions, and evaluating outcomes using case-like stems. Tie ${esc(spec.themeLabel)} decisions to measurable patient responses rather than single “correct” labels.</p>`,
   );
-  parts.push(sectionBody("NGN", spec, "l", 200));
+  parts.push(sectionRichHtml("NGN", spec));
 
   parts.push(`<h2>Exam-focused review points</h2>`);
   parts.push(
     `<p><strong>NCLEX and REx-PN review.</strong> Re-read stems for timing words, priority verbs, and unstable versus stable presentations. For ${Ti}, rehearse eliminating teaching-only answers when assessment or escalation is still incomplete.</p>`,
   );
-  parts.push(sectionBody("Exam", spec, "m", 200));
+  parts.push(sectionRichHtml("Exam", spec));
 
   parts.push(`<h2>Suggested Internal Links</h2>`);
   parts.push(internalLinksHtml(spec, index));
@@ -574,7 +605,7 @@ export function buildNewGradLongtailBodyHtml(spec: NewGradLongtailSpec, index: n
   const wc = wordCountHtml(html);
   if (wc < 1400) {
     // Deterministic expansion block (unique per slug) to satisfy long-form floor.
-    const extra = sectionBody("Expansion", spec, "z", 450);
+    const extra = sectionRichHtml("Expansion", spec);
     const settingEsc = esc(spec.settingLabel);
     const themeEsc = esc(spec.themeLabel);
     return `${html}\n<h2>Mini case scenario for practice</h2>\n<p><strong>Vignette.</strong> You inherit a ${settingEsc} patient whose ${themeEsc} plan conflicts with new vitals.</p>\n${extra}`;

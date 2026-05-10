@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: "Nurse Scope of Practice in UAE Context: Educational... | NurseNest"
-seoDescription: "Nurse Scope of Practice in UAE Context — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation."
+seoDescription: "Nurse Scope of Practice in UAE Context: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/nurse-scope-of-practice-uae-context-educational-framing-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: CLABSI Prevention and Central Line Nursing Care for... | NurseNest
-seoDescription: "CLABSI Prevention and Central Line Nursing Care... — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation."
+seoDescription: "CLABSI Prevention and Central Line...: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/clabsi-prevention-ipc-nursing-licensing-focus-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

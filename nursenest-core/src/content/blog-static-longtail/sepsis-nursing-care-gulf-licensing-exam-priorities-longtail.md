@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: Sepsis Nursing Care Priorities for Gulf Licensing and... | NurseNest
-seoDescription: "Sepsis Nursing Care Priorities for Gulf... — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation."
+seoDescription: "Sepsis Nursing Care Priorities for...: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/sepsis-nursing-care-gulf-licensing-exam-priorities-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

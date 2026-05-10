@@ -6,7 +6,7 @@ category: "Community & population health"
 tags: ["Harm reduction","Stigma","Substance use","Advocacy","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Substance use, stigma reduction, and harm reducti | NurseNest"
+seoTitle: "Substance use, stigma reduction, and harm | NurseNest"
 seoDescription: "Substance use, stigma reduction, and harm reduction considerations — REx-PN and NGN-style case thinking: Canadian PN/RPN scope, REx-PN-style traps, documentation,..."
 canonicalUrl: /blog/rex-pn-rpn-substance-use-stigma-harm-reduction-canada-rex-pn-ngn-item-thinking
 authorDisplayName: NurseNest Editorial

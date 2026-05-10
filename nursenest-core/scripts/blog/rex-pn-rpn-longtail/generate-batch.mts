@@ -39,7 +39,11 @@ function seoTitleFor(fullTitle: string): string {
   const suffix = " | NurseNest";
   const max = 62;
   if (fullTitle.length + suffix.length <= max) return `${fullTitle}${suffix}`;
-  return `${fullTitle.slice(0, max - suffix.length - 1).trim()}${suffix}`;
+  let head = fullTitle.slice(0, max - suffix.length).trim();
+  const cut = head.lastIndexOf(" ");
+  if (cut > 28) head = head.slice(0, cut).trim();
+  head = head.replace(/[:;,.\-–]+$/, "").trim();
+  return `${head}${suffix}`;
 }
 
 function seoDescriptionFor(excerpt: string): string {

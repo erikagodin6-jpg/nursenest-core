@@ -6,7 +6,7 @@ category: "Professional practice & ethics"
 tags: ["Abuse reporting","Advocacy","Safety","Documentation","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Abuse, neglect, and reporting obligations in Cana | NurseNest"
+seoTitle: "Abuse, neglect, and reporting obligations in | NurseNest"
 seoDescription: "Abuse, neglect, and reporting obligations in Canadian nursing exams — Patient teaching and health literacy for Canadian PN learners: Canadian PN/RPN scope, REx-PN..."
 canonicalUrl: /blog/rex-pn-rpn-abuse-neglect-reporting-rpn-canada-patient-teaching-health-literacy
 authorDisplayName: NurseNest Editorial

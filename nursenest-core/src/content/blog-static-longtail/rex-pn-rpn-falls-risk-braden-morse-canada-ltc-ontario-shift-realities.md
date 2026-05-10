@@ -6,7 +6,7 @@ category: "Safety & mobility"
 tags: ["Falls prevention","Safety","Gerontology","Assessment","RPN scope","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Falls risk, Morse/Baden scales, and shift safety: | NurseNest"
+seoTitle: "Falls risk, Morse/Baden scales, and shift | NurseNest"
 seoDescription: "Falls risk, Morse/Baden scales, and shift safety — LTC shift realities and resident-centred pacing: Canadian PN/RPN scope, REx-PN-style traps, documentation, dele..."
 canonicalUrl: /blog/rex-pn-rpn-falls-risk-braden-morse-canada-ltc-ontario-shift-realities
 authorDisplayName: NurseNest Editorial

@@ -6,7 +6,7 @@ category: "Palliative & end-of-life"
 tags: ["Palliative care","Comfort measures","Family support","Symptom control","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Palliative symptoms, comfort measures, and family | NurseNest"
+seoTitle: "Palliative symptoms, comfort measures, and | NurseNest"
 seoDescription: "Palliative symptoms, comfort measures, and family support — Medication safety, MAR checks, and high-alert vigilance: Canadian PN/RPN scope, REx-PN-style traps, do..."
 canonicalUrl: /blog/rex-pn-rpn-palliative-symptom-comfort-rpn-canada-medication-safety-mar-canada
 authorDisplayName: NurseNest Editorial

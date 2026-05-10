@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: Pediatric Dosing Safety and Nursing Calculations for... | NurseNest
-seoDescription: "Pediatric Dosing Safety and Nursing Calculations... — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation."
+seoDescription: "Pediatric Dosing Safety and Nursing...: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/pediatric-dosing-safety-nursing-calculations-licensing-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

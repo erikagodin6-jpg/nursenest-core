@@ -6,7 +6,7 @@ category: "Renal nursing"
 tags: ["CKD","Fluid balance","Labs","Patient teaching","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Chronic kidney disease fluid balance, diet teachi | NurseNest"
+seoTitle: "Chronic kidney disease fluid balance, diet | NurseNest"
 seoDescription: "Chronic kidney disease fluid balance, diet teaching, and lab trends — Medication safety, MAR checks, and high-alert vigilance: Canadian PN/RPN scope, REx-PN-style..."
 canonicalUrl: /blog/rex-pn-rpn-ckd-fluid-balance-labs-rpn-canada-medication-safety-mar-canada
 authorDisplayName: NurseNest Editorial

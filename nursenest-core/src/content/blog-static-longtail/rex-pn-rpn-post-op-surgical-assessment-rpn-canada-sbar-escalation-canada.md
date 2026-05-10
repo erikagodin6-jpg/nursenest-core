@@ -6,7 +6,7 @@ category: "Perioperative nursing"
 tags: ["Post-operative","Surgical complications","Assessment","Escalation","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Post-operative assessment, drains, and complicati | NurseNest"
+seoTitle: "Post-operative assessment, drains, and | NurseNest"
 seoDescription: "Post-operative assessment, drains, and complication surveillance — SBAR, escalation, and interprofessional handoff discipline: Canadian PN/RPN scope, REx-PN-style..."
 canonicalUrl: /blog/rex-pn-rpn-post-op-surgical-assessment-rpn-canada-sbar-escalation-canada
 authorDisplayName: NurseNest Editorial

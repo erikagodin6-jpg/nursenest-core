@@ -6,7 +6,7 @@ category: "Medication safety"
 tags: ["Anticoagulation","Bleeding risk","Patient teaching","Labs","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Anticoagulant teaching for warfarin and DOAC scen | NurseNest"
+seoTitle: "Anticoagulant teaching for warfarin and DOAC | NurseNest"
 seoDescription: "Anticoagulant teaching for warfarin and DOAC scenarios — IPAC routine practices and outbreak language: Canadian PN/RPN scope, REx-PN-style traps, documentation, d..."
 canonicalUrl: /blog/rex-pn-rpn-anticoagulant-teaching-warfarin-doac-canada-ipac-routine-practices-canada
 authorDisplayName: NurseNest Editorial

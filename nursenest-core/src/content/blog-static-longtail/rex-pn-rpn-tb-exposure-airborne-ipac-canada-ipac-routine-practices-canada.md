@@ -6,7 +6,7 @@ category: "Infection prevention & control"
 tags: ["Tuberculosis","Airborne precautions","IPAC","Public health","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Tuberculosis precautions, airborne PPE language, | NurseNest"
+seoTitle: "Tuberculosis precautions, airborne PPE language | NurseNest"
 seoDescription: "Tuberculosis precautions, airborne PPE language, and reporting themes — IPAC routine practices and outbreak language: Canadian PN/RPN scope, REx-PN-style traps, d..."
 canonicalUrl: /blog/rex-pn-rpn-tb-exposure-airborne-ipac-canada-ipac-routine-practices-canada
 authorDisplayName: NurseNest Editorial

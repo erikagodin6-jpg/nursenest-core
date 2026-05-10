@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: "Oxygen Therapy: Safety and Monitoring for Nursing... | NurseNest"
-seoDescription: "Oxygen Therapy — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation. Educational only;"
+seoDescription: "Oxygen Therapy: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/oxygen-therapy-safety-nursing-licensing-exams-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

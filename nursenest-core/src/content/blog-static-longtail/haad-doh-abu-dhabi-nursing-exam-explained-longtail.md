@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: HAAD and DOH Abu Dhabi Nursing Exam Pathways Explained... | NurseNest
-seoDescription: "HAAD and DOH Abu Dhabi Nursing Exam Pathways... — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation."
+seoDescription: "HAAD and DOH Abu Dhabi Nursing Exam...: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/haad-doh-abu-dhabi-nursing-exam-explained-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

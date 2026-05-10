@@ -1,6 +1,6 @@
 /** Placeholders: {TOPIC} {SPEC} {METHOD} {ANALYTE} {QC} {SAFETY} {EXAM} {ERROR} */
 export const MLT_SENTENCE_TEMPLATES: string[] = [
-  "Medical laboratory technology programs emphasize that {TOPIC} is part of a chain from patient identification to clinically actionable reporting for {EXAM} preparation and real workflow.",
+  "Medical laboratory technology programs emphasize that {TOPIC} is part of a chain from patient identification to clinically actionable reporting during {EXAM} study and in real workflow.",
   "Students connect {TOPIC} to the pre-analytical phase because delayed centrifugation, wrong tube type, or mislabeled {SPEC} can shift results before {METHOD} analysis begins.",
   "The analytical phase for {ANALYTE} relies on calibrated instruments, controlled reagents, and documented {QC} so technologists distinguish true shifts from drift or random {ERROR}.",
   "Post-analytical work for {TOPIC} includes critical value verification, delta checks, reflex algorithms, and clear communication, which certification items often frame as priority questions.",
@@ -10,7 +10,7 @@ export const MLT_SENTENCE_TEMPLATES: string[] = [
   "Sources of {ERROR} for {TOPIC} include calibration failures, degraded controls, misidentification, transcription mistakes, and delayed transport; items ask which step explains inconsistent {QC}.",
   "Infection control intersects {SAFETY} through standard precautions, sharps injury prevention, biosafety cabinets for high-risk cultures, hand hygiene, and regulated waste segregation in laboratory practice.",
   "Clinical significance of {ANALYTE} appears when values cross thresholds that change anticoagulation, transfusion, antimicrobial dosing, or disposition, requiring knowledge of reporting and comment rules.",
-  "Patient communication for {TOPIC} includes fasting requirements, timed collections, chain-of-custody constraints, pediatric micro-sampling, and why repeat testing follows hemolyzed {SPEC} rejection.",
+  "Patient communication for {TOPIC} includes fasting requirements, timed collections, chain-of-custody constraints, pediatric micro-sampling, and why hemolyzed or unsuitable {SPEC} may require recollection per policy.",
   "Exam preparation for {EXAM} rewards tube-top knowledge, stability limits, reflex pathways, delta checks, and corrective action documentation rather than isolated reference interval memorization alone.",
   "Hemolysis tied to {TOPIC} mentions intracellular potassium and lactate dehydrogenase release, plasma color checks, hemolysis indices when present, and recollection policies protecting patient safety.",
   "Coagulation items for {TOPIC} test citrate fill ratio, processing times, freezing requirements, and why heparin contamination invalidates certain prothrombin-based measurements on {SPEC}.",

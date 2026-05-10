@@ -3,7 +3,7 @@
  * Writes reports/rt-longtail-batch-300-README.md and part files for the RT long-tail batch.
  * Run from nursenest-core/: npx tsx scripts/blog/write-rt-longtail-report.mts
  */
-import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -27,7 +27,6 @@ function parseBody(raw: string): string {
 
 function main(): void {
   const manifest = getRtLongtailTopicManifest();
-  const slugSet = new Set(manifest.map((m) => m.slug));
   const rows: string[] = [];
   let pass = 0;
   let fail = 0;
@@ -73,20 +72,20 @@ ${parts.map((p) => `- [${p}](./${p})`).join("\n")}
 
 ## Validation (run from nursenest-core/)
 
-- \\`npm run validate:blog-static-longtail\\` — required
-- \\`npm run diagnose:blog-slug-collisions -- --write-report\\`
-- \\`npm run typecheck:critical\\`
-- \\`npm run test:blog-recovery\\`
-- \\`npm run test:homepage\\`
+- npm run validate:blog-static-longtail — required
+- npm run diagnose:blog-slug-collisions -- --write-report
+- npm run typecheck:critical
+- npm run test:blog-recovery
+- npm run test:homepage
 
 ## Generator
 
-- \\`npx tsx scripts/blog/generate-rt-longtail-files.mts --dry-run\\` — word count audit
-- \\`npx tsx scripts/blog/generate-rt-longtail-files.mts --force\\` — regenerate all RT files
+- npx tsx scripts/blog/generate-rt-longtail-files.mts --dry-run — word count audit
+- npx tsx scripts/blog/generate-rt-longtail-files.mts --force — regenerate all RT files
 
 ## Notes
 
-Content is deterministic from \\`scripts/blog/rt-longtail/manifest.ts\\` + \\`body-builder.ts\\` (seeded pools). Internal links include other \\`/blog/rt-*\\` posts and selected nursing long-tail hubs where present.
+Content is deterministic from scripts/blog/rt-longtail/manifest.ts and body-builder.ts (seeded pools). Internal links include other /blog/rt-* posts and selected nursing long-tail hubs where present.
 `;
   writeFileSync(join(REPORTS, "rt-longtail-batch-300-README.md"), readme, "utf8");
   console.log(`Wrote ${parts.length} part files + rt-longtail-batch-300-README.md under reports/`);

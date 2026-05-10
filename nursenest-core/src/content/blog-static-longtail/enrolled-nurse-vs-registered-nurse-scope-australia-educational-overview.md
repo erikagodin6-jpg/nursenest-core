@@ -67,6 +67,7 @@ disclaimer: This article supports nursing education, Australian registration ori
 <li><a href="/app/lessons">RN lessons hub</a> — structured lesson study.</li>
 <li><a href="/app/flashcards">Flashcards</a> — spaced recall for medications and procedures.</li>
 <li><a href="/app/practice-tests">Practice questions hub</a> — build exam stamina.</li>
+<li><a href="/app/questions">Question bank</a> — topic and pathway practice.</li>
 <li><a href="/app/cat">CAT adaptive practice</a> — prioritisation under uncertainty.</li>
 <li><a href="/app/labs">Labs interpretation practice</a> — connect numbers to nursing actions.</li>
 <li><a href="/app/ecg-video-quiz">ECG video quiz</a> — rhythm recognition reinforcement.</li>

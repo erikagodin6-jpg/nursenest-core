@@ -6,7 +6,7 @@ category: "Perioperative nursing"
 tags: ["Post-operative","Surgical complications","Assessment","Escalation","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Post-operative assessment, drains, and complicati | NurseNest"
+seoTitle: "Post-operative assessment, drains, and | NurseNest"
 seoDescription: "Post-operative assessment, drains, and complication surveillance — Acute med-surg priorities for practical nurses: Canadian PN/RPN scope, REx-PN-style traps, docu..."
 canonicalUrl: /blog/rex-pn-rpn-post-op-surgical-assessment-rpn-canada-acute-med-surg-canada
 authorDisplayName: NurseNest Editorial

@@ -6,7 +6,7 @@ category: "Infection prevention & control"
 tags: ["C difficile","Contact precautions","IPAC","Hand hygiene","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Clostridioides difficile precautions and Canadian | NurseNest"
+seoTitle: "Clostridioides difficile precautions and | NurseNest"
 seoDescription: "Clostridioides difficile precautions and Canadian IPAC language — Acute med-surg priorities for practical nurses: Canadian PN/RPN scope, REx-PN-style traps, docum..."
 canonicalUrl: /blog/rex-pn-rpn-c-diff-precautions-ipac-canada-acute-med-surg-canada
 authorDisplayName: NurseNest Editorial

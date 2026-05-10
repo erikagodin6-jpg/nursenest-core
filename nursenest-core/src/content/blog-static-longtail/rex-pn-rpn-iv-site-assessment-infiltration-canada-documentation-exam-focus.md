@@ -6,7 +6,7 @@ category: "Fluid & electrolyte / vascular access"
 tags: ["IV therapy","Assessment","Complications","Escalation","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Peripheral IV site assessment, phlebitis cues, an | NurseNest"
+seoTitle: "Peripheral IV site assessment, phlebitis cues | NurseNest"
 seoDescription: "Peripheral IV site assessment, phlebitis cues, and infiltration surveillance — Documentation expectations on Canadian PN exams: Canadian PN/RPN scope, REx-PN-styl..."
 canonicalUrl: /blog/rex-pn-rpn-iv-site-assessment-infiltration-canada-documentation-exam-focus
 authorDisplayName: NurseNest Editorial

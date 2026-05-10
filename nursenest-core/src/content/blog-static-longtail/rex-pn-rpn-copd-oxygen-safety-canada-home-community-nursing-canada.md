@@ -6,7 +6,7 @@ category: "Respiratory nursing"
 tags: ["COPD","Oxygen therapy","Respiratory assessment","Safety teaching","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "COPD, oxygen safety, and Canadian home oxygen tea | NurseNest"
+seoTitle: "COPD, oxygen safety, and Canadian home oxygen | NurseNest"
 seoDescription: "COPD, oxygen safety, and Canadian home oxygen teaching — Home and community care realities for RPN practice: Canadian PN/RPN scope, REx-PN-style traps, documentat..."
 canonicalUrl: /blog/rex-pn-rpn-copd-oxygen-safety-canada-home-community-nursing-canada
 authorDisplayName: NurseNest Editorial

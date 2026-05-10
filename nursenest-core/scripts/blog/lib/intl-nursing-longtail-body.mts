@@ -76,7 +76,7 @@ function internalLinksHtml(lang: IntlNursingLangKey, topicIndex: number): string
     ],
     tl: [
       "NMC CBT gabay (UK)",
-  "NMC registration pathway para sa internationally educated nurses",
+      "NMC registration pathway para sa internationally educated nurses",
       "AHPRA at registration sa Australia (edukasyonal na overview)",
       "Sepsis sa NHS (nursing overview)",
       "NEWS2 para sa UK acute care",
@@ -117,14 +117,30 @@ function internalLinksHtml(lang: IntlNursingLangKey, topicIndex: number): string
                 : lang === "zh-Hans"
                   ? "NurseNest 学习者控制台"
                   : "NurseNest 学習者ダッシュボード";
+  const trail =
+    lang === "es"
+      ? "para continuar el circuito de estudio adaptativo"
+      : lang === "fr"
+        ? "pour poursuivre la boucle d’étude adaptative"
+        : lang === "pt"
+          ? "para continuar o circuito de estudo adaptativo"
+          : lang === "ar"
+            ? "لمتابعة حلقة الدراسة التكيفية"
+            : lang === "hi"
+              ? "अनुकूल अध्ययन लूप जारी रखने के लिए"
+              : lang === "tl"
+                ? "para magpatuloy sa adaptive study loop"
+                : lang === "zh-Hans"
+                  ? "以继续自适应学习闭环"
+                  : "適応型学習ループを続けるため";
   return `<h2>${lang === "es" ? "Enlaces internos sugeridos" : lang === "fr" ? "Liens internes suggérés" : lang === "pt" ? "Links internos sugeridos" : lang === "ar" ? "روابط داخلية مقترحة" : lang === "hi" ? "सुझाए गए आंतरिक लिंक" : lang === "tl" ? "Mga iminungkahing internal link" : lang === "zh-Hans" ? "建议站内链接" : "推奨内部リンク"}</h2>
 <ul>
 ${items}
-  <li><a href="/app/dashboard">${dashLabel}</a> — ${lang === "en" ? "" : ""}</li>
+  <li><a href="/app/dashboard">${dashLabel}</a> — ${trail}</li>
 </ul>`;
 }
 
-function faqAndSchemaJsonLd(lang: IntlNursingLangKey, topicPhrase: string, slug: string): string {
+function faqAndSchemaJsonLd(lang: IntlNursingLangKey, topicPhrase: string, examFrame: string): string {
   const q1 =
     lang === "es"
       ? "¿Este artículo sustituye políticas locales o tutoría?"
@@ -143,28 +159,20 @@ function faqAndSchemaJsonLd(lang: IntlNursingLangKey, topicPhrase: string, slug:
                   : "この記事は院内手順や臨床指導に代わりますか？";
   const a1 =
     lang === "es"
-      ? "No. Es material educativo de apoyo para §TOPIC§ y para §E§; siga siempre el manual de su centro y la supervisión."
-          .replace("§TOPIC§", topicPhrase)
-          .replace("§E§", "su examen")
+      ? `No. Es material educativo de apoyo para ${topicPhrase} y para ${examFrame}; siga siempre el manual de su centro y la supervisión.`
       : lang === "fr"
-        ? "Non. Il s’agit d’un support éducatif pour §TOPIC§ ; suivez toujours votre institution et la supervision."
-            .replace("§TOPIC§", topicPhrase)
+        ? `Non. Il s’agit d’un support éducatif pour ${topicPhrase} ; suivez toujours votre institution et la supervision.`
         : lang === "pt"
-          ? "Não. É apoio educativo para §TOPIC§; siga sempre o manual da instituição e a supervisão."
-              .replace("§TOPIC§", topicPhrase)
+          ? `Não. É apoio educativo para ${topicPhrase}; siga sempre o manual da instituição e a supervisão.`
           : lang === "ar"
-            ? "لا. هذا دعم تعليمي لـ §TOPIC§؛ التزم دائمًا بسياسات المؤسسة والإشراف."
-                .replace("§TOPIC§", topicPhrase)
+            ? `لا. هذا دعم تعليمي لـ ${topicPhrase}؛ التزم دائمًا بسياسات المؤسسة والإشراف.`
             : lang === "hi"
-              ? "नहीं। यह §TOPIC§ के लिए शैक्षिक सहायक है; संस्थान की नीति और पर्यवेक्षण का पालन करें।"
-                  .replace("§TOPIC§", topicPhrase)
+              ? `नहीं। यह ${topicPhrase} के लिए शैक्षिक सहायक है; संस्थान की नीति और पर्यवेक्षण का पालन करें।`
               : lang === "tl"
-                ? "Hindi. Edukasyong suporta ito para sa §TOPIC§; sundin ang patakaran ng institusyon at superbisyon."
-                    .replace("§TOPIC§", topicPhrase)
+                ? `Hindi. Edukasyong suporta ito para sa ${topicPhrase}; sundin ang patakaran ng institusyon at superbisyon.`
                 : lang === "zh-Hans"
-                  ? "否。本文为 §TOPIC§ 的教育辅助材料；请遵循机构制度与督导。"
-                      .replace("§TOPIC§", topicPhrase)
-                  : "いいえ。§TOPIC§ の学習補助であり、施設手順と指導に従ってください。".replace("§TOPIC§", topicPhrase);
+                  ? `否。本文为 ${topicPhrase} 的教育辅助材料；请遵循机构制度与督导。`
+                  : `いいえ。${topicPhrase} の学習補助であり、施設手順と指導に従ってください。`;
 
   const q2 =
     lang === "es"
@@ -324,7 +332,7 @@ export function buildIntlLongtailBodyHtml(
                   : "プレミアムCTA";
   const cta = `<h2>${ctaTitle}</h2><p>${spec.premiumCta}</p>`;
   const links = internalLinksHtml(spec.key, topicIndex);
-  const faq = faqAndSchemaJsonLd(spec.key, topicPhrase, slug);
+  const faq = faqAndSchemaJsonLd(spec.key, topicPhrase, spec.examFrame);
   const refs = referencesHtml(spec.key);
   return [...parts, links, cta, faq, refs].join("\n");
 }

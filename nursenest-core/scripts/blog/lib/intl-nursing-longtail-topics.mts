@@ -301,5 +301,21 @@ export function asciiSlugStem(i: number): string {
 
 export function topicPhraseFor(lang: IntlNursingLangKey, i: number): string {
   const row = PICK[lang][i % PICK[lang].length];
-  return `${row} · ${lang.toUpperCase()} pedagogy band ${i + 1}`;
+  const band =
+    lang === "es"
+      ? `ficha ${i + 1}`
+      : lang === "fr"
+        ? `fiche ${i + 1}`
+        : lang === "pt"
+          ? `ficha ${i + 1}`
+          : lang === "ar"
+            ? `ملف ${i + 1}`
+            : lang === "hi"
+              ? `अनुक्रम ${i + 1}`
+              : lang === "tl"
+                ? `talangpahina ${i + 1}`
+                : lang === "zh-Hans"
+                  ? `分册 ${i + 1}`
+                  : `分冊 ${i + 1}`;
+  return `${row} — ${band}`;
 }

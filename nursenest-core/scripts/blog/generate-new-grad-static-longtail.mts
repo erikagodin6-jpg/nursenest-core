@@ -18,12 +18,13 @@ function main(): void {
     console.error(`Missing output directory: ${OUT_DIR}`);
     process.exit(1);
   }
+  const force = process.argv.includes("--force");
   const existingFiles = readdirSync(OUT_DIR).filter((f) => f.endsWith(".md"));
   const existingSlugs = new Set(existingFiles.map((f) => f.replace(/\.md$/u, "")));
   const specs = allNewGradLongtailSpecs();
   const collisions = specs.filter((s) => existingSlugs.has(s.slug));
-  if (collisions.length > 0) {
-    console.error("Refusing to overwrite existing long-tail files. Collisions:");
+  if (collisions.length > 0 && !force) {
+    console.error("Refusing to overwrite existing long-tail files. Pass --force to replace batch slugs. Collisions:");
     for (const c of collisions.slice(0, 30)) console.error(`  - ${c.slug}`);
     if (collisions.length > 30) console.error(`  … ${collisions.length - 30} more`);
     process.exit(1);

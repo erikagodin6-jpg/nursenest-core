@@ -6,7 +6,7 @@ category: "Endocrine & self-management"
 tags: ["Diabetes","Foot care","Patient teaching","Chronic disease","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Diabetes foot screening and teaching for PN pract | NurseNest"
+seoTitle: "Diabetes foot screening and teaching for PN | NurseNest"
 seoDescription: "Diabetes foot screening and teaching for PN practice — Patient teaching and health literacy for Canadian PN learners: Canadian PN/RPN scope, REx-PN-style traps, d..."
 canonicalUrl: /blog/rex-pn-rpn-diabetes-foot-screening-rpn-canada-patient-teaching-health-literacy
 authorDisplayName: NurseNest Editorial

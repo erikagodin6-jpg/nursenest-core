@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: "Saudi Prometric Nursing Exam Study Guide: Clinical... | NurseNest"
-seoDescription: "Saudi Prometric Nursing Exam Study Guide — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation."
+seoDescription: "Saudi Prometric Nursing Exam Study Guide: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/saudi-prometric-nursing-exam-study-guide-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

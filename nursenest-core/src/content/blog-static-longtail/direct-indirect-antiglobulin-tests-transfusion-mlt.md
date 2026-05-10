@@ -31,7 +31,7 @@ disclaimer: This article supports exam preparation and educational laboratory re
   <li>daily QC and calibration verification and pre-analytical and analytical error documentation are part of professional practice, not trivia separate from patient care.</li>
   <li>Always align bench and reporting decisions with institutional standard operating procedures for Standard Precautions and institutional exposure control plans.</li>
 </ul>
-<p>Patient communication for Coombs testing supporting hemolytic anemia and transfusion reaction workups includes fasting requirements, timed collections, chain-of-custody constraints, pediatric micro-sampling, and why repeat testing follows hemolyzed EDTA and clotted samples per blood bank manual for DAT versus antibody investigation rejection.</p>
+<p>Patient communication for Coombs testing supporting hemolytic anemia and transfusion reaction workups includes fasting requirements, timed collections, chain-of-custody constraints, pediatric micro-sampling, and why hemolyzed or unsuitable EDTA and clotted samples per blood bank manual for DAT versus antibody investigation may require recollection per policy.</p>
 <p>Chemistry context for DAT positive patterns versus negative results in alloimmune hemolysis teaching uses organ maps, enzyme sources, isoforms, and clearance routes so pattern recognition separates injury patterns from unrelated muscle or hemolysis release.</p>
 <p>Endocrine testing for DAT positive patterns versus negative results in alloimmune hemolysis teaching includes circadian variation, biotin interference with some immunoassays, pregnancy-specific patterns, and central versus peripheral hypothyroidism narratives.</p>
 <h2>Pathophysiology and science background</h2>

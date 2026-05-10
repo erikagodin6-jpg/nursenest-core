@@ -6,7 +6,7 @@ category: "Medication safety"
 tags: ["Medication reconciliation","MAR","Transitions","Patient safety","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Medication reconciliation at transitions of care: | NurseNest"
+seoTitle: "Medication reconciliation at transitions of | NurseNest"
 seoDescription: "Medication reconciliation at transitions of care — Documentation expectations on Canadian PN exams: Canadian PN/RPN scope, REx-PN-style traps, documentation, dele..."
 canonicalUrl: /blog/rex-pn-rpn-medication-reconciliation-mar-canada-documentation-exam-focus
 authorDisplayName: NurseNest Editorial

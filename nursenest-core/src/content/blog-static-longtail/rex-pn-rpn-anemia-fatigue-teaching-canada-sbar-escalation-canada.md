@@ -6,7 +6,7 @@ category: "Hematologic nursing"
 tags: ["Anemia","Fatigue","Patient teaching","Functional status","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Anemia-related fatigue, iron teaching, and functi | NurseNest"
+seoTitle: "Anemia-related fatigue, iron teaching, and | NurseNest"
 seoDescription: "Anemia-related fatigue, iron teaching, and functional assessment — SBAR, escalation, and interprofessional handoff discipline: Canadian PN/RPN scope, REx-PN-style..."
 canonicalUrl: /blog/rex-pn-rpn-anemia-fatigue-teaching-canada-sbar-escalation-canada
 authorDisplayName: NurseNest Editorial

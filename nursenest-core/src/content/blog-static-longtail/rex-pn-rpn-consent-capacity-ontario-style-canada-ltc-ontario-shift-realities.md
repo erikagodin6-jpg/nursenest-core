@@ -6,7 +6,7 @@ category: "Professional practice & ethics"
 tags: ["Consent","Ethics","Capacity","Interprofessional collaboration","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Consent, capacity, and substitute decision-making | NurseNest"
+seoTitle: "Consent, capacity, and substitute | NurseNest"
 seoDescription: "Consent, capacity, and substitute decision-making language — LTC shift realities and resident-centred pacing: Canadian PN/RPN scope, REx-PN-style traps, documenta..."
 canonicalUrl: /blog/rex-pn-rpn-consent-capacity-ontario-style-canada-ltc-ontario-shift-realities
 authorDisplayName: NurseNest Editorial

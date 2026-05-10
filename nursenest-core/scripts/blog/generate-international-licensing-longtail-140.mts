@@ -5,6 +5,7 @@
  * Run from `nursenest-core/`:
  *   npx tsx scripts/blog/generate-international-licensing-longtail-140.mts --dry-run
  *   npx tsx scripts/blog/generate-international-licensing-longtail-140.mts --write
+ *   npx tsx scripts/blog/generate-international-licensing-longtail-140.mts --write --force-overwrite
  *
  * Writes markdown to `src/content/blog-static-longtail/` and a machine-readable
  * JSON summary next to the human report for `reports/international-licensing-longtail-batch-140.md`.
@@ -65,6 +66,7 @@ function supplementalWordsBlock(): string {
 
 function main(): void {
   const write = process.argv.includes("--write");
+  const forceOverwrite = process.argv.includes("--force-overwrite");
   const specs = getInternationalLicensingLongtailSpecs();
   const existing = existsSync(OUT_DIR)
     ? new Set(readdirSync(OUT_DIR).filter((f) => f.endsWith(".md")).map((f) => f.replace(/\.md$/, "")))
@@ -84,8 +86,10 @@ function main(): void {
 
   for (const spec of specs) {
     validateYamlFriendly(spec);
-    if (existing.has(spec.slug)) {
-      throw new Error(`Refusing to overwrite existing long-tail slug file: ${spec.slug}.md`);
+    if (existing.has(spec.slug) && !forceOverwrite) {
+      throw new Error(
+        `Refusing to overwrite existing long-tail slug file: ${spec.slug}.md (pass --force-overwrite to replace)`,
+      );
     }
     let body = renderInternationalLicensingArticle(spec);
     let words = countWordsFromHtml(body);
@@ -114,7 +118,9 @@ function main(): void {
       country: spec.country,
       exam: spec.exam,
       wordCount: words,
-      seoComplete: Boolean(spec.seoTitle?.trim() && spec.seoDescription?.trim() && spec.canonicalUrl),
+      seoComplete: Boolean(
+        spec.seoTitle?.trim() && spec.seoDescription?.trim() && spec.slug?.trim(),
+      ),
       status,
     });
   }

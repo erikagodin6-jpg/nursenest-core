@@ -6,7 +6,7 @@ category: "Medication safety"
 tags: ["Anticoagulation","Bleeding risk","Patient teaching","Labs","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Anticoagulant teaching for warfarin and DOAC scen | NurseNest"
+seoTitle: "Anticoagulant teaching for warfarin and DOAC | NurseNest"
 seoDescription: "Anticoagulant teaching for warfarin and DOAC scenarios — Patient teaching and health literacy for Canadian PN learners: Canadian PN/RPN scope, REx-PN-style traps,..."
 canonicalUrl: /blog/rex-pn-rpn-anticoagulant-teaching-warfarin-doac-canada-patient-teaching-health-literacy
 authorDisplayName: NurseNest Editorial

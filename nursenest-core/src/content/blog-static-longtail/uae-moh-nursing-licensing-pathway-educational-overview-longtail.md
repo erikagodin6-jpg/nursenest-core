@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: "UAE MOH Nursing Licensing Pathway: Educational... | NurseNest"
-seoDescription: "UAE MOH Nursing Licensing Pathway — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation. Educational only;"
+seoDescription: "UAE MOH Nursing Licensing Pathway: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/uae-moh-nursing-licensing-pathway-educational-overview-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

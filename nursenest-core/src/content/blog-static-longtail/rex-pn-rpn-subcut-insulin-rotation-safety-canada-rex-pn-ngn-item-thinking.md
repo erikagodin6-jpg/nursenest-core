@@ -6,7 +6,7 @@ category: "Endocrine & self-management"
 tags: ["Insulin","Hypoglycemia","Medication administration","Older adult","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Subcutaneous insulin administration, rotation, an | NurseNest"
+seoTitle: "Subcutaneous insulin administration, rotation | NurseNest"
 seoDescription: "Subcutaneous insulin administration, rotation, and hypoglycemia safety — REx-PN and NGN-style case thinking: Canadian PN/RPN scope, REx-PN-style traps, documentat..."
 canonicalUrl: /blog/rex-pn-rpn-subcut-insulin-rotation-safety-canada-rex-pn-ngn-item-thinking
 authorDisplayName: NurseNest Editorial

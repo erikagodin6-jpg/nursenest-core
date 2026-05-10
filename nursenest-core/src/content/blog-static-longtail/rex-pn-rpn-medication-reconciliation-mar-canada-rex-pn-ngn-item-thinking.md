@@ -6,7 +6,7 @@ category: "Medication safety"
 tags: ["Medication reconciliation","MAR","Transitions","Patient safety","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Medication reconciliation at transitions of care: | NurseNest"
+seoTitle: "Medication reconciliation at transitions of | NurseNest"
 seoDescription: "Medication reconciliation at transitions of care — REx-PN and NGN-style case thinking: Canadian PN/RPN scope, REx-PN-style traps, documentation, delegation, and e..."
 canonicalUrl: /blog/rex-pn-rpn-medication-reconciliation-mar-canada-rex-pn-ngn-item-thinking
 authorDisplayName: NurseNest Editorial

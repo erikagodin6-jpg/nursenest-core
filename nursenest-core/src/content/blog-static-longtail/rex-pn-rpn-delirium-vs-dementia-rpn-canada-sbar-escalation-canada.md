@@ -6,7 +6,7 @@ category: "Gerontology & cognition"
 tags: ["Delirium","Dementia","Cognitive assessment","Safety","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Delirium versus dementia cues for practical nurse | NurseNest"
+seoTitle: "Delirium versus dementia cues for practical | NurseNest"
 seoDescription: "Delirium versus dementia cues for practical nurses — SBAR, escalation, and interprofessional handoff discipline: Canadian PN/RPN scope, REx-PN-style traps, docume..."
 canonicalUrl: /blog/rex-pn-rpn-delirium-vs-dementia-rpn-canada-sbar-escalation-canada
 authorDisplayName: NurseNest Editorial

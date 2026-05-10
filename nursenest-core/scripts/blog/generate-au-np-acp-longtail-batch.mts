@@ -1091,8 +1091,8 @@ function buildBody(stem: Stem, lensLabel: string): string {
 
 <h2>APA-7 References</h2>
 <p>Australian Health Practitioner Regulation Agency. (2025). Nursing and midwifery. https://www.ahpra.gov.au/</p>
-<p>Nursing and Midwifery Board of Australia. (2024). Nurse practitioner standards for practice. https://www.nursingmidwiferyboard.gov.au/</p>
-<p>Nursing and Midwifery Board of Australia. (2024). Registered nurse standards for practice. https://www.nursingmidwiferyboard.gov.au/</p>
+<p>Nursing and Midwifery Board of Australia. (2024). Nurse practitioner standards for practice. https://www.nursingmidwiferyboard.gov.au/Codes-Guidelines-Statements/Professional-standards/nurse-practitioner-standards-for-practice.aspx</p>
+<p>Nursing and Midwifery Board of Australia. (2024). Registered nurse standards for practice. https://www.nursingmidwiferyboard.gov.au/Codes-Guidelines-Statements/Professional-standards/registered-nurse-standards-for-practice.aspx</p>
 <p>Australian Commission on Safety and Quality in Health Care. (2024). National Safety and Quality Health Service Standards. https://www.safetyandquality.gov.au/</p>
 <p>Australian Commission on Safety and Quality in Health Care. (2023). Medication safety standard (NSQHS Medication Safety). https://www.safetyandquality.gov.au/standards/nsqhs-standards</p>
 <p>Royal Australian College of General Practitioners. (2022). RACGP educational resources (secondary reference for primary care orientation). https://www.racgp.org.au/</p>

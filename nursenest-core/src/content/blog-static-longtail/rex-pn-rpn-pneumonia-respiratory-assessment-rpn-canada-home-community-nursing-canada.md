@@ -6,7 +6,7 @@ category: "Respiratory nursing"
 tags: ["Pneumonia","Respiratory assessment","Vaccination teaching","Isolation","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Pneumonia assessment, oxygen titration themes, an | NurseNest"
+seoTitle: "Pneumonia assessment, oxygen titration themes | NurseNest"
 seoDescription: "Pneumonia assessment, oxygen titration themes, and vaccination teaching — Home and community care realities for RPN practice: Canadian PN/RPN scope, REx-PN-style..."
 canonicalUrl: /blog/rex-pn-rpn-pneumonia-respiratory-assessment-rpn-canada-home-community-nursing-canada
 authorDisplayName: NurseNest Editorial

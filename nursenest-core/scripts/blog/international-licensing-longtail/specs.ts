@@ -163,6 +163,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "NNAS for Canadian IEN registration: what to expect",
       "Learn how NNAS document evaluation supports provincial nursing colleges and how to parallel NCLEX-RN preparation without losing months to administrative gaps.",
       "NNAS is a shared service many Canadian regulators use to structure international academic and registration documents into an comparable report. It is not an exam; it is an administrative gateway that affects when your provincial college can finalize gap analysis and next steps such as refresher education or NCLEX eligibility communication.",
+      "NNAS credential evaluation plus provincial RN registration (NCLEX-RN may apply)",
     ),
   );
   specs.push(
@@ -187,6 +188,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "REx-PN and Canadian practical nurse registration overview",
       "Educational orientation for Canadian PN candidates comparing REx-PN preparation with provincial college requirements and clinical judgment expectations.",
       "Practical nursing regulation remains provincial. Some jurisdictions use the REx-PN while others may use alternate assessments depending on timing and policy. Always read your college’s practical nurse pages alongside NCSBN materials for REx-PN so you are not mixing RN and PN item styles accidentally.",
+      "REx-PN (Canadian practical nurse registration examination where authorized)",
     ),
   );
   specs.push(
@@ -199,6 +201,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "CPNRE context for Canadian PN licensure preparation",
       "Understand CPNRE versus evolving PN exam options in Canada and how to study safely without relying on obsolete exam labels.",
       "The CPNRE brand remains recognizable in study communities, but exam migration toward REx-PN means you must confirm your regulator’s current authorized examination. Educational strategy still centers on safe PN scope, chronic disease, gerontology, mental health, and community care priorities.",
+      "CPNRE / PN pathways (historical and jurisdictional — confirm current exam with your college)",
     ),
   );
   specs.push(
@@ -211,6 +214,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "NCAS supplemental assessment: study implications for IENs",
       "Learn how NCAS-style assessments can shape bridging priorities while you continue NCLEX-RN preparation and communication practice.",
       "NCAS offers standardized assessment options that some regulatory pathways reference when determining whether additional education or practice is needed. Results should guide focused remediation in communication, clinical skills, or professional accountability domains rather than random topic surfing.",
+      "NCAS supplemental assessments (not a national licensing exam)",
     ),
   );
   specs.push(
@@ -223,6 +227,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "CARE Centre practice readiness themes for BC IENs",
       "Educational overview of practice readiness supports sometimes used by IENs in British Columbia alongside regulator requirements.",
       "Non-regulatory practice readiness organizations can help with communication, resume conventions, and simulation practice. They do not replace BCCNM decisions; treat them as coaching layers while your official pathway remains defined by the college and any authorized assessment providers.",
+      "Practice readiness coaching (parallel to provincial registration requirements)",
     ),
   );
   specs.push(
@@ -235,6 +240,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "CELBAN overview for Canadian nursing registration preparation",
       "Plan CELBAN preparation alongside NCLEX-RN study when your regulator lists CELBAN as an acceptable English evidence option.",
       "CELBAN uses scenarios closer to nursing communication than general academic tests, which can make it attractive for IENs. Still verify score thresholds on your regulator list and schedule early because seating can be limited in some regions.",
+      "CELBAN English proficiency (where accepted by regulators)",
     ),
   );
   specs.push(
@@ -247,6 +253,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "Canadian IEN bridging and refresher programmes: exam linkage",
       "Understand how bridging assignments connect to NCLEX-RN clinical judgment expectations and provincial scope education.",
       "Bridging programmes are not merely paperwork delays; they are structured competence recovery when gap analysis shows differences between your training and Canadian entry-to-practice competencies. Engage actively because bridging assignments often preview the same safety themes NCLEX rewards.",
+      "Provincial IEN bridging and competency refreshers",
     ),
   );
   specs.push(
@@ -259,6 +266,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "Canadian nurse practitioner registration: educational context for IENs",
       "High-level orientation to Canadian NP registration complexity for IENs who may hold advanced practice abroad.",
       "Canada’s nurse practitioner designation is regulated provincially with additional graduate education and examination expectations that differ from RN NCLEX-RN. If you were an advanced practitioner overseas, still assume you must meet Canadian graduate credentials unless a regulator publishes a rare equivalency pathway.",
+      "Canadian nurse practitioner registration (distinct from RN NCLEX-RN)",
     ),
   );
   specs.push(
@@ -271,6 +279,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "Canadian PN versus RN scope: licensing exam preparation lens",
       "Clarify Canadian PN and RN scope differences to avoid dangerous delegation errors on exams and in future practice.",
       "Canadian practice distinguishes clearly between practical nursing and registered nursing scopes. Exam items may test which tasks can be delegated, what requires an RN assessment first, and how to supervise assistive personnel safely.",
+      "PN versus RN scope (educational comparison for exam judgment)",
     ),
   );
   specs.push(
@@ -283,6 +292,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "US Nurse Licensure Compact versus Canadian provincial registration",
       "Educational comparison for nurses considering mobility across the Canada–US border without confusing compact rules with Canadian colleges.",
       "The NLC allows multistate practice for eligible US licenses under specific conditions. Canada does not use the NLC; each province remains sovereign for RN registration. If you pursue both countries, maintain two checklists and two primary regulator portals.",
+      "US NLC versus Canadian provincial RN registration (crosswalk)",
     ),
   );
   specs.push(

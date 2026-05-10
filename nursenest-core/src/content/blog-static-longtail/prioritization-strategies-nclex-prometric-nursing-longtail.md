@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: "Prioritization Questions: NCLEX-Style vs... | NurseNest"
-seoDescription: "Prioritization Questions — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation. Educational only;"
+seoDescription: "Prioritization Questions: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/prioritization-strategies-nclex-prometric-nursing-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

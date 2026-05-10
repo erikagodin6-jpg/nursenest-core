@@ -6,7 +6,7 @@ category: "Laboratory interpretation"
 tags: ["CBC","Labs","Infection risk","Bleeding risk","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "CBC basics practical nurses use for escalation an | NurseNest"
+seoTitle: "CBC basics practical nurses use for escalation | NurseNest"
 seoDescription: "CBC basics practical nurses use for escalation and teaching — REx-PN and NGN-style case thinking: Canadian PN/RPN scope, REx-PN-style traps, documentation, delega..."
 canonicalUrl: /blog/rex-pn-rpn-cbc-basics-rpn-canada-rex-pn-ngn-item-thinking
 authorDisplayName: NurseNest Editorial

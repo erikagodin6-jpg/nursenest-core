@@ -211,6 +211,9 @@ function bodyHtml(topic: UkAcpTopic, index: number): string {
 <p>Safety netting means telling patients and carers which changes should trigger urgent review, how to access urgent care in your local system, and what to monitor at home without creating alarm fatigue. For exam preparation, practise phrasing that is specific, actionable, and culturally respectful—avoid vague “seek help if worse” statements. For internationally educated nurses, also rehearse UK vocabulary patients recognise, such as NHS 111 where appropriate to your scenario training, GP out-of-hours services, and emergency department use, while remembering that real advice must follow local pathways and clinical judgment.</p>
 <p>Discharge communication tests whether you can align medicines reconciliation, follow-up timing, red flag education, and interagency letters so the next provider understands risk. In ACP-style assessments, you may be scored on completeness, clarity, and accountability rather than on ornate prose. If a stem includes frailty, anticoagulation, infection risk, or recent AKI, expect the marker to reward explicit follow-up plans and monitoring hooks.</p>
 
+<h2>Professionalism, governance, and reflective practice</h2>
+<p>UK professional practice expects honesty, candour culture compatible with organisational processes, and reflective learning when things go well or poorly. For exam narratives, prefer answers that show supervision-seeking, incident reporting where appropriate, respectful escalation, and accountability rather than blame shifting. Governance includes information governance, safeguarding escalation routes, and fitness-to-practise–adjacent themes such as maintaining competence and refusing work outside scope. Reflective writing should connect observed behaviour to theory and to a specific future commitment, rather than ending on generic self-praise.</p>
+
 <h2>Suggested internal links</h2>
 <ul>
 ${links}

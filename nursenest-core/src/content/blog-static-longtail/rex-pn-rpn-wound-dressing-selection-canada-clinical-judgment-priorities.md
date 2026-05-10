@@ -6,7 +6,7 @@ category: "Wound & skin integrity"
 tags: ["Wound care","Dressings","Infection signs","Documentation","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Wound dressings, exudate, and infection surveilla | NurseNest"
+seoTitle: "Wound dressings, exudate, and infection | NurseNest"
 seoDescription: "Wound dressings, exudate, and infection surveillance — Clinical judgment and prioritization drills: Canadian PN/RPN scope, REx-PN-style traps, documentation, dele..."
 canonicalUrl: /blog/rex-pn-rpn-wound-dressing-selection-canada-clinical-judgment-priorities
 authorDisplayName: NurseNest Editorial

@@ -6,7 +6,7 @@ category: "Neurological nursing"
 tags: ["Stroke","Neurological assessment","Escalation","Time-critical care","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Stroke recognition, FAST teaching, and time-sensi | NurseNest"
+seoTitle: "Stroke recognition, FAST teaching, and | NurseNest"
 seoDescription: "Stroke recognition, FAST teaching, and time-sensitive communication — IPAC routine practices and outbreak language: Canadian PN/RPN scope, REx-PN-style traps, doc..."
 canonicalUrl: /blog/rex-pn-rpn-stroke-assessment-canadian-context-ipac-routine-practices-canada
 authorDisplayName: NurseNest Editorial

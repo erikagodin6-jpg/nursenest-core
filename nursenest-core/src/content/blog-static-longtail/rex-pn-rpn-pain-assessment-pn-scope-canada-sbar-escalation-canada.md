@@ -6,7 +6,7 @@ category: "Comfort & symptom management"
 tags: ["Pain assessment","Comfort measures","Scope of practice","Older adult","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Pain assessment tools and practical nursing scope | NurseNest"
+seoTitle: "Pain assessment tools and practical nursing | NurseNest"
 seoDescription: "Pain assessment tools and practical nursing scope in Canada — SBAR, escalation, and interprofessional handoff discipline: Canadian PN/RPN scope, REx-PN-style trap..."
 canonicalUrl: /blog/rex-pn-rpn-pain-assessment-pn-scope-canada-sbar-escalation-canada
 authorDisplayName: NurseNest Editorial

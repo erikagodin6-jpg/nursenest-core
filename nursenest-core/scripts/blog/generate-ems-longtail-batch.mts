@@ -98,16 +98,16 @@ const POOL: Record<string, string[]> = {
   ],
 };
 
-const INTERNAL = [
-  "/blog/sepsis-pathophysiology-early-nursing-recognition",
-  "/blog/stroke-ischemic-vs-hemorrhagic-nursing-care",
-  "/blog/pulmonary-embolism-signs-symptoms-nursing-priorities",
-  "/blog/respiratory-acidosis-vs-respiratory-alkalosis",
-  "/blog/metabolic-acidosis-vs-metabolic-alkalosis",
-  "/blog/dka-vs-hhs-nursing-priorities",
-  "/blog/hyperkalemia-ecg-changes-nursing-students",
-  "/blog/hypokalemia-pathophysiology-nursing-priorities",
-  "/app/dashboard",
+const INTERNAL: { href: string; label: string }[] = [
+  { href: "/blog/sepsis-pathophysiology-early-nursing-recognition", label: "Sepsis pathophysiology and early nursing recognition" },
+  { href: "/blog/stroke-ischemic-vs-hemorrhagic-nursing-care", label: "Stroke: ischemic vs hemorrhagic nursing care" },
+  { href: "/blog/pulmonary-embolism-signs-symptoms-nursing-priorities", label: "Pulmonary embolism signs, symptoms, and nursing priorities" },
+  { href: "/blog/respiratory-acidosis-vs-respiratory-alkalosis", label: "Respiratory acidosis vs respiratory alkalosis" },
+  { href: "/blog/metabolic-acidosis-vs-metabolic-alkalosis", label: "Metabolic acidosis vs metabolic alkalosis" },
+  { href: "/blog/dka-vs-hhs-nursing-priorities", label: "DKA vs HHS nursing priorities" },
+  { href: "/blog/hyperkalemia-ecg-changes-nursing-students", label: "Hyperkalemia ECG changes for nursing students" },
+  { href: "/blog/hypokalemia-pathophysiology-nursing-priorities", label: "Hypokalemia pathophysiology and nursing priorities" },
+  { href: "/app/dashboard", label: "Learner dashboard — continue adaptive practice after reading" },
 ];
 
 function pick(pool: string[], key: string): string {
@@ -255,10 +255,7 @@ function buildBody(t: Topic): string {
   const links =
     h2("Suggested Internal Links") +
     ul(
-      INTERNAL.map((href) => {
-        const label = href.includes("/app/")
-          ? "Learner dashboard — continue adaptive practice after reading"
-          : href.replace("/blog/", "").replace(/-/g, " ") + " (related clinical reasoning)";
+      INTERNAL.map(({ href, label }) => {
         return '<a href="' + href + '">' + label + "</a>";
       }),
     );

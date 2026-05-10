@@ -6,7 +6,7 @@ category: "Nutrition & chronic disease"
 tags: ["Heart failure","Nutrition teaching","Sodium","Health literacy","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Sodium restriction teaching and hidden salt couns | NurseNest"
+seoTitle: "Sodium restriction teaching and hidden salt | NurseNest"
 seoDescription: "Sodium restriction teaching and hidden salt counselling — Medication safety, MAR checks, and high-alert vigilance: Canadian PN/RPN scope, REx-PN-style traps, docu..."
 canonicalUrl: /blog/rex-pn-rpn-sodium-restriction-heart-failure-teaching-canada-medication-safety-mar-canada
 authorDisplayName: NurseNest Editorial

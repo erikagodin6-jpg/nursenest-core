@@ -16,7 +16,7 @@ const APA_PRC =
   "Professional Regulation Commission (Philippines). (2026). Nursing licensure examination information. https://www.prc.gov.ph/";
 const APA_INC =
   "Indian Nursing Council. (2026). Information for nurses. https://www.indiannursingcouncil.org/";
-const APA CGFNS =
+const APA_CGFNS =
   "CGFNS International. (2026). Credentials evaluation services. https://www.cgfns.org/";
 const APA_ECFMG =
   "ECFMG | CGFNS Alliance. (2026). VisaScreen: Visa credentials assessment. https://www.cgfns.org/services/visascreen/";
@@ -50,12 +50,13 @@ export function buildCanadaNclexProvincial(
   seoTitle: string,
   seoDescription: string,
   extraOverview: string,
+  examOverride?: string,
 ): InternationalLicensingTopicSpec {
   return {
     slug,
     title,
     country: "Canada",
-    exam: "NCLEX-RN (within provincial RN registration)",
+    exam: examOverride ?? "NCLEX-RN (within provincial RN registration)",
     excerpt,
     seoTitle,
     seoDescription,
@@ -120,7 +121,7 @@ export function buildUsNclexTopic(
       ["What is NGN in simple terms?", "It is an exam evolution that emphasizes clinical judgment measurement with richer item types and case contexts."],
       ["Can I study only US textbooks?", "Use board test plans and reputable prep, but keep practicing priority reasoning, not memorization alone."],
     ],
-    references: [APA_NCSBN, APA CGFNS],
+    references: [APA_NCSBN, APA_CGFNS],
   };
 }
 
@@ -280,7 +281,7 @@ export function buildPhilippinesPnleTopic(
       ["Where are official announcements posted?", "Rely on PRC memoranda rather than unverified social reposts."],
       ["Do I still need CGFNS or similar services?", "Depends on destination; US-bound routes frequently use CGFNS services for verification."],
     ],
-    references: [APA_PRC, APA CGFNS],
+    references: [APA_PRC, APA_CGFNS],
   };
 }
 
@@ -320,7 +321,7 @@ export function buildIndiaIncOverseasTopic(
       ["Which exam should Indian nurses take?", "It depends on your destination country’s regulator; there is no universal single exam."],
       ["How do I avoid document fraud pitfalls?", "Use official channels for attestations and never alter academic records."],
     ],
-    references: [APA_INC, APA CGFNS],
+    references: [APA_INC, APA_CGFNS],
   };
 }
 
@@ -366,7 +367,7 @@ export function buildMiddleEastAuthorityTopic(
     ],
     references: [
       `${regulatorLabel}. (2026). Official licensing information portal. ${authorityUrl}`,
-      APA CGFNS,
+      APA_CGFNS,
     ],
   };
 }
@@ -409,6 +410,6 @@ export function buildGlobalCrossCuttingTopic(
       ["Which English test should I take?", "Choose the test and score band accepted by your regulator list, not the easiest rumor."],
       ["How do I pick a destination?", "Weight family, immigration feasibility, employer demand, and licensure pathway length together."],
     ],
-    references: refs.length ? refs : [APA_NCSBN, APA CGFNS],
+    references: refs.length ? refs : [APA_NCSBN, APA_CGFNS],
   };
 }

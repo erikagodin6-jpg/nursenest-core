@@ -6,7 +6,7 @@ category: "Wound & skin integrity"
 tags: ["Pressure injury","Wound staging","Skin assessment","LTC nursing","IPAC","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Pressure injuries and staging essentials: Acute m | NurseNest"
+seoTitle: "Pressure injuries and staging essentials: Acute | NurseNest"
 seoDescription: "Pressure injuries and staging essentials — Acute med-surg priorities for practical nurses: Canadian PN/RPN scope, REx-PN-style traps, documentation, delegation, a..."
 canonicalUrl: /blog/rex-pn-rpn-pressure-injury-staging-canada-acute-med-surg-canada
 authorDisplayName: NurseNest Editorial

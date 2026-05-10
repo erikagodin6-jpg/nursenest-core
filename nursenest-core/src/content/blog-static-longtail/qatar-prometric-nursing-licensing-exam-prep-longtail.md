@@ -7,7 +7,7 @@ tags: Middle East, Gulf nursing, Exam preparation, International nurses, Patient
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
 seoTitle: "Qatar Prometric Nursing Exam Prep: Structure, Study... | NurseNest"
-seoDescription: "Qatar Prometric Nursing Exam Prep — Gulf licensing-style exam prep: clinical judgment, meds, IPC, documentation, escalation. Educational only;"
+seoDescription: "Qatar Prometric Nursing Exam Prep: licensing prep (judgment, meds, IPC, charting, escalation). Educational only; verify with official authorities."
 canonicalUrl: /blog/qatar-prometric-nursing-licensing-exam-prep-longtail
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)

@@ -6,7 +6,7 @@ category: "Professional practice & ethics"
 tags: ["Cultural safety","Anti-racism","Health equity","Communication","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Indigenous cultural safety as exam-prep considera | NurseNest"
+seoTitle: "Indigenous cultural safety as exam-prep | NurseNest"
 seoDescription: "Indigenous cultural safety as exam-prep considerations for Canadian PN learners — Clinical judgment and prioritization drills: Canadian PN/RPN scope, REx-PN-style..."
 canonicalUrl: /blog/rex-pn-rpn-indigenous-cultural-safety-exam-prep-canada-clinical-judgment-priorities
 authorDisplayName: NurseNest Editorial

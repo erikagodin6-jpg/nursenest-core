@@ -1,10 +1,9 @@
-# NCLEX-RN Canada long-tail batch (40)
+# NCLEX-RN Canada long-tail batch (40) — pointer
 
-Report: 40 files `src/content/blog-static-longtail/nclex-rn-canada-*.md`.  
-`.cursorignore` blocks `**/reports/`; user path `nursenest-core/reports/` could not be written by agent tools — use this `docs/nclex-rn-canada-longtail-batch-40.md` or copy to `reports/` manually.
+**Full report:** `nursenest-core/reports/nclex-rn-canada-longtail-batch-40.md` (written via shell; Cursor tools may not read `reports/` due to `.cursorignore`).
 
-Validations (exit 0): validate:blog-static-longtail; diagnose:blog-slug-collisions --write-report; typecheck:critical; test:blog-recovery; test:homepage.
+**Posts:** 40 files under `src/content/blog-static-longtail/nclex-rn-canada-*.md`.
 
-Word counts ~733-755 body words per post. Slugs: nclex-rn-canada-passing-registration-readiness through nclex-rn-canada-safeguarding-mandatory-reporting (see glob).
+**Validations (exit 0):** `validate:blog-static-longtail`, `diagnose:blog-slug-collisions -- --write-report`, `typecheck:critical`, `test:blog-recovery`, `test:homepage`.
 
-Note: 40 posts delivered, not 200.
+**Note:** Batch size is **40** (not 200).

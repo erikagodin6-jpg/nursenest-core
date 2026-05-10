@@ -6,7 +6,7 @@ category: "Cardiovascular nursing"
 tags: ["Heart failure","Fluid balance","Patient teaching","Vital trends","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Heart failure monitoring, daily weights, and flui | NurseNest"
+seoTitle: "Heart failure monitoring, daily weights, and | NurseNest"
 seoDescription: "Heart failure monitoring, daily weights, and fluid teaching — Patient teaching and health literacy for Canadian PN learners: Canadian PN/RPN scope, REx-PN-style t..."
 canonicalUrl: /blog/rex-pn-rpn-heart-failure-daily-weights-canada-patient-teaching-health-literacy
 authorDisplayName: NurseNest Editorial

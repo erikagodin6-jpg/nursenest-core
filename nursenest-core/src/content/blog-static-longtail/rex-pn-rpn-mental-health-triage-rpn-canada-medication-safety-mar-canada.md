@@ -6,7 +6,7 @@ category: "Mental health nursing"
 tags: ["Mental health","Therapeutic communication","Safety","Triage","REx-PN","RPN Canada","PN Canada","Practical nursing","Canadian nursing","Exam preparation"]
 publishedAt: 2026-05-09
 updatedAt: 2026-05-09
-seoTitle: "Mental health triage language and therapeutic com | NurseNest"
+seoTitle: "Mental health triage language and therapeutic | NurseNest"
 seoDescription: "Mental health triage language and therapeutic communication — Medication safety, MAR checks, and high-alert vigilance: Canadian PN/RPN scope, REx-PN-style traps,..."
 canonicalUrl: /blog/rex-pn-rpn-mental-health-triage-rpn-canada-medication-safety-mar-canada
 authorDisplayName: NurseNest Editorial

@@ -16,20 +16,9 @@ updatedAt: 2026-05-09
 
 <h2>Introduction</h2>
 <p><strong>Audience and intent.</strong> This guide is written for new graduate nurses and transition-to-practice learners who are consolidating sleep and boundary planning skills in intensive care environments. It supports NCLEX-RN and REx-PN style clinical judgment and residency habits; it does not replace your educator, preceptor, or institutional policy.</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>On intensive care units, sleep and boundary planning shows up as a pacing problem in vitals, intake and output, medication timing, and how quickly you notice when a plan is not working. (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Introduction focus.)</p>
+<p>Your first months on intensive care reward a disciplined loop: collect objective data, narrate change clearly, and align sleep and boundary planning work with orders rather than improvising care.</p>
+<p>This article names concrete behaviors for “Sleep and boundary planning for New Graduate Nurses in intensive care: Transition-to-Practice Long-Tail Review” so you can rehearse them before high-stakes moments. It is written for NCLEX-RN and REx-PN learners and new graduates; it is not a substitute for supervision agreements or facility policy.</p>
+<p>When sleep and boundary planning intersects complex families, pair empathy with boundaries: repeat the plan, confirm understanding, and document who agreed to what.</p>
 <h2>Key Takeaways</h2><ul>
 <li>Treat sleep and boundary planning as a safety behavior, not a personality trait, especially on intensive care assignments.</li>
 <li>Keep assessment, intervention, teaching, and escalation threads visible in your narrative report and charting.</li>
@@ -37,156 +26,49 @@ updatedAt: 2026-05-09
 <li>Protect wellness boundaries while you build speed; fatigue increases omission errors during sleep and boundary planning tasks.</li>
 <li>Ask for help early when data conflict with the expected trajectory; silence is a common root cause of preventable harm.</li>
 </ul>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — KeyTakeaways focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — KeyTakeaways focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — KeyTakeaways focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — KeyTakeaways focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — KeyTakeaways focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — KeyTakeaways focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — KeyTakeaways focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — KeyTakeaways focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — KeyTakeaways focus.)</p>
+<p>Carry one sticky-note habit: after each sleep and boundary planning task, ask whether the patient’s trajectory still matches the morning plan on intensive care.</p>
+<p>Second, rehearse one sentence you would say to a provider if vitals drifted while you were focused on sleep and boundary planning responsibilities.</p>
 <h2>Why this matters for new grads</h2>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — WhyGrads focus.)</p>
+<p>Employers measure new graduates on reliability: you show up prepared, you verify instead of assuming, and you escalate sleep and boundary planning concerns with measurable detail on intensive care.</p>
+<p>Patients experience your competence through continuity: if sleep and boundary planning teaching contradicts what the last nurse said, trust erodes faster than any single clinical error.</p>
 <h2>Clinical reasoning considerations</h2>
 <p><strong>Mechanism-linked thinking.</strong> Even when the shift theme is sleep and boundary planning, connect symptoms to plausible physiology: oxygen delivery, volume status, neurologic perfusion, infection burden, and medication effects. That habit mirrors pathophysiology teaching and keeps you from chasing chart tasks while missing patient trajectory.</p>
-<p>Documentation should show trajectory: baseline, change, intervention, response, and notification for sleep and boundary planning events on intensive care. (Sleep and boundary planning for New Graduate Nurses in i — ClinicalReasoning focus.)</p>
-<p>Hemodynamic patterns on intensive care reward understanding preload, afterload, and contractility when sleep and boundary planning touches cardiac patients. (Sleep and boundary planning for New Graduate Nurses in i — ClinicalReasoning focus.)</p>
-<p>Pathophysiology literacy still matters when the shift feels organizational: subtle perfusion or oxygenation shifts can reorder your task list faster than a new admission. (Sleep and boundary planning for New Graduate Nurses in i — ClinicalReasoning focus.)</p>
-<p>Delegation requires ongoing evaluation: reassess UAP observations, clarify expectations, and retain accountability for the overall sleep and boundary planning plan. (Sleep and boundary planning for New Graduate Nurses in i — ClinicalReasoning focus.)</p>
-<p>End-of-shift handoffs fail when sleep and boundary planning details are vague; include pending tasks, unstable cues, and family concerns for intensive care. (Sleep and boundary planning for New Graduate Nurses in i — ClinicalReasoning focus.)</p>
-<p>Reflective practice after shifts converts sleep and boundary planning stress into learning if you name one success, one risk caught, and one improvement for intensive care. (Sleep and boundary planning for New Graduate Nurses in i — ClinicalReasoning focus.)</p>
-<p>Preceptor feedback sticks when you bring specific patients, timestamps, and one question about sleep and boundary planning judgment rather than vague anxiety. (Sleep and boundary planning for New Graduate Nurses in i — ClinicalReasoning focus.)</p>
+<p>Mechanistic curiosity protects you from “task completion” thinking. Ask what supply-and-demand mismatch could explain symptoms while you implement sleep and boundary planning workflows on intensive care.</p>
+<p>Link subjective complaints to objective anchors: orthopnea plus bilateral crackles suggests a different urgency than pleuritic pain with unilateral decreased sounds, even when both appear during sleep and boundary planning shifts.</p>
+<p>Medication mechanisms matter for safety timing: know which therapies blunt compensatory responses and which ones narrow the margin for error while you execute sleep and boundary planning tasks.</p>
 <h2>Prioritization frameworks</h2>
 <p><strong>Assessment and intervention sequencing.</strong> Use airway, breathing, circulation, then time-sensitive complications, then comfort and education when stability is verified. Compare Maslow only after immediate survival risks are ruled out for intensive care patients.</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>On intensive care units, sleep and boundary planning shows up as a pacing problem in vitals, intake and output, medication timing, and how quickly you notice when a plan is not working. (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Prioritization focus.)</p>
+<p>Use a forced rank: airway patency, adequate ventilation, perfusion and bleeding control, reversible neurologic threats, then time-bound therapies, then sleep and boundary planning routines on intensive care.</p>
+<p>When two patients both “need you,” compare deterioration slopes, not politeness. The patient whose trajectory leaves the fewest safe minutes should receive your next eyes-on assessment.</p>
 <h2>Common mistakes and safety risks</h2>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Mistakes focus.)</p>
+<p>A common early error is charting reassurance without assessment: “patient resting comfortably” while work of breathing is worsening during sleep and boundary planning care on intensive care.</p>
+<p>Another failure mode is silent fixes: adjusting a pump without confirming the order, the concentration, and the line—especially when sleep and boundary planning overlaps high-alert medications.</p>
 <h2>Communication pearls</h2>
-<p>On intensive care units, sleep and boundary planning shows up as a pacing problem in vitals, intake and output, medication timing, and how quickly you notice when a plan is not working. (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Communication focus.)</p>
+<p>SBAR is not a script to sound polished; it is a compression algorithm that reduces harm during sleep and boundary planning handoffs on intensive care. Lead with instability, then context, then question.</p>
+<p>With families, separate certainty from process: name what is known, what is being watched, when the team will reassess, and what symptoms should trigger an immediate call during sleep and boundary planning care.</p>
 <h2>Documentation tips</h2>
 <p><strong>Defensible notes.</strong> Patient education entries should include teach-back, language access, barriers, and measurable outcomes. For sleep and boundary planning events, capture who was notified, what orders were clarified, and how the patient responded.</p>
-<p>Family communication improves when you lead with what is known, what is being done, and when you will update again about sleep and boundary planning care on intensive care. (Sleep and boundary planning for New Graduate Nurses in i — Documentation focus.)</p>
-<p>Pediatric dosing checks belong in sleep and boundary planning passes because small errors have large consequences on intensive care. (Sleep and boundary planning for New Graduate Nurses in i — Documentation focus.)</p>
-<p>Include device safety, mobility plans, adherence barriers, and interpreter access when language changes comprehension for sleep and boundary planning teaching moments. (Sleep and boundary planning for New Graduate Nurses in i — Documentation focus.)</p>
-<p>Orientation goals for sleep and boundary planning should be observable: I will verify X before Y on intensive care for two weeks, then raise the standard with preceptor agreement. (Sleep and boundary planning for New Graduate Nurses in i — Documentation focus.)</p>
-<p>Respiratory patients on intensive care need work-of-breathing language in your report when sleep and boundary planning touches oxygenation plans. (Sleep and boundary planning for New Graduate Nurses in i — Documentation focus.)</p>
-<p>Pair assessment cues with mechanism language in your notes because exams test why a symptom implies an action, not only what a textbook list contains. (Sleep and boundary planning for New Graduate Nurses in i — Documentation focus.)</p>
+<p>Write so a tired colleague can defend your judgment: quote symptoms, cite numeric trends, name notifications, and describe responses for sleep and boundary planning events on intensive care.</p>
+<p>Avoid diagnostic overreach in the nursing narrative; describe findings and link them to orders, protocols, and consultations relevant to sleep and boundary planning.</p>
 <h2>Escalation/red flag situations</h2>
 <p><strong>Urgent escalation.</strong> Red flags include sudden confusion, airway compromise, shock, uncontrolled pain with objective instability, suspected stroke onset, seizure activity, and massive bleeding. Use rapid response or provider escalation pathways appropriate to intensive care.</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Escalation focus.)</p>
+<p>Treat sudden confusion, stridor, refractory hypoxia, MAP collapse, suspected stroke onset, or uncontrolled hemorrhage as automatic triggers for rapid escalation pathways on intensive care, even if sleep and boundary planning tasks are unfinished.</p>
+<p>If you are unsure whether it is “urgent enough,” escalate with data: you are requesting partnership, not admitting incompetence, especially when sleep and boundary planning risk is nonlinear.</p>
 <h2>Shift organization and workflow tips</h2>
-<p>Reflective practice after shifts converts sleep and boundary planning stress into learning if you name one success, one risk caught, and one improvement for intensive care. (Sleep and boundary planning for New Graduate Nurses in i — ShiftOrg focus.)</p>
-<p>Preceptor feedback sticks when you bring specific patients, timestamps, and one question about sleep and boundary planning judgment rather than vague anxiety. (Sleep and boundary planning for New Graduate Nurses in i — ShiftOrg focus.)</p>
-<p>IV stewardship and line maintenance belong inside sleep and boundary planning because central and peripheral lines change infection and hemodynamic risk on intensive care. (Sleep and boundary planning for New Graduate Nurses in i — ShiftOrg focus.)</p>
-<p>Telemetry literacy supports sleep and boundary planning when intensive care includes arrhythmia risk and medication effects on conduction. (Sleep and boundary planning for New Graduate Nurses in i — ShiftOrg focus.)</p>
-<p>Safety risks cluster around high-alert medications, lines and drains, falls, infection prevention, and handoff gaps when sleep and boundary planning competes with admissions on intensive care. (Sleep and boundary planning for New Graduate Nurses in i — ShiftOrg focus.)</p>
-<p>Cultural humility changes how you ask assessment questions during sleep and boundary planning; slow down, listen, and verify understanding on intensive care. (Sleep and boundary planning for New Graduate Nurses in i — ShiftOrg focus.)</p>
+<p>Cluster compatible work: draw labs once, bundle room entries, and align med passes with assessments so sleep and boundary planning does not fragment your attention on intensive care.</p>
+<p>Protect a ten-minute mid-shift scan: reopen the board, reread high-risk patients, and verify that sleep and boundary planning tasks did not crowd out trending vitals.</p>
 <h2>Delegation considerations</h2>
 <p><strong>Delegation and supervision.</strong> Match tasks to competency, verify UAP observations, retain accountability for nursing judgment, and never delegate assessment that requires registered nurse interpretation when policy requires RN eyes.</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Delegation focus.)</p>
+<p>Delegation is a dynamic contract: confirm understanding, set checkpoints, and reevaluate after the patient’s condition changes—especially when sleep and boundary planning spans multiple assistive roles on intensive care.</p>
+<p>Never delegate clinical judgment you cannot supervise in real time; retain accountability for interpreting findings that drive sleep and boundary planning decisions.</p>
 <h2>NGN-style thinking points</h2>
 <p><strong>Next-generation NCLEX style practice.</strong> Practice recognizing cues, generating hypotheses, prioritizing actions, and evaluating outcomes using case-like stems. Tie sleep and boundary planning decisions to measurable patient responses rather than single “correct” labels.</p>
-<p>Documentation should show trajectory: baseline, change, intervention, response, and notification for sleep and boundary planning events on intensive care. (Sleep and boundary planning for New Graduate Nurses in i — NGN focus.)</p>
-<p>Hemodynamic patterns on intensive care reward understanding preload, afterload, and contractility when sleep and boundary planning touches cardiac patients. (Sleep and boundary planning for New Graduate Nurses in i — NGN focus.)</p>
-<p>Pathophysiology literacy still matters when the shift feels organizational: subtle perfusion or oxygenation shifts can reorder your task list faster than a new admission. (Sleep and boundary planning for New Graduate Nurses in i — NGN focus.)</p>
-<p>Delegation requires ongoing evaluation: reassess UAP observations, clarify expectations, and retain accountability for the overall sleep and boundary planning plan. (Sleep and boundary planning for New Graduate Nurses in i — NGN focus.)</p>
-<p>End-of-shift handoffs fail when sleep and boundary planning details are vague; include pending tasks, unstable cues, and family concerns for intensive care. (Sleep and boundary planning for New Graduate Nurses in i — NGN focus.)</p>
-<p>Reflective practice after shifts converts sleep and boundary planning stress into learning if you name one success, one risk caught, and one improvement for intensive care. (Sleep and boundary planning for New Graduate Nurses in i — NGN focus.)</p>
+<p>NGN-style items reward hypothesis testing: collect cues, propose the most dangerous realistic problem first, choose the least harmful immediate action, then evaluate whether sleep and boundary planning assumptions still fit intensive care data.</p>
+<p>Practice writing a one-line “because” for each option you eliminate; that discipline exposes hidden assumptions during sleep and boundary planning scenarios.</p>
 <h2>Exam-focused review points</h2>
 <p><strong>NCLEX and REx-PN review.</strong> Re-read stems for timing words, priority verbs, and unstable versus stable presentations. For Sleep and boundary planning for New Graduate Nurses in intensive care: Transition-to-Practice Long-Tail Review, rehearse eliminating teaching-only answers when assessment or escalation is still incomplete.</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
-<p>undefined (Sleep and boundary planning for New Graduate Nurses in i — Exam focus.)</p>
+<p>Underline priority verbs: initial, first, best, priority, most important. They shift the correct answer toward assessment or escalation during NCLEX-RN and REx-PN practice tied to sleep and boundary planning.</p>
+<p>When answers include both a thorough assessment option and a helpful-but-nonurgent task, pick assessment if the stem still leaves stability uncertain on intensive care.</p>
 <h2>Suggested Internal Links</h2>
 <ul>
   <li><a href="/app/dashboard">NurseNest learner dashboard</a> — continue adaptive study and progress tracking.</li>
