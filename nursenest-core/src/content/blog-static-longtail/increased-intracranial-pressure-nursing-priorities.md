@@ -6,7 +6,7 @@ category: Neurologic
 tags: Increased ICP, Neuro, Head Injury, Stroke, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: true
+draft: false
 seoTitle: Increased Intracranial Pressure Nursing Priorities
 seoDescription: Review increased ICP symptoms, Cushing triad, positioning, neuro checks, airway safety, seizure precautions, and nursing priorities for exams.
 canonicalUrl: /blog/increased-intracranial-pressure-nursing-priorities

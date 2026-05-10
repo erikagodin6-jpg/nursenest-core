@@ -11,7 +11,7 @@ seoDescription: Oxygen delivery devices, reassessment, and safety language for A
 canonicalUrl: /blog/oxygen-therapy-spo2-targets-australian-nursing-education
 authorDisplayName: NurseNest Editorial
 medicalReviewerName: Clinical review board (educational)
-disclaimer: This article supports nursing education, Australian registration orientation, and exam preparation. It is not individualized medical or legal advice, not AHPRA/NMBA case guidance, and not a substitute for employer policy, clinical supervision, or statutory requirements. It is not individualized medical advice. Always follow local scope, orders, and workplace procedures in real patient care.
+disclaimer: This article supports nursing education, Australian registration orientation, and exam preparation. It is not individualized medical advice, not legal advice, not AHPRA/NMBA case guidance, and not a substitute for employer policy, clinical supervision, or statutory requirements. It is not individualized medical advice. Always follow local scope, orders, and workplace procedures in real patient care.
 ---
 
 <h2>Introduction</h2>
@@ -60,9 +60,9 @@ disclaimer: This article supports nursing education, Australian registration ori
 
 <h2>Suggested internal links</h2>
 <ul>
-<li><a href="/blog/ahpra-nurse-registration-pathway-international-educational-overview">Related Australian RN long-tail guide</a></li>
-<li><a href="/blog/nursing-in-australia-for-internationally-qualified-nurses-longtail-guide">Related Australian RN long-tail guide</a></li>
-<li><a href="/blog/australian-medication-safety-seven-standard-expectations-nurses">Related Australian RN long-tail guide</a></li>
+<li><a href="/blog/ahpra-nurse-registration-pathway-international-educational-overview">AHPRA Nurse Registration in Australia: Pathway Overview for Internationally Educated Nurses</a></li>
+<li><a href="/blog/nursing-in-australia-for-internationally-qualified-nurses-longtail-guide">Nursing in Australia for Internationally Qualified Nurses: Orientation and Practice Expectations</a></li>
+<li><a href="/blog/australian-medication-safety-seven-standard-expectations-nurses">Australian Medication Safety: What Nurses Should Know About the National Standard</a></li>
 <li><a href="/blog/sepsis-pathophysiology-early-nursing-recognition">Sepsis pathophysiology and early nursing recognition (global clinical scaffold)</a></li>
 <li><a href="/app/lessons">RN lessons hub</a> — structured lesson study.</li>
 <li><a href="/app/flashcards">Flashcards</a> — spaced recall for medications and procedures.</li>
@@ -92,5 +92,5 @@ disclaimer: This article supports nursing education, Australian registration ori
 <p>Nursing and Midwifery Board of Australia. (2024). Registered nurse standards for practice. https://www.nursingmidwiferyboard.gov.au/</p>
 <p>Australian Commission on Safety and Quality in Health Care. (2024). National Safety and Quality Health Service Standards. https://www.safetyandquality.gov.au/</p>
 <p>Australian Commission on Safety and Quality in Health Care. (2023). Medication safety standard (NSQHS Medication Safety). https://www.safetyandquality.gov.au/standards/nsqhs-standards</p>
-<p>Department of Health and Aged Care (Australia). (2024). My Health Record — information for healthcare providers. https://www.digitalhealth.gov.au/</p>
+<p>Australian Digital Health Agency. (2024). My Health Record — information for healthcare providers. https://www.digitalhealth.gov.au/</p>
 <p><em>Follow your program’s citation requirements; links support educational traceability and do not replace statutes, employer policy, or supervision.</em></p>

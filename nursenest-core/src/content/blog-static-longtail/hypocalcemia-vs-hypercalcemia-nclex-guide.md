@@ -6,7 +6,7 @@ category: Fluid and Electrolytes
 tags: Calcium, Hypocalcemia, Hypercalcemia, Electrolytes, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: true
+draft: false
 seoTitle: Hypocalcemia vs Hypercalcemia Nursing Guide
 seoDescription: Compare low and high calcium symptoms, ECG clues, neuromuscular signs, causes, nursing priorities, and NCLEX-style traps.
 canonicalUrl: /blog/hypocalcemia-vs-hypercalcemia-nclex-guide

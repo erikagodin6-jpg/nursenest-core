@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-05-10T01:16:54.259Z",
-  "stage": "draft",
+  "generatedAt": "2026-05-10T01:20:26.351Z",
+  "stage": "publish",
   "count": 20,
   "posts": [
     {
@@ -8,7 +8,7 @@
       "slug": "siadh-vs-diabetes-insipidus-nursing-comparison",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/siadh-vs-diabetes-insipidus-nursing-comparison.md",
       "wordCount": 1521,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/siadh-vs-diabetes-insipidus-nursing-comparison"
     },
     {
@@ -16,7 +16,7 @@
       "slug": "dka-vs-hhs-nursing-priorities",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/dka-vs-hhs-nursing-priorities.md",
       "wordCount": 1517,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/dka-vs-hhs-nursing-priorities"
     },
     {
@@ -24,7 +24,7 @@
       "slug": "acute-kidney-injury-prerenal-intrinsic-postrenal",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/acute-kidney-injury-prerenal-intrinsic-postrenal.md",
       "wordCount": 1539,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/acute-kidney-injury-prerenal-intrinsic-postrenal"
     },
     {
@@ -32,7 +32,7 @@
       "slug": "left-sided-vs-right-sided-heart-failure",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/left-sided-vs-right-sided-heart-failure.md",
       "wordCount": 1528,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/left-sided-vs-right-sided-heart-failure"
     },
     {
@@ -40,7 +40,7 @@
       "slug": "sepsis-pathophysiology-early-nursing-recognition",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/sepsis-pathophysiology-early-nursing-recognition.md",
       "wordCount": 1542,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/sepsis-pathophysiology-early-nursing-recognition"
     },
     {
@@ -48,7 +48,7 @@
       "slug": "digoxin-toxicity-nursing-priorities",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/digoxin-toxicity-nursing-priorities.md",
       "wordCount": 1540,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/digoxin-toxicity-nursing-priorities"
     },
     {
@@ -56,7 +56,7 @@
       "slug": "warfarin-vs-heparin-nursing-comparison",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/warfarin-vs-heparin-nursing-comparison.md",
       "wordCount": 1505,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/warfarin-vs-heparin-nursing-comparison"
     },
     {
@@ -64,7 +64,7 @@
       "slug": "beta-blockers-mechanism-side-effects-nursing-teaching",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/beta-blockers-mechanism-side-effects-nursing-teaching.md",
       "wordCount": 1547,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/beta-blockers-mechanism-side-effects-nursing-teaching"
     },
     {
@@ -72,7 +72,7 @@
       "slug": "hyponatremia-symptoms-causes-nursing-priorities",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/hyponatremia-symptoms-causes-nursing-priorities.md",
       "wordCount": 1526,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/hyponatremia-symptoms-causes-nursing-priorities"
     },
     {
@@ -80,7 +80,7 @@
       "slug": "hypernatremia-causes-symptoms-nursing-care",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/hypernatremia-causes-symptoms-nursing-care.md",
       "wordCount": 1506,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/hypernatremia-causes-symptoms-nursing-care"
     },
     {
@@ -88,7 +88,7 @@
       "slug": "hypocalcemia-vs-hypercalcemia-nclex-guide",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/hypocalcemia-vs-hypercalcemia-nclex-guide.md",
       "wordCount": 1521,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/hypocalcemia-vs-hypercalcemia-nclex-guide"
     },
     {
@@ -96,7 +96,7 @@
       "slug": "metabolic-acidosis-vs-metabolic-alkalosis",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/metabolic-acidosis-vs-metabolic-alkalosis.md",
       "wordCount": 1539,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/metabolic-acidosis-vs-metabolic-alkalosis"
     },
     {
@@ -104,7 +104,7 @@
       "slug": "respiratory-acidosis-vs-respiratory-alkalosis",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/respiratory-acidosis-vs-respiratory-alkalosis.md",
       "wordCount": 1516,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/respiratory-acidosis-vs-respiratory-alkalosis"
     },
     {
@@ -112,7 +112,7 @@
       "slug": "copd-symptoms-treatment-nursing-care",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/copd-symptoms-treatment-nursing-care.md",
       "wordCount": 1517,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/copd-symptoms-treatment-nursing-care"
     },
     {
@@ -120,7 +120,7 @@
       "slug": "asthma-pathophysiology-emergency-nursing-interventions",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/asthma-pathophysiology-emergency-nursing-interventions.md",
       "wordCount": 1507,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/asthma-pathophysiology-emergency-nursing-interventions"
     },
     {
@@ -128,7 +128,7 @@
       "slug": "pulmonary-embolism-signs-symptoms-nursing-priorities",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/pulmonary-embolism-signs-symptoms-nursing-priorities.md",
       "wordCount": 1514,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/pulmonary-embolism-signs-symptoms-nursing-priorities"
     },
     {
@@ -136,7 +136,7 @@
       "slug": "deep-vein-thrombosis-nursing-guide",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/deep-vein-thrombosis-nursing-guide.md",
       "wordCount": 1544,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/deep-vein-thrombosis-nursing-guide"
     },
     {
@@ -144,7 +144,7 @@
       "slug": "stroke-ischemic-vs-hemorrhagic-nursing-care",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/stroke-ischemic-vs-hemorrhagic-nursing-care.md",
       "wordCount": 1522,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/stroke-ischemic-vs-hemorrhagic-nursing-care"
     },
     {
@@ -152,7 +152,7 @@
       "slug": "increased-intracranial-pressure-nursing-priorities",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/increased-intracranial-pressure-nursing-priorities.md",
       "wordCount": 1501,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/increased-intracranial-pressure-nursing-priorities"
     },
     {
@@ -160,7 +160,7 @@
       "slug": "seizure-disorders-treatment-nursing-care",
       "file": "/root/nursenest-core/nursenest-core/src/content/blog-static-longtail/seizure-disorders-treatment-nursing-care.md",
       "wordCount": 1543,
-      "status": "draft_written_not_public",
+      "status": "published_static_longtail",
       "publicUrl": "/blog/seizure-disorders-treatment-nursing-care"
     }
   ]

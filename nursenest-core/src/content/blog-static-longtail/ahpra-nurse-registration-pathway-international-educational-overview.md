@@ -60,9 +60,9 @@ disclaimer: This article supports nursing education, Australian registration ori
 
 <h2>Suggested internal links</h2>
 <ul>
-<li><a href="/blog/nursing-in-australia-for-internationally-qualified-nurses-longtail-guide">Related Australian RN long-tail guide</a></li>
-<li><a href="/blog/australian-medication-safety-seven-standard-expectations-nurses">Related Australian RN long-tail guide</a></li>
-<li><a href="/blog/clinical-handover-isobar-sbar-australian-hospital-nursing">Related Australian RN long-tail guide</a></li>
+<li><a href="/blog/nursing-in-australia-for-internationally-qualified-nurses-longtail-guide">Nursing in Australia for Internationally Qualified Nurses: Orientation and Practice Expectations</a></li>
+<li><a href="/blog/australian-medication-safety-seven-standard-expectations-nurses">Australian Medication Safety: What Nurses Should Know About the National Standard</a></li>
+<li><a href="/blog/clinical-handover-isobar-sbar-australian-hospital-nursing">Clinical Handover in Australia: ISBAR, SBAR, and Safe Transfer of Accountability</a></li>
 <li><a href="/blog/sepsis-pathophysiology-early-nursing-recognition">Sepsis pathophysiology and early nursing recognition (global clinical scaffold)</a></li>
 <li><a href="/app/lessons">RN lessons hub</a> — structured lesson study.</li>
 <li><a href="/app/flashcards">Flashcards</a> — spaced recall for medications and procedures.</li>
@@ -92,5 +92,5 @@ disclaimer: This article supports nursing education, Australian registration ori
 <p>Nursing and Midwifery Board of Australia. (2024). Registered nurse standards for practice. https://www.nursingmidwiferyboard.gov.au/</p>
 <p>Australian Commission on Safety and Quality in Health Care. (2024). National Safety and Quality Health Service Standards. https://www.safetyandquality.gov.au/</p>
 <p>Australian Commission on Safety and Quality in Health Care. (2023). Medication safety standard (NSQHS Medication Safety). https://www.safetyandquality.gov.au/standards/nsqhs-standards</p>
-<p>Department of Health and Aged Care (Australia). (2024). My Health Record — information for healthcare providers. https://www.digitalhealth.gov.au/</p>
+<p>Australian Digital Health Agency. (2024). My Health Record — information for healthcare providers. https://www.digitalhealth.gov.au/</p>
 <p><em>Follow your program’s citation requirements; links support educational traceability and do not replace statutes, employer policy, or supervision.</em></p>

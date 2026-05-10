@@ -33,6 +33,7 @@ disclaimer: This article supports educational exam preparation and clinical reas
 <p>Te Whatu Ora leads the national health service delivery context that many hospital and specialist roles sit within, while primary care and community organisations also employ large nursing workforces. Your orientation should connect policy to local forms, order sets, and escalation numbers.</p>
 
 <h2>Clinical priorities for this topic</h2>
+<p>Line up lung sounds, daily weights where ordered, I/O balance, and laboratory trends before interpreting a single fluid bolus decision. Call out signs of fluid overload early and document provider notification with times.</p>
 <p>Anchor clinical priorities to the patient story: baseline function, acute change, red-flag findings, and the complication most likely to cause serious harm in the next minutes to hours. Pair assessment data with nursing actions that are in scope: monitoring, independent nursing interventions where authorised, administering ordered treatments safely, teaching, and escalating when thresholds are met.</p>
 <p>For internationally educated nurses, explicitly map vocabulary differences (for example, ward versus unit, physician versus medical officer, enrolled nurse roles) using your employer glossary so communication stays precise under stress.</p>
 

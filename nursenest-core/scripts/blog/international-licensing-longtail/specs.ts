@@ -288,9 +288,8 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
   specs.push(
     ca(
       "intl-canada-cultural-safety-indigenous-health-ien-exam-prep-overview",
-      "Cultural safety and Indigenous health expectations for IENs preparing for Canadian practice (educational)",
-      "Canada",
-      "Provincial standards of practice referencing cultural safety and anti-Indigenous racism (varies by college)",
+      "Pan-Canadian",
+      "Provincial colleges of nursing — cultural safety and anti-Indigenous racism standards (varies)",
       "https://www.cno.org/en/standards-learn/standards-and-guidelines/",
       "Canadian regulatory standards increasingly emphasize culturally safe care, trauma-informed communication, and accountability for addressing systemic barriers. IENs should study the college’s practice standards and any assigned Indigenous health modules as serious professional obligations, not optional soft skills. Exam preparation still requires clinical safety fundamentals, but communication stems may explicitly test respectful engagement, advocacy, and collaboration with Indigenous patients and families.",
     ),
@@ -1623,7 +1622,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "Priority versus assessment NCLEX discipline",
       "Improve international exam performance with universal priority frameworks.",
       "This skill transfers to many countries’ multiple-choice licensing exams.",
-      [APA_NCSBN],
+      ["National Council of State Boards of Nursing. (2026). NCLEX & other examinations. https://www.ncsbn.org/exams"],
     ),
   );
   specs.push(
@@ -1635,7 +1634,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "Transcript authentication chain for nurses",
       "Reduce anxiety by visualizing each attestation hop for international licensing.",
       "Photograph envelopes and tracking numbers for every courier send.",
-      [APA CGFNS],
+      ["CGFNS International. (2026). Credentials evaluation services. https://www.cgfns.org/"],
     ),
   );
   specs.push(
@@ -1647,7 +1646,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "Avoid nursing licensing misinformation on social media",
       "Protect your timeline and mental health from licensing rumor accounts.",
       "Mute keywords that trigger panic during exam week.",
-      [APA_NCSBN],
+      ["National Council of State Boards of Nursing. (2026). NCLEX & other examinations. https://www.ncsbn.org/exams"],
     ),
   );
   specs.push(
@@ -1659,7 +1658,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "Remote study partner structures for nursing exams",
       "Build accountability across time zones while preparing for licensing tests.",
       "Written agendas prevent unstructured vent sessions that steal study time.",
-      [APA_NCSBN],
+      ["National Council of State Boards of Nursing. (2026). NCLEX & other examinations. https://www.ncsbn.org/exams"],
     ),
   );
   specs.push(
@@ -1671,7 +1670,7 @@ export function getInternationalLicensingLongtailSpecs(): InternationalLicensing
       "Budgeting for international nursing licensing fees",
       "Reduce money surprises during NCLEX, NMC, OBA, or Gulf sequences.",
       "Financial stress reduces working memory; budget early to protect scores.",
-      [APA CGFNS],
+      ["CGFNS International. (2026). Credentials evaluation services. https://www.cgfns.org/"],
     ),
   );
   specs.push(

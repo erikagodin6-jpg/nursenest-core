@@ -6,7 +6,7 @@ category: Acid-Base Balance
 tags: ABG, Metabolic Acidosis, Metabolic Alkalosis, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: true
+draft: false
 seoTitle: Metabolic Acidosis vs Alkalosis Nursing Review
 seoDescription: Learn metabolic acidosis and alkalosis causes, ABG direction, compensation, nursing assessment priorities, and NCLEX traps.
 canonicalUrl: /blog/metabolic-acidosis-vs-metabolic-alkalosis

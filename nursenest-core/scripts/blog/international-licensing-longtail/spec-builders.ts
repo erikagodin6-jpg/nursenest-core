@@ -4,12 +4,6 @@ const APA_NCSBN =
   "National Council of State Boards of Nursing. (2026). NCLEX & other examinations. https://www.ncsbn.org/exams";
 const APA_NNAS =
   "National Nursing Assessment Service. (2026). NNAS: Applying to a Canadian nursing regulatory body. https://nnas.ca/";
-const APA_CNO =
-  "College of Nurses of Ontario. (2026). Registration: Internationally educated nurses. https://www.cno.org/en/become-a-nurse/registration-tools-and-resources/internationally-educated-nurses/";
-const APA_BCCNM =
-  "British Columbia College of Nurses and Midwives. (2026). Become a nurse: Internationally educated applicants. https://www.bccnm.ca/Registration/BecomeANurse/";
-const APA_CRNA =
-  "College of Registered Nurses of Alberta. (2026). Apply for registration. https://www.nurses.ab.ca/becoming-a-nurse/";
 const APA_NMC =
   "Nursing and Midwifery Council. (2026). Test of Competence (ToC) information. https://www.nmc.org.uk/registration/joining-the-register/toc/";
 const APA_NMBA =

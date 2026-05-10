@@ -374,7 +374,7 @@ function buildBody(topic: Topic): string {
   );
   parts.push(paragraphsFromFacts(factsC.slice(0, 8), rng));
 
-  parts.push(`<h2>Interpretation of labs and imaging</h2>`);
+  parts.push(`<h2>Interpretation of labs/imaging</h2>`);
   parts.push(
     `<p>Interpret tests in context: acute versus chronic changes, baseline versus trend, and confounders such as hemolysis, volume status, or timing relative to therapy. For <strong>${label}</strong>, connect each abnormal value to a decision: continue, adjust, stop, or escalate.</p>`,
   );

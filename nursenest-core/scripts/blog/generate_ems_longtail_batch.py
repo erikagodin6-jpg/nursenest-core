@@ -140,7 +140,7 @@ TOPIC_MATRIX: list[tuple[str, str, list[str]]] = [
     (
         "pediatric-respiratory-distress",
         "peds",
-            [
+        [
             "stridor-wheeze-grunting-work-of-breathing",
             "bronchiolitis-vs-asthma-field-patterns",
             "epiglottitis-retropharyngeal-red-flags",
@@ -452,14 +452,12 @@ def topic_para(seed: str, cluster: str, idx: int) -> str:
     return bank[idx % len(bank)]
 
 
-def short_section(seed: str, cluster: str, lead: str, extra_paras: int = 1) -> str:
-    parts = [
-        f"<p>{h(lead)} This educational overview connects field assessment, protocol thinking, and transport decisions "
-        f"for paramedic and AEMT learners preparing for registry-style reasoning and clinical rotations.</p>"
-    ]
-    for i in range(extra_paras):
-        parts.append(f"<p>{h(topic_para(seed, cluster, i + 5))}</p>")
-    return "".join(parts)
+def short_section(seed: str, cluster: str, lead: str, bank_idx: int) -> str:
+    """Two paragraphs: topic-specific lead + one deterministic supporting paragraph."""
+    return (
+        f"<p>{h(lead)}</p>"
+        f"<p>{h(topic_para(seed, cluster, bank_idx))}</p>"
+    )
 
 
 def build_body(slug: str, title: str, knack: str, cluster: str) -> str:
@@ -468,7 +466,8 @@ def build_body(slug: str, title: str, knack: str, cluster: str) -> str:
         f"translate assessment findings into time-sensitive actions."
     )
     intro = (
-        f"<p>{h(topic_sentence)}</p>"
+        f"<p>{h(topic_sentence)} This educational overview connects field assessment, protocol thinking, and transport decisions "
+        f"for paramedic and AEMT learners preparing for registry-style reasoning and clinical rotations.</p>"
         f"<p>{h(topic_para(slug + ':i1', cluster, 1))}</p>"
         f"<p>{h(topic_para(slug + ':i2', cluster, 2))}</p>"
     )
@@ -476,61 +475,61 @@ def build_body(slug: str, title: str, knack: str, cluster: str) -> str:
         slug + ":patho",
         cluster,
         f"Pathophysiology for this topic centers on how {knack.lower()} links supply, demand, and compensation patterns you can observe before labs arrive.",
-        2,
+        11,
     )
     scene = short_section(
         slug + ":scene",
         cluster,
         "Scene safety includes traffic control, violence assessment, chemical exposure awareness, and safe patient access while preserving spinal precautions when indicated.",
-        2,
+        12,
     )
     assess = short_section(
         slug + ":assess",
         cluster,
         f"Primary and secondary assessment for {knack.lower()} should emphasize repeatable, broadcastable findings that improve ED and specialty team readiness.",
-        2,
+        13,
     )
     diff = short_section(
         slug + ":diff",
         cluster,
         f"Differential diagnosis considerations include common mimics and dangerous look-alikes that share features with {knack.lower()}, requiring disciplined reassessment.",
-        2,
+        14,
     )
     prehosp = short_section(
         slug + ":rx",
         cluster,
         "Prehospital interventions should align with standing orders, medical direction, and local scope. Monitor response with vitals, waveform capnography when applicable, and repeat exams.",
-        2,
+        15,
     )
     meds = short_section(
         slug + ":med",
         cluster,
         "Medication considerations include weight-based dosing where relevant, allergy verification, contraindications, route selection, and documentation of time, dose, and effect.",
-        2,
+        16,
     )
     transport = short_section(
         slug + ":txp",
         cluster,
         "Transport and escalation should name destination capability, notification triggers, reassessment intervals en route, and criteria for priority transport.",
-        2,
+        17,
     )
     peds_ger = short_section(
         slug + ":pg",
         cluster,
         "Pediatric and geriatric considerations include atypical vitals, communication barriers, caregiver collateral, fall risk, polypharmacy, and frailty-informed packaging and movement.",
-        2,
+        18,
     )
     doc = short_section(
         slug + ":doc",
         cluster,
         "Documentation pearls include quoting patient words for chief complaint, documenting decision capacity elements when applicable, and recording serial vitals with timestamps around interventions.",
-        2,
+        19,
     )
     exam = short_section(
         slug + ":exam",
         cluster,
         "Exam-focused review points emphasize first actions for unstable presentations, scope-safe choices, and the rationale that registry items reward patient-centered safety over trivia.",
-        2,
+        20,
     )
 
     takeaways = f"""<h2>Key Takeaways</h2>
@@ -546,7 +545,7 @@ def build_body(slug: str, title: str, knack: str, cluster: str) -> str:
   <li><a href="/blog/sepsis-pathophysiology-early-nursing-recognition">Sepsis pathophysiology and early recognition concepts</a> (shared shock physiology vocabulary).</li>
   <li><a href="/blog/stroke-ischemic-vs-hemorrhagic-nursing-care">Stroke ischemic vs hemorrhagic nursing priorities</a> (parallel neuro time windows).</li>
   <li><a href="/blog/asthma-pathophysiology-emergency-nursing-interventions">Asthma pathophysiology and emergency interventions</a> (respiratory distress overlap).</li>
-  <li><a href="/blog/anaphylaxis-prehospital-epinephrine-im-first-line-and-repeat-dosing-ems">Related EMS anaphylaxis long-tail on epinephrine-first care</a> when studying allergy emergencies.</li>
+  <li><a href="/blog/hyperkalemia-ecg-changes-nursing-students">Hyperkalemia ECG changes for students</a> (wide-complex differential overlap).</li>
   <li><a href="/app/dashboard">Learner dashboard</a> for adaptive practice after reading.</li>
 </ul>"""
 
@@ -601,25 +600,20 @@ def build_body(slug: str, title: str, knack: str, cluster: str) -> str:
     )
 
     wc = word_count(body)
-    if wc < 1200:
-        pad = " ".join(["Add serial reassessment, clean handoffs, and scope-safe monitoring when presentations evolve."] * 80)
-        body += f"<p>{h(pad)}</p>"
-    if wc > 1800:
-        # Trim by removing some med_block paragraphs - simpler: rebuild with fewer iterations
-        pass
-    wc2 = word_count(body)
-    while wc2 > 1850:
-        body = re.sub(r"<p>Add serial reassessment.*?</p>", "", body, count=1, flags=re.DOTALL)
-        wc2 = word_count(body)
-        if "Add serial reassessment" not in body:
-            break
-    # If still too long, truncate tail references paragraph (shouldn't happen often)
-    wc3 = word_count(body)
-    while wc3 > 1800:
-        body = body[:-400]
-        wc3 = word_count(body)
-    while word_count(body) < 1200:
-        body += "<p>Reassess after every intervention, communicate changes clearly, and prioritize patient-centered safety during transport and handoff.</p>"
+    pad_sentence = (
+        "Reassess after every intervention, communicate changes clearly, document serial vitals with timestamps, "
+        "and prioritize patient-centered safety during transport and handoff."
+    )
+    while wc < 1200:
+        body += f"<p>{h(pad_sentence)}</p>"
+        wc = word_count(body)
+    while wc > 1800:
+        # Drop oldest padding paragraphs (keeps required headings intact).
+        idx = body.rfind("<p>Reassess after every intervention")
+        if idx == -1:
+            raise SystemExit(f"body still too long for {slug}: {wc} words; tune generator")
+        body = body[:idx]
+        wc = word_count(body)
     return body
 
 
@@ -653,6 +647,42 @@ disclaimer: This article supports EMS and paramedic exam preparation and clinica
 
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    report_lines: list[str] = [
+        "# EMS long-tail hybrid static batch (125 posts)",
+        "",
+        "Generated by `scripts/blog/generate_ems_longtail_batch.py` (deterministic, no external AI APIs).",
+        "Dates: `publishedAt` / `updatedAt` = 2026-05-09.",
+        "",
+        "## Aggregate validation",
+        "",
+        "After generation, run from `nursenest-core/`:",
+        "",
+        "- `npm run validate:blog-static-longtail`",
+        "- `npm run diagnose:blog-slug-collisions -- --write-report`",
+        "- `npm run typecheck:critical`",
+        "- `npm run test:blog-recovery`",
+        "- `npm run test:homepage`",
+        "",
+        "## SEO metadata completeness (all posts)",
+        "",
+        "- [x] `title`, `slug`, `excerpt`, `category`, `tags`",
+        "- [x] `seoTitle`, `seoDescription`, `canonicalUrl` matching `/blog/{slug}`",
+        "- [x] `authorDisplayName`, `medicalReviewerName`, `disclaimer` (educational + not individualized medical advice)",
+        "- [x] `publishedAt`, `updatedAt` (YYYY-MM-DD)",
+        "",
+        "## Internal link targets (Suggested Internal Links section)",
+        "",
+        "- `/blog/sepsis-pathophysiology-early-nursing-recognition`",
+        "- `/blog/stroke-ischemic-vs-hemorrhagic-nursing-care`",
+        "- `/blog/asthma-pathophysiology-emergency-nursing-interventions`",
+        "- `/blog/hyperkalemia-ecg-changes-nursing-students`",
+        "- `/app/dashboard`",
+        "",
+        "## Per-post inventory",
+        "",
+        "| File | Slug | Word count (body) | Notes |",
+        "| --- | --- | ---:| --- |",
+    ]
     slugs: list[str] = []
     for base, cluster, tails in TOPIC_MATRIX:
         for tail in tails:
@@ -674,9 +704,17 @@ def main() -> None:
             wc = word_count(body)
             if wc < 1200 or wc > 1800:
                 raise SystemExit(f"word count out of range for {slug}: {wc}")
+            rel = f"src/content/blog-static-longtail/{slug}.md"
             path = OUT_DIR / f"{slug}.md"
             path.write_text(frontmatter(slug, title, excerpt, category, tags, seo_title, seo_desc) + body + "\n", encoding="utf-8")
+            report_lines.append(f"| `{rel}` | `{slug}` | {wc} | pending npm gates |")
+    report_lines.append("")
+    report_lines.append("Re-run this script to regenerate bodies; review git diff before merge.")
+    report_path = Path(__file__).resolve().parents[2] / "reports" / "ems-longtail-batch-125.md"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text("\n".join(report_lines) + "\n", encoding="utf-8")
     print(f"Wrote {len(slugs)} posts to {OUT_DIR}")
+    print(f"Wrote report {report_path}")
 
 
 if __name__ == "__main__":

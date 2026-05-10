@@ -6,7 +6,7 @@ category: Emergency and Critical Care
 tags: Sepsis, Shock, Infection, Critical Care, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: true
+draft: false
 seoTitle: Sepsis Pathophysiology and Early Nursing Recognition
 seoDescription: Review sepsis pathophysiology, early warning signs, lactate and perfusion clues, nursing escalation priorities, and NCLEX-style safety traps.
 canonicalUrl: /blog/sepsis-pathophysiology-early-nursing-recognition

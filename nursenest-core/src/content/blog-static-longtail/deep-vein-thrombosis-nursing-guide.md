@@ -6,7 +6,7 @@ category: Cardiovascular
 tags: DVT, VTE, Anticoagulation, Postoperative Nursing, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: true
+draft: false
 seoTitle: DVT Nursing Assessment and Prevention Guide
 seoDescription: Review DVT risk factors, symptoms, prevention, anticoagulation safety, PE warning signs, and nursing priorities for NCLEX-RN and REx-PN.
 canonicalUrl: /blog/deep-vein-thrombosis-nursing-guide

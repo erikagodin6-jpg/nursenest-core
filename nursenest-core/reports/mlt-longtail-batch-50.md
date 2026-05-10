@@ -1,6 +1,6 @@
 # MLT static long-tail batch (50 posts)
 
-Generated deterministically by `scripts/blog/generate-mlt-static-longtail-batch.mts`.
+Generated deterministically by `scripts/blog/generate-mlt-static-longtail-batch.mts` and `scripts/blog/mlt-longtail-corpus.ts`.
 
 ## Summary
 
@@ -9,79 +9,67 @@ Generated deterministically by `scripts/blog/generate-mlt-static-longtail-batch.
 
 ## Per-post metrics
 
-| slug | word count | word target |
-| --- | ---: | --- |
-| cbc-interpretation-mlt-certification-prep | 2355 | 1200+ (pass) |
-| hemolysis-causes-laboratory-detection-mlt | 2169 | 1200+ (pass) |
-| pre-analytical-errors-blood-specimens-mlt | 2313 | 1200+ (pass) |
-| troponin-assays-pre-analytical-stability-mlt | 2345 | 1200+ (pass) |
-| pt-inr-vs-aptt-coagulation-basics-mlt | 2229 | 1200+ (pass) |
-| blood-culture-contamination-versus-true-bacteremia-mlt | 2289 | 1200+ (pass) |
-| urinalysis-dipstick-microscopic-basics-mlt | 2226 | 1200+ (pass) |
-| esr-versus-crp-inflammatory-markers-mlt | 2308 | 1200+ (pass) |
-| abo-rh-blood-group-typing-forward-reverse-mlt | 2382 | 1200+ (pass) |
-| crossmatch-transfusion-compatibility-basics-mlt | 2174 | 1200+ (pass) |
-| arterial-blood-gas-basics-for-mlt-students | 2298 | 1200+ (pass) |
-| laboratory-specimen-rejection-criteria-mlt | 2267 | 1200+ (pass) |
-| chain-of-custody-toxicology-specimens-mlt | 2148 | 1200+ (pass) |
-| csf-analysis-cell-count-protein-glucose-mlt | 2360 | 1200+ (pass) |
-| gram-stain-quality-interpretation-mlt | 2351 | 1200+ (pass) |
-| hematology-analyzer-qc-westgard-concepts-mlt | 2294 | 1200+ (pass) |
-| liver-function-tests-lfts-laboratory-mlt | 2352 | 1200+ (pass) |
-| thyroid-laboratory-testing-tsh-free-t4-mlt | 2166 | 1200+ (pass) |
-| critical-values-reporting-laboratory-communication-mlt | 2256 | 1200+ (pass) |
-| laboratory-infection-control-bloodborne-pathogens-mlt | 2320 | 1200+ (pass) |
-| ldh-tissue-injury-marker-laboratory-mlt | 2280 | 1200+ (pass) |
-| lactate-laboratory-measurement-pre-analytics-mlt | 2248 | 1200+ (pass) |
-| hba1c-diabetes-monitoring-assay-caveats-mlt | 2331 | 1200+ (pass) |
-| iron-studies-ferritin-iron-saturation-mlt | 2307 | 1200+ (pass) |
-| vitamin-b12-folate-megablastic-workup-mlt | 2372 | 1200+ (pass) |
-| d-dimer-thrombosis-rule-out-laboratory-mlt | 2283 | 1200+ (pass) |
-| vancomycin-therapeutic-monitoring-troughs-mlt | 2285 | 1200+ (pass) |
-| phenytoin-therapeutic-drug-monitoring-basics-mlt | 2189 | 1200+ (pass) |
-| digoxin-therapeutic-monitoring-laboratory-mlt | 2372 | 1200+ (pass) |
-| glucose-fasting-random-hba1c-triad-mlt | 2280 | 1200+ (pass) |
-| lipase-amylase-pancreatitis-biomarkers-mlt | 2383 | 1200+ (pass) |
-| bnp-nt-probnp-heart-failure-markers-mlt | 2222 | 1200+ (pass) |
-| magnesium-laboratory-hypomagnesemia-hypermagnesemia-mlt | 2288 | 1200+ (pass) |
-| phosphate-disorders-laboratory-interpretation-mlt | 2338 | 1200+ (pass) |
-| anion-gap-metabolic-acidosis-laboratory-mlt | 2252 | 1200+ (pass) |
-| serum-osmolality-serum-urine-laboratory-mlt | 2301 | 1200+ (pass) |
-| cortisol-testing-laboratory-diurnal-variation-mlt | 2361 | 1200+ (pass) |
-| ana-screening-autoimmune-serology-basics-mlt | 2310 | 1200+ (pass) |
-| rheumatoid-factor-anti-ccp-serology-mlt | 2314 | 1200+ (pass) |
-| hcg-qualitative-quantitative-pregnancy-testing-mlt | 2297 | 1200+ (pass) |
-| hepatitis-serology-panel-acute-chronic-basics-mlt | 2250 | 1200+ (pass) |
-| hiv-screening-confirmatory-algorithm-concepts-mlt | 2491 | 1200+ (pass) |
-| syphilis-reverse-screening-algorithm-laboratory-mlt | 2252 | 1200+ (pass) |
-| urine-drug-screen-immunoassay-cross-reactivity-mlt | 2368 | 1200+ (pass) |
-| peripheral-blood-smear-review-mlt-certification | 2464 | 1200+ (pass) |
-| reticulocyte-count-anemia-classification-mlt | 2198 | 1200+ (pass) |
-| direct-indirect-antiglobulin-tests-transfusion-mlt | 2346 | 1200+ (pass) |
-| antibody-screen-unexpected-antibodies-blood-bank-mlt | 2290 | 1200+ (pass) |
-| point-of-care-glucometer-quality-control-mlt | 2290 | 1200+ (pass) |
-| therapeutic-phlebotomy-iron-indices-laboratory-monitoring-mlt | 2270 | 1200+ (pass) |
+| slug | word count | >=1200 | internal link targets |
+| --- | ---: | --- | --- |
+| cbc-interpretation-mlt-certification-prep | 2355 | pass | /blog/esr-versus-crp-inflammatory-markers-mlt, /blog/csf-analysis-cell-count-protein-glucose-mlt, /blog/laboratory-infection-control-bloodborne-pathogens-mlt, /blog/iron-studies-ferritin-iron-saturation-mlt, /app/dashboard |
+| hemolysis-causes-laboratory-detection-mlt | 2169 | pass | /blog/abo-rh-blood-group-typing-forward-reverse-mlt, /blog/gram-stain-quality-interpretation-mlt, /blog/ldh-tissue-injury-marker-laboratory-mlt, /blog/vitamin-b12-folate-megablastic-workup-mlt, /app/dashboard |
+| pre-analytical-errors-blood-specimens-mlt | 2313 | pass | /blog/crossmatch-transfusion-compatibility-basics-mlt, /blog/hematology-analyzer-qc-westgard-concepts-mlt, /blog/lactate-laboratory-measurement-pre-analytics-mlt, /blog/d-dimer-thrombosis-rule-out-laboratory-mlt, /app/dashboard |
+| troponin-assays-pre-analytical-stability-mlt | 2345 | pass | /blog/arterial-blood-gas-basics-for-mlt-students, /blog/liver-function-tests-lfts-laboratory-mlt, /blog/hba1c-diabetes-monitoring-assay-caveats-mlt, /blog/vancomycin-therapeutic-monitoring-troughs-mlt, /app/dashboard |
+| pt-inr-vs-aptt-coagulation-basics-mlt | 2229 | pass | /blog/laboratory-specimen-rejection-criteria-mlt, /blog/thyroid-laboratory-testing-tsh-free-t4-mlt, /blog/iron-studies-ferritin-iron-saturation-mlt, /blog/phenytoin-therapeutic-drug-monitoring-basics-mlt, /app/dashboard |
+| blood-culture-contamination-versus-true-bacteremia-mlt | 2289 | pass | /blog/chain-of-custody-toxicology-specimens-mlt, /blog/critical-values-reporting-laboratory-communication-mlt, /blog/vitamin-b12-folate-megablastic-workup-mlt, /blog/digoxin-therapeutic-monitoring-laboratory-mlt, /app/dashboard |
+| urinalysis-dipstick-microscopic-basics-mlt | 2226 | pass | /blog/csf-analysis-cell-count-protein-glucose-mlt, /blog/laboratory-infection-control-bloodborne-pathogens-mlt, /blog/d-dimer-thrombosis-rule-out-laboratory-mlt, /blog/glucose-fasting-random-hba1c-triad-mlt, /app/dashboard |
+| esr-versus-crp-inflammatory-markers-mlt | 2308 | pass | /blog/gram-stain-quality-interpretation-mlt, /blog/ldh-tissue-injury-marker-laboratory-mlt, /blog/vancomycin-therapeutic-monitoring-troughs-mlt, /blog/lipase-amylase-pancreatitis-biomarkers-mlt, /app/dashboard |
+| abo-rh-blood-group-typing-forward-reverse-mlt | 2382 | pass | /blog/hematology-analyzer-qc-westgard-concepts-mlt, /blog/lactate-laboratory-measurement-pre-analytics-mlt, /blog/phenytoin-therapeutic-drug-monitoring-basics-mlt, /blog/bnp-nt-probnp-heart-failure-markers-mlt, /app/dashboard |
+| crossmatch-transfusion-compatibility-basics-mlt | 2174 | pass | /blog/liver-function-tests-lfts-laboratory-mlt, /blog/hba1c-diabetes-monitoring-assay-caveats-mlt, /blog/digoxin-therapeutic-monitoring-laboratory-mlt, /blog/magnesium-laboratory-hypomagnesemia-hypermagnesemia-mlt, /app/dashboard |
+| arterial-blood-gas-basics-for-mlt-students | 2298 | pass | /blog/thyroid-laboratory-testing-tsh-free-t4-mlt, /blog/iron-studies-ferritin-iron-saturation-mlt, /blog/glucose-fasting-random-hba1c-triad-mlt, /blog/phosphate-disorders-laboratory-interpretation-mlt, /app/dashboard |
+| laboratory-specimen-rejection-criteria-mlt | 2267 | pass | /blog/critical-values-reporting-laboratory-communication-mlt, /blog/vitamin-b12-folate-megablastic-workup-mlt, /blog/lipase-amylase-pancreatitis-biomarkers-mlt, /blog/anion-gap-metabolic-acidosis-laboratory-mlt, /app/dashboard |
+| chain-of-custody-toxicology-specimens-mlt | 2148 | pass | /blog/laboratory-infection-control-bloodborne-pathogens-mlt, /blog/d-dimer-thrombosis-rule-out-laboratory-mlt, /blog/bnp-nt-probnp-heart-failure-markers-mlt, /blog/serum-osmolality-serum-urine-laboratory-mlt, /app/dashboard |
+| csf-analysis-cell-count-protein-glucose-mlt | 2360 | pass | /blog/ldh-tissue-injury-marker-laboratory-mlt, /blog/vancomycin-therapeutic-monitoring-troughs-mlt, /blog/magnesium-laboratory-hypomagnesemia-hypermagnesemia-mlt, /blog/cortisol-testing-laboratory-diurnal-variation-mlt, /app/dashboard |
+| gram-stain-quality-interpretation-mlt | 2351 | pass | /blog/lactate-laboratory-measurement-pre-analytics-mlt, /blog/phenytoin-therapeutic-drug-monitoring-basics-mlt, /blog/phosphate-disorders-laboratory-interpretation-mlt, /blog/ana-screening-autoimmune-serology-basics-mlt, /app/dashboard |
+| hematology-analyzer-qc-westgard-concepts-mlt | 2294 | pass | /blog/hba1c-diabetes-monitoring-assay-caveats-mlt, /blog/digoxin-therapeutic-monitoring-laboratory-mlt, /blog/anion-gap-metabolic-acidosis-laboratory-mlt, /blog/rheumatoid-factor-anti-ccp-serology-mlt, /app/dashboard |
+| liver-function-tests-lfts-laboratory-mlt | 2352 | pass | /blog/iron-studies-ferritin-iron-saturation-mlt, /blog/glucose-fasting-random-hba1c-triad-mlt, /blog/serum-osmolality-serum-urine-laboratory-mlt, /blog/hcg-qualitative-quantitative-pregnancy-testing-mlt, /app/dashboard |
+| thyroid-laboratory-testing-tsh-free-t4-mlt | 2166 | pass | /blog/vitamin-b12-folate-megablastic-workup-mlt, /blog/lipase-amylase-pancreatitis-biomarkers-mlt, /blog/cortisol-testing-laboratory-diurnal-variation-mlt, /blog/hepatitis-serology-panel-acute-chronic-basics-mlt, /app/dashboard |
+| critical-values-reporting-laboratory-communication-mlt | 2256 | pass | /blog/d-dimer-thrombosis-rule-out-laboratory-mlt, /blog/bnp-nt-probnp-heart-failure-markers-mlt, /blog/ana-screening-autoimmune-serology-basics-mlt, /blog/hiv-screening-confirmatory-algorithm-concepts-mlt, /app/dashboard |
+| laboratory-infection-control-bloodborne-pathogens-mlt | 2320 | pass | /blog/vancomycin-therapeutic-monitoring-troughs-mlt, /blog/magnesium-laboratory-hypomagnesemia-hypermagnesemia-mlt, /blog/rheumatoid-factor-anti-ccp-serology-mlt, /blog/syphilis-reverse-screening-algorithm-laboratory-mlt, /app/dashboard |
+| ldh-tissue-injury-marker-laboratory-mlt | 2280 | pass | /blog/phenytoin-therapeutic-drug-monitoring-basics-mlt, /blog/phosphate-disorders-laboratory-interpretation-mlt, /blog/hcg-qualitative-quantitative-pregnancy-testing-mlt, /blog/urine-drug-screen-immunoassay-cross-reactivity-mlt, /app/dashboard |
+| lactate-laboratory-measurement-pre-analytics-mlt | 2248 | pass | /blog/digoxin-therapeutic-monitoring-laboratory-mlt, /blog/anion-gap-metabolic-acidosis-laboratory-mlt, /blog/hepatitis-serology-panel-acute-chronic-basics-mlt, /blog/peripheral-blood-smear-review-mlt-certification, /app/dashboard |
+| hba1c-diabetes-monitoring-assay-caveats-mlt | 2331 | pass | /blog/glucose-fasting-random-hba1c-triad-mlt, /blog/serum-osmolality-serum-urine-laboratory-mlt, /blog/hiv-screening-confirmatory-algorithm-concepts-mlt, /blog/reticulocyte-count-anemia-classification-mlt, /app/dashboard |
+| iron-studies-ferritin-iron-saturation-mlt | 2307 | pass | /blog/lipase-amylase-pancreatitis-biomarkers-mlt, /blog/cortisol-testing-laboratory-diurnal-variation-mlt, /blog/syphilis-reverse-screening-algorithm-laboratory-mlt, /blog/direct-indirect-antiglobulin-tests-transfusion-mlt, /app/dashboard |
+| vitamin-b12-folate-megablastic-workup-mlt | 2372 | pass | /blog/bnp-nt-probnp-heart-failure-markers-mlt, /blog/ana-screening-autoimmune-serology-basics-mlt, /blog/urine-drug-screen-immunoassay-cross-reactivity-mlt, /blog/antibody-screen-unexpected-antibodies-blood-bank-mlt, /app/dashboard |
+| d-dimer-thrombosis-rule-out-laboratory-mlt | 2283 | pass | /blog/magnesium-laboratory-hypomagnesemia-hypermagnesemia-mlt, /blog/rheumatoid-factor-anti-ccp-serology-mlt, /blog/peripheral-blood-smear-review-mlt-certification, /blog/point-of-care-glucometer-quality-control-mlt, /app/dashboard |
+| vancomycin-therapeutic-monitoring-troughs-mlt | 2285 | pass | /blog/phosphate-disorders-laboratory-interpretation-mlt, /blog/hcg-qualitative-quantitative-pregnancy-testing-mlt, /blog/reticulocyte-count-anemia-classification-mlt, /blog/therapeutic-phlebotomy-iron-indices-laboratory-monitoring-mlt, /app/dashboard |
+| phenytoin-therapeutic-drug-monitoring-basics-mlt | 2189 | pass | /blog/anion-gap-metabolic-acidosis-laboratory-mlt, /blog/hepatitis-serology-panel-acute-chronic-basics-mlt, /blog/direct-indirect-antiglobulin-tests-transfusion-mlt, /blog/cbc-interpretation-mlt-certification-prep, /app/dashboard |
+| digoxin-therapeutic-monitoring-laboratory-mlt | 2372 | pass | /blog/serum-osmolality-serum-urine-laboratory-mlt, /blog/hiv-screening-confirmatory-algorithm-concepts-mlt, /blog/antibody-screen-unexpected-antibodies-blood-bank-mlt, /blog/hemolysis-causes-laboratory-detection-mlt, /app/dashboard |
+| glucose-fasting-random-hba1c-triad-mlt | 2280 | pass | /blog/cortisol-testing-laboratory-diurnal-variation-mlt, /blog/syphilis-reverse-screening-algorithm-laboratory-mlt, /blog/point-of-care-glucometer-quality-control-mlt, /blog/pre-analytical-errors-blood-specimens-mlt, /app/dashboard |
+| lipase-amylase-pancreatitis-biomarkers-mlt | 2383 | pass | /blog/ana-screening-autoimmune-serology-basics-mlt, /blog/urine-drug-screen-immunoassay-cross-reactivity-mlt, /blog/therapeutic-phlebotomy-iron-indices-laboratory-monitoring-mlt, /blog/troponin-assays-pre-analytical-stability-mlt, /app/dashboard |
+| bnp-nt-probnp-heart-failure-markers-mlt | 2222 | pass | /blog/rheumatoid-factor-anti-ccp-serology-mlt, /blog/peripheral-blood-smear-review-mlt-certification, /blog/cbc-interpretation-mlt-certification-prep, /blog/pt-inr-vs-aptt-coagulation-basics-mlt, /app/dashboard |
+| magnesium-laboratory-hypomagnesemia-hypermagnesemia-mlt | 2288 | pass | /blog/hcg-qualitative-quantitative-pregnancy-testing-mlt, /blog/reticulocyte-count-anemia-classification-mlt, /blog/hemolysis-causes-laboratory-detection-mlt, /blog/blood-culture-contamination-versus-true-bacteremia-mlt, /app/dashboard |
+| phosphate-disorders-laboratory-interpretation-mlt | 2338 | pass | /blog/hepatitis-serology-panel-acute-chronic-basics-mlt, /blog/direct-indirect-antiglobulin-tests-transfusion-mlt, /blog/pre-analytical-errors-blood-specimens-mlt, /blog/urinalysis-dipstick-microscopic-basics-mlt, /app/dashboard |
+| anion-gap-metabolic-acidosis-laboratory-mlt | 2252 | pass | /blog/hiv-screening-confirmatory-algorithm-concepts-mlt, /blog/antibody-screen-unexpected-antibodies-blood-bank-mlt, /blog/troponin-assays-pre-analytical-stability-mlt, /blog/esr-versus-crp-inflammatory-markers-mlt, /app/dashboard |
+| serum-osmolality-serum-urine-laboratory-mlt | 2301 | pass | /blog/syphilis-reverse-screening-algorithm-laboratory-mlt, /blog/point-of-care-glucometer-quality-control-mlt, /blog/pt-inr-vs-aptt-coagulation-basics-mlt, /blog/abo-rh-blood-group-typing-forward-reverse-mlt, /app/dashboard |
+| cortisol-testing-laboratory-diurnal-variation-mlt | 2361 | pass | /blog/urine-drug-screen-immunoassay-cross-reactivity-mlt, /blog/therapeutic-phlebotomy-iron-indices-laboratory-monitoring-mlt, /blog/blood-culture-contamination-versus-true-bacteremia-mlt, /blog/crossmatch-transfusion-compatibility-basics-mlt, /app/dashboard |
+| ana-screening-autoimmune-serology-basics-mlt | 2310 | pass | /blog/peripheral-blood-smear-review-mlt-certification, /blog/cbc-interpretation-mlt-certification-prep, /blog/urinalysis-dipstick-microscopic-basics-mlt, /blog/arterial-blood-gas-basics-for-mlt-students, /app/dashboard |
+| rheumatoid-factor-anti-ccp-serology-mlt | 2314 | pass | /blog/reticulocyte-count-anemia-classification-mlt, /blog/hemolysis-causes-laboratory-detection-mlt, /blog/esr-versus-crp-inflammatory-markers-mlt, /blog/laboratory-specimen-rejection-criteria-mlt, /app/dashboard |
+| hcg-qualitative-quantitative-pregnancy-testing-mlt | 2297 | pass | /blog/direct-indirect-antiglobulin-tests-transfusion-mlt, /blog/pre-analytical-errors-blood-specimens-mlt, /blog/abo-rh-blood-group-typing-forward-reverse-mlt, /blog/chain-of-custody-toxicology-specimens-mlt, /app/dashboard |
+| hepatitis-serology-panel-acute-chronic-basics-mlt | 2250 | pass | /blog/antibody-screen-unexpected-antibodies-blood-bank-mlt, /blog/troponin-assays-pre-analytical-stability-mlt, /blog/crossmatch-transfusion-compatibility-basics-mlt, /blog/csf-analysis-cell-count-protein-glucose-mlt, /app/dashboard |
+| hiv-screening-confirmatory-algorithm-concepts-mlt | 2491 | pass | /blog/point-of-care-glucometer-quality-control-mlt, /blog/pt-inr-vs-aptt-coagulation-basics-mlt, /blog/arterial-blood-gas-basics-for-mlt-students, /blog/gram-stain-quality-interpretation-mlt, /app/dashboard |
+| syphilis-reverse-screening-algorithm-laboratory-mlt | 2252 | pass | /blog/therapeutic-phlebotomy-iron-indices-laboratory-monitoring-mlt, /blog/blood-culture-contamination-versus-true-bacteremia-mlt, /blog/laboratory-specimen-rejection-criteria-mlt, /blog/hematology-analyzer-qc-westgard-concepts-mlt, /app/dashboard |
+| urine-drug-screen-immunoassay-cross-reactivity-mlt | 2368 | pass | /blog/cbc-interpretation-mlt-certification-prep, /blog/urinalysis-dipstick-microscopic-basics-mlt, /blog/chain-of-custody-toxicology-specimens-mlt, /blog/liver-function-tests-lfts-laboratory-mlt, /app/dashboard |
+| peripheral-blood-smear-review-mlt-certification | 2464 | pass | /blog/hemolysis-causes-laboratory-detection-mlt, /blog/esr-versus-crp-inflammatory-markers-mlt, /blog/csf-analysis-cell-count-protein-glucose-mlt, /blog/thyroid-laboratory-testing-tsh-free-t4-mlt, /app/dashboard |
+| reticulocyte-count-anemia-classification-mlt | 2198 | pass | /blog/pre-analytical-errors-blood-specimens-mlt, /blog/abo-rh-blood-group-typing-forward-reverse-mlt, /blog/gram-stain-quality-interpretation-mlt, /blog/critical-values-reporting-laboratory-communication-mlt, /app/dashboard |
+| direct-indirect-antiglobulin-tests-transfusion-mlt | 2346 | pass | /blog/troponin-assays-pre-analytical-stability-mlt, /blog/crossmatch-transfusion-compatibility-basics-mlt, /blog/hematology-analyzer-qc-westgard-concepts-mlt, /blog/laboratory-infection-control-bloodborne-pathogens-mlt, /app/dashboard |
+| antibody-screen-unexpected-antibodies-blood-bank-mlt | 2290 | pass | /blog/pt-inr-vs-aptt-coagulation-basics-mlt, /blog/arterial-blood-gas-basics-for-mlt-students, /blog/liver-function-tests-lfts-laboratory-mlt, /blog/ldh-tissue-injury-marker-laboratory-mlt, /app/dashboard |
+| point-of-care-glucometer-quality-control-mlt | 2290 | pass | /blog/blood-culture-contamination-versus-true-bacteremia-mlt, /blog/laboratory-specimen-rejection-criteria-mlt, /blog/thyroid-laboratory-testing-tsh-free-t4-mlt, /blog/lactate-laboratory-measurement-pre-analytics-mlt, /app/dashboard |
+| therapeutic-phlebotomy-iron-indices-laboratory-monitoring-mlt | 2270 | pass | /blog/urinalysis-dipstick-microscopic-basics-mlt, /blog/chain-of-custody-toxicology-specimens-mlt, /blog/critical-values-reporting-laboratory-communication-mlt, /blog/hba1c-diabetes-monitoring-assay-caveats-mlt, /app/dashboard |
 
-## Internal link pattern
+## Validation gates
 
-- Each post links to four peer slugs in this batch plus `/app/dashboard`.
-
-## Validation commands
-
-Run from `nursenest-core/` package root:
-
-- `npm run validate:blog-static-longtail`
-- `npm run diagnose:blog-slug-collisions -- --write-report`
-- `npm run typecheck:critical`
-- `npm run test:blog-recovery`
-- `npm run test:homepage`
-
-Record exit codes below after running locally.
+Run from nursenest-core package root after generation. typecheck:critical succeeded after removing a corrupted local .next directory that broke routes.d.ts parsing.
 
 | command | exit code |
 | --- | ---: |
-| validate:blog-static-longtail | _pending_ |
-| diagnose:blog-slug-collisions | _pending_ |
-| typecheck:critical | _pending_ |
-| test:blog-recovery | _pending_ |
-| test:homepage | _pending_ |
+| npm run validate:blog-static-longtail | 0 |
+| npm run diagnose:blog-slug-collisions -- --write-report | 0 |
+| npm run typecheck:critical | 0 |
+| npm run test:blog-recovery | 0 |
+| npm run test:homepage | 0 |

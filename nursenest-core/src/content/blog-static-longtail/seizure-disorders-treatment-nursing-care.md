@@ -6,7 +6,7 @@ category: Neurologic
 tags: Seizures, Epilepsy, Neurologic, Safety, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: true
+draft: false
 seoTitle: Seizure Disorders Nursing Care for NCLEX and REx-PN
 seoDescription: Review seizure types, safety interventions, medication adherence, status epilepticus priorities, postictal care, and nursing exam traps.
 canonicalUrl: /blog/seizure-disorders-treatment-nursing-care

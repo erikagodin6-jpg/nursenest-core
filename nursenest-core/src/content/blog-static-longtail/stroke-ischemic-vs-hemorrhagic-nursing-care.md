@@ -6,7 +6,7 @@ category: Neurologic
 tags: Stroke, Ischemic Stroke, Hemorrhagic Stroke, Neuro, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: true
+draft: false
 seoTitle: Ischemic vs Hemorrhagic Stroke Nursing Priorities
 seoDescription: Compare ischemic and hemorrhagic stroke signs, CT timing, thrombolytic cautions, blood pressure themes, and nursing priorities for exams.
 canonicalUrl: /blog/stroke-ischemic-vs-hemorrhagic-nursing-care

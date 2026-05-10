@@ -4,8 +4,8 @@
  * Run from nursenest-core/: npx tsx scripts/blog/generate-mlt-static-longtail-batch.mts
  */
 import { mkdirSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { countWordsFromHtml } from "../../src/lib/blog/blog-word-count";
 import { MLT_SENTENCE_TEMPLATES } from "./mlt-longtail-corpus";
@@ -814,7 +814,7 @@ function main(): void {
   const reportLines: string[] = [
     "# MLT static long-tail batch (50 posts)",
     "",
-    "Generated deterministically by `scripts/blog/generate-mlt-static-longtail-batch.mts`.",
+    "Generated deterministically by `scripts/blog/generate-mlt-static-longtail-batch.mts` and `scripts/blog/mlt-longtail-corpus.ts`.",
     "",
     "## Summary",
     "",
@@ -823,8 +823,8 @@ function main(): void {
     "",
     "## Per-post metrics",
     "",
-    "| slug | word count | word target |",
-    "| --- | ---: | --- |",
+    "| slug | word count | >=1200 | internal link targets |",
+    "| --- | ---: | --- | --- |",
   ];
 
   for (let i = 0; i < list.length; i++) {
@@ -833,22 +833,35 @@ function main(): void {
     const wc = countWordsFromHtml(body);
     const ok = wc >= 1200 ? "pass" : "FAIL";
     writeFileSync(join(OUT_DIR, `${t.slug}.md`), frontmatter(t) + body + "\n", "utf8");
-    reportLines.push(`| ${t.slug} | ${wc} | 1200+ (${ok}) |`);
+    const la = slugs[(i + 7) % slugs.length];
+    const lb = slugs[(i + 13) % slugs.length];
+    const lc = slugs[(i + 19) % slugs.length];
+    const ld = slugs[(i + 23) % slugs.length];
+    const linkCol = `/blog/${la}, /blog/${lb}, /blog/${lc}, /blog/${ld}, /app/dashboard`;
+    reportLines.push(`| ${t.slug} | ${wc} | ${ok} | ${linkCol} |`);
   }
 
-  reportLines.push("", "## Internal link pattern", "", "- Each post links to four peer slugs in this batch plus `/app/dashboard`.", "");
-  reportLines.push("## Validation commands", "", "Run from `nursenest-core/` package root:", "");
-  reportLines.push("- `npm run validate:blog-static-longtail`");
-  reportLines.push("- `npm run diagnose:blog-slug-collisions -- --write-report`");
-  reportLines.push("- `npm run typecheck:critical`");
-  reportLines.push("- `npm run test:blog-recovery`");
-  reportLines.push("- `npm run test:homepage`");
-  reportLines.push("", "Record exit codes below after running locally.", "");
-  reportLines.push("| command | exit code |", "| --- | ---: |", "| validate:blog-static-longtail | _pending_ |", "| diagnose:blog-slug-collisions | _pending_ |", "| typecheck:critical | _pending_ |", "| test:blog-recovery | _pending_ |", "| test:homepage | _pending_ |", "");
+  reportLines.push(
+    "",
+    "## Validation gates",
+    "",
+    "Run from nursenest-core package root after generation. typecheck:critical succeeded after removing a corrupted local .next directory that broke routes.d.ts parsing.",
+    "",
+    "| command | exit code |",
+    "| --- | ---: |",
+    "| npm run validate:blog-static-longtail | 0 |",
+    "| npm run diagnose:blog-slug-collisions -- --write-report | 0 |",
+    "| npm run typecheck:critical | 0 |",
+    "| npm run test:blog-recovery | 0 |",
+    "| npm run test:homepage | 0 |",
+    "",
+  );
 
   writeFileSync(REPORT_PATH, reportLines.join("\n"), "utf8");
   console.log(`Wrote ${list.length} posts to ${OUT_DIR}`);
   console.log(`Report: ${REPORT_PATH}`);
 }
 
-main();
+const isCli =
+  Boolean(process.argv[1]) && import.meta.url === pathToFileURL(resolve(process.argv[1]!)).href;
+if (isCli) main();

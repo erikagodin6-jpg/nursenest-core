@@ -162,6 +162,7 @@
     "validate:production-surface": "npm run validate:marketing-production-surface",
     "validate:internal-links": "npx tsx scripts/validate-internal-links.ts",
     "validate:blog-static-longtail": "npx tsx scripts/blog/validate-blog-static-longtail.mts",
+    "generate:rex-pn-rpn-longtail": "npx tsx scripts/blog/rex-pn-rpn-longtail/generate-batch.mts",
     "diagnose:blog-slug-collisions": "npx tsx scripts/blog/diagnose-blog-slug-collisions.mts",
     "db:validate-url-shape": "npx tsx scripts/db/validate-database-url-shape.mts",
     "validate:marketing-production-surface": "node scripts/validate-marketing-production-surface.mjs",

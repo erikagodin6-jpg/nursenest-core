@@ -71,13 +71,7 @@ Aortic dissection ripping pain red flags and urgent imaging activation teaching
 Pulmonary hypertension gradual deterioration assessment and MDT referral language
 Venous thromboembolism prophylaxis education mechanical versus pharmacological themes
 Medicines reconciliation at admission transfer and discharge for UK patient safety
-Medicines reconciliation errors common causes nursing mitigation strategies study
 Antimicrobial allergy documentation penicillin allergy delabelling awareness themes
-Drug interaction clinical decision support nursing advocacy for pharmacy review
-High dose opioid governance naloxone availability awareness for inpatient settings
-Sedation scoring monitoring for ventilated patients nursing safety teaching UK context
-Tracheostomy emergency management awareness for ward nurses without specialist scope
-Chest drain observation nursing cues for air leak and respiratory distress study
 Acute stroke FAST recognition hyperacute pathway time metrics nursing awareness
 Transient ischaemic attack ABCD2 nursing relevance for risk communication teaching
 Post-stroke swallow screening and aspiration prevention governance for ward nurses
@@ -104,22 +98,10 @@ Carbapenemase-producing enterobacterales cohort nursing education for UK IPC pol
 Blood culture collection contamination reduction teaching for phlebotomy-linked roles
 Lumbar puncture consent and aftercare nursing support study for neurology placements
 Acute kidney injury urine output monitoring bundle elements for nursing documentation
-Contrast-induced acute kidney injury risk communication themes for radiology interface
-Perioperative fluid balance charts interpretation and escalation for surgical nurses
-Enhanced observations for NEWS2 step-ups nursing workload and safety trade-offs study
 Endocrine storm recognition thyrotoxicosis nursing monitoring themes for acute care
 Addisonian crisis suspicion hypotension hyponatraemia hyperkalaemia exam clustering
 Sickle cell acute chest syndrome recognition and oxygenation themes for UK learners
 Thalassaemia transfusion iron chelation awareness for liaison nursing exam notes only
-Iron deficiency anaemia investigation themes nursing history gathering for primary care
-B12 folate deficiency neurological clues nursing assessment for exam case practice
-Coeliac disease malabsorption clues nursing dietary liaison and GP referral teaching
-Inflammatory bowel disease flare assessment dehydration and pain escalation study
-Acute abdomen gynaecological emergencies ectopic pregnancy awareness for ED nurses
-Antepartum haemorrhage recognition escalation and major haemorrhage call themes
-Pre-eclampsia severe features magnesium observations study without infusion titration
-Eclampsia emergency response nursing framework note for simulation exam preparation
-Postpartum haemorrhage quantification escalation and warming measures teaching study
 Neonatal jaundice threshold awareness for nurses working at maternity interfaces
 Paediatric fever sepsis vigilance without over-medicalising low-risk exam stems
 Child safeguarding immediate escalation steps UK acute trust policy awareness

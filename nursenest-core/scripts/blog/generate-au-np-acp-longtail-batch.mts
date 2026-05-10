@@ -10,7 +10,8 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const APP = join(__dirname, "..");
+/** Repo app root: `nursenest-core/` (parent of `scripts/`). */
+const APP = join(__dirname, "..", "..");
 const OUT = join(APP, "src", "content", "blog-static-longtail");
 
 const PUBLISHED_AT = "2026-05-09";

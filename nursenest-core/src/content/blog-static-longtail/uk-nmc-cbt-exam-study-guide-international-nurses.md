@@ -85,7 +85,7 @@ disclaimer: This article supports educational exam preparation and clinical reas
 <h2>APA-7 References</h2>
 <p>Nursing and Midwifery Council. (2018). Future nurse: Standards of proficiency for registered nurses. https://www.nmc.org.uk/standards/standards-for-nurses/standards-of-proficiency-for-registered-nurses/</p>
 <p>Nursing and Midwifery Council. (2024). The Code: Professional standards of practice and behaviour for nurses, midwives and nursing associates. https://www.nmc.org.uk/standards/code/</p>
-<p>NHS England. (2023). National early warning score (NEWS2). https://www.england.nhs.uk/ourwork/clinical-policy/sepsis/national-early-warning-score/</p>
+<p>NHS England. (2023). National early warning score (NEWS2). https://www.england.nhs.uk/ourwork/clinical-policy/sepsis/nationalearlywarningscore/</p>
 <p>NHS England. (2023). Patient safety syllabus: supporting education and training. https://www.england.nhs.uk/patient-safety/</p>
 <p>Royal College of Nursing. (2022). Accountability and delegation: A guide for the nursing team. https://www.rcn.org.uk/professional-development/publications/pub-007781</p>
-<p>Department of Health and Social Care. (2014). Duty of candour: a professional duty on providers. https://www.gov.uk/government/publications/duty-of-candour-guidance-for-health-and-social-care-providers</p>
+<p>Care Quality Commission. (2024). Regulation 20: Duty of candour. https://www.cqc.org.uk/guidance-regulation/providers/regulations-enforcement/regulation-20-duty-candour</p><p>Department of Health and Social Care. (2024). Findings of the call for evidence on the statutory duty of candour. https://www.gov.uk/government/publications/findings-of-the-call-for-evidence-on-the-statutory-duty-of-candour</p>

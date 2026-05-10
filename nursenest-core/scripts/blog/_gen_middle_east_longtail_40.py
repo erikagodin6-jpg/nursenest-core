@@ -402,14 +402,20 @@ def build_body(meta: dict, peer_slugs: list[str], title_by_slug: dict[str, str])
 
 
 def clip_seo_desc(text: str, max_len: int = 158) -> str:
+    """Prefer a full clause under max_len; avoid chopping mid-phrase."""
     text = text.strip()
     if len(text) <= max_len:
         return text
-    cut = text[: max_len - 1]
+    cut = text[:max_len]
+    # Avoid ending SEO description at the first short clause (e.g., right after the exam name).
+    for sep, minpos in ((". ", 125), ("; ", 95), (", ", 85)):
+        sp = cut.rfind(sep)
+        if sp >= minpos:
+            return cut[: sp + 1].rstrip()
     sp = cut.rfind(" ")
-    if sp > 40:
-        cut = cut[:sp]
-    return cut.rstrip(",;:- ") + "."
+    if sp >= 60:
+        return cut[:sp].rstrip(",;:- ") + "."
+    return text[: max_len - 3].rstrip() + "..."
 
 
 def shorten_seo_title(title: str, suffix: str = " | NurseNest", max_total: int = 70) -> str:
@@ -466,11 +472,15 @@ def build_frontmatter(meta: dict) -> str:
         f"({meta['exam']}): clinical safety refresh, documentation, IPC, and test strategy—verify all eligibility rules officially."
     )
     seo_title = shorten_seo_title(title)
-    raw_desc = (
-        f"Study guide for internationally educated nurses: {meta['exam']} framing for {meta['country']}, "
-        f"clinical priorities, documentation, IPC, medication safety, and exam-day strategy. Educational only."
+    lead = meta["title"].split(":")[0].strip()
+    if len(lead) > 52:
+        lead = lead[:49].rsplit(" ", 1)[0] + "..."
+    seo_desc = (
+        f"{lead}: Gulf licensing exam prep (clinical judgment, meds, IPC, charting, escalation). "
+        f"Educational only; confirm rules with official authorities."
     )
-    seo_desc = clip_seo_desc(raw_desc)
+    if len(seo_desc) > 158:
+        seo_desc = clip_seo_desc(seo_desc)
     tags_csv = tags_for(meta)
     cat = "International Nursing"
     lines = [
@@ -497,11 +507,12 @@ def build_frontmatter(meta: dict) -> str:
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     slugs = [p["slug"] for p in POSTS]
+    title_by_slug = {p["slug"]: p["title"] for p in POSTS}
     report: list[str] = []
     for meta in POSTS:
-        body = build_body(meta, slugs)
+        body = build_body(meta, slugs, title_by_slug)
         wc = word_count(body)
-        fm = build_frontmatter(meta, wc)
+        fm = build_frontmatter(meta)
         text = fm + body + "\n"
         path = OUT / f"{meta['slug']}.md"
         path.write_text(text, encoding="utf-8")

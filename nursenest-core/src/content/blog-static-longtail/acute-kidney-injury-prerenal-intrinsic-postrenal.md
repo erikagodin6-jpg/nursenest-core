@@ -6,7 +6,7 @@ category: Renal and Urinary
 tags: Acute Kidney Injury, Renal, Prerenal, Postrenal, NCLEX-RN, REx-PN
 publishedAt: 2026-05-10
 updatedAt: 2026-05-10
-draft: true
+draft: false
 seoTitle: Prerenal vs Intrinsic vs Postrenal AKI for Nursing Students
 seoDescription: Compare AKI causes, urine output clues, nursing assessment priorities, nephrotoxin safety, and NCLEX-style traps across prerenal, intrinsic, and postrenal injury.
 canonicalUrl: /blog/acute-kidney-injury-prerenal-intrinsic-postrenal

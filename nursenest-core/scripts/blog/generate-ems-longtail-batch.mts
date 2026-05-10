@@ -140,7 +140,7 @@ function buildBody(t: Topic): string {
     p(
       t.scenario,
       "The sections below support paramedic students, AEMT candidates, and EMS clinicians preparing for registry-style reasoning. They emphasize scene safety, assessment discipline, protocol-aligned interventions, and documentation.",
-      "Clinical focus: " + t.focus,
+      "Clinical focus: " + t.focus + ".",
     ) +
     p(
       "Translate each scenario into a field problem: airway protection, ventilation adequacy, oxygen delivery, perfusion, hemorrhage control, neurologic time windows, and toxicologic triggers. Prehospital care is interrupt-driven; document decisions at each step.",
