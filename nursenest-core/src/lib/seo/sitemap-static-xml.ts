@@ -388,7 +388,8 @@ export async function collectPathwayLessonSeoUrls(
 }
 
 /**
- * Default-locale “core” slice (merged into `/sitemap.xml` via `collectCoreUrls`).
+ * Default-locale “core” slice (merged into `/sitemap-core.xml` via `collectCoreUrls`; legacy merged `/sitemap.xml`
+ * used the full collector including pathway lessons).
  *
  * Unless {@link CollectCoreUrlsOptions.productionSafeStatic} is set, omits `/login` (noindex auth surface).
  */

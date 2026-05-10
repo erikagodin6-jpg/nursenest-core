@@ -46,16 +46,26 @@ test("sitemap XML has valid structure", () => {
   assert.match(xml, /<loc>https:\/\/www\.nursenest\.ca\/pricing<\/loc>/);
 });
 
-test("sitemap route excludes blog locs from core then merges with empty blog slice for main urlset", () => {
+test("sitemap.xml route serves sitemap index (no merged urlset)", () => {
   const routeSrc = readAppFile("app/sitemap.xml/route.ts");
-  assert.match(routeSrc, /try\s*\{/, "route must have try block for DB calls");
-  assert.match(routeSrc, /\}\s*catch/, "route must have catch block for DB failures");
-  assert.match(routeSrc, /collectCoreUrls/, "route must use collectCoreUrls for marketing + pathway URLs");
-  assert.match(routeSrc, /listBlogSitemapEntriesSafe/, "route must fetch live blog entries for dedupe");
-  assert.match(routeSrc, /excludeAbsoluteUrlsMatchingBlogSitemapEntries/, "route must strip blog locs from core list");
-  assert.match(routeSrc, /filterPublicSitemapEntries/, "route must filter ineligible locs");
-  assert.match(routeSrc, /mergeCoreUrlsWithBlogEntries/, "route must build merged url entries");
-  assert.match(routeSrc, /new Set/, "route must deduplicate URLs");
+  assert.match(routeSrc, /buildSitemapIndexXmlForOrigin/, "index route must build sitemap index XML");
+  assert.match(routeSrc, /normalizeOrigin/, "index route must normalize canonical origin");
+  assert.match(routeSrc, /requestMatchesEtag/, "index route must support 304 via ETag");
+});
+
+test("sitemap-core route excludes pathway lesson SEO urls from core collector", () => {
+  const routeSrc = readAppFile("app/sitemap-core.xml/route.ts");
+  assert.match(routeSrc, /omitPathwayLessonSeoUrls:\s*true/);
+  assert.match(routeSrc, /collectCoreUrls/);
+  assert.match(routeSrc, /excludeAbsoluteUrlsMatchingBlogSitemapEntries/);
+  assert.match(routeSrc, /filterPublicSitemapEntries/);
+  assert.match(routeSrc, /mergeCoreUrlsWithBlogEntries/);
+});
+
+test("sitemap-lessons route uses pathway lesson collector", () => {
+  const routeSrc = readAppFile("app/sitemap-lessons.xml/route.ts");
+  assert.match(routeSrc, /collectPathwayLessonSeoUrls/);
+  assert.match(routeSrc, /filterPublicSitemapEntries/);
 });
 
 test("sitemap-blog route serves blog-only urlset", () => {

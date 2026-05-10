@@ -1,20 +1,25 @@
 # NurseNest sitemap architecture — audit & roadmap
 
 **Purpose:** Information architecture + discoverability + topical authority—not “SEO cleanup” alone.  
-**Status:** Audit complete; **Phase 1** (segmented blog urlset) implemented. Further splits are roadmap-only unless prioritized.
+**Status:** Audit complete; **Phase 1** (sitemap index + core/blog/lessons segmentation + single robots line) implemented.
 
 **Figma:** This doc includes **Mermaid** diagrams you can paste into FigJam/Figma as the IA baseline; export PNGs for chat review per your workflow.
 
 ---
 
-## Phase 1 implemented (repo)
+## Phase 1 implemented (repo) — **sitemap index + segmented urlsets**
 
-- **`/sitemap-blog.xml`** — Blog-only urlset (`listBlogSitemapEntriesSafe` + `filterPublicSitemapEntries`). ETag + 304 like other routes (`src/app/sitemap-blog.xml/route.ts`).
-- **`/sitemap.xml`** — Uses `excludeAbsoluteUrlsMatchingBlogSitemapEntries` so blog `<loc>`s are **not** duplicated in the main merged file (`src/lib/seo/sitemap-public-index-filter.ts`).
-- **`robots.txt`** — Fourth `Sitemap:` line for `sitemap-blog.xml` (`CANONICAL_SITEMAP_LINES`).
-- **Tests:** `sitemap-public-index-filter.test.ts`, `sitemap-merged-route.test.ts`, `robots-route-source.contract.test.ts`.
+- **`/sitemap.xml`** — **Sitemap index** (`<sitemapindex>`) listing child urlsets only (`buildSitemapIndexXmlForOrigin`). No merged `<urlset>` in this response.
+- **`/sitemap-core.xml`** — Core marketing/programmatic URLs from `collectCoreUrls({ omitPathwayLessonSeoUrls: true })`, minus blog overlap (`excludeAbsoluteUrlsMatchingBlogSitemapEntries`) — same filtering/dedupe pattern as legacy merged file.
+- **`/sitemap-blog.xml`** — Blog-only urlset (`listBlogSitemapEntriesSafe` + `filterPublicSitemapEntries`).
+- **`/sitemap-lessons.xml`** — DB-backed pathway lesson hubs/topics/details (`collectPathwayLessonSeoUrls`) — extracted from core for segmentation.
+- **`/sitemap-allied.xml`** / **`/sitemap-new-grad.xml`** — Unchanged satellite urlsets.
+- **`robots.txt`** — **Single** `Sitemap:` line pointing at `/sitemap.xml` (index); crawlers discover children via index `<loc>` entries.
+- **Tests:** `sitemap-index.contract.test.ts`, `sitemap-segment-dedupe.contract.test.ts`, updated `sitemap-merged-route.test.ts`, `robots-route-source.contract.test.ts`.
 
-**Next phases:** Sitemap index at `/sitemap.xml`, further segmentation (lessons, pathways, localized), CI orphan validation — see risks/table above.
+**Prior Phase 1 note (superseded):** Earlier implementation used merged `/sitemap.xml` urlset + separate blog file + four `robots` lines — replaced by index-first layout above.
+
+**Next phases:** Further segmentation (localized-only chunk), CI orphan validation — see risks/table below.
 
 ---
 
@@ -22,11 +27,11 @@
 
 | Area | Current state |
 |------|----------------|
-| **Primary merged urlset** | `/sitemap.xml` = `collectCoreUrls()` **minus** any `<loc>` also in blog urlset; blog posts/hub live in `/sitemap-blog.xml` |
-| **Satellite urlsets** | `/sitemap-blog.xml`, `/sitemap-allied.xml`, `/sitemap-new-grad.xml` |
-| **robots.txt** | **Four** `Sitemap:` lines — enforced in tests (`robots.txt/route.ts`) |
+| **Primary discovery file** | `/sitemap.xml` = **sitemap index** listing `sitemap-core.xml`, `sitemap-blog.xml`, `sitemap-lessons.xml`, `sitemap-allied.xml`, `sitemap-new-grad.xml` |
+| **Satellite urlsets** | Same five children as index `<loc>`s — core excludes pathway-lesson rows (owned by lessons urlset) and blog overlap handled like legacy merged route |
+| **robots.txt** | **One** `Sitemap:` line — `/sitemap.xml` index only (`CANONICAL_SITEMAP_LINES`) |
 | **Gated surfaces** | `/app/*`, `/admin/*`, `/api/*`, `/seo/` — **disallowed** + excluded from urlsets via `isValidPublicUrl` |
-| **Lessons** | Pathway lesson hubs, topic clusters, lesson detail URLs — DB-backed, **capped** (`MAX_PATHWAY_DERIVED_SITEMAP_URLS` = 48k) + time budget (`SITEMAP_PATHWAY_BUDGET_MS`) |
+| **Lessons** | **`/sitemap-lessons.xml`** — pathway lesson hubs, topic clusters, lesson detail URLs (`collectPathwayLessonSeoUrls`); **capped** (`MAX_PATHWAY_DERIVED_SITEMAP_URLS`) + `SITEMAP_PATHWAY_BUDGET_MS` |
 | **Blog** | Dedicated **`/sitemap-blog.xml`** (same rows as former merge slice); lastmod from publish rows |
 | **ECG / labs / learner modules** | **Not** separately segmented; deep learner URLs generally **not** indexable |
 | **OSCE / scenarios** | Marketing hub paths when feature flags on (`collectOsceScenariosMarketingHubUrls`) |
