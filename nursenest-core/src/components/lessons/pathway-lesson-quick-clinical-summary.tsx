@@ -104,7 +104,7 @@ export function PathwayLessonQuickClinicalSummary({
 
   return (
     <section
-      className="nn-lesson-quick-summary nn-premium-lesson-quick-summary"
+      className="nn-lesson-quick-summary nn-premium-lesson-quick-summary nn-lesson-quick-summary--blossom"
       aria-labelledby="quick-clinical-summary"
       data-testid="pathway-lesson-quick-clinical-summary"
     >

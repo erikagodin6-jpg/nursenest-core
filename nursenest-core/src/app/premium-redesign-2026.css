@@ -2143,6 +2143,127 @@ html[data-theme="aurora"] .nn-premium-auth-system {
   text-underline-offset: 0.18em;
 }
 
+/* ---------------------------------------------------------------------
+   Pathway lesson reading — Blossom presentation (marketing + shared shell)
+   --------------------------------------------------------------------- */
+
+.nn-lesson-reading-shell--blossom {
+  border-radius: 1rem;
+  background:
+    linear-gradient(
+      185deg,
+      color-mix(in srgb, var(--semantic-panel-cool) 16%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-panel-muted)) 46%,
+      color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--theme-page-bg)) 100%
+    );
+  box-shadow: 0 28px 56px -44px color-mix(in srgb, var(--semantic-text-primary) 14%, transparent);
+}
+
+.nn-lesson-reading-shell--blossom .nn-lesson-main--blossom {
+  border-radius: 1.125rem;
+  padding: 0.15rem 0.1rem 0.35rem;
+}
+
+@media (min-width: 640px) {
+  .nn-lesson-reading-shell--blossom .nn-lesson-main--blossom {
+    padding: 0.25rem 0.15rem 0.5rem;
+  }
+}
+
+.nn-lesson-reading-progress {
+  position: sticky;
+  top: 0;
+  z-index: 34;
+  margin-top: -0.15rem;
+  margin-bottom: 0.45rem;
+}
+
+.nn-lesson-reading-progress__track {
+  height: 4px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-panel-muted));
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--semantic-text-primary) 6%, transparent);
+}
+
+.nn-lesson-reading-progress__fill {
+  height: 100%;
+  min-width: 3%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-chart-3) 78%, var(--semantic-border-soft)),
+    color-mix(in srgb, var(--semantic-chart-2) 82%, var(--semantic-border-soft)),
+    color-mix(in srgb, var(--semantic-chart-5) 76%, var(--semantic-border-soft))
+  );
+  transition: width 140ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-lesson-reading-progress__fill {
+    transition: none;
+  }
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-section-nav.nn-lesson-section-nav--blossom {
+  border-top-color: color-mix(in srgb, var(--semantic-chart-2) 38%, var(--semantic-border-soft));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--semantic-chart-4) 7%, transparent), transparent 42%),
+    var(--bg-card);
+  box-shadow: 0 16px 38px color-mix(in srgb, var(--semantic-text-primary) 5%, transparent);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-section-nav__progress strong {
+  color: color-mix(in srgb, var(--semantic-chart-2) 82%, var(--semantic-text-secondary));
+}
+
+@media (max-width: 1023px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-section-nav-mobile--sticky-lane {
+    position: sticky;
+    top: 0.35rem;
+    z-index: 28;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.nn-lesson-quick-summary--blossom {
+  border-radius: 1.125rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 90%, var(--semantic-chart-3) 10%);
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-cool));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+html[data-theme="dark-clinical"] .nn-lesson-quick-summary--blossom,
+html[data-theme="dark-mode"] .nn-lesson-quick-summary--blossom,
+html[data-theme="midnight-indigo"] .nn-lesson-quick-summary--blossom {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 94%, var(--semantic-chart-3) 6%);
+}
+
+.nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-article-flow::before {
+  opacity: 0.62;
+}
+
+html[data-theme="dark-clinical"] .nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-article-flow::before,
+html[data-theme="dark-mode"] .nn-premium-lesson-detail-shell.nn-lesson-reading-shell--blossom .nn-lesson-article-flow::before {
+  opacity: 0.28;
+}
+
+.nn-premium-lesson-detail-shell .lv-lesson-actions .lv-btn-secondary {
+  min-width: 0;
+  white-space: normal;
+  text-wrap: balance;
+  text-align: center;
+  padding-inline: 0.85rem;
+}
+
+.nn-premium-lesson-detail-shell .lv-lesson-actions .lv-btn-primary {
+  min-width: 0;
+  white-space: normal;
+  text-wrap: balance;
+  text-align: center;
+}
+
 .nn-premium-auth-header {
   text-align: left;
 }

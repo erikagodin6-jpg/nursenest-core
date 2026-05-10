@@ -16,6 +16,7 @@ import {
   normalizeMarketingLessonsHubTopicSlug,
 } from "@/lib/lessons/lesson-routes";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import {
   getPathwayLessonListWarehouseLocaleForHub,
   listAlliedProfessionTaxonomyClustersForPublicHub,
@@ -68,6 +69,8 @@ import type { HubDbFailureCategory } from "@/lib/db/safe-database";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonHubClinicalModulesStrip } from "@/components/pathway-lessons/lesson-hub-clinical-modules-strip";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
+import { MarketingLessonsHubStickyStudyChrome } from "@/components/pathway-lessons/marketing-lessons-hub-sticky-study-chrome";
+import { MarketingPublicLessonsHubAnonymousUpgradeStrip } from "@/components/pathway-lessons/marketing-public-lessons-hub-anonymous-upgrade-strip";
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
 import { LessonHubFullLessonLinkNav } from "@/components/pathway-lessons/lesson-hub-full-lesson-link-nav";
@@ -78,6 +81,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-hub-pipeline-collapse-guard";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { buildSubscriberPublicLessonsHubHeroCta } from "@/lib/marketing/public-lessons-hub-hero-cta";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { marketingCatCompletePoolUsable } from "@/lib/exam-pathways/pathway-marketing-practice-gates";
 import {
@@ -1377,10 +1381,15 @@ export default async function PathwayLessonsHubPage({
   const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
   const viewerSignedInLessonsHub = Boolean(progressCtx.userId.trim());
   const canShowProgressMap = canShowResume && lessonsForCurriculumHub.length > 0;
+  const anonymousHeroCta = {
+    label: "Create a free account",
+    href: `${withMarketingLocale(lessonContentLocale, HUB.signup)}?callbackUrl=${encodeURIComponent(base)}`,
+  } as const;
+  let subscriberHeroCta: { label: string; href: string } | undefined;
 
   if (canShowResume) {
     const hubSlugs = canShowProgressMap ? lessonsForCurriculumHub.map((l) => l.slug).filter(Boolean) : [];
-    const { progressMap: map } = await loadPathwayHubSubscriberData(
+    const { progressMap: map, resume } = await loadPathwayHubSubscriberData(
       progressCtx.userId,
       progressCtx.scope,
       progressCtx.learnerPath,
@@ -1389,6 +1398,7 @@ export default async function PathwayLessonsHubPage({
       hubSlugs,
     );
     progressMap = map;
+    subscriberHeroCta = buildSubscriberPublicLessonsHubHeroCta(resume, base);
   }
 
   return (
@@ -1398,6 +1408,7 @@ export default async function PathwayLessonsHubPage({
       eyebrow={pathway.shortName.trim() || pathway.displayName}
       pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
+      heroPrimaryCta={subscriberHeroCta ?? anonymousHeroCta}
       backLink={{ label: `${examName} overview`, href: overviewHref }}
     >
       <MarketingHubSmokeDiagnosticsJson
@@ -1424,7 +1435,9 @@ export default async function PathwayLessonsHubPage({
         }}
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-      <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      <MarketingLessonsHubStickyStudyChrome>
+        <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      </MarketingLessonsHubStickyStudyChrome>
       <LessonHubClinicalModulesStrip
         pathway={pathway}
         marketingLocale={lessonContentLocale}
@@ -1539,6 +1552,13 @@ export default async function PathwayLessonsHubPage({
         alliedTaxonomy={alliedTaxonomyNorm ?? undefined}
         lessonsOnPage={lessonsOnPageForPagination}
       />
+
+      {!canShowResume ? (
+        <MarketingPublicLessonsHubAnonymousUpgradeStrip
+          marketingUiLocale={lessonContentLocale}
+          signupCallbackPath={base}
+        />
+      ) : null}
 
       <p className="mt-8 text-sm text-[var(--semantic-text-secondary)]">
         <Link

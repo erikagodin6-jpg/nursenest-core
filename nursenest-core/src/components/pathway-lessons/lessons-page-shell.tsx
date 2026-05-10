@@ -16,6 +16,8 @@ type Props = {
   pathwayTrack?: string;
   toolbar?: ReactNode;
   ctas?: CtaButton[];
+  /** Single primary hero action: signup for guests, resume/next lesson for subscribers. */
+  heroPrimaryCta?: { label: string; href: string };
   backLink?: { label: string; href: string };
   children: ReactNode;
 };
@@ -44,6 +46,7 @@ export function LessonsPageShell({
   pathwayTrack,
   toolbar,
   ctas,
+  heroPrimaryCta,
   backLink,
   children,
 }: Props) {
@@ -52,6 +55,7 @@ export function LessonsPageShell({
       className="nn-premium-pathway-hub nn-premium-lessons-system"
       data-nn-lessons-marketing-hub="1"
       data-nn-premium-lessons-system="hub"
+      data-nn-public-hub-blossom="1"
       {...(pathwayTrack ? { "data-pathway-track": pathwayTrack } : {})}
     >
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8">
@@ -86,6 +90,14 @@ export function LessonsPageShell({
             ) : null}
 
             {toolbar ? <div className="mx-auto mt-5 w-full max-w-3xl">{toolbar}</div> : null}
+
+            {heroPrimaryCta ? (
+              <div className="mx-auto mt-6 flex w-full max-w-2xl justify-center sm:justify-start">
+                <Link href={heroPrimaryCta.href} className={ctaClass("primary")}>
+                  {heroPrimaryCta.label}
+                </Link>
+              </div>
+            ) : null}
 
             {ctas && ctas.length > 0 ? (
               <div className="mx-auto mt-4 flex max-w-2xl flex-wrap justify-center gap-2">

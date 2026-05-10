@@ -25,6 +25,78 @@ export type RuntimeVersionPayload = {
 
 const missingMetaMessage = "nn-build-meta.json missing; run a production build (prebuild writes this file).";
 
+const commitEnvKeys = [
+  "GITHUB_SHA",
+  "SOURCE_COMMIT",
+  "SOURCE_VERSION",
+  "DIGITALOCEAN_GIT_COMMIT_SHA",
+  "COMMIT_SHA",
+] as const;
+
+const branchEnvKeys = [
+  "GITHUB_REF_NAME",
+  "SOURCE_BRANCH",
+  "DIGITALOCEAN_GIT_BRANCH",
+  "BRANCH_NAME",
+] as const;
+
+function firstEnvValue(env: NodeJS.ProcessEnv, keys: readonly string[]) {
+  for (const key of keys) {
+    const value = env[key]?.trim();
+    if (value) return { key, value };
+  }
+  return null;
+}
+
+function normalizeBranch(value: string | null | undefined) {
+  if (!value || value === "HEAD") return null;
+  return value.replace(/^refs\/heads\//, "").replace(/^origin\//, "").trim() || null;
+}
+
+function detectRuntimeBuildPlatform(env: NodeJS.ProcessEnv) {
+  if (env.DIGITALOCEAN_APP_ID || env.DIGITALOCEAN_GIT_COMMIT_SHA || env.NN_APP_PLATFORM_BUILD === "true") {
+    return "digitalocean";
+  }
+  if (env.GITHUB_ACTIONS === "true" || env.GITHUB_SHA) return "github-actions";
+  if (env.VERCEL === "1" || env.VERCEL_GIT_COMMIT_SHA) return "vercel";
+  if (env.CI === "true") return "ci";
+  return null;
+}
+
+export function buildRuntimeEnvMeta(env: NodeJS.ProcessEnv = process.env): BuildMeta | null {
+  const commit = firstEnvValue(env, commitEnvKeys);
+  const branch = firstEnvValue(env, branchEnvKeys);
+  const commitValue = commit?.value ?? null;
+  const branchValue = normalizeBranch(branch?.value);
+
+  if (!commitValue && !branchValue) {
+    return null;
+  }
+
+  return {
+    commit: commitValue,
+    branch: branchValue,
+    recordedAt: env.NN_BUILD_RECORDED_AT?.trim() || null,
+    environment: env.NN_DEPLOY_ENV?.trim() || env.NODE_ENV?.trim() || null,
+    buildPlatform: detectRuntimeBuildPlatform(env),
+    source: commit ? `env:${commit.key}` : branch ? `env:${branch.key}` : "env:runtime",
+  };
+}
+
+function mergeMetaWithRuntimeEnv(meta: BuildMeta | null, env: NodeJS.ProcessEnv = process.env): BuildMeta | null {
+  const envMeta = buildRuntimeEnvMeta(env);
+  if (!meta) return envMeta;
+  if (!envMeta) return meta;
+  return {
+    commit: meta.commit ?? envMeta.commit ?? null,
+    branch: meta.branch ?? envMeta.branch ?? null,
+    recordedAt: meta.recordedAt ?? envMeta.recordedAt ?? null,
+    environment: meta.environment ?? envMeta.environment ?? null,
+    buildPlatform: meta.buildPlatform ?? envMeta.buildPlatform ?? null,
+    source: meta.commit ? meta.source ?? null : envMeta.source ?? meta.source ?? null,
+  };
+}
+
 export async function readBuildMeta(cwd = process.cwd()): Promise<BuildMeta | null> {
   const filePath = join(cwd, "public", "nn-build-meta.json");
   try {
@@ -40,21 +112,23 @@ export function buildRuntimeVersionPayload(
   runtime: {
     nodeEnv?: string | null;
     deploymentMode?: string | null;
+    env?: NodeJS.ProcessEnv;
   } = {},
 ): RuntimeVersionPayload {
+  const effectiveMeta = mergeMetaWithRuntimeEnv(meta, runtime.env);
   const payload: RuntimeVersionPayload = {
-    ok: Boolean(meta),
-    commit: meta?.commit ?? null,
-    branch: meta?.branch ?? null,
-    recordedAt: meta?.recordedAt ?? null,
-    environment: meta?.environment ?? null,
-    buildPlatform: meta?.buildPlatform ?? null,
+    ok: Boolean(effectiveMeta),
+    commit: effectiveMeta?.commit ?? null,
+    branch: effectiveMeta?.branch ?? null,
+    recordedAt: effectiveMeta?.recordedAt ?? null,
+    environment: effectiveMeta?.environment ?? null,
+    buildPlatform: effectiveMeta?.buildPlatform ?? null,
     deploymentMode: runtime.deploymentMode ?? null,
     runtimeEnvironment: runtime.nodeEnv ?? null,
-    source: meta?.source ?? null,
+    source: effectiveMeta?.source ?? null,
   };
 
-  if (!meta) {
+  if (!effectiveMeta) {
     payload.message = missingMetaMessage;
   }
 
