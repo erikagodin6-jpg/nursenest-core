@@ -98,9 +98,9 @@ test("tag supplement merge includes long-tail slug when tag matches", () => {
 });
 
 test("category supplement merge includes long-tail slug when category matches", () => {
-  const rows = supplementBlogIndexMergeRowsForCategory("Renal & Fluids", new Set());
+  const rows = supplementBlogIndexMergeRowsForCategory("Pathophysiology", new Set());
   assert.ok(
     rows.some((r) => r.slug === "why-potassium-changes-are-dangerous-in-acute-kidney-injury-nursing-exams"),
-    "expected AKI potassium long-tail in Renal & Fluids supplement rows",
+    "expected AKI potassium long-tail in Pathophysiology supplement rows",
   );
 });

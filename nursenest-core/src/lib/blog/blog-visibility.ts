@@ -135,6 +135,23 @@ export function isBlogPostMarketingMetaVisible(
 }
 
 /** Prisma filter for list/count/sitemap/tag queries. */
+/**
+ * Optional denylist for **bundled** `blog-static-posts` entries on public marketing surfaces
+ * (`listStaticBlogPostsForIndex`, `getStaticBlogPost`). Comma-separated slugs in
+ * `BLOG_STATIC_MARKETING_HIDDEN_SLUGS` (e.g. `old-slug,duplicate-slug`). Long-tail markdown and DB posts
+ * are unaffected.
+ */
+export function isBlogSlugHiddenFromPublicMarketingCatalog(slug: string): boolean {
+  const raw = process.env.BLOG_STATIC_MARKETING_HIDDEN_SLUGS?.trim();
+  if (!raw) return false;
+  const needle = slug.trim();
+  if (!needle) return false;
+  for (const part of raw.split(",")) {
+    if (part.trim() === needle) return true;
+  }
+  return false;
+}
+
 export function blogLiveWhere(now: Date = new Date()): Prisma.BlogPostWhereInput {
   const workflowNeverPublic: Prisma.BlogPostWhereInput = {
     workflowStatus: { notIn: BLOG_WORKFLOW_FAILURES },
