@@ -20,6 +20,7 @@ export function validateBlogStaticLongtailRecord(
   if (!r.title?.trim()) issues.push({ file, message: "missing title" });
   if (!r.excerpt?.trim()) issues.push({ file, message: "missing excerpt" });
   if (!r.category?.trim()) issues.push({ file, message: "missing category" });
+  if (!r.tags?.length) issues.push({ file, message: "missing or empty tags" });
   if (!r.bodyHtml?.trim()) issues.push({ file, message: "missing body" });
   if (!r.createdAt?.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(r.createdAt)) {
     issues.push({ file, message: `invalid createdAt/publishedAt: ${r.createdAt}` });
