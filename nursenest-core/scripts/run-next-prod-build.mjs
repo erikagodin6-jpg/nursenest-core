@@ -9,14 +9,25 @@ import { fileURLToPath } from "node:url";
 
 import { resolveStandaloneServerPath } from "./verify-standalone-artifact.mjs";
 import { acquireExclusiveNextBuildLock, releaseExclusiveNextBuildLock } from "./next-build-exclusive.mjs";
+import {
+  createBuildMetricsRun,
+  finishBuildMetricsRun,
+  persistBuildMetricsRun,
+  recordBuildPhase,
+} from "./build-runtime-metrics.mjs";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
 const nextOutDir = path.join(packageRoot, ".next");
+const metricsRun = createBuildMetricsRun({ kind: "next-prod-build" });
 
 /** Structured timing + RSS-ish heap for CI log parsers (`phase_ms` stays grep-friendly). */
 function logPhaseMs(name, durationMs) {
   const m = process.memoryUsage();
+  recordBuildPhase(metricsRun, name, durationMs, {
+    heapUsedMb: Math.round(m.heapUsed / (1024 * 1024)),
+    rssMb: Math.round(m.rss / (1024 * 1024)),
+  });
   console.error(
     `[next-prod-build] phase_ms ${JSON.stringify({
       name,
@@ -292,6 +303,8 @@ const validateSurface = spawnSync(npmCmd, ["run", "validate:production-surface"]
 const validateSurfaceMs = Date.now() - t0;
 if ((validateSurface.status ?? 1) !== 0) {
   console.error("[next-prod-build] FATAL: validate:production-surface failed");
+  finishBuildMetricsRun(metricsRun, { counts: { failedPhase: "validate_production_surface" } });
+  persistBuildMetricsRun(metricsRun);
   process.exit(validateSurface.status ?? 1);
 }
 console.log("[next-prod-build] validate:production-surface_ok");
@@ -307,6 +320,8 @@ const lessonIndexes = spawnSync(process.execPath, [lessonIndexesForBuild], {
 const lessonIndexesMs = Date.now() - tLesson;
 if ((lessonIndexes.status ?? 1) !== 0) {
   console.error("[next-prod-build] FATAL: pathway lesson index build/verify failed (see [lesson-indexes] logs)");
+  finishBuildMetricsRun(metricsRun, { counts: { failedPhase: "lesson_indexes_gate" } });
+  persistBuildMetricsRun(metricsRun);
   process.exit(lessonIndexes.status ?? 1);
 }
 logPhaseMs("lesson_indexes_gate", lessonIndexesMs);
@@ -346,6 +361,8 @@ try {
   }
 }
 const nextBuildMs = Date.now() - tNext;
+metricsRun.memory.peakRssMb = r.peakRssMb;
+metricsRun.memory.peakProcessCount = r.peakProcessCount;
 console.log(
   `[next-prod-build] next_cli_invocation_end status=${r.status ?? "null"} signal=${r.signal ?? "null"}`,
 );
@@ -353,16 +370,42 @@ logPhaseMs("next_build", nextBuildMs);
 
 if (r.error) {
   console.error("[next-prod-build] FATAL: failed to spawn `next build`", r.error);
+  finishBuildMetricsRun(metricsRun, { counts: { failedPhase: "next_build" } });
+  persistBuildMetricsRun(metricsRun);
   process.exit(1);
 }
 if (r.signal != null) {
   console.error(
     `[next-prod-build] FATAL: next build process was terminated by signal ${r.signal} (common causes: OOM killer, container memory limit, manual interrupt).`,
   );
+  finishBuildMetricsRun(metricsRun, { counts: { failedPhase: "next_build", signal: r.signal } });
+  persistBuildMetricsRun(metricsRun);
   process.exit(1);
 }
 if (r.status !== 0) {
+  finishBuildMetricsRun(metricsRun, { counts: { failedPhase: "next_build", exitCode: r.status } });
+  persistBuildMetricsRun(metricsRun);
   process.exit(r.status ?? 1);
+}
+
+function listFilesRecursive(dir, predicate, out = []) {
+  if (!existsSync(dir)) {
+    return out;
+  }
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith(".")) {
+      continue;
+    }
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      listFilesRecursive(fullPath, predicate, out);
+      continue;
+    }
+    if (predicate(entry.name, fullPath)) {
+      out.push(fullPath);
+    }
+  }
+  return out;
 }
 
 function assertNonEmptyDir(label, dir, filter) {
@@ -383,6 +426,16 @@ function assertNonEmptyDir(label, dir, filter) {
   }
 }
 
+function assertNonEmptyCssOutput(staticRoot) {
+  const cssFiles = listFilesRecursive(staticRoot, (name) => name.endsWith(".css"));
+  if (cssFiles.length === 0) {
+    console.error(
+      `[next-prod-build] FATAL: next build reported success but no CSS assets were found under ${staticRoot}`,
+    );
+    process.exit(1);
+  }
+}
+
 const staticRoot = path.join(nextOutDir, "static");
 const standaloneRoot = path.join(nextOutDir, "standalone");
 if (!existsSync(staticRoot)) {
@@ -397,7 +450,7 @@ if (!existsSync(standaloneRoot)) {
   );
   process.exit(1);
 }
-assertNonEmptyDir("static/css", path.join(staticRoot, "css"), (n) => n.endsWith(".css"));
+assertNonEmptyCssOutput(staticRoot);
 assertNonEmptyDir("static/chunks", path.join(staticRoot, "chunks"), (n) => n.endsWith(".js"));
 const standaloneServer = resolveStandaloneServerPath(packageRoot);
 if (!standaloneServer) {
@@ -437,5 +490,18 @@ if ((verifyStandalone.status ?? 1) !== 0) {
 }
 console.log("[next-prod-build] verify_standalone_artifact_ok=1");
 logPhaseMs("verify_standalone_artifact", verifyStandaloneMs);
+
+finishBuildMetricsRun(metricsRun, {
+  counts: {
+    staticAssetFiles: listFilesRecursive(staticRoot, () => true).length,
+    standaloneFiles: listFilesRecursive(standaloneRoot, () => true).length,
+    peakNextProcessCount: r.peakProcessCount,
+  },
+  memory: {
+    peakRssMb: r.peakRssMb,
+    peakProcessCount: r.peakProcessCount,
+  },
+});
+persistBuildMetricsRun(metricsRun);
 
 process.exit(0);
