@@ -451,10 +451,31 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
         await expect(themeBtn).toBeVisible({ timeout: 15_000 });
       }
 
-      const leaf = page.locator('[data-nn-header-lockup="leaf"]').first();
-      const word = page.locator('[data-nn-header-lockup="wordmark"]').first();
-      await expect(leaf).toBeVisible();
-      await expect(word).toBeVisible();
+      /* Desktop lockup lives under `[data-testid="marketing-header-primary-row"]` (mobile row is hidden at lg+). */
+      const brandRegionOk = await page.evaluate(({ headerLayout }) => {
+        const header = document.querySelector(`header[data-nn-header-layout="${headerLayout}"]`);
+        const primaryRow = header?.querySelector('[data-testid="marketing-header-primary-row"]');
+        const leaf =
+          primaryRow?.querySelector('[data-nn-header-lockup="leaf"]') ??
+          header?.querySelector('[data-nn-header-lockup="leaf"]');
+        const word =
+          primaryRow?.querySelector('[data-nn-header-lockup="wordmark"]') ??
+          header?.querySelector('[data-nn-header-lockup="wordmark"]');
+        if (!leaf || !word) return { ok: false as const, reason: "missing lockup" };
+        const lr = leaf.getBoundingClientRect();
+        const wr = word.getBoundingClientRect();
+        const lc = getComputedStyle(leaf).color;
+        const wc = getComputedStyle(word).color;
+        const ok =
+          lr.width >= 8 &&
+          lr.height >= 8 &&
+          wr.width >= 24 &&
+          wr.height >= 8 &&
+          lc === wc &&
+          lc !== "transparent";
+        return { ok: ok as const, lr: lr.width, wr: wr.width, lc, wc };
+      }, { headerLayout: layout });
+      expect(brandRegionOk.ok, JSON.stringify(brandRegionOk)).toBe(true);
 
       await page.screenshot({
         path: path.join(SHOT_DIR, `theme-nav-${theme}-1280x900-${testInfo.project.name}.png`),
@@ -490,11 +511,10 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
             if (r >= 235 && b >= 165 && g <= 130) return true;
             return false;
           }
-          function scanHeaderChromePink(): { hit: boolean; sample?: string } {
-            const header = document.querySelector(`header[data-nn-header-layout]`);
-            if (!header) return { hit: false };
+          function scanHeaderChromePink(h: Element | null): { hit: boolean; sample?: string } {
+            if (!h) return { hit: false };
             /* Shell surfaces only — avoid CTA/link brand hues. */
-            const nodes = header.querySelectorAll(
+            const nodes = h.querySelectorAll(
               ".nn-marketing-nav-v31-frame, .nn-header-desktop-grid, .nn-marketing-nav-v31-tier-inner, [data-testid='marketing-header-utility-band'], .nn-marketing-nav-v31-bar-a",
             );
             for (const el of Array.from(nodes).slice(0, 40)) {
@@ -507,16 +527,17 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
             return { hit: false };
           }
 
-          const header = document.querySelector(`header[data-nn-header-layout]`);
-          const tierChip = document.querySelector(
+          const layoutSel = themeId === "midnight" ? "marketing-unified-dark" : "marketing-row4";
+          const header = document.querySelector(`header[data-nn-header-layout="${layoutSel}"]`);
+          const tierChip = header?.querySelector(
             ".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier'] a, .nn-marketing-tier-chip",
           );
           const tierColor = tierChip ? getComputedStyle(tierChip).color : "";
-          const pinkScan = scanHeaderChromePink();
+          const pinkScan = scanHeaderChromePink(header);
 
-          const wordmark = document.querySelector('[data-nn-header-lockup="wordmark"]');
-          const frame = document.querySelector(".nn-marketing-nav-v31-frame");
-          const grid = document.querySelector(".nn-header-desktop-grid");
+          const wordmark = header?.querySelector('[data-nn-header-lockup="wordmark"]') ?? null;
+          const frame = header?.querySelector(".nn-marketing-nav-v31-frame") ?? null;
+          const grid = header?.querySelector(".nn-header-desktop-grid") ?? null;
           const wmFg = wordmark ? parseRgb(getComputedStyle(wordmark).color) : null;
           const frameBg = frame ? parseRgb(getComputedStyle(frame).backgroundColor) : null;
           const gridBg = grid ? parseRgb(getComputedStyle(grid).backgroundColor) : null;
@@ -536,9 +557,9 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
           };
 
           if (themeId === "ocean" || themeId === "blossom") {
-            const util = document.querySelector("[data-testid='marketing-header-utility-band']");
-            const tierRail = document.querySelector(".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier']");
-            const primaryGrid = document.querySelector(".nn-header-desktop-grid");
+            const util = header?.querySelector("[data-testid='marketing-header-utility-band']") ?? null;
+            const tierRail = header?.querySelector(".nn-marketing-nav-v31-tier-rail[data-nn-header-band='tier']") ?? null;
+            const primaryGrid = header?.querySelector(".nn-header-desktop-grid") ?? null;
             const uBg = util ? getComputedStyle(util).backgroundColor : "";
             const tBg = tierRail ? getComputedStyle(tierRail).backgroundColor : "";
             const shellBg = primaryGrid ? getComputedStyle(primaryGrid).backgroundColor : "";
@@ -580,23 +601,22 @@ test.describe("Marketing header — Ocean / Blossom / Midnight", () => {
           }
 
           if (themeId === "midnight") {
-            const tierInner = document.querySelector(".nn-marketing-nav-v31-tier-inner");
+            const tierInner = header?.querySelector(".nn-marketing-nav-v31-tier-inner") ?? null;
             const innerBg = tierInner ? getComputedStyle(tierInner).backgroundColor : "";
             const ip = parseRgb(innerBg);
             const innerLum = ip ? relLuminance(ip) : 0;
-            const login = document.querySelector(
-              "header a.nav-item.nn-header-login-receded, header a.nn-header-login-receded",
-            );
+            const login =
+              header?.querySelector("a.nav-item.nn-header-login-receded, a.nn-header-login-receded") ?? null;
             const loginLink =
               login ??
-              Array.from(document.querySelectorAll("header a.nav-item")).find((a) =>
+              Array.from(header?.querySelectorAll("a.nav-item") ?? []).find((a) =>
                 /log\s*in/i.test(a.textContent ?? ""),
               );
             const loginColor = loginLink ? getComputedStyle(loginLink).color : "";
             const lp = parseRgb(loginColor);
             const loginLum = lp ? relLuminance(lp) : 0;
             const tierLum = parseRgb(tierColor) ? relLuminance(parseRgb(tierColor)!) : 0;
-            const utilText = document.querySelector("[data-testid='marketing-header-utility-band']");
+            const utilText = header?.querySelector("[data-testid='marketing-header-utility-band']") ?? null;
             const utilColor = utilText ? getComputedStyle(utilText).color : "";
             const utilLum = parseRgb(utilColor) ? relLuminance(parseRgb(utilColor)!) : 0;
             return {
