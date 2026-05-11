@@ -34,7 +34,7 @@ export const PRENURSING_ALLIED_COVERAGE_MANIFEST = {
     apiLessonQuestionPools:
       "Grep: `src/app/api/lessons` and `src/app/api/questions` do not branch on `alliedProfessionKey` — pools are entitlement + pathway/tier scoped, not per-profession lesson IDs.",
     weakTopicAndDashboard:
-      "When `User.tier === ALLIED` and `alliedProfessionKey` is set, `filterWeakTopicsForAlliedProfession` / `filterTopicRowsForAlliedProfession` in `src/lib/allied/allied-weak-topic-filter.ts` may narrow weak-topic lists **only if** the profession defines `topicSlugsIn` on `AlliedProfessionMarketing`. Current registry entries omit `topicSlugsIn`, so the filter is a no-op (returns rows unchanged) until/unless product adds slugs per profession.",
+      "ALLIED weak-topic lists for dashboard / Study Next use `filterWeakTopicsForAlliedEntitlement` in `src/lib/allied/allied-weak-topic-filter.ts` with `AccessScope` (Stripe-backed `alliedCareer` → canonical profession) plus learner `pathwayId`. On allied marketing core pathways, exclusive topic ownership uses `exclusiveWinningProfessionForTopic`; non-core paths still support legacy `topicSlugsIn` via `filterWeakTopicsForAlliedProfession` (deprecated for new call sites).",
     uiAndSettings:
       "Profession affects nav badge labeling for ALLIED (`examIndicatorLabel` in `src/components/layout/site-header.tsx`) and exam-plan payload (`GET /api/learner/exam-plan` in `src/app/api/learner/exam-plan/route.ts`).",
     suiteEnforcement:

@@ -47,6 +47,7 @@ interface SingleHueDataHit {
   region: string;
   uniqueBrandFills: number;
   semanticHuesUsed: number;
+  barCount: number;
 }
 
 export interface TokenAuditResults {
@@ -248,12 +249,23 @@ export async function collectTokenAudit(page: Page, theme: AestheticThemeId): Pr
       ));
       for (const region of dataRegions) {
         const fills = new Set<string>();
-        const bars = region.querySelectorAll<HTMLElement>(
-          "[class*='progress'], [class*='bar'], [class*='fill'], [data-nn-progress-fill]",
-        );
+        const barSelector =
+          "[class*='progress'], [class*='bar'], [class*='fill'], [data-nn-progress-fill]";
+        const allBars = Array.from(region.querySelectorAll<HTMLElement>(barSelector));
+        // Count only the leaf fill — when a track contains a child fill element, the track
+        // itself is not a "bar" for hue purposes. This keeps the rule pointed at the actual
+        // colored fills (which should vary), not at uniform track chrome (which should not).
+        const bars = allBars.filter((b) => !b.querySelector(barSelector));
+        // Prefer gradient/background-image hues when present; fall back to bg-color.
         for (const b of bars) {
           if (!isVisible(b)) continue;
-          const bg = getComputedStyle(b).backgroundColor;
+          const cs = getComputedStyle(b);
+          const bgImage = cs.backgroundImage || "";
+          if (bgImage && bgImage !== "none") {
+            fills.add(bgImage);
+            continue;
+          }
+          const bg = cs.backgroundColor;
           if (bg && bg !== "rgba(0, 0, 0, 0)" && bg !== "transparent") {
             fills.add(bg);
           }
@@ -263,6 +275,7 @@ export async function collectTokenAudit(page: Page, theme: AestheticThemeId): Pr
             region: cssSelectorFor(region),
             uniqueBrandFills: fills.size,
             semanticHuesUsed: fills.size,
+            barCount: bars.length,
           });
         }
       }
@@ -325,7 +338,7 @@ export function attachTokenAuditToCollector(
     collector.recordTokenViolation(
       "single-hue-data-ui",
       TOKEN_SEVERITY["single-hue-data-ui"]!,
-      `Data region ${hit.region} uses a single fill across ${hit.uniqueBrandFills} bar(s) (semantic-color-guardrails)`,
+      `Data region ${hit.region} renders ${hit.barCount} bar(s) with ${hit.uniqueBrandFills} unique fill — semantic-color-guardrails expects multi-hue`,
       hit,
     );
   }

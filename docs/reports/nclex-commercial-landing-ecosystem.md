@@ -97,10 +97,43 @@ Commands run during implementation:
 - MCP descriptor inspection for `user-uicanvas` tools.
 - `CallMcpTool user-uicanvas/open_canvas` - failed with webview connection timeout.
 
-Validation commands to run after this report:
+Validation results:
 
-- `node --import tsx --test src/lib/seo/nclex-commercial-landing-pages.contract.test.ts`
-- `npm run typecheck`
-- `npm run test:seo-sitemap`
-- `npm run seo:guardrails`
-- `npm run test:internal-links-audit`
+- `node --import tsx --test src/lib/seo/nclex-commercial-landing-pages.contract.test.ts` - passed, 6/6 tests.
+- `npm run test:seo-sitemap` - passed, 44/44 tests.
+- `npm run seo:guardrails` - passed.
+- `npm run test:internal-links-audit` - passed, 5/5 tests.
+- `ReadLints` on edited files - no linter errors.
+- `npm run typecheck` - failed in pre-existing question-support typing code: `src/lib/questions/practice-runner-question-support.ts` references `reason` on the supported render-class union variant. No new landing files were listed in the typecheck output.
+
+## Final deploy readiness — 2026-05-11
+
+### Deployment readiness
+
+Safe to merge from the NCLEX commercial landing ecosystem perspective after the isolated typecheck fixes in the working tree. The 13 landing pages remain server-rendered, sitemap-visible, schema-tested, and internally linked into existing NurseNest study surfaces without changing learner route auth, entitlement, or CAT behavior.
+
+### Typecheck status
+
+The original `npm run typecheck` blocker in `src/lib/questions/practice-runner-question-support.ts` was low-risk and isolated. Root cause: `practiceRunnerNeedsUnsupportedFallback` narrowed `shape.kind === "supported"` only when canonical option length was at least two, then fell through and read `shape.reason`, which only exists on the `unsupported_shape` union member. Fix: return immediately for supported shapes, using `optsCanonicalLen < 2` as the fallback decision. Added a regression test for scalar option payloads whose canonical parsing yields too few choices.
+
+A second unrelated full-typecheck blocker appeared in multilingual blog sitemap work: `src/lib/seo/sitemap-multilingual-blog-xml.ts` imported `MultilingualBlogLocaleCode` from the registry module instead of `src/lib/blog/multilingual-blog-seo-types.ts`. This was corrected as an isolated type-only import fix.
+
+### Figma evidence risk
+
+Figma evidence remains the main non-code risk. The official Figma MCP server was not registered in this Cursor session, and the available UI canvas MCP timed out waiting for the editor webview. No Figma URL, file key, frame IDs, or exported side-by-side screenshots were produced. Do not claim Figma parity in a PR until the required Figma file and Ocean/Blossom/Midnight desktop/mobile frames are created and attached.
+
+### Commands and results
+
+- `node --import tsx --test src/lib/questions/practice-runner-question-support.test.ts` — passed, 8/8 tests.
+- `npm run typecheck:critical` — passed.
+- `npm run test:seo-sitemap` — passed, 44/44 tests.
+- `npm run test:internal-links-audit` — passed, 5/5 tests.
+- `node --import tsx --test src/lib/seo/nclex-commercial-landing-pages.contract.test.ts` — passed, 6/6 tests.
+- `npm run seo:guardrails` — initially failed because current sitemap index configuration included `sitemap-fr-blog.xml` and `sitemap-es-blog.xml` while `sitemap-index.contract.test.ts` still expected the older eight-child list; the contract was updated to match the configured child sitemap set and then passed.
+- `npm run typecheck` — passed after the isolated fixes above.
+- `ReadLints` on edited files — no linter errors.
+
+### Merge decision
+
+Safe to merge for code deploy readiness if reviewers accept the documented Figma evidence gap as a known visual QA follow-up. If the release policy requires strict Figma-first evidence before merge, hold the PR until the Figma MCP/file is available and the required frames plus screenshots are attached.
+

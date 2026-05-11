@@ -1,0 +1,127 @@
+ingress:
+  rules:
+  - component:
+      name: web
+    match:
+      path:
+        prefix: /
+name: nursenest-core-next
+region: tor
+services:
+- dockerfile_path: Dockerfile
+  envs:
+  - key: NODE_VERSION
+    scope: RUN_AND_BUILD_TIME
+    value: 22.22.2
+  - key: NODE_ENV
+    scope: RUN_AND_BUILD_TIME
+    value: production
+  - key: NEXT_TELEMETRY_DISABLED
+    scope: BUILD_TIME
+    value: "1"
+  - key: RUN_HEAVY_BUILD_TASKS
+    scope: BUILD_TIME
+    value: "false"
+  - key: SKIP_I18N_PREBUILD
+    scope: BUILD_TIME
+    value: "1"
+  - key: NN_APP_PLATFORM_BUILD
+    scope: BUILD_TIME
+    value: "true"
+  - key: NN_LESSON_INDEX_VERIFY_MODE
+    scope: BUILD_TIME
+    value: manifest
+  - key: NN_SKIP_HEAVY_BUILD_REPORTS
+    scope: BUILD_TIME
+    value: "1"
+  - key: NN_LOW_MEMORY_BUILD
+    scope: BUILD_TIME
+    value: "1"
+  - key: NN_BUILD_COMMIT
+    scope: RUN_TIME
+    value: ${web.COMMIT_HASH}
+  - key: NN_BUILD_BRANCH
+    scope: RUN_TIME
+    value: main
+  - key: NN_FORCE_SINGLE_BUILD_WORKER
+    scope: BUILD_TIME
+    value: "true"
+  - key: NN_TIMED_INCLUDE_NPM_PRUNE
+    scope: BUILD_TIME
+    value: "1"
+  - key: SENTRY_ENABLED
+    scope: BUILD_TIME
+    value: "false"
+  - key: NODE_OPTIONS
+    scope: BUILD_TIME
+    value: --max-old-space-size=4096
+  - key: BUILD_NODE_MAX_OLD_SPACE_SIZE_MB
+    scope: BUILD_TIME
+    value: "4096"
+  - key: BUILD_WEBPACK_PARALLELISM
+    scope: RUN_TIME
+    value: "1"
+  - key: TMPDIR
+    scope: RUN_TIME
+    value: /tmp
+  - key: PORT
+    scope: RUN_TIME
+    value: "8080"
+  - key: HOSTNAME
+    scope: RUN_TIME
+    value: 0.0.0.0
+  - key: NODE_MAX_OLD_SPACE_SIZE_MB
+    scope: RUN_TIME
+    value: "768"
+  - key: AUTH_TRUST_HOST
+    scope: RUN_TIME
+    value: "true"
+  - key: AUTH_SECRET
+    scope: RUN_TIME
+    type: SECRET
+    value: EV[1:rs6qdryWryx/WYE3sfAKUJh0Cov/SPDk:NR84+jZ9xSxNTzav+jWELQ==]
+  - key: DATABASE_URL
+    scope: RUN_TIME
+    type: SECRET
+    value: EV[1:epn2WKfjCszP6t4y3HVIH0npBDHw1gl4:VQDVd0phuUp1+VG9MmsAog==]
+  - key: AUTH_URL
+    scope: RUN_TIME
+  - key: AI_ADMIN_GENERATION_ENABLED
+    scope: RUN_TIME
+    value: "false"
+  - key: AI_INTEGRATIONS_OPENAI_API_KEY
+    scope: RUN_TIME
+    type: SECRET
+    value: EV[1:r2I65JIXdA3G7laYXfqXPezE4FfO5gjZ:UMiQ1EncFIJt2alQhr/skQ==]
+  - key: OPENAI_API_KEY
+    scope: RUN_TIME
+    type: SECRET
+    value: EV[1:DGi1tt1DaIJvQeSeMmOV1RinySVmwgj1:1ZsaCJe//lchsNnZrE1Wpw==]
+  - key: NN_ENV_VALIDATION_MODE
+    scope: RUN_TIME
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: erikagodin6-jpg/nursenest-core
+  health_check:
+    failure_threshold: 12
+    http_path: /readyz
+    initial_delay_seconds: 240
+    period_seconds: 15
+    port: 8080
+    success_threshold: 1
+    timeout_seconds: 15
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: basic-xs
+  liveness_health_check:
+    failure_threshold: 12
+    http_path: /healthz
+    initial_delay_seconds: 240
+    period_seconds: 15
+    port: 8080
+    success_threshold: 1
+    timeout_seconds: 15
+  name: web
+  run_command: node scripts/start-standalone.mjs
+  source_dir: .

@@ -63,6 +63,7 @@ import {
   alliedHubCatSurfaceUnlocked,
   applyAlliedOccupationPremiumModuleLocks,
 } from "@/lib/marketing/allied-hub-premium-module-policy";
+import { isMltSpecialtyMarketingSurfacesEnabled } from "@/lib/mlt/mlt-premium-module-config";
 import { isRtVentilatorMarketingSurfacesEnabled } from "@/lib/rt-ventilator/rt-ventilator-module-config";
 
 export type PremiumHubModuleKey =
@@ -106,6 +107,8 @@ export type PremiumHubModuleKey =
   | "allied_career_resources"
   /** RT ventilator premium marketing landing (`/respiratory-therapy/ventilator-training`). */
   | "rt_ventilator_training"
+  /** MLT / MLS premium specialty modules landing (`/medical-laboratory-technology/specialty-modules`). */
+  | "mlt_specialty_modules"
   /** Pathway marketing lessons directory (nursing tier hubs). */
   | "hub_lessons"
   /** Public marketing CAT explainer route (`/us/rn/nclex-rn/cat`, etc.) — nursing pathways only. */
@@ -484,6 +487,21 @@ function pushAlliedSupplementalPremiumStudyTools(
       ctaKey: "components.examPathwayHub.premiumModules.rtVentilatorCta",
       lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
       href: "/respiratory-therapy/ventilator-training",
+      wrapGuestWithLoginCallback: false,
+    });
+  }
+
+  if (k === "mlt" && isMltSpecialtyMarketingSurfacesEnabled()) {
+    studyTools.push({
+      key: "mlt_specialty_modules",
+      icon: Microscope,
+      variant: "featured",
+      extraClass: "nn-exam-hub-study-card--featured nn-qa-mlt-specialty-premium",
+      titleKey: "components.examPathwayHub.premiumModules.mltSpecialtyModulesTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.mltSpecialtyModulesBody",
+      ctaKey: "components.examPathwayHub.premiumModules.mltSpecialtyModulesCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: "/medical-laboratory-technology/specialty-modules",
       wrapGuestWithLoginCallback: false,
     });
   }

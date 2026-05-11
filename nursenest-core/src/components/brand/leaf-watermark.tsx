@@ -17,7 +17,7 @@ export function LeafWatermark({ className = "", imageClassName = "", size = 420 
   return (
     <div
       aria-hidden
-      className={`pointer-events-none absolute z-0 overflow-hidden select-none ${className}`.trim()}
+      className={`pointer-events-none absolute overflow-hidden select-none ${className}`.trim()}
     >
       <Image
         src={leafUrl}

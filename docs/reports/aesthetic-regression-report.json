@@ -1,13 +1,158 @@
 {
-  "generatedAt": "2026-05-11T03:49:20.145Z",
+  "generatedAt": "2026-05-11T04:26:12.363Z",
   "gate": "major",
-  "gateViolated": false,
+  "gateViolated": true,
   "severityCounts": {
     "critical": 0,
-    "major": 0,
-    "moderate": 0,
+    "major": 1,
+    "moderate": 5,
     "cosmetic": 0
   },
-  "totalShards": 0,
-  "shards": []
+  "totalShards": 1,
+  "catalogExpectedRoutes": [
+    "public-home",
+    "public-rn-hub",
+    "public-rpn-hub",
+    "public-np-hub",
+    "public-allied-hub",
+    "public-allied-respiratory",
+    "public-allied-mlt",
+    "public-blog",
+    "public-blog-article",
+    "public-marketing-lesson",
+    "auth-dashboard",
+    "auth-lessons-hub",
+    "auth-flashcards-hub",
+    "auth-practice-hub",
+    "auth-cat-hub",
+    "auth-cat-launch",
+    "auth-account",
+    "auth-account-settings",
+    "auth-lesson-detail",
+    "learner-practice-session",
+    "learner-cat-session",
+    "learner-cat-results",
+    "learner-flashcard-session",
+    "learner-report-card",
+    "learner-labs-ventilator-preview",
+    "learner-allied-premium-preview"
+  ],
+  "catalogMissingRoutes": [
+    "auth-account",
+    "auth-account-settings",
+    "auth-cat-hub",
+    "auth-cat-launch",
+    "auth-dashboard",
+    "auth-flashcards-hub",
+    "auth-lesson-detail",
+    "auth-lessons-hub",
+    "auth-practice-hub",
+    "learner-allied-premium-preview",
+    "learner-cat-results",
+    "learner-cat-session",
+    "learner-flashcard-session",
+    "learner-labs-ventilator-preview",
+    "learner-practice-session",
+    "learner-report-card",
+    "public-allied-hub",
+    "public-allied-mlt",
+    "public-allied-respiratory",
+    "public-blog",
+    "public-blog-article",
+    "public-marketing-lesson",
+    "public-np-hub",
+    "public-rn-hub",
+    "public-rpn-hub"
+  ],
+  "shards": [
+    {
+      "route": "public-home",
+      "theme": "ocean",
+      "viewport": "desktop",
+      "status": "captured",
+      "screenshotRelPath": "docs/screenshots/aesthetic-audit-2026/public/pub-home-ocean-desktop.png",
+      "baselineDiff": null,
+      "figmaDiff": null,
+      "thresholds": {
+        "cosmetic": 0.5,
+        "moderate": 2,
+        "major": 6
+      },
+      "issues": [
+        {
+          "category": "layout-heuristic",
+          "ruleId": "card-height-imbalance",
+          "severity": "moderate",
+          "message": "Card heights vary 1.95× in div.relative (max 189 / min 97)",
+          "detail": {
+            "containerSelector": "div.relative",
+            "maxHeight": 188.6875,
+            "minHeight": 96.671875,
+            "ratio": 1.951834491676095,
+            "cardCount": 5
+          }
+        },
+        {
+          "category": "layout-heuristic",
+          "ruleId": "empty-vertical-gap",
+          "severity": "moderate",
+          "message": "Empty vertical gap 450px (50% of viewport)",
+          "detail": {
+            "yStart": 4922.609375,
+            "yEnd": 5372.4375,
+            "height": 449.828125,
+            "viewportHeight": 900,
+            "ratio": 0.4998090277777778
+          }
+        },
+        {
+          "category": "layout-heuristic",
+          "ruleId": "empty-vertical-gap",
+          "severity": "moderate",
+          "message": "Empty vertical gap 430px (48% of viewport)",
+          "detail": {
+            "yStart": 7890.203125,
+            "yEnd": 8320.6875,
+            "height": 430.484375,
+            "viewportHeight": 900,
+            "ratio": 0.4783159722222222
+          }
+        },
+        {
+          "category": "layout-heuristic",
+          "ruleId": "low-contrast-gradient",
+          "severity": "major",
+          "message": "Gradient background may be unreadable (ratio 2.03)",
+          "detail": {
+            "selector": "section.nn-hero-bridge",
+            "gradient": "radial-gradient(120% 85% at 100% -20%, color(srgb 0.0588235 0.294118 0.431373 / 0.12), rgba(0, 0, 0, 0) 55%), radial-gradient(90% 70% at 0% 105%, color(srgb 0.5",
+            "contrastRatio": 2.0325910606829045
+          }
+        },
+        {
+          "category": "token-violation",
+          "ruleId": "hardcoded-color",
+          "severity": "moderate",
+          "message": "Hardcoded color #1da2d8, #1583b1, #0f172a on html.dm_sans_d096191e-module__sFdC_a__variable (style)",
+          "detail": {
+            "selector": "html.dm_sans_d096191e-module__sFdC_a__variable",
+            "property": "style",
+            "value": "#1da2d8, #1583b1, #0f172a"
+          }
+        },
+        {
+          "category": "token-violation",
+          "ruleId": "hardcoded-color",
+          "severity": "moderate",
+          "message": "Hardcoded color #2D7FD3, #FFFFFF, #236BBC on div.sticky (style)",
+          "detail": {
+            "selector": "div.sticky",
+            "property": "style",
+            "value": "#2D7FD3, #FFFFFF, #236BBC"
+          }
+        }
+      ],
+      "capturedAt": "2026-05-11T04:24:32.718Z"
+    }
+  ]
 }

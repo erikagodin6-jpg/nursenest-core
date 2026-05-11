@@ -10,6 +10,7 @@ import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-question-c
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 import { prismaWhereForAlliedProfessionExamQuestions } from "@/lib/allied/allied-exam-question-scope";
 import { US_ALLIED_CORE_PATHWAY_ID } from "@/lib/allied/allied-hub-program-model";
+import { prismaWhereExcludeMltPremiumModuleTags } from "@/lib/mlt/mlt-premium-content-taxonomy";
 import { RT_VENTILATOR_BANK_TAG } from "@/lib/rt-ventilator/rt-ventilator-content-taxonomy";
 
 /** Matches {@link pathwayExamQuestionMarketingWhere} for non-NP pathways (allied core). */
@@ -30,12 +31,14 @@ export function pathwayExamQuestionMarketingWhereForAlliedCore(): Prisma.ExamQue
 export function usAlliedMarketingHubInventoryWhere(): Prisma.ExamQuestionWhereInput | null {
   const base = pathwayExamQuestionMarketingWhereForAlliedCore();
   if (!base) return null;
+  const mltExclude = prismaWhereExcludeMltPremiumModuleTags();
   return {
     AND: [
       base,
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
       { NOT: { tags: { has: RT_VENTILATOR_BANK_TAG } } },
+      ...(Object.keys(mltExclude).length > 0 ? [mltExclude] : []),
     ],
   };
 }

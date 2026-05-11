@@ -172,6 +172,8 @@ export async function runSitemapSegmentationValidation(options: {
       "sitemap.xml": () => import("@/app/sitemap.xml/route"),
       "sitemap-core.xml": () => import("@/app/sitemap-core.xml/route"),
       "sitemap-blog.xml": () => import("@/app/sitemap-blog.xml/route"),
+      "sitemap-fr-blog.xml": () => import("@/app/sitemap-fr-blog.xml/route"),
+      "sitemap-es-blog.xml": () => import("@/app/sitemap-es-blog.xml/route"),
       "sitemap-pathways.xml": () => import("@/app/sitemap-pathways.xml/route"),
       "sitemap-lessons.xml": () => import("@/app/sitemap-lessons.xml/route"),
       "sitemap-localized.xml": () => import("@/app/sitemap-localized.xml/route"),

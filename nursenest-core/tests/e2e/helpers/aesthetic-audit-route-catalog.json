@@ -1,0 +1,31 @@
+{
+  "description": "Expected aesthetic audit route ids (prefix public-|auth-|learner-). Aggregator compares shards to this list for coverage gaps.",
+  "routes": [
+    "public-home",
+    "public-rn-hub",
+    "public-rpn-hub",
+    "public-np-hub",
+    "public-allied-hub",
+    "public-allied-respiratory",
+    "public-allied-mlt",
+    "public-blog",
+    "public-blog-article",
+    "public-marketing-lesson",
+    "auth-dashboard",
+    "auth-lessons-hub",
+    "auth-flashcards-hub",
+    "auth-practice-hub",
+    "auth-cat-hub",
+    "auth-cat-launch",
+    "auth-account",
+    "auth-account-settings",
+    "auth-lesson-detail",
+    "learner-practice-session",
+    "learner-cat-session",
+    "learner-cat-results",
+    "learner-flashcard-session",
+    "learner-report-card",
+    "learner-labs-ventilator-preview",
+    "learner-allied-premium-preview"
+  ]
+}

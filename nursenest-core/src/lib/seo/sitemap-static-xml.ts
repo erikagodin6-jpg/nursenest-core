@@ -37,6 +37,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
 import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logRuntimeMemoryDiagnostic } from "@/lib/observability/runtime-memory-diag";
 import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { shouldSkipDbBackedSitemapUrlsForBuild } from "@/lib/seo/sitemap-build-skip";
@@ -354,6 +355,7 @@ export async function collectPathwayLessonSeoUrls(
     return [`${o}/lessons`];
   }
   const urls: string[] = [];
+  logRuntimeMemoryDiagnostic("sitemap_pathway_lesson_collector_start", { segment });
   let pathwayDerived = 0;
   const push = (loc: string): boolean => {
     if (pathwayDerived >= MAX_PATHWAY_DERIVED_SITEMAP_URLS) return false;
@@ -433,6 +435,11 @@ export async function collectPathwayLessonSeoUrls(
       if (batch.length < PATHWAY_LESSON_SITEMAP_BATCH) break;
     }
   }
+  logRuntimeMemoryDiagnostic("sitemap_pathway_lesson_collector_done", {
+    segment,
+    urlCount: urls.length,
+    pathwayDerived,
+  });
   logSeoEmittedUrlBatch("sitemap_pathway_lesson_urls", urls);
   return urls;
 }

@@ -90,6 +90,13 @@ const PUBLIC_ROUTES: PublicRoute[] = [
     marketingChrome: true,
   },
   {
+    id: "allied-mlt",
+    path: "/allied/mlt",
+    seed: "us",
+    readySelector: "main h1, .nn-premium-pathway-hub, main",
+    marketingChrome: true,
+  },
+  {
     id: "blog",
     path: "/blog",
     seed: "us",

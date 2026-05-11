@@ -131,7 +131,11 @@ export function PremiumReadinessPreview() {
                     <span className="text-[var(--palette-heading)]">{domain.pct}%</span>
                   </div>
                   <div className="nn-premium-progress mt-1.5">
-                    <span style={{ width: `${domain.pct}%`, ["--progress-tone" as string]: `var(--nn-premium-meter-${domain.tone})` }} />
+                    <span
+                      data-nn-progress-fill
+                      data-nn-progress-tone={domain.tone}
+                      style={{ width: `${domain.pct}%`, ["--progress-tone" as string]: `var(--nn-premium-meter-${domain.tone})` }}
+                    />
                   </div>
                 </div>
               ))}

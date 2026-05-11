@@ -14,10 +14,9 @@ import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-lis
 import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scale";
-import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import {
-  filterTopicRowsForAlliedProfession,
-  filterWeakTopicsForAlliedProfession,
+  filterTopicRowsForAlliedEntitlement,
+  filterWeakTopicsForAlliedEntitlement,
 } from "@/lib/allied/allied-weak-topic-filter";
 import { computeReadiness, type ReadinessResult } from "@/lib/learner/readiness-score";
 import {
@@ -636,7 +635,7 @@ export async function loadLearnerDashboardCore(
 export async function loadLearnerDashboardAnalytics(
   userId: string,
   entitlement: AccessScope,
-  user: { tier: TierCode | null; alliedProfessionKey: string | null } | null | undefined,
+  user: { tier: TierCode | null; alliedProfessionKey: string | null; learnerPath?: string | null } | null | undefined,
 ): Promise<{
   weakTopics: WeakTopicRow[];
   strongTopics: WeakTopicRow[];
@@ -678,11 +677,11 @@ export async function loadLearnerDashboardAnalytics(
     });
   }
 
-  if (user?.tier === TierCode.ALLIED && user.alliedProfessionKey) {
-    const ap = getAlliedProfessionByProfessionKey(user.alliedProfessionKey);
-    weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
-    strongTopics = filterWeakTopicsForAlliedProfession(strongTopics, ap);
-    topicTrends = filterTopicRowsForAlliedProfession(topicTrends, ap);
+  if (entitlement.tier === TierCode.ALLIED && entitlement.hasAccess) {
+    const learnerPath = user?.learnerPath ?? null;
+    weakTopics = filterWeakTopicsForAlliedEntitlement(weakTopics, entitlement, learnerPath);
+    strongTopics = filterWeakTopicsForAlliedEntitlement(strongTopics, entitlement, learnerPath);
+    topicTrends = filterTopicRowsForAlliedEntitlement(topicTrends, entitlement, learnerPath);
     recommendedQuizTopic = weakTopics[0]?.topic ?? null;
     if (topicPerformance) {
       topicPerformance = {
@@ -910,6 +909,7 @@ export async function loadLearnerDashboard(
       loadLearnerDashboardAnalytics(userId, entitlement, {
         tier: core.userTier,
         alliedProfessionKey: core.alliedProfessionKey,
+        learnerPath: core.learnerPath,
       }),
       loadLearnerDashboardPracticeDetails(userId, entitlement, preload?.sessionGradingPreload ?? null),
     ]);

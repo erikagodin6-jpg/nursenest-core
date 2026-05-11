@@ -64,6 +64,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-force-publish";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logRuntimeMemoryDiagnostic } from "@/lib/observability/runtime-memory-diag";
 import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { applyAlliedStructuralCompletion } from "@/lib/lessons/allied-pathway-lesson-structural-normalization";
 import { applyNewGradStructuralCompletion } from "@/lib/lessons/new-grad-pathway-lesson-structural-normalization";
@@ -779,6 +780,10 @@ function ensurePathwayCatalogIndexes(pathwayId: string): void {
   pathwayCatalogRawBySlug.set(key, rawBySlug);
   lessonsPerfMark("catalog_build_end", { scope: "normalized_pathway_catalog", pathwayId: key, count: normRows.length });
   lessonsPerfMark("catalog_size", { scope: "normalized_pathway_catalog", pathwayId: key, count: normRows.length });
+  logRuntimeMemoryDiagnostic("lesson_catalog_pathway_index_built", {
+    pathwayId: key,
+    normalizedRows: normRows.length,
+  });
 }
 
 /** Raw merged catalog row for `slug` when present (no normalize). */

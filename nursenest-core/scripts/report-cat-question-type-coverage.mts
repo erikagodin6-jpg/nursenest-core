@@ -3,8 +3,9 @@
  * Inventory exam_questions by question_type for CAT / practice pool auditing.
  *
  *   cd nursenest-core && npx tsx scripts/report-cat-question-type-coverage.mts
+ *   CAT_REPORT_FULL_SCAN=1 CAT_ASSERT_POOL_RENDERERS=1 npx tsx scripts/report-cat-question-type-coverage.mts
  *
- * Requires DATABASE_URL. Writes reports/cat-question-type-coverage.md
+ * Requires DATABASE_URL (unless you only need the static renderer matrix stub). Writes reports/cat-question-type-coverage.md
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
@@ -20,11 +21,26 @@ async function main(): Promise<void> {
   mkdirSync(path.dirname(outMd), { recursive: true });
 
   if (!process.env.DATABASE_URL?.trim()) {
-    writeFileSync(
-      outMd,
-      `# CAT question-type coverage\n\n**Generated:** ${new Date().toISOString()}\n\nDATABASE_URL not set — run against a configured database for counts.\n`,
-      "utf8",
-    );
+    const { CAT_QUESTION_TYPE_RUNTIME_MATRIX } = await import("@/lib/questions/cat-runner-renderer-coverage");
+    const stubLines = [
+      `# CAT question-type coverage`,
+      ``,
+      `**Generated:** ${new Date().toISOString()}`,
+      ``,
+      `DATABASE_URL not set — run against a configured database for SQL counts.`,
+      ``,
+      `## Runtime renderer matrix (static)`,
+      ``,
+      `| Logical format | Example question_type labels | Client renderer | Positive E2E | Notes / exclusion |`,
+      `| --- | --- | --- | --- | --- |`,
+    ];
+    for (const row of CAT_QUESTION_TYPE_RUNTIME_MATRIX) {
+      const ex = row.exclusionReason ?? row.positiveE2eNote ?? "—";
+      stubLines.push(
+        `| ${row.id} | ${row.questionTypeExamples.join(", ")} | ${row.runtimeRenderer} | ${row.positiveE2e} | ${ex.replace(/\|/g, "\\|")} |`,
+      );
+    }
+    writeFileSync(outMd, stubLines.join("\n") + "\n", "utf8");
     console.warn("[report-cat-question-type-coverage] DATABASE_URL missing — wrote stub report.");
     return;
   }
@@ -92,10 +108,20 @@ async function main(): Promise<void> {
   const fullScan = process.env.CAT_REPORT_FULL_SCAN === "1";
   const completeByType = new Map<string, { scanned: number; complete: number }>();
   const MAX_SCAN = Math.min(50_000, Number.parseInt(process.env.CAT_REPORT_MAX_SCAN ?? "25000", 10) || 25_000);
+  const assertPool = process.env.CAT_ASSERT_POOL_RENDERERS === "1";
+  const poolViolations: string[] = [];
+
+  if (assertPool && !fullScan) {
+    console.warn(
+      "[report-cat-question-type-coverage] CAT_ASSERT_POOL_RENDERERS=1 is ignored unless CAT_REPORT_FULL_SCAN=1 (no row scan scheduled).",
+    );
+  }
+
   if (fullScan) {
     const { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE } = await import(
       "@/lib/practice-tests/cat-question-completeness",
     );
+    const { assertCatCompleteRowRenderableOrThrow } = await import("@/lib/questions/cat-runner-renderer-coverage");
     let cursor: string | undefined;
     let scanned = 0;
     while (scanned < MAX_SCAN) {
@@ -120,16 +146,31 @@ async function main(): Promise<void> {
         const qt = r.questionType ?? "UNKNOWN";
         const agg = completeByType.get(qt) ?? { scanned: 0, complete: 0 };
         agg.scanned += 1;
-        if (
-          isCompleteCatQuestionRow({
-            questionType: r.questionType,
-            stem: r.stem,
-            options: r.options,
-            correctAnswer: r.correctAnswer,
-            rationale: r.rationale,
-          })
-        ) {
+        const complete = isCompleteCatQuestionRow({
+          questionType: r.questionType,
+          stem: r.stem,
+          options: r.options,
+          correctAnswer: r.correctAnswer,
+          rationale: r.rationale,
+        });
+        if (complete) {
           agg.complete += 1;
+          if (assertPool) {
+            try {
+              assertCatCompleteRowRenderableOrThrow(
+                {
+                  id: r.id,
+                  questionType: r.questionType,
+                  stem: r.stem,
+                  options: r.options,
+                },
+                { questionTypeLabel: String(r.questionType ?? "") },
+              );
+            } catch (e) {
+              const msg = e instanceof Error ? e.message : String(e);
+              poolViolations.push(msg);
+            }
+          }
         }
         completeByType.set(qt, agg);
       }
@@ -140,6 +181,16 @@ async function main(): Promise<void> {
   }
 
   await prisma.$disconnect();
+
+  if (assertPool && poolViolations.length > 0) {
+    console.error(
+      `[report-cat-question-type-coverage] CAT_ASSERT_POOL_RENDERERS=1 found ${poolViolations.length} complete row(s) that are not runner-renderable.`,
+    );
+    for (const v of poolViolations.slice(0, 40)) console.error(v);
+    process.exit(1);
+  }
+
+  const { CAT_QUESTION_TYPE_RUNTIME_MATRIX } = await import("@/lib/questions/cat-runner-renderer-coverage");
 
   const lines: string[] = [];
   lines.push(`# CAT / practice pool — question_type inventory`);
@@ -156,6 +207,12 @@ async function main(): Promise<void> {
   );
   lines.push(
     `- **Renderer**: MCQ, SATA, Bowtie/Trend; structured/matrix/cloze rows surface \`runnerUnsupportedQuestionFallback\` until dedicated UI ships.`,
+  );
+  lines.push(
+    `- **Positive E2E**: \`tests/e2e/cat/cat-question-type-positive-matrix.spec.ts\` (run via \`npm run test:e2e:cat-question-types\`).`,
+  );
+  lines.push(
+    `- **Pool assert**: \`CAT_ASSERT_POOL_RENDERERS=1\` with \`CAT_REPORT_FULL_SCAN=1\` fails the script when any \`isCompleteCatQuestionRow\` row still requires the unsupported fallback (see \`assertCatCompleteRowRenderableOrThrow\`).`,
   );
   lines.push("");
   lines.push(
@@ -226,6 +283,20 @@ async function main(): Promise<void> {
     lines.push(`Set \`CAT_REPORT_FULL_SCAN=1\` to batch-scan rows and count \`isCompleteCatQuestionRow\` passes per \`question_type\`.`);
     lines.push("");
   }
+
+  lines.push(`## Runtime renderer matrix (product + exclusions)`);
+  lines.push("");
+  lines.push(
+    "| Logical format | Example question_type labels | Client renderer | Positive E2E | Notes / exclusion |",
+  );
+  lines.push("| --- | --- | --- | --- | --- |");
+  for (const row of CAT_QUESTION_TYPE_RUNTIME_MATRIX) {
+    const ex = row.exclusionReason ?? row.positiveE2eNote ?? "—";
+    lines.push(
+      `| ${row.id} | ${row.questionTypeExamples.join(", ")} | ${row.runtimeRenderer} | ${row.positiveE2e} | ${ex.replace(/\|/g, "\\|")} |`,
+    );
+  }
+  lines.push("");
 
   writeFileSync(outMd, lines.join("\n"), "utf8");
   console.log(`[report-cat-question-type-coverage] wrote ${outMd}`);

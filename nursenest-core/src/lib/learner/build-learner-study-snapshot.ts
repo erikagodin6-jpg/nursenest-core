@@ -4,10 +4,9 @@ import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import {
-  filterTopicRowsForAlliedProfession,
-  filterWeakTopicsForAlliedProfession,
+  filterTopicRowsForAlliedEntitlement,
+  filterWeakTopicsForAlliedEntitlement,
 } from "@/lib/allied/allied-weak-topic-filter";
 import { resolvePathwayLessonForWeakTopic, resolvePathwayNextLesson, type PathwayNextLesson } from "@/lib/learner/resolve-pathway-next-lesson";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
@@ -159,11 +158,14 @@ export async function buildLearnerStudySnapshot(
   let topicTrends = perf.trends.slice(0, 3);
   let strongTopicsHighlight = perf.strongTopics.slice(0, 3);
 
-  if (userRow?.tier === TierCode.ALLIED && userRow.alliedProfessionKey) {
-    const ap = getAlliedProfessionByProfessionKey(userRow.alliedProfessionKey);
-    weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
-    topicTrends = filterTopicRowsForAlliedProfession(topicTrends, ap).slice(0, 3);
-    strongTopicsHighlight = filterWeakTopicsForAlliedProfession(strongTopicsHighlight, ap).slice(0, 3);
+  if (entitlement.tier === TierCode.ALLIED && entitlement.hasAccess) {
+    weakTopics = filterWeakTopicsForAlliedEntitlement(weakTopics, entitlement, learnerPathResolved);
+    topicTrends = filterTopicRowsForAlliedEntitlement(topicTrends, entitlement, learnerPathResolved).slice(0, 3);
+    strongTopicsHighlight = filterTopicRowsForAlliedEntitlement(
+      strongTopicsHighlight,
+      entitlement,
+      learnerPathResolved,
+    ).slice(0, 3);
     perf = {
       ...perf,
       weakTopics,

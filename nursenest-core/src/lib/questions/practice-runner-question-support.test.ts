@@ -27,6 +27,11 @@ describe("practice-runner-question-support", () => {
     assert.equal(practiceRunnerNeedsUnsupportedFallback("MCQ", ["a", "b"], 2, false), false);
   });
 
+  it("flags scalar option payloads when canonical option parsing produces too few choices", () => {
+    assert.equal(practiceRunnerNeedsUnsupportedFallback("MCQ", ["a", "b"], 0, false), true);
+    assert.equal(practiceRunnerNeedsUnsupportedFallback("MCQ", ["a", "b"], 1, false), true);
+  });
+
   it("never flags bowtie branch as unsupported", () => {
     assert.equal(practiceRunnerNeedsUnsupportedFallback("BOWTIE", {}, 0, true), false);
   });

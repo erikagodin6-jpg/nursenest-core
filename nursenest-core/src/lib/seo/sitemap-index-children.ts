@@ -8,6 +8,8 @@ import { buildSitemapIndexXml } from "@/lib/seo/sitemap-urlset-build";
 export const SITEMAP_INDEX_CHILD_FILENAMES = [
   "sitemap-core.xml",
   "sitemap-blog.xml",
+  "sitemap-fr-blog.xml",
+  "sitemap-es-blog.xml",
   "sitemap-pathways.xml",
   "sitemap-lessons.xml",
   "sitemap-localized.xml",

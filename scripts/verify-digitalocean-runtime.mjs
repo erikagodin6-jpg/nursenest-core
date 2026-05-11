@@ -1,18 +1,29 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { verifyOptionalContentDirectories } from "./verify-optional-content-directories.mjs";
 
+const require = createRequire(import.meta.url);
+const yaml = require("js-yaml");
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const appRoot = path.join(root, "nursenest-core");
 const specPath = path.join(root, ".do", "app-nursenest-core-next.yaml");
+const liveSpecPath = process.env.NN_DO_LIVE_SPEC_PATH?.trim() || "";
 const dockerfilePath = path.join(root, "Dockerfile");
 const packagePath = path.join(appRoot, "package.json");
 const rootPackagePath = path.join(root, "package.json");
 const standaloneStartPath = path.join(appRoot, "scripts", "start-standalone.mjs");
+const expectedAppName = "nursenest-core-next";
+const expectedServiceName = "web";
+const expectedSourceDir = ".";
+const expectedRunCommand = "node scripts/start-standalone.mjs";
+const runtimeVisibleScopes = new Set(["RUN_TIME", "RUN_AND_BUILD_TIME"]);
 
 const failures = [];
+const warnings = [];
 
 function rel(file) {
   return path.relative(root, file) || ".";
@@ -20,6 +31,10 @@ function rel(file) {
 
 function fail(message) {
   failures.push(message);
+}
+
+function warn(message) {
+  warnings.push(message);
 }
 
 /**
@@ -105,17 +120,91 @@ function envBlockScalar(specText, key, field) {
   return match ? match[1].trim().replace(/^["']|["']$/g, "") : null;
 }
 
+function parseSpecModel(specText, label) {
+  try {
+    return yaml.load(specText) ?? {};
+  } catch (error) {
+    fail(`${label} spec must be valid YAML: ${error instanceof Error ? error.message : String(error)}`);
+    return {};
+  }
+}
+
+function asArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function findService(specModel, serviceName = expectedServiceName) {
+  return asArray(specModel?.services).find((service) => service?.name === serviceName) ?? null;
+}
+
+function findIngressComponentNames(specModel) {
+  const names = new Set();
+  for (const rule of asArray(specModel?.ingress?.rules)) {
+    const name = rule?.component?.name;
+    if (typeof name === "string" && name.trim()) names.add(name.trim());
+  }
+  return names;
+}
+
+function findRouteServiceNames(specModel) {
+  return new Set(asArray(specModel?.services).filter((service) => asArray(service?.routes).length > 0).map((service) => service.name));
+}
+
+function findEnvEntry(envs, key) {
+  return asArray(envs).find((env) => env?.key === key) ?? null;
+}
+
+function findEffectiveEnvEntry(specModel, serviceName, key) {
+  const service = findService(specModel, serviceName);
+  const serviceEntry = findEnvEntry(service?.envs, key);
+  if (serviceEntry) return { attachment: "service", serviceName, entry: serviceEntry };
+
+  const appEntry = findEnvEntry(specModel?.envs, key);
+  if (appEntry) return { attachment: "app", serviceName: null, entry: appEntry };
+
+  return null;
+}
+
+function summarizeSpec(specModel, label) {
+  const service = findService(specModel);
+  const db = findEffectiveEnvEntry(specModel, expectedServiceName, "DATABASE_URL");
+  return {
+    label,
+    appName: specModel?.name ?? null,
+    serviceName: service?.name ?? null,
+    sourceDir: service?.source_dir ?? null,
+    runCommand: service?.run_command ?? null,
+    databaseUrlKeyPresent: Boolean(db),
+    databaseUrlScope: db?.entry?.scope ?? null,
+    databaseUrlAttachment: db?.attachment ?? null,
+    databaseUrlServiceName: db?.serviceName ?? null,
+    ingressComponents: [...findIngressComponentNames(specModel)],
+    routeServices: [...findRouteServiceNames(specModel)],
+  };
+}
+
 function assertIncludes(haystack, needle, context) {
   if (!haystack.includes(needle)) fail(`${context} must include ${needle}`);
 }
 
 const spec = read(specPath);
+const specModel = parseSpecModel(spec, "repo");
 const dockerfile = read(dockerfilePath);
 const pkg = read(packagePath);
 const rootPkg = read(rootPackagePath);
 const standaloneStart = read(standaloneStartPath);
 const lines = activeLines(spec);
 const keys = envKeys(lines);
+const repoSummary = summarizeSpec(specModel, "repo");
+let liveSummary = null;
+if (liveSpecPath) {
+  if (!existsSync(liveSpecPath)) {
+    warn(`NN_DO_LIVE_SPEC_PATH was set but file does not exist: ${liveSpecPath}`);
+  } else {
+    const liveSpec = readFileSync(liveSpecPath, "utf8");
+    liveSummary = summarizeSpec(parseSpecModel(liveSpec, "live"), "live");
+  }
+}
 let appPackage = null;
 try {
   appPackage = pkg ? JSON.parse(pkg) : null;
@@ -179,15 +268,32 @@ function verifyStartScript({ label, command, baseDir, allowRootStandalone = fals
 }
 
 console.log("[verify:do-runtime] checking DigitalOcean Dockerfile runtime contract");
+console.log(`[verify:do-runtime] repo spec summary ${JSON.stringify(repoSummary)}`);
+if (liveSummary) console.log(`[verify:do-runtime] live spec summary ${JSON.stringify(liveSummary)}`);
 
 assertRunTimeGeneralKeyHasLiteralValue(spec, "AI_ADMIN_GENERATION_ENABLED");
+
+if (repoSummary.appName !== expectedAppName) {
+  fail(`expected app name ${expectedAppName}, found ${repoSummary.appName ?? "missing"}`);
+}
+
+if (repoSummary.serviceName !== expectedServiceName) {
+  fail(`expected running service name ${expectedServiceName}, found ${repoSummary.serviceName ?? "missing"}`);
+}
+
+if (
+  repoSummary.ingressComponents.length > 0 &&
+  !repoSummary.ingressComponents.includes(expectedServiceName)
+) {
+  fail(`ingress does not route to expected service ${expectedServiceName}; found ${repoSummary.ingressComponents.join(", ")}`);
+}
 
 if (scalar(lines, "dockerfile_path") !== "Dockerfile") {
   fail(`expected dockerfile_path: Dockerfile, found ${scalar(lines, "dockerfile_path") ?? "missing"}`);
 }
 
-if (scalar(lines, "source_dir") !== ".") {
-  fail(`expected source_dir: ., found ${scalar(lines, "source_dir") ?? "missing"}`);
+if (repoSummary.sourceDir !== expectedSourceDir) {
+  fail(`expected source_dir: ${expectedSourceDir}, found ${repoSummary.sourceDir ?? "missing"}`);
 }
 
 if (scalar(lines, "branch") !== "main") {
@@ -212,26 +318,50 @@ if (scalar(lines, "http_port") !== "8080") {
   fail(`expected http_port: 8080, found ${scalar(lines, "http_port") ?? "missing"}`);
 }
 
-if (scalar(lines, "run_command") !== "node scripts/start-standalone.mjs") {
-  fail(
-    `expected run_command: node scripts/start-standalone.mjs, found ${scalar(lines, "run_command") ?? "missing"}`,
-  );
+if (repoSummary.runCommand !== expectedRunCommand) {
+  fail(`expected run_command: ${expectedRunCommand}, found ${repoSummary.runCommand ?? "missing"}`);
 }
 
 if (!keys.has("AUTH_SECRET") && !keys.has("NEXTAUTH_SECRET")) {
   fail("app spec must document AUTH_SECRET and/or NEXTAUTH_SECRET as a runtime secret");
 }
 
-if (!keys.has("DATABASE_URL")) {
-  fail("app spec must document DATABASE_URL as the runtime database secret");
+const repoDatabaseUrl = findEffectiveEnvEntry(specModel, expectedServiceName, "DATABASE_URL");
+if (!repoDatabaseUrl) {
+  fail(`DATABASE_URL absent from effective runtime env for running service ${expectedServiceName}`);
 } else {
-  const databaseUrlScope = envBlockScalar(spec, "DATABASE_URL", "scope");
-  const databaseUrlType = envBlockScalar(spec, "DATABASE_URL", "type");
-  if (databaseUrlScope !== "RUN_TIME") {
-    fail(`DATABASE_URL must be attached to the running service with scope RUN_TIME, found ${databaseUrlScope ?? "missing"}`);
+  const databaseUrlScope = repoDatabaseUrl.entry?.scope;
+  const databaseUrlType = repoDatabaseUrl.entry?.type;
+  if (!runtimeVisibleScopes.has(databaseUrlScope)) {
+    fail(
+      `DATABASE_URL must be runtime-visible for service ${expectedServiceName}; accepted scopes: ${[...runtimeVisibleScopes].join(", ")}; found ${databaseUrlScope ?? "missing"}`,
+    );
+  }
+  if (databaseUrlScope === "RUN_AND_BUILD_TIME") {
+    warn("DATABASE_URL scope RUN_AND_BUILD_TIME is runtime-visible on DigitalOcean, but RUN_TIME is preferred to avoid build-time DB exposure.");
   }
   if (databaseUrlType !== "SECRET") {
     fail(`DATABASE_URL must be declared as type SECRET, found ${databaseUrlType ?? "missing"}`);
+  }
+  if (repoDatabaseUrl.attachment !== "service") {
+    warn(`DATABASE_URL is ${repoDatabaseUrl.attachment}-level, not service-level; verify DigitalOcean applies it to service ${expectedServiceName}.`);
+  }
+}
+
+if (liveSummary) {
+  for (const field of ["appName", "serviceName", "sourceDir", "runCommand", "databaseUrlAttachment"]) {
+    if (repoSummary[field] !== liveSummary[field]) {
+      warn(`live spec drift: ${field} repo=${repoSummary[field] ?? "missing"} live=${liveSummary[field] ?? "missing"}`);
+    }
+  }
+  if (!liveSummary.databaseUrlKeyPresent) {
+    fail(`live spec: DATABASE_URL absent from effective runtime env for running service ${expectedServiceName}`);
+  } else if (!runtimeVisibleScopes.has(liveSummary.databaseUrlScope)) {
+    fail(
+      `live spec: DATABASE_URL scope is not runtime-visible for service ${expectedServiceName}; accepted scopes: ${[...runtimeVisibleScopes].join(", ")}; found ${liveSummary.databaseUrlScope ?? "missing"}`,
+    );
+  } else if (repoSummary.databaseUrlScope === "RUN_TIME" && liveSummary.databaseUrlScope === "RUN_AND_BUILD_TIME") {
+    warn("live spec drift: repo expects DATABASE_URL scope RUN_TIME, live has RUN_AND_BUILD_TIME; this is runtime-visible but broader than preferred.");
   }
 }
 
@@ -313,10 +443,17 @@ for (const message of contentDirectoryResult.failures) {
 }
 
 if (failures.length > 0) {
+  for (const message of warnings) {
+    console.warn(`[verify:do-runtime] WARN: ${message}`);
+  }
   for (const message of failures) {
     console.error(`[verify:do-runtime] FAIL: ${message}`);
   }
   process.exit(1);
+}
+
+for (const message of warnings) {
+  console.warn(`[verify:do-runtime] WARN: ${message}`);
 }
 
 console.log("[verify:do-runtime] DEPLOY MODE: DOCKERFILE BUILD");

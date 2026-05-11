@@ -40,7 +40,7 @@ export function practiceRunnerNeedsUnsupportedFallback(
   if (isBowtie) return false;
   const qt = (questionType ?? "").trim();
   const shape = classifyPracticeRunnerPayloadShape(options);
-  if (shape.kind === "supported" && optsCanonicalLen >= 2) return false;
+  if (shape.kind === "supported") return optsCanonicalLen < 2;
   if (shape.reason === "non_scalar_option_array" || shape.reason === "structured_options_object") return true;
   if (SPECIALIZED_TYPE_HINTS.test(qt)) return true;
   return shape.reason === "missing_or_invalid_options" || shape.reason === "empty_option_array";

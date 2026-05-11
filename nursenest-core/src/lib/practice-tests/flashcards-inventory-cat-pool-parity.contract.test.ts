@@ -9,17 +9,19 @@ import { describe, it } from "node:test";
 const appRoot = join(process.cwd(), "src");
 
 describe("flashcards inventory vs CAT pool parity (static)", () => {
-  it("canonical pathway WHERE composes questionAccessWhereWithPathway + NON_ECG + study bank gates", () => {
+  it("canonical pathway WHERE composes questionAccessWhereWithPathway + NON_ECG + study bank gates + RT ventilator gate", () => {
     const src = readFileSync(join(appRoot, "lib/study-question-pool/canonical-exam-question-where.ts"), "utf8");
     assert.match(src, /questionAccessWhereWithPathway/);
     assert.match(src, /NON_ECG_PRACTICE_EXAM_WHERE/);
     assert.match(src, /generalStudyBankModuleSurfaceWhere/);
+    assert.match(src, /rtVentilatorPremiumBankGateWhere/);
   });
 
-  it("CAT fetchCatPracticePool still ANDs the same non-ECG + study-bank slices onto pathway base", () => {
+  it("CAT fetchCatPracticePool still ANDs the same non-ECG + study-bank + RT ventilator slices onto pathway base", () => {
     const src = readFileSync(join(appRoot, "lib/practice-tests/cat-pool.ts"), "utf8");
     assert.match(src, /NON_ECG_PRACTICE_EXAM_WHERE/);
     assert.match(src, /generalStudyBankModuleSurfaceWhere/);
+    assert.match(src, /rtVentilatorPremiumBankGateWhere/);
     assert.match(src, /questionAccessWhereWithPathway/);
   });
 });

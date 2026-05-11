@@ -29,8 +29,10 @@ import {
 } from "./aesthetic-token-audit";
 import {
   AestheticIssueCollector,
+  defaultDiffOverlayPathForScreenshot,
   diffPngFiles,
   resolveBaselinePath,
+  writeBaselineDiffOverlayPng,
 } from "./aesthetic-regression";
 
 export interface RunAestheticAuditArgs {
@@ -85,6 +87,13 @@ export async function runAestheticAudit(args: RunAestheticAuditArgs): Promise<vo
       metrics,
       path.relative(REPO_ROOT, baselinePath).split(path.sep).join("/"),
     );
+    const writeDiff = process.env.AESTHETIC_AUDIT_WRITE_DIFF_PNG?.trim();
+    if (writeDiff === "1" || writeDiff?.toLowerCase() === "true") {
+      const diffAbs = defaultDiffOverlayPathForScreenshot(args.screenshotPath);
+      if (writeBaselineDiffOverlayPng(baselinePath, args.screenshotPath, diffAbs)) {
+        collector.setDiffOverlayRelPath(path.relative(REPO_ROOT, diffAbs).split(path.sep).join("/"));
+      }
+    }
   }
 
   // Figma parity — opt-in via FIGMA_FRAME_MAP entries.

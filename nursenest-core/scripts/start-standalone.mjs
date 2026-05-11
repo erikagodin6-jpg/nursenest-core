@@ -2,7 +2,7 @@
 /**
  * Production entry: bind a tiny bootstrap HTTP server on the public port immediately, then
  * run Next standalone on a private loopback port. Public `GET/HEAD /healthz` reports liveness
- * immediately. Public `/readyz` only flips to 200 after the child can answer a real health route,
+ * immediately (served by this parent on the public port — not proxied). Public `/readyz` only flips to 200 after the child can answer a real health route,
  * and all other traffic waits for the same readiness gate before proxying.
  *
  * **Startup mode (single source of truth):** `resolve-bootstrap-mode.mjs` → `BOOTSTRAP_MODE`.
@@ -280,14 +280,19 @@ function handleBootstrapRequest(req, res) {
   }
 
   if (pathname === livenessProbePath) {
-    emit("bootstrap_healthz_intercepted", {
-      pid: process.pid,
-      method: req.method,
-      url: req.url,
-      handlersReady: state.handlersReady,
-      internalPort,
-      publicPort,
-    });
+    // Steady-state: PaaS hits `/healthz` forever on the public port; this handler always serves liveness here
+    // (by design). Log `bootstrap_healthz_intercepted` only while handlers are not ready so operators do not
+    // read "bootstrap interception" as "stuck in bootstrap" after `handlers_ready`.
+    if (!state.handlersReady) {
+      emit("bootstrap_healthz_intercepted", {
+        pid: process.pid,
+        method: req.method,
+        url: req.url,
+        handlersReady: state.handlersReady,
+        internalPort,
+        publicPort,
+      });
+    }
     res.statusCode = 200;
     res.setHeader("content-type", "text/plain; charset=utf-8");
     res.setHeader("cache-control", "no-store");
@@ -300,15 +305,15 @@ function handleBootstrapRequest(req, res) {
   }
 
   if (pathname === readinessProbePath) {
-    emit("bootstrap_healthz_intercepted", {
-      pid: process.pid,
-      method: req.method,
-      url: req.url,
-      handlersReady: state.handlersReady,
-      internalPort,
-      publicPort,
-    });
     if (!state.handlersReady) {
+      emit("bootstrap_healthz_intercepted", {
+        pid: process.pid,
+        method: req.method,
+        url: req.url,
+        handlersReady: state.handlersReady,
+        internalPort,
+        publicPort,
+      });
       res.statusCode = 503;
       res.setHeader("content-type", "text/plain; charset=utf-8");
       res.setHeader("cache-control", "no-store");

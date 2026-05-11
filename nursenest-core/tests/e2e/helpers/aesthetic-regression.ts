@@ -21,6 +21,7 @@ import {
   resolveDiffThresholds,
   SEVERITY_ORDER,
   SHARDS_DIR,
+  REPO_ROOT,
   type AestheticRouteId,
   type AestheticThemeId,
   type DiffThresholds,
@@ -156,6 +157,55 @@ export function diffPngFiles(
   };
 }
 
+const DIFF_OUT_DIR = path.join(REPO_ROOT, "docs", "screenshots", "aesthetic-audit-2026", "diffs");
+
+/**
+ * Writes a PNG overlay: current capture with magenta tint on pixels that differ
+ * from baseline (same metric as {@link diffPngFiles}). Opt-in via env in runner.
+ */
+export function writeBaselineDiffOverlayPng(baselinePath: string, currentPath: string, outAbsPath: string): boolean {
+  const baseline: PngImage | null = loadPng(baselinePath);
+  const current: PngImage | null = loadPng(currentPath);
+  if (!baseline || !current) return false;
+  const w = Math.min(baseline.width, current.width);
+  const h = Math.min(baseline.height, current.height);
+  if (w === 0 || h === 0) return false;
+  // pngjs typings omit the constructor — runtime PNG supports `new PNG({...})`.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const png = new (PNG as any)({ width: w, height: h });
+  for (let y = 0; y < h; y++) {
+    const baseRow = y * baseline.width * 4;
+    const curRow = y * current.width * 4;
+    for (let x = 0; x < w; x++) {
+      const bi = baseRow + x * 4;
+      const ci = curRow + x * 4;
+      const dr = Math.abs(baseline.data[bi] - current.data[ci]);
+      const dg = Math.abs(baseline.data[bi + 1] - current.data[ci + 1]);
+      const db = Math.abs(baseline.data[bi + 2] - current.data[ci + 2]);
+      const oi = (y * w + x) * 4;
+      if (dr + dg + db > CHANNEL_DELTA_THRESHOLD * 3) {
+        png.data[oi] = 255;
+        png.data[oi + 1] = 0;
+        png.data[oi + 2] = 200;
+        png.data[oi + 3] = 220;
+      } else {
+        png.data[oi] = current.data[ci];
+        png.data[oi + 1] = current.data[ci + 1];
+        png.data[oi + 2] = current.data[ci + 2];
+        png.data[oi + 3] = 255;
+      }
+    }
+  }
+  mkdirSync(path.dirname(outAbsPath), { recursive: true });
+  writeFileSync(outAbsPath, PNG.sync.write(png));
+  return true;
+}
+
+export function defaultDiffOverlayPathForScreenshot(screenshotAbsPath: string): string {
+  const base = path.basename(screenshotAbsPath, ".png");
+  return path.join(DIFF_OUT_DIR, `${base}.diff.png`);
+}
+
 export type IssueCategory =
   | "baseline-diff"
   | "figma-drift"
@@ -182,6 +232,8 @@ export interface ShardRecord {
   status: "captured" | "skipped";
   /** Screenshot path relative to the monorepo root. */
   screenshotRelPath: string;
+  /** Red/magenta overlay diff vs baseline (when AESTHETIC_AUDIT_WRITE_DIFF_PNG=1). */
+  diffOverlayRelPath?: string;
   /** Baseline path if one existed at run time. */
   baselineRelPath?: string;
   /** Figma export path if Figma parity ran. */
@@ -211,6 +263,7 @@ export class AestheticIssueCollector {
   private figmaDiff: DiffMetrics | null = null;
   private baselineRelPath: string | undefined;
   private figmaRelPath: string | undefined;
+  private diffOverlayRelPath: string | undefined;
 
   constructor(route: AestheticRouteId, theme: AestheticThemeId, viewport: ViewportId) {
     this.route = route;
@@ -246,7 +299,7 @@ export class AestheticIssueCollector {
     this.baselineDiff = metrics;
     this.baselineRelPath = relBaselinePath;
     if (!metrics) return;
-    const thresholds = resolveDiffThresholds(this.route, this.theme);
+    const thresholds = resolveDiffThresholds(this.route, this.theme, this.viewport);
     const severity = classifyDiffSeverity(metrics.changedPercent, thresholds);
     if (severity !== "cosmetic" || metrics.changedPercent >= thresholds.cosmetic / 2) {
       this.issues.push({
@@ -270,7 +323,7 @@ export class AestheticIssueCollector {
     this.figmaDiff = metrics;
     this.figmaRelPath = relFigmaPath;
     if (!metrics) return;
-    const thresholds = resolveDiffThresholds(this.route, this.theme);
+    const thresholds = resolveDiffThresholds(this.route, this.theme, this.viewport);
     // Figma parity uses a slightly more permissive band (export pipelines vary)
     const fThresholds: DiffThresholds = {
       cosmetic: thresholds.cosmetic * 2,
@@ -307,6 +360,10 @@ export class AestheticIssueCollector {
    * Write the shard to {@link SHARDS_DIR}. Tests should call once per case.
    * Filename is deterministic so repeat runs overwrite cleanly.
    */
+  setDiffOverlayRelPath(relFromRepoRoot: string): void {
+    this.diffOverlayRelPath = relFromRepoRoot;
+  }
+
   flush(args: {
     screenshotAbsPath: string;
     repoRoot: string;
@@ -320,11 +377,12 @@ export class AestheticIssueCollector {
       viewport: this.viewport,
       status: args.status ?? "captured",
       screenshotRelPath: path.relative(args.repoRoot, args.screenshotAbsPath).split(path.sep).join("/"),
+      diffOverlayRelPath: this.diffOverlayRelPath,
       baselineRelPath: this.baselineRelPath,
       figmaRelPath: this.figmaRelPath,
       baselineDiff: this.baselineDiff,
       figmaDiff: this.figmaDiff,
-      thresholds: resolveDiffThresholds(this.route, this.theme),
+      thresholds: resolveDiffThresholds(this.route, this.theme, this.viewport),
       issues: this.issues,
       capturedAt: new Date().toISOString(),
     };

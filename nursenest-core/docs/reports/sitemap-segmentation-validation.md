@@ -1,6 +1,6 @@
 # Sitemap segmentation validation report
 
-Generated: **2026-05-11T02:48:47.640Z** (Phase 4 offline validator — App Router GET handlers).
+Generated: **2026-05-11T04:05:57.700Z** (Phase 4 offline validator — App Router GET handlers).
 
 ## Summary
 
@@ -18,20 +18,22 @@ Generated: **2026-05-11T02:48:47.640Z** (Phase 4 offline validator — App Route
 
 | Segment | URLs | Invalid locs | Gen time (ms) | 48k band |
 | --- | ---: | ---: | ---: | --- |
-| **core** (`sitemap-core.xml`) | 5 | 0 | 2597 | OK |
-| **blog** (`sitemap-blog.xml`) | 3916 | 0 | 287 | OK |
-| **pathways** (`sitemap-pathways.xml`) | 25 | 0 | 1445 | OK |
-| **lessons** (`sitemap-lessons.xml`) | 1 | 0 | 192 | OK |
-| **localized** (`sitemap-localized.xml`) | 48 | 0 | 9 | OK |
+| **core** (`sitemap-core.xml`) | 18 | 0 | 3326 | OK |
+| **blog** (`sitemap-blog.xml`) | 3916 | 0 | 414 | OK |
+| **fr-blog** (`sitemap-fr-blog.xml`) | 1 | 0 | 57 | OK |
+| **es-blog** (`sitemap-es-blog.xml`) | 1 | 0 | 82 | OK |
+| **pathways** (`sitemap-pathways.xml`) | 25 | 0 | 1061 | OK |
+| **lessons** (`sitemap-lessons.xml`) | 1 | 0 | 223 | OK |
+| **localized** (`sitemap-localized.xml`) | 48 | 0 | 5 | OK |
 | **clinical-modules** (`sitemap-clinical-modules.xml`) | 5 | 0 | 2 | OK |
-| **allied** (`sitemap-allied.xml`) | 24 | 0 | 2 | OK |
-| **new-grad** (`sitemap-new-grad.xml`) | 46 | 0 | 2 | OK |
+| **allied** (`sitemap-allied.xml`) | 24 | 0 | 4 | OK |
+| **new-grad** (`sitemap-new-grad.xml`) | 46 | 0 | 3 | OK |
 
 ## Index validation
 
-- Generation time: **80** ms
+- Generation time: **96** ms
 - XML well-formed: **yes**
-- Approved children (`8`): `https://www.nursenest.ca/sitemap-core.xml`, `https://www.nursenest.ca/sitemap-blog.xml`, `https://www.nursenest.ca/sitemap-pathways.xml`, `https://www.nursenest.ca/sitemap-lessons.xml`, `https://www.nursenest.ca/sitemap-localized.xml`, `https://www.nursenest.ca/sitemap-clinical-modules.xml`, `https://www.nursenest.ca/sitemap-allied.xml`, `https://www.nursenest.ca/sitemap-new-grad.xml`
+- Approved children (`10`): `https://www.nursenest.ca/sitemap-core.xml`, `https://www.nursenest.ca/sitemap-blog.xml`, `https://www.nursenest.ca/sitemap-fr-blog.xml`, `https://www.nursenest.ca/sitemap-es-blog.xml`, `https://www.nursenest.ca/sitemap-pathways.xml`, `https://www.nursenest.ca/sitemap-lessons.xml`, `https://www.nursenest.ca/sitemap-localized.xml`, `https://www.nursenest.ca/sitemap-clinical-modules.xml`, `https://www.nursenest.ca/sitemap-allied.xml`, `https://www.nursenest.ca/sitemap-new-grad.xml`
 
 ## Tests run
 

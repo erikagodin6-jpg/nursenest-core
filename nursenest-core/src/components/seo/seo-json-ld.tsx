@@ -93,6 +93,8 @@ export function WebPageJsonLd({
 
 export function BlogPostingJsonLd({
   slug,
+  /** When set, overrides the default `/blog/{slug}` URL (e.g. multilingual `/fr/blog/...`). */
+  resourcePath,
   title,
   description,
   datePublished,
@@ -104,8 +106,11 @@ export function BlogPostingJsonLd({
   authorJobTitle,
   reviewerName,
   reviewerJobTitle,
+  inLanguage,
 }: {
   slug: string;
+  /** Leading-slash path for this article's public URL. */
+  resourcePath?: string;
   title: string;
   description: string;
   datePublished: string;
@@ -122,8 +127,12 @@ export function BlogPostingJsonLd({
   /** Optional clinical / editorial reviewer (YMYL). */
   reviewerName?: string | null;
   reviewerJobTitle?: string | null;
+  /** BCP47-ish tag for Article/BlogPosting schema. */
+  inLanguage?: string;
 }) {
-  const url = absoluteUrl(`/blog/${slug}`);
+  const path =
+    resourcePath?.startsWith("/") ? resourcePath : resourcePath ? `/${resourcePath}` : `/blog/${slug}`;
+  const url = absoluteUrl(path);
   const kw = keywords?.map((k) => k.trim()).filter(Boolean) ?? [];
   const author =
     authorName?.trim() ?
@@ -150,6 +159,7 @@ export function BlogPostingJsonLd({
         description,
         datePublished,
         ...(dateModified?.trim() ? { dateModified: dateModified.trim() } : {}),
+        ...(inLanguage?.trim() ? { inLanguage: inLanguage.trim() } : {}),
         url,
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
         author,

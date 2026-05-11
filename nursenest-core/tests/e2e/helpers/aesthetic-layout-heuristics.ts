@@ -229,6 +229,27 @@ export async function collectHeuristics(page: Page, viewport: ViewportId): Promi
       }
 
       const lowContrastGradients: GradientHit[] = [];
+      // Alpha-aware stop parser — composites rgba(r,g,b,a) over a base rgb so the
+      // measured contrast reflects what the user actually sees. Decorative stops
+      // with low alpha get pulled toward the underlying surface (usually page-bg),
+      // which is the right semantic for "is text readable on this gradient".
+      const parseRgbA = (color: string): [number, number, number, number] | null => {
+        const m = color.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?/i);
+        if (!m) return null;
+        const a = m[4] != null ? Number(m[4]) : 1;
+        return [Number(m[1]), Number(m[2]), Number(m[3]), Number.isFinite(a) ? a : 1];
+      };
+      const compositeOver = (
+        stop: [number, number, number, number],
+        base: [number, number, number],
+      ): [number, number, number] => {
+        const [r, g, b, a] = stop;
+        return [
+          Math.round(r * a + base[0] * (1 - a)),
+          Math.round(g * a + base[1] * (1 - a)),
+          Math.round(b * a + base[2] * (1 - a)),
+        ];
+      };
       const gradientCandidates = Array.from(document.querySelectorAll<HTMLElement>(
         "section, header, footer, [class*='hero'], [class*='gradient'], [class*='banner']",
       ));
@@ -236,10 +257,22 @@ export async function collectHeuristics(page: Page, viewport: ViewportId): Promi
         const cs = getComputedStyle(el);
         const bg = cs.backgroundImage || "";
         if (!/(linear|radial|conic)-gradient/i.test(bg)) continue;
-        // sample text foreground against approximate midpoint background
+        // Skip purely decorative overlays — they cannot host text, so a stop-vs-text
+        // contrast measurement is meaningless. Heuristic precision, not threshold:
+        // a real low-contrast gradient on a text-bearing surface still triggers.
+        if (cs.pointerEvents === "none") continue;
         const fgRgb = parseRgb(cs.color || "");
+        // Resolve the element's solid background underneath the gradient. Falls back
+        // to white when transparent so alpha-blended stops collapse to the same
+        // surface a user would see on a default light theme.
+        const baseBg = parseRgb(cs.backgroundColor || "") ?? [255, 255, 255];
         const stops = bg.match(/rgba?\([^\)]+\)/g) || [];
-        const stopRgbs = stops.map(parseRgb).filter((s): s is [number, number, number] => !!s);
+        const stopRgbs = stops
+          .map(parseRgbA)
+          .filter((s): s is [number, number, number, number] => !!s)
+          // Drop fully transparent stops — they contribute nothing visually.
+          .filter((s) => s[3] > 0)
+          .map((s) => compositeOver(s, baseBg));
         if (!fgRgb || stopRgbs.length === 0) continue;
         const minRatio = Math.min(...stopRgbs.map((s) => contrast(fgRgb, s)));
         if (minRatio < 2.5) {
@@ -328,12 +361,17 @@ export async function collectHeuristics(page: Page, viewport: ViewportId): Promi
         }
       }
 
-      // z-index collisions: visible elements with explicit z-index that overlap a sibling
+      // z-index collisions: visible elements with explicit z-index that overlap a sibling.
+      // Skip pointer-events:none decorative overlays (watermarks, blurs, ambient gradients) —
+      // they cannot capture interaction and their visual ordering is intentional. Heuristic
+      // precision, not threshold: real content-layer z-index conflicts still trigger.
       const zIndexCollisions: ZIndexCollision[] = [];
       const zNodes = Array.from(document.querySelectorAll<HTMLElement>("*"))
         .filter(isVisible)
         .filter((el) => {
-          const z = getComputedStyle(el).zIndex;
+          const cs = getComputedStyle(el);
+          if (cs.pointerEvents === "none") return false;
+          const z = cs.zIndex;
           return z !== "auto" && !Number.isNaN(Number(z));
         })
         .slice(0, 80); // bound — page can have thousands

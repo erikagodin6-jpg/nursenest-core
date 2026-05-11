@@ -12,9 +12,10 @@
  * single run can be re-graded by re-running this script with a different
  * AESTHETIC_AUDIT_GATE.
  *
- *   AESTHETIC_AUDIT_GATE = off | warn | major | critical   (default: warn)
+ *   AESTHETIC_AUDIT_GATE = off | warn | moderate | major | critical   (default: warn)
  *     off       — never returns non-zero exit
  *     warn      — never returns non-zero exit, but lists everything
+ *     moderate  — non-zero when any moderate, major, or critical issue exists
  *     major     — non-zero when any major or critical issue exists
  *     critical  — non-zero when any critical issue exists
  *
@@ -30,6 +31,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const APP_ROOT = path.resolve(HERE, "..");
 const REPO_ROOT = path.resolve(APP_ROOT, "..");
 const SHARDS_DIR = path.join(APP_ROOT, ".aesthetic-audit", "shards");
+const ROUTE_CATALOG_PATH = path.join(APP_ROOT, "tests", "e2e", "helpers", "aesthetic-audit-route-catalog.json");
 const REPORTS_DIR = path.join(REPO_ROOT, "docs", "reports");
 const REPORT_MD = path.join(REPORTS_DIR, "aesthetic-regression-report.md");
 const REPORT_JSON = path.join(REPORTS_DIR, "aesthetic-regression-report.json");
@@ -54,8 +56,19 @@ function parseArgs() {
 function resolveGate() {
   const args = parseArgs();
   const raw = String(args.gate ?? process.env.AESTHETIC_AUDIT_GATE ?? "warn").trim().toLowerCase();
-  if (["off", "warn", "major", "critical"].includes(raw)) return raw;
+  if (["off", "warn", "moderate", "major", "critical"].includes(raw)) return raw;
   return "warn";
+}
+
+function readRouteCatalog() {
+  if (!existsSync(ROUTE_CATALOG_PATH)) return [];
+  try {
+    const j = JSON.parse(readFileSync(ROUTE_CATALOG_PATH, "utf8"));
+    const routes = j.routes;
+    return Array.isArray(routes) ? routes.map(String) : [];
+  } catch {
+    return [];
+  }
 }
 
 function readShards() {
@@ -95,6 +108,9 @@ function gateViolated(gate, counts) {
   if (gate === "off" || gate === "warn") return false;
   if (gate === "critical") return counts.critical > 0;
   if (gate === "major") return counts.critical > 0 || counts.major > 0;
+  if (gate === "moderate") {
+    return counts.critical > 0 || counts.major > 0 || counts.moderate > 0;
+  }
   return false;
 }
 
@@ -129,7 +145,7 @@ function writeJsonReport(payload) {
   writeFileSync(REPORT_JSON, JSON.stringify(payload, null, 2) + "\n");
 }
 
-function writeMarkdownReport(shards, counts, gate, gateViolatedFlag) {
+function writeMarkdownReport(shards, counts, gate, gateViolatedFlag, catalogRoutes, missingCatalogRoutes) {
   mkdirSync(path.dirname(REPORT_MD), { recursive: true });
   const lines = [];
   lines.push("# Aesthetic regression report");
@@ -137,6 +153,10 @@ function writeMarkdownReport(shards, counts, gate, gateViolatedFlag) {
   lines.push(`**Generated:** ${new Date().toISOString()}`);
   lines.push(`**Gate:** \`${gate}\` ${gateViolatedFlag ? "**(FAILED)**" : "(passing)"}`);
   lines.push(`**Captured shards:** ${shards.length}`);
+  if (catalogRoutes?.length) {
+    lines.push(`**Catalog expected routes:** ${catalogRoutes.length}`);
+    lines.push(`**Catalog missing (no shard this run):** ${missingCatalogRoutes?.length ?? 0}`);
+  }
   lines.push("");
   lines.push("## Severity summary");
   lines.push("");
@@ -146,6 +166,13 @@ function writeMarkdownReport(shards, counts, gate, gateViolatedFlag) {
     lines.push(`| ${s} | ${counts[s] || 0} |`);
   }
   lines.push("");
+
+  if (missingCatalogRoutes?.length) {
+    lines.push("## Catalog gaps (expected routes with no shard this run)");
+    lines.push("");
+    for (const r of missingCatalogRoutes) lines.push(`- \`${r}\``);
+    lines.push("");
+  }
 
   const topIssues = topIssuesForReport(shards);
   if (topIssues.length > 0) {
@@ -183,7 +210,9 @@ function writeMarkdownReport(shards, counts, gate, gateViolatedFlag) {
 
   lines.push("## Screenshots");
   lines.push("");
-  lines.push(`Captures live under \`docs/screenshots/aesthetic-audit-2026/\`. Baselines, when present, live under \`docs/screenshots/aesthetic-audit-2026/baselines/\`. Figma frames (optional) under \`docs/screenshots/aesthetic-audit-2026/figma/\`.`);
+  lines.push(
+    `Captures live under \`docs/screenshots/aesthetic-audit-2026/\`. Baselines under \`baselines/\`. Optional Figma exports under \`figma/\`. With \`AESTHETIC_AUDIT_WRITE_DIFF_PNG=1\`, baseline overlays are written to \`diffs/\`.`,
+  );
   lines.push("");
   lines.push("## Regenerating");
   lines.push("");
@@ -212,23 +241,31 @@ function listScreenshotFiles(root) {
   return out;
 }
 
-function writeInventoryReport(shards) {
+function writeInventoryReport(shards, catalogRoutes) {
   mkdirSync(path.dirname(INVENTORY_MD), { recursive: true });
   const lines = [];
   const groups = groupByRoute(shards);
   const sortedRoutes = [...groups.keys()].sort();
   const baselineFiles = listScreenshotFiles(BASELINE_ROOT);
   const figmaFiles = listScreenshotFiles(FIGMA_ROOT);
+  const catalogSet = new Set(catalogRoutes);
 
   lines.push("# UI surface inventory");
   lines.push("");
   lines.push(`**Generated:** ${new Date().toISOString()}`);
-  lines.push(`**Total audited routes:** ${sortedRoutes.length}`);
+  lines.push(`**Total audited routes (from shards):** ${sortedRoutes.length}`);
+  if (catalogRoutes.length) {
+    lines.push(`**Expected routes (catalog):** ${catalogRoutes.length}`);
+  }
   lines.push("");
-  lines.push("Coverage matrix — `✓` indicates a capture exists for this slice; `—` means the matrix slice has no recorded shard (either the route was skipped or the audit hasn't run for it).");
+  lines.push("Coverage matrix — `✓` indicates a capture exists for this slice; `—` means the matrix slice has no recorded shard (either the route was skipped or the audit hasn't run for it). **Baseline** / **Figma** use shard metadata when present, else fall back to a filename heuristic under `baselines/` / `figma/`.");
   lines.push("");
-  lines.push("| Route | Mobile | Authenticated | Ocean | Blossom | Midnight | Baseline | Figma |");
-  lines.push("|-------|--------|---------------|-------|---------|----------|----------|-------|");
+  lines.push(
+    "| Route | Mobile | Authenticated | Ocean | Blossom | Midnight | Sunset | Aurora | Baseline | Figma |",
+  );
+  lines.push(
+    "|-------|--------|---------------|-------|---------|----------|--------|--------|----------|-------|",
+  );
 
   for (const route of sortedRoutes) {
     const list = groups.get(route);
@@ -237,14 +274,41 @@ function writeInventoryReport(shards) {
     const authenticated = /^auth-|^learner-/.test(route);
     const hasMobile = viewports.has("mobile");
 
-    // baseline coverage — does this route have at least one baseline file matching the screenshot pattern?
-    const hasBaseline = [...baselineFiles].some((name) => name.includes(route.replace(/^(public|auth|learner)-/, "")));
-    const hasFigma = [...figmaFiles].some((name) => name.includes(route.replace(/^(public|auth|learner)-/, "")));
+    const hasBaselineFromShards = list.some((s) => Boolean(s.baselineRelPath));
+    const hasFigmaFromShards = list.some((s) => Boolean(s.figmaRelPath));
+    const slug = route.replace(/^(public|auth|learner)-/, "");
+    const hasBaselineHeuristic = [...baselineFiles].some((name) => name.includes(slug));
+    const hasFigmaHeuristic = [...figmaFiles].some((name) => name.includes(slug));
+    const hasBaseline = hasBaselineFromShards || hasBaselineHeuristic;
+    const hasFigma = hasFigmaFromShards || hasFigmaHeuristic;
 
     const cell = (b) => (b ? "✓" : "—");
     lines.push(
-      `| ${route} | ${cell(hasMobile)} | ${cell(authenticated)} | ${cell(themes.has("ocean"))} | ${cell(themes.has("blossom"))} | ${cell(themes.has("midnight"))} | ${cell(hasBaseline)} | ${cell(hasFigma)} |`,
+      `| ${route} | ${cell(hasMobile)} | ${cell(authenticated)} | ${cell(themes.has("ocean"))} | ${cell(themes.has("blossom"))} | ${cell(themes.has("midnight"))} | ${cell(themes.has("sunset"))} | ${cell(themes.has("aurora"))} | ${cell(hasBaseline)} | ${cell(hasFigma)} |`,
     );
+  }
+  lines.push("");
+
+  if (catalogRoutes.length) {
+    const missing = catalogRoutes.filter((r) => !groups.has(r)).sort();
+    const extra = sortedRoutes.filter((r) => !catalogSet.has(r));
+    lines.push("## Catalog coverage");
+    lines.push("");
+    if (missing.length) {
+      lines.push("### Missing routes (in catalog, no shard in this run)");
+      lines.push("");
+      for (const r of missing) lines.push(`- \`${r}\``);
+      lines.push("");
+    } else {
+      lines.push("All catalog routes produced at least one shard in this aggregation.");
+      lines.push("");
+    }
+    if (extra.length) {
+      lines.push("### Shards not listed in catalog (consider adding to `aesthetic-audit-route-catalog.json`)");
+      lines.push("");
+      for (const r of extra) lines.push(`- \`${r}\``);
+      lines.push("");
+    }
   }
   lines.push("");
   lines.push("## Routes captured by category");
@@ -275,8 +339,12 @@ function writeInventoryReport(shards) {
 function main() {
   const gate = resolveGate();
   const shards = readShards();
+  const catalogRoutes = readRouteCatalog();
   const counts = countBySeverity(shards);
   const gateViolatedFlag = gateViolated(gate, counts);
+
+  const groups = groupByRoute(shards);
+  const missingCatalogRoutes = catalogRoutes.filter((r) => !groups.has(r)).sort();
 
   const payload = {
     generatedAt: new Date().toISOString(),
@@ -284,12 +352,14 @@ function main() {
     gateViolated: gateViolatedFlag,
     severityCounts: counts,
     totalShards: shards.length,
+    catalogExpectedRoutes: catalogRoutes,
+    catalogMissingRoutes: missingCatalogRoutes,
     shards,
   };
 
   writeJsonReport(payload);
-  writeMarkdownReport(shards, counts, gate, gateViolatedFlag);
-  writeInventoryReport(shards);
+  writeMarkdownReport(shards, counts, gate, gateViolatedFlag, catalogRoutes, missingCatalogRoutes);
+  writeInventoryReport(shards, catalogRoutes);
 
   // Console summary — stable output for CI logs.
   const fmt = (s) => `${s}=${counts[s] || 0}`;

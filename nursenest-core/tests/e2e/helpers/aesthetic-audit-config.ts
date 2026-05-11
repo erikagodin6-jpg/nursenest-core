@@ -8,10 +8,14 @@
  *
  *   AESTHETIC_AUDIT_BASELINE_DIR    override baseline screenshot folder
  *   AESTHETIC_AUDIT_FIGMA_DIR       override Figma frame folder
- *   AESTHETIC_AUDIT_GATE            "off" | "warn" | "critical" | "major"
- *                                   default "warn" — aggregator never throws,
- *                                   "critical"/"major" sets non-zero exit code
+ *   AESTHETIC_AUDIT_GATE            "off" | "warn" | "critical" | "major" | "moderate"
+ *                                   default "warn" — no non-zero exit;
+ *                                   "critical" fails on critical issues only;
+ *                                   "major" fails on major+critical;
+ *                                   "moderate" fails on moderate+major+critical
  *   AESTHETIC_AUDIT_FIGMA_PARITY    "0" disables Figma parity comparison
+ *   AESTHETIC_AUDIT_WRITE_DIFF_PNG  "1" | "true" writes overlay diff PNGs under
+ *                                   docs/screenshots/aesthetic-audit-2026/diffs/
  *
  * See docs/reports/aesthetic-visual-audit.md for the broader system overview.
  */
@@ -88,14 +92,29 @@ export const THEME_DIFF_OVERRIDES: Partial<Record<AestheticThemeId, Partial<Diff
   aurora: { cosmetic: 0.75, moderate: 2.4, major: 6.8 },
 };
 
+/** Route + theme + viewport composite keys for fine-grained tolerance (rarest). */
+export type CompositeDiffKey = `${AestheticRouteId}__${AestheticThemeId}__${ViewportId}`;
+
+export const COMPOSITE_DIFF_OVERRIDES: Partial<Record<CompositeDiffKey, Partial<DiffThresholds>>> = {
+  /** Mobile nav chrome can legitimately shift a few pixels vs desktop baselines. */
+  // "public-home__ocean__mobile": { cosmetic: 0.9, moderate: 2.2, major: 6.5 },
+};
+
 export function resolveDiffThresholds(
   routeId: AestheticRouteId | undefined,
   theme: AestheticThemeId | undefined,
+  viewport?: ViewportId | undefined,
 ): DiffThresholds {
   const base = { ...DEFAULT_DIFF_THRESHOLDS };
   const r = routeId ? ROUTE_DIFF_OVERRIDES[routeId] : undefined;
   const t = theme ? THEME_DIFF_OVERRIDES[theme] : undefined;
-  return { ...base, ...(r ?? {}), ...(t ?? {}) };
+  let merged = { ...base, ...(r ?? {}), ...(t ?? {}) };
+  if (routeId && theme && viewport) {
+    const key = `${routeId}__${theme}__${viewport}` as CompositeDiffKey;
+    const c = COMPOSITE_DIFF_OVERRIDES[key];
+    if (c) merged = { ...merged, ...c };
+  }
+  return merged;
 }
 
 /** Classify a measured % changed pixel ratio into a severity. */
@@ -151,12 +170,12 @@ export function figmaFrameKey(
   return `${route}__${theme}__${viewport}`;
 }
 
-/** "off" disables all gating; tests only soft-warn. */
-export type AuditGate = "off" | "warn" | "critical" | "major";
+/** "off" disables all gating; tests only soft-warn. "moderate" fails on moderate+major+critical. */
+export type AuditGate = "off" | "warn" | "critical" | "major" | "moderate";
 
 export function resolveAuditGate(): AuditGate {
   const raw = (process.env.AESTHETIC_AUDIT_GATE || "").trim().toLowerCase();
-  if (raw === "off" || raw === "warn" || raw === "critical" || raw === "major") return raw;
+  if (raw === "off" || raw === "warn" || raw === "critical" || raw === "major" || raw === "moderate") return raw;
   return "warn";
 }
 

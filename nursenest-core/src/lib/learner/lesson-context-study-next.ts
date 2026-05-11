@@ -1,11 +1,9 @@
 import "server-only";
 
-import { TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { filterWeakTopicsForAlliedProfession } from "@/lib/allied/allied-weak-topic-filter";
-import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { filterWeakTopicsForAlliedEntitlement } from "@/lib/allied/allied-weak-topic-filter";
 import {
   recommendNextActionsForLessonContinue,
   type PostTestRemediationInputRow,
@@ -106,14 +104,7 @@ export async function loadLessonContinueStudyNext(
     weakTopics = [];
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { tier: true, alliedProfessionKey: true },
-  });
-  if (user?.tier === TierCode.ALLIED && user.alliedProfessionKey) {
-    const ap = getAlliedProfessionByProfessionKey(user.alliedProfessionKey);
-    weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
-  }
+  weakTopics = filterWeakTopicsForAlliedEntitlement(weakTopics, entitlement, learnerPath);
 
   const filtered = weakTopics.filter((w) => !weakOverlapsCurrentLesson(w, anchorNorm, topicCode));
 
