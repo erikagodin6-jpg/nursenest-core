@@ -258,9 +258,26 @@ Additional fixes applied before the next redeploy:
 - temporary `NN_RUNTIME_ENV_PROBE=1` support prints filtered env key names only (`DATABASE|AUTH|STRIPE|POSTGRES|PORT|HOSTNAME|NODE_ENV`)
 - auth-origin validation now validates explicit `AUTH_URL` / `NEXTAUTH_URL` values without fatally blocking runtime when both are blank under the existing trust-host deployment pattern
 
+### Attempt 3
+
+- Failed deployment: `06e62487-7fa6-4756-b2cf-320d7c7eaad6`
+- Cause: `commit f86e608 pushed to github.com/erikagodin6-jpg/nursenest-core/tree/main`
+- Phase: `ERROR`
+- Reason: `BuildJobTerminated`
+- Failing step: `build.components.web`
+- First failing line: deployment never reached runtime; DigitalOcean terminated the build job after image packaging completed
+- Additional regression observed during the build: the deployment spec reverted `AUTH_SECRET` and `DATABASE_URL` from `RUN_AND_BUILD_TIME` back to `RUN_TIME`
+
+Fixes applied after this failure:
+
+- restored the DigitalOcean secret-scope workaround in `.do/app-nursenest-core-next.yaml` so the first runtime Node process receives `AUTH_SECRET` and `DATABASE_URL`
+- tightened `.dockerignore` to exclude deploy-irrelevant screenshot/report artifact trees (`preview-screenshots`, `reports/ui-redesign-preview`, and root docs screenshot/report directories) from the Docker build context
+- reran `npm run typecheck:critical`, `npm test -- runtime-env-guard-bootstrap`, `npm test -- standalone-env-forwarding`, and `npm run verify:do-runtime` against the new `f86e608` baseline before the next redeploy
+
 ### Current status
 
-- Stop condition `A` has **not** been met yet because no fresh deployment with the latest runtime-env hardening has reached `ACTIVE`
-- Stop condition `B` has **not** been proven because the live app spec for `services.web` currently shows the expected `DATABASE_URL` and `AUTH_SECRET` attachment
-- Stop condition `C` is the current operational state until the next deploy settles: the rollback is active and unscoped runtime logs still follow that rollback deployment
+- Stop condition `A` has **not** been met yet because no fresh deployment with the restored secret scopes and reduced Docker context has reached `ACTIVE`
+- Stop condition `B` has **not** been proven; the latest failure is now a repo/spec regression plus build resource exhaustion, not an unfixable platform secret-attachment absence
+- Stop condition `C` remains the live operational state for now: active deployment `2b85db8c-8eda-4d89-98c2-27dda61b78d6` is a rollback, and unscoped runtime logs still follow that rollback deployment
+- Repo spec is corrected locally (`RUN_AND_BUILD_TIME` for `AUTH_SECRET` and `DATABASE_URL`), but the live spec remains on `RUN_TIME` until the next spec update / deployment lands
 

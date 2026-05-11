@@ -28,6 +28,12 @@ nursenest-core/tests
 nursenest-core/output
 nursenest-core/reports
 nursenest-core/docs/reports
+reports/ui-redesign-preview
+preview-screenshots
+**/preview-screenshots
+docs/screenshots
+docs/qa-reports
+docs/verification-screenshots
 **/docs/screenshots
 **/test-results/**
 **/playwright-report/**

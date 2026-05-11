@@ -77,10 +77,18 @@ services:
         scope: RUN_TIME
         value: "true"
       - key: AUTH_SECRET
-        scope: RUN_TIME
+        # App Platform regression workaround: some spec-update deployments are starting the container without
+        # injecting RUN_TIME-only secrets, while RUN_AND_BUILD_TIME vars still reach the final Node process.
+        # Keep this synchronized with `DATABASE_URL` below and preserve presence-only diagnostics in bootstrap logs.
+        scope: RUN_AND_BUILD_TIME
         type: SECRET
       - key: DATABASE_URL
-        scope: RUN_TIME
+        # Canonical production DB connection (DigitalOcean Managed PostgreSQL). Do not set a second conflicting URL.
+        # App Platform regression workaround: the fresh deploy can reach `node scripts/start-standalone.mjs` with
+        # `DATABASE_URL_present=false` and `AUTH_SECRET_present=false` even when the live service spec shows both
+        # runtime secrets attached. Until that platform/runtime-secret injection path is reliable again, promote the
+        # critical boot secret to RUN_AND_BUILD_TIME so the first runtime Node process always receives it.
+        scope: RUN_AND_BUILD_TIME
         type: SECRET
       - key: AUTH_URL
         scope: RUN_TIME
