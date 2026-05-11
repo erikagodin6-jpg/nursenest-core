@@ -18,7 +18,7 @@ describe("SiteHeader sticky chrome wrapper (site-header.tsx)", () => {
     const src = fs.readFileSync(siteHeaderTsx, "utf8");
     assert.match(
       src,
-      /className=\{`sticky top-0 z-50 w-full min-w-0\$\{isLightTheme \? "" : " nn-header-dark-surface"\}`\}/,
+      /className=\{`sticky top-0 z-50 w-full min-w-0\$\{isLightTheme\s*\?\s*""\s*:\s*" nn-header-dark-surface"\}`\}/,
       "sticky wrapper must be w-full min-w-0 and host nn-header-dark-surface when dark",
     );
     assert.match(src, /stickyChromeStyle/, "dark/light chrome must flow through stickyChromeStyle");
@@ -44,11 +44,11 @@ describe("SiteHeader sticky chrome wrapper (site-header.tsx)", () => {
     );
   });
 
-  it("declares marketing-unified-dark on <header> for dark themes (row4 tier CSS stays light-only)", () => {
+  it("declares marketing-row4 vs unified-dark on <header> (Midnight keeps row4; other dark themes unified)", () => {
     const src = fs.readFileSync(siteHeaderTsx, "utf8");
     assert.match(
       src,
-      /data-nn-header-layout=\{isLightTheme \? "marketing-row4" : "marketing-unified-dark"\}/,
+      /data-nn-header-layout=\{marketingRow4Layout \? "marketing-row4" : "marketing-unified-dark"\}/,
     );
   });
 

@@ -95,7 +95,7 @@ export function LearnerHubClinicalQuickLaunch({
   const { tiles, variant } = buildPremiumDashboardLaunchTiles({
     t,
     snapshot,
-    pathwayDef,
+    pathwayDef: pathwayDef ?? null,
     pathwayId,
   });
 

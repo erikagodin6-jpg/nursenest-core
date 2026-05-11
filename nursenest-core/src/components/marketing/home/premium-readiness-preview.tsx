@@ -28,7 +28,7 @@ export function PremiumReadinessPreview() {
 
   return (
     <section
-      className="nn-premium-home-section nn-premium-home-section--readiness border-b border-[var(--border-subtle)]"
+      className="nn-premium-home-section nn-premium-home-section--readiness nn-marketing-brand-leaf-band border-b border-[var(--border-subtle)]"
       aria-labelledby="premium-readiness-heading"
       data-testid="section-premium-readiness-preview"
     >

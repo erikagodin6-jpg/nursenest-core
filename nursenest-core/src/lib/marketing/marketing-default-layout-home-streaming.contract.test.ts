@@ -13,7 +13,7 @@ function readSrc(relativeFromSrc: string): string {
 
 test("default marketing layout streams SiteFooter via MarketingMainI18nShards trailingChrome (not before deferred main)", () => {
   const layout = readSrc("app/(marketing)/(default)/layout.tsx");
-  assert.match(layout, /trailingChrome=\{\s*createElement\(SiteFooter/s);
+  assert.match(layout, /trailingChrome=\{\s*<SiteFooter/s);
   assert.match(layout, /<MarketingMainI18nShards[\s\S]*trailingChrome=/s);
 });
 

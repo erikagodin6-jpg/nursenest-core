@@ -41,6 +41,8 @@ const CAT_SOFT_MIN_COMPLETE_ROWS = 8;
 export type CompleteCatQuestionRow = CatQuestionCompletenessFields & {
   id: string;
   difficulty: number | null;
+  /** Present on pool selects; required so filtered rows match Prisma row typing. */
+  questionType: string;
   bodySystem: string | null;
   topic: string | null;
   nclexClientNeedsCategory: string | null;

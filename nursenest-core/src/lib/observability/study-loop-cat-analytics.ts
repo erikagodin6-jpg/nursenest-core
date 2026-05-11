@@ -5,6 +5,7 @@ export type StudyLoopCatSurface =
   | "adaptive_study_overview_primary"
   | "adaptive_study_overview_secondary"
   | "dashboard_quick_actions"
+  | "dashboard_study_modes_grid"
   | "lesson_study_loop_primary"
   | "lesson_study_loop_secondary"
   | "learner_overview_quick_link"

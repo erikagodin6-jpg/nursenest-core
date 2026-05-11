@@ -65,9 +65,10 @@ function correctAnswerFrom(
       if (allNums) {
         const texts: string[] = [];
         if (!Array.isArray(options)) return null;
+        const optionList = options as unknown[];
         for (const idx of caRaw as number[]) {
-          if (idx < 0 || idx >= options.length) return null;
-          texts.push(options[idx]!);
+          if (idx < 0 || idx >= optionList.length) return null;
+          texts.push(String(optionList[idx]));
         }
         return texts as unknown as Prisma.InputJsonValue;
       }
@@ -86,8 +87,10 @@ function correctAnswerFrom(
     if (arr) return arr as unknown as Prisma.InputJsonValue;
   }
   const idx = raw.correctIndex ?? raw.correct_index ?? raw.answerIndex;
-  if (typeof idx === "number" && Number.isInteger(idx) && idx >= 0 && idx < options.length) {
-    return [options[idx]] as unknown as Prisma.InputJsonValue;
+  if (!Array.isArray(options)) return null;
+  const optionList = options as unknown[];
+  if (typeof idx === "number" && Number.isInteger(idx) && idx >= 0 && idx < optionList.length) {
+    return [optionList[idx]] as unknown as Prisma.InputJsonValue;
   }
   return null;
 }

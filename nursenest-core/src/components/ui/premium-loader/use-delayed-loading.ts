@@ -22,11 +22,12 @@ export function useDelayedLoading(visible: boolean, options?: UseDelayedLoadingO
     }
 
     let cancelled = false;
-    let timer: ReturnType<typeof setTimeout> | undefined;
+    /** Browser timer id (`number`); Node typings may widen `setTimeout` to `NodeJS.Timeout`. */
+    let timer: number | undefined;
     const raf = requestAnimationFrame(() => {
       timer = window.setTimeout(() => {
         if (!cancelled) setShow(true);
-      }, delayMs);
+      }, delayMs) as number;
     });
 
     return () => {

@@ -197,10 +197,13 @@ export async function loadAlliedOccupationInventoryRows(
     );
 
     const practiceQuestionsPublished = pool
-      ? await safeCount(`practice_q:${p.professionKey}`, () =>
-          prisma.examQuestion.count({
-            where: { ...pool, status: "published" },
-          }),
+      ? await safeCount(
+          `practice_q:${p.professionKey}`,
+          () =>
+            prisma.examQuestion.count({
+              where: { ...pool, status: "published" },
+            }),
+          "allied practice question count failed",
         )
       : cellUnavailable(
           "no prismaWhereForAlliedProfessionExamQuestions scope — shared allied pool not attributable to this occupation",
@@ -214,45 +217,57 @@ export async function loadAlliedOccupationInventoryRows(
         ? cellUnavailable(
             "no prismaWhereForAlliedProfessionExamQuestions scope — cannot count adaptive items for this occupation",
           )
-        : await safeCount(`cat_adaptive:${p.professionKey}`, () =>
-            prisma.examQuestion.count({
-              where: { ...pool, status: "published", isAdaptiveEligible: true },
-            }),
+        : await safeCount(
+            `cat_adaptive:${p.professionKey}`,
+            () =>
+              prisma.examQuestion.count({
+                where: { ...pool, status: "published", isAdaptiveEligible: true },
+              }),
+            "allied CAT adaptive-eligible count failed",
           );
 
     const scenarioCaseQuestionsPublished = pool
-      ? await safeCount(`scenario_q:${p.professionKey}`, () =>
-          prisma.examQuestion.count({
-            where: { ...pool, status: "published", isScenario: true },
-          }),
+      ? await safeCount(
+          `scenario_q:${p.professionKey}`,
+          () =>
+            prisma.examQuestion.count({
+              where: { ...pool, status: "published", isScenario: true },
+            }),
+          "allied scenario question count failed",
         )
       : cellUnavailable("no attributable exam-question scope for scenarios");
 
     const labDiagnosticTaggedPublished = pool
-      ? await safeCount(`lab_tagged:${p.professionKey}`, () =>
-          prisma.examQuestion.count({
-            where: {
-              ...pool,
-              status: "published",
-              OR: [
-                { tags: { has: "lab-values" } },
-                { tags: { has: "lab-interpretation" } },
-                { tags: { has: "lab-drills-only" } },
-              ],
-            },
-          }),
+      ? await safeCount(
+          `lab_tagged:${p.professionKey}`,
+          () =>
+            prisma.examQuestion.count({
+              where: {
+                ...pool,
+                status: "published",
+                OR: [
+                  { tags: { has: "lab-values" } },
+                  { tags: { has: "lab-interpretation" } },
+                  { tags: { has: "lab-drills-only" } },
+                ],
+              },
+            }),
+          "allied lab-tagged question count failed",
         )
       : cellUnavailable("no attributable exam-question scope for lab/diagnostic tags");
 
     const medCalcTaggedPublished = pool
-      ? await safeCount(`medcalc_tagged:${p.professionKey}`, () =>
-          prisma.examQuestion.count({
-            where: {
-              ...pool,
-              status: "published",
-              tags: { has: "med-calculations-only" },
-            },
-          }),
+      ? await safeCount(
+          `medcalc_tagged:${p.professionKey}`,
+          () =>
+            prisma.examQuestion.count({
+              where: {
+                ...pool,
+                status: "published",
+                tags: { has: "med-calculations-only" },
+              },
+            }),
+          "allied med-calc tagged question count failed",
         )
       : cellUnavailable("no attributable exam-question scope for med-calc tags");
 

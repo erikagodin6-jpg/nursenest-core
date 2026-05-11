@@ -39,7 +39,7 @@ export async function GET(request: Request): Promise<Response> {
     );
   } catch {
     const fallbackEntries: SitemapUrlEntry[] = SITEMAP_FALLBACK_LOCALIZED_PATHS.map((path) => ({
-      loc: `${origin}${path === "/" ? "" : path}`,
+      loc: `${origin}${path}`,
     }));
     const filteredFallback = filterPublicSitemapEntries(fallbackEntries, origin);
     xml = buildSitemapUrlsetFromAbsoluteUrls(

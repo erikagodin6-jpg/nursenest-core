@@ -301,7 +301,7 @@ export async function listBlogGenerationJobsForAdmin(
       },
     },
   });
-  const mapped = rows.map(serializeJob);
+  const mapped = rows.map((batch) => serializeJob(batch));
   if (!params.phase) return mapped.slice(0, take);
   return mapped.filter((j) => j.phase === params.phase).slice(0, take);
 }

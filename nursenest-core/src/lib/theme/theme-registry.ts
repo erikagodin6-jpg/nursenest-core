@@ -202,7 +202,7 @@ export const PUBLIC_MARKETING_THEME_ALLOWLIST = [
 ] as const;
 
 export function themeOptionsForPublicMarketingPicker(all: ThemeOption[] = THEME_OPTIONS): ThemeOption[] {
-  const allow = new Set(PUBLIC_MARKETING_THEME_ALLOWLIST);
+  const allow = new Set<string>(PUBLIC_MARKETING_THEME_ALLOWLIST);
   return all.filter((o) => allow.has(o.id));
 }
 

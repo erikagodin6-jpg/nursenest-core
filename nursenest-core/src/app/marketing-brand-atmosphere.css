@@ -1,0 +1,264 @@
+/* =====================================================================
+   NurseNest marketing + learner brand atmosphere (CSS-only).
+   - Colourful ambient washes, premium depth, subtle leaf watermark texture.
+   - Scoped to `.nn-marketing-brand-root` (public marketing chrome) and
+     `.nn-learner-app.nn-brand-learner-atmosphere` (learner shell).
+   - Uses semantic + chart tokens only — leaf mark references same-origin SVG.
+   - No routing / data / i18n changes; additive visuals only.
+   ===================================================================== */
+
+.nn-marketing-brand-root {
+  --nn-brand-leaf-svg: url("/logos/arctic-frost-leaf.svg");
+  --nn-brand-leaf-band-opacity: 0.048;
+  --nn-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-2) 38%, transparent);
+  --nn-brand-page-wash-a: radial-gradient(120% 88% at 8% 0%, color-mix(in srgb, var(--semantic-chart-1) 12%, transparent), transparent 58%);
+  --nn-brand-page-wash-b: radial-gradient(100% 72% at 96% 18%, color-mix(in srgb, var(--semantic-chart-3) 11%, transparent), transparent 56%);
+  --nn-brand-page-wash-c: radial-gradient(92% 64% at 42% 100%, color-mix(in srgb, var(--semantic-chart-4) 9%, transparent), transparent 62%);
+  --nn-brand-card-rim: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 14%);
+}
+
+html[data-theme="ocean"] .nn-marketing-brand-root {
+  --nn-brand-leaf-tint: color-mix(in srgb, var(--semantic-info) 42%, transparent);
+  --nn-brand-leaf-band-opacity: 0.055;
+  --nn-brand-page-wash-a: radial-gradient(118% 86% at 6% 4%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent), transparent 58%);
+  --nn-brand-page-wash-b: radial-gradient(102% 74% at 100% 12%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 56%);
+  --nn-brand-page-wash-c: radial-gradient(90% 62% at 48% 100%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent), transparent 60%);
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-marketing-brand-root {
+  --nn-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-5) 40%, transparent);
+  --nn-brand-leaf-band-opacity: 0.058;
+  --nn-brand-page-wash-a: radial-gradient(120% 90% at 4% 0%, color-mix(in srgb, var(--semantic-chart-1) 13%, transparent), transparent 56%);
+  --nn-brand-page-wash-b: radial-gradient(104% 76% at 100% 8%, color-mix(in srgb, var(--semantic-chart-3) 11%, transparent), transparent 56%);
+  --nn-brand-page-wash-c: radial-gradient(94% 68% at 44% 100%, color-mix(in srgb, var(--semantic-chart-4) 10%, transparent), transparent 60%);
+}
+
+html[data-theme="sunset"] .nn-marketing-brand-root {
+  --nn-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-5) 36%, transparent);
+  --nn-brand-page-wash-a: radial-gradient(118% 86% at 10% 0%, color-mix(in srgb, var(--semantic-warning) 11%, transparent), transparent 58%);
+}
+
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-marketing-brand-root {
+  --nn-brand-leaf-tint: color-mix(in srgb, var(--semantic-info) 48%, transparent);
+  --nn-brand-leaf-band-opacity: 0.072;
+  --nn-brand-page-wash-a: radial-gradient(110% 82% at 12% 0%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent), transparent 55%);
+  --nn-brand-page-wash-b: radial-gradient(96% 70% at 96% 10%, color-mix(in srgb, var(--semantic-info) 14%, transparent), transparent 54%);
+  --nn-brand-page-wash-c: radial-gradient(88% 64% at 38% 100%, color-mix(in srgb, var(--semantic-chart-4) 12%, transparent), transparent 58%);
+}
+
+/* Soft page wash behind all marketing main content (never blocks interaction). */
+.nn-marketing-brand-root main {
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-marketing-brand-root main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--nn-brand-page-wash-a), var(--nn-brand-page-wash-b), var(--nn-brand-page-wash-c);
+  opacity: 0.92;
+}
+
+.nn-marketing-brand-root main > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Repeating leaf silhouette — very low contrast; sits above wash, below sections. */
+.nn-marketing-brand-root main::after {
+  content: "";
+  position: absolute;
+  inset: -6% 0 0 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--nn-brand-leaf-band-opacity);
+  background-color: var(--nn-brand-leaf-tint);
+  -webkit-mask-image: var(--nn-brand-leaf-svg);
+  mask-image: var(--nn-brand-leaf-svg);
+  -webkit-mask-size: clamp(150px, 20vw, 220px) clamp(150px, 20vw, 220px);
+  mask-size: clamp(150px, 20vw, 220px) clamp(150px, 20vw, 220px);
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+}
+
+@media (max-width: 639.98px) {
+  .nn-marketing-brand-root main::after {
+    -webkit-mask-size: clamp(130px, 38vw, 200px) clamp(130px, 38vw, 200px);
+    mask-size: clamp(130px, 38vw, 200px) clamp(130px, 38vw, 200px);
+    opacity: calc(var(--nn-brand-leaf-band-opacity) * 0.82);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-marketing-brand-root main::before {
+    opacity: 0.65;
+  }
+  .nn-marketing-brand-root main::after {
+    opacity: calc(var(--nn-brand-leaf-band-opacity) * 0.55);
+  }
+}
+
+/* Homepage sections: extra pastel depth + leaf band (z behind section content). */
+.nn-marketing-brand-root .nn-home-marketing-root .nn-marketing-brand-leaf-band {
+  position: relative;
+}
+
+.nn-marketing-brand-root .nn-home-marketing-root .nn-marketing-brand-leaf-band::after {
+  content: "";
+  position: absolute;
+  inset: -3% -2%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: calc(var(--nn-brand-leaf-band-opacity) * 1.12);
+  background-color: var(--nn-brand-leaf-tint);
+  -webkit-mask-image: var(--nn-brand-leaf-svg);
+  mask-image: var(--nn-brand-leaf-svg);
+  -webkit-mask-size: min(58vw, 460px);
+  mask-size: min(58vw, 460px);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 92% 6%;
+  mask-position: 92% 6%;
+}
+
+.nn-marketing-brand-root .nn-home-marketing-root .nn-marketing-brand-leaf-band > .nn-section-shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* Premium homepage cards: colour-forward rim + slightly richer lift (marketing only). */
+.nn-marketing-brand-root .nn-premium-pathway-card,
+.nn-marketing-brand-root .nn-premium-flow-card,
+.nn-marketing-brand-root .nn-premium-trust-card,
+.nn-marketing-brand-root .nn-premium-readiness-panel,
+.nn-marketing-brand-root .nn-premium-final-cta,
+.nn-marketing-brand-root .nn-premium-cta-tile {
+  border-color: var(--nn-brand-card-rim);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--premium-card-accent, var(--premium-flow-accent, var(--semantic-brand))) 20%, transparent),
+    0 20px 48px -32px color-mix(in srgb, var(--palette-heading) 24%, transparent);
+}
+
+.nn-marketing-brand-root .nn-premium-readiness-panel,
+.nn-marketing-brand-root .nn-premium-trust-card,
+.nn-marketing-brand-root .nn-premium-final-cta,
+.nn-marketing-brand-root .nn-premium-cta-tile {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-brand) 16%, transparent),
+    0 20px 48px -32px color-mix(in srgb, var(--palette-heading) 24%, transparent);
+}
+
+.nn-marketing-brand-root .nn-premium-pathway-card__icon,
+.nn-marketing-brand-root .nn-premium-flow-card__icon {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--premium-card-accent, var(--premium-flow-accent)) 12%, transparent);
+}
+
+/* Pathway marketing hubs: airy colour halo behind hub body. */
+.nn-marketing-brand-root .nn-premium-pathway-hub {
+  position: relative;
+}
+
+.nn-marketing-brand-root .nn-premium-pathway-hub::before {
+  content: "";
+  position: absolute;
+  inset: -1rem -0.5rem auto;
+  height: min(36rem, 70vh);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 2.5rem;
+  background: var(--nn-brand-page-wash-a), var(--nn-brand-page-wash-b);
+  opacity: 0.55;
+}
+
+.nn-marketing-brand-root .nn-premium-pathway-hub > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Blog / editorial cards — slightly richer premium rim (marketing routes only). */
+.nn-marketing-brand-root .nn-premium-blog-related-card,
+.nn-marketing-brand-root .nn-premium-blog-toc {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 20%, var(--semantic-border-soft));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-info) 12%, transparent),
+    0 18px 40px -30px color-mix(in srgb, var(--palette-heading) 18%, transparent);
+}
+
+/* Pricing — soft brand wash behind plan grid (does not alter plan logic). */
+.nn-marketing-brand-root .nn-pricing-premium-root {
+  position: relative;
+}
+
+.nn-marketing-brand-root .nn-pricing-premium-root::before {
+  content: "";
+  position: absolute;
+  inset: -0.5rem 0 auto 0;
+  height: min(28rem, 52vh);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 2rem;
+  background: var(--nn-brand-page-wash-a), var(--nn-brand-page-wash-c);
+  opacity: 0.42;
+}
+
+.nn-marketing-brand-root .nn-pricing-premium-root > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------------
+   Learner shell — single oversized leaf glow (dashboard / study surfaces).
+   --------------------------------------------------------------------- */
+
+.nn-learner-app.nn-brand-learner-atmosphere {
+  --nn-learner-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-3) 32%, transparent);
+}
+
+html[data-theme="blossom"] .nn-learner-app.nn-brand-learner-atmosphere {
+  --nn-learner-brand-leaf-tint: color-mix(in srgb, var(--semantic-chart-5) 30%, transparent);
+}
+
+:is(html[data-theme="midnight"], html[data-theme="midnight-indigo"], html[data-theme="midnight-ink"], html[data-theme="apex"])
+  .nn-learner-app.nn-brand-learner-atmosphere {
+  --nn-learner-brand-leaf-tint: color-mix(in srgb, var(--semantic-info) 38%, transparent);
+}
+
+.nn-learner-app.nn-brand-learner-atmosphere::before {
+  content: "";
+  position: absolute;
+  right: -12%;
+  bottom: -18%;
+  width: min(28rem, 85vw);
+  height: min(28rem, 85vw);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.045;
+  background: var(--nn-learner-brand-leaf-tint);
+  -webkit-mask-image: url("/logos/arctic-frost-leaf.svg");
+  mask-image: url("/logos/arctic-frost-leaf.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  filter: drop-shadow(0 0 48px color-mix(in srgb, var(--semantic-chart-3) 22%, transparent));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-learner-app.nn-brand-learner-atmosphere::before {
+    filter: none;
+    opacity: 0.032;
+  }
+}
+
+.nn-learner-app.nn-brand-learner-atmosphere > * {
+  position: relative;
+  z-index: 1;
+}

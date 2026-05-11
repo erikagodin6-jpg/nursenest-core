@@ -55,7 +55,7 @@ export function PremiumClinicalDepth() {
 
   return (
     <section
-      className="nn-premium-home-section nn-premium-home-section--clinical border-b border-[var(--border-subtle)]"
+      className="nn-premium-home-section nn-premium-home-section--clinical nn-marketing-brand-leaf-band border-b border-[var(--border-subtle)]"
       aria-labelledby="premium-clinical-depth-heading"
       data-testid="section-premium-clinical-depth"
     >

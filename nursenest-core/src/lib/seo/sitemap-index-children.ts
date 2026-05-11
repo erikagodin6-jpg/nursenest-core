@@ -52,7 +52,7 @@ export const SITEMAP_FALLBACK_PATHS_ALL = [
 export const SITEMAP_FALLBACK_CORE_PATHS = SITEMAP_FALLBACK_PATHS_ALL.filter((p) => {
   if (p === "/blog") return false;
   if (p === "/lessons") return false;
-  if (p.endsWith("/lessons") && p !== "/lessons") return false;
+  if (p.endsWith("/lessons")) return false;
   // Exam pathway hubs — emitted only from `/sitemap-pathways.xml` when collectors fail here.
   const pathwayHubOnly = new Set([
     "/us/rn/nclex-rn",

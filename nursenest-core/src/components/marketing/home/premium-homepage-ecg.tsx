@@ -37,7 +37,7 @@ export function PremiumHomepageEcg() {
 
   return (
     <section
-      className="nn-premium-home-section nn-premium-home-section--ecg border-b border-[var(--border-subtle)]"
+      className="nn-premium-home-section nn-premium-home-section--ecg nn-marketing-brand-leaf-band border-b border-[var(--border-subtle)]"
       aria-labelledby="premium-home-ecg-core-heading"
       data-testid="section-premium-home-ecg"
     >

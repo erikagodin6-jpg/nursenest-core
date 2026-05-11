@@ -14,6 +14,8 @@ type Props = {
   secondaryCapture?: { event: string; eventProps?: Record<string, string | number | boolean | undefined> };
   className?: string;
   style?: React.CSSProperties;
+  /** Forwarded to Next.js `Link` (both perf branches). */
+  prefetch?: boolean;
   children: ReactNode;
   "aria-label"?: string;
   "data-testid"?: string;
@@ -33,13 +35,14 @@ export function MarketingTrackedLink({
   eventProps,
   secondaryCapture,
   className,
+  prefetch,
   children,
   ...rest
 }: Props) {
   const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
   if (marketingNarrow) {
     return (
-      <Link href={href} className={className} {...rest}>
+      <Link href={href} className={className} prefetch={prefetch} {...rest}>
         {children}
       </Link>
     );
@@ -48,6 +51,7 @@ export function MarketingTrackedLink({
     <Link
       href={href}
       className={className}
+      prefetch={prefetch}
       onClick={() => {
         trackProductEvent(event, eventProps);
         if (secondaryCapture) trackProductEvent(secondaryCapture.event, secondaryCapture.eventProps);

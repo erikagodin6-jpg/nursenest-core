@@ -171,7 +171,7 @@ export async function assessCatPracticeReadinessForPathway(
     };
   }
 
-  if (!v.ok) {
+  if (v != null && !v.ok) {
     return {
       ok: false,
       code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,

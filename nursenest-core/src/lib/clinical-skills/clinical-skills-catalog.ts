@@ -131,7 +131,7 @@ const SKILLS: ClinicalSkillDefinition[] = [
       ["Inspect under adequate lighting", "Measure & describe tissue layers present"],
       ["Note drainage, odor, and periwound skin", "Photograph per policy"],
       ["Identify infection escalation triggers", "Align dressing plan with orders"],
-      ["Document in structured fields + teach-back"],
+      ["Document in structured fields + teach-back", "Pair with pain reassessment and follow-up orders"],
     ),
   },
   {
@@ -145,7 +145,7 @@ const SKILLS: ClinicalSkillDefinition[] = [
       ["Review indication & aspiration risk", "Measure insertion depth"],
       ["Confirm placement per protocol stack", "Observe for respiratory distress"],
       ["Secure & mark insertion site", "Educate on coughing / pulling precautions"],
-      ["Document verification method & time"],
+      ["Document verification method & time", "Report and escalate if placement uncertain or patient deteriorates"],
     ),
   },
   {

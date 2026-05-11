@@ -37,7 +37,7 @@ export function PremiumHomepageTrust() {
 
   return (
     <section
-      className="nn-premium-home-section nn-premium-home-section--trust border-b border-[var(--border-subtle)]"
+      className="nn-premium-home-section nn-premium-home-section--trust nn-marketing-brand-leaf-band border-b border-[var(--border-subtle)]"
       aria-labelledby="premium-homepage-trust-heading"
       data-testid="section-premium-homepage-trust"
     >

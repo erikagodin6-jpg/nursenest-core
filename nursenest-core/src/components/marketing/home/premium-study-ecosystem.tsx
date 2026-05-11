@@ -54,7 +54,7 @@ export function PremiumStudyEcosystem() {
 
   return (
     <section
-      className="nn-premium-home-section nn-premium-home-section--ecosystem border-b border-[var(--border-subtle)]"
+      className="nn-premium-home-section nn-premium-home-section--ecosystem nn-marketing-brand-leaf-band border-b border-[var(--border-subtle)]"
       aria-labelledby="premium-study-ecosystem-heading"
       data-testid="section-premium-study-ecosystem"
     >

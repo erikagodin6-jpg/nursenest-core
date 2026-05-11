@@ -23,7 +23,8 @@ test("site-header keeps a single desktop MarketingHeaderUtilityCluster (light: B
   const header = read("src/components/layout/site-header.tsx");
   assert.match(header, /data-nn-header-band="utility"[\s\S]*MarketingHeaderUtilityCluster/s);
   assert.doesNotMatch(header, /MarketingHeaderUtilityStrip/);
-  assert.match(header, /\{!isLightTheme \? \(/);
+  /** Bar A when `marketingRow4Layout` (light + Midnight); dark unified uses `!marketingRow4Layout` for inline utility. */
+  assert.match(header, /\{!marketingRow4Layout \? \(/);
   assert.match(header, /chromeMode="row4"/);
   assert.match(header, /chromeMode="dark-marketing"/);
 });

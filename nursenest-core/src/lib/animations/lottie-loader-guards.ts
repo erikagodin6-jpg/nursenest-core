@@ -11,7 +11,7 @@ const REDUCED_MOTION_MQ = "(prefers-reduced-motion: reduce)";
 /** Sync read for gating network + parse (avoids a fetch window before `useReducedMotion` hydrates). */
 export function syncPrefersReducedMotion(): boolean {
   if (typeof window === "undefined") return false;
-  return window.matchMedia(REDUCED_MQ).matches;
+  return window.matchMedia(REDUCED_MOTION_MQ).matches;
 }
 
 /**

@@ -245,7 +245,7 @@ export default async function LearnerShellLayout({ children }: { children: React
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate>
             <div
-              className="nn-learner-app nn-learner-ds-ambient relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+var(--nn-learner-bottom-nav-reserve))] sm:px-5 md:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
+              className="nn-learner-app nn-learner-ds-ambient nn-brand-learner-atmosphere relative isolate mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+var(--nn-learner-bottom-nav-reserve))] sm:px-5 md:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
               data-nn-learner-ds
               data-learner-exam-chrome={isFocusedExamShell ? "hidden" : undefined}
               data-testid="learner-shell"

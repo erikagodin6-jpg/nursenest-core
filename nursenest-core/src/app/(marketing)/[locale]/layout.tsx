@@ -144,7 +144,7 @@ export default async function MarketingLocaleLayout({
             <MarketingFeedbackShell>
               <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
                 <CheckoutGlobalRegionContextPathStamp />
-                <div className="nn-marketing-surface flex min-h-screen flex-col">
+                <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
                   <SiteHeader serverHasStaffSession={staffSession != null} />
                   <MarketingMainI18nShards
                     locale={locale}

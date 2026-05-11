@@ -1,4 +1,4 @@
-import { createElement, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { headers } from "next/headers";
 import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
 import { getEffectiveMarketingCountry } from "@/lib/marketing/get-effective-country";
@@ -426,15 +426,13 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                 <MarketingFeedbackShell>
                   <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
                     <CheckoutGlobalRegionContextPathStamp />
-                    <div className="nn-marketing-surface flex min-h-screen flex-col">
+                    <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
                       <SiteHeader serverHasStaffSession={staffSession != null} />
                       {shouldLayerMainPageShards() ? (
                         <MarketingMainI18nShards
                           locale={resolvedLocale}
                           publicContentOverrides={publicContentOverrides}
-                          trailingChrome={createElement(SiteFooter, {
-                            serverHasStaffSession: staffSession != null,
-                          })}
+                          trailingChrome={<SiteFooter serverHasStaffSession={staffSession != null} />}
                         >
                           <main className="flex min-h-0 flex-1 flex-col">
                             <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>

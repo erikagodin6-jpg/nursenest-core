@@ -15,7 +15,8 @@ export type LessonsPerfPhase =
   | "detail_lookup_start"
   | "detail_lookup_end"
   | "personalization_start"
-  | "personalization_end";
+  | "personalization_end"
+  | "effective_hub_catalog";
 
 function lessonsPerfEnabled(): boolean {
   if (process.env.NN_LESSONS_PERF_LOG === "1") return true;

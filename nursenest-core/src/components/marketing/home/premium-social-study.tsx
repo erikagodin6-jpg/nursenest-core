@@ -49,7 +49,7 @@ export function PremiumSocialStudy() {
 
   return (
     <section
-      className="nn-premium-home-section nn-premium-home-section--social-study border-b border-[var(--border-subtle)]"
+      className="nn-premium-home-section nn-premium-home-section--social-study nn-marketing-brand-leaf-band border-b border-[var(--border-subtle)]"
       aria-labelledby="premium-social-study-heading"
       data-testid="section-premium-social-study"
     >

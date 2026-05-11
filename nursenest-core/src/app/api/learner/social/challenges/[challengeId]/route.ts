@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import type { Prisma } from "@prisma/client";
 import { SocialChallengeStatus } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
@@ -30,6 +31,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ challengeId: 
       return NextResponse.json({ ok: false, code: "not_found" }, { status: 404, headers: mergeSubscriberPrivateCacheHeaders() });
     }
     const status = parsed.data.status as SocialChallengeStatus;
+    const completionSummary: Prisma.InputJsonValue | undefined =
+      parsed.data.completionSummary === undefined
+        ? undefined
+        : (JSON.parse(JSON.stringify(parsed.data.completionSummary)) as Prisma.InputJsonValue);
     const updated = await prisma.socialChallengeParticipant.update({
       where: { id: participant.id },
       data: {
@@ -37,7 +42,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ challengeId: 
         acceptedAt: status === SocialChallengeStatus.ACCEPTED ? new Date() : undefined,
         declinedAt: status === SocialChallengeStatus.DECLINED ? new Date() : undefined,
         completedAt: status === SocialChallengeStatus.COMPLETED ? new Date() : undefined,
-        completionSummary: parsed.data.completionSummary ?? undefined,
+        completionSummary,
       },
       select: { id: true, challengeId: true, status: true, completedAt: true, completionSummary: true },
     });

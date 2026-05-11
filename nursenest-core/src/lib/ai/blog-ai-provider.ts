@@ -160,7 +160,7 @@ export async function openRouterChatCompletion(params: {
       throw new Error("Invalid JSON from OpenRouter response");
     }
   });
-  const content = resp.choices[0]?.message?.content ?? "";
+  const content = resp.choices?.[0]?.message?.content ?? "";
   return { content, totalTokens: resp.usage?.total_tokens };
 }
 
@@ -226,6 +226,6 @@ export async function blogAiChatCompletion(params: {
       ...(user ? { user } : {}),
     }),
   );
-  const content = resp.choices[0]?.message?.content ?? "";
+  const content = resp.choices?.[0]?.message?.content ?? "";
   return { content, totalTokens: resp.usage?.total_tokens };
 }

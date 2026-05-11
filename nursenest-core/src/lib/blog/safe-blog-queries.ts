@@ -26,7 +26,7 @@ import {
   type BlogIndexMergeRow,
 } from "@/lib/blog/blog-public-merge";
 import { getBlogStaticLongtailRecord, listBlogStaticLongtailRecords } from "@/lib/blog/blog-static-longtail-load";
-import type { BlogStaticLongtailRecord } from "@/lib/blog/blog-static-longtail-types";
+import type { BlogPostPublicListSource, BlogStaticLongtailRecord } from "@/lib/blog/blog-static-longtail-types";
 import {
   allSupplementSlugsForOverlapQuery,
   buildSupplementBlogIndexRowsExcludingLiveSlugs,
@@ -160,7 +160,7 @@ export type BlogIndexPostWithSource = BlogIndexPost & {
   publicSource?: BlogPostPublicListSource;
   source?: BlogPostPublicListSource;
 };
-export type { BlogPostPublicListSource };
+export type { BlogPostPublicListSource } from "@/lib/blog/blog-static-longtail-types";
 
 function mergeRowToBlogIndexPost(row: BlogIndexMergeRow, source: BlogPostPublicListSource): BlogIndexPostWithSource {
   return {

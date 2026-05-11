@@ -25,7 +25,7 @@ export function PremiumHomepageCta() {
 
   return (
     <section
-      className="nn-premium-home-section nn-premium-home-section--cta"
+      className="nn-premium-home-section nn-premium-home-section--cta nn-marketing-brand-leaf-band"
       aria-labelledby="premium-homepage-final-cta-heading"
       data-testid="section-premium-homepage-final-cta"
     >

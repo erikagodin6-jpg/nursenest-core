@@ -25,6 +25,21 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  /* Homepage hero headline — theme tokens (semantic charts + brand; no raw product hex in TSX). */
+  --hero-headline-accent: var(--semantic-chart-1, var(--semantic-brand));
+  --hero-headline-secondary: var(--semantic-chart-3, var(--semantic-info));
+  --hero-headline-gradient: linear-gradient(
+    96deg,
+    color-mix(in srgb, var(--hero-headline-accent) 94%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 92%, var(--semantic-border-soft)) 40%,
+    color-mix(in srgb, var(--hero-headline-secondary) 93%, var(--semantic-border-soft)) 100%
+  );
+  --hero-headline-shadow: 0 0.04em 0 color-mix(in srgb, var(--semantic-border-soft) 45%, transparent);
+  --hero-headline-glow: drop-shadow(0 0 20px color-mix(in srgb, var(--semantic-chart-3) 26%, transparent))
+    drop-shadow(0 0 44px color-mix(in srgb, var(--semantic-chart-1) 16%, transparent));
+  --hero-ambient-radial: radial-gradient(120% 92% at 6% 28%, color-mix(in srgb, var(--semantic-chart-2) 16%, transparent) 0%, transparent 58%),
+    radial-gradient(100% 78% at 96% 12%, color-mix(in srgb, var(--semantic-chart-3) 14%, transparent) 0%, transparent 55%),
+    radial-gradient(92% 72% at 42% 108%, color-mix(in srgb, var(--semantic-chart-4) 12%, transparent) 0%, transparent 62%);
   background:
     radial-gradient(720px 380px at 8% 0%, color-mix(in srgb, var(--semantic-chart-1, #ec4899) 26%, transparent) 0%, transparent 60%),
     radial-gradient(720px 380px at 100% 12%, color-mix(in srgb, var(--semantic-chart-3, #3b82f6) 26%, transparent) 0%, transparent 60%),
@@ -46,10 +61,128 @@
   z-index: 0;
 }
 
+/* ----- Premium hero headline stack (typography + local ambient only; layout unchanged) ----- */
+.nn-home-marketing-rich-hero .nn-hero-headline-visual {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  max-width: min(100%, 42rem);
+}
+
+.nn-home-marketing-rich-hero .nn-hero-headline-visual::before {
+  content: "";
+  position: absolute;
+  inset: -14% -6% -20% -10%;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--hero-ambient-radial);
+  opacity: 0.88;
+}
+
+@media (min-width: 1024px) {
+  .nn-home-marketing-rich-hero .nn-hero-headline-visual::before {
+    filter: blur(34px);
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .nn-home-marketing-rich-hero .nn-hero-headline-visual::before {
+    opacity: 0.72;
+    inset: -10% -4% -14% -6%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-home-marketing-rich-hero .nn-hero-headline-visual::before {
+    filter: none;
+    opacity: 0.5;
+  }
+}
+
+.nn-home-marketing-rich-hero #home-conversion-hero-heading.nn-hero-headline--premium {
+  letter-spacing: -0.034em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.nn-home-marketing-rich-hero .nn-hero-headline-emphasis,
+.nn-home-marketing-rich-hero .nn-blossom-hero-gradient-copy {
+  display: inline;
+  background-image: var(--hero-headline-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  text-shadow: var(--hero-headline-shadow);
+  filter: var(--hero-headline-glow);
+}
+
+@media (max-width: 639.98px) {
+  .nn-home-marketing-rich-hero .nn-hero-headline-emphasis,
+  .nn-home-marketing-rich-hero .nn-blossom-hero-gradient-copy {
+    filter: drop-shadow(0 0 14px color-mix(in srgb, var(--semantic-chart-3) 22%, transparent))
+      drop-shadow(0 0 28px color-mix(in srgb, var(--semantic-chart-1) 14%, transparent));
+  }
+}
+
 @media (max-width: 1023.98px) {
   .nn-home-marketing-rich-hero {
     contain: layout style;
   }
+}
+
+/* Ocean — calm aqua / cool blue headline emphasis (semantic charts). */
+html[data-theme="ocean"] .nn-home-marketing-rich-hero {
+  --hero-headline-accent: var(--semantic-chart-2);
+  --hero-headline-secondary: var(--semantic-chart-3);
+  --hero-headline-gradient: linear-gradient(
+    94deg,
+    color-mix(in srgb, var(--semantic-chart-2) 95%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 90%, var(--semantic-border-soft)) 44%,
+    color-mix(in srgb, var(--semantic-chart-3) 92%, var(--semantic-border-soft)) 100%
+  );
+  --hero-headline-glow: drop-shadow(0 0 22px color-mix(in srgb, var(--semantic-info) 30%, transparent))
+    drop-shadow(0 0 42px color-mix(in srgb, var(--semantic-chart-4) 18%, transparent));
+  --hero-ambient-radial: radial-gradient(118% 88% at 4% 22%, color-mix(in srgb, var(--semantic-chart-2) 18%, transparent) 0%, transparent 58%),
+    radial-gradient(96% 74% at 100% 10%, color-mix(in srgb, var(--semantic-chart-3) 15%, transparent) 0%, transparent 56%),
+    radial-gradient(90% 70% at 48% 100%, color-mix(in srgb, var(--semantic-chart-4) 12%, transparent) 0%, transparent 60%);
+}
+
+/* Sunset — warm optimistic emphasis without flat orange slabs. */
+html[data-theme="sunset"] .nn-home-marketing-rich-hero {
+  --hero-headline-accent: var(--semantic-chart-5);
+  --hero-headline-secondary: var(--semantic-warning);
+  --hero-headline-gradient: linear-gradient(
+    96deg,
+    color-mix(in srgb, var(--semantic-chart-5) 92%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-border-soft)) 42%,
+    color-mix(in srgb, var(--semantic-warning) 90%, var(--semantic-border-soft)) 100%
+  );
+  --hero-headline-glow: drop-shadow(0 0 20px color-mix(in srgb, var(--semantic-chart-5) 26%, transparent))
+    drop-shadow(0 0 40px color-mix(in srgb, var(--semantic-warning) 16%, transparent));
+}
+
+/* Dark / Midnight family — luminous clinical workstation headline. */
+:is(html[data-theme="dark-clinical"], html[data-theme="dark-academia"], html[data-theme="dark-mode"], html[data-theme="midnight-indigo"], html[data-theme="deep-twilight"], html[data-theme="evergreen-steel"], html[data-theme="midnight-ink"], html[data-theme="storm-slate"], html[data-theme="midnight"], html[data-theme="apex"])
+  .nn-home-marketing-rich-hero {
+  --hero-headline-accent: var(--semantic-chart-4);
+  --hero-headline-secondary: var(--semantic-chart-3);
+  --hero-headline-gradient: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--semantic-chart-4) 86%, var(--palette-heading)) 0%,
+    color-mix(in srgb, var(--semantic-chart-3) 88%, var(--palette-heading)) 34%,
+    color-mix(in srgb, var(--semantic-info) 84%, var(--palette-heading)) 66%,
+    color-mix(in srgb, var(--semantic-chart-1) 80%, var(--palette-heading)) 100%
+  );
+  --hero-headline-shadow: 0 0.07em 0 color-mix(in srgb, var(--palette-heading) 22%, transparent);
+  --hero-headline-glow: drop-shadow(0 0 28px color-mix(in srgb, var(--semantic-chart-3) 48%, transparent))
+    drop-shadow(0 0 58px color-mix(in srgb, var(--semantic-info) 32%, transparent))
+    drop-shadow(0 0 36px color-mix(in srgb, var(--semantic-success) 24%, transparent));
+  --hero-ambient-radial: radial-gradient(112% 86% at 10% 18%, color-mix(in srgb, var(--semantic-chart-3) 24%, transparent) 0%, transparent 55%),
+    radial-gradient(98% 74% at 94% 6%, color-mix(in srgb, var(--semantic-info) 20%, transparent) 0%, transparent 54%),
+    radial-gradient(90% 70% at 38% 108%, color-mix(in srgb, var(--semantic-chart-4) 18%, transparent) 0%, transparent 58%);
 }
 
 /* Inner shell uses 2-col grid on lg+, single column on mobile. */
@@ -425,7 +558,7 @@
   font-weight: 800;
 }
 
-/* Primary marketing band: neutral paper + whisper tint — never `--nav-bg`; full-width wrapper, not `.nn-section-shell`. */
+/* Primary marketing band: neutral paper on --nn-header-primary-bg + whisper tint — not sticky wrapper chrome; full-width wrapper, not `.nn-section-shell`. */
 /* =====================================================================
    === THEME ARCHITECTURE CONTRACT (marketing) ===
    Ocean is the canonical structural theme for the marketing header
@@ -1118,6 +1251,19 @@
 }
 
 :is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-home-marketing-rich-hero {
+  --hero-headline-accent: var(--semantic-chart-5);
+  --hero-headline-secondary: var(--semantic-brand);
+  --hero-headline-gradient: linear-gradient(
+    94deg,
+    color-mix(in srgb, var(--semantic-chart-5) 92%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 90%, var(--semantic-border-soft)) 46%,
+    color-mix(in srgb, var(--semantic-brand) 91%, var(--semantic-border-soft)) 100%
+  );
+  --hero-headline-glow: drop-shadow(0 0 24px color-mix(in srgb, var(--semantic-brand) 30%, transparent))
+    drop-shadow(0 0 48px color-mix(in srgb, var(--semantic-chart-5) 20%, transparent));
+  --hero-ambient-radial: radial-gradient(120% 90% at 8% 26%, color-mix(in srgb, var(--semantic-chart-5) 20%, transparent) 0%, transparent 58%),
+    radial-gradient(102% 76% at 100% 12%, color-mix(in srgb, var(--semantic-brand) 16%, transparent) 0%, transparent 56%),
+    radial-gradient(92% 70% at 40% 100%, color-mix(in srgb, var(--semantic-chart-2) 14%, transparent) 0%, transparent 60%);
   background:
     radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-5) 26%, transparent), transparent 58%),
     radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-brand) 20%, transparent), transparent 56%),
@@ -1169,6 +1315,19 @@ html[data-theme="blossom"] .nn-home-marketing-root {
 }
 
 html[data-theme="blossom"] .nn-home-marketing-rich-hero {
+  --hero-headline-accent: var(--semantic-chart-1);
+  --hero-headline-secondary: var(--semantic-chart-3);
+  --hero-headline-gradient: linear-gradient(
+    92deg,
+    color-mix(in srgb, var(--semantic-chart-1) 93%, var(--semantic-border-soft)) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 91%, var(--semantic-border-soft)) 48%,
+    color-mix(in srgb, var(--semantic-chart-3) 92%, var(--semantic-border-soft)) 100%
+  );
+  --hero-headline-glow: drop-shadow(0 0 24px color-mix(in srgb, var(--semantic-chart-3) 32%, transparent))
+    drop-shadow(0 0 52px color-mix(in srgb, var(--semantic-chart-1) 20%, transparent));
+  --hero-ambient-radial: radial-gradient(122% 90% at 8% 26%, color-mix(in srgb, var(--semantic-chart-1) 19%, transparent) 0%, transparent 58%),
+    radial-gradient(102% 76% at 100% 14%, color-mix(in srgb, var(--semantic-chart-3) 16%, transparent) 0%, transparent 56%),
+    radial-gradient(92% 70% at 38% 100%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent) 0%, transparent 60%);
   background:
     radial-gradient(820px 440px at 6% 4%, color-mix(in srgb, var(--semantic-chart-1) 16%, transparent), transparent 60%),
     radial-gradient(780px 420px at 94% 8%, color-mix(in srgb, var(--semantic-chart-3) 15%, transparent), transparent 58%),
@@ -1196,17 +1355,6 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
     radial-gradient(740px 380px at 100% 18%, color-mix(in srgb, var(--semantic-chart-3) 8%, transparent), transparent 60%),
     radial-gradient(720px 360px at 100% 22%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 60%),
     radial-gradient(700px 340px at 50% 100%, color-mix(in srgb, var(--semantic-chart-2) 7%, transparent), transparent 62%);
-}
-
-html[data-theme="blossom"] .nn-home-marketing-rich-hero #home-conversion-hero-heading {
-  color: var(--theme-heading-text);
-}
-
-html[data-theme="blossom"] .nn-home-marketing-rich-hero #home-conversion-hero-heading .nn-blossom-hero-gradient-copy {
-  background: linear-gradient(92deg, var(--semantic-chart-1) 0%, var(--semantic-chart-2) 52%, var(--semantic-chart-3) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 /* =====================================================================

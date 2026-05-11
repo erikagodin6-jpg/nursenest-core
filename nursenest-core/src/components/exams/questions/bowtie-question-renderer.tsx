@@ -38,7 +38,7 @@ function slotSurface(
     return "border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))]";
   }
   const sel = selectedId ?? "";
-  const ok = reveal.correctIds[BOWTIE_SLOT_KEYS.indexOf(slot)] === sel;
+  const ok = reveal.correct.correctIds[BOWTIE_SLOT_KEYS.indexOf(slot)] === sel;
   return ok
     ? "border-[color-mix(in_srgb,var(--semantic-success)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_12%,var(--semantic-surface))]"
     : "border-[color-mix(in_srgb,var(--semantic-danger)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))]";

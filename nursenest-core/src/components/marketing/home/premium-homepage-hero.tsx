@@ -59,6 +59,24 @@ function safePath(locale: string, path: string) {
   }
 }
 
+/**
+ * Split headline into solid lead + gradient emphasis for locales that use a
+ * natural bridge word (with / avec / mit / con). Falls back to full solid headline.
+ */
+function splitPremiumHeroHeadline(headline: string): { lead: string; emphasis: string | null } {
+  const bridges = [/\s+with\s+/i, /\s+avec\s+/i, /\s+mit\s+/i, /\s+con\s+/i];
+  for (const re of bridges) {
+    const match = headline.match(re);
+    if (match && match.index != null) {
+      return {
+        lead: headline.slice(0, match.index),
+        emphasis: headline.slice(match.index),
+      };
+    }
+  }
+  return { lead: headline, emphasis: null };
+}
+
 /** Thousands separators for hero statistics (matches active locale). */
 function formatMarketingInteger(n: number, locale: string): string {
   try {
@@ -267,7 +285,7 @@ export function PremiumHomepageHero(props: {
     safeHomepageMarketingT(
       t,
       "pages.home.hero.headlinePremium",
-      "Pass the boards with a calm, clinical study plan.",
+      "Pass the boards with a calm, clinical study companion.",
     ),
     locale,
   );
@@ -329,6 +347,8 @@ export function PremiumHomepageHero(props: {
 
   // Right-panel copy — all overridable via i18n, with safe defaults that
   // never claim a specific learner / outcome / institution.
+  const { lead: heroHeadlineLead, emphasis: heroHeadlineEmphasis } = splitPremiumHeroHeadline(headline);
+
   const panelCopy = {
     panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Readiness preview"),
     panelLive: safeHomepageMarketingT(t, "pages.home.hero.panel.live", "Live readiness preview"),
@@ -384,22 +404,22 @@ export function PremiumHomepageHero(props: {
           <div>
             <span className="nn-premium-hero-eyebrow">{eyebrow}</span>
 
-            <h1
-              id="home-conversion-hero-heading"
-              className="nn-marketing-h1 mt-3 min-w-0 max-w-[min(100%,36ch)] text-balance text-[var(--palette-heading)]"
-              data-testid="text-hero-heading"
-            >
-              {headline.includes(" with ") ? (
-                <>
-                  {headline.slice(0, headline.indexOf(" with "))}
-                  <span className="nn-blossom-hero-gradient-copy">
-                    {headline.slice(headline.indexOf(" with "))}
-                  </span>
-                </>
-              ) : (
-                headline
-              )}
-            </h1>
+            <div className="nn-hero-headline-visual">
+              <h1
+                id="home-conversion-hero-heading"
+                className="nn-marketing-h1 nn-hero-headline--premium mt-3 min-w-0 max-w-[min(100%,36ch)] text-balance text-[var(--palette-heading)]"
+                data-testid="text-hero-heading"
+              >
+                {heroHeadlineEmphasis ? (
+                  <>
+                    {heroHeadlineLead}
+                    <span className="nn-hero-headline-emphasis">{heroHeadlineEmphasis}</span>
+                  </>
+                ) : (
+                  headline
+                )}
+              </h1>
+            </div>
 
             <p className="nn-marketing-body mt-[var(--nn-rhythm-heading-sub)] max-w-[42ch] text-pretty text-[var(--palette-text-muted)]">
               {subheading}

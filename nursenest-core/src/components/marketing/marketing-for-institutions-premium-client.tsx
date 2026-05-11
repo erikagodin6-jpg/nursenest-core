@@ -143,9 +143,16 @@ export function MarketingForInstitutionsPremiumClient({ locale, messages: m, pri
                 >
                   {m["pages.forInstitutions.requestDemo"]} <ChevronRight className="h-5 w-5" aria-hidden />
                 </Button>
-                <Button size="lg" variant="outline" className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-full px-7`} asChild>
-                  <Link href={exploreHref}>{m["pages.forInstitutions.explorePlatform"]}</Link>
-                </Button>
+                <Link
+                  href={exploreHref}
+                  className={[
+                    "nn-ui-btn nn-ui-btn--outline nn-ui-btn--lg inline-flex items-center justify-center gap-2 no-underline",
+                    MARKETING_SECONDARY_CTA_CLASS,
+                    "rounded-full px-7",
+                  ].join(" ")}
+                >
+                  {m["pages.forInstitutions.explorePlatform"]}
+                </Link>
               </div>
               <p className="nn-marketing-caption mt-5 text-[var(--semantic-text-muted)]">{m["pages.forInstitutions.heroMontageCaption"]}</p>
             </div>
@@ -424,9 +431,16 @@ export function MarketingForInstitutionsPremiumClient({ locale, messages: m, pri
             >
               {m["pages.forInstitutions.requestDemo"]}
             </Button>
-            <Button size="lg" variant="outline" className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-full px-8`} asChild>
-              <Link href={exploreHref}>{m["pages.forInstitutions.explorePlatform"]}</Link>
-            </Button>
+            <Link
+              href={exploreHref}
+              className={[
+                "nn-ui-btn nn-ui-btn--outline nn-ui-btn--lg inline-flex items-center justify-center gap-2 no-underline",
+                MARKETING_SECONDARY_CTA_CLASS,
+                "rounded-full px-8",
+              ].join(" ")}
+            >
+              {m["pages.forInstitutions.explorePlatform"]}
+            </Link>
           </div>
         </div>
       </section>

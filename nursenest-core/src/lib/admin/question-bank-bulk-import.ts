@@ -1,4 +1,4 @@
-import { ContentStatus } from "@prisma/client";
+import { ContentStatus, type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { stemHash } from "@/lib/content/stem-hash";
 import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
@@ -165,6 +165,11 @@ export type BulkRowReport = {
 };
 
 const MAX_ITEMS = 200;
+
+/** Prisma JSON columns — runtime-clone so Zod `record(unknown)` shapes satisfy `InputJsonValue`. */
+function examQuestionJsonField(value: unknown): Prisma.InputJsonValue {
+  return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
+}
 
 function isBowtieBulkItem(data: QuestionBankBulkItem): data is BowtieQuestionBankBulkItem {
   return data.questionType === "BOWTIE" && "bank" in data && "correctMapping" in data;
@@ -360,8 +365,12 @@ export async function applyQuestionBankBulkImport(
         data: {
           stem: data.stem,
           rationale: data.rationale,
-          options: isBowtieBulkItem(data) ? bowtieOptionsForImport(data) : data.options,
-          correctAnswer: isBowtieBulkItem(data) ? bowtieCorrectAnswerForImport(data) : data.answerKey,
+          options: examQuestionJsonField(
+            isBowtieBulkItem(data) ? bowtieOptionsForImport(data) : data.options,
+          ),
+          correctAnswer: examQuestionJsonField(
+            isBowtieBulkItem(data) ? bowtieCorrectAnswerForImport(data) : data.answerKey,
+          ),
           questionType: isBowtieBulkItem(data)
             ? "Bowtie"
             : isCanonicalBowtieBulkItem(data)
