@@ -60,6 +60,25 @@ test.describe("Phase 1 — release QA (guest / marketing entry)", () => {
     expect(body).not.toMatch(/application error|internal server error|unhandled runtime error/i);
   });
 
+  test("Canada REx-PN hub preserves auth callback into the canonical RPN paid route", async ({ page }) => {
+    test.setTimeout(180_000);
+    const hub = await page.goto("/canada/pn/rex-pn", { waitUntil: "domcontentloaded", timeout: 120_000 });
+    expect(hub?.ok(), `HTTP ${hub?.status()} for /canada/pn/rex-pn`).toBeTruthy();
+    await dismissMarketingScrims(page);
+    await expect(page.getByRole("heading", { name: /REx-PN/i }).first()).toBeVisible({ timeout: 60_000 });
+    const practiceModule = page
+      .locator('[data-nn-qa-hub-premium-module="practice_tests"] a.nn-exam-hub-study-card')
+      .first();
+    await expect(practiceModule).toBeVisible({ timeout: 60_000 });
+    const href = await practiceModule.getAttribute("href");
+    const decodedHref = decodeURIComponent(href ?? "");
+    expect(decodedHref).toContain("/login");
+    expect(decodedHref).toContain("pathwayId=ca-rpn-rex-pn");
+    await practiceModule.click();
+    await expect(page).toHaveURL(/\/login\?/, { timeout: 60_000 });
+    expect(decodeURIComponent(page.url())).toContain("pathwayId=ca-rpn-rex-pn");
+  });
+
   test("unauthenticated user hitting /app/onboarding is redirected toward auth (no blank shell)", async ({
     browser,
     baseURL,

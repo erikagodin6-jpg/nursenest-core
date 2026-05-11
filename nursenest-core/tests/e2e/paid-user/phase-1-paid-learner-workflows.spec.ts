@@ -24,8 +24,19 @@ import { hasAdminE2eCredentials, getAdminE2eCredentials } from "../helpers/smoke
 import { loginWithCredentials } from "../helpers/learner-login";
 
 const pathwayId = PAID_E2E_DEFAULT_PATHWAY_ID;
+const rpnPathwayId = "ca-rpn-rex-pn";
 
 test.describe("Phase 1 — paid learner workflows (release)", () => {
+  test("Canada RPN lessons hub is entitled in the blocking paid suite", async ({ page }) => {
+    test.setTimeout(180_000);
+    await page.goto(paidLessonsHubUrl(rpnPathwayId), { waitUntil: "domcontentloaded" });
+    expectNotLoginUrl(page);
+    await waitForAuthenticatedLearnerShell(page);
+    await expectNoSubscriberPaywallSurface(page, "phase1 RPN lessons hub");
+    const first = page.locator(LESSON_HUB_CARD_LINKS).first();
+    await expect(first).toBeVisible({ timeout: 120_000 });
+  });
+
   test("pathway lessons hub + lesson detail + mark studied (no crash)", async ({ page }) => {
     test.setTimeout(240_000);
     await page.goto(paidLessonsHubUrl(pathwayId), { waitUntil: "domcontentloaded" });

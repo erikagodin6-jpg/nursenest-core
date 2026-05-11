@@ -19,6 +19,21 @@
 
 ---
 
+## Readiness source map
+
+Use the right source for the right question. The repo currently exposes **three different lesson/readiness signals**, and they are not interchangeable:
+
+| Question | Authoritative source | Notes |
+| --- | --- | --- |
+| What does the **public launch gate** think is published right now? | `src/config/pathway-readiness-snapshot.json` and `/admin/country-exam-readiness` | DB-backed / emitted snapshot used by public site gating. |
+| How many **versioned lesson bodies** exist in the catalog? | `docs/pathway-lesson-launch-inventory.md` + `../scripts/audit-pathway-lesson-inventory.ts` | Catalog/effective lesson inventory only; useful for authoring backlog, not by itself a public launch signal. |
+| Do REx-PN lessons actually resolve on runtime/public surfaces? | `npm run verify:rpn-lessons-visible` | Filesystem + runtime resolver + optional site HTML/direct route verification. |
+| Are questions / flashcards / CAT pools actually healthy for launch? | Admin diagnostics and staging/prod checks (`/api/admin/question-bank-coverage`, `/api/admin/exam-coverage-audit`, `/api/flashcards/inventory`, `/api/practice-tests/cat-readiness`) | Runtime truth; required before claiming subscriber readiness. |
+
+This is why `docs/pathway-lesson-launch-inventory.md` may show `61` catalog/effective REx-PN lessons while `src/config/pathway-readiness-snapshot.json` shows `180` lessons for `ca-rpn-rex-pn`. Those counts answer different questions and must be cited with their source.
+
+---
+
 ## 1. Anonymous visitor → pathway
 
 **Marketing hubs**
@@ -161,6 +176,37 @@
 
 - Sitemap / robots / merged route tests (`test:seo-sitemap`, `test:sitemap`).
 - i18n route readiness lists REx-PN lesson hub paths (`tests/e2e/i18n/i18n-route-readiness.spec.ts`).
+
+---
+
+## 12. Canada RPN / REx-PN launch signoff sequence
+
+To call the Canada RPN slice truly launch-ready, use one explicit candidate pass and one explicit post-deploy pass.
+
+### Candidate / pre-promote
+
+1. `npm run production:preflight`
+2. `npm run verify:do-runtime` (or `npm run release:runtime-checklist` if the human-readable checklist is needed)
+3. `npm run qa:release-gate`
+4. `npm run verify:rpn-lessons-visible`
+5. Confirm the candidate includes all of the following evidence:
+   - `/canada/pn/rex-pn` renders and preserves auth callback into a `ca-rpn-rex-pn` learner route
+   - paid blocking suite reaches an entitled `ca-rpn-rex-pn` learner lessons surface
+   - runtime lesson visibility passes for REx-PN
+   - admin/runtime diagnostics show non-zero and launch-acceptable question, flashcard, and CAT pools
+
+### Post-deploy / production
+
+1. `npm run qa:verify:health`
+2. `npm run qa:verify:production`
+3. `npm run verify:rpn-lessons-visible`
+4. Record pass/fail evidence for:
+   - public REx-PN hub health
+   - paid learner unlock on `ca-rpn-rex-pn`
+   - billing route health (portal/cancel smoke remains contract-safe; no destructive Stripe automation on live)
+   - runtime content pool visibility
+
+If any item above fails, the slice is not at 100% launch readiness, even if generic RN or homepage checks remain green.
 
 ---
 

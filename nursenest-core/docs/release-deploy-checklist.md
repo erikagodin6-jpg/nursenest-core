@@ -2,7 +2,7 @@
 
 Concise checklist for promoting a build. **Deploy safety (precheck, health, rollback, verification):** **[`deploy-safety.md`](./deploy-safety.md)**.
 
-Pair with **`npm run validate:release`**, **`npm run qa:release-gate`** (pre-promote), and **`npm run qa:verify:production`** (post-deploy). See **[`release-verification.md`](./release-verification.md)** and **[`RELEASE_QA.md`](./RELEASE_QA.md)**.
+Pair with **`npm run ci:verify`**, **`npm run production:preflight`**, **`npm run qa:release-gate`** (pre-promote), **`npm run verify:rpn-lessons-visible`** when Canada RPN / REx-PN is in scope, and **`npm run qa:verify:production`** (post-deploy). See **[`release-verification.md`](./release-verification.md)** and **[`RELEASE_QA.md`](./RELEASE_QA.md)**.
 
 ---
 
@@ -26,11 +26,13 @@ Pair with **`npm run validate:release`**, **`npm run qa:release-gate`** (pre-pro
 
 - [ ] Stripe webhook URL and signing secret match the deployed host.
 - [ ] Price / product env keys match the plans shown on `/pricing` (smoke: `smoke-checkout-path`).
+- [ ] If Canada RPN / REx-PN is in scope, confirm the candidate resolves the intended `RPN` checkout path and no generic Canada fallback price is shown.
 
 ## Entitlements
 
 - [ ] Paid vs free surfaces match product rules (paid + free smoke tests when creds available).
 - [ ] No accidental widening of lesson/question access (server-side checks unchanged).
+- [ ] If Canada RPN / REx-PN is in scope, `npm run verify:rpn-lessons-visible` passes against the candidate before promotion.
 
 ## Navigation & marketing
 
@@ -48,7 +50,9 @@ Pair with **`npm run validate:release`**, **`npm run qa:release-gate`** (pre-pro
 
 ## After deploy
 
+- [ ] `npm run qa:verify:health` with production `BASE_URL`.
 - [ ] `npm run qa:verify:production` with production `BASE_URL` (or staging first).
+- [ ] If Canada RPN / REx-PN is in scope, rerun `npm run verify:rpn-lessons-visible` against production and record the result alongside the deploy ticket / release notes.
 - [ ] **Edge + origin:** optional `ORIGIN_BASE_URL` (DO `*.ondigitalocean.app`) + `VERIFY_CANONICAL_HOME=1` with `npm run qa:verify:health` — see **`deploy-safety.md`** §5 and **`edge-origin-troubleshooting.md`**.
 - [ ] Enable **`production-public-health-watch`** GitHub Actions secrets + failure notifications if not already (external HTTP / `/` regression guard).
 - [ ] Scan dashboards for 5xx, checkout errors, auth errors (see `release-verification.md` monitoring table).

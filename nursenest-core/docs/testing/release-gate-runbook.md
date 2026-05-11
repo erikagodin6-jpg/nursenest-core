@@ -95,6 +95,14 @@ npm run qa:release-gate
 
 No implicit default applies meaningfully here — set `BASE_URL` explicitly so artifacts and failures reference the correct host.
 
+If the release includes Canada RPN / REx-PN, immediately follow the candidate gate with:
+
+```bash
+npm run verify:rpn-lessons-visible
+```
+
+Treat that command as required candidate evidence for the RPN slice, not as an optional audit.
+
 ---
 
 ## Required credentials (optional groups)

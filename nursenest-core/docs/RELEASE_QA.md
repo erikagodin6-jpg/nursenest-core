@@ -14,27 +14,35 @@ Run **`npm run qa:release-gate`** against the **candidate** `BASE_URL` (staging 
 
 | # | What | Spec / entry |
 |---|------|----------------|
-| 1 | Learner pathname contract (Node) | `tests/e2e/helpers/learner-shell.test.ts` via `npm run test:e2e:learner-shell-contract` |
+| 1 | Guest marketing + auth entry shells | `tests/e2e/release/phase-1-release-qa-guest.spec.ts` |
 | 2 | Liveness + DB readiness | `tests/e2e/release/release-health-apis.spec.ts` |
 | 3 | Paid auth seed (storage state) | `tests/e2e/setup/auth.setup.ts` (`setup-paid-auth` project) |
 | 4 | Fast sanity — shell, lessons hub, guards | `tests/e2e/paid-user/paid-user-00-fast-sanity.spec.ts` |
 | 5 | Entitlements — premium lesson + question + flashcards vs anonymous | `tests/e2e/paid-user/paid-user-entitlements.spec.ts` |
 | 6 | API / network health — lessons + questions + flashcards paths | `tests/e2e/paid-user/paid-user-api-health.spec.ts` |
-| 7 | CAT / practice exam — hub → exam → items | `tests/e2e/paid-user/paid-user-cat-smoke.spec.ts` |
-| 8 | Account overview (read-only, no Stripe writes) | `tests/e2e/release/release-account-billing-smoke.spec.ts` |
+| 7 | Paid learner workflows — lessons, flashcards, practice, billing, explicit Canada RPN lessons route | `tests/e2e/paid-user/phase-1-paid-learner-workflows.spec.ts` |
+| 8 | CAT / practice exam — hub → exam → items | `tests/e2e/paid-user/paid-user-cat-smoke.spec.ts` |
+| 9 | Account overview (read-only, no Stripe writes) | `tests/e2e/release/release-account-billing-smoke.spec.ts` |
 
 **Exact files in the blocking layer:**
 
-1. `tests/e2e/helpers/learner-shell.test.ts` (contract, not Playwright)
+1. `tests/e2e/release/phase-1-release-qa-guest.spec.ts`
 2. `tests/e2e/release/release-health-apis.spec.ts`
 3. `tests/e2e/setup/auth.setup.ts`
 4. `tests/e2e/paid-user/paid-user-00-fast-sanity.spec.ts`
 5. `tests/e2e/paid-user/paid-user-entitlements.spec.ts`
 6. `tests/e2e/paid-user/paid-user-api-health.spec.ts`
-7. `tests/e2e/paid-user/paid-user-cat-smoke.spec.ts`
-8. `tests/e2e/release/release-account-billing-smoke.spec.ts`
+7. `tests/e2e/paid-user/phase-1-paid-learner-workflows.spec.ts`
+8. `tests/e2e/paid-user/paid-user-cat-smoke.spec.ts`
+9. `tests/e2e/release/release-account-billing-smoke.spec.ts`
 
 Config: `playwright.release-gate.config.ts` (health project, then setup + `release-blocking-paid`).
+
+When the release includes Canada RPN / REx-PN, the blocking gate must also cover:
+
+- public hub rendering + auth callback preservation for `/canada/pn/rex-pn` in `phase-1-release-qa-guest.spec.ts`
+- an entitled learner route for `ca-rpn-rex-pn` in `phase-1-paid-learner-workflows.spec.ts`
+- runtime inventory verification via `npm run verify:rpn-lessons-visible`
 
 Optional: set `E2E_RELEASE_SKIP_BILLING=1` to skip account/billing smoke only when explicitly justified (same as spec `test.skip`).
 
@@ -47,10 +55,9 @@ Optional: set `E2E_RELEASE_SKIP_BILLING=1` to skip account/billing smoke only wh
 | Extended paid CI slice | `npm run test:e2e:ci-master` → fast-sanity, journey, entitlements, navigation, api-health (`playwright.ci-master.config.ts`) |
 | Subscriber audit | `tests/e2e/paid-user/paid-subscriber-audit.spec.ts` |
 | Session persistence | `tests/e2e/paid-user/paid-user-session-persistence.spec.ts` |
-| Navigation / i18n / mobile | `paid-user-navigation`, `paid-user-i18n`, `paid-user-mobile` |
-| Stress / performance / degraded | `paid-user-stress`, `paid-user-performance`, `paid-user-degraded-mode` |
-| Public marketing | `npm run qa:pre-deploy:public` (includes `marketing-production-sentinel`, **DOM placeholder** spec `tests/marketing/marketing-placeholder-dom.spec.ts`, and `pre-deploy-regression`) |
-| Public marketing — DOM placeholder only | `npm run qa:marketing-placeholder-dom` (Playwright: `/` + `/pricing` visible text; requires app at `BASE_URL` or local `webServer`) |
+| Navigation / i18n / mobile | paid-user navigation/mobile/i18n suites under `tests/e2e/paid-user/` |
+| Stress / performance / degraded | paid-user stress/performance/degraded suites under `tests/e2e/paid-user/` |
+| Public marketing | targeted Playwright suites under `tests/e2e/public/` plus `playwright.site-wide-audit.config.ts` when a broader public audit is needed |
 | Login flow (explicit UI) | `tests/e2e/paid-user/paid-user-login-flow.spec.ts` |
 | Auth audit (optional creds) | `tests/e2e/auth/auth-audit.spec.ts` |
 | Adaptive questions | `tests/e2e/paid-user/paid-user-adaptive-question-flow.spec.ts` |
@@ -105,7 +112,10 @@ cd nursenest-core
 export BASE_URL="https://your-candidate.example"   # or local http://127.0.0.1:3000
 export PLAYWRIGHT_SKIP_WEB_SERVER=1               # when testing a remote URL
 # Paid credentials in env or .env.playwright.local — see playwright.env.ts
+npm run production:preflight
+npm run verify:do-runtime
 npm run qa:release-gate
+npm run verify:rpn-lessons-visible               # required when Canada RPN / REx-PN is in release scope
 ```
 
 ### Post-deploy (production smoke, no paid creds required)
@@ -131,11 +141,6 @@ npm run qa:verify:production
 
 ### Local emergency smoke (fastest signal)
 
-```bash
-cd nursenest-core
-npm run qa:smoke:emergency
-```
-
 Health-only (no Playwright paid setup):
 
 ```bash
@@ -146,7 +151,7 @@ npx playwright test -c playwright.release-gate.config.ts --project=release-healt
 With paid creds, fast sanity alone:
 
 ```bash
-npm run test:e2e:paid-fast-sanity
+npx playwright test -c playwright.release-gate.config.ts --project=release-blocking-paid tests/e2e/paid-user/paid-user-00-fast-sanity.spec.ts
 ```
 
 ### One-liners (aliases)
@@ -160,16 +165,15 @@ npm run test:e2e:paid-fast-sanity
 | `npm run qa:release-gate:mobile` | Mobile Pixel smoke (runs phase-1 guest dependency) |
 | `npm run qa:release-gate:all` | Same as `qa:release-gate` |
 | `npm run qa:predeploy` | Same as `qa:release-gate` |
-| `npm run qa:release-gate:health` | `/api/health` + `/api/health/ready` only |
-| `npm run qa:important-regression` | CI master paid bundle + public pre-deploy |
+| `npm run qa:release-gate:health` | `/api/health` + `/api/health/ready` release-health project only |
+| `npm run production:preflight` | Schema / build / deploy preflight validation before candidate promotion |
+| `npm run verify:do-runtime` | Runtime DigitalOcean / app-platform verification before promotion |
+| `npm run release:runtime-checklist` | Human-readable runtime verification checklist helper |
+| `npm run verify:rpn-lessons-visible` | Required RPN runtime/public-surface verification when REx-PN is in scope |
 | `npm run qa:post-deploy-smoke` | Post-deploy health + home (`playwright.postdeploy.config.ts`) |
 | `npm run qa:postdeploy` | Same as `qa:post-deploy-smoke` |
 | `npm run qa:verify:production` | Post-deploy smoke **+** core journey bundle (`scripts/verify-production-release.mjs`) |
 | `npm run qa:verify:production:core` | Core journey bundle only (`playwright.verify-production.config.ts`) |
-| `npm run qa:smoke` | Minimal four-group smoke (`tests/e2e/smoke-production`) |
-| `npm run qa:smoke:extended` | Legacy broad `tests/e2e/smoke` suite |
-| `npm run qa:smoke:emergency` | Health APIs + paid fast sanity when creds exist (`playwright.emergency.config.ts`) |
-| `npm run qa:marketing-placeholder-dom` | Playwright: visible `/` + `/pricing` must not contain placeholder tokens (`tests/marketing/marketing-placeholder-dom.spec.ts`) |
 
 ---
 
@@ -232,9 +236,12 @@ Route expectations for paid users are documented in `tests/e2e/helpers/learner-s
 
 Minimum:
 
-1. `npm run validate:release` (or your CI equivalent: typecheck + content + i18n + release-safety tests) — see `package.json` `validate:release`.
-2. `npm run qa:release-gate` on the **same build** deployed to production (candidate/staging URL with production-like DB).
-3. After promote: `npm run qa:verify:production` (or at minimum `npm run qa:post-deploy-smoke`) against **production** `BASE_URL`.
+1. `npm run ci:verify`
+2. `npm run production:preflight`
+3. `npm run verify:do-runtime` (or `npm run release:runtime-checklist` if you need the human-readable checklist)
+4. `npm run qa:release-gate` on the **same build** deployed to production (candidate/staging URL with production-like DB)
+5. If Canada RPN / REx-PN is in scope: `npm run verify:rpn-lessons-visible`
+6. After promote: `npm run qa:verify:production` (or at minimum `npm run qa:post-deploy-smoke`) against **production** `BASE_URL`
 
 ---
 

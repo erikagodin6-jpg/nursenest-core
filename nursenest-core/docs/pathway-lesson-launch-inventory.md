@@ -1,8 +1,16 @@
-# Pathway lesson launch inventory (core six)
+# Pathway lesson catalog inventory (core six)
 
-**Source of truth:** `src/content/pathway-lessons/catalog.json` (versioned lesson bodies).  
-**Audit script:** `node scripts/audit-pathway-lesson-inventory.mjs` (optional `--enforce` when all pathways ≥ 150).  
+**Primary source of truth for this document:** `src/content/pathway-lessons/catalog.json` (versioned lesson bodies).  
+**Audit script:** `npx tsx ../scripts/audit-pathway-lesson-inventory.ts` (optional `--enforce` when all pathways ≥ 150).  
 **Machine-readable matrix:** `data/reports/pathway-lesson-launch-matrix.json`
+
+**Important:** this document tracks the **catalog / effective lesson inventory** only. It is **not** the same signal as the public launch gate used by country / exam readiness:
+
+- **Committed public launch snapshot:** `src/config/pathway-readiness-snapshot.json`
+- **Public/live readiness UI:** `/admin/country-exam-readiness`
+- **Runtime RPN route visibility verifier:** `npm run verify:rpn-lessons-visible`
+
+Those sources are DB-backed or runtime-backed and can legitimately diverge from the catalog audit in this file. Do **not** compare the numbers here directly to the public launch snapshot without stating which source you mean.
 
 **Policy:** Do not inflate counts with thin or near-duplicate lessons. Each row must pass structural / premium gates (`pathway-lesson-premium.ts`, `classifyPathwayLesson`) and remain pathway-scoped (US vs Canada, RN vs PN vs NP).
 
@@ -10,7 +18,32 @@
 
 ---
 
-## A. Current lesson counts by pathway
+## A. Count sources and how to use them
+
+| Source | Backing data | What it answers | Use for |
+| --- | --- | --- | --- |
+| This document (`catalog.json` + scoped-gold effective count) | Versioned lesson bodies in repo | How many durable lesson bodies exist in the catalog | Authoring / content backlog / parity planning |
+| `src/config/pathway-readiness-snapshot.json` | DB-backed emitted snapshot (`countPathwayLessons` + question diagnostics) | What public launch gates currently consider published for a pathway | Public launch gating / country-exam readiness |
+| `npm run verify:rpn-lessons-visible` | Filesystem + runtime loader + optional site HTML | Whether RPN lessons resolve and render on runtime/public surfaces | Candidate / post-deploy verification |
+
+### Snapshot reference (committed public launch gate)
+
+At the time this doc was last reconciled with the launch gate, `src/config/pathway-readiness-snapshot.json` reported:
+
+| Pathway ID | Snapshot lessons | Snapshot questions |
+| --- | ---: | ---: |
+| `us-rn-nclex-rn` | 200 | 480 |
+| `ca-rn-nclex-rn` | 190 | 420 |
+| `us-lpn-nclex-pn` | 175 | 380 |
+| `ca-rpn-rex-pn` | 180 | 350 |
+| `us-np-fnp` | 91 | 280 |
+| `ca-np-cnple` | 0 | 0 |
+
+If these numbers drift, regenerate the snapshot and reconcile this section before using any launch percentage in reports.
+
+---
+
+## B. Current catalog/effective lesson counts by pathway
 
 | Pathway ID        | Exam / role                         | Catalog lessons |
 |-------------------|-------------------------------------|----------------:|
@@ -27,7 +60,7 @@
 
 ---
 
-## B. New lesson targets by domain (high level)
+## C. New lesson targets by domain (high level)
 
 Map each **new** lesson to at least one **content intent** (tag via `topicSlug`, `bodySystem`, premium section kinds, and `exam_focus`):
 
@@ -60,7 +93,7 @@ Map each **new** lesson to at least one **content intent** (tag via `topicSlug`,
 
 ---
 
-## C. What was added or adapted (this deliverable)
+## D. What was added or adapted (this deliverable)
 
 | Artifact | Purpose |
 |----------|---------|
@@ -77,7 +110,7 @@ Map each **new** lesson to at least one **content intent** (tag via `topicSlug`,
 
 ---
 
-## D. Which pathways meet 150+
+## E. Which pathways meet 150+ catalog lessons
 
 **None** of the six pathways are at **150** yet.
 
@@ -87,7 +120,7 @@ Map each **new** lesson to at least one **content intent** (tag via `topicSlug`,
 
 ---
 
-## E. Expansion plan toward 500+
+## F. Expansion plan toward 500+
 
 1. **150 (launch floor):** Close pathway-specific gaps; maintain paired US/CA workflows for RN and PN; FNP expansion uses lifespan × domain matrix; CNPLE seeds after Canadian scope is stable.
 2. **150 → 250:** Increase density in **medications**, **labs/diagnostics**, and **case-style** lessons; merge or retire thin duplicates if any appear.
@@ -106,7 +139,7 @@ Map each **new** lesson to at least one **content intent** (tag via `topicSlug`,
 ## Cross-check commands
 
 ```bash
-node scripts/audit-pathway-lesson-inventory.mjs
+npx tsx ../scripts/audit-pathway-lesson-inventory.ts
 # When every core pathway >= 150:
-node scripts/audit-pathway-lesson-inventory.mjs --enforce
+npx tsx ../scripts/audit-pathway-lesson-inventory.ts --enforce
 ```

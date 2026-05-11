@@ -16,9 +16,6 @@ import { publicAppOriginForBilling } from "@/lib/env/public-app-origin";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
 import { canonicalProfessionKeyForAlliedCareer } from "@/lib/allied/allied-billing-career-resolution";
 import {
-  stripePriceEnvKey,
-  alliedStripePriceEnvKey,
-  sharedAlliedStripePriceEnvKey,
   STRIPE_TRIAL_DAYS,
   ALLIED_CAREER_KEYS,
   isFreeStripeBillingNursingTier,
@@ -38,10 +35,10 @@ import {
   includeStripePriceEnvKeyInCheckoutResponse,
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
 } from "@/lib/stripe/checkout-api-diagnostics";
+import { resolveCheckoutPriceSelection } from "@/lib/stripe/checkout-price-selection";
 import { naBillingScopeAckRequiredForCheckout } from "@/lib/stripe/checkout-na-billing-scope-gate";
-import { findPriceEntry, findAlliedPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
+import type { BillingDuration } from "@/lib/stripe/pricing-map";
 import { JSON_BODY_CHECKOUT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
-import { getRegionalPricing } from "@/lib/pricing/regional-pricing-map";
 import { isGlobalRegionSlug, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { GLOBAL_REGION_COOKIE, parseGlobalRegionCookie } from "@/lib/region/global-region-cookie";
 import {
@@ -294,45 +291,25 @@ export async function POST(req: Request) {
       na_ack_present: naBillingScopeAcknowledged ? 1 : 0,
     });
 
-    // Try regional pricing first (covers all 18 global markets), fall back to legacy CA/US map
-    let priceId: string | undefined;
-    let planCode: string | undefined;
-    let resolvedCurrency: string = country === "US" ? "USD" : "CAD";
+    const priceSelection = resolveCheckoutPriceSelection({
+      country,
+      region: resolvedRegion,
+      tier: tierCode,
+      duration: durationCode,
+      alliedCareer: careerKey,
+    });
+    const priceId = priceSelection.priceId ?? undefined;
+    const planCode = priceSelection.planCode ?? undefined;
+    const resolvedCurrency = priceSelection.currency;
 
-    if (resolvedRegion) {
-      const regionalConfig = getRegionalPricing(resolvedRegion);
-      const profKey = tierCode === "ALLIED" ? "allied" : "nursing";
-      const entry = regionalConfig[profKey][durationCode];
-      if (entry.stripePriceId) {
-        priceId = entry.stripePriceId;
-        planCode = `${resolvedRegion}_${profKey}_${durationCode}`;
-        resolvedCurrency = entry.currency;
-      }
-    }
-
-    // Fall back to legacy CA/US price map if regional didn't resolve
-    if (!priceId) {
-      const price = tierCode === "ALLIED" && careerKey
-        ? findAlliedPriceEntry(country, careerKey, durationCode)
-        : findPriceEntry(country, tierCode, durationCode);
-      if (price) {
-        priceId = price.priceId;
-        planCode = price.planCode;
-      }
-    }
-
-    const missingEnvKey =
-      tierCode === "ALLIED" && careerKey
-        ? process.env[sharedAlliedStripePriceEnvKey(durationCode)]?.trim()
-          ? sharedAlliedStripePriceEnvKey(durationCode)
-          : alliedStripePriceEnvKey(country, careerKey, durationCode)
-        : stripePriceEnvKey(country, tierCode, durationCode);
+    const missingEnvKey = priceSelection.envKey;
     safeServerLog("stripe_checkout", "checkout_price_resolution", {
       pathway: requestedPathway,
       tier: tierCode,
       duration: durationCode,
       envKey: missingEnvKey,
       priceId: priceId ?? "",
+      priceSource: priceSelection.source,
     });
 
     if (!priceId || !planCode) {

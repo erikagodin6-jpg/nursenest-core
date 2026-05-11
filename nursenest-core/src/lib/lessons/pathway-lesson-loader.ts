@@ -588,7 +588,7 @@ const effectiveLocaleForPathwayLessonDbRows = pathwayLoaderAsyncMemo(async funct
   return effective;
 });
 
-const PATHWAY_LESSON_HUB_LIST_SELECT = {
+const PATHWAY_LESSON_HUB_LIST_SELECT_BASE = {
   slug: true,
   title: true,
   topic: true,
@@ -602,13 +602,77 @@ const PATHWAY_LESSON_HUB_LIST_SELECT = {
   priority: true,
   examMeta: true,
   locale: true,
+} as const;
+
+const PATHWAY_LESSON_HUB_LIST_SELECT = {
+  ...PATHWAY_LESSON_HUB_LIST_SELECT_BASE,
   alliedProfessionKey: true,
+} as const;
+
+const PATHWAY_LESSON_HUB_LIST_SELECT_NO_ALLIED_KEY = {
+  ...PATHWAY_LESSON_HUB_LIST_SELECT_BASE,
 } as const;
 
 const PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS = {
   ...PATHWAY_LESSON_HUB_LIST_SELECT,
   sections: true,
 } as const;
+
+const PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS_NO_ALLIED_KEY = {
+  ...PATHWAY_LESSON_HUB_LIST_SELECT_NO_ALLIED_KEY,
+  sections: true,
+} as const;
+
+type PathwayLessonHubSelectRow = Parameters<typeof pathwayLessonRowToInput>[0];
+
+function isLikelyMissingDbColumnError(e: unknown, columnHint: string): boolean {
+  const msg = e instanceof Error ? e.message : String(e);
+  const lower = msg.toLowerCase();
+  return lower.includes("does not exist") && lower.includes(columnHint.toLowerCase());
+}
+
+function pathwayLessonHubSelectRowToInput(row: PathwayLessonHubSelectRow, includeSections: boolean): LessonInput {
+  return pathwayLessonRowToInput({
+    ...row,
+    alliedProfessionKey: row.alliedProfessionKey ?? null,
+    sections: includeSections ? row.sections ?? [] : [],
+  });
+}
+
+async function findPathwayLessonHubInputs(args: {
+  where: Prisma.PathwayLessonWhereInput;
+  orderBy: Prisma.PathwayLessonOrderByWithRelationInput[];
+  skip?: number;
+  take?: number;
+  includeSections?: boolean;
+}): Promise<LessonInput[]> {
+  const includeSections = Boolean(args.includeSections);
+  const select = includeSections ? PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS : PATHWAY_LESSON_HUB_LIST_SELECT;
+  const fallbackSelect = includeSections
+    ? PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS_NO_ALLIED_KEY
+    : PATHWAY_LESSON_HUB_LIST_SELECT_NO_ALLIED_KEY;
+
+  try {
+    const rows = (await prisma.pathwayLesson.findMany({
+      where: args.where,
+      orderBy: args.orderBy,
+      skip: args.skip,
+      take: args.take,
+      select,
+    })) as PathwayLessonHubSelectRow[];
+    return rows.map((row) => pathwayLessonHubSelectRowToInput(row, includeSections));
+  } catch (e) {
+    if (!isLikelyMissingDbColumnError(e, "allied_profession_key")) throw e;
+    const rows = (await prisma.pathwayLesson.findMany({
+      where: args.where,
+      orderBy: args.orderBy,
+      skip: args.skip,
+      take: args.take,
+      select: fallbackSelect,
+    })) as PathwayLessonHubSelectRow[];
+    return rows.map((row) => pathwayLessonHubSelectRowToInput(row, includeSections));
+  }
+}
 
 async function loadPublishedLessonRowsPage(
   pathwayId: string,
@@ -631,22 +695,17 @@ async function loadPublishedLessonRowsPage(
     hubSearch && hubSearch.length >= PATHWAY_HUB_SEARCH_MIN_LEN
       ? { AND: [base, pathwayLessonHubSearchWhere(hubSearch)] }
       : base;
-  const select = includeSections ? PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS : PATHWAY_LESSON_HUB_LIST_SELECT;
-  return dbCall(async () => {
-    const rows = await prisma.pathwayLesson.findMany({
+  return dbCall(
+    () =>
+      findPathwayLessonHubInputs({
       where,
       orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
-      skip,
-      take,
-      select,
-    });
-    return rows.map((row) =>
-      pathwayLessonRowToInput({
-        ...row,
-        sections: includeSections && "sections" in row && row.sections != null ? row.sections : [],
+        skip,
+        take,
+        includeSections,
       }),
-    );
-  }, []);
+    [],
+  );
 }
 
 async function countPublishedLessonRows(
@@ -1315,18 +1374,18 @@ async function getLessonsForTopicPageImpl(
     const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective, [topicSlug]);
     const dbRowsAll = await dbCall(
       () =>
-        prisma.pathwayLesson.findMany({
+        findPathwayLessonHubInputs({
           where: { pathwayId, status: ContentStatus.PUBLISHED, topicSlug, locale: effective },
           orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
           take: 200,
-          select: PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS,
+          includeSections: true,
         }),
       [],
     );
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     const rawInputs: LessonInput[] = [
       ...missingGolds,
-      ...dbRowsAll.map((r) => pathwayLessonRowToInput(r)),
+      ...dbRowsAll,
     ];
     const hubReady = sortAndFilterLessonsForPathwayContext(
       pathwayId,
@@ -2152,7 +2211,7 @@ async function getRelatedPathwayLessonsImpl(
     const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
     const rows = await dbCall(
       () =>
-        prisma.pathwayLesson.findMany({
+        findPathwayLessonHubInputs({
           where: {
             pathwayId,
             status: ContentStatus.PUBLISHED,
@@ -2162,7 +2221,7 @@ async function getRelatedPathwayLessonsImpl(
           },
           orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
           take: Math.min(48, cap * 6),
-          select: PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS,
+          includeSections: true,
         }),
       [],
     );
@@ -2171,7 +2230,7 @@ async function getRelatedPathwayLessonsImpl(
       batch
         .map((r) =>
           applyOverlayAndStructural(
-            withLocaleMeta(normalizeLesson(pathwayLessonRowToInput(r), pathwayId), meta),
+            withLocaleMeta(normalizeLesson(r, pathwayId), meta),
             marketingLocale,
             pathwayId,
             lessonDbOverlays,
@@ -2188,7 +2247,7 @@ async function getRelatedPathwayLessonsImpl(
       const seenSlugs = new Set(merged.map((m) => m.slug));
       const backfillRows = await dbCall(
         () =>
-          prisma.pathwayLesson.findMany({
+          findPathwayLessonHubInputs({
             where: {
               pathwayId,
               status: ContentStatus.PUBLISHED,
@@ -2199,7 +2258,7 @@ async function getRelatedPathwayLessonsImpl(
             },
             orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
             take: Math.min(48, need + 24),
-            select: PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS,
+            includeSections: true,
           }),
         [],
       );
@@ -2421,11 +2480,13 @@ export async function listPathwayLessonSlugBatch(
   const publicSurfaceStructuralWhere = surfaceOnly ? await pathwayLessonStructuralCompleteWhereInput() : {};
 
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
+  const effectiveLoc = dbHas ? await effectiveLocaleForPathwayLessonDbRows(pathwayId, loc) : loc;
   if (sk === 0) {
     const catN = getCatalogLessonsRaw(pathwayId).length;
     safeServerLog("pathway_lessons", "sitemap_batch_source", {
       pathwayId,
-      locale: loc,
+      locale: effectiveLoc,
+      requestedLocale: loc,
       pathwayLessonRuntimeSource: dbHas ? "database" : catN > 0 ? "catalog" : "none",
       restrictToPublicMarketingSurface: surfaceOnly,
     });
@@ -2446,7 +2507,7 @@ export async function listPathwayLessonSlugBatch(
           where: {
             pathwayId,
             status: ContentStatus.PUBLISHED,
-            locale: loc,
+            locale: effectiveLoc,
             ...publicSurfaceStructuralWhere,
           },
           select: { slug: true, topicSlug: true },
@@ -2456,7 +2517,9 @@ export async function listPathwayLessonSlugBatch(
         }),
       [],
     );
-    return rows.map((r) => ({ slug: r.slug, topicSlug: r.topicSlug }));
+    if (rows.length > 0) {
+      return rows.map((r) => ({ slug: r.slug, topicSlug: r.topicSlug }));
+    }
   }
 
   const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(loc);
@@ -2464,31 +2527,33 @@ export async function listPathwayLessonSlugBatch(
   if (dbHas) {
     const rows = await dbCall(
       () =>
-        prisma.pathwayLesson.findMany({
+        findPathwayLessonHubInputs({
           where: {
             pathwayId,
             status: ContentStatus.PUBLISHED,
-            locale: loc,
+            locale: effectiveLoc,
             ...publicSurfaceStructuralWhere,
           },
-          select: PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS,
           orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
           skip: sk,
           take,
+          includeSections: true,
         }),
       [],
     );
-    const meta = lessonLocaleMeta(undefined, loc, false, false);
-    return rows
-      .map((r) =>
-        applyOverlayAndStructural(
-          withLocaleMeta(normalizeLesson(pathwayLessonRowToInput(r), pathwayId), meta),
-          undefined,
-          pathwayId,
-          lessonDbOverlays,
-        ),
-      )
-      .map((l) => ({ slug: l.slug, topicSlug: l.topicSlug }));
+    if (rows.length > 0) {
+      const meta = lessonLocaleMeta(undefined, effectiveLoc, effectiveLoc !== loc, false);
+      return rows
+        .map((r) =>
+          applyOverlayAndStructural(
+            withLocaleMeta(normalizeLesson(r, pathwayId), meta),
+            undefined,
+            pathwayId,
+            lessonDbOverlays,
+          ),
+        )
+        .map((l) => ({ slug: l.slug, topicSlug: l.topicSlug }));
+    }
   }
 
   const metaCat = lessonLocaleMeta(

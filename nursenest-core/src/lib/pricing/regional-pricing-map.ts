@@ -1,8 +1,9 @@
 /**
  * Regional pricing map: display prices by region, profession, and duration.
  *
- * This is a READ-ONLY display/configuration layer. It does NOT replace the
- * existing CAD billing pipeline (`display-catalog.ts` + `pricing-map.ts`).
+ * This is a READ-ONLY display/configuration layer for global-region pricing.
+ * It does NOT replace the existing North America tier-aware billing pipeline
+ * (`display-catalog.ts` + `pricing-map.ts`) for `us` / `canada`.
  *
  * When Stripe Price IDs are configured for a region, checkout can proceed.
  * Until then, the pricing page shows the price with a "Not available yet" state.

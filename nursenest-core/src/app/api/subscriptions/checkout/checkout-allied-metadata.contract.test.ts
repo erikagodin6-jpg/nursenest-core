@@ -6,9 +6,11 @@ import { describe, it } from "node:test";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const routePath = join(__dirname, "route.ts");
+const checkoutPriceSelectionPath = join(__dirname, "..", "..", "..", "..", "lib", "stripe", "checkout-price-selection.ts");
 
 describe("checkout route — allied occupation metadata contract", () => {
   const src = readFileSync(routePath, "utf8");
+  const checkoutPriceSelectionSrc = readFileSync(checkoutPriceSelectionPath, "utf8");
 
   it("rejects ALLIED checkout without alliedCareer", () => {
     assert.match(src, /tier\s*===\s*["']ALLIED["']\s*&&\s*!alliedCareer/);
@@ -21,6 +23,7 @@ describe("checkout route — allied occupation metadata contract", () => {
   });
 
   it("prefers shared allied Stripe env when configured", () => {
-    assert.ok(src.includes("sharedAlliedStripePriceEnvKey"));
+    assert.ok(src.includes("resolveCheckoutPriceSelection"));
+    assert.ok(checkoutPriceSelectionSrc.includes("sharedAlliedStripePriceEnvKey"));
   });
 });

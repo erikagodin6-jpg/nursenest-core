@@ -59,9 +59,21 @@ export async function assertRequiredColumns(client, requiredColumns) {
   return result;
 }
 
+function sanitizeConnectionStringForExplicitSsl(databaseUrl) {
+  try {
+    var url = new URL(databaseUrl);
+    for (const key of ["sslmode", "sslcert", "sslkey", "sslrootcert", "sslaccept", "ssl"]) {
+      url.searchParams.delete(key);
+    }
+    return url.toString();
+  } catch {
+    return databaseUrl;
+  }
+}
+
 export async function withPgClient(databaseUrl, fn) {
   var client = new Client({
-    connectionString: databaseUrl,
+    connectionString: sanitizeConnectionStringForExplicitSsl(databaseUrl),
     ssl: { rejectUnauthorized: false },
   });
   await client.connect();

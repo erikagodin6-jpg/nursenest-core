@@ -38,6 +38,7 @@ function runMigrateStatus() {
 
 async function main() {
   const blockers = [];
+  let databaseConnectionReady = false;
   console.log("[production-preflight] Starting NurseNest production database preflight...");
 
   try {
@@ -56,12 +57,13 @@ async function main() {
         await client.query("SELECT 1");
       });
       console.log("[production-preflight] database connection: PASS");
+      databaseConnectionReady = true;
     } catch (error) {
       blockers.push(`DATABASE_CONNECT_FAILED: ${error?.message ?? error}`);
     }
   }
 
-  if (blockers.length === 0) {
+  if (databaseConnectionReady) {
     const status = runMigrateStatus();
     if (status.status === 0) {
       console.log("[production-preflight] migrations applied: PASS");
@@ -74,7 +76,7 @@ async function main() {
     }
   }
 
-  if (blockers.length === 0) {
+  if (databaseConnectionReady) {
     try {
       await assertRequiredColumnsFromDatabaseUrl(process.env.DATABASE_URL);
       console.log("[production-preflight] required columns: PASS");

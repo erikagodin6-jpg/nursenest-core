@@ -1,7 +1,7 @@
 import { hash } from "bcryptjs";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
+import { CountryCode, Prisma } from "@prisma/client";
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
 import { createAndSendVerificationEmail, normalizeEmailForDedup } from "@/lib/auth/email-verification";
 import { validateUsernameForSignup } from "@/lib/auth/username-rules";
@@ -22,6 +22,7 @@ import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-s
 import { captureServerMessageIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { triggerWelcomeEmailRequested } from "@/lib/server/inngest";
+import { resolveSignupPathwayAssignment } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
 
 function signupStructuredFailed(req: Request, errorClass: string, severity: "warn" | "error" = "warn"): void {
   emitStructuredLog("signup_failed", severity, {
@@ -51,6 +52,10 @@ const schema = z.object({
     (v) => (v === "" || v === null ? undefined : v),
     z.coerce.number().int().min(5).max(600).optional(),
   ),
+  /**
+   * Legacy signup field carrying an experience preference from the marketing form.
+   * Never persist this value into `User.learnerPath`, which must stay a canonical pathway id.
+   */
   learnerPath: z.preprocess(emptyToUndef, z.enum(["new_grad", "experienced", "career_change"]).optional()),
   captchaToken: z.string().optional(),
 });
@@ -166,8 +171,15 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Username already taken", code: "duplicate_username" }, { status: 409 });
   }
 
-  const { email, name, firstName, lastName, password, country, tier, examFocus, studyGoal, dailyStudyMinutes, learnerPath } = parsed.data;
+  const { email, name, firstName, lastName, password, country, tier, examFocus, studyGoal, dailyStudyMinutes } = parsed.data;
   const passwordHash = await hash(password, 12);
+  const signupAssignment = resolveSignupPathwayAssignment({
+    examFocus,
+    tier,
+    country: country as CountryCode,
+    studyGoal,
+    dailyStudyMinutes,
+  });
 
   let createdId: string;
   try {
@@ -188,9 +200,10 @@ export async function POST(req: Request) {
         examFocus: examFocus ?? null,
         studyGoal: studyGoal ?? null,
         dailyStudyMinutes: dailyStudyMinutes ?? null,
-        learnerPath: learnerPath ?? null,
-        onboardingCompletedAt:
-          examFocus && studyGoal && dailyStudyMinutes && learnerPath ? new Date() : null,
+        learnerPath: signupAssignment.learnerPath,
+        targetExamPathwayId: signupAssignment.targetExamPathwayId,
+        examGoalSetAt: signupAssignment.examGoalSetAt,
+        onboardingCompletedAt: signupAssignment.onboardingCompletedAt,
       },
       select: { id: true },
     });

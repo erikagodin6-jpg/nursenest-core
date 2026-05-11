@@ -14,9 +14,10 @@ How to confirm the live site works for real users **before** and **after** deplo
 | Login | — | — | ✓ | — | `smoke/auth-login` |
 | Logout | — | — | ✓ | — | `smoke/auth-logout` |
 | Forgot password | ✓ | — | — | — | `smoke/smoke-forgot-password` |
-| Pricing | ✓ | — | — | — | `smoke/smoke-checkout-path`, `qa:pre-deploy:public` |
+| Pricing | ✓ | — | — | — | `smoke/smoke-checkout-path`, plus the guest release gate in `tests/e2e/release/phase-1-release-qa-guest.spec.ts` |
 | Checkout path (UI only, no Stripe charge) | ✓ | — | — | — | `smoke/smoke-checkout-path` |
 | Paid access (lessons / questions) | — | — | ✓ | — | `smoke/paid-user-access` |
+| Canada RPN public + paid path | ✓ | — | ✓ | — | `qa:release-gate` (guest REx-PN hub + paid RPN lessons route) plus `verify:rpn-lessons-visible` |
 | Free access (gates / preview) | — | ✓ | — | — | `smoke/free-user-access` |
 | Lessons / questions (deeper) | — | — | ✓ | — | Covered by `paid-user-access` in the core bundle |
 | Mobile marketing nav | ✓ | — | — | — | `smoke/smoke-mobile-nav` |
@@ -40,12 +41,12 @@ Skipped tests (missing creds) are **expected** in CI or minimal envs; they are n
 
 | Command | When | What |
 |---------|------|------|
+| `npm run qa:verify:health` | Before or after deploy | Direct runtime health script (`scripts/verify-deploy-health.mjs`). |
 | `npm run qa:verify:production` | After deploy (or against staging) | **Health + home** (`qa:post-deploy-smoke`), then **core journey** bundle (`playwright.verify-production.config.ts`). Requires `BASE_URL` and `PLAYWRIGHT_SKIP_WEB_SERVER=1` (set by script). |
 | `npm run qa:verify:production:core` | Core journeys only (no duplicate health/home) | Same Playwright config as step 2 above; set `BASE_URL` yourself. |
 | `npm run qa:post-deploy-smoke` | Minimal prod ping | `/api/health`, `/api/health/ready`, marketing home. |
-| `npm run qa:smoke` | **Minimal** — Guest / Free / Paid / Admin (`tests/e2e/smoke-production`) | `playwright.smoke.config.ts` via `scripts/run-smoke.mjs` |
-| `npm run qa:smoke:extended` | Legacy broad smoke (localized, extra auth specs) | `playwright.smoke-extended.config.ts` |
 | `npm run qa:release-gate` | **Before** promote to production | See [`RELEASE_QA.md`](./RELEASE_QA.md). |
+| `npm run verify:rpn-lessons-visible` | Candidate or production when REx-PN is in scope | Runtime/public-surface verification for `ca-rpn-rex-pn` inventory and route visibility. |
 
 **Example (production):**
 
@@ -53,7 +54,9 @@ Skipped tests (missing creds) are **expected** in CI or minimal envs; they are n
 cd nursenest-core
 export BASE_URL="https://www.nursenest.ca"
 # Optional: paid/free/admin/signup — load from .env.playwright.local or export
+npm run qa:verify:health
 npm run qa:verify:production
+npm run verify:rpn-lessons-visible   # when Canada RPN / REx-PN is in release scope
 ```
 
 The script exits **non-zero** if any step fails.

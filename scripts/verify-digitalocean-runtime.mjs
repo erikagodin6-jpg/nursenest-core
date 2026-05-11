@@ -483,13 +483,18 @@ if (!/FROM\s+node:20-alpine\s+AS\s+runner/.test(dockerfile)) {
   fail("Dockerfile must have a node:20-alpine runner stage");
 }
 for (const requiredCopy of [
-  "COPY --from=builder /app/nursenest-core/.next ./.next",
+  "COPY --from=builder /app/nursenest-core/.next-standalone-runtime.tar.gz ./.next-standalone-runtime.tar.gz",
   "COPY --from=builder /app/nursenest-core/public ./public",
   "COPY --from=builder /app/nursenest-core/scripts ./scripts",
   "COPY --from=builder /app/nursenest-core/package.json ./package.json",
 ]) {
   assertIncludes(dockerfile, requiredCopy, "Dockerfile runner stage");
 }
+assertIncludes(
+  dockerfile,
+  "tar -C .next -czf .next-standalone-runtime.tar.gz standalone",
+  "Dockerfile builder stage",
+);
 assertIncludes(dockerfile, "EXPOSE 8080", "Dockerfile");
 assertIncludes(dockerfile, "NODE_MAX_OLD_SPACE_SIZE_MB=768", "Dockerfile runner ENV");
 if (!dockerfile.includes('CMD ["node", "scripts/start-standalone.mjs"]')) {
