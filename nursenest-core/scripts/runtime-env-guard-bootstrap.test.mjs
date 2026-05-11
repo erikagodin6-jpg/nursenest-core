@@ -35,6 +35,33 @@ test("process.env.DATABASE_URL survives runtime env guard bootstrap", () => {
   assert.doesNotMatch(result.stderr + result.stdout, /super-secret-password/);
 });
 
+test("runtime env file fallback hydrates missing DATABASE_URL before validation", () => {
+  const tempRoot = mkdtempSync(path.join(os.tmpdir(), "nn-runtime-env-file-bootstrap-"));
+  const runtimeEnvFile = path.join(tempRoot, "env.production");
+  try {
+    writeFileSync(
+      runtimeEnvFile,
+      [
+        "DATABASE_URL=postgresql://file-user:file-secret@file-db.example.com:5432/filedb",
+        "",
+      ].join("\n"),
+    );
+
+    const result = runBootstrap({
+      NN_RUNTIME_ENV_FILE: runtimeEnvFile,
+      DATABASE_URL: undefined,
+    });
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stderr, /runtime_env_file_loaded:true/);
+    assert.match(result.stderr, /loaded_keys:\["DATABASE_URL"\]/);
+    assert.match(result.stderr, /DATABASE_URL_present:\s*true/);
+    assert.doesNotMatch(result.stderr + result.stdout, /file-secret/);
+  } finally {
+    rmSync(tempRoot, { recursive: true, force: true });
+  }
+});
+
 test("dotenv hydration cannot erase an existing DATABASE_URL", () => {
   const tempRoot = mkdtempSync(path.join(os.tmpdir(), "nn-runtime-env-"));
   const previousDatabaseUrl = process.env.DATABASE_URL;

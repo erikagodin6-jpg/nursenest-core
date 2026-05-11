@@ -3,10 +3,11 @@ import { AuthFlowTrustReassurance } from "@/components/auth/auth-flow-trust-reas
 import { PremiumAuthShell } from "@/components/auth/premium-auth-shell";
 import { SignupForm } from "@/components/auth/signup-form";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
 export async function MarketingSignupPage({ locale }: { locale: string }) {
-  const m = await loadMarketingMessages(locale);
+  const m = await loadMarketingMessageShards(locale, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
   const termsHref = withMarketingLocale(locale, "/terms");
   const privacyHref = withMarketingLocale(locale, "/privacy");
   const contactHref = withMarketingLocale(locale, "/contact");

@@ -31,7 +31,7 @@ The following boards were created as custom canonical Ocean layouts:
 - `RN Dashboard v2` (`50:2`)
 - `Mobile Dashboard v2` (`50:121`)
 - `Lesson Detail v2 (compressed)` (`50:154`)
-- `Flashcards Session v3` (`55:2`)
+- `Flashcards Session v4` (`56:2`)
 - `Practice Hub / CAT v2` (`50:305`)
 - `Report Card v2` (`50:390`)
 
@@ -60,6 +60,13 @@ Changes in `Flashcards Session v3`:
 - Added a conditional media region so image-supported cards can expand when future assets exist without forcing a large empty image box into every text-only card.
 - Kept confidence/progress in a secondary side rail so the question remains the dominant task.
 
+A further premium refinement produced `Flashcards Session v4`:
+
+- The board now shows a clearer post-submit state with a wrong selected answer and the correct answer highlighted separately.
+- Correct / incorrect hierarchy is readable at a glance rather than buried inside the rationale copy.
+- The conditional media region now feels like a premium module surface instead of a generic placeholder.
+- The side rail is calmer and more supportive so the answer outcome remains visually dominant.
+
 ### Lesson detail was too vertical
 
 The lesson detail board was explicitly compressed.
@@ -87,6 +94,7 @@ Exported to both:
 - `figma-refined-lesson-compressed-v2.png`
 - `figma-refined-flashcards-v2.png`
 - `figma-refined-flashcards-v3.png`
+- `figma-refined-flashcards-v4.png`
 - `figma-refined-practice-cat-v2.png`
 - `figma-refined-report-card-v2.png`
 

@@ -40,10 +40,10 @@ export SKIP_BUILD_REPORTS="${SKIP_BUILD_REPORTS:-1}"
 export VITE_SKIP_CIRCULAR_CHECK="${VITE_SKIP_CIRCULAR_CHECK:-1}"
 export RUN_HEAVY_BUILD_TASKS="${RUN_HEAVY_BUILD_TASKS:-0}"
 
-echo "[production-build] npm run build..."
+echo "[production-build] npm run build:production..."
 START_BUILD="$(date +%s)"
-npm run build
-echo "[deploy-timing] npm_run_build_s=$(( $(date +%s) - START_BUILD ))"
+npm --prefix nursenest-core run build:production
+echo "[deploy-timing] npm_run_build_production_s=$(( $(date +%s) - START_BUILD ))"
 
 if [ "${SKIP_BUNDLE_SIZE_CHECK:-0}" = "1" ]; then
   echo "[production-build] skipping check:bundle-size (SKIP_BUNDLE_SIZE_CHECK=1)"

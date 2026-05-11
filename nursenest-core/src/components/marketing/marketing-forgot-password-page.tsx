@@ -2,10 +2,11 @@ import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 import { PremiumAuthShell } from "@/components/auth/premium-auth-shell";
 import { AuthIncidentNotice } from "@/components/marketing/auth-incident-notice";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
 export async function MarketingForgotPasswordPage({ locale }: { locale: string }) {
-  const m = await loadMarketingMessages(locale);
+  const m = await loadMarketingMessageShards(locale, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
   const loginHref = withMarketingLocale(locale, "/login");
   const contactHref = withMarketingLocale(locale, "/contact");
 

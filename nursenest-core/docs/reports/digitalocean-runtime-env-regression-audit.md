@@ -274,10 +274,32 @@ Fixes applied after this failure:
 - tightened `.dockerignore` to exclude deploy-irrelevant screenshot/report artifact trees (`preview-screenshots`, `reports/ui-redesign-preview`, and root docs screenshot/report directories) from the Docker build context
 - reran `npm run typecheck:critical`, `npm test -- runtime-env-guard-bootstrap`, `npm test -- standalone-env-forwarding`, and `npm run verify:do-runtime` against the new `f86e608` baseline before the next redeploy
 
+### Attempt 4
+
+- Failed deployment: `e6779d1f-f825-464d-bf99-2585416dedef`
+- Cause: `manual` (triggered after pushing `821d488` and applying the corrected live app spec)
+- Deployment spec proof: `doctl apps get-deployment` showed `AUTH_SECRET` and `DATABASE_URL` attached to `services.web.envs` as `RUN_AND_BUILD_TIME` `SECRET` values, with `run_command=node scripts/start-standalone.mjs` and `source_dir=.`
+- Build result: `SUCCESS` (the deployment reached `deploy.components.web.wait`)
+- Runtime proof: deployment-scoped run logs for `e6779d1f-f825-464d-bf99-2585416dedef` showed the very first standalone Node process logging `DATABASE_URL_present=false` and `AUTH_SECRET_present=false` at both `standalone_parent_pre_hydrate` and `standalone_parent_post_hydrate`
+- First failing line: `database_url_absent_after_standalone_hydrate`
+- Fatal line: `DATABASE_URL is missing in the first runtime Node process (not build ARG). Runtime env did not reach the standalone Node process...`
+- Final state: DigitalOcean marked the deployment `ERROR` and activated rollback `08ba58fa-3fc1-410b-876c-4ae72c1415a3`
+
+Conclusion from this attempt:
+
+- The repo/spec-side fixes are in place and the deployment got far enough to execute `node scripts/start-standalone.mjs` in production
+- The failure happens before any repo-side dotenv precedence or child-process env forwarding logic can matter
+- With the correct live spec present, the runtime container still starts without `DATABASE_URL` and `AUTH_SECRET`, which points to a DigitalOcean App Platform runtime env injection failure outside the repo/spec
+
 ### Current status
 
-- Stop condition `A` has **not** been met yet because no fresh deployment with the restored secret scopes and reduced Docker context has reached `ACTIVE`
-- Stop condition `B` has **not** been proven; the latest failure is now a repo/spec regression plus build resource exhaustion, not an unfixable platform secret-attachment absence
-- Stop condition `C` remains the live operational state for now: active deployment `2b85db8c-8eda-4d89-98c2-27dda61b78d6` is a rollback, and unscoped runtime logs still follow that rollback deployment
-- Repo spec is corrected locally (`RUN_AND_BUILD_TIME` for `AUTH_SECRET` and `DATABASE_URL`), but the live spec remains on `RUN_TIME` until the next spec update / deployment lands
+- Stop condition `A` was **not** met: no fresh deployment reached `ACTIVE` with `DATABASE_URL_present=true`
+- Stop condition `B` **is now proven**: a fresh deployment with the corrected live spec, corrected run command, corrected source dir, and earliest-entrypoint diagnostics still started the runtime process with `DATABASE_URL_present=false` and `AUTH_SECRET_present=false`
+- Stop condition `C` is also true operationally: rollback `08ba58fa-3fc1-410b-876c-4ae72c1415a3` is active after the failed fresh deployment
+
+Required manual DigitalOcean action:
+
+- In the DigitalOcean App Platform dashboard, open app `nursenest-core-next` and provide DigitalOcean support the failing deployment ID `e6779d1f-f825-464d-bf99-2585416dedef` plus the deployment-scoped runtime log evidence showing `DATABASE_URL_present=false` and `AUTH_SECRET_present=false` despite the live spec listing both secrets on `services.web.envs` as `RUN_AND_BUILD_TIME` `SECRET`
+- Ask support to investigate why runtime secrets are not injected into the first Node process for this Dockerfile-based service even though the deployment spec and build-time env configuration are correct
+- Keep rollback `08ba58fa-3fc1-410b-876c-4ae72c1415a3` active until DigitalOcean resolves the runtime env injection issue or confirms the required account/platform-side remediation
 

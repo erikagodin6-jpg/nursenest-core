@@ -1,0 +1,1645 @@
+{
+  "schemaVersion": 1,
+  "stepName": "lesson_indexes",
+  "fingerprint": "d1047e2e2f446bf90ceaa34a66668a412418ad752a150b535d7d4235f20b4fcb",
+  "generatedAt": "2026-05-11T06:35:58.450Z",
+  "inputs": [
+    {
+      "type": "file",
+      "path": "scripts/build-normalized-lesson-indexes.mjs"
+    },
+    {
+      "type": "file",
+      "path": "scripts/build-normalized-lesson-indexes.runner.mts"
+    },
+    {
+      "type": "file",
+      "path": "scripts/run-lesson-indexes-for-build.mjs"
+    },
+    {
+      "type": "file",
+      "path": "scripts/verify-normalized-lesson-indexes.mjs"
+    },
+    {
+      "type": "file",
+      "path": "scripts/verify-normalized-lesson-indexes.runner.mts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-bundled-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/allied-professions/registry.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/nclex-rn-source-checklist.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/new-grad-transition-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/np-ca-np-cnple-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/np-core-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/np-parity-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/np-us-np-fnp-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-cardiovascular-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-catalog-import-state.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-endocrine-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-exam-notes-integration-batch3-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-exam-notes-integration-batch4-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-exam-notes-integration-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-exam-strategy-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-explicit-inventory-aliases.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-fluids-electrolytes-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-gastrointestinal-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-hematology-oncology-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-infection-control-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-integumentary-wound-care-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-leadership-delegation-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-master-map.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-maternal-newborn-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-musculoskeletal-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-neurological-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-nutrition-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-procedures-skills-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-renal-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rn-nclex-respiratory-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/content/pathway-lessons/rpn-rex-pn-parity-expansion-catalog.json"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-billing-career-resolution.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-billing-career-resolution.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-exam-question-scope.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-exam-question-scope.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-global-hub-path.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-global-hub-two-tier.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-global-pathway.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-hub-inventory-counts.server.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-hub-program-model.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-hub-program-model.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-hub-report-markdown.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-lesson-access.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-lesson-seo-differentiation.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-marketing-constants.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-mastery-module-access.server.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-mastery-module-scaffolding.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-mastery-modules.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-mastery-modules.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-mlt-pool-scope.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-occupation-entitlement.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-profession-catalog-hub-filter.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-profession-catalog-hub-filter.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-profession-lesson-exclusive-scope.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-profession-lesson-exclusive-scope.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-profession-lesson-index-verification.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-profession-lesson-index-verification.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-profession-lock.server.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-profession-taxonomy.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-professions-registry.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-professions-registry.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-question-modality-audit.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-question-modality-audit.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-respiratory-pool-scope.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-respiratory-pool-scope.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-weak-topic-filter.entitlement.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/allied-weak-topic-filter.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/allied/count-allied-pathway-lessons.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/admin-ai-lesson-batch-step-handler.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/admin-ai-lesson-batch.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/admin-ai-lesson-batch.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/admin-ai-lesson-pipeline.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/admin-ai-lesson-schema.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/admin-ai-lesson-to-content-item.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/allied-health-pathway-lesson-contracts.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/allied-health-structural-completion.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/allied-pathway-lesson-structural-normalization.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-hub-list-source.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-hub-list-source.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-hub-pathway-safety-where.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-hub-published-snapshot-fallback.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-hub-published-snapshot-fallback.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-hub-row-renderability.invariants.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-hub-row-renderability.invariants.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-lessons-hub-row-renderability.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-pathway-lesson-list-scope.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/app-subscriber-lesson-detail-resolve.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/build-lesson-category-progress.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/build-lesson-category-progress.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/ca-rn-nclex-marketing-lessons-hub-pipeline.release.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/canonical-lessons-hubs.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/canonical-lessons-hubs.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/canonical-pathway-lesson-sections.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/cardiac-sounds-library-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/content-completion-progress-storage.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/content-completion-progress-storage.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/exam-complete-lesson-template.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/exam-complete-lesson-template.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/exam-complete-topic-taxonomy.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/exam-question-lesson-bank-order.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/exam-question-to-lesson-quiz-item.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/exam-takeaways-heading.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/exam-takeaways-items.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/fnp-us-lesson-enrichment.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/get-lesson-progress-for-pathway-user.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/global-lesson-architecture.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/has-renderable-lesson-image.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/has-renderable-lesson-image.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/hub-lessons-database-error.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/image-backed-lesson-audit.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/image-backed-lesson-audit.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/invalidate-pathway-lesson-paid-stale-cache.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/learner-app-lessons-hub-summary.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/learner-app-lessons-hub-summary.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/legacy-content-map-lessons.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/legacy-content-map-lessons.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-ai-expand-runner.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-ai-expand-shared.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-ai-expand-shared.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-assessment-explicit-pure.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-assessment-store.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-bank-assessment-assemble.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-bank-assessment-assembly-pure.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-bank-assessment-explicit.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-bank-assessment-selection.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-bank-study-loop-store.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-batch-completion.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-batch-completion.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-completion-incremental-pure.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-content-depth-schema.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-content-depth-schema.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-content-readiness.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-exam-domain.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-explicit-exam-question-access-pure.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-explicit-exam-question-access-pure.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-explicit-exam-question-drops.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-explicit-exam-question-items.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-explicit-exam-question-observability.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-explicit-exam-question-resolution-pipeline.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-explicit-exam-question-resolution-pipeline.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-high-yield-study-fields.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-high-yield-study-fields.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-hub-visibility-diagnostics.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-hub-visibility-diagnostics.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-image-map.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-image-map.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-interactive-modules.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-interactive-modules.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-normalization-non-drop.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-progress-resolver.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-question-cross-links.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-question-gap-fill-ai.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-question-gap-fill.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-question-link-coverage-core.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-quiz-embeds.resolve.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-quiz-embeds.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-quiz-render-contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-quiz-render-contract.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-recall-types.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-region-exam.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-region-exam.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-routes-topic-cluster.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-routes.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-routes.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-section-anchor.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-section-page-layout.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-section-presentability.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-sound-library-scope.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-sound-waveform-synth.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-taxonomy.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-taxonomy.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-title-presentation.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-title-presentation.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-topic-cluster-registry.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lesson-topic-cluster-registry.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lessons-hub-import-guard.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lessons-perf.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/lessons-route-import-guard.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/load-lesson-study-loop-bank-pack.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/load-lesson-study-loop-explicit-gate.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/load-lesson-study-loop-gate.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/load-lesson-topic-linked-quiz-items.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-hub-category-page-cap.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-hub-category-rows-db-resilient.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-hub-category-rows-db-resilient.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-hub-lesson-inventory-audit.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-hub-lesson-inventory-fill.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-hub-lesson-inventory-fill.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-hub-progress-safe.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-hub-progress-safe.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lesson-eeat-surface.policy.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lesson-path-guard.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lesson-path-guard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lessons-hub-category-resolve.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lessons-hub-category.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lessons-hub-category.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lessons-hub-detail-route-split.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lessons-hub-fundamentals-hub-routing.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-lessons-hub-verify-invariant-ui.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-client-contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-client-contract.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-progress-gate.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-progress-gate.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-progress-server.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-staff-bypass.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-staff-bypass.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-viewer-context.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lesson-viewer-context.server.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/marketing-pathway-lessons-route-import-guard.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/nclex-pn-us-lesson-enrichment.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/nclex-rn-us-lesson-enrichment.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/new-grad-pathway-lesson-structural-normalization.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/new-grad-pathway-lesson-structural-normalization.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/np-legacy-lesson-merge.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/np-legacy-lesson-merge.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/np-pathway-lesson-structural-normalization.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/np-pathway-lesson-structural-normalization.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/np-post-fix-audit.runner.mts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-flashcards-hub-seo.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-flashcards-hub-seo.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-launch-bundle.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-launch-bundle.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-access.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-access.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-adjacent.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-admin-option-b.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-batch4-catalog.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-body-system-groups.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-body-system-groups.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-catalog-integrity.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-catalog-redundancy.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-catalog-sync.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-cms-link-tags.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-content-item-authority.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-content-item-authority.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-dedupe.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-dedupe.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-deferred-practice-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-detail-display.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-detail-display.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-detail-redirect.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-force-publish.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-generated-index.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-generated-index.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-density-gate.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-index-shape.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-link-integrity.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-link-integrity.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-list-shape.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-organize.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-organize.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-page-slice.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-page-slice.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-pipeline-collapse-guard.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-pipeline-collapse-guard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-seo.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-hub-verify-loader-contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-license-band.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-linked-learning-assets.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-linked-learning-assets.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-linked-learning-hrefs.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-linked-learning-hrefs.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-loader-config.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-loader-effective-warehouse.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-loader.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-loader.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-locale.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-locale.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-marketing-detail-href-parse.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-marketing-hub-verified-card-href.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-marketing-link-integrity-reasons.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-marketing-pathway-context.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-metadata-select.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-nclex-rn-cross-region-marketing.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-pathway-country-merge.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-plain-body-sections.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-plain-body-sections.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-premium-foundation.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-premium.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-premium.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-preview-kind.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-progress-events.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-progress-refresh.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-progress-refresh.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-progress.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-progress.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-public-cross-link-integrity.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-public-cross-link-integrity.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-public-cross-link-partition.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-public-cross-link-partition.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-public-metadata.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-public-preview-priority.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-public-preview-priority.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-quick-review.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-registry-source.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-render-invariants.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-render-source.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-route-access.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-route-access.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-scale.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-scale.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-section-surface.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-slug-redirects.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-slug-redirects.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-sound-libraries.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-sound-libraries.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-study-extract.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-subscriber-completeness.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-topic-programmatic-intro.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-translation-diagnostics.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-types.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-visible-sections.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lesson-yield.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lessons-hub-intro.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-lessons-hub-marketing-ux.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-np-hub-exam-context.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-questions-hub-seo.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-questions-hub-seo.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-topic-coverage.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-topic-sitemap-filter.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/pathway-topic-sitemap-filter.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/respiratory-sounds-library-data.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-expanded-lesson-contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-expanded-lesson-contract.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-cardiovascular-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-catalog-taxonomy.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-catalog-taxonomy.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-endocrine-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-exam-strategy-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-fluids-electrolytes-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-gastrointestinal-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-hematology-oncology-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-infection-control-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-integumentary-wound-care-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-leadership-delegation-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-lesson-question-bank-bridge.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-lesson-question-bank-bridge.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-lesson-question-bridge.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-maternal-newborn-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-musculoskeletal-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-neurological-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-nutrition-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-procedures-skills-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-renal-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/rn-nclex-respiratory-expansion-catalog.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/acute-coronary-syndrome-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/canadian-rpn-high-yield-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/case-study-casebook-shared.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/case-study-casebook-specs-a.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/case-study-casebook-specs-b.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/case-study-casebook-specs.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/clinical-judgment-prioritization-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/copd-gold-standard.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/copd-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/exam-complete-med-rows.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/exam-complete-med-safety-rows.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/exam-complete-med-safety-specs.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/exam-complete-safety-rows.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/fluids-electrolytes-emergencies-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/gold-premium-synthesis.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/high-alert-medications-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/launch-wave-1-bulk-builder.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/launch-wave-1-bulk-rows-a.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/launch-wave-1-bulk-rows-b.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/launch-wave-1-bulk-rows.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/launch-wave-1-bulk-specs.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/launch-wave-1-rel.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/launch-wave-1-shared.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/launch-wave-1a-high-yield-gold.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-ambulatory-gynec-common-presentations-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-antiinfectives-stewardship-outpatient-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-asthma-outpatient-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-contraception-counseling-selection-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-geriatrics-polypharmacy-deprescribing-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-heart-failure-primary-care-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-immunization-vaccines-primary-care-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-mental-health-anxiety-depression-ptsd-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-msk-rheumatology-outpatient-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-neurology-outpatient-primary-care-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-obesity-metabolic-management-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-pathway-display.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-pediatric-well-child-prevention-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-pneumonia-cap-outpatient-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-primary-care-foundations-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-reproductive-screening-prevention-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-sleep-insomnia-osa-primary-care-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-thyroid-primary-care-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-travel-medicine-pretravel-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-type2-diabetes-outpatient-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/np-vaccine-travel-content-base.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/ob-emergencies-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/pediatric-triage-emergencies-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/renal-dialysis-acute-complications-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/scoped-gold-registry.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/scoped-gold-registry.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/sepsis-early-recognition-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/shock-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/scoped-lessons/stroke-increased-icp-gold-standard.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/tier-block-content.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/tier-block-content.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/topic-to-system-map.ts"
+    }
+  ],
+  "outputs": [
+    "/root/nursenest-core/nursenest-core/src/content/pathway-lessons/generated-indexes",
+    "/root/nursenest-core/nursenest-core/src/content/pathway-lessons/generated-indexes/manifest.json"
+  ],
+  "metadata": {
+    "verifyMode": "deep",
+    "buildLessonIndexesMs": 57429,
+    "verifyLessonIndexesMs": 113167
+  }
+}

@@ -9,11 +9,17 @@ import {
   REPO_ROOT_FROM_SCRIPT,
 } from "./repo-root";
 import { readMergedBundleFromNextPublicI18n } from "./lib/next-public-i18n-bundle";
+import {
+  logArtifactCacheDecision,
+  prepareArtifactCacheDecision,
+  writeArtifactCache,
+} from "../scripts/build-artifact-cache.mjs";
 
 const LANGUAGES = [
   "en", "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko",
   "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru",
 ];
+const I18N_COMPILE_CACHE_PATH = path.join(REPO_ROOT, "tools", "i18n", "generated", "compile-artifact-cache.json");
 
 function extractTranslationsFromSource(filePath: string): Record<string, string> | null {
   const source = readFileSync(filePath, "utf-8");
@@ -89,6 +95,10 @@ export async function compileI18n() {
   const scriptDir = path.dirname(fileURLToPath(import.meta.url));
   const enPathPrimary = path.join(REPO_ROOT, "tools/i18n/source/i18n-en.ts");
   const shardFb = shardFallbackEnabled();
+  const marketingKeysGeneratedPath = path.join(
+    APP_ROOT,
+    "src/lib/i18n/marketing-message-keys.generated.ts",
+  );
 
   console.log(`[i18n] compile: repo root (resolved)=${REPO_ROOT}`);
   console.log(`[i18n] compile: repo root (script parent)=${REPO_ROOT_FROM_SCRIPT}`);
@@ -100,6 +110,34 @@ export async function compileI18n() {
   console.log(
     `[i18n] compile: ${SHARD_FALLBACK_ENV}=${shardFb ? "1 (shard fallback allowed)" : "unset/false"}`,
   );
+
+  const cacheDecision = prepareArtifactCacheDecision({
+    stepName: "i18n_compile",
+    cwd: REPO_ROOT,
+    cachePath: I18N_COMPILE_CACHE_PATH,
+    inputs: [
+      { path: "tools/i18n/source", extensions: [".ts"] },
+      { path: "tools/i18n/marketing", extensions: [".json"] },
+      { path: "script", extensions: [".ts", ".mts", ".mjs"] },
+      { path: "shared", extensions: [".ts", ".tsx", ".mts", ".mjs", ".json"] },
+    ],
+    outputs: [
+      path.relative(REPO_ROOT, CLIENT_PUBLIC_I18N_DIR),
+      path.relative(REPO_ROOT, NEXT_PUBLIC_I18N_SHARD_ROOT),
+      path.relative(REPO_ROOT, marketingKeysGeneratedPath),
+    ],
+  });
+  if (cacheDecision.action === "reuse") {
+    logArtifactCacheDecision(cacheDecision, {
+      languageCount: LANGUAGES.length,
+      cachePath: path.relative(REPO_ROOT, I18N_COMPILE_CACHE_PATH),
+    });
+    return;
+  }
+  logArtifactCacheDecision(cacheDecision, {
+    languageCount: LANGUAGES.length,
+    cachePath: path.relative(REPO_ROOT, I18N_COMPILE_CACHE_PATH),
+  });
 
   const outDir = CLIENT_PUBLIC_I18N_DIR;
   mkdirSync(outDir, { recursive: true });
@@ -193,6 +231,18 @@ export async function compileI18n() {
       `[i18n] compile: expected English bundle missing after merge: ${finalEn} (CLIENT_PUBLIC_I18N_DIR=${CLIENT_PUBLIC_I18N_DIR})`,
     );
   }
+
+  writeArtifactCache({
+    cachePath: I18N_COMPILE_CACHE_PATH,
+    stepName: "i18n_compile",
+    fingerprint: cacheDecision.fingerprint,
+    files: cacheDecision.files,
+    outputs: [CLIENT_PUBLIC_I18N_DIR, NEXT_PUBLIC_I18N_SHARD_ROOT, marketingKeysGeneratedPath],
+    metadata: {
+      languageCount: LANGUAGES.length,
+      shardFallbackEnabled: shardFb,
+    },
+  });
 }
 
 if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("compile-i18n.ts")) {

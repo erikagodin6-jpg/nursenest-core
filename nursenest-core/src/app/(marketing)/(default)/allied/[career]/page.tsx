@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
 import { AlliedMarketingPathwayMissing } from "@/components/marketing/allied-marketing-pathway-missing";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -138,6 +137,8 @@ export default async function AlliedCareerHubPage({ params }: Props) {
 
   const categoryMeta = ALLIED_HUB_CATEGORY_META[prof.hubCategory] ?? ALLIED_HUB_CATEGORY_META.clinical;
   const ecgModulePublicForHub = await resolveMarketingHubEcgModulePublic();
+  const AlliedHealthPathwayHub = (await import("@/components/marketing/allied-health-pathway-hub"))
+    .AlliedHealthPathwayHub;
 
   const crumbs = [
     { name: "Home", href: "/" },

@@ -68,10 +68,13 @@ describe("standalone bootstrap ordering", () => {
   it("hydrates disk env before validateRuntimeEnvOrThrow", () => {
     const src = fs.readFileSync(START_STANDALONE, "utf8");
     const hydrateIdx = src.indexOf("hydrateProcessEnvFromDisk();");
+    const runtimeEnvFileIdx = src.indexOf("loadRuntimeEnvFileFallback();");
     const validateIdx = src.indexOf("validateRuntimeEnvOrThrow();");
     assert.ok(hydrateIdx > 0, "expected hydrateProcessEnvFromDisk call in start-standalone.mjs");
+    assert.ok(runtimeEnvFileIdx > 0, "expected loadRuntimeEnvFileFallback call in start-standalone.mjs");
     assert.ok(validateIdx > 0, "expected validateRuntimeEnvOrThrow() call in start-standalone.mjs");
-    assert.ok(hydrateIdx < validateIdx, "hydrate must run before validateRuntimeEnvOrThrow");
+    assert.ok(hydrateIdx < runtimeEnvFileIdx, "disk hydrate must run before runtime env file fallback");
+    assert.ok(runtimeEnvFileIdx < validateIdx, "runtime env file fallback must run before validateRuntimeEnvOrThrow");
   });
 
   it("documents prisma-safe generate as a compile-only argv shape (grep)", () => {

@@ -14,6 +14,11 @@ import {
   recordBuildPhase,
 } from "./build-runtime-metrics.mjs";
 import { getLessonVerifyMode } from "./lesson-index-verify-mode.mjs";
+import {
+  logArtifactCacheDecision,
+  prepareArtifactCacheDecision,
+  writeArtifactCache,
+} from "../../scripts/build-artifact-cache.mjs";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const scriptPath = fileURLToPath(import.meta.url);
@@ -24,6 +29,8 @@ export function isNNSkipLessonIndexBuild() {
 }
 
 const indexDir = path.join(packageRoot, "src", "content", "pathway-lessons", "generated-indexes");
+const lessonIndexCachePath = path.join(packageRoot, "reports", "build-artifact-cache", "lesson-indexes.json");
+const lessonIndexManifestPath = path.join(indexDir, "manifest.json");
 
 function runLessonIndexesForBuild() {
   const metricsRun = createBuildMetricsRun({ kind: "lesson-index-gate" });
@@ -43,6 +50,39 @@ function runLessonIndexesForBuild() {
 
   console.log(`[lesson-indexes] indexDir=${indexDir}`);
   const verifyModeLabel = getLessonVerifyMode(process.env);
+  const cacheDecision = prepareArtifactCacheDecision({
+    stepName: "lesson_indexes",
+    cwd: packageRoot,
+    cachePath: lessonIndexCachePath,
+    inputs: [
+      {
+        path: "src/content/pathway-lessons",
+        extensions: [".json", ".md", ".mdx", ".ts", ".tsx"],
+        excludePathSubstrings: ["generated-indexes"],
+      },
+      { path: "src/lib/lessons", extensions: [".ts", ".tsx", ".mts", ".mjs", ".json"] },
+      { path: "src/lib/allied", extensions: [".ts", ".tsx", ".mts", ".mjs", ".json"] },
+      { path: "scripts/build-normalized-lesson-indexes.mjs", extensions: [".mjs"] },
+      { path: "scripts/build-normalized-lesson-indexes.runner.mts", extensions: [".mts"] },
+      { path: "scripts/verify-normalized-lesson-indexes.mjs", extensions: [".mjs"] },
+      { path: "scripts/verify-normalized-lesson-indexes.runner.mts", extensions: [".mts"] },
+      { path: "scripts/run-lesson-indexes-for-build.mjs", extensions: [".mjs"] },
+    ],
+    outputs: [path.relative(packageRoot, indexDir), path.relative(packageRoot, lessonIndexManifestPath)],
+  });
+  if (cacheDecision.action === "reuse") {
+    logArtifactCacheDecision(cacheDecision, { verifyMode: verifyModeLabel });
+    console.log("[lesson-indexes] reused verified generated indexes");
+    finishBuildMetricsRun(metricsRun, {
+      counts: {
+        skipped: "fingerprint_match",
+        verifyMode: verifyModeLabel,
+      },
+    });
+    persistBuildMetricsRun(metricsRun);
+    return 0;
+  }
+  logArtifactCacheDecision(cacheDecision, { verifyMode: verifyModeLabel });
   console.error(
     `[lesson-indexes] phase_start ${JSON.stringify({ phase: "lesson_index_generation", verifyMode: verifyModeLabel })}`,
   );
@@ -131,6 +171,18 @@ function runLessonIndexesForBuild() {
     },
   });
   persistBuildMetricsRun(metricsRun);
+  writeArtifactCache({
+    cachePath: lessonIndexCachePath,
+    stepName: "lesson_indexes",
+    fingerprint: cacheDecision.fingerprint,
+    files: cacheDecision.files,
+    outputs: [indexDir, lessonIndexManifestPath],
+    metadata: {
+      verifyMode: verifyModeLabel,
+      buildLessonIndexesMs: genMs,
+      verifyLessonIndexesMs: verMs,
+    },
+  });
 
   return 0;
 }

@@ -291,53 +291,6 @@ console.log(
   }),
 );
 
-/** Site-wide production gates (marketing JSON, route manifest, theme chrome, forbidden copy). */
-const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
-const t0 = Date.now();
-console.error(
-  `[next-prod-build] phase_start ${JSON.stringify({ phase: "validate_production_surface", pid: process.pid })}`,
-);
-console.log("[next-prod-build] validate:production-surface_start");
-const validateSurface = spawnSync(npmCmd, ["run", "validate:production-surface"], {
-  cwd: packageRoot,
-  stdio: "inherit",
-  env: process.env,
-});
-const validateSurfaceMs = Date.now() - t0;
-if ((validateSurface.status ?? 1) !== 0) {
-  console.error("[next-prod-build] FATAL: validate:production-surface failed");
-  finishBuildMetricsRun(metricsRun, { counts: { failedPhase: "validate_production_surface" } });
-  persistBuildMetricsRun(metricsRun);
-  process.exit(validateSurface.status ?? 1);
-}
-console.log("[next-prod-build] validate:production-surface_ok");
-logPhaseMs("validate_production_surface", validateSurfaceMs);
-console.error(
-  `[next-prod-build] phase_end ${JSON.stringify({ phase: "validate_production_surface", durationMs: validateSurfaceMs })}`,
-);
-
-const lessonIndexesForBuild = path.join(packageRoot, "scripts", "run-lesson-indexes-for-build.mjs");
-const tLesson = Date.now();
-console.error(
-  `[next-prod-build] phase_start ${JSON.stringify({ phase: "lesson_indexes_gate", pid: process.pid })}`,
-);
-const lessonIndexes = spawnSync(process.execPath, [lessonIndexesForBuild], {
-  cwd: packageRoot,
-  stdio: "inherit",
-  env: process.env,
-});
-const lessonIndexesMs = Date.now() - tLesson;
-if ((lessonIndexes.status ?? 1) !== 0) {
-  console.error("[next-prod-build] FATAL: pathway lesson index build/verify failed (see [lesson-indexes] logs)");
-  finishBuildMetricsRun(metricsRun, { counts: { failedPhase: "lesson_indexes_gate" } });
-  persistBuildMetricsRun(metricsRun);
-  process.exit(lessonIndexes.status ?? 1);
-}
-logPhaseMs("lesson_indexes_gate", lessonIndexesMs);
-console.error(
-  `[next-prod-build] phase_end ${JSON.stringify({ phase: "lesson_indexes_gate", durationMs: lessonIndexesMs })}`,
-);
-
 if (!String(process.env.NEXT_TELEMETRY_DISABLED ?? "").trim()) {
   process.env.NEXT_TELEMETRY_DISABLED = "1";
 }

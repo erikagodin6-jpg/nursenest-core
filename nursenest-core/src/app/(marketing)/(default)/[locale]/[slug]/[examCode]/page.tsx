@@ -4,9 +4,6 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
-import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
-import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
-import { InternalAdmissionsPrepHubScaffold } from "@/components/marketing/internal-admissions-prep-hub-scaffold";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -39,7 +36,6 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
-import { InternationalRnHubSections } from "@/components/marketing/international-rn-hub-sections";
 import { intlRnRegulatorDisclaimerText, resolveIntlRnHubSectionCopy } from "@/lib/marketing/intl-rn-pathway-hub-copy";
 import { isIntlRnFoundationPathwayId } from "@/lib/navigation/country-exam-launch-readiness";
 import {
@@ -112,6 +108,9 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) notFound();
   if (isInternalAdmissionsPrepPathwayId(pathway.id) && isPhaseOneHiddenAdmissionsScaffoldPathwayId(pathway.id)) {
+    const { InternalAdmissionsPrepHubScaffold } = await import(
+      "@/components/marketing/internal-admissions-prep-hub-scaffold"
+    );
     return (
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
         <InternalAdmissionsPrepHubScaffold pathway={pathway} hubPath={pathname} />
@@ -253,6 +252,16 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
     const intlDisclaimer = isIntlRnFoundationPathwayId(pathway.id)
       ? intlRnRegulatorDisclaimerText(marketingMessages)
       : "";
+    const AlliedHealthPathwayHubComponent = isAlliedHub
+      ? (await import("@/components/marketing/allied-health-pathway-hub")).AlliedHealthPathwayHub
+      : null;
+    const NursingTierHubPageComponent =
+      !isAlliedHub && content
+        ? (await import("@/components/marketing/nursing-tier-hub-page")).NursingTierHubPage
+        : null;
+    const InternationalRnHubSectionsComponent = intlSections
+      ? (await import("@/components/marketing/international-rn-hub-sections")).InternationalRnHubSections
+      : null;
 
     return (
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
@@ -264,8 +273,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
 
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
 
-        {isAlliedHub ? (
-          <AlliedHealthPathwayHub
+        {isAlliedHub && AlliedHealthPathwayHubComponent ? (
+          <AlliedHealthPathwayHubComponent
             pathway={pathway}
             hubPath={pathname}
             overview={alliedOverview}
@@ -274,8 +283,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
             viewerSignedIn={viewerSignedIn}
             ecgModulePublic={ecgModulePublicForHub}
           />
-        ) : content ? (
-          <NursingTierHubPage
+        ) : content && NursingTierHubPageComponent ? (
+          <NursingTierHubPageComponent
             pathway={pathway}
             hubPath={pathname}
             content={content}
@@ -294,8 +303,12 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           </div>
         )}
 
-        {intlSections ? (
-          <InternationalRnHubSections pathway={pathway} copy={intlSections} disclaimer={intlDisclaimer} />
+        {intlSections && InternationalRnHubSectionsComponent ? (
+          <InternationalRnHubSectionsComponent
+            pathway={pathway}
+            copy={intlSections}
+            disclaimer={intlDisclaimer}
+          />
         ) : null}
 
         <footer className="mt-10 border-t border-[var(--border-subtle)] pt-5 text-center">

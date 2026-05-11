@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NurseNest Homepage Convergence Mockup (Sunset)</title>
+  <style>
+    html, body { margin: 0; padding: 0; background: #fff8f2; font-family: "DM Sans", Inter, system-ui, sans-serif; }
+    .stage { width: 1440px; height: 4544px; margin: 0 auto; position: relative; overflow: hidden; background: url("./desktop/homepage-ocean.png") top left / 1440px 4544px no-repeat; }
+    .theme-overlay { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(255,216,196,0.14), rgba(224,242,254,0.10)); }
+    .patch { position: absolute; border-radius: 16px; }
+    .text-patch { background: rgba(255, 248, 242, 0.96); color: #1a2438; box-shadow: 0 10px 24px -22px rgba(12, 36, 60, 0.22); padding: 6px 12px 8px; line-height: 0.98; letter-spacing: -0.04em; font-weight: 800; }
+    .hero-title { left: 76px; top: 138px; width: 700px; font-size: 64px; }
+    .hero-title .accent { display: block; color: #e07862; }
+    .section-title { max-width: 690px; }
+    .section-paths { left: 72px; top: 958px; width: 860px; font-size: 48px; }
+    .section-operating { left: 72px; top: 2154px; width: 780px; font-size: 46px; }
+    .section-readiness { left: 72px; top: 3008px; width: 760px; font-size: 44px; }
+    .section-trust { left: 420px; top: 3864px; width: 600px; text-align: center; font-size: 28px; line-height: 0.95; }
+    .section-cta { left: 430px; top: 4276px; width: 580px; text-align: center; font-size: 26px; line-height: 0.95; }
+    .subtle-card { position: absolute; border-radius: 20px; box-shadow: 0 16px 34px -24px rgba(13, 39, 69, 0.26); border: 1px solid rgba(124, 184, 196, 0.35); overflow: hidden; }
+    .hero-ecg { left: 790px; top: 424px; width: 500px; height: 190px; background: linear-gradient(to right, rgba(255,255,255,0.62) 1px, transparent 1px) 0 0/20px 20px, linear-gradient(to bottom, rgba(255,255,255,0.62) 1px, transparent 1px) 0 0/20px 20px, linear-gradient(to right, rgba(255,255,255,0.88) 1px, transparent 1px) 0 0/100px 100px, linear-gradient(to bottom, rgba(255,255,255,0.88) 1px, transparent 1px) 0 0/100px 100px, linear-gradient(180deg, rgba(255, 240, 229, 0.98), rgba(255, 248, 242, 0.98)); }
+    .lower-ecg { left: 948px; top: 1710px; width: 366px; height: 150px; background: linear-gradient(to right, rgba(255,255,255,0.58) 1px, transparent 1px) 0 0/18px 18px, linear-gradient(to bottom, rgba(255,255,255,0.58) 1px, transparent 1px) 0 0/18px 18px, linear-gradient(180deg, rgba(244, 249, 255, 0.96), rgba(255, 247, 240, 0.96)); }
+    .ecg-head { position: absolute; left: 18px; right: 18px; top: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 800; color: #1a2438; letter-spacing: -0.02em; }
+    .ecg-head .meta { font-size: 12px; color: #648194; font-weight: 700; }
+    .ecg-svg { position: absolute; left: 16px; right: 16px; top: 48px; height: 88px; width: calc(100% - 32px); }
+    .ecg-caption { position: absolute; left: 18px; right: 18px; bottom: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 700; color: #6a8796; }
+    .study-badge { position: absolute; left: 1168px; top: 2664px; padding: 8px 12px; border-radius: 999px; background: rgba(255, 241, 231, 0.96); border: 1px solid rgba(224, 120, 98, 0.24); color: #ad5645; font-size: 12px; font-weight: 800; letter-spacing: -0.01em; box-shadow: 0 10px 22px -18px rgba(14, 46, 76, 0.28); }
+    .study-note { position: absolute; left: 1022px; top: 3366px; width: 270px; padding: 10px 12px; border-radius: 16px; background: rgba(255, 245, 236, 0.95); border: 1px solid rgba(232, 180, 79, 0.22); color: #6a4b21; font-size: 12px; line-height: 1.35; font-weight: 700; box-shadow: 0 14px 24px -22px rgba(15, 50, 75, 0.3); }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <div class="theme-overlay"></div>
+    <div class="patch text-patch hero-title">Master Nursing.<span class="accent">Think Like a Clinician.</span></div>
+    <div class="patch text-patch section-title section-paths">Every Path Has Its Own Clinical Scaffold.</div>
+    <div class="patch text-patch section-title section-operating">A Guided Clinical Operating System.</div>
+    <div class="patch text-patch section-title section-readiness">Know Exactly What to Study Next.</div>
+    <div class="patch text-patch section-title section-trust">Learners Who Think Like Nurses. Pass Like Nurses.</div>
+    <div class="patch text-patch section-title section-cta">Begin Your Nursing Success Story Today.</div>
+    <section class="subtle-card hero-ecg" aria-label="Clinically credible ECG hero patch">
+      <div class="ecg-head"><span>Lead II · Normal Sinus Rhythm</span><span class="meta">72 bpm</span></div>
+      <svg class="ecg-svg" viewBox="0 0 760 136" aria-hidden="true">
+        <path d="M0 72 H760" fill="none" stroke="rgba(13,50,74,0.10)" stroke-width="1"/>
+        <path d="M8 72 L30 72 C36 72,40 64,48 64 C54 64,60 72,66 72 L92 72 L98 78 L104 72 L112 34 L118 92 L126 72 L156 72 C166 72,178 48,194 56 C210 64,218 72,228 72 L246 72 L268 72 C274 72,278 64,286 64 C292 64,298 72,304 72 L330 72 L336 78 L342 72 L350 34 L356 92 L364 72 L394 72 C404 72,416 48,432 56 C448 64,456 72,466 72 L484 72 L506 72 C512 72,516 64,524 64 C530 64,536 72,542 72 L568 72 L574 78 L580 72 L588 34 L594 92 L602 72 L632 72 C642 72,654 48,670 56 C686 64,694 72,704 72 L752 72" fill="none" stroke="#168b69" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="ecg-caption"><span>Upright P Waves · Narrow QRS · Regular Intervals</span><span>ECG Preview</span></div>
+    </section>
+    <section class="subtle-card lower-ecg" aria-label="Clinically credible lower ECG patch">
+      <div class="ecg-head"><span>Telemetry Learning Preview</span><span class="meta">Lead II</span></div>
+      <svg class="ecg-svg" viewBox="0 0 760 136" aria-hidden="true">
+        <path d="M0 72 H760" fill="none" stroke="rgba(13,50,74,0.10)" stroke-width="1"/>
+        <path d="M8 72 L30 72 C36 72,40 64,48 64 C54 64,60 72,66 72 L92 72 L98 78 L104 72 L112 34 L118 92 L126 72 L156 72 C166 72,178 48,194 56 C210 64,218 72,228 72 L246 72 L268 72 C274 72,278 64,286 64 C292 64,298 72,304 72 L330 72 L336 78 L342 72 L350 34 L356 92 L364 72 L394 72 C404 72,416 48,432 56 C448 64,456 72,466 72 L484 72 L506 72 C512 72,516 64,524 64 C530 64,536 72,542 72 L568 72 L574 78 L580 72 L588 34 L594 92 L602 72 L632 72 C642 72,654 48,670 56 C686 64,694 72,704 72 L752 72" fill="none" stroke="#178c71" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="ecg-caption"><span>Regular Sinus Rhythm</span><span>Educational ECG</span></div>
+    </section>
+    <div class="study-badge">Study With Friends</div>
+    <div class="study-note">Private Invite Codes, Progress Comparison, and Friend Challenges Are Available Here Too.</div>
+  </main>
+</body>
+</html>
