@@ -28,6 +28,9 @@ nursenest-core/tests
 nursenest-core/output
 nursenest-core/reports
 nursenest-core/docs/reports
+**/docs/screenshots
+**/test-results/**
+**/playwright-report/**
 
 # Logs & env (never bake secrets)
 **/*.log

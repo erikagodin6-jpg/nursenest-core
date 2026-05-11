@@ -294,6 +294,9 @@ console.log(
 /** Site-wide production gates (marketing JSON, route manifest, theme chrome, forbidden copy). */
 const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
 const t0 = Date.now();
+console.error(
+  `[next-prod-build] phase_start ${JSON.stringify({ phase: "validate_production_surface", pid: process.pid })}`,
+);
 console.log("[next-prod-build] validate:production-surface_start");
 const validateSurface = spawnSync(npmCmd, ["run", "validate:production-surface"], {
   cwd: packageRoot,
@@ -309,9 +312,15 @@ if ((validateSurface.status ?? 1) !== 0) {
 }
 console.log("[next-prod-build] validate:production-surface_ok");
 logPhaseMs("validate_production_surface", validateSurfaceMs);
+console.error(
+  `[next-prod-build] phase_end ${JSON.stringify({ phase: "validate_production_surface", durationMs: validateSurfaceMs })}`,
+);
 
 const lessonIndexesForBuild = path.join(packageRoot, "scripts", "run-lesson-indexes-for-build.mjs");
 const tLesson = Date.now();
+console.error(
+  `[next-prod-build] phase_start ${JSON.stringify({ phase: "lesson_indexes_gate", pid: process.pid })}`,
+);
 const lessonIndexes = spawnSync(process.execPath, [lessonIndexesForBuild], {
   cwd: packageRoot,
   stdio: "inherit",
@@ -325,6 +334,9 @@ if ((lessonIndexes.status ?? 1) !== 0) {
   process.exit(lessonIndexes.status ?? 1);
 }
 logPhaseMs("lesson_indexes_gate", lessonIndexesMs);
+console.error(
+  `[next-prod-build] phase_end ${JSON.stringify({ phase: "lesson_indexes_gate", durationMs: lessonIndexesMs })}`,
+);
 
 if (!String(process.env.NEXT_TELEMETRY_DISABLED ?? "").trim()) {
   process.env.NEXT_TELEMETRY_DISABLED = "1";
@@ -349,6 +361,9 @@ try {
  * 🔥 CRITICAL FIX:
  * REMOVE "--webpack"
  */
+console.error(
+  `[next-prod-build] phase_start ${JSON.stringify({ phase: "next_build", pid: process.pid })}`,
+);
 console.log(`[next-prod-build] next_cli_invocation_start pid=${process.pid}`);
 const tNext = Date.now();
 let r;
@@ -367,6 +382,7 @@ console.log(
   `[next-prod-build] next_cli_invocation_end status=${r.status ?? "null"} signal=${r.signal ?? "null"}`,
 );
 logPhaseMs("next_build", nextBuildMs);
+console.error(`[next-prod-build] phase_end ${JSON.stringify({ phase: "next_build", durationMs: nextBuildMs })}`);
 
 if (r.error) {
   console.error("[next-prod-build] FATAL: failed to spawn `next build`", r.error);

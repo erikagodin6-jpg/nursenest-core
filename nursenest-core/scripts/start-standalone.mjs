@@ -40,6 +40,22 @@ try {
 logRuntimeEnvSnapshot();
 validateRuntimeEnvOrThrow();
 
+// Dockerfile builds often bake null commit/branch into nn-build-meta.json; App Platform injects
+// NN_BUILD_COMMIT from ${_self.COMMIT_HASH} at RUN_TIME only — refresh the file before serving.
+const writeBuildMetaScript = join(pkgRoot, "scripts", "write-build-git-meta.mjs");
+const writeMetaResult = spawnSync(process.execPath, [writeBuildMetaScript], {
+  cwd: pkgRoot,
+  env: process.env,
+  stdio: "inherit",
+});
+if (writeMetaResult.status !== 0) {
+  console.error(
+    `[nursenest-core] write_build_git_meta_startup_failed status=${writeMetaResult.status ?? "null"}`,
+  );
+} else {
+  console.error("[nursenest-core] write_build_git_meta_startup_ok");
+}
+
 try {
   const metaPath = join(pkgRoot, "public", "nn-build-meta.json");
   const meta = JSON.parse(readFileSync(metaPath, "utf8"));

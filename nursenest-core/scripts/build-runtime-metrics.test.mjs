@@ -97,3 +97,39 @@ test("build runtime metrics helper includes latest question inventory diagnostic
     rmSync(tempDir, { recursive: true, force: true });
   }
 });
+
+test("persistBuildMetricsRun skips question inventory attachment when NN_SKIP_HEAVY_BUILD_REPORTS=1", () => {
+  const tempDir = mkdtempSync(path.join(os.tmpdir(), "nn-build-metrics-skip-inv-"));
+  const previousCwd = process.cwd();
+  const prevSkip = process.env.NN_SKIP_HEAVY_BUILD_REPORTS;
+  try {
+    process.chdir(tempDir);
+    mkdirSync("reports", { recursive: true });
+    writeFileSync(
+      "reports/question-inventory-us-rn-nclex-rn.json",
+      JSON.stringify({
+        generatedAt: "2026-05-10T12:00:00.000Z",
+        pathwayId: "us-rn-nclex-rn",
+        buckets: { publishedInventory: 1 },
+        exclusions: {},
+      }),
+      "utf8",
+    );
+    process.env.NN_SKIP_HEAVY_BUILD_REPORTS = "1";
+    const metricsPath = path.join(tempDir, "reports", "build-runtime-metrics.json");
+    const run = finishBuildMetricsRun(
+      createBuildMetricsRun({
+        kind: "next-prod-build",
+        startedAt: new Date("2026-05-10T12:02:00.000Z"),
+      }),
+    );
+    persistBuildMetricsRun(run, { metricsPath });
+    const persisted = JSON.parse(readFileSync(metricsPath, "utf8"));
+    assert.equal(persisted.runs[0].inventoryDiagnostics, undefined);
+  } finally {
+    if (prevSkip === undefined) delete process.env.NN_SKIP_HEAVY_BUILD_REPORTS;
+    else process.env.NN_SKIP_HEAVY_BUILD_REPORTS = prevSkip;
+    process.chdir(previousCwd);
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+});

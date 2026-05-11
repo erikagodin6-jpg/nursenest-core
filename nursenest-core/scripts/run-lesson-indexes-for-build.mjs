@@ -13,6 +13,7 @@ import {
   persistBuildMetricsRun,
   recordBuildPhase,
 } from "./build-runtime-metrics.mjs";
+import { getLessonVerifyMode } from "./lesson-index-verify-mode.mjs";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const scriptPath = fileURLToPath(import.meta.url);
@@ -41,6 +42,10 @@ function runLessonIndexesForBuild() {
   }
 
   console.log(`[lesson-indexes] indexDir=${indexDir}`);
+  const verifyModeLabel = getLessonVerifyMode(process.env);
+  console.error(
+    `[lesson-indexes] phase_start ${JSON.stringify({ phase: "lesson_index_generation", verifyMode: verifyModeLabel })}`,
+  );
   console.log("[lesson-indexes] generating");
   const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
   const genStarted = Date.now();
@@ -60,7 +65,13 @@ function runLessonIndexesForBuild() {
   console.error(
     `[nursenest-core] lesson_indexes gate_build_lesson_indexes_ms ${JSON.stringify({ durationMs: genMs, ok: true })}`,
   );
+  console.error(
+    `[lesson-indexes] phase_end ${JSON.stringify({ phase: "lesson_index_generation", durationMs: genMs, verifyMode: verifyModeLabel })}`,
+  );
 
+  console.error(
+    `[lesson-indexes] phase_start ${JSON.stringify({ phase: "lesson_index_verification", verifyMode: verifyModeLabel })}`,
+  );
   console.log("[lesson-indexes] verifying");
   const verStarted = Date.now();
   const ver = spawnSync(npmCmd, ["run", "verify:lesson-indexes"], {
@@ -70,13 +81,7 @@ function runLessonIndexesForBuild() {
   });
   const verMs = Date.now() - verStarted;
   recordBuildPhase(metricsRun, "lesson_index_verification", verMs, {
-    verifyMode: process.env.NN_DEEP_LESSON_VERIFY
-      ? "deep"
-      : process.env.NN_VERIFY_CHANGED_PATHWAYS_ONLY
-        ? "changed-only"
-        : process.env.NN_SKIP_HEAVY_LESSON_VERIFY
-          ? "light"
-          : "deep",
+    verifyMode: verifyModeLabel,
   });
   if ((ver.status ?? 1) !== 0) {
     console.error("[lesson-indexes] FATAL: verify:lesson-indexes failed");
@@ -86,6 +91,9 @@ function runLessonIndexesForBuild() {
   }
   console.error(
     `[nursenest-core] lesson_indexes gate_verify_lesson_indexes_ms ${JSON.stringify({ durationMs: verMs, ok: true })}`,
+  );
+  console.error(
+    `[lesson-indexes] phase_end ${JSON.stringify({ phase: "lesson_index_verification", durationMs: verMs, verifyMode: verifyModeLabel })}`,
   );
 
   console.log("[lesson-indexes] ready");

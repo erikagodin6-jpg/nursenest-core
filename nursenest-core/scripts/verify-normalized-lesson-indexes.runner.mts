@@ -23,11 +23,12 @@ import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lesso
 import { getMarketingLessonsHubCatalogLessons } from "@/lib/lessons/marketing-lessons-hub-category";
 import { buildLessonNormalizationCoverageReport } from "./lesson-normalization-coverage.mts";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { getLessonVerifyMode as getLessonVerifyModeFromEnv } from "./lesson-index-verify-mode.mjs";
 
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const realIndexDir = path.join(coreRoot, "src", "content", "pathway-lessons", "generated-indexes");
 const manifestPath = path.join(realIndexDir, "manifest.json");
-type LessonVerifyMode = "deep" | "light" | "changed-only";
+export type LessonVerifyMode = "deep" | "light" | "changed-only";
 
 type LessonIndexManifest = {
   schemaVersion: 1;
@@ -53,15 +54,8 @@ function listGeneratedJsonFiles(): string[] {
   return fs.readdirSync(realIndexDir).filter((f) => f.endsWith(".json") && f !== "package.json" && f !== "manifest.json");
 }
 
-function isTruthyEnv(value: string | undefined): boolean {
-  return /^(1|true|yes)$/i.test(String(value ?? "").trim());
-}
-
 export function getLessonVerifyMode(env: NodeJS.ProcessEnv = process.env): LessonVerifyMode {
-  if (isTruthyEnv(env.NN_DEEP_LESSON_VERIFY)) return "deep";
-  if (isTruthyEnv(env.NN_VERIFY_CHANGED_PATHWAYS_ONLY)) return "changed-only";
-  if (isTruthyEnv(env.NN_SKIP_HEAVY_LESSON_VERIFY)) return "light";
-  return "deep";
+  return getLessonVerifyModeFromEnv(env);
 }
 
 function changedPathwaysFromEnv(env: NodeJS.ProcessEnv = process.env): Set<string> {

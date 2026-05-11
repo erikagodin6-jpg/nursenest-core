@@ -245,7 +245,17 @@ async function main(): Promise<void> {
       }
     }
   }
-  writeLessonNormalizationCoverageReports(coverage);
+  const skipHeavyReports = /^(1|true|yes)$/i.test(String(process.env.NN_SKIP_HEAVY_BUILD_REPORTS ?? "").trim());
+  if (skipHeavyReports) {
+    console.info(
+      "[build:lesson-indexes] skipped disk coverage report write reason=NN_SKIP_HEAVY_BUILD_REPORTS (in-memory gates unchanged)",
+    );
+  } else {
+    writeLessonNormalizationCoverageReports(coverage);
+    console.info(
+      `[build:lesson-indexes] wrote coverage reports json=${lessonNormalizationCoverageJsonPath()} md=${lessonNormalizationCoverageMarkdownPath()}`,
+    );
+  }
   const collapsed = coverage.pathways.filter((pathway) => pathway.rawCount > 0 && pathway.renderableCount === 0);
   if (collapsed.length > 0) {
     throw new Error(
@@ -262,9 +272,6 @@ async function main(): Promise<void> {
         .join(", ")}`,
     );
   }
-  console.info(
-    `[build:lesson-indexes] wrote coverage reports json=${lessonNormalizationCoverageJsonPath()} md=${lessonNormalizationCoverageMarkdownPath()}`,
-  );
   console.info(`[build:lesson-indexes] done pathways=${ids.length} -> ${outDir}`);
   safeServerLog("lesson_indexes", "lesson_index_generation_complete_ms", {
     totalMs: Math.round(performance.now() - buildStarted),

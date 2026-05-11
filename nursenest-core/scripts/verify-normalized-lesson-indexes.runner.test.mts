@@ -24,6 +24,20 @@ test("getLessonVerifyMode lets deep verification override lightweight flags", ()
   );
 });
 
+test("getLessonVerifyMode maps manifest to light (App Platform / constrained builders)", () => {
+  assert.equal(getLessonVerifyMode({ NN_LESSON_INDEX_VERIFY_MODE: "manifest" }), "light");
+});
+
+test("getLessonVerifyMode explicit manifest wins over NN_DEEP_LESSON_VERIFY", () => {
+  assert.equal(
+    getLessonVerifyMode({
+      NN_LESSON_INDEX_VERIFY_MODE: "manifest",
+      NN_DEEP_LESSON_VERIFY: "true",
+    }),
+    "light",
+  );
+});
+
 test("shouldDeepVerifyPathway verifies only changed pathways in changed-only mode", () => {
   const changed = new Set(["us-rn-nclex-rn"]);
 

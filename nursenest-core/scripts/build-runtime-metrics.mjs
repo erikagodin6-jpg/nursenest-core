@@ -113,7 +113,8 @@ function latestQuestionInventoryReport(reportsDir = path.join(packageRoot, "repo
 export function persistBuildMetricsRun(run, { metricsPath = buildRuntimeMetricsPath } = {}) {
   const metrics = readExistingMetrics(metricsPath);
   metrics.generatedAt = new Date().toISOString();
-  const inventory = latestQuestionInventoryReport(path.dirname(metricsPath));
+  const skipHeavyReports = /^(1|true|yes)$/i.test(String(process.env.NN_SKIP_HEAVY_BUILD_REPORTS ?? "").trim());
+  const inventory = skipHeavyReports ? null : latestQuestionInventoryReport(path.dirname(metricsPath));
   if (inventory) {
     run.inventoryDiagnostics = inventory;
   }
