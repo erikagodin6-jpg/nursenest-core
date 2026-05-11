@@ -25,6 +25,13 @@ export function formatPathwayContextBar(p: ExamPathwayDefinition): string {
   return `${tier} • ${country} • ${p.shortName}`;
 }
 
+/** Learner chrome must never surface hidden/internal pathways. */
+export function pathwayVisibleForLearnerChrome(
+  pathway: ExamPathwayDefinition | null | undefined,
+): pathway is ExamPathwayDefinition {
+  return Boolean(pathway && pathway.status !== "hidden");
+}
+
 function pillLabelForRoleTrack(roleTrack: string): string {
   if (roleTrack === "rn") return "RN";
   if (roleTrack === "lpn" || roleTrack === "rpn") return "PN";
@@ -89,11 +96,18 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
     pathwayId = lp && lp.length > 0 ? lp : null;
     if (lp) {
       const p = getExamPathwayById(lp);
-      pathwayShortLabel = p ? pillLabelForRoleTrack(p.roleTrack) : lp.slice(0, 48);
-      if (p) {
-        pathwayHubHref = learnerPathwayHubChromeHref(p);
-        pathwayContextBar = formatPathwayContextBar(p);
-        if (p.roleTrack === "rn" || p.roleTrack === "rpn" || p.roleTrack === "lpn" || p.roleTrack === "np") {
+      const visiblePathway = pathwayVisibleForLearnerChrome(p) ? p : null;
+      pathwayId = visiblePathway ? lp : null;
+      pathwayShortLabel = visiblePathway ? pillLabelForRoleTrack(visiblePathway.roleTrack) : null;
+      if (visiblePathway) {
+        pathwayHubHref = learnerPathwayHubChromeHref(visiblePathway);
+        pathwayContextBar = formatPathwayContextBar(visiblePathway);
+        if (
+          visiblePathway.roleTrack === "rn" ||
+          visiblePathway.roleTrack === "rpn" ||
+          visiblePathway.roleTrack === "lpn" ||
+          visiblePathway.roleTrack === "np"
+        ) {
           examsLabel = "CAT Exams";
         }
       }

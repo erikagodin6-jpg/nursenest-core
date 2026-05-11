@@ -16,6 +16,7 @@ import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-te
 import {
   isInternalAdmissionsPrepPathwayId,
   marketingRobotsForExamPathway,
+  isPhaseOneHiddenAdmissionsScaffoldPathwayId,
   shouldOmitRegionalHreflangForInternalAdmissionsPrep,
 } from "@/lib/exam-pathways/admissions-prep-internal-pathways";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -110,7 +111,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
 
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) notFound();
-  if (isInternalAdmissionsPrepPathwayId(pathway.id)) {
+  if (isInternalAdmissionsPrepPathwayId(pathway.id) && isPhaseOneHiddenAdmissionsScaffoldPathwayId(pathway.id)) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
         <InternalAdmissionsPrepHubScaffold pathway={pathway} hubPath={pathname} />

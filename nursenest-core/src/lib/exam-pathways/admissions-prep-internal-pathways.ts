@@ -20,6 +20,20 @@ export type InternalAdmissionsPrepPathwayId = (typeof INTERNAL_ADMISSIONS_PREP_P
 const INTERNAL_SET = new Set<string>(INTERNAL_ADMISSIONS_PREP_PATHWAY_IDS);
 
 /**
+ * Phase 1 hidden scaffold only exposes the overview page for HESI A2 + ATI TEAS.
+ * HESI Exit remains hidden and unresolved at the route layer until a later phase.
+ */
+export const PHASE_ONE_HIDDEN_ADMISSIONS_SCAFFOLD_PATHWAY_IDS = [
+  "us-allied-hesi-a2",
+  "us-allied-ati-teas",
+] as const;
+
+export type PhaseOneHiddenAdmissionsScaffoldPathwayId =
+  (typeof PHASE_ONE_HIDDEN_ADMISSIONS_SCAFFOLD_PATHWAY_IDS)[number];
+
+const PHASE_ONE_SET = new Set<string>(PHASE_ONE_HIDDEN_ADMISSIONS_SCAFFOLD_PATHWAY_IDS);
+
+/**
  * When `true`, hidden admissions-prep pathways resolve via {@link resolveExamPathwaySafe}
  * so local/staging QA can hit `/us/allied/hesi-a2` style URLs without public sitemap/nav exposure.
  *
@@ -31,6 +45,35 @@ export function isInternalAdmissionsPrepPathwaysEnabled(): boolean {
 
 export function isInternalAdmissionsPrepPathwayId(pathwayId: string): pathwayId is InternalAdmissionsPrepPathwayId {
   return INTERNAL_SET.has(pathwayId);
+}
+
+export function isPhaseOneHiddenAdmissionsScaffoldPathwayId(
+  pathwayId: string,
+): pathwayId is PhaseOneHiddenAdmissionsScaffoldPathwayId {
+  return PHASE_ONE_SET.has(pathwayId);
+}
+
+function normalizeRequestPath(path: string): string {
+  const noQuery = path.split("?")[0]?.trim() ?? "";
+  if (!noQuery) return "/";
+  return noQuery.length > 1 ? noQuery.replace(/\/+$/, "") : noQuery;
+}
+
+/**
+ * Hidden admissions routes are allowed only for the exact overview path in local/staging QA.
+ * Sibling pages (`/pricing`, `/questions`, `/cat`, `/lessons`, ...) stay blocked.
+ */
+export function shouldAllowInternalAdmissionsOverviewRoute(
+  pathway: ExamPathwayDefinition,
+  routePathname: string,
+  requestPathname: string,
+): boolean {
+  return (
+    isInternalAdmissionsPrepPathwaysEnabled() &&
+    pathway.status === "hidden" &&
+    isPhaseOneHiddenAdmissionsScaffoldPathwayId(pathway.id) &&
+    normalizeRequestPath(routePathname) === normalizeRequestPath(requestPathname)
+  );
 }
 
 /** Omit regional hreflang alternates on internal admissions-prep hubs (not publicly indexable). */

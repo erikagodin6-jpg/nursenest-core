@@ -1,8 +1,5 @@
 import { crawlSurfaceErrorCode, logCrawlSurfaceEvent } from "@/lib/observability/crawl-surface-observability";
 import { CANONICAL_PRODUCTION_ORIGIN } from "@/lib/seo/canonical-site";
-import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
-import { isLocaleRobotsPathDisallowed } from "@/lib/i18n/language-readiness";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 
 /**
  * Explicit `text/plain` robots.txt — no DB; always 200 for crawlers.
@@ -11,12 +8,21 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
  * index (`sitemap-core.xml`, `sitemap-blog.xml`, `sitemap-lessons.xml`, `sitemap-allied.xml`, `sitemap-new-grad.xml`).
  * All use `${CANONICAL_PRODUCTION_ORIGIN}` (https `www` in production). No `http:`, no legacy hostnames.
  *
- * SEO indexing policy per language status:
- * - active (full tier): allowed — Google indexes the locale pages normally; locale URLs may appear in `/sitemap.xml`.
- * - partial (partial tier): `noindex` meta (via safeGenerateMetadata); crawling **allowed** (no `Disallow` for
- *   `/{code}/`) so bots can fetch pages and honor hreflang + noindex; **not** listed in `/sitemap.xml`.
- * - disabled (incomplete tier): `Disallow: /{code}/` plus `noindex`; excluded from hreflang and sitemaps.
- *   Routes may still return 200 for humans.
+ * ## Locale readiness — robots.txt is intentionally permissive for marketing locales
+ *
+ * Every routable marketing locale (`/{code}/…`) is **crawlable**. Locale-tier indexing control
+ * lives entirely in page metadata via `<meta name="robots" content="noindex,follow">` (see
+ * `safeGenerateMetadata` + `localeRobotsOverride`) and in sitemap/hreflang exclusion via the
+ * `getLocaleSeoTier` helpers.
+ *
+ * Previously this route emitted `Disallow: /{code}/` for `incomplete`/blocked locales. That
+ * directly produced Google Search Console "Indexed, though blocked by robots.txt" warnings
+ * for URLs like `/pa/terms`, `/zh-tw/guides/...`, `/it/forgot-password`, `/ko/`, `/tr/`,
+ * `/ur/clinical-clarity/...`, `/ht/lessons/...` because Googlebot was prevented from fetching
+ * those pages to read the `noindex` tag (the only valid de-indexing signal). The fix — per
+ * Google's own docs — is to remove the robots.txt Disallow and let Googlebot read `noindex`.
+ *
+ * See `docs/reports/locale-seo-leakage-remediation.md` for the full remediation history.
  *
  * **Authenticated / internal surfaces:** `Disallow: /app/`, `/admin/`, `/internal/`, `/api/` — learner shell and gated flows;
  * these are also blocked from sitemap emission via URL validation (see `public-url-validator`).
@@ -24,8 +30,8 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
  * Internal `/seo/*` rewrite targets are disallowed to avoid duplicate indexing
  * with the public `/{slug}` URLs they back.
  *
- * **Static:** body depends only on shipped locale tier config — no per-request data. Serving as
- * static reduces cold-start variance for crawlers vs `force-dynamic`.
+ * **Static:** body has no per-request data and no per-locale variation — serving as static
+ * reduces cold-start variance for crawlers vs `force-dynamic`.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-static";
@@ -36,20 +42,16 @@ const ROBOTS_HEADERS = {
   "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
 } as const;
 
-function buildDisallowedLocaleLines(): string {
-  const lines: string[] = [];
-  for (const lang of MARKETING_LANGUAGES) {
-    if (lang.code === DEFAULT_MARKETING_LOCALE) continue;
-    if (isLocaleRobotsPathDisallowed(lang.code)) {
-      lines.push(`Disallow: /${lang.code}/`);
-    }
-  }
-  return lines.join("\n");
-}
-
 const CANONICAL_SITEMAP_LINES = [`Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`] as const;
 
-const FALLBACK_BODY = [
+/**
+ * Body is identical for every request — no per-locale Disallow lines.
+ *
+ * Marketing locale paths (`/fr/…`, `/pa/…`, etc.) are intentionally crawlable so Googlebot
+ * can read each page's `<meta name="robots" content="noindex,follow">`. The page-level noindex
+ * is the **only** correct mechanism to keep `preview`-tier locales out of the index.
+ */
+const STATIC_BODY = [
   "User-agent: *",
   "Allow: /",
   "Disallow: /app/",
@@ -60,6 +62,8 @@ const FALLBACK_BODY = [
   "",
   ...CANONICAL_SITEMAP_LINES,
 ].join("\n");
+
+const FALLBACK_BODY = STATIC_BODY;
 
 const ROBOTS_PATHNAME = "/robots.txt";
 
@@ -88,24 +92,9 @@ function assertCanonicalSitemapDirectives(body: string): void {
 export async function GET() {
   const t0 = Date.now();
   try {
-    const disallowedLocales = buildDisallowedLocaleLines();
+    assertCanonicalSitemapDirectives(STATIC_BODY);
 
-    const body = [
-      "User-agent: *",
-      "Allow: /",
-      "Disallow: /app/",
-      "Disallow: /admin/",
-      "Disallow: /internal/",
-      "Disallow: /api/",
-      "Disallow: /seo/",
-      ...(disallowedLocales ? [disallowedLocales] : []),
-      "",
-      ...CANONICAL_SITEMAP_LINES,
-    ].join("\n");
-
-    assertCanonicalSitemapDirectives(body);
-
-    return new Response(body, { status: 200, headers: ROBOTS_HEADERS });
+    return new Response(STATIC_BODY, { status: 200, headers: ROBOTS_HEADERS });
   } catch (e) {
     logCrawlSurfaceEvent({
       routeType: "marketing.robots_txt",

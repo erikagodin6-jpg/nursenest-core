@@ -11,13 +11,18 @@ import {
 } from "@/lib/exam-pathways/exam-product-registry";
 import {
   INTERNAL_ADMISSIONS_PREP_PATHWAY_IDS,
+  PHASE_ONE_HIDDEN_ADMISSIONS_SCAFFOLD_PATHWAY_IDS,
   marketingRobotsForExamPathway,
+  shouldAllowInternalAdmissionsOverviewRoute,
   shouldOmitRegionalHreflangForInternalAdmissionsPrep,
 } from "@/lib/exam-pathways/admissions-prep-internal-pathways";
 import {
   INTERNAL_ADMISSIONS_PATHWAY_ID_TO_KIND,
   validateAdmissionsPrepTaxonomyUniqueIds,
 } from "@/lib/exam-pathways/admissions-prep-taxonomy";
+import { assessMarketingCatSurfaceWithoutAuth } from "@/lib/exam-pathways/cat-eligibility";
+import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
+import { isFreeStripeBillingNursingTier } from "@/lib/pricing/display-catalog";
 import { collectExamPathwayUrls } from "@/lib/seo/sitemap-static-xml";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
@@ -39,6 +44,13 @@ describe("admissions prep phase 2 — taxonomy", () => {
       );
     }
     assert.equal(Object.keys(INTERNAL_ADMISSIONS_PATHWAY_ID_TO_KIND).length, INTERNAL_ADMISSIONS_PREP_PATHWAY_IDS.length);
+  });
+
+  it("limits phase 1 hidden scaffold expansion to HESI A2 and ATI TEAS", () => {
+    assert.deepEqual(
+      [...PHASE_ONE_HIDDEN_ADMISSIONS_SCAFFOLD_PATHWAY_IDS].sort(),
+      ["us-allied-ati-teas", "us-allied-hesi-a2"],
+    );
   });
 });
 
@@ -69,6 +81,36 @@ describe("admissions prep phase 2 — hidden routes & flag", () => {
   it("public marketing resolution never exposes admissions URLs", () => {
     for (const exam of ["hesi-a2", "hesi-exit", "ati-teas"] as const) {
       assert.equal(resolveExamPathwayFromMarketingHubSegment("us", "allied", exam), undefined);
+    }
+  });
+
+  it("allows only the exact overview route for A2 and ATI TEAS", () => {
+    const hesi = getExamPathwayByRoute("us", "allied", "hesi-a2")!;
+    process.env.NN_INTERNAL_ADMISSIONS_PREP_PATHWAYS = "1";
+    try {
+      assert.equal(
+        shouldAllowInternalAdmissionsOverviewRoute(hesi, "/us/allied/hesi-a2", "/us/allied/hesi-a2"),
+        true,
+      );
+      assert.equal(
+        shouldAllowInternalAdmissionsOverviewRoute(hesi, "/us/allied/hesi-a2", "/us/allied/hesi-a2/questions"),
+        false,
+      );
+    } finally {
+      delete process.env.NN_INTERNAL_ADMISSIONS_PREP_PATHWAYS;
+    }
+  });
+
+  it("keeps HESI Exit blocked from phase 1 hidden scaffold exposure", () => {
+    const exit = getExamPathwayByRoute("us", "allied", "hesi-exit")!;
+    process.env.NN_INTERNAL_ADMISSIONS_PREP_PATHWAYS = "1";
+    try {
+      assert.equal(
+        shouldAllowInternalAdmissionsOverviewRoute(exit, "/us/allied/hesi-exit", "/us/allied/hesi-exit"),
+        false,
+      );
+    } finally {
+      delete process.env.NN_INTERNAL_ADMISSIONS_PREP_PATHWAYS;
     }
   });
 });
@@ -104,6 +146,38 @@ describe("admissions prep phase 2 — public listings & sitemap", () => {
   });
 });
 
+describe("admissions prep phase 2 — checkout and pool isolation", () => {
+  it("keeps HESI A2 and ATI TEAS on the free PRE_NURSING tier with no Stripe checkout", () => {
+    for (const exam of ["hesi-a2", "ati-teas"] as const) {
+      const pathway = getExamPathwayByRoute("us", "allied", exam)!;
+      assert.equal(pathway.stripeTier, "PRE_NURSING");
+      assert.equal(isFreeStripeBillingNursingTier(pathway.stripeTier), true);
+    }
+  });
+
+  it("fails question-bank scope closed for admissions pathways with empty contentExamKeys", () => {
+    const pathway = getExamPathwayByRoute("us", "allied", "hesi-a2")!;
+    const where = questionAccessWhereWithPathway(
+      {
+        hasAccess: true,
+        reason: "active_subscription",
+        tier: "PRE_NURSING",
+        country: "US",
+        alliedCareer: null,
+      },
+      pathway,
+    );
+    assert.deepEqual(where, { id: { in: [] } });
+  });
+
+  it("marks hidden admissions CAT as info-only rather than launchable", () => {
+    const pathway = getExamPathwayByRoute("us", "allied", "ati-teas")!;
+    const assessment = assessMarketingCatSurfaceWithoutAuth(pathway, { status: "unavailable" });
+    assert.equal(assessment.reason, "pathway_info_only");
+    assert.equal(assessment.marketingPrimaryCta, "none");
+  });
+});
+
 describe("admissions prep phase 2 — scaffold source hygiene", () => {
   const scaffoldPath = path.resolve(ROOT, "src/components/marketing/internal-admissions-prep-hub-scaffold.tsx");
 
@@ -121,13 +195,24 @@ describe("admissions prep phase 2 — scaffold source hygiene", () => {
       "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/page.tsx",
     );
     const src = fs.readFileSync(pagePath, "utf8");
-    const idxEarly = src.indexOf("if (isInternalAdmissionsPrepPathwayId(pathway.id))");
+    const idxEarly = src.indexOf("if (isInternalAdmissionsPrepPathwayId(pathway.id) && isPhaseOneHiddenAdmissionsScaffoldPathwayId(pathway.id))");
     const idxBuildContent = src.indexOf("buildNursingTierHubContent(pathway)");
     assert.ok(idxEarly > 0);
     assert.ok(idxBuildContent > 0);
     assert.ok(idxEarly < idxBuildContent, "early admissions return must precede NCLEX hub content builder");
     assert.ok(src.includes("isInternalAdmissionsPrepPathwayId"));
+    assert.ok(src.includes("isPhaseOneHiddenAdmissionsScaffoldPathwayId"));
     assert.ok(src.includes("InternalAdmissionsPrepHubScaffold"));
+  });
+
+  it("layout blocks hidden admissions subroutes unless the request is the exact overview path", () => {
+    const layoutPath = path.resolve(
+      ROOT,
+      "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/layout.tsx",
+    );
+    const src = fs.readFileSync(layoutPath, "utf8");
+    assert.ok(src.includes("shouldAllowInternalAdmissionsOverviewRoute"));
+    assert.match(src, /pathway\.status === "hidden"/);
   });
 });
 

@@ -25,6 +25,7 @@ import {
   formatPathwayContextBar,
   isLearnerPathwayNavMetadata,
   loadLearnerPathwayNavMetadata,
+  pathwayVisibleForLearnerChrome,
 } from "@/lib/learner/load-learner-shell-pathway-metadata";
 import { safeOptional } from "@/lib/server/safe-optional";
 import { getLearnerFallback, setLearnerFallback } from "@/lib/server/fallback-cache";
@@ -160,7 +161,7 @@ export default async function LearnerShellLayout({ children }: { children: React
     const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
     if (pathwayId) {
       const p = getExamPathwayById(pathwayId);
-      if (p) pathwayContextBar = formatPathwayContextBar(p);
+      if (pathwayVisibleForLearnerChrome(p)) pathwayContextBar = formatPathwayContextBar(p);
     }
     if (!pathwayContextBar && pathwayHubHref) {
       const tier = (
@@ -180,7 +181,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   : null;
       if (fallbackPathwayId) {
         const p = getExamPathwayById(fallbackPathwayId);
-        if (p) pathwayContextBar = formatPathwayContextBar(p);
+        if (pathwayVisibleForLearnerChrome(p)) pathwayContextBar = formatPathwayContextBar(p);
       }
     }
   }

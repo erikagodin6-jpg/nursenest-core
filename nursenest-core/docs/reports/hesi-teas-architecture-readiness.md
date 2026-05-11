@@ -223,6 +223,15 @@ Contract tests + `tests/e2e/admissions/admissions-prep-governance.placeholder.sp
 - `tests/contracts/admissions-prep-phase2.contract.test.ts` (taxonomy, flag, metadata, sitemap, scaffold hygiene, registry).
 - Existing: `admissions-prep-internal-pathways.contract.test.ts`, `resolve-exam-pathway-safe.admissions.contract.test.ts`.
 
+
+### Phase 1 hidden scaffold implementation update (A2 + ATI TEAS only)
+
+- The hidden scaffold route is now **overview-only** for `us-allied-hesi-a2` and `us-allied-ati-teas` behind `NN_INTERNAL_ADMISSIONS_PREP_PATHWAYS=1`.
+- Hidden admissions sibling routes under the same hub tree remain blocked at the layout layer, so pricing, questions, CAT, and lessons do not fall through to generic nursing behavior.
+- Learner shell metadata now filters hidden pathways from chrome/context-bar rendering.
+- HESI Exit remains `hidden` and out of scope for route enablement in this phase.
+- Detailed implementation evidence: `docs/reports/hesi-teas-phase-1-scaffold.md`
+
 ---
 
 ## Critical launch rule (mandatory)

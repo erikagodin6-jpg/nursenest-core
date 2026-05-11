@@ -20,4 +20,13 @@ describe("robots.txt route source (static gate)", () => {
     assert.match(src, /allied\.nursenest\.ca/);
     assert.match(src, /exactly \$\{CANONICAL_SITEMAP_LINES\.length\}/);
   });
+
+  it("does not import MARKETING_LANGUAGES or isLocaleRobotsPathDisallowed (no per-locale Disallow loop)", () => {
+    const src = readFileSync(join(HERE, "../../app/robots.txt/route.ts"), "utf8");
+    assert.equal(
+      /MARKETING_LANGUAGES|isLocaleRobotsPathDisallowed/.test(src),
+      false,
+      "robots.txt route must not iterate marketing locales — locale readiness is controlled via page-level noindex,follow",
+    );
+  });
 });

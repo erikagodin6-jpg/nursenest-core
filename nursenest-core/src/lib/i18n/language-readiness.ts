@@ -4,16 +4,29 @@
  * Maps the three-tier system (full | partial | incomplete) to concrete SEO rules
  * that control sitemap inclusion, hreflang eligibility, and robots indexing.
  *
- * ## Status semantics
+ * ## Locale SEO tiers (single source of truth — see {@link getLocaleSeoTier})
  *
- * | status   | tier       | indexed | hreflang | sitemap | switcher        |
- * |----------|------------|---------|----------|---------|-----------------|
- * | active   | full       | ✓       | ✓        | ✓       | yes, no label   |
- * | partial  | partial    | ✗       | ✗        | ✗       | yes, "(partial)"|
- * | disabled | incomplete | ✗       | ✗        | ✗       | hidden          |
+ * | seo tier    | status   | mkt tier   | indexed | hreflang | sitemap | robots.txt          | switcher        |
+ * |-------------|----------|------------|---------|----------|---------|---------------------|-----------------|
+ * | production  | active   | full       | ✓       | ✓        | ✓       | crawlable           | yes, no label   |
+ * | preview     | partial  | partial    | ✗       | ✗        | ✗       | crawlable + noindex | yes, "(partial)"|
+ * | preview     | disabled | incomplete | ✗       | ✗        | ✗       | crawlable + noindex | hidden          |
  *
- * Routes for every locale remain accessible (no 404). `partial` uses `noindex` and stays out of completed
- * hreflang clusters; `disabled` uses `noindex`, `Disallow` in robots.txt, and drops hreflang — neither tier is listed in sitemaps.
+ * Routes for every locale remain accessible (no 404). Both `partial` and `disabled` use
+ * `<meta name="robots" content="noindex,follow">` to keep pages out of the index while
+ * remaining **crawlable** — Google must be able to fetch the page to honor `noindex`.
+ *
+ * **Why robots.txt does NOT Disallow incomplete locales:** previously, `disabled` locales emitted
+ * `Disallow: /{locale}/`. Google Search Console reported these as
+ * "Indexed, though blocked by robots.txt" — because URLs discovered via internal links, old
+ * sitemaps, or external links could be queued for indexing but Googlebot was prevented from
+ * fetching them to read the `noindex` meta. Per Google's own guidance, blocking via robots.txt
+ * is **the wrong tool** for de-indexing: it suppresses crawling, not indexing. The correct fix
+ * is to let Googlebot fetch and read `noindex,follow` — implemented in `safeGenerateMetadata`
+ * via {@link localeRobotsOverride}. See `docs/reports/locale-seo-leakage-remediation.md`.
+ *
+ * The third tier — `blocked` — is reserved for locales we intentionally hard-404 or redirect
+ * (none today). Today every routable marketing locale falls into `production` or `preview`.
  *
  * ## Adding a new language (safe workflow)
  *
@@ -151,17 +164,53 @@ export function localeRobotsOverride(localeCode: string): { index: false; follow
 }
 
 /**
- * When true, `robots.txt` should emit `Disallow: /{locale}/` for this locale.
+ * Always returns `false` — robots.txt **never** Disallows a marketing locale path.
  *
- * **Only** `incomplete` (disabled-switcher) tiers — **not** `partial` (noindex in metadata, hreflang
- * eligible, **omitted from sitemap**; bots must still be able to fetch pages to see `noindex` + alternates).
+ * Locale readiness is controlled by `<meta name="robots" content="noindex,follow">`
+ * via {@link localeRobotsOverride}, **not** by robots.txt. Blocking via robots.txt prevented
+ * Googlebot from fetching pages to read `noindex`, producing
+ * "Indexed, though blocked by robots.txt" warnings in Google Search Console — see
+ * `docs/reports/locale-seo-leakage-remediation.md`.
  *
- * Do **not** use `!isLocaleSeoIndexable` here — that is also false for partial locales and would
- * incorrectly block crawling.
+ * The function is preserved as a stable export so callers (robots.txt generator, contract tests)
+ * keep a single invariant point. Genuinely private surfaces (`/app`, `/admin`, `/internal`, `/api`,
+ * `/seo/`) are still Disallowed directly in {@link "@/app/robots.txt/route".GET}.
+ *
+ * @deprecated Use {@link getLocaleSeoTier} for tier checks. Always returns `false` going forward.
  */
-export function isLocaleRobotsPathDisallowed(localeCode: string): boolean {
-  if (localeCode === DEFAULT_MARKETING_LOCALE) return false;
-  return getLanguageStatus(localeCode) === "disabled";
+export function isLocaleRobotsPathDisallowed(_localeCode: string): boolean {
+  return false;
+}
+
+// ─── Explicit SEO tiers (production / preview / blocked) ──────────────────────
+
+/**
+ * SEO-facing tier name for a marketing locale, used by sitemap/hreflang/robots/contract tests.
+ *
+ * - `production` — fully indexable. Pages appear in sitemap, hreflang clusters, and canonical
+ *   alternate clusters. Bots may crawl and index.
+ * - `preview` — pages must remain crawlable (so Googlebot can read `noindex,follow`) but must
+ *   not appear in sitemap, hreflang, or canonical alternate clusters. Partial + incomplete
+ *   marketing tiers and explicit `SEO_BLOCKED_LOCALES` overrides all map here.
+ * - `blocked` — reserved for locales we intentionally hard-404 or redirect at the request layer.
+ *   No locale uses this today; the value exists so future deletions/region-locks are typed.
+ */
+export type LocaleSeoTier = "production" | "preview" | "blocked";
+
+export function getLocaleSeoTier(localeCode: string): LocaleSeoTier {
+  if (localeCode === DEFAULT_MARKETING_LOCALE) return "production";
+  if (isLocaleSeoIndexable(localeCode)) return "production";
+  return "preview";
+}
+
+/** Locale codes (default + non-default) currently classified as fully indexable production SEO. */
+export function getProductionSeoLocales(): readonly string[] {
+  return [DEFAULT_MARKETING_LOCALE, ...getIndexableLocales()];
+}
+
+/** Locale codes classified as crawlable-but-noindexed preview tier (partial/incomplete/blocked overrides). */
+export function getPreviewSeoLocales(): readonly string[] {
+  return CORE_HOSTED_MARKETING_LOCALES.filter((c) => getLocaleSeoTier(c) === "preview");
 }
 
 // ─── Promotion gate ───────────────────────────────────────────────────────────

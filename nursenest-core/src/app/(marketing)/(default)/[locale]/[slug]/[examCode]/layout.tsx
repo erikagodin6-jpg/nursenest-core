@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { notFound, permanentRedirect } from "next/navigation";
 import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
 import { legacyCountryAlliedHealthMarketingRedirectDestination } from "@/lib/allied/allied-global-hub-path";
+import { shouldAllowInternalAdmissionsOverviewRoute } from "@/lib/exam-pathways/admissions-prep-internal-pathways";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 
 /**
@@ -25,12 +26,15 @@ type Props = {
 export default async function ExamPathwayLayout({ children, params }: Props) {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
+  const requestPath = (await headers()).get("x-nn-request-pathname")?.trim() ?? pathname;
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
-  if (!pathway || pathway.status === "hidden") {
+  if (
+    !pathway ||
+    (pathway.status === "hidden" && !shouldAllowInternalAdmissionsOverviewRoute(pathway, pathname, requestPath))
+  ) {
     notFound();
   }
 
-  const requestPath = (await headers()).get("x-nn-request-pathname")?.trim() ?? pathname;
   const legacyAlliedTarget = legacyCountryAlliedHealthMarketingRedirectDestination(requestPath);
   if (legacyAlliedTarget) {
     permanentRedirect(legacyAlliedTarget);
