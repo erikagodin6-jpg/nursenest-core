@@ -88,19 +88,19 @@ ALTER TABLE "printable_products" ADD CONSTRAINT "printable_products_file_asset_i
 ALTER TABLE "printable_products" ADD CONSTRAINT "printable_products_thumbnail_asset_id_fkey" FOREIGN KEY ("thumbnail_asset_id") REFERENCES "media_assets"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "printable_products" ADD CONSTRAINT "printable_products_created_by_user_id_fkey" FOREIGN KEY ("created_by_user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "printable_products" ADD CONSTRAINT "printable_products_created_by_user_id_fkey" FOREIGN KEY ("created_by_user_id") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "printable_products" ADD CONSTRAINT "printable_products_updated_by_user_id_fkey" FOREIGN KEY ("updated_by_user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "printable_products" ADD CONSTRAINT "printable_products_updated_by_user_id_fkey" FOREIGN KEY ("updated_by_user_id") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "printable_download_events" ADD CONSTRAINT "printable_download_events_printable_product_id_fkey" FOREIGN KEY ("printable_product_id") REFERENCES "printable_products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "printable_download_events" ADD CONSTRAINT "printable_download_events_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "printable_download_events" ADD CONSTRAINT "printable_download_events_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "printable_accesses" ADD CONSTRAINT "printable_accesses_printable_product_id_fkey" FOREIGN KEY ("printable_product_id") REFERENCES "printable_products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "printable_accesses" ADD CONSTRAINT "printable_accesses_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "printable_accesses" ADD CONSTRAINT "printable_accesses_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

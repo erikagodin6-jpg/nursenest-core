@@ -37,6 +37,11 @@ CREATE TABLE "ecg_video_questions" (
   "is_premium" BOOLEAN NOT NULL DEFAULT true,
   "level" VARCHAR(16) NOT NULL,
   "mode" VARCHAR(16) NOT NULL,
+  "clinician_reviewed_at" TIMESTAMP(3),
+  "clinician_reviewed_by" TEXT,
+  "waveform_fidelity" VARCHAR(40) NOT NULL DEFAULT 'educational_simplified',
+  "qa_status" VARCHAR(32) NOT NULL DEFAULT 'pending',
+  "publish_safety_status" VARCHAR(32) NOT NULL DEFAULT 'internal_only',
   "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   CONSTRAINT "ecg_video_questions_pkey" PRIMARY KEY ("id")
@@ -44,6 +49,8 @@ CREATE TABLE "ecg_video_questions" (
 
 CREATE INDEX "ecg_video_questions_level_mode_idx" ON "ecg_video_questions"("level", "mode");
 CREATE INDEX "ecg_video_questions_rhythm_tag_idx" ON "ecg_video_questions"("rhythm_tag");
+CREATE INDEX "ecg_video_questions_qa_status_idx" ON "ecg_video_questions"("qa_status");
+CREATE INDEX "ecg_video_questions_publish_safety_status_idx" ON "ecg_video_questions"("publish_safety_status");
 
 CREATE TABLE "ecg_video_question_practice_answer_attempts" (
   "id" TEXT NOT NULL,
@@ -83,7 +90,7 @@ CREATE TABLE "ecg_video_question_performance_aggregates" (
 
 ALTER TABLE "ecg_video_question_practice_answer_attempts"
   ADD CONSTRAINT "ecg_video_question_practice_answer_attempts_user_id_fkey"
-  FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "ecg_video_question_practice_answer_attempts"
   ADD CONSTRAINT "ecg_video_question_practice_answer_attempts_question_id_fkey"

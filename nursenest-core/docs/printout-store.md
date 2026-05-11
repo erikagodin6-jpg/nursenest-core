@@ -30,7 +30,7 @@ npx tsx scripts/run-prisma-with-env.mts migrate deploy
 
 Migration folder: `prisma/migrations/20260515120000_printable_store/`.
 
-**Target database must be the real app Postgres** (with `users`, `media_assets`, etc.). Applying migrations to an empty or wrong database can fail mid-chain (e.g. `relation "users" does not exist` on FK creation) and leave Prisma in **`P3018`** — resolve using [Prisma migrate troubleshooting](https://www.prisma.io/docs/guides/migrate/troubleshooting-development) (mark rolled-back / repair) before retrying.
+**Target database must be the real app Postgres** (with `"User"`, `media_assets`, etc.). Applying migrations to an empty or wrong database can fail mid-chain (for example if the DB lacks the Prisma `"User"` table) and leave Prisma in **`P3018`** — resolve using [Prisma migrate troubleshooting](https://www.prisma.io/docs/guides/migrate/troubleshooting-development) (mark rolled-back / repair) before retrying.
 
 ### Production readiness check
 
