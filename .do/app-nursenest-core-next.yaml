@@ -101,8 +101,9 @@ services:
       # not available during Dockerfile *build* — only at runtime. RUN_TIME `NN_BUILD_COMMIT` + startup
       # `write-build-git-meta.mjs` in `start-standalone.mjs` refresh `public/nn-build-meta.json` on boot.
       # Keep `NN_BUILD_BRANCH` aligned with `services[].github.branch` above (no branch bindable on services).
+      # Prefer `${web.COMMIT_HASH}` — component name must match `services[].name` (DO bindable resolution).
       - key: NN_BUILD_COMMIT
-        value: "${_self.COMMIT_HASH}"
+        value: "${web.COMMIT_HASH}"
         scope: RUN_TIME
       - key: NN_BUILD_BRANCH
         value: "main"

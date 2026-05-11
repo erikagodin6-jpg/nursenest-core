@@ -81,13 +81,13 @@ If App Platform logs show **“configuring build-time app environment variables�
 
 The Docker build context **excludes `.git`**, and DigitalOcean App Platform often leaves **`SOURCE_*` / `DIGITALOCEAN_GIT_*` / `GITHUB_*` empty during image builds**. `prebuild` runs `scripts/write-build-git-meta.mjs`, which resolves commit/branch from env first, then `git` (which fails silently without `.git`).
 
-Per [DigitalOcean’s env docs](https://docs.digitalocean.com/products/app-platform/how-to/use-environment-variables/), **bindable variables are not available at Dockerfile build time** — only at runtime. So `${_self.COMMIT_HASH}` does not populate during `docker build`; it **does** apply when the container runs.
+Per [DigitalOcean’s env docs](https://docs.digitalocean.com/products/app-platform/how-to/use-environment-variables/), **bindable variables are not available at Dockerfile build time** — only at runtime. So `${web.COMMIT_HASH}` / `${_self.COMMIT_HASH}` does not populate during `docker build`; it **does** apply when the container runs (use the **`services[].name`** prefix, e.g. `web`, if `_self` does not resolve in your spec).
 
 **App Platform (Dockerfile service) — recommended:**
 
 | Variable | Scope | Value | Purpose |
 |----------|--------|--------|---------|
-| `NN_BUILD_COMMIT` | `RUN_TIME` | `${_self.COMMIT_HASH}` | Deployment SHA from the platform |
+| `NN_BUILD_COMMIT` | `RUN_TIME` | `${web.COMMIT_HASH}` (match `services[].name`) | Deployment SHA from the platform |
 | `NN_BUILD_BRANCH` | `RUN_TIME` | Same string as `services[].github.branch` (no branch bindable for services) | Branch label |
 
 `nursenest-core/scripts/start-standalone.mjs` runs `write-build-git-meta.mjs` once at **process startup** (after env is injected), so `public/nn-build-meta.json` is refreshed when the filesystem allows writes. `/api/version` already merges runtime env over file contents via `runtime-version.ts`, so commit appears in the API even if the file stays build-time-null inside the image.

@@ -10,7 +10,7 @@
  * GITHUB_REF_NAME → VERCEL_GIT_COMMIT_REF → git CLI.
  *
  * DigitalOcean Dockerfile builds often omit `.git` and leave platform git envs empty; bindable
- * `${_self.COMMIT_HASH}` is runtime-only for Dockerfile services. Prefer RUN_TIME `NN_BUILD_*` in the app
+ * `${web.COMMIT_HASH}` (match `services[].name`) is runtime-only for Dockerfile services. Prefer RUN_TIME `NN_BUILD_*` in the app
  * spec; `start-standalone.mjs` re-runs this script at boot so `nn-build-meta.json` matches (see deploy docs).
  */
 import { execSync } from "node:child_process";
