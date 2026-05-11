@@ -1,13 +1,13 @@
 import type { TierCode } from "@prisma/client";
-import type { BillingDuration } from "@/lib/stripe/pricing-map";
 
 export const ADVANCED_ECG_MODULE_ENTITLEMENT = "module_advanced_ecg" as const;
 export const ADVANCED_ECG_MODULE_ROUTE = "/modules/ecg-advanced" as const;
 export const ADVANCED_ECG_MODULE_CHECKOUT_ANCHOR = `${ADVANCED_ECG_MODULE_ROUTE}#upgrade` as const;
 export const ADVANCED_ECG_PRICING_ANCHOR = "/pricing#advanced-ecg-add-on" as const;
 export const ADVANCED_ECG_ALLOWED_TIERS = ["RN", "NP"] as const satisfies readonly TierCode[];
-export const ADVANCED_ECG_BILLING_DURATIONS = ["monthly", "3-month", "6-month", "yearly"] as const satisfies readonly BillingDuration[];
 export const ADVANCED_ECG_PLAN_CODE_PREFIX = `${ADVANCED_ECG_MODULE_ENTITLEMENT}_` as const;
+export const ADVANCED_ECG_LIFETIME_PLAN_CODE = `${ADVANCED_ECG_MODULE_ENTITLEMENT}_lifetime` as const;
+export const ADVANCED_ECG_STRIPE_PRICE_ENV_KEY = "STRIPE_PRICE_MODULE_ADVANCED_ECG_LIFETIME" as const;
 
 export type AdvancedEcgAllowedTier = (typeof ADVANCED_ECG_ALLOWED_TIERS)[number];
 
@@ -23,15 +23,20 @@ export function isAdvancedEcgTierEligible(tier: TierCode | string | null | undef
   return tier === "RN" || tier === "NP";
 }
 
-export function advancedEcgPlanCode(duration: BillingDuration): string {
-  return `${ADVANCED_ECG_MODULE_ENTITLEMENT}_${duration}`;
+export function advancedEcgPlanCode(): string {
+  return ADVANCED_ECG_LIFETIME_PLAN_CODE;
 }
 
 export function isAdvancedEcgPlanCode(planCode: string | null | undefined): boolean {
   return planCode?.trim().toLowerCase().startsWith(ADVANCED_ECG_PLAN_CODE_PREFIX) ?? false;
 }
 
-export function advancedEcgStripePriceEnvKey(duration: BillingDuration): string {
-  const durationToken = duration.toUpperCase().replace(/[^A-Z0-9]+/g, "_");
-  return `STRIPE_PRICE_MODULE_ADVANCED_ECG_${durationToken}`;
+export function advancedEcgStripePriceEnvKey(): string {
+  return ADVANCED_ECG_STRIPE_PRICE_ENV_KEY;
+}
+
+export function advancedEcgLifetimeStripeReference(paymentIntentId: string | null | undefined, checkoutSessionId: string): string {
+  const paymentId = paymentIntentId?.trim();
+  if (paymentId) return `payment:${paymentId}`;
+  return `checkout:${checkoutSessionId}`;
 }

@@ -1,8 +1,6 @@
 "use client";
 
-import type { BillingDuration } from "@/lib/stripe/pricing-map";
 import {
-  ADVANCED_ECG_BILLING_DURATIONS,
   ADVANCED_ECG_MODULE_ENTITLEMENT,
 } from "@/lib/advanced-ecg/advanced-ecg-module-config";
 import {
@@ -10,15 +8,8 @@ import {
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 
-const DURATION_LABELS: Record<BillingDuration, string> = {
-  monthly: "Monthly",
-  "3-month": "3 months",
-  "6-month": "6 months",
-  yearly: "Yearly",
-};
-
 type PricingAdvancedEcgAddOnProps = {
-  onCheckout: (duration: BillingDuration) => void;
+  onCheckout: () => void;
   checkoutLoading?: boolean;
 };
 
@@ -38,7 +29,7 @@ export function PricingAdvancedEcgAddOn({ onCheckout, checkoutLoading = false }:
             Advanced ECG & Telemetry Mastery
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-            Advanced ECG is a separate paid module. Not included in base exam subscriptions. Designed for RN/NP, critical care, emergency, telemetry, and advanced practice ECG interpretation.
+            Advanced ECG is a separate paid module. Not included in base exam subscriptions. Includes full access to the Basic ECG curriculum. Designed for RN/NP, critical care, emergency, telemetry, and advanced practice ECG interpretation.
           </p>
           <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-[var(--semantic-text-secondary)]">
             <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1">Own entitlement: <code>{ADVANCED_ECG_MODULE_ENTITLEMENT}</code></span>
@@ -49,24 +40,19 @@ export function PricingAdvancedEcgAddOn({ onCheckout, checkoutLoading = false }:
 
         <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 lg:w-[23rem]">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
-            Choose add-on billing
+            One-time purchase
           </p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            {ADVANCED_ECG_BILLING_DURATIONS.map((duration) => (
-              <button
-                key={duration}
-                type="button"
-                className={MARKETING_PRIMARY_CTA_CLASS}
-                onClick={() => onCheckout(duration)}
-                disabled={checkoutLoading}
-                data-nn-qa-advanced-ecg-duration={duration}
-              >
-                {checkoutLoading ? "Loading..." : `Add ${DURATION_LABELS[duration]}`}
-              </button>
-            ))}
-          </div>
+          <button
+            type="button"
+            className={`mt-4 w-full ${MARKETING_PRIMARY_CTA_CLASS}`}
+            onClick={onCheckout}
+            disabled={checkoutLoading}
+            data-nn-qa-advanced-ecg-purchase=""
+          >
+            {checkoutLoading ? "Loading..." : "Buy Advanced ECG"}
+          </button>
           <p className="mt-3 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
-            Checkout starts a dedicated Advanced ECG add-on subscription. It does not replace or expand the base RN/NP subscription you already have.
+            Checkout starts a one-time Advanced ECG purchase with ongoing specialty-module access. It does not replace or expand the base RN/NP subscription you already have.
           </p>
         </div>
       </div>

@@ -47,6 +47,12 @@ import {
   resolveUserIdForOrphanStripeSubscription,
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
+import {
+  ADVANCED_ECG_MODULE_ENTITLEMENT,
+  advancedEcgLifetimeStripeReference,
+  advancedEcgPlanCode,
+  isAdvancedEcgTierEligible,
+} from "@/lib/advanced-ecg/advanced-ecg-module-config";
 
 type LifecycleData = ReturnType<typeof billingLifecycleFields>;
 
@@ -436,6 +442,49 @@ export async function applyStripeWebhookEvent(
     const session = event.data.object as Stripe.Checkout.Session;
     const userId = session.metadata?.userId ?? session.client_reference_id ?? undefined;
     const subId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
+    const paymentIntentId =
+      typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id;
+    if (
+      userId &&
+      session.mode === "payment" &&
+      session.metadata?.moduleEntitlement === ADVANCED_ECG_MODULE_ENTITLEMENT
+    ) {
+      const stripePaymentReference = advancedEcgLifetimeStripeReference(paymentIntentId, session.id);
+      const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id ?? "";
+      const baseTierMeta = session.metadata?.baseTierAtCheckout?.trim();
+      const planTier = isAdvancedEcgTierEligible(baseTierMeta) ? baseTierMeta : undefined;
+      const planCode = session.metadata?.planCode?.trim() || advancedEcgPlanCode();
+
+      await prisma.subscription.upsert({
+        where: { stripeSubscriptionId: stripePaymentReference },
+        update: {
+          status: SubscriptionStatus.ACTIVE,
+          pastDueSince: null,
+          ...(customerId.trim() ? { stripeCustomerId: customerId.trim() } : {}),
+          ...(planTier ? { planTier } : {}),
+          planDuration: "lifetime",
+          planCode,
+          currentPeriodEnd: null,
+          trialEnd: null,
+          cancelAtPeriodEnd: false,
+        },
+        create: {
+          userId,
+          status: SubscriptionStatus.ACTIVE,
+          pastDueSince: null,
+          stripeSubscriptionId: stripePaymentReference,
+          stripeCustomerId: customerId.trim() || undefined,
+          planTier,
+          planDuration: "lifetime",
+          planCode,
+          currentPeriodEnd: null,
+          trialEnd: null,
+          cancelAtPeriodEnd: false,
+        },
+      });
+
+      return;
+    }
     if (userId && subId) {
       const plan = planFromCheckoutMetadata(session.metadata ?? undefined);
       const durationMeta = session.metadata?.duration ?? undefined;

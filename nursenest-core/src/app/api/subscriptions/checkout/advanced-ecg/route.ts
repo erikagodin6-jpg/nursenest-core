@@ -28,7 +28,6 @@ import { hasActiveAdvancedEcgEntitlementFromRows } from "@/lib/advanced-ecg/adva
 
 const bodySchema = z
   .object({
-    duration: z.enum(["monthly", "3-month", "6-month", "yearly"]),
     acceptPolicies: z.literal(true),
     policyVersion: z.string().min(1).max(64),
   })
@@ -104,14 +103,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const duration = body.data.duration;
-    const priceEnvKey = advancedEcgStripePriceEnvKey(duration);
+    const priceEnvKey = advancedEcgStripePriceEnvKey();
     const priceId = process.env[priceEnvKey]?.trim();
     if (!priceId) {
       const payload: Record<string, string> = {
         code: STRIPE_PRICE_NOT_CONFIGURED_CODE,
-        message: "This add-on is not available for checkout yet. Billing configuration is incomplete.",
-        error: "This add-on is not available for checkout yet. Billing configuration is incomplete.",
+        message: "This premium module is not available for checkout yet. Billing configuration is incomplete.",
+        error: "This premium module is not available for checkout yet. Billing configuration is incomplete.",
       };
       if (includeStripePriceEnvKeyInCheckoutResponse()) payload.envKey = priceEnvKey;
       return NextResponse.json(payload, { status: 400 });
@@ -149,13 +147,13 @@ export async function POST(req: Request) {
       select: { stripeCustomerId: true },
     });
 
-    const planCode = advancedEcgPlanCode(duration);
+    const planCode = advancedEcgPlanCode();
     const metadata = {
       userId,
-      duration,
       planCode,
       moduleKey: "advanced_ecg",
       moduleEntitlement: ADVANCED_ECG_MODULE_ENTITLEMENT,
+      purchaseModel: "lifetime_one_time",
       baseTierAtCheckout: canonicalAccess.tier ?? "",
       baseCountryAtCheckout: canonicalAccess.country ?? "",
       app: "nursenest-core",
@@ -164,7 +162,7 @@ export async function POST(req: Request) {
     };
 
     const checkoutSession = await stripe.checkout.sessions.create({
-      mode: "subscription",
+      mode: "payment",
       line_items: [{ price: priceId, quantity: 1 }],
       ...(existingCustomer?.stripeCustomerId?.trim()
         ? { customer: existingCustomer.stripeCustomerId.trim() }
@@ -174,9 +172,6 @@ export async function POST(req: Request) {
       cancel_url: `${appUrl}/pricing?checkout=cancelled#advanced-ecg-add-on`,
       client_reference_id: userId,
       metadata,
-      subscription_data: {
-        metadata,
-      },
     });
 
     const checkoutUrl = checkoutSession.url?.trim();

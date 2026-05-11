@@ -556,7 +556,7 @@ export function PricingPageClient({
   );
 
   const redirectGuestToLoginForAdvancedEcgCheckout = useCallback(
-    (duration: BillingDuration) => {
+    () => {
       const qs =
         typeof window !== "undefined" && window.location.search.length > 1
           ? window.location.search.slice(1)
@@ -564,7 +564,6 @@ export function PricingPageClient({
       const callbackParams = new URLSearchParams(qs);
       callbackParams.set("checkoutIntent", "1");
       callbackParams.set("checkoutModule", "advanced_ecg");
-      callbackParams.set("checkoutDuration", duration);
       const callbackPath = `${pathname}?${callbackParams.toString()}`;
       const loginPath = localize("/login");
       window.location.assign(`${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`);
@@ -788,12 +787,12 @@ export function PricingPageClient({
   );
 
   const startAdvancedEcgCheckout = useCallback(
-    async (duration: BillingDuration) => {
+    async () => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
       if (authStatus === "loading") return;
       if (authStatus !== "authenticated") {
-        redirectGuestToLoginForAdvancedEcgCheckout(duration);
+        redirectGuestToLoginForAdvancedEcgCheckout();
         return;
       }
       if (!policiesAccepted) {
@@ -807,7 +806,6 @@ export function PricingPageClient({
           headers: { "Content-Type": "application/json" },
           credentials: "include",
           body: JSON.stringify({
-            duration,
             acceptPolicies: true,
             policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
           }),
@@ -817,7 +815,7 @@ export function PricingPageClient({
           const parsed = parseCheckoutApiErrorBody(payload);
           if (parsed.code === CHECKOUT_UNAUTHORIZED_CODE || res.status === 401) {
             setCheckoutLoading(false);
-            redirectGuestToLoginForAdvancedEcgCheckout(duration);
+            redirectGuestToLoginForAdvancedEcgCheckout();
             return;
           }
           const err = new Error(checkoutErrorUserMessage(parsed, res.status, t)) as CheckoutRequestError;
@@ -834,7 +832,7 @@ export function PricingPageClient({
         const checkoutErr = error as CheckoutRequestError;
         if (checkoutErr.status === 401 || checkoutErr.parsed?.code === CHECKOUT_UNAUTHORIZED_CODE) {
           setCheckoutLoading(false);
-          redirectGuestToLoginForAdvancedEcgCheckout(duration);
+          redirectGuestToLoginForAdvancedEcgCheckout();
           return;
         }
         if (checkoutErr.parsed?.code === STRIPE_PRICE_NOT_CONFIGURED_CODE) {
@@ -892,18 +890,12 @@ export function PricingPageClient({
     const sp = new URLSearchParams(initialSearchParamsString);
     if (sp.get("checkoutIntent") !== "1") return;
     const checkoutModule = sp.get("checkoutModule");
-    const checkoutDuration = sp.get("checkoutDuration");
 
     if (checkoutModule === "advanced_ecg") {
-      if (!checkoutDuration) return;
-      const allowedDurations: BillingDuration[] = ["monthly", "3-month", "6-month", "yearly"];
-      if (!allowedDurations.includes(checkoutDuration as BillingDuration)) return;
-
       setCheckoutIntentHandled(true);
       const cleanParams = new URLSearchParams(sp.toString());
       cleanParams.delete("checkoutIntent");
       cleanParams.delete("checkoutModule");
-      cleanParams.delete("checkoutDuration");
       const cleanUrl = cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
       window.history.replaceState({}, "", cleanUrl);
 
@@ -911,9 +903,11 @@ export function PricingPageClient({
         setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
         return;
       }
-      void startAdvancedEcgCheckout(checkoutDuration as BillingDuration);
+      void startAdvancedEcgCheckout();
       return;
     }
+
+    const checkoutDuration = sp.get("checkoutDuration");
 
     const checkoutTier = sp.get("checkoutTier");
     if (!checkoutTier || !checkoutDuration) return;
@@ -1431,7 +1425,7 @@ export function PricingPageClient({
 
       <PricingEcgClarityBlock />
 
-      <PricingAdvancedEcgAddOn onCheckout={(duration) => void startAdvancedEcgCheckout(duration)} checkoutLoading={checkoutLoading} />
+      <PricingAdvancedEcgAddOn onCheckout={() => void startAdvancedEcgCheckout()} checkoutLoading={checkoutLoading} />
 
       <PricingRegionFaq />
 
