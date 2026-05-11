@@ -84,9 +84,6 @@ export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryE
       case "pn":
         href = pnPrimaryHub(region);
         break;
-      case "np":
-        href = isUs ? CANONICAL_PATHWAY_HUB.usNp : CANONICAL_PATHWAY_HUB.caNp;
-        break;
       case "allied":
         href = alliedHub(region);
         break;

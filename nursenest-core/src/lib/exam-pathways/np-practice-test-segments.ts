@@ -135,16 +135,16 @@ register("canada", "np", "cnple-practice-test", {
   pathwayId: "ca-np-cnple",
   title: "CNPLE Practice Test | Canadian NP Prep | NurseNest",
   description:
-    "Canadian NP preparation hub: pathway-scoped content and practice as national CNPLE integration evolves. Join waitlist or study active tracks in parallel.",
+    "Canadian NP preparation with pathway-scoped lessons, questions, flashcards, and adaptive practice built for the live CNPLE track.",
   heroTitle: "CNPLE practice test & Canadian NP prep",
   heroLead:
-    "NurseNest’s Canadian NP pathway keeps copy and content scoped for CNPLE-oriented candidates. Exam branding and registration rules can change—this hub stays current as requirements finalize.",
+    "Use NurseNest's Canadian NP pathway for CNPLE-oriented prep: lessons, question-bank reps, flashcards, and adaptive practice all stay scoped to the live Canada NP track.",
   supportSectionHeading: "Canadian NP / CNPLE context in one pathway",
   supportSectionBody:
-    "This URL mirrors the Canadian NP hub (`/canada/np/cnple`)—one pathway row, one entitlement scope. Use it when readers search for CNPLE by name.",
+    "This URL mirrors the Canadian NP hub (`/canada/np/cnple`)—one pathway row, one entitlement scope, and one live subscriber product for Canadian NP learners.",
   conversionSectionHeading: "Questions, lessons, and plans for Canadian NP",
   conversionSectionLead:
-    "Explore pathway-scoped content from here; checkout still uses your NP tier for Canada when the pathway is active.",
+    "Open pathway-scoped questions, lessons, pricing, and adaptive practice from here, then subscribe on the NP tier matched to Canada.",
 });
 
 export function getNpPracticeTestLandingCopy(

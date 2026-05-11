@@ -5,7 +5,14 @@ import { validateBowtieQuestionPayload } from "@/lib/questions/bowtie-question-s
 
 /** Shared with marketing snapshots and flashcard exam-bank SQL — keep CAT / linear / hub counts aligned. */
 export const NON_ECG_PRACTICE_EXAM_WHERE: Prisma.ExamQuestionWhereInput = {
-  NOT: [{ questionFormat: ECG_QUESTION_FORMAT }, { tags: { has: "ecg-video" } }],
+  AND: [
+    {
+      OR: [{ questionFormat: null }, { questionFormat: { not: ECG_QUESTION_FORMAT } }],
+    },
+    {
+      NOT: { tags: { has: "ecg-video" } },
+    },
+  ],
 };
 
 /** Fields required for CAT completeness checks (subset of Prisma `ExamQuestion` selects). */

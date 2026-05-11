@@ -54,7 +54,14 @@ test("isCompleteCatQuestionRow accepts valid bowtie object answers", () => {
 
 test("regular practice/CAT pool excludes ECG-formatted and ECG-tagged rows", () => {
   assert.deepEqual(NON_ECG_PRACTICE_EXAM_WHERE, {
-    NOT: [{ questionFormat: "ecg_video" }, { tags: { has: "ecg-video" } }],
+    AND: [
+      {
+        OR: [{ questionFormat: null }, { questionFormat: { not: "ecg_video" } }],
+      },
+      {
+        NOT: { tags: { has: "ecg-video" } },
+      },
+    ],
   });
 });
 

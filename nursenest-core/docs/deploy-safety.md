@@ -45,7 +45,7 @@ Optional DB readiness on the public URL: `VERIFY_READINESS=1 npm run qa:verify:h
 
 `/healthz` is intentionally minimal (liveness). **`/readyz`** gates **routing readiness** until handlers can serve real routes. If App Platform reports **`timeout awaiting headers` on `/readyz`**, the likely failure mode is **pre-handler startup stall** inside Next standalone.
 
-For this repo's current workload, **`basic-xs` is not recommended for production**. The safest first infra response is to move off `basic-xs` before attempting broader application refactors, because weak shared CPU headroom can stretch the standalone handler-initialization window enough to fail health checks even when the `/healthz` route body itself is cheap.
+For this repo's current workload, **`basic-xs` is not recommended for production**. The tracked App Platform spec should stay at **`basic-s` or higher** before attempting broader application refactors, because weak shared CPU headroom can stretch the standalone handler-initialization window enough to fail health checks even when the `/healthz` route body itself is cheap.
 
 ---
 

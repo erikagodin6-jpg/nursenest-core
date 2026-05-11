@@ -41,7 +41,7 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     status: "active",
     acquisitionMode: "subscribe",
   },
-  // —— Canada — NP (transition-ready; extensible) ——
+  // —— Canada — NP (subscriber-ready CNPLE track) ——
   {
     id: "ca-np-cnple",
     countrySlug: "canada",
@@ -58,8 +58,8 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     seoTitle: "NP exam prep for Canada | NurseNest",
     seoDescription:
       "Practice NP exam prep with case-style questions, rationales, and adaptive review. Built for Canadian nurses (CNPLE-aligned pathway).",
-    status: "upcoming",
-    acquisitionMode: "waitlist",
+    status: "active",
+    acquisitionMode: "subscribe",
     internalNotes:
       "2026+ transition: keep status/contentExamKeys configurable; add parallel pathway rows if regulators split exams.",
   },

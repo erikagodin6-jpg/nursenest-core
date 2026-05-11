@@ -36,3 +36,12 @@ test("every emitted pathway-topic programmatic path round-trips through route tr
     assert.equal(buildExamPathwayPath(pathway, parsed.seoSlug), path, `rebuilt path mismatch for ${path}`);
   }
 });
+
+test("NP programmatic registry emits at least 100 condition-discovery paths", () => {
+  const paths = collectPathwayTopicProgrammaticPublicPaths();
+  const npConditionPaths = paths.filter((path) => path.includes("/np-condition-"));
+  assert.ok(
+    npConditionPaths.length >= 100,
+    `expected >=100 NP condition programmatic paths, got ${npConditionPaths.length}`,
+  );
+});

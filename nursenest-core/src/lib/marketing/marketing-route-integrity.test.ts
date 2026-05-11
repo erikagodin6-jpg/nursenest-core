@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
-import { createRouteValidator } from "../../../../scripts/audit-internal-links";
+import { createRouteValidator } from "../../../../../../scripts/audit-internal-links.ts";
 import {
   defaultPathwayIdForMarketingOffering,
   EXAM_PATHWAY_ORDER,

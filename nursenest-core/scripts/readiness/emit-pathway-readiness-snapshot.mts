@@ -12,8 +12,8 @@ import { fileURLToPath } from "node:url";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
-import { countPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
-import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-bank-diagnostics";
+import { pathwayExamQuestionMarketingHubInventoryWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
+import { countPathwayLessonsPublic } from "@/lib/lessons/pathway-lesson-loader";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const APP_ROOT = join(__dirname, "../..");
@@ -25,14 +25,14 @@ async function main() {
     process.exit(1);
   }
 
-  const [questionDiag, ...lessonCounts] = await Promise.all([
-    buildQuestionBankCoverageReport(),
-    ...EXAM_PATHWAYS.map((p) => countPathwayLessons(p.id).catch(() => -1)),
+  const [lessonCounts, questionCounts] = await Promise.all([
+    Promise.all(EXAM_PATHWAYS.map((p) => countPathwayLessonsPublic(p.id).catch(() => -1))),
+    Promise.all(
+      EXAM_PATHWAYS.map((p) =>
+        prisma.examQuestion.count({ where: pathwayExamQuestionMarketingHubInventoryWhere(p) }).catch(() => 0),
+      ),
+    ),
   ]);
-
-  const matchByPathway = new Map(
-    (questionDiag?.pathwayPublishedMatch ?? []).map((m) => [m.pathwayId, m.publishedCount]),
-  );
 
   const payload: Record<string, { lessons: number; questions: number; updatedAt: string } | Record<string, string>> = {
     _meta: {
@@ -43,7 +43,7 @@ async function main() {
 
   EXAM_PATHWAYS.forEach((p, i) => {
     const lessons = lessonCounts[i] ?? 0;
-    const questions = matchByPathway.get(p.id) ?? 0;
+    const questions = questionCounts[i] ?? 0;
     payload[p.id] = {
       lessons: lessons < 0 ? 0 : lessons,
       questions,

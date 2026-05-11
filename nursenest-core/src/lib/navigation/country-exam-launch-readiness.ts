@@ -100,7 +100,7 @@ export const PATHWAY_LAUNCH_APPROVED: ReadonlySet<string> = new Set([
   "us-np-pmhnp",
   "us-np-whnp",
   "us-np-pnp-pc",
-  /** Canadian NP hub (marketing tier surface + waitlist; content grows on snapshot). */
+  /** Canadian NP hub. */
   "ca-np-cnple",
   /** New grad transition lessons (NEW_GRAD tier). */
   "us-rn-new-grad-transition",
@@ -112,12 +112,9 @@ export const PATHWAY_LAUNCH_APPROVED: ReadonlySet<string> = new Set([
 /** When an expansion region clears market + hub checks, add it here to allow `published` (rare). */
 export const GLOBAL_REGION_EXPANSION_PUBLISHED: ReadonlySet<GlobalRegionSlug> = new Set([]);
 
-/** Canadian CNPLE hub: marketing shell + waitlist before full lesson/question scale (see snapshot). */
-const CA_NP_CNPLE_PATHWAY_ID = "ca-np-cnple";
-
 /**
  * NP marketing hubs ship with a lower committed-lesson floor than RN/PN (pathway catalogs are smaller per track).
- * Still requires a real lesson inventory for US NP tracks; CNPLE waitlist shell is exempt via {@link CA_NP_CNPLE_PATHWAY_ID}.
+ * Still requires a real lesson inventory for every NP track.
  */
 const NP_PUBLIC_LESSON_FLOOR = 85;
 
@@ -215,10 +212,9 @@ export function evaluatePathwayLaunchReadiness(
     detail: labelOk ? undefined : "Titles too short or contain placeholder language",
   });
 
-  const isCaNpCnpleWaitlistShell = pathway.id === CA_NP_CNPLE_PATHWAY_ID;
   const isIntlFoundation = isIntlRnFoundationPathwayId(pathway.id);
   const isNpFamily = pathway.examFamily === ExamFamily.NP;
-  const minLessonsRequired = isIntlFoundation || isCaNpCnpleWaitlistShell
+  const minLessonsRequired = isIntlFoundation
     ? 0
     : isNpFamily
       ? NP_PUBLIC_LESSON_FLOOR
@@ -231,7 +227,7 @@ export function evaluatePathwayLaunchReadiness(
     detail: lessonsOk ? undefined : `Have ${lessons}; target ${minLessonsRequired}+`,
   });
 
-  const minQuestionsRequired = isIntlFoundation || isCaNpCnpleWaitlistShell ? 0 : MIN_PATHWAY_QUESTIONS_PUBLISH;
+  const minQuestionsRequired = isIntlFoundation ? 0 : MIN_PATHWAY_QUESTIONS_PUBLISH;
   const questionsOk = questions >= minQuestionsRequired;
   checks.push({
     code: "min_questions",
@@ -256,7 +252,7 @@ export function evaluatePathwayLaunchReadiness(
     detail: seoClean ? undefined : "SEO title or description matches placeholder heuristics",
   });
 
-  const nonEmpty = isIntlFoundation || isCaNpCnpleWaitlistShell || (lessons >= 1 && questions >= 1);
+  const nonEmpty = isIntlFoundation || (lessons >= 1 && questions >= 1);
   checks.push({
     code: "inventory_non_empty",
     label: "Non-empty lesson & question inventory",

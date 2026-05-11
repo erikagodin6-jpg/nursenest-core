@@ -98,7 +98,7 @@ export const LOCALIZED_SEO_SURFACES: readonly LocalizedSeoSurface[] = [
   {
     surfaceType: "np-hub",
     englishPath: "/canada/np/cnple",
-    internalRouteId: "pathway.ca-np-cnpe",
+    internalRouteId: "pathway.ca-np-cnple",
     indexable: true,
     supportsLocalizedSlug: false,
     supportsLocalizedRoute: false,

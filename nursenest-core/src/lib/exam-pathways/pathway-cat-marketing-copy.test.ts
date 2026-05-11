@@ -55,12 +55,13 @@ describe("pathway CAT marketing copy", () => {
     }
   });
 
-  it("CNPLE beta public copy names the track when pathway context is passed", () => {
+  it("CNPLE public copy is no longer beta-only once the pathway is launchable", () => {
     const pathway = getExamPathwayById("ca-np-cnple");
     assert.ok(pathway);
     const rc = readinessConfigForPathway(pathway);
     const pc = publicCopyForReadinessConfig(rc, pathway);
-    assert.equal(pc.betaLabel, "Canadian NP (CNPLE) beta");
+    assert.equal(pc.effectiveMode, "mini_adaptive");
+    assert.equal(pc.betaLabel, null);
   });
 });
 
@@ -78,8 +79,13 @@ describe("marketing CAT route source (static string regression)", () => {
 describe("CAT eligibility server module (static regression)", () => {
   it("keeps staff/admin entitlement bypass before subscription tier checks", () => {
     const src = readFileSync(join(__dirname, "cat-eligibility.ts"), "utf8");
+    const entitlementsSrc = readFileSync(join(__dirname, "pathway-entitlements-policy.ts"), "utf8");
     assert.ok(
-      src.includes("accessScopeIsStaffLearnerEntitlementBypass(entitlement)"),
+      src.includes("subscriptionCoversPathwayBase(entitlement, pathway)"),
+      "CAT eligibility must delegate server-side pathway coverage checks",
+    );
+    assert.ok(
+      entitlementsSrc.includes("accessScopeIsStaffLearnerEntitlementBypass(scope)"),
       "staff bypass must stay server-side for CAT marketing + app gates",
     );
   });

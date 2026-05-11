@@ -788,12 +788,12 @@ async function resolveMarketingHubRenderableLessonList(
   const qRaw = normalizePathwayHubSearchQuery(listOptions?.q);
   const qLower = qRaw ? qRaw.toLowerCase() : "";
 
-  let publishedCrossLocaleCount: number;
+  let publishedCrossLocaleCount = 0;
   try {
     publishedCrossLocaleCount = await assertPublishedLessonInventoryDbReachable(pathwayId);
   } catch (e) {
     const err = HubLessonsListDatabaseError.fromCaughtUnknown(e, "pathway_published_lesson_count_all_locales");
-    safeServerLog("pathway_lessons", "hub_list_db_unavailable_fail_closed", {
+    safeServerLog("pathway_lessons", "hub_list_db_unavailable_catalog_fallback", {
       pathwayId,
       hubSearch: qRaw ? "1" : "0",
       db_failure_category: err.category,
@@ -803,7 +803,6 @@ async function resolveMarketingHubRenderableLessonList(
       hub_search: qRaw ? "1" : "0",
       db_failure_category: err.category,
     });
-    throw err;
   }
 
   const dbAny = publishedCrossLocaleCount > 0;
@@ -822,7 +821,11 @@ async function resolveMarketingHubRenderableLessonList(
     );
     const dbQueryMs = Math.round(performance.now() - tDbQuery0);
     const truncatedDbScan = sqlDbOnly > dbChunked.length;
-    const rawInputs = [...goldsFiltered, ...dbChunked];
+    const catalogFallback =
+      dbChunked.length === 0
+        ? getCatalogLessonsRaw(pathwayId).filter((row) => (qRaw ? lessonInputMatchesHubSearch(row, qLower) : true))
+        : [];
+    const rawInputs = [...goldsFiltered, ...dbChunked, ...catalogFallback];
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     const tNorm0 = performance.now();
     const hubNormalized = rawInputs.map((row) =>
@@ -884,6 +887,7 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
       gold_injected: String(goldsFiltered.length),
       sql_db_published_effective_locale: String(sqlDbOnly),
       db_chunk_scanned: String(dbChunked.length),
+      catalog_fallback: String(catalogFallback.length),
       after_initial_merge: String(rawInputs.length),
       after_normalization: String(hubNormalized.length),
       after_safe_slug: String(afterSafeSlug.length),

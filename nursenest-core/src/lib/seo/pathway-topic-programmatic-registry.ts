@@ -170,6 +170,347 @@ const PRIORITIZATION_TOPICS: PrioTopic[] = [
   },
 ];
 
+type NpConditionTopic = { key: string; label: string; angle: string; studyTip: string };
+
+const NP_CONDITION_TOPICS: NpConditionTopic[] = [
+  {
+    key: "hypertension",
+    label: "hypertension",
+    angle: "diagnosis thresholds, home readings, first-line therapy, and follow-up intensification",
+    studyTip: "Practice matching blood pressure patterns, comorbidities, and medication choice before you memorize isolated guideline numbers.",
+  },
+  {
+    key: "coronary-artery-disease",
+    label: "coronary artery disease",
+    angle: "stable ischemic symptoms, antianginal therapy, risk reduction, and escalation cues",
+    studyTip: "Separate stable outpatient management from ACS red flags so you do not overcall or under-triage chest pain stems.",
+  },
+  {
+    key: "heart-failure",
+    label: "heart failure",
+    angle: "volume assessment, GDMT titration, decompensation recognition, and patient teaching",
+    studyTip: "Link each symptom cluster to preload, afterload, or pump failure so interventions feel logical under time pressure.",
+  },
+  {
+    key: "atrial-fibrillation",
+    label: "atrial fibrillation",
+    angle: "rate versus rhythm control, stroke prevention, and urgent instability signals",
+    studyTip: "When AFib shows up in review, decide anticoagulation risk and hemodynamic stability before you chase rhythm language.",
+  },
+  {
+    key: "asthma",
+    label: "asthma",
+    angle: "stepwise outpatient control, inhaler strategy, triggers, and exacerbation rescue decisions",
+    studyTip: "Review controller versus reliever roles side by side so medication questions stay tied to severity and symptom frequency.",
+  },
+  {
+    key: "copd",
+    label: "COPD",
+    angle: "GOLD staging, inhaler escalation, oxygen safety, and exacerbation prevention",
+    studyTip: "Use symptom burden plus exacerbation history as your anchor for inhaler escalation instead of memorizing drug names alone.",
+  },
+  {
+    key: "pneumonia",
+    label: "pneumonia",
+    angle: "outpatient versus inpatient decisions, antibiotic selection, and return precautions",
+    studyTip: "Sort CAP stems by severity and follow-up risk so you can justify treatment setting, not just antibiotic choice.",
+  },
+  {
+    key: "pulmonary-embolism",
+    label: "pulmonary embolism",
+    angle: "pretest probability, imaging strategy, anticoagulation, and emergency escalation",
+    studyTip: "Practice choosing the next diagnostic step from Wells-style risk framing before you think about definitive therapy.",
+  },
+  {
+    key: "type-2-diabetes",
+    label: "type 2 diabetes",
+    angle: "A1c targets, medication sequencing, complication screening, and insulin escalation",
+    studyTip: "Build quick treatment ladders around A1c, CKD, ASCVD, and obesity so board stems map to one clinical plan.",
+  },
+  {
+    key: "hypothyroidism",
+    label: "hypothyroidism",
+    angle: "screening, lab interpretation, levothyroxine dosing, and follow-up timing",
+    studyTip: "Compare hypothyroid and hyperthyroid cue clusters in the same study block so TSH-based decisions stay sharp.",
+  },
+  {
+    key: "dyslipidemia",
+    label: "dyslipidemia",
+    angle: "ASCVD risk framing, statin intensity, triglyceride traps, and monitoring",
+    studyTip: "Treat lipid questions like risk stratification questions first, medication questions second.",
+  },
+  {
+    key: "osteoporosis",
+    label: "osteoporosis",
+    angle: "screening, fracture risk, calcium/vitamin D counseling, and pharmacotherapy sequencing",
+    studyTip: "Tie bone density decisions to age, fracture history, and steroid exposure so treatment thresholds feel predictable.",
+  },
+  {
+    key: "osteoarthritis",
+    label: "osteoarthritis",
+    angle: "diagnosis, exercise and weight strategies, analgesic ladders, and referral thresholds",
+    studyTip: "Keep OA management ordered from function-first measures to injections and surgery so you do not jump to invasive answers.",
+  },
+  {
+    key: "gout",
+    label: "gout",
+    angle: "flare treatment, urate-lowering therapy, dietary triggers, and renal considerations",
+    studyTip: "Separate acute-flare decisions from chronic urate control so treatment timing stays correct in question stems.",
+  },
+  {
+    key: "low-back-pain",
+    label: "low back pain",
+    angle: "red flags, radiculopathy clues, imaging thresholds, and conservative management",
+    studyTip: "Ask yourself whether the stem is routine MSK pain or a hidden cauda equina / malignancy / infection question.",
+  },
+  {
+    key: "allergic-rhinitis",
+    label: "allergic rhinitis",
+    angle: "trigger control, intranasal therapy, adjunct medications, and overlap with sinus complaints",
+    studyTip: "Compare allergic rhinitis, viral URI, and bacterial sinusitis in one pass so similar HEENT stems stop blurring together.",
+  },
+  {
+    key: "otitis-externa",
+    label: "otitis externa",
+    angle: "ear pain differentials, topical therapy, wick indications, and red flags for referral",
+    studyTip: "Keep swimmer's ear decisions tied to canal findings and diabetes/immunocompromise risks.",
+  },
+  {
+    key: "glaucoma",
+    label: "glaucoma recognition",
+    angle: "screening context, acute angle-closure emergencies, and urgent referral cues",
+    studyTip: "Treat glaucoma questions as recognition and triage questions first; definitive ophthalmology treatment comes after safety.",
+  },
+  {
+    key: "conjunctivitis",
+    label: "conjunctivitis",
+    angle: "viral, bacterial, and allergic differentiation plus red-eye danger signs",
+    studyTip: "Red-eye stems become easier when you separate discharge pattern, pain, vision change, and contact-lens risk immediately.",
+  },
+  {
+    key: "gerd",
+    label: "GERD",
+    angle: "alarm features, empiric treatment, lifestyle changes, and escalation to endoscopy",
+    studyTip: "Anchor GERD questions on alarm symptoms and response-to-therapy checkpoints so you know when it stops being routine reflux.",
+  },
+  {
+    key: "irritable-bowel-syndrome",
+    label: "irritable bowel syndrome",
+    angle: "Rome-style symptom framing, diet strategies, subtype-directed therapy, and red-flag exclusions",
+    studyTip: "IBS stems are usually about ruling out danger signs before you commit to symptom-based management.",
+  },
+  {
+    key: "cancer-screening",
+    label: "cancer screening",
+    angle: "USPSTF-style age/risk decisions across breast, cervical, colorectal, and lung screening",
+    studyTip: "Study screening tables as patient profiles, not isolated ages, so you can answer nuance-heavy preventive care stems.",
+  },
+  {
+    key: "immunization-schedules",
+    label: "immunization schedules",
+    angle: "adult catch-up plans, risk-based vaccination, pregnancy considerations, and counseling",
+    studyTip: "Pair vaccine recommendations with the risk factor that triggered them so catch-up questions stay clinically grounded.",
+  },
+  {
+    key: "well-child-care",
+    label: "well-child care",
+    angle: "anticipatory guidance, developmental surveillance, vaccine timing, and parent teaching",
+    studyTip: "Use age bands and milestone checkpoints as your framework so pediatric prevention questions feel chronological instead of random.",
+  },
+  {
+    key: "insomnia",
+    label: "insomnia",
+    angle: "sleep history, behavioral treatment, medication caution, and comorbidity screening",
+    studyTip: "Sleep questions usually reward cause-finding and CBT-I logic before sedative prescribing.",
+  },
+  {
+    key: "restless-legs-syndrome",
+    label: "restless legs syndrome",
+    angle: "diagnosis, iron deficiency workup, medication triggers, and treatment sequencing",
+    studyTip: "Keep RLS tied to timing, urge-to-move symptoms, and ferritin review so it does not blur with neuropathy or cramps.",
+  },
+  {
+    key: "stable-angina",
+    label: "stable angina",
+    angle: "exertional symptom recognition, antianginal therapy, and when ischemia becomes unstable",
+    studyTip: "Sort chronic angina, ACS, and noncardiac chest pain by timing and danger signs before you pick medications.",
+  },
+  {
+    key: "peripheral-artery-disease",
+    label: "peripheral artery disease",
+    angle: "claudication assessment, ABI use, risk-factor treatment, and referral thresholds",
+    studyTip: "PAD questions are often vascular-risk questions in disguise, so connect symptoms to smoking, statins, and walking plans.",
+  },
+  {
+    key: "chronic-kidney-disease",
+    label: "chronic kidney disease",
+    angle: "eGFR staging, ACEi/ARB use, anemia and bone-disease screening, and nephrology referral",
+    studyTip: "Use albuminuria plus eGFR as your frame so CKD stems stay anchored to progression risk, not just lab recall.",
+  },
+  {
+    key: "urinary-tract-infection",
+    label: "urinary tract infection",
+    angle: "simple cystitis decisions, culture use, pregnancy considerations, and return precautions",
+    studyTip: "Separate uncomplicated UTI treatment from pyelonephritis or STI mimics before you commit to antibiotics.",
+  },
+  {
+    key: "pyelonephritis",
+    label: "pyelonephritis",
+    angle: "upper-tract infection recognition, imaging escalation, and outpatient versus inpatient treatment",
+    studyTip: "Look for fever, flank pain, vomiting, and sepsis cues first; setting of care matters as much as the antibiotic choice.",
+  },
+  {
+    key: "benign-prostatic-hyperplasia",
+    label: "benign prostatic hyperplasia",
+    angle: "LUTS evaluation, medication options, retention red flags, and shared decision-making",
+    studyTip: "Frame BPH stems around obstruction severity and urinary retention risk instead of prostate size trivia.",
+  },
+  {
+    key: "depression",
+    label: "depression",
+    angle: "screening, safety assessment, first-line therapy, and follow-up planning in primary care",
+    studyTip: "Always decide safety and severity before you choose SSRI, therapy referral, or watchful follow-up.",
+  },
+  {
+    key: "anxiety",
+    label: "anxiety disorders",
+    angle: "screening, differential diagnosis, CBT and SSRI strategy, and panic red flags",
+    studyTip: "Use impairment plus duration to separate generalized anxiety, panic, and normal stress responses in stems.",
+  },
+  {
+    key: "peripheral-neuropathy",
+    label: "peripheral neuropathy",
+    angle: "diabetes linkage, reversible causes, neuro exam clues, and medication choices",
+    studyTip: "Build a quick reversible-causes checklist so neuropathy questions stay diagnostic, not purely symptomatic.",
+  },
+  {
+    key: "bell-palsy",
+    label: "Bell palsy",
+    angle: "facial weakness differentiation, steroid timing, eye protection, and stroke exclusions",
+    studyTip: "Bell palsy stems reward anatomy-based thinking: forehead involvement and neuro deficits change everything.",
+  },
+  {
+    key: "carpal-tunnel-syndrome",
+    label: "carpal tunnel syndrome",
+    angle: "history and exam clues, splinting, injections, and referral for decompression",
+    studyTip: "Tie numbness distribution to nighttime symptoms and repetitive-use risk before you jump to imaging or surgery.",
+  },
+  {
+    key: "skin-lesion-identification",
+    label: "skin lesion identification",
+    angle: "benign versus concerning lesions, ABCDE melanoma cues, and biopsy referral",
+    studyTip: "When derm stems feel vague, step back and decide whether the exam is asking reassurance, treatment, or cancer recognition.",
+  },
+  {
+    key: "rosacea",
+    label: "rosacea",
+    angle: "trigger management, topical and oral therapy, and ocular complication cues",
+    studyTip: "Compare acne, rosacea, and seborrheic dermatitis in one block so facial-rash stems stop blending together.",
+  },
+  {
+    key: "tinea",
+    label: "tinea infections",
+    angle: "distribution patterns, topical versus oral treatment, and recurrence prevention",
+    studyTip: "Use lesion location and hair/nail involvement to decide whether topical therapy is enough.",
+  },
+  {
+    key: "scabies",
+    label: "scabies",
+    angle: "itch pattern recognition, household treatment, and reinfestation prevention",
+    studyTip: "Scabies questions get easier when you think about contacts and environment, not just the single patient.",
+  },
+  {
+    key: "herpes-simplex",
+    label: "herpes simplex",
+    angle: "lesion recognition, antiviral timing, counseling, and differential diagnosis",
+    studyTip: "Anchor HSV decisions on stage of outbreak, patient population, and whether the question is treatment or counseling.",
+  },
+  {
+    key: "obesity",
+    label: "obesity management",
+    angle: "behavioral treatment, pharmacotherapy, comorbidity framing, and follow-up expectations",
+    studyTip: "Treat obesity stems as chronic-disease management plans, not as isolated diet advice questions.",
+  },
+  {
+    key: "metabolic-syndrome",
+    label: "metabolic syndrome",
+    angle: "risk clustering, lifestyle priorities, and coordination of glucose, lipid, and blood pressure management",
+    studyTip: "Look for the pattern of risk factors rather than chasing one abnormal lab in isolation.",
+  },
+  {
+    key: "smoking-cessation",
+    label: "smoking cessation",
+    angle: "motivational interviewing, nicotine replacement, varenicline/bupropion, and relapse prevention",
+    studyTip: "Smoking-cessation questions usually reward stage-of-change counseling plus one concrete medication plan.",
+  },
+  {
+    key: "constipation",
+    label: "constipation",
+    angle: "alarm features, medication causes, bowel regimen design, and escalation to workup",
+    studyTip: "Decide first whether the stem is routine constipation or a hidden obstruction / malignancy / med adverse-effect question.",
+  },
+  {
+    key: "chronic-diarrhea",
+    label: "chronic diarrhea",
+    angle: "infectious versus inflammatory clues, dehydration risk, and initial outpatient workup",
+    studyTip: "Separate acute infection logic from chronic-weight-loss and alarm-feature logic before you choose tests.",
+  },
+  {
+    key: "celiac-disease",
+    label: "celiac disease",
+    angle: "screening, serology interpretation, nutrition counseling, and confirmation steps",
+    studyTip: "Keep celiac review linked to iron deficiency, diarrhea, dermatitis herpetiformis, and gluten-exposure testing rules.",
+  },
+  {
+    key: "peptic-ulcer-disease",
+    label: "peptic ulcer disease",
+    angle: "H. pylori strategy, NSAID risk, bleeding red flags, and treatment follow-up",
+    studyTip: "Ulcer stems usually hinge on cause and complication risk, not just whether to hand out a PPI.",
+  },
+  {
+    key: "hepatitis-c",
+    label: "hepatitis C",
+    angle: "screening, staging basics, counseling, and referral for antiviral treatment",
+    studyTip: "Think population screening plus liver-disease risk reduction, not memorization of specialty antiviral regimens.",
+  },
+  {
+    key: "cirrhosis",
+    label: "cirrhosis outpatient care",
+    angle: "decompensation recognition, monitoring, vaccination, and ascites/hepatic encephalopathy follow-up",
+    studyTip: "Cirrhosis questions reward complication surveillance and escalation planning more than one-off lab memorization.",
+  },
+  {
+    key: "prostate-cancer-screening",
+    label: "prostate cancer screening",
+    angle: "shared decision-making, PSA interpretation context, and when to investigate further",
+    studyTip: "Screening stems are usually about counseling and risk discussion, not reflexive testing.",
+  },
+  {
+    key: "advance-care-planning",
+    label: "advance care planning",
+    angle: "goals-of-care conversations, documentation, and family-centered primary-care follow-up",
+    studyTip: "Communication stems improve when you focus on eliciting values before you jump to forms or orders.",
+  },
+  {
+    key: "geriatric-assessment",
+    label: "geriatric assessment",
+    angle: "falls, cognition, function, polypharmacy, and caregiver planning in one outpatient workflow",
+    studyTip: "Approach geriatric cases as multidomain assessments; one symptom rarely explains the whole presentation.",
+  },
+  {
+    key: "joint-injection",
+    label: "joint injection decisions",
+    angle: "indications, contraindications, counseling, and when procedures should escalate to referral",
+    studyTip: "Procedure questions are usually safety questions: infection, anticoagulation, diagnosis certainty, and follow-up.",
+  },
+  {
+    key: "skin-biopsy",
+    label: "skin biopsy decisions",
+    angle: "which lesions warrant biopsy, referral timing, and patient counseling on next steps",
+    studyTip: "If a lesion stem feels uncertain, decide first whether reassurance is safe or tissue diagnosis is the real priority.",
+  },
+];
+
 function linkPackForPathwayId(id: string): NonNullable<SeoPageDefinition["linkPack"]> {
   if (id.includes("allied")) return "allied";
   if (id.includes("np-")) return "np";
@@ -468,6 +809,59 @@ function buildPrioPage(pathway: ExamPathwayDefinition, topic: PrioTopic, seoSlug
   };
 }
 
+function buildNpConditionPage(
+  pathway: ExamPathwayDefinition,
+  topic: NpConditionTopic,
+  seoSlug: string,
+): SeoPageDefinition {
+  const h1 = `${pathway.shortName} prep for ${topic.label}`;
+  return {
+    slug: seoSlug,
+    title: `${h1} | Nurse Practitioner Review | ${SITE}`,
+    description: `NP prep for ${topic.label} on ${pathway.displayName}: lessons, practice flow, and clinical decision-making cues focused on ${topic.angle}.`,
+    h1,
+    cluster: "exam-np",
+    pageKind: "topic-guide" satisfies SeoPageKind,
+    keywords: [pathway.shortName, topic.label, "nurse practitioner", "practice questions", "lessons"],
+    linkPack: "np",
+    practiceConversion: false,
+    sections: [
+      {
+        heading: `How ${topic.label} appears on ${pathway.shortName} questions`,
+        level: 2,
+        body: [
+          `${pathway.displayName} prep for ${topic.label} usually tests ${topic.angle}.`,
+          `NurseNest keeps these pages pathway-scoped so the lessons, pricing, and downstream study routes stay aligned with ${pathway.shortName} rather than a generic NP bucket.`,
+        ],
+      },
+      {
+        heading: "What strong NP answers usually show",
+        level: 2,
+        body: [
+          `Strong answers connect focused assessment, differential diagnosis, diagnostics, and a next-step plan instead of naming the condition alone.`,
+          `For ${topic.label}, review when primary-care management is appropriate, which red flags force escalation or referral, and how follow-up changes after the initial plan is started.`,
+        ],
+      },
+      {
+        heading: "Study loop for condition-specific NP review",
+        level: 2,
+        body: [
+          topic.studyTip,
+          "Run a short lesson block first, then switch to pathway questions or flashcards so recognition, treatment selection, and patient teaching reinforce each other.",
+        ],
+      },
+      {
+        heading: "Where to go next in NurseNest",
+        level: 2,
+        body: [
+          `Use the ${pathway.shortName} lessons hub for deeper review, then move into questions, flashcards, and adaptive practice under the same pathway.`,
+          "That keeps your follow-up study loop inside one product track instead of splitting topic review across unrelated routes.",
+        ],
+      },
+    ],
+  };
+}
+
 export type PathwayTopicProgrammaticRow = {
   pathwayId: string;
   seoSlug: string;
@@ -543,6 +937,18 @@ function expandRowsForPathway(pathway: ExamPathwayDefinition): PathwayTopicProgr
         seoSlug,
         publicRelativePath: buildExamPathwayPath(pathway, seoSlug),
         page: buildPrioPage(pathway, pr, seoSlug),
+      });
+    }
+  }
+
+  if (pathway.id.includes("np-")) {
+    for (const topic of NP_CONDITION_TOPICS) {
+      const seoSlug = `np-condition-${topic.key}`;
+      rows.push({
+        pathwayId: pathway.id,
+        seoSlug,
+        publicRelativePath: buildExamPathwayPath(pathway, seoSlug),
+        page: buildNpConditionPage(pathway, topic, seoSlug),
       });
     }
   }

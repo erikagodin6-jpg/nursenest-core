@@ -36,7 +36,14 @@ test("us-rn-nclex-rn practice hub inventory excludes ECG and module-only rows un
   const serialized = JSON.stringify(where);
 
   assert.deepEqual(NON_ECG_PRACTICE_EXAM_WHERE, {
-    NOT: [{ questionFormat: "ecg_video" }, { tags: { has: "ecg-video" } }],
+    AND: [
+      {
+        OR: [{ questionFormat: null }, { questionFormat: { not: "ecg_video" } }],
+      },
+      {
+        NOT: { tags: { has: "ecg-video" } },
+      },
+    ],
   });
   assert.deepEqual(generalStudyBankModuleSurfaceWhere(), {
     OR: [

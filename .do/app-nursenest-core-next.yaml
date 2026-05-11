@@ -121,7 +121,9 @@ services:
       timeout_seconds: 15
     http_port: 8080
     instance_count: 1
-    instance_size_slug: basic-xs
+    # Production baseline matches docs/deploy-safety.md: keep NurseNest off basic-xs so standalone
+    # startup + readiness probes have enough CPU/RAM headroom during real deploys.
+    instance_size_slug: basic-s
     liveness_health_check:
       failure_threshold: 12
       http_path: /healthz
