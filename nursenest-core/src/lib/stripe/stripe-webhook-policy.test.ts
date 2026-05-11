@@ -93,4 +93,36 @@ describe("stripe webhook policy (static)", () => {
     assert.match(checkout, /line_items:\s*\[\{\s*price:\s*priceId/);
     assert.ok(!/req\.json\(\)/.test(checkout), "use size-limited JSON parse");
   });
+
+  it("checkout writes plan country metadata onto subscription_data for later webhook/reconcile sync", () => {
+    const checkout = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "subscriptions", "checkout", "route.ts"),
+      "utf8",
+    );
+    assert.match(checkout, /const subscriptionMetadata: Record<string, string>/);
+    assert.match(checkout, /subscriptionMetadata\.country = metadata\.country/);
+    assert.match(checkout, /metadata: subscriptionMetadata/);
+  });
+
+  it("webhook and reconcile sync user country from subscription metadata or preserved row context, not raw price id alone", () => {
+    const applySrc = readFileSync(join(nursenestCoreRoot, "src", "lib", "stripe", "apply-stripe-webhook-event.ts"), "utf8");
+    const reconcileSrc = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "subscriptions", "stripe-subscription-reconcile.ts"),
+      "utf8",
+    );
+    const runSrc = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "stripe", "stripe-subscription-reconciliation-run.ts"),
+      "utf8",
+    );
+
+    assert.match(applySrc, /const metadataPlan = planFromCheckoutMetadata\(stripeSubMeta\)/);
+    assert.match(applySrc, /syncUserFromStripePriceId\(row\.userId, priceId, metadataPlan\?\.country \?\? row\.planCountry \?\? null\)/);
+
+    assert.match(reconcileSrc, /const metadataPlan = planFromCheckoutMetadata\(stripeMeta\)/);
+    assert.match(reconcileSrc, /syncUserFromStripePriceId\(rowForSync\.userId, priceId, rowForSync\.planCountry \?\? null\)/);
+
+    assert.match(runSrc, /const metadataPlan = planFromCheckoutMetadata\(stripeMeta\)/);
+    assert.match(runSrc, /syncUserFromStripePriceId\(metadataUserId, priceId, resolvedPlanCountry\)/);
+    assert.match(runSrc, /syncUserFromStripePriceId\(row\.userId, priceId, resolvedPlanCountry \?\? row\.planCountry \?\? null\)/);
+  });
 });

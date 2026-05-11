@@ -26,7 +26,7 @@ describe("findTierCountryByPriceId (shared allied Stripe price)", () => {
     assert.ok(mapped);
     assert.equal(mapped!.tier, "ALLIED");
     assert.equal(mapped!.alliedCareer, undefined);
-    assert.ok(mapped!.country === "CA" || mapped!.country === "US");
+    assert.equal(mapped!.country, undefined);
     assert.equal(mapped!.duration, "monthly");
   });
 });

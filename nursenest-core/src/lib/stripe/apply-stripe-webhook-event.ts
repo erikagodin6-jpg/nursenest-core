@@ -193,6 +193,8 @@ async function applyCustomerSubscriptionUpsert(
   });
   const priceId = firstSubscriptionPriceId(sub);
   const mapped = priceId ? findTierCountryByPriceId(priceId) : undefined;
+  const stripeSubMeta = (sub.metadata && typeof sub.metadata === "object" ? sub.metadata : {}) as Record<string, string>;
+  const metadataPlan = planFromCheckoutMetadata(stripeSubMeta);
   if (priceId && !mapped) {
     safeServerLog("stripe_webhook", "unknown_subscription_price_id", {
       priceIdPrefix: priceId.slice(0, 28),
@@ -201,7 +203,7 @@ async function applyCustomerSubscriptionUpsert(
     });
   }
   if (row?.userId && priceId) {
-    await syncUserFromStripePriceId(row.userId, priceId);
+    await syncUserFromStripePriceId(row.userId, priceId, metadataPlan?.country ?? row.planCountry ?? null);
   }
   if (!row) {
     const resolvedUserId = await resolveUserIdForOrphanStripeSubscription(sub);
@@ -320,15 +322,16 @@ async function applyCustomerSubscriptionUpsert(
     const pastPatch = pastDueSinceForStatusTransition(mappedStatus, row.status);
     if (pastPatch) Object.assign(data, pastPatch);
   }
-  const stripeSubMeta = (sub.metadata && typeof sub.metadata === "object" ? sub.metadata : {}) as Record<
-    string,
-    string
-  >;
   const metaCareerRaw = stripeSubMeta.alliedCareer?.trim();
 
-  if (mapped) {
-    data.planTier = mapped.tier;
-    data.planCountry = mapped.country;
+  const resolvedPlanTier = metadataPlan?.tier ?? mapped?.tier;
+  const resolvedPlanCountry = metadataPlan?.country ?? mapped?.country;
+
+  if (resolvedPlanTier) {
+    data.planTier = resolvedPlanTier;
+  }
+  if (resolvedPlanCountry != null) {
+    data.planCountry = resolvedPlanCountry;
   }
   if (mapped?.tier === TierCode.ALLIED || Boolean(metaCareerRaw)) {
     if (metaCareerRaw && isValidAlliedCareerKey(metaCareerRaw)) {

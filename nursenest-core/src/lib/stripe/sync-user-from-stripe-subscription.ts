@@ -1,4 +1,4 @@
-import { TierCode, type Prisma } from "@prisma/client";
+import { CountryCode, TierCode, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { canonicalProfessionKeyForAlliedCareer } from "@/lib/allied/allied-billing-career-resolution";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -35,7 +35,11 @@ export async function syncUserFromCheckoutSessionMetadata(
   });
 }
 
-export async function syncUserFromStripePriceId(userId: string, priceId: string): Promise<void> {
+export async function syncUserFromStripePriceId(
+  userId: string,
+  priceId: string,
+  countryOverride?: CountryCode | null,
+): Promise<void> {
   const mapped = findTierCountryByPriceId(priceId);
   if (!mapped) {
     safeServerLog("stripe_sync", "unknown_price_id_skip_user_tier", {
@@ -43,7 +47,11 @@ export async function syncUserFromStripePriceId(userId: string, priceId: string)
     });
     return;
   }
-  const data: Prisma.UserUpdateInput = { tier: mapped.tier, country: mapped.country };
+  const resolvedCountry = countryOverride === undefined ? mapped.country : countryOverride;
+  const data: Prisma.UserUpdateInput = { tier: mapped.tier };
+  if (resolvedCountry != null) {
+    data.country = resolvedCountry;
+  }
   /**
    * Shared Allied Stripe prices do not encode occupation — never infer `alliedProfessionKey` from price id alone
    * (would incorrectly pin a single career from duplicate matrix rows).
@@ -54,7 +62,7 @@ export async function syncUserFromStripePriceId(userId: string, priceId: string)
   await prisma.user.update({ where: { id: userId }, data });
   safeServerLog("stripe_sync", "user_profile_from_price_id", {
     tier: mapped.tier,
-    country: mapped.country,
+    country: resolvedCountry ?? undefined,
     alliedCareer: mapped.alliedCareer ?? undefined,
   });
 }

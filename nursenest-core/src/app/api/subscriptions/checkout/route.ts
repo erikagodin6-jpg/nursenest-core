@@ -440,33 +440,33 @@ export async function POST(req: Request) {
       metadata.pathwayKey = `allied-${canonicalProfessionKeyForAlliedCareer(careerKey)}`.replace(/--+/g, "-");
     }
 
+    const subscriptionMetadata: Record<string, string> = {
+      userId,
+      tier,
+      duration,
+      planCode,
+      app: "nursenest-core",
+    };
+    if (metadata.region) {
+      subscriptionMetadata.region = metadata.region;
+    }
+    if (metadata.country) {
+      subscriptionMetadata.country = metadata.country;
+    }
+    if (careerKey) {
+      subscriptionMetadata.alliedCareer = careerKey;
+      subscriptionMetadata.alliedProfessionKey = canonicalProfessionKeyForAlliedCareer(careerKey);
+    }
+
     const subscriptionData =
       trialDays > 0
         ? {
             trial_period_days: trialDays,
-            ...(careerKey
-              ? {
-                  metadata: {
-                    userId,
-                    tier: "ALLIED",
-                    alliedCareer: careerKey,
-                    alliedProfessionKey: canonicalProfessionKeyForAlliedCareer(careerKey),
-                    app: "nursenest-core",
-                  },
-                }
-              : {}),
+            metadata: subscriptionMetadata,
           }
-        : careerKey
-          ? {
-              metadata: {
-                userId,
-                tier: "ALLIED",
-                alliedCareer: careerKey,
-                alliedProfessionKey: canonicalProfessionKeyForAlliedCareer(careerKey),
-                app: "nursenest-core",
-              },
-            }
-          : undefined;
+        : {
+            metadata: subscriptionMetadata,
+          };
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",

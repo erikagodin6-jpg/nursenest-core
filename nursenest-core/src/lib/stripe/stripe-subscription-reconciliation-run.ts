@@ -23,9 +23,10 @@
  * @see `/api/admin/billing/stripe-reconcile` — on-demand dry-run (any staff); **`?apply=1` super-tier + reason + confirm header** (see route)
  */
 import type Stripe from "stripe";
-import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
+import { Prisma, SubscriptionStatus, type CountryCode, type TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
+import { planFromCheckoutMetadata } from "@/lib/stripe/checkout-plan-metadata";
 import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
 import { syncUserFromStripePriceId } from "@/lib/stripe/sync-user-from-stripe-subscription";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -361,8 +362,11 @@ export async function runStripeSubscriptionReconciliation(
       string,
       string
     >;
+    const metadataPlan = planFromCheckoutMetadata(stripeMeta);
     const rawUserId = typeof stripeMeta.userId === "string" ? stripeMeta.userId.trim() : "";
     const metadataUserId = rawUserId.length ? rawUserId : null;
+    const resolvedPlanTier = metadataPlan?.tier ?? mapped?.tier ?? null;
+    const resolvedPlanCountry: CountryCode | null = metadataPlan?.country ?? mapped?.country ?? null;
 
     const row = dbByStripeId.get(sub.id);
     if (!row) {
@@ -427,8 +431,8 @@ export async function runStripeSubscriptionReconciliation(
                   stripeCustomerId: customerId,
                   status: mappedStatus,
                   ...(mappedStatus === SubscriptionStatus.PAST_DUE ? { pastDueSince: new Date() } : {}),
-                  planTier: mapped?.tier ?? undefined,
-                  planCountry: mapped?.country ?? undefined,
+                  planTier: resolvedPlanTier ?? undefined,
+                  planCountry: resolvedPlanCountry ?? undefined,
                   planCode: planCodeMeta || undefined,
                   billingRegionSlug: billingRegionMeta || undefined,
                   currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
@@ -446,7 +450,7 @@ export async function runStripeSubscriptionReconciliation(
                 ),
               });
               if (priceId) {
-                await syncUserFromStripePriceId(metadataUserId, priceId);
+                await syncUserFromStripePriceId(metadataUserId, priceId, resolvedPlanCountry);
                 report.apply.userSyncsApplied += 1;
               }
             }
@@ -504,19 +508,19 @@ export async function runStripeSubscriptionReconciliation(
     const patch: Prisma.SubscriptionUpdateInput = {};
     let syncUserFromPrice = false;
 
-    if (mapped) {
-      const tierOk = row.planTier === mapped.tier;
-      const countryOk = row.planCountry === mapped.country;
+    if (resolvedPlanTier) {
+      const tierOk = row.planTier === resolvedPlanTier;
+      const countryOk = resolvedPlanCountry == null || row.planCountry === resolvedPlanCountry;
       if (!tierOk || !countryOk) {
         emitBillingAudit("reconciliation_mismatch_found", {
           source: "reconciliation",
           mismatchKind: "plan_tier_country",
           subscriptionIdPrefix: prefixStripeId(sub.id),
           userIdPrefix: prefixUserId(row.userId),
-          tier: String(mapped.tier),
-          country: mapped.country,
+          tier: String(resolvedPlanTier),
+          country: resolvedPlanCountry ?? undefined,
           priorState: [row.planTier ?? "?", row.planCountry ?? "?"].join("|"),
-          newState: [mapped.tier, mapped.country].join("|"),
+          newState: [resolvedPlanTier, resolvedPlanCountry ?? "?"].join("|"),
           reason: apply ? "will_repair_if_apply" : "dry_run",
         });
         report.discrepancies.tierMismatch.push({
@@ -524,13 +528,15 @@ export async function runStripeSubscriptionReconciliation(
           userId: row.userId,
           dbPlanTier: row.planTier,
           dbPlanCountry: row.planCountry,
-          stripeMappedTier: mapped.tier,
-          stripeMappedCountry: mapped.country,
+          stripeMappedTier: resolvedPlanTier,
+          stripeMappedCountry: resolvedPlanCountry,
           priceId,
         });
-        patch.planTier = mapped.tier;
-        patch.planCountry = mapped.country;
-        if (mapped.alliedCareer) patch.alliedCareer = mapped.alliedCareer;
+        patch.planTier = resolvedPlanTier;
+        if (resolvedPlanCountry != null) {
+          patch.planCountry = resolvedPlanCountry;
+        }
+        if (mapped?.alliedCareer) patch.alliedCareer = mapped.alliedCareer;
         syncUserFromPrice = true;
       }
     }
@@ -575,7 +581,7 @@ export async function runStripeSubscriptionReconciliation(
           patchKeys,
         });
         if (syncUserFromPrice && priceId) {
-          await syncUserFromStripePriceId(row.userId, priceId);
+          await syncUserFromStripePriceId(row.userId, priceId, resolvedPlanCountry ?? row.planCountry ?? null);
           report.apply.userSyncsApplied += 1;
         }
       } catch (e) {

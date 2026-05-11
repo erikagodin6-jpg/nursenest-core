@@ -24,6 +24,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import {
   examKeyNormsForPathwayPool,
   examQuestionExamNormInSql,
+  normExamKeyForMatching,
 } from "../src/lib/content-quality/exam-question-exam-normalization";
 import { databaseUrlDriftAuditPublic } from "../src/lib/db/database-url-drift-audit";
 import {
@@ -155,11 +156,11 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
     }
   }
 
-  const matched = examDbRows.filter((r) => examLower.includes(r.exam_val));
+  const matched = examDbRows.filter((r) => examNorms.includes(normExamKeyForMatching(r.exam_val)));
   if (matched.length === 0 && scopedTotal === 0 && totalPublished > 0) {
     console.log(`\n  ⚠️  NO DB ROWS MATCH contentExamKeys — exam key mismatch!`);
-    console.log(`     Expected (lowercase) : ${examLower.join(", ")}`);
-    const found = [...new Set(examDbRows.map((r) => r.exam_val))].slice(0, 8).join(", ");
+    console.log(`     Expected (normalized) : ${examNorms.join(", ")}`);
+    const found = [...new Set(examDbRows.map((r) => normExamKeyForMatching(r.exam_val)))].slice(0, 8).join(", ");
     console.log(`     Found in DB          : ${found || "(none)"}`);
     console.log(`     FALLBACK ACTIVE      : flashcard hub will skip exam scope and use entitlement WHERE only.`);
     console.log(`     PERMANENT FIX        : re-seed ExamQuestion rows with exam matching one of the exam keys above.`);

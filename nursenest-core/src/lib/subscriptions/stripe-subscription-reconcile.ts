@@ -10,6 +10,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
+import { planFromCheckoutMetadata } from "@/lib/stripe/checkout-plan-metadata";
 import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
 import {
   guardSubscriptionCreateCustomerConsistency,
@@ -227,6 +228,7 @@ export async function persistStripeSubscriptionMirrorForUser(userId: string, sub
   const priceId = firstSubscriptionPriceId(sub);
   const mapped = priceId ? findTierCountryByPriceId(priceId) : undefined;
   const stripeMeta = (sub.metadata && typeof sub.metadata === "object" ? sub.metadata : {}) as Record<string, string>;
+  const metadataPlan = planFromCheckoutMetadata(stripeMeta);
   const planCodeMeta = stripeMeta.planCode?.trim();
   const billingRegionMeta = stripeMeta.region?.trim();
   const metaCareerRaw = stripeMeta.alliedCareer?.trim();
@@ -251,9 +253,14 @@ export async function persistStripeSubscriptionMirrorForUser(userId: string, sub
   const pastPatch = existing ? pastDueSinceForStatusTransition(mappedStatus, existing.status) : null;
   if (pastPatch) Object.assign(dataUpdate, pastPatch);
 
-  if (mapped) {
-    dataUpdate.planTier = mapped.tier;
-    dataUpdate.planCountry = mapped.country;
+  const resolvedPlanTier = metadataPlan?.tier ?? mapped?.tier;
+  const resolvedPlanCountry = metadataPlan?.country ?? mapped?.country;
+
+  if (resolvedPlanTier) {
+    dataUpdate.planTier = resolvedPlanTier;
+  }
+  if (resolvedPlanCountry != null) {
+    dataUpdate.planCountry = resolvedPlanCountry;
   }
   const resolvedAlliedCareer =
     metaCareerRaw && isValidAlliedCareerKey(metaCareerRaw)
@@ -291,8 +298,8 @@ export async function persistStripeSubscriptionMirrorForUser(userId: string, sub
         currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
         trialEnd: lifecycle.trialEnd ?? null,
         cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
-        planTier: mapped?.tier ?? undefined,
-        planCountry: mapped?.country ?? undefined,
+        planTier: resolvedPlanTier ?? undefined,
+        planCountry: resolvedPlanCountry ?? undefined,
         planCode: planCodeMeta || undefined,
         billingRegionSlug: billingRegionMeta || undefined,
         alliedCareer: resolvedAlliedCareer,
@@ -304,9 +311,9 @@ export async function persistStripeSubscriptionMirrorForUser(userId: string, sub
   if (priceId) {
     const rowForSync = await prisma.subscription.findUnique({
       where: { stripeSubscriptionId: sub.id },
-      select: { userId: true },
+      select: { userId: true, planCountry: true },
     });
-    if (rowForSync) await syncUserFromStripePriceId(rowForSync.userId, priceId);
+    if (rowForSync) await syncUserFromStripePriceId(rowForSync.userId, priceId, rowForSync.planCountry ?? null);
   }
 
   if (resolvedAlliedCareer && isValidAlliedCareerKey(resolvedAlliedCareer)) {
