@@ -7,6 +7,12 @@
  */
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import {
+  buildMissingRuntimeEnvContractMessage,
+  createEarlyRuntimeDiagnostics,
+  createRuntimeEnvProbeDiagnostics,
+  runtimeEnvProbeEnabled,
+} from "./lib/runtime-env-contract.mjs";
 
 /** Must stay aligned with `require-database-env.ts` placeholder markers. */
 const DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER = "127.0.0.1:5432/postgres";
@@ -14,6 +20,7 @@ const REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS = "postgres:postgres@127.0
 
 const OPENAI_KEY_GROUP = ["AI_INTEGRATIONS_OPENAI_API_KEY", "OPENAI_API_KEY"];
 const ADMIN_AI_GENERATION_FLAG_GROUP = ["AI_ADMIN_GENERATION_ENABLED", "AI_ADMIN_GENERation"];
+const APP_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 /** First non-empty flag wins; unknown tokens are treated as `ambiguous` (still require AI funding). */
 function parseAdminAiGenerationIntentMjs() {
@@ -168,6 +175,56 @@ function logDatabaseContractLine(payload) {
   console.info(`[nn-db-startup] ${JSON.stringify(payload)}`);
 }
 
+function validateOriginLikeSettingMjs(key) {
+  const raw = process.env[key]?.trim();
+  if (!raw) return null;
+
+  let parsed;
+  try {
+    parsed = new URL(raw);
+  } catch {
+    return `${key} must be a valid absolute http(s) origin.`;
+  }
+
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    return `${key} must use http:// or https://.`;
+  }
+
+  if (!parsed.origin) {
+    return `${key} must include an origin.`;
+  }
+
+  if ((parsed.pathname && parsed.pathname !== "/") || parsed.search || parsed.hash) {
+    return `${key} must be origin-only (for example https://www.nursenest.ca, not a path).`;
+  }
+
+  return null;
+}
+
+function collectAuthOriginIssuesMjs() {
+  const issues = [];
+  const authUrl = process.env.AUTH_URL?.trim();
+  const nextAuthUrl = process.env.NEXTAUTH_URL?.trim();
+  if (!authUrl && !nextAuthUrl) return issues;
+
+  for (const key of ["AUTH_URL", "NEXTAUTH_URL"]) {
+    const issue = validateOriginLikeSettingMjs(key);
+    if (issue) issues.push(issue);
+  }
+
+  if (authUrl && nextAuthUrl) {
+    try {
+      if (new URL(authUrl).origin !== new URL(nextAuthUrl).origin) {
+        issues.push("AUTH_URL and NEXTAUTH_URL must resolve to the same origin when both are set.");
+      }
+    } catch {
+      /* Individual parse errors are already collected above. */
+    }
+  }
+
+  return issues;
+}
+
 /** Mirrors `assertRuntimeDatabaseEnvContract` in `require-database-env.ts`. */
 function assertRuntimeDatabaseEnvContractMjs() {
   const raw = process.env.DATABASE_URL?.trim();
@@ -181,20 +238,13 @@ function assertRuntimeDatabaseEnvContractMjs() {
 
   if (!raw) {
     if (process.env.NODE_ENV === "production") {
-      let cwd = ".";
-      try {
-        cwd = process.cwd();
-      } catch {
-        /* ignore */
-      }
       throw new Error(
-        [
-          "DATABASE_URL is missing in runtime environment (not build ARG).",
-          "Runtime env did not reach the standalone Node process; inspect DigitalOcean component env attachment, source_dir, run_command, and wrapper env forwarding.",
-          `cwd=${cwd}`,
-          `NEXT_PHASE=${process.env.NEXT_PHASE ?? "(unset)"}`,
-          `npm_lifecycle_event=${process.env.npm_lifecycle_event ?? "(unset)"}`,
-        ].join(" "),
+        buildMissingRuntimeEnvContractMessage({
+          envName: "DATABASE_URL",
+          appRoot: APP_ROOT,
+          reason:
+            "Runtime env did not reach the standalone Node process; inspect DigitalOcean component env attachment, source_dir, run_command, deployment freshness, rollback state, dotenv precedence, and wrapper env forwarding.",
+        }),
       );
     }
     return;
@@ -241,29 +291,38 @@ function isAuthSecretConfiguredMjs() {
 }
 
 function collectMissingRuntimeEnvIssues() {
-  const missing = [];
+  const errors = [];
+  const warnings = [];
 
   const adminAiIntent = parseAdminAiGenerationIntentMjs();
   if (adminAiIntent === "unset") {
-    missing.push("AI_ADMIN_GENERATION_ENABLED (or accepted typo alias AI_ADMIN_GENERation)");
+    errors.push("AI_ADMIN_GENERATION_ENABLED (or accepted typo alias AI_ADMIN_GENERation)");
   }
 
   const requiresAiFunding =
     adminAiIntent === "on" || adminAiIntent === "ambiguous";
 
   if (requiresAiFunding && !satisfiesAiFundingContractMjs()) {
-    missing.push(
+    errors.push(
       `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
     );
   }
 
   if (isNonDevelopmentNodeEnv() && !isAuthSecretBuildToleranceContextMjs() && !isAuthSecretConfiguredMjs()) {
-    missing.push(
+    errors.push(
       "AUTH_SECRET (preferred) or NEXTAUTH_SECRET (legacy) — required for Auth.js JWT signing at runtime (generate: openssl rand -base64 32)",
     );
   }
 
-  return missing;
+  errors.push(...collectAuthOriginIssuesMjs());
+
+  if (isNonDevelopmentNodeEnv() && !hasTrimmedEnvMjs("STRIPE_SECRET_KEY")) {
+    warnings.push(
+      "STRIPE_SECRET_KEY missing — app boot is allowed, but checkout/session creation will fail on billing routes.",
+    );
+  }
+
+  return { errors, warnings };
 }
 
 export function logRuntimeEnvSnapshot() {
@@ -271,26 +330,28 @@ export function logRuntimeEnvSnapshot() {
     return;
   }
 
-  const snapshot = {
-    DATABASE_URL_present: Boolean(process.env.DATABASE_URL?.trim()),
-    AI_ADMIN_GENERATION_ENABLED_present: Boolean(process.env["AI_ADMIN_GENERATION_ENABLED"]),
-    AI_ADMIN_GENERATION_ENABLED_value: process.env["AI_ADMIN_GENERATION_ENABLED"] ?? null,
-    AI_ADMIN_GENERATION_intent: parseAdminAiGenerationIntentMjs(),
-    AI_INTEGRATIONS_OPENAI_API_KEY_present: Boolean(process.env["AI_INTEGRATIONS_OPENAI_API_KEY"]),
-    OPENAI_API_KEY_present: Boolean(process.env["OPENAI_API_KEY"]),
-    OPENROUTER_API_KEY_present: Boolean(process.env["OPENROUTER_API_KEY"]?.trim()),
-    BLOG_OPENROUTER_API_KEY_present: Boolean(process.env["BLOG_OPENROUTER_API_KEY"]?.trim()),
-    AI_PROVIDER: process.env["AI_PROVIDER"] ?? null,
-    BLOG_AI_PROVIDER: process.env["BLOG_AI_PROVIDER"] ?? null,
-    NN_ENV_VALIDATION_MODE: process.env["NN_ENV_VALIDATION_MODE"] ?? null,
-  };
-
-  console.error("[ENV SNAPSHOT]", snapshot);
+  console.error(
+    "[ENV SNAPSHOT]",
+    createEarlyRuntimeDiagnostics({
+      env: process.env,
+      phase: "runtime_env_guard_snapshot",
+    }),
+  );
 }
 
 export function validateRuntimeEnvOrThrow() {
   if (isNextProductionBuildPhase()) {
     return;
+  }
+
+  if (runtimeEnvProbeEnabled(process.env)) {
+    console.error(
+      "[ENV PROBE]",
+      createRuntimeEnvProbeDiagnostics({
+        env: process.env,
+        phase: "runtime_env_guard_pre_validate",
+      }),
+    );
   }
 
   assertRuntimeDatabaseEnvContractMjs();
@@ -300,21 +361,26 @@ export function validateRuntimeEnvOrThrow() {
     return;
   }
 
-  const missing = collectMissingRuntimeEnvIssues();
-  if (missing.length === 0) {
+  const diagnostics = collectMissingRuntimeEnvIssues();
+  if (diagnostics.errors.length === 0 && diagnostics.warnings.length === 0) {
     return;
   }
 
-  const presentKeys = Object.keys(process.env).filter(
-    (k) => k.includes("AI_") || k.includes("OPENAI") || k.includes("OPENROUTER"),
-  );
+  if (diagnostics.warnings.length > 0) {
+    console.error("[ENV VALIDATION WARN]", {
+      warnings: diagnostics.warnings,
+    });
+  }
+
+  if (diagnostics.errors.length === 0) {
+    return;
+  }
 
   console.error("[ENV VALIDATION ERROR]", {
-    missing,
-    presentKeys,
+    errors: diagnostics.errors,
   });
 
-  const message = `Missing required runtime env vars: ${missing.join(", ")}`;
+  const message = `Missing required runtime env vars: ${diagnostics.errors.join(", ")}`;
 
   if (mode === "warn") {
     console.error("[ENV VALIDATION WARN]", message);

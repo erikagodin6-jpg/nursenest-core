@@ -46,7 +46,7 @@ if (args.length > 0) {
 
 const result = spawnSync(process.execPath, nodeArgs, {
   cwd: root,
-  env: { ...process.env },
+  env: process.env,
   stdio: "inherit",
 });
 

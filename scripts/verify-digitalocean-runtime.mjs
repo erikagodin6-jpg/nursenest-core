@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { verifyOptionalContentDirectories } from "./verify-optional-content-directories.mjs";
+import { writeDoRuntimeVerificationCache } from "../nursenest-core/scripts/lib/runtime-env-contract.mjs";
 
 const require = createRequire(import.meta.url);
 const yaml = require("js-yaml");
@@ -11,23 +13,21 @@ const yaml = require("js-yaml");
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const appRoot = path.join(root, "nursenest-core");
 const specPath = path.join(root, ".do", "app-nursenest-core-next.yaml");
-const liveSpecPath = process.env.NN_DO_LIVE_SPEC_PATH?.trim() || "";
 const dockerfilePath = path.join(root, "Dockerfile");
 const packagePath = path.join(appRoot, "package.json");
 const rootPackagePath = path.join(root, "package.json");
 const standaloneStartPath = path.join(appRoot, "scripts", "start-standalone.mjs");
+
 const expectedAppName = "nursenest-core-next";
 const expectedServiceName = "web";
 const expectedSourceDir = ".";
 const expectedRunCommand = "node scripts/start-standalone.mjs";
+const expectedAccountEmail = process.env.NN_DO_EXPECTED_ACCOUNT_EMAIL?.trim() || "erikagodin6@gmail.com";
+const expectedTeamName = process.env.NN_DO_EXPECTED_TEAM?.trim() || "My Team";
 const runtimeVisibleScopes = new Set(["RUN_TIME", "RUN_AND_BUILD_TIME"]);
 
 const failures = [];
 const warnings = [];
-
-function rel(file) {
-  return path.relative(root, file) || ".";
-}
 
 function fail(message) {
   failures.push(message);
@@ -37,40 +37,74 @@ function warn(message) {
   warnings.push(message);
 }
 
-/**
- * Bootstrap (`scripts/start-standalone.mjs`) calls `validateRuntimeEnvOrThrow` before binding PORT.
- * GENERAL vars declared in the DO spec without `value:` can be empty at runtime → process exits → no healthy upstream.
- */
-function assertRunTimeGeneralKeyHasLiteralValue(specText, key) {
-  const needle = `- key: ${key}`;
-  const idx = specText.indexOf(needle);
-  if (idx === -1) {
-    fail(`app spec must declare "${needle}" (bootstrap runtime-env guard)`);
-    return;
+function read(file) {
+  if (!existsSync(file)) {
+    fail(`missing ${path.relative(root, file) || "."}`);
+    return "";
   }
-  const tail = specText.slice(idx).split(/\r?\n/);
-  let sawValue = false;
-  for (let i = 1; i < tail.length; i += 1) {
-    const line = tail[i];
-    if (/^\s*-\s*key:/.test(line)) break;
-    if (/^\s*value\s*:/.test(line)) {
-      sawValue = true;
-      break;
-    }
-  }
-  if (!sawValue) {
-    fail(
-      `RUN_TIME env "${key}" must declare explicit value: in app spec — empty GENERAL vars crash bootstrap (DigitalOcean: no_healthy_upstream / 503).`,
-    );
+
+  return readFileSync(file, "utf8");
+}
+
+function parseJsonText(text, label) {
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    fail(`${label} returned invalid JSON: ${error instanceof Error ? error.message : String(error)}`);
+    return null;
   }
 }
 
-function read(file) {
-  if (!existsSync(file)) {
-    fail(`missing ${rel(file)}`);
-    return "";
+function runCommand(command, args, { cwd = root, allowFailure = false } = {}) {
+  const result = spawnSync(command, args, {
+    cwd,
+    env: process.env,
+    encoding: "utf8",
+    maxBuffer: 20 * 1024 * 1024,
+  });
+
+  if (!allowFailure && result.status !== 0) {
+    const stderr = result.stderr?.trim();
+    const stdout = result.stdout?.trim();
+    fail(
+      `${command} ${args.join(" ")} failed with exit ${result.status ?? 1}: ${stderr || stdout || "(no output)"}`,
+    );
   }
-  return readFileSync(file, "utf8");
+
+  return result;
+}
+
+function runDoctlJson(args, label) {
+  const result = runCommand("doctl", args, { allowFailure: true });
+  if (result.status !== 0) {
+    const detail = result.stderr?.trim() || result.stdout?.trim() || "(no output)";
+    fail(`${label} failed: ${detail}`);
+    return null;
+  }
+
+  const parsed = parseJsonText(result.stdout, label);
+  if (parsed == null) return null;
+  return Array.isArray(parsed) ? parsed : [parsed];
+}
+
+function runDoctlText(args, label) {
+  const result = runCommand("doctl", args, { allowFailure: true });
+  if (result.status !== 0) {
+    const detail = result.stderr?.trim() || result.stdout?.trim() || "(no output)";
+    fail(`${label} failed: ${detail}`);
+    return null;
+  }
+
+  return result.stdout;
+}
+
+function unwrapSingle(items) {
+  if (!Array.isArray(items) || items.length === 0) return null;
+  return items[0] ?? null;
+}
+
+function asArray(value) {
+  return Array.isArray(value) ? value : [];
 }
 
 function activeLines(text) {
@@ -98,28 +132,6 @@ function envKeys(lines) {
   return keys;
 }
 
-function envBlock(specText, key) {
-  const needle = `- key: ${key}`;
-  const idx = specText.indexOf(needle);
-  if (idx === -1) return null;
-  const block = [];
-  const tail = specText.slice(idx).split(/\r?\n/);
-  for (let i = 0; i < tail.length; i += 1) {
-    const line = tail[i];
-    if (i > 0 && /^\s*-\s*key:/.test(line)) break;
-    block.push(line);
-  }
-  return block.join("\n");
-}
-
-function envBlockScalar(specText, key, field) {
-  const block = envBlock(specText, key);
-  if (!block) return null;
-  const pattern = new RegExp(`^\\s*${field}:\\s*(.+?)\\s*$`, "m");
-  const match = block.match(pattern);
-  return match ? match[1].trim().replace(/^["']|["']$/g, "") : null;
-}
-
 function parseSpecModel(specText, label) {
   try {
     return yaml.load(specText) ?? {};
@@ -127,10 +139,6 @@ function parseSpecModel(specText, label) {
     fail(`${label} spec must be valid YAML: ${error instanceof Error ? error.message : String(error)}`);
     return {};
   }
-}
-
-function asArray(value) {
-  return Array.isArray(value) ? value : [];
 }
 
 function findService(specModel, serviceName = expectedServiceName) {
@@ -143,11 +151,13 @@ function findIngressComponentNames(specModel) {
     const name = rule?.component?.name;
     if (typeof name === "string" && name.trim()) names.add(name.trim());
   }
-  return names;
+  return [...names];
 }
 
 function findRouteServiceNames(specModel) {
-  return new Set(asArray(specModel?.services).filter((service) => asArray(service?.routes).length > 0).map((service) => service.name));
+  return asArray(specModel?.services)
+    .filter((service) => asArray(service?.routes).length > 0)
+    .map((service) => service.name);
 }
 
 function findEnvEntry(envs, key) {
@@ -165,60 +175,75 @@ function findEffectiveEnvEntry(specModel, serviceName, key) {
   return null;
 }
 
+function sanitizeEnvAttachment(specModel, key) {
+  const effective = findEffectiveEnvEntry(specModel, expectedServiceName, key);
+  if (!effective) {
+    return {
+      key,
+      present: false,
+      attachment: null,
+      scope: null,
+      type: null,
+    };
+  }
+
+  return {
+    key,
+    present: true,
+    attachment: effective.attachment,
+    scope: effective.entry?.scope ?? null,
+    type: effective.entry?.type ?? null,
+  };
+}
+
 function summarizeSpec(specModel, label) {
   const service = findService(specModel);
-  const db = findEffectiveEnvEntry(specModel, expectedServiceName, "DATABASE_URL");
   return {
     label,
     appName: specModel?.name ?? null,
     serviceName: service?.name ?? null,
     sourceDir: service?.source_dir ?? null,
     runCommand: service?.run_command ?? null,
-    databaseUrlKeyPresent: Boolean(db),
-    databaseUrlScope: db?.entry?.scope ?? null,
-    databaseUrlAttachment: db?.attachment ?? null,
-    databaseUrlServiceName: db?.serviceName ?? null,
-    ingressComponents: [...findIngressComponentNames(specModel)],
-    routeServices: [...findRouteServiceNames(specModel)],
+    ingressComponents: findIngressComponentNames(specModel),
+    routeServices: findRouteServiceNames(specModel),
+    databaseUrl: sanitizeEnvAttachment(specModel, "DATABASE_URL"),
+    authSecret: sanitizeEnvAttachment(specModel, "AUTH_SECRET"),
   };
 }
 
 function assertIncludes(haystack, needle, context) {
-  if (!haystack.includes(needle)) fail(`${context} must include ${needle}`);
-}
-
-const spec = read(specPath);
-const specModel = parseSpecModel(spec, "repo");
-const dockerfile = read(dockerfilePath);
-const pkg = read(packagePath);
-const rootPkg = read(rootPackagePath);
-const standaloneStart = read(standaloneStartPath);
-const lines = activeLines(spec);
-const keys = envKeys(lines);
-const repoSummary = summarizeSpec(specModel, "repo");
-let liveSummary = null;
-if (liveSpecPath) {
-  if (!existsSync(liveSpecPath)) {
-    warn(`NN_DO_LIVE_SPEC_PATH was set but file does not exist: ${liveSpecPath}`);
-  } else {
-    const liveSpec = readFileSync(liveSpecPath, "utf8");
-    liveSummary = summarizeSpec(parseSpecModel(liveSpec, "live"), "live");
+  if (!haystack.includes(needle)) {
+    fail(`${context} must include ${needle}`);
   }
 }
-let appPackage = null;
-try {
-  appPackage = pkg ? JSON.parse(pkg) : null;
-} catch {
-  fail("nursenest-core/package.json must be valid JSON");
-}
-let rootPackage = null;
-try {
-  rootPackage = rootPkg ? JSON.parse(rootPkg) : null;
-} catch {
-  fail("package.json must be valid JSON");
+
+function assertRunTimeGeneralKeyHasLiteralValue(specText, key) {
+  const needle = `- key: ${key}`;
+  const idx = specText.indexOf(needle);
+  if (idx === -1) {
+    fail(`app spec must declare "${needle}" (bootstrap runtime-env guard)`);
+    return;
+  }
+
+  const tail = specText.slice(idx).split(/\r?\n/);
+  let sawValue = false;
+  for (let i = 1; i < tail.length; i += 1) {
+    const line = tail[i];
+    if (/^\s*-\s*key:/.test(line)) break;
+    if (/^\s*value\s*:/.test(line)) {
+      sawValue = true;
+      break;
+    }
+  }
+
+  if (!sawValue) {
+    fail(
+      `RUN_TIME env "${key}" must declare explicit value: in app spec — empty GENERAL vars crash bootstrap (DigitalOcean: no_healthy_upstream / 503).`,
+    );
+  }
 }
 
-function verifyStartScript({ label, command, baseDir, allowRootStandalone = false }) {
+function verifyStartScript({ label, command, baseDir, allowRootStandalone = false, dockerfile }) {
   if (typeof command !== "string" || !command.trim()) {
     fail(`${label} must expose a non-empty start command`);
     return;
@@ -267,116 +292,195 @@ function verifyStartScript({ label, command, baseDir, allowRootStandalone = fals
   }
 }
 
-console.log("[verify:do-runtime] checking DigitalOcean Dockerfile runtime contract");
+function readPackageJson(file, label) {
+  try {
+    return JSON.parse(read(file));
+  } catch {
+    fail(`${label} must be valid JSON`);
+    return null;
+  }
+}
+
+function pickExpectedApp(apps) {
+  const envAppId = process.env.NN_DO_APP_ID?.trim();
+  if (envAppId) {
+    return apps.find((app) => app?.id === envAppId) ?? null;
+  }
+  return (
+    apps.find((app) => app?.spec_name === expectedAppName) ??
+    apps.find((app) => app?.spec?.name === expectedAppName) ??
+    null
+  );
+}
+
+function parseDeploymentRows(text) {
+  if (!text) return [];
+  return text
+    .split(/\r?\n/)
+    .map((line) => line.trimEnd())
+    .filter(Boolean)
+    .map((line) => {
+      const match = line.match(/^(\S+)\s{2,}(.+?)\s{2,}(\S+)\s{2,}(.+)$/);
+      if (!match) {
+        return null;
+      }
+      return {
+        id: match[1],
+        cause: match[2],
+        phase: match[3],
+        created: match[4],
+      };
+    })
+    .filter(Boolean);
+}
+
+function extractCommitShaFromCause(cause) {
+  const match = String(cause ?? "").match(/\bcommit\s+([0-9a-f]{7,40})\b/i);
+  return match?.[1] ?? null;
+}
+
+function summarizeDeployment(deployment) {
+  if (!deployment) return null;
+  const sourceCommit =
+    asArray(deployment?.services).find((service) => service?.name === expectedServiceName)?.source_commit_hash ??
+    extractCommitShaFromCause(deployment?.cause) ??
+    null;
+  return {
+    id: deployment.id ?? null,
+    phase: deployment.phase ?? null,
+    cause: deployment.cause ?? null,
+    sourceCommitHash: sourceCommit,
+    previousDeploymentId: deployment.previous_deployment_id ?? null,
+    clonedFrom: deployment.cloned_from ?? null,
+  };
+}
+
+function isRollbackLikeDeployment(deployment) {
+  const cause = String(deployment?.cause ?? "").toLowerCase();
+  return cause.includes("rollback") || Boolean(deployment?.cloned_from);
+}
+
+function listStripeEnvKeysJson() {
+  const result = runCommand(
+    process.execPath,
+    ["--import", "tsx", "scripts/list-stripe-runtime-env-keys.mts", "--json"],
+    { cwd: appRoot, allowFailure: true },
+  );
+  if (result.status !== 0) {
+    warn(
+      `Could not resolve Stripe runtime env keys via list-stripe-runtime-env-keys: ${
+        result.stderr?.trim() || result.stdout?.trim() || "(no output)"
+      }`,
+    );
+    return [];
+  }
+
+  const parsed = parseJsonText(result.stdout, "list-stripe-runtime-env-keys --json");
+  return Array.isArray(parsed) ? parsed.filter((key) => typeof key === "string") : [];
+}
+
+function sanitizeAccount(account) {
+  return {
+    email: account?.email ?? null,
+    team: account?.team?.name ?? account?.team ?? null,
+    status: account?.status ?? null,
+  };
+}
+
+function gitSha(args) {
+  const result = runCommand("git", args, { cwd: root, allowFailure: true });
+  if (result.status !== 0) return null;
+  return result.stdout.trim() || null;
+}
+
+function verifyLiveSpec(summary, label) {
+  if (!summary) return;
+
+  if (summary.appName !== expectedAppName) {
+    fail(`${label}: expected app name ${expectedAppName}, found ${summary.appName ?? "missing"}`);
+  }
+  if (summary.serviceName !== expectedServiceName) {
+    fail(`${label}: expected service ${expectedServiceName}, found ${summary.serviceName ?? "missing"}`);
+  }
+  if (summary.sourceDir !== expectedSourceDir) {
+    fail(`${label}: expected source_dir ${expectedSourceDir}, found ${summary.sourceDir ?? "missing"}`);
+  }
+  if (summary.runCommand !== expectedRunCommand) {
+    fail(`${label}: expected run_command ${expectedRunCommand}, found ${summary.runCommand ?? "missing"}`);
+  }
+  if (summary.ingressComponents.length > 0 && !summary.ingressComponents.includes(expectedServiceName)) {
+    fail(`${label}: ingress does not route to ${expectedServiceName}; found ${summary.ingressComponents.join(", ")}`);
+  }
+}
+
+const specText = read(specPath);
+const specModel = parseSpecModel(specText, "repo");
+const dockerfile = read(dockerfilePath);
+const packageJson = readPackageJson(packagePath, "nursenest-core/package.json");
+const rootPackageJson = readPackageJson(rootPackagePath, "package.json");
+const standaloneStart = read(standaloneStartPath);
+const lines = activeLines(specText);
+const keys = envKeys(lines);
+const repoSummary = summarizeSpec(specModel, "repo");
+
+console.log("[verify:do-runtime] checking DigitalOcean runtime contract");
 console.log(`[verify:do-runtime] repo spec summary ${JSON.stringify(repoSummary)}`);
-if (liveSummary) console.log(`[verify:do-runtime] live spec summary ${JSON.stringify(liveSummary)}`);
 
-assertRunTimeGeneralKeyHasLiteralValue(spec, "AI_ADMIN_GENERATION_ENABLED");
-
-if (repoSummary.appName !== expectedAppName) {
-  fail(`expected app name ${expectedAppName}, found ${repoSummary.appName ?? "missing"}`);
-}
-
-if (repoSummary.serviceName !== expectedServiceName) {
-  fail(`expected running service name ${expectedServiceName}, found ${repoSummary.serviceName ?? "missing"}`);
-}
-
-if (
-  repoSummary.ingressComponents.length > 0 &&
-  !repoSummary.ingressComponents.includes(expectedServiceName)
-) {
-  fail(`ingress does not route to expected service ${expectedServiceName}; found ${repoSummary.ingressComponents.join(", ")}`);
-}
+assertRunTimeGeneralKeyHasLiteralValue(specText, "AI_ADMIN_GENERATION_ENABLED");
+verifyLiveSpec(repoSummary, "repo spec");
 
 if (scalar(lines, "dockerfile_path") !== "Dockerfile") {
   fail(`expected dockerfile_path: Dockerfile, found ${scalar(lines, "dockerfile_path") ?? "missing"}`);
 }
-
-if (repoSummary.sourceDir !== expectedSourceDir) {
-  fail(`expected source_dir: ${expectedSourceDir}, found ${repoSummary.sourceDir ?? "missing"}`);
-}
-
 if (scalar(lines, "branch") !== "main") {
   fail(`expected production branch main, found ${scalar(lines, "branch") ?? "missing"}`);
 }
-
+if (scalar(lines, "http_port") !== "8080") {
+  fail(`expected http_port: 8080, found ${scalar(lines, "http_port") ?? "missing"}`);
+}
+if (!/liveness_health_check:[\s\S]*http_path:\s*\/healthz/.test(specText)) {
+  fail("liveness_health_check must point to /healthz");
+}
+if (!/health_check:[\s\S]*http_path:\s*\/readyz/.test(specText)) {
+  fail("health_check must point to /readyz");
+}
 for (const forbidden of ["ghcr.io", "image:", "image_name:", "docker_image:", "registry_image:"]) {
   if (lines.some((line) => line.includes(forbidden))) {
     fail(`app spec contains stale image/registry reference: ${forbidden}`);
   }
 }
 
-if (!/liveness_health_check:[\s\S]*http_path:\s*\/healthz/.test(spec)) {
-  fail("liveness_health_check must point to /healthz");
-}
-
-if (!/health_check:[\s\S]*http_path:\s*\/readyz/.test(spec)) {
-  fail("health_check readiness must point to /readyz");
-}
-
-if (scalar(lines, "http_port") !== "8080") {
-  fail(`expected http_port: 8080, found ${scalar(lines, "http_port") ?? "missing"}`);
-}
-
-if (repoSummary.runCommand !== expectedRunCommand) {
-  fail(`expected run_command: ${expectedRunCommand}, found ${repoSummary.runCommand ?? "missing"}`);
-}
-
 if (!keys.has("AUTH_SECRET") && !keys.has("NEXTAUTH_SECRET")) {
-  fail("app spec must document AUTH_SECRET and/or NEXTAUTH_SECRET as a runtime secret");
+  fail("app spec must declare AUTH_SECRET and/or NEXTAUTH_SECRET as a runtime secret");
 }
-
-const repoDatabaseUrl = findEffectiveEnvEntry(specModel, expectedServiceName, "DATABASE_URL");
-if (!repoDatabaseUrl) {
-  fail(`DATABASE_URL absent from effective runtime env for running service ${expectedServiceName}`);
-} else {
-  const databaseUrlScope = repoDatabaseUrl.entry?.scope;
-  const databaseUrlType = repoDatabaseUrl.entry?.type;
-  if (!runtimeVisibleScopes.has(databaseUrlScope)) {
-    fail(
-      `DATABASE_URL must be runtime-visible for service ${expectedServiceName}; accepted scopes: ${[...runtimeVisibleScopes].join(", ")}; found ${databaseUrlScope ?? "missing"}`,
-    );
-  }
-  if (databaseUrlScope === "RUN_AND_BUILD_TIME") {
-    warn("DATABASE_URL scope RUN_AND_BUILD_TIME is runtime-visible on DigitalOcean, but RUN_TIME is preferred to avoid build-time DB exposure.");
-  }
-  if (databaseUrlType !== "SECRET") {
-    fail(`DATABASE_URL must be declared as type SECRET, found ${databaseUrlType ?? "missing"}`);
-  }
-  if (repoDatabaseUrl.attachment !== "service") {
-    warn(`DATABASE_URL is ${repoDatabaseUrl.attachment}-level, not service-level; verify DigitalOcean applies it to service ${expectedServiceName}.`);
-  }
-}
-
-if (liveSummary) {
-  for (const field of ["appName", "serviceName", "sourceDir", "runCommand", "databaseUrlAttachment"]) {
-    if (repoSummary[field] !== liveSummary[field]) {
-      warn(`live spec drift: ${field} repo=${repoSummary[field] ?? "missing"} live=${liveSummary[field] ?? "missing"}`);
-    }
-  }
-  if (!liveSummary.databaseUrlKeyPresent) {
-    fail(`live spec: DATABASE_URL absent from effective runtime env for running service ${expectedServiceName}`);
-  } else if (!runtimeVisibleScopes.has(liveSummary.databaseUrlScope)) {
-    fail(
-      `live spec: DATABASE_URL scope is not runtime-visible for service ${expectedServiceName}; accepted scopes: ${[...runtimeVisibleScopes].join(", ")}; found ${liveSummary.databaseUrlScope ?? "missing"}`,
-    );
-  } else if (repoSummary.databaseUrlScope === "RUN_TIME" && liveSummary.databaseUrlScope === "RUN_AND_BUILD_TIME") {
-    warn("live spec drift: repo expects DATABASE_URL scope RUN_TIME, live has RUN_AND_BUILD_TIME; this is runtime-visible but broader than preferred.");
-  }
-}
-
 if (!keys.has("NODE_MAX_OLD_SPACE_SIZE_MB")) {
   fail("app spec must set NODE_MAX_OLD_SPACE_SIZE_MB for standalone child runtime heap");
 }
-
-if (!keys.has("AUTH_SECRET")) {
-  console.warn("[verify:do-runtime] warning: AUTH_SECRET is preferred over legacy NEXTAUTH_SECRET");
+if (repoSummary.authSecret.present && repoSummary.authSecret.type !== "SECRET") {
+  fail(`repo spec: AUTH_SECRET must be declared as type SECRET, found ${repoSummary.authSecret.type ?? "missing"}`);
+}
+if (!repoSummary.databaseUrl.present) {
+  fail(`repo spec: DATABASE_URL absent from effective runtime env for running service ${expectedServiceName}`);
+} else {
+  if (repoSummary.databaseUrl.attachment !== "service") {
+    fail(`repo spec: DATABASE_URL must be attached under services.${expectedServiceName}.envs, found ${repoSummary.databaseUrl.attachment ?? "missing"}`);
+  }
+  if (!runtimeVisibleScopes.has(repoSummary.databaseUrl.scope)) {
+    fail(
+      `repo spec: DATABASE_URL must be runtime-visible for service ${expectedServiceName}; found ${repoSummary.databaseUrl.scope ?? "missing"}`,
+    );
+  }
+  if (repoSummary.databaseUrl.type !== "SECRET") {
+    fail(`repo spec: DATABASE_URL must be declared as type SECRET, found ${repoSummary.databaseUrl.type ?? "missing"}`);
+  }
+  if (repoSummary.databaseUrl.scope === "RUN_AND_BUILD_TIME") {
+    warn("repo spec: DATABASE_URL scope RUN_AND_BUILD_TIME is runtime-visible, but RUN_TIME is preferred.");
+  }
 }
 
 if (!/FROM\s+node:20-alpine\s+AS\s+runner/.test(dockerfile)) {
   fail("Dockerfile must have a node:20-alpine runner stage");
 }
-
 for (const requiredCopy of [
   "COPY --from=builder /app/nursenest-core/.next ./.next",
   "COPY --from=builder /app/nursenest-core/public ./public",
@@ -385,55 +489,50 @@ for (const requiredCopy of [
 ]) {
   assertIncludes(dockerfile, requiredCopy, "Dockerfile runner stage");
 }
-
 assertIncludes(dockerfile, "EXPOSE 8080", "Dockerfile");
 assertIncludes(dockerfile, "NODE_MAX_OLD_SPACE_SIZE_MB=768", "Dockerfile runner ENV");
-
-if (!/(CMD|ENTRYPOINT)\s+\[/.test(dockerfile)) {
-  fail("Dockerfile runner stage must define CMD or ENTRYPOINT");
-}
-
 if (!dockerfile.includes('CMD ["node", "scripts/start-standalone.mjs"]')) {
-  fail("Dockerfile runner CMD must start scripts/start-standalone.mjs directly");
-}
-
-if (!existsSync(standaloneStartPath)) {
-  fail("startup path nursenest-core/scripts/start-standalone.mjs does not exist");
+  fail('Dockerfile runner CMD must start scripts/start-standalone.mjs directly');
 }
 
 for (const requiredSnippet of [
-  "process.env.PORT",
-  "process.env.HOSTNAME || \"0.0.0.0\"",
-  "const internalHost = \"127.0.0.1\"",
+  "standalone_parent_pre_hydrate",
+  "standalone_parent_post_hydrate",
+  "standalone_parent_contract_validated",
   "livenessProbePath = \"/healthz\"",
   "readinessProbePath = \"/readyz\"",
-  "server.listen(publicPort, publicHost",
   "PORT: String(internalPort)",
   "HOSTNAME: internalHost",
 ]) {
   assertIncludes(standaloneStart, requiredSnippet, "start-standalone.mjs");
 }
 
-if (!pkg.includes("\"verify:standalone-artifact\"")) {
-  fail("nursenest-core/package.json must expose verify:standalone-artifact");
-}
-
-const packageStartScript = appPackage?.scripts?.start;
-verifyStartScript({ label: "nursenest-core/package.json start", command: packageStartScript, baseDir: appRoot });
-
-const rootPackageStartScript = rootPackage?.scripts?.start;
+verifyStartScript({
+  label: "nursenest-core/package.json start",
+  command: packageJson?.scripts?.start,
+  baseDir: appRoot,
+  dockerfile,
+});
 verifyStartScript({
   label: "package.json start",
-  command: rootPackageStartScript,
+  command: rootPackageJson?.scripts?.start,
   baseDir: root,
   allowRootStandalone: true,
+  dockerfile,
 });
 
 for (const specFile of [".do/app-nursenest-core-next.yaml", ".do/app.yaml"]) {
-  const specText = read(path.join(root, specFile));
-  const specRunCommand = scalar(activeLines(specText), "run_command");
+  const candidate = path.join(root, specFile);
+  if (!existsSync(candidate)) continue;
+  const specCandidate = readFileSync(candidate, "utf8");
+  const specRunCommand = scalar(activeLines(specCandidate), "run_command");
   if (specRunCommand) {
-    verifyStartScript({ label: `${specFile} run_command`, command: specRunCommand, baseDir: appRoot });
+    verifyStartScript({
+      label: `${specFile} run_command`,
+      command: specRunCommand,
+      baseDir: appRoot,
+      dockerfile,
+    });
   }
 }
 
@@ -441,6 +540,187 @@ const contentDirectoryResult = verifyOptionalContentDirectories({ root });
 for (const message of contentDirectoryResult.failures) {
   fail(message);
 }
+
+const accountItems = runDoctlJson(["account", "get", "--output", "json"], "doctl account get");
+const apps = runDoctlJson(["apps", "list", "--output", "json"], "doctl apps list");
+
+if (!apps || apps.length === 0) {
+  fail("doctl apps list returned no apps — verify the authenticated account/team before deploying.");
+}
+
+const account = sanitizeAccount(unwrapSingle(accountItems));
+if (expectedAccountEmail && account.email && account.email !== expectedAccountEmail) {
+  fail(
+    `doctl is authenticated to ${account.email} (team=${account.team ?? "unknown"}), expected ${expectedAccountEmail} (team=${expectedTeamName}).`,
+  );
+}
+if (expectedTeamName && account.team && account.team !== expectedTeamName) {
+  fail(
+    `doctl is authenticated to team ${account.team} (account=${account.email ?? "unknown"}), expected ${expectedTeamName}.`,
+  );
+}
+
+const appListEntry = apps ? pickExpectedApp(apps) : null;
+if (!appListEntry) {
+  fail(
+    `could not find DigitalOcean app ${expectedAppName} in apps list for account=${account.email ?? "unknown"} team=${account.team ?? "unknown"}`,
+  );
+}
+
+const appId = appListEntry?.id ?? null;
+const liveAppItems = appId
+  ? runDoctlJson(["apps", "get", appId, "--output", "json"], "doctl apps get")
+  : null;
+const liveApp = unwrapSingle(liveAppItems);
+const liveSpecSummary = liveApp ? summarizeSpec(liveApp.spec ?? {}, "live") : null;
+if (liveSpecSummary) {
+  console.log(`[verify:do-runtime] live spec summary ${JSON.stringify(liveSpecSummary)}`);
+  verifyLiveSpec(liveSpecSummary, "live app spec");
+  if (!liveSpecSummary.databaseUrl.present) {
+    fail(`live app spec: DATABASE_URL absent from effective runtime env for service ${expectedServiceName}`);
+  } else {
+    if (liveSpecSummary.databaseUrl.attachment !== "service") {
+      fail(
+        `live app spec: DATABASE_URL must be attached under services.${expectedServiceName}.envs, found ${liveSpecSummary.databaseUrl.attachment ?? "missing"}`,
+      );
+    }
+    if (!runtimeVisibleScopes.has(liveSpecSummary.databaseUrl.scope)) {
+      fail(`live app spec: DATABASE_URL scope must be runtime-visible, found ${liveSpecSummary.databaseUrl.scope ?? "missing"}`);
+    }
+    if (liveSpecSummary.databaseUrl.type !== "SECRET") {
+      fail(`live app spec: DATABASE_URL must be type SECRET, found ${liveSpecSummary.databaseUrl.type ?? "missing"}`);
+    }
+    if (liveSpecSummary.databaseUrl.scope === "RUN_AND_BUILD_TIME") {
+      warn("live app spec: DATABASE_URL scope RUN_AND_BUILD_TIME is runtime-visible, but RUN_TIME is preferred.");
+    }
+  }
+  if (!liveSpecSummary.authSecret.present) {
+    fail(`live app spec: AUTH_SECRET absent from effective runtime env for service ${expectedServiceName}`);
+  } else if (liveSpecSummary.authSecret.type !== "SECRET") {
+    fail(`live app spec: AUTH_SECRET must be type SECRET, found ${liveSpecSummary.authSecret.type ?? "missing"}`);
+  }
+}
+
+const activeDeploymentId = liveApp?.active_deployment?.id ?? appListEntry?.active_deployment_id ?? null;
+const inProgressDeploymentId =
+  liveApp?.in_progress_deployment?.id ?? appListEntry?.in_progress_deployment_id ?? null;
+const deploymentRows = appId
+  ? parseDeploymentRows(
+      runDoctlText(
+        ["apps", "list-deployments", appId, "--format", "ID,Cause,Phase,Created", "--no-header"],
+        "doctl apps list-deployments",
+      ) ?? "",
+    )
+  : [];
+const latestDeploymentId = deploymentRows[0]?.id ?? null;
+const activeDeployment =
+  activeDeploymentId && appId
+    ? unwrapSingle(
+        runDoctlJson(["apps", "get-deployment", appId, activeDeploymentId, "--output", "json"], "doctl apps get-deployment active"),
+      ) ?? liveApp?.active_deployment ?? null
+    : liveApp?.active_deployment ?? null;
+const latestDeployment =
+  latestDeploymentId && appId
+    ? unwrapSingle(
+        runDoctlJson(["apps", "get-deployment", appId, latestDeploymentId, "--output", "json"], "doctl apps get-deployment latest"),
+      )
+    : null;
+const currentMainCommit = gitSha(["rev-parse", "origin/main"]) ?? gitSha(["rev-parse", "HEAD"]);
+
+const freshness = {
+  activeDeploymentId,
+  latestDeploymentId: latestDeployment?.id ?? latestDeploymentId,
+  inProgressDeploymentId,
+  activeDeployment: summarizeDeployment(activeDeployment),
+  latestDeployment: summarizeDeployment(latestDeployment),
+  activeIsRollback: isRollbackLikeDeployment(activeDeployment),
+  latestIsActive: Boolean(activeDeploymentId && latestDeployment?.id && activeDeploymentId === latestDeployment.id),
+  logsCommandTargetsActiveDeployment: true,
+  logsTargetDeploymentId: activeDeploymentId,
+  logsLikelyShowRollbackState: isRollbackLikeDeployment(activeDeployment),
+  activeCommitSha:
+    summarizeDeployment(activeDeployment)?.sourceCommitHash ??
+    liveApp?.services?.find((service) => service?.name === expectedServiceName)?.source_commit_hash ??
+    null,
+  latestCommitSha: summarizeDeployment(latestDeployment)?.sourceCommitHash ?? extractCommitShaFromCause(deploymentRows[0]?.cause) ?? null,
+  currentMainCommit,
+};
+
+console.log(`[verify:do-runtime] doctl account ${JSON.stringify(account)}`);
+console.log(
+  `[verify:do-runtime] deployment freshness ${JSON.stringify({
+    activeDeploymentId: freshness.activeDeploymentId,
+    latestDeploymentId: freshness.latestDeploymentId,
+    inProgressDeploymentId: freshness.inProgressDeploymentId,
+    activeIsRollback: freshness.activeIsRollback,
+    latestIsActive: freshness.latestIsActive,
+    logsTargetDeploymentId: freshness.logsTargetDeploymentId,
+    logsLikelyShowRollbackState: freshness.logsLikelyShowRollbackState,
+    activeCommitSha: freshness.activeCommitSha,
+    latestCommitSha: freshness.latestCommitSha,
+    currentMainCommit: freshness.currentMainCommit,
+  })}`,
+);
+
+if (freshness.activeIsRollback) {
+  warn(
+    `active deployment ${freshness.activeDeploymentId ?? "(unknown)"} is a rollback; runtime logs may be showing rollback state instead of the latest attempted deploy.`,
+  );
+}
+if (freshness.latestDeploymentId && freshness.activeDeploymentId && freshness.latestDeploymentId !== freshness.activeDeploymentId) {
+  warn(
+    `latest deployment ${freshness.latestDeploymentId} is not the active deployment ${freshness.activeDeploymentId}; unscoped doctl runtime logs follow the active deployment.`,
+  );
+}
+if (freshness.activeCommitSha && freshness.currentMainCommit && freshness.activeCommitSha !== freshness.currentMainCommit) {
+  warn(
+    `active deployment commit ${freshness.activeCommitSha} does not match current main ${freshness.currentMainCommit}; do not mark env fixed until a fresh deployment reaches ACTIVE.`,
+  );
+}
+if (
+  freshness.latestCommitSha &&
+  freshness.currentMainCommit &&
+  !freshness.currentMainCommit.startsWith(freshness.latestCommitSha) &&
+  !freshness.latestCommitSha.startsWith(freshness.currentMainCommit)
+) {
+  warn(
+    `latest deployment commit ${freshness.latestCommitSha} does not match current main ${freshness.currentMainCommit}; the newest deploy may still be behind local main.`,
+  );
+}
+
+const stripeKeys = listStripeEnvKeysJson();
+const liveServiceEnvKeys = new Set(
+  asArray(findService(liveApp?.spec ?? {}, expectedServiceName)?.envs).map((entry) => entry?.key).filter(Boolean),
+);
+const missingStripeKeys = stripeKeys.filter((key) => !liveServiceEnvKeys.has(key));
+if (missingStripeKeys.length > 0) {
+  warn(
+    `live app spec is missing ${missingStripeKeys.length} Stripe runtime env keys from list:stripe-runtime-env-keys (${missingStripeKeys.slice(0, 10).join(", ")}${missingStripeKeys.length > 10 ? ", ..." : ""})`,
+  );
+}
+
+const cacheSummary = {
+  checkedAt: new Date().toISOString(),
+  account,
+  appId,
+  appName: expectedAppName,
+  serviceName: expectedServiceName,
+  repoSummary,
+  liveSpecSummary,
+  freshness,
+  checks: {
+    databaseUrlAttached: Boolean(liveSpecSummary?.databaseUrl?.present),
+    databaseUrlAttachedToService: liveSpecSummary?.databaseUrl?.attachment === "service",
+    databaseUrlRuntimeVisible: runtimeVisibleScopes.has(liveSpecSummary?.databaseUrl?.scope),
+    databaseUrlSecret: liveSpecSummary?.databaseUrl?.type === "SECRET",
+    authSecretAttached: Boolean(liveSpecSummary?.authSecret?.present),
+    authSecretSecret: liveSpecSummary?.authSecret?.type === "SECRET",
+  },
+  warnings,
+  failed: failures.length > 0,
+};
+const cachePath = writeDoRuntimeVerificationCache(appRoot, cacheSummary);
+console.log(`[verify:do-runtime] wrote verification cache ${path.relative(root, cachePath)}`);
 
 if (failures.length > 0) {
   for (const message of warnings) {
@@ -456,7 +736,6 @@ for (const message of warnings) {
   console.warn(`[verify:do-runtime] WARN: ${message}`);
 }
 
-console.log("[verify:do-runtime] DEPLOY MODE: DOCKERFILE BUILD");
-console.log("[verify:do-runtime] startup command: node scripts/start-standalone.mjs");
+console.log("[verify:do-runtime] verified repo spec, live app spec, runtime env attachment, and deployment freshness");
 console.log("[verify:do-runtime] public health: /healthz immediate, /readyz gated by child readiness");
-console.log("[verify:do-runtime] auth secret env documented: AUTH_SECRET or NEXTAUTH_SECRET");
+console.log("[verify:do-runtime] startup command: node scripts/start-standalone.mjs");

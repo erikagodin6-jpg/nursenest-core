@@ -101,8 +101,8 @@ test("start-standalone spawn wrappers use forwarded process.env", async () => {
 test("missing DATABASE_URL throws a clear runtime forwarding error", () => {
   const result = runBootstrap({ DATABASE_URL: "" });
   assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /DATABASE_URL is missing in runtime environment/);
-  assert.match(result.stderr, /component env attachment, source_dir, run_command, and wrapper env forwarding/);
+  assert.match(result.stderr, /DATABASE_URL is missing in the first runtime Node process/);
+  assert.match(result.stderr, /env attachment, source_dir, run_command, deployment freshness, rollback state, dotenv precedence, and wrapper env forwarding/);
 });
 
 test("runtime env diagnostics do not log secret values", () => {
@@ -110,6 +110,7 @@ test("runtime env diagnostics do not log secret values", () => {
     DATABASE_URL: runtimeDatabaseUrl,
     OPENAI_API_KEY: "sk-test-secret-value",
     AI_INTEGRATIONS_OPENAI_API_KEY: "sk-integrations-secret-value",
+    NN_RUNTIME_ENV_PROBE: "1",
   });
   const logs = result.stdout + result.stderr;
   assert.equal(result.status, 0, result.stderr);
@@ -117,4 +118,17 @@ test("runtime env diagnostics do not log secret values", () => {
   assert.doesNotMatch(logs, /runtime-user/);
   assert.doesNotMatch(logs, /sk-test-secret-value/);
   assert.doesNotMatch(logs, /sk-integrations-secret-value/);
+  assert.match(logs, /runtime_env_probe_keys/);
+  assert.match(logs, /DATABASE_URL/);
+  assert.match(logs, /NODE_ENV/);
+});
+
+test("invalid AUTH_URL still fails validation when explicitly set", () => {
+  const result = runBootstrap({
+    DATABASE_URL: runtimeDatabaseUrl,
+    AUTH_URL: "https://www.nursenest.test/api/auth",
+  });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /AUTH_URL must be origin-only/);
 });

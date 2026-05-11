@@ -42,6 +42,8 @@
     "start": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && node scripts/start-standalone.mjs",
     "heroku:local": "node ../scripts/start-production.mjs",
     "verify:do-runtime": "node ../scripts/verify-digitalocean-runtime.mjs",
+    "smoke:runtime-env": "node scripts/smoke-runtime-env.mjs",
+    "release:runtime-checklist": "node scripts/runtime-release-checklist.mjs",
     "verify:dist": "node ../scripts/verify-dist-artifacts.mjs",
     "heroku-postbuild": "NN_POSTBUILD_NEXT_BUILD=1 npm run build",
     "build:deploy": "npm run build:deploy:postbuild",

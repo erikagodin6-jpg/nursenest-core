@@ -97,21 +97,17 @@ export function loadRuntimeEnv(options = {}) {
     purpose = "runtime",
   } = options;
 
-  const preExistingKeys = new Set(
-    Object.entries(process.env)
-      .filter(([, value]) => isTruthyString(value))
-      .map(([key]) => key),
-  );
+  const preExistingKeys = new Set(Object.keys(process.env));
 
   const { values, sources, files } = collectEnvFiles(envRoot);
 
   for (const [key, value] of values.entries()) {
-    if (!isTruthyString(process.env[key])) {
+    if (!preExistingKeys.has(key)) {
       process.env[key] = value;
     }
   }
 
-  if (!isTruthyString(process.env.DIRECT_URL) && isTruthyString(process.env.DATABASE_DIRECT_URL)) {
+  if (!preExistingKeys.has("DIRECT_URL") && isTruthyString(process.env.DATABASE_DIRECT_URL)) {
     process.env.DIRECT_URL = process.env.DATABASE_DIRECT_URL;
   }
 

@@ -5,6 +5,7 @@
 import { spawnSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { buildForwardedRuntimeEnv } from "../lib/runtime-env-contract.mjs";
 
 const appRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
@@ -18,7 +19,7 @@ function run(label, command, args) {
   console.log(`[standalone-build] ${label}: ${command} ${args.join(" ")}`);
   const result = spawnSync(command, args, {
     cwd: appRoot,
-    env: { ...process.env },
+    env: buildForwardedRuntimeEnv(process.env),
     stdio: "inherit",
   });
   if (result.signal) {

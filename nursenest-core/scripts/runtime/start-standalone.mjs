@@ -12,6 +12,7 @@ import {
   verifyStandaloneArtifact,
   verifyStandaloneStaticAssetsPresent,
 } from "../verify-standalone-artifact.mjs";
+import { buildForwardedRuntimeEnv } from "../lib/runtime-env-contract.mjs";
 
 const appRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
@@ -31,7 +32,7 @@ function exitCodeFromSignal(signal) {
 
 const validate = spawnSync(process.execPath, ["scripts/runtime/validate-local-env.mjs", "--check-port"], {
   cwd: appRoot,
-  env: { ...process.env },
+  env: process.env,
   stdio: "inherit",
 });
 if (validate.signal) {
@@ -55,12 +56,11 @@ const standaloneCwd = dirname(serverPath);
 const commandForHumans = `node ${relative(appRoot, serverPath)}`;
 const port = process.env.PORT?.trim() || "3000";
 const hostname = process.env.HOSTNAME?.trim() || "127.0.0.1";
-const env = {
-  ...process.env,
+const env = buildForwardedRuntimeEnv(process.env, {
   NODE_ENV: "production",
   PORT: port,
   HOSTNAME: hostname,
-};
+});
 
 log(`command=${commandForHumans}`);
 log(`cwd=${standaloneCwd}`);

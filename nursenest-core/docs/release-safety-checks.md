@@ -4,6 +4,24 @@ Commands and scripts that catch config drift, broken marketing routes, and unsaf
 
 **Runtime E2E / health / paid-access gate:** see **[`RELEASE_QA.md`](./RELEASE_QA.md)** (`npm run qa:release-gate`). **Post-deploy smoke / user journeys:** **[`release-verification.md`](./release-verification.md)** (`npm run qa:verify:production`).
 
+## Runtime env / DigitalOcean guardrail
+
+Before large deploy restructures, also run:
+
+```bash
+cd nursenest-core
+npm run release:runtime-checklist
+```
+
+This bundles:
+
+1. `npm run typecheck:critical`
+2. `npm run verify:do-runtime`
+3. `npm run list:stripe-runtime-env-keys`
+4. Optional `npm run verify:sitemap` + `npm run test:homepage` when `RUN_OPTIONAL_RUNTIME_RELEASE_CHECKS=1`
+
+`npm run verify:do-runtime` is the blocking live App Platform check. It verifies the expected app/account, `services.web` `source_dir`, `run_command`, `DATABASE_URL` attachment/scope/type, `AUTH_SECRET`, and deployment freshness (active vs latest deployment, rollback state, active commit vs current `main`). It also writes `tmp/do-runtime-verification.json`, which runtime bootstrap errors reference when `DATABASE_URL` is missing.
+
 ## Recommended pre-push / pre-deploy
 
 ```bash

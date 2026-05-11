@@ -219,16 +219,29 @@ export function assertRuntimeDatabaseEnvContract(): void {
   if (!raw) {
     if (process.env.NODE_ENV === "production") {
       let cwd = ".";
+      let scriptPath = "(unavailable)";
       try {
         cwd = process.cwd();
       } catch {
         /* ignore */
       }
+      try {
+        scriptPath = typeof process.argv[1] === "string" ? process.argv[1] : "(unavailable)";
+      } catch {
+        /* ignore */
+      }
       throw new Error(
         [
-          "DATABASE_URL is missing in runtime environment (not build ARG).",
-          "Confirm DigitalOcean DATABASE_URL is scope RUN_TIME with a non-empty secret, or ship `.env.production` / `.env.local` under the app root for standalone hydrate.",
+          "DATABASE_URL is missing in the first runtime Node process (not build ARG).",
+          "Inspect DigitalOcean component env attachment, source_dir, run_command, deployment freshness, rollback state, dotenv precedence, and wrapper env forwarding.",
+          "app_name=nursenest-core-next",
+          "component_name=web",
+          "source_dir=.",
+          "run_command=node scripts/start-standalone.mjs",
           `cwd=${cwd}`,
+          `script_path=${scriptPath}`,
+          "deployment_id=(unavailable)",
+          "doctl_verify_runtime=unavailable app_root=(not available in app runtime)",
           `NEXT_PHASE=${process.env.NEXT_PHASE ?? "(unset)"}`,
           `npm_lifecycle_event=${process.env.npm_lifecycle_event ?? "(unset)"}`,
         ].join(" "),

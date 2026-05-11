@@ -18,7 +18,7 @@ import net from "node:net";
 import { once } from "node:events";
 import { setTimeout as sleep } from "node:timers/promises";
 import { spawn, spawnSync } from "node:child_process";
-import { dirname, join, resolve as resolvePath } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
 import { normalizeBootstrapProbePathname } from "./standalone-bootstrap-probe-pathname.mjs";
@@ -26,22 +26,17 @@ import { resolveBootstrapStartupMode } from "./resolve-bootstrap-mode.mjs";
 import { loadRuntimeEnv } from "./lib/load-runtime-env.mjs";
 import {
   buildForwardedRuntimeEnv,
+  createRuntimeEnvProbeDiagnostics,
   DIGITALOCEAN_STANDALONE_RUNTIME_EVIDENCE,
-  runtimeEnvPresenceSnapshot,
+  createEarlyRuntimeDiagnostics,
+  runtimeEnvProbeEnabled,
+  resolveRuntimeContractContext,
 } from "./lib/standalone-env-forwarding.mjs";
 import { logRuntimeEnvSnapshot, validateRuntimeEnvOrThrow } from "./runtime-env-guard-bootstrap.mjs";
 
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const runtimeBootstrap = join(pkgRoot, "scripts", "start-standalone-runtime.cjs");
-let entry;
-try {
-  entry = verifyStandaloneArtifact(pkgRoot);
-} catch (error) {
-  const message = error instanceof Error ? error.message : String(error);
-  console.error(`[nursenest-core] FATAL: ${message}`);
-  process.exit(1);
-}
 
 /**
  * Merge `.env` / `.env.local` / `.env.production` into `process.env` without overwriting non-empty
@@ -82,44 +77,34 @@ function promoteDatabaseUrlAliasesFromEnv() {
   }
 }
 
-function logStandaloneParentBootstrapDiagnostics() {
-  let scriptResolved = null;
-  try {
-    const a1 = process.argv[1];
-    scriptResolved = typeof a1 === "string" ? resolvePath(a1) : null;
-  } catch {
-    scriptResolved = null;
-  }
+function logStandaloneRuntimeDiagnostics(phase) {
   console.error(
     "[nn-bootstrap]",
     JSON.stringify({
-      phase: "standalone_parent_post_hydrate",
-      cwd: process.cwd(),
+      ...createEarlyRuntimeDiagnostics({
+        env: process.env,
+        phase,
+      }),
       pkgRoot,
-      scriptResolved,
-      execPath: process.execPath,
-      ...runtimeEnvPresenceSnapshot(process.env),
+      ...DIGITALOCEAN_STANDALONE_RUNTIME_EVIDENCE,
       DIGITALOCEAN_APP_ID_present: Boolean(String(process.env.DIGITALOCEAN_APP_ID ?? "").trim()),
-      NEXT_PHASE: process.env.NEXT_PHASE ?? null,
-      npm_lifecycle_event: process.env.npm_lifecycle_event ?? null,
+      execPath: process.execPath,
+      NEXT_PHASE_present: Boolean(String(process.env.NEXT_PHASE ?? "").trim()),
+      npm_lifecycle_event_present: Boolean(String(process.env.npm_lifecycle_event ?? "").trim()),
     }),
   );
 }
 
-function logStandaloneEnvForwardingDiagnostics(phase) {
+function logStandaloneRuntimeProbe(phase) {
+  if (!runtimeEnvProbeEnabled(process.env)) return;
   console.error(
     "[nn-bootstrap]",
-    JSON.stringify({
-      phase,
-      cwd: process.cwd(),
-      pkgRoot,
-      ...DIGITALOCEAN_STANDALONE_RUNTIME_EVIDENCE,
-      ...runtimeEnvPresenceSnapshot(process.env),
-      DIGITALOCEAN_APP_ID_present: Boolean(String(process.env.DIGITALOCEAN_APP_ID ?? "").trim()),
-      NODE_ENV: process.env.NODE_ENV ?? null,
-      PORT: process.env.PORT ?? null,
-      HOSTNAME: process.env.HOSTNAME ?? null,
-    }),
+    JSON.stringify(
+      createRuntimeEnvProbeDiagnostics({
+        env: process.env,
+        phase,
+      }),
+    ),
   );
 }
 
@@ -131,21 +116,35 @@ function logMissingDatabaseUrlRuntimeEvidence() {
       event: "database_url_absent_after_standalone_hydrate",
       message:
         "DATABASE_URL is absent in the Node runtime process after disk hydration; inspect deploy component env attachment, source_dir, and run_command.",
-      cwd: process.cwd(),
-      pkgRoot,
+      ...resolveRuntimeContractContext({
+        env: process.env,
+        cwd: process.cwd(),
+      }),
       ...DIGITALOCEAN_STANDALONE_RUNTIME_EVIDENCE,
-      ...runtimeEnvPresenceSnapshot(process.env),
+      pkgRoot,
     }),
   );
 }
 
-logStandaloneEnvForwardingDiagnostics("standalone_parent_pre_hydrate");
+logStandaloneRuntimeDiagnostics("standalone_parent_pre_hydrate");
+logStandaloneRuntimeProbe("standalone_parent_pre_hydrate");
+
+let entry;
+try {
+  entry = verifyStandaloneArtifact(pkgRoot);
+} catch (error) {
+  const message = error instanceof Error ? error.message : String(error);
+  console.error(`[nursenest-core] FATAL: ${message}`);
+  process.exit(1);
+}
+
 hydrateProcessEnvFromDisk();
 promoteDatabaseUrlAliasesFromEnv();
-logStandaloneParentBootstrapDiagnostics();
+logStandaloneRuntimeDiagnostics("standalone_parent_post_hydrate");
 logMissingDatabaseUrlRuntimeEvidence();
 logRuntimeEnvSnapshot();
 validateRuntimeEnvOrThrow();
+logStandaloneRuntimeDiagnostics("standalone_parent_contract_validated");
 
 // Dockerfile builds often bake null commit/branch into nn-build-meta.json; App Platform injects
 // NN_BUILD_COMMIT from DO bindable (e.g. ${web.COMMIT_HASH}) at RUN_TIME only — refresh the file before serving.
