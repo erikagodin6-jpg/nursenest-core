@@ -27,13 +27,30 @@ import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback
 import { CheckoutGlobalRegionContextPathStamp } from "@/components/marketing/checkout-global-region-context-path-stamp";
 import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
 import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
-
-import { getStaffSession } from "@/lib/auth/staff-session";
 import { MarketingPublicContentEditProvider } from "@/components/marketing/marketing-public-content-edit-provider";
-import { loadMarketingPublicContentOverridesForLocale } from "@/lib/marketing/load-marketing-public-content-overrides";
 const marketingLocaleLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
 export const dynamic = "force-dynamic";
+
+async function loadPublicContentOverridesForLocaleSafe(locale: string): Promise<Record<string, string>> {
+  try {
+    const { loadMarketingPublicContentOverridesForLocale } = await import(
+      "@/lib/marketing/load-marketing-public-content-overrides"
+    );
+    return await loadMarketingPublicContentOverridesForLocale(locale);
+  } catch {
+    return {};
+  }
+}
+
+async function getStaffSessionSafe() {
+  try {
+    const { getStaffSession } = await import("@/lib/auth/staff-session");
+    return await getStaffSession();
+  } catch {
+    return null;
+  }
+}
 
 export default async function MarketingLocaleLayout({
   children,
@@ -125,8 +142,8 @@ export default async function MarketingLocaleLayout({
     (serverGlobalRegionCookie === "us" ? "US" : serverGlobalRegionCookie === "canada" ? "CA" : examRegionToggle);
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingCountryToggle);
   const [publicContentOverrides, staffSession, serverNarrowViewportHint] = await Promise.all([
-    loadMarketingPublicContentOverridesForLocale(locale).catch(() => ({} as Record<string, string>)),
-    getStaffSession().catch(() => null),
+    loadPublicContentOverridesForLocaleSafe(locale),
+    getStaffSessionSafe(),
     readMarketingNarrowViewportServerHint(),
   ]);
 

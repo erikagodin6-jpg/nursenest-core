@@ -74,14 +74,6 @@ function splitPremiumHeroHeadline(headline: string): { lead: string; emphasis: s
       };
     }
   }
-  const sentenceBreak = headline.match(/([.!?])\s+/);
-  if (sentenceBreak && sentenceBreak.index != null) {
-    const splitAt = sentenceBreak.index + sentenceBreak[0].length;
-    return {
-      lead: headline.slice(0, splitAt).trimEnd(),
-      emphasis: headline.slice(splitAt).trimStart(),
-    };
-  }
   return { lead: headline, emphasis: null };
 }
 
@@ -286,22 +278,22 @@ export function PremiumHomepageHero(props: {
   // Premium hero copy. Headline + sub use NEW i18n keys so existing
   // translations of `pages.home.hero.headline` are not silently changed.
   const eyebrow = formatTitleCase(
-    safeHomepageMarketingT(t, "pages.home.hero.eyebrowAdaptive", "Adaptive Clinical Readiness"),
+    safeHomepageMarketingT(t, "pages.home.hero.eyebrow", "Global study platform · Canada-first exam depth"),
     locale,
   );
-  const headline = formatTitleCase(
+  const headline = formatSentenceCase(
     safeHomepageMarketingT(
       t,
-      "pages.home.hero.headlineAdaptive",
-      "Master Nursing. Think Like a Clinician.",
+      "pages.home.hero.headlinePremium",
+      "Pass the boards with a calm, clinical study companion.",
     ),
     locale,
   );
   const subheading = formatSentenceCase(
     safeHomepageMarketingT(
       t,
-      "pages.home.hero.subheadingAdaptive",
-      "Study with lessons, flashcards, rationales, CAT readiness, ECG, labs, and clinical reasoning tools built for RN, PN or RPN, NP, allied health, and pre-nursing learners.",
+      "pages.home.hero.subheadingPremium",
+      "Study with lessons, flashcards, rationales, and readiness tools built for RN, RPN, NP, and allied health learners worldwide.",
     ),
     locale,
   );
@@ -358,8 +350,8 @@ export function PremiumHomepageHero(props: {
   const { lead: heroHeadlineLead, emphasis: heroHeadlineEmphasis } = splitPremiumHeroHeadline(headline);
 
   const panelCopy = {
-    panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Adaptive Readiness Preview"),
-    panelLive: safeHomepageMarketingT(t, "pages.home.hero.panel.live", "Live Clinical Readiness Preview"),
+    panelTag: safeHomepageMarketingT(t, "pages.home.hero.panel.tag", "Readiness preview"),
+    panelLive: safeHomepageMarketingT(t, "pages.home.hero.panel.live", "Live readiness preview"),
     readinessLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessLabel", "Readiness"),
     readinessValue: safeHomepageMarketingT(t, "pages.home.hero.panel.readinessValue", "78%"),
     streakLabel: safeHomepageMarketingT(t, "pages.home.hero.panel.streakLabel", "Study streak"),
@@ -370,28 +362,28 @@ export function PremiumHomepageHero(props: {
     ecgLabel: safeHomepageMarketingT(
       t,
       "pages.home.hero.panel.ecgLabel",
-      "Lead II · Normal Sinus Rhythm",
+      "ECG practice",
     ),
     ecgBpm: safeHomepageMarketingT(t, "pages.home.hero.panel.ecgBpm", "72 bpm"),
     mini1Title: safeHomepageMarketingT(
       t,
       "pages.home.hero.panel.mini1.title",
-      "Labs and Clinical Interpretation",
+      "Heart failure · hemodynamics & safety",
     ),
     mini1Sub: safeHomepageMarketingT(
       t,
       "pages.home.hero.panel.mini1.sub",
-      "79% readiness · weak areas detected",
+      "79% mastery · 6 questions remaining",
     ),
     mini2Title: safeHomepageMarketingT(
       t,
       "pages.home.hero.panel.mini2.title",
-      "Medication Safety and Med Math",
+      "Pharmacology · high-alert medications",
     ),
     mini2Sub: safeHomepageMarketingT(
       t,
       "pages.home.hero.panel.mini2.sub",
-      "54% readiness · focused review queued",
+      "54% mastery · 11 questions remaining",
     ),
   };
 

@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 import { usePremiumHomepageRoutes } from "./premium-homepage-routes";
 
@@ -13,13 +14,13 @@ const PATHWAY_ICON_ABBR: Record<string, string> = {
   rn: "RN",
   pn: "PN",
   np: "NP",
-  "international-rn": "IRN",
   allied: "AH",
+  "pre-nursing": "PRE",
 };
 
 export function PremiumPathwayShowcase() {
-  const { region, pathwayCards } = usePremiumHomepageRoutes();
-  const { t } = useMarketingI18n();
+  const { region, pathwayCards, hrefs } = usePremiumHomepageRoutes();
+  const { t, locale } = useMarketingI18n();
 
   return (
     <section
@@ -30,20 +31,26 @@ export function PremiumPathwayShowcase() {
       <div className="nn-section-shell">
         <div className="mx-auto max-w-3xl text-center">
           <p className="nn-premium-home-eyebrow">
-            {safeHomepageMarketingT(t, "pages.home.premium.pathways.eyebrow", "Pathways")}
+            {formatTitleCase(safeHomepageMarketingT(t, "pages.home.premium.pathways.eyebrow", "Pathways"), locale)}
           </p>
           <h2 id="premium-pathway-showcase-heading" className="nn-marketing-h2 mt-4 text-balance text-[var(--palette-heading)]">
-            {safeHomepageMarketingT(
-              t,
-              "pages.home.premium.pathways.heading",
-              "A clinical study path for the license you are earning.",
+            {formatTitleCase(
+              safeHomepageMarketingT(
+                t,
+                "pages.home.premium.pathways.heading",
+                "Every Path Has Its Own Clinical Scaffold.",
+              ),
+              locale,
             )}
           </h2>
           <p className="nn-marketing-body mx-auto mt-3 max-w-2xl text-pretty text-[var(--palette-text-muted)]">
-            {safeHomepageMarketingT(
-              t,
-              "pages.home.premium.pathways.body",
-              "Choose the exam lane that matches your role. Each pathway keeps learners on real public hub routes with region-aware RN, PN/RPN, NP, Allied, and global RN entry points.",
+            {formatSentenceCase(
+              safeHomepageMarketingT(
+                t,
+                "pages.home.premium.pathways.body",
+                "Choose the lane that matches your role. RN, PN or RPN, NP, allied health, and pre-nursing each keep their own public entry points and readiness framing.",
+              ),
+              locale,
             )}
           </p>
         </div>
@@ -78,6 +85,60 @@ export function PremiumPathwayShowcase() {
               </span>
             </MarketingTrackedLink>
           ))}
+        </div>
+
+        <div className="mt-6 rounded-3xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--theme-card-bg))] p-5 sm:p-6">
+          <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--semantic-info)]">
+                {formatTitleCase(
+                  safeHomepageMarketingT(t, "pages.home.premium.pathways.international.badge", "International RN"),
+                  locale,
+                )}
+              </p>
+              <h3 className="mt-3 text-xl font-black text-[var(--palette-heading)]">
+                {formatTitleCase(
+                  safeHomepageMarketingT(
+                    t,
+                    "pages.home.premium.pathways.international.heading",
+                    "Live Hubs and Foundation Coverage Vary by Region.",
+                  ),
+                  locale,
+                )}
+              </h3>
+              <p className="nn-marketing-body-sm mt-2 max-w-2xl text-pretty text-[var(--palette-text-muted)]">
+                {formatSentenceCase(
+                  safeHomepageMarketingT(
+                    t,
+                    "pages.home.premium.pathways.international.body",
+                    "Launched country hubs are live, but not every international route carries the same readiness system or CAT depth yet. Keep regional expectations explicit.",
+                  ),
+                  locale,
+                )}
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
+              <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_42%,var(--theme-card-bg))] px-4 py-3 text-sm font-semibold text-[var(--palette-heading)]">
+                {formatTitleCase(
+                  safeHomepageMarketingT(t, "pages.home.premium.pathways.international.live", "Live Now: Launched Country Hubs"),
+                  locale,
+                )}
+              </div>
+              <MarketingTrackedLink
+                href={hrefs.internationalRn}
+                event={PH.marketingHomeExploreHubClick}
+                eventProps={{ pathway: "international-rn", region, surface: "premium_pathway_showcase_international" }}
+                className="inline-flex items-center justify-center rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--border-subtle))] px-4 py-3 text-sm font-bold text-[var(--semantic-info)] transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,transparent)]"
+                data-testid="premium-pathway-international-status-link"
+              >
+                {formatTitleCase(
+                  safeHomepageMarketingT(t, "pages.home.premium.pathways.international.cta", "View a Live International Hub"),
+                  locale,
+                )}
+                <ArrowRight className="ml-1.5 h-4 w-4 shrink-0" aria-hidden />
+              </MarketingTrackedLink>
+            </div>
+          </div>
         </div>
       </div>
     </section>

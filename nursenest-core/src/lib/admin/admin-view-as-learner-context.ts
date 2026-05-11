@@ -6,15 +6,15 @@ import {
   staffGatedVerifiedSimulation,
   type AdminLearnerQaPayloadV1,
 } from "@/lib/admin/admin-learner-qa-simulation";
-import { resolveEntitlementForPage, type PageEntitlementResult } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { getUserAccess } from "@/lib/entitlements/get-user-access";
-import type { UserAccess } from "@/lib/entitlements/user-access-types";
 
 export type AdminViewAsLearnerContext = {
   staffSession: StaffSession | null;
   /** Signed cookie + tier/lifecycle simulation — only non-null when staff is present. */
   simulation: AdminLearnerQaPayloadV1 | null;
 };
+
+type PageEntitlementResult = import("@/lib/entitlements/resolve-entitlement-for-page").PageEntitlementResult;
+type UserAccess = import("@/lib/entitlements/user-access-types").UserAccess;
 
 /**
  * Admin "view as learner" / QA simulation: staff session + HMAC-bound cookie (see {@link getVerifiedAdminLearnerQaSimulation}).
@@ -35,6 +35,7 @@ export const getAdminViewAsLearnerContext = cache(async function getAdminViewAsL
 
 /** Page-level entitlements (includes staff QA overlay via {@link getUserAccess}). */
 export async function resolveEffectiveEntitlements(userId: string): Promise<PageEntitlementResult> {
+  const { resolveEntitlementForPage } = await import("@/lib/entitlements/resolve-entitlement-for-page");
   return resolveEntitlementForPage(userId);
 }
 
@@ -47,10 +48,14 @@ export async function resolveEffectiveLearnerContext(userId: string): Promise<{
   userAccess: UserAccess;
   viewAs: AdminViewAsLearnerContext;
 }> {
-  const [entitlement, userAccess, viewAs] = await Promise.all([
+  const [{ resolveEntitlementForPage }, { getUserAccess }, viewAs] = await Promise.all([
+    import("@/lib/entitlements/resolve-entitlement-for-page"),
+    import("@/lib/entitlements/get-user-access"),
+    getAdminViewAsLearnerContext(userId),
+  ]);
+  const [entitlement, userAccess] = await Promise.all([
     resolveEntitlementForPage(userId),
     getUserAccess(userId),
-    getAdminViewAsLearnerContext(userId),
   ]);
   return { entitlement, userAccess, viewAs };
 }

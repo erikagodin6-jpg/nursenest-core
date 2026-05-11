@@ -7,10 +7,6 @@ import {
   type UserRole,
 } from "@prisma/client";
 import { resolveAlliedEntitlementFromProfile } from "@/lib/allied/allied-billing-career-resolution";
-import {
-  buildUserAccessForAdminLearnerQa,
-  getVerifiedAdminLearnerQaSimulation,
-} from "@/lib/admin/admin-learner-qa-simulation";
 import { isDeletedAccountEmail } from "@/lib/account/delete-learner-account";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import { normalizeCountryCodeForEntitlement } from "@/lib/entitlements/country-code";
@@ -44,6 +40,10 @@ function withSessionJwt(
   };
 }
 export { subscriptionStatusForSession, type SessionSubscriptionStatus } from "./subscription-session-status";
+
+async function loadAdminLearnerQaSimulationModule() {
+  return import("@/lib/admin/admin-learner-qa-simulation");
+}
 
 function mapSubscriptionPlanStatus(status: SubscriptionStatus | undefined | null): SubscriptionPlanStatus {
   if (!status) return "none";
@@ -203,6 +203,8 @@ async function getUserAccessCore(
 
   /** Staff roles: full internal product access — do not run subscription queries or imply a paid Stripe plan. */
   if (isLearnerEntitlementStaffBypassRole(user.role)) {
+    const { buildUserAccessForAdminLearnerQa, getVerifiedAdminLearnerQaSimulation } =
+      await loadAdminLearnerQaSimulationModule();
     const qaSim = await getVerifiedAdminLearnerQaSimulation(userId);
     if (qaSim) {
       safeServerLog("admin_learner_qa", "entitlement_overlay", {

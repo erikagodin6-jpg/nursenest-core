@@ -1,6 +1,5 @@
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
 import { minimalUrlsetSingleHome } from "@/lib/seo/sitemap-static-xml";
-import { buildMultilingualBlogSitemapXmlForLocale } from "@/lib/seo/sitemap-multilingual-blog-xml";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
 export const runtime = "nodejs";
@@ -9,6 +8,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request): Promise<Response> {
   let xml: string;
   try {
+    const { buildMultilingualBlogSitemapXmlForLocale } = await import("@/lib/seo/sitemap-multilingual-blog-xml");
     xml = await buildMultilingualBlogSitemapXmlForLocale("es");
   } catch {
     xml = minimalUrlsetSingleHome();

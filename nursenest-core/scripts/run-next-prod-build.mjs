@@ -15,6 +15,7 @@ import {
   persistBuildMetricsRun,
   recordBuildPhase,
 } from "./build-runtime-metrics.mjs";
+import { collectBuildGraphIsolationSnapshot } from "./build-graph-isolation-metrics.mjs";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
@@ -297,6 +298,18 @@ if (!String(process.env.NEXT_TELEMETRY_DISABLED ?? "").trim()) {
 if (!String(process.env.NN_FORCE_SINGLE_BUILD_WORKER ?? "").trim()) {
   process.env.NN_FORCE_SINGLE_BUILD_WORKER = "true";
 }
+
+const graphIsolationSnapshot = collectBuildGraphIsolationSnapshot({ packageRoot });
+metricsRun.graphIsolation = graphIsolationSnapshot;
+Object.assign(metricsRun.counts, {
+  routeCount: graphIsolationSnapshot.routeCount,
+  layoutCount: graphIsolationSnapshot.layoutCount,
+  pageCount: graphIsolationSnapshot.pageCount,
+  sourceModuleCount: graphIsolationSnapshot.sourceModuleCount,
+  appSourceModuleCount: graphIsolationSnapshot.appSourceModuleCount,
+  importedRegistryCounts: graphIsolationSnapshot.importedRegistryCounts,
+});
+console.log("[next-prod-build] compile_graph_snapshot", JSON.stringify(graphIsolationSnapshot));
 
 let buildLockHeld = false;
 try {

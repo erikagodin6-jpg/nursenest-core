@@ -44,7 +44,7 @@ runStep({
   name: "verify_dist_artifacts",
   command: process.execPath,
   args: [path.join(repoRoot, "scripts", "verify-dist-artifacts.mjs")],
-  cwd: repoRoot,
+  cwd: packageRoot,
 });
 
 finishBuildMetricsRun(metricsRun);

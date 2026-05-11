@@ -6,7 +6,6 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { MarketingHomepageEcgStripIllustration } from "@/components/marketing/home/premium-homepage-hero";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_TERTIARY_LINK_CLASS,
@@ -33,7 +32,7 @@ const ADVANCED_TEASERS = [
  */
 export function PremiumHomepageEcg() {
   const { hrefs, region } = usePremiumHomepageRoutes();
-  const { t, locale } = useMarketingI18n();
+  const { t } = useMarketingI18n();
   const tr = (key: string, fallback: string) => safeHomepageMarketingT(t, key, fallback);
 
   return (
@@ -47,27 +46,21 @@ export function PremiumHomepageEcg() {
           {/* Core ECG — integrated capability */}
           <div className="min-w-0">
             <p className="nn-premium-home-eyebrow">
-              {formatTitleCase(tr("pages.home.premium.ecg.coreEyebrow", "Integrated Telemetry Learning"), locale)}
+              {tr("pages.home.premium.ecg.coreEyebrow", "Integrated telemetry learning")}
             </p>
             <h2
               id="premium-home-ecg-core-heading"
               className="nn-marketing-h2 mt-4 text-balance text-[var(--palette-heading)]"
             >
-              {formatTitleCase(
-                tr(
-                  "pages.home.premium.ecg.coreHeading",
-                  "Adaptive ECG Education Built Into NurseNest, Not a Bolt-On Simulator.",
-                ),
-                locale,
+              {tr(
+                "pages.home.premium.ecg.coreHeading",
+                "Adaptive ECG education built into NurseNest — not a bolt-on simulator.",
               )}
             </h2>
             <p className="nn-marketing-body mt-3 max-w-xl text-pretty text-[var(--palette-text-muted)]">
-              {formatSentenceCase(
-                tr(
-                  "pages.home.premium.ecg.coreBody",
-                  "Build telemetry literacy with nursing-focused rhythm recognition, interpretation workflows, and practice-aligned reinforcement across RN, NP, allied, and new grad pathways.",
-                ),
-                locale,
+              {tr(
+                "pages.home.premium.ecg.coreBody",
+                "Build telemetry literacy with nursing-focused rhythm recognition, interpretation workflows, and practice-aligned reinforcement across RN, NP, allied, and new grad pathways.",
               )}
             </p>
 
@@ -85,7 +78,7 @@ export function PremiumHomepageEcg() {
 
             <div className="nn-premium-hero-ecg mt-8 max-w-lg">
               <div className="nn-premium-hero-ecg__row">
-                <span>{tr("pages.home.premium.ecg.stripLabel", "Lead II · Normal Sinus Rhythm")}</span>
+                <span>{tr("pages.home.premium.ecg.stripLabel", "Telemetry preview")}</span>
                 <span className="nn-premium-hero-ecg__bpm">{tr("pages.home.premium.ecg.stripBpm", "72 bpm")}</span>
               </div>
               <MarketingHomepageEcgStripIllustration

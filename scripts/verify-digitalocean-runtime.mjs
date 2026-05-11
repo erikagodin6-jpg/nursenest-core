@@ -429,8 +429,9 @@ console.log(`[verify:do-runtime] repo spec summary ${JSON.stringify(repoSummary)
 assertRunTimeGeneralKeyHasLiteralValue(specText, "AI_ADMIN_GENERATION_ENABLED");
 verifyLiveSpec(repoSummary, "repo spec");
 
-if (scalar(lines, "dockerfile_path") !== "Dockerfile") {
-  fail(`expected dockerfile_path: Dockerfile, found ${scalar(lines, "dockerfile_path") ?? "missing"}`);
+const repoDockerfilePath = findService(specModel)?.dockerfile_path ?? null;
+if (repoDockerfilePath !== "Dockerfile") {
+  fail(`expected dockerfile_path: Dockerfile, found ${repoDockerfilePath ?? "missing"}`);
 }
 if (scalar(lines, "branch") !== "main") {
   fail(`expected production branch main, found ${scalar(lines, "branch") ?? "missing"}`);

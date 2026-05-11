@@ -10,7 +10,7 @@ import { HUB } from "@/lib/navigation/canonical-destinations";
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 
 export type PremiumHomepagePathway = {
-  id: "rn" | "pn" | "np" | "allied" | "pre-nursing";
+  id: "rn" | "pn" | "np" | "international-rn" | "allied";
   title: string;
   subtitle: string;
   body: string;
@@ -32,7 +32,6 @@ export type PremiumHomepageRoutes = {
     questionBank: string;
     practiceExams: string;
     dashboard: string;
-    preNursing: string;
     internationalRn: string;
   };
   pathwayCards: PremiumHomepagePathway[];
@@ -91,7 +90,6 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
         questionBank: loc(HUB.questionBank),
         practiceExams: loc(HUB.practiceExams),
         dashboard: loc(HUB.login),
-        preNursing: loc("/pre-nursing"),
         internationalRn: loc(internationalRn),
       },
       pathwayCards: [
@@ -104,7 +102,7 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
           ),
           body: tr(
             "pages.home.premium.pathways.rn.body",
-            "Adaptive lessons, NGN case practice, weak-area targeting, and readiness loops for registered nurse candidates.",
+            "Clinical judgment lessons, NGN case practice, and CAT-style readiness for registered nurse candidates.",
           ),
           href: loc(hubs.rn),
           cta: tr("pages.home.premium.pathways.rn.cta", "Explore RN"),
@@ -119,7 +117,7 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
           ),
           body: tr(
             "pages.home.premium.pathways.pn.body",
-            "Focused practical nursing prep across fundamentals, bedside safety, medication administration, and delegation.",
+            "Focused practical nursing prep across fundamentals, safety, medication administration, and delegation.",
           ),
           href: loc(hubs.pn),
           cta: tr("pages.home.premium.pathways.pn.cta", "Explore PN"),
@@ -134,11 +132,23 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
           ),
           body: tr(
             "pages.home.premium.pathways.np.body",
-            "Advanced assessment, diagnostics, prescribing logic, and primary care reasoning for NP candidates.",
+            "Advanced assessment, diagnostics, pharmacology, and primary care reasoning for NP candidates.",
           ),
           href: loc(hubs.np),
           cta: tr("pages.home.premium.pathways.np.cta", "Explore NP"),
           tone: "success",
+        },
+        {
+          id: "international-rn",
+          title: tr("pages.home.premium.pathways.internationalRn.title", "International RN"),
+          subtitle: tr("pages.home.premium.pathways.internationalRn.subtitle", "Global registration pathways"),
+          body: tr(
+            "pages.home.premium.pathways.internationalRn.body",
+            "Bridge-style RN study support for internationally educated nurses using launched country exam hubs.",
+          ),
+          href: loc(internationalRn),
+          cta: tr("pages.home.premium.pathways.internationalRn.cta", "Explore global RN"),
+          tone: "warning",
         },
         {
           id: "allied",
@@ -151,18 +161,6 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
           href: loc(hubs.allied),
           cta: tr("pages.home.premium.pathways.allied.cta", "Explore Allied"),
           tone: "accent",
-        },
-        {
-          id: "pre-nursing",
-          title: tr("pages.home.premium.pathways.preNursing.title", "Pre-Nursing"),
-          subtitle: tr("pages.home.premium.pathways.preNursing.subtitle", "Public foundations and study planning"),
-          body: tr(
-            "pages.home.premium.pathways.preNursing.body",
-            "Start with open foundations, prerequisite science support, and study planning before role-specific licensure prep.",
-          ),
-          href: loc("/pre-nursing"),
-          cta: tr("pages.home.premium.pathways.preNursing.cta", "Explore Pre-Nursing"),
-          tone: "warning",
         },
       ],
     };

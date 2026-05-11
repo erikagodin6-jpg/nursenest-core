@@ -2,10 +2,18 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
-import { getStaffSession } from "@/lib/auth/staff-session";
 
 /** Shared marketing/locale dictionary for all `/app/*` routes (learner shell, exams, practice). */
 export const dynamic = "force-dynamic";
+
+async function getStaffSessionSafe() {
+  try {
+    const { getStaffSession } = await import("@/lib/auth/staff-session");
+    return await getStaffSession();
+  } catch {
+    return null;
+  }
+}
 
 /** Learner app is auth-gated; keep subscriber lesson/question payloads out of search indexes even when metadata is missing on a leaf route. */
 export const metadata: Metadata = {
@@ -32,7 +40,7 @@ export default async function AppSegmentLayout({ children }: { children: React.R
 
   let adminPalette: ReactNode = null;
   try {
-    const staff = await getStaffSession();
+    const staff = await getStaffSessionSafe();
     if (staff) {
       const { AdminGlobalCommandPalette } = await import("@/components/admin/admin-global-command-palette");
       adminPalette = (

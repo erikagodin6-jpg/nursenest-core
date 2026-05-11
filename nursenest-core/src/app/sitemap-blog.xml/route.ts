@@ -1,6 +1,5 @@
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
-import { listBlogSitemapEntriesSafe } from "@/lib/seo/sitemap-blog-xml";
 import { filterPublicSitemapEntries } from "@/lib/seo/sitemap-public-index-filter";
 import { buildSitemapUrlsetFromAbsoluteUrls, normalizeOrigin } from "@/lib/seo/sitemap-static-xml";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
@@ -17,6 +16,7 @@ export async function GET(request: Request): Promise<Response> {
 
   let xml: string;
   try {
+    const { listBlogSitemapEntriesSafe } = await import("@/lib/seo/sitemap-blog-xml");
     const entries = await listBlogSitemapEntriesSafe();
     const filtered = filterPublicSitemapEntries(entries, origin);
     xml = buildSitemapUrlsetFromAbsoluteUrls(

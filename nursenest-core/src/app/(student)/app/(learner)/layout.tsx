@@ -58,17 +58,37 @@ import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
-
-import {
-  bannerTitleForPayload,
-  learnerPathwayNavFromQaPayload,
-  learnerQaChromeTierFallbackString,
-  learnerQaUserBarOverlayFromPayload,
-  publicQaStateFromPayload,
-} from "@/lib/admin/admin-learner-qa-simulation";
-import { getAdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
+import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
+
+type AdminLearnerQaSimulationModule = typeof import("@/lib/admin/admin-learner-qa-simulation");
+
+async function getAdminViewAsLearnerContextSafe(userId: string): Promise<AdminViewAsLearnerContext> {
+  try {
+    const { getAdminViewAsLearnerContext } = await import("@/lib/admin/admin-view-as-learner-context");
+    return await getAdminViewAsLearnerContext(userId);
+  } catch (error) {
+    layoutStderrTrace("learner_shell", "admin_view_as_context_import_failed", {
+      detail: error instanceof Error ? error.message.slice(0, 200) : String(error).slice(0, 200),
+    });
+    return {
+      staffSession: null,
+      simulation: null,
+    };
+  }
+}
+
+async function loadAdminLearnerQaSimulationHelpersSafe(): Promise<AdminLearnerQaSimulationModule | null> {
+  try {
+    return await import("@/lib/admin/admin-learner-qa-simulation");
+  } catch (error) {
+    layoutStderrTrace("learner_shell", "admin_qa_helpers_import_failed", {
+      detail: error instanceof Error ? error.message.slice(0, 200) : String(error).slice(0, 200),
+    });
+    return null;
+  }
+}
 
 export default async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
   const requestPathname = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
@@ -93,9 +113,10 @@ export default async function LearnerShellLayout({ children }: { children: React
   const [entitlement, paywallHomeStats, viewAsCtx] = await Promise.all([
     resolveEntitlementForPage(userId),
     loadPaywallHomeStatsForShell(),
-    getAdminViewAsLearnerContext(userId),
+    getAdminViewAsLearnerContextSafe(userId),
   ]);
   const { staffSession, simulation: qaShell } = viewAsCtx;
+  const adminQaSimulationHelpers = qaShell ? await loadAdminLearnerQaSimulationHelpersSafe() : null;
 
   const adminQaModules = qaShell
     ? await Promise.all([
@@ -120,7 +141,7 @@ export default async function LearnerShellLayout({ children }: { children: React
     entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
 
   const pathwayNav = qaShell
-    ? learnerPathwayNavFromQaPayload(qaShell)
+    ? adminQaSimulationHelpers?.learnerPathwayNavFromQaPayload(qaShell) ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA
     : await safeOptional(
         async () => {
           const fresh = await loadLearnerPathwayNavMetadata(userId);
@@ -148,7 +169,9 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   if (!pathwayHubHref) {
     const tier = (
-      qaShell ? learnerQaChromeTierFallbackString(qaShell.track) : (session?.user as { tier?: string | null })?.tier ?? ""
+      qaShell && adminQaSimulationHelpers
+        ? adminQaSimulationHelpers.learnerQaChromeTierFallbackString(qaShell.track)
+        : ((session?.user as { tier?: string | null })?.tier ?? "")
     ).toUpperCase();
     const tierHub = await learnerPathwayHubChromeHrefForTierFallback(tier);
     if (tierHub) {
@@ -165,7 +188,9 @@ export default async function LearnerShellLayout({ children }: { children: React
     }
     if (!pathwayContextBar && pathwayHubHref) {
       const tier = (
-        qaShell ? learnerQaChromeTierFallbackString(qaShell.track) : (session?.user as { tier?: string | null })?.tier ?? ""
+        qaShell && adminQaSimulationHelpers
+          ? adminQaSimulationHelpers.learnerQaChromeTierFallbackString(qaShell.track)
+          : ((session?.user as { tier?: string | null })?.tier ?? "")
       ).toUpperCase();
       const fallbackPathwayId =
         tier === "RN"
@@ -284,8 +309,21 @@ export default async function LearnerShellLayout({ children }: { children: React
               ) : null}
               {qaShell && AdminLearnerQaAppToolbar ? (
                 <AdminLearnerQaAppToolbar
-                  bannerTitle={bannerTitleForPayload(qaShell)}
-                  initialPublicState={publicQaStateFromPayload(qaShell)}
+                  bannerTitle={adminQaSimulationHelpers?.bannerTitleForPayload(qaShell) ?? "Simulated learner view"}
+                  initialPublicState={
+                    adminQaSimulationHelpers?.publicQaStateFromPayload(qaShell) ?? {
+                      active: true,
+                      track: qaShell.track,
+                      lifecycle: qaShell.lifecycle,
+                      country: qaShell.country,
+                      npSpecialty: qaShell.npSpecialty ?? null,
+                      alliedCareer: qaShell.alliedCareer ?? null,
+                      planVariant: qaShell.planVariant ?? null,
+                      billingRegionSlug: null,
+                      bannerTitle: "Simulated learner view",
+                      pathwayId: pathwayId,
+                    }
+                  }
                 />
               ) : null}
               {!skipNonCritical && !qaShell ? <LearnerAppSectionAnalytics /> : null}
@@ -301,7 +339,11 @@ export default async function LearnerShellLayout({ children }: { children: React
                         <LearnerShellUserBar
                           pathwayShortLabel={pathwayShortLabel}
                           serverHasStaffSession={staffSession != null && !qaShell}
-                          learnerQaOverlay={qaShell ? learnerQaUserBarOverlayFromPayload(qaShell) : null}
+                          learnerQaOverlay={
+                            qaShell && adminQaSimulationHelpers
+                              ? adminQaSimulationHelpers.learnerQaUserBarOverlayFromPayload(qaShell)
+                              : null
+                          }
                         />
                         {!coreOnlyEmergency ? <SupportEmailHeaderLink /> : null}
                         <LearnerShellLanguageControl />

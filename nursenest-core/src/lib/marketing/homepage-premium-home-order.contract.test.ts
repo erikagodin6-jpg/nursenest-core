@@ -1,6 +1,7 @@
 /**
- * Contract: premium homepage client section order — ECG stays between Study Ecosystem and Readiness,
- * after hero and pathway/clinical blocks (ecosystem narrative).
+ * Contract: premium homepage client section order — ECG / telemetry now leads the
+ * readiness narrative directly below the hero, followed by pathways, clinical
+ * ecosystems, the adaptive loop, social study, readiness, trust, children, and CTA.
  */
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -9,16 +10,17 @@ import test from "node:test";
 
 const ROOT = process.cwd();
 
-test("HomeRestoredClient section order: hero → product screenshots → pathways → clinical → study ecosystem → ECG → readiness → trust → children → final CTA", () => {
+test("HomeRestoredClient section order: hero → product screenshots → ECG → pathways → clinical → study ecosystem → social study → readiness → trust → children → final CTA", () => {
   const src = fs.readFileSync(path.join(ROOT, "src/components/marketing/home-restored-client.tsx"), "utf8");
 
   const markers = [
     "<PremiumHomepageHero",
     "<HomeHeroScreenshotSectionLazy",
+    "<PremiumHomepageEcg",
     "<PremiumPathwayShowcase",
     "<PremiumClinicalDepth",
     "<PremiumStudyEcosystem",
-    "<PremiumHomepageEcg",
+    "<PremiumSocialStudy",
     "<PremiumReadinessPreview",
     "<PremiumHomepageTrust",
     "{children}",

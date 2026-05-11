@@ -35,23 +35,24 @@ const THEMES_SNAPSHOT = ["ocean", "midnight", "sage-garden", "aurora"] as const;
 test.describe("Homepage ECG visual governance", () => {
   test.describe.configure({ mode: "serial" });
 
-  test("section order and safe-mode: ECG between Study Ecosystem and Readiness", async ({ page }) => {
+test("section order and safe-mode: ECG sits directly below the hero band before pathways", async ({ page }) => {
     await page.goto("/", { waitUntil: "load", timeout: 120_000 });
 
     await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
     await expect(page.getByText(/updating the site right now/i)).toHaveCount(0);
 
-    const study = page.getByTestId("section-premium-study-ecosystem");
+    const screenshots = page.getByTestId("home-hero-screenshot-section");
     const ecg = page.getByTestId("section-premium-home-ecg");
-    const readiness = page.getByTestId("section-premium-readiness-preview");
+    const pathways = page.getByTestId("section-premium-pathway-showcase");
 
-    await expect(study).toBeVisible({ timeout: 60_000 });
     await expect(ecg).toBeVisible({ timeout: 60_000 });
-    await expect(readiness).toBeVisible({ timeout: 60_000 });
+    await expect(pathways).toBeVisible({ timeout: 60_000 });
+    await expect(ecg).toBeVisible({ timeout: 60_000 });
+    await expect(screenshots.first()).toBeVisible({ timeout: 60_000 });
 
-    const yStudy = await study.evaluate((el) => el.getBoundingClientRect().top);
+    const yStudy = await screenshots.first().evaluate((el) => el.getBoundingClientRect().top);
     const yEcg = await ecg.evaluate((el) => el.getBoundingClientRect().top);
-    const yReady = await readiness.evaluate((el) => el.getBoundingClientRect().top);
+    const yReady = await pathways.evaluate((el) => el.getBoundingClientRect().top);
 
     expect(yStudy, "study ecosystem top").toBeLessThan(yEcg);
     expect(yEcg, "ecg top").toBeLessThan(yReady);
@@ -77,7 +78,7 @@ test.describe("Homepage ECG visual governance", () => {
 
   test("ECG telemetry strip and advanced card have non-zero layout (no collapsed visibility)", async ({ page }) => {
     await page.goto("/", { waitUntil: "load", timeout: 120_000 });
-    const stripBox = page.locator(".nn-premium-home-section--ecg .nn-premium-hero-ecg").first();
+    const stripBox = page.locator(".nn-premium-home-section--ecg .nn-premium-hero-ecg svg").first();
     await expect(stripBox).toBeVisible({ timeout: 60_000 });
     const sb = await stripBox.boundingBox();
     expect(sb?.height ?? 0).toBeGreaterThan(40);

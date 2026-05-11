@@ -92,8 +92,20 @@ test("sitemap-clinical-modules route serves clinical marketing urlset only", () 
 
 test("sitemap-blog route serves blog-only urlset", () => {
   const routeSrc = readAppFile("app/sitemap-blog.xml/route.ts");
+  assert.doesNotMatch(routeSrc, /^import\s+\{\s*listBlogSitemapEntriesSafe\s*\}/m);
+  assert.match(routeSrc, /await import\("@\/lib\/seo\/sitemap-blog-xml"\)/);
   assert.match(routeSrc, /listBlogSitemapEntriesSafe/);
   assert.match(routeSrc, /filterPublicSitemapEntries/);
+});
+
+test("localized blog sitemap routes lazy-load DB-backed helpers", () => {
+  const frRouteSrc = readAppFile("app/sitemap-fr-blog.xml/route.ts");
+  assert.doesNotMatch(frRouteSrc, /^import\s+\{\s*buildMultilingualBlogSitemapXmlForLocale\s*\}/m);
+  assert.match(frRouteSrc, /await import\("@\/lib\/seo\/sitemap-multilingual-blog-xml"\)/);
+
+  const esRouteSrc = readAppFile("app/sitemap-es-blog.xml/route.ts");
+  assert.doesNotMatch(esRouteSrc, /^import\s+\{\s*buildMultilingualBlogSitemapXmlForLocale\s*\}/m);
+  assert.match(esRouteSrc, /await import\("@\/lib\/seo\/sitemap-multilingual-blog-xml"\)/);
 });
 
 test("sitemap-allied route exists alongside merged sitemap", () => {

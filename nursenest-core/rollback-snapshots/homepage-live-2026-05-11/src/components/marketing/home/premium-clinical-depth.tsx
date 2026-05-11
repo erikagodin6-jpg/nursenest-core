@@ -3,55 +3,54 @@
 import { Activity, AlertTriangle, FlaskConical, Lightbulb, Pill, Stethoscope } from "lucide-react";
 
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
-import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 const CLINICAL_CARDS = [
   {
-    titleKey: "ecgTelemetry",
-    title: "ECG and Telemetry",
-    body: "Build rhythm recognition, telemetry interpretation, and bedside pattern recognition inside the same study system.",
+    titleKey: "pathophysiology",
+    title: "Pathophysiology",
+    body: "Start with the why: preload, afterload, gas exchange, perfusion, and compensatory cues before memorizing interventions.",
     icon: Activity,
     role: "pathophysiology",
   },
   {
-    titleKey: "labsInterpretation",
-    title: "Labs and Clinical Interpretation",
-    body: "Connect ABGs, electrolytes, cultures, biomarkers, and trend shifts to the next safest nursing action.",
+    titleKey: "diagnostics",
+    title: "Labs and diagnostics",
+    body: "Connect ABGs, electrolytes, cardiac markers, cultures, and imaging clues to the next safest nursing action.",
     icon: FlaskConical,
     role: "diagnostics",
   },
   {
-    titleKey: "clinicalScenarios",
-    title: "Clinical Scenarios",
-    body: "Practice unfolding bedside judgment with escalation cues, prioritization, and exam-style distractors.",
+    titleKey: "redFlags",
+    title: "Red flags",
+    body: "Spot unstable patterns early: new confusion, falling urine output, refractory hypoxia, chest pressure, and sepsis trends.",
     icon: AlertTriangle,
     role: "red-flags",
   },
   {
-    titleKey: "clinicalSkills",
-    title: "Clinical Skills and OSCE",
-    body: "Rehearse communication, escalation, patient education, and safe bedside sequencing in a realistic flow.",
+    titleKey: "interventions",
+    title: "Interventions",
+    body: "Prioritize airway, circulation, safety, escalation, teaching, and reassessment with exam-style distractors in mind.",
     icon: Stethoscope,
     role: "interventions",
   },
   {
-    titleKey: "medMath",
-    title: "Medication Safety and Med Math",
-    body: "Review dosage calculations, high-alert medications, hold parameters, and administration safety with practical context.",
+    titleKey: "medications",
+    title: "Medications",
+    body: "Review mechanisms, hold parameters, adverse effects, antidotes, and patient education inside clinical scenarios.",
     icon: Pill,
     role: "medications",
   },
   {
-    titleKey: "newGrad",
-    title: "New Grad Readiness",
-    body: "Bridge licensure prep into transition-to-practice confidence with specialty signals and bedside readiness framing.",
+    titleKey: "pearls",
+    title: "Clinical pearls",
+    body: "Turn rationales into quick rules: what to do first, what to monitor next, and what answer sounds right but is unsafe.",
     icon: Lightbulb,
     role: "pearls",
   },
 ] as const;
 
 export function PremiumClinicalDepth() {
-  const { t, locale } = useMarketingI18n();
+  const { t } = useMarketingI18n();
   const tr = (key: string, fallback: string) => safeHomepageMarketingT(t, key, fallback);
 
   return (
@@ -64,34 +63,25 @@ export function PremiumClinicalDepth() {
         <div className="grid gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-start">
           <div>
             <p className="nn-premium-home-eyebrow">
-              {formatTitleCase(tr("pages.home.premium.clinicalDepth.eyebrow", "Clinical Readiness Ecosystems"), locale)}
+              {tr("pages.home.premium.clinicalDepth.eyebrow", "Adaptive lessons")}
             </p>
             <h2 id="premium-clinical-depth-heading" className="nn-marketing-h2 mt-4 text-balance text-[var(--palette-heading)]">
-              {formatTitleCase(
-                tr("pages.home.premium.clinicalDepth.heading", "A Guided Clinical Operating System."),
-                locale,
-              )}
+              {tr("pages.home.premium.clinicalDepth.heading", "Clinical depth without the textbook fog.")}
             </h2>
             <p className="nn-marketing-body mt-3 max-w-xl text-pretty text-[var(--palette-text-muted)]">
-              {formatSentenceCase(
-                tr(
-                  "pages.home.premium.clinicalDepth.body",
-                  "NurseNest already spans ECG, labs, medication safety, scenarios, clinical skills, and transition-to-practice readiness inside one adaptive platform.",
-                ),
-                locale,
+              {tr(
+                "pages.home.premium.clinicalDepth.body",
+                "The lesson model is built around how nurses actually think at the bedside: recognize the pattern, decide what matters, act safely, and explain why.",
               )}
             </p>
             <div className="nn-premium-clinical-note mt-6 rounded-2xl border p-5">
               <p className="text-sm font-bold uppercase tracking-wide text-[var(--semantic-brand)]">
-                {formatTitleCase(tr("pages.home.premium.clinicalDepth.priorityCueLabel", "Platform Rule"), locale)}
+                {tr("pages.home.premium.clinicalDepth.priorityCueLabel", "Priority cue")}
               </p>
               <p className="nn-marketing-body-sm mt-2 text-[var(--palette-text-muted)]">
-                {formatSentenceCase(
-                  tr(
-                    "pages.home.premium.clinicalDepth.priorityCueBody",
-                    "These readiness domains are integrated into the same learner ecosystem, not broken out into disconnected tools or mini-apps.",
-                  ),
-                  locale,
+                {tr(
+                  "pages.home.premium.clinicalDepth.priorityCueBody",
+                  "A patient with heart failure, new crackles, and falling oxygen saturation needs rapid respiratory assessment before routine discharge teaching.",
                 )}
               </p>
             </div>

@@ -136,11 +136,11 @@ export default function HomeRestoredClient({
 
       <HomeHeroScreenshotSectionLazy serverPreparedSlides={homeHeroCarouselSlides} />
 
-      <PremiumHomepageEcg />
       <PremiumPathwayShowcase />
       <PremiumClinicalDepth />
       <PremiumStudyEcosystem />
       <PremiumSocialStudy />
+      <PremiumHomepageEcg />
       <PremiumReadinessPreview />
       <PremiumHomepageTrust />
 

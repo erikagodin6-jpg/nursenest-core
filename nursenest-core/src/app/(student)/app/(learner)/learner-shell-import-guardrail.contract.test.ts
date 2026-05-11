@@ -18,11 +18,13 @@ const BLOCKED_IMPORT_SUBSTRINGS = [
   "admin-blog-control-panel-client",
   "question-bank-practice-client",
   "practice-tests-hub-client",
+  "admin-learner-qa-simulation",
+  "admin-view-as-learner-context",
 ] as const;
 
 function staticImportSpecifiers(source: string): string[] {
   const out: string[] = [];
-  const re = /^\s*import\s+[^'"]*\s+from\s+['"]([^'"]+)['"]\s*;?/gm;
+  const re = /^\s*import(?!\s+type\b)\s+[^'"]*\s+from\s+['"]([^'"]+)['"]\s*;?/gm;
   let m: RegExpExecArray | null;
   while ((m = re.exec(source)) !== null) {
     out.push(m[1]!);

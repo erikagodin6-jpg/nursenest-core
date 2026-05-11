@@ -16,8 +16,9 @@ const KEY_LINK_SELECTORS = [
   '[data-testid="premium-pathway-card-rn"]',
   '[data-testid="premium-pathway-card-pn"]',
   '[data-testid="premium-pathway-card-np"]',
-  '[data-testid="premium-pathway-card-international-rn"]',
   '[data-testid="premium-pathway-card-allied"]',
+  '[data-testid="premium-pathway-card-pre-nursing"]',
+  '[data-testid="premium-pathway-international-status-link"]',
   '[data-testid="premium-social-study-primary"]',
   '[data-testid="premium-social-study-secondary"]',
   '[data-testid="premium-final-cta-primary"]',
@@ -61,6 +62,10 @@ test.describe("Premium homepage body", () => {
     for (const id of SECTION_IDS) {
       await expect(page.getByTestId(id)).toBeVisible({ timeout: 30_000 });
     }
+
+    const pathways = page.getByTestId("section-premium-pathway-showcase");
+    await expect(pathways.getByRole("heading", { name: "Every Path Has Its Own Clinical Scaffold." })).toBeVisible();
+    await expect(pathways.getByText("Live Hubs and Foundation Coverage Vary by Region.")).toBeVisible();
 
     const social = page.getByTestId("section-premium-social-study");
     await expect(social.getByRole("heading", { name: "Study With Friends. Challenge Your Scores." })).toBeVisible();
