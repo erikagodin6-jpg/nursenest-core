@@ -12,7 +12,7 @@
  * - **`NN_BYPASS_BOOTSTRAP`:** deprecated for mode selection; still gates **readiness watchdog bypass**
  *   in `bootstrap_proxy` when not conflicting (see `resolveBootstrapStartupMode`).
  */
-import { readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
 import http from "node:http";
 import net from "node:net";
 import { once } from "node:events";
@@ -38,6 +38,32 @@ import { logRuntimeEnvSnapshot, validateRuntimeEnvOrThrow } from "./runtime-env-
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const runtimeBootstrap = join(pkgRoot, "scripts", "start-standalone-runtime.cjs");
+const standaloneBundle = join(pkgRoot, ".next-standalone-runtime.tar.gz");
+
+function extractStandaloneRuntimeBundleIfNeeded() {
+  const standaloneRoot = join(pkgRoot, ".next", "standalone");
+  if (existsSync(standaloneRoot) || !existsSync(standaloneBundle)) {
+    return;
+  }
+
+  mkdirSync(join(pkgRoot, ".next"), { recursive: true });
+  console.error(`[nursenest-core] extracting_standalone_runtime_bundle bundle=${standaloneBundle}`);
+
+  const result = spawnSync("tar", ["-xzf", standaloneBundle, "-C", join(pkgRoot, ".next")], {
+    cwd: pkgRoot,
+    stdio: "inherit",
+  });
+
+  if (result.status !== 0) {
+    console.error(
+      `[nursenest-core] FATAL: standalone runtime bundle extraction failed status=${result.status ?? "null"}`,
+    );
+    process.exit(1);
+  }
+
+  rmSync(standaloneBundle, { force: true });
+  console.error("[nursenest-core] extracted_standalone_runtime_bundle");
+}
 
 /**
  * Merge `.env` / `.env.local` / `.env.production` into `process.env` without overwriting non-empty
@@ -129,6 +155,7 @@ function logMissingDatabaseUrlRuntimeEvidence() {
 
 logStandaloneRuntimeDiagnostics("standalone_parent_pre_hydrate");
 logStandaloneRuntimeProbe("standalone_parent_pre_hydrate");
+extractStandaloneRuntimeBundleIfNeeded();
 
 let entry;
 try {

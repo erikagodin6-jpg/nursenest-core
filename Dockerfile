@@ -52,10 +52,10 @@ ENV NODE_ENV=production \
   NN_APP_PLATFORM_BUILD=true \
   NN_LOW_MEMORY_BUILD=1 \
   NN_LESSON_INDEX_VERIFY_MODE=manifest \
+  NN_SKIP_NONESSENTIAL_BUILD_AUDITS=1 \
   NN_SKIP_HEAVY_BUILD_REPORTS=1 \
   SENTRY_ENABLED=false \
   BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=4096 \
-  NODE_OPTIONS=--max-old-space-size=4096 \
   NN_BUILD_COMMIT=${NN_BUILD_COMMIT} \
   NN_BUILD_BRANCH=${NN_BUILD_BRANCH} \
   SOURCE_COMMIT=${SOURCE_COMMIT} \
@@ -75,11 +75,13 @@ RUN DATABASE_URL="${DATABASE_URL}" \
   BUILD_WEBPACK_PARALLELISM="${BUILD_WEBPACK_PARALLELISM}" \
   NN_FORCE_SINGLE_BUILD_WORKER="${NN_FORCE_SINGLE_BUILD_WORKER}" \
   NN_TIMED_INCLUDE_NPM_PRUNE="${NN_TIMED_INCLUDE_NPM_PRUNE}" \
-  rm -rf .next node_modules/.cache \
+  rm -rf .next .turbo node_modules/.cache \
   && npm run heroku-postbuild \
   && npm run build:deploy \
+  && tar -C .next -czf .next-standalone-runtime.tar.gz standalone \
+  && rm -rf .next/standalone \
   && npm prune --omit=dev --no-fund --no-audit \
-  && rm -rf .next/cache node_modules/.cache
+  && rm -rf .next/cache .turbo node_modules/.cache
 
 FROM node:20-alpine AS runner
 
@@ -93,7 +95,7 @@ ENV NODE_ENV=production \
   NODE_MAX_OLD_SPACE_SIZE_MB=768 \
   NEXT_TELEMETRY_DISABLED=1
 
-COPY --from=builder /app/nursenest-core/.next/standalone ./.next/standalone
+COPY --from=builder /app/nursenest-core/.next-standalone-runtime.tar.gz ./.next-standalone-runtime.tar.gz
 COPY --from=builder /app/nursenest-core/public ./public
 COPY --from=builder /app/nursenest-core/scripts ./scripts
 COPY --from=builder /app/scripts ../scripts

@@ -49,8 +49,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "prisma/**/*.ts",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
@@ -61,13 +60,20 @@
     ".next/build",
     "coverage",
     "dist",
+    "build",
     "out",
     ".turbo",
     ".cache",
     "data",
     "public",
     "playwright-report",
+    "playwright-report-full-regression",
     "test-results",
+    "reports",
+    "preview-screenshots",
+    "rollback-snapshots",
+    "output",
+    "tmp",
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
     "tests/e2e/**/*.ts"

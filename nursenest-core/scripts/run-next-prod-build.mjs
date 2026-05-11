@@ -77,9 +77,9 @@ function processTreeRssMb(rootPid) {
   return { rssMb: total, processCount: seen.size };
 }
 
-function runNextBuildWithMemorySampling() {
+function runNextBuildWithMemorySampling(nextArgs = ["build"]) {
   return new Promise((resolve) => {
-    const child = spawn(process.execPath, [nextBin, "build"], {
+    const child = spawn(process.execPath, [nextBin, ...nextArgs], {
       cwd: packageRoot,
       stdio: "inherit",
       env: process.env,
@@ -289,8 +289,20 @@ console.log(
     GITHUB_ACTIONS: process.env.GITHUB_ACTIONS ?? null,
     NN_APP_PLATFORM_BUILD: process.env.NN_APP_PLATFORM_BUILD ?? null,
     NODE_OPTIONS_has_heap: /--max-old-space-size=\d+/.test(String(process.env.NODE_OPTIONS ?? "")),
+    preferredBundler: !envExplicitlyFalse("NN_FORCE_WEBPACK_BUILD") &&
+      (envTruthy("NN_FORCE_WEBPACK_BUILD") || lowMemoryHeuristic)
+      ? "webpack"
+      : "turbopack",
   }),
 );
+
+const useWebpackBuild =
+  !envExplicitlyFalse("NN_FORCE_WEBPACK_BUILD") &&
+  (envTruthy("NN_FORCE_WEBPACK_BUILD") || lowMemoryHeuristic);
+
+if (useWebpackBuild) {
+  process.env.NEXT_DISABLE_TURBOPACK = "1";
+}
 
 if (!String(process.env.NEXT_TELEMETRY_DISABLED ?? "").trim()) {
   process.env.NEXT_TELEMETRY_DISABLED = "1";
@@ -323,18 +335,21 @@ try {
   throw e;
 }
 
-/**
- * 🔥 CRITICAL FIX:
- * REMOVE "--webpack"
- */
 console.error(
-  `[next-prod-build] phase_start ${JSON.stringify({ phase: "next_build", pid: process.pid })}`,
+  `[next-prod-build] phase_start ${JSON.stringify({
+    phase: "next_build",
+    pid: process.pid,
+    bundler: useWebpackBuild ? "webpack" : "turbopack",
+  })}`,
 );
-console.log(`[next-prod-build] next_cli_invocation_start pid=${process.pid}`);
+const nextBuildArgs = ["build", ...(useWebpackBuild ? ["--webpack"] : [])];
+console.log(
+  `[next-prod-build] next_cli_invocation_start pid=${process.pid} bundler=${useWebpackBuild ? "webpack" : "turbopack"} args=${JSON.stringify(nextBuildArgs)}`,
+);
 const tNext = Date.now();
 let r;
 try {
-  r = await runNextBuildWithMemorySampling();
+  r = await runNextBuildWithMemorySampling(nextBuildArgs);
 } finally {
   if (buildLockHeld) {
     releaseExclusiveNextBuildLock(packageRoot);
