@@ -1,6 +1,6 @@
 # CAT / practice pool — question_type inventory
 
-**Generated:** 2026-05-11T04:23:47.916Z
+**Generated:** 2026-05-11T04:31:52.301Z
 
 ## Scope notes
 
@@ -172,9 +172,22 @@
 | prioritization | (unset) | 1 |
 | delegation | (unset) | 1 |
 
-## CAT completeness scan
+## CAT completeness scan (`isCompleteCatQuestionRow`) — CAT_REPORT_FULL_SCAN=1
 
-Set `CAT_REPORT_FULL_SCAN=1` to batch-scan rows and count `isCompleteCatQuestionRow` passes per `question_type`.
+Scanned up to 25000 published non-ECG rows (see CAT_REPORT_MAX_SCAN).
+
+| question_type | scanned | passes_completeness |
+|---|---:|---:|
+| MCQ | 1584 | 1584 |
+| SATA | 1442 | 1442 |
+| Bowtie | 719 | 327 |
+| Priority | 706 | 706 |
+| Exhibit | 557 | 557 |
+| Matrix | 197 | 197 |
+| Drag-drop | 119 | 119 |
+| Hot-spot | 110 | 110 |
+| Fill-in | 77 | 77 |
+| Trend | 51 | 0 |
 
 ## Runtime renderer matrix (product + exclusions)
 
