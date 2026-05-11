@@ -38,6 +38,7 @@ const INCLUSION_IMPLYING_KEY_PREFIXES: readonly string[] = [
   "pages.pricing.matrix.r",
   "pages.pricing.conversion.includes.",
   "pages.pricing.narrative.",
+  "pages.pricing.tierScope.",
   "pages.pricing.tier.",
 ];
 
@@ -60,6 +61,8 @@ const FORBIDDEN_INCLUSION_PATTERNS: ReadonlyArray<{ name: string; re: RegExp }> 
   { name: "bls_implied_included", re: /\bBLS\b/ },
   { name: "acls_implied_included", re: /\bACLS\b/ },
   { name: "pals_implied_included", re: /\bPALS\b/ },
+  { name: "all_occupations_implied_included", re: /\ball\s+occupations?\b/i },
+  { name: "all_pathways_implied_included", re: /\ball\s+pathways?\b/i },
   { name: "official_certification_implied", re: /official\s+certification/i },
   { name: "guarantee_pass_implied", re: /pass(es|ing)?\s+guaranteed?|guaranteed?\s+pass/i },
 ];

@@ -754,24 +754,24 @@ export function AlliedHealthPathwayHub({
       >
         <HeartHandshake className="mx-auto h-10 w-10 text-[var(--semantic-success)]" aria-hidden />
         <h2 id="allied-pricing-heading" className="nn-marketing-h2 mt-4">
-          {profession ? alliedProfessionPremiumCtaHeadline(profession) : "Ready to study on a career-specific allied plan?"}
+          {profession ? alliedProfessionPremiumCtaHeadline(profession) : "Ready to choose one Allied occupation plan?"}
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-          Allied plans are priced per career lane at checkout. Pick your track above, then confirm the plan that matches your
-          exam and region.
+          Allied occupations can share the same price, but access stays occupation-specific. Pick your track above, then
+          confirm the plan that matches your exam and region before checkout.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href={pricingHref}
             className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--role-cta)] px-8 py-2.5 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-[0_10px_22px_color-mix(in_srgb,var(--role-cta-shadow)_55%,transparent)] transition hover:bg-[var(--role-cta-hover)]"
           >
-            Compare Allied Pricing
+            View occupation-specific Allied pricing
           </Link>
           <Link
             href="/signup"
             className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-8 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
           >
-            Create Account
+            Create account to choose your occupation
           </Link>
         </div>
         <p className="mt-4 text-xs text-[var(--semantic-text-secondary)]">

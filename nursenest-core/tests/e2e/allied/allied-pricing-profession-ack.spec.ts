@@ -17,12 +17,24 @@ test.describe("Allied pricing — profession acknowledgement", () => {
     const warn = page.getByTestId("pricing-allied-profession-warning");
     await expect(warn).toBeVisible({ timeout: 60_000 });
     await expect(warn.getByRole("listitem")).toHaveCount(3);
+    await expect(warn).toContainText(/same price/i);
+    await expect(warn).toContainText(/occupation-specific/i);
+
+    const scopePanel = page.getByTestId("pricing-tier-scope-panel");
+    await expect(scopePanel).toContainText(/one selected occupation only/i);
+    await expect(scopePanel).toContainText(/share the same price/i);
 
     const monthly = page.getByTestId("pricing-checkout-monthly");
     await expect(monthly).toBeDisabled();
 
     await page.getByTestId("pricing-allied-profession-ack").check();
     await expect(monthly).toBeEnabled();
+
+    await monthly.click();
+    await page.waitForURL(/\/login\?/);
+    await expect(page).toHaveURL(/checkoutIntent=1/);
+    await expect(page).toHaveURL(/checkoutTier=ALLIED/);
+    await expect(page).toHaveURL(/checkoutAlliedCareer=paramedic/);
   });
 
   test("warning remains visible on mobile viewport", async ({ page }) => {

@@ -38,6 +38,11 @@ ARG GITHUB_SHA
 ARG GITHUB_REF_NAME
 ARG VERCEL_GIT_COMMIT_SHA
 ARG VERCEL_GIT_COMMIT_REF
+ARG DATABASE_URL
+ARG AUTH_SECRET
+ARG BUILD_WEBPACK_PARALLELISM
+ARG NN_FORCE_SINGLE_BUILD_WORKER
+ARG NN_TIMED_INCLUDE_NPM_PRUNE
 
 ENV NODE_ENV=production \
   TMPDIR=/tmp \
@@ -65,7 +70,12 @@ ENV NODE_ENV=production \
 
 RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" npm run db:generate
 
-RUN rm -rf .next node_modules/.cache \
+RUN DATABASE_URL="${DATABASE_URL}" \
+  AUTH_SECRET="${AUTH_SECRET}" \
+  BUILD_WEBPACK_PARALLELISM="${BUILD_WEBPACK_PARALLELISM}" \
+  NN_FORCE_SINGLE_BUILD_WORKER="${NN_FORCE_SINGLE_BUILD_WORKER}" \
+  NN_TIMED_INCLUDE_NPM_PRUNE="${NN_TIMED_INCLUDE_NPM_PRUNE}" \
+  rm -rf .next node_modules/.cache \
   && npm run heroku-postbuild \
   && npm run build:deploy \
   && npm prune --omit=dev --no-fund --no-audit \

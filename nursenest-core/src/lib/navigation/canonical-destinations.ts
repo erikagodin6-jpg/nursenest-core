@@ -176,7 +176,6 @@ export function publicMarketingFooterStudyToolsDestinations(region: MarketingReg
   const pathwayId = defaultPathwayIdForMarketingOffering(region, "rn");
   return {
     cat: publicMarketingCatHrefForOffering(region, "rn"),
-    ecg: "/modules/ecg/basic/lessons",
     osce: withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.osce, pathwayId),
     labs: withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.labDrills, pathwayId),
     medicationMathApp: withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.medCalculations, pathwayId),

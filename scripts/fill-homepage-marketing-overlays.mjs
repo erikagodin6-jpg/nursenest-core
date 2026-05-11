@@ -23,6 +23,8 @@ const LANG_OPTS = {
   pt: { to: "pt" },
   hi: { to: "hi" },
   tl: { to: "tl" },
+  it: { to: "it" },
+  ru: { to: "ru" },
   zh: { to: "zh-CN" },
   "zh-tw": { to: "zh-TW" },
   ar: { to: "ar" },
@@ -106,6 +108,15 @@ function placeholderSignature(text) {
   return JSON.stringify((String(text).match(/\{\{[^}]+\}\}/g) ?? []).sort());
 }
 
+function looksEnglishCarryover(text) {
+  const value = String(text ?? "").trim();
+  if (!value) return false;
+  if (!/[A-Za-z]{3,}/.test(value)) return false;
+  return /\b(adaptive|education|built|into|simulator|master|nursing|think|clinician|live|coverage|region|detect|weakness|readiness|study|questions|flashcards|lessons)\b/i.test(
+    value,
+  );
+}
+
 async function translateOneSafe(text, opts) {
   const { masked, tokens } = shield(text);
   const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${encodeURIComponent(opts.to)}&dt=t&q=${encodeURIComponent(masked)}`;
@@ -132,7 +143,7 @@ function homepageKeysToTranslate(en, overlay) {
       const english = String(en[key] ?? "");
       const localized = overlay[key];
       if (typeof localized !== "string" || localized.trim() === "") return true;
-      return localized.trim() === english.trim();
+      return localized.trim() === english.trim() || looksEnglishCarryover(localized);
     })
     .sort();
 }
@@ -146,9 +157,21 @@ async function fillLocale(locale, en) {
 
   const overlay = readJson(overlayPath);
   const overrides = HOMEPAGE_OVERRIDES[locale] ?? {};
+  let overrideChanged = false;
+  for (const [key, value] of Object.entries(overrides)) {
+    if (overlay[key] !== value) {
+      overlay[key] = value;
+      overrideChanged = true;
+    }
+  }
   const keys = homepageKeysToTranslate(en, overlay);
 
   if (keys.length === 0) {
+    if (overrideChanged) {
+      fs.writeFileSync(overlayPath, `${JSON.stringify(overlay, null, 2)}\n`);
+      console.log(`[${locale}] wrote ${overlayPath} (override refresh)`);
+      return Object.keys(overrides).length;
+    }
     console.log(`[${locale}] homepage overlay already localized`);
     return 0;
   }
@@ -178,10 +201,6 @@ async function fillLocale(locale, en) {
       }
 
       overlay[key] = translated;
-    }
-
-    for (const [key, value] of Object.entries(overrides)) {
-      overlay[key] = value;
     }
 
     process.stdout.write(`\r[${locale}] ${Math.min(i + slice.length, keys.length)}/${keys.length}`);

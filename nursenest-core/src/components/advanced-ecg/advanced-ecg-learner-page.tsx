@@ -18,7 +18,9 @@ type AdvancedEcgLearnerPageProps = {
   curriculum: readonly AdvancedEcgCurriculumUnit[];
 };
 
-function reasonHeading(reason: AdvancedEcgAccessDecision extends { ok: false; reason: infer R } ? R : never): string {
+type BlockedAdvancedEcgAccess = Extract<AdvancedEcgAccessDecision, { ok: false }>;
+
+function reasonHeading(reason: BlockedAdvancedEcgAccess["reason"]): string {
   switch (reason) {
     case "sign_in_required":
       return "Sign in to view Advanced ECG";
@@ -33,7 +35,7 @@ function reasonHeading(reason: AdvancedEcgAccessDecision extends { ok: false; re
   }
 }
 
-function reasonBody(access: Extract<AdvancedEcgAccessDecision, { ok: false }>): string {
+function reasonBody(access: BlockedAdvancedEcgAccess): string {
   switch (access.reason) {
     case "sign_in_required":
       return "Advanced ECG is a separate paid module. Sign in first, then add the module from pricing when you are ready.";

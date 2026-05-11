@@ -53,18 +53,20 @@ const TEXT_MUTED = "var(--semantic-text-muted)";
 
 // ── Section 2: Value Props Strip ────────────────────────────────────────────
 
-const VALUE_PROPS = [
-  { icon: Target, label: "Exam + Bedside Study Plan", accent: "var(--palette-primary)" },
-  { icon: Eye, label: "Strengthen Weak Areas Fast", accent: "var(--semantic-warning)" },
-  { icon: ClipboardCheck, label: "Clinical Decision Questions", accent: "var(--semantic-info)" },
-  { icon: TrendingUp, label: "Clinical Readiness Tracking", accent: "var(--semantic-success)" },
+const VALUE_PROP_META = [
+  { icon: Target, labelKey: "pages.pricing.valueProps.0", accent: "var(--palette-primary)" },
+  { icon: Eye, labelKey: "pages.pricing.valueProps.1", accent: "var(--semantic-warning)" },
+  { icon: ClipboardCheck, labelKey: "pages.pricing.valueProps.2", accent: "var(--semantic-info)" },
+  { icon: TrendingUp, labelKey: "pages.pricing.valueProps.3", accent: "var(--semantic-success)" },
 ] as const;
 
 export function ValuePropsStrip() {
+  const { t } = useMarketingI18n();
+
   return (
     <StaggerGroup className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5" staggerMs={65} whenInView once>
-      {VALUE_PROPS.map(({ icon: Icon, label, accent }) => (
-        <StaggerItem key={label} variant="softReveal">
+      {VALUE_PROP_META.map(({ icon: Icon, labelKey, accent }) => (
+        <StaggerItem key={labelKey} variant="softReveal">
           <div
             className="nn-elevation-panel nn-motion-standard flex h-full flex-col items-center gap-3 rounded-2xl px-5 py-6 text-center"
             style={{
@@ -88,7 +90,7 @@ export function ValuePropsStrip() {
               className="text-sm font-semibold leading-tight"
               style={{ color: TEXT_PRIMARY }}
             >
-              {label}
+              {t(labelKey)}
             </span>
           </div>
         </StaggerItem>
@@ -154,38 +156,40 @@ export function PricingFeaturesGrid() {
 
 // ── Section 7: Why NurseNest Works ──────────────────────────────────────────
 
-const WHY_POINTS = [
+const WHY_POINT_META = [
   {
     icon: Crosshair,
-    title: "Most platforms teach you what to memorize.",
-    desc: "We train you how to think — with scenarios that mirror real judgment calls, prioritization, and safety.",
+    titleKey: "pages.pricing.why.0.title",
+    descKey: "pages.pricing.why.0.body",
     accent: "var(--palette-primary)",
   },
   {
     icon: Eye,
-    title: "Prioritize safely under pressure",
-    desc: "Recognize early deterioration, sequence interventions, and understand why each option is right or risky — not just the keyed answer.",
+    titleKey: "pages.pricing.why.1.title",
+    descKey: "pages.pricing.why.1.body",
     accent: "var(--semantic-warning)",
   },
   {
     icon: ShieldCheck,
-    title: "Pass the exam. Be ready for the bedside.",
-    desc: "Because passing the exam is step one. Practicing safely is what matters next.",
+    titleKey: "pages.pricing.why.2.title",
+    descKey: "pages.pricing.why.2.body",
     accent: "var(--semantic-success)",
   },
 ] as const;
 
 export function WhyItWorks() {
+  const { t } = useMarketingI18n();
+
   return (
     <section aria-labelledby="why-heading">
       <FadeUp className="mb-10 text-center">
         <h2 id="why-heading" className="nn-marketing-h2">
-          Why we are different
+          {t("pages.pricing.why.heading")}
         </h2>
       </FadeUp>
       <StaggerGroup className="grid gap-5 sm:grid-cols-3 sm:gap-6" staggerMs={65} whenInView once>
-        {WHY_POINTS.map((p) => (
-          <StaggerItem key={p.title} variant="softReveal">
+        {WHY_POINT_META.map((p) => (
+          <StaggerItem key={p.titleKey} variant="softReveal">
             <div
               className="nn-elevation-panel nn-motion-standard flex h-full flex-col gap-4 overflow-hidden rounded-2xl p-7"
               style={{
@@ -202,9 +206,9 @@ export function WhyItWorks() {
               >
                 <p.icon className="h-5 w-5" style={{ color: p.accent }} aria-hidden />
               </div>
-              <h3 className="nn-marketing-h4">{p.title}</h3>
+              <h3 className="nn-marketing-h4">{t(p.titleKey)}</h3>
               <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
-                {p.desc}
+                {t(p.descKey)}
               </p>
             </div>
           </StaggerItem>
@@ -217,6 +221,8 @@ export function WhyItWorks() {
 // ── Section 8: Allied Health Clarity ─────────────────────────────────────────
 
 export function AlliedHealthClarity() {
+  const { t } = useMarketingI18n();
+
   return (
     <div
       className="nn-elevation-panel rounded-xl px-6 py-5 text-center"
@@ -226,11 +232,10 @@ export function AlliedHealthClarity() {
       }}
     >
       <p className="text-sm font-semibold" style={{ color: TEXT_PRIMARY }}>
-        Allied Health Plans Are Career-Specific
+        {t("pages.pricing.alliedClarity.title")}
       </p>
       <p className="mt-1.5 text-xs" style={{ color: TEXT_SECONDARY }}>
-        Each plan delivers role-specific clinical application — the protocols, calculations, and judgment calls your
-        certification expects — without mixing unrelated scopes.
+        {t("pages.pricing.alliedClarity.body")}
       </p>
     </div>
   );
@@ -409,6 +414,8 @@ export function UnlockFeatureBlock({
 }
 
 function StudyPlanPreview() {
+  const { t } = useMarketingI18n();
+
   return (
     <div className="space-y-2 text-sm">
       <div className="rounded-xl p-3" style={{ background: SOFT_B, border: `1px solid ${BORDER}` }}>
@@ -422,15 +429,24 @@ function StudyPlanPreview() {
           >
             1
           </span>
-          <span className="text-xs font-bold" style={{ color: TEXT_PRIMARY }}>Day 1: Core Weak Area Repair</span>
+          <span className="text-xs font-bold" style={{ color: TEXT_PRIMARY }}>
+            {t("pages.pricing.unlock.preview.studyPlan.day1")}
+          </span>
         </div>
         <div className="space-y-1.5 pl-8">
-          {["Study lesson", "10 targeted questions", "Review incorrect answers"].map((b) => (
+          {[
+            t("pages.pricing.unlock.preview.studyPlan.day1Item0"),
+            t("pages.pricing.unlock.preview.studyPlan.day1Item1"),
+            t("pages.pricing.unlock.preview.studyPlan.day1Item2"),
+          ].map((b) => (
             <p key={b} className="text-xs" style={{ color: TEXT_SECONDARY }}>{b}</p>
           ))}
         </div>
       </div>
-      {["Day 2: Second Focus Area", "Day 3: Timed Practice"].map((title, i) => (
+      {[
+        t("pages.pricing.unlock.preview.studyPlan.day2"),
+        t("pages.pricing.unlock.preview.studyPlan.day3"),
+      ].map((title, i) => (
         <div
           key={i}
           className="flex items-center gap-2.5 rounded-xl px-3 py-2.5"
@@ -451,11 +467,12 @@ function StudyPlanPreview() {
 }
 
 function SmartReviewPreview() {
+  const { t } = useMarketingI18n();
   const groups = [
-    { label: "High Priority Fixes", count: 4, bg: WARNING_SOFT, accent: "var(--semantic-warning)" },
-    { label: "Needs Review", count: 6, bg: NEUTRAL_MUTED, accent: TEXT_MUTED },
-    { label: "Uncertain Knowledge", count: 5, bg: INFO_SOFT, accent: "var(--semantic-info)" },
-    { label: "Established knowledge", count: 8, bg: SUCCESS_SOFT, accent: "var(--role-success, var(--semantic-success))" },
+    { label: t("pages.pricing.unlock.preview.smartReview.group0"), count: 4, bg: WARNING_SOFT, accent: "var(--semantic-warning)" },
+    { label: t("pages.pricing.unlock.preview.smartReview.group1"), count: 6, bg: NEUTRAL_MUTED, accent: TEXT_MUTED },
+    { label: t("pages.pricing.unlock.preview.smartReview.group2"), count: 5, bg: INFO_SOFT, accent: "var(--semantic-info)" },
+    { label: t("pages.pricing.unlock.preview.smartReview.group3"), count: 8, bg: SUCCESS_SOFT, accent: "var(--role-success, var(--semantic-success))" },
   ];
   return (
     <div className="space-y-2 text-xs">
@@ -476,7 +493,7 @@ function SmartReviewPreview() {
               color: TEXT_SECONDARY,
             }}
           >
-            {g.count} questions
+            {t("pages.pricing.unlock.preview.smartReview.count", { count: g.count })}
           </span>
         </div>
       ))}
@@ -485,10 +502,11 @@ function SmartReviewPreview() {
 }
 
 function ConfidenceAnalyticsPreview() {
+  const { t } = useMarketingI18n();
   const cards = [
-    { label: "Overconfident Errors", value: "4", bg: WARNING_SOFT, accent: "var(--semantic-warning)" },
-    { label: "Uncertain Correct", value: "7", bg: INFO_SOFT, accent: "var(--semantic-info)" },
-    { label: "Established knowledge", value: "11", bg: SUCCESS_SOFT, accent: "var(--role-success, var(--semantic-success))" },
+    { label: t("pages.pricing.unlock.preview.analytics.card0"), value: "4", bg: WARNING_SOFT, accent: "var(--semantic-warning)" },
+    { label: t("pages.pricing.unlock.preview.analytics.card1"), value: "7", bg: INFO_SOFT, accent: "var(--semantic-info)" },
+    { label: t("pages.pricing.unlock.preview.analytics.card2"), value: "11", bg: SUCCESS_SOFT, accent: "var(--role-success, var(--semantic-success))" },
   ];
   return (
     <div className="space-y-2.5 text-xs">
@@ -500,7 +518,7 @@ function ConfidenceAnalyticsPreview() {
           color: TEXT_SECONDARY,
         }}
       >
-        High-confidence answers were correct 78% of the time
+        {t("pages.pricing.unlock.preview.analytics.summary")}
       </div>
       <div className="grid grid-cols-3 gap-2">
         {cards.map((c) => (
@@ -522,13 +540,16 @@ function ConfidenceAnalyticsPreview() {
 }
 
 function CatExamPreview() {
+  const { t } = useMarketingI18n();
   return (
     <div className="space-y-3 text-sm">
       <div
         className="rounded-xl p-4"
         style={{ background: SURFACE_ELEVATED, border: `1px solid ${BORDER}` }}
       >
-        <p className="text-xs font-bold uppercase tracking-wider" style={{ color: TEXT_MUTED }}>Readiness Score</p>
+        <p className="text-xs font-bold uppercase tracking-wider" style={{ color: TEXT_MUTED }}>
+          {t("pages.pricing.unlock.preview.cat.readinessLabel")}
+        </p>
         <div className="my-2 flex items-center gap-3">
           <span className="text-4xl font-black tabular-nums" style={{ color: TEXT_PRIMARY }}>68</span>
           <span
@@ -539,7 +560,7 @@ function CatExamPreview() {
               color: TEXT_SECONDARY,
             }}
           >
-            Approaching Readiness
+            {t("pages.pricing.unlock.preview.cat.readinessBand")}
           </span>
         </div>
         <div className="mt-3 h-1.5 overflow-hidden rounded-full" style={{ background: NEUTRAL_MUTED }}>
@@ -551,9 +572,9 @@ function CatExamPreview() {
       </div>
       <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
         {[
-          { label: "Clinical accuracy", value: "72%" },
-          { label: "Difficulty", value: "Medium+" },
-          { label: "Consistency", value: "Improving" },
+          { label: t("pages.pricing.unlock.preview.cat.stat0"), value: "72%" },
+          { label: t("pages.pricing.unlock.preview.cat.stat1"), value: "Medium+" },
+          { label: t("pages.pricing.unlock.preview.cat.stat2"), value: "Improving" },
         ].map((s) => (
           <div
             key={s.label}
@@ -569,70 +590,71 @@ function CatExamPreview() {
   );
 }
 
-const UNLOCK_BLOCKS = [
-  {
-    label: "Adaptive Study Plan",
-    title: "Know exactly what to study every day",
-    bullets: [
-      "Personalized plan built from your clinical readiness score and weak areas",
-      "Daily tasks: clinical mastery lessons, targeted clinical decision practice, and review sessions",
-      "Direct links to every lesson and question",
-      "Retest strategy so you know when to take the exam — and when you are safe to practice",
-    ],
-    accentColor: "var(--palette-primary)",
-    preview: <StudyPlanPreview />,
-  },
-  {
-    label: "Strengthen Weak Areas",
-    title: "Close the judgment gaps that hurt you most",
-    bullets: [
-      "Questions grouped by urgency: High Priority, Needs Review, Uncertain, and Strong",
-      "See which mistakes matter most for safety and prioritization",
-      "Filter by topic, confidence, or correctness",
-      "Direct lesson links from every question",
-    ],
-    accentColor: "var(--semantic-warning)",
-    preview: <SmartReviewPreview />,
-  },
-  {
-    label: "Clinical Performance Analytics",
-    title: "See exactly where you stand clinically",
-    bullets: [
-      "Catch overconfident errors: answers you got wrong but thought you knew",
-      "Identify uncertain correct answers to reinforce guessed knowledge",
-      "Track strong mastery under exam conditions",
-      "Prioritized review queue: Where to Focus Next for real shifts",
-    ],
-    accentColor: "var(--semantic-info)",
-    preview: <ConfidenceAnalyticsPreview />,
-  },
-  {
-    label: "Adaptive NCLEX Simulation",
-    title: "Simulate the real exam and track readiness",
-    bullets: [
-      "Adaptive sessions that adjust difficulty in real time",
-      "Readiness score with a clear band from Not Ready to Exam Ready",
-      "Clinical performance analysis by topic and category",
-      "Clinical decision questions with full rationales",
-    ],
-    accentColor: "var(--semantic-success)",
-    preview: <CatExamPreview />,
-  },
-];
-
 export function PricingUnlockSection() {
+  const { t } = useMarketingI18n();
+  const unlockBlocks = [
+    {
+      label: t("pages.pricing.unlock.block0.label"),
+      title: t("pages.pricing.unlock.block0.title"),
+      bullets: [
+        t("pages.pricing.unlock.block0.bullet0"),
+        t("pages.pricing.unlock.block0.bullet1"),
+        t("pages.pricing.unlock.block0.bullet2"),
+        t("pages.pricing.unlock.block0.bullet3"),
+      ],
+      accentColor: "var(--palette-primary)",
+      preview: <StudyPlanPreview />,
+    },
+    {
+      label: t("pages.pricing.unlock.block1.label"),
+      title: t("pages.pricing.unlock.block1.title"),
+      bullets: [
+        t("pages.pricing.unlock.block1.bullet0"),
+        t("pages.pricing.unlock.block1.bullet1"),
+        t("pages.pricing.unlock.block1.bullet2"),
+        t("pages.pricing.unlock.block1.bullet3"),
+      ],
+      accentColor: "var(--semantic-warning)",
+      preview: <SmartReviewPreview />,
+    },
+    {
+      label: t("pages.pricing.unlock.block2.label"),
+      title: t("pages.pricing.unlock.block2.title"),
+      bullets: [
+        t("pages.pricing.unlock.block2.bullet0"),
+        t("pages.pricing.unlock.block2.bullet1"),
+        t("pages.pricing.unlock.block2.bullet2"),
+        t("pages.pricing.unlock.block2.bullet3"),
+      ],
+      accentColor: "var(--semantic-info)",
+      preview: <ConfidenceAnalyticsPreview />,
+    },
+    {
+      label: t("pages.pricing.unlock.block3.label"),
+      title: t("pages.pricing.unlock.block3.title"),
+      bullets: [
+        t("pages.pricing.unlock.block3.bullet0"),
+        t("pages.pricing.unlock.block3.bullet1"),
+        t("pages.pricing.unlock.block3.bullet2"),
+        t("pages.pricing.unlock.block3.bullet3"),
+      ],
+      accentColor: "var(--semantic-success)",
+      preview: <CatExamPreview />,
+    },
+  ];
+
   return (
     <section aria-labelledby="what-you-unlock-heading">
       <FadeUp className="mb-10 text-center">
         <h2 id="what-you-unlock-heading" className="nn-marketing-h2">
-          Train your brain for the NCLEX and the bedside
+          {t("pages.pricing.unlock.heading")}
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
-          Start your free trial and get instant access to exam prep, clinical thinking drills, and early-career support
+          {t("pages.pricing.unlock.lead")}
         </p>
       </FadeUp>
       <div className="space-y-6">
-        {UNLOCK_BLOCKS.map((block) => (
+        {unlockBlocks.map((block) => (
           <UnlockFeatureBlock key={block.label} {...block} />
         ))}
       </div>
@@ -645,56 +667,58 @@ export function PricingUnlockSection() {
 import { ScreenshotProductCard } from "@/components/marketing/screenshot-feature-grid";
 import type { ScreenshotId } from "@/lib/marketing/screenshot-registry";
 
-const PRODUCT_AREAS: {
+const PRODUCT_AREA_META: {
   screenshotId: ScreenshotId;
   icon: ComponentType<{ className?: string }>;
-  title: string;
-  desc: string;
-  detail: string;
+  titleKey: string;
+  descKey: string;
+  detailKey: string;
 }[] = [
   {
     screenshotId: 1,
     icon: BookOpen,
-    title: "Clinical Decision Practice",
-    desc: "Real-world patient scenarios with stems, options, and a Clinical Thinking Breakdown in one view.",
-    detail: "Why the safest answer is correct, why distractors fail, key takeaway, and linked Clinical Mastery Lessons",
+    titleKey: "pages.pricing.productPreview.card0.title",
+    descKey: "pages.pricing.productPreview.card0.body",
+    detailKey: "pages.pricing.productPreview.card0.detail",
   },
   {
     screenshotId: 6,
     icon: Target,
-    title: "Adaptive NCLEX Simulation",
-    desc: "Adaptive sessions that adjust difficulty item by item while scoring readiness on a 0 to 100 scale.",
-    detail: "Adaptive difficulty, readiness scoring, category breakdown, historical trend",
+    titleKey: "pages.pricing.productPreview.card1.title",
+    descKey: "pages.pricing.productPreview.card1.body",
+    detailKey: "pages.pricing.productPreview.card1.detail",
   },
   {
     screenshotId: 7,
     icon: BarChart3,
-    title: "Clinical Performance & Remediation",
-    desc: "Structured results with weak areas, strengths, confidence patterns, and a plan that closes bedside gaps.",
-    detail: "Strengthen weak areas, study plan, clinical performance analytics, retest strategy",
+    titleKey: "pages.pricing.productPreview.card2.title",
+    descKey: "pages.pricing.productPreview.card2.body",
+    detailKey: "pages.pricing.productPreview.card2.detail",
   },
 ];
 
 export function ProductPreviewGrid() {
+  const { t } = useMarketingI18n();
+
   return (
     <section aria-labelledby="product-preview-heading">
       <FadeUp className="mb-8 text-center">
         <h2 id="product-preview-heading" className="nn-marketing-h2">
-          Exam prep, simulation, and remediation — connected
+          {t("pages.pricing.productPreview.heading")}
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
-          One system that shows you what to study, stress-tests clinical judgment, and helps you strengthen weak areas before your first shift
+          {t("pages.pricing.productPreview.lead")}
         </p>
       </FadeUp>
       <div className="grid gap-4 sm:grid-cols-3">
-        {PRODUCT_AREAS.map((area) => (
+        {PRODUCT_AREA_META.map((area) => (
           <ScreenshotProductCard
-            key={area.title}
+            key={area.titleKey}
             screenshotId={area.screenshotId}
             icon={<area.icon className="nn-icon-md" />}
-            title={area.title}
-            description={area.desc}
-            detail={area.detail}
+            title={t(area.titleKey)}
+            description={t(area.descKey)}
+            detail={t(area.detailKey)}
           />
         ))}
       </div>
@@ -704,36 +728,38 @@ export function ProductPreviewGrid() {
 
 // ── Trust Reassurance ───────────────────────────────────────────────────────
 
-const TRUST_POINTS = [
+const TRUST_POINT_META = [
   {
     icon: Target,
-    headline: "From student to practicing nurse",
-    body: "You are not just preparing for a test — you are preparing for real patients. NurseNest helps you build confidence for your first year, strengthen clinical judgment under pressure, and transition from student to practicing clinician.",
+    headlineKey: "pages.pricing.trust.point0.title",
+    bodyKey: "pages.pricing.trust.point0.body",
   },
   {
     icon: ShieldCheck,
-    headline: "Recognize, prioritize, and act safely",
-    body: "Drills emphasize early deterioration, safe prioritization, and the delegation decisions new grads face — because the goal is not only to pass, but to practice safely.",
+    headlineKey: "pages.pricing.trust.point1.title",
+    bodyKey: "pages.pricing.trust.point1.body",
   },
   {
     icon: BarChart3,
-    headline: "Avoid common new-grad mistakes",
-    body: "Because passing the exam is step one. Practicing confidently — without freezing on your first shifts — is what matters next.",
+    headlineKey: "pages.pricing.trust.point2.title",
+    bodyKey: "pages.pricing.trust.point2.body",
   },
 ];
 
 export function PricingTrustReassurance() {
+  const { t } = useMarketingI18n();
+
   return (
     <section aria-labelledby="trust-heading">
       <FadeUp className="mb-8 text-center">
         <h2 id="trust-heading" className="nn-marketing-h2">
-          Support Beyond the Exam
+          {t("pages.pricing.trust.heading")}
         </h2>
       </FadeUp>
       <div className="grid gap-5 sm:grid-cols-3 sm:gap-6">
-        {TRUST_POINTS.map((p) => (
+        {TRUST_POINT_META.map((p) => (
           <div
-            key={p.headline}
+            key={p.headlineKey}
             className="nn-elevation-panel nn-motion-standard rounded-2xl p-7"
             style={{ background: SURFACE_ELEVATED, border: `1px solid ${BORDER}` }}
           >
@@ -746,9 +772,9 @@ export function PricingTrustReassurance() {
             >
               <p.icon className="h-5 w-5" style={{ color: "var(--semantic-info)" }} aria-hidden />
             </div>
-            <h3 className="nn-marketing-h4 mb-2">{p.headline}</h3>
+            <h3 className="nn-marketing-h4 mb-2">{t(p.headlineKey)}</h3>
             <p className="text-sm leading-relaxed" style={{ color: TEXT_SECONDARY }}>
-              {p.body}
+              {t(p.bodyKey)}
             </p>
           </div>
         ))}
@@ -760,6 +786,8 @@ export function PricingTrustReassurance() {
 // ── Final CTA ───────────────────────────────────────────────────────────────
 
 export function PricingCTA({ plansHref }: { plansHref: string }) {
+  const { t } = useMarketingI18n();
+
   return (
     <section
       className="nn-gradient-safe rounded-3xl px-8 py-14 text-center shadow-[var(--elevation-rest)] sm:px-12 sm:py-16"
@@ -774,25 +802,24 @@ export function PricingCTA({ plansHref }: { plansHref: string }) {
       }}
     >
       <FadeUp>
-        <h2 className="nn-marketing-h2 mb-3">Do not just pass the exam.</h2>
+        <h2 className="nn-marketing-h2 mb-3">{t("pages.pricing.finalCta.heading")}</h2>
         <p className="nn-marketing-body-sm mx-auto mb-8 max-w-lg text-muted-foreground">
-          Be ready for the responsibility that comes after it. Choose a plan above, then continue to secure checkout.
-          Eligible plans may still include a short trial at checkout. Start your training today.
+          {t("pages.pricing.finalCta.body")}
         </p>
       </FadeUp>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link href={plansHref} className={MARKETING_PRIMARY_CTA_CLASS}>
-          Continue to checkout
+          {t("pages.pricing.finalCta.primary")}
         </Link>
         <Link href="#pricing-plans-heading" className={MARKETING_SECONDARY_CTA_CLASS}>
-          View Plans
+          {t("pages.pricing.finalCta.secondary")}
         </Link>
       </div>
       <p className="mt-3 text-xs text-muted-foreground">
-        No charge today. Cancel anytime before your trial ends.
+        {t("pages.pricing.trial.shortLead")}
       </p>
       <p className="mt-1 text-[11px] text-muted-foreground">
-        Billing begins automatically after 3 days unless cancelled.
+        {t("pages.pricing.trial.shortFinePrint")}
       </p>
     </section>
   );

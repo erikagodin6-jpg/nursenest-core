@@ -102,10 +102,12 @@ test("localized blog sitemap routes lazy-load DB-backed helpers", () => {
   const frRouteSrc = readAppFile("app/sitemap-fr-blog.xml/route.ts");
   assert.doesNotMatch(frRouteSrc, /^import\s+\{\s*buildMultilingualBlogSitemapXmlForLocale\s*\}/m);
   assert.match(frRouteSrc, /await import\("@\/lib\/seo\/sitemap-multilingual-blog-xml"\)/);
+  assert.match(frRouteSrc, /buildSitemapUrlsetFromAbsoluteUrls\(\[\{ loc: `\$\{origin\}\/fr\/blog` \}\]\)/);
 
   const esRouteSrc = readAppFile("app/sitemap-es-blog.xml/route.ts");
   assert.doesNotMatch(esRouteSrc, /^import\s+\{\s*buildMultilingualBlogSitemapXmlForLocale\s*\}/m);
   assert.match(esRouteSrc, /await import\("@\/lib\/seo\/sitemap-multilingual-blog-xml"\)/);
+  assert.match(esRouteSrc, /buildSitemapUrlsetFromAbsoluteUrls\(\[\{ loc: `\$\{origin\}\/es\/blog` \}\]\)/);
 });
 
 test("sitemap-allied route exists alongside merged sitemap", () => {

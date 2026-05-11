@@ -1,5 +1,11 @@
+import { AdminAdvancedEcgStatusControls } from "@/components/advanced-ecg/admin-advanced-ecg-status-controls";
 import { AdminEcgPublishButton } from "@/components/ecg-module/admin-ecg-publish-button";
 import { EcgLiveStrip } from "@/components/study/ecg-live-strip";
+import { ADVANCED_ECG_CURRICULUM } from "@/lib/advanced-ecg/advanced-ecg-curriculum";
+import {
+  ADVANCED_ECG_ADMIN_ENTITLEMENT_LABEL,
+  getAdvancedEcgModuleAdminSnapshot,
+} from "@/lib/advanced-ecg/advanced-ecg-module-admin";
 import { requireAdmin } from "@/lib/auth/guards";
 import { defaultEcgStripConfigForRhythm } from "@/lib/ecg-module/ecg-waveform-generator";
 import { getEcgRhythmTemplate } from "@/lib/ecg-module/ecg-rhythm-templates";
@@ -14,7 +20,10 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminEcgModulePage() {
   await requireAdmin();
-  const readiness = await getEcgModuleReadiness();
+  const [readiness, advancedSnapshot] = await Promise.all([
+    getEcgModuleReadiness(),
+    getAdvancedEcgModuleAdminSnapshot(),
+  ]);
   const failures = summarizeEcgModuleGates(readiness);
   const previewConfig = defaultEcgStripConfigForRhythm("atrial_fibrillation");
   const template = getEcgRhythmTemplate(previewConfig.rhythmKey);
@@ -68,6 +77,38 @@ export default async function AdminEcgModulePage() {
             <p className="mt-2 text-2xl font-semibold text-[var(--semantic-text-primary)]">{value}</p>
           </div>
         ))}
+      </section>
+
+      <section className="mt-6 grid gap-4 lg:grid-cols-[1fr_1fr]">
+        <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+          <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">Advanced ECG add-on controls</h2>
+          <dl className="mt-4 grid gap-3 text-sm">
+            <div><dt className="font-semibold">Feature enabled</dt><dd>{advancedSnapshot.enabled ? "Yes" : "No"}</dd></div>
+            <div><dt className="font-semibold">Publish status</dt><dd>{advancedSnapshot.status}</dd></div>
+            <div><dt className="font-semibold">Entitlement requirement</dt><dd><code>{ADVANCED_ECG_ADMIN_ENTITLEMENT_LABEL}</code></dd></div>
+            <div><dt className="font-semibold">Curriculum scaffold units</dt><dd>{advancedSnapshot.curriculumUnits}</dd></div>
+            <div><dt className="font-semibold">Ready advanced inventory</dt><dd>{advancedSnapshot.reviewCounts.readyAdvanced}</dd></div>
+            <div><dt className="font-semibold">Manual review missing</dt><dd>{advancedSnapshot.reviewCounts.manualReviewMissing}</dd></div>
+          </dl>
+          <div className="mt-4">
+            <AdminAdvancedEcgStatusControls
+              currentStatus={advancedSnapshot.status}
+              canPublish={advancedSnapshot.canPublish}
+              publishFailures={advancedSnapshot.publishFailures}
+            />
+          </div>
+        </div>
+        <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+          <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">Advanced ECG curriculum scaffold</h2>
+          <ul className="mt-4 space-y-3 text-sm text-[var(--semantic-text-secondary)]">
+            {ADVANCED_ECG_CURRICULUM.map((unit) => (
+              <li key={unit.slug} className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-bg-base)] px-3 py-2">
+                <p className="font-semibold text-[var(--semantic-text-primary)]">{unit.title}</p>
+                <p className="mt-1">{unit.summary}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <section className="mt-6 grid gap-4 lg:grid-cols-[1fr_1fr]">

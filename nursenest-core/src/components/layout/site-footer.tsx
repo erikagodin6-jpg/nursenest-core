@@ -235,9 +235,6 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       <FLink href={footerStudyTools.cat}>{formatTitleCase("CAT", locale)}</FLink>
                     </li>
                     <li>
-                      <FooterGuestAppLink path={footerStudyTools.ecg}>{formatTitleCase("ECG", locale)}</FooterGuestAppLink>
-                    </li>
-                    <li>
                       <FooterGuestAppLink path={footerStudyTools.osce}>{formatTitleCase("OSCE", locale)}</FooterGuestAppLink>
                     </li>
                     <li>

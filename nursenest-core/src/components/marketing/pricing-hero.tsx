@@ -2,26 +2,32 @@ import Link from "next/link";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 export function PricingHero({
-  studySystemHref,
-  ctaLabel = "Continue to Checkout",
-  trialSubtext = "No charge today. Cancel anytime before your trial ends.",
-  trialFinePrint = "Billing begins automatically after 3 days unless cancelled.",
-  pricesShownLine = "All prices are shown in Canadian dollars.",
+  eyebrow,
+  headline,
+  body,
+  trustLine,
+  ctaLabel,
+  trialSubtext,
+  trialFinePrint,
+  pricesShownLine,
   primaryCtaHref = "#pricing-plans-heading",
-  secondaryCtaHref = "#pricing-plans-heading",
-  secondaryLabel = "View Plans",
+  secondaryCtaHref = "#pricing-tier-scope-panel",
+  secondaryLabel,
   compactFooter = false,
 }: {
-  studySystemHref: string;
-  ctaLabel?: string;
-  trialSubtext?: string;
-  trialFinePrint?: string;
+  eyebrow: string;
+  headline: string;
+  body: string;
+  trustLine: string;
+  ctaLabel: string;
+  trialSubtext: string;
+  trialFinePrint: string;
   /** Region-aware checkout currency hint (marketing pricing only). */
-  pricesShownLine?: string;
+  pricesShownLine: string;
   /** Primary hero CTA target (defaults to in-page plan grid). */
   primaryCtaHref?: string;
   secondaryCtaHref?: string;
-  secondaryLabel?: string;
+  secondaryLabel: string;
   /** Hide trial billing microcopy (e.g. free pathways like Pre-Nursing). */
   compactFooter?: boolean;
 }) {
@@ -60,17 +66,15 @@ export function PricingHero({
             color: "color-mix(in srgb, var(--theme-primary) 86%, var(--semantic-text-primary))",
           }}
         >
-          Exam prep + clinical thinking + early-career support
+          {eyebrow}
         </p>
 
         <h1 className="nn-marketing-h1 text-balance">
-          Pass your exam — and feel confident on your first shift.
+          {headline}
         </h1>
 
         <p className="nn-marketing-body mx-auto mt-5 max-w-xl text-pretty text-muted-foreground">
-          NurseNest does not just prepare you for the NCLEX. We train you to think, prioritize, and make safe clinical
-          decisions in real-world scenarios — with a structured plan for your exam and your first shifts. Designed to
-          help you pass your exam and feel confident walking into your first shift.
+          {body}
         </p>
 
         <p
@@ -81,8 +85,10 @@ export function PricingHero({
             color: "var(--semantic-text-secondary)",
           }}
         >
-          {pricesShownLine}
+          {trustLine}
         </p>
+
+        <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground">{pricesShownLine}</p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link href={primaryCtaHref} className={MARKETING_PRIMARY_CTA_CLASS}>

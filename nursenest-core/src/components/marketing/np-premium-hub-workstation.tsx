@@ -8,7 +8,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-cat-start";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
-import { pathwayAllowsEcgLinkedLearning } from "@/lib/ecg-module/ecg-linked-learning";
+import { ECG_MODULE_ENTRY, pathwayAllowsEcgLinkedLearning } from "@/lib/ecg-module/ecg-linked-learning";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import {
   pathwayHubAppFlashcardsHref,
@@ -95,7 +95,7 @@ export function NpPremiumHubWorkstation({
   const pharmHref = pathwayHubAppQuestionsHref(pathway.id, "Pharmacology");
   const diagnosticHref = pathwayHubAppQuestionsPathwayMixedHref(pathway.id);
   const labsHref = "/app/labs";
-  const ecgHref = "/modules/ecg/basic/lessons";
+  const ecgHref = ECG_MODULE_ENTRY;
   const casesHref = withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathway.id);
   const osceHref = withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.osce, pathway.id);
   const flashHref = pathwayHubAppFlashcardsHref(pathway.id);

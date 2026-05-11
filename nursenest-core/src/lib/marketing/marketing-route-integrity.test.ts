@@ -48,7 +48,6 @@ describe("marketing route integrity", () => {
       const d = publicMarketingFooterStudyToolsDestinations(region);
       assert.ok(d.cat.startsWith("/"), d.cat);
       assert.equal(isValidPath(d.cat), true, d.cat);
-      assert.match(d.ecg, /^\/modules\/ecg\//);
       assert.match(d.osce, /^\/app\/osce\?/);
       assert.match(d.labs, /^\/app\/lab-drills\?/);
       assert.match(d.medicationMathApp, /^\/app\/med-calculations\?/);

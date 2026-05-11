@@ -38,7 +38,7 @@ import type { CardVariant } from "@/components/ui/study-card";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { marketingCatPathForPathway } from "@/lib/exam-pathways/practice-exams-cat-start";
-import { pathwayAllowsEcgLinkedLearning } from "@/lib/ecg-module/ecg-linked-learning";
+import { ECG_MODULE_ENTRY, pathwayAllowsEcgLinkedLearning } from "@/lib/ecg-module/ecg-linked-learning";
 import { isEcgModuleMarketingInventoryEnabled } from "@/lib/ecg-module/ecg-module-config";
 import {
   pathwayHubAppFlashcardsHref,
@@ -368,7 +368,9 @@ function pushCoreStudyToolCards(
       bodyKey: "components.examPathwayHub.premiumModules.ecgBody",
       ctaKey: "components.examPathwayHub.premiumModules.ecgCta",
       lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
-      href: scopeAlliedAppHref(pathway, "/modules/ecg/basic/lessons", alliedProfessionKey),
+      href: ecgOn
+        ? scopeAlliedAppHref(pathway, ECG_MODULE_ENTRY, alliedProfessionKey)
+        : buildExamPathwayPath(pathway),
       wrapGuestWithLoginCallback: true,
       locked: !ecgOn,
       qaMarker: "ecg",

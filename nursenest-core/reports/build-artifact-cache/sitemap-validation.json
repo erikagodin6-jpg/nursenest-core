@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "3b4b2a25be79003012d31a82b1c3cdca274647e831ba090359f20659f22eb26e",
-  "generatedAt": "2026-05-11T07:07:20.359Z",
+  "fingerprint": "f705da111ac4f4218a5455f574fdac69cad173a0d8475a83058001700b0f3b2b",
+  "generatedAt": "2026-05-11T07:37:26.006Z",
   "inputs": [
     {
       "type": "file",
@@ -1874,6 +1874,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/modules/advanced-ecg/status/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/modules/ecg/publish/route.ts"
     },
     {
@@ -2698,6 +2702,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/subscriptions/checkout/advanced-ecg/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/subscriptions/checkout/checkout-allied-metadata.contract.test.ts"
     },
     {
@@ -2783,6 +2791,18 @@
     {
       "type": "file",
       "path": "src/app/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/ecg-advanced/layout.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/ecg-advanced/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/modules/ecg-advanced/route-contract.test.ts"
     },
     {
       "type": "file",
@@ -5769,6 +5789,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 9596
+    "durationMs": 15203
   }
 }

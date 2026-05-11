@@ -12,7 +12,29 @@ const REPO_ROOT = path.resolve(ROOT, "..");
 const MARKETING_EN = path.join(REPO_ROOT, "tools/i18n/marketing/marketing-en.json");
 const LOCALE_DIR = path.join(REPO_ROOT, "tools/i18n/marketing/locale");
 
-const PRIORITY_LOCALES = ["fr", "es", "pt", "hi", "tl"] as const;
+const PRIORITY_LOCALES = [
+  "fr",
+  "es",
+  "pt",
+  "hi",
+  "tl",
+  "ar",
+  "de",
+  "fa",
+  "ht",
+  "id",
+  "it",
+  "ja",
+  "ko",
+  "pa",
+  "ru",
+  "th",
+  "tr",
+  "ur",
+  "vi",
+  "zh",
+  "zh-tw",
+] as const;
 const HOMEPAGE_KEYS = [
   "pages.home.hero.headlineAdaptive",
   "pages.home.premium.pathways.international.heading",

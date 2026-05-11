@@ -19,7 +19,7 @@ export function collectClinicalMarketingToolTeaserUrls(origin: string): string[]
 
 /**
  * Clinical readiness marketing urlset: OSCE + clinical-scenario pathway hubs (feature-flagged) + `/tools/*` teasers.
- * Used by `/sitemap-clinical-modules.xml` only — never emit learner `/app/*` or `/modules/ecg|lab-values` shells here.
+ * Used by `/sitemap-clinical-modules.xml` only — never emit learner `/app/*` or hidden mastery-module shells here.
  */
 export function collectClinicalModulesSitemapUrls(origin: string): string[] {
   return [...collectClinicalMarketingToolTeaserUrls(origin), ...collectOsceScenariosMarketingHubUrls(origin)];

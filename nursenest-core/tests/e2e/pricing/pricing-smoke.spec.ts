@@ -36,6 +36,7 @@ test.describe("Pricing page", () => {
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
     await expect(page.getByTestId("pricing-marketing-hero")).toBeVisible();
     await expect(page.locator("#pricing-plans-heading")).toBeVisible();
+    await expect(page.getByTestId("pricing-tier-scope-panel")).toBeVisible();
     await expect(page.getByRole("button", { name: /RN\s*\/\s*NCLEX-RN/i })).toBeVisible();
     await expect(page.locator("article.nn-pricing-plan-card").first()).toBeVisible();
     await expect(page.getByTestId("section-pricing-learner-faq")).toBeVisible();
@@ -46,6 +47,20 @@ test.describe("Pricing page", () => {
     const firstFaq = page.getByTestId("section-pricing-learner-faq").locator("details").first();
     await firstFaq.locator("summary").click();
     await expect(firstFaq).toHaveAttribute("open", "");
+
+    const scopePanel = page.getByTestId("pricing-tier-scope-panel");
+    for (const name of [/New Grad/i, /RN\s*\/\s*NCLEX-RN/i, /PN/i, /^NP$/i, /Allied Health/i]) {
+      await page.getByRole("button", { name }).click();
+      await expect(scopePanel.getByText("What's included")).toBeVisible();
+      await expect(scopePanel.getByText("Access scope")).toBeVisible();
+      await expect(scopePanel.getByText("Not included")).toBeVisible();
+    }
+
+    await page.getByRole("button", { name: /RN\s*\/\s*NCLEX-RN/i }).click();
+    await page.getByTestId("pricing-checkout-monthly").click();
+    await page.waitForURL(/\/login\?/);
+    await expect(page).toHaveURL(/checkoutIntent=1/);
+    await expect(page).toHaveURL(/checkoutTier=RN/);
 
     await expect(page.locator('[data-testid="pricing-marketing-hero"] a[href="#pricing-plans-heading"]').first()).toBeVisible();
     await page.screenshot({ path: "preview-screenshots/pricing-desktop.png", fullPage: true });
@@ -85,6 +100,7 @@ test.describe("Pricing page", () => {
     await expect(page.locator('[data-nn-nav-mode="public"]')).toBeVisible({ timeout: 60_000 });
     await expect(page.getByTestId("pricing-marketing-hero")).toBeVisible();
     await expect(page.locator("#pricing-plans-heading")).toBeVisible();
+    await expect(page.getByTestId("pricing-tier-scope-panel")).toBeVisible();
     await expect(page.locator("article.nn-pricing-plan-card").first()).toBeVisible();
 
     const d = actionableObserverDiagnostics(await logObserverDiagnostics(o, testInfo.title));

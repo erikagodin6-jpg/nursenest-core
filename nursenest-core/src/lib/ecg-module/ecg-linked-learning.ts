@@ -48,7 +48,7 @@ export function weakTopicSuggestsEcgFocus(topicKey: string): boolean {
 }
 
 /** Core ECG entry — integrated nursing telemetry literacy. Not the future Advanced ECG Program vertical. */
-const ECG_MODULE_ENTRY = "/modules/ecg/basic/lessons" as const;
+export const ECG_MODULE_ENTRY = "/modules/ecg/basic/lessons" as const;
 
 /**
  * Optional “Explore” hub link to gated **core** ECG entry (same URL learners use in-app).

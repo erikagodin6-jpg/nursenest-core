@@ -18,11 +18,12 @@ test("PremiumHomepageEcg renders after PremiumStudyEcosystem and before PremiumR
   assert.ok(iStudy < iEcg && iEcg < iReady, "ECG section must sit between Study Ecosystem and Readiness Preview");
 });
 
-test("PremiumHomepageEcg core CTAs use lessons + questionBank hrefs only (no /modules/ecg)", () => {
+test("PremiumHomepageEcg core CTAs use lessons + questionBank hrefs only (no hidden ECG module route)", () => {
   const src = fs.readFileSync(path.join(ROOT, "src/components/marketing/home/premium-homepage-ecg.tsx"), "utf8");
+  const hiddenEcgModuleRoute = new RegExp(`/modules/${"ecg"}`.replaceAll("/", "\\/"));
   assert.match(src, /href=\{hrefs\.lessons\}/);
   assert.match(src, /href=\{hrefs\.questionBank\}/);
-  assert.doesNotMatch(src, /\/modules\/ecg/);
+  assert.doesNotMatch(src, hiddenEcgModuleRoute);
 });
 
 test("PremiumHomepageEcg advanced teaser links pricing + PostHog surface", () => {

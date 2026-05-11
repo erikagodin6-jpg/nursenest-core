@@ -1,17 +1,19 @@
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
-import { minimalUrlsetSingleHome } from "@/lib/seo/sitemap-static-xml";
+import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
+import { buildSitemapUrlsetFromAbsoluteUrls, normalizeOrigin } from "@/lib/seo/sitemap-static-xml";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request): Promise<Response> {
+  const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
   let xml: string;
   try {
     const { buildMultilingualBlogSitemapXmlForLocale } = await import("@/lib/seo/sitemap-multilingual-blog-xml");
     xml = await buildMultilingualBlogSitemapXmlForLocale("fr");
   } catch {
-    xml = minimalUrlsetSingleHome();
+    xml = buildSitemapUrlsetFromAbsoluteUrls([{ loc: `${origin}/fr/blog` }]);
   }
 
   const etag = buildPublicResponseEtag(xml);

@@ -57,6 +57,7 @@ import { PricingReliabilityFaq } from "@/components/marketing/pricing-reliabilit
 import { PricingLearnerFaq } from "@/components/marketing/pricing-learner-faq";
 import { PricingSubscriptionFaq } from "@/components/marketing/pricing-subscription-faq";
 import { PricingHero } from "@/components/marketing/pricing-hero";
+import { PricingTierScopePanel } from "@/components/marketing/pricing-tier-scope-panel";
 import {
   ValuePropsStrip,
   FeatureComparisonTable,
@@ -170,9 +171,6 @@ const PLAN_CARD_BULLET_KEYS = [
   "pages.pricing.planCard.bullet4",
 ] as const;
 
-const TRIAL_SECONDARY_COPY = "No charge today. Cancel anytime before your trial ends.";
-const TRIAL_FINE_PRINT_COPY = "Billing begins automatically after 3 days unless cancelled.";
-
 function checkoutErrorUserMessage(
   parsed: ParsedCheckoutErrorBody,
   httpStatus: number,
@@ -192,12 +190,12 @@ function checkoutErrorUserMessage(
   return t("pages.pricing.error.checkoutUnavailable");
 }
 
-function PricingPlanGridSkeleton() {
+function PricingPlanGridSkeleton({ ariaLabel }: { ariaLabel: string }) {
   return (
     <div
       className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4 xl:gap-6 xl:items-start"
       aria-busy="true"
-      aria-label="Loading pricing plans"
+      aria-label={ariaLabel}
     >
       {BILLING_DURATION_ORDER.map((duration) => (
         <article
@@ -231,9 +229,11 @@ function PricingPlanGridSkeleton() {
 function PricingPlansStatusPanel({
   message,
   onRetry,
+  refreshLabel,
 }: {
   message: string;
   onRetry: () => void;
+  refreshLabel: string;
 }) {
   return (
     <div
@@ -246,7 +246,7 @@ function PricingPlansStatusPanel({
         className="mt-2 text-sm font-semibold text-primary underline underline-offset-2 hover:opacity-90"
         onClick={onRetry}
       >
-        Refresh page
+        {refreshLabel}
       </button>
     </div>
   );
@@ -353,15 +353,18 @@ export function PricingPageClient({
     if (trialDays <= 0) {
       return { sub: t("pages.pricing.checkout.recurringShort"), fine: "" as const };
     }
-    return { sub: TRIAL_SECONDARY_COPY, fine: TRIAL_FINE_PRINT_COPY };
+    return {
+      sub: t("pages.pricing.trial.shortLead"),
+      fine: t("pages.pricing.trial.shortFinePrint"),
+    };
   }, [trialDays, t]);
 
   const pricingCurrencyLine = useMemo(
     () =>
       region === "US"
-        ? "All prices are shown in U.S. dollars."
-        : "All prices are shown in Canadian dollars.",
-    [region],
+        ? t("pages.pricing.pricesShown.us")
+        : t("pages.pricing.pricesShown.ca"),
+    [region, t],
   );
 
   useEffect(() => {
@@ -464,6 +467,9 @@ export function PricingPageClient({
     return built;
   }, [t, tier, serverTierSubheads]);
   const isAllied = segment === "allied";
+  const selectedTierScopeLabel = isAllied
+    ? ALLIED_CAREER_DISPLAY_NAMES[selectedAlliedCareer]
+    : segmentLabels[segment];
   const alliedCheckoutBlocked = isAllied && !alliedProfessionCheckoutAck;
   const isFreeNursingPricingTrack = !isAllied && isFreeStripeBillingNursingTier(tier);
 
@@ -827,6 +833,7 @@ export function PricingPageClient({
       } catch (error) {
         const checkoutErr = error as CheckoutRequestError;
         if (checkoutErr.status === 401 || checkoutErr.parsed?.code === CHECKOUT_UNAUTHORIZED_CODE) {
+          setCheckoutLoading(false);
           redirectGuestToLoginForAdvancedEcgCheckout(duration);
           return;
         }
@@ -958,11 +965,15 @@ export function PricingPageClient({
 
       {/* ── Section 1: Hero ── */}
       <PricingHero
-        studySystemHref={localize("/how-it-works")}
+        eyebrow={t("pages.pricing.hero.choicePill")}
+        headline={heading}
+        body={heroSub}
+        trustLine={intro}
         ctaLabel={heroCtaLabel}
         trialSubtext={heroTrialFooter.sub}
         trialFinePrint={heroTrialFooter.fine}
         pricesShownLine={pricingCurrencyLine}
+        secondaryLabel={t("pages.pricing.hero.ctaSeeIncluded")}
       />
 
       {showNorthAmericaStripeScopeNote ? (
@@ -1089,18 +1100,31 @@ export function PricingPageClient({
           </div>
         )}
 
+        <PricingTierScopePanel
+          tier={tier}
+          trackLabel={segmentLabels[segment]}
+          alliedCareerLabel={isAllied ? selectedTierScopeLabel : undefined}
+        />
+
         <CheckoutCancelledNotice searchQuery={initialSearchParamsString} t={t} />
 
-        {!plansLoaded && !loadError ? <PricingPlanGridSkeleton /> : null}
+        {!plansLoaded && !loadError ? (
+          <PricingPlanGridSkeleton ariaLabel={t("pages.pricing.loadingPlansAria")} />
+        ) : null}
 
         {plansLoaded && loadError ? (
-          <PricingPlansStatusPanel message={loadError} onRetry={() => window.location.reload()} />
+          <PricingPlansStatusPanel
+            message={loadError}
+            onRetry={() => window.location.reload()}
+            refreshLabel={t("pages.pricing.error.refreshCta")}
+          />
         ) : null}
 
         {plansLoaded && !loadError && trackDataGap ? (
           <PricingPlansStatusPanel
             message={t("pages.pricing.error.trackTemporarilyUnavailable")}
             onRetry={() => window.location.reload()}
+            refreshLabel={t("pages.pricing.error.refreshCta")}
           />
         ) : null}
 
@@ -1229,10 +1253,10 @@ export function PricingPageClient({
                                 isPop ? "font-semibold text-[var(--semantic-info)]" : "text-muted-foreground"
                               }`}
                             >
-                              {TRIAL_SECONDARY_COPY}
+                              {heroTrialFooter.sub}
                             </p>
                             <p className="mt-1 text-center text-[11px] leading-snug text-muted-foreground">
-                              {TRIAL_FINE_PRINT_COPY}
+                              {heroTrialFooter.fine}
                             </p>
                           </>
                         ) : !pricingCheckoutSoftGate ? (
@@ -1380,7 +1404,7 @@ export function PricingPageClient({
             </p>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
               {t("pages.pricing.trial.bannerLead")}
-              {` ${TRIAL_SECONDARY_COPY}`}
+              {` ${heroTrialFooter.sub}`}
             </p>
             <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.trial.bannerFinePrint")}</p>
           </div>
@@ -1450,8 +1474,8 @@ export function PricingPageClient({
         </div>
         {trialDays > 0 ? (
           <>
-            <p className="mt-3 text-xs text-muted-foreground">{TRIAL_SECONDARY_COPY}</p>
-            <p className="mt-1 text-[11px] text-muted-foreground">{TRIAL_FINE_PRINT_COPY}</p>
+            <p className="mt-3 text-xs text-muted-foreground">{heroTrialFooter.sub}</p>
+            <p className="mt-1 text-[11px] text-muted-foreground">{heroTrialFooter.fine}</p>
           </>
         ) : (
           <p className="mt-3 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
