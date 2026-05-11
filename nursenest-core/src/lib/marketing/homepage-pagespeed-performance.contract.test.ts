@@ -149,4 +149,107 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.match(premiumCss, /contain:\s*paint/);
     assert.match(premiumCss, /\.nn-premium-final-cta\s*\{[^}]*radial-gradient/s);
   });
+
+  it("defers below-fold screenshot carousel SSR to reduce initial hydration cost", () => {
+    const homeClient = source("src/components/marketing/home-restored-client.tsx");
+
+    // Screenshot carousel must be ssr:false — it has 8+ effects and setInterval.
+    // This eliminates the most expensive hydration reconciliation from the initial paint.
+    assert.match(homeClient, /HomeHeroScreenshotSectionLazy/);
+    assert.match(homeClient, /ssr:\s*false/);
+  });
+
+  it("defers analytics beacon SSR to prevent blocking first paint", () => {
+    const homeClient = source("src/components/marketing/home-restored-client.tsx");
+
+    assert.match(homeClient, /FunnelHomepageViewBeaconLazy/);
+    // Both the analytics beacon and the screenshot carousel must have ssr: false
+    const ssrFalseCount = (homeClient.match(/ssr:\s*false/g) ?? []).length;
+    assert.ok(ssrFalseCount >= 2, `expected at least 2 ssr: false entries, got ${ssrFalseCount}`);
+  });
+
+  it("guards Prisma homepage stats module from entering browser bundles", () => {
+    const stats = source("src/lib/marketing/public-home-stats.ts");
+
+    // server-only guard must appear before the first Prisma import
+    assert.match(stats, /['"]server-only['"]/);
+    const serverOnlyIdx = stats.indexOf("server-only");
+    const prismaIdx = stats.indexOf("@prisma/client");
+    assert.ok(
+      serverOnlyIdx < prismaIdx,
+      `server-only guard (pos ${serverOnlyIdx}) must precede @prisma/client import (pos ${prismaIdx})`,
+    );
+  });
+
+  it("keeps ECG strip path as a module-level constant to avoid recomputation on hydration", () => {
+    const hero = source("src/components/marketing/home/premium-homepage-hero.tsx");
+
+    // The ECG path must be computed at module level (outside any function/component).
+    // This prevents redundant CPU work during hero hydration.
+    assert.match(hero, /const _ECG_PATH\s*=/);
+    assert.doesNotMatch(hero, /buildSinusRhythmPath\([^)]+\)[^;]*\n[^}]*return\s*\(/);
+  });
+
+  it("PremiumClinicalDepth is a server island with no use-client directive", () => {
+    const clinicalDepth = source("src/components/marketing/home/premium-clinical-depth.tsx");
+
+    // Must NOT have "use client" — this section is a Server Component
+    assert.doesNotMatch(clinicalDepth, /["']use client["']/);
+    // Must NOT import React hooks (no useMarketingI18n, no useState, no useEffect)
+    assert.doesNotMatch(clinicalDepth, /useMarketingI18n/);
+    assert.doesNotMatch(clinicalDepth, /useState|useEffect|useCallback|useMemo/);
+    // Must accept messages as a prop (server-island pattern)
+    assert.match(clinicalDepth, /messages:\s*Record<string,\s*string>/);
+  });
+
+  it("PremiumHomepageTrust is a server island with no use-client directive", () => {
+    const trust = source("src/components/marketing/home/premium-homepage-trust.tsx");
+
+    // Must NOT have "use client" — this section is a Server Component
+    assert.doesNotMatch(trust, /["']use client["']/);
+    // Must NOT import useMarketingI18n hook
+    assert.doesNotMatch(trust, /useMarketingI18n/);
+    assert.doesNotMatch(trust, /useState|useEffect|useCallback/);
+    // Must accept messages as a prop (server-island pattern)
+    assert.match(trust, /messages:\s*Record<string,\s*string>/);
+    // Must not import the client-only BrandTrustInline (uses its own server-safe variant)
+    assert.doesNotMatch(trust, /from.*brand-trust-inline/);
+  });
+
+  it("HomeRestoredClient accepts server island slots for static sections", () => {
+    const homeClient = source("src/components/marketing/home-restored-client.tsx");
+
+    // Must declare named slots for server-rendered islands
+    assert.match(homeClient, /clinicalDepthSlot\?:\s*React\.ReactNode/);
+    assert.match(homeClient, /trustSlot\?:\s*React\.ReactNode/);
+    // Must NOT dynamically import the sections that are now server islands
+    assert.doesNotMatch(homeClient, /dynamic\([^)]*premium-clinical-depth/);
+    assert.doesNotMatch(homeClient, /dynamic\([^)]*premium-homepage-trust/);
+  });
+
+  it("HomeRestoredWithDeferredStats renders server islands and passes them as slots", () => {
+    const serverStats = source(
+      "src/components/marketing/home-restored-with-deferred-stats.server.tsx",
+    );
+
+    // Must import both server island components
+    assert.match(serverStats, /PremiumClinicalDepth/);
+    assert.match(serverStats, /PremiumHomepageTrust/);
+    // Must pass the slots to HomeRestoredClient
+    assert.match(serverStats, /clinicalDepthSlot/);
+    assert.match(serverStats, /trustSlot/);
+    // Must load messages for the server islands
+    assert.match(serverStats, /loadServerIslandMessagesSafe|loadMarketingMessageShards/);
+  });
+
+  it("server island message loader loads pages, marketing, and brand shards", () => {
+    const serverStats = source(
+      "src/components/marketing/home-restored-with-deferred-stats.server.tsx",
+    );
+
+    // The message loader must request the shards needed for clinical depth and trust sections
+    assert.match(serverStats, /["']pages["']/);
+    assert.match(serverStats, /["']marketing["']/);
+    assert.match(serverStats, /["']brand["']/);
+  });
 });

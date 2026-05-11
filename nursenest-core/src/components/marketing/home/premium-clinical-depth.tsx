@@ -1,8 +1,5 @@
-"use client";
-
 import { Activity, AlertTriangle, FlaskConical, Lightbulb, Pill, Stethoscope } from "lucide-react";
 
-import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 const CLINICAL_CARDS = [
@@ -50,9 +47,27 @@ const CLINICAL_CARDS = [
   },
 ] as const;
 
-export function PremiumClinicalDepth() {
-  const { t, locale } = useMarketingI18n();
-  const tr = (key: string, fallback: string) => safeHomepageMarketingT(t, key, fallback);
+/** Resolve a key from a flat messages record with an English fallback. */
+function pickMsg(messages: Record<string, string>, key: string, fallback: string): string {
+  const v = messages[key]?.trim();
+  return v && v.length > 0 ? v : fallback;
+}
+
+/**
+ * Server Component — zero browser APIs, no state, no effects.
+ *
+ * Receives pre-computed i18n messages from the parent server component instead
+ * of reading from a client context hook. Keeps the section fully server-rendered
+ * and eliminates its hydration cost entirely.
+ */
+export function PremiumClinicalDepth({
+  messages,
+  locale,
+}: {
+  messages: Record<string, string>;
+  locale: string;
+}) {
+  const tr = (key: string, fallback: string) => pickMsg(messages, key, fallback);
 
   return (
     <section

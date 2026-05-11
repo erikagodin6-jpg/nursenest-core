@@ -146,25 +146,28 @@ function buildSinusRhythmPath(beats: number, beatWidth: number, baselineY: numbe
    upright T; rates/shapes are not calibrated. Not a substitute for
    clinical ECG interpretation. Static (no animation).
    ────────────────────────────────────────────────────────────────── */
+
+// Hoisted module-level constants — path is deterministic; compute once at module load time.
+const _ECG_BEAT_W = 138;
+const _ECG_BEAT_COUNT = 3;
+const _ECG_BASELINE = 46;
+const _ECG_PATH = buildSinusRhythmPath(_ECG_BEAT_COUNT, _ECG_BEAT_W, _ECG_BASELINE);
+const _ECG_VIEWBOX_W = _ECG_BEAT_W * _ECG_BEAT_COUNT;
+
 /** Reusable illustrative NSR-style strip for homepage marketing (not diagnostic). */
 export function MarketingHomepageEcgStripIllustration({ ariaLabel }: { ariaLabel: string }) {
-  const beatW = 138;
-  const beatCount = 3;
-  const baseline = 46;
-  const width = beatW * beatCount;
-  const d = buildSinusRhythmPath(beatCount, beatW, baseline);
   return (
     <svg
       role="img"
       aria-label={ariaLabel}
-      viewBox={`0 0 ${width} 72`}
+      viewBox={`0 0 ${_ECG_VIEWBOX_W} 72`}
       preserveAspectRatio="xMidYMid meet"
       className="nn-premium-hero-ecg__svg block w-full text-[var(--semantic-success)]"
       style={{ height: 52 }}
     >
       <g className="nn-premium-hero-ecg__trace">
         <path
-          d={d}
+          d={_ECG_PATH}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"

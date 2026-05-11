@@ -1,3 +1,5 @@
+import "server-only";
+
 import { ContentStatus, UserRole } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cacheDeploymentRevision } from "@/lib/cache/cache-revision";

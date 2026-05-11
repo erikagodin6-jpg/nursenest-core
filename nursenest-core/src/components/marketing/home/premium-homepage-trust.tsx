@@ -1,9 +1,4 @@
-"use client";
-
-import { BadgeCheck, GraduationCap, ShieldCheck } from "lucide-react";
-
-import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
-import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
+import { BadgeCheck, CheckCircle2, GraduationCap, ShieldCheck } from "lucide-react";
 
 const TRUST_CARDS = [
   {
@@ -31,9 +26,62 @@ const TRUST_CARDS = [
   },
 ] as const;
 
-export function PremiumHomepageTrust() {
-  const { t } = useMarketingI18n();
-  const tr = (key: string, fallback: string) => safeHomepageMarketingT(t, key, fallback);
+/** Resolve a key from a flat messages record with an English fallback. */
+function pickMsg(messages: Record<string, string>, key: string, fallback: string): string {
+  const v = messages[key]?.trim();
+  return v && v.length > 0 ? v : fallback;
+}
+
+/**
+ * Server-safe inline trust bullet list — receives pre-split points as a prop.
+ * No hooks; avoids pulling client context into a server component.
+ */
+function BrandTrustInlineServer({
+  points,
+  className = "",
+}: {
+  points: string[];
+  className?: string;
+}) {
+  if (!points.length) return null;
+  return (
+    <ul
+      className={`flex flex-col gap-1.5 text-xs text-muted-foreground sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-1 ${className}`}
+      role="list"
+    >
+      {points.map((part) => (
+        <li key={part} className="flex items-center gap-1.5">
+          <CheckCircle2
+            className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-success)]"
+            aria-hidden
+          />
+          <span>{part}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/**
+ * Server Component — zero browser APIs, no state, no effects.
+ *
+ * Receives pre-computed i18n messages from the parent server component.
+ * The BrandTrustInline trust bullets are also rendered server-side via
+ * BrandTrustInlineServer (no hooks version of the client BrandTrustInline).
+ */
+export function PremiumHomepageTrust({
+  messages,
+}: {
+  messages: Record<string, string>;
+}) {
+  const tr = (key: string, fallback: string) => pickMsg(messages, key, fallback);
+
+  // Trust bullet list — split the same way BrandTrustInline does client-side
+  const trustText = pickMsg(messages, "brand.trust.prep", "");
+  const trustPoints = trustText
+    .split(" · ")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
   return (
     <section
@@ -55,7 +103,7 @@ export function PremiumHomepageTrust() {
               "Representative feedback from exam candidates—not outcome guarantees. Content stays exam-scoped with conservative claims.",
             )}
           </p>
-          <BrandTrustInline variant="prep" className="mt-5 justify-center text-center" />
+          <BrandTrustInlineServer points={trustPoints} className="mt-5 justify-center text-center" />
         </div>
 
         <div className="mt-9 grid gap-4 md:grid-cols-3">

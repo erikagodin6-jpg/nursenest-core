@@ -3,6 +3,8 @@ import "server-only";
 import type { PropsWithChildren } from "react";
 
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
+import { PremiumClinicalDepth } from "@/components/marketing/home/premium-clinical-depth";
+import { PremiumHomepageTrust } from "@/components/marketing/home/premium-homepage-trust";
 import {
   getDegradedPublicHomeStatsFallback,
   type PublicHomeStatsPayload,
@@ -48,8 +50,28 @@ async function getStatsSafe(): Promise<PublicHomeStatsPayload> {
 }
 
 /**
+ * Load page-body i18n messages for server-island sections (pages + marketing shards).
+ * Returns empty object on failure so server islands fall back to English defaults.
+ * Messages are read from filesystem (cached by Node module system) — no network calls.
+ */
+async function loadServerIslandMessagesSafe(): Promise<Record<string, string>> {
+  try {
+    const { loadMarketingMessageShards } = await import(
+      "@/lib/marketing-i18n/load-marketing-messages"
+    );
+    return await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, ["pages", "marketing", "brand"]);
+  } catch {
+    return {};
+  }
+}
+
+/**
  * Single server await for homepage stats — no Suspense swap on `/` so the first
  * paint is one consistent HomeRestoredClient tree (degraded stats on failure).
+ *
+ * Server islands: PremiumClinicalDepth and PremiumHomepageTrust are rendered here
+ * as React Server Components and passed as named slots to the client wrapper.
+ * React does not hydrate these subtrees — they become static HTML.
  */
 export async function HomeRestoredWithDeferredStats({
   skipOptionalDbReads,
@@ -58,16 +80,28 @@ export async function HomeRestoredWithDeferredStats({
 }: HomeRestoredWithDeferredStatsProps) {
   const safeCardIds = safeRegionCardIds(publishedGlobalRegionCardIds);
 
-  const [stats, homeHeroCarouselSlides] = await Promise.all([
+  const [stats, homeHeroCarouselSlides, serverIslandMessages] = await Promise.all([
     skipOptionalDbReads ? Promise.resolve(getDegradedPublicHomeStatsFallback("db_skipped")) : getStatsSafe(),
     loadHomeHeroPrimaryCarouselSlidesForLocale(DEFAULT_MARKETING_LOCALE),
+    loadServerIslandMessagesSafe(),
   ]);
+
+  // Server-rendered islands: rendered here as RSC, slotted into the client wrapper.
+  // These sections have zero browser API usage and are fully static — no hydration needed.
+  const clinicalDepthSlot = (
+    <PremiumClinicalDepth messages={serverIslandMessages} locale={DEFAULT_MARKETING_LOCALE} />
+  );
+  const trustSlot = (
+    <PremiumHomepageTrust messages={serverIslandMessages} />
+  );
 
   return (
     <HomeRestoredClient
       homeMarketingStats={homeMarketingStatsFromPayload(stats)}
       publishedGlobalRegionCardIds={safeCardIds}
       homeHeroCarouselSlides={homeHeroCarouselSlides}
+      clinicalDepthSlot={clinicalDepthSlot}
+      trustSlot={trustSlot}
     >
       {children}
     </HomeRestoredClient>

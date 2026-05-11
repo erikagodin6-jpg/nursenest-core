@@ -18,9 +18,8 @@ import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 const PremiumPathwayShowcase = dynamic(() =>
   import("@/components/marketing/home/premium-pathway-showcase").then((m) => m.PremiumPathwayShowcase),
 );
-const PremiumClinicalDepth = dynamic(() =>
-  import("@/components/marketing/home/premium-clinical-depth").then((m) => m.PremiumClinicalDepth),
-);
+// PremiumClinicalDepth: now a Server Component — rendered as clinicalDepthSlot from the parent RSC.
+// PremiumHomepageTrust: now a Server Component — rendered as trustSlot from the parent RSC.
 const PremiumStudyEcosystem = dynamic(() =>
   import("@/components/marketing/home/premium-study-ecosystem").then((m) => m.PremiumStudyEcosystem),
 );
@@ -33,9 +32,6 @@ const PremiumHomepageEcg = dynamic(() =>
 const PremiumReadinessPreview = dynamic(() =>
   import("@/components/marketing/home/premium-readiness-preview").then((m) => m.PremiumReadinessPreview),
 );
-const PremiumHomepageTrust = dynamic(() =>
-  import("@/components/marketing/home/premium-homepage-trust").then((m) => m.PremiumHomepageTrust),
-);
 const PremiumHomepageCta = dynamic(() =>
   import("@/components/marketing/home/premium-homepage-cta").then((m) => m.PremiumHomepageCta),
 );
@@ -46,7 +42,9 @@ const HomeHeroScreenshotSectionLazy = dynamic(
     import("@/components/marketing/home-hero-screenshot-section").then((m) => ({
       default: m.HomeHeroScreenshotSection,
     })),
-  { loading: () => <HomeHeroScreenshotSectionSkeleton /> },
+  // ssr: false — carousel has 8+ effects/setInterval; skipping SSR reconciliation reduces initial TBT.
+  // Skeleton provides stable pre-hydration geometry so CLS stays below threshold.
+  { loading: () => <HomeHeroScreenshotSectionSkeleton />, ssr: false },
 );
 
 const FunnelHomepageViewBeaconLazy = dynamic(
@@ -92,6 +90,16 @@ export type HomeRestoredClientProps = PropsWithChildren<{
   publishedGlobalRegionCardIds?: readonly string[] | null;
   /** Server-built carousel slides — avoids client-side slide assembly on hydration. */
   homeHeroCarouselSlides?: readonly HomeHeroSlide[] | null;
+  /**
+   * Server-rendered island for PremiumClinicalDepth.
+   * Passed from the parent Server Component so this section never hydrates.
+   */
+  clinicalDepthSlot?: React.ReactNode;
+  /**
+   * Server-rendered island for PremiumHomepageTrust.
+   * Passed from the parent Server Component so this section never hydrates.
+   */
+  trustSlot?: React.ReactNode;
 }>;
 
 /* ------------------ COMPONENT ------------------ */
@@ -100,6 +108,8 @@ export default function HomeRestoredClient({
   homeMarketingStats,
   publishedGlobalRegionCardIds: _publishedGlobalRegionCardIds,
   homeHeroCarouselSlides,
+  clinicalDepthSlot,
+  trustSlot,
   children,
 }: HomeRestoredClientProps) {
   const { locale } = useMarketingI18n();
@@ -138,11 +148,18 @@ export default function HomeRestoredClient({
 
       <PremiumHomepageEcg />
       <PremiumPathwayShowcase />
-      <PremiumClinicalDepth />
+
+      {/* Server island — PremiumClinicalDepth is a Server Component rendered by the
+          parent RSC (HomeRestoredWithDeferredStats). React does not hydrate this subtree. */}
+      {clinicalDepthSlot}
+
       <PremiumStudyEcosystem />
       <PremiumSocialStudy />
       <PremiumReadinessPreview />
-      <PremiumHomepageTrust />
+
+      {/* Server island — PremiumHomepageTrust is a Server Component rendered by the
+          parent RSC (HomeRestoredWithDeferredStats). React does not hydrate this subtree. */}
+      {trustSlot}
 
       {/* Global hub strip — after pathway cards (supporting marketing, not above hero).
           Pass as `children` from the server page so RSC streaming keeps DOM order under the hero. */}

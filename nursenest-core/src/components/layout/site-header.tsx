@@ -5,7 +5,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import { createPortal } from "react-dom";
-import { CountryCode } from "@prisma/client";
 import { useTheme } from "next-themes";
 import { getNavChrome, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, MapPin, Menu, Settings, User, X } from "lucide-react";
@@ -89,20 +88,20 @@ function formatRegionSlugFallback(slug: string): string {
 /** Sync badge line — allied-specific abbreviation is resolved client-side via dynamic import. */
 function examIndicatorLabelSync(
   t: (key: string) => string,
-  country: CountryCode,
+  country: string,
   tier: LearnerTier,
   alliedAbbrev: string | null,
 ): string {
   const regionShort =
-    country === CountryCode.CA
+    country === "CA"
       ? t("nav.badge.regionCA")
-      : country === CountryCode.US
+      : country === "US"
         ? t("nav.badge.regionUS")
-        : country === CountryCode.GB
+        : country === "GB"
           ? "UK"
-          : country === CountryCode.AU
+          : country === "AU"
             ? "AU"
-            : country === CountryCode.PH
+            : country === "PH"
               ? "PH"
               : String(country);
   if (tier === "LVN_LPN") return `${regionShort} ${t("nav.badge.roleLvnLpn")}`;
@@ -116,9 +115,29 @@ function examIndicatorLabelSync(
   return `${regionShort} ${tier}`;
 }
 
+/** Server-precomputed static nav data — eliminates hook calls for above-fold static labels. */
+export type SiteHeaderPrecomputedNav = {
+  /** BCP-47 locale (e.g. "en", "fr") resolved server-side. */
+  locale: string;
+  /** Static marketing nav links (Pricing, About, Blog, FAQ, Pre-nursing, Tools). */
+  moreLinks: ReadonlyArray<{ key: string; href: string; label: string; matchBase: string }>;
+  /** Computed server-side; avoids t("brand.homeAriaLabel") on the client. */
+  homeAriaLabel: string;
+  /** "Log In" CTA label computed server-side. */
+  loginLabel: string;
+  /** "Start Free" CTA label computed server-side. */
+  signupLabel: string;
+};
+
 export type SiteHeaderProps = {
   /** True when getStaffSession() found a staff row for this request (JWT role may still lag). */
   serverHasStaffSession?: boolean;
+  /**
+   * Static nav data pre-computed by SiteHeaderServer (server component).
+   * When provided, avoids hook-computed labels for static desktop nav links.
+   * Falls back to hook-computed values when absent (backward-compatible).
+   */
+  precomputedNavData?: SiteHeaderPrecomputedNav;
 };
 
 /**
@@ -153,7 +172,7 @@ export type SiteHeaderProps = {
  * Visual parity release gate: `tests/e2e/visual/theme-parity/
  * homepage-theme-parity.spec.ts` (see `docs/screenshots/theme-parity/`).
  */
-export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
+export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHeaderProps = {}) {
   const { t, locale } = useMarketingI18n();
   const tRef = useRef(t);
   tRef.current = t;
@@ -379,8 +398,8 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     const tier: MarketingHeaderFlowTier | null =
       isMarketingEntitledLearner && user?.tier ? (user.tier as MarketingHeaderFlowTier) : null;
     const country =
-      user?.country === CountryCode.US || user?.country === CountryCode.CA
-        ? user.country === CountryCode.US
+      user?.country === "US" || user?.country === "CA"
+        ? user.country === "US"
           ? "US"
           : "CA"
         : null;
@@ -410,36 +429,41 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
     ],
     [marketingFlowDestinations, t, locale],
   );
+  // Use server-precomputed more-links when available — eliminates 6 t() calls for static desktop nav.
   const marketingMoreLinks: HeaderNavLink[] = useMemo(
-    () => [
-      {
-        key: "pricing",
-        href: HUB.pricing,
-        matchBase: "/pricing",
-        label: formatTitleCase(t("nav.pricing"), locale),
-      },
-      {
-        key: "about",
-        href: "/about",
-        matchBase: "/about",
-        label: formatTitleCase(t("nav.about"), locale),
-      },
-      {
-        key: "blog",
-        href: "/blog",
-        matchBase: "/blog",
-        label: formatTitleCase(t("footer.blog"), locale),
-      },
-      { key: "faq", href: "/faq", matchBase: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
-      {
-        key: "pre-nursing",
-        href: "/pre-nursing",
-        matchBase: "/pre-nursing",
-        label: formatTitleCase(t("nav.preNursing"), locale),
-      },
-      { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
-    ],
-    [t, locale],
+    () =>
+      precomputedNavData?.moreLinks
+        ? [...precomputedNavData.moreLinks]
+        : [
+            {
+              key: "pricing",
+              href: HUB.pricing,
+              matchBase: "/pricing",
+              label: formatTitleCase(t("nav.pricing"), locale),
+            },
+            {
+              key: "about",
+              href: "/about",
+              matchBase: "/about",
+              label: formatTitleCase(t("nav.about"), locale),
+            },
+            {
+              key: "blog",
+              href: "/blog",
+              matchBase: "/blog",
+              label: formatTitleCase(t("footer.blog"), locale),
+            },
+            { key: "faq", href: "/faq", matchBase: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
+            {
+              key: "pre-nursing",
+              href: "/pre-nursing",
+              matchBase: "/pre-nursing",
+              label: formatTitleCase(t("nav.preNursing"), locale),
+            },
+            { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
+          ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [precomputedNavData?.moreLinks, t, locale],
   );
   const darkHeaderShadow = useMemo(() => {
     const inset = "inset 0 1px 0 0 rgba(255,255,255,0.15)";

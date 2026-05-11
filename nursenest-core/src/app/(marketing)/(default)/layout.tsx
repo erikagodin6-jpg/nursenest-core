@@ -5,7 +5,7 @@ import { getEffectiveMarketingCountry } from "@/lib/marketing/get-effective-coun
 import { readOptionalMarketingRegionToggleForCountry } from "@/lib/marketing/read-optional-marketing-region-cookie.server";
 import { MarketingMainI18nShards } from "@/components/i18n/marketing-main-i18n-shards";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
+import { SiteHeaderServer } from "@/components/layout/site-header-server";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -430,7 +430,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                   <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
                     <CheckoutGlobalRegionContextPathStamp />
                     <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
-                      <SiteHeader serverHasStaffSession={staffSession != null} />
+                      <SiteHeaderServer serverHasStaffSession={staffSession != null} />
                       {shouldLayerMainPageShards() ? (
                         <MarketingMainI18nShards
                           locale={resolvedLocale}
