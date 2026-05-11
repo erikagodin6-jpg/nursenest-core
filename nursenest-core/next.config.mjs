@@ -99,6 +99,22 @@ const experimental = {
   webpackBuildWorker: false,
 };
 
+/**
+ * Generic NP discovery pages are canonical public URLs (`/{slug}`) but render through the internal
+ * programmatic route implementation at `/seo/[slug]`.
+ *
+ * Keep this list intentionally scoped to the NP discoverability pass so we do not broaden unrelated
+ * routing behavior while restoring specialty-first public entry points.
+ */
+const NP_PROGRAMMATIC_SEO_REWRITES = [
+  "np-exam-prep",
+  "np-exam-practice-questions",
+  "np-clinical-cases",
+  "canada-np-exam-prep",
+  "cnple-practice-questions",
+  "np-study-guide-canada",
+];
+
 class NextServerCommonJsBoundaryPlugin {
   apply(compiler) {
     const pluginName = "NextServerCommonJsBoundaryPlugin";
@@ -162,6 +178,15 @@ const nextConfig = {
       { source: "/canada/allied/allied-health", destination: "/allied/allied-health", permanent: true },
       { source: "/canada/allied/allied-health/:path*", destination: "/allied/allied-health/:path*", permanent: true },
     ];
+  },
+
+  async rewrites() {
+    return {
+      beforeFiles: NP_PROGRAMMATIC_SEO_REWRITES.map((slug) => ({
+        source: `/${slug}`,
+        destination: `/seo/${slug}`,
+      })),
+    };
   },
 
   /**

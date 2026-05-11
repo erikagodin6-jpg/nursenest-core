@@ -75,6 +75,10 @@ export function SignupForm({
     setClientReady(true);
   }, []);
 
+  useEffect(() => {
+    setExamFocus((prev) => reconcileExamFocusForCountryAndTier(country, tier, prev, t));
+  }, [country, tier, t]);
+
   function signupErrorMessage(data: { error?: string; code?: string }): string {
     if (typeof data.error === "string" && data.error.length > 0) return data.error;
     switch (data.code) {
@@ -285,7 +289,6 @@ export function SignupForm({
           onChange={(e) => {
             const next = e.target.value === "US" ? "US" : "CA";
             setCountry(next);
-            setExamFocus((prev) => reconcileExamFocusForCountryAndTier(next, tier, prev, t));
           }}
         >
           <option value="CA">{t("pages.signup.countryCa")}</option>
@@ -298,7 +301,6 @@ export function SignupForm({
           onChange={(e) => {
             const next = e.target.value as SignupTierValue;
             setTier(next);
-            setExamFocus((prev) => reconcileExamFocusForCountryAndTier(country, next, prev, t));
           }}
         >
           <option value="RPN">{t("pages.signup.tierRpn")}</option>

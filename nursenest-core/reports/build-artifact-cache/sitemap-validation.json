@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "778153da19b09b429796f8f8789672e888f9c7d1a72300d03f3b853ab96cb00c",
-  "generatedAt": "2026-05-11T09:29:03.614Z",
+  "fingerprint": "4bdd4fb6ffc9e033efe3548456a5d7c3ad6d59f2a08846ebffdf8f877dabe9fb",
+  "generatedAt": "2026-05-11T12:17:31.411Z",
   "inputs": [
     {
       "type": "file",
@@ -5386,6 +5386,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/np-advanced-seo-inventory.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/np-advanced-seo-posts.ts"
     },
     {
@@ -5459,6 +5463,10 @@
     {
       "type": "file",
       "path": "src/lib/seo/programmatic-page-kind.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/programmatic-page-links.test.ts"
     },
     {
       "type": "file",
@@ -5789,6 +5797,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 15057
+    "durationMs": 18720
   }
 }

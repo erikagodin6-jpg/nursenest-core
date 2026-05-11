@@ -49,18 +49,22 @@ export function localNextDevWebServer(input: LocalNextWebServerInput) {
     (!forceNoReuse && !process.env.CI);
 
   const existingNodeOptions = process.env.NODE_OPTIONS?.trim();
-  const playwrightHeap = process.env.PLAYWRIGHT_NEXT_HEAP_MB?.trim() || "4096";
-  const heapFlag = `--max-old-space-size=${playwrightHeap}`;
-  const mergedNodeOptions = existingNodeOptions ? `${existingNodeOptions} ${heapFlag}` : heapFlag;
+  const playwrightHeap = process.env.PLAYWRIGHT_NEXT_HEAP_MB?.trim();
+  const heapFlag = playwrightHeap ? `--max-old-space-size=${playwrightHeap}` : undefined;
+  const mergedNodeOptions = heapFlag
+    ? existingNodeOptions
+      ? `${existingNodeOptions} ${heapFlag}`
+      : heapFlag
+    : existingNodeOptions;
 
   const env: Record<string, string> = {
-    NODE_OPTIONS: mergedNodeOptions,
     RUN_HEAVY_BUILD_TASKS: "false",
     NEXTAUTH_SECRET: secret,
     AUTH_SECRET: process.env.AUTH_SECRET?.trim() || secret,
     AUTH_URL: origin.origin,
     NEXTAUTH_URL: origin.origin,
     ...(dbUrl ? { DATABASE_URL: dbUrl } : {}),
+    ...(mergedNodeOptions ? { NODE_OPTIONS: mergedNodeOptions } : {}),
   };
 
   if (input.envExtra) {

@@ -118,6 +118,26 @@ describe("marketing route integrity", () => {
     }
   });
 
+  it("next config rewrites NP discovery slugs to the internal programmatic SEO route", () => {
+    const nextConfig = readFileSync(join(dir, "..", "..", "..", "next.config.mjs"), "utf8");
+    const expectedRewrites = [
+      "np-exam-prep",
+      "np-exam-practice-questions",
+      "np-clinical-cases",
+      "canada-np-exam-prep",
+      "cnple-practice-questions",
+      "np-study-guide-canada",
+    ];
+
+    assert.match(nextConfig, /const NP_PROGRAMMATIC_SEO_REWRITES = \[/);
+    assert.match(nextConfig, /source:\s*`\/\$\{slug\}`/);
+    assert.match(nextConfig, /destination:\s*`\/seo\/\$\{slug\}`/);
+
+    for (const slug of expectedRewrites) {
+      assert.match(nextConfig, new RegExp(`"${slug}"`), `${slug} rewrite list entry missing`);
+    }
+  });
+
   it("resolveExamPathwaySafe rejects unsupported triples while keeping canonical hubs resolvable", async () => {
     assert.equal(
       await resolveExamPathwaySafe("us", "rpn", "rex-pn", { pathname: "/us/rpn/rex-pn" }),

@@ -55,6 +55,7 @@ import { answerMatches } from "../src/lib/exams/score-session-answers";
 import { questionAccessWhere } from "../src/lib/entitlements/content-access-scope";
 import { resolveEntitlement } from "../src/lib/entitlements/resolve-entitlement";
 import { syntheticPathwayLessonId } from "../src/lib/lessons/pathway-lesson-progress";
+import { isNonFatalPrismaSchemaError } from "../src/lib/prisma/safe-reads";
 import { prisma } from "./lib/prisma-script-client";
 
 const SEED_TAG = "nn_auth_qa";
@@ -62,8 +63,69 @@ const SEED_JSON_MARKER = "nnAuthQaSeed";
 const SEED_JSON_VERSION = 1;
 const DECK_SLUG = "nn-auth-qa-e2e-deck";
 const OSCE_SEED_SLUG = "nn-auth-qa-osce-seed";
+const CAT_ATTEMPT_TABLE = "exam_question_practice_answer_attempts";
+const ECG_ATTEMPT_TABLE = "ecg_video_question_practice_answer_attempts";
 /** Marks synthetic `EcgVideoQuestionPracticeAnswerAttempt` rows created by this script (cleanup on reset). */
 const ECG_SEED_OPTION_ID = "nn_auth_qa_ecg_synthetic_option";
+const OPTIONAL_SCHEMA_WARNINGS = new Set<string>();
+const OPTIONAL_TABLE_PRESENCE = new Map<string, boolean>();
+
+async function optionalTableExists(tableName: string, label: string): Promise<boolean> {
+  const cached = OPTIONAL_TABLE_PRESENCE.get(tableName);
+  if (cached !== undefined) return cached;
+  try {
+    const rows = await prisma.$queryRaw<Array<{ present: boolean }>>`
+      SELECT EXISTS (
+        SELECT 1
+        FROM information_schema.tables
+        WHERE table_schema = 'public' AND table_name = ${tableName}
+      ) AS present
+    `;
+    const present = Boolean(rows[0]?.present);
+    OPTIONAL_TABLE_PRESENCE.set(tableName, present);
+    if (!present && !OPTIONAL_SCHEMA_WARNINGS.has(`missing:${tableName}`)) {
+      OPTIONAL_SCHEMA_WARNINGS.add(`missing:${tableName}`);
+      console.warn(`[seed-auth-qa] ${label} skipped: table public.${tableName} is missing in this database.`);
+    }
+    return present;
+  } catch (error) {
+    if (!isNonFatalPrismaSchemaError(error)) throw error;
+    OPTIONAL_TABLE_PRESENCE.set(tableName, false);
+    if (!OPTIONAL_SCHEMA_WARNINGS.has(`probe:${tableName}`)) {
+      OPTIONAL_SCHEMA_WARNINGS.add(`probe:${tableName}`);
+      const detail = error instanceof Error ? error.message.slice(0, 220) : String(error).slice(0, 220);
+      console.warn(`[seed-auth-qa] ${label} skipped: could not probe optional table public.${tableName}. ${detail}`);
+    }
+    return false;
+  }
+}
+
+async function runOptionalSeedWrite(label: string, run: () => Promise<void>): Promise<void> {
+  try {
+    await run();
+  } catch (error) {
+    if (!isNonFatalPrismaSchemaError(error)) throw error;
+    if (!OPTIONAL_SCHEMA_WARNINGS.has(label)) {
+      OPTIONAL_SCHEMA_WARNINGS.add(label);
+      const detail = error instanceof Error ? error.message.slice(0, 220) : String(error).slice(0, 220);
+      console.warn(`[seed-auth-qa] ${label} skipped: optional table/column missing in this database. ${detail}`);
+    }
+  }
+}
+
+async function runOptionalSeedRead<T>(label: string, fallback: T, run: () => Promise<T>): Promise<T> {
+  try {
+    return await run();
+  } catch (error) {
+    if (!isNonFatalPrismaSchemaError(error)) throw error;
+    if (!OPTIONAL_SCHEMA_WARNINGS.has(`read:${label}`)) {
+      OPTIONAL_SCHEMA_WARNINGS.add(`read:${label}`);
+      const detail = error instanceof Error ? error.message.slice(0, 220) : String(error).slice(0, 220);
+      console.warn(`[seed-auth-qa] ${label} skipped: optional table/column missing in this database. ${detail}`);
+    }
+    return fallback;
+  }
+}
 
 function resolveTargetEmail(): string | null {
   const a =
@@ -124,16 +186,20 @@ async function cleanupTaggedRows(userId: string): Promise<void> {
     where: { user_id: userId, snapshot_week: weekKey },
   });
 
-  await prisma.examQuestionPracticeAnswerAttempt.deleteMany({
-    where: {
-      userId,
-      mode: PracticeQuestionAnswerMode.cat,
-      selectedOptionKey: { startsWith: `${SEED_TAG}:` },
-    },
+  await runOptionalSeedWrite("CAT attempt cleanup", async () => {
+    await prisma.examQuestionPracticeAnswerAttempt.deleteMany({
+      where: {
+        userId,
+        mode: PracticeQuestionAnswerMode.cat,
+        selectedOptionKey: { startsWith: `${SEED_TAG}:` },
+      },
+    });
   });
 
-  await prisma.ecgVideoQuestionPracticeAnswerAttempt.deleteMany({
-    where: { userId, selectedOptionId: ECG_SEED_OPTION_ID },
+  await runOptionalSeedWrite("ECG attempt cleanup", async () => {
+    await prisma.ecgVideoQuestionPracticeAnswerAttempt.deleteMany({
+      where: { userId, selectedOptionId: ECG_SEED_OPTION_ID },
+    });
   });
 
   await prisma.learnerNote.deleteMany({
@@ -180,6 +246,8 @@ async function main(): Promise<void> {
   }
 
   const pathwayId = user.learnerPath?.trim() || "us-rn-nclex-rn";
+  const hasCatAttemptTable = await optionalTableExists(CAT_ATTEMPT_TABLE, "CAT attempt seed");
+  const hasEcgAttemptTable = await optionalTableExists(ECG_ATTEMPT_TABLE, "ECG attempt seed");
   const entitlement = await resolveEntitlement(user.id);
   const qWhere = questionAccessWhere(entitlement);
   const questions = await prisma.examQuestion.findMany({
@@ -199,13 +267,15 @@ async function main(): Promise<void> {
   const lastWrong = new Date(now.getTime() - 1 * 86400000);
 
   await prisma.$transaction(async (tx) => {
-    await tx.examQuestionPracticeAnswerAttempt.deleteMany({
-      where: {
-        userId: user.id,
-        mode: PracticeQuestionAnswerMode.cat,
-        selectedOptionKey: { startsWith: `${SEED_TAG}:` },
-      },
-    });
+    if (hasCatAttemptTable) {
+      await tx.examQuestionPracticeAnswerAttempt.deleteMany({
+        where: {
+          userId: user.id,
+          mode: PracticeQuestionAnswerMode.cat,
+          selectedOptionKey: { startsWith: `${SEED_TAG}:` },
+        },
+      });
+    }
 
     const topicRows = [
       {
@@ -557,16 +627,18 @@ async function main(): Promise<void> {
             ? String(q.correctAnswer[0] ?? "")
             : String(q.correctAnswer ?? "")
           : "__auth_qa_cat_wrong__";
-        await tx.examQuestionPracticeAnswerAttempt.create({
-          data: {
-            userId: user.id,
-            questionId: qid,
-            selectedOptionKey: `${SEED_TAG}:${pick}`,
-            isCorrect: answerMatches(q.questionType, q.correctAnswer, pick),
-            mode: PracticeQuestionAnswerMode.cat,
-            pathwayId,
-          },
-        });
+        if (hasCatAttemptTable) {
+          await tx.examQuestionPracticeAnswerAttempt.create({
+            data: {
+              userId: user.id,
+              questionId: qid,
+              selectedOptionKey: `${SEED_TAG}:${pick}`,
+              isCorrect: answerMatches(q.questionType, q.correctAnswer, pick),
+              mode: PracticeQuestionAnswerMode.cat,
+              pathwayId,
+            },
+          });
+        }
       }
     } else if (!exam) {
       console.warn("[seed-auth-qa] No Exam titled 'Core Readiness Exam' — skipping bank sessions / practice tests.");
@@ -638,72 +710,87 @@ async function main(): Promise<void> {
     });
   });
 
-  await prisma.osceStation.upsert({
-    where: { slug: OSCE_SEED_SLUG },
-    create: {
-      slug: OSCE_SEED_SLUG,
-      title: "Auth QA — hand hygiene station",
-      description: "Deterministic OSCE row for QA / Playwright visibility when dev DBs lack imported stations.",
-      scenarioIntro:
-        "You enter an isolation room to assess a stable patient. Demonstrate appropriate hand hygiene before touching the patient.",
-      candidateInstructions: "Introduce yourself; perform hand hygiene; explain each step briefly.",
-      patientScript: "Patient is cooperative and asks what you are doing.",
-      steps: [
-        {
-          id: "intro",
-          instruction: "Introduce yourself and confirm patient identity.",
-          rationale: "Establishes rapport and safety.",
-        },
-        {
-          id: "hygiene",
-          instruction: "Perform hand hygiene before patient contact.",
-          rationale: "Prevents transmission of pathogens.",
-        },
-      ] as unknown as Prisma.InputJsonValue,
-      examinerChecklist: [],
-      criticalFails: [],
-      rationales: [],
-      timeLimit: "8 min",
-      difficulty: "beginner",
-      category: "infection_control",
-      pathwayId,
-      isPublished: true,
-      domain: "Fundamentals",
-      roleTrack: "RN",
-      sourceLegacyPath: "seed-authenticated-qa-learner.mts",
-      extensions: { seedTag: SEED_TAG, importSource: "auth-qa-seed" },
-    },
-    update: {
-      title: "Auth QA — hand hygiene station",
-      description:
-        "Deterministic OSCE row for QA / Playwright visibility when dev DBs lack imported stations.",
-      scenarioIntro:
-        "You enter an isolation room to assess a stable patient. Demonstrate appropriate hand hygiene before touching the patient.",
-      isPublished: true,
-      pathwayId,
-      extensions: { seedTag: SEED_TAG, importSource: "auth-qa-seed" },
-    },
-  });
-
-  const ecgQuestion = await prisma.ecgVideoQuestion.findFirst({
-    orderBy: { createdAt: "asc" },
-    select: { id: true },
-  });
-  if (ecgQuestion) {
-    await prisma.ecgVideoQuestionPracticeAnswerAttempt.deleteMany({
-      where: { userId: user.id, selectedOptionId: ECG_SEED_OPTION_ID },
-    });
-    await prisma.ecgVideoQuestionPracticeAnswerAttempt.create({
-      data: {
-        userId: user.id,
-        questionId: ecgQuestion.id,
-        selectedOptionId: ECG_SEED_OPTION_ID,
-        isCorrect: false,
-        mode: PracticeQuestionAnswerMode.practice,
+  await runOptionalSeedWrite("OSCE seed station", async () => {
+    await prisma.osceStation.upsert({
+      where: { slug: OSCE_SEED_SLUG },
+      create: {
+        slug: OSCE_SEED_SLUG,
+        title: "Auth QA — hand hygiene station",
+        description: "Deterministic OSCE row for QA / Playwright visibility when dev DBs lack imported stations.",
+        scenarioIntro:
+          "You enter an isolation room to assess a stable patient. Demonstrate appropriate hand hygiene before touching the patient.",
+        candidateInstructions: "Introduce yourself; perform hand hygiene; explain each step briefly.",
+        patientScript: "Patient is cooperative and asks what you are doing.",
+        steps: [
+          {
+            id: "intro",
+            instruction: "Introduce yourself and confirm patient identity.",
+            rationale: "Establishes rapport and safety.",
+          },
+          {
+            id: "hygiene",
+            instruction: "Perform hand hygiene before patient contact.",
+            rationale: "Prevents transmission of pathogens.",
+          },
+        ] as unknown as Prisma.InputJsonValue,
+        examinerChecklist: [],
+        criticalFails: [],
+        rationales: [],
+        timeLimit: "8 min",
+        difficulty: "beginner",
+        category: "infection_control",
         pathwayId,
+        isPublished: true,
+        domain: "Fundamentals",
+        roleTrack: "RN",
+        sourceLegacyPath: "seed-authenticated-qa-learner.mts",
+        extensions: { seedTag: SEED_TAG, importSource: "auth-qa-seed" },
+      },
+      update: {
+        title: "Auth QA — hand hygiene station",
+        description:
+          "Deterministic OSCE row for QA / Playwright visibility when dev DBs lack imported stations.",
+        scenarioIntro:
+          "You enter an isolation room to assess a stable patient. Demonstrate appropriate hand hygiene before touching the patient.",
+        isPublished: true,
+        pathwayId,
+        extensions: { seedTag: SEED_TAG, importSource: "auth-qa-seed" },
       },
     });
-    console.log(`[seed-auth-qa] ECG practice attempt linked to question ${ecgQuestion.id.slice(0, 8)}…`);
+  });
+
+  const ecgQuestion = await runOptionalSeedRead(
+    "ECG question probe",
+    null as { id: string } | null,
+    async () =>
+      await prisma.ecgVideoQuestion.findFirst({
+        orderBy: { createdAt: "asc" },
+        select: { id: true },
+      }),
+  );
+  if (ecgQuestion && hasEcgAttemptTable) {
+    let ecgSeeded = false;
+    await runOptionalSeedWrite("ECG attempt seed", async () => {
+      await prisma.ecgVideoQuestionPracticeAnswerAttempt.deleteMany({
+        where: { userId: user.id, selectedOptionId: ECG_SEED_OPTION_ID },
+      });
+      await prisma.ecgVideoQuestionPracticeAnswerAttempt.create({
+        data: {
+          userId: user.id,
+          questionId: ecgQuestion.id,
+          selectedOptionId: ECG_SEED_OPTION_ID,
+          isCorrect: false,
+          mode: PracticeQuestionAnswerMode.practice,
+          pathwayId,
+        },
+      });
+      ecgSeeded = true;
+    });
+    if (ecgSeeded) {
+      console.log(`[seed-auth-qa] ECG practice attempt linked to question ${ecgQuestion.id.slice(0, 8)}…`);
+    }
+  } else if (ecgQuestion) {
+    // Presence probe already logged the missing optional table; avoid failing the seed on older DBs.
   } else {
     console.warn("[seed-auth-qa] No EcgVideoQuestion rows — skipping ECG practice attempt (optional).");
   }

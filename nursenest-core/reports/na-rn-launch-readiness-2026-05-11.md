@@ -88,3 +88,11 @@ The RN slice is materially closer to launch-ready now: billing hardening is in p
 - Supply paid, free, and admin credentials and re-run the release-gate projects that are currently skipped.
 - Restore DNS access to `www.nursenest.ca` and re-run `verify:sitemap` and `verify:robots`.
 - Provide `AUTH_SECRET` and complete a clean visual QA capture pass if screenshot evidence is required for final signoff.
+
+
+## Post-report follow-up
+
+- Re-ran `tests/e2e/public/nursing-pathway-hubs-smoke.spec.ts` with `playwright.nursing-hubs.config.ts` after tightening the RN premium heading assertions.
+- Result: `14 passed (3.6m)`.
+- The prior Canada RN failure was fixed by scoping the `Study tools` and `Readiness & progress` heading checks to the premium hub surface.
+- The prior US RN page crash did not reproduce in isolated reruns or in the full nursing-hubs rerun, so it currently looks like a transient environment/browser instability rather than an active deterministic RN hub bug.
