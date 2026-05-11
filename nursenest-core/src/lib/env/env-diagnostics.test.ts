@@ -40,4 +40,16 @@ describe("env-diagnostics", () => {
       else process.env.DATABASE_URL = prev;
     }
   });
+
+  test("production profile does not mutate process.env.NODE_ENV", () => {
+    const prevNodeEnv = process.env.NODE_ENV;
+    delete process.env.NODE_ENV;
+    try {
+      buildEnvDiagnosticsReport({ profile: "production" });
+      assert.equal(process.env.NODE_ENV, undefined);
+    } finally {
+      if (prevNodeEnv === undefined) delete process.env.NODE_ENV;
+      else process.env.NODE_ENV = prevNodeEnv;
+    }
+  });
 });

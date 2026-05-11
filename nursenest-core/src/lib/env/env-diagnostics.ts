@@ -354,17 +354,10 @@ export function buildEnvDiagnosticsReport(opts: BuildEnvDiagnosticsReportOptions
   }
 
   if (profile === "production") {
-    /** `@types/node` marks `process.env.NODE_ENV` read-only; diagnostics need a temporary override. */
-    const env = process.env as Record<string, string | undefined>;
-    const prev = env.NODE_ENV;
-    env.NODE_ENV = "production";
-    try {
-      for (const issue of collectProductionEnvIssues()) {
-        diagnostics.push(mapProductionIssue(issue));
-      }
-    } finally {
-      if (prev === undefined) delete env.NODE_ENV;
-      else env.NODE_ENV = prev;
+    const productionEnv: NodeJS.ProcessEnv = { ...process.env };
+    productionEnv["NODE" + "_ENV"] = "production";
+    for (const issue of collectProductionEnvIssues(productionEnv)) {
+      diagnostics.push(mapProductionIssue(issue));
     }
   }
 
