@@ -28,13 +28,19 @@ function pick(messages: Record<string, string>, key: string, fallback: string): 
   return v && v.length > 0 ? v : fallback;
 }
 
-/** Load nav + brand message shards from the filesystem (server-only path). */
+/** Load nav + brand message shards from the filesystem (server-only path, bounded 400ms). */
 async function loadNavMessagesSafe(locale: string): Promise<Record<string, string>> {
   try {
-    const { loadMarketingMessageShards } = await import(
-      "@/lib/marketing-i18n/load-marketing-messages"
+    const timeoutMs = 400;
+    const timeoutPromise = new Promise<Record<string, string>>((resolve) =>
+      setTimeout(() => resolve({}), timeoutMs),
     );
-    return await loadMarketingMessageShards(locale, ["nav", "brand"]);
+    const loadPromise = import(
+      "@/lib/marketing-i18n/load-marketing-message-shards"
+    ).then(({ loadMarketingMessageShards }) =>
+      loadMarketingMessageShards(locale, ["nav", "brand"]),
+    );
+    return await Promise.race([loadPromise, timeoutPromise]);
   } catch {
     return {};
   }

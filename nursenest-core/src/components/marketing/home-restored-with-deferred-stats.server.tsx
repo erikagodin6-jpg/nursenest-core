@@ -52,14 +52,21 @@ async function getStatsSafe(): Promise<PublicHomeStatsPayload> {
 /**
  * Load page-body i18n messages for server-island sections (pages + marketing shards).
  * Returns empty object on failure so server islands fall back to English defaults.
- * Messages are read from filesystem (cached by Node module system) — no network calls.
+ * Messages are read from filesystem — no network calls. Bounded at 500ms to protect
+ * against unexpected fs stalls in the standalone environment.
  */
 async function loadServerIslandMessagesSafe(): Promise<Record<string, string>> {
   try {
-    const { loadMarketingMessageShards } = await import(
-      "@/lib/marketing-i18n/load-marketing-messages"
+    const TIMEOUT_MS = 500;
+    const timeoutFallback = new Promise<Record<string, string>>((resolve) =>
+      setTimeout(() => resolve({}), TIMEOUT_MS),
     );
-    return await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, ["pages", "marketing", "brand"]);
+    const load = import(
+      "@/lib/marketing-i18n/load-marketing-message-shards"
+    ).then(({ loadMarketingMessageShards }) =>
+      loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, ["pages", "marketing", "brand"]),
+    );
+    return await Promise.race([load, timeoutFallback]);
   } catch {
     return {};
   }
@@ -80,11 +87,19 @@ export async function HomeRestoredWithDeferredStats({
 }: HomeRestoredWithDeferredStatsProps) {
   const safeCardIds = safeRegionCardIds(publishedGlobalRegionCardIds);
 
-  const [stats, homeHeroCarouselSlides, serverIslandMessages] = await Promise.all([
+  // Promise.allSettled: a single rejected promise cannot bring down the entire homepage.
+  // All three are already fail-safe, but allSettled adds a final safety net.
+  const [statsResult, slidesResult, messagesResult] = await Promise.allSettled([
     skipOptionalDbReads ? Promise.resolve(getDegradedPublicHomeStatsFallback("db_skipped")) : getStatsSafe(),
     loadHomeHeroPrimaryCarouselSlidesForLocale(DEFAULT_MARKETING_LOCALE),
     loadServerIslandMessagesSafe(),
   ]);
+
+  const stats = statsResult.status === "fulfilled"
+    ? statsResult.value
+    : getDegradedPublicHomeStatsFallback("promise_rejected");
+  const homeHeroCarouselSlides = slidesResult.status === "fulfilled" ? slidesResult.value : [];
+  const serverIslandMessages = messagesResult.status === "fulfilled" ? messagesResult.value : {};
 
   // Server-rendered islands: rendered here as RSC, slotted into the client wrapper.
   // These sections have zero browser API usage and are fully static — no hydration needed.

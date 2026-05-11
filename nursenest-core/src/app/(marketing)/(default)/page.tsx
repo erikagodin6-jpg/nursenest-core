@@ -25,7 +25,7 @@ import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-async function safeRegionCards(): Promise<string[]> {
+function safeRegionCards(): string[] {
   try {
     const cards = listPublishedHomeGlobalRegionCardIds();
     return Array.isArray(cards) ? cards : [];
@@ -67,12 +67,30 @@ async function loadHomePageBodyMessages() {
 
 /**
  * HOMEPAGE
+ *
+ * All optional data dependencies (blog, body messages) are fetched in parallel
+ * using Promise.allSettled so a slow/failed optional fetch cannot block the
+ * primary render or produce a 504. Stats and carousel are bounded inside
+ * HomeRestoredWithDeferredStats via their own timeout guards.
  */
 export default async function HomePage() {
   try {
-    const cards = await safeRegionCards();
-    const blogSection = await safeBlog();
-    const bodyMessages = await loadHomePageBodyMessages();
+    // Run all optional data fetches in parallel — none can reject the render.
+    const [blogResult, bodyMessagesResult] = await Promise.allSettled([
+      safeBlog(),
+      loadHomePageBodyMessages(),
+    ]);
+
+    const blogSection =
+      blogResult.status === "fulfilled"
+        ? blogResult.value
+        : <HomeBlogTeaserSectionShell m={{}} posts={[]} />;
+
+    const bodyMessages =
+      bodyMessagesResult.status === "fulfilled" ? bodyMessagesResult.value : null;
+
+    // Region cards are synchronous (no network) — read after parallel phase.
+    const cards = safeRegionCards();
 
     const content = (
       <>
