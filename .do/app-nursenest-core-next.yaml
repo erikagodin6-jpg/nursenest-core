@@ -159,16 +159,25 @@ services:
         value: "true"
         scope: RUN_TIME
       - key: AUTH_SECRET
-        scope: RUN_TIME
+        # App Platform regression workaround: some spec-update deployments are starting the container without
+        # injecting RUN_TIME-only secrets, while RUN_AND_BUILD_TIME vars still reach the final Node process.
+        # Keep this synchronized with `DATABASE_URL` below and preserve presence-only diagnostics in bootstrap logs.
+        scope: RUN_AND_BUILD_TIME
         type: SECRET
       # Canonical production DB connection (DigitalOcean Managed PostgreSQL). Do not set a second conflicting URL.
-      # **RUN_TIME only** — never BUILD_TIME or RUN_AND_BUILD_TIME: a build-visible DATABASE_URL would bake into
-      # the image / build job and can override the real managed DB at runtime (see Dockerfile comments).
+      # App Platform regression workaround: the fresh deploy can reach `node scripts/start-standalone.mjs` with
+      # `DATABASE_URL_present=false` and `AUTH_SECRET_present=false` even though the live service spec shows both
+      # runtime secrets attached. Until that platform/runtime-secret injection path is reliable again, promote the
+      # critical boot secret to RUN_AND_BUILD_TIME so the runtime process always receives it.
+      #
+      # Safety notes:
+      # - Build commands that need a DB URL continue to override with a local placeholder URI.
+      # - Bootstrap / verification logs remain presence-only; no secret values are emitted.
       # **Assign the secret value in App Platform:** Settings → your component → Environment Variables → DATABASE_URL
       # must have a non-empty runtime secret (declaring the key alone is not enough). Logs show DATABASE_URL_present
       # in `[ENV SNAPSHOT]` — never the connection string.
       - key: DATABASE_URL
-        scope: RUN_TIME
+        scope: RUN_AND_BUILD_TIME
         type: SECRET
       # Optional: canonical public URL (your custom domain or *.ondigitalocean.app)
       - key: AUTH_URL
