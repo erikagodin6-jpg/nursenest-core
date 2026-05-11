@@ -95,14 +95,12 @@ ENV NODE_ENV=production \
   NODE_MAX_OLD_SPACE_SIZE_MB=768 \
   NEXT_TELEMETRY_DISABLED=1
 
-COPY --from=builder /app/nursenest-core/.next ./.next
+COPY --from=builder /app/nursenest-core/.next/standalone ./.next/standalone
 COPY --from=builder /app/nursenest-core/public ./public
 COPY --from=builder /app/nursenest-core/scripts ./scripts
 COPY --from=builder /app/scripts ../scripts
 COPY --from=builder /app/script ../script
 COPY --from=builder /app/nursenest-core/package.json ./package.json
-COPY --from=builder /app/nursenest-core/package-lock.json ./package-lock.json
-COPY --from=builder /app/nursenest-core/node_modules ./node_modules
 
 EXPOSE 8080
 

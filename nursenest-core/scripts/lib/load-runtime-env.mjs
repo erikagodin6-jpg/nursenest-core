@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { parse as parseDotenv } from "dotenv";
+import { parseEnv } from "node:util";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_PACKAGE_ROOT = resolve(__dirname, "../..");
@@ -73,7 +73,7 @@ function collectEnvFiles(envRoot) {
     }
 
     files.push({ file, found: true });
-    const parsed = parseDotenv(readFileSync(filePath, "utf8"));
+    const parsed = parseEnv(readFileSync(filePath, "utf8"));
     for (const [key, value] of Object.entries(parsed)) {
       values.set(key, value);
       sources.set(key, file);
