@@ -4,7 +4,8 @@ import { ToolsToolShell } from "@/components/tools/tools-tool-shell";
 import { ToolSeoArticle } from "@/components/tools/tool-seo-article";
 import { isToolSlug } from "@/lib/tools/tool-registry";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -56,7 +57,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pathname = `/tools/${slug}`;
   return safeGenerateMetadata(
     async () => {
-      const enMessages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const enMessages = await loadMarketingMessageShards(
+        DEFAULT_MARKETING_LOCALE,
+        MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+      );
       const m = await metaForSlug(slug, enMessages);
       if (!m) return {};
       const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, `/tools/${slug}`);

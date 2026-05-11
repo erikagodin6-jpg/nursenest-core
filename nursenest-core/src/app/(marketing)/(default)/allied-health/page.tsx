@@ -8,7 +8,8 @@ import { alliedProfessionsGroupedForHub } from "@/lib/allied/allied-professions-
 import { ALLIED_GLOBAL_HUB_PATH, getCanonicalAlliedPathway } from "@/lib/allied/allied-global-pathway";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import {
   MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK,
@@ -28,8 +29,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
       const locale = await getMarketingLocaleForDefaultRoute();
-      const m = await loadMarketingMessages(locale);
-      const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const m = await loadMarketingMessageShards(locale, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
+      const en = await loadMarketingMessageShards(
+        DEFAULT_MARKETING_LOCALE,
+        MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+      );
       const title = getRequiredPublicMetadataLine(
         m,
         "pages.alliedHealthHub.metaTitle",
@@ -97,8 +101,11 @@ export default async function AlliedHealthHubPage() {
   }
 
   const locale = await getMarketingLocaleForDefaultRoute();
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const m = await loadMarketingMessageShards(locale, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
+  const en = await loadMarketingMessageShards(
+    DEFAULT_MARKETING_LOCALE,
+    MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+  );
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
   const hubCopy = buildHubCopy((key) => t(key));
 

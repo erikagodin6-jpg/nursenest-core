@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { ToolsToolShell } from "@/components/tools/tools-tool-shell";
 import { ToolSeoArticle } from "@/components/tools/tool-seo-article";
 import { isToolSlug } from "@/lib/tools/tool-registry";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     async () => {
       const k = keysForSlug(slug);
       if (!k) return {};
-      const m = await loadMarketingMessages(locale);
+      const m = await loadMarketingMessageShards(locale, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
       const alt = marketingAlternatesSharedPage(locale, `/tools/${slug}`);
       return {
         title: m[k.title],

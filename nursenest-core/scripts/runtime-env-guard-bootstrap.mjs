@@ -13,6 +13,7 @@ import {
   createRuntimeEnvProbeDiagnostics,
   runtimeEnvProbeEnabled,
 } from "./lib/runtime-env-contract.mjs";
+import { loadRuntimeEnvFileFallback } from "./lib/runtime-env-file-fallback.mjs";
 
 /** Must stay aligned with `require-database-env.ts` placeholder markers. */
 const DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER = "127.0.0.1:5432/postgres";
@@ -395,6 +396,7 @@ const isMain =
   path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
 
 if (isMain) {
+  loadRuntimeEnvFileFallback();
   logRuntimeEnvSnapshot();
   validateRuntimeEnvOrThrow();
 }

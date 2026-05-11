@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "fc56aad0d975edbf2f026d8d81b45517082db43f71aaa734feab1d120d40b08b",
-  "generatedAt": "2026-05-11T06:36:16.914Z",
+  "fingerprint": "2113835aba93d03cd53b7f5dfa1b5eaa201084e884164ddc0b51d18962c03f03",
+  "generatedAt": "2026-05-11T06:44:43.347Z",
   "inputs": [
     {
       "type": "file",
@@ -5769,6 +5769,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 16937
+    "durationMs": 8523
   }
 }

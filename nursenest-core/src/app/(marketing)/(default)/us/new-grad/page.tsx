@@ -4,7 +4,8 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { US_NEW_GRAD_MARKETING_HUB_PATH } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -13,7 +14,10 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 const PATH = US_NEW_GRAD_MARKETING_HUB_PATH;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingMessageShards(
+    DEFAULT_MARKETING_LOCALE,
+    MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+  );
   const title =
     messages["newGrad.marketing.landing.seoTitle"] ?? "New Grad nursing | Clinical work areas | NurseNest";
   const description =
@@ -40,7 +44,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function UsNewGradMarketingPage() {
-  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const messages = await loadMarketingMessageShards(
+    DEFAULT_MARKETING_LOCALE,
+    MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+  );
   const jsonTitle =
     messages["newGrad.marketing.landing.seoTitle"] ?? "New Grad nursing | Clinical work areas | NurseNest";
   const jsonDesc =

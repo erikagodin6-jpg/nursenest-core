@@ -24,6 +24,7 @@ import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
 import { normalizeBootstrapProbePathname } from "./standalone-bootstrap-probe-pathname.mjs";
 import { resolveBootstrapStartupMode } from "./resolve-bootstrap-mode.mjs";
 import { loadRuntimeEnv } from "./lib/load-runtime-env.mjs";
+import { loadRuntimeEnvFileFallback } from "./lib/runtime-env-file-fallback.mjs";
 import {
   buildForwardedRuntimeEnv,
   createRuntimeEnvProbeDiagnostics,
@@ -139,6 +140,7 @@ try {
 }
 
 hydrateProcessEnvFromDisk();
+loadRuntimeEnvFileFallback();
 promoteDatabaseUrlAliasesFromEnv();
 logStandaloneRuntimeDiagnostics("standalone_parent_post_hydrate");
 logMissingDatabaseUrlRuntimeEvidence();

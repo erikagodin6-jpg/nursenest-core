@@ -21,7 +21,8 @@ import { ProgrammaticFinalFunnelCta, ProgrammaticMidPagePracticeCta } from "@/co
 import { isUnifiedPracticeSlug } from "@/lib/seo/programmatic-practice-hub";
 import { NpMarketingProductDiscovery } from "@/components/marketing/np-marketing-product-discovery";
 import { ProgrammaticStudyModesHub } from "@/components/seo/programmatic-study-modes-hub";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 
 export async function ProgrammaticSeoPage({
@@ -49,8 +50,11 @@ export async function ProgrammaticSeoPage({
   jsonLdResourcePath?: string;
   pathwayForProductLinks?: ExamPathwayDefinition | null;
 }) {
-  const m = await loadMarketingMessages(locale);
-  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const m = await loadMarketingMessageShards(locale, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS);
+  const en = await loadMarketingMessageShards(
+    DEFAULT_MARKETING_LOCALE,
+    MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+  );
   const t = (key: string) => formatMarketingMessage(m, key, undefined, en);
 
   const pathForProgrammatic = (slug: string) =>

@@ -46,6 +46,7 @@
     "heroku:local": "node ../scripts/start-production.mjs",
     "verify:do-runtime": "node ../scripts/verify-digitalocean-runtime.mjs",
     "smoke:runtime-env": "node scripts/smoke-runtime-env.mjs",
+    "prepare:runtime-env-file": "node scripts/prepare-runtime-env-file.mjs",
     "release:runtime-checklist": "node scripts/runtime-release-checklist.mjs",
     "verify:dist": "node ../scripts/verify-dist-artifacts.mjs",
     "heroku-postbuild": "NN_POSTBUILD_NEXT_BUILD=1 npm run build",

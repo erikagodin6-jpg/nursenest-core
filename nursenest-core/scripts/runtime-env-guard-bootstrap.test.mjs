@@ -14,16 +14,22 @@ const standaloneStartScript = path.join(appRoot, "scripts", "start-standalone.mj
 const runtimeDatabaseUrl = "postgresql://runtime-user:super-secret-password@db.example.com:25060/nursenest";
 
 function runBootstrap(env) {
+  const mergedEnv = {
+    PATH: process.env.PATH,
+    HOME: process.env.HOME,
+    NODE_ENV: "production",
+    AI_ADMIN_GENERATION_ENABLED: "false",
+    AUTH_SECRET: "test-auth-secret",
+    ...env,
+  };
+  for (const [key, value] of Object.entries(mergedEnv)) {
+    if (value === undefined) {
+      delete mergedEnv[key];
+    }
+  }
   return spawnSync(process.execPath, [bootstrapScript], {
     cwd: appRoot,
-    env: {
-      PATH: process.env.PATH,
-      HOME: process.env.HOME,
-      NODE_ENV: "production",
-      AI_ADMIN_GENERATION_ENABLED: "false",
-      AUTH_SECRET: "test-auth-secret",
-      ...env,
-    },
+    env: mergedEnv,
     encoding: "utf8",
   });
 }

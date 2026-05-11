@@ -3,14 +3,26 @@
  * Run from `nursenest-core/`: `npx tsx scripts/list-stripe-runtime-env-keys.mts`
  */
 import { eachStripePriceMatrixRow } from "../src/lib/stripe/pricing-map";
+import { STRIPE_RUNTIME_ENV_KEYS } from "./lib/stripe-runtime-env-keys.mjs";
 
 export function listStripeRuntimeEnvKeys(): string[] {
-  return [...new Set(eachStripePriceMatrixRow().map((r) => r.envKey))].sort();
+  return [...STRIPE_RUNTIME_ENV_KEYS];
+}
+
+export function assertStripeRuntimeEnvKeyListMatchesPricingMatrix(): void {
+  const expected = [...new Set(eachStripePriceMatrixRow().map((row) => row.envKey))].sort();
+  const actual = listStripeRuntimeEnvKeys();
+  if (expected.length !== actual.length || expected.some((key, index) => key !== actual[index])) {
+    throw new Error(
+      `scripts/lib/stripe-runtime-env-keys.mjs is out of sync with pricing-map. Expected ${expected.length} keys, got ${actual.length}.`,
+    );
+  }
 }
 
 const isMain = typeof process.argv[1] === "string" && process.argv[1].includes("list-stripe-runtime-env-keys");
 
 if (isMain) {
+  assertStripeRuntimeEnvKeyListMatchesPricingMatrix();
   const priceKeys = listStripeRuntimeEnvKeys();
   if (process.argv.includes("--json")) {
     console.log(JSON.stringify(priceKeys));
