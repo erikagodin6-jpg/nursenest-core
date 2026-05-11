@@ -1,13 +1,54 @@
-import { existsSync, rmSync } from "node:fs";
+import { existsSync, readdirSync, rmSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const nextCacheDir = path.join(packageRoot, ".next", "cache");
 const nextTracePath = path.join(packageRoot, ".next", "trace");
+const standaloneDir = path.join(packageRoot, ".next", "standalone");
 
 function truthyEnv(name) {
   return /^(1|true|yes)$/i.test(String(process.env[name] ?? ""));
+}
+
+function walkFiles(dir, out = []) {
+  if (!existsSync(dir)) {
+    return out;
+  }
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkFiles(fullPath, out);
+      continue;
+    }
+    if (entry.isFile()) {
+      out.push(fullPath);
+    }
+  }
+  return out;
+}
+
+function removeMatchingFiles(rootDir, predicate, label) {
+  if (!existsSync(rootDir)) {
+    console.log(`[post-build-prune] no ${label} root at ${rootDir}`);
+    return;
+  }
+
+  let removedCount = 0;
+  let removedBytes = 0;
+
+  for (const filePath of walkFiles(rootDir)) {
+    if (!predicate(filePath)) {
+      continue;
+    }
+    removedBytes += statSync(filePath).size;
+    rmSync(filePath, { force: true });
+    removedCount += 1;
+  }
+
+  console.log(
+    `[post-build-prune] removed ${label} count=${removedCount} bytes=${removedBytes} root=${rootDir}`,
+  );
 }
 
 /**
@@ -26,6 +67,12 @@ if (existsSync(nextTracePath)) {
   rmSync(nextTracePath, { recursive: true, force: true });
   console.log("[post-build-prune] removed .next/trace (build diagnostics only)");
 }
+
+removeMatchingFiles(
+  standaloneDir,
+  (filePath) => filePath.endsWith(".map"),
+  "standalone sourcemaps",
+);
 
 if (!existsSync(nextCacheDir)) {
   console.log("[post-build-prune] no .next/cache directory present");

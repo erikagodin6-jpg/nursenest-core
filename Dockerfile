@@ -83,9 +83,7 @@ RUN DATABASE_URL="${DATABASE_URL}" \
 
 FROM node:20-alpine AS runner
 
-RUN apk add --no-cache libc6-compat openssl \
-  && corepack enable \
-  && corepack prepare npm@10.9.7 --activate
+RUN apk add --no-cache libc6-compat openssl
 
 WORKDIR /app/nursenest-core
 
