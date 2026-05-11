@@ -8,7 +8,8 @@ ingress:
         path:
           prefix: /
 services:
-  - dockerfile_path: Dockerfile
+  - name: web
+    dockerfile_path: Dockerfile
     envs:
       - key: NODE_VERSION
         scope: RUN_AND_BUILD_TIME
@@ -122,6 +123,5 @@ services:
       port: 8080
       success_threshold: 1
       timeout_seconds: 15
-    name: web
     run_command: node scripts/start-standalone.mjs
     source_dir: .

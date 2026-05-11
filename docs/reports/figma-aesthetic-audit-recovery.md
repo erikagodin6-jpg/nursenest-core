@@ -1,240 +1,107 @@
 # Figma Aesthetic Audit Recovery
 
-Generated: 2026-05-11T05:46Z
-
 ## Status
 
-This pass stayed **Figma-first** and **did not implement production UI changes**.
+A second-pass Figma refinement has been completed in response to review feedback that too many of the first generated mockups felt generic and that the lesson detail surface was too vertical.
 
-- Production routing, auth, entitlements, SEO, pricing, lesson APIs, and schema were not modified.
-- Ocean remains the structural baseline for the mockup/export set.
-- Blossom and Midnight were treated as visual/token variants only.
+This pass stayed Figma-only. No production routes, auth, entitlements, SEO, lesson APIs, pricing logic, or schema were modified.
 
 ## Figma File
 
-- File: [NurseNest Aesthetic Audit Recovery 2026](https://www.figma.com/design/HUOBGapnVeXdmrexXLZESm)
 - File key: `HUOBGapnVeXdmrexXLZESm`
+- Pages updated in this pass:
+  - `20 After - Public`
+  - `21 After - Learner`
 
-### Figma page inventory
+## What Changed In This Pass
 
-- `0:1` `00 Cover & Inventory`
-  - `3:2` `Audit Cover`
-- `2:2` `10 Before - Public`
-  - scaffold page created, no frames placed yet
-- `2:3` `11 Before - Learner`
-  - scaffold page created, no frames placed yet
-- `2:4` `20 After - Public`
-  - scaffold page created, no frames placed yet
-- `2:5` `21 After - Learner`
-  - scaffold page created, no frames placed yet
-- `2:6` `30 Theme Matrix`
-  - headers: `42:6`, `42:7`
-  - frames: `27:2`, `28:2`, `30:2`, `29:2`, `31:2`, `32:2`, `33:2`, `34:2`, `35:2`, `36:2`, `38:2`, `39:2`, `40:2`, `41:2`
-- `2:7` `40 Comparisons`
-  - headers: `42:2`, `42:3`, `42:4`, `42:5`
-  - frames: `7:2`, `8:2`, `9:2`, `10:2`, `11:2`, `12:2`, `13:2`, `14:2`, `15:2`, `16:2`, `17:2`, `18:2`, `19:2`, `20:2`, `21:2`, `22:2`, `23:2`, `24:2`, `25:2`, `26:2`, `37:2`
-- `2:8` `90 Scratch Imports`
-  - scaffold page created, no frames placed yet
+### Public boards rebuilt from generic preview shells to route-specific compositions
 
-### Figma frame inventory
+The following boards were rebuilt as custom Figma layouts instead of relying on the earlier preview-shell screenshots:
 
-#### Theme Matrix page
+- `Pricing v2` (`47:2`)
+- `Blog Hub / Article v2` (`47:121`)
+- `Allied Hub v2` (`47:192`)
+- `Pre-Nursing Hub v2` (`47:297`)
 
-- `allied-hub`
-- `analytics`
-- `blog`
-- `blog-detail`
-- `cat`
-- `dashboard`
-- `flashcards`
-- `homepage`
-- `lesson`
-- `practice-tests`
-- `pre-nursing`
-- `pricing`
-- `report-cards`
-- `rn-hub`
+### Learner boards rebuilt from route structure and study-flow primitives
 
-#### Comparisons page
+The following boards were created as custom canonical Ocean layouts:
 
-Before/after:
+- `RN Dashboard v2` (`50:2`)
+- `Mobile Dashboard v2` (`50:121`)
+- `Lesson Detail v2 (compressed)` (`50:154`)
+- `Flashcards Session v3` (`55:2`)
+- `Practice Hub / CAT v2` (`50:305`)
+- `Report Card v2` (`50:390`)
 
-- `allied-health-hub-desktop`
-- `blog-article-desktop`
-- `blog-hub-desktop`
-- `homepage-desktop`
-- `lesson-hub-desktop`
-- `pre-nursing-hub-desktop`
-- `pricing-desktop`
+## Design Response To Review Feedback
 
-Desktop/mobile:
+### Generic boards
 
-- `allied-hub-ocean`
-- `analytics-ocean`
-- `blog-detail-ocean`
-- `blog-ocean`
-- `cat-ocean`
-- `dashboard-ocean`
-- `flashcards-ocean`
-- `homepage-ocean`
-- `lesson-ocean`
-- `practice-tests-ocean`
-- `pre-nursing-ocean`
-- `pricing-ocean`
-- `report-cards-ocean`
-- `rn-hub-ocean`
+The first-pass mockups were visually clean but too close to reusable preview templates. This pass made the boards more route-specific by surfacing actual product structure:
 
-## Export locations
+- Pricing now shows segment switching, duration comparison, comparison rows, reassurance, and ecosystem proof.
+- Dashboard now reflects priority band, readiness, countdown, quick launch, performance region, report preview, and mobile fold behavior.
+- Flashcards now shows a full study loop: prompt, reveal/rationale, confidence controls, and linked next actions.
+- Practice/CAT now reads as a real builder and CAT-first hub instead of a generic content card layout.
+- Report card now feels like a progress narrative rather than a sparse analytics placeholder.
+- Allied / pre-nursing now reflect pathway-specific organization rather than generic marketing cards.
 
-Exports were written to both requested locations:
+### Flashcards needed a real answer flow
 
-- `nursenest-core/preview-screenshots/aesthetic-audit-2026/`
+The flashcard board was revised again after review feedback that it still behaved too much like passive recall.
+
+Changes in `Flashcards Session v3`:
+
+- Reframed the surface as a multiple-choice question flow instead of a plain prompt card.
+- Added explicit answer options and a `Submit answer` action.
+- Moved the rationale into an after-answer reveal state instead of showing teaching copy immediately.
+- Added a conditional media region so image-supported cards can expand when future assets exist without forcing a large empty image box into every text-only card.
+- Kept confidence/progress in a secondary side rail so the question remains the dominant task.
+
+### Lesson detail was too vertical
+
+The lesson detail board was explicitly compressed.
+
+Changes in `Lesson Detail v2 (compressed)`:
+
+- Moved the study rail into a persistent right column.
+- Replaced the long vertical module stack with denser two-column study cards.
+- Kept the quick clinical summary, but reduced its dominance so the page does not feel footer-weighted.
+- Tightened the hero and surfaced metadata/context earlier.
+
+## Exported Review Assets
+
+Exported to both:
+
+- `preview-screenshots/aesthetic-audit-2026/`
 - `reports/ui-redesign-preview/aesthetic-audit-2026/`
 
-### Folder counts
+### New exported PNGs from this refinement pass
 
-- `before-public`: 13 files
-- `desktop`: 48 files
-- `tablet`: 48 files
-- `mobile`: 48 files
-- `comparisons/before-after`: 7 files
-- `comparisons/desktop-mobile`: 14 files
-- `comparisons/themes-desktop`: 14 files
-- `comparisons/themes-mobile`: 14 files
+- `figma-refined-public-page.png`
+- `figma-refined-learner-page.png`
+- `figma-refined-pricing-v2.png`
+- `figma-refined-dashboard-v2.png`
+- `figma-refined-lesson-compressed-v2.png`
+- `figma-refined-flashcards-v2.png`
+- `figma-refined-flashcards-v3.png`
+- `figma-refined-practice-cat-v2.png`
+- `figma-refined-report-card-v2.png`
 
-## Screenshot inventory
+## Notes On Audit State
 
-### Public before baselines
+- These new exports are the review gate for the current refinement pass.
+- The earlier theme-matrix and comparison assets still exist, but they were generated from the first-pass preview-shell mockups and should not be treated as the final aesthetic direction for the revised boards above.
+- If this direction is approved, the next Figma-only step should be regenerating theme parity and comparison exports from these revised canonical boards before any further production implementation.
 
-- `before-homepage-ocean-desktop.png`
-- `before-homepage-ocean-mobile.png`
-- `before-pricing-ocean-desktop.png`
-- `before-pricing-ocean-mobile.png`
-- `before-lesson-hub-ocean-desktop.png`
-- `before-lesson-hub-ocean-mobile.png`
-- `before-blog-hub-ocean-desktop.png`
-- `before-blog-hub-ocean-mobile.png`
-- `before-blog-article-ocean-desktop.png`
-- `before-allied-health-hub-ocean-desktop.png`
-- `before-allied-health-hub-ocean-mobile.png`
-- `before-pre-nursing-hub-ocean-desktop.png`
-- `before-pre-nursing-hub-ocean-mobile.png`
+## Recommendation Before Implementation
 
-### Before / after comparison boards
+Do not resume production UI implementation yet.
 
-- `allied-health-hub-desktop.png`
-- `blog-article-desktop.png`
-- `blog-hub-desktop.png`
-- `homepage-desktop.png`
-- `lesson-hub-desktop.png`
-- `pre-nursing-hub-desktop.png`
-- `pricing-desktop.png`
+Review the newly exported refined boards first, with particular attention to:
 
-### Desktop / mobile comparison boards
-
-- `allied-hub-ocean.png`
-- `analytics-ocean.png`
-- `blog-detail-ocean.png`
-- `blog-ocean.png`
-- `cat-ocean.png`
-- `dashboard-ocean.png`
-- `flashcards-ocean.png`
-- `homepage-ocean.png`
-- `lesson-ocean.png`
-- `practice-tests-ocean.png`
-- `pre-nursing-ocean.png`
-- `pricing-ocean.png`
-- `report-cards-ocean.png`
-- `rn-hub-ocean.png`
-
-### Theme comparison boards
-
-Desktop:
-
-- `allied-hub.png`
-- `analytics.png`
-- `blog-detail.png`
-- `blog.png`
-- `cat.png`
-- `dashboard.png`
-- `flashcards.png`
-- `homepage.png`
-- `lesson.png`
-- `practice-tests.png`
-- `pre-nursing.png`
-- `pricing.png`
-- `report-cards.png`
-- `rn-hub.png`
-
-Mobile:
-
-- `allied-hub.png`
-- `analytics.png`
-- `blog-detail.png`
-- `blog.png`
-- `cat.png`
-- `dashboard.png`
-- `flashcards.png`
-- `homepage.png`
-- `lesson.png`
-- `practice-tests.png`
-- `pre-nursing.png`
-- `pricing.png`
-- `report-cards.png`
-- `rn-hub.png`
-
-### Raw mockup matrix
-
-The mockup export set includes Ocean / Blossom / Midnight for desktop, tablet, and mobile across:
-
-- `homepage`
-- `pricing`
-- `blog`
-- `blog-detail`
-- `allied-hub`
-- `pre-nursing`
-- `rn-hub`
-- `dashboard`
-- `lesson`
-- `flashcards`
-- `flashcard-session`
-- `practice-tests`
-- `practice-runner`
-- `cat`
-- `report-cards`
-- `analytics`
-
-## Modified Figma nodes / frames
-
-Created or modified in this pass:
-
-- cover board: `3:2`
-- page scaffolds: `2:2`, `2:3`, `2:4`, `2:5`, `2:6`, `2:7`, `2:8`
-- comparison headers / notes: `42:2`, `42:3`, `42:4`, `42:5`
-- theme headers / notes: `42:6`, `42:7`
-- imported comparison frames: `7:2` through `41:2` except removed duplicate `5:2`
-
-Removed:
-
-- duplicate comparison frame `5:2`
-
-## Review notes
-
-### What is ready for review now
-
-- Figma audit file with review pages and stable node IDs
-- exported high-fidelity preview matrices for Ocean / Blossom / Midnight
-- public before baselines for homepage, pricing, lesson hub, blog hub/article, allied health hub, and pre-nursing hub
-- comparison boards for before/after, desktop/mobile, and theme variants
-
-### Known gaps / explicit caveats
-
-- Real authenticated learner **before** baselines were **not** captured from `/app/*` because the local environment does not currently include:
-  - `playwright/.auth/learner-paid.json`
-  - paid QA credentials (`E2E_PAID_*` / `QA_PAID_*`)
-- The public lesson-hub mockup slot currently uses `rn-hub` as the closest available preview proxy for the Ocean-anchored study-hub structure. A dedicated `/preview/lessons-hub` surface would remove that proxy step.
-- `.vibecheck/truthpack/` is not present in this repo root, so no truthpack route/copy cross-check could be performed during this Figma-only recovery pass.
-
-## Recommended next step
-
-Review the Figma file and the exported PNG boards first. Do **not** start production implementation until the Ocean structure and the Blossom / Midnight parity boards are approved, and until learner before-state baselines are either accepted as preview-derived or re-captured with a seeded paid QA auth state.
+- whether the lesson detail density now feels appropriately horizontal,
+- whether the dashboard/report/practice boards feel sufficiently NurseNest-specific,
+- which public boards still need another fidelity pass before sign-off.
