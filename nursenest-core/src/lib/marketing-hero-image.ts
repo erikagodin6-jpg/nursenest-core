@@ -13,6 +13,8 @@ export const HOME_HERO_SCREENSHOT_WEBP_WIDTH_SUFFIXES = [
   "-480w.webp",
 ] as const;
 
+const LOCAL_HOME_HERO_SCREENSHOT_IDS = new Set([1, 3, 7, 9, 10]);
+
 function uniqueStrings(urls: string[]): string[] {
   const seen = new Set<string>();
   const out: string[] = [];
@@ -78,6 +80,29 @@ export function homeHeroScreenshotOptimizedVariants(
   }
 }
 
+function localHomeHeroScreenshotOptimizedVariants(
+  objectKey: string,
+  opts?: { widthSuffixOrder?: "largestFirst" | "smallestFirst" },
+): Array<{ key: string; url: string }> {
+  const match = /^screenshot(\d+)\.png$/i.exec(objectKey);
+  if (!match) return [];
+  const id = Number(match[1]);
+  if (!LOCAL_HOME_HERO_SCREENSHOT_IDS.has(id)) return [];
+
+  const suffixes =
+    opts?.widthSuffixOrder === "smallestFirst"
+      ? [...HOME_HERO_SCREENSHOT_WEBP_WIDTH_SUFFIXES].reverse()
+      : [...HOME_HERO_SCREENSHOT_WEBP_WIDTH_SUFFIXES];
+
+  return suffixes.map((suffix) => {
+    const key = `marketing/homepage-screenshots/screenshot${id}${suffix}`;
+    return {
+      key,
+      url: `/${key}`,
+    };
+  });
+}
+
 function pushOptimizedTiers(
   out: string[],
   variants: Array<{ key: string; url: string }>,
@@ -112,9 +137,14 @@ export function getMarketingHeroImageUrlChain(params: {
     return [MARKETING_HERO_LOCAL_FALLBACK];
   }
 
-  const optimized = homeHeroScreenshotOptimizedVariants(publicCdnUrl, {
-    widthSuffixOrder: params.optimizedWidthOrder === "smallestFirst" ? "smallestFirst" : "largestFirst",
-  });
+  const optimized = [
+    ...localHomeHeroScreenshotOptimizedVariants(objectKey, {
+      widthSuffixOrder: params.optimizedWidthOrder === "smallestFirst" ? "smallestFirst" : "largestFirst",
+    }),
+    ...homeHeroScreenshotOptimizedVariants(publicCdnUrl, {
+      widthSuffixOrder: params.optimizedWidthOrder === "smallestFirst" ? "smallestFirst" : "largestFirst",
+    }),
+  ];
   const proxyPng = marketingProxyPathForKey(objectKey);
 
   const out: string[] = [];
@@ -128,15 +158,15 @@ export function getMarketingHeroImageUrlChain(params: {
   }
 
   if (marketingProxyFallbackEnabled()) {
+    pushOptimizedTiers(out, optimized, false);
     out.push(publicCdnUrl);
     out.push(proxyPng);
-    pushOptimizedTiers(out, optimized, false);
     out.push(MARKETING_HERO_LOCAL_FALLBACK);
     return uniqueStrings(out);
   }
 
-  out.push(publicCdnUrl);
   pushOptimizedTiers(out, optimized, false);
+  out.push(publicCdnUrl);
   out.push(MARKETING_HERO_LOCAL_FALLBACK);
 
   return uniqueStrings(out);

@@ -407,7 +407,7 @@ export function PremiumHomepageHero(props: {
           imageClassName="max-h-[22rem] opacity-[0.035] lg:max-h-[24rem]"
           size={460}
         />
-        <div className="nn-premium-hero-grid relative z-[1] min-h-[min(22rem,72dvh)] md:min-h-[19rem]">
+        <div className="nn-premium-hero-grid relative z-[1]">
           {/* ── Copy column ───────────────────────────────────────── */}
           <div>
             <span className="nn-premium-hero-eyebrow">{eyebrow}</span>

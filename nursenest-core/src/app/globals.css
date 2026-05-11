@@ -3280,15 +3280,10 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
 }
 
 .nn-header-animate-in {
-  animation: nn-header-enter var(--brand-motion-medium) var(--brand-motion-ease-luxury) forwards;
+  animation: none;
 }
 
-/* Mobile PSI: transform enter on the sticky header can register as layout instability with heavy hydration. */
-@media (max-width: 1023.98px) {
-  .nn-header-animate-in {
-    animation: none;
-  }
-}
+/* PSI: transform enter on the sticky header can register as layout instability during hydration. */
 
 @keyframes nn-overlay-enter {
   from {

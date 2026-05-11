@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { getMarketingHeroImageUrlChain } from "@/lib/marketing-hero-image";
 
 const ROOT = process.cwd();
 
@@ -67,6 +68,21 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.match(nextConfig, /max-age=31536000, immutable/);
   });
 
+  it("tries optimized homepage screenshot variants before raw PNG fallbacks", () => {
+    const chain = getMarketingHeroImageUrlChain({
+      objectKey: "screenshot10.png",
+      publicCdnUrl: "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot10.png",
+      optimizedWidthOrder: "smallestFirst",
+    });
+
+    assert.match(chain[0] ?? "", /screenshot10-480w\.webp$/);
+    assert.ok(
+      chain.findIndex((src) => /screenshot10-480w\.webp$/.test(src)) <
+        chain.findIndex((src) => /screenshot10\.png$/.test(src)),
+      "optimized WebP variants must be attempted before raw PNG",
+    );
+  });
+
   it("uses Next-compatible static asset header matchers so local Playwright can start reliably", () => {
     const nextConfig = source("next.config.mjs");
     const headerSources = [...nextConfig.matchAll(/source:\s*"([^"]+)"/g)].map((match) => match[1]);
@@ -101,6 +117,28 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.match(shell, /dynamic\(/);
     assert.doesNotMatch(shell, /import\s+\{\s*PageTransitionShell\s*\}\s+from/);
     assert.match(shell, /ssr:\s*false/);
+  });
+
+  it("locks above-the-fold homepage geometry before hydration", () => {
+    const premiumCss = source("src/app/premium-redesign-2026.css");
+    const globals = source("src/app/globals.css");
+
+    assert.match(globals, /\.nn-header-animate-in\s*\{[^}]*animation:\s*none/s);
+    assert.match(premiumCss, /\[data-nn-header-layout="marketing-row4"\]\s*\{[^}]*min-height:/s);
+    assert.match(premiumCss, /\.nn-premium-hero-grid\s*\{[^}]*min-height:\s*clamp/s);
+    assert.match(premiumCss, /\.nn-premium-home-section\s*\{[^}]*min-height:/s);
+  });
+
+  it("ships production security headers without blocking Stripe/auth popups", () => {
+    const nextConfig = source("next.config.mjs");
+
+    assert.match(nextConfig, /Content-Security-Policy/);
+    assert.match(nextConfig, /Strict-Transport-Security/);
+    assert.match(nextConfig, /X-Frame-Options/);
+    assert.match(nextConfig, /Cross-Origin-Opener-Policy/);
+    assert.match(nextConfig, /same-origin-allow-popups/);
+    assert.match(nextConfig, /https:\/\/js\.stripe\.com/);
+    assert.match(nextConfig, /https:\/\/checkout\.stripe\.com/);
   });
 
   it("contains below-fold premium homepage paint while preserving gradients", () => {

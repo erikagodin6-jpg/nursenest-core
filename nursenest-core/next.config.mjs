@@ -198,6 +198,44 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "base-uri 'self'",
+              "object-src 'none'",
+              "frame-ancestors 'none'",
+              "form-action 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://*.posthog.com https://*.i.posthog.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https://nursenest-images.tor1.digitaloceanspaces.com https://nursenest-images.tor1.cdn.digitaloceanspaces.com https://*.digitaloceanspaces.com https://*.stripe.com https://*.posthog.com",
+              "font-src 'self' data: https://fonts.gstatic.com",
+              "connect-src 'self' https://api.stripe.com https://*.stripe.com https://*.posthog.com https://*.i.posthog.com https://nursenest-images.tor1.digitaloceanspaces.com https://nursenest-images.tor1.cdn.digitaloceanspaces.com",
+              "frame-src https://js.stripe.com https://hooks.stripe.com https://checkout.stripe.com",
+              "worker-src 'self' blob:",
+            ].join("; "),
+          },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
+          },
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+        ],
+      },
+      {
         source: "/fr",
         headers: [
           {

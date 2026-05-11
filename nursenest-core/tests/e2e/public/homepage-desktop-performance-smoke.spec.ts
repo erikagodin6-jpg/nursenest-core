@@ -31,6 +31,23 @@ test.describe("Homepage desktop performance smoke", () => {
       }
     });
 
+    await page.addInitScript(() => {
+      (window as unknown as { __nnCumulativeLayoutShift: number }).__nnCumulativeLayoutShift = 0;
+      try {
+        const observer = new PerformanceObserver((list) => {
+          for (const raw of list.getEntries()) {
+            const entry = raw as PerformanceEntry & { value?: number; hadRecentInput?: boolean };
+            if (!entry.hadRecentInput && typeof entry.value === "number") {
+              (window as unknown as { __nnCumulativeLayoutShift: number }).__nnCumulativeLayoutShift += entry.value;
+            }
+          }
+        });
+        observer.observe({ type: "layout-shift", buffered: true });
+      } catch {
+        /* Layout Instability API may be unavailable in some browsers. */
+      }
+    });
+
     await page.goto("/", { waitUntil: "load", timeout: 120_000 });
     await expect(page.locator('[data-testid="hero-section"], #home-conversion-hero-heading').first()).toBeVisible({
       timeout: 60_000,
@@ -38,21 +55,14 @@ test.describe("Homepage desktop performance smoke", () => {
 
     await page.waitForTimeout(5000);
 
-    const clsScore = await page.evaluate(() => {
-      let total = 0;
-      for (const raw of performance.getEntriesByType("layout-shift")) {
-        const e = raw as PerformanceEntry & { value?: number; hadRecentInput?: boolean };
-        if (!e.hadRecentInput && typeof e.value === "number") {
-          total += e.value;
-        }
-      }
-      return total;
-    });
+    const clsScore = await page.evaluate(() =>
+      Number((window as unknown as { __nnCumulativeLayoutShift?: number }).__nnCumulativeLayoutShift ?? 0),
+    );
 
     expect(
       clsScore,
       `cumulative layout-shift (no user input) should stay low after 5s; got ${clsScore}`,
-    ).toBeLessThan(0.2);
+    ).toBeLessThan(0.1);
 
     expect(consoleErrors, `unexpected console errors:\n${consoleErrors.join("\n")}`).toEqual([]);
 

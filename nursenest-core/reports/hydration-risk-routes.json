@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-05-10T10:16:59.152Z",
+  "generatedAt": "2026-05-11T16:30:22.860Z",
   "rows": [
     {
       "rel": "src/components/student/practice-test-runner-client.tsx",
-      "lines": 3422,
-      "bytes": 158854,
+      "lines": 3470,
+      "bytes": 160864,
       "useClient": true,
-      "riskScore": 3935.3,
+      "riskScore": 3990.5,
       "risk": "medium"
     },
     {
@@ -27,18 +27,18 @@
     },
     {
       "rel": "src/components/student/practice-tests-hub-client.tsx",
-      "lines": 1869,
-      "bytes": 92635,
+      "lines": 1886,
+      "bytes": 93053,
       "useClient": true,
-      "riskScore": 2149.35,
+      "riskScore": 2168.9,
       "risk": "lower"
     },
     {
       "rel": "src/app/(student)/app/(learner)/layout.tsx",
-      "lines": 378,
-      "bytes": 18988,
+      "lines": 421,
+      "bytes": 21110,
       "useClient": false,
-      "riskScore": 321.3,
+      "riskScore": 357.85,
       "risk": "lower"
     }
   ]

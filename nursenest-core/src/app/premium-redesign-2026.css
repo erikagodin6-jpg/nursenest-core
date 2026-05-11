@@ -193,11 +193,13 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
   grid-template-columns: 1fr;
   gap: 22px;
   align-items: center;
+  min-height: clamp(34rem, 72dvh, 46rem);
 }
 @media (min-width: 1024px) {
   .nn-premium-hero-grid {
     grid-template-columns: 1.05fr 1fr;
     gap: 40px;
+    min-height: 28rem;
   }
 }
 
@@ -881,6 +883,22 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
     0 18px 42px -30px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
   backdrop-filter: saturate(150%) blur(14px);
   -webkit-backdrop-filter: saturate(150%) blur(14px);
+}
+
+[data-nn-header-layout="marketing-row4"] {
+  min-height: var(--nn-marketing-header-reserved-height, 7.4rem);
+}
+
+@media (max-width: 1023.98px) {
+  [data-nn-header-layout="marketing-row4"],
+  [data-nn-header-layout="marketing-unified-dark"] {
+    min-height: var(--nn-marketing-header-mobile-reserved-height, 3.75rem);
+  }
+
+  [data-nn-header-layout="marketing-row4"] .top-bar,
+  [data-nn-header-layout="marketing-unified-dark"] .top-bar {
+    min-height: var(--nn-marketing-header-mobile-reserved-height, 3.75rem);
+  }
 }
 
 [data-nn-header-layout="marketing-row4"] .nn-header-brand-lockup {
@@ -1574,6 +1592,7 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketi
   overflow: hidden;
   padding-block: var(--nn-rhythm-section-y, 4rem);
   background: var(--page-bg, #ffffff);
+  min-height: var(--nn-premium-home-section-min, 34rem);
 }
 
 .nn-premium-home-section::before {

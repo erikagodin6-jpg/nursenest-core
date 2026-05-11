@@ -18,11 +18,11 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
 
 | Rank | File | Lines | Bytes | use client | Risk |
 | --- | --- | ---: | ---: | --- | --- |
-| 1 | `src/components/student/practice-test-runner-client.tsx` | 3422 | 158854 | yes | medium |
+| 1 | `src/components/student/practice-test-runner-client.tsx` | 3470 | 160864 | yes | medium |
 | 2 | `src/components/admin/admin-blog-control-panel-client.tsx` | 2859 | 126714 | yes | medium |
 | 3 | `src/components/student/question-bank-practice-client.tsx` | 1941 | 88345 | yes | lower |
-| 4 | `src/components/student/practice-tests-hub-client.tsx` | 1869 | 92635 | yes | lower |
-| 5 | `src/app/(student)/app/(learner)/layout.tsx` | 378 | 18988 | no | lower |
+| 4 | `src/components/student/practice-tests-hub-client.tsx` | 1886 | 93053 | yes | lower |
+| 5 | `src/app/(student)/app/(learner)/layout.tsx` | 421 | 21110 | no | lower |
 
 ## Static imports (first 12k chars)
 
@@ -221,4 +221,4 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/components/student/paywall-home-stats-context`
 
 
-*Generated 2026-05-10T10:16:59.148Z*
+*Generated 2026-05-11T16:30:22.858Z*
