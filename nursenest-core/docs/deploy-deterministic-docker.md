@@ -21,6 +21,22 @@ This complements `.do/app-nursenest-core-next.yaml` (Heroku Node buildpack path)
 3. **No Heroku buildpack:** Node version comes from the base image (`node:22.22.2-alpine`, aligned with `engines` / App Platform `NODE_VERSION` env).
 4. **Low-memory flags:** set in Dockerfile for the compile stage (`NN_FORCE_SINGLE_BUILD_WORKER`, `NN_APP_PLATFORM_BUILD`, single webpack parallelism, heap cap). Keep parity with YAML build env when switching.
 
+### Lesson indexes + verification (memory)
+
+Deep `verify:lesson-indexes` replays live catalog merges per pathway and can dominate build time/RSS on small builders. For App Platform / Docker:
+
+| Variable | Typical value | Effect |
+|----------|----------------|--------|
+| `NN_LESSON_INDEX_VERIFY_MODE` | `manifest` | Alias of **light** mode: manifest hash + `mergedRawLessonCount` + href checks; skips live parity replay (see `scripts/lesson-index-verify-mode.mjs`). |
+| `NN_SKIP_HEAVY_BUILD_REPORTS` | `1` | Skips writing `reports/lesson-normalization-coverage.*` and skips attaching question-inventory diagnostics to `build-runtime-metrics.json` (in-memory quality gates in the index build still run). |
+| `NN_SKIP_HEAVY_LESSON_VERIFY` | `1` | Legacy alias for light mode when `NN_LESSON_INDEX_VERIFY_MODE` is unset. |
+
+The root `Dockerfile` compile stage sets `NN_LESSON_INDEX_VERIFY_MODE=manifest` and `NN_SKIP_HEAVY_BUILD_REPORTS=1`. CI and local full verification can unset these or set `NN_LESSON_INDEX_VERIFY_MODE=deep`.
+
+### Single `next build` in Docker
+
+The image runs `npm run heroku-postbuild` (which sets `NN_POSTBUILD_NEXT_BUILD=1` and runs **one** production compile via `run-buildpack-build.mjs` → `run-next-prod-build.mjs`) and then `npm run build:deploy` (**post-compile**: git meta, standalone static sync, prune) — **not** a second `next build`.
+
 ## Switching App Platform to Docker
 
 1. In the DO spec (or UI), set **`source_dir` to `/` (repo root)** so `../shared` and `../client` exist for Docker context.
@@ -72,6 +88,9 @@ docker run --rm -e PORT=8080 nursenest-core-next:local node -e "const fs=require
 | `NODE_VERSION` (Docker `ARG`) | Pin Node base image |
 | `DATABASE_URL` | **Runtime:** managed Postgres URI (App Platform secret, `RUN_TIME` only). **Not** a platform build env — never bake into the image. **Build:** the Dockerfile sets a **one-line** ephemeral URL only for `npm run db:generate` inside that `RUN` (not `ENV`). |
 | `NN_FORCE_SINGLE_BUILD_WORKER` / `NN_APP_PLATFORM_BUILD` | Low-memory / DO-aware compile |
+| `NN_LOW_MEMORY_BUILD` | Prefer low-memory Next/webpack settings |
+| `NN_LESSON_INDEX_VERIFY_MODE` | `manifest` on DO Docker builds (light verify); use `deep` for full parity in CI |
+| `NN_SKIP_HEAVY_BUILD_REPORTS` | `1` to skip disk-heavy lesson coverage reports during image build |
 | `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` | Heap for `build:compile` (Docker `ARG`) |
 | Runtime secrets | Same as buildpack deploy (`DATABASE_URL`, NextAuth, etc.) |
 
