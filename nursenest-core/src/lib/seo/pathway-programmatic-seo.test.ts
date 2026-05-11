@@ -38,22 +38,40 @@ test("US PN (NCLEX-PN) → rex-pn-practice-questions label matches h1", async ()
   await expectLanding(p, "rex-pn-practice-questions");
 });
 
-test("US NP FNP → np-exam-practice-questions label matches h1", async () => {
+test("US NP FNP → np-exam-prep label matches h1", async () => {
   const p = getExamPathwayById("us-np-fnp");
   assert.ok(p);
-  await expectLanding(p, "np-exam-practice-questions");
+  await expectLanding(p, "np-exam-prep");
 });
 
-test("US NP AGPCNP shares NP programmatic umbrella slug", async () => {
+test("US NP AGPCNP shares NP prep discovery slug", async () => {
   const p = getExamPathwayById("us-np-agpcnp");
   assert.ok(p);
-  await expectLanding(p, "np-exam-practice-questions");
+  await expectLanding(p, "np-exam-prep");
 });
 
-test("Canada CNPLE → np-exam-practice-questions label matches h1", async () => {
+test("US NP WHNP shares NP prep discovery slug", async () => {
+  const p = getExamPathwayById("us-np-whnp");
+  assert.ok(p);
+  await expectLanding(p, "np-exam-prep");
+});
+
+test("US NP PNP-PC shares NP prep discovery slug", async () => {
+  const p = getExamPathwayById("us-np-pnp-pc");
+  assert.ok(p);
+  await expectLanding(p, "np-exam-prep");
+});
+
+test("US NP PMHNP shares NP prep discovery slug", async () => {
+  const p = getExamPathwayById("us-np-pmhnp");
+  assert.ok(p);
+  await expectLanding(p, "np-exam-prep");
+});
+
+test("Canada CNPLE → canada-np-exam-prep label matches h1", async () => {
   const p = getExamPathwayById("ca-np-cnple");
   assert.ok(p);
-  await expectLanding(p, "np-exam-practice-questions");
+  await expectLanding(p, "canada-np-exam-prep");
 });
 
 test("Canada allied → allied-health-career-guides label matches h1", async () => {

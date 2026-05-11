@@ -8,6 +8,7 @@ import {
   normalizeSitemapLoc,
 } from "@/lib/seo/sitemap-public-index-filter";
 import { collectLocalizedMarketingSegmentUrls } from "@/lib/seo/sitemap-static-xml";
+import { collectLocaleMarketingUrls, collectSeoPagesUrls } from "@/lib/seo/sitemap-static-xml";
 
 const origin = CANONICAL_PRODUCTION_ORIGIN;
 const blockedLocales = ["it", "vi", "tr", "ur", "ko", "fa", "zh", "pa", "pt"] as const;
@@ -51,4 +52,32 @@ test("mergeCoreUrlsWithBlogEntries prefers blog lastmod on duplicate loc", () =>
   const merged = mergeCoreUrlsWithBlogEntries([`${origin}/blog`], [{ loc: `${origin}/blog`, lastmod: "2025-01-02T00:00:00.000Z" }]);
   assert.equal(merged.length, 1);
   assert.equal(merged[0]?.lastmod, "2025-01-02T00:00:00.000Z");
+});
+
+test("shared NP programmatic pages stay in the English sitemap when they do not live-redirect", () => {
+  const urls = new Set(collectSeoPagesUrls(origin));
+  for (const slug of [
+    "np-exam-practice-questions",
+    "np-exam-prep",
+    "np-clinical-cases",
+    "cnple-practice-questions",
+    "canada-np-exam-prep",
+    "np-study-guide-canada",
+  ]) {
+    assert.equal(urls.has(`${origin}/${slug}`), true, slug);
+  }
+});
+
+test("shared NP programmatic pages stay in localized marketing sitemap slices", async () => {
+  const urls = new Set(await collectLocaleMarketingUrls(origin, "fr"));
+  for (const slug of [
+    "np-exam-practice-questions",
+    "np-exam-prep",
+    "np-clinical-cases",
+    "cnple-practice-questions",
+    "canada-np-exam-prep",
+    "np-study-guide-canada",
+  ]) {
+    assert.equal(urls.has(`${origin}/fr/${slug}`), true, slug);
+  }
 });

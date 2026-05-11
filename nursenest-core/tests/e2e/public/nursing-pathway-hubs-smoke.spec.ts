@@ -53,6 +53,28 @@ test.describe("Nursing pathway hubs — public smoke", () => {
     await expectNoAdminLinksInPremiumZone(page);
   });
 
+  test("Canada RN hub — study + readiness premium bands, ECG module present", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await seedCaMarketingCookie(page, origin);
+    await gotoExpectOk(page, "/canada/rn/nclex-rn");
+    await expectNotPageNotFound(page);
+    await expect(page.locator('[data-nn-nursing-tier-hub="surface"]')).toBeVisible({ timeout: 90_000 });
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 60_000 });
+    await expect(page.locator(PREMIUM)).toBeVisible();
+    await expect(page.locator('[data-nn-hub-premium-tone="study"]')).toBeVisible();
+    await expect(page.locator('[data-nn-hub-premium-tone="readiness"]')).toBeVisible();
+    await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(1);
+    await expect(page.getByRole("heading", { name: /^study tools$/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^readiness & progress$/i })).toBeVisible();
+    await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="hub_lessons"]`)).toBeVisible();
+    await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="flashcards"]`)).toBeVisible();
+    await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="labs"]`)).toBeVisible();
+    await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="med_calc"]`)).toBeVisible();
+    await expect(page.locator('[data-nn-hub-section="quick-actions"]')).toBeVisible();
+    await expect(page.locator('[data-nn-hub-section="identity-hero"]')).toBeVisible();
+    await expectNoAdminLinksInPremiumZone(page);
+  });
+
   test("Canada RPN hub — premium grids, no ECG marker", async ({ page, baseURL }) => {
     const origin = requireOrigin(baseURL);
     await seedCaMarketingCookie(page, origin);

@@ -45,4 +45,22 @@ describe("buildMarketingMegaMenus", () => {
     const pnQ = pn?.groups.flatMap((g) => g.links).find((l) => l.key === "pn-questions");
     assert.equal(pnQ?.href, "/us/pn/nclex-pn/questions");
   });
+
+  it("NP mega menu exposes specialty discovery links without replacing the canonical NP hub", () => {
+    const usMenus = buildMarketingMegaMenus("US", t);
+    const usNp = usMenus.find((m) => m.key === "np");
+    assert.equal(usNp?.hubHref, "/us/np/fnp");
+    const usSpecialties = usNp?.groups.find((g) => g.key === "specialties")?.links ?? [];
+    assert.deepEqual(
+      usSpecialties.map((link) => link.href),
+      ["/us/np/fnp", "/us/np/agpcnp", "/us/np/pmhnp", "/us/np/whnp", "/us/np/pnp-pc", "/canada/np/cnple"],
+    );
+
+    const caMenus = buildMarketingMegaMenus("CA", t);
+    const caNp = caMenus.find((m) => m.key === "np");
+    assert.equal(caNp?.hubHref, "/canada/np/cnple");
+    const caSpecialties = caNp?.groups.find((g) => g.key === "specialties")?.links ?? [];
+    assert.equal(caSpecialties.some((link) => link.href === "/canada/np/cnple"), true);
+    assert.equal(caSpecialties.some((link) => link.href === "/us/np/whnp"), true);
+  });
 });

@@ -27,9 +27,22 @@ export const LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB: readonly { slug: string; d
   { slug: "cnple-practice-questions", destination: CANONICAL_PATHWAY_HUB.caNp },
 ];
 
+/**
+ * NP umbrella pages are live, self-canonical discovery surfaces now. Keep RN/PN behavior untouched in this pass and
+ * stop treating only the NP/CNPLE slugs as hub-redirected for sitemap and redirect generation.
+ */
+const SELF_CANONICAL_PROGRAMMATIC_DISCOVERY_SLUGS = new Set([
+  "np-exam-practice-questions",
+  "cnple-practice-questions",
+]);
+
+const ACTIVE_LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB = LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB.filter(
+  ({ slug }) => !SELF_CANONICAL_PROGRAMMATIC_DISCOVERY_SLUGS.has(slug),
+);
+
 /** Slugs that 301 to pathway hubs — exclude from `/seo/{slug}` → `/{slug}` canonical redirect generation. */
 export const LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT = new Set(
-  LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB.map((x) => x.slug),
+  ACTIVE_LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB.map((x) => x.slug),
 );
 
 /** 301s for legacy programmatic URLs + localized `/{locale}/{slug}` + internal `/seo/{slug}` targets. */
@@ -37,7 +50,7 @@ export function buildLegacyProgrammaticSeoRedirectsToPathwayHubs(
   nonDefaultLocales: readonly string[],
 ): Array<{ source: string; destination: string; permanent: true }> {
   const out: Array<{ source: string; destination: string; permanent: true }> = [];
-  for (const { slug, destination } of LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB) {
+  for (const { slug, destination } of ACTIVE_LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB) {
     out.push({ source: `/${slug}`, destination, permanent: true });
     out.push({ source: `/seo/${slug}`, destination, permanent: true });
     for (const loc of nonDefaultLocales) {

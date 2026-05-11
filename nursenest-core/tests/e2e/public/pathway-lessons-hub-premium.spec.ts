@@ -77,6 +77,27 @@ test.describe("Pathway lessons hub — premium shell (RN / PN / NP / CA RPN / Al
     await captureHubScreenshot(page, "us-rn-nclex-rn-lessons");
   });
 
+  test("Canada RN lessons index loads premium hub + lesson section", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await seedCaMarketingCookie(page, origin);
+    await gotoExpectOk(page, "/canada/rn/nclex-rn/lessons");
+    await expectNotPageNotFound(page);
+    await expectMarketingLessonsHubLoaded(page);
+    await expect(page.locator(APP_ERROR_SCREEN)).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: /^Lesson Library$/ })).toBeVisible();
+    await expect(page.locator(`${LESSONS_SECTION} a.group`).first()).toBeVisible();
+    await page.waitForTimeout(5000);
+    await expect(page.locator(APP_ERROR_SCREEN)).toHaveCount(0);
+    await expect(page.locator(HUB_ROOT)).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /lessons/i })).toBeVisible();
+    const main = page.locator("main");
+    await expect(main).toBeVisible();
+    await expect(main).not.toContainText(PLACEHOLDER_RE);
+    await expect(page.locator(`${HUB_ROOT} a`).filter({ hasText: /overview/i }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /Practice Questions/ }).first()).toBeVisible();
+    await captureHubScreenshot(page, "ca-rn-nclex-rn-lessons");
+  });
+
   test("US PN lessons index loads premium hub + lesson section", async ({ page, baseURL }) => {
     const origin = requireOrigin(baseURL);
     await seedUsMarketingCookie(page, origin);
@@ -132,14 +153,20 @@ test.describe("Pathway lessons hub — premium shell (RN / PN / NP / CA RPN / Al
     await captureHubScreenshot(page, "canada-pn-rex-pn-lessons");
   });
 
-  test("Mobile viewport — RN + NP hubs: no runaway horizontal scroll", async ({ page, baseURL }) => {
+  test("Mobile viewport — US RN, Canada RN, and US NP hubs: no runaway horizontal scroll", async ({ page, baseURL }) => {
     const origin = requireOrigin(baseURL);
-    await seedUsMarketingCookie(page, origin);
     await page.setViewportSize({ width: 390, height: 844 });
+    await seedUsMarketingCookie(page, origin);
     await gotoExpectOk(page, "/us/rn/nclex-rn/lessons");
     await expectNotPageNotFound(page);
     await expectMarketingLessonsHubLoaded(page);
     await assertNoHorizontalOverflow(page);
+    await seedCaMarketingCookie(page, origin);
+    await gotoExpectOk(page, "/canada/rn/nclex-rn/lessons");
+    await expectNotPageNotFound(page);
+    await expectMarketingLessonsHubLoaded(page);
+    await assertNoHorizontalOverflow(page);
+    await seedUsMarketingCookie(page, origin);
     await gotoExpectOk(page, "/us/np/fnp/lessons");
     await expectNotPageNotFound(page);
     await expectMarketingLessonsHubLoaded(page);

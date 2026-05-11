@@ -23,80 +23,82 @@ import {
 import { hasAdminE2eCredentials, getAdminE2eCredentials } from "../helpers/smoke-credentials";
 import { loginWithCredentials } from "../helpers/learner-login";
 
-const pathwayId = PAID_E2E_DEFAULT_PATHWAY_ID;
+const RN_RELEASE_PATHWAY_IDS = [...new Set([PAID_E2E_DEFAULT_PATHWAY_ID, "ca-rn-nclex-rn"])];
 
 test.describe("Phase 1 — paid learner workflows (release)", () => {
-  test("pathway lessons hub + lesson detail + mark studied (no crash)", async ({ page }) => {
-    test.setTimeout(240_000);
-    await page.goto(paidLessonsHubUrl(pathwayId), { waitUntil: "domcontentloaded" });
-    expectNotLoginUrl(page);
-    await waitForAuthenticatedLearnerShell(page);
-    await expectNoSubscriberPaywallSurface(page, "phase1 lessons hub");
-    const first = page.locator(LESSON_HUB_CARD_LINKS).first();
-    await expect(first).toBeVisible({ timeout: 120_000 });
-    await first.click();
-    await page.waitForLoadState("domcontentloaded");
-    expectNotLoginUrl(page);
-    await waitForAuthenticatedLearnerShell(page);
-    await expectNoSubscriberPaywallSurface(page, "phase1 lesson detail");
-    const markBtn = page.getByRole("button", { name: /mark.*studied|mark as studied/i }).first();
-    if (await markBtn.isVisible().catch(() => false)) {
-      await markBtn.click();
-      await page.waitForTimeout(500);
-      await expect(page.locator("body")).toBeVisible();
-    }
-  });
-
-  test("flashcards pool is non-zero when CAT hub exposes start; session reveal works", async ({ page }) => {
-    test.setTimeout(300_000);
-    await page.goto(`/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(pathwayId)}`, {
-      waitUntil: "domcontentloaded",
+  for (const pathwayId of RN_RELEASE_PATHWAY_IDS) {
+    test(`pathway lessons hub + lesson detail + mark studied (no crash) (${pathwayId})`, async ({ page }) => {
+      test.setTimeout(240_000);
+      await page.goto(paidLessonsHubUrl(pathwayId), { waitUntil: "domcontentloaded" });
+      expectNotLoginUrl(page);
+      await waitForAuthenticatedLearnerShell(page);
+      await expectNoSubscriberPaywallSurface(page, "phase1 lessons hub");
+      const first = page.locator(LESSON_HUB_CARD_LINKS).first();
+      await expect(first).toBeVisible({ timeout: 120_000 });
+      await first.click();
+      await page.waitForLoadState("domcontentloaded");
+      expectNotLoginUrl(page);
+      await waitForAuthenticatedLearnerShell(page);
+      await expectNoSubscriberPaywallSurface(page, "phase1 lesson detail");
+      const markBtn = page.getByRole("button", { name: /mark.*studied|mark as studied/i }).first();
+      if (await markBtn.isVisible().catch(() => false)) {
+        await markBtn.click();
+        await page.waitForTimeout(500);
+        await expect(page.locator("body")).toBeVisible();
+      }
     });
-    await waitForAuthenticatedLearnerShell(page);
-    await expectNoSubscriberPaywallSurface(page, "CAT hub inventory probe");
-    const startCat = page.locator("[data-nn-qa-practice-hub-start-test]");
-    const catStartVisible = await startCat.isVisible().catch(() => false);
 
-    await page.goto(paidFlashcardsHubUrl(pathwayId), { waitUntil: "domcontentloaded" });
-    expectNotLoginUrl(page);
-    await expectNoSubscriberPaywallSurface(page, "phase1 flashcards hub");
-    await dismissFlashcardResumeIfPresent(page);
-    const poolLine = page.getByText(/\d+\s+cards in pool/i);
-    await expect(poolLine).toBeVisible({ timeout: 120_000 });
-    const poolText = (await poolLine.innerText()).trim();
-    const m = poolText.match(/(\d+)\s+cards in pool/i);
-    expect(m, "expected flashcards pool count in hub header").toBeTruthy();
-    const n = Number(m![1]);
-    if (catStartVisible) {
-      expect(n, "flashcards pool should be >0 when CAT hub shows a startable session").toBeGreaterThan(0);
-    } else {
-      expect(n).toBeGreaterThanOrEqual(0);
-    }
+    test(`flashcards pool is non-zero when CAT hub exposes start; session reveal works (${pathwayId})`, async ({ page }) => {
+      test.setTimeout(300_000);
+      await page.goto(`/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(pathwayId)}`, {
+        waitUntil: "domcontentloaded",
+      });
+      await waitForAuthenticatedLearnerShell(page);
+      await expectNoSubscriberPaywallSurface(page, "CAT hub inventory probe");
+      const startCat = page.locator("[data-nn-qa-practice-hub-start-test]");
+      const catStartVisible = await startCat.isVisible().catch(() => false);
 
-    const start = page.locator("[data-nn-e2e-start-review]").first();
-    await expect(start).toBeVisible({ timeout: 120_000 });
-    await start.click();
-    const reveal = page.getByRole("button", { name: /show answer|reveal answer/i });
-    await expect(reveal).toBeVisible({ timeout: 120_000 });
-    await reveal.click();
-    await expect(page.getByRole("button", { name: /^Known$/i })).toBeVisible({ timeout: 30_000 });
-  });
+      await page.goto(paidFlashcardsHubUrl(pathwayId), { waitUntil: "domcontentloaded" });
+      expectNotLoginUrl(page);
+      await expectNoSubscriberPaywallSurface(page, "phase1 flashcards hub");
+      await dismissFlashcardResumeIfPresent(page);
+      const poolLine = page.getByText(/\d+\s+cards in pool/i);
+      await expect(poolLine).toBeVisible({ timeout: 120_000 });
+      const poolText = (await poolLine.innerText()).trim();
+      const m = poolText.match(/(\d+)\s+cards in pool/i);
+      expect(m, "expected flashcards pool count in hub header").toBeTruthy();
+      const n = Number(m![1]);
+      if (catStartVisible) {
+        expect(n, "flashcards pool should be >0 when CAT hub shows a startable session").toBeGreaterThan(0);
+      } else {
+        expect(n).toBeGreaterThanOrEqual(0);
+      }
 
-  test("linear practice: first question, rationale after submit, optional next (no CAT-only deferral leak)", async ({
-    page,
-  }) => {
-    test.setTimeout(300_000);
-    await page.goto("/app", { waitUntil: "domcontentloaded" });
-    await waitForAuthenticatedLearnerShell(page);
-    await startLinearPracticeTestFromHub(page, pathwayId);
-    await expect(page.locator(".nn-cat-question-stem").first()).toBeVisible({ timeout: 120_000 });
-    await submitFirstLinearPracticeAnswerAndExpectRationale(page);
+      const start = page.locator("[data-nn-e2e-start-review]").first();
+      await expect(start).toBeVisible({ timeout: 120_000 });
+      await start.click();
+      const reveal = page.getByRole("button", { name: /show answer|reveal answer/i });
+      await expect(reveal).toBeVisible({ timeout: 120_000 });
+      await reveal.click();
+      await expect(page.getByRole("button", { name: /^Known$/i })).toBeVisible({ timeout: 30_000 });
+    });
 
-    const advanced = await clickLinearPracticeNextItemIfPresent(page);
-    if (advanced) {
-      await expect(page.locator(".nn-cat-question-stem").first()).toBeVisible({ timeout: 60_000 });
-    }
-  });
+    test(`linear practice: first question, rationale after submit, optional next (no CAT-only deferral leak) (${pathwayId})`, async ({
+      page,
+    }) => {
+      test.setTimeout(300_000);
+      await page.goto("/app", { waitUntil: "domcontentloaded" });
+      await waitForAuthenticatedLearnerShell(page);
+      await startLinearPracticeTestFromHub(page, pathwayId);
+      await expect(page.locator(".nn-cat-question-stem").first()).toBeVisible({ timeout: 120_000 });
+      await submitFirstLinearPracticeAnswerAndExpectRationale(page);
+
+      const advanced = await clickLinearPracticeNextItemIfPresent(page);
+      if (advanced) {
+        await expect(page.locator(".nn-cat-question-stem").first()).toBeVisible({ timeout: 60_000 });
+      }
+    });
+  }
 
   test("onboarding entry loads for authenticated subscriber", async ({ page }) => {
     await page.goto("/app/onboarding", { waitUntil: "domcontentloaded" });

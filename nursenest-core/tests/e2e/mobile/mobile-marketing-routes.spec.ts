@@ -14,18 +14,23 @@ import { LESSON_FLOW_PATHWAY_QA } from "@/lib/qa/lesson-flow-pathways";
 
 const baseURL = getE2eBaseURL();
 const usRn = LESSON_FLOW_PATHWAY_QA.find((p) => p.pathwayId === "us-rn-nclex-rn");
+const caRn = LESSON_FLOW_PATHWAY_QA.find((p) => p.pathwayId === "ca-rn-nclex-rn");
 if (!usRn) throw new Error("us-rn-nclex-rn missing from LESSON_FLOW_PATHWAY_QA");
+if (!caRn) throw new Error("ca-rn-nclex-rn missing from LESSON_FLOW_PATHWAY_QA");
 
 /** Exclude `/blog` from the fast grid — first paint can exceed default test timeout under dev + DB cold start. */
-const ROUTES = ["/signup", usRn.hubPath, usRn.lessonsPath] as const;
+const ROUTES = [
+  { route: "/signup", region: "us" as const },
+  { route: usRn.hubPath, region: "us" as const },
+  { route: usRn.lessonsPath, region: "us" as const },
+  { route: caRn.hubPath, region: "canada" as const },
+  { route: caRn.lessonsPath, region: "canada" as const },
+] as const;
 
 test.describe("Mobile — marketing route grid", () => {
-  test.beforeEach(async ({ page }) => {
-    await setGlobalRegionCookie(page, "us", baseURL);
-  });
-
-  for (const route of ROUTES) {
+  for (const { route, region } of ROUTES) {
     test(`bounded width: ${route}`, async ({ page }) => {
+      await setGlobalRegionCookie(page, region, baseURL);
       const res = await page.goto(route, { waitUntil: "domcontentloaded", timeout: 120_000 });
       expect(res?.ok(), `${route} HTTP ${res?.status()}`).toBeTruthy();
       await dismissMarketingScrims(page);
