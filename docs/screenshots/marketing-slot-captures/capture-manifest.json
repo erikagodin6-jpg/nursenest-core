@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-05-11T11:05:43.498Z",
+  "baseUrl": "http://localhost:3101",
+  "outputDir": "/root/.config/superpowers/worktrees/nursenest-core/advanced-ecg-rollout/docs/screenshots/marketing-slot-captures",
+  "pathwayIdDefault": "ca-rn-nclex-rn",
+  "cdnBaseDocumentation": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com",
+  "uploadPolicy": "Do not upload to DigitalOcean Spaces or overwrite production screenshot1.png–screenshot15.png keys until manually approved (see docs/SCREENSHOT_CAPTURE_TO_CDN.md).",
+  "slots": [],
+  "supplementary": [
+    {
+      "id": "extra-advanced-ecg-unlocked-learner",
+      "filename": "supplementary/advanced-ecg-unlocked-learner.png",
+      "route": "/modules/ecg-advanced",
+      "auth": "demo",
+      "theme": "midnight",
+      "manualReviewNotes": "Signed-in learner with Advanced ECG entitlement sees full curriculum access."
+    },
+    {
+      "id": "extra-advanced-ecg-purchase-success",
+      "filename": "supplementary/advanced-ecg-purchase-success.png",
+      "route": "/modules/ecg-advanced?checkout=success",
+      "auth": "demo",
+      "theme": "midnight",
+      "manualReviewNotes": "Post-checkout success state on the Advanced ECG learner surface."
+    }
+  ],
+  "errors": []
+}

@@ -105,26 +105,32 @@ async function main() {
     }
   }
 
-  const existing = await prisma.user.findUnique({ where: { email: DEMO_EMAIL } });
+  const passwordHash = await hash(DEMO_PASSWORD, 12);
+
+  const existing = await prisma.user.findFirst({
+    where: { email: { equals: DEMO_EMAIL, mode: "insensitive" } },
+    select: { id: true },
+  });
   if (existing) {
     console.log(`  Demo account already exists (id: ${existing.id}).`);
-    await prisma.user.update({
+    const updated = await prisma.user.update({
       where: { id: existing.id },
       data: {
         isDemoUser: true,
         learnerPath: PATHWAY_ID,
         tier: pathway.stripeTier,
         country: pathway.countryCode,
+        passwordHash,
+        emailVerified: true,
       },
+      select: { id: true },
     });
     console.log("  Updated pathway / demo flags.");
-    await ensureDemoSubscription(existing.id);
-    await ensureAdvancedEcgEntitlement(existing.id, pathway.stripeTier, pathway.countryCode);
+    await ensureDemoSubscription(updated.id);
+    await ensureAdvancedEcgEntitlement(updated.id, pathway.stripeTier, pathway.countryCode);
     printCredentials();
     return;
   }
-
-  const passwordHash = await hash(DEMO_PASSWORD, 12);
 
   const user = await prisma.user.create({
     data: {
@@ -141,6 +147,7 @@ async function main() {
       dailyStudyMinutes: 60,
       emailVerified: true,
     },
+    select: { id: true },
   });
 
   console.log(`\n  Created demo user: ${user.id}`);

@@ -209,26 +209,121 @@ async function settleLearnerSurface(page) {
     .catch(() => {});
 }
 
+function isCredentialsPostResponse(res) {
+  return res.request().method().toUpperCase() === "POST" && res.url().includes("/api/auth/callback/credentials");
+}
+
+function parseCredentialsCallbackPayload(payload) {
+  if (!payload || typeof payload !== "object") {
+    return { ok: false, redirectUrl: "", errorParam: "invalid_payload", credentialsCode: null };
+  }
+  const raw = typeof payload.url === "string" ? payload.url : "";
+  if (!raw) {
+    return { ok: false, redirectUrl: "", errorParam: "missing_url", credentialsCode: null };
+  }
+
+  let errorParam = null;
+  let credentialsCode = null;
+  try {
+    const abs =
+      raw.startsWith("http://") || raw.startsWith("https://")
+        ? raw
+        : `http://local.invalid${raw.startsWith("/") ? raw : `/${raw}`}`;
+    const sp = new URL(abs).searchParams;
+    errorParam = sp.get("error");
+    credentialsCode = sp.get("code");
+  } catch {
+    errorParam = null;
+    credentialsCode = null;
+  }
+
+  return { ok: !errorParam, redirectUrl: raw, errorParam, credentialsCode };
+}
+
 async function loginAsDemoUser(page) {
   console.log(`  ↳ Logging in as ${DEMO_EMAIL}…`);
   await page.goto(`${BASE_URL}/login`, { waitUntil: "domcontentloaded", timeout: 60_000 });
 
-  const emailInput = page.locator('input[type="email"], input[name="email"]').first();
-  const passwordInput = page.locator('input[type="password"], input[name="password"]').first();
-  const submitBtn = page
-    .locator('button[type="submit"]:not([disabled]), input[type="submit"]')
+  const form = page
+    .locator("form")
+    .filter({ has: page.locator("#login-identifier") })
     .first();
+  const emailInput = page.locator("#login-identifier").first();
+  const passwordInput = page.locator("#login-password").first();
+  const submitBtn = form.locator('button[type="submit"]:not([disabled]), input[type="submit"]').first();
+
+  try {
+    await emailInput.waitFor({ state: "visible", timeout: 25_000 });
+    await passwordInput.waitFor({ state: "visible", timeout: 25_000 });
+    await form.waitFor({ state: "visible", timeout: 25_000 });
+    await page.waitForFunction(
+      () => {
+        const forms = Array.from(document.querySelectorAll("form"));
+        const f = forms.find((el) => el.querySelector("#login-identifier"));
+        if (!f) return false;
+        const m = f.getAttribute("method")?.toLowerCase() ?? "";
+        return m === "post";
+      },
+      undefined,
+      { timeout: 30_000 },
+    );
+  } catch {
+    throw new Error(
+      `Login failed — login form did not hydrate to the real POST submission shell before credentials entry at ${BASE_URL}.`,
+    );
+  }
 
   await emailInput.fill(DEMO_EMAIL);
   await passwordInput.fill(DEMO_PASSWORD);
+
+  const authPostPromise = page.waitForResponse((res) => isCredentialsPostResponse(res), {
+    timeout: 120_000,
+  });
   await submitBtn.click();
+
+  let authRes;
+  try {
+    authRes = await authPostPromise;
+  } catch {
+    throw new Error(
+      `Login failed — no POST response from /api/auth/callback/credentials. Check the auth route, login form wiring, and dev server readiness at ${BASE_URL}.`,
+    );
+  }
+
+  let payload;
+  try {
+    payload = await authRes.json();
+  } catch {
+    const text = await authRes.text().catch(() => "");
+    throw new Error(
+      `Login failed — credentials callback returned non-JSON (status ${authRes.status()}). First bytes: ${text.slice(0, 240)}`,
+    );
+  }
+
+  const parsed = parseCredentialsCallbackPayload(payload);
+  if (!parsed.ok || parsed.errorParam) {
+    throw new Error(
+      `Login failed — Auth.js rejected credentials (error=${parsed.errorParam ?? "unknown"}, code=${parsed.credentialsCode ?? "n/a"}, status=${authRes.status()}).`,
+    );
+  }
+
+  await page.waitForURL((url) => !url.pathname.includes("/login") && !url.pathname.includes("/signup"), {
+    timeout: 15_000,
+  }).catch(() => {});
+
   await page.waitForLoadState("domcontentloaded");
   await settleLearnerSurface(page);
 
   const url = page.url();
   if (url.includes("/login") || url.includes("/signup")) {
+    await page.goto(`${BASE_URL}/app`, { waitUntil: "domcontentloaded", timeout: 60_000 });
+    await settleLearnerSurface(page);
+  }
+
+  const finalUrl = page.url();
+  if (finalUrl.includes("/login") || finalUrl.includes("/signup")) {
     throw new Error(
-      `Login failed — still on auth URL (${url}). Seed demo user (DATABASE_URL=… npx tsx scripts/seed-screenshot-demo-user.ts), verify DB schema matches Prisma, and check SCREENSHOT_DEMO_EMAIL / SCREENSHOT_DEMO_PASSWORD.`,
+      `Login failed — still on auth URL (${finalUrl}). Seed demo user (DATABASE_URL=… npx tsx scripts/seed-screenshot-demo-user.ts), verify DB schema matches Prisma, and check SCREENSHOT_DEMO_EMAIL / SCREENSHOT_DEMO_PASSWORD.`,
     );
   }
   console.log("  ↳ Logged in successfully.");
@@ -357,7 +452,15 @@ async function main() {
     targets = targets.filter((t) => targetIdFilter.has(t.id));
   }
 
-  if (targets.length === 0) {
+  let supplementary = targetsDoc.supplementary ?? [];
+  if (targetIdFilter?.size) {
+    supplementary = supplementary.filter((t) => targetIdFilter.has(t.id));
+  }
+
+  const willRunSupplementary =
+    !ONLY_SLOTS && process.env.SCREENSHOT_INCLUDE_SUPPLEMENTARY !== "0" && supplementary.length > 0;
+
+  if (targets.length === 0 && !willRunSupplementary) {
     console.error("No slot targets selected (check SCREENSHOT_ONLY_SLOTS / SCREENSHOT_TARGET_IDS / --targets).");
     process.exit(1);
   }
@@ -421,8 +524,7 @@ async function main() {
   }
 
   const supplementaryResults = [];
-  const supplementary = targetsDoc.supplementary ?? [];
-  if (!ONLY_SLOTS && process.env.SCREENSHOT_INCLUDE_SUPPLEMENTARY !== "0") {
+  if (willRunSupplementary) {
     console.log("\n── Supplementary captures ──");
     for (const s of supplementary) {
       try {
