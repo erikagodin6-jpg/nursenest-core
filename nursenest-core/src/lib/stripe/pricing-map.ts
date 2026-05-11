@@ -154,16 +154,25 @@ export function findPriceEntryByPlanCode(planCode: string): PriceEntry | undefin
   return priceMap().find((p) => p.planCode === planCode);
 }
 
+function uniqueCountryOrUndefined(matches: PriceEntry[]): "CA" | "US" | undefined {
+  const countries = [...new Set(matches.map((p) => p.country))];
+  return countries.length === 1 ? countries[0] : undefined;
+}
+
 /** Reverse lookup: Stripe Price id to plan identity. */
 export function findTierCountryByPriceId(
   priceId: string,
-): { tier: TierCode; country: "CA" | "US"; duration: BillingDuration; alliedCareer?: AlliedCareerKey } | undefined {
+): { tier: TierCode; country?: "CA" | "US"; duration: BillingDuration; alliedCareer?: AlliedCareerKey } | undefined {
   const matches = priceMap().filter((p) => p.priceId === priceId);
   if (matches.length === 0) return undefined;
 
   const nursing = matches.find((p) => !p.alliedCareer);
   if (nursing) {
-    return { tier: nursing.tier, country: nursing.country, duration: nursing.duration };
+    return {
+      tier: nursing.tier,
+      country: uniqueCountryOrUndefined(matches.filter((p) => !p.alliedCareer)),
+      duration: nursing.duration,
+    };
   }
 
   const alliedRows = matches.filter((p) => p.tier === "ALLIED");
@@ -172,7 +181,7 @@ export function findTierCountryByPriceId(
     /** Shared allied price id maps to ALLIED tier only — occupation comes from checkout / subscription metadata. */
     return {
       tier: "ALLIED",
-      country: first.country,
+      country: uniqueCountryOrUndefined(alliedRows),
       duration: first.duration,
     };
   }

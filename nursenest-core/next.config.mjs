@@ -99,6 +99,27 @@ const experimental = {
   webpackBuildWorker: false,
 };
 
+class NextServerCommonJsBoundaryPlugin {
+  apply(compiler) {
+    const pluginName = "NextServerCommonJsBoundaryPlugin";
+    const { Compilation, sources } = compiler.webpack;
+
+    compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
+      compilation.hooks.processAssets.tap(
+        {
+          name: pluginName,
+          stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
+        },
+        () => {
+          // Next emits CommonJS server chunks under `.next/server`, but this app is ESM at the package
+          // root. Emit a local package boundary so build-time `require()` of generated app pages works.
+          compilation.emitAsset("server/package.json", new sources.RawSource('{"type":"commonjs"}\n'));
+        },
+      );
+    });
+  }
+}
+
 const nextConfig = {
   output: "standalone",
 
@@ -258,7 +279,7 @@ const nextConfig = {
     },
   },
 
-  webpack: (config, { dev }) => {
+  webpack: (config, { dev, isServer }) => {
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
@@ -269,6 +290,10 @@ const nextConfig = {
     // PackFileCacheStrategy can throw ENOENT under load; disabling persistent cache trims disk + mmap pressure.
     if (!dev) {
       config.cache = false;
+    }
+    if (!dev && isServer) {
+      config.plugins = config.plugins || [];
+      config.plugins.push(new NextServerCommonJsBoundaryPlugin());
     }
     return config;
   },

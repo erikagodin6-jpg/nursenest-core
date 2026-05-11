@@ -20,17 +20,17 @@ function isTruthy(v: string | undefined): boolean {
 }
 
 /** Aligned with `enforceCronSecretOrResponse` — production-like schedulers expect `CRON_SECRET`. */
-function isProductionLikeRuntime(): boolean {
+function isProductionLikeRuntime(env: NodeJS.ProcessEnv = process.env): boolean {
   return (
-    process.env.NODE_ENV === "production" ||
-    process.env.VERCEL_ENV === "production" ||
-    process.env.NURSE_NEST_ENFORCE_CRON_SECRET === "1"
+    env.NODE_ENV === "production" ||
+    env.VERCEL_ENV === "production" ||
+    env.NURSE_NEST_ENFORCE_CRON_SECRET === "1"
   );
 }
 
-function collectDatabaseUrlIssues(): EnvIssue[] {
+function collectDatabaseUrlIssues(env: NodeJS.ProcessEnv = process.env): EnvIssue[] {
   const issues: EnvIssue[] = [];
-  if (!isDatabaseUrlConfigured()) {
+  if (!isDatabaseUrlConfigured(env)) {
     issues.push({
       code: "database_url_missing",
       severity: "critical",
@@ -38,7 +38,7 @@ function collectDatabaseUrlIssues(): EnvIssue[] {
     });
     return issues;
   }
-  const raw = process.env.DATABASE_URL?.trim();
+  const raw = env.DATABASE_URL?.trim();
   if (!raw) return issues;
   try {
     const u = new URL(raw);
@@ -60,9 +60,9 @@ function collectDatabaseUrlIssues(): EnvIssue[] {
   return issues;
 }
 
-function collectAuthUrlIssues(): EnvIssue[] {
+function collectAuthUrlIssues(env: NodeJS.ProcessEnv = process.env): EnvIssue[] {
   const issues: EnvIssue[] = [];
-  if (!hasAnyAuthPublicOriginUrl()) {
+  if (!hasAnyAuthPublicOriginUrl(env)) {
     issues.push({
       code: "auth_url_missing",
       severity: "critical",
@@ -73,27 +73,27 @@ function collectAuthUrlIssues(): EnvIssue[] {
   }
   issues.push(
     ...collectAuthPublicOriginEnvIssues({
-      requireProductionHttps: process.env.NODE_ENV === "production",
-    }),
+      requireProductionHttps: env.NODE_ENV === "production",
+    }, env),
   );
   return issues;
 }
 
-export function collectProductionEnvIssues(): EnvIssue[] {
-  if (process.env.NODE_ENV !== "production") return [];
+export function collectProductionEnvIssues(env: NodeJS.ProcessEnv = process.env): EnvIssue[] {
+  if (env.NODE_ENV !== "production") return [];
 
   const issues: EnvIssue[] = [];
 
-  issues.push(...collectDatabaseUrlIssues());
+  issues.push(...collectDatabaseUrlIssues(env));
 
-  if (!isTruthy(process.env.AUTH_SECRET) && !isTruthy(process.env.NEXTAUTH_SECRET)) {
+  if (!isTruthy(env.AUTH_SECRET) && !isTruthy(env.NEXTAUTH_SECRET)) {
     issues.push({
       code: "auth_secret_missing",
       severity: "critical",
       message: "AUTH_SECRET or NEXTAUTH_SECRET must be set — sessions and signing will fail.",
     });
   } else {
-    const raw = process.env.AUTH_SECRET?.trim() || process.env.NEXTAUTH_SECRET?.trim() || "";
+    const raw = env.AUTH_SECRET?.trim() || env.NEXTAUTH_SECRET?.trim() || "";
     if (raw.length > 0 && raw.length < 32) {
       issues.push({
         code: "auth_secret_short",
@@ -104,9 +104,9 @@ export function collectProductionEnvIssues(): EnvIssue[] {
     }
   }
 
-  issues.push(...collectAuthUrlIssues());
+  issues.push(...collectAuthUrlIssues(env));
 
-  if (!isTruthy(process.env.NEXT_PUBLIC_APP_URL)) {
+  if (!isTruthy(env.NEXT_PUBLIC_APP_URL)) {
     issues.push({
       code: "public_app_url_missing",
       severity: "critical",
@@ -115,8 +115,8 @@ export function collectProductionEnvIssues(): EnvIssue[] {
     });
   } else {
     try {
-      const u = new URL(process.env.NEXT_PUBLIC_APP_URL!.trim());
-      if (process.env.NODE_ENV === "production" && u.protocol !== "https:") {
+      const u = new URL(env.NEXT_PUBLIC_APP_URL!.trim());
+      if (env.NODE_ENV === "production" && u.protocol !== "https:") {
         issues.push({
           code: "public_app_url_not_https",
           severity: "warning",
@@ -132,14 +132,14 @@ export function collectProductionEnvIssues(): EnvIssue[] {
     }
   }
 
-  if (!isTruthy(process.env.STRIPE_SECRET_KEY)) {
+  if (!isTruthy(env.STRIPE_SECRET_KEY)) {
     issues.push({
       code: "stripe_secret_key_missing",
       severity: "critical",
       message: "STRIPE_SECRET_KEY must be set — checkout, webhooks, and billing integrations require it.",
     });
   } else {
-    const sk = process.env.STRIPE_SECRET_KEY!.trim();
+    const sk = env.STRIPE_SECRET_KEY!.trim();
     if (sk.startsWith("sk_test_")) {
       issues.push({
         code: "stripe_secret_key_test_mode",
@@ -150,7 +150,7 @@ export function collectProductionEnvIssues(): EnvIssue[] {
     }
   }
 
-  if (!isTruthy(process.env.STRIPE_WEBHOOK_SECRET)) {
+  if (!isTruthy(env.STRIPE_WEBHOOK_SECRET)) {
     issues.push({
       code: "stripe_webhook_secret_missing",
       severity: "critical",
@@ -158,7 +158,7 @@ export function collectProductionEnvIssues(): EnvIssue[] {
     });
   }
 
-  if (!isTruthy(process.env.SPACES_KEY) || !isTruthy(process.env.SPACES_SECRET)) {
+  if (!isTruthy(env.SPACES_KEY) || !isTruthy(env.SPACES_SECRET)) {
     issues.push({
       code: "spaces_credentials_missing",
       severity: "critical",
@@ -167,7 +167,7 @@ export function collectProductionEnvIssues(): EnvIssue[] {
     });
   }
 
-  if (isProductionLikeRuntime() && !isTruthy(process.env.CRON_SECRET)) {
+  if (isProductionLikeRuntime(env) && !isTruthy(env.CRON_SECRET)) {
     issues.push({
       code: "cron_secret_missing",
       severity: "warning",
@@ -183,15 +183,15 @@ export function collectProductionEnvIssues(): EnvIssue[] {
  * When true, `runProductionEnvGuard` exits on any **critical** issue.
  * In production, defaults to **off** so optional integration/env drift does not take down the whole site.
  */
-export function strictProductionEnvEnabled(): boolean {
-  if (process.env.NODE_ENV !== "production") return false;
-  const v = process.env.NN_STRICT_PRODUCTION_ENV?.trim().toLowerCase();
+export function strictProductionEnvEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  if (env.NODE_ENV !== "production") return false;
+  const v = env.NN_STRICT_PRODUCTION_ENV?.trim().toLowerCase();
   return v === "1" || v === "true" || v === "yes" || v === "on";
 }
 
 /** `next build` often runs with NODE_ENV=production without production secrets — skip fail-fast until runtime. */
-function isNextCompilerBuildPhase(): boolean {
-  const p = process.env.NEXT_PHASE;
+function isNextCompilerBuildPhase(env: NodeJS.ProcessEnv = process.env): boolean {
+  const p = env.NEXT_PHASE;
   return p === "phase-production-build" || p === "phase-development-build";
 }
 

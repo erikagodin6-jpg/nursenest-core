@@ -160,7 +160,13 @@ function prepareDestDir(destStatic) {
 
 function copyTree(destStatic, serverPath, mode) {
   prepareDestDir(destStatic);
-  cpSync(sourceStatic, destStatic, { recursive: true, force: true });
+  mkdirSync(destStatic, { recursive: true });
+  for (const entry of readdirSync(sourceStatic, { withFileTypes: true })) {
+    cpSync(path.join(sourceStatic, entry.name), path.join(destStatic, entry.name), {
+      recursive: true,
+      force: true,
+    });
+  }
   assertNonEmptyCssOutput(destStatic);
   assertNonEmptyChunksDir(destStatic);
   assertMediaSynced(sourceStatic, destStatic);

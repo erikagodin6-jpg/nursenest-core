@@ -2,7 +2,6 @@
   "name": "rest-express",
   "version": "1.0.0",
   "packageManager": "npm@10.9.7",
-  "type": "module",
   "license": "MIT",
   "cacheDirectories": [
     "node_modules"

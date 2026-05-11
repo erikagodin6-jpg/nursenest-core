@@ -263,10 +263,13 @@ export type PricedCombination = {
 
 /** Yields every **Stripe-billed** nursing plan (excludes free tracks like Pre-Nursing). */
 export function* eachNursingPricedCombination(_markets?: readonly ("CA" | "US")[]): Generator<PricedCombination> {
+  const markets = _markets?.length ? [..._markets] : (["CA", "US"] as const);
   for (const tier of STRIPE_BILLED_NURSING_TIERS) {
     for (const duration of BILLING_DURATION_ORDER) {
-      if (getDisplayTotalMajorUnits("CA", tier, duration) !== undefined) {
-        yield { country: "CA", tier, duration, planCode: nursingPlanCode("CA", tier, duration) };
+      for (const country of markets) {
+        if (getDisplayTotalMajorUnits(country, tier, duration) !== undefined) {
+          yield { country, tier, duration, planCode: nursingPlanCode(country, tier, duration) };
+        }
       }
     }
   }
@@ -274,15 +277,18 @@ export function* eachNursingPricedCombination(_markets?: readonly ("CA" | "US")[
 
 /** Yields every priced allied career plan. */
 export function* eachAlliedPricedCombination(_markets?: readonly ("CA" | "US")[]): Generator<PricedCombination> {
+  const markets = _markets?.length ? [..._markets] : (["CA", "US"] as const);
   for (const career of ALLIED_CAREER_KEYS) {
     for (const duration of BILLING_DURATION_ORDER) {
-      yield {
-        country: "CA",
-        tier: "ALLIED" as TierCode,
-        duration,
-        alliedCareer: career,
-        planCode: alliedPlanCode("CA", career, duration),
-      };
+      for (const country of markets) {
+        yield {
+          country,
+          tier: "ALLIED" as TierCode,
+          duration,
+          alliedCareer: career,
+          planCode: alliedPlanCode(country, career, duration),
+        };
+      }
     }
   }
 }

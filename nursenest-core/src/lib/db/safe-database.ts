@@ -10,8 +10,8 @@ import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
  *
  * Only `DATABASE_URL` counts — `PROD_DATABASE_URL` is not used (see `env-bootstrap.ts`).
  */
-export function isDatabaseUrlConfigured(): boolean {
-  return typeof process.env.DATABASE_URL === "string" && process.env.DATABASE_URL.trim().length > 0;
+export function isDatabaseUrlConfigured(env: NodeJS.ProcessEnv = process.env): boolean {
+  return typeof env.DATABASE_URL === "string" && env.DATABASE_URL.trim().length > 0;
 }
 
 export async function withDatabaseFallback<T>(run: () => Promise<T>, fallback: T): Promise<T> {

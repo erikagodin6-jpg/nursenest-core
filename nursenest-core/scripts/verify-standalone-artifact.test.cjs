@@ -255,6 +255,13 @@ test("next config keeps standalone output enabled", () => {
   assert.match(nextConfig, /output:\s*"standalone"/);
 });
 
+test("next config emits a CommonJS package boundary for .next/server output", () => {
+  const nextConfig = fs.readFileSync(path.join(__dirname, "..", "next.config.mjs"), "utf8");
+  assert.match(nextConfig, /NextServerCommonJsBoundaryPlugin/);
+  assert.match(nextConfig, /emitAsset\("server\/package\.json"/);
+  assert.match(nextConfig, /\{"type":"commonjs"\}/);
+});
+
 test("ensure-standalone-static copies .next/static beside nested standalone server.js", async () => {
   const tempRoot = createTempScriptRoot("nn-ensure-standalone-static-", [
     "ensure-standalone-static.mjs",

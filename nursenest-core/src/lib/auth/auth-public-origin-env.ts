@@ -28,8 +28,8 @@ function originKey(u: URL): string {
   return `${u.protocol}//${u.host}`.toLowerCase();
 }
 
-export function hasAnyAuthPublicOriginUrl(): boolean {
-  return isTruthy(process.env.AUTH_URL) || isTruthy(process.env.NEXTAUTH_URL);
+export function hasAnyAuthPublicOriginUrl(env: NodeJS.ProcessEnv = process.env): boolean {
+  return isTruthy(env.AUTH_URL) || isTruthy(env.NEXTAUTH_URL);
 }
 
 /**
@@ -38,10 +38,10 @@ export function hasAnyAuthPublicOriginUrl(): boolean {
  */
 export function collectAuthPublicOriginEnvIssues(options: {
   requireProductionHttps: boolean;
-}): AuthPublicOriginIssue[] {
+}, env: NodeJS.ProcessEnv = process.env): AuthPublicOriginIssue[] {
   const issues: AuthPublicOriginIssue[] = [];
-  const aRaw = process.env.AUTH_URL?.trim();
-  const nRaw = process.env.NEXTAUTH_URL?.trim();
+  const aRaw = env.AUTH_URL?.trim();
+  const nRaw = env.NEXTAUTH_URL?.trim();
 
   const checkOne = (label: "AUTH_URL" | "NEXTAUTH_URL", raw: string) => {
     const u = parsePublicOrigin(raw);
@@ -87,7 +87,7 @@ export function collectAuthPublicOriginEnvIssues(options: {
     }
   }
 
-  const pubRaw = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  const pubRaw = env.NEXT_PUBLIC_APP_URL?.trim();
   if (pubRaw) {
     const pub = parsePublicOrigin(pubRaw);
     const primaryRaw = aRaw || nRaw;
