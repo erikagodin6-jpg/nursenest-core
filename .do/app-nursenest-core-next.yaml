@@ -164,6 +164,9 @@ services:
       # Canonical production DB connection (DigitalOcean Managed PostgreSQL). Do not set a second conflicting URL.
       # **RUN_TIME only** — never BUILD_TIME or RUN_AND_BUILD_TIME: a build-visible DATABASE_URL would bake into
       # the image / build job and can override the real managed DB at runtime (see Dockerfile comments).
+      # **Assign the secret value in App Platform:** Settings → your component → Environment Variables → DATABASE_URL
+      # must have a non-empty runtime secret (declaring the key alone is not enough). Logs show DATABASE_URL_present
+      # in `[ENV SNAPSHOT]` — never the connection string.
       - key: DATABASE_URL
         scope: RUN_TIME
         type: SECRET
@@ -174,7 +177,7 @@ services:
       # --- Runtime AI admin gate + env guard (`src/lib/env/runtime-env-guard.ts`, `scripts/start-standalone.mjs`) ---
       # `AI_ADMIN_GENERATION_ENABLED` must be non-empty at runtime (use `false` / `0` / `off` to disable generation).
       # **Explicit default:** without `value:`, App Platform can ship an empty GENERAL var → bootstrap `validateRuntimeEnvOrThrow` exits → no healthy upstream.
-      # At least one of the OpenAI key envs must be set (SECRET). Staging may set `NN_ENV_VALIDATION_MODE=warn` or `off`.
+      # When disabled (`false`), OpenAI/OpenRouter keys are **not** required by bootstrap (enable keys only when turning admin AI on).
       - key: AI_ADMIN_GENERATION_ENABLED
         value: "false"
         scope: RUN_TIME

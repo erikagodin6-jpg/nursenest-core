@@ -27,8 +27,17 @@ function hasOpenAiFunding(): boolean {
   return OPENAI_KEY_GROUP.some((k) => hasTrimmedEnv(k));
 }
 
-function hasAdminAiGenerationFlag(): boolean {
-  return ADMIN_AI_GENERATION_FLAG_GROUP.some((k) => hasTrimmedEnv(k));
+/** First non-empty flag wins; unknown tokens are `ambiguous` (still require AI funding). */
+function parseAdminAiGenerationIntent(): "unset" | "off" | "on" | "ambiguous" {
+  for (const k of ADMIN_AI_GENERATION_FLAG_GROUP) {
+    const v = process.env[k]?.trim();
+    if (!v) continue;
+    const lower = v.toLowerCase();
+    if (["false", "0", "off", "no", "disabled"].includes(lower)) return "off";
+    if (["true", "1", "on", "yes", "enabled"].includes(lower)) return "on";
+    return "ambiguous";
+  }
+  return "unset";
 }
 
 /** OpenAI keys, or OpenRouter key when blog/content chat is routed to OpenRouter. */
@@ -60,11 +69,14 @@ function isNonDevelopmentNodeEnv(): boolean {
 function collectMissingRuntimeEnvIssues(): string[] {
   const missing: string[] = [];
 
-  if (!hasAdminAiGenerationFlag()) {
-    missing.push("AI_ADMIN_GENERATION_ENABLED (or accepted typo alias AI_ADMIN_GENERation)");
+  const adminAiIntent = parseAdminAiGenerationIntent();
+  if (adminAiIntent === "unset") {
+    missing.push("AI_ADMIN_GENERATION_ENABLED (or accepted typo alias AI_ADMIN_Generation)");
   }
 
-  if (!satisfiesAiFundingContract()) {
+  const requiresAiFunding = adminAiIntent === "on" || adminAiIntent === "ambiguous";
+
+  if (requiresAiFunding && !satisfiesAiFundingContract()) {
     missing.push(
       `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
     );
@@ -92,8 +104,10 @@ export function logRuntimeEnvSnapshot(): void {
   }
 
   const snapshot = {
+    DATABASE_URL_present: Boolean(process.env.DATABASE_URL?.trim()),
     AI_ADMIN_GENERATION_ENABLED_present: Boolean(process.env["AI_ADMIN_GENERATION_ENABLED"]),
     AI_ADMIN_GENERATION_ENABLED_value: process.env["AI_ADMIN_GENERATION_ENABLED"] ?? null,
+    AI_ADMIN_GENERATION_intent: parseAdminAiGenerationIntent(),
     AI_INTEGRATIONS_OPENAI_API_KEY_present: Boolean(process.env["AI_INTEGRATIONS_OPENAI_API_KEY"]),
     OPENAI_API_KEY_present: Boolean(process.env["OPENAI_API_KEY"]),
     OPENROUTER_API_KEY_present: Boolean(process.env["OPENROUTER_API_KEY"]?.trim()),

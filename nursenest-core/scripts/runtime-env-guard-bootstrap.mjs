@@ -15,6 +15,19 @@ const REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS = "postgres:postgres@127.0
 const OPENAI_KEY_GROUP = ["AI_INTEGRATIONS_OPENAI_API_KEY", "OPENAI_API_KEY"];
 const ADMIN_AI_GENERATION_FLAG_GROUP = ["AI_ADMIN_GENERATION_ENABLED", "AI_ADMIN_GENERation"];
 
+/** First non-empty flag wins; unknown tokens are treated as `ambiguous` (still require AI funding). */
+function parseAdminAiGenerationIntentMjs() {
+  for (const k of ADMIN_AI_GENERATION_FLAG_GROUP) {
+    const v = process.env[k]?.trim();
+    if (!v) continue;
+    const lower = v.toLowerCase();
+    if (["false", "0", "off", "no", "disabled"].includes(lower)) return "off";
+    if (["true", "1", "on", "yes", "enabled"].includes(lower)) return "on";
+    return "ambiguous";
+  }
+  return "unset";
+}
+
 /** Keep in sync with `blogChatUsesOpenRouter` in `src/lib/ai/blog-ai-routing.ts`. */
 function blogChatUsesOpenRouterMjs() {
   const b = process.env["BLOG_AI_PROVIDER"]?.trim().toLowerCase();
@@ -212,11 +225,15 @@ function isAuthSecretConfiguredMjs() {
 function collectMissingRuntimeEnvIssues() {
   const missing = [];
 
-  if (!ADMIN_AI_GENERATION_FLAG_GROUP.some((k) => hasTrimmedEnvMjs(k))) {
+  const adminAiIntent = parseAdminAiGenerationIntentMjs();
+  if (adminAiIntent === "unset") {
     missing.push("AI_ADMIN_GENERATION_ENABLED (or accepted typo alias AI_ADMIN_GENERation)");
   }
 
-  if (!satisfiesAiFundingContractMjs()) {
+  const requiresAiFunding =
+    adminAiIntent === "on" || adminAiIntent === "ambiguous";
+
+  if (requiresAiFunding && !satisfiesAiFundingContractMjs()) {
     missing.push(
       `One of: ${OPENAI_KEY_GROUP.join(", ")} — or OPENROUTER_API_KEY / BLOG_OPENROUTER_API_KEY when AI_PROVIDER=openrouter (or BLOG_AI_PROVIDER=openrouter)`,
     );
@@ -237,8 +254,10 @@ export function logRuntimeEnvSnapshot() {
   }
 
   const snapshot = {
+    DATABASE_URL_present: Boolean(process.env.DATABASE_URL?.trim()),
     AI_ADMIN_GENERATION_ENABLED_present: Boolean(process.env["AI_ADMIN_GENERATION_ENABLED"]),
     AI_ADMIN_GENERATION_ENABLED_value: process.env["AI_ADMIN_GENERATION_ENABLED"] ?? null,
+    AI_ADMIN_GENERATION_intent: parseAdminAiGenerationIntentMjs(),
     AI_INTEGRATIONS_OPENAI_API_KEY_present: Boolean(process.env["AI_INTEGRATIONS_OPENAI_API_KEY"]),
     OPENAI_API_KEY_present: Boolean(process.env["OPENAI_API_KEY"]),
     OPENROUTER_API_KEY_present: Boolean(process.env["OPENROUTER_API_KEY"]?.trim()),
