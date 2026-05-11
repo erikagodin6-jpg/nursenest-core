@@ -49,6 +49,7 @@ import { LearnerDashboardMobileFold } from "@/components/student/learner-dashboa
 import { FocusTodayStrip } from "@/components/student/focus-today-strip";
 import { LearnerReportCard } from "@/components/student/learner-report-card";
 import type { LearnerReportCardViewModel } from "@/lib/learner/learner-report-card-model";
+import type { AdvancedEcgDashboardCardModel } from "@/lib/advanced-ecg/load-advanced-ecg-dashboard-card";
 import { LearnerPremiumNursingAnalyticsSection } from "@/components/student/dashboard/learner-premium-nursing-analytics";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { isPracticalNursingMarketingPathway } from "@/lib/marketing/is-practical-nursing-marketing-pathway";
@@ -150,6 +151,7 @@ export type LearnerStudyHomeProps = {
   reportCard?: LearnerReportCardViewModel | null;
   /** Optional RSC block (e.g. adaptive wire bundle) — parent composes; keeps ordering inside the hub. */
   adaptiveRecommendations?: ReactNode;
+  advancedEcgCard?: AdvancedEcgDashboardCardModel | null;
 };
 
 export function LearnerStudyHome({
@@ -184,6 +186,7 @@ export function LearnerStudyHome({
   priorityEyebrowKey = "learner.studyHome.sectionPriorityEyebrow",
   showShell = true,
   entitlement,
+  advancedEcgCard = null,
   adaptiveStudyNextRecs,
   reportCard,
   adaptiveRecommendations = null,
@@ -209,6 +212,7 @@ export function LearnerStudyHome({
 
   const hubNavItems: LearnerDashboardHubNavItem[] = [
     { href: "#study-priority", label: t("learner.studyHome.sectionPriorityTitle") },
+    ...(advancedEcgCard ? [{ href: "#study-specialty-modules", label: "Specialty Modules" }] : []),
     { href: "#study-quick-launch", label: t("learner.studyHome.quickLaunchNavLabel") },
     { href: "#study-modes", label: t("learner.studyModes.sectionNavLabel") },
   ];
@@ -279,6 +283,62 @@ export function LearnerStudyHome({
         strongTopicsPreview={studySnap?.strongTopicsHighlight ?? []}
         benchmark={benchmark}
       />
+
+      {advancedEcgCard ? (
+        <LearnerStudySurfaceSection
+          id="study-specialty-modules"
+          eyebrow="Specialty Modules"
+          title="Premium specialty lanes"
+          intro="Separate from the standard prep launcher. Own Advanced ECG once and carry foundational ECG continuity straight into telemetry-focused specialty work."
+          tone="secondary"
+          surfacePadding="md"
+          className="nn-dash-band nn-dash-band--specialty-modules nn-dash-band--stack-tight"
+        >
+          <div
+            className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]"
+            data-nn-qa-dashboard-specialty-advanced-ecg=""
+          >
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-3xl">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--semantic-info)]">
+                    {advancedEcgCard.badgeLabel}
+                  </span>
+                  <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">
+                    Includes Basic ECG Foundations
+                  </span>
+                </div>
+                <h3 className="mt-3 text-xl font-semibold text-[var(--semantic-text-primary)]">
+                  {advancedEcgCard.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                  {advancedEcgCard.body}
+                </p>
+                <p className="mt-3 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+                  {advancedEcgCard.detail}
+                </p>
+              </div>
+
+              <div className="flex w-full max-w-sm flex-col gap-3 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
+                  {advancedEcgCard.locked ? "Locked specialty access" : "Owned specialty access"}
+                </p>
+                <Link href={advancedEcgCard.href} className="inline-flex w-full justify-center rounded-full bg-[var(--role-cta)] px-4 py-3 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_10px_var(--role-cta-shadow)]">
+                  {advancedEcgCard.ctaLabel}
+                </Link>
+                {advancedEcgCard.resumeHref && !advancedEcgCard.locked ? (
+                  <Link
+                    href={advancedEcgCard.resumeHref}
+                    className="inline-flex w-full justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-3 text-sm font-semibold text-[var(--semantic-text-primary)]"
+                  >
+                    Resume ECG continuity
+                  </Link>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </LearnerStudySurfaceSection>
+      ) : null}
 
       <LearnerStudySurfaceSection
         id="study-modes"

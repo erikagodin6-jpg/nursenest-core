@@ -51,6 +51,19 @@ test("Advanced ECG route stays blocked for RPN/PN by default", () => {
   }
 });
 
+test("Advanced ECG entitlement remains sufficient even without an active base learner subscription", () => {
+  const decision = resolveAdvancedEcgAccessDecision({
+    moduleEnabled: true,
+    moduleStatus: "published",
+    adminPreview: false,
+    userId: "user_123",
+    tier: "RN",
+    hasBaseAccess: false,
+    hasAdvancedEcgEntitlement: true,
+  });
+  assert.equal(decision.ok, true);
+});
+
 test("Advanced ECG entitlement rows require module plan codes", () => {
   const now = new Date("2026-05-11T00:00:00.000Z").getTime();
   assert.equal(

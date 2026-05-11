@@ -15,6 +15,7 @@ import {
   isAdvancedEcgPlanCode,
   isAdvancedEcgTierEligible,
 } from "@/lib/advanced-ecg/advanced-ecg-module-config";
+import { resolveEcgModuleEntitlements } from "@/lib/ecg-module/ecg-access-resolution";
 import { getAdvancedEcgModuleStatus, type AdvancedEcgModuleStatus } from "@/lib/advanced-ecg/advanced-ecg-module-status";
 
 type AdvancedEcgRouteSession = {
@@ -96,7 +97,11 @@ export function resolveAdvancedEcgAccessDecision(input: {
       entitlementKey: ADVANCED_ECG_MODULE_ENTITLEMENT,
     };
   }
-  if (!input.hasBaseAccess) {
+  const entitlements = resolveEcgModuleEntitlements({
+    hasBaseLearnerAccess: input.hasBaseAccess,
+    hasAdvancedEcgEntitlement: input.hasAdvancedEcgEntitlement,
+  });
+  if (!entitlements.hasBasicEcgAccess) {
     return {
       ok: false,
       reason: "base_subscription_required",
@@ -118,7 +123,7 @@ export function resolveAdvancedEcgAccessDecision(input: {
       entitlementKey: ADVANCED_ECG_MODULE_ENTITLEMENT,
     };
   }
-  if (!input.hasAdvancedEcgEntitlement) {
+  if (!entitlements.hasAdvancedEcgAccess) {
     return {
       ok: false,
       reason: "advanced_ecg_upgrade_required",

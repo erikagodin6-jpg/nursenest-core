@@ -1,7 +1,9 @@
 import "server-only";
 
 import { notFound } from "next/navigation";
+import { SubscriptionStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
 import { loadCanonicalLearnerAccessForUserId } from "@/lib/entitlements/canonical-learner-access.server";
 import { getAdminModulePreviewAccess, type AdminModulePreviewAccess } from "@/lib/modules/admin-module-preview-access";
 import {
@@ -11,6 +13,8 @@ import {
   type EcgLevel,
 } from "@/lib/ecg-module/ecg-module-config";
 import { getEcgModuleStatus } from "@/lib/ecg-module/ecg-module-status";
+import { hasActiveAdvancedEcgEntitlementFromRows } from "@/lib/advanced-ecg/advanced-ecg-access";
+import { resolveEcgModuleEntitlements } from "@/lib/ecg-module/ecg-access-resolution";
 
 export type EcgModuleAccess =
   | { ok: true; mode: "public"; userId: string; tier: "RN" | "NP"; pathwayId: string | null; hasPremium: boolean }
@@ -48,10 +52,33 @@ export async function getCurrentEcgModuleAccess(): Promise<EcgModuleAccess> {
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) return { ok: false, reason: "unauthorized" };
 
-  const canonical = await loadCanonicalLearnerAccessForUserId(userId);
+  const [canonical, entitlementRows] = await Promise.all([
+    loadCanonicalLearnerAccessForUserId(userId),
+    prisma.subscription.findMany({
+      where: {
+        userId,
+        status: {
+          in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE, SubscriptionStatus.PAST_DUE, SubscriptionStatus.CANCELLED],
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 16,
+      select: {
+        status: true,
+        planCode: true,
+        currentPeriodEnd: true,
+        trialEnd: true,
+        updatedAt: true,
+      },
+    }),
+  ]);
   const tier = canonical.tier;
   if (!canAccessEcgModuleForTier(tier)) return { ok: false, reason: "tier_denied" };
-  if (!canonical.hasAccess) return { ok: false, reason: "premium_required" };
+  const entitlements = resolveEcgModuleEntitlements({
+    hasBaseLearnerAccess: canonical.hasAccess,
+    hasAdvancedEcgEntitlement: hasActiveAdvancedEcgEntitlementFromRows(entitlementRows),
+  });
+  if (!entitlements.hasBasicEcgAccess) return { ok: false, reason: "premium_required" };
   try {
     assertNoEcgForRpn(tier, canonical.pathwayId);
   } catch {
@@ -64,7 +91,7 @@ export async function getCurrentEcgModuleAccess(): Promise<EcgModuleAccess> {
     userId,
     tier: tier as "RN" | "NP",
     pathwayId: canonical.pathwayId,
-    hasPremium: canonical.hasAccess,
+    hasPremium: entitlements.hasBasicEcgAccess,
   };
 }
 

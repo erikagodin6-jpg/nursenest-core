@@ -58,6 +58,8 @@ test("ECG learner pools only expose clinician-reviewed approved safe items", () 
 test("ECG readiness uses governance metadata instead of raw inventory alone", () => {
   const src = read("src/lib/ecg-module/ecg-module-readiness.ts");
   assert.match(src, /getEcgQuestionGovernanceFlags/);
+  assert.match(src, /usesGeneratedPacemakerPhysiology/);
+  assert.match(src, /leakedGeneratedPacemaker/);
   assert.match(src, /readyQuestions/);
   assert.match(src, /clinicianReviewedAt/);
   assert.match(src, /qaStatus/);

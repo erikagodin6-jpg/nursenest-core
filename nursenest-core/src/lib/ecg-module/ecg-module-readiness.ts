@@ -2,7 +2,11 @@ import "server-only";
 
 import { prisma } from "@/lib/db";
 import { validateEcgStripClinicalConfig } from "@/lib/ecg-module/ecg-strip-clinical-validation";
-import { getEcgQuestionGovernanceFlags } from "@/lib/ecg-module/ecg-safety-governance";
+import {
+  getEcgQuestionGovernanceFlags,
+  isPacemakerEcgQuestion,
+  usesGeneratedPacemakerPhysiology,
+} from "@/lib/ecg-module/ecg-safety-governance";
 import {
   generateAndInsertEcgQuestionsForCategory,
   type EcgGenerationActivity,
@@ -37,6 +41,10 @@ export type EcgModuleReadinessCounts = {
   readyElectrolyteMedication: number;
   advanced: number;
   readyAdvanced: number;
+  pacemaker: number;
+  readyPacemaker: number;
+  generatedPacemaker: number;
+  leakedGeneratedPacemaker: number;
   flashcards: number;
   linkedLessons: number;
   withRationale: number;
@@ -118,6 +126,14 @@ function buildGates(status: EcgModuleStatus, counts: EcgModuleReadinessCounts): 
     gate("scoped", "Pathway/tier scope", counts.scoped === counts.totalQuestions, counts.scoped, counts.totalQuestions, `Scoped ECG questions ${counts.scoped}/${counts.totalQuestions}.`),
     gate("validation", "Medical QA validation", counts.validationFailures === 0, counts.validationFailures, 0, `${counts.validationFailures} ECG question(s) fail validation.`),
     gate("manual_review", "High-risk manual review", counts.manualReviewMissing === 0, counts.manualReviewMissing, 0, `${counts.manualReviewMissing} high-risk ECG strip(s) need manual review.`),
+    gate(
+      "pacemaker_generator",
+      "Generated pacing physiology quarantine",
+      counts.leakedGeneratedPacemaker === 0,
+      counts.leakedGeneratedPacemaker,
+      0,
+      `${counts.leakedGeneratedPacemaker} generated pacemaker strip(s) are still learner-visible.`,
+    ),
   ];
   return gates;
 }
@@ -164,6 +180,9 @@ export async function getEcgModuleReadiness(): Promise<EcgModuleReadiness> {
   let readyCaseBased = 0;
   let readyElectrolyteMedication = 0;
   let readyAdvanced = 0;
+  let readyPacemaker = 0;
+  let generatedPacemaker = 0;
+  let leakedGeneratedPacemaker = 0;
   let clinicianReviewed = 0;
   let qaApproved = 0;
   let publishSafe = 0;
@@ -171,8 +190,14 @@ export async function getEcgModuleReadiness(): Promise<EcgModuleReadiness> {
   let waveformApproximate = 0;
   let contextDependent = 0;
   for (const question of questions) {
+    const pacemakerQuestion = isPacemakerEcgQuestion(question);
+    const generatedPacemakerQuestion = usesGeneratedPacemakerPhysiology(question);
     if (question.medicalQaStatus === "failed") validationFailures += 1;
     const governance = getEcgQuestionGovernanceFlags(question);
+    if (generatedPacemakerQuestion) {
+      generatedPacemaker += 1;
+      if (governance.learnerVisible) leakedGeneratedPacemaker += 1;
+    }
     if (governance.clinicianReviewed) clinicianReviewed += 1;
     if (governance.qaApproved) qaApproved += 1;
     if (governance.publishSafe) publishSafe += 1;
@@ -194,6 +219,7 @@ export async function getEcgModuleReadiness(): Promise<EcgModuleReadiness> {
       if (hasAnyTag(question.topicTags, CATEGORY_TAGS.case)) readyCaseBased += 1;
       if (hasAnyTag(question.topicTags, CATEGORY_TAGS.electrolyte_medication)) readyElectrolyteMedication += 1;
       if (question.level === "advanced" || hasAnyTag(question.topicTags, CATEGORY_TAGS.advanced)) readyAdvanced += 1;
+      if (pacemakerQuestion) readyPacemaker += 1;
     }
   }
 
@@ -210,6 +236,10 @@ export async function getEcgModuleReadiness(): Promise<EcgModuleReadiness> {
     readyElectrolyteMedication,
     advanced: questions.filter((q) => q.level === "advanced" || hasAnyTag(q.topicTags, CATEGORY_TAGS.advanced)).length,
     readyAdvanced,
+    pacemaker: questions.filter((q) => isPacemakerEcgQuestion(q)).length,
+    readyPacemaker,
+    generatedPacemaker,
+    leakedGeneratedPacemaker,
     flashcards,
     linkedLessons: Math.max(lessons, questions.reduce((sum, row) => sum + (row.lessonLinkCount > 0 ? 1 : 0), 0)),
     withRationale: questions.filter((q) => getEcgQuestionGovernanceFlags(q).learnerVisible && q.rationale.trim().length > 0).length,

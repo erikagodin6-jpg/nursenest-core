@@ -56,6 +56,7 @@ import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 import { listPublishedNclexCommercialLandingPaths } from "@/lib/seo/nclex-commercial-landing-pages";
+import { listAdvancedEcgMarketingPaths } from "@/lib/advanced-ecg/advanced-ecg-marketing-pages";
 export {
   buildSitemapIndexXml,
   buildSitemapUrlsetFromAbsoluteUrls,
@@ -255,6 +256,7 @@ export function collectLocaleMarketingSitemapSafeUrls(origin: string, locale: st
   const urls: string[] = [
     add(`/${locale}`),
     add(`/${locale}/pricing`),
+    ...listAdvancedEcgMarketingPaths().map((path) => add(`/${locale}${path}`)),
     add(`/${locale}/lessons`),
     add(`/${locale}/question-bank`),
     add(`/${locale}/practice-exams`),
@@ -562,6 +564,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     ...listPublishedExpansionExamMarketingPaths().map((p) => add(p)),
     ...regionalTopicPaths.map((p) => add(p)),
     ...collectNclexCommercialLandingUrls(o),
+    ...collectAdvancedEcgMarketingUrls(o),
   ];
   if (productionSafe) {
     const pathwayTopicUrls = omitExamPathwayAndTopicProgrammaticUrls ? [] : await collectPathwayTopicProgrammaticUrls(o);
@@ -615,6 +618,11 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
 export function collectNclexCommercialLandingUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
   return listPublishedNclexCommercialLandingPaths().map((path) => `${o}${path}`);
+}
+
+export function collectAdvancedEcgMarketingUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return listAdvancedEcgMarketingPaths().map((path) => `${o}${path}`);
 }
 
 /** seo-pages.xml — English canonical programmatic URLs at `/{slug}` (rewritten to /seo/[slug] internally). */

@@ -6,6 +6,7 @@ import {
   ECG_QUARANTINED_RHYTHM_KEYS,
   isEcgQuestionLearnerVisible,
   isQuarantinedEcgRhythm,
+  usesGeneratedPacemakerPhysiology,
   type EcgQuestionGovernanceSnapshot,
 } from "@/lib/ecg-module/ecg-safety-governance";
 
@@ -62,6 +63,17 @@ test("publish-ready ECG counts exclude pending, media-less, generated-only, and 
   ];
 
   assert.equal(countPublishReadyEcgQuestions(rows), 1);
+});
+
+test("generated pacemaker physiology stays internal-only even if other QA flags look approved", () => {
+  const pacedQuestion = makeQuestion({
+    rhythmTag: "paced_rhythm",
+    mediaType: "ecg_live_strip",
+    mediaConfig: { rhythmKey: "paced_rhythm", pacingMode: "ventricular" },
+  });
+
+  assert.equal(usesGeneratedPacemakerPhysiology(pacedQuestion), true);
+  assert.equal(isEcgQuestionLearnerVisible(pacedQuestion), false);
 });
 
 test("generated ECG defaults remain non-publishable until clinician QA happens", () => {

@@ -27,6 +27,7 @@ export type EcgPublishSafetyStatus = (typeof ECG_PUBLISH_SAFETY_STATUS_VALUES)[n
 export type EcgQuestionGovernanceSnapshot = {
   id?: string;
   rhythmTag: string | null;
+  topicTags?: string[] | null;
   mediaType?: string | null;
   mediaConfig?: unknown;
   videoUrl?: string | null;
@@ -40,6 +41,7 @@ export type EcgQuestionGovernanceSnapshot = {
 export type EcgQuestionGovernanceFlags = {
   hasRenderableMedia: boolean;
   quarantined: boolean;
+  pacemakerGeneratorQuarantined: boolean;
   clinicianReviewed: boolean;
   qaApproved: boolean;
   publishSafe: boolean;
@@ -70,6 +72,22 @@ export function isQuarantinedEcgRhythm(rhythmKey: string | null | undefined): bo
 
 export function rhythmRequiresContextualInterpretation(rhythmKey: string | null | undefined): boolean {
   return Boolean(rhythmKey && CONTEXT_DEPENDENT_SET.has(rhythmKey));
+}
+
+export function isPacemakerEcgQuestion(
+  question: Pick<EcgQuestionGovernanceSnapshot, "rhythmTag" | "topicTags">,
+): boolean {
+  if (question.rhythmTag === "paced_rhythm") return true;
+  return (question.topicTags ?? []).some((tag) => {
+    const normalized = tag.trim().toLowerCase();
+    return normalized.includes("pacemaker") || normalized.includes("paced");
+  });
+}
+
+export function usesGeneratedPacemakerPhysiology(
+  question: Pick<EcgQuestionGovernanceSnapshot, "rhythmTag" | "mediaType" | "mediaConfig">,
+): boolean {
+  return question.rhythmTag === "paced_rhythm" && question.mediaType === "ecg_live_strip" && Boolean(question.mediaConfig);
 }
 
 export function hasRenderableEcgMedia(question: Pick<EcgQuestionGovernanceSnapshot, "mediaType" | "mediaConfig" | "videoUrl">): boolean {
@@ -127,11 +145,12 @@ export function countPublishReadyEcgQuestions(questions: EcgQuestionGovernanceSn
 }
 
 export function getEcgQuestionGovernanceFlags(question: EcgQuestionGovernanceSnapshot): EcgQuestionGovernanceFlags {
-  const quarantined = isQuarantinedEcgRhythm(question.rhythmTag);
+  const pacemakerGeneratorQuarantined = usesGeneratedPacemakerPhysiology(question);
+  const quarantined = isQuarantinedEcgRhythm(question.rhythmTag) || pacemakerGeneratorQuarantined;
   const hasRenderableMedia = hasRenderableEcgMedia(question);
   const clinicianReviewed = Boolean(question.clinicianReviewedAt);
-  const qaApproved = question.qaStatus === "approved";
-  const publishSafe = question.publishSafetyStatus === "safe";
+  const qaApproved = question.qaStatus === "approved" && !pacemakerGeneratorQuarantined;
+  const publishSafe = question.publishSafetyStatus === "safe" && !pacemakerGeneratorQuarantined;
   const waveformApproximate =
     question.waveformFidelity === "educational_simplified" ||
     question.waveformFidelity === "morphology_approximate";
@@ -140,6 +159,7 @@ export function getEcgQuestionGovernanceFlags(question: EcgQuestionGovernanceSna
   return {
     hasRenderableMedia,
     quarantined,
+    pacemakerGeneratorQuarantined,
     clinicianReviewed,
     qaApproved,
     publishSafe,
@@ -156,6 +176,9 @@ export function getEcgQuestionGovernanceFlags(question: EcgQuestionGovernanceSna
 
 export function getEcgAdminWarnings(question: EcgQuestionGovernanceSnapshot): string[] {
   const warnings: string[] = [];
+  if (usesGeneratedPacemakerPhysiology(question)) {
+    warnings.push("Pacemaker generator output is internal-only until static clinician-reviewed paced strips replace the simplified renderer.");
+  }
   if (isQuarantinedEcgRhythm(question.rhythmTag)) {
     warnings.push("Quarantined: renderer cannot faithfully model this conduction morphology yet.");
   }

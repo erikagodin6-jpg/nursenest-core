@@ -55,6 +55,7 @@ import { isAdaptiveLearningEnabled } from "@/lib/learner/adaptive-learning-env";
 import { loadLearnerAdaptiveWireBundle } from "@/lib/learner/build-learner-adaptive-wire-bundle";
 import { LearnerAdaptiveRecommendationsSection } from "@/components/student/learner-adaptive-recommendations-section";
 import { SocialStudyDashboardCard } from "@/components/student/social-study-dashboard-card";
+import { loadAdvancedEcgDashboardCardModel } from "@/lib/advanced-ecg/load-advanced-ecg-dashboard-card";
 
 type DashboardSessionLike = {
   user?: {
@@ -240,6 +241,7 @@ async function LearnerDashboardHeavyContent({
               continueCheckpoint,
             })
           : null;
+      const advancedEcgCard = await loadAdvancedEcgDashboardCardModel(resume?.href ?? null);
       const scopedContinueLinks = continueLinks.map((link) => ({
         ...link,
         href: withPathwayScopeHref(link.href, preferredPathwayId),
@@ -339,6 +341,7 @@ async function LearnerDashboardHeavyContent({
             }
             showShell={false}
             entitlement={entitlement}
+            advancedEcgCard={advancedEcgCard}
             adaptiveStudyNextRecs={adaptiveStudyNextRecs}
             reportCard={reportCard}
             adaptiveRecommendations={

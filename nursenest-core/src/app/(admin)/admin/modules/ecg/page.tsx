@@ -1,7 +1,7 @@
 import { AdminAdvancedEcgStatusControls } from "@/components/advanced-ecg/admin-advanced-ecg-status-controls";
 import { AdminEcgPublishButton } from "@/components/ecg-module/admin-ecg-publish-button";
 import { EcgLiveStrip } from "@/components/study/ecg-live-strip";
-import { ADVANCED_ECG_CURRICULUM } from "@/lib/advanced-ecg/advanced-ecg-curriculum";
+import { ADVANCED_ECG_CURRICULUM, ADVANCED_ECG_PACEMAKER_CURRICULUM } from "@/lib/advanced-ecg/advanced-ecg-curriculum";
 import {
   ADVANCED_ECG_ADMIN_ENTITLEMENT_LABEL,
   getAdvancedEcgModuleAdminSnapshot,
@@ -89,6 +89,9 @@ export default async function AdminEcgModulePage() {
             <div><dt className="font-semibold">Curriculum scaffold units</dt><dd>{advancedSnapshot.curriculumUnits}</dd></div>
             <div><dt className="font-semibold">Ready advanced inventory</dt><dd>{advancedSnapshot.reviewCounts.readyAdvanced}</dd></div>
             <div><dt className="font-semibold">Manual review missing</dt><dd>{advancedSnapshot.reviewCounts.manualReviewMissing}</dd></div>
+            <div><dt className="font-semibold">Pacemaker curriculum units</dt><dd>{advancedSnapshot.pacemakerGovernance.curriculumUnits}</dd></div>
+            <div><dt className="font-semibold">Generated pacing strips</dt><dd>{advancedSnapshot.pacemakerGovernance.generatedPacemakerInventory}</dd></div>
+            <div><dt className="font-semibold">Leaked pacing strips</dt><dd>{advancedSnapshot.pacemakerGovernance.leakedGeneratedPacemaker}</dd></div>
           </dl>
           <div className="mt-4">
             <AdminAdvancedEcgStatusControls
@@ -108,6 +111,23 @@ export default async function AdminEcgModulePage() {
               </li>
             ))}
           </ul>
+          <div className="mt-5 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100">
+            <h3 className="text-sm font-semibold">Pacemaker publish-safety rules</h3>
+            <p className="mt-2">
+              Pacemaker learner content is Phase 1 curated-strip only. Generated pacing physiology from the simplified waveform renderer must remain internal-only until stronger validation exists.
+            </p>
+            <ul className="mt-3 space-y-3">
+              {ADVANCED_ECG_PACEMAKER_CURRICULUM.map((unit) => (
+                <li key={unit.slug} className="rounded-lg border border-amber-200/70 bg-white/70 px-3 py-3 dark:border-amber-800/60 dark:bg-black/20">
+                  <p className="font-semibold">{unit.title}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.14em] text-amber-800 dark:text-amber-200">
+                    {unit.fidelity?.replace(/_/g, " ") ?? "curated"} · {unit.reviewRequirement}
+                  </p>
+                  <p className="mt-2 text-sm">{unit.publishGuardrail}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 

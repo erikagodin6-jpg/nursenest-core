@@ -1,7 +1,7 @@
 import "server-only";
 
 import { getEcgModuleReadiness } from "@/lib/ecg-module/ecg-module-readiness";
-import { ADVANCED_ECG_CURRICULUM } from "@/lib/advanced-ecg/advanced-ecg-curriculum";
+import { ADVANCED_ECG_CURRICULUM, ADVANCED_ECG_PACEMAKER_CURRICULUM } from "@/lib/advanced-ecg/advanced-ecg-curriculum";
 import { getAdvancedEcgModuleStatus, type AdvancedEcgModuleStatus } from "@/lib/advanced-ecg/advanced-ecg-module-status";
 import { ADVANCED_ECG_MODULE_ENTITLEMENT, isAdvancedEcgModuleEnabled } from "@/lib/advanced-ecg/advanced-ecg-module-config";
 
@@ -16,6 +16,13 @@ export type AdvancedEcgModuleAdminSnapshot = {
     clinicianReviewed: number;
     manualReviewMissing: number;
     publishSafe: number;
+  };
+  pacemakerGovernance: {
+    curriculumUnits: number;
+    pacemakerInventory: number;
+    generatedPacemakerInventory: number;
+    leakedGeneratedPacemaker: number;
+    requiresStaticCuration: true;
   };
   publishFailures: string[];
   canPublish: boolean;
@@ -34,6 +41,11 @@ export async function getAdvancedEcgModuleAdminSnapshot(): Promise<AdvancedEcgMo
   if (readiness.counts.publishSafe < readiness.counts.readyAdvanced) {
     publishFailures.push("Not every learner-visible advanced ECG item is marked publish-safe.");
   }
+  if (readiness.counts.leakedGeneratedPacemaker > 0) {
+    publishFailures.push(
+      `${readiness.counts.leakedGeneratedPacemaker} generated pacemaker strip(s) are learner-visible. Pacemaker physiology must stay quarantined until static clinician-reviewed strips are used.`,
+    );
+  }
 
   return {
     enabled,
@@ -46,6 +58,13 @@ export async function getAdvancedEcgModuleAdminSnapshot(): Promise<AdvancedEcgMo
       clinicianReviewed: readiness.counts.clinicianReviewed,
       manualReviewMissing: readiness.counts.manualReviewMissing,
       publishSafe: readiness.counts.publishSafe,
+    },
+    pacemakerGovernance: {
+      curriculumUnits: ADVANCED_ECG_PACEMAKER_CURRICULUM.length,
+      pacemakerInventory: readiness.counts.pacemaker,
+      generatedPacemakerInventory: readiness.counts.generatedPacemaker,
+      leakedGeneratedPacemaker: readiness.counts.leakedGeneratedPacemaker,
+      requiresStaticCuration: true,
     },
     publishFailures,
     canPublish: publishFailures.length === 0,
