@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "i18n_compile",
-  "fingerprint": "d7a9ac5b8a1a237855d8017579d448b31ad344b7838f97f1d4af35cf38305dd7",
-  "generatedAt": "2026-05-11T06:32:56.838Z",
+  "fingerprint": "174178bd06051efeb8ded21ecdd40281e417b9932bb65cfbecd54c1388dbfd4c",
+  "generatedAt": "2026-05-11T07:22:22.928Z",
   "inputs": [
     {
       "type": "file",

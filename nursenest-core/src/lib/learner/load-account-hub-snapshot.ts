@@ -6,6 +6,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage, type PageEntitlementResult } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadPremiumDashboardSnapshot, type PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
+import { pickLatestBaseSubscription } from "@/lib/subscriptions/subscription-plan-codes";
 
 export type AccountHubUserRow = {
   email: string | null;
@@ -52,18 +53,21 @@ export async function loadAccountHubBundle(userId: string): Promise<AccountHubBu
     },
   });
 
-  const subscription = await prisma.subscription.findFirst({
+  const subscriptionRows = await prisma.subscription.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
+    take: 12,
     select: {
       status: true,
       planTier: true,
       planCountry: true,
+      planCode: true,
       stripeCustomerId: true,
       stripeSubscriptionId: true,
       createdAt: true,
     },
   });
+  const subscription = pickLatestBaseSubscription(subscriptionRows);
 
   const entitlement = await resolveEntitlementForPage(userId);
 

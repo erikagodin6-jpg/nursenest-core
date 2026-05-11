@@ -11,6 +11,7 @@ import {
   type PathwayPickOption,
 } from "@/lib/learner/personal-profile-policy";
 import { parseMeasurementPreference, type MeasurementPreference } from "@/lib/measurements/measurement-preference";
+import { pickLatestBaseSubscription } from "@/lib/subscriptions/subscription-plan-codes";
 
 export type PersonalProfilePathwayPreview = {
   country: CountryCode;
@@ -51,7 +52,7 @@ export async function loadPersonalProfilePayload(
 ): Promise<PersonalProfilePayload | null> {
   if (!userId || !isDatabaseUrlConfigured()) return null;
 
-  const [user, subscription, entitlement] = await Promise.all([
+  const [user, subscriptionRows, entitlement] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -73,16 +74,18 @@ export async function loadPersonalProfilePayload(
         measurementPreference: true,
       },
     }),
-    prisma.subscription.findFirst({
+    prisma.subscription.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      select: { status: true, planTier: true, planCountry: true },
+      take: 12,
+      select: { status: true, planTier: true, planCountry: true, planCode: true },
     }),
     resolveEntitlementForPage(userId),
   ]);
 
   if (!user) return null;
 
+  const subscription = pickLatestBaseSubscription(subscriptionRows);
   const regionTierLocked = subscriptionLocksProfileRegionAndTier(subscription);
   const subscriberAccess = entitlement !== "error" && entitlement.hasAccess;
   const scopeForPathways: AccessScope =

@@ -9,6 +9,7 @@ import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
 import { assertNoEcgForRpn } from "@/lib/ecg-module/ecg-module-config";
+import { defaultEcgQaMetadataForRhythm } from "@/lib/ecg-module/ecg-safety-governance";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import {
   adminQuestionTypeToDb,
@@ -146,6 +147,11 @@ export async function POST(req: Request, ctx: Props) {
     }
 
     const exhibitRecord = ecgVideo as { asset?: { url?: unknown; thumbnailUrl?: unknown; durationSeconds?: unknown }; rhythmCategory?: unknown };
+    const rhythmTag =
+      typeof exhibitRecord.rhythmCategory === "string" && exhibitRecord.rhythmCategory.trim().length > 0
+        ? exhibitRecord.rhythmCategory.trim()
+        : n.topicTag?.trim() || "ecg";
+    const governance = defaultEcgQaMetadataForRhythm(rhythmTag, "draft_promoted");
     const question = await prisma.ecgVideoQuestion.create({
       data: {
         videoUrl: typeof exhibitRecord.asset?.url === "string" ? exhibitRecord.asset.url : "",
@@ -159,14 +165,17 @@ export async function POST(req: Request, ctx: Props) {
         correctAnswerId,
         rationale: n.rationale,
         difficulty: diffLabel?.toLowerCase() ?? "intermediate",
-        rhythmTag:
-          typeof exhibitRecord.rhythmCategory === "string" && exhibitRecord.rhythmCategory.trim().length > 0
-            ? exhibitRecord.rhythmCategory.trim()
-            : n.topicTag?.trim() || "ecg",
+        rhythmTag,
         clinicalPriority: null,
         allowedTiers: ["RN", "NP"],
         level: ecgLevel ?? "basic",
         mode: ecgMode ?? "quiz",
+        medicalQaStatus: governance.qaStatus,
+        clinicianReviewedAt: null,
+        clinicianReviewedBy: null,
+        waveformFidelity: governance.waveformFidelity,
+        qaStatus: governance.qaStatus,
+        publishSafetyStatus: governance.publishSafetyStatus,
       },
     });
     promotedEntityId = question.id;

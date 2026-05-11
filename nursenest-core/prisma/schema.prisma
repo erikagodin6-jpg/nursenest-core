@@ -330,6 +330,11 @@ model EcgVideoQuestion {
   medicalQaStatus  String   @default("pending") @map("medical_qa_status") @db.VarChar(32)
   manualReviewedAt DateTime? @map("manual_reviewed_at")
   manualReviewedBy String?  @map("manual_reviewed_by")
+  clinicianReviewedAt DateTime? @map("clinician_reviewed_at")
+  clinicianReviewedBy String?   @map("clinician_reviewed_by")
+  waveformFidelity    String    @default("educational_simplified") @map("waveform_fidelity") @db.VarChar(40)
+  qaStatus            String    @default("pending") @map("qa_status") @db.VarChar(32)
+  publishSafetyStatus String    @default("internal_only") @map("publish_safety_status") @db.VarChar(32)
   createdAt        DateTime @default(now()) @map("created_at")
 
   practiceAnswerAttempts EcgVideoQuestionPracticeAnswerAttempt[]
@@ -340,6 +345,8 @@ model EcgVideoQuestion {
   @@index([rhythmTag])
   @@index([mediaType])
   @@index([medicalQaStatus])
+  @@index([qaStatus])
+  @@index([publishSafetyStatus])
   @@map("ecg_video_questions")
 }
 

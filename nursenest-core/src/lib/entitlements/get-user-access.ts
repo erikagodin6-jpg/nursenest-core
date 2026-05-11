@@ -26,6 +26,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
+import { isBaseSubscriptionPlanCode } from "@/lib/subscriptions/subscription-plan-codes";
 
 export type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-access-types";
 
@@ -253,14 +254,16 @@ async function getUserAccessCore(
   );
   telemetry.subscriptionRowsRead = subscriptionRows.length;
 
+  const baseSubscriptionRows = subscriptionRows.filter((row) => isBaseSubscriptionPlanCode(row.planCode));
+
   const now = Date.now();
   let activeSubscription =
-    subscriptionRows.find((s) => {
+    baseSubscriptionRows.find((s) => {
       if (!ACTIVE_LIKE.includes(s.status)) return false;
       if (s.status === SubscriptionStatus.PAST_DUE) return true;
       return activeLikePaidWindowOpen(s, now);
     }) ?? null;
-  const latestSubscription: SubscriptionSelect | null = subscriptionRows[0] ?? null;
+  const latestSubscription: SubscriptionSelect | null = baseSubscriptionRows[0] ?? null;
 
   if (subscriptionRows.length === SUBSCRIPTION_HISTORY_WINDOW && activeSubscription === null) {
     telemetry.subscriptionQueries = 2;
@@ -273,7 +276,7 @@ async function getUserAccessCore(
       }),
     );
     const fallbackActive =
-      fallbackRows.find((s) => {
+      fallbackRows.filter((row) => isBaseSubscriptionPlanCode(row.planCode)).find((s) => {
         if (s.status === SubscriptionStatus.PAST_DUE) return true;
         return activeLikePaidWindowOpen(s, now);
       }) ?? null;
@@ -283,7 +286,7 @@ async function getUserAccessCore(
   }
 
   const cancelledPaidThrough =
-    subscriptionRows
+    baseSubscriptionRows
       .filter((s) => cancelledPaidThroughActive(s, now))
       .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0] ?? null;
 

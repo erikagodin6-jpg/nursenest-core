@@ -50,6 +50,7 @@ import { getExamLabel, getNursingRoleLabel } from "@/lib/labels/nursing-role-lab
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { PricingConversionClarity } from "@/components/marketing/pricing-conversion-clarity";
 import { PricingClinicalReadinessEcosystem } from "@/components/marketing/pricing-clinical-readiness-ecosystem";
+import { PricingAdvancedEcgAddOn } from "@/components/marketing/pricing-advanced-ecg-add-on";
 import { PricingEcgClarityBlock } from "@/components/marketing/pricing-ecg-clarity-block";
 import { PricingRegionFaq } from "@/components/marketing/pricing-region-faq";
 import { PricingReliabilityFaq } from "@/components/marketing/pricing-reliability-faq";
@@ -548,6 +549,23 @@ export function PricingPageClient({
     [isAllied, localize, pathname, initialSearchParamsString, selectedAlliedCareer, tier],
   );
 
+  const redirectGuestToLoginForAdvancedEcgCheckout = useCallback(
+    (duration: BillingDuration) => {
+      const qs =
+        typeof window !== "undefined" && window.location.search.length > 1
+          ? window.location.search.slice(1)
+          : initialSearchParamsString;
+      const callbackParams = new URLSearchParams(qs);
+      callbackParams.set("checkoutIntent", "1");
+      callbackParams.set("checkoutModule", "advanced_ecg");
+      callbackParams.set("checkoutDuration", duration);
+      const callbackPath = `${pathname}?${callbackParams.toString()}`;
+      const loginPath = localize("/login");
+      window.location.assign(`${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`);
+    },
+    [initialSearchParamsString, localize, pathname],
+  );
+
   const startCheckout = useCallback(
     async (duration: BillingDuration) => {
       setCheckoutError(null);
@@ -763,6 +781,74 @@ export function PricingPageClient({
     ],
   );
 
+  const startAdvancedEcgCheckout = useCallback(
+    async (duration: BillingDuration) => {
+      setCheckoutError(null);
+      setCheckoutOpsHint(null);
+      if (authStatus === "loading") return;
+      if (authStatus !== "authenticated") {
+        redirectGuestToLoginForAdvancedEcgCheckout(duration);
+        return;
+      }
+      if (!policiesAccepted) {
+        setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
+        return;
+      }
+      setCheckoutLoading(true);
+      try {
+        const res = await fetch("/api/subscriptions/checkout/advanced-ecg", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            duration,
+            acceptPolicies: true,
+            policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
+          }),
+        });
+        const payload = (await res.json().catch(() => ({}))) as unknown;
+        if (!res.ok) {
+          const parsed = parseCheckoutApiErrorBody(payload);
+          if (parsed.code === CHECKOUT_UNAUTHORIZED_CODE || res.status === 401) {
+            setCheckoutLoading(false);
+            redirectGuestToLoginForAdvancedEcgCheckout(duration);
+            return;
+          }
+          const err = new Error(checkoutErrorUserMessage(parsed, res.status, t)) as CheckoutRequestError;
+          err.parsed = parsed;
+          err.status = res.status;
+          throw err;
+        }
+        const checkoutUrl = (payload as { url?: unknown }).url;
+        if (typeof checkoutUrl !== "string" || checkoutUrl.trim().length === 0) {
+          throw new Error(t("pages.pricing.error.checkoutTemporarilyUnavailable"));
+        }
+        window.location.assign(checkoutUrl);
+      } catch (error) {
+        const checkoutErr = error as CheckoutRequestError;
+        if (checkoutErr.status === 401 || checkoutErr.parsed?.code === CHECKOUT_UNAUTHORIZED_CODE) {
+          redirectGuestToLoginForAdvancedEcgCheckout(duration);
+          return;
+        }
+        if (checkoutErr.parsed?.code === STRIPE_PRICE_NOT_CONFIGURED_CODE) {
+          setCheckoutError(t("pages.pricing.error.checkoutPlanNotConfigured"));
+          if (showStripePriceEnvKeyOnCheckoutError() && checkoutErr.parsed.envKey) {
+            setCheckoutOpsHint(t("pages.pricing.error.checkoutOpsStripePrice", { envKey: checkoutErr.parsed.envKey }));
+          }
+        } else {
+          setCheckoutError(error instanceof Error && error.message.trim().length > 0 ? error.message : t("pages.pricing.error.checkoutNetwork"));
+        }
+        setCheckoutLoading(false);
+      }
+    },
+    [
+      authStatus,
+      policiesAccepted,
+      redirectGuestToLoginForAdvancedEcgCheckout,
+      t,
+    ],
+  );
+
   const confirmConsentAndCheckout = useCallback(() => {
     if (!pendingCheckoutDuration) return;
     if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
@@ -798,9 +884,31 @@ export function PricingPageClient({
     if (checkoutIntentHandled || authStatus !== "authenticated") return;
     const sp = new URLSearchParams(initialSearchParamsString);
     if (sp.get("checkoutIntent") !== "1") return;
+    const checkoutModule = sp.get("checkoutModule");
+    const checkoutDuration = sp.get("checkoutDuration");
+
+    if (checkoutModule === "advanced_ecg") {
+      if (!checkoutDuration) return;
+      const allowedDurations: BillingDuration[] = ["monthly", "3-month", "6-month", "yearly"];
+      if (!allowedDurations.includes(checkoutDuration as BillingDuration)) return;
+
+      setCheckoutIntentHandled(true);
+      const cleanParams = new URLSearchParams(sp.toString());
+      cleanParams.delete("checkoutIntent");
+      cleanParams.delete("checkoutModule");
+      cleanParams.delete("checkoutDuration");
+      const cleanUrl = cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
+      window.history.replaceState({}, "", cleanUrl);
+
+      if (!policiesAccepted) {
+        setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
+        return;
+      }
+      void startAdvancedEcgCheckout(checkoutDuration as BillingDuration);
+      return;
+    }
 
     const checkoutTier = sp.get("checkoutTier");
-    const checkoutDuration = sp.get("checkoutDuration");
     if (!checkoutTier || !checkoutDuration) return;
 
     if (checkoutTier === "PRE_NURSING") {
@@ -843,7 +951,7 @@ export function PricingPageClient({
     cleanParams.delete("checkoutAlliedCareer");
     const cleanUrl = cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
     window.history.replaceState({}, "", cleanUrl);
-  }, [authStatus, checkoutIntentHandled, initialSearchParamsString, localize, pathname, region]);
+  }, [authStatus, checkoutIntentHandled, initialSearchParamsString, localize, pathname, policiesAccepted, region, startAdvancedEcgCheckout, t]);
 
   return (
     <div className="nn-pricing-premium-root mx-auto flex w-full max-w-6xl flex-col gap-12 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
@@ -1298,6 +1406,8 @@ export function PricingPageClient({
       <PricingClinicalReadinessEcosystem />
 
       <PricingEcgClarityBlock />
+
+      <PricingAdvancedEcgAddOn onCheckout={(duration) => void startAdvancedEcgCheckout(duration)} checkoutLoading={checkoutLoading} />
 
       <PricingRegionFaq />
 

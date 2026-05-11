@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import type { Prisma } from "@prisma/client";
 import { buildEcgPremiumCuratedPack } from "@/lib/ecg-module/ecg-premium-curated-pack";
+import { ECG_QUARANTINED_RHYTHM_KEYS } from "@/lib/ecg-module/ecg-safety-governance";
 import { validateEcgStripClinicalConfig } from "@/lib/ecg-module/ecg-strip-clinical-validation";
 
 function categoryCounts(rows: Prisma.EcgVideoQuestionCreateInput[]) {
@@ -45,4 +46,15 @@ test("ECG premium curated pack: category coverage snapshot", () => {
   assert.equal((counts.get("electrolyte_ecg") ?? 0) >= 4, true);
   assert.equal((counts.get("artifact_vs_true_rhythm") ?? 0) >= 4, true);
   assert.equal((counts.get("progressive_curated_set") ?? 0) >= 4, true);
+});
+
+test("ECG premium curated pack: unsupported AV block variants stay quarantined/internal-only", () => {
+  const pack = buildEcgPremiumCuratedPack();
+  const quarantined = pack.filter((row) => ECG_QUARANTINED_RHYTHM_KEYS.includes(String(row.rhythmTag) as never));
+
+  assert.equal(quarantined.length > 0, true);
+  for (const row of quarantined) {
+    assert.equal(row.qaStatus, "quarantined", `${row.id} should be quarantined`);
+    assert.equal(row.publishSafetyStatus, "internal_only", `${row.id} should stay internal-only`);
+  }
 });

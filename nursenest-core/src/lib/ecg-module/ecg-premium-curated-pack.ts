@@ -8,6 +8,7 @@
  */
 import type { Prisma } from "@prisma/client";
 import { getEcgRhythmTemplate } from "@/lib/ecg-module/ecg-rhythm-templates";
+import { defaultEcgQaMetadataForRhythm } from "@/lib/ecg-module/ecg-safety-governance";
 import type { EcgStripMediaConfig } from "@/lib/ecg-module/ecg-waveform-generator";
 import { defaultEcgStripConfigForRhythm } from "@/lib/ecg-module/ecg-waveform-generator";
 
@@ -84,6 +85,8 @@ function makeRow(args: MakeArgs): Prisma.EcgVideoQuestionCreateInput {
     ...(args.progressiveLevel ? [`progressive:${args.progressiveLevel}`] : []),
   ];
   const rk = args.rhythmKey;
+  const governance = defaultEcgQaMetadataForRhythm(rk, "curated");
+  const reviewedAt = new Date("2026-05-09T12:00:00.000Z");
   return {
     id: args.id,
     videoUrl: "",
@@ -104,9 +107,14 @@ function makeRow(args: MakeArgs): Prisma.EcgVideoQuestionCreateInput {
     mode: args.mode,
     topicTags,
     lessonLinkCount: lessonSlug ? 1 : 0,
-    medicalQaStatus: "approved",
-    manualReviewedAt: new Date("2026-05-09T12:00:00.000Z"),
+    medicalQaStatus: governance.qaStatus,
+    manualReviewedAt: reviewedAt,
     manualReviewedBy: "ecg-premium-curated-pack-v1",
+    clinicianReviewedAt: reviewedAt,
+    clinicianReviewedBy: "ecg-premium-curated-pack-v1",
+    waveformFidelity: governance.waveformFidelity,
+    qaStatus: governance.qaStatus,
+    publishSafetyStatus: governance.publishSafetyStatus,
   };
 }
 

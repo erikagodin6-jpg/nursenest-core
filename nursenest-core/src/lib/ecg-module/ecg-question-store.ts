@@ -10,6 +10,7 @@ import {
   type EcgMode,
   type EcgRouteKind,
 } from "@/lib/ecg-module/ecg-module-config";
+import { isEcgQuestionLearnerVisible } from "@/lib/ecg-module/ecg-safety-governance";
 import type { EcgWaveformConfig } from "@/lib/ecg-module/ecg-waveform-generator";
 
 type EcgAccess = {
@@ -178,11 +179,26 @@ export async function listEcgQuestionsForAccess(
       clinicalPriority: true,
       level: true,
       mode: true,
+      clinicianReviewedAt: true,
+      qaStatus: true,
+      publishSafetyStatus: true,
     },
   });
 
-  const stats = await loadStats(rows.map((row) => row.id));
-  return rows.map((row) => {
+  const visibleRows = rows.filter((row) =>
+    isEcgQuestionLearnerVisible({
+      rhythmTag: row.rhythmTag,
+      mediaType: row.mediaType,
+      mediaConfig: row.mediaConfig,
+      videoUrl: row.videoUrl,
+      clinicianReviewedAt: row.clinicianReviewedAt,
+      qaStatus: row.qaStatus,
+      publishSafetyStatus: row.publishSafetyStatus,
+    }),
+  );
+
+  const stats = await loadStats(visibleRows.map((row) => row.id));
+  return visibleRows.map((row) => {
     const options = asOptions(row.answerOptions);
     const lookup = optionTextLookup(options);
     const questionStats = stats.get(row.id);
@@ -231,9 +247,28 @@ export async function recordEcgQuestionAnswer(
       correctAnswerId: true,
       rationale: true,
       rhythmTag: true,
+      mediaType: true,
+      mediaConfig: true,
+      videoUrl: true,
+      clinicianReviewedAt: true,
+      qaStatus: true,
+      publishSafetyStatus: true,
     },
   });
   if (!question) return null;
+  if (
+    !isEcgQuestionLearnerVisible({
+      rhythmTag: question.rhythmTag,
+      mediaType: question.mediaType,
+      mediaConfig: question.mediaConfig,
+      videoUrl: question.videoUrl,
+      clinicianReviewedAt: question.clinicianReviewedAt,
+      qaStatus: question.qaStatus,
+      publishSafetyStatus: question.publishSafetyStatus,
+    })
+  ) {
+    return null;
+  }
 
   const options = asOptions(question.answerOptions);
   const selectedOption = options.find((option) => option.id === params.selectedOptionId);

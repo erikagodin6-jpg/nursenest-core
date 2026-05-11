@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-05-11T06:32:56.831Z",
-  "totalFallbacks": 81,
+  "generatedAt": "2026-05-11T07:22:22.925Z",
+  "totalFallbacks": 82,
   "byLocale": {
     "fr": 3,
     "tl": 3,
@@ -10,7 +10,7 @@
     "zh-tw": 4,
     "ar": 3,
     "ko": 5,
-    "pt": 4,
+    "pt": 5,
     "pa": 4,
     "vi": 4,
     "ht": 5,
@@ -360,6 +360,16 @@
       "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "pages.home.trustStrip.pill.questionsCount",
+      "localizedValue": "NNTOKE0 perguntas",
+      "englishValue": "{{count}} questions",
+      "placeholdersInEnglish": [
+        "count"
       ],
       "placeholdersInLocalized": []
     },

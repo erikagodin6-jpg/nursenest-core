@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { defaultEcgQaMetadataForRhythm } from "@/lib/ecg-module/ecg-safety-governance";
 import { filterDuplicateGeneratedQuestions, type EcgDedupQuestion } from "@/lib/ecg-module/ecg-question-dedup";
 import { defaultEcgStripConfigForRhythm, type EcgStripMediaConfig } from "@/lib/ecg-module/ecg-waveform-generator";
 
@@ -24,6 +25,11 @@ export type GeneratedEcgQuestion = EcgDedupQuestion & {
   topicTags: string[];
   lessonLinkCount: number;
   medicalQaStatus: string;
+  clinicianReviewedAt: Date | null;
+  clinicianReviewedBy: string | null;
+  waveformFidelity: string;
+  qaStatus: string;
+  publishSafetyStatus: string;
 };
 
 export type EcgGenerationActivity = {
@@ -50,6 +56,7 @@ function buildQuestion(category: EcgQuestionCategory, index: number): GeneratedE
   const rhythmKey = RHYTHMS_BY_CATEGORY[category][index % RHYTHMS_BY_CATEGORY[category].length]!;
   const rhythmLabel = label(rhythmKey);
   const mediaConfig = defaultEcgStripConfigForRhythm(rhythmKey);
+  const governance = defaultEcgQaMetadataForRhythm(rhythmKey, "generated");
   const suffix = `${category.replace(/_/g, " ")} set ${Math.floor(index / RHYTHMS_BY_CATEGORY[category].length) + 1}`;
   const options = [
     { id: "a", text: rhythmLabel },
@@ -78,7 +85,12 @@ function buildQuestion(category: EcgQuestionCategory, index: number): GeneratedE
     mode: category === "strip_video" || category === "advanced" ? "drill" : "quiz",
     topicTags: ["ecg", category, rhythmKey, mediaConfig.difficulty],
     lessonLinkCount: category === "rhythm" || category === "strip_video" ? 1 : 0,
-    medicalQaStatus: "pending",
+    medicalQaStatus: governance.qaStatus,
+    clinicianReviewedAt: null,
+    clinicianReviewedBy: null,
+    waveformFidelity: governance.waveformFidelity,
+    qaStatus: governance.qaStatus,
+    publishSafetyStatus: governance.publishSafetyStatus,
   };
 }
 

@@ -31,6 +31,7 @@ import {
   reconcileUserSubscriptionFromStripe,
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
 import { ALLIED_CAREER_DISPLAY_NAMES, type AlliedCareerKey } from "@/lib/pricing/display-catalog";
+import { pickLatestBaseSubscription } from "@/lib/subscriptions/subscription-plan-codes";
 
 export type { BillingStatusSurface, BillingSubscriptionRow, BillingUserRow };
 
@@ -139,7 +140,7 @@ const SUBSCRIPTION_SELECT = {
 export async function loadBillingPagePayload(userId: string): Promise<BillingPagePayload | null> {
   if (!userId || !isDatabaseUrlConfigured()) return null;
 
-  const [userRow, subscriptionRowBefore, qaSim] = await Promise.all([
+  const [userRow, subscriptionRowsBefore, qaSim] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -154,9 +155,10 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
         alliedProfessionKey: true,
       },
     }),
-    prisma.subscription.findFirst({
+    prisma.subscription.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
+      take: 12,
       select: SUBSCRIPTION_SELECT,
     }),
     getVerifiedAdminLearnerQaSimulation(userId),
@@ -166,6 +168,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
 
   const qaStaffSim = Boolean(qaSim && isLearnerEntitlementStaffBypassRole(userRow.role));
 
+  const subscriptionRowBefore = pickLatestBaseSubscription(subscriptionRowsBefore);
   let subscriptionRow = subscriptionRowBefore;
   let reconcileLiveSub: Stripe.Subscription | null = null;
 
@@ -189,11 +192,13 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       const r = await reconcileUserSubscriptionFromStripe(userId, { surface: "billing_page" });
       reconcileLiveSub = r.stripeSubscription;
       if (r.dbUpdated) {
-        subscriptionRow = await prisma.subscription.findFirst({
+        const refreshedRows = await prisma.subscription.findMany({
           where: { userId },
           orderBy: { createdAt: "desc" },
+          take: 12,
           select: SUBSCRIPTION_SELECT,
         });
+        subscriptionRow = pickLatestBaseSubscription(refreshedRows);
       }
     }
   }

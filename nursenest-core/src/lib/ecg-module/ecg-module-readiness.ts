@@ -2,6 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/db";
 import { validateEcgStripClinicalConfig } from "@/lib/ecg-module/ecg-strip-clinical-validation";
+import { getEcgQuestionGovernanceFlags } from "@/lib/ecg-module/ecg-safety-governance";
 import {
   generateAndInsertEcgQuestionsForCategory,
   type EcgGenerationActivity,
@@ -25,11 +26,17 @@ export const ECG_MINIMUM_CONTENT = {
 
 export type EcgModuleReadinessCounts = {
   totalQuestions: number;
+  readyQuestions: number;
   rhythm: number;
+  readyRhythm: number;
   stripVideo: number;
+  readyStripVideo: number;
   caseBased: number;
+  readyCaseBased: number;
   electrolyteMedication: number;
+  readyElectrolyteMedication: number;
   advanced: number;
+  readyAdvanced: number;
   flashcards: number;
   linkedLessons: number;
   withRationale: number;
@@ -40,6 +47,12 @@ export type EcgModuleReadinessCounts = {
   scoped: number;
   validationFailures: number;
   manualReviewMissing: number;
+  clinicianReviewed: number;
+  qaApproved: number;
+  publishSafe: number;
+  quarantined: number;
+  waveformApproximate: number;
+  contextDependent: number;
 };
 
 export type EcgModuleGate = {
@@ -86,17 +99,17 @@ export function summarizeEcgModuleGates(readiness: Pick<EcgModuleReadiness, "gat
 }
 
 function buildGates(status: EcgModuleStatus, counts: EcgModuleReadinessCounts): EcgModuleGate[] {
-  const rationalePct = pct(counts.withRationale, counts.totalQuestions);
-  const mediaPct = pct(counts.withMedia, Math.max(counts.stripVideo, 1));
+  const rationalePct = pct(counts.withRationale, Math.max(counts.readyQuestions, 1));
+  const mediaPct = pct(counts.withMedia, Math.max(counts.readyStripVideo, 1));
   const taggedPct = pct(counts.tagged, counts.totalQuestions);
   const gates: EcgModuleGate[] = [
     gate("status", "Module status", status !== "archived", status, "draft|qa_preview|published", `ECG module status is ${status}.`),
-    gate("total", "Total ECG questions", counts.totalQuestions >= ECG_MINIMUM_CONTENT.totalQuestions, counts.totalQuestions, ECG_MINIMUM_CONTENT.totalQuestions, `ECG question count ${counts.totalQuestions}/${ECG_MINIMUM_CONTENT.totalQuestions}.`),
-    gate("rhythm", "Rhythm interpretation", counts.rhythm >= ECG_MINIMUM_CONTENT.rhythm, counts.rhythm, ECG_MINIMUM_CONTENT.rhythm, `Rhythm interpretation count ${counts.rhythm}/${ECG_MINIMUM_CONTENT.rhythm}.`),
-    gate("strip", "Video/strip questions", counts.stripVideo >= ECG_MINIMUM_CONTENT.stripVideo, counts.stripVideo, ECG_MINIMUM_CONTENT.stripVideo, `ECG strip/video count ${counts.stripVideo}/${ECG_MINIMUM_CONTENT.stripVideo}.`),
-    gate("case", "Case-based questions", counts.caseBased >= ECG_MINIMUM_CONTENT.caseBased, counts.caseBased, ECG_MINIMUM_CONTENT.caseBased, `Case-based ECG count ${counts.caseBased}/${ECG_MINIMUM_CONTENT.caseBased}.`),
-    gate("electrolyte", "Electrolyte/medication", counts.electrolyteMedication >= ECG_MINIMUM_CONTENT.electrolyteMedication, counts.electrolyteMedication, ECG_MINIMUM_CONTENT.electrolyteMedication, `Electrolyte/medication ECG count ${counts.electrolyteMedication}/${ECG_MINIMUM_CONTENT.electrolyteMedication}.`),
-    gate("advanced", "Advanced ECG", counts.advanced >= ECG_MINIMUM_CONTENT.advanced, counts.advanced, ECG_MINIMUM_CONTENT.advanced, `Advanced ECG count ${counts.advanced}/${ECG_MINIMUM_CONTENT.advanced}.`),
+    gate("total", "Ready ECG questions", counts.readyQuestions >= ECG_MINIMUM_CONTENT.totalQuestions, counts.readyQuestions, ECG_MINIMUM_CONTENT.totalQuestions, `Publish-ready ECG question count ${counts.readyQuestions}/${ECG_MINIMUM_CONTENT.totalQuestions}.`),
+    gate("rhythm", "Ready rhythm interpretation", counts.readyRhythm >= ECG_MINIMUM_CONTENT.rhythm, counts.readyRhythm, ECG_MINIMUM_CONTENT.rhythm, `Publish-ready rhythm interpretation count ${counts.readyRhythm}/${ECG_MINIMUM_CONTENT.rhythm}.`),
+    gate("strip", "Ready video/strip questions", counts.readyStripVideo >= ECG_MINIMUM_CONTENT.stripVideo, counts.readyStripVideo, ECG_MINIMUM_CONTENT.stripVideo, `Publish-ready ECG strip/video count ${counts.readyStripVideo}/${ECG_MINIMUM_CONTENT.stripVideo}.`),
+    gate("case", "Ready case-based questions", counts.readyCaseBased >= ECG_MINIMUM_CONTENT.caseBased, counts.readyCaseBased, ECG_MINIMUM_CONTENT.caseBased, `Publish-ready case-based ECG count ${counts.readyCaseBased}/${ECG_MINIMUM_CONTENT.caseBased}.`),
+    gate("electrolyte", "Ready electrolyte/medication", counts.readyElectrolyteMedication >= ECG_MINIMUM_CONTENT.electrolyteMedication, counts.readyElectrolyteMedication, ECG_MINIMUM_CONTENT.electrolyteMedication, `Publish-ready electrolyte/medication ECG count ${counts.readyElectrolyteMedication}/${ECG_MINIMUM_CONTENT.electrolyteMedication}.`),
+    gate("advanced", "Ready advanced ECG", counts.readyAdvanced >= ECG_MINIMUM_CONTENT.advanced, counts.readyAdvanced, ECG_MINIMUM_CONTENT.advanced, `Publish-ready advanced ECG count ${counts.readyAdvanced}/${ECG_MINIMUM_CONTENT.advanced}.`),
     gate("flashcards", "Linked flashcards", counts.flashcards >= ECG_MINIMUM_CONTENT.flashcards, counts.flashcards, ECG_MINIMUM_CONTENT.flashcards, `ECG flashcard count ${counts.flashcards}/${ECG_MINIMUM_CONTENT.flashcards}.`),
     gate("lessons", "Linked lessons", counts.linkedLessons >= ECG_MINIMUM_CONTENT.linkedLessons, counts.linkedLessons, ECG_MINIMUM_CONTENT.linkedLessons, `Linked ECG lessons ${counts.linkedLessons}/${ECG_MINIMUM_CONTENT.linkedLessons}.`),
     gate("rationale", "Rationale coverage", rationalePct >= ECG_MINIMUM_CONTENT.rationaleCoveragePct, `${rationalePct}%`, "100%", `Rationale coverage ${rationalePct}%.`),
@@ -122,6 +135,7 @@ export async function getEcgModuleReadiness(): Promise<EcgModuleReadiness> {
         id: true,
         mediaType: true,
         mediaConfig: true,
+        videoUrl: true,
         rationale: true,
         rhythmTag: true,
         level: true,
@@ -129,6 +143,10 @@ export async function getEcgModuleReadiness(): Promise<EcgModuleReadiness> {
         allowedTiers: true,
         medicalQaStatus: true,
         manualReviewedAt: true,
+        clinicianReviewedAt: true,
+        waveformFidelity: true,
+        qaStatus: true,
+        publishSafetyStatus: true,
         correctAnswerId: true,
         lessonLinkCount: true,
       },
@@ -140,35 +158,74 @@ export async function getEcgModuleReadiness(): Promise<EcgModuleReadiness> {
 
   let validationFailures = 0;
   let manualReviewMissing = 0;
+  let readyQuestions = 0;
+  let readyRhythm = 0;
+  let readyStripVideo = 0;
+  let readyCaseBased = 0;
+  let readyElectrolyteMedication = 0;
+  let readyAdvanced = 0;
+  let clinicianReviewed = 0;
+  let qaApproved = 0;
+  let publishSafe = 0;
+  let quarantined = 0;
+  let waveformApproximate = 0;
+  let contextDependent = 0;
   for (const question of questions) {
     if (question.medicalQaStatus === "failed") validationFailures += 1;
+    const governance = getEcgQuestionGovernanceFlags(question);
+    if (governance.clinicianReviewed) clinicianReviewed += 1;
+    if (governance.qaApproved) qaApproved += 1;
+    if (governance.publishSafe) publishSafe += 1;
+    if (governance.quarantined) quarantined += 1;
+    if (governance.waveformApproximate) waveformApproximate += 1;
+    if (governance.contextDependent) contextDependent += 1;
     if (question.mediaType === "ecg_live_strip") {
       const result = validateEcgStripClinicalConfig(question.mediaConfig, {
         correctAnswer: question.rhythmTag,
-        highRiskManualReviewed: Boolean(question.manualReviewedAt),
+        highRiskManualReviewed: Boolean(question.clinicianReviewedAt ?? question.manualReviewedAt),
       });
       if (!result.ok) validationFailures += result.failures.length > 0 ? 1 : 0;
       if (result.needsManualReview) manualReviewMissing += 1;
+    }
+    if (governance.learnerVisible) {
+      readyQuestions += 1;
+      if (hasAnyTag(question.topicTags, CATEGORY_TAGS.rhythm)) readyRhythm += 1;
+      if (question.mediaType === "ecg_live_strip" || hasAnyTag(question.topicTags, CATEGORY_TAGS.strip_video)) readyStripVideo += 1;
+      if (hasAnyTag(question.topicTags, CATEGORY_TAGS.case)) readyCaseBased += 1;
+      if (hasAnyTag(question.topicTags, CATEGORY_TAGS.electrolyte_medication)) readyElectrolyteMedication += 1;
+      if (question.level === "advanced" || hasAnyTag(question.topicTags, CATEGORY_TAGS.advanced)) readyAdvanced += 1;
     }
   }
 
   const counts: EcgModuleReadinessCounts = {
     totalQuestions: questions.length,
+    readyQuestions,
     rhythm: questions.filter((q) => hasAnyTag(q.topicTags, CATEGORY_TAGS.rhythm)).length,
+    readyRhythm,
     stripVideo: questions.filter((q) => q.mediaType === "ecg_live_strip" || hasAnyTag(q.topicTags, CATEGORY_TAGS.strip_video)).length,
+    readyStripVideo,
     caseBased: questions.filter((q) => hasAnyTag(q.topicTags, CATEGORY_TAGS.case)).length,
+    readyCaseBased,
     electrolyteMedication: questions.filter((q) => hasAnyTag(q.topicTags, CATEGORY_TAGS.electrolyte_medication)).length,
+    readyElectrolyteMedication,
     advanced: questions.filter((q) => q.level === "advanced" || hasAnyTag(q.topicTags, CATEGORY_TAGS.advanced)).length,
+    readyAdvanced,
     flashcards,
     linkedLessons: Math.max(lessons, questions.reduce((sum, row) => sum + (row.lessonLinkCount > 0 ? 1 : 0), 0)),
-    withRationale: questions.filter((q) => q.rationale.trim().length > 0).length,
-    withMedia: questions.filter((q) => q.mediaType === "ecg_live_strip" ? Boolean(q.mediaConfig) : true).length,
+    withRationale: questions.filter((q) => getEcgQuestionGovernanceFlags(q).learnerVisible && q.rationale.trim().length > 0).length,
+    withMedia: questions.filter((q) => getEcgQuestionGovernanceFlags(q).learnerVisible).length,
     missingMedia: questions.filter((q) => q.mediaType === "ecg_live_strip" && !q.mediaConfig).length,
     missingRationale: questions.filter((q) => q.rationale.trim().length === 0).length,
     tagged: questions.filter((q) => q.topicTags.length > 0 && q.rhythmTag.trim().length > 0).length,
     scoped: questions.filter((q) => q.allowedTiers.length > 0).length,
     validationFailures,
     manualReviewMissing,
+    clinicianReviewed,
+    qaApproved,
+    publishSafe,
+    quarantined,
+    waveformApproximate,
+    contextDependent,
   };
 
   const gates = buildGates(status, counts);

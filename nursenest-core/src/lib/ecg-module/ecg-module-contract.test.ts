@@ -41,10 +41,37 @@ test("ECG questions are fetched through API filters, not static dataset imports"
 });
 
 test("CAT and practice exam pools exclude ECG video questions", () => {
-  const src = read("src/lib/practice-tests/cat-pool.ts");
+  const src = read("src/lib/practice-tests/cat-question-completeness.ts");
   assert.match(src, /NON_ECG_PRACTICE_EXAM_WHERE/);
   assert.match(src, /questionFormat:\s*ECG_QUESTION_FORMAT/);
   assert.match(src, /tags:\s*\{\s*has:\s*"ecg-video"\s*\}/);
+});
+
+test("ECG learner pools only expose clinician-reviewed approved safe items", () => {
+  const src = read("src/lib/ecg-module/ecg-question-store.ts");
+  assert.match(src, /isEcgQuestionLearnerVisible/);
+  assert.match(src, /clinicianReviewedAt/);
+  assert.match(src, /qaStatus/);
+  assert.match(src, /publishSafetyStatus/);
+});
+
+test("ECG readiness uses governance metadata instead of raw inventory alone", () => {
+  const src = read("src/lib/ecg-module/ecg-module-readiness.ts");
+  assert.match(src, /getEcgQuestionGovernanceFlags/);
+  assert.match(src, /readyQuestions/);
+  assert.match(src, /clinicianReviewedAt/);
+  assert.match(src, /qaStatus/);
+  assert.match(src, /publishSafetyStatus/);
+  assert.match(src, /Publish-ready ECG question count/);
+});
+
+test("ECG Prisma model includes clinician QA governance metadata", () => {
+  const schema = read("prisma/schema.prisma");
+  assert.match(schema, /clinicianReviewedAt\s+DateTime\?/);
+  assert.match(schema, /clinicianReviewedBy\s+String\?/);
+  assert.match(schema, /waveformFidelity\s+String/);
+  assert.match(schema, /qaStatus\s+String/);
+  assert.match(schema, /publishSafetyStatus\s+String/);
 });
 
 test("ECG answer route records isolated ECG analytics instead of grading through core question bank", () => {
