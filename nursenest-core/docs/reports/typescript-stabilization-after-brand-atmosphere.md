@@ -66,3 +66,13 @@ npm run sitemap:validate
 - `npm run sitemap:validate` — **OK** (`[sitemap:validate] OK`)
 
 No further code changes required; fixes were already applied (`premium-redesign-2026.css` primary-band comment + contract test updates for `marketingRow4Layout` / CSS slice).
+
+## DigitalOcean / validate-marketing-production-surface (2026-05-11)
+
+Build failed: `(default)/layout.tsx must contain exactly one <SiteFooter /> (found 2)` — two JSX `<SiteFooter` literals (shards `trailingChrome` + non-shards branch) plus a doc comment accidentally contained the substring `<SiteFooter`, tripling the regex count.
+
+**Fix:** one shared element `const defaultLayoutSiteFooter = <SiteFooter … />`, reused as `trailingChrome={defaultLayoutSiteFooter}` and `{defaultLayoutSiteFooter}`; comment text avoids `<SiteFooter`. Contract test updated for the shared variable pattern.
+
+**Files:** `src/app/(marketing)/(default)/layout.tsx`, `src/lib/marketing/marketing-default-layout-home-streaming.contract.test.ts`
+
+**Verify:** `npm run validate:marketing-production-surface` — OK.
