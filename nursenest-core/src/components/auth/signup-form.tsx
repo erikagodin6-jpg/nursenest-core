@@ -32,6 +32,7 @@ export function SignupForm({
   contactHref?: string;
   forgotPasswordHref?: string;
 } = {}) {
+  type SignupTierSelection = SignupTierValue | "";
   const { t, locale } = useMarketingI18n();
   const router = useRouter();
   const pathname = usePathname() ?? "/";
@@ -58,8 +59,8 @@ export function SignupForm({
   const [clientReady, setClientReady] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
-  const [tier, setTier] = useState<SignupTierValue>("RN");
-  const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
+  const [tier, setTier] = useState<SignupTierSelection>("");
+  const [examFocus, setExamFocus] = useState<SignupExamFocusValue | "">("");
   const onCaptcha = useCallback((tok: string | null) => setCaptchaToken(tok), []);
   /** When the widget is shown, `/api/signup` may require a token (see `isTurnstileEnforced`). */
   const turnstileQaBypassActive =
@@ -67,7 +68,7 @@ export function SignupForm({
   const turnstileGateActive =
     Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim()) && !turnstileQaBypassActive;
 
-  const examOptions = useMemo(() => signupExamFocusOptions(country, tier, t), [country, tier, t]);
+  const examOptions = useMemo(() => (tier ? signupExamFocusOptions(country, tier, t) : []), [country, tier, t]);
   const firstNamePlaceholder = safeSignupFieldCopy(t("pages.signup.placeholderFirstName"), "First name");
   const lastNamePlaceholder = safeSignupFieldCopy(t("pages.signup.placeholderLastName"), "Last name");
 
@@ -99,6 +100,11 @@ export function SignupForm({
     const myGeneration = ++submitGeneration.current;
     setError(null);
     setErrorHelp(null);
+    if (!tier) {
+      setError(t("pages.signup.errorValidation"));
+      setErrorHelp(null);
+      return;
+    }
     trackProductEvent(PH.signupSubmitAttempt, {
       actor: "anonymous",
       funnel_step: "signup_submit",
@@ -119,7 +125,7 @@ export function SignupForm({
       password: String(formData.get("password") ?? ""),
       country,
       tier,
-      examFocus,
+      examFocus: examFocus || "",
       studyGoal: String(formData.get("studyGoal") ?? ""),
       dailyStudyMinutes: Number(formData.get("dailyStudyMinutes") ?? 30),
       learnerPath: learnerPathRaw || undefined,
@@ -285,7 +291,16 @@ export function SignupForm({
           onChange={(e) => {
             const next = e.target.value === "US" ? "US" : "CA";
             setCountry(next);
-            setExamFocus((prev) => reconcileExamFocusForCountryAndTier(next, tier, prev, t));
+            setExamFocus((prev) =>
+              tier
+                ? reconcileExamFocusForCountryAndTier(
+                    next,
+                    tier,
+                    (prev || signupExamFocusOptions(next, tier, t)[0]?.value || "nclex_rn") as SignupExamFocusValue,
+                    t,
+                  )
+                : "",
+            );
           }}
         >
           <option value="CA">{t("pages.signup.countryCa")}</option>
@@ -295,12 +310,16 @@ export function SignupForm({
           className="nn-premium-auth-input rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
           name="tier"
           value={tier}
+          required
           onChange={(e) => {
-            const next = e.target.value as SignupTierValue;
+            const next = e.target.value as SignupTierSelection;
             setTier(next);
-            setExamFocus((prev) => reconcileExamFocusForCountryAndTier(country, next, prev, t));
+            setExamFocus((prev) =>
+              next ? reconcileExamFocusForCountryAndTier(country, next, (prev || "nclex_rn") as SignupExamFocusValue, t) : "",
+            );
           }}
         >
+          <option value="">{t("pages.signup.tierPrompt")}</option>
           <option value="RPN">{t("pages.signup.tierRpn")}</option>
           <option value="LVN_LPN">{t("pages.signup.tierLvn")}</option>
           <option value="RN">{t("pages.signup.tierRn")}</option>
@@ -325,8 +344,10 @@ export function SignupForm({
             className="nn-premium-auth-input rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
             name="examFocus"
             value={examFocus}
+            disabled={!tier}
             onChange={(e) => setExamFocus(e.target.value as SignupExamFocusValue)}
           >
+            <option value="">{t("pages.signup.examFocusPrompt")}</option>
             {examOptions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}

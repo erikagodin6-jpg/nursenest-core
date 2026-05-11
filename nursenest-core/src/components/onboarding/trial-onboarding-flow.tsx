@@ -58,6 +58,15 @@ const STUDY_STYLE_OPTIONS: { id: StudyStyle; label: string; description: string;
   },
 ];
 
+function formatOnboardingDateSummary(examDate: string | null, notScheduled: boolean): string {
+  if (notScheduled) return "No exam date yet";
+  if (!examDate) return "Date not set";
+  const parsed = new Date(`${examDate}T00:00:00`);
+  return Number.isNaN(parsed.getTime())
+    ? examDate
+    : new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(parsed);
+}
+
 // ── Component ──────────────────────────────────────────────────────────────
 
 export function TrialOnboardingFlow({
@@ -90,6 +99,18 @@ export function TrialOnboardingFlow({
 
   const totalSteps = 4;
   const progressPct = ((step + 1) / totalSteps) * 100;
+  const selectedExamGoal = useMemo(
+    () => examGoalRows.find((row) => row.id === state.examGoal) ?? null,
+    [examGoalRows, state.examGoal],
+  );
+  const selectedStudyStyle = useMemo(
+    () => STUDY_STYLE_OPTIONS.find((option) => option.id === state.studyStyle) ?? null,
+    [state.studyStyle],
+  );
+  const dateSummary = useMemo(
+    () => formatOnboardingDateSummary(state.examDate, state.examDateNotScheduled),
+    [state.examDate, state.examDateNotScheduled],
+  );
 
   const canAdvance = useCallback((): boolean => {
     switch (step) {
@@ -234,6 +255,9 @@ export function TrialOnboardingFlow({
         )}
         {step === 3 && (
           <StepCta
+            examGoalLabel={selectedExamGoal?.label ?? "Your selected pathway"}
+            timelineSummary={dateSummary}
+            studyStyleLabel={selectedStudyStyle?.label ?? "Flexible study start"}
             saving={saving}
             onStartTrial={completeOnboarding}
             onExplore={() => {
@@ -458,10 +482,16 @@ function StepStudyStyle({
 // ── Step 4: CTA ───────────────────────────────────────────────────────────
 
 function StepCta({
+  examGoalLabel,
+  timelineSummary,
+  studyStyleLabel,
   saving,
   onStartTrial,
   onExplore,
 }: {
+  examGoalLabel: string;
+  timelineSummary: string;
+  studyStyleLabel: string;
   saving: boolean;
   onStartTrial: () => void;
   onExplore: () => void;
@@ -477,10 +507,34 @@ function StepCta({
         <CheckCircle2 className="h-8 w-8" style={{ color: "var(--semantic-success)" }} />
       </div>
 
-      <h2 className="nn-onboarding-step__title">Start studying now</h2>
+      <h2 className="nn-onboarding-step__title">Your study start is ready</h2>
       <p className="nn-onboarding-step__subtitle">
-        Jump into your first lesson and question set. You can start a trial or upgrade anytime from your study hub.
+        We saved your starting preferences so your dashboard can point you to the clearest next step.
       </p>
+
+      <div className="mt-6 grid gap-3 text-left sm:grid-cols-3">
+        {[
+          { label: "Pathway", value: examGoalLabel },
+          { label: "Timeline", value: timelineSummary },
+          { label: "Starting mode", value: studyStyleLabel },
+        ].map((item) => (
+          <div
+            key={item.label}
+            className="rounded-2xl border px-4 py-3"
+            style={{
+              borderColor: "color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))",
+              background: "color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--semantic-surface))",
+            }}
+          >
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: "var(--semantic-text-muted)" }}>
+              {item.label}
+            </p>
+            <p className="mt-2 text-sm font-semibold leading-snug" style={{ color: "var(--semantic-text-primary)" }}>
+              {item.value}
+            </p>
+          </div>
+        ))}
+      </div>
 
       <div className="mt-8 flex w-full min-w-0 flex-col items-stretch gap-3 sm:items-center">
         <button
@@ -489,7 +543,7 @@ function StepCta({
           onClick={onStartTrial}
           className="nn-btn-primary inline-flex min-h-[3rem] w-full min-w-0 max-w-md items-center justify-center rounded-xl px-6 text-base font-semibold shadow-none disabled:opacity-50 sm:max-w-sm"
         >
-          {saving ? "Setting up…" : "Start studying now"}
+          {saving ? "Setting up…" : "Continue to my study hub"}
         </button>
         <button
           type="button"
