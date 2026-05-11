@@ -1,6 +1,10 @@
 import "server-only";
 
-import { ADVANCED_ECG_MODULE_ROUTE, ADVANCED_ECG_PRICING_ANCHOR } from "@/lib/advanced-ecg/advanced-ecg-module-config";
+import {
+  ADVANCED_ECG_MARKETING_ROUTE,
+  ADVANCED_ECG_MODULE_ROUTE,
+  ADVANCED_ECG_PRICE_LABEL,
+} from "@/lib/advanced-ecg/advanced-ecg-module-config";
 import { loadAdvancedEcgAccess } from "@/lib/advanced-ecg/advanced-ecg-access";
 
 export type AdvancedEcgDashboardCardModel = {
@@ -21,12 +25,12 @@ export async function loadAdvancedEcgDashboardCardModel(resumeHref: string | nul
   return locked
     ? {
         locked: true,
-        href: ADVANCED_ECG_PRICING_ANCHOR,
-        ctaLabel: "Unlock specialty module",
+        href: ADVANCED_ECG_MARKETING_ROUTE,
+        ctaLabel: "View specialty module",
         badgeLabel: "Premium specialty module",
         title: "Advanced ECG & Telemetry Mastery",
         body: "Telemetry, 12-lead, ACLS, pacemaker interpretation, and premium case progressions in one ICU-grade module.",
-        detail: "One-time purchase. Includes full Basic ECG Foundations and keeps advanced telemetry lanes locked until owned.",
+        detail: `${ADVANCED_ECG_PRICE_LABEL} one-time purchase. Includes full Basic ECG Foundations and keeps advanced telemetry lanes locked until owned.`,
         resumeHref,
       }
     : {

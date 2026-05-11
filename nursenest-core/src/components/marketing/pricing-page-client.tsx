@@ -252,7 +252,7 @@ function PricingPlansStatusPanel({
   );
 }
 
-function CheckoutCancelledNotice({
+function CheckoutStateNotice({
   searchQuery,
   t,
 }: {
@@ -261,15 +261,38 @@ function CheckoutCancelledNotice({
 }) {
   const sp = useMemo(() => new URLSearchParams(searchQuery), [searchQuery]);
   const [dismissed, setDismissed] = useState(false);
-  if (dismissed || sp.get("checkout") !== "cancelled") return null;
+  const state = sp.get("checkout");
+  if (dismissed || (state !== "cancelled" && state !== "success")) return null;
   return (
-    <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--color-card))] px-4 py-3 text-sm shadow-[var(--elevation-rest)]">
-      <p className="font-semibold text-[var(--semantic-warning-contrast)]">{t("pages.pricing.checkout.cancelledHeading")}</p>
-      <p className="mt-0.5 text-[color-mix(in_srgb,var(--semantic-warning-contrast)_85%,var(--semantic-text-muted))]">
-        {t("pages.pricing.checkout.cancelledBody")}
+    <div
+      className={`rounded-xl px-4 py-3 text-sm shadow-[var(--elevation-rest)] ${
+        state === "success"
+          ? "border border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_8%,var(--color-card))]"
+          : "border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--color-card))]"
+      }`}
+    >
+      <p
+        className={`font-semibold ${
+          state === "success"
+            ? "text-[var(--semantic-success-contrast)]"
+            : "text-[var(--semantic-warning-contrast)]"
+        }`}
+      >
+        {state === "success" ? "Advanced ECG purchase complete" : t("pages.pricing.checkout.cancelledHeading")}
+      </p>
+      <p
+        className={`mt-0.5 ${
+          state === "success"
+            ? "text-[color-mix(in_srgb,var(--semantic-success-contrast)_85%,var(--semantic-text-muted))]"
+            : "text-[color-mix(in_srgb,var(--semantic-warning-contrast)_85%,var(--semantic-text-muted))]"
+        }`}
+      >
+        {state === "success"
+          ? "Advanced ECG is now on your account. Open the learner route to start the specialty module."
+          : t("pages.pricing.checkout.cancelledBody")}
       </p>
       <button type="button" onClick={() => setDismissed(true)} className="mt-1.5 text-xs underline opacity-70 hover:opacity-100">
-        {t("pages.pricing.checkout.dismissCancelled")}
+        {state === "success" ? "Dismiss" : t("pages.pricing.checkout.dismissCancelled")}
       </button>
     </div>
   );
@@ -283,6 +306,8 @@ export function PricingPageClient({
   serverTierSubheads = {},
   initialPricingOptions,
   initialSearchParamsString = "",
+  advancedEcgCheckoutEnabled = true,
+  advancedEcgDisabledMessage = null,
 }: {
   heading: string;
   intro: string;
@@ -298,6 +323,8 @@ export function PricingPageClient({
   initialPricingOptions: PricingOptionsPayload;
   /** From RSC `searchParams` — avoids `useSearchParams()` (CSR bailout + full-page Suspense skeleton on `/pricing`). */
   initialSearchParamsString?: string;
+  advancedEcgCheckoutEnabled?: boolean;
+  advancedEcgDisabledMessage?: string | null;
 }) {
   const hasServerCatalogRef = useRef(marketingPricingPayloadHasRenderablePlans(initialPricingOptions));
   const [segment, setSegment] = useState<Segment>("rn");
@@ -790,6 +817,12 @@ export function PricingPageClient({
     async () => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
+      if (!advancedEcgCheckoutEnabled) {
+        setCheckoutError(
+          advancedEcgDisabledMessage ?? "Advanced ECG checkout is not available right now.",
+        );
+        return;
+      }
       if (authStatus === "loading") return;
       if (authStatus !== "authenticated") {
         redirectGuestToLoginForAdvancedEcgCheckout();
@@ -808,6 +841,7 @@ export function PricingPageClient({
           body: JSON.stringify({
             acceptPolicies: true,
             policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
+            entryPoint: "pricing",
           }),
         });
         const payload = (await res.json().catch(() => ({}))) as unknown;
@@ -848,6 +882,8 @@ export function PricingPageClient({
     },
     [
       authStatus,
+      advancedEcgCheckoutEnabled,
+      advancedEcgDisabledMessage,
       policiesAccepted,
       redirectGuestToLoginForAdvancedEcgCheckout,
       t,
@@ -1100,7 +1136,7 @@ export function PricingPageClient({
           alliedCareerLabel={isAllied ? selectedTierScopeLabel : undefined}
         />
 
-        <CheckoutCancelledNotice searchQuery={initialSearchParamsString} t={t} />
+        <CheckoutStateNotice searchQuery={initialSearchParamsString} t={t} />
 
         {!plansLoaded && !loadError ? (
           <PricingPlanGridSkeleton ariaLabel={t("pages.pricing.loadingPlansAria")} />
@@ -1425,7 +1461,12 @@ export function PricingPageClient({
 
       <PricingEcgClarityBlock />
 
-      <PricingAdvancedEcgAddOn onCheckout={() => void startAdvancedEcgCheckout()} checkoutLoading={checkoutLoading} />
+      <PricingAdvancedEcgAddOn
+        onCheckout={() => void startAdvancedEcgCheckout()}
+        checkoutLoading={checkoutLoading}
+        checkoutEnabled={advancedEcgCheckoutEnabled}
+        disabledMessage={advancedEcgDisabledMessage}
+      />
 
       <PricingRegionFaq />
 

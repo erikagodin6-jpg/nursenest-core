@@ -56,6 +56,9 @@ export default async function AdminEcgModulePage() {
     ["QA approved", readiness.counts.qaApproved],
     ["Publish-safe", readiness.counts.publishSafe],
     ["Quarantined", readiness.counts.quarantined],
+    ["Coverage keys", advancedSnapshot.coverage.coveredKeys.length],
+    ["Missing coverage", advancedSnapshot.coverage.missingKeys.length],
+    ["Advanced topics below minimum", advancedSnapshot.coverage.advancedTopicsMissingMinimums.length],
     ["Publish readiness", readiness.canPublish ? "Ready" : "Blocked"],
   ] as const;
 
@@ -125,6 +128,93 @@ export default async function AdminEcgModulePage() {
                   </p>
                   <p className="mt-2 text-sm">{unit.publishGuardrail}</p>
                 </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-6 grid gap-4 lg:grid-cols-[1.35fr_0.65fr]">
+        <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">Coverage matrix</h2>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+                Audited lesson depth, question-family volume, and rationale completeness across core and advanced ECG keys.
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="text-xs uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                <tr className="border-b border-[var(--semantic-border-soft)]">
+                  <th className="px-2 py-2">Key</th>
+                  <th className="px-2 py-2">Words</th>
+                  <th className="px-2 py-2">Questions</th>
+                  <th className="px-2 py-2">Strip</th>
+                  <th className="px-2 py-2">Priority</th>
+                  <th className="px-2 py-2">Escalation</th>
+                  <th className="px-2 py-2">Compare</th>
+                  <th className="px-2 py-2">Causes</th>
+                  <th className="px-2 py-2">Full rationale</th>
+                  <th className="px-2 py-2">Distractors</th>
+                </tr>
+              </thead>
+              <tbody>
+                {advancedSnapshot.coverage.matrix.map((row) => (
+                  <tr key={row.key} className="border-b border-[var(--semantic-border-soft)] align-top">
+                    <td className="px-2 py-2 font-medium text-[var(--semantic-text-primary)]">{row.key}</td>
+                    <td className="px-2 py-2 text-[var(--semantic-text-secondary)]">{row.lessonWordCount}</td>
+                    <td className="px-2 py-2 text-[var(--semantic-text-secondary)]">{row.totalQuestions}</td>
+                    <td className="px-2 py-2 text-[var(--semantic-text-secondary)]">{row.stripIdentification}</td>
+                    <td className="px-2 py-2 text-[var(--semantic-text-secondary)]">{row.priorityAction}</td>
+                    <td className="px-2 py-2 text-[var(--semantic-text-secondary)]">{row.complicationEscalation}</td>
+                    <td className="px-2 py-2 text-[var(--semantic-text-secondary)]">{row.comparison}</td>
+                    <td className="px-2 py-2 text-[var(--semantic-text-secondary)]">{row.clinicalCauses}</td>
+                    <td className="px-2 py-2 text-[var(--semantic-text-secondary)]">{row.fullRationales}</td>
+                    <td className="px-2 py-2 text-[var(--semantic-text-secondary)]">{row.distractorRationales}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">Coverage gaps</h2>
+            {advancedSnapshot.coverage.missingKeys.length > 0 ? (
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--semantic-text-secondary)]">
+                {advancedSnapshot.coverage.missingKeys.map((key) => (
+                  <li key={key}>{key}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">No rhythm/topic gaps detected in the audited key set.</p>
+            )}
+          </div>
+          <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">Advanced ECG minimum-volume gaps</h2>
+            {advancedSnapshot.coverage.advancedTopicsMissingMinimums.length > 0 ? (
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--semantic-text-secondary)]">
+                {advancedSnapshot.coverage.advancedTopicsMissingMinimums.map((key) => (
+                  <li key={key}>{key}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">All advanced topics currently meet the specialty question minimums.</p>
+            )}
+          </div>
+          <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
+            <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">Affected routes</h2>
+            <ul className="mt-3 space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+              {advancedSnapshot.coverage.affectedRoutes.map((route) => (
+                <li key={route}><code>{route}</code></li>
+              ))}
+            </ul>
+            <h3 className="mt-4 text-sm font-semibold text-[var(--semantic-text-primary)]">Admin previews</h3>
+            <ul className="mt-2 space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+              {advancedSnapshot.coverage.adminPreviewRoutes.map((route) => (
+                <li key={route}><code>{route}</code></li>
               ))}
             </ul>
           </div>

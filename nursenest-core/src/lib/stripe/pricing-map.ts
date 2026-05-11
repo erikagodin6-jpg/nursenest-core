@@ -9,6 +9,10 @@ import {
 } from "@/lib/pricing/display-catalog";
 import type { BillingDuration } from "@/lib/pricing/billing-types";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import {
+  advancedEcgPlanCode,
+  advancedEcgStripePriceEnvKey,
+} from "@/lib/advanced-ecg/advanced-ecg-module-config";
 
 export type { BillingDuration } from "@/lib/pricing/billing-types";
 
@@ -19,6 +23,12 @@ export type PriceEntry = {
   priceId: string;
   alliedCareer?: AlliedCareerKey;
   planCode: string;
+};
+
+export type AdvancedEcgPriceEntry = {
+  planCode: string;
+  envKey: string;
+  priceId: string | null;
 };
 
 export type StripePriceMatrixRow = {
@@ -59,9 +69,14 @@ export function eachStripePriceMatrixRow(): StripePriceMatrixRow[] {
 }
 
 export function listMissingStripePriceEnvKeys(): string[] {
-  return eachStripePriceMatrixRow()
+  const missing = eachStripePriceMatrixRow()
     .filter((r) => !r.priceId)
     .map((r) => r.envKey);
+  const advancedEcgEnvKey = advancedEcgStripePriceEnvKey();
+  if (!process.env[advancedEcgEnvKey]?.trim()) {
+    missing.push(advancedEcgEnvKey);
+  }
+  return missing;
 }
 
 export function isStripePricingFullyConfigured(): boolean {
@@ -152,6 +167,16 @@ export function findAlliedPriceEntry(
 /** Find any price entry by plan code. */
 export function findPriceEntryByPlanCode(planCode: string): PriceEntry | undefined {
   return priceMap().find((p) => p.planCode === planCode);
+}
+
+export function getAdvancedEcgPriceEntry(): AdvancedEcgPriceEntry {
+  const envKey = advancedEcgStripePriceEnvKey();
+  const priceId = process.env[envKey]?.trim() || null;
+  return {
+    planCode: advancedEcgPlanCode(),
+    envKey,
+    priceId,
+  };
 }
 
 /** Reverse lookup: Stripe Price id to plan identity. */

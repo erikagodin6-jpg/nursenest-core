@@ -14,11 +14,27 @@ import {
 } from "@/lib/ecg-module/ecg-module-config";
 import { getEcgModuleStatus } from "@/lib/ecg-module/ecg-module-status";
 import { hasActiveAdvancedEcgEntitlementFromRows } from "@/lib/advanced-ecg/advanced-ecg-access";
-import { resolveEcgModuleEntitlements } from "@/lib/ecg-module/ecg-access-resolution";
+import { resolveEcgModuleEntitlements, type EcgBasicAccessState } from "@/lib/ecg-module/ecg-access-resolution";
 
 export type EcgModuleAccess =
-  | { ok: true; mode: "public"; userId: string; tier: "RN" | "NP"; pathwayId: string | null; hasPremium: boolean }
-  | { ok: true; mode: "admin-preview"; userId: string; allowedTiers: ["RN", "NP"]; pathwayId: null; hasPremium: true }
+  | {
+      ok: true;
+      mode: "public";
+      userId: string;
+      tier: "RN" | "NP";
+      pathwayId: string | null;
+      hasPremium: boolean;
+      accessState: Exclude<EcgBasicAccessState, "no_access">;
+    }
+  | {
+      ok: true;
+      mode: "admin-preview";
+      userId: string;
+      allowedTiers: ["RN", "NP"];
+      pathwayId: null;
+      hasPremium: true;
+      accessState: "advanced_includes_basic";
+    }
   | { ok: false; reason: "disabled" | "unauthorized" | "tier_denied" | "premium_required" | "not-admin" };
 
 async function getAdminPreviewAccess(): Promise<AdminModulePreviewAccess> {
@@ -45,6 +61,7 @@ export async function getCurrentEcgModuleAccess(): Promise<EcgModuleAccess> {
       allowedTiers: ["RN", "NP"],
       pathwayId: null,
       hasPremium: true,
+      accessState: "advanced_includes_basic",
     };
   }
 
@@ -92,6 +109,7 @@ export async function getCurrentEcgModuleAccess(): Promise<EcgModuleAccess> {
     tier: tier as "RN" | "NP",
     pathwayId: canonical.pathwayId,
     hasPremium: entitlements.hasBasicEcgAccess,
+    accessState: entitlements.accessState === "advanced_includes_basic" ? "advanced_includes_basic" : "basic_only",
   };
 }
 

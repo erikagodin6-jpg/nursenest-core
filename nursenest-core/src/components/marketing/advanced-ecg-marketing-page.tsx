@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AdvancedEcgLaunchPurchaseSection } from "@/components/marketing/advanced-ecg-launch-purchase-section";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import {
@@ -9,6 +10,12 @@ import {
   getAdvancedEcgMarketingPageBySegments,
   type AdvancedEcgMarketingPage,
 } from "@/lib/advanced-ecg/advanced-ecg-marketing-pages";
+import {
+  ADVANCED_ECG_MODULE_ROUTE,
+  ADVANCED_ECG_MODULE_NAME,
+  ADVANCED_ECG_PRICE_LABEL,
+} from "@/lib/advanced-ecg/advanced-ecg-module-config";
+import { getAdvancedEcgCommercialLaunchState } from "@/lib/advanced-ecg/advanced-ecg-module-status";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import {
@@ -89,7 +96,7 @@ function MarketingLinkCard({
   );
 }
 
-export function AdvancedEcgMarketingPageView({
+export async function AdvancedEcgMarketingPageView({
   locale,
   segments,
 }: {
@@ -98,6 +105,7 @@ export function AdvancedEcgMarketingPageView({
 }) {
   const page = getAdvancedEcgMarketingPageBySegments(segments);
   if (!page) notFound();
+  const launchState = await getAdvancedEcgCommercialLaunchState();
 
   const breadcrumbItems = [
     { name: "Home", item: absoluteUrl("/") },
@@ -153,7 +161,7 @@ export function AdvancedEcgMarketingPageView({
                 </Link>
               </div>
               <p className="mt-4 text-sm text-[var(--semantic-text-secondary)]">
-                One-time purchase. Includes full access to the Basic ECG curriculum. Kept separate from base subscriptions so the specialty lane stays clearly premium.
+                {ADVANCED_ECG_PRICE_LABEL} one-time purchase. Includes full access to the Basic ECG curriculum. Kept separate from base subscriptions so the specialty lane stays clearly premium.
               </p>
             </div>
 
@@ -162,8 +170,13 @@ export function AdvancedEcgMarketingPageView({
               <div className="mt-4 rounded-3xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-canvas)_72%,var(--semantic-panel-cool))] p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">Advanced ECG & Telemetry Mastery</p>
-                    <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">Dedicated learner route with telemetry, 12-lead, ACLS, and paced-strip tracks.</p>
+                    <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{ADVANCED_ECG_MODULE_NAME}</p>
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--semantic-info)]">
+                      {ADVANCED_ECG_PRICE_LABEL} lifetime access
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
+                      Dedicated learner route with telemetry, 12-lead, ACLS, and paced-strip tracks.
+                    </p>
                   </div>
                   <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--semantic-info)]">
                     Premium
@@ -240,20 +253,70 @@ export function AdvancedEcgMarketingPageView({
           </section>
         </div>
 
+        <div className="mt-6 grid gap-6 xl:grid-cols-2">
+          <section className="rounded-[28px] border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] p-6 shadow-[var(--semantic-shadow-soft)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-info)]">Who this is for</p>
+            <h2 className="mt-3 text-2xl font-semibold text-[var(--semantic-text-primary)]">Built for telemetry learners who want specialty-level rhythm confidence</h2>
+            <ul className="mt-5 grid gap-3">
+              {[
+                "RN and NP learners who already know the basics and want stronger telemetry, 12-lead, ACLS, and paced-rhythm recognition.",
+                "Critical-care, stepdown, emergency, and monitor-heavy learners who want repetition with clearer escalation framing.",
+                "Learners who want one connected ECG pathway instead of bouncing between intro lessons and scattered reference sheets.",
+              ].map((item) => (
+                <li key={item} className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="rounded-[28px] border border-[color-mix(in_srgb,var(--semantic-warning)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] p-6 shadow-[var(--semantic-shadow-soft)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-warning)]">Who it is not for</p>
+            <h2 className="mt-3 text-2xl font-semibold text-[var(--semantic-text-primary)]">Not positioned as a generic bundle add-on or a beginner-only ECG primer</h2>
+            <ul className="mt-5 grid gap-3">
+              {[
+                "Learners looking for a base exam subscription replacement. This module is a separate specialty purchase.",
+                "PN, RPN, Allied, and New Grad tracks expecting default inclusion inside their base plan today.",
+                "Students who only want a lightweight intro deck without specialty telemetry, 12-lead, ACLS, or pacemaker depth.",
+              ].map((item) => (
+                <li key={item} className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
         <section className="mt-6 rounded-[28px] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)]">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-info)]">Internal route map</p>
-              <h2 className="mt-3 text-2xl font-semibold text-[var(--semantic-text-primary)]">Explore the premium cluster</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-info)]">Learner access proof</p>
+              <h2 className="mt-3 text-2xl font-semibold text-[var(--semantic-text-primary)]">How ownership and access actually work</h2>
             </div>
             <p className="max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-              These public pages are designed to rank on specialty intent while directing learners into the dedicated Advanced ECG product, not the generic exam-prep shell.
+              The public launch path, checkout path, and learner path all point at the same specialty product: {ADVANCED_ECG_MODULE_NAME}.
             </p>
           </div>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {page.internalLinks.map((link) => (
-              <MarketingLinkCard key={link.href} {...link} />
-            ))}
+          <div className="mt-6 grid gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+            <div className="rounded-[24px] border border-[color-mix(in_srgb,var(--semantic-brand)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))] p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">Ownership rules</p>
+              <ul className="mt-4 grid gap-3">
+                {[
+                  `${ADVANCED_ECG_PRICE_LABEL} one-time purchase for the Advanced ECG specialty lane.`,
+                  "Base learner access is still required for the ECG ecosystem, with RN / NP eligibility enforced on the server.",
+                  `Learner ownership resolves on the dedicated route at ${ADVANCED_ECG_MODULE_ROUTE}.`,
+                ].map((item) => (
+                  <li key={item} className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {page.internalLinks.map((link) => (
+                <MarketingLinkCard key={link.href} {...link} />
+              ))}
+            </div>
           </div>
         </section>
 
@@ -272,21 +335,11 @@ export function AdvancedEcgMarketingPageView({
           </div>
         </section>
 
-        <section className="mt-6 rounded-[32px] border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--semantic-panel-cool)_40%,var(--semantic-surface))_0%,var(--semantic-surface)_100%)] p-8 text-center shadow-[var(--semantic-shadow-soft)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--semantic-info)]">One-time specialty upgrade</p>
-          <h2 className="mt-3 text-3xl font-semibold text-[var(--semantic-text-primary)]">Own Advanced ECG once and keep the full ECG pathway connected</h2>
-          <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-base">
-            Advanced ECG & Telemetry Mastery stays separate from base plans, includes the Basic ECG curriculum, and gives learners a premium specialty route for telemetry, 12-lead, ACLS, pacemaker rhythms, and curated cases.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href={ADVANCED_ECG_MARKETING_PRIMARY_CTA.href} className={MARKETING_PRIMARY_CTA_CLASS}>
-              {ADVANCED_ECG_MARKETING_PRIMARY_CTA.label}
-            </Link>
-            <Link href={ADVANCED_ECG_MARKETING_SECONDARY_CTA.href} className={MARKETING_SECONDARY_CTA_CLASS}>
-              {ADVANCED_ECG_MARKETING_SECONDARY_CTA.label}
-            </Link>
-          </div>
-        </section>
+        <AdvancedEcgLaunchPurchaseSection
+          locale={locale}
+          checkoutEnabled={launchState.canSellPublicly}
+          disabledMessage={launchState.canSellPublicly ? null : launchState.publicMessage}
+        />
       </div>
     </main>
   );

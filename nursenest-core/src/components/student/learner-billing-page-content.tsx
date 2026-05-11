@@ -191,6 +191,7 @@ export function LearnerBillingPageContent({
   const {
     user,
     subscription,
+    advancedEcgPackage,
     entitlement,
     pathwayLabels,
     stripeRenewal,
@@ -249,6 +250,22 @@ export function LearnerBillingPageContent({
             </p>
             {accessWhy ? (
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{accessWhy}</p>
+            ) : null}
+            {advancedEcgPackage ? (
+              <div className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_88%,var(--semantic-surface))] px-4 py-3 text-sm leading-relaxed">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Owned specialty package</p>
+                <p className="mt-2 font-medium text-foreground">
+                  {advancedEcgPackage.productName} · {advancedEcgPackage.priceLabel}
+                </p>
+                <p className="mt-2 text-muted-foreground">
+                  {advancedEcgPackage.accessActive
+                    ? "Your one-time Advanced ECG ownership is active on this account."
+                    : "This Advanced ECG package purchase is on your account, but access is not currently active."}
+                </p>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Purchased {advancedEcgPackage.purchasedAt.toLocaleDateString(localeTag, { year: "numeric", month: "short", day: "numeric" })} · Entitlement <code>{advancedEcgPackage.entitlementKey}</code>
+                </p>
+              </div>
             ) : null}
             {effectiveTier === "ALLIED" && alliedProfessionSummary ? (
               <div

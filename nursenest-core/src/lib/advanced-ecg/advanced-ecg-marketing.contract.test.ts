@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import {
+  ADVANCED_ECG_MARKETING_PRIMARY_CTA,
   getAdvancedEcgMarketingPageByPath,
   listAdvancedEcgMarketingPaths,
 } from "@/lib/advanced-ecg/advanced-ecg-marketing-pages";
@@ -59,6 +60,20 @@ test("Advanced ECG public marketing routes remain indexable", () => {
   assert.match(localizedRoute, /if \(!page\)\s*\{\s*return\s*\{[\s\S]*robots: \{ index: false, follow: true \}/);
   assert.doesNotMatch(defaultRoute, /return\s+\{[\s\S]*title: page\.title[\s\S]*robots:/);
   assert.doesNotMatch(localizedRoute, /return\s+\{[\s\S]*title: page\.title[\s\S]*robots:/);
+});
+
+test("Advanced ECG launch page keeps the direct buy anchor and shared purchase section", () => {
+  assert.equal(ADVANCED_ECG_MARKETING_PRIMARY_CTA.href, "#buy");
+
+  const pageView = fs.readFileSync(
+    path.join(root, "src/components/marketing/advanced-ecg-marketing-page.tsx"),
+    "utf8",
+  );
+
+  assert.match(pageView, /AdvancedEcgLaunchPurchaseSection/);
+  assert.match(pageView, /Who this is for/);
+  assert.match(pageView, /Who it is not for/);
+  assert.match(pageView, /Learner access proof/);
 });
 
 test("pacemaker marketing page targets paced-rhythm and ICU telemetry SEO terms", () => {

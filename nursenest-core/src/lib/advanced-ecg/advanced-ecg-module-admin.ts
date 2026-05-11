@@ -1,9 +1,13 @@
 import "server-only";
 
 import { getEcgModuleReadiness } from "@/lib/ecg-module/ecg-module-readiness";
+import { buildRepoEcgDepthAuditSnapshot } from "@/lib/ecg-module/ecg-depth-audit-repo";
 import { ADVANCED_ECG_CURRICULUM, ADVANCED_ECG_PACEMAKER_CURRICULUM } from "@/lib/advanced-ecg/advanced-ecg-curriculum";
-import { getAdvancedEcgModuleStatus, type AdvancedEcgModuleStatus } from "@/lib/advanced-ecg/advanced-ecg-module-status";
-import { ADVANCED_ECG_MODULE_ENTITLEMENT, isAdvancedEcgModuleEnabled } from "@/lib/advanced-ecg/advanced-ecg-module-config";
+import {
+  getAdvancedEcgCommercialLaunchState,
+  type AdvancedEcgModuleStatus,
+} from "@/lib/advanced-ecg/advanced-ecg-module-status";
+import { ADVANCED_ECG_MODULE_ENTITLEMENT } from "@/lib/advanced-ecg/advanced-ecg-module-config";
 
 export type AdvancedEcgModuleAdminSnapshot = {
   enabled: boolean;
@@ -26,30 +30,67 @@ export type AdvancedEcgModuleAdminSnapshot = {
   };
   publishFailures: string[];
   canPublish: boolean;
+  coverage: {
+    coveredKeys: string[];
+    missingKeys: string[];
+    affectedRoutes: string[];
+    adminPreviewRoutes: string[];
+    matrix: Array<{
+      key: string;
+      lessonWordCount: number;
+      totalQuestions: number;
+      stripIdentification: number;
+      priorityAction: number;
+      complicationEscalation: number;
+      comparison: number;
+      clinicalCauses: number;
+      fullRationales: number;
+      distractorRationales: number;
+    }>;
+    advancedTopicsMissingMinimums: string[];
+  };
 };
 
-export async function getAdvancedEcgModuleAdminSnapshot(): Promise<AdvancedEcgModuleAdminSnapshot> {
-  const [status, readiness] = await Promise.all([getAdvancedEcgModuleStatus(), getEcgModuleReadiness()]);
-  const enabled = isAdvancedEcgModuleEnabled();
-
-  const publishFailures: string[] = [];
-  if (!enabled) publishFailures.push("Advanced ECG module is disabled by feature flag.");
-  if (readiness.counts.readyAdvanced <= 0) publishFailures.push("No publish-safe advanced ECG content is available yet.");
-  if (readiness.counts.manualReviewMissing > 0) {
-    publishFailures.push(`${readiness.counts.manualReviewMissing} high-risk ECG strip(s) still need clinician review.`);
-  }
-  if (readiness.counts.publishSafe < readiness.counts.readyAdvanced) {
-    publishFailures.push("Not every learner-visible advanced ECG item is marked publish-safe.");
-  }
-  if (readiness.counts.leakedGeneratedPacemaker > 0) {
-    publishFailures.push(
-      `${readiness.counts.leakedGeneratedPacemaker} generated pacemaker strip(s) are learner-visible. Pacemaker physiology must stay quarantined until static clinician-reviewed strips are used.`,
-    );
-  }
+export function buildAdvancedEcgCoverageAdminSnapshot() {
+  const repoAudit = buildRepoEcgDepthAuditSnapshot();
 
   return {
-    enabled,
-    status,
+    coveredKeys: repoAudit.audit.coveredKeys,
+    missingKeys: repoAudit.audit.missingKeys,
+    affectedRoutes: repoAudit.affectedRoutes,
+    adminPreviewRoutes: repoAudit.adminPreviewRoutes,
+    matrix: repoAudit.audit.coveredKeys.map((key) => {
+      const counts = repoAudit.audit.questionCountsByKey[key];
+      const rationale = repoAudit.audit.rationaleCompleteness[key];
+      return {
+        key,
+        lessonWordCount: repoAudit.audit.lessonWordCounts[key] ?? 0,
+        totalQuestions: counts?.total ?? 0,
+        stripIdentification: counts?.families.strip_identification ?? 0,
+        priorityAction: counts?.families.priority_action ?? 0,
+        complicationEscalation: counts?.families.complication_escalation ?? 0,
+        comparison: counts?.families.comparison ?? 0,
+        clinicalCauses: counts?.families.clinical_causes ?? 0,
+        fullRationales: rationale?.fullRationaleCount ?? 0,
+        distractorRationales: rationale?.distractorRationaleCount ?? 0,
+      };
+    }),
+    advancedTopicsMissingMinimums: repoAudit.advancedCoverage.topics
+      .filter((topic) => !topic.questionVolume.minimumsMet)
+      .map((topic) => topic.key),
+  };
+}
+
+export async function getAdvancedEcgModuleAdminSnapshot(): Promise<AdvancedEcgModuleAdminSnapshot> {
+  const [launchState, readiness] = await Promise.all([
+    getAdvancedEcgCommercialLaunchState(),
+    getEcgModuleReadiness(),
+  ]);
+  const coverage = buildAdvancedEcgCoverageAdminSnapshot();
+
+  return {
+    enabled: launchState.enabled,
+    status: launchState.status,
     entitlementRequired: true,
     curriculumUnits: ADVANCED_ECG_CURRICULUM.length,
     reviewCounts: {
@@ -66,8 +107,9 @@ export async function getAdvancedEcgModuleAdminSnapshot(): Promise<AdvancedEcgMo
       leakedGeneratedPacemaker: readiness.counts.leakedGeneratedPacemaker,
       requiresStaticCuration: true,
     },
-    publishFailures,
-    canPublish: publishFailures.length === 0,
+    publishFailures: launchState.publishFailures,
+    canPublish: launchState.canPublish,
+    coverage,
   };
 }
 

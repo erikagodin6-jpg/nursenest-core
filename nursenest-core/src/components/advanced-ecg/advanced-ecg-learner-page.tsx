@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type { AdvancedEcgAccessDecision } from "@/lib/advanced-ecg/advanced-ecg-access";
 import {
-  ADVANCED_ECG_MODULE_CHECKOUT_ANCHOR,
   ADVANCED_ECG_MODULE_ENTITLEMENT,
+  ADVANCED_ECG_MARKETING_ROUTE,
+  ADVANCED_ECG_MODULE_NAME,
+  ADVANCED_ECG_PRICE_LABEL,
   ADVANCED_ECG_PRICING_ANCHOR,
 } from "@/lib/advanced-ecg/advanced-ecg-module-config";
 import {
@@ -89,9 +92,27 @@ export function AdvancedEcgLearnerPage({
   const inPacemakerTrack = currentSectionSlug === "pacemakers" || Boolean(currentPacemakerSection);
   const focusUnit = currentPacemakerSection ?? currentSection;
   const highlightedPacemakerFramework = selectedPacemakerFrameworkSlug(currentSectionSlug, currentPacemakerSectionSlug);
+  const searchParams = useSearchParams();
+  const checkoutState = searchParams.get("checkout");
 
   return (
     <div className="space-y-6" data-nn-qa-advanced-ecg-page="">
+      {checkoutState === "success" ? (
+        <section className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] px-5 py-4 text-sm text-[var(--semantic-success-contrast)] shadow-[var(--semantic-shadow-soft)]">
+          <p className="font-semibold">Advanced ECG purchase complete</p>
+          <p className="mt-1 leading-relaxed">
+            Your {ADVANCED_ECG_MODULE_NAME} ownership is active. Start anywhere in the specialty lane below.
+          </p>
+        </section>
+      ) : null}
+      {checkoutState === "cancelled" ? (
+        <section className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-5 py-4 text-sm text-[var(--semantic-warning-contrast)] shadow-[var(--semantic-shadow-soft)]">
+          <p className="font-semibold">Checkout cancelled</p>
+          <p className="mt-1 leading-relaxed">
+            The specialty module is still here when you are ready to continue.
+          </p>
+        </section>
+      ) : null}
       <section className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-3xl">
@@ -99,7 +120,7 @@ export function AdvancedEcgLearnerPage({
               Advanced ECG Add-On
             </p>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--semantic-text-primary)]">
-              Advanced ECG & Telemetry Mastery
+              {ADVANCED_ECG_MODULE_NAME}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
               Not included in base exam subscriptions. Includes Basic ECG Foundations plus premium telemetry, 12-lead, ACLS, pacemaker, and case-based interpretation training for RN/NP learners.
@@ -108,6 +129,7 @@ export function AdvancedEcgLearnerPage({
               <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1">
                 Dedicated entitlement: <code>{ADVANCED_ECG_MODULE_ENTITLEMENT}</code>
               </span>
+              <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1">{ADVANCED_ECG_PRICE_LABEL} lifetime access</span>
               <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1">Includes Basic ECG Foundations</span>
               <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1">Clinician-reviewed before learner exposure</span>
               <span className="rounded-full border border-[var(--semantic-border-soft)] px-3 py-1">Separate from core ECG quizzes and renderer</span>
@@ -135,13 +157,13 @@ export function AdvancedEcgLearnerPage({
                 <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{reasonBody(access)}</p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   <Link
-                    href={access.reason === "sign_in_required" ? "/login?callbackUrl=%2Fmodules%2Fecg-advanced" : ADVANCED_ECG_PRICING_ANCHOR}
+                    href={access.reason === "sign_in_required" ? "/login?callbackUrl=%2Fmodules%2Fecg-advanced" : ADVANCED_ECG_MARKETING_ROUTE}
                     className={MARKETING_PRIMARY_CTA_CLASS}
                   >
-                    {access.reason === "sign_in_required" ? "Sign in" : "View add-on pricing"}
+                    {access.reason === "sign_in_required" ? "Sign in" : "View launch page"}
                   </Link>
-                  <Link href={ADVANCED_ECG_MODULE_CHECKOUT_ANCHOR} className={MARKETING_SECONDARY_CTA_CLASS}>
-                    Review access requirements
+                  <Link href={ADVANCED_ECG_PRICING_ANCHOR} className={MARKETING_SECONDARY_CTA_CLASS}>
+                    Review pricing
                   </Link>
                 </div>
               </>
@@ -324,9 +346,14 @@ export function AdvancedEcgLearnerPage({
               This learner surface is intentionally separate from the core ECG hub. Standard RN, PN, NP, and Allied subscriptions do not unlock it automatically, but owned Advanced ECG access now carries the foundational ECG path with it for continuous progression.
             </p>
             {!unlocked ? (
-              <Link href={ADVANCED_ECG_PRICING_ANCHOR} className={`mt-4 inline-flex ${MARKETING_PRIMARY_CTA_CLASS}`}>
-                Open pricing
-              </Link>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link href={ADVANCED_ECG_MARKETING_ROUTE} className={MARKETING_PRIMARY_CTA_CLASS}>
+                  Open launch page
+                </Link>
+                <Link href={ADVANCED_ECG_PRICING_ANCHOR} className={MARKETING_SECONDARY_CTA_CLASS}>
+                  Open pricing
+                </Link>
+              </div>
             ) : null}
           </div>
         </aside>

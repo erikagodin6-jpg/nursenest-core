@@ -124,6 +124,13 @@ export async function LearnerAccountCenterOverview({
             <p className="text-sm text-muted-foreground">
               <span className="font-medium text-foreground">{t("learner.account.center.planLabel")}</span> {planLabel}
             </p>
+            {billing.advancedEcgPackage ? (
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">Advanced ECG package:</span>{" "}
+                {billing.advancedEcgPackage.priceLabel} one-time purchase
+                {billing.advancedEcgPackage.accessActive ? " active" : " on file"}
+              </p>
+            ) : null}
             {billing.entitlement !== "error" && !billing.entitlement.hasAccess ? (
               <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--card))] p-4">
                 <p className="text-sm text-foreground">{t("learner.account.center.upgradeHint")}</p>

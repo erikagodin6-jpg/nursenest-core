@@ -1,4 +1,5 @@
 import type { CountryCode, SubscriptionStatus, TierCode, TrialStatus, UserRole } from "@prisma/client";
+import type { AdvancedEcgPackageSummary } from "@/lib/advanced-ecg/advanced-ecg-package";
 
 export type BillingSubscriptionRow = {
   status: SubscriptionStatus;
@@ -25,3 +26,5 @@ export type BillingUserRow = {
   /** Canonical allied profession slug when tier is ALLIED (marketing / lesson scope). */
   alliedProfessionKey: string | null;
 };
+
+export type { AdvancedEcgPackageSummary };

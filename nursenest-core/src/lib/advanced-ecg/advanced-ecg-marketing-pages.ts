@@ -1,5 +1,3 @@
-import { ADVANCED_ECG_PRICING_ANCHOR } from "@/lib/advanced-ecg/advanced-ecg-module-config";
-
 export type AdvancedEcgMarketingPage = {
   slug: "" | "telemetry" | "12-lead" | "acls" | "case-studies" | "pacemaker-rhythms";
   path: string;
@@ -406,7 +404,7 @@ export function buildAdvancedEcgMarketingFaqJsonLd(page: AdvancedEcgMarketingPag
 }
 
 export const ADVANCED_ECG_MARKETING_PRIMARY_CTA = {
-  href: ADVANCED_ECG_PRICING_ANCHOR,
+  href: "#buy",
   label: "Buy Advanced ECG",
 } as const;
 

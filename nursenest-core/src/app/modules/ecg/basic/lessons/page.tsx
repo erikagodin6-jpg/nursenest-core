@@ -1,7 +1,9 @@
 import { EcgModulePage } from "@/components/ecg-module/ecg-module-page";
 import { ECG_ROUTE_CONFIGS } from "@/lib/ecg-module/ecg-module-config";
+import { getCurrentEcgModuleAccess } from "@/lib/ecg-module/ecg-module.server";
 
-export default function EcgBasicLessonsPage() {
-  return <EcgModulePage config={ECG_ROUTE_CONFIGS["/modules/ecg/basic/lessons"]} />;
+export default async function EcgBasicLessonsPage() {
+  const access = await getCurrentEcgModuleAccess();
+  return <EcgModulePage config={ECG_ROUTE_CONFIGS["/modules/ecg/basic/lessons"]} accessState={access.ok ? access.accessState : "basic_only"} />;
 }
 

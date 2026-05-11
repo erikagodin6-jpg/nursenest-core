@@ -32,6 +32,7 @@ import {
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
 import { ALLIED_CAREER_DISPLAY_NAMES, type AlliedCareerKey } from "@/lib/pricing/display-catalog";
 import { pickLatestBaseSubscription } from "@/lib/subscriptions/subscription-plan-codes";
+import { buildAdvancedEcgPackageSummary } from "@/lib/advanced-ecg/advanced-ecg-package";
 
 export type { BillingStatusSurface, BillingSubscriptionRow, BillingUserRow };
 
@@ -45,6 +46,7 @@ export type StripeRenewalSnapshot = {
 export type BillingPagePayload = {
   user: BillingUserRow;
   subscription: BillingSubscriptionRow | null;
+  advancedEcgPackage: import("@/lib/advanced-ecg/advanced-ecg-package").AdvancedEcgPackageSummary | null;
   entitlement: PageEntitlementResult;
   /** Pathways unlocked by current entitlement (empty if no access). */
   pathwayLabels: string[];
@@ -125,6 +127,7 @@ const SUBSCRIPTION_SELECT = {
   status: true,
   stripeSubscriptionId: true,
   stripeCustomerId: true,
+  planCode: true,
   planTier: true,
   planCountry: true,
   alliedCareer: true,
@@ -167,6 +170,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
   if (!userRow) return null;
 
   const qaStaffSim = Boolean(qaSim && isLearnerEntitlementStaffBypassRole(userRow.role));
+  const advancedEcgPackage = buildAdvancedEcgPackageSummary(subscriptionRowsBefore);
 
   const subscriptionRowBefore = pickLatestBaseSubscription(subscriptionRowsBefore);
   let subscriptionRow = subscriptionRowBefore;
@@ -384,6 +388,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
   return {
     user,
     subscription,
+    advancedEcgPackage,
     entitlement,
     pathwayLabels,
     stripeRenewal,

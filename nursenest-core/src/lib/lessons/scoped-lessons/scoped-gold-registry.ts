@@ -95,6 +95,7 @@ import { LAUNCH_WAVE_1_BULK_PROVIDERS } from "@/lib/lessons/scoped-lessons/launc
 import { LAUNCH_WAVE_1A_PROVIDERS } from "@/lib/lessons/scoped-lessons/launch-wave-1a-high-yield-gold";
 import { CASE_STUDY_CASEBOOK_PROVIDERS } from "@/lib/lessons/scoped-lessons/case-study-casebook-specs";
 import { EXAM_COMPLETE_MED_SAFETY_PROVIDERS } from "@/lib/lessons/scoped-lessons/exam-complete-med-safety-specs";
+import { ECG_CORE_FOUNDATIONS_GOLD_PROVIDERS } from "@/lib/lessons/scoped-lessons/ecg-core-foundations-gold";
 import {
   getNpPrimaryCareFoundationsGoldLessonInput,
   NP_PRIMARY_CARE_FOUNDATIONS_GOLD_SLUG,
@@ -408,6 +409,7 @@ export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
     getHubListRow: npAntiinfectivesStewardshipOutpatientHubListInput,
   },
   ...LAUNCH_WAVE_1A_PROVIDERS,
+  ...ECG_CORE_FOUNDATIONS_GOLD_PROVIDERS,
   ...LAUNCH_WAVE_1_BULK_PROVIDERS,
   ...CASE_STUDY_CASEBOOK_PROVIDERS,
   ...EXAM_COMPLETE_MED_SAFETY_PROVIDERS,

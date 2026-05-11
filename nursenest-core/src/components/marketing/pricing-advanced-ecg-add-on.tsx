@@ -2,6 +2,9 @@
 
 import {
   ADVANCED_ECG_MODULE_ENTITLEMENT,
+  ADVANCED_ECG_MODULE_NAME,
+  ADVANCED_ECG_PRICE_LABEL,
+  ADVANCED_ECG_PURCHASE_BADGE,
 } from "@/lib/advanced-ecg/advanced-ecg-module-config";
 import {
   MARKETING_PRIMARY_CTA_CLASS,
@@ -11,9 +14,16 @@ import {
 type PricingAdvancedEcgAddOnProps = {
   onCheckout: () => void;
   checkoutLoading?: boolean;
+  checkoutEnabled?: boolean;
+  disabledMessage?: string | null;
 };
 
-export function PricingAdvancedEcgAddOn({ onCheckout, checkoutLoading = false }: PricingAdvancedEcgAddOnProps) {
+export function PricingAdvancedEcgAddOn({
+  onCheckout,
+  checkoutLoading = false,
+  checkoutEnabled = true,
+  disabledMessage = null,
+}: PricingAdvancedEcgAddOnProps) {
   return (
     <section
       id="advanced-ecg-add-on"
@@ -26,7 +36,7 @@ export function PricingAdvancedEcgAddOn({ onCheckout, checkoutLoading = false }:
             Separate paid module
           </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--semantic-text-primary)]">
-            Advanced ECG & Telemetry Mastery
+            {ADVANCED_ECG_MODULE_NAME}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
             Advanced ECG is a separate paid module. Not included in base exam subscriptions. Includes full access to the Basic ECG curriculum. Designed for RN/NP, critical care, emergency, telemetry, and advanced practice ECG interpretation.
@@ -40,20 +50,35 @@ export function PricingAdvancedEcgAddOn({ onCheckout, checkoutLoading = false }:
 
         <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 lg:w-[23rem]">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
-            One-time purchase
+            {ADVANCED_ECG_PURCHASE_BADGE}
+          </p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-[var(--semantic-text-primary)]">
+            {ADVANCED_ECG_PRICE_LABEL}
+          </p>
+          <p className="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
+            Lifetime access
           </p>
           <button
             type="button"
-            className={`mt-4 w-full ${MARKETING_PRIMARY_CTA_CLASS}`}
+            className={`mt-5 w-full ${MARKETING_PRIMARY_CTA_CLASS}`}
             onClick={onCheckout}
-            disabled={checkoutLoading}
+            disabled={checkoutLoading || !checkoutEnabled}
             data-nn-qa-advanced-ecg-purchase=""
           >
-            {checkoutLoading ? "Loading..." : "Buy Advanced ECG"}
+            {checkoutLoading
+              ? "Loading..."
+              : checkoutEnabled
+                ? `Buy ${ADVANCED_ECG_MODULE_NAME}`
+                : "Advanced ECG not available yet"}
           </button>
           <p className="mt-3 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
             Checkout starts a one-time Advanced ECG purchase with ongoing specialty-module access. It does not replace or expand the base RN/NP subscription you already have.
           </p>
+          {disabledMessage ? (
+            <p className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-2 text-xs leading-relaxed text-[var(--semantic-warning-contrast)]">
+              {disabledMessage}
+            </p>
+          ) : null}
         </div>
       </div>
 

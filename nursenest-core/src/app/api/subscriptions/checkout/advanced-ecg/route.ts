@@ -20,16 +20,21 @@ import {
 import { loadCanonicalLearnerAccessForUserId } from "@/lib/entitlements/canonical-learner-access.server";
 import {
   ADVANCED_ECG_MODULE_ENTITLEMENT,
+  ADVANCED_ECG_MODULE_NAME,
   advancedEcgPlanCode,
+  advancedEcgPriceLabel,
+  ADVANCED_ECG_PURCHASE_MODEL,
   advancedEcgStripePriceEnvKey,
   isAdvancedEcgTierEligible,
 } from "@/lib/advanced-ecg/advanced-ecg-module-config";
 import { hasActiveAdvancedEcgEntitlementFromRows } from "@/lib/advanced-ecg/advanced-ecg-access";
+import { getAdvancedEcgCommercialLaunchState } from "@/lib/advanced-ecg/advanced-ecg-module-status";
 
 const bodySchema = z
   .object({
     acceptPolicies: z.literal(true),
     policyVersion: z.string().min(1).max(64),
+    entryPoint: z.enum(["pricing", "launch", "learner"]).default("pricing"),
   })
   .strict();
 
@@ -78,6 +83,13 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: "Advanced ECG checkout is currently available only for RN and NP learners.", error: "Advanced ECG checkout is currently available only for RN and NP learners." },
         { status: 403 },
+      );
+    }
+    const launchState = await getAdvancedEcgCommercialLaunchState();
+    if (!launchState.canSellPublicly) {
+      return NextResponse.json(
+        { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: launchState.publicMessage, error: launchState.publicMessage },
+        { status: 409 },
       );
     }
 
@@ -153,13 +165,29 @@ export async function POST(req: Request) {
       planCode,
       moduleKey: "advanced_ecg",
       moduleEntitlement: ADVANCED_ECG_MODULE_ENTITLEMENT,
-      purchaseModel: "lifetime_one_time",
+      moduleName: ADVANCED_ECG_MODULE_NAME,
+      modulePriceLabel: advancedEcgPriceLabel(),
+      purchaseModel: ADVANCED_ECG_PURCHASE_MODEL,
       baseTierAtCheckout: canonicalAccess.tier ?? "",
       baseCountryAtCheckout: canonicalAccess.country ?? "",
       app: "nursenest-core",
       legalPolicyVersion: body.data.policyVersion,
       legalPoliciesAcceptedAt: acceptedAt.toISOString(),
+      checkoutEntryPoint: body.data.entryPoint,
     };
+
+    const successPath =
+      body.data.entryPoint === "launch"
+        ? "/advanced-ecg?checkout=success#buy"
+        : body.data.entryPoint === "learner"
+          ? "/modules/ecg-advanced?checkout=success"
+          : "/pricing?checkout=success#advanced-ecg-add-on";
+    const cancelPath =
+      body.data.entryPoint === "launch"
+        ? "/advanced-ecg?checkout=cancelled#buy"
+        : body.data.entryPoint === "learner"
+          ? "/modules/ecg-advanced?checkout=cancelled#upgrade"
+          : "/pricing?checkout=cancelled#advanced-ecg-add-on";
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -168,8 +196,8 @@ export async function POST(req: Request) {
         ? { customer: existingCustomer.stripeCustomerId.trim() }
         : { customer_email: userForCheckout.email }),
       allow_promotion_codes: true,
-      success_url: `${appUrl}/modules/ecg-advanced?checkout=success`,
-      cancel_url: `${appUrl}/pricing?checkout=cancelled#advanced-ecg-add-on`,
+      success_url: `${appUrl}${successPath}`,
+      cancel_url: `${appUrl}${cancelPath}`,
       client_reference_id: userId,
       metadata,
     });

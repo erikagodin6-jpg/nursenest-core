@@ -26,6 +26,7 @@ import {
 import type { PricingOptionsPayload } from "@/lib/pricing/pricing-options-payload-types";
 import { validatePricingOptionsPayload } from "@/lib/pricing/pricing-options-payload-validate";
 import { STRIPE_BILLED_NURSING_TIERS } from "@/lib/pricing/display-catalog";
+import { getAdvancedEcgCommercialLaunchState } from "@/lib/advanced-ecg/advanced-ecg-module-status";
 
 function pricingPayloadHasRenderablePlans(p: PricingOptionsPayload): boolean {
   const plans = p.plans;
@@ -86,6 +87,7 @@ export async function MarketingPricingPage({
     getOptionalPublicMessage(m, "pages.pricing.conversion.lead", { fallbackMessages: en }).trim() ||
     MARKETING_PRICING_CONVERSION_LEAD_FALLBACK;
   const initialPricingOptions = await loadPricingOptionsForMarketingPage();
+  const advancedEcgLaunchState = await getAdvancedEcgCommercialLaunchState();
   const payloadCheck = validatePricingOptionsPayload(initialPricingOptions);
   if (!payloadCheck.ok) {
     safeServerLog("billing", "marketing_pricing_page_payload_invalid_after_fallback", {
@@ -117,6 +119,10 @@ export async function MarketingPricingPage({
         serverTierSubheads={serverTierSubheads}
         initialPricingOptions={initialPricingOptions}
         initialSearchParamsString={initialSearchParamsString}
+        advancedEcgCheckoutEnabled={advancedEcgLaunchState.canSellPublicly}
+        advancedEcgDisabledMessage={
+          advancedEcgLaunchState.canSellPublicly ? null : advancedEcgLaunchState.publicMessage
+        }
       />
     </PricingPageErrorBoundary>
   );

@@ -242,6 +242,56 @@
       "filename": "supplementary/practice-tests-hub.png",
       "waitFor": "main",
       "manualReviewNotes": "Practice exams hub — complements slot 1 (rationale) and CAT slots 6–7."
+    },
+    {
+      "id": "extra-advanced-ecg-launch-page",
+      "route": "/advanced-ecg#buy",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "midnight",
+      "filename": "supplementary/advanced-ecg-launch-page.png",
+      "waitFor": "#buy",
+      "manualReviewNotes": "Dedicated Advanced ECG launch page with hero, curriculum proof, and buy section."
+    },
+    {
+      "id": "extra-advanced-ecg-pricing-block",
+      "route": "/pricing#advanced-ecg-add-on",
+      "viewport": "desktop",
+      "auth": "guest",
+      "theme": "ocean",
+      "filename": "supplementary/advanced-ecg-pricing-block.png",
+      "waitFor": "#advanced-ecg-add-on",
+      "manualReviewNotes": "Pricing page Advanced ECG $99 package block."
+    },
+    {
+      "id": "extra-advanced-ecg-locked-learner",
+      "route": "/modules/ecg-advanced",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "midnight",
+      "filename": "supplementary/advanced-ecg-locked-learner.png",
+      "waitFor": "[data-nn-qa-advanced-ecg-page]",
+      "manualReviewNotes": "Signed-in learner without Advanced ECG entitlement sees premium locked state and upgrade CTA."
+    },
+    {
+      "id": "extra-advanced-ecg-unlocked-learner",
+      "route": "/modules/ecg-advanced",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "midnight",
+      "filename": "supplementary/advanced-ecg-unlocked-learner.png",
+      "waitFor": "[data-nn-qa-advanced-ecg-page]",
+      "manualReviewNotes": "Signed-in learner with Advanced ECG entitlement sees full curriculum access."
+    },
+    {
+      "id": "extra-advanced-ecg-purchase-success",
+      "route": "/modules/ecg-advanced?checkout=success",
+      "viewport": "desktop",
+      "auth": "demo",
+      "theme": "midnight",
+      "filename": "supplementary/advanced-ecg-purchase-success.png",
+      "waitFor": "[data-nn-qa-advanced-ecg-page]",
+      "manualReviewNotes": "Post-checkout success state on the Advanced ECG learner surface."
     }
   ]
 }

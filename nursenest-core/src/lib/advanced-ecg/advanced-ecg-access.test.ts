@@ -82,7 +82,7 @@ test("Advanced ECG entitlement rows require module plan codes", () => {
     hasActiveAdvancedEcgEntitlementFromRows([
       {
         status: SubscriptionStatus.ACTIVE,
-        planCode: "module_advanced_ecg_monthly",
+        planCode: "module_advanced_ecg_lifetime",
         currentPeriodEnd: new Date("2026-06-11T00:00:00.000Z"),
         trialEnd: null,
         updatedAt: new Date("2026-05-11T00:00:00.000Z"),

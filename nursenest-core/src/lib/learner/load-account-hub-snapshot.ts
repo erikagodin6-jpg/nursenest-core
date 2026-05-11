@@ -7,6 +7,7 @@ import { resolveEntitlementForPage, type PageEntitlementResult } from "@/lib/ent
 import { loadPremiumDashboardSnapshot, type PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import { pickLatestBaseSubscription } from "@/lib/subscriptions/subscription-plan-codes";
+import { buildAdvancedEcgPackageSummary, type AdvancedEcgPackageSummary } from "@/lib/advanced-ecg/advanced-ecg-package";
 
 export type AccountHubUserRow = {
   email: string | null;
@@ -31,6 +32,7 @@ export type AccountHubSubscriptionRow = {
 export type AccountHubBundle = {
   userRow: AccountHubUserRow | null;
   subscription: AccountHubSubscriptionRow;
+  advancedEcgPackage: AdvancedEcgPackageSummary | null;
   entitlement: PageEntitlementResult;
   premiumSnapshot: PremiumDashboardSnapshot | null;
   topicPerf: TopicPerformanceSnapshot | null;
@@ -65,9 +67,13 @@ export async function loadAccountHubBundle(userId: string): Promise<AccountHubBu
       stripeCustomerId: true,
       stripeSubscriptionId: true,
       createdAt: true,
+      currentPeriodEnd: true,
+      trialEnd: true,
+      updatedAt: true,
     },
   });
   const subscription = pickLatestBaseSubscription(subscriptionRows);
+  const advancedEcgPackage = buildAdvancedEcgPackageSummary(subscriptionRows);
 
   const entitlement = await resolveEntitlementForPage(userId);
 
@@ -87,5 +93,5 @@ export async function loadAccountHubBundle(userId: string): Promise<AccountHubBu
     }
   }
 
-  return { userRow, subscription, entitlement, premiumSnapshot, topicPerf };
+  return { userRow, subscription, advancedEcgPackage, entitlement, premiumSnapshot, topicPerf };
 }

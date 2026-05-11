@@ -13,6 +13,8 @@ test("pricing add-on block keeps Advanced ECG separate from base plans", () => {
   assert.match(html, /Not included in base exam subscriptions\./i);
   assert.match(html, /Includes full access to the Basic ECG curriculum\./i);
   assert.match(html, /One-time purchase/i);
+  assert.match(html, /\$99 CAD/i);
+  assert.match(html, /Lifetime access/i);
   assert.match(html, /Designed for RN\/NP, critical care, emergency, telemetry, and advanced practice ECG interpretation\./i);
   assert.match(html, /Own entitlement:\s*<code>module_advanced_ecg<\/code>/i);
   assert.doesNotMatch(html, /included in standard RN\/NP subscriptions/i);

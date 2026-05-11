@@ -13,6 +13,7 @@ import { randomBytes } from "node:crypto";
 import { hash } from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
 import { getExamPathwayById } from "../src/lib/exam-pathways/exam-product-registry";
+import { advancedEcgPlanCode } from "../src/lib/advanced-ecg/advanced-ecg-module-config";
 
 const prisma = new PrismaClient();
 
@@ -22,6 +23,7 @@ const DEMO_PASSWORD =
   process.env.SCREENSHOT_DEMO_PASSWORD?.trim() ?? "DemoScreenshot2024!";
 const DEMO_RESET = process.env.SCREENSHOT_DEMO_RESET === "true";
 const PATHWAY_ID = process.env.SCREENSHOT_DEMO_PATHWAY_ID?.trim() ?? "ca-rn-nclex-rn";
+const INCLUDE_ADVANCED_ECG = process.env.SCREENSHOT_DEMO_INCLUDE_ADVANCED_ECG === "true";
 
 async function ensureDemoSubscription(userId: string) {
   const pathway = getExamPathwayById(PATHWAY_ID);
@@ -56,6 +58,35 @@ async function ensureDemoSubscription(userId: string) {
   console.log("  Created demo subscription row for screenshot captures.");
 }
 
+async function ensureAdvancedEcgEntitlement(userId: string, tier: string, country: string) {
+  if (!INCLUDE_ADVANCED_ECG) return;
+
+  const existing = await prisma.subscription.findFirst({
+    where: { userId, planCode: advancedEcgPlanCode() },
+    orderBy: { createdAt: "desc" },
+  });
+  if (existing) {
+    console.log(`  Advanced ECG entitlement already present (${existing.id}) — skipping create.`);
+    return;
+  }
+
+  await prisma.subscription.create({
+    data: {
+      userId,
+      status: "ACTIVE",
+      stripeSubscriptionId: `demo_advanced_ecg_${randomBytes(12).toString("hex")}`,
+      stripeCustomerId: null,
+      planTier: tier,
+      planCountry: country,
+      planDuration: "lifetime",
+      planCode: advancedEcgPlanCode(),
+      currentPeriodEnd: null,
+      cancelAtPeriodEnd: false,
+    },
+  });
+  console.log("  Created Advanced ECG entitlement row for screenshot captures.");
+}
+
 async function main() {
   const pathway = getExamPathwayById(PATHWAY_ID);
   if (!pathway) {
@@ -88,6 +119,7 @@ async function main() {
     });
     console.log("  Updated pathway / demo flags.");
     await ensureDemoSubscription(existing.id);
+    await ensureAdvancedEcgEntitlement(existing.id, pathway.stripeTier, pathway.countryCode);
     printCredentials();
     return;
   }
@@ -113,6 +145,7 @@ async function main() {
 
   console.log(`\n  Created demo user: ${user.id}`);
   await ensureDemoSubscription(user.id);
+  await ensureAdvancedEcgEntitlement(user.id, pathway.stripeTier, pathway.countryCode);
   printCredentials();
 }
 

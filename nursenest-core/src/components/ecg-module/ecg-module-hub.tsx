@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Activity, ChevronRight, Gauge, Layers, Zap } from "lucide-react";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { ECG_ROUTE_CONFIGS } from "@/lib/ecg-module/ecg-module-config";
+import type { EcgBasicAccessState } from "@/lib/ecg-module/ecg-access-resolution";
 
 const HERO_WAVE_HEIGHTS = [18, 42, 28, 55, 35, 62, 40, 48, 33, 58, 44, 52, 30, 46, 38, 50, 36, 44, 32, 56, 41, 47, 29, 53] as const;
 
@@ -46,14 +47,10 @@ function WaveformStrip({ className }: { className?: string }) {
   );
 }
 
-export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
+export function EcgModuleHub({ t, accessState }: { t: LearnerMarketingT; accessState: Exclude<EcgBasicAccessState, "no_access"> }) {
   const basicLessons = ECG_ROUTE_CONFIGS["/modules/ecg/basic/lessons"];
   const basicQuizzes = ECG_ROUTE_CONFIGS["/modules/ecg/basic/quizzes"];
   const basicWs = ECG_ROUTE_CONFIGS["/modules/ecg/basic/worksheets"];
-  const advLessons = ECG_ROUTE_CONFIGS["/modules/ecg/advanced/lessons"];
-  const advDrills = ECG_ROUTE_CONFIGS["/modules/ecg/advanced/video-drills"];
-  const advScenarios = ECG_ROUTE_CONFIGS["/modules/ecg/advanced/scenarios"];
-  const advWs = ECG_ROUTE_CONFIGS["/modules/ecg/advanced/worksheets"];
 
   const basicPath: HubSection = {
     id: "basic",
@@ -87,28 +84,28 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
     eyebrow: t("pages.home.premium.ecg.advancedBadge"),
     items: [
       {
-        href: "/modules/ecg/advanced/lessons",
-        title: advLessons.title,
-        subtitle: advLessons.subtitle,
-        behaviors: advLessons.behaviors,
+        href: "/modules/ecg-advanced/foundations",
+        title: "Advanced foundations",
+        subtitle: "Telemetry-first premium onboarding into Advanced ECG & Telemetry Mastery.",
+        behaviors: ["Premium specialty lane", "Includes Basic ECG Foundations", "Clinician-reviewed pacing guardrails"],
       },
       {
-        href: "/modules/ecg/advanced/video-drills",
-        title: advDrills.title,
-        subtitle: advDrills.subtitle,
-        behaviors: advDrills.behaviors,
+        href: "/modules/ecg-advanced/telemetry",
+        title: "Telemetry lane",
+        subtitle: "Monitor interpretation, escalation cues, and ICU-grade rhythm framing.",
+        behaviors: ["Telemetry workflows", "Critical-care positioning", "Premium case depth"],
       },
       {
-        href: "/modules/ecg/advanced/scenarios",
-        title: advScenarios.title,
-        subtitle: advScenarios.subtitle,
-        behaviors: advScenarios.behaviors,
+        href: "/modules/ecg-advanced/acls",
+        title: "ACLS and cases",
+        subtitle: "Move from rhythm recognition into emergency interpretation and case progression.",
+        behaviors: ["ACLS decisions", "Case progressions", "Priority response reasoning"],
       },
       {
-        href: "/modules/ecg/advanced/worksheets",
-        title: advWs.title,
-        subtitle: advWs.subtitle,
-        behaviors: advWs.behaviors,
+        href: "/modules/ecg-advanced/pacemakers",
+        title: "Pacemaker interpretation",
+        subtitle: "Paced-rhythm recognition, malfunction callouts, and curated ICU telemetry cases.",
+        behaviors: ["Pacing spikes", "Capture overlays", "Pacemaker-safe curriculum"],
       },
     ],
   };
@@ -238,6 +235,39 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
       </section>
 
       <section
+        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_22%,var(--semantic-surface))] p-5 sm:p-6"
+        aria-labelledby="ecg-advanced-entitlement-heading"
+      >
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-warning)]">Advanced ECG &amp; Telemetry Mastery</p>
+            <h2 id="ecg-advanced-entitlement-heading" className="mt-1 text-lg font-semibold text-[var(--semantic-text-primary)]">
+              {accessState === "advanced_includes_basic" ? "Includes Basic ECG Foundations" : "Separate premium specialty module"}
+            </h2>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              {accessState === "advanced_includes_basic"
+                ? "Your Advanced ECG & Telemetry Mastery entitlement unlocks the full foundational ECG curriculum and keeps premium telemetry, 12-lead, ACLS, and pacemaker interpretation in one continuous pathway."
+                : "Basic ECG access does not bundle Advanced ECG & Telemetry Mastery. Advanced remains a distinct premium module for telemetry, 12-lead, ACLS, and pacemaker interpretation."}
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            <Link
+              href="/modules/ecg-advanced"
+              className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-warning)_92%,var(--semantic-text-primary))] shadow-[var(--semantic-shadow-soft)] sm:text-sm"
+            >
+              {accessState === "advanced_includes_basic" ? "Open Advanced ECG" : "Preview premium module"}
+            </Link>
+            <Link
+              href="/advanced-ecg"
+              className="inline-flex min-h-10 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-[var(--semantic-shadow-soft)] sm:text-sm"
+            >
+              Learn more
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section
         className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-4)_06%,var(--semantic-surface))] p-5 sm:p-6"
         aria-labelledby="ecg-drills-heading"
       >
@@ -256,10 +286,10 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
               {basicQuizzes.title}
             </Link>
             <Link
-              href="/modules/ecg/advanced/video-drills"
+              href="/modules/ecg-advanced"
               className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-4 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-warning)_92%,var(--semantic-text-primary))] shadow-[var(--semantic-shadow-soft)] sm:text-sm"
             >
-              {advDrills.title}
+              {accessState === "advanced_includes_basic" ? "Open Advanced ECG" : "Preview Advanced ECG"}
             </Link>
           </div>
         </div>

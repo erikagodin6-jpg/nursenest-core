@@ -51,6 +51,17 @@ test("advanced ECG learner routes remain noindex", () => {
   assert.match(layout, /googleBot:\s*\{\s*index: false/);
 });
 
+test("advanced ECG learner surface includes launch-ready ownership and purchase-state messaging", () => {
+  const learnerPage = fs.readFileSync(
+    path.join(process.cwd(), "src/components/advanced-ecg/advanced-ecg-learner-page.tsx"),
+    "utf8",
+  );
+  assert.match(learnerPage, /Advanced ECG purchase complete/);
+  assert.match(learnerPage, /Open launch page/);
+  assert.match(learnerPage, /ADVANCED_ECG_PRICE_LABEL/);
+  assert.match(learnerPage, /lifetime access/);
+});
+
 test("legacy /modules/ecg/advanced routes redirect into the specialty Advanced ECG tree", () => {
   for (const route of [
     "src/app/modules/ecg/advanced/page.tsx",

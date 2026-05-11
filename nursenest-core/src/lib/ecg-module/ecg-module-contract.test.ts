@@ -97,6 +97,25 @@ test("ECG learner layout uses dynamic robots metadata; legacy interpretation sta
   assert.match(access, /notFound\(\)/);
 });
 
+test("core ECG hub and basic pages distinguish basic-only versus advanced-includes-basic access", () => {
+  const hubPage = read("src/app/modules/ecg/page.tsx");
+  const basicLessons = read("src/app/modules/ecg/basic/lessons/page.tsx");
+  const hub = read("src/components/ecg-module/ecg-module-hub.tsx");
+  const modulePage = read("src/components/ecg-module/ecg-module-page.tsx");
+  const access = read("src/lib/ecg-module/ecg-module.server.ts");
+
+  assert.match(access, /"basic_only"/);
+  assert.match(access, /"advanced_includes_basic"/);
+  assert.match(hubPage, /getCurrentEcgModuleAccess/);
+  assert.match(basicLessons, /getCurrentEcgModuleAccess/);
+  assert.match(hub, /Advanced ECG & Telemetry Mastery/);
+  assert.match(hub, /Includes Basic ECG Foundations/);
+  assert.match(hub, /\/modules\/ecg-advanced/);
+  assert.match(modulePage, /accessState/);
+  assert.match(modulePage, /advanced_includes_basic/);
+  assert.match(modulePage, /basic_only/);
+});
+
 test("ECG module publish route is admin-only and refuses failed readiness gates", () => {
   const src = read("src/app/api/admin/modules/ecg/publish/route.ts");
   assert.match(src, /requireAdmin/);
