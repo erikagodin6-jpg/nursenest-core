@@ -13,6 +13,8 @@ export type AccessScope = {
     | "grace_period"
     | "past_due_grace"
     | "active_trial"
+    /** Allied tier subscription active in Stripe/DB but occupation scope missing or invalid — premium study surfaces stay locked until repaired. */
+    | "allied_occupation_required"
     | "no_access";
   tier: TierCode | null;
   country: CountryCode | null;

@@ -1,7 +1,10 @@
 import "server-only";
 
 import type Stripe from "stripe";
-import { SubscriptionStatus, TrialStatus, type CountryCode, type TierCode } from "@prisma/client";
+import { SubscriptionStatus, TierCode, TrialStatus, type CountryCode } from "@prisma/client";
+import { isValidAlliedCareerKey } from "@/lib/allied/allied-billing-career-resolution";
+import { getAlliedProfessionLockState } from "@/lib/allied/allied-profession-lock.server";
+import { listAlliedProfessionsSorted } from "@/lib/allied/allied-professions-registry";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
@@ -27,6 +30,7 @@ import {
   canUserCancelStripeSubscription,
   reconcileUserSubscriptionFromStripe,
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
+import { ALLIED_CAREER_DISPLAY_NAMES, type AlliedCareerKey } from "@/lib/pricing/display-catalog";
 
 export type { BillingStatusSurface, BillingSubscriptionRow, BillingUserRow };
 
@@ -57,6 +61,11 @@ export type BillingPagePayload = {
   pastDueGraceEndsAt: Date | null;
   /** Best-effort current period end (Stripe API, else DB) for “access until” copy. */
   billingPeriodEndDisplay: Date | null;
+  /** Allied Health only — selected profession display + lock after subscription (support overrides excluded). */
+  alliedProfessionSummary: {
+    displayLabel: string | null;
+    lockedAfterPurchase: boolean;
+  } | null;
 };
 
 function tierHuman(tier: TierCode): string {
@@ -142,6 +151,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
         trialStartedAt: true,
         learnerPath: true,
         passwordHash: true,
+        alliedProfessionKey: true,
       },
     }),
     prisma.subscription.findFirst({
@@ -202,6 +212,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     trialStartedAt: userRow.trialStartedAt,
     learnerPath: userRow.learnerPath,
     passwordHash: userRow.passwordHash,
+    alliedProfessionKey: userRow.alliedProfessionKey ?? null,
   };
 
   let subscription: BillingSubscriptionRow | null = subscriptionRow
@@ -302,6 +313,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     entitlementReason,
     trialEndsAt: user.trialEndsAt,
     skipStaffAdminSurface: qaStaffSim,
+    effectiveTier,
   });
 
   let pastDueGraceEndsAt: Date | null = null;
@@ -347,6 +359,23 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     showTrialEndCallout = entitlement !== "error" && entitlement.reason === "active_trial";
   }
 
+  let alliedProfessionSummary: BillingPagePayload["alliedProfessionSummary"] = null;
+  if (effectiveTier === TierCode.ALLIED) {
+    const lockState = await getAlliedProfessionLockState(userId);
+    let displayLabel: string | null = null;
+    const careerRaw = subscription?.alliedCareer?.trim();
+    if (careerRaw && isValidAlliedCareerKey(careerRaw)) {
+      displayLabel = ALLIED_CAREER_DISPLAY_NAMES[careerRaw as AlliedCareerKey];
+    } else if (userRow.alliedProfessionKey?.trim()) {
+      const pk = userRow.alliedProfessionKey.trim().toLowerCase();
+      displayLabel = listAlliedProfessionsSorted().find((p) => p.professionKey === pk)?.h1 ?? pk;
+    }
+    alliedProfessionSummary = {
+      displayLabel,
+      lockedAfterPurchase: lockState.locked,
+    };
+  }
+
   return {
     user,
     subscription,
@@ -361,5 +390,6 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     showTrialEndCallout,
     pastDueGraceEndsAt,
     billingPeriodEndDisplay,
+    alliedProfessionSummary,
   };
 }

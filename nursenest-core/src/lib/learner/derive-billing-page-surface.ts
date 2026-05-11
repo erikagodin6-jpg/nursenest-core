@@ -1,4 +1,4 @@
-import { SubscriptionStatus, TrialStatus } from "@prisma/client";
+import { SubscriptionStatus, TierCode, TrialStatus } from "@prisma/client";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import type { AccessScope } from "@/lib/entitlements/user-access-types";
 import type { BillingSubscriptionRow, BillingUserRow } from "@/lib/learner/billing-page-payload-types";
@@ -15,6 +15,8 @@ export type BillingStatusSurface =
   | "trial"
   | "trial_ending"
   | "inactive"
+  /** Paid Allied subscription exists but occupation scope is missing — study tools stay gated until repaired. */
+  | "allied_occupation_incomplete"
   | "admin";
 
 /**
@@ -26,6 +28,8 @@ export function deriveBillingSurface(args: {
   subscription: BillingSubscriptionRow | null;
   hasAccess: boolean;
   entitlementReason: AccessScope["reason"] | "error";
+  /** Effective tier after Stripe mirror (used for Allied occupation gate banner). */
+  effectiveTier?: TierCode;
   trialEndsAt: Date | null;
   /**
    * When staff use signed **admin learner QA** simulation, entitlement reflects the simulated learner.
@@ -39,6 +43,15 @@ export function deriveBillingSurface(args: {
   const now = Date.now();
   const trialActive = args.user.trialStatus === TrialStatus.ACTIVE && args.trialEndsAt && args.trialEndsAt.getTime() > now;
   const reason = args.entitlementReason === "error" ? ("no_access" as const) : args.entitlementReason;
+
+  if (
+    sub?.status === SubscriptionStatus.ACTIVE &&
+    !args.hasAccess &&
+    reason === "allied_occupation_required" &&
+    args.effectiveTier === TierCode.ALLIED
+  ) {
+    return "allied_occupation_incomplete";
+  }
 
   if (sub?.status === SubscriptionStatus.ACTIVE && args.hasAccess && sub.cancelAtPeriodEnd) {
     return "active_scheduled_cancel";

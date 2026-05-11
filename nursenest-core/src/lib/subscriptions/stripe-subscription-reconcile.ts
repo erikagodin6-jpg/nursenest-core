@@ -1,7 +1,11 @@
 import "server-only";
 
 import type Stripe from "stripe";
-import { Prisma, SubscriptionStatus } from "@prisma/client";
+import { Prisma, SubscriptionStatus, TierCode } from "@prisma/client";
+import {
+  canonicalProfessionKeyForAlliedCareer,
+  isValidAlliedCareerKey,
+} from "@/lib/allied/allied-billing-career-resolution";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -225,6 +229,7 @@ export async function persistStripeSubscriptionMirrorForUser(userId: string, sub
   const stripeMeta = (sub.metadata && typeof sub.metadata === "object" ? sub.metadata : {}) as Record<string, string>;
   const planCodeMeta = stripeMeta.planCode?.trim();
   const billingRegionMeta = stripeMeta.region?.trim();
+  const metaCareerRaw = stripeMeta.alliedCareer?.trim();
 
   if (mappedStatus === null) {
     safeServerLog("subscription_reconcile", "persist_skip_incomplete_paused", {
@@ -249,7 +254,15 @@ export async function persistStripeSubscriptionMirrorForUser(userId: string, sub
   if (mapped) {
     dataUpdate.planTier = mapped.tier;
     dataUpdate.planCountry = mapped.country;
-    if (mapped.alliedCareer) dataUpdate.alliedCareer = mapped.alliedCareer;
+  }
+  const resolvedAlliedCareer =
+    metaCareerRaw && isValidAlliedCareerKey(metaCareerRaw)
+      ? metaCareerRaw
+      : mapped?.tier === TierCode.ALLIED && mapped?.alliedCareer
+        ? mapped.alliedCareer
+        : undefined;
+  if (resolvedAlliedCareer) {
+    dataUpdate.alliedCareer = resolvedAlliedCareer;
   }
   if (planCodeMeta) dataUpdate.planCode = planCodeMeta;
   if (billingRegionMeta) dataUpdate.billingRegionSlug = billingRegionMeta;
@@ -282,7 +295,7 @@ export async function persistStripeSubscriptionMirrorForUser(userId: string, sub
         planCountry: mapped?.country ?? undefined,
         planCode: planCodeMeta || undefined,
         billingRegionSlug: billingRegionMeta || undefined,
-        alliedCareer: mapped?.alliedCareer ?? undefined,
+        alliedCareer: resolvedAlliedCareer,
         ...(mappedStatus === SubscriptionStatus.PAST_DUE ? { pastDueSince: new Date() } : { pastDueSince: null }),
       },
     });
@@ -294,6 +307,16 @@ export async function persistStripeSubscriptionMirrorForUser(userId: string, sub
       select: { userId: true },
     });
     if (rowForSync) await syncUserFromStripePriceId(rowForSync.userId, priceId);
+  }
+
+  if (resolvedAlliedCareer && isValidAlliedCareerKey(resolvedAlliedCareer)) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        tier: TierCode.ALLIED,
+        alliedProfessionKey: canonicalProfessionKeyForAlliedCareer(resolvedAlliedCareer),
+      },
+    });
   }
 
   return true;

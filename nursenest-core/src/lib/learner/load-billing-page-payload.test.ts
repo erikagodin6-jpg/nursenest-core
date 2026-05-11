@@ -14,6 +14,7 @@ function user(over: Partial<BillingUserRow> = {}): BillingUserRow {
     trialStartedAt: null,
     learnerPath: null,
     passwordHash: null,
+    alliedProfessionKey: null,
     ...over,
   };
 }

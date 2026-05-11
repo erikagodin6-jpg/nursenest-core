@@ -208,6 +208,15 @@ export function alliedStripePriceEnvKey(
   return `STRIPE_PRICE_ALLIED_${career.toUpperCase()}_${durationEnvSuffix(duration)}`;
 }
 
+/**
+ * **Preferred** Allied Stripe Price env — one shared price id per billing interval for every occupation.
+ * When set for a duration, checkout and {@link eachStripePriceMatrixRow} use it for all allied careers.
+ * Legacy per-career env vars remain as fallback until fully migrated.
+ */
+export function sharedAlliedStripePriceEnvKey(duration: BillingDuration): string {
+  return `STRIPE_PRICE_ALLIED_${durationEnvSuffix(duration)}`;
+}
+
 // ── Plan code helpers ───────────────────────────────────────────────────────
 
 function durationPlanSuffix(duration: BillingDuration): string {

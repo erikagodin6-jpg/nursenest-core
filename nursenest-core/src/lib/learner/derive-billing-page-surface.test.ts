@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { SubscriptionStatus, TrialStatus, UserRole } from "@prisma/client";
+import { SubscriptionStatus, TierCode, TrialStatus, UserRole } from "@prisma/client";
 import { deriveBillingSurface } from "@/lib/learner/derive-billing-page-surface";
 
 const baseUser = {
@@ -91,5 +91,27 @@ describe("deriveBillingSurface", () => {
       trialEndsAt: null,
     });
     assert.equal(s, "canceled_access_until");
+  });
+
+  it("surfaces allied_occupation_incomplete when paid allied sub lacks occupation scope", () => {
+    const s = deriveBillingSurface({
+      user: { ...baseUser, role: UserRole.LEARNER },
+      subscription: {
+        status: SubscriptionStatus.ACTIVE,
+        stripeSubscriptionId: "sub_x",
+        stripeCustomerId: "cus_x",
+        planTier: "ALLIED",
+        planCountry: "US",
+        alliedCareer: null,
+        cancelAtPeriodEnd: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      hasAccess: false,
+      entitlementReason: "allied_occupation_required",
+      effectiveTier: TierCode.ALLIED,
+      trialEndsAt: null,
+    });
+    assert.equal(s, "allied_occupation_incomplete");
   });
 });

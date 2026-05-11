@@ -1,6 +1,6 @@
 # Sitemap segmentation validation report
 
-Generated: **2026-05-10T06:48:52.582Z** (Phase 4 offline validator — App Router GET handlers).
+Generated: **2026-05-11T02:48:47.640Z** (Phase 4 offline validator — App Router GET handlers).
 
 ## Summary
 
@@ -18,18 +18,18 @@ Generated: **2026-05-10T06:48:52.582Z** (Phase 4 offline validator — App Route
 
 | Segment | URLs | Invalid locs | Gen time (ms) | 48k band |
 | --- | ---: | ---: | ---: | --- |
-| **core** (`sitemap-core.xml`) | 5 | 0 | 1576 | OK |
-| **blog** (`sitemap-blog.xml`) | 3916 | 0 | 212 | OK |
-| **pathways** (`sitemap-pathways.xml`) | 25 | 0 | 965 | OK |
-| **lessons** (`sitemap-lessons.xml`) | 1 | 0 | 186 | OK |
-| **localized** (`sitemap-localized.xml`) | 64 | 0 | 5 | OK |
+| **core** (`sitemap-core.xml`) | 5 | 0 | 2597 | OK |
+| **blog** (`sitemap-blog.xml`) | 3916 | 0 | 287 | OK |
+| **pathways** (`sitemap-pathways.xml`) | 25 | 0 | 1445 | OK |
+| **lessons** (`sitemap-lessons.xml`) | 1 | 0 | 192 | OK |
+| **localized** (`sitemap-localized.xml`) | 48 | 0 | 9 | OK |
 | **clinical-modules** (`sitemap-clinical-modules.xml`) | 5 | 0 | 2 | OK |
 | **allied** (`sitemap-allied.xml`) | 24 | 0 | 2 | OK |
-| **new-grad** (`sitemap-new-grad.xml`) | 46 | 0 | 6 | OK |
+| **new-grad** (`sitemap-new-grad.xml`) | 46 | 0 | 2 | OK |
 
 ## Index validation
 
-- Generation time: **68** ms
+- Generation time: **80** ms
 - XML well-formed: **yes**
 - Approved children (`8`): `https://www.nursenest.ca/sitemap-core.xml`, `https://www.nursenest.ca/sitemap-blog.xml`, `https://www.nursenest.ca/sitemap-pathways.xml`, `https://www.nursenest.ca/sitemap-lessons.xml`, `https://www.nursenest.ca/sitemap-localized.xml`, `https://www.nursenest.ca/sitemap-clinical-modules.xml`, `https://www.nursenest.ca/sitemap-allied.xml`, `https://www.nursenest.ca/sitemap-new-grad.xml`
 

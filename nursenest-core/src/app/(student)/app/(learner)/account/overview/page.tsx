@@ -391,7 +391,7 @@ export default async function LearnerAccountOverviewPage() {
         </dl>
       </LearnerProfileSummaryCard>
 
-      {entitlement !== "error" && entitlement.hasAccess ? <ExamPlanSettingsCard /> : null}
+      {entitlement !== "error" && entitlement.hasAccess ? <ExamPlanSettingsCard learnerT={t} /> : null}
 
       {entitlement !== "error" && entitlement.hasAccess && premiumSnapshot ? (
         <section className="nn-card nn-student-card-lift p-6">

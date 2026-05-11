@@ -31,6 +31,7 @@ import {
   Stethoscope,
   Target,
   Waves,
+  Wind,
   Zap,
 } from "lucide-react";
 import type { CardVariant } from "@/components/ui/study-card";
@@ -62,6 +63,7 @@ import {
   alliedHubCatSurfaceUnlocked,
   applyAlliedOccupationPremiumModuleLocks,
 } from "@/lib/marketing/allied-hub-premium-module-policy";
+import { isRtVentilatorMarketingSurfacesEnabled } from "@/lib/rt-ventilator/rt-ventilator-module-config";
 
 export type PremiumHubModuleKey =
   | "labs"
@@ -102,6 +104,8 @@ export type PremiumHubModuleKey =
   | "pathway_cat"
   /** Public marketing blog deep-link for the active allied occupation track. */
   | "allied_career_resources"
+  /** RT ventilator premium marketing landing (`/respiratory-therapy/ventilator-training`). */
+  | "rt_ventilator_training"
   /** Pathway marketing lessons directory (nursing tier hubs). */
   | "hub_lessons"
   /** Public marketing CAT explainer route (`/us/rn/nclex-rn/cat`, etc.) — nursing pathways only. */
@@ -466,6 +470,21 @@ function pushAlliedSupplementalPremiumStudyTools(
       ),
       wrapGuestWithLoginCallback: true,
       locked: !clinicalOn,
+    });
+  }
+
+  if (k === "respiratory" && isRtVentilatorMarketingSurfacesEnabled()) {
+    studyTools.push({
+      key: "rt_ventilator_training",
+      icon: Wind,
+      variant: "featured",
+      extraClass: "nn-exam-hub-study-card--featured nn-qa-rt-ventilator-premium",
+      titleKey: "components.examPathwayHub.premiumModules.rtVentilatorTitle",
+      bodyKey: "components.examPathwayHub.premiumModules.rtVentilatorBody",
+      ctaKey: "components.examPathwayHub.premiumModules.rtVentilatorCta",
+      lockedCtaKey: "components.examPathwayHub.premiumModules.comingSoonCta",
+      href: "/respiratory-therapy/ventilator-training",
+      wrapGuestWithLoginCallback: false,
     });
   }
 

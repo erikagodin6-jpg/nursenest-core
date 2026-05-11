@@ -1,3 +1,4 @@
+import { TierCode } from "@prisma/client";
 import {
   Activity,
   BookOpen,
@@ -14,6 +15,7 @@ import {
   ScanSearch,
   Stethoscope,
   Theater,
+  Wind,
   type LucideIcon,
 } from "lucide-react";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
@@ -34,6 +36,7 @@ import { isNpPremiumConvergencePathway } from "@/lib/marketing/np-premium-conver
 import { pathwayAllowsEcgLinkedLearning } from "@/lib/ecg-module/ecg-linked-learning";
 import { pathwayHubAppQuestionsHref, pathwayHubAppQuestionsPathwayMixedHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayQuery } from "@/lib/scenarios/scenario-routes";
+import { isRtVentilatorLearnerModuleEnabled } from "@/lib/rt-ventilator/rt-ventilator-module-config";
 
 export type PremiumLaunchTone = "success" | "info" | "chart3" | "chart4" | "brand" | "warning";
 
@@ -289,6 +292,22 @@ export function buildPremiumDashboardLaunchTiles(args: {
       cta: t("learner.studyHome.quickLaunch.studyToolsCta"),
       tone: "chart3",
       icon: GraduationCap,
+    });
+  }
+
+  if (
+    isRtVentilatorLearnerModuleEnabled() &&
+    snapshot.studyBootstrap.tier === TierCode.ALLIED &&
+    snapshot.studyBootstrap.alliedProfessionKey === "respiratory"
+  ) {
+    tiles.push({
+      key: "rtVentilator",
+      href: "/modules/rt-ventilator",
+      title: t("learner.studyHome.quickLaunch.rtVentilatorTitle"),
+      desc: t("learner.studyHome.quickLaunch.rtVentilatorDesc"),
+      cta: t("learner.studyHome.quickLaunch.rtVentilatorCta"),
+      tone: "warning",
+      icon: Wind,
     });
   }
 

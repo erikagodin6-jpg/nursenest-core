@@ -68,6 +68,8 @@ function qaAttrsForTileKey(key: string): Record<string, string> {
       return { "data-nn-qa-dash-diagnostic-launch": "1" };
     case "clinicalCases":
       return { "data-nn-qa-dash-clinical-cases-launch": "1" };
+    case "rtVentilator":
+      return { "data-nn-qa-dash-rt-ventilator": "1" };
     default:
       return {};
   }

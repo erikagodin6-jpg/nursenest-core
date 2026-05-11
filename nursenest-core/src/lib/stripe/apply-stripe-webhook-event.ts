@@ -1,6 +1,10 @@
 import "server-only";
 import type Stripe from "stripe";
-import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
+import { Prisma, SubscriptionStatus, TierCode } from "@prisma/client";
+import {
+  canonicalProfessionKeyForAlliedCareer,
+  isValidAlliedCareerKey,
+} from "@/lib/allied/allied-billing-career-resolution";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
@@ -316,10 +320,22 @@ async function applyCustomerSubscriptionUpsert(
     const pastPatch = pastDueSinceForStatusTransition(mappedStatus, row.status);
     if (pastPatch) Object.assign(data, pastPatch);
   }
+  const stripeSubMeta = (sub.metadata && typeof sub.metadata === "object" ? sub.metadata : {}) as Record<
+    string,
+    string
+  >;
+  const metaCareerRaw = stripeSubMeta.alliedCareer?.trim();
+
   if (mapped) {
     data.planTier = mapped.tier;
     data.planCountry = mapped.country;
-    if (mapped.alliedCareer) data.alliedCareer = mapped.alliedCareer;
+  }
+  if (mapped?.tier === TierCode.ALLIED || Boolean(metaCareerRaw)) {
+    if (metaCareerRaw && isValidAlliedCareerKey(metaCareerRaw)) {
+      data.alliedCareer = metaCareerRaw;
+    } else if (mapped?.alliedCareer) {
+      data.alliedCareer = mapped.alliedCareer;
+    }
   }
 
   const updated = await prisma.subscription.update({
@@ -333,8 +349,24 @@ async function applyCustomerSubscriptionUpsert(
       pastDueSince: true,
       planTier: true,
       planCountry: true,
+      alliedCareer: true,
     },
   });
+
+  if (
+    updated.planTier === TierCode.ALLIED &&
+    row.userId &&
+    updated.alliedCareer &&
+    isValidAlliedCareerKey(updated.alliedCareer)
+  ) {
+    await prisma.user.update({
+      where: { id: row.userId },
+      data: {
+        tier: TierCode.ALLIED,
+        alliedProfessionKey: canonicalProfessionKeyForAlliedCareer(updated.alliedCareer),
+      },
+    });
+  }
 
   const entitlementEndMs = subscriptionEntitlementEndMs({
     currentPeriodEnd: updated.currentPeriodEnd,
@@ -470,6 +502,16 @@ export async function applyStripeWebhookEvent(
       const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id ?? "";
       const planCodeMeta = session.metadata?.planCode?.trim() || undefined;
       const billingRegionMeta = session.metadata?.region?.trim() || undefined;
+
+      if (plan?.tier === TierCode.ALLIED && !alliedCareerMeta) {
+        safeServerLog("stripe_webhook", "allied_checkout_missing_occupation_metadata", {
+          userIdPrefix: userId.slice(0, 8),
+          stripeSessionIdPrefix: session.id.slice(0, 14),
+          eventIdPrefix,
+          correlation,
+          severity: "warning",
+        });
+      }
 
       const priorCheckoutRow = await prisma.subscription.findUnique({
         where: { stripeSubscriptionId: subId },

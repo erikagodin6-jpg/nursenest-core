@@ -8,6 +8,7 @@ import { EXAM_PATHWAYS_SEGMENT_B } from "./exam-pathways-data-segment-b";
 import { EXAM_PATHWAYS_SEGMENT_C } from "./exam-pathways-data-segment-c";
 import { EXAM_PATHWAYS_SEGMENT_D } from "./exam-pathways-data-segment-d";
 import { EXAM_PATHWAYS_SEGMENT_E } from "./exam-pathways-data-segment-e";
+import { EXAM_PATHWAYS_SEGMENT_F_INTERNAL_ADMISSIONS } from "./exam-pathways-data-segment-f-internal-admissions";
 
 export const EXAM_PATHWAYS: ExamPathwayDefinition[] = [
   ...EXAM_PATHWAYS_SEGMENT_A,
@@ -15,6 +16,7 @@ export const EXAM_PATHWAYS: ExamPathwayDefinition[] = [
   ...EXAM_PATHWAYS_SEGMENT_C,
   ...EXAM_PATHWAYS_SEGMENT_D,
   ...EXAM_PATHWAYS_SEGMENT_E,
+  ...EXAM_PATHWAYS_SEGMENT_F_INTERNAL_ADMISSIONS,
 ];
 
 const byId = new Map<string, ExamPathwayDefinition>();

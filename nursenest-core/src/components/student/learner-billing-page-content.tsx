@@ -49,6 +49,8 @@ function billingAccessWhyLine(
       return t("learner.billingPage.accessDetail.active_trial");
     case "canceled_paid_through":
       return t("learner.billingPage.accessDetail.canceled_paid_through");
+    case "allied_occupation_required":
+      return t("learner.billingPage.accessDetail.allied_occupation_required");
     case "admin_override":
       return t("learner.billingPage.accessDetail.admin_override");
     default:
@@ -134,6 +136,8 @@ export function LearnerBillingStatusBanner({
     trial_ending:
       "border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] text-[var(--semantic-warning-contrast)]",
     inactive: "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-muted-foreground",
+    allied_occupation_incomplete:
+      "border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] text-[var(--semantic-warning-contrast)]",
     admin:
       "border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] text-[var(--semantic-info-contrast)]",
   };
@@ -198,6 +202,7 @@ export function LearnerBillingPageContent({
     pastDueGraceEndsAt,
     billingPeriodEndDisplay,
     showCancelSubscription,
+    alliedProfessionSummary,
   } = payload;
 
   const planLabel = formatBillingTierLabel(effectiveTier, effectiveCountry);
@@ -244,6 +249,31 @@ export function LearnerBillingPageContent({
             </p>
             {accessWhy ? (
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{accessWhy}</p>
+            ) : null}
+            {effectiveTier === "ALLIED" && alliedProfessionSummary ? (
+              <div
+                data-testid="billing-allied-profession-summary"
+                className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_88%,var(--semantic-surface))] px-4 py-3 text-sm leading-relaxed"
+              >
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t("learner.billingPage.alliedProfessionSectionTitle")}
+                </p>
+                <p className="mt-2 font-medium text-foreground">
+                  {t("learner.billingPage.alliedProfessionSelectedLine", {
+                    profession:
+                      alliedProfessionSummary.displayLabel?.trim() ||
+                      t("learner.billingPage.alliedProfessionUnknown"),
+                  })}
+                </p>
+                {alliedProfessionSummary.lockedAfterPurchase ? (
+                  <>
+                    <p className="mt-2 text-muted-foreground">{t("learner.billingPage.alliedProfessionLockedLine")}</p>
+                    <p className="mt-2 text-xs text-muted-foreground">{t("learner.billingPage.alliedProfessionSupportNote")}</p>
+                  </>
+                ) : (
+                  <p className="mt-2 text-xs text-muted-foreground">{t("learner.billingPage.alliedProfessionPendingNote")}</p>
+                )}
+              </div>
             ) : null}
             {showTrialEndCallout && user.trialEndsAt ? (
               <p className="mt-2 text-sm font-medium text-primary">

@@ -112,6 +112,12 @@ import {
   tryNormalizeBowtiePayload,
 } from "@/lib/questions/bowtie-adapter";
 import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
+import {
+  logPracticeRunnerUnsupportedQuestionDev,
+  logPracticeRunnerUnsupportedQuestionProd,
+  logUnknownCatalogQuestionTypeDev,
+  practiceRunnerNeedsUnsupportedFallback,
+} from "@/lib/questions/practice-runner-question-support";
 import { ChevronLeft, ChevronRight, Flag, LayoutGrid, Send, Shield } from "lucide-react";
 
 type QRow = {
@@ -699,6 +705,31 @@ export function PracticeTestRunnerClient({
   );
   const isBowtie = Boolean(bowtiePayload);
   const raw = current ? answers[current.id] : undefined;
+
+  const needsUnsupportedQuestionUi = useMemo(
+    () =>
+      Boolean(
+        current &&
+          practiceRunnerNeedsUnsupportedFallback(
+            current.questionType,
+            current.options,
+            optsCanonical.length,
+            isBowtie,
+          ),
+      ),
+    [current, optsCanonical.length, isBowtie],
+  );
+
+  useEffect(() => {
+    if (!current || !needsUnsupportedQuestionUi) return;
+    logPracticeRunnerUnsupportedQuestionDev(current.id, current.questionType, "unsupported_payload_shape");
+    logPracticeRunnerUnsupportedQuestionProd(current.id, current.questionType);
+  }, [current, needsUnsupportedQuestionUi]);
+
+  useEffect(() => {
+    if (!current || needsUnsupportedQuestionUi || isBowtie) return;
+    logUnknownCatalogQuestionTypeDev(current.id, current.questionType, optsCanonical.length);
+  }, [current, needsUnsupportedQuestionUi, isBowtie, optsCanonical.length]);
 
   useEffect(() => {
     if (!current || !catStudyFeedback) return;
@@ -2002,6 +2033,19 @@ export function PracticeTestRunnerClient({
     </p>
   );
 
+  /** Matrix / cloze / structured JSON items — runner does not mis-render as MCQ; fail loudly in dev (see logger). */
+  const runnerUnsupportedQuestionFallback = (
+    <div
+      role="alert"
+      className="rounded-md border border-[color-mix(in_srgb,var(--semantic-warning)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-panel-muted))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
+    >
+      {tx(
+        "learner.practiceTests.run.unsupportedQuestionFormat",
+        "This item uses a specialized question format that cannot be answered in this session yet. End the test and report the issue, or contact support.",
+      )}
+    </div>
+  );
+
   // ══════════════════════════════════════════════════════════════════════════
   // CAT MODE — study: split + rationale. Test (exam): single column, submit→lock→next, adaptive progress.
   // Server: `cat_advance` still scores and selects the next item in one PATCH (no separate commit endpoint).
@@ -2034,7 +2078,9 @@ export function PracticeTestRunnerClient({
 
     // Build CAT-specific option rows using AnswerOptionRow
     const catOptions =
-      isBowtie && bowtiePayload ? (
+      needsUnsupportedQuestionUi ? (
+        runnerUnsupportedQuestionFallback
+      ) : isBowtie && bowtiePayload ? (
         <BowtieQuestionRenderer
           payload={bowtiePayload}
           value={raw}
@@ -2894,7 +2940,9 @@ export function PracticeTestRunnerClient({
   };
 
   const linearCatOptions =
-    isBowtie && bowtiePayload ? (
+    needsUnsupportedQuestionUi ? (
+      runnerUnsupportedQuestionFallback
+    ) : isBowtie && bowtiePayload ? (
       <BowtieQuestionRenderer
         payload={bowtiePayload}
         value={raw}

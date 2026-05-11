@@ -1,3 +1,7 @@
+import {
+  isInternalAdmissionsPrepPathwayId,
+  isInternalAdmissionsPrepPathwaysEnabled,
+} from "@/lib/exam-pathways/admissions-prep-internal-pathways";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -18,8 +22,13 @@ export async function resolveExamPathwaySafe(
   ctx?: PathwayResolutionLogContext,
 ): Promise<ExamPathwayDefinition | null> {
   try {
-    const { resolveExamPathwayFromMarketingHubSegment } = await import("@/lib/exam-pathways/exam-product-registry");
-    const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+    const reg = await import("@/lib/exam-pathways/exam-product-registry");
+    let pathway: ExamPathwayDefinition | undefined =
+      reg.resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+    if (!pathway && isInternalAdmissionsPrepPathwaysEnabled()) {
+      const candidate = reg.getExamPathwayByRoute(countrySlug, roleTrack, examCode);
+      if (candidate?.status === "hidden" && isInternalAdmissionsPrepPathwayId(candidate.id)) pathway = candidate;
+    }
     if (!pathway) {
       safeServerLog("exam_pathway_hub", "pathway_resolution_failed", {
         event: "pathway_resolution_failed",

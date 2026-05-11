@@ -54,7 +54,8 @@ export const DEFAULT_DIFF_THRESHOLDS: DiffThresholds = {
 };
 
 export type AestheticRouteId = string;
-export type { AestheticThemeId } from "./aesthetic-audit-shared";
+import type { AestheticThemeId } from "./aesthetic-audit-shared";
+export type { AestheticThemeId };
 export type ViewportId = "desktop" | "mobile";
 
 export interface ThresholdOverrideKey {

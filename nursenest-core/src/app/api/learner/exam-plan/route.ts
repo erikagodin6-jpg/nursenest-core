@@ -1,6 +1,7 @@
 import { ExamDatePlanType, TierCode } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { ALLIED_PROFESSION_KEYS, listAlliedProfessionsSorted } from "@/lib/allied/allied-professions-registry";
+import { getAlliedProfessionLockState } from "@/lib/allied/allied-profession-lock.server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { prisma } from "@/lib/db";
@@ -79,10 +80,13 @@ export async function GET(req: Request) {
       label: p.h1,
     }));
 
+    const alliedLock = await getAlliedProfessionLockState(gate.userId);
+
     return NextResponse.json({
       ...serializeExamPlan(user),
       pathways,
       alliedProfessionOptions,
+      alliedProfessionLocked: alliedLock.locked,
     });
   } catch {
     return NextResponse.json({ error: "Unable to load exam plan." }, { status: 503 });
@@ -183,6 +187,23 @@ export async function PATCH(req: Request) {
         alliedProfessionKey = trimmed;
       }
     }
+
+    const alliedLock = await getAlliedProfessionLockState(gate.userId);
+    if (alliedLock.locked && alliedProfessionKey !== undefined) {
+      const requested =
+        alliedProfessionKey === null ? null : alliedProfessionKey.trim().toLowerCase();
+      const current = alliedLock.effectiveProfessionKey;
+      if (requested !== current) {
+        return NextResponse.json(
+          {
+            error: "allied_profession_locked",
+            message:
+              "Your Allied Health profession was set at subscription and cannot be changed here. Contact support if you need help.",
+          },
+          { status: 403 },
+        );
+      }
+    }
   }
 
   let studyCadencePreference: string | null | undefined = undefined;
@@ -239,11 +260,14 @@ export async function PATCH(req: Request) {
       label: p.h1,
     }));
 
+    const alliedLockAfter = await getAlliedProfessionLockState(gate.userId);
+
     return NextResponse.json({
       ok: true,
       ...serializeExamPlan(updated),
       pathways,
       alliedProfessionOptions,
+      alliedProfessionLocked: alliedLockAfter.locked,
     });
   } catch {
     return NextResponse.json({ error: "Unable to save exam plan." }, { status: 503 });

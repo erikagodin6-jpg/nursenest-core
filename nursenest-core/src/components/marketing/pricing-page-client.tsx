@@ -321,6 +321,8 @@ export function PricingPageClient({
   const [plansLoaded, setPlansLoaded] = useState(() => hasServerCatalogRef.current);
   /** Soft gate: partial global regions (cookie + signed explicit context) require NA billing acknowledgment before checkout. */
   const [naPathwayAcknowledged, setNaPathwayAcknowledged] = useState(false);
+  /** Allied Health only — explicit acknowledgement before any paid checkout (persists until segment/career changes). */
+  const [alliedProfessionCheckoutAck, setAlliedProfessionCheckoutAck] = useState(false);
   const { locale, t } = useMarketingI18n();
   /** `t` is recreated when marketing shards merge — do not use it as a fetch effect dep (can starve in-flight loads). */
   const tRef = useRef(t);
@@ -461,6 +463,7 @@ export function PricingPageClient({
     return built;
   }, [t, tier, serverTierSubheads]);
   const isAllied = segment === "allied";
+  const alliedCheckoutBlocked = isAllied && !alliedProfessionCheckoutAck;
   const isFreeNursingPricingTrack = !isAllied && isFreeStripeBillingNursingTier(tier);
 
   const filteredNursingPlans = useMemo(
@@ -506,6 +509,10 @@ export function PricingPageClient({
     setNaPathwayAcknowledged(false);
   }, [authoritativeRegionKey]);
 
+  useEffect(() => {
+    setAlliedProfessionCheckoutAck(false);
+  }, [segment, selectedAlliedCareer]);
+
   const paidPlanPrimaryCtaLabel = useMemo(
     () =>
       pricingCheckoutSoftGate
@@ -545,6 +552,10 @@ export function PricingPageClient({
     async (duration: BillingDuration) => {
       setCheckoutError(null);
       setCheckoutOpsHint(null);
+      if (isAllied && !alliedProfessionCheckoutAck) {
+        setCheckoutError(t("pages.pricing.alliedLock.mustAckBeforeCheckout"));
+        return;
+      }
       if (isFreeStripeBillingNursingTier(tier)) {
         window.location.assign(localize("/pre-nursing"));
         return;
@@ -569,7 +580,9 @@ export function PricingPageClient({
         na_pathway_acknowledged: naPathwayAcknowledged,
         global_market_slug: checkoutBodyGlobalSlug,
         authoritative_region_slugs: authoritativeRegionSlugs.join(","),
-        ...(isAllied ? { allied_career: selectedAlliedCareer } : {}),
+        ...(isAllied
+          ? { allied_career: selectedAlliedCareer, allied_profession_acknowledged: alliedProfessionCheckoutAck }
+          : {}),
       });
       try {
         const body: Record<string, unknown> = {
@@ -705,6 +718,7 @@ export function PricingPageClient({
       naPathwayAcknowledged,
       checkoutBodyGlobalSlug,
       authoritativeRegionKey,
+      alliedProfessionCheckoutAck,
     ],
   );
 
@@ -714,6 +728,10 @@ export function PricingPageClient({
       setCheckoutOpsHint(null);
       if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
         setCheckoutError(t("pages.pricing.globalContext.mustAckBeforeCheckout"));
+        return;
+      }
+      if (isAllied && !alliedProfessionCheckoutAck) {
+        setCheckoutError(t("pages.pricing.alliedLock.mustAckBeforeCheckout"));
         return;
       }
       if (authStatus === "loading") return;
@@ -741,6 +759,7 @@ export function PricingPageClient({
       startCheckout,
       t,
       tier,
+      alliedProfessionCheckoutAck,
     ],
   );
 
@@ -748,6 +767,10 @@ export function PricingPageClient({
     if (!pendingCheckoutDuration) return;
     if (pricingCheckoutSoftGate && !naPathwayAcknowledged) {
       setCheckoutError(t("pages.pricing.globalContext.mustAckBeforeCheckout"));
+      return;
+    }
+    if (isAllied && !alliedProfessionCheckoutAck) {
+      setCheckoutError(t("pages.pricing.alliedLock.mustAckBeforeCheckout"));
       return;
     }
     if (!policiesAccepted) {
@@ -758,7 +781,16 @@ export function PricingPageClient({
     const duration = pendingCheckoutDuration;
     setPendingCheckoutDuration(null);
     void startCheckout(duration);
-  }, [pendingCheckoutDuration, policiesAccepted, pricingCheckoutSoftGate, naPathwayAcknowledged, startCheckout, t]);
+  }, [
+    pendingCheckoutDuration,
+    policiesAccepted,
+    pricingCheckoutSoftGate,
+    naPathwayAcknowledged,
+    isAllied,
+    alliedProfessionCheckoutAck,
+    startCheckout,
+    t,
+  ]);
 
   const SEGMENT_ORDER: Segment[] = ["newgrad", "rn", "pn", "np", "allied"];
 
@@ -871,6 +903,7 @@ export function PricingPageClient({
               <button
                 key={id}
                 type="button"
+                data-testid={`pricing-segment-${id}`}
                 onClick={() => {
                   setSegment(id);
                   trackProductEvent("tier_selected", {
@@ -916,6 +949,35 @@ export function PricingPageClient({
               ))}
             </div>
             <AlliedHealthClarity />
+
+            <div
+              data-testid="pricing-allied-profession-warning"
+              className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_09%,var(--semantic-surface))] px-4 py-3 text-left shadow-[var(--semantic-shadow-soft)] sm:px-5"
+              role="region"
+              aria-label={t("pages.pricing.alliedLock.warningAria")}
+            >
+              <p className="text-sm font-semibold text-[var(--semantic-warning-contrast)]">
+                {t("pages.pricing.alliedLock.warningTitle")}
+              </p>
+              <ul className="mt-2 list-inside list-disc space-y-1.5 text-sm leading-snug text-[color-mix(in_srgb,var(--semantic-warning-contrast)_92%,var(--semantic-text-muted))]">
+                <li>{t("pages.pricing.alliedLock.line1")}</li>
+                <li>{t("pages.pricing.alliedLock.line2")}</li>
+                <li>{t("pages.pricing.alliedLock.line3")}</li>
+              </ul>
+              <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_05%,var(--color-card))] p-3 text-left text-[13px] leading-snug text-[var(--palette-text)]">
+                <input
+                  type="checkbox"
+                  data-testid="pricing-allied-profession-ack"
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
+                  checked={alliedProfessionCheckoutAck}
+                  onChange={(e) => {
+                    setAlliedProfessionCheckoutAck(e.target.checked);
+                    if (e.target.checked) setCheckoutError(null);
+                  }}
+                />
+                <span>{t("pages.pricing.alliedLock.ackLabel")}</span>
+              </label>
+            </div>
           </div>
         )}
 
@@ -1032,11 +1094,13 @@ export function PricingPageClient({
 
                     <button
                       type="button"
+                      data-testid={`pricing-checkout-${duration}`}
                       disabled={
                         checkoutLoading ||
                         authStatus === "loading" ||
                         !row.checkoutAvailable ||
-                        (pricingCheckoutSoftGate && !naPathwayAcknowledged)
+                        (pricingCheckoutSoftGate && !naPathwayAcknowledged) ||
+                        alliedCheckoutBlocked
                       }
                       onClick={() => requestCheckout(duration)}
                       className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
@@ -1066,6 +1130,11 @@ export function PricingPageClient({
                         ) : !pricingCheckoutSoftGate ? (
                           <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
                             {t("pages.pricing.checkout.recurringShort")}
+                          </p>
+                        ) : null}
+                        {isAllied && alliedCheckoutBlocked ? (
+                          <p className="mt-3 text-center text-xs font-medium leading-snug text-[var(--semantic-warning-contrast)]">
+                            {t("pages.pricing.alliedLock.mustAckBeforeCheckout")}
                           </p>
                         ) : null}
                       </>
@@ -1135,6 +1204,33 @@ export function PricingPageClient({
                 </div>
               ) : null}
 
+              {isAllied ? (
+                <div
+                  data-testid="pricing-allied-profession-warning-modal"
+                  className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_07%,var(--color-card))] p-4 text-sm"
+                >
+                  <p className="font-semibold text-[var(--semantic-warning-contrast)]">{t("pages.pricing.alliedLock.warningTitle")}</p>
+                  <ul className="mt-2 list-inside list-disc space-y-1 text-[13px] leading-snug text-muted-foreground">
+                    <li>{t("pages.pricing.alliedLock.line1")}</li>
+                    <li>{t("pages.pricing.alliedLock.line2")}</li>
+                    <li>{t("pages.pricing.alliedLock.line3")}</li>
+                  </ul>
+                  <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_04%,var(--semantic-surface))] p-3 text-left text-[13px] leading-snug">
+                    <input
+                      type="checkbox"
+                      data-testid="pricing-allied-profession-ack-modal"
+                      className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
+                      checked={alliedProfessionCheckoutAck}
+                      onChange={(e) => {
+                        setAlliedProfessionCheckoutAck(e.target.checked);
+                        if (e.target.checked) setCheckoutError(null);
+                      }}
+                    />
+                    <span className="text-[var(--palette-text)]">{t("pages.pricing.alliedLock.ackLabel")}</span>
+                  </label>
+                </div>
+              ) : null}
+
               <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                 <button
                   type="button"
@@ -1155,7 +1251,8 @@ export function PricingPageClient({
                   disabled={
                     checkoutLoading ||
                     !policiesAccepted ||
-                    (pricingCheckoutSoftGate && !naPathwayAcknowledged)
+                    (pricingCheckoutSoftGate && !naPathwayAcknowledged) ||
+                    (isAllied && !alliedProfessionCheckoutAck)
                   }
                 >
                   {pricingCheckoutSoftGate

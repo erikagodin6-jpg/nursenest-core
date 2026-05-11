@@ -138,7 +138,7 @@ export default async function StudyPlanPage({ searchParams }: Props) {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.studyPlan.subtitle.subscriber")}</p>
       </div>
 
-      <ExamPlanSettingsCard />
+      <ExamPlanSettingsCard learnerT={t} />
 
       {structuredPath ? (
         <StructuredStudyPathSection

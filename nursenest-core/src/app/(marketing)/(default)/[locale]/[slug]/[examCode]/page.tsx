@@ -6,12 +6,18 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
+import { InternalAdmissionsPrepHubScaffold } from "@/components/marketing/internal-admissions-prep-hub-scaffold";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
+import {
+  isInternalAdmissionsPrepPathwayId,
+  marketingRobotsForExamPathway,
+  shouldOmitRegionalHreflangForInternalAdmissionsPrep,
+} from "@/lib/exam-pathways/admissions-prep-internal-pathways";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { loadPathwayHubResumePayload, type PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
@@ -59,12 +65,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const requestUrl = absoluteUrl(`/${locale}/${slug}/${examCode}`);
     const hreflang = examPathwayRegionalHreflang(pathway);
 
+    const robots = marketingRobotsForExamPathway(pathway);
+    const omitHreflang = shouldOmitRegionalHreflangForInternalAdmissionsPrep(pathway);
+
     if (seo) {
       return {
         title: seo.title,
         description: seo.description,
-        robots: { index: true, follow: true },
-        alternates: { canonical: requestUrl, languages: hreflang },
+        robots,
+        alternates: omitHreflang ? { canonical: requestUrl } : { canonical: requestUrl, languages: hreflang },
         openGraph: { title: seo.title, description: seo.description, url: requestUrl, type: "website" },
       };
     }
@@ -73,8 +82,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: pathway.seoTitle,
       description: pathway.seoDescription,
-      robots: { index: true, follow: true },
-      alternates: { canonical: coreUrl, languages: hreflang },
+      robots,
+      alternates: omitHreflang ? { canonical: coreUrl } : { canonical: coreUrl, languages: hreflang },
       openGraph: {
         title: pathway.seoTitle,
         description: pathway.seoDescription,
@@ -101,6 +110,13 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
 
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) notFound();
+  if (isInternalAdmissionsPrepPathwayId(pathway.id)) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+        <InternalAdmissionsPrepHubScaffold pathway={pathway} hubPath={pathname} />
+      </div>
+    );
+  }
   const isAlliedHub = pathway.roleTrack === "allied" && pathway.examCode === "allied-health";
 
   let alliedInitialMeasurement: MeasurementPreference | null = null;

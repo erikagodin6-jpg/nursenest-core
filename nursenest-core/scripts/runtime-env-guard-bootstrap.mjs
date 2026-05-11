@@ -73,11 +73,17 @@ function isDatabaseContractSkippedPhase() {
   if (process.env.NN_SKIP_DATABASE_ENV_CONTRACT === "1") return true;
   const argv = safeArgvJoin();
   const lifecycle = process.env.npm_lifecycle_event ?? "";
+  const phase = process.env.NEXT_PHASE?.trim();
+
+  if (phase === "phase-production-build" || phase === "phase-development-build") return true;
   if (lifecycle === "build") return true;
+  if (lifecycle === "heroku-postbuild") return true;
   if (argv.includes("next build")) return true;
+  if (argv.includes("run-next-prod-build.mjs")) return true;
+  if (argv.includes("run-buildpack-build.mjs")) return true;
   if (/prisma\s+generate\b/i.test(argv)) return true;
   if (/run-prisma-with-env\.(?:mts?|cjs|js)\s+generate\b/i.test(argv)) return true;
-  if (process.env.NN_APP_PLATFORM_BUILD === "true") return true;
+  if (/prisma-safe\.mjs\s+generate\b/i.test(argv)) return true;
   return false;
 }
 
@@ -175,8 +181,20 @@ function assertRuntimeDatabaseEnvContractMjs() {
 
   if (!raw) {
     if (process.env.NODE_ENV === "production") {
+      let cwd = ".";
+      try {
+        cwd = process.cwd();
+      } catch {
+        /* ignore */
+      }
       throw new Error(
-        "DATABASE_URL is missing in runtime environment (not build ARG). Ensure .env.local or runtime env is set.",
+        [
+          "DATABASE_URL is missing in runtime environment (not build ARG).",
+          "Confirm DigitalOcean DATABASE_URL is scope RUN_TIME with a non-empty secret, or ship `.env.production` / `.env.local` under the app root for standalone hydrate.",
+          `cwd=${cwd}`,
+          `NEXT_PHASE=${process.env.NEXT_PHASE ?? "(unset)"}`,
+          `npm_lifecycle_event=${process.env.npm_lifecycle_event ?? "(unset)"}`,
+        ].join(" "),
       );
     }
     return;

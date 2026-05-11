@@ -14,9 +14,11 @@ import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { publicAppOriginForBilling } from "@/lib/env/public-app-origin";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
+import { canonicalProfessionKeyForAlliedCareer } from "@/lib/allied/allied-billing-career-resolution";
 import {
   stripePriceEnvKey,
   alliedStripePriceEnvKey,
+  sharedAlliedStripePriceEnvKey,
   STRIPE_TRIAL_DAYS,
   ALLIED_CAREER_KEYS,
   isFreeStripeBillingNursingTier,
@@ -319,9 +321,12 @@ export async function POST(req: Request) {
       }
     }
 
-    const missingEnvKey = tierCode === "ALLIED" && careerKey
-      ? alliedStripePriceEnvKey(country, careerKey, durationCode)
-      : stripePriceEnvKey(country, tierCode, durationCode);
+    const missingEnvKey =
+      tierCode === "ALLIED" && careerKey
+        ? process.env[sharedAlliedStripePriceEnvKey(durationCode)]?.trim()
+          ? sharedAlliedStripePriceEnvKey(durationCode)
+          : alliedStripePriceEnvKey(country, careerKey, durationCode)
+        : stripePriceEnvKey(country, tierCode, durationCode);
     safeServerLog("stripe_checkout", "checkout_price_resolution", {
       pathway: requestedPathway,
       tier: tierCode,
@@ -430,19 +435,44 @@ export async function POST(req: Request) {
     }
     if (careerKey) {
       metadata.alliedCareer = careerKey;
+      metadata.alliedProfessionKey = canonicalProfessionKeyForAlliedCareer(careerKey);
+      metadata.subscriptionTier = "allied";
+      metadata.pathwayKey = `allied-${canonicalProfessionKeyForAlliedCareer(careerKey)}`.replace(/--+/g, "-");
     }
 
-    const subscriptionData = trialDays > 0
-      ? { trial_period_days: trialDays }
-      : undefined;
+    const subscriptionData =
+      trialDays > 0
+        ? {
+            trial_period_days: trialDays,
+            ...(careerKey
+              ? {
+                  metadata: {
+                    userId,
+                    tier: "ALLIED",
+                    alliedCareer: careerKey,
+                    alliedProfessionKey: canonicalProfessionKeyForAlliedCareer(careerKey),
+                    app: "nursenest-core",
+                  },
+                }
+              : {}),
+          }
+        : careerKey
+          ? {
+              metadata: {
+                userId,
+                tier: "ALLIED",
+                alliedCareer: careerKey,
+                alliedProfessionKey: canonicalProfessionKeyForAlliedCareer(careerKey),
+                app: "nursenest-core",
+              },
+            }
+          : undefined;
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
-      ...(subscriptionData ? {
-        subscription_data: subscriptionData,
-        payment_method_collection: "always",
-      } : {}),
+      ...(subscriptionData ? { subscription_data: subscriptionData } : {}),
+      ...(trialDays > 0 ? { payment_method_collection: "always" as const } : {}),
       ...(existingCustomerId ? { customer: existingCustomerId } : { customer_email: userForCheckout.email }),
       allow_promotion_codes: true,
       success_url: `${appUrl}/app?checkout=success`,
@@ -458,8 +488,11 @@ export async function POST(req: Request) {
       amountSubtotal: checkoutSession.amount_subtotal ?? 0,
       amountTotal: checkoutSession.amount_total ?? 0,
       currency: checkoutSession.currency ?? "",
-      trialPeriodDays: subscriptionData?.trial_period_days ?? 0,
-      hasSubscriptionDataTrial: Boolean(subscriptionData?.trial_period_days),
+      trialPeriodDays:
+        subscriptionData && "trial_period_days" in subscriptionData ? subscriptionData.trial_period_days : 0,
+      hasSubscriptionDataTrial: Boolean(
+        subscriptionData && "trial_period_days" in subscriptionData && subscriptionData.trial_period_days,
+      ),
       metadataTrialDays: checkoutSession.metadata?.trialDays ?? "",
       urlPresent: Boolean(checkoutSession.url),
       existingCustomer: Boolean(existingCustomerId),

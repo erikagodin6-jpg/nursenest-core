@@ -18,11 +18,12 @@ import net from "node:net";
 import { once } from "node:events";
 import { setTimeout as sleep } from "node:timers/promises";
 import { spawn, spawnSync } from "node:child_process";
-import { dirname, join } from "node:path";
+import { dirname, join, resolve as resolvePath } from "node:path";
 import { fileURLToPath } from "node:url";
 import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
 import { normalizeBootstrapProbePathname } from "./standalone-bootstrap-probe-pathname.mjs";
 import { resolveBootstrapStartupMode } from "./resolve-bootstrap-mode.mjs";
+import { loadRuntimeEnv } from "./lib/load-runtime-env.mjs";
 import { logRuntimeEnvSnapshot, validateRuntimeEnvOrThrow } from "./runtime-env-guard-bootstrap.mjs";
 
 const bootAt = Date.now();
@@ -37,6 +38,73 @@ try {
   process.exit(1);
 }
 
+/**
+ * Merge `.env` / `.env.local` / `.env.production` into `process.env` without overwriting non-empty
+ * platform-injected values — must run **before** `validateRuntimeEnvOrThrow` so standalone matches `next dev` hydration.
+ */
+function hydrateProcessEnvFromDisk() {
+  try {
+    loadRuntimeEnv({
+      envRoot: pkgRoot,
+      validate: false,
+      quiet: true,
+      purpose: "standalone-bootstrap",
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`[nursenest-core] standalone_env_hydrate_warning: ${message}`);
+  }
+}
+
+/** Common PaaS aliases when the platform binds `POSTGRES_URL` but app expects `DATABASE_URL`. */
+function promoteDatabaseUrlAliasesFromEnv() {
+  if (process.env.DATABASE_URL?.trim()) return;
+  const keys = ["POSTGRES_URL", "POSTGRESQL_URL"];
+  for (const key of keys) {
+    const v = process.env[key]?.trim();
+    if (!v) continue;
+    const lower = v.toLowerCase();
+    if (!lower.startsWith("postgresql:") && !lower.startsWith("postgres:")) continue;
+    process.env.DATABASE_URL = v;
+    console.error(
+      "[nn-bootstrap]",
+      JSON.stringify({
+        event: "database_url_alias_promoted",
+        from_key: key,
+      }),
+    );
+    return;
+  }
+}
+
+function logStandaloneParentBootstrapDiagnostics() {
+  let scriptResolved = null;
+  try {
+    const a1 = process.argv[1];
+    scriptResolved = typeof a1 === "string" ? resolvePath(a1) : null;
+  } catch {
+    scriptResolved = null;
+  }
+  console.error(
+    "[nn-bootstrap]",
+    JSON.stringify({
+      phase: "standalone_parent_post_hydrate",
+      cwd: process.cwd(),
+      pkgRoot,
+      scriptResolved,
+      execPath: process.execPath,
+      DATABASE_URL_present: Boolean(process.env.DATABASE_URL?.trim()),
+      POSTGRES_URL_present: Boolean(process.env.POSTGRES_URL?.trim()),
+      DIGITALOCEAN_APP_ID_present: Boolean(String(process.env.DIGITALOCEAN_APP_ID ?? "").trim()),
+      NEXT_PHASE: process.env.NEXT_PHASE ?? null,
+      npm_lifecycle_event: process.env.npm_lifecycle_event ?? null,
+    }),
+  );
+}
+
+hydrateProcessEnvFromDisk();
+promoteDatabaseUrlAliasesFromEnv();
+logStandaloneParentBootstrapDiagnostics();
 logRuntimeEnvSnapshot();
 validateRuntimeEnvOrThrow();
 

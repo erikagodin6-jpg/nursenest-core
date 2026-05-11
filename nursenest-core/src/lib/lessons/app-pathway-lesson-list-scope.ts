@@ -7,6 +7,10 @@ import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tie
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import {
+  pathwayLessonAlliedProfessionAllowsSubscriber,
+  pathwayLessonAlliedProfessionWhere,
+} from "@/lib/allied/allied-occupation-entitlement";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 
 /** Pathway IDs the learner may see in `/app/lessons` by tier, country, and specialty. */

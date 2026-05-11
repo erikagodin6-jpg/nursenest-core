@@ -102,6 +102,7 @@ const FIRST_SEGMENT_TO_SHARD: Record<string, I18nShardFilename> = {
   glossary: "learner",
   medAbbreviations: "learner",
   licensingExams: "learner",
+  rtVentilator: "learner",
 
   // auth & account
   auth: "auth",

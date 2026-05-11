@@ -91,6 +91,12 @@ export default async function AdminDiagnosticsPage() {
           >
             Theme & logo QA
           </Link>
+          <Link
+            href="/admin/diagnostics/allied-occupation"
+            className="rounded-lg border border-border px-3 py-2 font-medium text-foreground hover:bg-muted"
+          >
+            Allied occupation health
+          </Link>
         </div>
       </div>
 

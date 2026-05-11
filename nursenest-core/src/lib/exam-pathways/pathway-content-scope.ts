@@ -1,4 +1,6 @@
 import type { Prisma } from "@prisma/client";
+import { TierCode } from "@prisma/client";
+import type { AlliedCareerKey } from "@/lib/pricing/display-catalog";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import {
   examQuestionTierCaseInsensitiveWhere,
@@ -9,6 +11,9 @@ import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { npPathwaySpecialtyWhere } from "@/lib/exam-pathways/np-question-specialty-scope";
+import { prismaWhereForAlliedProfessionExamQuestions } from "@/lib/allied/allied-exam-question-scope";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { canonicalProfessionKeyForAlliedCareer } from "@/lib/allied/allied-billing-career-resolution";
 
 /**
  * When a pathway is active, `exam_questions` region + tier ladder must follow the **pathway**

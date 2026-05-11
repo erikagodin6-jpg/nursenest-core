@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
 type PathwayOpt = { id: string; label: string; shortLabel: string };
 
@@ -19,6 +20,7 @@ type ExamPlanPayload = {
   tier: string;
   pathways: PathwayOpt[];
   alliedProfessionOptions?: AlliedProfessionOpt[];
+  alliedProfessionLocked?: boolean;
 };
 
 function ymdFromIso(iso: string | null): string {
@@ -26,7 +28,24 @@ function ymdFromIso(iso: string | null): string {
   return iso.slice(0, 10);
 }
 
-export function ExamPlanSettingsCard() {
+function fallbackExamPlanTr(
+  key: string,
+  params?: Record<string, string | number | undefined>,
+): string {
+  const profession = params?.profession != null ? String(params.profession) : "";
+  switch (key) {
+    case "learner.examPlan.alliedProfessionLockedNotice":
+      return "This profession is locked after purchase. Contact support if you need help changing it.";
+    case "learner.examPlan.alliedProfessionLockedHint":
+      return profession.trim().length > 0 ? `Selected profession: ${profession}` : fallbackExamPlanTr("learner.examPlan.alliedProfessionLockedGeneric");
+    case "learner.examPlan.alliedProfessionLockedGeneric":
+      return "Your Allied Health profession is locked to match your subscription.";
+    default:
+      return key;
+  }
+}
+
+export function ExamPlanSettingsCard({ learnerT }: { learnerT?: LearnerMarketingT }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,9 +106,15 @@ export function ExamPlanSettingsCard() {
           alliedProfessionKey: alliedProfessionKey.trim() ? alliedProfessionKey.trim().toLowerCase() : null,
         }),
       });
-      const j = await res.json().catch(() => ({}));
+      const j = (await res.json().catch(() => ({}))) as Record<string, unknown>;
       if (!res.ok) {
-        setError(typeof j.error === "string" ? j.error : "Save failed.");
+        const errMsg =
+          typeof j.message === "string" && j.message.trim().length > 0
+            ? j.message
+            : typeof j.error === "string"
+              ? j.error
+              : "Save failed.";
+        setError(errMsg);
         setSaving(false);
         return;
       }
@@ -123,6 +148,13 @@ export function ExamPlanSettingsCard() {
   const pathways = data?.pathways ?? [];
   const alliedOptions = data?.alliedProfessionOptions ?? [];
   const showAlliedProfession = data?.tier === "allied";
+  const alliedLocked = Boolean(data?.alliedProfessionLocked);
+  const tr = (key: string, params?: Record<string, string | number | undefined>) =>
+    learnerT ? learnerT(key, params) : fallbackExamPlanTr(key, params);
+  const lockedProfessionLabel =
+    alliedLocked && alliedProfessionKey
+      ? alliedOptions.find((o) => o.key === alliedProfessionKey)?.label ?? alliedProfessionKey
+      : null;
 
   return (
     <section className="nn-card scroll-mt-24 p-6">
@@ -169,13 +201,16 @@ export function ExamPlanSettingsCard() {
         )}
 
         {showAlliedProfession ? (
-          <div>
+          <div data-testid="exam-plan-allied-profession-block">
             <label className="text-sm font-medium text-foreground" htmlFor="exam-plan-allied-profession">
               Allied profession (optional)
             </label>
             <select
               id="exam-plan-allied-profession"
-              className="mt-1 w-full max-w-md rounded-lg border border-border bg-card px-3 py-2 text-sm"
+              data-testid="exam-plan-allied-profession-select"
+              disabled={alliedLocked}
+              aria-disabled={alliedLocked}
+              className="mt-1 w-full max-w-md rounded-lg border border-border bg-card px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-70"
               value={alliedProfessionKey}
               onChange={(e) => setAlliedProfessionKey(e.target.value)}
             >
@@ -186,9 +221,23 @@ export function ExamPlanSettingsCard() {
                 </option>
               ))}
             </select>
-            <p className="mt-1 text-xs text-muted">
-              Keeps weak-area suggestions and study copy aligned with your discipline (allied tier only).
-            </p>
+            {alliedLocked ? (
+              <div
+                data-testid="exam-plan-allied-locked-notice"
+                className="mt-3 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_07%,var(--semantic-surface))] px-3 py-2 text-sm leading-snug text-[var(--semantic-warning-contrast)]"
+              >
+                <p className="font-medium">
+                  {lockedProfessionLabel
+                    ? tr("learner.examPlan.alliedProfessionLockedHint", { profession: lockedProfessionLabel })
+                    : tr("learner.examPlan.alliedProfessionLockedGeneric")}
+                </p>
+                <p className="mt-1 text-xs leading-relaxed opacity-95">{tr("learner.examPlan.alliedProfessionLockedNotice")}</p>
+              </div>
+            ) : (
+              <p className="mt-1 text-xs text-muted">
+                Keeps weak-area suggestions and study copy aligned with your discipline (allied tier only).
+              </p>
+            )}
           </div>
         ) : null}
 

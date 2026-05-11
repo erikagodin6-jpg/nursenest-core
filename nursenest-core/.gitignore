@@ -41,6 +41,9 @@ external/
 tests/e2e/.auth/
 playwright/.auth/
 
+# Aesthetic audit per-test shards (regenerated each run; reports live under docs/reports/)
+.aesthetic-audit/
+
 # Visual QA route pack — latest captures are ephemeral; baselines may be committed (see docs/visual-qa.md)
 .visual-acceptance/routes/**/latest/
 

@@ -22,4 +22,6 @@ export type BillingUserRow = {
   trialStartedAt: Date | null;
   learnerPath: string | null;
   passwordHash: string | null;
+  /** Canonical allied profession slug when tier is ALLIED (marketing / lesson scope). */
+  alliedProfessionKey: string | null;
 };

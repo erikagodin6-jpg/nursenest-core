@@ -30,4 +30,12 @@ describe("question-api-payload-strip (unpaid / preview API shaping)", () => {
     assert.deepEqual(finalizeQuestionApiTeachingExposure(row, "none"), { stem: "s" });
     assert.deepEqual(finalizeQuestionApiTeachingExposure(row, "full"), row);
   });
+
+  it("documents CAT exam-mode teaching strip contract (server merges via teachingExposure none)", () => {
+    const teachingExposure = "none" as const;
+    const row = { rationale: "do not leak during CAT item", stem: "x", correctAnswer: ["A"] };
+    assert.deepEqual(finalizeQuestionApiTeachingExposure(row, teachingExposure), {
+      stem: "x",
+    });
+  });
 });

@@ -3,6 +3,7 @@ import {
   eachPricedCombination,
   stripePriceEnvKey,
   alliedStripePriceEnvKey,
+  sharedAlliedStripePriceEnvKey,
   type AlliedCareerKey,
   type PricedCombination,
 } from "@/lib/pricing/display-catalog";
@@ -32,6 +33,8 @@ export type StripePriceMatrixRow = {
 
 function envKeyForCombination(c: PricedCombination): string {
   if (c.alliedCareer) {
+    const shared = sharedAlliedStripePriceEnvKey(c.duration);
+    if (process.env[shared]?.trim()) return shared;
     return alliedStripePriceEnvKey(c.country, c.alliedCareer, c.duration);
   }
   return stripePriceEnvKey(c.country, c.tier, c.duration);
@@ -119,6 +122,11 @@ function priceMap(): PriceEntry[] {
   return cachedPriceMap;
 }
 
+/** Clears memoized env-derived rows — use only from tests after mutating `process.env.STRIPE_PRICE_*`. */
+export function resetStripePriceMapCacheForTests(): void {
+  cachedPriceMap = undefined;
+}
+
 /** Find a nursing tier price entry. */
 export function findPriceEntry(
   country: "CA" | "US",
@@ -150,7 +158,25 @@ export function findPriceEntryByPlanCode(planCode: string): PriceEntry | undefin
 export function findTierCountryByPriceId(
   priceId: string,
 ): { tier: TierCode; country: "CA" | "US"; duration: BillingDuration; alliedCareer?: AlliedCareerKey } | undefined {
-  const row = priceMap().find((p) => p.priceId === priceId);
-  if (!row) return undefined;
+  const matches = priceMap().filter((p) => p.priceId === priceId);
+  if (matches.length === 0) return undefined;
+
+  const nursing = matches.find((p) => !p.alliedCareer);
+  if (nursing) {
+    return { tier: nursing.tier, country: nursing.country, duration: nursing.duration };
+  }
+
+  const alliedRows = matches.filter((p) => p.tier === "ALLIED");
+  if (alliedRows.length > 0) {
+    const first = alliedRows[0]!;
+    /** Shared allied price id maps to ALLIED tier only — occupation comes from checkout / subscription metadata. */
+    return {
+      tier: "ALLIED",
+      country: first.country,
+      duration: first.duration,
+    };
+  }
+
+  const row = matches[0]!;
   return { tier: row.tier, country: row.country, duration: row.duration, alliedCareer: row.alliedCareer };
 }

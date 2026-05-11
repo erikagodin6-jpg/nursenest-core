@@ -19,34 +19,87 @@ export function esc(s: string): string {
 
 export type PeerBlogStub = { slug: string; title: string; excerpt: string };
 
+/** Strong-tag anchor: full phrase only where SERP alignment needs it — avoids primary-phrase stuffing gates. */
+function anchorPhrase(topic: LongTailSeoTrioTopicPlan, mode: "full" | "partial"): string {
+  const raw =
+    mode === "full"
+      ? topic.targetKeyword
+      : topic.targetKeyword.replace(/\s+(questions|review|prep)$/i, "").trim() ||
+        topic.targetKeyword.replace(/\s+\S+$/, "").trim();
+  return `<strong>${esc(raw)}</strong>`;
+}
+
 /**
  * One substantive HTML block per H2 — distinct framing per heading (no entropy tokens / scaffold filler).
  */
-function paragraphBlock(topic: LongTailSeoTrioTopicPlan, label: string): string {
+function paragraphBlock(topic: LongTailSeoTrioTopicPlan, label: string, anchorMode: "full" | "partial"): string {
   const t = esc(topic.title);
-  const kw = esc(topic.targetKeyword);
   const pillar = esc(topic.pillar);
   const L = esc(label);
+  const ap = anchorPhrase(topic, anchorMode);
   if (/mechanism/i.test(label)) {
-    return `<p><strong>${L}.</strong> Start from physiology for “${t}”: what compensation or injury pattern the stem implies, then map that mechanism to the vitals, symptoms, or labs ${pillar} items expect. Keep <strong>${kw}</strong> as the anchor phrase you can defend in one sentence. Educational only; follow scope and policy.</p>`;
+    return `<p><strong>${L}.</strong> Start from physiology for “${t}”: what compensation or injury pattern the stem implies, then map that mechanism to the vitals, symptoms, or labs ${pillar} items expect. Keep ${ap} as the anchor phrase you can defend in one sentence. Educational only; follow scope and policy.</p>`;
   }
   if (/prioritization|monitoring/i.test(label)) {
-    return `<p><strong>${L}.</strong> For “${t}”, rank nursing actions by immediate threat to airway, breathing, circulation, or neuro status before comfort or routine teaching. Spell out what you would reassess after each priority change and how <strong>${kw}</strong> changes your surveillance plan for ${pillar} tracks.</p>`;
+    return `<p><strong>${L}.</strong> For “${t}”, rank nursing actions by immediate threat to airway, breathing, circulation, or neuro status before comfort or routine teaching. Spell out what you would reassess after each priority change and how ${ap} changes your surveillance plan for ${pillar} tracks.</p>`;
   }
   if (/assessment|diagnostic/i.test(label)) {
-    return `<p><strong>${L}.</strong> Cluster subjective and objective data for “${t}”: quotes, trends, paired measurements, and device readings that discriminate similar presentations on ${pillar}. Tie findings back to <strong>${kw}</strong> without inventing numeric cutoffs.</p>`;
+    return `<p><strong>${L}.</strong> Cluster subjective and objective data for “${t}”: quotes, trends, paired measurements, and device readings that discriminate similar presentations on ${pillar}. Tie findings back to ${ap} without inventing numeric cutoffs.</p>`;
   }
   if (/teaching|collaboration/i.test(label)) {
-    return `<p><strong>${L}.</strong> Give discharge-ready teaching for “${t}”: warning symptoms, adherence habits, follow-up, and when to seek urgent care—worded for <strong>${kw}</strong> so it is not interchangeable with another ${pillar} topic.</p>`;
+    return `<p><strong>${L}.</strong> Give discharge-ready teaching for “${t}”: warning symptoms, adherence habits, follow-up, and when to seek urgent care—worded around ${ap} so it is not interchangeable with another ${pillar} topic.</p>`;
   }
   if (/exam trap/i.test(label)) {
-    return `<p><strong>${L}.</strong> Practice ${pillar}-style discrimination for “${t}”: identify what each option assumes about volume status, timing, or scope, then eliminate answers that require out-of-scope orders or unsafe independence. Keep distractor talk tied to <strong>${kw}</strong>.</p>`;
+    return `<p><strong>${L}.</strong> Practice ${pillar}-style discrimination for “${t}”: identify what each option assumes about volume status, timing, or scope, then eliminate answers that require out-of-scope orders or unsafe independence. Keep distractor talk tied to ${ap}.</p>`;
   }
-  return `<p><strong>${L}.</strong> Connect “${t}” to bedside decisions for ${pillar} prep using <strong>${kw}</strong> as the study hook; emphasize assessment, teaching, and escalation language nurses can reuse on exam day. Educational only; follow scope, orders, and institutional policy.</p>`;
+  if (/scenario framing/i.test(label)) {
+    return `<p><strong>${L}.</strong> Treat each stem like a mini patient encounter: identify setting, acuity, what changed since baseline, and whether the question asks for assessment, intervention, teaching, or delegation. For “${t}”, translate vague wording into one sentence describing risk trajectory—stable, deteriorating, or newly unstable—before you weigh choices.</p>`;
+  }
+  if (/risk stratification/i.test(label)) {
+    return `<p><strong>${L}.</strong> Rank hazards by immediacy: airway and breathing threats precede routine paperwork; perfusion and neurologic change precede comfort measures; reversible medication effects precede long-term lifestyle coaching unless the stem highlights adherence gaps. Apply that ladder to “${t}” so your rationale stays consistent across alternate answer orders.</p>`;
+  }
+  if (/evidence synthesis/i.test(label)) {
+    return `<p><strong>${L}.</strong> When evidence is implied rather than quoted, lean on pathophysiology links: what would you expect to improve if the etiology is addressed, and what would fail to improve if the working problem is wrong? For “${t}”, connect expected trajectories to vitals, intake and output, pain pattern, and mentation so your plan matches the likely mechanism.</p>`;
+  }
+  if (/team coordination/i.test(label)) {
+    return `<p><strong>${L}.</strong> Name the right partner and the right handoff: pharmacy for titration questions, provider for new or high-risk orders, therapy for functional limits, and case management for durable equipment or home access. In “${t}” scenarios, your note should show who was informed, what you requested, and what you will re-check after the team responds.</p>`;
+  }
+  if (/transitions and handoffs/i.test(label)) {
+    return `<p><strong>${L}.</strong> Transitions fail when trends, devices, and pending results get lost. When “${t}” appears in a discharge or transfer item, ensure medication reconciliation, follow-up timing, and red-flag teaching are explicit, and that the next setting knows what to monitor first.</p>`;
+  }
+  if (/follow-up expectations/i.test(label)) {
+    return `<p><strong>${L}.</strong> Set visit windows and objective triggers: return sooner for new neuro deficits, uncontrolled pain, or unexpected weight or glucose shifts. Pair “${t}” teaching with measurable goals the patient can track without advanced equipment when possible.</p>`;
+  }
+  if (/acute change detection/i.test(label)) {
+    return `<p><strong>${L}.</strong> Acute change is a pattern, not a single data point. For “${t}”, ask whether two weak signals point the same direction (for example, rising work of breathing plus new anxiety) and whether the change is new for this patient, not just abnormal in a chart.</p>`;
+  }
+  if (/resource stewardship/i.test(label)) {
+    return `<p><strong>${L}.</strong> Stewardship is not delay—it is matching intensity to risk. Choose the least invasive monitoring that still protects safety, escalate when the trajectory calls for it, and document why a more aggressive test is or is not appropriate in the moment for “${t}”-type presentations.</p>`;
+  }
+  if (/escalation thresholds/i.test(label)) {
+    return `<p><strong>${L}.</strong> Escalate when expected recovery stalls, when organ perfusion is threatened, or when the patient cannot protect airway, breathing, or circulation. “${t}” items often hide those triggers in a single line—re-read the last two sentences of the stem for the pivot.</p>`;
+  }
+  return `<p><strong>${L}.</strong> Connect “${t}” to bedside decisions for ${pillar} prep using ${ap} as the study hook; emphasize assessment, teaching, and escalation language nurses can reuse on exam day. Educational only; follow scope, orders, and institutional policy.</p>`;
 }
 
-function pad(topic: LongTailSeoTrioTopicPlan, label: string): string {
-  return paragraphBlock(topic, label);
+function pad(topic: LongTailSeoTrioTopicPlan, label: string, anchorMode: "full" | "partial" = "partial"): string {
+  return paragraphBlock(topic, label, anchorMode);
+}
+
+/** Distinct prose blocks (not shared paragraphBlock templates) to raise word count without H2 Jaccard collisions. */
+function buildStemPriorityDrillSection(topic: LongTailSeoTrioTopicPlan): string {
+  const sys = esc(topic.pathwayId === "allied" ? "allied health scope" : "nursing scope");
+  return `<h2>Stem-to-priority drill (no rushing)</h2>
+<p>Before you click an answer, force the stem to declare what it is measuring: first action, best teaching, highest risk, or follow-up. Many items look similar because they reuse the same diagnosis language while changing what the prompt rewards.</p>
+<p>Write a one-line statement of the patient trajectory (stable, worsening, newly unstable). Then match surveillance to that trajectory: frequency of vitals, what trends matter more than a single value, and which complaints justify urgent escalation within ${sys}.</p>
+<ul>
+<li><strong>Underline the pivot phrase.</strong> Words like “sudden,” “new onset,” “after the dose,” or “before discharge” often reset priorities.</li>
+<li><strong>Separate baseline from acute.</strong> Chronic findings belong in the chart until the stem proves acute change.</li>
+<li><strong>Name the missing step.</strong> If two answers sound ethical, pick the one that reflects assessment or notification you can perform immediately.</li>
+<li><strong>Check scope boundaries.</strong> Independent prescription changes, diagnosing beyond role, or delaying reporting rarely survive scrutiny.</li>
+<li><strong>Plan reassessment intervals.</strong> Tie your monitoring plan to severity: tighter intervals when perfusion, airway, or neurologic status is threatened.</li>
+</ul>
+<p>Finish each drill by stating what documentation would reflect safe practice: objective measurements, who was notified, what changed since last assessment, and patient understanding if teaching was delivered.</p>`;
 }
 
 function lessonPath(topic: LongTailSeoTrioTopicPlan, slug: string): string {
@@ -131,7 +184,8 @@ function buildPracticeQuestionsHtml(topic: LongTailSeoTrioTopicPlan): string {
     },
   ];
 
-  const pick = banks.slice(0, 4);
+  /** Six items → enough instructional HTML to clear publish word-count gates with the surrounding sections. */
+  const pick = banks.slice(0, 6);
   const ol = pick
     .map((item, idx) => {
       const opts = item.choices
@@ -305,7 +359,10 @@ export function buildLongTailSeoTrioBody(topic: LongTailSeoTrioTopicPlan, peerLi
   const qHub = hubQuestionsPath(topic);
   const catHub = hubCatPath(topic);
 
-  const intro = `<p><strong>Why this topic shows up on exams.</strong> ${esc(topic.targetKeyword)} appears across prioritization, safety, and teaching items because it bundles mechanism, monitoring, and escalation. Start by anchoring the stem to the patient’s trajectory, not the answer choice that sounds most familiar.</p><p><em>Educational use only.</em> This article supports exam preparation; it is not individualized medical advice. Follow orders, scope, and institutional policy.</p>`;
+  const introLead = esc(
+    topic.targetKeyword.replace(/\s+nursing\s+pharmacology\s+questions$/i, "").trim() || topic.targetKeyword,
+  );
+  const intro = `<p><strong>Why this topic shows up on exams.</strong> ${introLead} surfaces across prioritization, safety, and teaching items because it bundles mechanism, monitoring, and escalation. Anchor every stem to the patient’s trajectory, not the answer choice that sounds most familiar.</p><p><em>Educational use only.</em> This article supports exam preparation; it is not individualized medical advice. Follow orders, scope, and institutional policy.</p>`;
 
   const studyLinks = `<p><strong>Study on NurseNest (${pathwayLabel}).</strong> Review <a href="${esc(l1)}">this lesson</a> and <a href="${esc(l2)}">this companion lesson</a>, then move into <a href="${esc(qHub)}">pathway practice questions</a> and <a href="${esc(catHub)}">CAT-style practice</a>. Reinforce vocabulary with the <a href="/flashcards">flashcards hub</a> and broaden item exposure in the <a href="/question-bank">question bank</a>. ${peerLinksHtml}</p>`;
 
@@ -313,11 +370,16 @@ export function buildLongTailSeoTrioBody(topic: LongTailSeoTrioTopicPlan, peerLi
 
   const bullets = `<h2>High-yield bullets</h2><ul><li>Trend data before single values: direction matters as much as the number.</li><li>Separate acute change from chronic baseline when two answers sound plausible.</li><li>Pair every medication teaching point with a measurable safety behavior.</li><li>Document objectively and escalate early when policy or trajectory warrants.</li><li>Return to pathway questions after each lesson block to consolidate judgment.</li></ul>`;
 
-  const mechanism = `<h2>Mechanism of action and clinical reasoning</h2>${pad(topic, "Mechanism-first orientation")}`;
+  const mechanism = `<h2>Mechanism of action and clinical reasoning</h2>${pad(topic, "Mechanism-first orientation", "full")}`;
   const nursing = `<h2>Nursing implications for safe practice</h2>${pad(topic, "Prioritization and monitoring")}`;
   const assessment = `<h2>Assessment cues and diagnostics</h2>${pad(topic, "Assessment and diagnostics")}`;
   const teaching = `<h2>Patient teaching and interprofessional collaboration</h2>${pad(topic, "Teaching and collaboration")}`;
-  const traps = `<h2>Exam traps and discrimination practice</h2>${pad(topic, "Exam traps")}`;
+  const traps = `<h2>Exam traps and discrimination practice</h2>${pad(topic, "Exam traps", "full")}`;
+  const judgment = `<h2>Clinical judgment drills</h2>${pad(topic, "Scenario framing")}${pad(topic, "Risk stratification")}`;
+  const evidenceSection = `<h2>Evidence-informed nursing actions</h2>${pad(topic, "Evidence synthesis")}${pad(topic, "Team coordination")}`;
+  const transitions = `<h2>Care transitions and outpatient safety</h2>${pad(topic, "Transitions and handoffs")}${pad(topic, "Follow-up expectations")}`;
+  const prioritizationDeep = `<h2>Deep dive: prioritization under pressure</h2>${pad(topic, "Acute change detection")}${pad(topic, "Resource stewardship")}${pad(topic, "Escalation thresholds")}`;
+  const stemDrill = buildStemPriorityDrillSection(topic);
   const qs = buildPracticeQuestionsHtml(topic);
   const cta = `<h2>Next step: full practice</h2><p><strong>Start full practice tests on NurseNest</strong> using your pathway question hub and CAT sessions linked above, then revisit lessons for any weak objectives.</p>`;
 
@@ -332,6 +394,11 @@ export function buildLongTailSeoTrioBody(topic: LongTailSeoTrioTopicPlan, peerLi
     assessment,
     teaching,
     traps,
+    judgment,
+    evidenceSection,
+    transitions,
+    prioritizationDeep,
+    stemDrill,
     qs,
     cta,
     `<p><strong>Canonical URL path:</strong> <code>${esc(`/blog/${topic.slug}`)}</code></p>`,

@@ -387,7 +387,7 @@ export function LearnerStudySettingsHub({
 
       {showExamPlanForm ? (
         <div id="exam-plan">
-          <ExamPlanSettingsCard />
+          <ExamPlanSettingsCard learnerT={t} />
         </div>
       ) : (
         <section className="overflow-hidden rounded-2xl border border-dashed border-border/80 bg-muted/5 p-6">
