@@ -6,14 +6,23 @@
  */
 import type { SignupExamFocusValue } from "@/lib/marketing/signup-exam-focus-options";
 
+/** NP specialty coverage that must remain represented in tier / entitlement QA. */
+export const NP_TIER_MATRIX_CANONICAL_PATHWAY_IDS: readonly string[] = [
+  "us-np-fnp",
+  "us-np-agpcnp",
+  "us-np-pmhnp",
+  "us-np-whnp",
+  "us-np-pnp-pc",
+  "ca-np-cnple",
+] as const;
+
 /** Pathways included in cross-tier gating + marketing coverage (canonical IDs). */
 export const TIER_MATRIX_CANONICAL_PATHWAY_IDS: readonly string[] = [
   "us-rn-nclex-rn",
   "ca-rn-nclex-rn",
   "ca-rpn-rex-pn",
   "us-lpn-nclex-pn",
-  "us-np-fnp",
-  "ca-np-cnple",
+  ...NP_TIER_MATRIX_CANONICAL_PATHWAY_IDS,
   "us-allied-core",
   "us-rn-new-grad-transition",
 ] as const;
@@ -89,14 +98,14 @@ export const TIER_MATRIX_SIGNUP_ROWS: readonly TierMatrixSignupRow[] = [
   },
   {
     key: "np",
-    label: "NP (US board)",
+    label: "NP specialty discovery (US board)",
     homeTierCardId: "np",
     marketingRegionCookie: "us",
     signupCountry: "US",
     signupTier: "NP",
     signupExamFocus: "np_board",
     signupLearnerPath: "experienced",
-    hubPathnameRegex: /\/us\/np\//i,
+    hubPathnameRegex: /\/np-exam-prep/i,
   },
   {
     key: "allied",

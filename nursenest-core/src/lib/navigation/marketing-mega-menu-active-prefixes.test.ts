@@ -24,4 +24,18 @@ describe("strippedPathActivatesMegaMenuKey", () => {
   it("activates New Grad on Canada landing", () => {
     assert.equal(strippedPathActivatesMegaMenuKey("newgrad", CANADA_NEW_GRAD_MARKETING_HUB_PATH), true);
   });
+
+  it("activates NP on shared discovery slugs as well as pathway hubs", () => {
+    for (const path of [
+      "/np-exam-practice-questions",
+      "/np-exam-prep",
+      "/np-clinical-cases",
+      "/cnple-practice-questions",
+      "/canada-np-exam-prep",
+      "/np-study-guide-canada",
+    ]) {
+      assert.equal(strippedPathActivatesMegaMenuKey("np", path), true, path);
+    }
+    assert.equal(strippedPathActivatesMegaMenuKey("np", "/new-grad"), false);
+  });
 });

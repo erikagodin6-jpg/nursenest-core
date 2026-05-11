@@ -88,7 +88,7 @@ Resolved from code (`CANONICAL_PATHWAY_HUB`, `CANADA_NEW_GRAD_MARKETING_HUB_PATH
 | 1 | `study-home` | `/app` | **Also covers “Dashboard (learner)”** — same route. |
 | 2 | `rn-hub` | `/us/rn/nclex-rn` | Marketing RN NCLEX hub. |
 | 3 | `rpn-hub` | `/canada/rpn/rex-pn` | Canada RPN hub (matches CAT entrypoint tests). |
-| 4 | `np-hub` | `/us/np/fnp` | US NP FNP hub. |
+| 4 | `np-hub` | `/np-exam-prep` | Generic US NP discovery hub. Pair with the NP specialty extension pack below. |
 | 5 | `allied-landing` | `/allied/allied-health` | Allied global landing. |
 | 6 | `allied-occupation-mlt` | `/allied/mlt` | Example occupation hub (`professionKey` from allied registry). |
 | 7 | `new-grad-landing` | `/us/rn/new-grad-transition` | US new-grad transition pathway root. |
@@ -102,6 +102,30 @@ Resolved from code (`CANONICAL_PATHWAY_HUB`, `CANADA_NEW_GRAD_MARKETING_HUB_PATH
 | 15 | `report-card` | `/app/account/report` | Canonical report card (`/app/account/report-card` redirects here). |
 
 **Skips:** Lesson detail skips when the hub has no links (empty seed). Do not hard-fail the whole pack.
+
+### NP specialty extension pack
+
+When NP marketing, sitemap, or specialty discovery work changes, treat the following public routes as the required NP spot-check extension pack even if they are not all part of the minimal authenticated pack above:
+
+- `/np-exam-practice-questions`
+- `/np-exam-prep`
+- `/np-clinical-cases`
+- `/us/np/fnp`
+- `/us/np/agpcnp`
+- `/us/np/pmhnp`
+- `/us/np/whnp`
+- `/us/np/pnp-pc`
+- `/cnple-practice-questions`
+- `/canada-np-exam-prep`
+- `/np-study-guide-canada`
+- `/canada/np/cnple`
+
+Verify on mobile and desktop that:
+
+- Generic NP umbrella pages render specialty selection before specialty-specific conversion CTAs dominate.
+- CNPLE remains clearly Canada-scoped.
+- Footer and mega-menu specialty discovery links stay visible without crowding RN / PN prominence.
+- No specialty label wraps awkwardly or clips in header / footer chrome.
 
 ## `renderTrace` / dev overlays
 

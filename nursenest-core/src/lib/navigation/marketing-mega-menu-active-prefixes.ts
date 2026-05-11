@@ -18,7 +18,16 @@ export const US_NEW_GRAD_MARKETING_HUB_PATH = "/us/new-grad" as const;
 export const MEGA_MENU_STRIPPED_ACTIVE_PREFIXES: Record<MarketingPathwayMegaMenuKey, readonly string[]> = {
   rn: ["/us/rn/", "/canada/rn/", "/lessons", "/question-bank"],
   pn: ["/us/pn/", "/canada/pn/"],
-  np: ["/us/np/", "/canada/np/"],
+  np: [
+    "/us/np/",
+    "/canada/np/",
+    "/np-exam-practice-questions",
+    "/np-exam-prep",
+    "/np-clinical-cases",
+    "/cnple-practice-questions",
+    "/canada-np-exam-prep",
+    "/np-study-guide-canada",
+  ],
   newgrad: [
     US_NEW_GRAD_MARKETING_HUB_PATH,
     `${US_NEW_GRAD_MARKETING_HUB_PATH}/`,

@@ -42,8 +42,8 @@ test.describe("Nursing pathway hubs — public smoke", () => {
     await expect(page.locator('[data-nn-hub-premium-tone="study"]')).toBeVisible();
     await expect(page.locator('[data-nn-hub-premium-tone="readiness"]')).toBeVisible();
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(1);
-    await expect(page.getByRole("heading", { name: /^study tools$/i })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /^readiness & progress$/i })).toBeVisible();
+    await expect(page.locator(PREMIUM).getByRole("heading", { name: /^study tools$/i })).toBeVisible();
+    await expect(page.locator(PREMIUM).getByRole("heading", { name: /^readiness & progress$/i })).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="hub_lessons"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="flashcards"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="labs"]`)).toBeVisible();
@@ -64,8 +64,8 @@ test.describe("Nursing pathway hubs — public smoke", () => {
     await expect(page.locator('[data-nn-hub-premium-tone="study"]')).toBeVisible();
     await expect(page.locator('[data-nn-hub-premium-tone="readiness"]')).toBeVisible();
     await expect(page.locator('[data-nn-qa-hub-ecg="1"]')).toHaveCount(1);
-    await expect(page.getByRole("heading", { name: /^study tools$/i })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /^readiness & progress$/i })).toBeVisible();
+    await expect(page.locator(PREMIUM).getByRole("heading", { name: /^study tools$/i })).toBeVisible();
+    await expect(page.locator(PREMIUM).getByRole("heading", { name: /^readiness & progress$/i })).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="hub_lessons"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="flashcards"]`)).toBeVisible();
     await expect(page.locator(`${PREMIUM} [data-nn-qa-hub-premium-module="labs"]`)).toBeVisible();

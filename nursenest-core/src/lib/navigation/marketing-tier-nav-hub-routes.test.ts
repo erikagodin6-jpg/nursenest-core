@@ -11,11 +11,11 @@ import { buildMarketingTierHubStrip } from "@/lib/navigation/marketing-tier-hub-
 const GENERIC_LESSONS_INDEX = "/lessons";
 
 describe("top-tier marketing nav hub routes", () => {
-  it("US: RN/NP/New Grad/Allied hubs are pathway roots, not the generic lessons-by-pathway index", () => {
+  it("US: RN/PN/New Grad/Allied stay on pathway roots while generic NP lands on specialty discovery", () => {
     const hubs = publicExamPrepHubDestinations("US");
     assert.notEqual(hubs.rn, GENERIC_LESSONS_INDEX);
     assert.equal(hubs.rn, "/us/rn/nclex-rn");
-    assert.equal(hubs.np, "/us/np/fnp");
+    assert.equal(hubs.np, "/np-exam-prep");
     assert.equal(hubs.allied, "/allied/allied-health");
     assert.equal(hubs.pn, "/us/pn/nclex-pn");
     const strip = buildMarketingTierHubStrip("US", (k) => k);
@@ -26,11 +26,11 @@ describe("top-tier marketing nav hub routes", () => {
     assert.equal(strip.find((r) => r.key === "newgrad")?.hubHref, US_NEW_GRAD_MARKETING_HUB_PATH);
   });
 
-  it("CA: RN/NP/New Grad/Allied hubs are pathway roots; PN stays REx-PN hub", () => {
+  it("CA: RN/PN/New Grad/Allied stay on pathway roots while generic NP lands on Canada discovery", () => {
     const hubs = publicExamPrepHubDestinations("CA");
     assert.notEqual(hubs.rn, GENERIC_LESSONS_INDEX);
     assert.equal(hubs.rn, "/canada/rn/nclex-rn");
-    assert.equal(hubs.np, "/canada/np/cnple");
+    assert.equal(hubs.np, "/canada-np-exam-prep");
     assert.equal(hubs.allied, "/allied/allied-health");
     assert.equal(hubs.pn, "/canada/pn/rex-pn");
     const strip = buildMarketingTierHubStrip("CA", (k) => k);

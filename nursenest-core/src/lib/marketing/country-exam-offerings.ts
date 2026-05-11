@@ -6,8 +6,9 @@
  *
  * Paths stay aligned with `marketing-entry-routes.ts` and programmatic SEO slugs — do not rename routes here.
  *
- * **NP:** US → default pathway hub `/us/np/fnp` (FNP). Canada → canonical CNPLE hub (`/canada/np/cnple`).
- * Legacy programmatic SEO slugs 301 to these hubs (`canonical-pathway-hubs` + `next.config` redirects).
+ * **NP:** Underlying default pathway ids stay FNP/CNPLE for app deep links and analytics, but generic
+ * public marketing entry now lands on specialty-discovery SEO hubs (`/np-exam-prep`, `/canada-np-exam-prep`)
+ * instead of funneling all generic traffic into a single specialty hub.
  *
  * **Strip vs hero:** RN/PN/NP/Allied use pathway hub roots from the registry (`buildExamPathwayPath`).
  * Order is always RN → PN → NP → Allied (`EXAM_PATHWAY_ORDER`).
@@ -17,7 +18,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { alliedHub, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
+import { alliedHub, npDiscoveryLessonsForRegion, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
 import { ensureMarketingExamHubPath } from "@/lib/marketing/nursing-exam-nav-validation";
 
 export type CountryExamOfferingId = "rn" | "pn" | "np" | "allied";
@@ -64,8 +65,11 @@ export function defaultPathwayIdForMarketingOffering(region: MarketingRegionTogg
   }
 }
 
-/** Primary marketing landing for each exam (pathway hub root, not programmatic SEO slugs). */
+/** Primary marketing landing for each exam. NP uses shared discovery slugs; other offerings use pathway hub roots. */
 export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryExamOfferingId): string {
+  if (id === "np") {
+    return ensureMarketingExamHubPath(region, npDiscoveryLessonsForRegion(region));
+  }
   const isUs = region === "US";
   const pathwayId = defaultPathwayIdForMarketingOffering(region, id);
   const p = getExamPathwayById(pathwayId);

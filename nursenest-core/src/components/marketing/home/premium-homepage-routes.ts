@@ -130,11 +130,11 @@ export function usePremiumHomepageRoutes(): PremiumHomepageRoutes {
           title: tr("pages.home.premium.pathways.np.title", "NP"),
           subtitle: tr(
             "pages.home.premium.pathways.np.subtitle",
-            region === "US" ? "FNP and board review" : "CNPLE pathway",
+            region === "US" ? "FNP, AGPCNP, PMHNP, WHNP, and PNP-PC" : "CNPLE plus NP specialty discovery",
           ),
           body: tr(
             "pages.home.premium.pathways.np.body",
-            "Advanced assessment, diagnostics, prescribing logic, and primary care reasoning for NP candidates.",
+            "Specialty-first nurse practitioner prep with pathway hubs for primary care, psych, women's health, pediatrics, and Canada-specific CNPLE discovery.",
           ),
           href: loc(hubs.np),
           cta: tr("pages.home.premium.pathways.np.cta", "Explore NP"),

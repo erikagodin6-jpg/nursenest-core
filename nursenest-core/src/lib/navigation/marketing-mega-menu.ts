@@ -6,7 +6,15 @@
 import { buildAlliedOccupationMarketingHubPath } from "@/lib/allied/allied-global-pathway";
 import { ALLIED_HUB_CATEGORY_ORDER, ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { alliedHub, HUB, NP, npNpQuestionsForRegion, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import {
+  alliedHub,
+  HUB,
+  NP,
+  npDiscoveryCatForRegion,
+  npDiscoveryLessonsForRegion,
+  npNpQuestionsForRegion,
+  signupWithCallback,
+} from "@/lib/marketing/marketing-entry-routes";
 import { defaultPathwayIdForMarketingOffering } from "@/lib/marketing/country-exam-offerings";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import { marketingPathwaySubpathBesideExamHub } from "@/lib/lessons/lesson-routes";
@@ -45,8 +53,9 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
   const pnHub = hubs.pn;
   const npHub = hubs.np;
   const alliedHubHref = alliedHub(region);
-  const npLessons = region === "US" ? NP.fnpLessons : NP.caNpLessons;
+  const npLessons = npDiscoveryLessonsForRegion(region);
   const npQuestionHref = npNpQuestionsForRegion(region);
+  const npReadinessHref = npDiscoveryCatForRegion(region);
   const studyPlanSignupHref = signupWithCallback("/pre-nursing/study-plan");
   const newGrad = publicNewGradStudyDestinations(region, rnHub);
   const newGradStudyPlanHref = signupWithCallback(newGrad.lessons);
@@ -63,6 +72,26 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
   const lplan = () => t("nav.mega.link.buildStudyPlan");
   const lex = () => t("nav.mega.link.practiceExams");
   const lhow = () => t("nav.mega.link.howItWorks");
+  const ls = () => "Specialties";
+
+  const npSpecialtyLinks: MegaMenuLink[] =
+    region === "US"
+      ? [
+          { key: "np-fnp", label: "FNP", href: NP.fnpHub },
+          { key: "np-agpcnp", label: "AGPCNP", href: NP.agpcnpHub },
+          { key: "np-pmhnp", label: "PMHNP", href: NP.pmhnpHub },
+          { key: "np-whnp", label: "WHNP", href: NP.whnpHub },
+          { key: "np-pnp-pc", label: "PNP-PC", href: NP.pnpPcHub },
+          { key: "np-cnple", label: "CNPLE", href: NP.caNpHub },
+        ]
+      : [
+          { key: "np-cnple", label: "CNPLE", href: NP.caNpHub },
+          { key: "np-fnp", label: "FNP", href: NP.fnpHub },
+          { key: "np-agpcnp", label: "AGPCNP", href: NP.agpcnpHub },
+          { key: "np-pmhnp", label: "PMHNP", href: NP.pmhnpHub },
+          { key: "np-whnp", label: "WHNP", href: NP.whnpHub },
+          { key: "np-pnp-pc", label: "PNP-PC", href: NP.pnpPcHub },
+        ];
 
   return [
     {
@@ -144,8 +173,13 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           heading: gp(),
           links: [
             { key: "np-questions", label: lq(), href: npQuestionHref },
-            { key: "np-readiness", label: lcat(), href: publicMarketingCatHrefForOffering(region, "np") },
+            { key: "np-readiness", label: lcat(), href: npReadinessHref },
           ],
+        },
+        {
+          key: "specialties",
+          heading: ls(),
+          links: npSpecialtyLinks,
         },
         {
           key: "tools",

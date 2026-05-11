@@ -10,6 +10,12 @@ const KNOWN_SHORT_MARKETING_DESTINATIONS = new Set([
   "/flashcards",
   "/tools",
   "/pricing",
+  "/np-exam-practice-questions",
+  "/np-exam-prep",
+  "/np-clinical-cases",
+  "/cnple-practice-questions",
+  "/canada-np-exam-prep",
+  "/np-study-guide-canada",
   ALLIED_GLOBAL_HUB_PATH,
 ]);
 

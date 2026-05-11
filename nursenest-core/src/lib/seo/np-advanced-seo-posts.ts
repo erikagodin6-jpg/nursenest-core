@@ -1,5 +1,5 @@
 /**
- * Advanced NP long-form SEO — US FNP / AGPCNP / PMHNP / PNP-PC + Canada CNPLE-track literacy.
+ * Advanced NP long-form SEO — US FNP / AGPCNP / PMHNP / WHNP / PNP-PC + Canada CNPLE-track literacy.
  *
  * URLs follow registered marketing hubs: `/us/np/{exam}/…`, `/canada/np/cnple/…`.
  * Third-party certification marks belong to their owners; NurseNest is independent prep.
@@ -11,6 +11,7 @@ import { npHubPaths, type NpAdvSearchIntent, type NpAdvTrack } from "@/lib/seo/n
 const fnp = npHubPaths("us", "fnp");
 const ag = npHubPaths("us", "agpcnp");
 const pmh = npHubPaths("us", "pmhnp");
+const wh = npHubPaths("us", "whnp");
 const pnp = npHubPaths("us", "pnp-pc");
 const caNp = npHubPaths("canada", "cnple");
 
@@ -657,6 +658,212 @@ export const NP_ADV_POSTS_PART_B: NpAdvPost[] = [
       { text: "Canadian Nurses Association. (2024). *Nursing regulation and NP practice resources* (verify current documents). CNA." },
       { text: "National Council of State Boards of Nursing. (2023). *APRN regulatory model* (US contrast reference for readers comparing systems). NCSBN." },
     ],
+  },
+  {
+    id: "npadv-post-11",
+    region: "us",
+    locale: "en",
+    track: "whnp",
+    title: "WHNP Board Prep: Contraception Counseling, Preventive Screening, and Same-Day Escalation Red Flags",
+    metaTitle: "WHNP Board Prep Contraception Screening | NurseNest",
+    metaDescription:
+      "Women's health NP board prep with specialty-scoped contraception, preventive screening, pregnancy-safe prescribing, and adaptive exam practice on the WHNP hub.",
+    slug: "whnp-board-prep-contraception-screening-red-flags",
+    primaryKeyword: "WHNP board prep",
+    searchIntent: "transactional",
+    wordCount: 1760,
+    sections: [
+      {
+        heading: "Introduction",
+        body:
+          `WHNP preparation should feel like women’s health practice, not diluted FNP review. High-value items test contraception fit, preventive screening intervals, pregnancy rule-out logic, and when same-day escalation matters more than additional counseling.\n\n` +
+          `**Start NP practice questions** on ${wh.questions}. **Prepare with adaptive exams** on ${wh.cat}.`,
+      },
+      {
+        heading: "Exam pathway explanation — specialty-specific sequencing",
+        body:
+          `WHNP stems often reward sequence discipline: pregnancy test first, infection rule-out second, imaging or specialist referral only when the stem earns it. Use ${wh.lessons} when misses show you are skipping steps or importing unrelated primary-care defaults.`,
+      },
+      {
+        heading: "Study strategy — contraception and prevention in paired blocks",
+        body:
+          `Pair contraception blocks with preventive screening blocks so you repeatedly practice counseling + safety + follow-up in one session. Weekly mixed sets on ${wh.questions} should alternate gynecology, prenatal counseling, menopausal care, and STI logic.\n\n` +
+          `Mid-article CTA: run ${wh.cat} weekly after week 3 so your specialty rules survive mixed pressure.`,
+      },
+      {
+        heading: "Practice question strategy",
+        body:
+          `Turn every miss into a one-line rule: what stem feature changed the best next step? If the answer is “possible pregnancy,” “heavy bleeding,” or “hypertension plus estrogen,” your review card should say that explicitly.\n\n` +
+          `Final CTA: ${wh.questions}, ${wh.lessons}, ${wh.cat}, ${wh.pricing}.`,
+      },
+    ],
+    faq: [{ question: "Should WHNP candidates study on FNP hubs too?", answer: "Only for limited overlap review. Keep most question volume on WHNP-specific stems so answer instincts stay specialty-pure." }],
+    references: [{ text: "American College of Obstetricians and Gynecologists. (2024). *Practice guidance and preventive care resources*. ACOG." }],
+  },
+  {
+    id: "npadv-post-12",
+    region: "us",
+    locale: "en",
+    track: "whnp",
+    title: "WHNP Gynecology and Prenatal Questions: AUB, STI Care, Hypertensive Disorders, and Postpartum Flags",
+    metaTitle: "WHNP Gynecology Prenatal Questions | NurseNest",
+    metaDescription:
+      "WHNP exam practice for abnormal uterine bleeding, STI management, hypertensive disorders of pregnancy, and postpartum warning signs.",
+    slug: "whnp-gynecology-prenatal-questions-aub-postpartum",
+    primaryKeyword: "WHNP gynecology prenatal questions",
+    searchIntent: "informational",
+    wordCount: 1710,
+    sections: [
+      {
+        heading: "Introduction",
+        body:
+          `WHNP board questions reward calm sequencing through gynecology and prenatal care: identify the unstable patient, separate common from dangerous presentations, and choose the next safe action without over-ordering.\n\n` +
+          `**Start NP practice questions** on ${wh.questions}.`,
+      },
+      {
+        heading: "Exam pathway explanation — why postpartum and prenatal flags matter",
+        body:
+          `Hypertensive disorders, hemorrhage signals, infection warning signs, and lactation-safe prescribing show up because they test prioritization, not memorized buzzwords. Use ${wh.lessons} when your misses suggest you are reading only for diagnosis instead of severity.`,
+      },
+      {
+        heading: "Study strategy — split acute vs preventive stems",
+        body:
+          `Run two kinds of sessions: acute gynecology/prenatal red-flag stems and preventive counseling/screening stems. Mixing them too early can hide whether your misses come from urgency recognition or from follow-up planning.\n\n` +
+          `Mid-article CTA: use ${wh.cat} once your acute-vs-preventive accuracy gap narrows.`,
+      },
+      {
+        heading: "Practice question strategy",
+        body:
+          `Write “unstable / same day / routine follow-up” above each missed item before re-reading the options. That simple habit makes postpartum hypertension and severe bleeding stems much easier to triage.\n\n` +
+          `Final CTA: ${wh.questions}, ${wh.lessons}, ${wh.cat}, ${wh.pricing}.`,
+      },
+    ],
+    faq: [{ question: "Do WHNP exams include menopause and contraception together?", answer: "Yes, specialty exams often mix reproductive lifespan topics. Train mixed blocks so counseling logic survives topic switching." }],
+    references: [{ text: "World Health Organization. (2023). *Family planning and reproductive health guidance*. WHO." }],
+  },
+  {
+    id: "npadv-post-13",
+    region: "us",
+    locale: "en",
+    track: "pnp-pc",
+    title: "PNP-PC Case Review: Fever, Dehydration, Developmental Surveillance, and Family Teaching That Boards Reward",
+    metaTitle: "PNP-PC Case Review Fever Developmental Surveillance | NurseNest",
+    metaDescription:
+      "Pediatric primary care case review for fever, dehydration, developmental surveillance, school health, and parent education on the PNP-PC hub.",
+    slug: "pnp-pc-case-review-fever-developmental-surveillance",
+    primaryKeyword: "PNP-PC case review",
+    searchIntent: "informational",
+    wordCount: 1680,
+    sections: [
+      {
+        heading: "Introduction",
+        body:
+          `PNP-PC boards reward safe pediatric triage plus family-facing teaching. Fever, dehydration, asthma, developmental surveillance, and school-health scenarios all ask whether you can protect the child and guide the caregiver in the same answer.\n\n` +
+          `**Start NP practice questions** on ${pnp.questions}.`,
+      },
+      {
+        heading: "Exam pathway explanation — pediatric primary care means context",
+        body:
+          `Age, hydration status, appearance, caregiver reliability, and developmental stage all change the best next step. Use ${pnp.lessons} when your misses show adult-style assumptions sneaking into pediatric answers.`,
+      },
+      {
+        heading: "Study strategy — triage plus teaching drills",
+        body:
+          `Practice two-step review: first choose the safest disposition, then write the best caregiver teaching sentence. That trains the pattern many pediatric items reward.\n\n` +
+          `Mid-article CTA: run ${pnp.cat} weekly after you build comfort with triage language.`,
+      },
+      {
+        heading: "Practice question strategy",
+        body:
+          `Tag misses as “recognition,” “disposition,” or “teaching.” Most PNP-PC near-misses live in the last two categories, not in forgetting a diagnosis name.\n\n` +
+          `Final CTA: ${pnp.questions}, ${pnp.lessons}, ${pnp.cat}, ${pnp.pricing}.`,
+      },
+    ],
+    faq: [{ question: "Why do parent-teaching answers matter so much?", answer: "Pediatric primary care boards assess how you manage illness in the real outpatient context, which includes caregiver understanding and follow-up safety." }],
+    references: [{ text: "American Academy of Pediatrics. (2024). *Clinical practice guidance and Bright Futures resources*. AAP." }],
+  },
+  {
+    id: "npadv-post-14",
+    region: "canada",
+    locale: "en",
+    track: "cnple",
+    title: "CNPLE Clinical Management and Case Prep: Regulator-First Thinking Without US Blueprint Drift",
+    metaTitle: "CNPLE Clinical Management Case Prep | NurseNest",
+    metaDescription:
+      "Canadian NP case-style prep for clinical management, prescribing safety, documentation, and regulator-first reasoning on the CNPLE hub.",
+    slug: "cnple-clinical-management-case-prep",
+    primaryKeyword: "CNPLE clinical management prep",
+    searchIntent: "transactional",
+    wordCount: 1740,
+    sections: [
+      {
+        heading: "Introduction",
+        body:
+          `CNPLE prep should improve your clinical judgment while staying honest about Canadian regulatory reality. The safest mindset is regulator-first, then blueprint-first, then study-volume-first.\n\n` +
+          `**Start NP practice questions** on ${caNp.questions}. **Prepare with adaptive exams** on ${caNp.cat}.`,
+      },
+      {
+        heading: "Exam pathway explanation — what to separate",
+        body:
+          `Separate regulatory requirements, employer expectations, and exam preparation. When those stacks blur together, candidates often over-study legal edge cases while under-practicing clinical management.\n\n` +
+          `Use ${caNp.lessons} when your misses suggest uncertainty about scope language or documentation expectations.`,
+      },
+      {
+        heading: "Study strategy — case-first review",
+        body:
+          `Run weekly case reviews that end with a short note-writing exercise: chief concern, red flags, first-line action, documentation, and follow-up. That structure mirrors the kind of reasoning many candidates need more than raw fact memorization.\n\n` +
+          `Mid-article CTA: use ${caNp.cat} monthly to check variance reduction, not just raw score spikes.`,
+      },
+      {
+        heading: "Practice question strategy",
+        body:
+          `When you miss, ask whether the failure was regulatory drift, country-mixing, or clinical sequencing. Those three tags usually explain most CNPLE misses.\n\n` +
+          `Final CTA: ${caNp.questions}, ${caNp.lessons}, ${caNp.cat}, ${caNp.pricing}.`,
+      },
+    ],
+    faq: [{ question: "Should internationally educated NPs prep Canada and US tracks together?", answer: "Usually no. Keep the country-specific prep stacks separate so item-style and scope assumptions do not bleed together." }],
+    references: [{ text: "Canadian Council of Registered Nurse Regulators. (2024). *Canadian nursing regulation resources*. CCRNR." }],
+  },
+  {
+    id: "npadv-post-15",
+    region: "canada",
+    locale: "en",
+    track: "cnple",
+    title: "CNPLE Pharmacology and Prescribing Safety: Polypharmacy, Pregnancy, and Documentation Under Pressure",
+    metaTitle: "CNPLE Pharmacology Prescribing Safety | NurseNest",
+    metaDescription:
+      "Canadian NP pharmacology prep covering polypharmacy, pregnancy-safe prescribing, documentation habits, and adaptive readiness on the CNPLE hub.",
+    slug: "cnple-pharmacology-prescribing-safety-under-pressure",
+    primaryKeyword: "CNPLE pharmacology prescribing safety",
+    searchIntent: "informational",
+    wordCount: 1690,
+    sections: [
+      {
+        heading: "Introduction",
+        body:
+          `Canadian NP pharmacology prep is less about memorizing obscure drugs and more about safe prescribing patterns, documentation, interactions, and when collaboration or escalation is the better answer.\n\n` +
+          `**Start NP practice questions** on ${caNp.questions}.`,
+      },
+      {
+        heading: "Exam pathway explanation — polypharmacy and documentation",
+        body:
+          `Prescribing questions become harder when age, pregnancy status, renal function, or multiple medications change the risk profile. Use ${caNp.lessons} to rebuild any medication-safety rules you cannot explain out loud.`,
+      },
+      {
+        heading: "Study strategy — interaction ladders",
+        body:
+          `Build interaction ladders for common Canadian primary care scenarios: what to stop, what to avoid, what to document, and what follow-up interval the stem implies.\n\n` +
+          `Mid-article CTA: use ${caNp.cat} once interaction ladders feel natural under timed conditions.`,
+      },
+      {
+        heading: "Practice question strategy",
+        body:
+          `For each miss, write the interaction or documentation phrase that should have stopped you from choosing the distractor. Rehearsing the stopping cue is often more valuable than rereading a monograph.\n\n` +
+          `Final CTA: ${caNp.questions}, ${caNp.lessons}, ${caNp.cat}, ${caNp.pricing}.`,
+      },
+    ],
+    faq: [{ question: "Do I need province-specific prescribing law for every question?", answer: "Use official provincial regulator guidance for legal specifics; exam prep should reinforce safe reasoning without pretending one article can replace live regulator rules." }],
+    references: [{ text: "Institute for Safe Medication Practices Canada. (2024). *Medication safety resources*. ISMP Canada." }],
   },
 ];
 

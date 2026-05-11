@@ -13,6 +13,7 @@ import { PAID_E2E_DEFAULT_PATHWAY_ID } from "../helpers/paid-learner-shell";
 import { VISUAL_QA_LEARNER_AUTH_FILE } from "../helpers/auth-state-paths";
 
 const pid = PAID_E2E_DEFAULT_PATHWAY_ID;
+const caRnPathwayId = "ca-rn-nclex-rn";
 const label = (process.env.VISUAL_QA_LABEL?.trim() || "capture").replace(/[^a-zA-Z0-9_-]+/g, "-");
 
 const VIEWPORTS = [
@@ -27,16 +28,29 @@ const ROUTES: readonly { slug: string; url: string; shell: Shell }[] = [
   /** Study home + learner dashboard both resolve to `/app` (see `docs/visual-qa.md`). */
   { slug: "study-home", url: "/app", shell: "learner" },
   { slug: "rn-hub", url: "/us/rn/nclex-rn", shell: "marketing" },
+  { slug: "ca-rn-hub", url: "/canada/rn/nclex-rn", shell: "marketing" },
   { slug: "rpn-hub", url: "/canada/rpn/rex-pn", shell: "marketing" },
-  { slug: "np-hub", url: "/us/np/fnp", shell: "marketing" },
+  { slug: "np-hub", url: "/np-exam-prep", shell: "marketing" },
   { slug: "allied-landing", url: "/allied/allied-health", shell: "marketing" },
   { slug: "allied-occupation-mlt", url: "/allied/mlt", shell: "marketing" },
   { slug: "new-grad-landing", url: "/us/new-grad", shell: "marketing" },
   { slug: "new-grad-work-area-canada", url: "/canada/new-grad", shell: "marketing" },
   { slug: "flashcards-hub", url: `/app/flashcards?pathwayId=${encodeURIComponent(pid)}`, shell: "learner" },
+  { slug: "ca-rn-flashcards-hub", url: `/app/flashcards?pathwayId=${encodeURIComponent(caRnPathwayId)}`, shell: "learner" },
   { slug: "practice-questions", url: `/app/questions?pathwayId=${encodeURIComponent(pid)}`, shell: "learner" },
+  {
+    slug: "ca-rn-practice-questions",
+    url: `/app/questions?pathwayId=${encodeURIComponent(caRnPathwayId)}`,
+    shell: "learner",
+  },
   { slug: "practice-tests", url: `/app/practice-tests?pathwayId=${encodeURIComponent(pid)}`, shell: "learner" },
+  {
+    slug: "ca-rn-practice-tests",
+    url: `/app/practice-tests?pathwayId=${encodeURIComponent(caRnPathwayId)}`,
+    shell: "learner",
+  },
   { slug: "cat-hub", url: "/us/rn/nclex-rn/cat", shell: "marketing" },
+  { slug: "ca-rn-cat-hub", url: "/canada/rn/nclex-rn/cat", shell: "marketing" },
   { slug: "report-card", url: "/app/account/report", shell: "learner" },
 ];
 

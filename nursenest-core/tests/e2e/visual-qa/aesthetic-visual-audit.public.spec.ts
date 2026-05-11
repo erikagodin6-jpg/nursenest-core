@@ -69,7 +69,7 @@ const PUBLIC_ROUTES: PublicRoute[] = [
   },
   {
     id: "np-hub",
-    path: "/us/np/fnp",
+    path: "/np-exam-prep",
     seed: "us",
     readySelector: PREMIUM_ZONE,
     marketingChrome: true,

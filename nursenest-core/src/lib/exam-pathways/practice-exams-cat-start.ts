@@ -15,7 +15,7 @@ import {
   type CountryExamOfferingId,
 } from "@/lib/marketing/country-exam-offerings";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback, npDiscoveryCatForRegion } from "@/lib/marketing/marketing-entry-routes";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export { defaultPathwayIdForMarketingOffering } from "@/lib/marketing/country-exam-offerings";
@@ -47,7 +47,7 @@ export function practiceExamsCatStartMetaForOffering(
   const pathwayId = defaultPathwayIdForMarketingOffering(region, offering);
   const pathway = getExamPathwayById(pathwayId);
   if (!pathway) return null;
-  const marketingCatPath = marketingCatPathForPathway(pathway);
+  const marketingCatPath = offering === "np" ? npDiscoveryCatForRegion(region) : marketingCatPathForPathway(pathway);
   return {
     pathwayId: pathway.id,
     marketingCatPath,

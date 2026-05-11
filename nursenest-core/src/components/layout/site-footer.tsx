@@ -33,6 +33,7 @@ import { useMarketingChromeCountry } from "@/components/marketing/marketing-coun
 import { getCountryNavConfig } from "@/lib/marketing/countries/registry";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
+import { NP } from "@/lib/marketing/marketing-entry-routes";
 
 function formatFooterNode(children: React.ReactNode, locale: string): React.ReactNode {
   return typeof children === "string" ? formatTitleCase(children, locale) : children;
@@ -207,6 +208,33 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                     </li>
                     <li>
                       <FLink href={examHubs.np}>NP</FLink>
+                    </li>
+                    <li>
+                      <div className="rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-bg)_86%,var(--semantic-panel-positive))] px-3 py-2">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--footer-muted)]">
+                          NP specialties
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
+                          <FLink href={NP.fnpHub} className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                            FNP
+                          </FLink>
+                          <FLink href={NP.agpcnpHub} className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                            AGPCNP
+                          </FLink>
+                          <FLink href={NP.pmhnpHub} className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                            PMHNP
+                          </FLink>
+                          <FLink href={NP.whnpHub} className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                            WHNP
+                          </FLink>
+                          <FLink href={NP.pnpPcHub} className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                            PNP-PC
+                          </FLink>
+                          <FLink href={NP.caNpHub} className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                            CNPLE
+                          </FLink>
+                        </div>
+                      </div>
                     </li>
                     <li>
                       <FLink href={newGrad.hubHref}>{formatTitleCase(t("footer.newGradHub"), locale)}</FLink>

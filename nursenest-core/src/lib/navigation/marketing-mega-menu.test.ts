@@ -46,10 +46,10 @@ describe("buildMarketingMegaMenus", () => {
     assert.equal(pnQ?.href, "/us/pn/nclex-pn/questions");
   });
 
-  it("NP mega menu exposes specialty discovery links without replacing the canonical NP hub", () => {
+  it("NP mega menu uses discovery-first generic hubs while keeping specialty hub links direct", () => {
     const usMenus = buildMarketingMegaMenus("US", t);
     const usNp = usMenus.find((m) => m.key === "np");
-    assert.equal(usNp?.hubHref, "/us/np/fnp");
+    assert.equal(usNp?.hubHref, "/np-exam-prep");
     const usSpecialties = usNp?.groups.find((g) => g.key === "specialties")?.links ?? [];
     assert.deepEqual(
       usSpecialties.map((link) => link.href),
@@ -58,7 +58,7 @@ describe("buildMarketingMegaMenus", () => {
 
     const caMenus = buildMarketingMegaMenus("CA", t);
     const caNp = caMenus.find((m) => m.key === "np");
-    assert.equal(caNp?.hubHref, "/canada/np/cnple");
+    assert.equal(caNp?.hubHref, "/canada-np-exam-prep");
     const caSpecialties = caNp?.groups.find((g) => g.key === "specialties")?.links ?? [];
     assert.equal(caSpecialties.some((link) => link.href === "/canada/np/cnple"), true);
     assert.equal(caSpecialties.some((link) => link.href === "/us/np/whnp"), true);

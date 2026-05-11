@@ -29,11 +29,16 @@ export const LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB: readonly { slug: string; d
 
 /**
  * NP umbrella pages are live, self-canonical discovery surfaces now. Keep RN/PN behavior untouched in this pass and
- * stop treating only the NP/CNPLE slugs as hub-redirected for sitemap and redirect generation.
+ * explicitly treat all shared NP/CNPLE discovery slugs as non-redirecting so sitemap emission only excludes slugs with
+ * a real live hub redirect.
  */
 const SELF_CANONICAL_PROGRAMMATIC_DISCOVERY_SLUGS = new Set([
   "np-exam-practice-questions",
+  "np-exam-prep",
+  "np-clinical-cases",
   "cnple-practice-questions",
+  "canada-np-exam-prep",
+  "np-study-guide-canada",
 ]);
 
 const ACTIVE_LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB = LEGACY_PROGRAMMATIC_SLUG_TO_PATHWAY_HUB.filter(

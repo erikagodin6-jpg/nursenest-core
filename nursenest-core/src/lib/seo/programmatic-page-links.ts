@@ -2,9 +2,11 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import {
   HUB,
-  NP,
   PN,
   alliedQuestions,
+  npDiscoveryCatForRegion,
+  npDiscoveryLessonsForRegion,
+  npNpQuestionsForRegion,
   pnLessons,
   pnQuestions,
   rnLessons,
@@ -36,6 +38,14 @@ function catPathForPathwayId(id: string): string | null {
   return p ? buildExamPathwayPath(p, "cat") : null;
 }
 
+function npDiscoveryLinksForRegion(region: MarketingRegionToggle): { lessons: string; questions: string; cat: string } {
+  return {
+    lessons: npDiscoveryLessonsForRegion(region),
+    questions: npNpQuestionsForRegion(region),
+    cat: npDiscoveryCatForRegion(region),
+  };
+}
+
 /**
  * Public `/…/cat` route for the same pathway as lessons/questions (sign-in to run a session).
  */
@@ -54,13 +64,10 @@ function resolveProgrammaticCatHref(
     return raw ? loc(raw) : loc(HUB.practiceExams);
   }
   if (slug === "cnple-practice-questions" || slug === "np-study-guide-canada" || slug === "canada-np-exam-prep") {
-    const raw = catPathForPathwayId("ca-np-cnple");
-    return raw ? loc(raw) : loc(HUB.practiceExams);
+    return loc(npDiscoveryCatForRegion("CA"));
   }
   if (slug === "np-exam-practice-questions" || slug === "np-exam-prep" || slug === "np-clinical-cases") {
-    const id = marketingRegion === "CA" ? "ca-np-cnple" : "us-np-fnp";
-    const raw = catPathForPathwayId(id);
-    return raw ? loc(raw) : loc(HUB.practiceExams);
+    return loc(npDiscoveryCatForRegion(marketingRegion));
   }
 
   const pack = page.linkPack ?? inferLinkPackFromCluster(page.cluster);
@@ -76,9 +83,7 @@ function resolveProgrammaticCatHref(
       return raw ? loc(raw) : loc(HUB.practiceExams);
     }
     case "np": {
-      const id = marketingRegion === "US" ? "us-np-fnp" : "ca-np-cnple";
-      const raw = catPathForPathwayId(id);
-      return raw ? loc(raw) : loc(HUB.practiceExams);
+      return loc(npDiscoveryCatForRegion(marketingRegion));
     }
     case "allied": {
       const id = marketingRegion === "US" ? "us-allied-core" : "ca-allied-core";
@@ -135,17 +140,16 @@ function pathwayLessonsQuestionsFromProgrammaticSlug(
     return { lessons: PN.usLessons, questions: PN.usQuestions };
   }
   if (slug === "cnple-practice-questions" || slug === "np-study-guide-canada" || slug === "canada-np-exam-prep") {
-    return { lessons: NP.caNpLessons, questions: NP.caNpQuestions };
+    const links = npDiscoveryLinksForRegion("CA");
+    return { lessons: links.lessons, questions: links.questions };
   }
   if (slug === "np-exam-practice-questions" || slug === "np-exam-prep") {
-    return region === "CA"
-      ? { lessons: NP.caNpLessons, questions: NP.caNpQuestions }
-      : { lessons: NP.fnpLessons, questions: NP.fnpQuestions };
+    const links = npDiscoveryLinksForRegion(region);
+    return { lessons: links.lessons, questions: links.questions };
   }
   if (slug === "np-clinical-cases") {
-    return region === "CA"
-      ? { lessons: NP.caNpLessons, questions: NP.caNpQuestions }
-      : { lessons: NP.fnpLessons, questions: NP.fnpQuestions };
+    const links = npDiscoveryLinksForRegion(region);
+    return { lessons: links.lessons, questions: links.questions };
   }
   return null;
 }
@@ -230,11 +234,12 @@ export function resolveProgrammaticProductLinks(
         },
         page.slug,
       );
-    case "np":
+    case "np": {
+      const npLinks = npDiscoveryLinksForRegion(marketingRegion);
       return finalizeProgrammaticProductLinks(
         {
-          lessons: loc(marketingRegion === "CA" ? NP.caNpLessons : NP.fnpLessons),
-          questions: loc(marketingRegion === "CA" ? NP.caNpQuestions : NP.fnpQuestions),
+          lessons: loc(npLinks.lessons),
+          questions: loc(npLinks.questions),
           cat,
           testBank,
           exams,
@@ -243,6 +248,7 @@ export function resolveProgrammaticProductLinks(
         },
         page.slug,
       );
+    }
     case "allied":
       return finalizeProgrammaticProductLinks(
         {

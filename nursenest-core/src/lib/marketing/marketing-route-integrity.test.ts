@@ -33,12 +33,20 @@ describe("marketing route integrity", () => {
     }
   });
 
-  it("public CAT entry links are valid one-segment-under-hub paths", () => {
+  it("public CAT entry links are valid internal routes, with generic NP using discovery-first CAT pages", () => {
+    const expectedNpCat = {
+      US: "/np-clinical-cases",
+      CA: "/canada-np-exam-prep",
+    } as const;
+
     for (const region of ["US", "CA"] as const) {
       for (const id of ["rn", "pn", "np", "allied"] as const) {
         const cat = publicMarketingCatHrefForOffering(region, id);
         assert.ok(cat.startsWith("/") && !cat.includes("//"), cat);
         assert.equal(isValidPath(cat), true, cat);
+        if (id === "np") {
+          assert.equal(cat, expectedNpCat[region]);
+        }
       }
     }
   });
@@ -79,13 +87,13 @@ describe("marketing route integrity", () => {
       US: {
         rn: "/us/rn/nclex-rn",
         pn: "/us/pn/nclex-pn",
-        np: "/us/np/fnp",
+        np: "/np-exam-prep",
         allied: "/allied/allied-health",
       },
       CA: {
         rn: "/canada/rn/nclex-rn",
         pn: "/canada/pn/rex-pn",
-        np: "/canada/np/cnple",
+        np: "/canada-np-exam-prep",
         allied: "/allied/allied-health",
       },
     } as const;

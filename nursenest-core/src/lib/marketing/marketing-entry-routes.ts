@@ -58,11 +58,27 @@ export const NP = {
   cnplePracticeTest: "/canada/np/cnple-practice-test",
   /** Legacy: Canada NP canonical pathway hub (not `/cnple-practice-questions`). */
   practiceProgrammaticCa: CANONICAL_PATHWAY_HUB.caNp,
+  usDiscoveryLessons: "/np-exam-prep",
+  usDiscoveryQuestions: "/np-exam-practice-questions",
+  usDiscoveryCat: "/np-clinical-cases",
+  caDiscoveryLessons: "/canada-np-exam-prep",
+  caDiscoveryQuestions: "/cnple-practice-questions",
+  caDiscoveryCat: "/canada-np-exam-prep",
+  fnpHub: "/us/np/fnp",
+  agpcnpHub: "/us/np/agpcnp",
+  pmhnpHub: "/us/np/pmhnp",
+  whnpHub: "/us/np/whnp",
+  pnpPcHub: "/us/np/pnp-pc",
   fnpLessons: "/us/np/fnp/lessons",
   agpcnpLessons: "/us/np/agpcnp/lessons",
-  fnpQuestions: "/us/np/fnp/questions",
-  pmhnpHub: "/us/np/pmhnp",
   pmhnpLessons: "/us/np/pmhnp/lessons",
+  whnpLessons: "/us/np/whnp/lessons",
+  pnpPcLessons: "/us/np/pnp-pc/lessons",
+  fnpQuestions: "/us/np/fnp/questions",
+  agpcnpQuestions: "/us/np/agpcnp/questions",
+  pmhnpQuestions: "/us/np/pmhnp/questions",
+  whnpQuestions: "/us/np/whnp/questions",
+  pnpPcQuestions: "/us/np/pnp-pc/questions",
   caNpHub: "/canada/np/cnple",
   caNpLessons: "/canada/np/cnple/lessons",
   caNpQuestions: "/canada/np/cnple/questions",
@@ -129,7 +145,15 @@ export function alliedQuestions(region: MarketingRegionToggle): string {
 }
 
 export function npNpQuestionsForRegion(region: MarketingRegionToggle): string {
-  return region === "US" ? NP.fnpQuestions : NP.caNpQuestions;
+  return region === "US" ? NP.usDiscoveryQuestions : NP.caDiscoveryQuestions;
+}
+
+export function npDiscoveryLessonsForRegion(region: MarketingRegionToggle): string {
+  return region === "US" ? NP.usDiscoveryLessons : NP.caDiscoveryLessons;
+}
+
+export function npDiscoveryCatForRegion(region: MarketingRegionToggle): string {
+  return region === "US" ? NP.usDiscoveryCat : NP.caDiscoveryCat;
 }
 
 export function alliedCareersMarketingUrl(): string {
