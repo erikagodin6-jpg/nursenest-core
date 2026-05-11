@@ -15,8 +15,9 @@ export const metadata: Metadata = {
 
 export default async function LabsHubRoute() {
   const context = await loadLabsRouteContext("(student).app.(learner).labs");
-  const categories = listLabCategoriesForTrack(context.track);
-  const inventory = countLabsInventoryForTrack(context.track);
+  const entitlementScope = context.entitlement !== "error" ? context.entitlement : undefined;
+  const categories = listLabCategoriesForTrack(context.track, entitlementScope);
+  const inventory = countLabsInventoryForTrack(context.track, entitlementScope);
   const studyLinks = buildLabsStudyLinks(context.pathwayId);
 
   return (

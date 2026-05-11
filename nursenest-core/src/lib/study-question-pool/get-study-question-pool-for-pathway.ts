@@ -7,6 +7,7 @@ import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-cont
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
+import { rtVentilatorPremiumBankGateWhere } from "@/lib/rt-ventilator/rt-ventilator-bank-pool-gate";
 import { normalizePathwayIdForStudySurfaces } from "@/lib/study-question-pool/study-pathway-normalize";
 
 export type StudyQuestionPoolMode = "cat" | "practice" | "flashcards";
@@ -47,6 +48,7 @@ export async function getStudyQuestionPoolForPathway(args: {
           questionAccessWhereWithPathway(args.entitlement, pathway),
           NON_ECG_PRACTICE_EXAM_WHERE,
           generalStudyBankModuleSurfaceWhere(),
+          rtVentilatorPremiumBankGateWhere(args.entitlement),
         ],
       }
     : null;

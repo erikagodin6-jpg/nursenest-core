@@ -190,7 +190,7 @@ function assertRuntimeDatabaseEnvContractMjs() {
       throw new Error(
         [
           "DATABASE_URL is missing in runtime environment (not build ARG).",
-          "Confirm DigitalOcean DATABASE_URL is scope RUN_TIME with a non-empty secret, or ship `.env.production` / `.env.local` under the app root for standalone hydrate.",
+          "Runtime env did not reach the standalone Node process; inspect DigitalOcean component env attachment, source_dir, run_command, and wrapper env forwarding.",
           `cwd=${cwd}`,
           `NEXT_PHASE=${process.env.NEXT_PHASE ?? "(unset)"}`,
           `npm_lifecycle_event=${process.env.npm_lifecycle_event ?? "(unset)"}`,

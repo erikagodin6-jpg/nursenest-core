@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getNursingMechanismExplainerDraft } from "@/content/nursing-mechanism-explainers";
+import {
+  getNursingMechanismExplainerDraft,
+  isNursingMechanismExplainerPublishable,
+} from "@/content/nursing-mechanism-explainers";
 import {
   buildNursingMechanismBreadcrumbJsonLd,
   getNursingMechanismClusterBySlug,
@@ -19,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cluster = getNursingMechanismClusterBySlug(slug);
   const draft = getNursingMechanismExplainerDraft(slug);
 
-  if (!cluster || cluster.status !== "published" || !draft || draft.status !== "published") {
+  if (!cluster || cluster.status !== "published" || !draft || !isNursingMechanismExplainerPublishable(draft)) {
     return {
       title: "Nursing mechanism explainer unavailable | NurseNest",
       robots: { index: false, follow: false },
@@ -39,7 +42,7 @@ export default async function NursingMechanismExplainerPage({ params }: Props) {
   const cluster = getNursingMechanismClusterBySlug(slug);
   const draft = getNursingMechanismExplainerDraft(slug);
 
-  if (!cluster || cluster.status !== "published" || !draft || draft.status !== "published") {
+  if (!cluster || cluster.status !== "published" || !draft || !isNursingMechanismExplainerPublishable(draft)) {
     notFound();
   }
 
@@ -80,6 +83,15 @@ export default async function NursingMechanismExplainerPage({ params }: Props) {
         ))}
       </section>
 
+      {(draft.longFormSections ?? []).map((section) => (
+        <section key={section.heading} className="mt-10 space-y-4">
+          <h2 className="text-2xl font-semibold text-[var(--theme-heading-text)]">{section.heading}</h2>
+          {section.paragraphs.map((paragraph) => (
+            <p key={paragraph} className="leading-7 text-[var(--theme-body-text)]">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+
       <section className="mt-10">
         <h2 className="text-2xl font-semibold text-[var(--theme-heading-text)]">Nursing assessment implications</h2>
         <ul className="mt-4 list-disc space-y-2 pl-6 text-[var(--theme-body-text)]">
@@ -117,6 +129,13 @@ export default async function NursingMechanismExplainerPage({ params }: Props) {
         <Link className="rounded-lg border p-4 font-semibold text-primary hover:underline" href={draft.relatedLessonsCta.href}>
           {draft.relatedLessonsCta.label}
         </Link>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-2xl font-semibold text-[var(--theme-heading-text)]">References</h2>
+        <ul className="mt-4 list-disc space-y-2 pl-6 text-[var(--theme-body-text)]">
+          {draft.apa7References.map((reference) => <li key={reference}>{reference}</li>)}
+        </ul>
       </section>
     </article>
   );

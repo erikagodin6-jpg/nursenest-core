@@ -18,6 +18,7 @@ import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids"
 import { seededIndexInRange, shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
+import { rtVentilatorPremiumBankGateWhere } from "@/lib/rt-ventilator/rt-ventilator-bank-pool-gate";
 import {
   isCompleteCatQuestionRow,
   NON_ECG_PRACTICE_EXAM_WHERE,
@@ -283,7 +284,13 @@ export async function fetchCatPracticePoolReadiness(
   const minNeed = catReadinessMinCompletePoolRows(pathwayIdTrim);
   const secondaryStrict = await buildSecondaryFilterParts(userId, entitlement, input, false);
   const whereStrict: Prisma.ExamQuestionWhereInput = {
-    AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryStrict],
+    AND: [
+      base,
+      NON_ECG_PRACTICE_EXAM_WHERE,
+      generalStudyBankModuleSurfaceWhere(),
+      rtVentilatorPremiumBankGateWhere(entitlement),
+      ...secondaryStrict,
+    ],
   };
   const rawStrictCount = await countRawRows(whereStrict);
   let strictAccumulated = await accumulateCompleteCatPoolForReadiness(whereStrict, minNeed);
@@ -297,7 +304,13 @@ export async function fetchCatPracticePoolReadiness(
   if (strictness === "soft" && pool.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
     const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
     const whereRelaxed: Prisma.ExamQuestionWhereInput = {
-      AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryRelaxed],
+      AND: [
+        base,
+        NON_ECG_PRACTICE_EXAM_WHERE,
+        generalStudyBankModuleSurfaceWhere(),
+        rtVentilatorPremiumBankGateWhere(entitlement),
+        ...secondaryRelaxed,
+      ],
     };
     rawFinalCount = await countRawRows(whereRelaxed);
     const relaxed = await accumulateCompleteCatPoolForReadiness(whereRelaxed, minNeed);
@@ -312,7 +325,13 @@ export async function fetchCatPracticePoolReadiness(
       ? Math.max(
           0,
           (await countRawRows({
-            AND: [broadBase, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryStrict],
+            AND: [
+              broadBase,
+              NON_ECG_PRACTICE_EXAM_WHERE,
+              generalStudyBankModuleSurfaceWhere(),
+              rtVentilatorPremiumBankGateWhere(entitlement),
+              ...secondaryStrict,
+            ],
           })) - rawStrictCount,
         )
       : 0;
@@ -411,7 +430,13 @@ export async function fetchCatPracticePool(
 
   const secondaryStrict = await buildSecondaryFilterParts(userId, entitlement, input, false);
   const whereStrict: Prisma.ExamQuestionWhereInput = {
-    AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryStrict],
+    AND: [
+      base,
+      NON_ECG_PRACTICE_EXAM_WHERE,
+      generalStudyBankModuleSurfaceWhere(),
+      rtVentilatorPremiumBankGateWhere(entitlement),
+      ...secondaryStrict,
+    ],
   };
   let completeRows = await queryShuffledCompletePool(whereStrict, input);
   const strictCount = completeRows.length;
@@ -420,7 +445,13 @@ export async function fetchCatPracticePool(
   if (strictness === "soft" && completeRows.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
     const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
     const whereRelaxed: Prisma.ExamQuestionWhereInput = {
-      AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryRelaxed],
+      AND: [
+        base,
+        NON_ECG_PRACTICE_EXAM_WHERE,
+        generalStudyBankModuleSurfaceWhere(),
+        rtVentilatorPremiumBankGateWhere(entitlement),
+        ...secondaryRelaxed,
+      ],
     };
     completeRows = await queryShuffledCompletePool(whereRelaxed, input);
     usedRelaxedFilters = true;

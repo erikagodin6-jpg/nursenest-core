@@ -17,15 +17,17 @@ describe("rt-ventilator-module-config", () => {
     assert.equal(isRtVentilatorMarketingSurfacesEnabled({ NEXT_PUBLIC_ENABLE_RT_VENTILATOR_MARKETING: "false" }), false);
   });
 
-  it("allows only ALLIED + respiratory profession", () => {
+  it("allows only ALLIED + RRT / respiratory profession scope", () => {
     assert.equal(
       canAccessRtVentilatorModuleForTierAndProfession({ tier: "ALLIED", alliedProfessionKey: "respiratory" }),
       true,
     );
+    assert.equal(canAccessRtVentilatorModuleForTierAndProfession({ tier: "ALLIED", alliedCareer: "rrt" }), true);
     assert.equal(
       canAccessRtVentilatorModuleForTierAndProfession({ tier: "RN", alliedProfessionKey: "respiratory" }),
       false,
     );
     assert.equal(canAccessRtVentilatorModuleForTierAndProfession({ tier: "ALLIED", alliedProfessionKey: "mlt" }), false);
+    assert.equal(canAccessRtVentilatorModuleForTierAndProfession({ tier: "ALLIED", alliedCareer: "mlt" }), false);
   });
 });

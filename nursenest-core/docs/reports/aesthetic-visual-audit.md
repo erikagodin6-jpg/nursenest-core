@@ -46,7 +46,8 @@ Bright, optimistic, clinical premium; semantic multi-hue status (not one primary
 cd nursenest-core
 npm run typecheck:critical
 npm run test:homepage
-npm run test:e2e:aesthetic-audit
+npm run test:e2e:aesthetic-audit:full
+npm run aesthetic-audit:gate
 ```
 
 ## Files touched
@@ -62,6 +63,21 @@ npm run test:e2e:aesthetic-audit
 Pattern: `learner-{routeId}-{ocean|blossom|midnight|sunset|aurora}-{desktop|mobile}.png`
 
 **routeId:** `practice-session`, `cat-session`, `cat-results` (CAT insights), `flashcard-session`, `report-card`, `labs-ventilator-preview`, `allied-premium-preview`
+
+## Pipeline scripts (2026-05-12)
+
+| Script | Purpose |
+|--------|---------|
+| `npm run test:e2e:aesthetic-audit` | Playwright capture for `aesthetic-visual-audit.{public,authenticated,learner-sessions}.spec.ts` only (`playwright.aesthetic-audit.config.ts`). |
+| `npm run test:e2e:aesthetic-audit:full` | Runs the audit, then `npm run aesthetic-audit:report` to refresh `docs/reports/*` under the monorepo root. |
+| `npm run aesthetic-audit:report` | Aggregates `.aesthetic-audit/shards/*.json` → `aesthetic-regression-report.{md,json}` + `ui-surface-inventory.md`. |
+| `npm run aesthetic-audit:gate` | Same aggregator with `--gate=major` (non-zero exit if any **major** or **critical** issue). |
+
+### Reliability fixes (same date)
+
+- Removed `test.describe.configure({ mode: "serial" })` from the three aesthetic visual specs so one failure does not skip the remaining theme/viewport matrix.
+- Replaced `networkidle` waits on audit settle paths with `load` (marketing/learner pages keep long-lived connections that can prevent `networkidle` from ever firing within CI budgets).
+- `playwright.aesthetic-audit.config.ts` uses two projects: `aesthetic-audit` (visual audit specs) and `aesthetic-before-after` (real-site capture matrix). `npm run aesthetic-before-after:capture` targets `--project=aesthetic-before-after`.
 
 ## Regression engine upgrade (2026)
 

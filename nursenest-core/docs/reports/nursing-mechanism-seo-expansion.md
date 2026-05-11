@@ -47,7 +47,29 @@ Initial high-priority entries:
 
 Initial top 10 content drafts live in `src/content/nursing-mechanism-explainers.ts`.
 
-All initial explainers are `draft`. None are published, indexed, or emitted into sitemap collectors. This is intentional because final publication requires full editorial review, minimum 1000-word body depth, and reference verification.
+All initial explainers are `draft`. None are published, indexed, or emitted into sitemap collectors. This is intentional because final publication requires full editorial review, minimum 1000-word body depth, reference verification, nursing priorities, exam relevance, internal links, and placeholder-free content.
+
+## 2026-05-11 Expansion Pass
+
+Expanded, still-guarded drafts:
+
+1. `why-hyperkalemia-affects-the-heart-nursing-mechanism` — 1187 words.
+2. `hyperkalemia-vs-hypokalemia-ecg-changes-nursing` — 1098 words.
+3. `why-burns-cause-hyperkalemia-nursing` — 1112 words.
+
+Each selected explainer now includes:
+
+- Pathophysiology mechanism with clinically specific nursing interpretation.
+- Why the mechanism matters clinically.
+- Signs and symptoms.
+- Labs, diagnostics, and monitoring cues.
+- Nursing priorities and escalation language.
+- NCLEX-RN, REx-PN/NCLEX-PN, and NP relevance where applicable.
+- Common exam traps.
+- Internal links to lessons, lab tools, question bank, practice exams, CAT/dashboard hooks, and related scenario themes.
+- APA-style references from current authoritative sources where practical, including KDIGO 2024, ADA Standards of Care 2026, American Burn Association burn shock guidance, GOLD 2026, Surviving Sepsis Campaign 2021, and AHA/Red Cross 2024 first aid guidance.
+
+Status policy after this pass: all three remain `draft`. This is not a mass-publish pass.
 
 ## SEO Rationale From GSC Query Patterns
 
@@ -71,8 +93,23 @@ The system is designed to ingest future GSC exports by mapping query clusters to
 
 - Published explainers may emit canonical paths under `/nursing-mechanisms/{slug}`.
 - `planned`, `draft`, and `hidden` explainers are excluded from sitemap collectors.
+- `published` registry rows are still excluded unless the matching content object passes publish eligibility gates.
 - Draft/hidden route requests fail closed with `notFound()` and noindex metadata.
 - Canonical origin remains `https://www.nursenest.ca` through existing canonical helpers.
+
+## Quality Gates Added
+
+Public indexing is blocked when any of the following are true:
+
+- Content is below `NURSING_MECHANISM_MINIMUM_PUBLISH_WORDS` (`1000` words).
+- APA-style references are missing.
+- Nursing priorities are missing.
+- Exam relevance is missing.
+- Internal links are missing.
+- Placeholder language is detected.
+- Registry status and content status are not both `published`.
+
+The sitemap collector now calls the same publishability gate used by route metadata/page access, so a status flip alone cannot index an incomplete explainer.
 
 ## Publish-Readiness Checklist
 
@@ -102,5 +139,11 @@ npm run test:seo:nursing-mechanisms
 npm run typecheck:critical
 npm run sitemap:validate
 ```
+
+Current local validation:
+
+- `npm run test:seo:nursing-mechanisms` — pass on 2026-05-11 after this expansion.
+- `npm run typecheck:critical` — pass on 2026-05-11.
+- `npm run sitemap:validate` — pass on 2026-05-11; validator reported 0 duplicate page locs, 0 invalid page locs, 0 errors, and 0 warnings.
 
 This report is implementation evidence for the draft infrastructure pass, not a publication approval.

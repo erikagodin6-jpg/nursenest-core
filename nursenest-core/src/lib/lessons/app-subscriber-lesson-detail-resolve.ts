@@ -23,9 +23,10 @@ export type AppSubscriberPathwayLessonDetailRow = Pick<
     status: ContentStatus | null;
     countryCode: CountryCode | null;
     tierCode: TierCode | null;
+    alliedProfessionKey?: string | null;
   },
   "id" | "pathwayId" | "slug" | "status" | "countryCode" | "tierCode"
->;
+> & { alliedProfessionKey?: string | null };
 
 export type AppSubscriberPathwayLessonDetailResolution =
   | { kind: "out_of_plan" }

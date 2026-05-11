@@ -114,15 +114,15 @@ const PUBLIC_ROUTES: PublicRoute[] = [
 
 async function settlePublicPage(page: Page): Promise<void> {
   await page.waitForLoadState("domcontentloaded");
-  await page.waitForLoadState("networkidle", { timeout: 90_000 }).catch(() => {});
+  // Avoid `networkidle` here — marketing pages often keep long-lived connections (analytics,
+  // streaming, dev tooling) open, which can stall audits until the whole test times out.
+  await page.waitForLoadState("load", { timeout: 60_000 }).catch(() => {});
   await page.evaluate(() => document.fonts.ready).catch(() => {});
 }
 
 function screenshotName(routeId: string, theme: AestheticThemeId, vp: "desktop" | "mobile"): string {
   return path.join(OUT, `pub-${routeId}-${theme}-${vp}.png`);
 }
-
-test.describe.configure({ mode: "serial" });
 
 test.beforeAll(() => {
   mkdirSync(OUT, { recursive: true });

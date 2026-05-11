@@ -54,6 +54,7 @@ import { stripForbiddenLocalePrefixedPathwayTopics } from "@/lib/seo/sitemap-loc
 import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
+import { listPublishedNclexCommercialLandingPaths } from "@/lib/seo/nclex-commercial-landing-pages";
 export {
   buildSitemapIndexXml,
   buildSitemapUrlsetFromAbsoluteUrls,
@@ -553,6 +554,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     add("/case-studies"),
     ...listPublishedExpansionExamMarketingPaths().map((p) => add(p)),
     ...regionalTopicPaths.map((p) => add(p)),
+    ...collectNclexCommercialLandingUrls(o),
   ];
   if (productionSafe) {
     const pathwayTopicUrls = omitExamPathwayAndTopicProgrammaticUrls ? [] : await collectPathwayTopicProgrammaticUrls(o);
@@ -601,6 +603,11 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     ...collectPreNursingSeoUrls(o),
     ...lessonUrls,
   ];
+}
+
+export function collectNclexCommercialLandingUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return listPublishedNclexCommercialLandingPaths().map((path) => `${o}${path}`);
 }
 
 /** seo-pages.xml — English canonical programmatic URLs at `/{slug}` (rewritten to /seo/[slug] internally). */

@@ -55,7 +55,7 @@ export async function stabilizePageForCapture(
 
   await page.evaluate(() => document.fonts.ready).catch(() => {});
 
-  await page.waitForLoadState("networkidle", { timeout: Math.min(20_000, left()) }).catch(() => {});
+  await page.waitForLoadState("load", { timeout: Math.min(20_000, left()) }).catch(() => {});
 
   // Pause any running web animations so screenshots don't catch mid-tween.
   await page

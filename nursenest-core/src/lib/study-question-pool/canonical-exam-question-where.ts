@@ -7,6 +7,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
 import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
+import { rtVentilatorPremiumBankGateWhere } from "@/lib/rt-ventilator/rt-ventilator-bank-pool-gate";
 
 /**
  * Lightweight shape for inventory / category counting from ExamQuestion.
@@ -36,6 +37,7 @@ export function getCanonicalExamQuestionWhere(
       questionAccessWhere(entitlement),
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
+      rtVentilatorPremiumBankGateWhere(entitlement),
     ],
   };
 }
@@ -54,6 +56,7 @@ export function getCanonicalExamQuestionWhereForPathway(
       questionAccessWhereWithPathway(entitlement, pathway),
       NON_ECG_PRACTICE_EXAM_WHERE,
       generalStudyBankModuleSurfaceWhere(),
+      rtVentilatorPremiumBankGateWhere(entitlement),
     ],
   };
 }

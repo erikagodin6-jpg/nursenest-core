@@ -1,43 +1,13 @@
 {
-  "generatedAt": "2026-05-11T02:21:07.657Z",
-  "gate": "off",
+  "generatedAt": "2026-05-11T03:49:20.145Z",
+  "gate": "major",
   "gateViolated": false,
   "severityCounts": {
-    "critical": 1,
+    "critical": 0,
     "major": 0,
-    "moderate": 1,
+    "moderate": 0,
     "cosmetic": 0
   },
-  "totalShards": 1,
-  "shards": [
-    {
-      "route": "public-home",
-      "theme": "ocean",
-      "viewport": "desktop",
-      "status": "captured",
-      "screenshotRelPath": "docs/screenshots/aesthetic-audit-2026/public/pub-home-ocean-desktop.png",
-      "baselineDiff": null,
-      "figmaDiff": null,
-      "thresholds": {
-        "cosmetic": 0.5,
-        "moderate": 2,
-        "major": 6
-      },
-      "issues": [
-        {
-          "category": "layout-heuristic",
-          "ruleId": "horizontal-overflow",
-          "severity": "critical",
-          "message": "Synthetic critical for gate test"
-        },
-        {
-          "category": "token-violation",
-          "ruleId": "hardcoded-color",
-          "severity": "moderate",
-          "message": "Synthetic moderate"
-        }
-      ],
-      "capturedAt": "2026-05-11T00:00:00.000Z"
-    }
-  ]
+  "totalShards": 0,
+  "shards": []
 }

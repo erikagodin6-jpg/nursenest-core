@@ -6040,3 +6040,439 @@ html[data-theme="midnight"] .nn-flashcard-rail-tile {
   }
 }
 
+
+
+/* ---------------------------------------------------------------------
+   NCLEX commercial landing ecosystem — premium SEO surfaces.
+   Token-driven and theme-aware; preserves the existing marketing shell.
+   --------------------------------------------------------------------- */
+
+.nn-nclex-commercial {
+  background:
+    radial-gradient(900px 520px at 4% 2%, color-mix(in srgb, var(--semantic-chart-2) 16%, transparent), transparent 64%),
+    radial-gradient(820px 520px at 96% 8%, color-mix(in srgb, var(--semantic-chart-3) 14%, transparent), transparent 62%),
+    var(--theme-page-bg, var(--page-bg));
+  color: var(--theme-body-text);
+  min-height: 100vh;
+  padding-bottom: 5rem;
+}
+
+.nn-nclex-commercial-shell {
+  width: min(1180px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.nn-nclex-commercial-hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(1.75rem, 4vw, 4rem) 0 clamp(2.75rem, 6vw, 5.5rem);
+}
+
+.nn-nclex-commercial-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--semantic-border-soft) 46%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-border-soft) 40%, transparent) 1px, transparent 1px);
+  background-size: 58px 58px;
+  mask-image: radial-gradient(circle at 50% 10%, black, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at 50% 10%, black, transparent 70%);
+  opacity: 0.58;
+}
+
+.nn-nclex-commercial-breadcrumb {
+  color: var(--semantic-text-muted);
+}
+
+.nn-nclex-commercial-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.78fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.nn-nclex-commercial-hero__copy {
+  max-width: 760px;
+}
+
+.nn-nclex-commercial-eyebrow {
+  color: var(--semantic-info-text, var(--theme-primary));
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nn-nclex-commercial-hero h1 {
+  color: var(--theme-heading-text);
+  font-size: clamp(2.5rem, 6vw, 5.4rem);
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+  margin-top: 0.65rem;
+}
+
+.nn-nclex-commercial-hero__copy > p:not(.nn-nclex-commercial-eyebrow) {
+  margin-top: 1.35rem;
+  max-width: 68ch;
+  color: var(--theme-body-text);
+  font-size: clamp(1.04rem, 1.6vw, 1.27rem);
+  line-height: 1.75;
+}
+
+.nn-nclex-commercial-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.6rem;
+}
+
+.nn-nclex-commercial-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border-radius: 999px;
+  padding: 0.78rem 1.08rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.nn-nclex-commercial-cta:hover {
+  transform: translateY(var(--lift-hover-y, -2px));
+}
+
+.nn-nclex-commercial-cta--primary {
+  color: var(--role-primary-action-text, var(--theme-button-text));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--semantic-brand) 94%, var(--semantic-info)), var(--semantic-chart-3));
+  box-shadow: 0 18px 48px -24px color-mix(in srgb, var(--semantic-brand) 70%, transparent);
+}
+
+.nn-nclex-commercial-cta--secondary {
+  color: var(--theme-heading-text);
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-info));
+  background: color-mix(in srgb, var(--theme-card-bg) 82%, transparent);
+}
+
+.nn-nclex-commercial-audience {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.2rem;
+}
+
+.nn-nclex-commercial-audience span {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 80%, var(--semantic-info));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--theme-card-bg) 72%, transparent);
+  color: var(--semantic-text-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 0.42rem 0.68rem;
+}
+
+.nn-nclex-commercial-preview,
+.nn-nclex-commercial-card,
+.nn-nclex-commercial-section,
+.nn-nclex-commercial-final,
+.nn-nclex-commercial-link-card {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 84%, var(--semantic-info));
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--theme-card-bg) 92%, transparent), color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--theme-card-bg))),
+    var(--theme-card-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.nn-nclex-commercial-preview {
+  border-radius: 2rem;
+  padding: clamp(1.1rem, 2.2vw, 1.6rem);
+  overflow: hidden;
+}
+
+.nn-nclex-commercial-preview__topline,
+.nn-nclex-commercial-preview__tile,
+.nn-nclex-commercial-matrix__head,
+.nn-nclex-commercial-matrix__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nn-nclex-commercial-preview__topline span,
+.nn-nclex-commercial-preview__tile span {
+  color: var(--semantic-text-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nn-nclex-commercial-preview__topline strong,
+.nn-nclex-commercial-preview__tile strong {
+  color: var(--theme-heading-text);
+}
+
+.nn-nclex-commercial-preview__band {
+  height: 0.68rem;
+  border-radius: 999px;
+  background: var(--semantic-progress-track, color-mix(in srgb, var(--semantic-border-soft) 55%, transparent));
+  margin: 1.3rem 0;
+  overflow: hidden;
+}
+
+.nn-nclex-commercial-preview__band span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--semantic-success), var(--semantic-info), var(--semantic-warning));
+}
+
+.nn-nclex-commercial-preview__grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.nn-nclex-commercial-preview__tile {
+  align-items: center;
+  border-radius: 1.1rem;
+  background: color-mix(in srgb, var(--theme-card-bg) 72%, var(--semantic-panel-positive));
+  padding: 0.9rem 1rem;
+}
+
+.nn-nclex-commercial-preview__rhythm {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: end;
+  gap: 0.42rem;
+  height: 78px;
+  margin-top: 1.2rem;
+}
+
+.nn-nclex-commercial-preview__rhythm i {
+  display: block;
+  min-height: 28px;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(180deg, var(--semantic-chart-3), color-mix(in srgb, var(--semantic-chart-2) 68%, transparent));
+}
+
+.nn-nclex-commercial-preview__rhythm i:nth-child(2) { min-height: 58px; }
+.nn-nclex-commercial-preview__rhythm i:nth-child(3) { min-height: 40px; }
+.nn-nclex-commercial-preview__rhythm i:nth-child(4) { min-height: 68px; }
+.nn-nclex-commercial-preview__rhythm i:nth-child(5) { min-height: 48px; }
+
+.nn-nclex-commercial-body {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding: clamp(2rem, 5vw, 4rem) 0;
+}
+
+.nn-nclex-commercial-section,
+.nn-nclex-commercial-card,
+.nn-nclex-commercial-final {
+  border-radius: 1.55rem;
+  padding: clamp(1.2rem, 2.4vw, 2rem);
+}
+
+.nn-nclex-commercial-section__header {
+  max-width: 820px;
+}
+
+.nn-nclex-commercial-section h2,
+.nn-nclex-commercial-card h2,
+.nn-nclex-commercial-final h2 {
+  color: var(--theme-heading-text);
+  font-size: clamp(1.65rem, 3vw, 2.55rem);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  margin-top: 0.35rem;
+  text-wrap: balance;
+}
+
+.nn-nclex-commercial-section p,
+.nn-nclex-commercial-card p,
+.nn-nclex-commercial-final p,
+.nn-nclex-commercial-card li,
+.nn-nclex-commercial-faq p,
+.nn-nclex-commercial-link-card span {
+  color: var(--theme-body-text);
+  line-height: 1.72;
+}
+
+.nn-nclex-commercial-card-grid,
+.nn-nclex-commercial-diff-grid,
+.nn-nclex-commercial-link-grid,
+.nn-nclex-commercial-timeline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.nn-nclex-commercial-diff-grid {
+  margin-top: 1.25rem;
+}
+
+.nn-nclex-commercial-diff-grid article,
+.nn-nclex-commercial-timeline article {
+  border-radius: 1.2rem;
+  background: color-mix(in srgb, var(--theme-card-bg) 74%, var(--semantic-panel-cool));
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-info));
+  padding: 1rem;
+}
+
+.nn-nclex-commercial-diff-grid article span {
+  display: block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: var(--semantic-success);
+  margin-bottom: 0.7rem;
+}
+
+.nn-nclex-commercial-card ul {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  padding-left: 1.05rem;
+}
+
+.nn-nclex-commercial-timeline {
+  margin-top: 1.25rem;
+}
+
+.nn-nclex-commercial-timeline article > span {
+  color: var(--semantic-info-text, var(--theme-primary));
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+.nn-nclex-commercial-timeline h3 {
+  color: var(--theme-heading-text);
+  font-weight: 850;
+  margin-top: 0.45rem;
+}
+
+.nn-nclex-commercial-matrix {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+}
+
+.nn-nclex-commercial-matrix__head,
+.nn-nclex-commercial-matrix__row {
+  display: grid;
+  grid-template-columns: 0.7fr 1fr 1fr;
+  align-items: stretch;
+  border-radius: 1rem;
+  padding: 0.85rem;
+}
+
+.nn-nclex-commercial-matrix__head {
+  color: var(--theme-heading-text);
+  background: color-mix(in srgb, var(--semantic-info) 18%, var(--theme-card-bg));
+  font-weight: 900;
+}
+
+.nn-nclex-commercial-matrix__row {
+  background: color-mix(in srgb, var(--theme-card-bg) 84%, var(--semantic-panel-warm));
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 84%, transparent);
+}
+
+.nn-nclex-commercial-link-grid {
+  margin-top: 1.2rem;
+}
+
+.nn-nclex-commercial-link-card {
+  border-radius: 1.2rem;
+  padding: 1rem;
+  text-decoration: none;
+}
+
+.nn-nclex-commercial-link-card strong {
+  display: block;
+  color: var(--theme-heading-text);
+  font-size: 1.02rem;
+  margin-bottom: 0.35rem;
+}
+
+.nn-nclex-commercial-faq {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1.2rem;
+}
+
+.nn-nclex-commercial-faq details {
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--theme-card-bg) 82%, var(--semantic-panel-cool));
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 82%, transparent);
+  padding: 1rem;
+}
+
+.nn-nclex-commercial-faq summary {
+  cursor: pointer;
+  color: var(--theme-heading-text);
+  font-weight: 850;
+}
+
+.nn-nclex-commercial-final {
+  text-align: center;
+}
+
+.nn-nclex-commercial-final .nn-nclex-commercial-hero__ctas {
+  justify-content: center;
+}
+
+.nn-nclex-commercial-mobile-cta {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  display: none;
+  padding: 0.72rem max(1rem, env(safe-area-inset-left)) calc(0.72rem + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--theme-card-bg) 88%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.nn-nclex-commercial-mobile-cta .nn-nclex-commercial-cta {
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .nn-nclex-commercial-hero__grid,
+  .nn-nclex-commercial-card-grid,
+  .nn-nclex-commercial-diff-grid,
+  .nn-nclex-commercial-link-grid,
+  .nn-nclex-commercial-timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .nn-nclex-commercial-matrix__head {
+    display: none;
+  }
+
+  .nn-nclex-commercial-matrix__row {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .nn-nclex-commercial {
+    padding-bottom: 6.5rem;
+  }
+
+  .nn-nclex-commercial-mobile-cta {
+    display: block;
+  }
+
+  .nn-nclex-commercial-hero__ctas .nn-nclex-commercial-cta {
+    width: 100%;
+  }
+}

@@ -1,4 +1,10 @@
 import { TierCode } from "@prisma/client";
+import {
+  normalizeCanonicalAlliedProfessionKey,
+  subscriberCanonicalAlliedProfessionKey,
+} from "@/lib/entitlements/allied-occupation-entitlement";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { appPathwayCatSessionStartPath, resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
@@ -105,6 +111,11 @@ export type LabLessonDefinition = {
   microScenarios: LabMicroScenario[];
   tierFocus: Record<LabTrack, string[]>;
   supportedTracks: LabTrack[];
+  /**
+   * When set, only these canonical allied profession keys may access this lab (ALLIED tier).
+   * Omit for labs shared across all Allied occupations.
+   */
+  alliedExclusiveProfessionKeys?: readonly string[];
   practiceQuestionTopic: string;
 };
 
@@ -1214,12 +1225,28 @@ export function labTrackFromTier(tier: TierCode | null | undefined): LabTrack {
   }
 }
 
-export function listLabLessonsForTrack(track: LabTrack): LabLessonDefinition[] {
-  return LESSONS.filter((lesson) => lesson.supportedTracks.includes(track));
+export function labLessonAllowedForAlliedEntitlement(lesson: LabLessonDefinition, entitlement: AccessScope): boolean {
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) return true;
+  const exclusive = lesson.alliedExclusiveProfessionKeys;
+  if (!exclusive || exclusive.length === 0) return true;
+  if (entitlement.tier !== TierCode.ALLIED || !entitlement.hasAccess) return false;
+  const pk = subscriberCanonicalAlliedProfessionKey(entitlement);
+  if (!pk) return false;
+  const wanted = new Set(exclusive.map((k) => normalizeCanonicalAlliedProfessionKey(k)).filter(Boolean) as string[]);
+  return wanted.has(pk);
 }
 
-export function listLabCategoriesForTrack(track: LabTrack): Array<LabCategoryDefinition & { lessons: LabLessonDefinition[] }> {
-  const lessons = listLabLessonsForTrack(track);
+export function listLabLessonsForTrack(track: LabTrack, entitlement?: AccessScope): LabLessonDefinition[] {
+  const raw = LESSONS.filter((lesson) => lesson.supportedTracks.includes(track));
+  if (track !== "allied" || !entitlement) return raw;
+  return raw.filter((lesson) => labLessonAllowedForAlliedEntitlement(lesson, entitlement));
+}
+
+export function listLabCategoriesForTrack(
+  track: LabTrack,
+  entitlement?: AccessScope,
+): Array<LabCategoryDefinition & { lessons: LabLessonDefinition[] }> {
+  const lessons = listLabLessonsForTrack(track, entitlement);
   return LABS_CATEGORIES.map((category) => ({
     ...category,
     lessons: lessons.filter((lesson) => lesson.category === category.slug),
@@ -1230,12 +1257,16 @@ export function getLabLessonByCategoryAndSlug(
   category: LabCategorySlug,
   slug: string,
   track: LabTrack,
+  entitlement?: AccessScope,
 ): LabLessonDefinition | null {
-  return listLabLessonsForTrack(track).find((lesson) => lesson.category === category && lesson.slug === slug) ?? null;
+  return (
+    listLabLessonsForTrack(track, entitlement).find((lesson) => lesson.category === category && lesson.slug === slug) ??
+    null
+  );
 }
 
-export function getLabLessonBySlug(slug: string, track: LabTrack): LabLessonDefinition | null {
-  return listLabLessonsForTrack(track).find((lesson) => lesson.slug === slug) ?? null;
+export function getLabLessonBySlug(slug: string, track: LabTrack, entitlement?: AccessScope): LabLessonDefinition | null {
+  return listLabLessonsForTrack(track, entitlement).find((lesson) => lesson.slug === slug) ?? null;
 }
 
 export function getLabLessonQuestions(topic: LabLessonDefinition): LabQuestion[] {
@@ -1275,14 +1306,14 @@ export function buildLabsStudyLinks(pathwayId: string | null, topicCode: string 
   };
 }
 
-export function countLabsInventoryForTrack(track: LabTrack) {
-  const lessons = listLabLessonsForTrack(track);
+export function countLabsInventoryForTrack(track: LabTrack, entitlement?: AccessScope) {
+  const lessons = listLabLessonsForTrack(track, entitlement);
   const questionCount = lessons.reduce((sum, lesson) => sum + getLabLessonQuestions(lesson).length, 0);
   const flashcardCount = lessons.reduce((sum, lesson) => sum + getLabLessonFlashcards(lesson).length, 0);
   return {
     lessonCount: lessons.length,
     questionCount,
     flashcardCount,
-    categoryCount: listLabCategoriesForTrack(track).length,
+    categoryCount: listLabCategoriesForTrack(track, entitlement).length,
   };
 }

@@ -1,32 +1,19 @@
 # Aesthetic regression report
 
-**Generated:** 2026-05-11T02:21:07.658Z
-**Gate:** `off` (passing)
-**Captured shards:** 1
+**Generated:** 2026-05-11T03:49:20.146Z
+**Gate:** `major` (passing)
+**Captured shards:** 0
 
 ## Severity summary
 
 | Severity | Count |
 |----------|-------|
-| critical | 1 |
+| critical | 0 |
 | major | 0 |
-| moderate | 1 |
+| moderate | 0 |
 | cosmetic | 0 |
 
-## Top issues (ordered by severity)
-
-| Severity | Category | Rule | Route | Theme | Viewport | Message |
-|----------|----------|------|-------|-------|----------|---------|
-| critical | layout-heuristic | horizontal-overflow | public-home | ocean | desktop | Synthetic critical for gate test |
-| moderate | token-violation | hardcoded-color | public-home | ocean | desktop | Synthetic moderate |
-
 ## Per-route detail
-
-### `public-home`
-
-| Theme | Viewport | Status | Baseline diff | Figma drift | Max severity | Issues |
-|-------|----------|--------|---------------|-------------|--------------|--------|
-| ocean | desktop | captured | — | — | critical | 2 |
 
 ## Screenshots
 

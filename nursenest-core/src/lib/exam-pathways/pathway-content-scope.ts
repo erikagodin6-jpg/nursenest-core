@@ -1,19 +1,21 @@
 import type { Prisma } from "@prisma/client";
 import { TierCode } from "@prisma/client";
-import type { AlliedCareerKey } from "@/lib/pricing/display-catalog";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import {
   examQuestionTierCaseInsensitiveWhere,
   questionAccessWhere,
 } from "@/lib/entitlements/content-access-scope";
+import { subscriberCanonicalAlliedProfessionKey } from "@/lib/entitlements/allied-occupation-entitlement";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { npPathwaySpecialtyWhere } from "@/lib/exam-pathways/np-question-specialty-scope";
-import { prismaWhereForAlliedProfessionExamQuestions } from "@/lib/allied/allied-exam-question-scope";
+import {
+  prismaWhereForAlliedProfessionExamQuestions,
+  prismaWhereForAlliedSharedCoreExamQuestionsOnly,
+} from "@/lib/allied/allied-exam-question-scope";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
-import { canonicalProfessionKeyForAlliedCareer } from "@/lib/allied/allied-billing-career-resolution";
 
 /**
  * When a pathway is active, `exam_questions` region + tier ladder must follow the **pathway**
@@ -54,7 +56,7 @@ export function questionAccessWhereWithPathway(
     return { id: { in: [] } };
   }
   const npSpecialtyScope = npPathwaySpecialtyWhere(pathway);
-  const pathwayScope: Prisma.ExamQuestionWhereInput = npSpecialtyScope
+  let pathwayScope: Prisma.ExamQuestionWhereInput = npSpecialtyScope
     ? {
         AND: [
           { exam: { in: scoped.examIn } },
@@ -63,6 +65,27 @@ export function questionAccessWhereWithPathway(
         ],
       }
     : { exam: { in: scoped.examIn }, AND: [examQuestionTierCaseInsensitiveWhere(scoped.tierMatches)] };
+
+  if (
+    !accessScopeIsStaffLearnerEntitlementBypass(entitlement) &&
+    entitlement.hasAccess &&
+    entitlement.tier === TierCode.ALLIED &&
+    isAlliedMarketingCorePathwayId(pathway.id)
+  ) {
+    const pk = subscriberCanonicalAlliedProfessionKey(entitlement);
+    if (pk) {
+      const alliedSlice = prismaWhereForAlliedProfessionExamQuestions(pathway.id, pk);
+      pathwayScope = alliedSlice
+        ? { AND: [pathwayScope, alliedSlice] }
+        : { AND: [pathwayScope, { id: { in: [] } }] };
+    } else {
+      const sharedOnly = prismaWhereForAlliedSharedCoreExamQuestionsOnly(pathway.id);
+      pathwayScope = sharedOnly
+        ? { AND: [pathwayScope, sharedOnly] }
+        : { AND: [pathwayScope, { id: { in: [] } }] };
+    }
+  }
+
   return {
     AND: [base, pathwayScope],
   };

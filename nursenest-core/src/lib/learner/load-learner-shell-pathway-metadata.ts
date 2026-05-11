@@ -1,4 +1,6 @@
 import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
+import { buildAlliedOccupationMarketingHubPath } from "@/lib/allied/allied-global-hub-path";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { CountryCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -96,12 +98,23 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
         }
       }
     } else if (u.alliedProfessionKey) {
-      pathwayShortLabel = "Allied";
       const alliedId = u.country === CountryCode.CA ? "ca-allied-core" : "us-allied-core";
       pathwayId = alliedId;
-      const alliedPath = getExamPathwayById(alliedId);
-      pathwayHubHref = alliedPath ? learnerPathwayHubChromeHref(alliedPath) : "/allied/allied-health";
-      pathwayContextBar = alliedPath ? formatPathwayContextBar(alliedPath) : "Allied • United States • Allied health";
+      const prof = getAlliedProfessionByProfessionKey(u.alliedProfessionKey);
+      const countrySlug = u.country === CountryCode.CA ? "canada" : "us";
+      const country = countryLabelFromSlug(countrySlug);
+      if (prof) {
+        const acronymMatch = prof.h1.match(/\(([A-Z/]+)\)/);
+        pathwayShortLabel = acronymMatch ? acronymMatch[1] : prof.professionKey.slice(0, 8).toUpperCase();
+        pathwayHubHref = buildAlliedOccupationMarketingHubPath(prof.professionKey);
+        const shortName = prof.h1.replace(/ exam prep$/i, "").replace(/ \(.*\)$/, "").trim();
+        pathwayContextBar = `${pathwayShortLabel} • ${country} • ${shortName}`;
+      } else {
+        pathwayShortLabel = "Allied";
+        const alliedPath = getExamPathwayById(alliedId);
+        pathwayHubHref = alliedPath ? learnerPathwayHubChromeHref(alliedPath) : "/allied/allied-health";
+        pathwayContextBar = alliedPath ? formatPathwayContextBar(alliedPath) : `Allied • ${country} • Allied health`;
+      }
       examsLabel = "CAT Exams";
     }
   }

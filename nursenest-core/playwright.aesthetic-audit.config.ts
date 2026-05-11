@@ -59,12 +59,23 @@ export default defineConfig({
   projects: [
     {
       name: "aesthetic-audit",
-      testMatch:
-        /aesthetic-visual-audit\.(public|authenticated|learner-sessions)\.spec\.ts$|aesthetic-before-after\.capture\.spec\.ts$/,
+      // Before/after captures use project `aesthetic-before-after` below.
+      testMatch: /aesthetic-visual-audit\.(public|authenticated|learner-sessions)\.spec\.ts$/,
       use: {
         ...devices["Desktop Chrome"],
         reducedMotion: "reduce",
         // Avoid renderer "Page crashed" in Docker / low-shm CI when Next dev is heavy.
+        launchOptions: {
+          args: ["--disable-dev-shm-usage", "--no-sandbox"],
+        },
+      },
+    },
+    {
+      name: "aesthetic-before-after",
+      testMatch: /aesthetic-before-after\.capture\.spec\.ts$/,
+      use: {
+        ...devices["Desktop Chrome"],
+        reducedMotion: "reduce",
         launchOptions: {
           args: ["--disable-dev-shm-usage", "--no-sandbox"],
         },

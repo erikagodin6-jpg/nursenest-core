@@ -25,7 +25,7 @@ export async function GET(req: Request) {
     }
 
     try {
-      const plan = await buildStudyPlanForUser(prisma, gate.userId);
+      const plan = await buildStudyPlanForUser(prisma, gate.userId, gate.entitlement);
       return NextResponse.json(plan);
     } catch {
       return NextResponse.json(

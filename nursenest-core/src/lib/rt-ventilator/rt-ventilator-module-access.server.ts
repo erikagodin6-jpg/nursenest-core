@@ -56,12 +56,13 @@ export async function getCurrentRtVentilatorModuleAccess(): Promise<RtVentilator
   if (!canonical.hasAccess) return { ok: false, reason: "premium_required" };
 
   const tier = canonical.tier ?? null;
-  const alliedProfessionKey =
-    canonical.alliedCareer ??
-    // defensive: canonical uses subscription-aligned career key
-    null;
 
-  if (!canAccessRtVentilatorModuleForTierAndProfession({ tier, alliedProfessionKey })) {
+  if (
+    !canAccessRtVentilatorModuleForTierAndProfession({
+      tier,
+      alliedCareer: canonical.alliedCareer,
+    })
+  ) {
     if (tier !== "ALLIED") return { ok: false, reason: "tier_denied" };
     return { ok: false, reason: "profession_denied" };
   }

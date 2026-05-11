@@ -6,6 +6,7 @@ import {
   type Prisma,
   type TierCode,
 } from "@prisma/client";
+import { alliedFlashcardDeckListWhere, alliedDeckStudyAllowedByProfessionTagSlugs } from "@/lib/entitlements/allied-occupation-entitlement";
 import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tiers";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -38,9 +39,13 @@ export function isSyntheticFlashcardStudyId(id: string): boolean {
 
 /**
  * Subscriber / admin access to a deck (not individual card ladder — cards checked separately).
+ * When `tags` is loaded (e.g. from {@link findPublishedDeckByRef}), occupation-specific allied decks are gated.
  */
 export function userCanAccessDeckForStudy(
-  deck: Pick<FlashcardDeck, "status" | "visibility" | "country" | "tier">,
+  deck: Pick<FlashcardDeck, "status" | "visibility" | "country" | "tier"> & {
+    tagSlugs?: readonly string[];
+    tags?: { tag: { slug: string } }[];
+  },
   entitlement: AccessScope,
 ): boolean {
   if (deck.status !== PUBLISHED) {
@@ -61,7 +66,15 @@ export function userCanAccessDeckForStudy(
   const tier = entitlement.tier as TierCode | null;
   if (!country || !tier) return false;
   if (deck.country !== country) return false;
-  return prismaTierCodesForProfileTier(tier).includes(deck.tier);
+  if (!prismaTierCodesForProfileTier(tier).includes(deck.tier)) {
+    return false;
+  }
+  const fromJoin = deck.tags?.map((t) => t.tag.slug) ?? [];
+  const slugs = deck.tagSlugs ?? fromJoin;
+  if (slugs.length > 0) {
+    return alliedDeckStudyAllowedByProfessionTagSlugs(entitlement, slugs);
+  }
+  return true;
 }
 
 /** Anonymous or signed-in learner: may list/browse preview metadata only. */
@@ -103,16 +116,18 @@ export function prismaDeckListWhere(args: {
 
   const allowedTiers = prismaTierCodesForProfileTier(tier);
 
+  const subscriberBranch: Prisma.FlashcardDeckWhereInput = {
+    status: PUBLISHED,
+    visibility: FlashcardDeckVisibility.SUBSCRIBER,
+    country,
+    tier: { in: allowedTiers },
+  };
+
+  const alliedOccupation = alliedFlashcardDeckListWhere(entitlement);
+  const gatedSubscriber = alliedOccupation ? { AND: [subscriberBranch, alliedOccupation] } : subscriberBranch;
+
   return {
-    OR: [
-      { status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW },
-      {
-        status: PUBLISHED,
-        visibility: FlashcardDeckVisibility.SUBSCRIBER,
-        country,
-        tier: { in: allowedTiers },
-      },
-    ],
+    OR: [{ status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW }, gatedSubscriber],
   };
 }
 

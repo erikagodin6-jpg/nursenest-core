@@ -112,7 +112,7 @@ async function settleLearner(page: Page): Promise<void> {
   await learnerAppMainLandmark(page)
     .waitFor({ state: "visible", timeout: 90_000 })
     .catch(() => {});
-  await page.waitForLoadState("networkidle", { timeout: 60_000 }).catch(() => {});
+  await page.waitForLoadState("load", { timeout: 60_000 }).catch(() => {});
   await page.evaluate(() => document.fonts.ready).catch(() => {});
 }
 
@@ -127,8 +127,6 @@ async function waitForAnyReady(page: Page, selectors: readonly string[]): Promis
   }
   return false;
 }
-
-test.describe.configure({ mode: "serial" });
 
 test.beforeAll(({}, testInfo) => {
   mkdirSync(OUT, { recursive: true });

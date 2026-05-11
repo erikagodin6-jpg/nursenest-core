@@ -1,3 +1,7 @@
+import {
+  getNursingMechanismExplainerDraft,
+  isNursingMechanismExplainerPublishable,
+} from "@/content/nursing-mechanism-explainers";
 import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
 
 export const NURSING_MECHANISM_CANONICAL_BASE_PATH = "/nursing-mechanisms";
@@ -374,7 +378,11 @@ export function getNursingMechanismClusterBySlug(slug: string): NursingMechanism
 }
 
 export function listPublishedNursingMechanismClusters(): NursingMechanismCluster[] {
-  return NURSING_MECHANISM_CLUSTERS.filter((cluster) => cluster.status === "published");
+  return NURSING_MECHANISM_CLUSTERS.filter((cluster) => {
+    if (cluster.status !== "published") return false;
+    const draft = getNursingMechanismExplainerDraft(cluster.slug);
+    return Boolean(draft && isNursingMechanismExplainerPublishable(draft));
+  });
 }
 
 export function listPublishedNursingMechanismSitemapPaths(): string[] {

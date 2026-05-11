@@ -16,6 +16,7 @@ import { catReadinessMinCompletePoolRows } from "@/lib/practice-tests/cat-readin
 import { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
 import { validatePracticeCatPool, type CatPoolRow } from "@/lib/exams/cat-engine";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
+import { RT_VENTILATOR_BANK_TAG } from "@/lib/rt-ventilator/rt-ventilator-content-taxonomy";
 
 const SNAPSHOT_TIMEOUT_MS = 1000;
 const REVALIDATE_SECONDS = 3600;
@@ -56,7 +57,12 @@ export function pathwayExamQuestionMarketingHubInventoryWhere(
 ): Prisma.ExamQuestionWhereInput {
   const base = pathwayExamQuestionMarketingWhere(pathway);
   return {
-    AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere()],
+    AND: [
+      base,
+      NON_ECG_PRACTICE_EXAM_WHERE,
+      generalStudyBankModuleSurfaceWhere(),
+      { NOT: { tags: { has: RT_VENTILATOR_BANK_TAG } } },
+    ],
   };
 }
 

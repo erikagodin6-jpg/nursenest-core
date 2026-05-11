@@ -32,7 +32,8 @@ export default async function LabsCategoryRoute({ params }: Props) {
   if (!meta) notFound();
 
   const context = await loadLabsRouteContext("(student).app.(learner).labs.[category]");
-  const lessons = listLabLessonsForTrack(context.track).filter((l) => l.category === slug);
+  const entitlementScope = context.entitlement !== "error" ? context.entitlement : undefined;
+  const lessons = listLabLessonsForTrack(context.track, entitlementScope).filter((l) => l.category === slug);
   if (lessons.length === 0) notFound();
 
   return (

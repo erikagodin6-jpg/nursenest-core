@@ -10,6 +10,7 @@ import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-question-c
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 import { prismaWhereForAlliedProfessionExamQuestions } from "@/lib/allied/allied-exam-question-scope";
 import { US_ALLIED_CORE_PATHWAY_ID } from "@/lib/allied/allied-hub-program-model";
+import { RT_VENTILATOR_BANK_TAG } from "@/lib/rt-ventilator/rt-ventilator-content-taxonomy";
 
 /** Matches {@link pathwayExamQuestionMarketingWhere} for non-NP pathways (allied core). */
 export function pathwayExamQuestionMarketingWhereForAlliedCore(): Prisma.ExamQuestionWhereInput | null {
@@ -30,7 +31,12 @@ export function usAlliedMarketingHubInventoryWhere(): Prisma.ExamQuestionWhereIn
   const base = pathwayExamQuestionMarketingWhereForAlliedCore();
   if (!base) return null;
   return {
-    AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere()],
+    AND: [
+      base,
+      NON_ECG_PRACTICE_EXAM_WHERE,
+      generalStudyBankModuleSurfaceWhere(),
+      { NOT: { tags: { has: RT_VENTILATOR_BANK_TAG } } },
+    ],
   };
 }
 

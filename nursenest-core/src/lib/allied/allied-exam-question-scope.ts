@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { ALLIED_PROFESSION_KEYS, getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 
 /**
@@ -50,5 +50,28 @@ export function prismaWhereForAlliedProfessionExamQuestions(
       { tags: { has: `${TAG_PREFIX}${pk}` } },
       { tags: { has: `${TAG_ALLIED_PREFIX}${pk}` } },
     ],
+  };
+}
+
+/**
+ * When an ALLIED subscriber has **no** locked occupation metadata, they must not draw another
+ * occupation’s legacy career slices or profession tags — only items outside those exclusive OR-clauses
+ * (shared Allied core bank + untagged rows) remain eligible.
+ */
+export function prismaWhereForAlliedSharedCoreExamQuestionsOnly(
+  pathwayId: string | null | undefined,
+): Prisma.ExamQuestionWhereInput | null {
+  const pid = pathwayId?.trim() ?? "";
+  if (!pid || !isAlliedMarketingCorePathwayId(pid)) return null;
+
+  const exclusiveSlices: Prisma.ExamQuestionWhereInput[] = [];
+  for (const key of ALLIED_PROFESSION_KEYS) {
+    const slice = prismaWhereForAlliedProfessionExamQuestions(pid, key);
+    if (slice) exclusiveSlices.push(slice);
+  }
+  if (exclusiveSlices.length === 0) return null;
+
+  return {
+    NOT: { OR: exclusiveSlices },
   };
 }

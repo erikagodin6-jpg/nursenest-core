@@ -53,4 +53,5 @@ test("us-rn-nclex-rn practice hub inventory excludes ECG and module-only rows un
   assert.match(serialized, /lab-drills-only/);
   assert.match(serialized, /med-calculations-only/);
   assert.match(serialized, /general-nursing-practice/);
+  assert.match(serialized, /module:rt-ventilator/);
 });

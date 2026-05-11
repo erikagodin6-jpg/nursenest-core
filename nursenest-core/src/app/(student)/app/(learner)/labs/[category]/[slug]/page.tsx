@@ -18,7 +18,8 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category, slug } = await params;
   const context = await loadLabsRouteContext("(student).app.(learner).labs.[category].[slug].metadata");
-  const lesson = getLabLessonByCategoryAndSlug(category as LabCategorySlug, slug, context.track);
+  const entitlementScope = context.entitlement !== "error" ? context.entitlement : undefined;
+  const lesson = getLabLessonByCategoryAndSlug(category as LabCategorySlug, slug, context.track, entitlementScope);
   if (!lesson) {
     return { title: "Labs | NurseNest" };
   }
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function LabLessonRoute({ params }: Props) {
   const { category, slug } = await params;
   const context = await loadLabsRouteContext("(student).app.(learner).labs.[category].[slug]");
-  const lesson = getLabLessonByCategoryAndSlug(category as LabCategorySlug, slug, context.track);
+  const entitlementScope = context.entitlement !== "error" ? context.entitlement : undefined;
+  const lesson = getLabLessonByCategoryAndSlug(category as LabCategorySlug, slug, context.track, entitlementScope);
   if (!lesson) {
     notFound();
   }

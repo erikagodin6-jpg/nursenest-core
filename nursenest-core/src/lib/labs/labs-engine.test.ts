@@ -1,15 +1,18 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { TierCode } from "@prisma/client";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import {
   buildLabsStudyLinks,
   countLabsInventoryForTrack,
   getLabLessonByCategoryAndSlug,
   getLabLessonFlashcards,
   getLabLessonQuestions,
+  labLessonAllowedForAlliedEntitlement,
   labTrackFromTier,
   listLabCategoriesForTrack,
   listLabLessonsForTrack,
+  type LabLessonDefinition,
 } from "@/lib/labs/labs-engine";
 
 test("labs hub categories are populated for RN", () => {
@@ -76,4 +79,46 @@ test("tier mapping keeps RN, PN, NP, and Allied distinct", () => {
   assert.equal(labTrackFromTier(TierCode.LVN_LPN), "pn");
   assert.equal(labTrackFromTier(TierCode.NP), "np");
   assert.equal(labTrackFromTier(TierCode.ALLIED), "allied");
+});
+
+test("labLessonAllowedForAlliedEntitlement blocks occupation-exclusive labs without locked occupation", () => {
+  const lesson = {
+    alliedExclusiveProfessionKeys: ["respiratory"],
+  } as Pick<LabLessonDefinition, "alliedExclusiveProfessionKeys"> as LabLessonDefinition;
+  const scope: AccessScope = {
+    hasAccess: true,
+    reason: "active_subscription",
+    tier: TierCode.ALLIED,
+    country: "US",
+    alliedCareer: null,
+  };
+  assert.equal(labLessonAllowedForAlliedEntitlement(lesson, scope), false);
+});
+
+test("labLessonAllowedForAlliedEntitlement denies exclusive lab for a different Allied occupation", () => {
+  const lesson = {
+    alliedExclusiveProfessionKeys: ["respiratory"],
+  } as Pick<LabLessonDefinition, "alliedExclusiveProfessionKeys"> as LabLessonDefinition;
+  const scope: AccessScope = {
+    hasAccess: true,
+    reason: "active_subscription",
+    tier: TierCode.ALLIED,
+    country: "US",
+    alliedCareer: "mlt",
+  };
+  assert.equal(labLessonAllowedForAlliedEntitlement(lesson, scope), false);
+});
+
+test("labLessonAllowedForAlliedEntitlement allows exclusive lab when occupation matches", () => {
+  const lesson = {
+    alliedExclusiveProfessionKeys: ["respiratory"],
+  } as Pick<LabLessonDefinition, "alliedExclusiveProfessionKeys"> as LabLessonDefinition;
+  const scope: AccessScope = {
+    hasAccess: true,
+    reason: "active_subscription",
+    tier: TierCode.ALLIED,
+    country: "US",
+    alliedCareer: "rrt",
+  };
+  assert.equal(labLessonAllowedForAlliedEntitlement(lesson, scope), true);
 });

@@ -10,7 +10,7 @@ import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/path
 import {
   pathwayLessonAlliedProfessionAllowsSubscriber,
   pathwayLessonAlliedProfessionWhere,
-} from "@/lib/allied/allied-occupation-entitlement";
+} from "@/lib/entitlements/allied-occupation-entitlement";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 
 /** Pathway IDs the learner may see in `/app/lessons` by tier, country, and specialty. */
@@ -57,6 +57,11 @@ export async function pathwayLessonsAppListWhere(
     clauses.push({
       OR: [{ tierCode: null }, { tierCode: { in: prismaTierCodesForProfileTier(tier) } }],
     });
+
+    const alliedLesson = pathwayLessonAlliedProfessionWhere(scope);
+    if (alliedLesson) {
+      clauses.push(alliedLesson);
+    }
   }
 
   return andWhere(clauses);
@@ -137,10 +142,11 @@ export async function appPathwayLessonVisibleToSubscriber(
       pathwayId: string;
       countryCode: CountryCode | null;
       tierCode: TierCode | null;
+      alliedProfessionKey?: string | null;
       status?: ContentStatus | null;
     },
     "pathwayId" | "countryCode" | "tierCode" | "status"
-  >,
+  > & { alliedProfessionKey?: string | null },
   learnerPath: string | null | undefined,
 ): Promise<boolean> {
   if (row.status && row.status !== ContentStatus.PUBLISHED) {
@@ -179,6 +185,10 @@ export async function appPathwayLessonVisibleToSubscriber(
   }
 
   if (row.tierCode && !prismaTierCodesForProfileTier(tier).includes(row.tierCode)) {
+    return false;
+  }
+
+  if (!pathwayLessonAlliedProfessionAllowsSubscriber(scope, row.alliedProfessionKey)) {
     return false;
   }
 

@@ -85,15 +85,13 @@ const STATIC_ROUTES: StaticRoute[] = [
 async function settleLearner(page: Page): Promise<void> {
   await page.waitForLoadState("domcontentloaded");
   await learnerAppMainLandmark(page).waitFor({ state: "visible", timeout: 120_000 });
-  await page.waitForLoadState("networkidle", { timeout: 90_000 }).catch(() => {});
+  await page.waitForLoadState("load", { timeout: 60_000 }).catch(() => {});
   await page.evaluate(() => document.fonts.ready).catch(() => {});
 }
 
 function screenshotPath(routeId: string, theme: AestheticThemeId, vp: "desktop" | "mobile"): string {
   return path.join(OUT, `auth-${routeId}-${theme}-${vp}.png`);
 }
-
-test.describe.configure({ mode: "serial" });
 
 test.beforeAll(({}, testInfo) => {
   mkdirSync(OUT, { recursive: true });

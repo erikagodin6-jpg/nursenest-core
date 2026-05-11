@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   alignAccessScopeToPathwayForExamQuestionPool,
@@ -48,4 +49,34 @@ test("questionAccessWhereWithPathway uses case-insensitive tier filters for lega
   assert.match(serialized, /insensitive/);
   assert.match(serialized, /NCLEX-RN/);
   assert.match(serialized, /rn/);
+});
+
+test("questionAccessWhereWithPathway ANDs allied profession slice on us-allied-core for MLT subscriber", () => {
+  const pathway = getExamPathwayById("us-allied-core");
+  assert.ok(pathway);
+  const scope: AccessScope = {
+    hasAccess: true,
+    reason: "active_subscription",
+    tier: "ALLIED",
+    country: "US",
+    alliedCareer: "mlt",
+  };
+  const where = questionAccessWhereWithPathway(scope, pathway);
+  const serialized = JSON.stringify(where);
+  assert.ok(serialized.includes("careerType") || serialized.includes("profession:mlt") || serialized.includes("alliedProfession:mlt"));
+});
+
+test("questionAccessWhereWithPathway excludes occupation-tagged rows for ALLIED subscriber missing occupation metadata", () => {
+  const pathway = getExamPathwayById("us-allied-core");
+  assert.ok(pathway);
+  const scope: AccessScope = {
+    hasAccess: true,
+    reason: "active_subscription",
+    tier: "ALLIED",
+    country: "US",
+    alliedCareer: null,
+  };
+  const where = questionAccessWhereWithPathway(scope, pathway);
+  const serialized = JSON.stringify(where);
+  assert.match(serialized, /"NOT"\s*:\s*\{\s*"OR"/);
 });

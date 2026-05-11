@@ -1,19 +1,17 @@
 # UI surface inventory
 
-**Generated:** 2026-05-11T02:21:07.659Z
-**Total audited routes:** 1
+**Generated:** 2026-05-11T03:49:20.147Z
+**Total audited routes:** 0
 
 Coverage matrix — `✓` indicates a capture exists for this slice; `—` means the matrix slice has no recorded shard (either the route was skipped or the audit hasn't run for it).
 
 | Route | Mobile | Authenticated | Ocean | Blossom | Midnight | Baseline | Figma |
 |-------|--------|---------------|-------|---------|----------|----------|-------|
-| public-home | — | — | ✓ | — | — | — | — |
 
 ## Routes captured by category
 
-### public (1)
+### public (0)
 
-- `public-home`
 
 ### authenticated (0)
 

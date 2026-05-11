@@ -22,6 +22,11 @@ export async function findPublishedDeckByRef(ref: string) {
           visibility: true,
           status: true,
           cardCount: true,
+          tags: {
+            select: {
+              tag: { select: { slug: true } },
+            },
+          },
         },
       }),
     null,

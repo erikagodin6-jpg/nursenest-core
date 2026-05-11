@@ -83,6 +83,28 @@ function envKeys(lines) {
   return keys;
 }
 
+function envBlock(specText, key) {
+  const needle = `- key: ${key}`;
+  const idx = specText.indexOf(needle);
+  if (idx === -1) return null;
+  const block = [];
+  const tail = specText.slice(idx).split(/\r?\n/);
+  for (let i = 0; i < tail.length; i += 1) {
+    const line = tail[i];
+    if (i > 0 && /^\s*-\s*key:/.test(line)) break;
+    block.push(line);
+  }
+  return block.join("\n");
+}
+
+function envBlockScalar(specText, key, field) {
+  const block = envBlock(specText, key);
+  if (!block) return null;
+  const pattern = new RegExp(`^\\s*${field}:\\s*(.+?)\\s*$`, "m");
+  const match = block.match(pattern);
+  return match ? match[1].trim().replace(/^["']|["']$/g, "") : null;
+}
+
 function assertIncludes(haystack, needle, context) {
   if (!haystack.includes(needle)) fail(`${context} must include ${needle}`);
 }
@@ -198,6 +220,19 @@ if (scalar(lines, "run_command") !== "node scripts/start-standalone.mjs") {
 
 if (!keys.has("AUTH_SECRET") && !keys.has("NEXTAUTH_SECRET")) {
   fail("app spec must document AUTH_SECRET and/or NEXTAUTH_SECRET as a runtime secret");
+}
+
+if (!keys.has("DATABASE_URL")) {
+  fail("app spec must document DATABASE_URL as the runtime database secret");
+} else {
+  const databaseUrlScope = envBlockScalar(spec, "DATABASE_URL", "scope");
+  const databaseUrlType = envBlockScalar(spec, "DATABASE_URL", "type");
+  if (databaseUrlScope !== "RUN_TIME") {
+    fail(`DATABASE_URL must be attached to the running service with scope RUN_TIME, found ${databaseUrlScope ?? "missing"}`);
+  }
+  if (databaseUrlType !== "SECRET") {
+    fail(`DATABASE_URL must be declared as type SECRET, found ${databaseUrlType ?? "missing"}`);
+  }
 }
 
 if (!keys.has("NODE_MAX_OLD_SPACE_SIZE_MB")) {

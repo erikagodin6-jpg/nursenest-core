@@ -2,7 +2,13 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
-import { NURSING_MECHANISM_EXPLAINER_DRAFTS } from "@/content/nursing-mechanism-explainers";
+import {
+  countNursingMechanismExplainerWords,
+  getNursingMechanismPublishBlockers,
+  isNursingMechanismExplainerPublishable,
+  NURSING_MECHANISM_EXPLAINER_DRAFTS,
+  NURSING_MECHANISM_MINIMUM_PUBLISH_WORDS,
+} from "@/content/nursing-mechanism-explainers";
 import {
   buildNursingMechanismBreadcrumbJsonLd,
   listPublishedNursingMechanismSitemapPaths,
@@ -15,6 +21,11 @@ import {
 const placeholderPattern = /\b(lorem|todo|tbd|placeholder|coming soon|insert|dummy|sample title|description here)\b/i;
 const supportedTiers = new Set<string>(NURSING_MECHANISM_TIERS);
 const supportedExams = new Set<string>(NURSING_MECHANISM_EXAMS);
+const expandedTopExplainers = [
+  "why-hyperkalemia-affects-the-heart-nursing-mechanism",
+  "hyperkalemia-vs-hypokalemia-ecg-changes-nursing",
+  "why-burns-cause-hyperkalemia-nursing",
+] as const;
 
 function assertUnique(label: string, values: readonly string[]) {
   const seen = new Set<string>();
@@ -63,8 +74,57 @@ test("published nursing mechanism clusters require complete canonical-ready cont
   }
 });
 
+test("expanded top nursing mechanism drafts meet reviewable long-form depth without publishing", () => {
+  for (const slug of expandedTopExplainers) {
+    const draft = NURSING_MECHANISM_EXPLAINER_DRAFTS.find((item) => item.slug === slug);
+    assert.ok(draft, `${slug} should have a draft`);
+    assert.equal(draft.status, "draft", `${slug} should remain guarded as draft`);
+    assert.ok(
+      countNursingMechanismExplainerWords(draft) >= NURSING_MECHANISM_MINIMUM_PUBLISH_WORDS,
+      `${slug} should meet the long-form word-count floor`,
+    );
+    assert.ok(draft.longFormSections?.some((section) => /Signs, symptoms, labs, and diagnostics/i.test(section.heading)));
+    assert.ok(draft.longFormSections?.some((section) => /Nursing priorities/i.test(section.heading)));
+    assert.ok(draft.longFormSections?.some((section) => /exam traps/i.test(section.heading)));
+  }
+});
+
+test("publish eligibility blocks indexing for incomplete nursing mechanism drafts", () => {
+  const completeDraft = NURSING_MECHANISM_EXPLAINER_DRAFTS.find((item) => item.slug === expandedTopExplainers[0]);
+  assert.ok(completeDraft);
+  assert.equal(isNursingMechanismExplainerPublishable(completeDraft), false, "draft status must block publishability");
+
+  assert.deepEqual(
+    getNursingMechanismPublishBlockers({
+      ...completeDraft,
+      status: "published",
+    }),
+    [],
+    "a reviewed status flip should only pass when content gates are satisfied",
+  );
+
+  const incomplete = {
+    ...completeDraft,
+    status: "published" as const,
+    clinicalSummary: "Brief incomplete page.",
+    mechanismExplanation: ["Mechanism pending"],
+    longFormSections: [],
+    nursingImplications: [],
+    examRelevance: "",
+    internalLinks: [],
+    apa7References: [],
+  };
+  const blockers = getNursingMechanismPublishBlockers(incomplete);
+  assert.ok(blockers.some((blocker) => blocker.includes("minimum word count")), "word-count gate should block indexing");
+  assert.ok(blockers.includes("references are missing"));
+  assert.ok(blockers.includes("nursing priorities are missing"));
+  assert.ok(blockers.includes("exam relevance is missing"));
+  assert.ok(blockers.includes("internal links are missing"));
+});
+
 test("draft and hidden nursing mechanism clusters are excluded from sitemap paths", () => {
   const sitemapPaths = new Set(listPublishedNursingMechanismSitemapPaths());
+  assert.equal(sitemapPaths.size, 0, "draft-only mechanism program should not emit sitemap URLs");
   for (const cluster of NURSING_MECHANISM_CLUSTERS) {
     const path = nursingMechanismCanonicalPath(cluster);
     if (cluster.status === "published") {
@@ -112,7 +172,7 @@ test("public route keeps drafts unavailable and noindex", () => {
     "utf8",
   );
   assert.match(routeSource, /cluster\.status !== "published"/);
-  assert.match(routeSource, /draft\.status !== "published"/);
+  assert.match(routeSource, /isNursingMechanismExplainerPublishable\(draft\)/);
   assert.match(routeSource, /robots:\s*\{\s*index:\s*false,\s*follow:\s*false\s*\}/);
   assert.match(routeSource, /notFound\(\)/);
 });

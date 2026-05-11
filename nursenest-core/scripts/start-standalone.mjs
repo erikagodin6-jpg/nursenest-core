@@ -24,6 +24,11 @@ import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
 import { normalizeBootstrapProbePathname } from "./standalone-bootstrap-probe-pathname.mjs";
 import { resolveBootstrapStartupMode } from "./resolve-bootstrap-mode.mjs";
 import { loadRuntimeEnv } from "./lib/load-runtime-env.mjs";
+import {
+  buildForwardedRuntimeEnv,
+  DIGITALOCEAN_STANDALONE_RUNTIME_EVIDENCE,
+  runtimeEnvPresenceSnapshot,
+} from "./lib/standalone-env-forwarding.mjs";
 import { logRuntimeEnvSnapshot, validateRuntimeEnvOrThrow } from "./runtime-env-guard-bootstrap.mjs";
 
 const bootAt = Date.now();
@@ -93,8 +98,7 @@ function logStandaloneParentBootstrapDiagnostics() {
       pkgRoot,
       scriptResolved,
       execPath: process.execPath,
-      DATABASE_URL_present: Boolean(process.env.DATABASE_URL?.trim()),
-      POSTGRES_URL_present: Boolean(process.env.POSTGRES_URL?.trim()),
+      ...runtimeEnvPresenceSnapshot(process.env),
       DIGITALOCEAN_APP_ID_present: Boolean(String(process.env.DIGITALOCEAN_APP_ID ?? "").trim()),
       NEXT_PHASE: process.env.NEXT_PHASE ?? null,
       npm_lifecycle_event: process.env.npm_lifecycle_event ?? null,
@@ -102,9 +106,44 @@ function logStandaloneParentBootstrapDiagnostics() {
   );
 }
 
+function logStandaloneEnvForwardingDiagnostics(phase) {
+  console.error(
+    "[nn-bootstrap]",
+    JSON.stringify({
+      phase,
+      cwd: process.cwd(),
+      pkgRoot,
+      ...DIGITALOCEAN_STANDALONE_RUNTIME_EVIDENCE,
+      ...runtimeEnvPresenceSnapshot(process.env),
+      DIGITALOCEAN_APP_ID_present: Boolean(String(process.env.DIGITALOCEAN_APP_ID ?? "").trim()),
+      NODE_ENV: process.env.NODE_ENV ?? null,
+      PORT: process.env.PORT ?? null,
+      HOSTNAME: process.env.HOSTNAME ?? null,
+    }),
+  );
+}
+
+function logMissingDatabaseUrlRuntimeEvidence() {
+  if (process.env.DATABASE_URL?.trim()) return;
+  console.error(
+    "[nn-bootstrap]",
+    JSON.stringify({
+      event: "database_url_absent_after_standalone_hydrate",
+      message:
+        "DATABASE_URL is absent in the Node runtime process after disk hydration; inspect deploy component env attachment, source_dir, and run_command.",
+      cwd: process.cwd(),
+      pkgRoot,
+      ...DIGITALOCEAN_STANDALONE_RUNTIME_EVIDENCE,
+      ...runtimeEnvPresenceSnapshot(process.env),
+    }),
+  );
+}
+
+logStandaloneEnvForwardingDiagnostics("standalone_parent_pre_hydrate");
 hydrateProcessEnvFromDisk();
 promoteDatabaseUrlAliasesFromEnv();
 logStandaloneParentBootstrapDiagnostics();
+logMissingDatabaseUrlRuntimeEvidence();
 logRuntimeEnvSnapshot();
 validateRuntimeEnvOrThrow();
 
@@ -113,7 +152,7 @@ validateRuntimeEnvOrThrow();
 const writeBuildMetaScript = join(pkgRoot, "scripts", "write-build-git-meta.mjs");
 const writeMetaResult = spawnSync(process.execPath, [writeBuildMetaScript], {
   cwd: pkgRoot,
-  env: process.env,
+  env: buildForwardedRuntimeEnv(process.env),
   stdio: "inherit",
 });
 if (writeMetaResult.status !== 0) {
@@ -202,7 +241,7 @@ if (BOOTSTRAP_MODE === "direct_standalone") {
   const result = spawnSync(process.execPath, childArgs, {
     stdio: "inherit",
     cwd: pkgRoot,
-    env: { ...process.env },
+    env: buildForwardedRuntimeEnv(process.env),
   });
   process.exit(result.status === null ? 1 : result.status);
 }
@@ -721,11 +760,10 @@ if (BYPASS) {
 const child = spawn(process.execPath, childArgs, {
   stdio: ["ignore", "pipe", "pipe"],
   cwd: pkgRoot,
-  env: {
-    ...process.env,
+  env: buildForwardedRuntimeEnv(process.env, {
     PORT: String(internalPort),
     HOSTNAME: internalHost,
-  },
+  }),
 });
 
 child.stdout?.on("data", (chunk) => process.stdout.write(chunk));
