@@ -21,15 +21,15 @@ Examples:
 - `mlt-hub-ocean-1440x900-before.png`
 - `mlt-dashboard-midnight-390x844-after.png`
 
-**Themes:** `ocean`, `blossom` (or project-approved Blossom token alias), `midnight`.
+**Themes (canonical, equal priority):** `ocean`, `blossom`, `midnight`, `sunset`, `aurora` — match `html[data-theme]` / `tests/e2e/helpers/aesthetic-audit-shared.ts` (`AESTHETIC_THEMES`).
 
 ## Minimum capture set (program gate)
 
 For each **major** surface in the audit doc:
 
 - Desktop (≈1440) + mobile (≈390×844)  
-- Ocean + Blossom + Midnight  
-- Critical states: default, empty, locked premium, loading skeleton
+- **All five themes** — Sunset and Aurora are **not** optional baselines  
+- Critical states: default, empty, locked premium, loading skeleton; include **gradient-heavy** and **chart** surfaces for Sunset/Aurora readability checks
 
 ## Related
 
