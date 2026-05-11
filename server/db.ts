@@ -4,9 +4,6 @@ import pg from "pg";
 
 export type DatabaseTarget = "production" | "development";
 
-const DEV_URL = process.env.DATABASE_URL;
-const PROD_URL = process.env.PROD_DATABASE_URL;
-
 const DEFAULT_STATEMENT_TIMEOUT_MS = getEnvInt("DB_STATEMENT_TIMEOUT_MS", 10000);
 const DEFAULT_CONNECTION_TIMEOUT_MS = getEnvInt("DB_CONNECTION_TIMEOUT_MS", 5000);
 const DEFAULT_IDLE_TIMEOUT_MS = getEnvInt("DB_IDLE_TIMEOUT_MS", 30000);
@@ -17,6 +14,14 @@ const ALLOW_PROD_FALLBACK_TO_DATABASE_URL =
   String(process.env.ALLOW_PROD_FALLBACK_TO_DATABASE_URL || "").toLowerCase() === "true";
 
 const NODE_ENV = process.env.NODE_ENV || "development";
+
+function currentDevUrl(): string | undefined {
+  return process.env.DATABASE_URL?.trim() || undefined;
+}
+
+function currentProdUrl(): string | undefined {
+  return process.env.PROD_DATABASE_URL?.trim() || undefined;
+}
 
 /**
  * Use the production DB pool for all generic app access. Wider than NODE_ENV alone so
@@ -147,22 +152,22 @@ function resolvePgSslConfig(connectionString: string, sslModeFromUrl: string | n
 }
 
 function getRequiredUrl(target: DatabaseTarget): string {
-  if (target === "production") {
-    const prod = PROD_URL?.trim();
-    const dev = DEV_URL?.trim();
+  const prodUrl = currentProdUrl();
+  const devUrl = currentDevUrl();
 
-    if (prod) {
+  if (target === "production") {
+    if (prodUrl) {
       console.log("selected_db_target=production_prod_url");
-      return prod;
+      return prodUrl;
     }
 
-    if (dev) {
+    if (devUrl) {
       if (ALLOW_PROD_FALLBACK_TO_DATABASE_URL) {
         console.log("selected_db_target=production_database_url_fallback_flag");
       } else {
         console.log("selected_db_target=production_database_url_singleton");
       }
-      return dev;
+      return devUrl;
     }
 
     throw new Error(
@@ -170,7 +175,7 @@ function getRequiredUrl(target: DatabaseTarget): string {
     );
   }
 
-  if (DEV_URL) return DEV_URL;
+  if (devUrl) return devUrl;
 
   // Dev/test environments may intentionally run without DB; keep behavior non-fatal.
   console.error("[DB] DATABASE_URL is not set. Development DB calls will fail until DATABASE_URL is configured.");
@@ -316,7 +321,10 @@ export function createLazyPrimaryPoolProxy(): pg.Pool {
 }
 
 export function hasSeparateProdDb(): boolean {
-  return !!(PROD_URL && PROD_URL !== DEV_URL);
+  const prodUrl = currentProdUrl();
+  const devUrl = currentDevUrl();
+
+  return !!(prodUrl && prodUrl !== devUrl);
 }
 
 /**
@@ -325,8 +333,10 @@ export function hasSeparateProdDb(): boolean {
  */
 export function logStartupDatabaseResolution(): void {
   const productionLike = isProductionLikeRuntime();
-  const hasProd = Boolean(PROD_URL?.trim());
-  const hasDev = Boolean(DEV_URL?.trim());
+  const prodUrl = currentProdUrl();
+  const devUrl = currentDevUrl();
+  const hasProd = Boolean(prodUrl);
+  const hasDev = Boolean(devUrl);
 
   let primaryLabel: string;
   let maskedPrimary: string;
@@ -334,17 +344,17 @@ export function logStartupDatabaseResolution(): void {
   if (productionLike) {
     if (hasProd) {
       primaryLabel = "PROD_DATABASE_URL";
-      maskedPrimary = maskUrl(PROD_URL);
+      maskedPrimary = maskUrl(prodUrl);
     } else if (hasDev) {
       primaryLabel = "DATABASE_URL (PROD_DATABASE_URL unset)";
-      maskedPrimary = maskUrl(DEV_URL);
+      maskedPrimary = maskUrl(devUrl);
     } else {
       primaryLabel = "none";
       maskedPrimary = "(not set)";
     }
   } else if (hasDev) {
     primaryLabel = "DATABASE_URL";
-    maskedPrimary = maskUrl(DEV_URL);
+    maskedPrimary = maskUrl(devUrl);
   } else {
     primaryLabel = "none";
     maskedPrimary = "(not set)";
@@ -365,9 +375,12 @@ export function logStartupDatabaseResolution(): void {
 }
 
 export function getDbInfo() {
+  const devUrl = currentDevUrl();
+  const prodUrl = currentProdUrl();
+
   return {
-    devUrl: maskUrl(DEV_URL),
-    prodUrl: maskUrl(PROD_URL),
+    devUrl: maskUrl(devUrl),
+    prodUrl: maskUrl(prodUrl),
     hasSeparateProd: hasSeparateProdDb(),
     environment: NODE_ENV,
     allowProdFallbackToDatabaseUrl: ALLOW_PROD_FALLBACK_TO_DATABASE_URL,
@@ -387,7 +400,7 @@ export function getDbInfo() {
 
 export function logDatabaseTarget(operation: string, target: DatabaseTarget): void {
   const url =
-    target === "production" ? PROD_URL || DEV_URL : DEV_URL;
+    target === "production" ? currentProdUrl() || currentDevUrl() : currentDevUrl();
 
   console.log(
     `[DB] ${operation} → targeting ${target.toUpperCase()} database (${maskUrl(url)})`,
