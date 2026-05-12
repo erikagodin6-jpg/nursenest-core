@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useState } from "react";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CNPLE Simulation Shell
@@ -29,7 +30,7 @@ export function CnpleSimSurface({ children }: { children: ReactNode }) {
   );
 }
 
-/** Two-column layout: question content + optional patient summary side panel */
+/** Two-column layout: question content + collapsible patient summary panel */
 export function CnpleSimBody({
   children,
   sidePanel,
@@ -37,15 +38,70 @@ export function CnpleSimBody({
   children: ReactNode;
   sidePanel?: ReactNode;
 }) {
+  const [panelOpen, setPanelOpen] = useState(false);
+
   if (!sidePanel) {
     return <div className="flex-1 overflow-y-auto">{children}</div>;
   }
   return (
-    <div className="flex flex-1 overflow-hidden">
+    <div className="flex flex-1 flex-col overflow-hidden xl:flex-row">
+      {/* Mobile patient panel toggle — visible below xl */}
+      <div
+        className="flex shrink-0 items-center justify-between border-b px-4 py-2 xl:hidden"
+        style={{
+          background: "color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-brand) 4%)",
+          borderColor: "var(--semantic-border-soft)",
+        }}
+      >
+        <span
+          className="text-[12px] font-semibold"
+          style={{ color: "var(--semantic-text-secondary)" }}
+        >
+          Patient Summary
+        </span>
+        <button
+          type="button"
+          onClick={() => setPanelOpen((o) => !o)}
+          className="flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-semibold transition-colors"
+          style={{
+            background: panelOpen
+              ? "color-mix(in srgb, var(--semantic-brand) 12%, transparent)"
+              : "var(--semantic-surface)",
+            borderColor: panelOpen
+              ? "color-mix(in srgb, var(--semantic-brand) 30%, transparent)"
+              : "var(--semantic-border-soft)",
+            color: panelOpen ? "var(--semantic-brand)" : "var(--semantic-text-secondary)",
+          }}
+          aria-expanded={panelOpen}
+          aria-controls="cnple-sim-patient-panel"
+        >
+          {panelOpen ? "Hide" : "Show"} Patient Info
+          <span aria-hidden style={{ transform: panelOpen ? "rotate(180deg)" : "rotate(0deg)", display: "inline-block", transition: "transform 0.2s" }}>▾</span>
+        </button>
+      </div>
+
+      {/* Collapsible mobile panel */}
+      {panelOpen ? (
+        <aside
+          id="cnple-sim-patient-panel"
+          className="shrink-0 overflow-y-auto border-b xl:hidden"
+          style={{
+            maxHeight: "40vh",
+            borderColor: "var(--semantic-border-soft)",
+            background: "color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-brand) 4%)",
+          }}
+          aria-label="Patient summary"
+        >
+          {sidePanel}
+        </aside>
+      ) : null}
+
       {/* Main question surface */}
       <div className="flex-1 overflow-y-auto">{children}</div>
-      {/* Persistent patient summary panel (desktop only, collapsed on mobile) */}
+
+      {/* Persistent desktop side panel (xl+) */}
       <aside
+        id="cnple-sim-patient-panel"
         className="hidden w-[22rem] shrink-0 overflow-y-auto border-l xl:block"
         style={{
           borderColor: "var(--semantic-border-soft)",

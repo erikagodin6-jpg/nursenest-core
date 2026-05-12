@@ -1,10 +1,31 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import tseslint from "typescript-eslint";
+import reactHooks from "eslint-plugin-react-hooks";
 
+/**
+ * ESLint flat config (v9).
+ *
+ * Uses eslint-plugin-react-hooks directly rather than eslint-config-next so
+ * this config can run from the workspace root without needing `next` co-located
+ * in the same node_modules tree.
+ */
 const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
+  // ── TypeScript + JSX parsing for .ts/.tsx files ──
+  {
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: { parser: tseslint.parser },
+  },
+
+  // ── React Hooks rules (explicit — not inherited, so they can't silently regress) ──
+  {
+    plugins: { "react-hooks": reactHooks },
+    rules: {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+    },
+  },
+
+  // ── Layer isolation: marketing layer ──
   {
     files: ["src/app/(marketing)/**/*.{ts,tsx,js,jsx,mjs,cjs}"],
     rules: {
@@ -21,6 +42,8 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+
+  // ── Layer isolation: student layer ──
   {
     files: ["src/app/(student)/**/*.{ts,tsx,js,jsx,mjs,cjs}"],
     rules: {
@@ -35,6 +58,8 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+
+  // ── Inline-style guard for learner UI ──
   {
     files: ["src/components/flashcards/flashcards-hub-client.tsx", "src/components/learner-ui/**/*.tsx"],
     rules: {
@@ -48,6 +73,8 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+
+  // ── Layer isolation: admin layer ──
   {
     files: ["src/app/(admin)/**/*.{ts,tsx,js,jsx,mjs,cjs}"],
     rules: {
@@ -67,18 +94,9 @@ const eslintConfig = defineConfig([
       ],
     },
   },
-  // Explicitly pin react-hooks rules so they can't silently regress via
-  // eslint-config-next inheritance changes. The plugin is already loaded by
-  // eslint-config-next/core-web-vitals; this block just hard-sets the severity.
-  {
-    rules: {
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-    },
-  },
-  // Override default ignores of eslint-config-next.
+
+  // ── Build output ignores ──
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",

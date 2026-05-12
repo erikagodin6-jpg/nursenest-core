@@ -13,11 +13,13 @@ import {
   PatientSummaryPanel,
   ClinicalTimeline,
   MedicationListSurface,
+  MedicationAdherenceListSurface,
   LabTrendTable,
   DiagnosticResultCard,
   FollowUpUpdateCard,
 } from "@/components/clinical/clinical-case-ui";
-import type { MedicationEntry, LabResult, TimelineEvent, VitalSign } from "@/components/clinical/clinical-case-ui";
+import type { MedicationEntry, LabResult, TimelineEvent, VitalSign, AdherenceMedEntry } from "@/components/clinical/clinical-case-ui";
+import { mergeAdherenceWithMedications } from "@/lib/cases/medication-adherence";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CNPLE Longitudinal Case Shell
@@ -188,7 +190,20 @@ export function CnpleLongitudinalCaseShell({
             <EvolvedVitalsTrendRow vitals={evolved.evolvedVitals} />
           ) : null}
           {activeMeds.length > 0 && (
-            <MedicationListSurface medications={activeMeds} />
+            evolved?.medicationAdherenceRecords?.length ? (
+              <MedicationAdherenceListSurface
+                medications={mergeAdherenceWithMedications(
+                  activeMeds,
+                  evolved.medicationAdherenceRecords,
+                  // Pass current step's authored medication changes so newly-started
+                  // medications have dose/route/frequency immediately — before activeMeds
+                  // state refreshes via handleContinue().
+                  step.medicationChanges,
+                ) as AdherenceMedEntry[]}
+              />
+            ) : (
+              <MedicationListSurface medications={activeMeds} />
+            )
           )}
           <div
             className="overflow-hidden rounded-xl border p-4"

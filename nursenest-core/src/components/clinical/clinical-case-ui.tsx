@@ -295,6 +295,218 @@ function MedicationRow({ med }: { med: MedicationEntry }) {
   );
 }
 
+// ── MedicationAdherenceListSurface ────────────────────────────────────────────
+
+/**
+ * Medication list with adherence status badges.
+ * Replaces MedicationListSurface when evolvedState.medicationAdherenceRecords is available.
+ *
+ * Preserves all existing medication detail display (dose, route, frequency, indication)
+ * and adds status badge + clinical explanation for risky statuses.
+ *
+ * Compatible with all NurseNest themes (semantic tokens only).
+ */
+export type AdherenceMedEntry = {
+  name: string;
+  dose?: string;
+  route?: string;
+  frequency?: string;
+  indication?: string;
+  status?: "started" | "active" | "delayed" | "refused" | "contraindicated" | "duplicated" | "stopped" | null;
+  /** True when this medication was newly started or changed at the current step. */
+  isNewThisStep?: boolean;
+  /** Step index at which this medication entered the case. */
+  sourceStepIndex?: number;
+};
+
+type AdherenceSeverity = "success" | "warning" | "danger" | "muted" | "none";
+
+type AdherenceBadgeConfig = {
+  severity: AdherenceSeverity;
+  badgeLabel: string;
+  clinicalNote: string | null;
+  dimRow: boolean;
+};
+
+const ADHERENCE_BADGE_CONFIG: Record<NonNullable<AdherenceMedEntry["status"]>, AdherenceBadgeConfig> = {
+  active:         { severity: "none",    badgeLabel: "Ongoing",         clinicalNote: null,                                   dimRow: false },
+  started:        { severity: "success", badgeLabel: "Started",         clinicalNote: null,                                   dimRow: false },
+  delayed:        { severity: "warning", badgeLabel: "Delayed",         clinicalNote: "Therapy delayed; monitor response.",   dimRow: false },
+  refused:        { severity: "muted",   badgeLabel: "Refused",         clinicalNote: "Patient declined.",                    dimRow: true  },
+  contraindicated:{ severity: "danger",  badgeLabel: "Contraindicated", clinicalNote: "Safety concern — review before continuing.", dimRow: false },
+  duplicated:     { severity: "warning", badgeLabel: "Duplicate",       clinicalNote: "Possible duplicate therapy.",          dimRow: false },
+  stopped:        { severity: "muted",   badgeLabel: "Stopped",         clinicalNote: "Medication stopped in this trajectory.", dimRow: true },
+};
+
+function adherenceSeverityTokens(severity: AdherenceSeverity): { color: string; bg: string } {
+  switch (severity) {
+    case "success": return {
+      color: "var(--semantic-success)",
+      bg: "color-mix(in srgb, var(--semantic-success) 13%, transparent)",
+    };
+    case "warning": return {
+      color: "var(--semantic-warning-contrast)",
+      bg: "color-mix(in srgb, var(--semantic-warning) 13%, transparent)",
+    };
+    case "danger": return {
+      color: "var(--semantic-danger)",
+      bg: "color-mix(in srgb, var(--semantic-danger) 13%, transparent)",
+    };
+    case "muted": return {
+      color: "var(--semantic-text-muted)",
+      bg: "color-mix(in srgb, var(--semantic-border-soft) 50%, transparent)",
+    };
+    case "none": return {
+      color: "var(--semantic-text-muted)",
+      bg: "transparent",
+    };
+  }
+}
+
+export function MedicationAdherenceListSurface({
+  medications,
+}: {
+  medications: AdherenceMedEntry[];
+}) {
+  return (
+    <div
+      className="medication-adherence-list overflow-hidden rounded-xl border"
+      style={{ borderColor: "var(--semantic-border-soft)" }}
+      data-clinical="medication-adherence-list"
+    >
+      <div
+        className="flex items-center gap-2 border-b px-4 py-2.5"
+        style={{
+          borderColor: "var(--semantic-border-soft)",
+          background: "color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface))",
+        }}
+      >
+        <PillIcon />
+        <span className="text-[12px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-text-muted)" }}>
+          Medications
+        </span>
+        {medications.some((m) => m.status && m.status !== "active") && (
+          <span
+            className="ml-auto rounded px-1.5 py-0.5 text-[10px] font-semibold"
+            style={{
+              background: "color-mix(in srgb, var(--semantic-brand) 10%, transparent)",
+              color: "var(--semantic-brand)",
+            }}
+          >
+            Session status
+          </span>
+        )}
+      </div>
+      <div className="divide-y" style={{ borderColor: "var(--semantic-border-soft)" }}>
+        {medications.map((med, i) => (
+          <AdherenceMedRow key={`${med.name}-${i}`} med={med} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AdherenceMedRow({ med }: { med: AdherenceMedEntry }) {
+  const status = med.status ?? "active";
+  const config = ADHERENCE_BADGE_CONFIG[status];
+  const tokens = adherenceSeverityTokens(config.severity);
+  const showBadge = status !== "active";
+
+  return (
+    <div
+      className="px-4 py-3"
+      style={{
+        opacity: config.dimRow ? 0.6 : 1,
+        background: config.severity === "danger"
+          ? "color-mix(in srgb, var(--semantic-danger) 4%, var(--semantic-surface))"
+          : "transparent",
+      }}
+      data-medication-status={status}
+    >
+      <div className="flex min-w-0 items-start justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          {/* Name + badge row */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span
+              className="text-[13px] font-semibold"
+              style={{
+                color: config.dimRow ? "var(--semantic-text-muted)" : "var(--semantic-text-primary)",
+              }}
+            >
+              {med.name}
+            </span>
+            {showBadge && (
+              <span
+                className="rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+                style={{
+                  background: tokens.bg,
+                  color: tokens.color,
+                  border: `1px solid color-mix(in srgb, ${tokens.color} 25%, transparent)`,
+                }}
+                data-adherence-badge={status}
+              >
+                {config.badgeLabel}
+              </span>
+            )}
+          </div>
+
+          {/* Dose / route / frequency line */}
+          {(med.dose || med.route || med.frequency) ? (
+            <p className="mt-0.5 text-[12px]" style={{ color: "var(--semantic-text-muted)" }}>
+              {[med.dose, med.route, med.frequency].filter(Boolean).join(" · ")}
+            </p>
+          ) : null}
+
+          {/* Indication line */}
+          {med.indication ? (
+            <p className="mt-0.5 text-[11px]" style={{ color: "var(--semantic-text-muted)" }}>
+              For: {med.indication}
+            </p>
+          ) : null}
+
+          {/* New-this-step indicator — subtle, premium, no animation */}
+          {med.isNewThisStep ? (
+            <p
+              className="mt-1 text-[10px] font-semibold"
+              style={{ color: "color-mix(in srgb, var(--semantic-brand) 70%, var(--semantic-text-muted))" }}
+              data-new-this-step="true"
+            >
+              ↪ New this visit
+            </p>
+          ) : null}
+
+          {/* Clinical explanation for risky statuses */}
+          {config.clinicalNote ? (
+            <p
+              className="mt-1 text-[11px] font-medium"
+              style={{ color: tokens.color }}
+            >
+              {config.clinicalNote}
+            </p>
+          ) : null}
+        </div>
+
+        {/* Danger icon for contraindicated */}
+        {status === "contraindicated" && (
+          <div
+            className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
+            style={{
+              background: "color-mix(in srgb, var(--semantic-danger) 15%, transparent)",
+              color: "var(--semantic-danger)",
+            }}
+            aria-hidden
+          >
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── LabTrendTable ─────────────────────────────────────────────────────────────
 
 export function LabTrendTable({ results }: { results: LabResult[] }) {

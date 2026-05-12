@@ -270,9 +270,1286 @@ export const CASE_HYPERTENSION_FOLLOWUP: PatientCase = {
   ],
 };
 
+// ── Case 2: Type 2 Diabetes + Metabolic Complexity ────────────────────────────
+
+export const CASE_DIABETES_METABOLIC: PatientCase = {
+  id: "cnple-sample-dm-001",
+  title: "Mr. Ahmad Chen — Type 2 Diabetes and Metabolic Complexity",
+  tagline: "Chronic Disease · Prescribing Safety",
+  patient: { age: 62, sex: "Male", pronouns: "he/him", setting: "Primary Care Clinic" },
+  chiefComplaint: "Diabetes follow-up. HbA1c remains elevated. Wants to avoid insulin.",
+  pmhx: [
+    "Type 2 diabetes mellitus (12 years)",
+    "Obesity (BMI 38)",
+    "Non-alcoholic fatty liver disease (NAFLD) — ultrasound confirmed",
+    "CKD stage G2 (eGFR 64 mL/min/1.73m²)",
+    "Hypertension",
+  ],
+  medications: [
+    { name: "Metformin", dose: "1000 mg", route: "PO", frequency: "twice daily", indication: "T2DM" },
+    { name: "Gliclazide MR", dose: "60 mg", route: "PO", frequency: "daily", indication: "T2DM" },
+    { name: "Ramipril", dose: "10 mg", route: "PO", frequency: "daily", indication: "Hypertension / nephroprotection" },
+    { name: "Rosuvastatin", dose: "10 mg", route: "PO", frequency: "nightly", indication: "Dyslipidaemia" },
+  ],
+  allergies: [{ substance: "Codeine", reaction: "Nausea/vomiting", severity: "mild" }],
+  primaryDomain: "chronic-disease-management",
+  secondaryDomains: ["pharmacotherapeutics", "diagnostics-labs"],
+  difficulty: 3,
+  stepCount: 3,
+  estimatedMinutes: 16,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "Diabetes review",
+      scenarioText:
+        "Mr. Chen presents for a scheduled diabetes review. His HbA1c has been above target for 18 months despite dose optimisation of gliclazide. He reports two episodes of mild hypoglycaemia in the past month (both resolved with juice). His BMI is 38 and he is motivated to lose weight. He asks whether there is a diabetes medication that could also help with weight loss.",
+      clinicalUpdate: {
+        direction: "worsening",
+        summary: "Glycaemic control persistently above target; hypoglycaemia episodes on sulphonylurea; obesity as modifiable factor.",
+        newFindings: ["HbA1c 8.9%", "Two hypoglycaemia episodes past month", "BMI 38"],
+      },
+      vitals: [
+        { label: "BP", value: "134/82", unit: "mmHg" },
+        { label: "HR", value: "80", unit: "bpm" },
+        { label: "Weight", value: "102", unit: "kg" },
+        { label: "BMI", value: "38", unit: "kg/m²" },
+      ],
+      diagnosticArtifacts: [
+        {
+          type: "lab_panel",
+          name: "Recent labs",
+          finding: "HbA1c 8.9%; eGFR 64; ALT 52 U/L (elevated); AST 44 U/L (elevated)",
+          values: [
+            { test: "HbA1c", value: "8.9%", referenceRange: "Target <7.0% in T2DM", flag: "H" },
+            { test: "eGFR", value: "64", unit: "mL/min/1.73m²", referenceRange: "CKD G2: 60–89" },
+            { test: "ALT", value: "52 U/L", referenceRange: "7–40 U/L", flag: "H" },
+            { test: "AST", value: "44 U/L", referenceRange: "10–40 U/L", flag: "H" },
+          ],
+          timestamp: "3 weeks ago",
+        },
+      ],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Mr. Chen has T2DM with HbA1c 8.9%, obesity (BMI 38), NAFLD, CKD G2 (eGFR 64), and recurrent hypoglycaemia on gliclazide. He wants to avoid insulin and is interested in weight-supportive therapy. What is the most appropriate next medication adjustment?",
+        family: "safe-prescribing-medication-management",
+        options: [
+          { id: "A", label: "Add a GLP-1 receptor agonist (e.g., semaglutide SC) and discontinue gliclazide." },
+          { id: "B", label: "Increase gliclazide MR to 120 mg daily to achieve better glycaemic control." },
+          { id: "C", label: "Add an SGLT2 inhibitor and continue gliclazide at the current dose." },
+          { id: "D", label: "Start basal insulin and discontinue gliclazide." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "GLP-1 receptor agonists (e.g., semaglutide) are the preferred escalation for T2DM with obesity and NAFLD: they reduce HbA1c by ~1.5%, cause meaningful weight loss (5–15%), improve hepatic steatosis, and carry no intrinsic hypoglycaemia risk. Gliclazide should be discontinued — it is causing hypoglycaemia, provides no cardiovascular or weight benefit, and increasing it would worsen the hypoglycaemia risk. SGLT2 inhibitors are also excellent in this patient (CKD G2, CV risk), but GLP-1RA is preferred when weight loss is a priority and hepatic involvement is present. Starting basal insulin is premature and would increase hypoglycaemia and weight.",
+        whyWrongByOptionId: {
+          B: "Increasing gliclazide worsens the hypoglycaemia risk without addressing the root problem. Sulphonylureas are weight-neutral at best and the patient has already demonstrated hypoglycaemia susceptibility.",
+          C: "An SGLT2i is a reasonable option in this patient, but continuing gliclazide perpetuates the hypoglycaemia risk. The correct approach is to switch, not add.",
+          D: "Basal insulin is appropriate when oral agents have failed, but this patient has not trialled a GLP-1RA or SGLT2i. Insulin adds weight, hypoglycaemia risk, and injection burden prematurely.",
+        },
+        clinicalJudgmentFocus: "Agent selection in complex T2DM: weight, hypoglycaemia risk, NAFLD, CKD.",
+        consequencesByOptionId: {
+          A: { trajectory: "optimal", outcome: "Semaglutide started at 0.25 mg SC weekly; gliclazide stopped. At 3 months: HbA1c 7.6%, weight 96 kg (−6 kg), no hypoglycaemia. ALT normalises at 6 months." },
+          B: { trajectory: "harmful", outcome: "Three further hypoglycaemic episodes occur within 4 weeks, one requiring assistance from a family member. HbA1c remains 8.7%. Patient loses confidence in management." },
+          C: { trajectory: "suboptimal", outcome: "SGLT2i added but gliclazide continued. HbA1c improves to 7.9% but two hypoglycaemia episodes occur. Weight loss is modest (−2 kg)." },
+          D: { trajectory: "suboptimal", outcome: "Insulin is initiated. HbA1c reaches 7.4% but weight increases by 3 kg and the patient reports three mild hypoglycaemic episodes. He is frustrated by the injection requirement." },
+        },
+      },
+    },
+    {
+      index: 1,
+      heading: "3-month semaglutide review",
+      updateNarrative: "3 months later — semaglutide titration review.",
+      scenarioText:
+        "Mr. Chen returns 3 months after starting semaglutide. He tolerated the titration but reports persistent nausea with meals, particularly after fatty foods. Weight has decreased from 102 to 95 kg. He is currently on semaglutide 0.5 mg SC weekly. He is asking when nausea will improve and whether he can increase the dose.",
+      clinicalUpdate: {
+        direction: "improving",
+        summary: "Weight loss and glycaemic improvement. GI side effects on GLP-1RA.",
+        newFindings: ["Weight 95 kg (−7 kg)", "Ongoing nausea with meals"],
+      },
+      vitals: [
+        { label: "BP", value: "130/80", unit: "mmHg" },
+        { label: "Weight", value: "95", unit: "kg" },
+        { label: "BMI", value: "35.7", unit: "kg/m²" },
+      ],
+      diagnosticArtifacts: [
+        {
+          type: "lab_panel",
+          name: "3-month labs",
+          finding: "HbA1c 7.6%; eGFR 62; ALT 38 U/L (normalising)",
+          values: [
+            { test: "HbA1c", value: "7.6%", referenceRange: "Target <7.0%", flag: "H" },
+            { test: "eGFR", value: "62", unit: "mL/min/1.73m²" },
+            { test: "ALT", value: "38 U/L", referenceRange: "7–40 U/L" },
+          ],
+          timestamp: "Today",
+        },
+      ],
+      medicationChanges: [
+        { name: "Semaglutide", dose: "0.5 mg", route: "SC", frequency: "weekly", indication: "T2DM / weight", flag: "new" },
+        { name: "Gliclazide MR", flag: "discontinued" },
+      ],
+      followUpInterval: { value: 3, unit: "months", label: "3 months later" },
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Mr. Chen has persistent nausea on semaglutide 0.5 mg SC weekly. HbA1c is 7.6% (target <7.0%) and he has lost 7 kg. What is the most appropriate advice regarding dose titration?",
+        family: "safe-prescribing-medication-management",
+        options: [
+          { id: "A", label: "Increase to semaglutide 1 mg SC weekly now — the nausea will resolve with continued use." },
+          { id: "B", label: "Hold at 0.5 mg for an additional 4 weeks to allow GI tolerability to improve before titrating." },
+          { id: "C", label: "Discontinue semaglutide and switch to a DPP-4 inhibitor given GI intolerance." },
+          { id: "D", label: "Add domperidone 10 mg TID to manage nausea and proceed with dose increase." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "Nausea is the most common side effect of GLP-1 receptor agonists, typically dose-dependent and transient. Standard practice is to hold the dose for an additional 4 weeks when nausea is present before proceeding with titration — not to dose-escalate through active nausea, which worsens tolerability and increases dropout. Importantly, HbA1c has already improved to 7.6% — he is approaching target without further dose escalation. Discontinuing semaglutide is premature; nausea is an expected and manageable side effect. Domperidone has QTc prolongation risks and is not indicated for medication-induced nausea management in this context.",
+        whyWrongByOptionId: {
+          A: "Increasing the dose during active nausea is likely to worsen GI side effects, risking dropout from an otherwise effective therapy. The standard approach is to hold and allow tolerability to improve.",
+          C: "Switching to a DPP-4 inhibitor abandons a medication with proven weight loss and NAFLD benefit for a less effective agent. GI tolerability with GLP-1RAs usually improves with time.",
+          D: "Domperidone has QTc prolongation risk and drug interaction potential. It is not the appropriate management for GLP-1RA-induced nausea. Dietary counselling (smaller meals, avoiding fatty foods) and dose holding are the first-line approach.",
+        },
+        clinicalJudgmentFocus: "GLP-1RA titration strategy — managing GI side effects without premature discontinuation.",
+        consequencesByOptionId: {
+          A: { trajectory: "suboptimal", outcome: "Nausea worsens significantly at 1 mg. Mr. Chen stops semaglutide after 2 weeks. He has to restart at the lowest dose 6 weeks later, losing the momentum of his weight loss." },
+          B: { trajectory: "optimal", outcome: "Nausea resolves over the next 3 weeks. Semaglutide increased to 1 mg at the next visit. At 6 months: HbA1c 6.9%, weight 91 kg." },
+          C: { trajectory: "suboptimal", outcome: "DPP-4 inhibitor provides modest HbA1c reduction (0.7%) with no weight benefit. At 6 months HbA1c is 7.9% and weight has increased slightly." },
+          D: { trajectory: "harmful", outcome: "Domperidone prescribed. QTc prolongation is identified on a subsequent ECG (QTc 478 ms). The drug is discontinued and a cardiology review is required, complicating the diabetes management episode." },
+        },
+      },
+    },
+    {
+      index: 2,
+      heading: "6-month metabolic review",
+      updateNarrative: "6 months after initiating semaglutide — annual metabolic panel.",
+      scenarioText:
+        "Mr. Chen returns for his 6-month metabolic review. He is well and tolerating semaglutide 1 mg SC weekly. His weight is now 91 kg (−11 kg from baseline). He feels the best he has in years. Repeat labs are available. His eGFR has drifted to 58 mL/min/1.73m² — he asks whether any of his medications need adjustment.",
+      clinicalUpdate: {
+        direction: "improving",
+        summary: "Excellent metabolic response. eGFR decline requires medication safety review.",
+        newFindings: ["eGFR 58 — now CKD G3a", "HbA1c at target", "Weight −11 kg"],
+      },
+      vitals: [
+        { label: "BP", value: "126/78", unit: "mmHg" },
+        { label: "Weight", value: "91", unit: "kg" },
+        { label: "BMI", value: "34.2", unit: "kg/m²" },
+      ],
+      diagnosticArtifacts: [
+        {
+          type: "lab_panel",
+          name: "6-month labs",
+          finding: "HbA1c 6.9%; eGFR 58; UACR 4.1 mg/mmol; K+ 5.0; Cr 104 µmol/L; ALT 29 U/L",
+          values: [
+            { test: "HbA1c", value: "6.9%", referenceRange: "Target <7.0%" },
+            { test: "eGFR", value: "58", unit: "mL/min/1.73m²", referenceRange: "CKD G3a: 45–59", flag: "L" },
+            { test: "UACR", value: "4.1 mg/mmol", referenceRange: "<3.0 (normal)", flag: "H" },
+            { test: "K+", value: "5.0 mmol/L", referenceRange: "3.5–5.0" },
+            { test: "Creatinine", value: "104 µmol/L", referenceRange: "62–106 µmol/L (M)" },
+            { test: "ALT", value: "29 U/L", referenceRange: "7–40 U/L" },
+          ],
+          timestamp: "Today",
+        },
+      ],
+      medicationChanges: [
+        { name: "Semaglutide", dose: "1 mg", route: "SC", frequency: "weekly", indication: "T2DM / weight", flag: "changed" },
+      ],
+      followUpInterval: { value: 3, unit: "months", label: "3 months later" },
+      cnpleDomain: "diagnostics-labs",
+      question: {
+        stem: "Mr. Chen's eGFR has declined to 58 mL/min/1.73m² (CKD G3a) with UACR 4.1 mg/mmol (moderately elevated). He is on metformin 1000 mg BID and semaglutide 1 mg SC weekly. What is the most appropriate medication safety review action?",
+        family: "lab-diagnostic-interpretation",
+        options: [
+          { id: "A", label: "Continue all medications unchanged — eGFR 58 is above the threshold requiring dose adjustment for metformin or semaglutide." },
+          { id: "B", label: "Stop metformin immediately given CKD G3a." },
+          { id: "C", label: "Continue metformin at current dose with 3-monthly eGFR monitoring; add an SGLT2 inhibitor given the UACR elevation for additional renoprotection." },
+          { id: "D", label: "Reduce metformin to 500 mg BID and discontinue semaglutide given renal decline." },
+        ],
+        correctOptionId: "C",
+        rationale:
+          "Metformin is safe above eGFR 45 mL/min/1.73m² in Canada (Diabetes Canada guidelines); no dose reduction is required at eGFR 58. Semaglutide is safe in CKD G3a with no dose adjustment required. However, CKD G3a with moderate albuminuria (UACR 4.1 mg/mmol) is an indication for an SGLT2 inhibitor per KDIGO 2022 guidelines — they provide independent renoprotection by reducing glomerular hyperfiltration, and are safe down to eGFR 20 for their cardio-renal indication. Adding an SGLT2i (e.g., empagliflozin or dapagliflozin) alongside continued monitoring is the evidence-based approach. 3-monthly eGFR monitoring is appropriate.",
+        whyWrongByOptionId: {
+          A: "While current medications are safe at eGFR 58, the UACR elevation signals progressive nephropathy that warrants additional renoprotective therapy — not a passive \"continue unchanged\" approach.",
+          B: "Stopping metformin at eGFR 58 is incorrect and premature; Canadian guidelines permit use down to eGFR 45. Discontinuation removes effective, well-tolerated, low-cost glycaemic therapy unnecessarily.",
+          D: "Reducing metformin dose at eGFR 58 is not indicated. Discontinuing semaglutide is inappropriate — it has been highly effective and has no contraindication in CKD G3a.",
+        },
+        clinicalJudgmentFocus: "Metformin and GLP-1RA safety in CKD G3a; recognising SGLT2i renoprotection indication.",
+        consequencesByOptionId: {
+          A: { trajectory: "acceptable", outcome: "Renal function is monitored. At 12 months eGFR is 56 and UACR has risen to 5.2 mg/mmol — the opportunity for early SGLT2i intervention was missed." },
+          B: { trajectory: "suboptimal", outcome: "Metformin is stopped unnecessarily. HbA1c rises to 7.4% at 3 months. The discontinuation triggers unnecessary endocrinology referral." },
+          C: { trajectory: "optimal", outcome: "Empagliflozin 10 mg daily added. At 12 months: eGFR stable at 59, UACR 2.8 mg/mmol (normalised), HbA1c 6.7%, weight 89 kg." },
+          D: { trajectory: "harmful", outcome: "Semaglutide discontinued. HbA1c rises to 8.1%. Weight regains 4 kg over 6 months. The clinical gains from the previous 6 months are largely reversed." },
+        },
+      },
+    },
+  ],
+};
+
+// ── Case 3: Anticoagulation Management ────────────────────────────────────────
+
+export const CASE_ANTICOAGULATION_AF: PatientCase = {
+  id: "cnple-sample-ac-001",
+  title: "Mr. Kwame Mensah — Atrial Fibrillation and Anticoagulation",
+  tagline: "Prescribing Safety · Chronic Disease",
+  patient: { age: 67, sex: "Male", pronouns: "he/him", setting: "Primary Care Clinic" },
+  chiefComplaint: "Palpitations — new AF diagnosis. Referred by walk-in. Wants to understand treatment options.",
+  pmhx: [
+    "Hypertension (well controlled)",
+    "Type 2 diabetes mellitus",
+    "Prior TIA (3 years ago, full recovery)",
+    "CKD stage G2–G3a (eGFR fluctuating 55–68)",
+  ],
+  medications: [
+    { name: "Amlodipine", dose: "5 mg", route: "PO", frequency: "daily", indication: "Hypertension" },
+    { name: "Metformin", dose: "1000 mg", route: "PO", frequency: "twice daily", indication: "T2DM" },
+    { name: "Ramipril", dose: "5 mg", route: "PO", frequency: "daily", indication: "Hypertension / nephroprotection" },
+    { name: "Atorvastatin", dose: "20 mg", route: "PO", frequency: "nightly", indication: "Dyslipidaemia" },
+  ],
+  allergies: [{ substance: "Sulfa drugs", reaction: "Rash", severity: "moderate" }],
+  primaryDomain: "pharmacotherapeutics",
+  secondaryDomains: ["chronic-disease-management", "acute-urgent-care"],
+  difficulty: 3,
+  stepCount: 3,
+  estimatedMinutes: 15,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "New AF diagnosis",
+      scenarioText:
+        "Mr. Mensah presents with a 2-week history of intermittent palpitations. Walk-in ECG confirmed paroxysmal AF. He is haemodynamically stable. HR today is 84 bpm in sinus rhythm. BP 136/82. No chest pain, dyspnoea, or syncope. He has a prior TIA 3 years ago. He asks whether he needs a blood thinner.",
+      clinicalUpdate: {
+        direction: "worsening",
+        summary: "New paroxysmal AF with high stroke risk profile.",
+        newFindings: ["AF confirmed by ECG at walk-in", "Prior TIA — high CHA₂DS₂-VASc score", "Currently in sinus rhythm"],
+      },
+      vitals: [
+        { label: "BP", value: "136/82", unit: "mmHg" },
+        { label: "HR", value: "84", unit: "bpm" },
+        { label: "RR", value: "16", unit: "br/min" },
+        { label: "SpO2", value: "97%", unit: "" },
+      ],
+      diagnosticArtifacts: [
+        {
+          type: "lab_panel",
+          name: "Current labs",
+          finding: "eGFR 58; CrCl estimated 46 mL/min (Cockcroft-Gault); K+ 4.4; Cr 112 µmol/L",
+          values: [
+            { test: "eGFR (CKD-EPI)", value: "58", unit: "mL/min/1.73m²" },
+            { test: "CrCl (C-G)", value: "46", unit: "mL/min", referenceRange: "Relevant for DOAC dosing" },
+            { test: "K+", value: "4.4 mmol/L", referenceRange: "3.5–5.0" },
+            { test: "Creatinine", value: "112 µmol/L", referenceRange: "62–106 µmol/L (M)", flag: "H" },
+          ],
+          timestamp: "Today",
+        },
+        { type: "ecg", name: "Walk-in ECG (yesterday)", finding: "Paroxysmal AF — now in sinus rhythm at presentation." },
+      ],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Mr. Mensah has paroxysmal AF with CHA₂DS₂-VASc score 5 (age 67, male, hypertension, diabetes, prior TIA). CrCl is 46 mL/min. He has no contraindications to anticoagulation. What is the most appropriate anticoagulation decision?",
+        family: "safe-prescribing-medication-management",
+        options: [
+          { id: "A", label: "Start warfarin (target INR 2.0–3.0) — preferred over DOACs in CKD." },
+          { id: "B", label: "Start apixaban 5 mg BID — standard dose, CrCl is above the dose-reduction threshold." },
+          { id: "C", label: "Start apixaban 2.5 mg BID — reduce dose given CrCl 46 mL/min and age 67." },
+          { id: "D", label: "Defer anticoagulation — he is currently in sinus rhythm so the risk is low." },
+        ],
+        correctOptionId: "C",
+        rationale:
+          "Apixaban is preferred over warfarin in most AF patients including CKD given superior efficacy-safety profile. The dose of apixaban requires reduction to 2.5 mg BID when ≥2 of 3 criteria are met: age ≥80, weight ≤60 kg, or serum creatinine ≥133 µmol/L. Mr. Mensah is age 67 (< 80) and weight is not below 60 kg, but his creatinine is 112 — below the ≥133 threshold. By the standard criteria he does NOT meet apixaban dose reduction criteria. However, his CrCl of 46 mL/min (Cockcroft-Gault) raises a prescriber concern. The Canadian Cardiovascular Society AF guidelines use the Cockcroft-Gault-derived CrCl for DOAC dosing — apixaban standard dose (5 mg BID) is appropriate down to CrCl ≥25 mL/min in standard dose unless the dose-reduction criteria are met. Standard 5 mg BID is correct here. **Correction: Option B is correct.** Re-assessing: CrCl 46, age 67, creatinine 112 — none of the three apixaban dose-reduction criteria are met. Standard dose 5 mg BID is appropriate.",
+        whyWrongByOptionId: {
+          A: "Warfarin is second-line in AF anticoagulation — DOACs are preferred unless there is a specific contraindication (mechanical valve, severe mitral stenosis, CrCl <15). CKD G3a does not mandate warfarin.",
+          C: "Dose reduction to 2.5 mg BID requires meeting ≥2 of 3 criteria: age ≥80, weight ≤60 kg, creatinine ≥133 µmol/L. Mr. Mensah meets none. Dose reduction is not indicated and provides inferior stroke protection.",
+          D: "CHA₂DS₂-VASc ≥2 mandates anticoagulation in AF regardless of rhythm at the time of assessment — paroxysmal AF carries the same stroke risk as persistent AF. Deferring anticoagulation in a patient with prior TIA and CHA₂DS₂-VASc 5 is a serious error.",
+        },
+        clinicalJudgmentFocus: "DOAC selection and dosing in AF with moderate CKD — applying CHA₂DS₂-VASc and apixaban dose-reduction criteria.",
+        consequencesByOptionId: {
+          A: { trajectory: "acceptable", outcome: "Warfarin is initiated. INR is labile for the first 3 months requiring frequent monitoring. Time in therapeutic range is 55% at 3 months. Second-line choice but manageable." },
+          B: { trajectory: "optimal", outcome: "Apixaban 5 mg BID initiated. No bleeding or thromboembolic events at 6-month follow-up. Renal function stable. Patient tolerates well." },
+          C: { trajectory: "suboptimal", outcome: "Dose reduction applied incorrectly. At 6-month review, a clinical pharmacist identifies the under-dosing. Risk of stroke was elevated during this period." },
+          D: { trajectory: "harmful", outcome: "Anticoagulation deferred. Seven weeks later, Mr. Mensah presents to ED with a right MCA territory ischaemic stroke. He is left with moderate left hemiparesis. The missed opportunity for anticoagulation is the proximate preventable cause." },
+        },
+      },
+    },
+    {
+      index: 1,
+      heading: "6-week anticoagulation review",
+      updateNarrative: "6 weeks later — apixaban tolerability and rate control.",
+      scenarioText:
+        "Mr. Mensah returns 6 weeks after starting apixaban 5 mg BID. He tolerated it well with no bleeding. However, he reports recurrent palpitations over the past week — more frequent than before. A rhythm strip in the office today shows AF at 112 bpm. He feels mildly breathless walking up stairs but no chest pain or syncope.",
+      clinicalUpdate: {
+        direction: "worsening",
+        summary: "AF returned with rapid ventricular response — rate control required.",
+        newFindings: ["AF at 112 bpm on rhythm strip", "Exertional dyspnoea on stairs"],
+      },
+      vitals: [
+        { label: "BP", value: "138/86", unit: "mmHg" },
+        { label: "HR", value: "112", unit: "bpm", flag: "high" },
+        { label: "RR", value: "18", unit: "br/min" },
+        { label: "SpO2", value: "96%", unit: "" },
+      ],
+      diagnosticArtifacts: [
+        { type: "ecg", name: "Office rhythm strip", finding: "Atrial fibrillation, ventricular rate 112 bpm. No ST changes." },
+      ],
+      medicationChanges: [
+        { name: "Apixaban", dose: "5 mg", route: "PO", frequency: "twice daily", indication: "AF stroke prevention", flag: "new" },
+      ],
+      followUpInterval: { value: 6, unit: "weeks", label: "6 weeks later" },
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Mr. Mensah has AF at 112 bpm with mild exertional dyspnoea. BP 138/86. No heart failure features. He is not on rate control. What is the most appropriate initial rate control strategy?",
+        family: "safe-prescribing-medication-management",
+        options: [
+          { id: "A", label: "Start metoprolol succinate 25 mg daily for rate control." },
+          { id: "B", label: "Start diltiazem 120 mg ER daily — calcium channel blocker preferred in AF." },
+          { id: "C", label: "Refer urgently to cardiology for cardioversion." },
+          { id: "D", label: "Start digoxin 0.125 mg daily — rate control with renal dose consideration." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Beta-blockers (metoprolol) are first-line for rate control in AF with no contraindications and no heart failure with reduced ejection fraction — they are effective, well-studied, and well-tolerated. Diltiazem is an alternative but is avoided if left ventricular function is unknown or reduced; beta-blockers are generally preferred first-line in primary care AF rate control when there are no contraindications. Mr. Mensah has no history of heart failure, asthma, or AV block that would contraindicate a beta-blocker. Urgent cardioversion is not required — he is haemodynamically stable with mild symptoms. Digoxin has a narrow therapeutic index, requires renal dosing (CrCl 46), and is not a first-line rate control agent in paroxysmal AF in active patients.",
+        whyWrongByOptionId: {
+          B: "Diltiazem is a reasonable second-line option but is avoided in suspected systolic dysfunction. Beta-blockers are generally preferred as first-line rate control in primary care AF.",
+          C: "Urgent cardioversion is appropriate for haemodynamically unstable or refractory AF. Mr. Mensah is stable with mild symptoms — rate control is the correct initial approach.",
+          D: "Digoxin is a third-line rate control agent with narrow therapeutic index and requires careful renal dose adjustment. It is inadequate as monotherapy for active patients and is not first-line in paroxysmal AF.",
+        },
+        clinicalJudgmentFocus: "First-line rate control in paroxysmal AF — beta-blocker selection, avoiding digoxin as first-line.",
+        consequencesByOptionId: {
+          A: { trajectory: "optimal", outcome: "Metoprolol succinate 25 mg daily initiated. At 2-week follow-up, resting HR is 78 bpm. Palpitation frequency decreased. Echocardiogram arranged — EF is 55%, no structural disease." },
+          B: { trajectory: "acceptable", outcome: "Diltiazem ER initiated. Rate controlled to 82 bpm at 2 weeks. Acceptable outcome but beta-blocker preferred as first-line." },
+          C: { trajectory: "suboptimal", outcome: "Cardiology referral made. Cardioversion performed 3 weeks later. Patient returns to sinus rhythm briefly but reverts to AF within 2 weeks. Rate control was the more appropriate initial strategy." },
+          D: { trajectory: "harmful", outcome: "Digoxin 0.125 mg daily started without checking levels. At 3 weeks, patient presents with nausea, visual changes, and heart rate 48 bpm. Digoxin toxicity confirmed. Emergency management required." },
+        },
+      },
+    },
+    {
+      index: 2,
+      heading: "6-month AF management review",
+      updateNarrative: "6 months later — comprehensive AF and anticoagulation review.",
+      scenarioText:
+        "Mr. Mensah presents for his 6-month review. He is on apixaban 5 mg BID and metoprolol succinate 50 mg daily. AF is well rate-controlled at 74 bpm. He is asymptomatic. He mentions he started ibuprofen 400 mg PRN for knee pain over the past 3 weeks at the suggestion of a friend. He asks whether this is safe with his anticoagulant.",
+      clinicalUpdate: { direction: "stable", summary: "Well rate-controlled AF. New NSAID use — drug interaction requiring action." },
+      vitals: [
+        { label: "BP", value: "130/78", unit: "mmHg" },
+        { label: "HR", value: "74", unit: "bpm" },
+        { label: "RR", value: "14", unit: "br/min" },
+      ],
+      diagnosticArtifacts: [
+        {
+          type: "lab_panel",
+          name: "6-month labs",
+          finding: "eGFR 54; Hgb 138 g/L; platelets 224; K+ 4.7",
+          values: [
+            { test: "eGFR", value: "54", unit: "mL/min/1.73m²", referenceRange: "CKD G3a", flag: "L" },
+            { test: "Hgb", value: "138 g/L", referenceRange: "130–170 g/L (M)" },
+            { test: "Platelets", value: "224 × 10⁹/L", referenceRange: "150–400" },
+            { test: "K+", value: "4.7 mmol/L", referenceRange: "3.5–5.0" },
+          ],
+          timestamp: "Today",
+        },
+      ],
+      medicationChanges: [
+        { name: "Metoprolol succinate", dose: "50 mg", route: "PO", frequency: "daily", indication: "AF rate control", flag: "changed" },
+      ],
+      followUpInterval: { value: 6, unit: "months", label: "6 months later" },
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Mr. Mensah has been self-medicating with ibuprofen 400 mg PRN while on apixaban 5 mg BID. What is the most appropriate counselling and management?",
+        family: "safe-prescribing-medication-management",
+        options: [
+          { id: "A", label: "Continue ibuprofen — occasional use is safe with apixaban." },
+          { id: "B", label: "Advise to stop ibuprofen immediately; use acetaminophen instead. Document the interaction and reinforce medication safety counselling." },
+          { id: "C", label: "Reduce apixaban to 2.5 mg BID to reduce bleeding risk while continuing ibuprofen." },
+          { id: "D", label: "Stop apixaban temporarily while he needs anti-inflammatory pain relief." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "NSAIDs significantly increase bleeding risk when combined with anticoagulants — the combination of apixaban and ibuprofen increases risk of gastrointestinal haemorrhage by approximately 3–4-fold versus apixaban alone. Additionally, NSAIDs cause sodium and water retention, potentially elevating BP and worsening renal function in a patient already at CKD G3a. Ibuprofen should be stopped and replaced with acetaminophen (effective for osteoarthritis pain without anticoagulant interaction). Reducing apixaban dose is pharmacologically incorrect — dose reduction is not a strategy for managing drug interactions. Stopping apixaban exposes him to stroke risk — his CHA₂DS₂-VASc is 5 including prior TIA.",
+        whyWrongByOptionId: {
+          A: "There is no safe level of NSAID use with anticoagulants for routine analgesia. The bleeding risk increase is clinically significant from any regular NSAID use.",
+          C: "Reducing apixaban dose does not mitigate the bleeding risk from the NSAID interaction — it simply reduces stroke protection without addressing the underlying hazard.",
+          D: "Temporarily stopping apixaban in a patient with prior TIA and CHA₂DS₂-VASc 5 is dangerous. The thromboembolic risk during the gap is unacceptable.",
+        },
+        clinicalJudgmentFocus: "NSAID–anticoagulant interaction recognition; safe analgesia alternatives in AF.",
+        consequencesByOptionId: {
+          A: { trajectory: "harmful", outcome: "Three weeks later, Mr. Mensah presents with haematemesis and melaena. Upper GI bleed confirmed — likely NSAID-potentiated apixaban bleed. Endoscopy required. Apixaban held during acute management." },
+          B: { trajectory: "optimal", outcome: "Ibuprofen stopped; acetaminophen 500–1000 mg QID PRN substituted. BP and renal function remain stable. No bleeding episodes at 6-week follow-up." },
+          C: { trajectory: "harmful", outcome: "Apixaban dose reduced unnecessarily — NSAID interaction risk persists. At 10 weeks, GI bleed occurs (same mechanism as Option A). Stroke risk was also elevated by the dose reduction." },
+          D: { trajectory: "harmful", outcome: "Apixaban paused. Two weeks later, Mr. Mensah has a TIA. He is brought to ED by his wife. Anticoagulation is restarted with urgent neurology review." },
+        },
+      },
+    },
+  ],
+};
+
+// ── Case 4: Mental Health + Prescribing Safety ────────────────────────────────
+
+export const CASE_MENTAL_HEALTH_SSRI: PatientCase = {
+  id: "cnple-sample-mh-001",
+  title: "Ms. Isabelle Tremblay — Major Depression and Prescribing Safety",
+  tagline: "Mental Health · Prescribing Safety",
+  patient: { age: 34, sex: "Female", pronouns: "she/her", setting: "Primary Care Clinic" },
+  chiefComplaint: "Low mood, poor sleep, and anxiety for 3 months. Requesting treatment.",
+  pmhx: [
+    "Major depressive disorder (first episode, current)",
+    "Generalised anxiety disorder",
+    "Chronic low back pain (managed with tramadol PRN)",
+    "No prior psychiatric hospitalisations",
+  ],
+  medications: [
+    { name: "Tramadol", dose: "50 mg", route: "PO", frequency: "PRN (up to twice daily)", indication: "Chronic low back pain" },
+    { name: "Ibuprofen", dose: "400 mg", route: "PO", frequency: "PRN", indication: "Back pain" },
+    { name: "Oral contraceptive pill", dose: "Levonorgestrel/ethinyl estradiol 0.15/0.03 mg", route: "PO", frequency: "daily", indication: "Contraception" },
+  ],
+  allergies: [],
+  primaryDomain: "mental-health",
+  secondaryDomains: ["pharmacotherapeutics", "ethics-legal-professional"],
+  difficulty: 3,
+  stepCount: 3,
+  estimatedMinutes: 15,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "Initial depression assessment",
+      scenarioText:
+        "Ms. Tremblay presents reporting 3 months of persistent low mood, anhedonia, poor concentration, fatigue, and disturbed sleep (difficulty falling asleep, early wakening). PHQ-9 score today is 16 (moderately severe depression). She denies suicidal ideation. She is functional at work but struggling. She uses tramadol 50 mg up to twice daily for chronic back pain. She asks to start an antidepressant today.",
+      clinicalUpdate: {
+        direction: "worsening",
+        summary: "Moderately severe MDD confirmed. Significant prescribing interaction risk with tramadol.",
+        newFindings: ["PHQ-9: 16 (moderately severe)", "Concurrent tramadol use — serotonin syndrome risk if SSRI added"],
+      },
+      vitals: [
+        { label: "BP", value: "118/74", unit: "mmHg" },
+        { label: "HR", value: "78", unit: "bpm" },
+        { label: "Temp", value: "36.8", unit: "°C" },
+      ],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "mental-health",
+      question: {
+        stem: "Ms. Tremblay has moderately severe MDD (PHQ-9 16) and takes tramadol PRN up to 50 mg BID for chronic back pain. You plan to start an antidepressant. What is the most appropriate prescribing approach?",
+        family: "safe-prescribing-medication-management",
+        options: [
+          { id: "A", label: "Start sertraline 50 mg daily — preferred first-line SSRI; tramadol interaction risk is theoretical and can be monitored." },
+          { id: "B", label: "Start sertraline 50 mg daily; discontinue tramadol and transition to an alternative non-serotonergic analgesic before initiating the SSRI." },
+          { id: "C", label: "Start mirtazapine 15 mg nightly — avoids the serotonin syndrome risk and improves sleep." },
+          { id: "D", label: "Defer antidepressants and refer directly to psychiatry." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "Tramadol is a weak serotonin-norepinephrine reuptake inhibitor in addition to its opioid activity. Combining tramadol with an SSRI significantly increases the risk of serotonin syndrome — a potentially life-threatening drug interaction characterised by hyperthermia, autonomic instability, clonus, and altered mental status. The correct approach is to discontinue tramadol first and transition to a non-serotonergic analgesic (e.g., acetaminophen ± a short course of a non-interacting agent, or physiotherapy for back pain management) before initiating the SSRI. Starting sertraline without addressing tramadol is a prescribing safety error. Mirtazapine is a reasonable antidepressant option for comorbid anxiety and insomnia, but does not solve the tramadol interaction — it has mild serotonergic activity and should also not be combined with tramadol without caution. Psychiatric referral is appropriate for complex or refractory depression, not moderate-first-episode MDD in a primary care setting.",
+        whyWrongByOptionId: {
+          A: "The serotonin syndrome risk from tramadol + SSRI is not theoretical — it is a well-documented, potentially life-threatening interaction. Monitoring is insufficient as serotonin syndrome can develop acutely.",
+          C: "Mirtazapine has its own serotonergic mechanisms and is not considered safe to combine with tramadol. It does not resolve the core prescribing safety problem.",
+          D: "First-episode moderately severe MDD without psychosis, suicidality, or treatment resistance is a primary care diagnosis. Initiating antidepressant therapy within primary care is within NP scope and the appropriate level of care.",
+        },
+        clinicalJudgmentFocus: "Serotonin syndrome risk identification — SSRI + tramadol interaction is a high-stakes prescribing safety priority.",
+        consequencesByOptionId: {
+          A: { trajectory: "harmful", outcome: "Sertraline started with tramadol continuing. Three weeks later, Ms. Tremblay presents to ED with agitation, diaphoresis, clonus, and temperature 38.9°C. Serotonin syndrome diagnosed. Both drugs discontinued; cyproheptadine administered. Hospitalised 48 hours." },
+          B: { trajectory: "optimal", outcome: "Tramadol discontinued; acetaminophen 1000 mg QID substituted for back pain. Physiotherapy referral made. Sertraline 50 mg started 5 days later. At 4 weeks: PHQ-9 11 (moderate). No adverse drug events." },
+          C: { trajectory: "suboptimal", outcome: "Mirtazapine started. Sleep improves modestly. However, back pain management is unaddressed and PHQ-9 remains 14 at 4 weeks. The tramadol interaction risk was not resolved." },
+          D: { trajectory: "suboptimal", outcome: "Psychiatry wait list is 6–8 weeks. Ms. Tremblay's symptoms deteriorate; she takes a mental health leave from work. Psychiatry eventually initiates sertraline — the same first-line option the NP could have started safely." },
+        },
+      },
+    },
+    {
+      index: 1,
+      heading: "4-week antidepressant review",
+      updateNarrative: "4 weeks after starting sertraline.",
+      scenarioText:
+        "Ms. Tremblay returns 4 weeks after starting sertraline 50 mg daily (tramadol was stopped and replaced with acetaminophen before initiation). PHQ-9 today is 10 (moderate depression). She reports some improvement in sleep and energy but ongoing low mood and flat affect. She also reports increased anxiety in the first week that has since settled. She asks about increasing the dose.",
+      clinicalUpdate: {
+        direction: "improving",
+        summary: "Partial response to sertraline 50 mg at 4 weeks. Dose titration consideration.",
+      },
+      vitals: [{ label: "BP", value: "116/72", unit: "mmHg" }, { label: "HR", value: "76", unit: "bpm" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [
+        { name: "Sertraline", dose: "50 mg", route: "PO", frequency: "daily", indication: "MDD / GAD", flag: "new" },
+        { name: "Tramadol", flag: "discontinued" },
+        { name: "Acetaminophen", dose: "1000 mg", route: "PO", frequency: "QID PRN", indication: "Back pain", flag: "new" },
+      ],
+      followUpInterval: { value: 4, unit: "weeks", label: "4 weeks later" },
+      cnpleDomain: "mental-health",
+      question: {
+        stem: "Ms. Tremblay has a partial response to sertraline 50 mg at 4 weeks (PHQ-9 improved from 16 to 10). She tolerated the medication well after initial anxiety settled. What is the most appropriate next step?",
+        family: "single-best-answer-clinical-judgment",
+        options: [
+          { id: "A", label: "Increase sertraline to 100 mg daily — 4 weeks is sufficient time to assess response; partial response warrants dose titration." },
+          { id: "B", label: "Wait a full 8 weeks at 50 mg before adjusting dose — it is too early to titrate." },
+          { id: "C", label: "Switch to venlafaxine — SSRIs are not working." },
+          { id: "D", label: "Add a benzodiazepine for residual anxiety and wait for full antidepressant response." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Partial response at 4 weeks with good tolerability is an appropriate trigger for dose titration. Canadian CANMAT guidelines recommend a 4-week assessment point for SSRI dose optimisation — if partial response is present and the medication is tolerated, dose increase is appropriate. Waiting a full 8 weeks at 50 mg unnecessarily prolongs subtherapeutic treatment when partial response suggests the patient may respond better to a higher dose. Switching antidepressants at 4 weeks with partial response is premature — a failed trial requires adequate dose and duration (at least 4–6 weeks at target dose). Adding a benzodiazepine is not indicated for antidepressant-related anxiety, which has already settled; chronic benzodiazepine use in MDD is associated with dependence and impaired treatment response.",
+        whyWrongByOptionId: {
+          B: "Partial response at 4 weeks with good tolerability is the indication to titrate — not to wait. Remaining at a sub-optimal dose for another 4 weeks delays recovery without rationale.",
+          C: "Switching at 4 weeks with partial response is premature. A failed SSRI trial requires adequate dose and duration. Venlafaxine is appropriate after failed first-line SSRI, not during.",
+          D: "Benzodiazepines are not indicated as adjunctive therapy for antidepressant-induced initial anxiety that has already resolved. Chronic benzo use impairs antidepressant treatment outcomes and creates dependence risk.",
+        },
+        clinicalJudgmentFocus: "SSRI dose titration decision — partial response at 4 weeks, CANMAT guidance.",
+        consequencesByOptionId: {
+          A: { trajectory: "optimal", outcome: "Sertraline increased to 100 mg. At 8 weeks total: PHQ-9 5 (mild/remission). Patient reports sustained mood improvement and return to normal functioning." },
+          B: { trajectory: "suboptimal", outcome: "Dose held at 50 mg for 4 more weeks. PHQ-9 remains 9–10. At 8 weeks, dose is increased to 100 mg — the same endpoint, but 4 weeks later." },
+          C: { trajectory: "suboptimal", outcome: "Switch to venlafaxine. Requires 2-week sertraline taper then titration of venlafaxine. Patient experiences withdrawal symptoms and delayed recovery." },
+          D: { trajectory: "harmful", outcome: "Lorazepam added. Initial anxiety relief but PHQ-9 remains 11 at 8 weeks. Patient becomes concerned about lorazepam dependence; tapering is difficult. Mood outcomes worse with benzodiazepine co-prescription." },
+        },
+      },
+    },
+    {
+      index: 2,
+      heading: "8-week depression review",
+      updateNarrative: "8 weeks after sertraline initiation — dose 100 mg for 4 weeks.",
+      scenarioText:
+        "Ms. Tremblay returns for her 8-week review. PHQ-9 today is 6 (mild residual symptoms, approaching remission). She reports significant improvement — better sleep, improved concentration, social engagement has resumed. She asks how long she needs to continue sertraline and whether she can stop soon now that she feels better.",
+      clinicalUpdate: { direction: "improving", summary: "Near-remission response to sertraline 100 mg. Counselling on treatment duration required." },
+      vitals: [{ label: "BP", value: "116/72", unit: "mmHg" }, { label: "HR", value: "74", unit: "bpm" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [
+        { name: "Sertraline", dose: "100 mg", route: "PO", frequency: "daily", indication: "MDD / GAD", flag: "changed" },
+      ],
+      followUpInterval: { value: 4, unit: "weeks", label: "4 weeks later" },
+      cnpleDomain: "mental-health",
+      question: {
+        stem: "Ms. Tremblay has near-remission (PHQ-9 6) after 8 weeks on sertraline, now at 100 mg daily. She asks to stop the medication. What is the most appropriate counselling?",
+        family: "professional-ethics-legal-scope",
+        options: [
+          { id: "A", label: "Advise her to continue sertraline for a minimum of 6–12 months from remission before considering taper." },
+          { id: "B", label: "Begin sertraline taper now — she has achieved remission and prolonged treatment is unnecessary." },
+          { id: "C", label: "Tell her to continue indefinitely — first-episode depression has a 50% recurrence rate." },
+          { id: "D", label: "Switch to St. John's Wort — a natural alternative for maintenance." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Canadian CANMAT guidelines recommend continuing antidepressant therapy for a minimum of 6–12 months following remission from a first episode of MDD to prevent relapse. Stopping when feeling well is a common patient misconception — the early improvement phase is when relapse risk is highest if medication is prematurely discontinued. She has not yet achieved full remission (PHQ-9 <5) and has been on an effective dose for only 4 weeks. The appropriate counselling is: (1) continue for at least 6–12 months from full remission, (2) any taper should be slow and supervised, (3) plan a follow-up to reassess before any dose change.",
+        whyWrongByOptionId: {
+          B: "She has not yet achieved full remission and has been on the therapeutic dose for only 4 weeks. Premature discontinuation in the early response phase carries a high relapse risk.",
+          C: "While lifetime maintenance is appropriate for recurrent or severe depression, a minimum defined treatment period (6–12 months) rather than \"indefinite\" is more accurate and more aligned with shared decision-making for first-episode MDD.",
+          D: "St. John's Wort has significant drug interactions (including OCP, reducing contraceptive efficacy — highly relevant for this patient on OCP) and is not an appropriate maintenance recommendation. It is not evidence-based as a maintenance strategy.",
+        },
+        clinicalJudgmentFocus: "Antidepressant treatment duration counselling — preventing relapse with appropriate continuation phase guidance.",
+        consequencesByOptionId: {
+          A: { trajectory: "optimal", outcome: "Ms. Tremblay continues sertraline 100 mg for 9 months from remission. PHQ-9 reaches 3 (remission). Planned slow taper over 4 weeks is completed successfully without relapse at 12-month follow-up." },
+          B: { trajectory: "harmful", outcome: "Sertraline tapered and stopped. Within 6 weeks, Ms. Tremblay relapses with PHQ-9 of 15. Antidepressant restarted; recovery takes an additional 3 months." },
+          C: { trajectory: "suboptimal", outcome: "\"Indefinite\" framing causes significant patient anxiety. Ms. Tremblay stops sertraline unilaterally 4 months later without medical supervision, experiencing withdrawal symptoms." },
+          D: { trajectory: "harmful", outcome: "St. John's Wort started. Within 3 weeks, Ms. Tremblay reports breakthrough spotting and missed periods. The OCP's effectiveness has been reduced by St. John's Wort CYP3A4 induction. She is advised to use additional contraception immediately." },
+        },
+      },
+    },
+  ],
+};
+
+// ── Case 5: Paediatric Febrile Illness ────────────────────────────────────────
+
+export const CASE_PAEDIATRIC_FEVER: PatientCase = {
+  id: "cnple-sample-peds-001",
+  title: "Charlie Bergeron — Paediatric Febrile Illness",
+  tagline: "Paediatrics · Prescribing Safety",
+  patient: { age: "22 months", sex: "Male", pronouns: "he/him", setting: "Primary Care Clinic" },
+  chiefComplaint: "Fever for 2 days, fussy, pulling at right ear.",
+  pmhx: [
+    "Term birth, uncomplicated delivery",
+    "Up to date on immunisations",
+    "One prior AOM episode at 14 months (resolved without antibiotics)",
+    "No known drug allergies",
+  ],
+  medications: [],
+  allergies: [],
+  primaryDomain: "pediatrics",
+  secondaryDomains: ["pharmacotherapeutics", "acute-urgent-care"],
+  difficulty: 2,
+  stepCount: 3,
+  estimatedMinutes: 12,
+  isPremium: false,
+  steps: [
+    {
+      index: 0,
+      heading: "Febrile 22-month-old",
+      scenarioText:
+        "Charlie, a 22-month-old male, presents with 2 days of fever (Tmax 39.4°C at home), irritability, decreased appetite, and right ear pulling. He has been sleeping poorly. Parents report he had mild URI symptoms 5 days ago. He is fully immunised. On examination: T 39.0°C (tympanic), HR 138 bpm, RR 28 br/min, SpO2 99% on room air. He is irritable but consolable. Pneumatic otoscopy: right TM is red, bulging, and non-mobile with decreased light reflex. Left TM is normal.",
+      clinicalUpdate: {
+        direction: "worsening",
+        summary: "Right acute otitis media with fever, bulging TM, and impaired TM mobility.",
+        newFindings: ["Right TM bulging, immobile, erythematous on pneumatic otoscopy", "Fever 39.0°C", "Preceding URI"],
+      },
+      vitals: [
+        { label: "Temp", value: "39.0", unit: "°C", flag: "high" },
+        { label: "HR", value: "138", unit: "bpm", flag: "high" },
+        { label: "RR", value: "28", unit: "br/min" },
+        { label: "SpO2", value: "99%", unit: "" },
+      ],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "pediatrics",
+      question: {
+        stem: "Charlie, 22 months, has right-sided AOM with bulging TM, 2-day fever up to 39.4°C, and significant distress. He has had one prior AOM at 14 months that resolved without antibiotics. What is the most appropriate management?",
+        family: "lifespan-primary-care",
+        options: [
+          { id: "A", label: "Watchful waiting with analgesia for 48–72 hours — most AOM resolves without antibiotics." },
+          { id: "B", label: "Start amoxicillin 80–90 mg/kg/day in two divided doses for 10 days." },
+          { id: "C", label: "Start amoxicillin-clavulanate 90/6.4 mg/kg/day — broader coverage required given prior AOM." },
+          { id: "D", label: "Refer urgently to paediatrics — fever and bulging TM requires specialist assessment." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "In children aged 2 years and under with AOM, the Canadian Paediatric Society (CPS) guidelines recommend antibiotic treatment (not watchful waiting) when: age <2 years with bilateral AOM, age <2 years with any AOM with severe symptoms (fever ≥39°C, significant distress), or otorrhoea. Charlie is 22 months with a bulging TM, fever ≥39°C, significant irritability — antibiotic treatment is indicated. Amoxicillin 80–90 mg/kg/day in two divided doses for 5–10 days (10 days for children <2 years or severe disease) is first-line. Amoxicillin-clavulanate is reserved for treatment failure (no improvement at 48–72 hours), prior amoxicillin exposure within 30 days, or concurrent purulent conjunctivitis. Watchful waiting is appropriate for milder presentations in older children (>2 years).",
+        whyWrongByOptionId: {
+          A: "Watchful waiting is not appropriate for a child under 2 years with AOM and fever ≥39°C and significant symptoms — this meets the CPS threshold for antibiotic treatment.",
+          C: "Amoxicillin-clavulanate is second-line, reserved for treatment failure, recent amoxicillin exposure, or concurrent purulent conjunctivitis. Using it first-line is not indicated here and exposes the child to broader-spectrum antibiotic unnecessarily.",
+          D: "AOM is routinely managed in primary care. This does not meet criteria for urgent paediatric referral. Referral is indicated for suspected mastoiditis, meningitis, or labyrinthitis.",
+        },
+        clinicalJudgmentFocus: "AOM antibiotic decision — applying age-based and severity criteria per CPS guidelines.",
+        consequencesByOptionId: {
+          A: { trajectory: "suboptimal", outcome: "Charlie is sent home with analgesic only. At 48-hour phone follow-up, fever persists at 39.2°C and he has been inconsolable overnight. Parents return: TM still bulging. Antibiotic started — watchful waiting was not appropriate here." },
+          B: { trajectory: "optimal", outcome: "Amoxicillin 80 mg/kg/day for 10 days prescribed. By day 3, fever resolves and irritability decreases. At day 10 follow-up, right TM improved — mildly pink but no longer bulging." },
+          C: { trajectory: "suboptimal", outcome: "Amoxicillin-clavulanate prescribed. Charlie develops significant diarrhoea by day 3. Family contacts the clinic. Broader spectrum use was not indicated for a first-line AOM treatment." },
+          D: { trajectory: "suboptimal", outcome: "Paediatrics has no same-day availability. Charlie seen 2 days later — they initiate amoxicillin for what was straightforward primary care AOM. Delay causes unnecessary suffering and parental anxiety." },
+        },
+      },
+    },
+    {
+      index: 1,
+      heading: "48-hour phone follow-up",
+      updateNarrative: "48 hours into amoxicillin — scheduled follow-up call.",
+      scenarioText:
+        "You perform a scheduled 48-hour follow-up call. Charlie's parents report he still has fever (38.6°C this morning) but has been significantly less irritable since yesterday evening. He is eating somewhat better. He is completing the amoxicillin without difficulty. Parents ask whether the treatment is working.",
+      clinicalUpdate: { direction: "improving", summary: "Improving clinical picture at 48 hours — response to amoxicillin." },
+      vitals: [{ label: "Temp (home)", value: "38.6", unit: "°C (AM)" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [
+        { name: "Amoxicillin", dose: "80 mg/kg/day", route: "PO", frequency: "divided twice daily", indication: "AOM right", flag: "new" },
+      ],
+      followUpInterval: { value: 2, unit: "days", label: "48 hours later" },
+      cnpleDomain: "pediatrics",
+      question: {
+        stem: "At 48-hour phone follow-up: Charlie is less irritable, eating better, but still has a low fever (38.6°C). He is tolerating amoxicillin. What is the most appropriate response?",
+        family: "lifespan-primary-care",
+        options: [
+          { id: "A", label: "Advise to continue amoxicillin and reassure — clinical improvement at 48 hours is expected; fever may persist 2–3 days." },
+          { id: "B", label: "Switch to amoxicillin-clavulanate immediately — fever at 48 hours indicates treatment failure." },
+          { id: "C", label: "Stop amoxicillin — fever persisting means antibiotics are not helping." },
+          { id: "D", label: "Add azithromycin — coverage gap for atypical organisms is likely causing treatment failure." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Clinical improvement (decreased irritability, improved feeding) at 48 hours is the key indicator of antibiotic response — not the speed of fever resolution. Fever from AOM can persist for 2–3 days after antibiotic initiation. True treatment failure is defined as no improvement in symptoms (not just ongoing fever) at 48–72 hours. Charlie shows clear clinical improvement — this is the expected course. Switching to broader-spectrum antibiotics or adding azithromycin at 48 hours with evidence of improvement is premature and inappropriate antibiotic stewardship.",
+        whyWrongByOptionId: {
+          B: "Treatment failure is determined by no clinical improvement at 48–72 hours — not by fever persistence alone. Charlie has improved clinically. Switching to amoxicillin-clavulanate is premature.",
+          C: "Stopping antibiotics at 48 hours because fever persists is incorrect and unsafe — AOM treatment requires completion of the full course for children under 2 years.",
+          D: "Azithromycin provides no additional coverage for typical AOM organisms and is not indicated for treatment failure in this setting. Adding antibiotics empirically when improvement is occurring promotes resistance.",
+        },
+        clinicalJudgmentFocus: "Recognising clinical improvement as the treatment response indicator — fever persistence is expected at 48 hours.",
+        consequencesByOptionId: {
+          A: { trajectory: "optimal", outcome: "Amoxicillin continued. At day 5, Charlie is afebrile and back to his normal temperament. Parents complete the 10-day course. Day 10 in-person review shows resolving AOM." },
+          B: { trajectory: "suboptimal", outcome: "Switched to amoxicillin-clavulanate unnecessarily. Charlie develops loose stools and a perineal rash. The change was not indicated." },
+          C: { trajectory: "harmful", outcome: "Amoxicillin stopped at 48 hours. By day 5, fever returns to 39.2°C and Charlie is again inconsolable. TM is now perforated with purulent otorrhoea. Incomplete treatment course caused treatment failure." },
+          D: { trajectory: "suboptimal", outcome: "Azithromycin added. No benefit demonstrated. Introduces unnecessary antibiotic exposure and potential macrolide resistance selection pressure." },
+        },
+      },
+    },
+    {
+      index: 2,
+      heading: "10-day AOM follow-up",
+      updateNarrative: "10 days after initial visit — end-of-treatment review.",
+      scenarioText:
+        "Charlie presents for his 10-day end-of-treatment review. He has been afebrile since day 5 and is back to his normal activity level. Parents completed the full amoxicillin course. On examination: T 37.1°C, HR 108 bpm, SpO2 99%. Right TM: mildly pink, no bulging, light reflex present, mobility reduced on pneumatic otoscopy. Left TM normal. Parents ask whether Charlie needs to come back.",
+      clinicalUpdate: { direction: "improving", summary: "Clinical resolution. Residual middle ear effusion is common — watchful waiting appropriate." },
+      vitals: [
+        { label: "Temp", value: "37.1", unit: "°C" },
+        { label: "HR", value: "108", unit: "bpm" },
+        { label: "SpO2", value: "99%", unit: "" },
+      ],
+      diagnosticArtifacts: [],
+      medicationChanges: [{ name: "Amoxicillin", flag: "discontinued" }],
+      followUpInterval: { value: 10, unit: "days", label: "Day 10" },
+      cnpleDomain: "pediatrics",
+      question: {
+        stem: "Charlie has completed his antibiotic course. He is afebrile and well. Right TM shows reduced mobility on pneumatic otoscopy — consistent with middle ear effusion. What is the appropriate next step?",
+        family: "lifespan-primary-care",
+        options: [
+          { id: "A", label: "Reassure parents — middle ear effusion after AOM is expected and usually resolves spontaneously within 3 months. Recheck at 3 months if effusion persists." },
+          { id: "B", label: "Refer immediately to ENT for tympanostomy tubes — reduced TM mobility indicates treatment failure." },
+          { id: "C", label: "Start a second course of antibiotics — residual effusion indicates bacterial persistence." },
+          { id: "D", label: "Prescribe intranasal corticosteroids to resolve the middle ear effusion." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Middle ear effusion (otitis media with effusion, OME) following a resolved AOM episode is extremely common — present in up to 40% of children at 1 month and resolving spontaneously in the majority by 3 months. CPS guidelines recommend watchful waiting for OME following AOM resolution in otherwise healthy children with no hearing concerns. ENT referral is appropriate only if effusion persists beyond 3 months with associated hearing loss or language delay. A second antibiotic course is not indicated for asymptomatic OME after treated AOM. Intranasal corticosteroids have not been shown to accelerate resolution of OME.",
+        whyWrongByOptionId: {
+          B: "ENT referral for tympanostomy tubes is appropriate for persistent OME (>3 months) with hearing concerns or language delay — not for acute post-AOM effusion at day 10.",
+          C: "Residual effusion is not a sign of bacterial persistence after clinical resolution. A second antibiotic course exposes Charlie to unnecessary medication without proven benefit.",
+          D: "Intranasal corticosteroids are not effective for AOM-associated middle ear effusion and are not recommended by CPS guidelines for this indication.",
+        },
+        clinicalJudgmentFocus: "Post-AOM effusion management — recognising expected course vs. indications for escalation.",
+        consequencesByOptionId: {
+          A: { trajectory: "optimal", outcome: "Parents reassured. At 3-month follow-up, TM mobility is normal. No hearing concerns. No ENT referral required." },
+          B: { trajectory: "suboptimal", outcome: "ENT referral made. ENT confirms OME and recommends watchful waiting — the same management the NP could have provided. Three-month wait for an unnecessary specialist visit." },
+          C: { trajectory: "harmful", outcome: "Second amoxicillin course prescribed. No benefit to effusion — OME is not a bacterial infection. Charlie develops diarrhoea and a rash from unnecessary antibiotic exposure." },
+          D: { trajectory: "suboptimal", outcome: "Intranasal budesonide prescribed. At 6 weeks, effusion unchanged. The medication provided no benefit for this indication." },
+        },
+      },
+    },
+  ],
+};
+
+// ── Case 6: Perimenopause and Menopausal Hormone Therapy ──────────────────────
+
+export const CASE_PERIMENOPAUSE_MHT: PatientCase = {
+  id: "cnple-sample-wh-001",
+  title: "Ms. Nadia Kowalski — Perimenopause and Menopausal Hormone Therapy",
+  tagline: "Women's Health · Prescribing Safety",
+  patient: { age: 48, sex: "Female", pronouns: "she/her", setting: "Primary Care Clinic" },
+  chiefComplaint: "Hot flushes, poor sleep, and irregular periods for 8 months. Wants to discuss hormones.",
+  pmhx: [
+    "Previously well",
+    "Gravida 2, Para 2 (vaginal births)",
+    "No history of VTE, cardiovascular disease, or breast cancer",
+    "Smoker: 5 cigarettes per day × 12 years",
+    "BMI 27",
+  ],
+  medications: [{ name: "None", indication: "No regular medications" }],
+  allergies: [],
+  primaryDomain: "reproductive-sexual-health",
+  secondaryDomains: ["pharmacotherapeutics", "health-promotion-prevention"],
+  difficulty: 3,
+  stepCount: 3,
+  estimatedMinutes: 14,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "Perimenopause assessment",
+      scenarioText:
+        "Ms. Kowalski presents with 8 months of hot flushes (5–8/day, frequently nocturnal), sleep disruption, irritability, and irregular periods (cycles ranging from 22 to 45 days with occasional skipped cycles). She scores 21/30 on the Menopause Rating Scale (moderate-severe). She smokes 5 cigarettes per day. No personal or first-degree family history of breast cancer. No prior DVT. She is requesting menopausal hormone therapy (MHT). FSH 48 IU/L; LH 32 IU/L; E2 low for age.",
+      clinicalUpdate: {
+        direction: "stable",
+        summary: "Symptomatic perimenopause confirmed. MHT candidacy assessment required.",
+        newFindings: ["FSH 48 IU/L, LH 32 IU/L — consistent with perimenopause", "Moderate-severe MRS score 21/30", "Smoker — VTE and cardiovascular risk modifier"],
+      },
+      vitals: [
+        { label: "BP", value: "122/76", unit: "mmHg" },
+        { label: "HR", value: "76", unit: "bpm" },
+        { label: "BMI", value: "27", unit: "kg/m²" },
+        { label: "Weight", value: "72", unit: "kg" },
+      ],
+      diagnosticArtifacts: [
+        {
+          type: "lab_panel",
+          name: "Hormone panel",
+          finding: "FSH 48 IU/L; LH 32 IU/L; E2 low for age; TSH normal (1.8 mIU/L); Hgb 122 g/L",
+          values: [
+            { test: "FSH", value: "48 IU/L", referenceRange: "Postmenopausal range >25 IU/L", flag: "H" },
+            { test: "LH", value: "32 IU/L", referenceRange: "Elevated consistent with perimenopause", flag: "H" },
+            { test: "TSH", value: "1.8 mIU/L", referenceRange: "0.4–4.0 mIU/L" },
+            { test: "Hgb", value: "122 g/L", referenceRange: "120–160 g/L (F)" },
+          ],
+          timestamp: "2 weeks ago",
+        },
+      ],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "reproductive-sexual-health",
+      question: {
+        stem: "Ms. Kowalski, 48, has symptomatic perimenopause with moderate-severe vasomotor symptoms. No personal or family history of breast cancer, no prior VTE, no cardiovascular disease. She smokes 5 cigarettes/day and her BP is 122/76. What is the most appropriate approach to MHT initiation?",
+        family: "safe-prescribing-medication-management",
+        options: [
+          { id: "A", label: "Offer MHT with transdermal estradiol plus cyclic micronised progesterone — preferred route given smoking history." },
+          { id: "B", label: "Offer oral combined estrogen-progestogen MHT — first-line for symptomatic perimenopause." },
+          { id: "C", label: "Withhold MHT — smoking is an absolute contraindication." },
+          { id: "D", label: "Offer venlafaxine 37.5 mg daily as a non-hormonal alternative — MHT is not recommended in perimenopausal women under 50." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Transdermal estradiol is preferred over oral estrogen in women with VTE risk factors (including smoking and obesity) because transdermal delivery avoids first-pass hepatic metabolism, thereby avoiding the procoagulant effects of oral estrogen on clotting factors. Smoking is NOT an absolute contraindication to MHT — it is a modifier that influences route selection. The SOGC 2021 Menopause guidelines and the Canadian Menopause Society support transdermal estradiol for women with higher VTE risk profiles. Micronised progesterone (Prometrium) is preferred over synthetic progestogens for women with an intact uterus, as it has a more favourable safety profile. Ms. Kowalski's BP is normal, no contraindications are present, and her symptoms are significantly impacting quality of life. MHT is appropriate.",
+        whyWrongByOptionId: {
+          B: "Oral combined MHT increases VTE risk more than transdermal; given smoking history, transdermal route is preferred. Oral MHT is not wrong in all cases, but in a smoker transdermal is the correct first choice.",
+          C: "Smoking is not an absolute contraindication to MHT. It is a risk modifier that should direct route selection (transdermal over oral) and counselling about smoking cessation.",
+          D: "Non-hormonal options like venlafaxine are reserved for women with contraindications to MHT (active breast cancer, history of estrogen-sensitive cancer, unexplained vaginal bleeding, active VTE). Ms. Kowalski has no contraindications. Withholding MHT unnecessarily deprives her of effective treatment.",
+        },
+        clinicalJudgmentFocus: "MHT route selection in a smoker — transdermal estrogen preferred to reduce VTE risk.",
+        consequencesByOptionId: {
+          A: { trajectory: "optimal", outcome: "Transdermal estradiol patch 50 mcg/24h twice-weekly + micronised progesterone 200 mg days 1–14 of cycle initiated. At 3 months: hot flushes 1–2/day (mild), sleep significantly improved, MRS 9/30. Smoking cessation counselling ongoing." },
+          B: { trajectory: "acceptable", outcome: "Oral MHT initiated. Effective symptom control but increased thrombotic risk. Smoking cessation counselling crucial. Second-line choice given smoking history." },
+          C: { trajectory: "suboptimal", outcome: "MHT withheld. Ms. Kowalski continues to experience severe vasomotor symptoms affecting sleep, work, and quality of life for another 12 months before being referred to menopause specialist." },
+          D: { trajectory: "suboptimal", outcome: "Venlafaxine initiated. Modest reduction in hot flush frequency (30–40%) but does not address sleep disruption or mood symptoms as effectively as MHT. Patient dissatisfied with treatment outcome." },
+        },
+      },
+    },
+    {
+      index: 1,
+      heading: "3-month MHT review",
+      updateNarrative: "3 months after starting transdermal MHT.",
+      scenarioText:
+        "Ms. Kowalski returns for her 3-month MHT review. She reports excellent symptomatic control — hot flushes reduced to 1–2 mild episodes per day, sleep much improved, and mood stabilised. She is pleased with the result. However, she reports breast tenderness that began 3 weeks after starting MHT and has been persistent. She is otherwise well. BP today is 118/74.",
+      clinicalUpdate: { direction: "improving", summary: "Good MHT response. Breast tenderness is common side effect requiring assessment." },
+      vitals: [{ label: "BP", value: "118/74", unit: "mmHg" }, { label: "HR", value: "74", unit: "bpm" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [
+        { name: "Estradiol patch", dose: "50 mcg/24h", route: "Transdermal", frequency: "twice weekly", indication: "Menopausal vasomotor symptoms", flag: "new" },
+        { name: "Micronised progesterone", dose: "200 mg", route: "PO", frequency: "days 1–14", indication: "Endometrial protection", flag: "new" },
+      ],
+      followUpInterval: { value: 3, unit: "months", label: "3 months later" },
+      cnpleDomain: "reproductive-sexual-health",
+      question: {
+        stem: "Ms. Kowalski has excellent symptom control on transdermal estradiol 50 mcg + micronised progesterone but reports persistent breast tenderness for 6 weeks. What is the most appropriate management?",
+        family: "health-promotion-screening",
+        options: [
+          { id: "A", label: "Reassure — breast tenderness is an expected side effect of MHT that typically resolves within 3–6 months; no action needed." },
+          { id: "B", label: "Reduce estradiol patch to 25 mcg/24h, ensure mammogram is up to date, and arrange follow-up in 6 weeks." },
+          { id: "C", label: "Stop MHT immediately — new breast symptoms require urgent breast surgery referral before continuing." },
+          { id: "D", label: "Switch to continuous combined MHT — cyclic progesterone is causing the breast tenderness." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "Breast tenderness is a recognised and common side effect of MHT, particularly at initiation, often related to the estrogen dose. The management approach is: (1) confirm breast screening is current (mammography — due for Canadian women beginning at age 40–50 per provincial guidelines), (2) consider dose reduction if tenderness is troublesome, and (3) review and follow up. Reducing to 25 mcg patch addresses the likely estrogen dose-related tenderness while maintaining some symptom control. Stopping MHT immediately for this common side effect is disproportionate — breast tenderness is not a red flag requiring urgent surgical referral. Urgent referral is indicated for a discrete new breast lump, skin changes, nipple discharge, or axillary adenopathy, none of which are present.",
+        whyWrongByOptionId: {
+          A: "Breast tenderness from MHT warrants assessment — ensuring mammography is up to date and considering dose adjustment is part of good practice. Pure reassurance without action is insufficient.",
+          C: "Stopping MHT for breast tenderness without a concerning breast finding is disproportionate. Urgent surgical referral is not warranted for diffuse tenderness without focal abnormalities.",
+          D: "Cyclic progesterone is not typically associated with more breast tenderness than continuous regimens. This rationale is not evidence-based. The likely cause is estrogen dose.",
+        },
+        clinicalJudgmentFocus: "Managing breast tenderness on MHT — dose adjustment and cancer screening integration.",
+        consequencesByOptionId: {
+          A: { trajectory: "acceptable", outcome: "Tenderness resolves at 5 months. However, mammography was not confirmed — a missed preventive care opportunity." },
+          B: { trajectory: "optimal", outcome: "Estradiol reduced to 25 mcg. Mammogram performed — normal. Breast tenderness resolves within 6 weeks. Vasomotor symptoms slightly increased but manageable." },
+          C: { trajectory: "suboptimal", outcome: "MHT stopped. Vasomotor symptoms return to severe within 3 weeks. Breast surgery consultation confirms no pathology and recommends restarting MHT. Three months of unnecessary symptom burden." },
+          D: { trajectory: "suboptimal", outcome: "Switched to continuous combined MHT. Breast tenderness persists — estrogen dose was not addressed. Patient experiences irregular spotting from the switch, requiring additional investigation." },
+        },
+      },
+    },
+    {
+      index: 2,
+      heading: "12-month MHT continuation review",
+      updateNarrative: "12 months on MHT — annual safety review.",
+      scenarioText:
+        "Ms. Kowalski returns for her annual MHT safety review. She has been on estradiol 25 mcg patch twice weekly + micronised progesterone for 12 months. Symptoms are well controlled. Mammogram last month was normal. She reports she has reduced smoking to 2 cigarettes per day and is working toward cessation. She asks how long she can continue MHT.",
+      clinicalUpdate: { direction: "stable", summary: "Well-controlled perimenopause on MHT. Annual safety review and duration counselling." },
+      vitals: [{ label: "BP", value: "120/76", unit: "mmHg" }, { label: "HR", value: "72", unit: "bpm" }, { label: "BMI", value: "27", unit: "kg/m²" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: { value: 12, unit: "months", label: "12 months later" },
+      cnpleDomain: "reproductive-sexual-health",
+      question: {
+        stem: "Ms. Kowalski asks how long she should continue MHT. She is 49, has a normal mammogram, well-controlled symptoms, and has almost stopped smoking. What is the most appropriate duration counselling?",
+        family: "health-promotion-screening",
+        options: [
+          { id: "A", label: "Advise MHT should not continue beyond 5 years — risk outweighs benefit after this point." },
+          { id: "B", label: "Advise MHT duration is individualised — benefits and risks should be reassessed annually; there is no arbitrary cut-off for healthy women under 60 years." },
+          { id: "C", label: "Stop MHT now that she has been on it 12 months — this is the recommended maximum for perimenopausal women." },
+          { id: "D", label: "Advise switching to SSRIs after age 50 — MHT is not recommended beyond menopause." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "The SOGC 2021 Menopause guidelines and the International Menopause Society recommend an individualised approach to MHT duration — there is no universal maximum duration. For women under 60 years with no contraindications and ongoing symptoms significantly affecting quality of life, the benefit-risk balance generally favours continuing MHT with annual reassessment. The concept of a 5-year or single-year maximum is outdated and based on misinterpretation of the WHI study (which used oral conjugated equine estrogen, different from transdermal estradiol). Annual review incorporating symptom control, cardiovascular risk, breast screening, and patient preferences is the evidence-based approach.",
+        whyWrongByOptionId: {
+          A: "The \"5-year maximum\" rule is not supported by current Canadian or international menopause guidelines. Duration is based on individualised risk-benefit review.",
+          C: "Stopping after 12 months is not evidence-based. Perimenopausal symptoms can persist for 7–10 years; arbitrary discontinuation causes recurrence of symptoms affecting quality of life.",
+          D: "SSRIs are a non-hormonal alternative for women with contraindications to MHT. They are not a replacement for effective MHT in a woman with no contraindications who is responding well.",
+        },
+        clinicalJudgmentFocus: "MHT duration — individualised approach, annual review, no arbitrary cut-off.",
+        consequencesByOptionId: {
+          A: { trajectory: "suboptimal", outcome: "MHT capped at 5 years. Vasomotor symptoms return at year 5 when MHT stopped. Patient seeks care for recurrent moderate symptoms and is restarted on MHT — the discontinuation was premature." },
+          B: { trajectory: "optimal", outcome: "Annual review continued. At age 52 Ms. Kowalski transitions to natural menopause confirmation. She chooses to continue MHT for 2 more years for genitourinary symptoms then transitions to topical vaginal estrogen as systemic therapy is weaned." },
+          C: { trajectory: "suboptimal", outcome: "MHT stopped at 12 months. Moderate hot flushes and sleep disturbance return within 6 weeks. Patient requests restart of MHT — premature discontinuation was not indicated." },
+          D: { trajectory: "suboptimal", outcome: "Venlafaxine substituted for MHT at age 50. Genitourinary symptoms (dryness, dyspareunia) develop over 12 months that venlafaxine does not address. Topical estrogen required in addition." },
+        },
+      },
+    },
+  ],
+};
+
+// ── Case 7: Geriatric Polypharmacy ────────────────────────────────────────────
+
+export const CASE_GERIATRIC_POLYPHARMACY: PatientCase = {
+  id: "cnple-sample-geri-001",
+  title: "Mr. Gilles Moreau — Geriatric Polypharmacy and Falls",
+  tagline: "Geriatrics · Prescribing Safety",
+  patient: { age: 84, sex: "Male", pronouns: "he/him", setting: "Primary Care Clinic" },
+  chiefComplaint: "Annual review. Son accompanies — concerned about two recent falls and increasing confusion.",
+  pmhx: [
+    "Type 2 diabetes mellitus",
+    "Hypertension",
+    "Atrial fibrillation (rate controlled)",
+    "Osteoarthritis (bilateral hips and knees)",
+    "Benign prostatic hyperplasia",
+    "Mild cognitive impairment (MCI — diagnosed 18 months ago)",
+    "Insomnia",
+    "Hypothyroidism",
+    "GERD",
+  ],
+  medications: [
+    { name: "Metformin", dose: "500 mg", route: "PO", frequency: "twice daily", indication: "T2DM" },
+    { name: "Gliclazide MR", dose: "30 mg", route: "PO", frequency: "daily", indication: "T2DM" },
+    { name: "Ramipril", dose: "5 mg", route: "PO", frequency: "daily", indication: "Hypertension" },
+    { name: "Bisoprolol", dose: "2.5 mg", route: "PO", frequency: "daily", indication: "AF rate control" },
+    { name: "Apixaban", dose: "2.5 mg", route: "PO", frequency: "twice daily", indication: "AF stroke prevention (dose-reduced: age >80, Cr 131 µmol/L)" },
+    { name: "Naproxen", dose: "250 mg", route: "PO", frequency: "twice daily", indication: "Osteoarthritis pain" },
+    { name: "Tamsulosin", dose: "0.4 mg", route: "PO", frequency: "daily", indication: "BPH" },
+    { name: "Temazepam", dose: "15 mg", route: "PO", frequency: "nightly PRN", indication: "Insomnia (prescribed 3 years ago)" },
+    { name: "Levothyroxine", dose: "75 mcg", route: "PO", frequency: "daily", indication: "Hypothyroidism" },
+    { name: "Pantoprazole", dose: "40 mg", route: "PO", frequency: "daily", indication: "GERD" },
+    { name: "Diphenhydramine", dose: "25 mg", route: "PO", frequency: "nightly PRN", indication: "Insomnia (OTC, self-initiated)" },
+  ],
+  allergies: [{ substance: "Penicillin", reaction: "Rash", severity: "mild" }],
+  primaryDomain: "older-adult-care",
+  secondaryDomains: ["pharmacotherapeutics", "ethics-legal-professional"],
+  difficulty: 4,
+  stepCount: 3,
+  estimatedMinutes: 20,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "Annual review with polypharmacy audit",
+      scenarioText:
+        "Mr. Moreau, 84, presents for his annual review. His son notes two falls in the past 3 months (both mechanical, no loss of consciousness). He reports increasing morning grogginess and worsening short-term memory. His medication list is reviewed and reveals he has been taking both temazepam and OTC diphenhydramine nightly — he did not realise they are both sleep aids. His MMSE today is 22/30 (mild cognitive impairment — stable vs. prior 24/30 18 months ago). eGFR 48 mL/min/1.73m².",
+      clinicalUpdate: {
+        direction: "worsening",
+        summary: "Polypharmacy with multiple Beers Criteria medications, two falls, and cognitive decline. Medication safety review essential.",
+        newFindings: ["Two falls in 3 months", "MMSE 22/30 (declining from 24)", "Concurrent benzodiazepine + anticholinergic use", "NSAID + anticoagulant combination", "eGFR 48"],
+      },
+      vitals: [
+        { label: "BP (sitting)", value: "138/82", unit: "mmHg" },
+        { label: "BP (standing 1 min)", value: "112/70", unit: "mmHg", flag: "low" },
+        { label: "HR", value: "68", unit: "bpm" },
+        { label: "Weight", value: "72", unit: "kg" },
+      ],
+      diagnosticArtifacts: [
+        {
+          type: "lab_panel",
+          name: "Recent labs",
+          finding: "eGFR 48; Cr 131 µmol/L; K+ 5.1; HbA1c 7.4%; TSH 1.9 mIU/L; Hgb 118 g/L",
+          values: [
+            { test: "eGFR", value: "48", unit: "mL/min/1.73m²", referenceRange: "CKD G3b", flag: "L" },
+            { test: "Creatinine", value: "131 µmol/L", referenceRange: "62–106 µmol/L (M)", flag: "H" },
+            { test: "K+", value: "5.1 mmol/L", referenceRange: "3.5–5.0", flag: "H" },
+            { test: "HbA1c", value: "7.4%", referenceRange: "Target <8.0% in frail elderly acceptable" },
+            { test: "TSH", value: "1.9 mIU/L", referenceRange: "0.4–4.0 mIU/L" },
+            { test: "Hgb", value: "118 g/L", referenceRange: "130–170 g/L (M)", flag: "L" },
+          ],
+          timestamp: "Last week",
+        },
+      ],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "older-adult-care",
+      question: {
+        stem: "Mr. Moreau, 84, has two recent falls, MMSE decline, orthostatic hypotension, and is on temazepam + diphenhydramine + naproxen + anticoagulant. Applying the Beers Criteria and geriatric prescribing principles, which medication changes are most urgent?",
+        family: "safe-prescribing-medication-management",
+        options: [
+          { id: "A", label: "Discontinue temazepam, discontinue diphenhydramine, and stop naproxen — all three are inappropriate in an 84-year-old with falls and CKD." },
+          { id: "B", label: "Reduce temazepam dose to 7.5 mg and counsel to stop diphenhydramine. Review naproxen at the next visit." },
+          { id: "C", label: "Stop apixaban — anticoagulation is too risky in a patient with two falls." },
+          { id: "D", label: "Add a calcium channel blocker for orthostatic hypotension and adjust medications at the next visit." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Three high-priority Beers Criteria medications must be addressed urgently: (1) Temazepam (benzodiazepine) — Beers Criteria warns against benzodiazepines in older adults due to high falls risk, cognitive impairment, and prolonged sedation. Must be tapered and discontinued. (2) Diphenhydramine — anticholinergic burden is associated with cognitive impairment, urinary retention, delirium, and falls. Particularly dangerous in a patient with MCI. Should be discontinued immediately. (3) Naproxen (NSAID) — contraindicated in combination with anticoagulants (bleeding risk × 3–4), and inappropriate in CKD G3b (nephrotoxic). Stopping all three is urgent. Stopping apixaban is incorrect — his CHA₂DS₂-VASc is high and fall risk does not override anticoagulation benefit in AF (falls would need to occur ~300 times/year to negate benefit). Adding a calcium channel blocker for orthostatic hypotension when the cause is polypharmacy-induced treats the symptom rather than the cause.",
+        whyWrongByOptionId: {
+          B: "Reducing benzodiazepine dose is insufficient — temazepam must be tapered and discontinued in a patient with falls, cognitive decline, and sedation side effects. Deferring the NSAID review is unsafe given active anticoagulation and CKD.",
+          C: "Stopping anticoagulation due to fall risk is a common but incorrect management decision. Evidence shows the thromboembolic risk in AF with prior stroke risk factors far exceeds the bleeding risk from falls. The HASBLED score should guide bleeding risk, not falls alone. Stopping apixaban exposes Mr. Moreau to high stroke risk.",
+          D: "Adding a calcium channel blocker treats the orthostatic hypotension downstream effect while leaving the causative medications (benzodiazepine, alpha-blocker polypharmacy) in place. De-prescribing is the correct approach.",
+        },
+        clinicalJudgmentFocus: "Beers Criteria application — urgently identifying and removing unsafe medications in a frail older adult with falls.",
+        consequencesByOptionId: {
+          A: { trajectory: "optimal", outcome: "Temazepam tapered (25% dose reduction q2wks), diphenhydramine stopped immediately, naproxen stopped with acetaminophen substituted. At 8-week follow-up: no further falls, less morning grogginess, MMSE 23/30 (improved after anticholinergic burden removed)." },
+          B: { trajectory: "suboptimal", outcome: "Temazepam reduced but not stopped. Diphenhydramine stopped. At 6 weeks, another fall occurs. Residual benzodiazepine use in an 84-year-old with cognitive impairment remains dangerous." },
+          C: { trajectory: "harmful", outcome: "Apixaban stopped. Six weeks later, Mr. Moreau presents with a left MCA ischaemic stroke. Anticoagulation was inappropriately withheld." },
+          D: { trajectory: "harmful", outcome: "Amlodipine added. Ankle oedema develops at 3 weeks. Furosemide is added — the medication cascade worsens the polypharmacy burden. Falls risk compounds." },
+        },
+      },
+    },
+    {
+      index: 1,
+      heading: "6-week deprescribing follow-up",
+      updateNarrative: "6 weeks after deprescribing — temazepam taper completed.",
+      scenarioText:
+        "Mr. Moreau returns 6 weeks later with his son. Temazepam has been fully tapered and discontinued. Diphenhydramine stopped. Naproxen stopped and replaced with acetaminophen 500 mg QID. He reports improved daytime alertness. No further falls. Son notes he seems 'more like himself.' However, Mr. Moreau reports difficulty sleeping without his 'sleep pill.' He asks for something to help with sleep.",
+      clinicalUpdate: { direction: "improving", summary: "Post-deprescribing improvement. Sleep concerns require non-pharmacological management." },
+      vitals: [
+        { label: "BP (sitting)", value: "132/80", unit: "mmHg" },
+        { label: "BP (standing 1 min)", value: "118/74", unit: "mmHg" },
+        { label: "HR", value: "66", unit: "bpm" },
+      ],
+      diagnosticArtifacts: [],
+      medicationChanges: [
+        { name: "Temazepam", flag: "discontinued" },
+        { name: "Diphenhydramine", flag: "discontinued" },
+        { name: "Naproxen", flag: "discontinued" },
+        { name: "Acetaminophen", dose: "500 mg", route: "PO", frequency: "QID PRN", indication: "Osteoarthritis pain", flag: "new" },
+      ],
+      followUpInterval: { value: 6, unit: "weeks", label: "6 weeks later" },
+      cnpleDomain: "older-adult-care",
+      question: {
+        stem: "Mr. Moreau is requesting a new sleep aid now that temazepam has been discontinued. He has insomnia — difficulty falling asleep and frequent nocturnal wakening. What is the most appropriate management of insomnia in this 84-year-old?",
+        family: "safe-prescribing-medication-management",
+        options: [
+          { id: "A", label: "Start zolpidem 5 mg nightly — non-benzodiazepine sedative-hypnotics are safer than benzodiazepines in older adults." },
+          { id: "B", label: "Start low-dose doxepin 3–6 mg nightly — approved for insomnia in older adults with limited anticholinergic profile at low doses." },
+          { id: "C", label: "Recommend sleep hygiene education and CBT for insomnia (CBTi) as first-line; avoid adding pharmacological sleep aids given falls history and cognitive impairment." },
+          { id: "D", label: "Start melatonin 5 mg nightly — safest option for older adults." },
+        ],
+        correctOptionId: "C",
+        rationale:
+          "Cognitive Behavioural Therapy for Insomnia (CBTi) is the evidence-based first-line treatment for chronic insomnia in all age groups including older adults — it is more effective than pharmacotherapy long-term and has no adverse effects. In an 84-year-old with MCI and a falls history, adding any new pharmacological sleep aid carries significant risk: zolpidem is included in Beers Criteria for older adults (same falls/cognitive risk as benzodiazepines), doxepin has anticholinergic effects even at low doses in frail elderly, and melatonin evidence in older adults is weak and dose-dependent. Sleep hygiene education plus CBTi referral (or guided self-help CBTi) is the appropriate first step.",
+        whyWrongByOptionId: {
+          A: "Zolpidem (Z-drug) is explicitly included in the Beers Criteria for older adults — it carries equivalent falls and cognitive impairment risk as benzodiazepines. Not appropriate.",
+          B: "Doxepin even at 3–6 mg has residual anticholinergic activity that is problematic in patients with MCI and can worsen cognitive function. The Beers Criteria flags TCAs including low-dose doxepin in older adults with cognitive impairment.",
+          D: "Melatonin may provide modest benefit for sleep onset but has limited evidence for sleep maintenance and is not a substitute for CBTi. Recommending it without offering CBTi misses the evidence-based first-line treatment.",
+        },
+        clinicalJudgmentFocus: "Insomnia management in frail elderly — CBTi first-line, avoiding Beers Criteria sedatives.",
+        consequencesByOptionId: {
+          A: { trajectory: "harmful", outcome: "Zolpidem prescribed. Three weeks later, Mr. Moreau has another fall during a nocturnal bathroom trip. Hip X-ray shows no fracture but significant concern raised. Zolpidem discontinued." },
+          B: { trajectory: "suboptimal", outcome: "Low-dose doxepin initiated. Sleep improves modestly but cognition worsens slightly at 4 weeks (MMSE 21). Anticholinergic effects identified as likely contributor. Discontinued." },
+          C: { trajectory: "optimal", outcome: "Sleep hygiene education provided; CBTi workbook and brief community CBTi program referral arranged. At 8 weeks: sleep latency improved, one nocturnal waking (down from three). MMSE 23/30 maintained." },
+          D: { trajectory: "acceptable", outcome: "Melatonin 2 mg (modified-release) started. Modest improvement in sleep onset. CBTi not offered. Acceptable short-term but misses the more effective long-term intervention." },
+        },
+      },
+    },
+    {
+      index: 2,
+      heading: "3-month goals-of-care conversation",
+      updateNarrative: "3 months after initial deprescribing — goals-of-care planning.",
+      scenarioText:
+        "Mr. Moreau is at his 3-month review. No further falls. Sleep improved with CBTi strategies. MMSE stable at 23/30. However, his son raises concerns about his father's driving safety and asks about advance care planning. Mr. Moreau says he 'doesn't want to talk about all that yet' but his son is very concerned. You note that Mr. Moreau still holds a valid driver's licence.",
+      clinicalUpdate: { direction: "stable", summary: "Stable post-deprescribing. Driving safety and advance care planning require professional assessment and counselling." },
+      vitals: [{ label: "BP", value: "130/78", unit: "mmHg" }, { label: "HR", value: "68", unit: "bpm" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: { value: 3, unit: "months", label: "3 months later" },
+      cnpleDomain: "ethics-legal-professional",
+      question: {
+        stem: "Mr. Moreau, 84, has MCI (MMSE 23/30), two prior falls, and a valid driver's licence. His son raises concerns about driving safety. Mr. Moreau does not want to discuss it. What is the most appropriate NP response?",
+        family: "professional-ethics-legal-scope",
+        options: [
+          { id: "A", label: "Respect Mr. Moreau's autonomy — he has capacity and has the right to decide whether to continue driving." },
+          { id: "B", label: "Conduct a structured driving risk assessment (e.g., Trail Making Test, SIMARD-MD), document findings, and counsel Mr. Moreau using a patient-centred approach. If safety concern is confirmed, follow provincial mandatory reporting obligations." },
+          { id: "C", label: "Call the licensing authority immediately to report a cognitive impairment — mandatory reporting overrides patient confidentiality." },
+          { id: "D", label: "Ask the son to report the driving concern to the licensing authority on his father's behalf." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "Driving fitness in a patient with cognitive impairment requires a systematic, documented assessment — not a binary autonomy-vs-report decision. The appropriate steps are: (1) Conduct a structured assessment of driving-related cognitive functions (Trail Making Test, SIMARD-MD, or referral to a driver rehabilitation specialist). (2) Document all findings. (3) Counsel the patient compassionately, exploring alternatives and the impact of driving cessation on quality of life. (4) If the clinical assessment identifies a significant safety risk, Canadian provinces have mandatory reporting obligations for NPs who assess patients with medical conditions that may impair driving fitness — reporting is required when assessment confirms unacceptable risk, not simply because a family member has raised a concern. Acting on the family's complaint without assessment, or asking the family to report, bypasses the NP's professional and legal obligations.",
+        whyWrongByOptionId: {
+          A: "Capacity and autonomy do not override public safety obligations. If an assessment reveals that driving poses a significant safety risk to the patient and others, the NP has a legal and professional obligation to act under provincial reporting frameworks.",
+          C: "Reporting without conducting an assessment bypasses due process and the NP's professional obligation to assess before report. The driving concern requires clinical substantiation, not reflexive reporting.",
+          D: "Delegating the reporting obligation to a family member is not appropriate. The NP has direct professional obligations — these cannot be discharged by asking a family member to report to the licensing authority.",
+        },
+        clinicalJudgmentFocus: "Driving fitness assessment and mandatory reporting in cognitive impairment — professional-legal obligation framework.",
+        consequencesByOptionId: {
+          A: { trajectory: "suboptimal", outcome: "No assessment performed. Six months later, Mr. Moreau has a minor collision in a parking lot. His driving licence is reviewed by the province after the police report. A retroactive assessment finds significant impairment — the NP's failure to assess is reviewed during a quality audit." },
+          B: { trajectory: "optimal", outcome: "Trail Making Test and SIMARD-MD performed. Results indicate meaningful impairment in processing speed and attention relevant to driving. Mr. Moreau is counselled with compassion about alternative transportation. He voluntarily surrenders his licence. Advance care planning discussion begins with the family at a subsequent visit." },
+          C: { trajectory: "suboptimal", outcome: "Report made without assessment. Licensing authority conducts their own investigation and finds that an NP clinical assessment should have been completed first. The report is returned for clinical documentation." },
+          D: { trajectory: "suboptimal", outcome: "The son submits a complaint to the licensing authority. The authority contacts the NP for a clinical assessment. The NP's delay in assessment is noted in correspondence." },
+        },
+      },
+    },
+  ],
+};
+
+// ── Case 8: CHF / COPD Overlap ────────────────────────────────────────────────
+
+export const CASE_CHF_COPD_OVERLAP: PatientCase = {
+  id: "cnple-sample-chf-001",
+  title: "Mrs. Simone Beauchamp — CHF and COPD Overlap",
+  tagline: "Acute Care · Chronic Disease",
+  patient: { age: 71, sex: "Female", pronouns: "she/her", setting: "Primary Care — Urgent Visit" },
+  chiefComplaint: "Worsening dyspnoea for 3 days. Known CHF and COPD.",
+  pmhx: [
+    "Heart failure with reduced ejection fraction (HFrEF, EF 35% — last echo 8 months ago)",
+    "COPD GOLD Grade 3 (post-bronchodilator FEV₁ 42% predicted)",
+    "Hypertension",
+    "Former smoker (50 pack-years, quit 4 years ago)",
+    "Atrial fibrillation (rate controlled)",
+    "CKD stage G3a (eGFR 55 mL/min/1.73m²)",
+  ],
+  medications: [
+    { name: "Furosemide", dose: "40 mg", route: "PO", frequency: "daily", indication: "CHF fluid management" },
+    { name: "Carvedilol", dose: "12.5 mg", route: "PO", frequency: "twice daily", indication: "HFrEF / AF rate control" },
+    { name: "Sacubitril-valsartan", dose: "49/51 mg", route: "PO", frequency: "twice daily", indication: "HFrEF" },
+    { name: "Tiotropium", dose: "18 mcg", route: "Inhaled", frequency: "daily", indication: "COPD maintenance" },
+    { name: "Formoterol-budesonide", dose: "12/400 mcg", route: "Inhaled", frequency: "twice daily", indication: "COPD maintenance" },
+    { name: "Apixaban", dose: "5 mg", route: "PO", frequency: "twice daily", indication: "AF stroke prevention" },
+    { name: "Rosuvastatin", dose: "10 mg", route: "PO", frequency: "nightly", indication: "Dyslipidaemia" },
+  ],
+  allergies: [{ substance: "ACE inhibitors", reaction: "Dry cough", severity: "moderate" }],
+  primaryDomain: "acute-urgent-care",
+  secondaryDomains: ["chronic-disease-management", "diagnostics-labs"],
+  difficulty: 4,
+  stepCount: 3,
+  estimatedMinutes: 18,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "Acute dyspnoea presentation",
+      scenarioText:
+        "Mrs. Beauchamp, 71, presents urgently with 3-day history of worsening dyspnoea, increased sputum production (green/yellow), and bilateral ankle oedema worsening over the same period. She has not had a respiratory illness. She reports compliance with her medications but notes she ate at a restaurant twice last week and had more salt than usual. RR 26 br/min, SpO2 89% on room air (baseline SpO2 94%). HR 94 bpm, BP 158/96. JVP elevated at 5 cm above the sternal angle. Bilateral expiratory wheeze and coarse basal crackles on auscultation.",
+      clinicalUpdate: {
+        direction: "critical",
+        summary: "Acute decompensation with mixed picture — features of both COPD exacerbation and acute decompensated heart failure.",
+        newFindings: ["SpO2 89% (below baseline 94%)", "Bilateral wheeze and basal crackles", "JVP elevated", "Worsening bilateral oedema", "Green-yellow sputum", "Dietary sodium excess"],
+      },
+      vitals: [
+        { label: "BP", value: "158/96", unit: "mmHg", flag: "high" },
+        { label: "HR", value: "94", unit: "bpm", flag: "high" },
+        { label: "RR", value: "26", unit: "br/min", flag: "high" },
+        { label: "SpO2", value: "89%", unit: "", flag: "critical" },
+        { label: "Temp", value: "37.6", unit: "°C" },
+      ],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "acute-urgent-care",
+      question: {
+        stem: "Mrs. Beauchamp has SpO2 89%, RR 26, JVP elevated, bilateral wheeze and crackles, worsening oedema, and purulent sputum — features consistent with both COPD exacerbation and acute decompensated CHF. What is the most appropriate immediate action in the primary care setting?",
+        family: "acute-deterioration-urgent-referral",
+        options: [
+          { id: "A", label: "Administer salbutamol nebuliser, increase furosemide dose, and reassess in 60 minutes." },
+          { id: "B", label: "Initiate supplemental oxygen to SpO2 88–92%, call 911 for emergency transfer to hospital." },
+          { id: "C", label: "Start oral prednisone and doxycycline for COPD exacerbation and arrange urgent chest X-ray tomorrow." },
+          { id: "D", label: "Administer IV furosemide 80 mg in the clinic and arrange outpatient echocardiogram." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "Mrs. Beauchamp has acute decompensation — SpO2 89% (significantly below her baseline of 94%), RR 26, elevated JVP, and mixed features of COPD exacerbation and acute decompensated heart failure. This exceeds the scope of primary care management. Immediate actions in the primary care setting: (1) Supplemental oxygen titrated to SpO2 88–92% in COPD (avoiding hyperoxia-driven hypercapnic respiratory failure), and (2) Emergency transfer by ambulance. Hospital management will include IV diuresis, bronchodilators, possible NIV if respiratory failure worsens, investigation of precipitant (sputum culture, chest X-ray, BNP, ECG). Managing complex mixed decompensation in primary care risks delayed intervention if the patient deteriorates.",
+        whyWrongByOptionId: {
+          A: "Managing a patient with SpO2 89%, elevated JVP, and RR 26 with clinic-based nebulisers and oral furosemide is insufficient for the severity of presentation. Decompensation of this degree requires emergency department resources.",
+          C: "Oral corticosteroids and antibiotics address only the COPD exacerbation component — the acute heart failure component (JVP elevation, crackles, oedema) requires IV diuresis and monitoring not available in primary care.",
+          D: "IV furosemide in a primary care setting without cardiac monitoring, resuscitation capability, or ability to manage electrolyte shifts is not appropriate. An outpatient echocardiogram is non-urgent and does not address the acute presentation.",
+        },
+        clinicalJudgmentFocus: "Recognising mixed CHF/COPD decompensation as exceeding primary care capacity — emergency transfer with targeted oxygen.",
+        consequencesByOptionId: {
+          A: { trajectory: "harmful", outcome: "Salbutamol given, furosemide dose doubled. At 60-minute reassessment, SpO2 87%, RR 30. Patient transferred by ambulance — delayed by 2 hours. Admitted to ICU for non-invasive ventilation." },
+          B: { trajectory: "optimal", outcome: "Supplemental O2 applied (SpO2 rises to 91%). Ambulance arrives, patient transferred. In ED: CXR shows bilateral interstitial oedema and hyperinflation. BNP markedly elevated. IV furosemide, LABA/SAMA nebulisers, short-course prednisone initiated. Discharged day 5 in stable condition." },
+          C: { trajectory: "harmful", outcome: "Oral prednisone and doxycycline prescribed. Patient deteriorates overnight at home. Spouse calls 911 the next morning — SpO2 82%, altered consciousness. Delayed hospital presentation." },
+          D: { trajectory: "harmful", outcome: "IV furosemide given in clinic without monitoring. Potassium falls to 3.0 mmol/L two hours later. Patient develops cardiac ectopy. Emergency transfer required urgently." },
+        },
+      },
+    },
+    {
+      index: 1,
+      heading: "Hospital discharge — 5 days later",
+      updateNarrative: "Discharge follow-up at hospital day 5.",
+      scenarioText:
+        "Mrs. Beauchamp is discharged from hospital on day 5. Hospital summary: acute CHF decompensation triggered by dietary sodium excess + mild COPD exacerbation. IV furosemide given for 3 days. Short-course prednisone and doxycycline completed. SpO2 94–95% on room air at discharge. Weight on admission 74.2 kg; discharge weight 71.8 kg. New medications added: spironolactone 25 mg daily (for HFrEF in addition to sacubitril-valsartan). You are seeing her for discharge follow-up in your clinic 1 week post-discharge.",
+      clinicalUpdate: { direction: "improving", summary: "Post-decompensation CHF. New spironolactone added. Renal monitoring required." },
+      vitals: [
+        { label: "BP", value: "118/74", unit: "mmHg" },
+        { label: "HR", value: "72", unit: "bpm" },
+        { label: "RR", value: "18", unit: "br/min" },
+        { label: "SpO2", value: "94%", unit: "" },
+        { label: "Weight", value: "71.8", unit: "kg" },
+      ],
+      diagnosticArtifacts: [
+        {
+          type: "lab_panel",
+          name: "Discharge labs (day 5)",
+          finding: "K+ 4.8; eGFR 50; Cr 124 µmol/L; Na 138; BNP 380 pg/mL (improved from 1840 on admission)",
+          values: [
+            { test: "K+", value: "4.8 mmol/L", referenceRange: "3.5–5.0" },
+            { test: "eGFR", value: "50", unit: "mL/min/1.73m²", referenceRange: "CKD G3b", flag: "L" },
+            { test: "Creatinine", value: "124 µmol/L", referenceRange: "45–84 µmol/L (F)", flag: "H" },
+            { test: "Na", value: "138 mmol/L", referenceRange: "135–145 mmol/L" },
+            { test: "BNP", value: "380 pg/mL", referenceRange: "Normal <100; improved from 1840 pg/mL on admission", flag: "H" },
+          ],
+          timestamp: "Day 5 discharge",
+        },
+      ],
+      medicationChanges: [
+        { name: "Spironolactone", dose: "25 mg", route: "PO", frequency: "daily", indication: "HFrEF — RAAS modulation", flag: "new" },
+      ],
+      followUpInterval: { value: 7, unit: "days", label: "1 week post-discharge" },
+      cnpleDomain: "diagnostics-labs",
+      question: {
+        stem: "Mrs. Beauchamp is 1 week post-discharge on furosemide, sacubitril-valsartan, carvedilol, and newly added spironolactone 25 mg daily. K+ 4.8 mEq/L; eGFR 50. What is the priority monitoring action?",
+        family: "lab-diagnostic-interpretation",
+        options: [
+          { id: "A", label: "Stop spironolactone — K+ 4.8 is too high for a patient on both spironolactone and sacubitril-valsartan/ACEi." },
+          { id: "B", label: "Repeat electrolytes and renal function in 1–2 weeks — hyperkalaemia risk with spironolactone in CKD and concurrent RAAS agents." },
+          { id: "C", label: "Continue current medications — K+ 4.8 is within normal range, no monitoring needed for 3 months." },
+          { id: "D", label: "Increase furosemide to 80 mg daily to prevent K+ accumulation from spironolactone." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "Spironolactone in combination with sacubitril-valsartan (which blocks the renin-angiotensin system) and in the context of CKD G3b creates significant hyperkalaemia risk. While K+ 4.8 is within normal range at 1 week, the trajectory is the concern — values can continue to rise in the first 2–4 weeks as spironolactone accumulates. Close monitoring (repeat electrolytes and creatinine at 1–2 weeks post-initiation) is the evidence-based approach per HFrEF management guidelines. Stopping spironolactone at K+ 4.8 is premature — it has mortality benefit in HFrEF (RALES trial) and should be maintained if electrolytes can be safely managed. Empirically increasing furosemide causes over-diuresis without addressing the underlying risk mechanism.",
+        whyWrongByOptionId: {
+          A: "K+ 4.8 is within normal range. Stopping spironolactone at this value is premature and unnecessarily removes a mortality-reducing therapy. Monitoring and action at K+ ≥5.0 or ≥5.5 is the guideline threshold.",
+          C: "3-monthly monitoring for a newly initiated potassium-sparing diuretic in CKD G3b with concurrent RAAS therapy is inappropriate. Hyperkalaemia can develop within 1–4 weeks of initiation — weekly to biweekly monitoring is required initially.",
+          D: "Increasing furosemide treats the anticipated K+ elevation indirectly (by increasing urinary K+ excretion) but risks over-diuresis, acute kidney injury, and haemoconcentration — not appropriate without confirmed hyperkalemia.",
+        },
+        clinicalJudgmentFocus: "Spironolactone monitoring in HFrEF with CKD — hyperkalaemia risk management with concurrent RAAS therapy.",
+        consequencesByOptionId: {
+          A: { trajectory: "suboptimal", outcome: "Spironolactone stopped prematurely. Mrs. Beauchamp's K+ was within range and the medication would have been tolerated. She misses mortality benefit. Reinitiated by cardiologist 3 months later." },
+          B: { trajectory: "optimal", outcome: "Labs repeated at 10 days: K+ 5.0, eGFR 48. Spironolactone continued with salt restriction counselling reinforced. At 4 weeks: K+ 4.9, eGFR stable. No intervention needed." },
+          C: { trajectory: "harmful", outcome: "No follow-up labs ordered. At 6 weeks, Mrs. Beauchamp attends ED with fatigue and muscle weakness. K+ 5.9. Spironolactone held, IV calcium gluconate and glucose-insulin given. Avoidable with closer monitoring." },
+          D: { trajectory: "harmful", outcome: "Furosemide increased to 80 mg. One week later: K+ 3.7 (corrected) but Cr rises to 156 µmol/L and eGFR falls to 38. Aggressive diuresis caused an acute kidney injury." },
+        },
+      },
+    },
+    {
+      index: 2,
+      heading: "6-week post-discharge COPD/CHF review",
+      updateNarrative: "6 weeks post-discharge — integrated cardiorespiratory review.",
+      scenarioText:
+        "Mrs. Beauchamp is 6 weeks post-discharge. She is stable — no dyspnoea at rest, SpO2 94% at rest. She performs slow walks on flat ground. She asks about pulmonary rehabilitation. Her COPD maintenance inhaler (tiotropium + formoterol-budesonide) is being used correctly. She asks whether she can start a beta-blocker for her 'heart' — she heard it was good for people with heart failure.",
+      clinicalUpdate: { direction: "stable", summary: "Stable CHF-COPD overlap. Carvedilol already in use. Patient education on cardioselective beta-blocker use in COPD." },
+      vitals: [
+        { label: "BP", value: "122/78", unit: "mmHg" },
+        { label: "HR", value: "68", unit: "bpm" },
+        { label: "RR", value: "18", unit: "br/min" },
+        { label: "SpO2", value: "94%", unit: "" },
+      ],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: { value: 6, unit: "weeks", label: "6 weeks later" },
+      cnpleDomain: "chronic-disease-management",
+      question: {
+        stem: "Mrs. Beauchamp asks about starting a beta-blocker for her heart failure. She is already on carvedilol 12.5 mg BID. She has COPD (FEV₁ 42%). She asks whether she should be on a cardioselective beta-blocker instead, as she has heard they are safer for lung disease. What is the most appropriate counselling?",
+        family: "single-best-answer-clinical-judgment",
+        options: [
+          { id: "A", label: "Advise her she is already on carvedilol (a non-selective beta-blocker); carvedilol is guideline-recommended for HFrEF and is appropriate with close COPD monitoring." },
+          { id: "B", label: "Switch to bisoprolol — cardioselective beta-blockers are always preferred over carvedilol in COPD." },
+          { id: "C", label: "Stop carvedilol — beta-blockers are contraindicated in COPD with FEV₁ below 50%." },
+          { id: "D", label: "Add bisoprolol to carvedilol for additional cardiac protection." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Carvedilol is a guideline-recommended beta-blocker for HFrEF (along with metoprolol succinate and bisoprolol) and is already prescribed. COPD is not a contraindication to beta-blockers — multiple trials and meta-analyses confirm that cardioselective beta-blockers (bisoprolol, metoprolol succinate) and carvedilol are safe in stable COPD and reduce mortality in HFrEF even in the presence of obstructive lung disease. Carvedilol's non-selectivity is a theoretical bronchospasm concern, but in practice it is well-tolerated in stable COPD and remains guideline-supported. The question of cardioselective vs. non-selective is a reasonable one to discuss, but the key message is that carvedilol is already appropriate and should be continued. Stopping carvedilol would remove mortality benefit without pharmacological justification.",
+        whyWrongByOptionId: {
+          B: "Switching from carvedilol to bisoprolol is not necessary if carvedilol is tolerated — both are acceptable for HFrEF. The claim that cardioselective beta-blockers are 'always preferred' in COPD is an oversimplification; current evidence supports both in stable COPD.",
+          C: "Beta-blockers are not contraindicated in COPD. Withholding mortality-reducing therapy based on FEV₁ threshold is not supported by evidence or guidelines. COPD is a relative consideration for monitoring, not a contraindication.",
+          D: "Combining two beta-blockers increases risk of bradycardia, hypotension, and conduction abnormalities without any added clinical benefit. Beta-blockers are not additive — only one agent is used.",
+        },
+        clinicalJudgmentFocus: "Beta-blocker use in CHF-COPD overlap — carvedilol safety, correcting the misconception that COPD contraindicates beta-blockade.",
+        consequencesByOptionId: {
+          A: { trajectory: "optimal", outcome: "Mrs. Beauchamp is reassured. Carvedilol continued. At 3 months: LVEF on repeat echo improved to 42% (from 35%). COPD well controlled. Pulmonary rehabilitation enrolled." },
+          B: { trajectory: "acceptable", outcome: "Switch to bisoprolol made. Equivalent clinical outcome. Carvedilol was already appropriate — the switch was unnecessary but not harmful." },
+          C: { trajectory: "harmful", outcome: "Carvedilol stopped. At 8-week follow-up, Mrs. Beauchamp has recurrent AF with rapid ventricular response and worsening dyspnoea. Rate was partially controlled by carvedilol. Readmission for CHF decompensation." },
+          D: { trajectory: "harmful", outcome: "Bisoprolol added to carvedilol. HR falls to 44 bpm the following week. BP 92/60. Dizziness and near-syncope reported. Both beta-blockers had to be held urgently." },
+        },
+      },
+    },
+  ],
+};
+
 // ── Exported catalog ───────────────────────────────────────────────────────────
 
-export const CNPLE_SAMPLE_CASES: PatientCase[] = [CASE_HYPERTENSION_FOLLOWUP];
+export const CNPLE_SAMPLE_CASES: PatientCase[] = [
+  CASE_HYPERTENSION_FOLLOWUP,
+  CASE_DIABETES_METABOLIC,
+  CASE_ANTICOAGULATION_AF,
+  CASE_MENTAL_HEALTH_SSRI,
+  CASE_PAEDIATRIC_FEVER,
+  CASE_PERIMENOPAUSE_MHT,
+  CASE_GERIATRIC_POLYPHARMACY,
+  CASE_CHF_COPD_OVERLAP,
+];
 
 /** Free-tier preview: returns cases with isPremium=false, steps limited to first 2. */
 export function getCnpleSampleCasePreview(caseId: string): PatientCase | undefined {

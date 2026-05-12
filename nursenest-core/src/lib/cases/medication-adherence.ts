@@ -192,6 +192,17 @@ export const ADHERENCE_STATUS_CONFIG: Record<
 
 // ── Merge helper ──────────────────────────────────────────────────────────────
 
+/** Minimal medication detail shape accepted as hydration source. */
+export type MedicationDetailSource = {
+  name: string;
+  dose?: string;
+  route?: string;
+  frequency?: string;
+  indication?: string;
+  /** When present, used to set isNewThisStep on the display entry. */
+  flag?: "new" | "changed" | "discontinued" | "hold";
+};
+
 /** Rich medication display entry: original details + current adherence status. */
 export type AdherenceMedDisplayEntry = {
   name: string;
@@ -201,48 +212,88 @@ export type AdherenceMedDisplayEntry = {
   indication?: string;
   /** Adherence status from evolved state. Null = status unknown (render as active). */
   status: MedicationAdherenceRecord["status"] | null;
+  /**
+   * The case step at which this medication was started.
+   * Undefined for initial case medications.
+   */
+  sourceStepIndex?: number;
+  /**
+   * True when the medication was started or changed at the current step being rendered.
+   * Used to show the "New this step" indicator without waiting for activeMeds to refresh.
+   */
+  isNewThisStep?: boolean;
 };
 
 /**
  * Merges a `MedicationEntry[]` (rich dose/frequency/route details)
  * with `MedicationAdherenceRecord[]` (current session status).
  *
+ * @param meds            Current medication entries with dose/route/frequency/indication.
+ * @param adherenceRecords Adherence status records from evolvedState.
+ * @param stepChanges     Optional: medication changes from the CURRENT step's authored content.
+ *                        Used to hydrate dose/route/frequency for newly-started medications
+ *                        BEFORE activeMeds state updates (same-step visibility fix).
+ *
  * Matching is case-insensitive on `name`. Medications in `meds` without
  * a matching adherence record get status=null (rendered as active/no badge).
  *
- * Medications in adherence records that aren't in `meds` are appended
- * (e.g. new medications added mid-session).
+ * Medications in adherence records that aren't in `meds` are appended;
+ * their details are sourced from `stepChanges` when available.
  */
 export function mergeAdherenceWithMedications(
   meds: Array<{ name: string; dose?: string; route?: string; frequency?: string; indication?: string }>,
   adherenceRecords: MedicationAdherenceRecord[],
+  stepChanges?: MedicationDetailSource[],
 ): AdherenceMedDisplayEntry[] {
   const result: AdherenceMedDisplayEntry[] = [];
   const seen = new Set<string>();
 
+  // Build a fast lookup from step changes (case-insensitive)
+  const stepChangeMap = new Map<string, MedicationDetailSource>();
+  for (const change of stepChanges ?? []) {
+    stepChangeMap.set(change.name.toLowerCase(), change);
+  }
+
   for (const med of meds) {
     const key = med.name.toLowerCase();
     const record = adherenceRecords.find((r) => r.name.toLowerCase() === key);
+    const stepChange = stepChangeMap.get(key);
+    const isNewThisStep = stepChange?.flag === "new" || stepChange?.flag === "changed";
     result.push({
       name: med.name,
-      dose: med.dose,
-      route: med.route,
-      frequency: med.frequency,
-      indication: med.indication,
+      // Prefer step-change details when a dose update happened this step
+      dose: isNewThisStep && stepChange?.dose ? stepChange.dose : med.dose,
+      route: isNewThisStep && stepChange?.route ? stepChange.route : med.route,
+      frequency: isNewThisStep && stepChange?.frequency ? stepChange.frequency : med.frequency,
+      indication: isNewThisStep && stepChange?.indication ? stepChange.indication : med.indication,
       status: record?.status ?? null,
+      isNewThisStep: isNewThisStep || undefined,
+      sourceStepIndex: record?.stepIndex,
     });
     seen.add(key);
   }
 
-  // Append adherence-only entries (new meds not in initial list)
+  // Append adherence-only entries not yet in activeMeds.
+  // Hydrate dose/route/frequency from stepChanges when available — this is the
+  // same-step visibility fix: new medications appear fully-detailed immediately.
   for (const record of adherenceRecords) {
     const key = record.name.toLowerCase();
-    if (!seen.has(key)) {
-      result.push({
-        name: record.name,
-        status: record.status,
-      });
-    }
+    if (seen.has(key)) continue;
+
+    const stepChange = stepChangeMap.get(key);
+    const isNewThisStep = record.status === "started" || stepChange?.flag === "new";
+
+    result.push({
+      name: stepChange?.name ?? record.name,
+      dose: stepChange?.dose,
+      route: stepChange?.route,
+      frequency: stepChange?.frequency,
+      indication: stepChange?.indication,
+      status: record.status,
+      sourceStepIndex: record.stepIndex,
+      isNewThisStep: isNewThisStep || undefined,
+    });
+    seen.add(key);
   }
 
   return result;

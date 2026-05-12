@@ -1,3 +1,5 @@
+// React must be in scope: root tsconfig uses "jsx":"preserve" so tsx falls back
+// to the classic React.createElement transform for client/src files.
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, GripVertical, ArrowRight } from "lucide-react";
@@ -138,6 +140,7 @@ export function MatrixRenderer({ question, onAnswer, readOnly }: RendererProps<M
 }
 
 export function HighlightRenderer({ question, onAnswer, readOnly }: RendererProps<HighlightQuestion>) {
+  const { t } = useI18n();
   const [selectedSpans, setSelectedSpans] = useState<Set<string>>(new Set());
   const [submitted, setSubmitted] = useState(false);
 
@@ -238,6 +241,7 @@ export function HighlightRenderer({ question, onAnswer, readOnly }: RendererProp
 }
 
 export function TrendRenderer({ question, onAnswer, readOnly }: RendererProps<TrendQuestion>) {
+  const { t } = useI18n();
   const [selected, setSelected] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
@@ -446,6 +450,7 @@ export function ImageBasedRenderer({
 }
 
 export function DragDropRenderer({ question, onAnswer, readOnly }: RendererProps<DragDropQuestion>) {
+  const { t } = useI18n();
   const [orderedItems, setOrderedItems] = useState<string[]>([]);
   const [availableItems, setAvailableItems] = useState<string[]>(question.items.map((i) => i.id));
   const [submitted, setSubmitted] = useState(false);
@@ -573,6 +578,7 @@ export function DragDropRenderer({ question, onAnswer, readOnly }: RendererProps
 }
 
 export function CaseStudyRenderer({ question, onAnswer, readOnly }: RendererProps<CaseStudyQuestion>) {
+  const { t } = useI18n();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [completed, setCompleted] = useState(false);
@@ -694,6 +700,7 @@ function CaseStudySubQuestionRenderer({
   onAnswer: (result: any) => void;
   readOnly?: boolean;
 }) {
+  const { t } = useI18n();
   const [selected, setSelected] = useState<number | null>(null);
   const [multiSelected, setMultiSelected] = useState<Set<number>>(new Set());
   const [textAnswer, setTextAnswer] = useState("");
