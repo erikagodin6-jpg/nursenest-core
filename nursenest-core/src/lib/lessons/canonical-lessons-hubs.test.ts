@@ -20,7 +20,8 @@ test("identifies allied core pathway ids", () => {
 test("alliedHealthLessonsIndexPath returns canonical pathway lessons hub", () => {
   const href = alliedHealthLessonsIndexPath(sampleProfession.professionKey);
 
-  assert.match(href, /^\/(us|canada)\/allied\/allied-health\/lessons\?/);
+  // Route is non-locale-prefixed: /allied/allied-health/lessons?alliedProfession=…
+  assert.match(href, /^\/allied\/allied-health\/lessons\?/);
   assert.ok(href.includes(`${ALLIED_PROFESSION_QUERY_PARAM}=`));
   assert.equal(href.startsWith("/allied-health/"), false);
 });
@@ -28,7 +29,8 @@ test("alliedHealthLessonsIndexPath returns canonical pathway lessons hub", () =>
 test("alliedHealthLessonDetailPath returns canonical pathway lesson detail path", () => {
   const href = alliedHealthLessonDetailPath(sampleProfession.professionKey, "sample-lesson-slug");
 
-  assert.match(href, /^\/(us|canada)\/allied\/allied-health\/lessons\/sample-lesson-slug$/);
+  // Route is non-locale-prefixed: /allied/allied-health/lessons/…
+  assert.match(href, /^\/allied\/allied-health\/lessons\/sample-lesson-slug$/);
   assert.equal(href.startsWith("/allied-health/"), false);
 });
 

@@ -363,6 +363,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
                 "hover:border-[color-mix(in_srgb,var(--nn-hub-cat-accent)_32%,var(--semantic-border-soft))]",
                 "hover:bg-[color-mix(in_srgb,var(--nn-hub-cat-accent)_7%,var(--semantic-surface))]",
                 "hover:shadow-[0_4px_16px_color-mix(in_srgb,var(--nn-hub-cat-accent)_10%,transparent)]",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--nn-hub-cat-accent)_50%,transparent)] focus-visible:ring-offset-2",
                 isExamCritical ? "nn-hub-category-card--exam-critical" : "",
                 isEmpty ? "nn-hub-category-card--empty" : "",
               ].filter(Boolean).join(" ");

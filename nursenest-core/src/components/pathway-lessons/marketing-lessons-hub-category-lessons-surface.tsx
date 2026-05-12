@@ -279,7 +279,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
                   {href ? (
                     <Link
                       href={href}
-                      className="nn-lessons-hub-lesson-row group flex items-center justify-between gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 py-2.5 text-sm font-medium text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] hover:text-primary"
+                      className="nn-lessons-hub-lesson-row group flex items-center justify-between gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 py-2.5 text-sm font-medium text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)] focus-visible:ring-offset-1"
                     >
                       <span className="min-w-0 flex-1 truncate">{label}</span>
                       <span className="flex shrink-0 items-center gap-2">

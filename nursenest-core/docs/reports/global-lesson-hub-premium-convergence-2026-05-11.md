@@ -364,3 +364,158 @@ Screenshots output to: `docs/screenshots/lesson-hub-convergence/`
 3. **`LessonsHomeHeader`** — alternative hub component not yet receiving `statCard`/`trustBadges`; rarely used.
 4. **Exam focus selector** — toolbar currently shows country only; full exam-focus switcher is a larger routing change.
 5. **Playwright E2E** — 27 tests written but require a live Next.js dev server to execute. Run with `npx playwright test tests/e2e/lesson-hub-premium-convergence.spec.ts`.
+
+---
+
+## Pass 4 — Production-Readiness and Deployment Safety (2026-05-11)
+
+### 1. Dead Attribute Cleanup
+
+**`data-nn-public-hub-blossom="1"`** — investigated and removed.
+
+**Investigation findings:**
+- Added in commit `fa3a444cd` ("feat(lessons): polish pathway lesson surfaces") — intended for Blossom-specific CSS that was never authored
+- Attribute is emitted unconditionally on ALL hubs regardless of active theme — not actually Blossom-specific
+- Zero CSS selectors reference it anywhere in the codebase
+- Zero test/QA selectors reference it
+- Present in all worktrees unchanged since introduction
+
+**Resolution:** Removed from `LessonsPageShell`. Existing `html[data-theme="blossom"] .nn-premium-lessons-hub-hero` and related selectors provide full Blossom theming without this attribute.
+
+### 2. Pre-existing Test Failures Fixed
+
+Two test files had failures that pre-dated this convergence work (verified by stash-and-retest):
+
+| File | Failure | Root Cause | Fix |
+|---|---|---|---|
+| `allied-hub-route-smoke.test.tsx` | `"Open study hub"` and `"Study modes"` not found | Allied hub CTA labels changed in `75f45a0be` but test was not updated | Updated assertions to `"Choose Your Occupation Track"` and `"Lessons by Category"` |
+| `canonical-lessons-hubs.test.ts` | Allied lessons path expected `/(us|canada)/allied/…` | Route changed to non-locale-prefixed `/allied/allied-health/…` in a prior commit | Updated regex to match actual route |
+
+Both files fixed — **0 pre-existing regressions left on main**.
+
+### 3. Accessibility Improvements
+
+| Issue | Fix |
+|---|---|
+| Category cards (`<Link>`) had no explicit focus-visible ring | Added `focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--nn-hub-cat-accent)_50%,transparent)] focus-visible:ring-offset-2` to each card |
+| Lesson rows in drill-down had no explicit focus-visible ring | Added `focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)] focus-visible:ring-offset-1` |
+
+**Heading hierarchy verified:**
+
+| Level | Content | Location |
+|---|---|---|
+| `h1` | "NCLEX-RN Lesson Library" (pathway-aware) | `LessonsPageShell`, hero |
+| `h2` | "Browse Clinical Areas" | `MarketingLessonsHubCategoryFirstIndex`, body section |
+| `h2` | Category label (e.g. "Cardiovascular") | `LessonSystemCard` in `PathwayLessonsCurriculumHub` |
+| `h2` | Category name (e.g. "Pharmacology Lessons") | `MarketingLessonsHubCategoryLessonsSurface` |
+
+**ARIA verified:**
+- `<section aria-labelledby="nn-lessons-hub-title">` on hero section ✅
+- `<section aria-labelledby="lesson-library-heading">` on category grid ✅
+- `<div aria-label="Quality indicators">` on trust badges ✅
+- `aria-hidden` on all decorative icons and the ← arrow ✅
+- `<span aria-hidden="true">` on progress counters with SR equivalents ✅
+- `aria-disabled={isEmpty || undefined}` on zero-lesson cards — only set when `isEmpty` is truthy ✅
+- `role="status"` on warning strips ✅
+- `prefers-reduced-motion: reduce` guards on all transform/transition animations ✅
+
+### 4. Route Audit — All Hub Routes Verified
+
+| Pathway | Route | Status |
+|---|---|---|
+| RN Canada | `/canada/rn/nclex-rn/lessons` | ✅ |
+| RN US | `/us/rn/nclex-rn/lessons` | ✅ |
+| RPN Canada | `/canada/pn/rex-pn/lessons` | ✅ |
+| LPN US | `/us/pn/nclex-pn/lessons` | ✅ |
+| NP Canada (CNPLE) | `/canada/np/cnple/lessons` | ✅ |
+| NP US (FNP) | `/us/np/fnp/lessons` | ✅ |
+| Allied Health | `/allied/allied-health/lessons` | ✅ |
+| Allied (profession-scoped) | `/allied/allied-health/lessons?alliedProfession=…` | ✅ |
+| New Grad | `/us/rn/new-grad-transition/lessons` | ✅ |
+| Category drill-down | `…/lessons/{category-slug}` | ✅ (via `marketingPathwayLessonsCategoryPath`) |
+
+No route patterns were changed. All builders verified by executing route functions.
+
+### 5. Production Build Status
+
+Full `next build` was not run (requires database, env vars, and ~4 GB memory). Closest available validation:
+
+| Check | Command | Result |
+|---|---|---|
+| TypeScript | `npm run typecheck:critical` | ✅ 0 errors |
+| Hub contracts (46 assertions) | `node --import tsx --test …` | ✅ 46/46 |
+| Full battery (82 tests) | `node --import tsx --test …` | ✅ 82/82 |
+| Pre-existing regressions on main | Stash + retest | ✅ none introduced |
+
+For full production build validation: `npm run build` (requires `DATABASE_URL` and all env vars from `.env.local`).
+
+### 6. Playwright Status
+
+- **Dev server**: Not running in this environment (confirmed `curl localhost:3000` returned no response)
+- **Spec file**: `tests/e2e/lesson-hub-premium-convergence.spec.ts` — 7 `test.describe` suites, 27 tests, valid Playwright import structure
+- **Runnable in CI/staging**: `npx playwright test tests/e2e/lesson-hub-premium-convergence.spec.ts --project=chromium`
+- **Screenshots output**: `docs/screenshots/lesson-hub-convergence/` (created by spec `beforeAll`)
+
+**Screenshot inventory** (captured when spec runs against live server):
+
+| Screenshot | File |
+|---|---|
+| RN Canada Ocean desktop | `rn-canada-ocean-chromium.png` |
+| RN Canada Blossom desktop | `rn-canada-blossom-chromium.png` |
+| RN Canada Midnight desktop | `rn-canada-midnight-chromium.png` |
+| RPN Canada Blossom desktop | `rpn-canada-blossom-chromium.png` |
+| NP FNP US Midnight desktop | `np-fnp-us-midnight-chromium.png` |
+| Allied Canada Ocean desktop | `allied-canada-ocean-chromium.png` |
+| RN hero + stat card (Ocean) | `rn-hero-statcard-ocean-chromium.png` |
+| RPN hero (Blossom) | `rpn-hero-blossom-chromium.png` |
+| RN mobile Ocean | `rn-mobile-ocean-chromium.png` |
+| Blossom mobile (RN) | `rn-mobile-blossom-chromium.png` |
+| Category drill-down (Cardiovascular) | `rn-cardiovascular-drill-down-chromium.png` |
+| Mobile drill-down | `rn-drill-down-mobile-chromium.png` |
+
+### 7. Final State — Files Changed Across All Passes
+
+| File | Change |
+|---|---|
+| `src/lib/lessons/marketing-lessons-hub-category.ts` | Added `description?` to `MarketingHubCategoryDescriptor`; populated from learning config |
+| `src/components/pathway-lessons/lessons-page-shell.tsx` | `statCard`/`trustBadges` props; flex hero layout; `self-start` stat card; full-width toolbar; removed dead `data-nn-public-hub-blossom` |
+| `src/components/pathway-lessons/marketing-lessons-hub-category-first-index.tsx` | Premium title; stat card; trust badges; icon+description cards; `EXAM_CRITICAL_CATEGORY_IDS`; zero-lesson filter; review_required filter; focus-visible rings |
+| `src/components/pathway-lessons/marketing-lessons-hub-category-lessons-surface.tsx` | `nn-lessons-hub-lesson-row` upgrade; chevron arrow; truncate; focus-visible ring |
+| `src/app/premium-redesign-2026.css` | Theme hero gradients (Ocean/Blossom/Midnight); exam-critical + empty card modifiers; lesson row CSS; stat card + trust badge CSS; all with reduced-motion guards |
+| `src/lib/lessons/premium-lessons-hub-layout-convergence.contract.test.ts` | New file — 46 assertions across 10 suites |
+| `tests/e2e/lesson-hub-premium-convergence.spec.ts` | New file — 27 Playwright tests (requires live server) |
+| `src/lib/marketing/allied-hub-route-smoke.test.tsx` | Fixed 3 pre-existing assertion failures |
+| `src/lib/lessons/canonical-lessons-hubs.test.ts` | Fixed 2 pre-existing route regex failures |
+
+### 8. Deployment Risk Assessment
+
+**Risk: LOW**
+
+| Factor | Assessment |
+|---|---|
+| Route changes | None — zero routing changes made |
+| Data/DB changes | None — pure UI/CSS/component work |
+| Entitlement changes | None — progress/paid chrome logic untouched |
+| Auth changes | None |
+| Breaking API changes | None |
+| New dependencies | None — uses existing Lucide icons, existing CSS patterns |
+| Hydration risk | None — all changes are server components or CSS |
+| SSR compatibility | All new TSX is server-rendered (async server components) |
+| Theme regression | Additive CSS — existing themes continue working, new theme variants add depth |
+| Rollback path | Revert commits — no DB migrations to roll back |
+
+### 9. Final Confirmation
+
+| Requirement | Status |
+|---|---|
+| No yellow placeholder artifact remains | ✅ Confirmed — none found in any hub component |
+| Blossom wordmark is pink (not black) | ✅ Confirmed — `--logo-primary` enforced, contract test guards it |
+| Blossom footer text is white on dark surface | ✅ Confirmed — `--footer-fg` token on Blossom footer |
+| Shared primitive architecture preserved | ✅ Confirmed — `LessonsPageShell` + `MarketingLessonsHubCategoryFirstIndex` remain single source of truth |
+| No route changes | ✅ Confirmed — all 9 hub routes verified identical |
+| All hub types converged | ✅ RN, RPN, NP, Allied, New Grad — all use shared shell |
+| `prefers-reduced-motion` guards | ✅ All new CSS transitions guarded |
+| Focus-visible keyboard states | ✅ Added to category cards and lesson rows |
+| Pre-existing test failures | ✅ Fixed 5 across 2 files |
+| TypeScript errors | ✅ 0 |
+| Node:test suite | ✅ 82/82 pass |

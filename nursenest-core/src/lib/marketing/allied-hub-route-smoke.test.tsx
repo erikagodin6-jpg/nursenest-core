@@ -79,10 +79,10 @@ describe("allied health pathway hub route smoke", () => {
       />,
     );
 
-    assert.match(html, /Choose your Allied Health track/);
+    assert.match(html, /Choose Your Allied Health Track/);
     assert.doesNotMatch(html, /Practice exams/);
     assert.doesNotMatch(html, /nn-qa-allied-hub-practice-exams/);
-    assert.match(html, /Open study hub/);
+    assert.match(html, /Choose Your Occupation Track/);
     assert.match(html, /href="\/allied\/[^"]+"/);
     assert.match(html, /Units for allied study/);
     assert.doesNotMatch(html, /Homepage content failed to load/);
@@ -95,9 +95,9 @@ describe("allied health pathway hub route smoke", () => {
     const html = renderToStaticMarkup(
       <AlliedHealthPathwayHub pathway={pathway!} hubPath="/us/allied/allied-health" overview={labsModuleOverview} />,
     );
-    assert.match(html, /Choose your Allied Health track/);
+    assert.match(html, /Choose Your Allied Health Track/);
     assert.doesNotMatch(html, /Study modes/);
-    assert.match(html, /Open study hub/);
+    assert.match(html, /Choose Your Occupation Track/);
     assert.doesNotMatch(html, /nn-qa-allied-hub-lessons/);
     assert.doesNotMatch(html, /Homepage content failed to load/);
   });
@@ -118,7 +118,7 @@ describe("allied health pathway hub route smoke", () => {
         />
       </MarketingI18nProvider>,
     );
-    assert.match(html, /Study modes/);
+    assert.match(html, /Lessons by Category/);
     assert.match(html, /nn-qa-allied-hub-lessons/);
     assert.doesNotMatch(html, /Specialized modules/);
   });
