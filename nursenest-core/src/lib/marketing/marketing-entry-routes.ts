@@ -95,7 +95,7 @@ export const CNPLE = {
   lessons: "/canada/np/cnple/lessons",
   questions: "/canada/np/cnple/questions",
   pricing: "/canada/np/cnple/pricing",
-  simulation: "/canada/np/cnple/cat",
+  simulation: "/canada/np/cnple/simulation",
   flashcards: "/canada/np/cnple/flashcards",
 
   // ── Primary discovery cluster ─────────────────────────────────────────────

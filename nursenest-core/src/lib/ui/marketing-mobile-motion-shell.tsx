@@ -20,6 +20,10 @@ const PageTransitionShellLazy = dynamic(
  * Marketing-only: narrow viewport for motion/carousel + homepage gating.
  * `serverNarrowViewportHint` comes from Edge `proxy` (`x-nn-marketing-narrow-viewport-hint`) so the
  * first paint matches mobile layout without waiting for `matchMedia`. Client syncs on resize.
+ *
+ * Perf: `mounted` state removed — it caused an extra re-render cycle on every marketing page.
+ * The server hint seeds the initial `narrow` state; the effect syncs once after hydration.
+ * `PageTransitionShellLazy` is `{ ssr: false }` so it never adds to SSR/hydration payload.
  */
 export function MarketingMobileMotionShell({
   children,
@@ -28,10 +32,8 @@ export function MarketingMobileMotionShell({
   children: ReactNode;
   serverNarrowViewportHint?: boolean;
 }) {
-  const [mounted, setMounted] = useState(false);
   const [narrow, setNarrow] = useState(serverNarrowViewportHint);
   useEffect(() => {
-    setMounted(true);
     const mq = window.matchMedia("(max-width: 768px)");
     const sync = () => setNarrow(mq.matches);
     sync();
@@ -40,7 +42,7 @@ export function MarketingMobileMotionShell({
   }, []);
   return (
     <MarketingMobilePerfProvider value={narrow}>
-      {narrow || !mounted ? children : <PageTransitionShellLazy>{children}</PageTransitionShellLazy>}
+      {narrow ? children : <PageTransitionShellLazy>{children}</PageTransitionShellLazy>}
     </MarketingMobilePerfProvider>
   );
 }

@@ -15,25 +15,38 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 
+// ssr:false for all below-fold sections — eliminates Suspense hydration CLS.
+// With ssr:true (default), dynamic() creates a Suspense boundary on the client;
+// on slow connections the chunk hasn't loaded when React begins hydrating, so React
+// briefly renders null for each section, SSR content disappears, then reappears
+// when the chunk arrives — causing compounding CLS across 6 sections.
+// With ssr:false these sections are absent from the SSR HTML and load after JS
+// execution; they appear below the fold where layout shifts are non-visible.
 const PremiumPathwayShowcase = dynamic(() =>
   import("@/components/marketing/home/premium-pathway-showcase").then((m) => m.PremiumPathwayShowcase),
+  { ssr: false },
 );
 // PremiumClinicalDepth: now a Server Component — rendered as clinicalDepthSlot from the parent RSC.
 // PremiumHomepageTrust: now a Server Component — rendered as trustSlot from the parent RSC.
 const PremiumStudyEcosystem = dynamic(() =>
   import("@/components/marketing/home/premium-study-ecosystem").then((m) => m.PremiumStudyEcosystem),
+  { ssr: false },
 );
 const PremiumSocialStudy = dynamic(() =>
   import("@/components/marketing/home/premium-social-study").then((m) => m.PremiumSocialStudy),
+  { ssr: false },
 );
 const PremiumHomepageEcg = dynamic(() =>
   import("@/components/marketing/home/premium-homepage-ecg").then((m) => m.PremiumHomepageEcg),
+  { ssr: false },
 );
 const PremiumReadinessPreview = dynamic(() =>
   import("@/components/marketing/home/premium-readiness-preview").then((m) => m.PremiumReadinessPreview),
+  { ssr: false },
 );
 const PremiumHomepageCta = dynamic(() =>
   import("@/components/marketing/home/premium-homepage-cta").then((m) => m.PremiumHomepageCta),
+  { ssr: false },
 );
 
 /** Below-fold carousel — separate chunk; keep SSR for SEO (skeleton only covers streaming gaps). */

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { BlogPostDistributionFooter } from "@/components/blog/blog-post-distribution-footer";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { applyAutoLinksToHtml } from "@/lib/blog/blog-auto-link-html";
@@ -23,9 +23,11 @@ import {
   blogDisplayCrumbsFromSeo,
   blogPostSchemaItemsForPublic,
   blogSchemaKeywords,
+  resolveBlogOgImageAbsolute,
   resolveOpenGraphCopy,
   resolvePublicCanonicalUrl,
 } from "@/lib/blog/blog-seo-automation";
+import { expectedCanonicalBlogPath } from "@/lib/blog/generated-blog-post-publish";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 import { logBlogSlugPipeline } from "@/lib/observability/content-source-trace";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -67,6 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       );
       const og = resolveOpenGraphCopy(seo, title, description);
       const canonical = resolvePublicCanonicalUrl(slug, seo);
+      const ogImage = resolveBlogOgImageAbsolute(seo, post.coverImage);
       return {
         title,
         description,
@@ -76,6 +79,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           description: og.description,
           url: canonical,
           type: "article",
+          ...(ogImage ? { images: [{ url: ogImage }] } : {}),
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: og.title,
+          description: og.description,
+          ...(ogImage ? { images: [ogImage] } : {}),
         },
       };
     },
@@ -93,6 +103,11 @@ export default async function BlogPostPage({ params }: Props) {
       const post = await getPublishedBlogPostBySlug(slug);
       logBlogSlugPipeline({ slug, resolved: Boolean(post) });
       if (!post) notFound();
+
+      // Career-scoped posts (rn, allied, nursing) have a canonical URL different from /blog/{slug}.
+      // Serving them here creates duplicate content; redirect to the correct canonical path.
+      const canonicalPath = expectedCanonicalBlogPath(slug, post.careerSlug);
+      if (canonicalPath !== `/blog/${slug}`) redirect(canonicalPath);
 
       const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
       const crumbs = blogDisplayCrumbsFromSeo(

@@ -1711,3 +1711,65 @@ export async function getSitemapBlogTagRows(): Promise<{ tags: string[] }[]> {
     BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS,
   );
 }
+
+/**
+ * Unique published tags and categories for sitemap hub pages.
+ * DB rows merged with static corpus; deduped and sorted for deterministic output.
+ * Tag hub: `/blog/tag/{tag}` — Category hub: `/blog/category/{category}`.
+ */
+export async function getSitemapBlogTagsAndCategories(): Promise<{
+  tags: string[];
+  categories: string[];
+}> {
+  const tagSet = new Set<string>();
+  const categorySet = new Set<string>();
+
+  // Seed from static corpus (always available, no DB timeout risk).
+  for (const p of listStaticBlogPostsForIndex()) {
+    for (const t of p.tags ?? []) { const v = t.trim(); if (v) tagSet.add(v); }
+    const c = (p.category ?? "").trim(); if (c) categorySet.add(c);
+  }
+  for (const r of listBlogStaticLongtailRecords()) {
+    for (const t of r.tags ?? []) { const v = t.trim(); if (v) tagSet.add(v); }
+    const c = (r.category ?? "").trim(); if (c) categorySet.add(c);
+  }
+
+  if (!isDatabaseUrlConfigured() || shouldSkipBlogDbForProductionBuild()) {
+    return { tags: [...tagSet].sort(), categories: [...categorySet].sort() };
+  }
+
+  const now = new Date();
+  const dbRows = await withBlogTimeoutFallback(
+    async () => {
+      const out: { tags: string[]; category: string | null }[] = [];
+      let cursor: { slug: string } | undefined;
+      for (;;) {
+        const page = await prisma.blogPost.findMany({
+          where: blogLiveWhere(now),
+          select: { tags: true, category: true, slug: true },
+          orderBy: { slug: "asc" },
+          take: SITEMAP_BLOG_SLUG_PAGE_SIZE,
+          ...(cursor ? { cursor, skip: 1 } : {}),
+        });
+        if (page.length === 0) break;
+        out.push(...page.map((r) => ({ tags: r.tags, category: r.category })));
+        if (out.length >= SITEMAP_BLOG_ROW_CAP) break;
+        if (page.length < SITEMAP_BLOG_SLUG_PAGE_SIZE) break;
+        const last = page[page.length - 1];
+        if (!last?.slug) break;
+        cursor = { slug: last.slug };
+      }
+      return out;
+    },
+    [] as { tags: string[]; category: string | null }[],
+    "blog_sitemap.tags_categories_batched",
+    BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS,
+  );
+
+  for (const row of dbRows) {
+    for (const t of row.tags ?? []) { const v = t.trim(); if (v) tagSet.add(v); }
+    const c = (row.category ?? "").trim(); if (c) categorySet.add(c);
+  }
+
+  return { tags: [...tagSet].sort(), categories: [...categorySet].sort() };
+}

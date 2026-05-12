@@ -39,6 +39,9 @@ export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalid
   revalidatePath("/lessons");
   revalidatePath("/flashcards");
   revalidatePath("/sitemap.xml");
+  revalidatePath("/sitemap-blog.xml");
+  revalidatePath("/sitemap-fr-blog.xml");
+  revalidatePath("/sitemap-es-blog.xml");
   revalidatePath("/sitemap-allied.xml");
   revalidatePath("/sitemap-new-grad.xml");
 

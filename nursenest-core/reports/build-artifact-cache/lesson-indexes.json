@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
-  "fingerprint": "d1047e2e2f446bf90ceaa34a66668a412418ad752a150b535d7d4235f20b4fcb",
-  "generatedAt": "2026-05-11T06:35:58.450Z",
+  "fingerprint": "3b3abbfee2ffbbfec8c06ffb2750f8f4bab5c075e2545f0d8d57e246237e9113",
+  "generatedAt": "2026-05-12T18:03:42.945Z",
   "inputs": [
     {
       "type": "file",
@@ -1314,6 +1314,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/premium-lessons-hub-layout-convergence.contract.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/respiratory-sounds-library-data.ts"
     },
     {
@@ -1639,7 +1643,7 @@
   ],
   "metadata": {
     "verifyMode": "deep",
-    "buildLessonIndexesMs": 57429,
-    "verifyLessonIndexesMs": 113167
+    "buildLessonIndexesMs": 126252,
+    "verifyLessonIndexesMs": 112512
   }
 }

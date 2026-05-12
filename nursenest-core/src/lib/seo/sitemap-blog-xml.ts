@@ -2,7 +2,7 @@ import "server-only";
 
 import { expectedCanonicalBlogPath } from "@/lib/blog/generated-blog-post-publish";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { getMergedBlogSitemapSlugRows } from "@/lib/blog/safe-blog-queries";
+import { getMergedBlogSitemapSlugRows, getSitemapBlogTagsAndCategories } from "@/lib/blog/safe-blog-queries";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
   minimalUrlsetSingleHome,
@@ -53,6 +53,24 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
   const rnHub = `${origin}/blog/rn`;
   if (rnHubLastMod && !seenLoc.has(rnHub)) {
     entries.push({ loc: rnHub, lastmod: rnHubLastMod.toISOString() });
+  }
+
+  // Tag and category hub pages — discoverable without hitting post-level crawl budget.
+  // Empty hubs emit `robots: noindex` at the page level so including them here is safe.
+  try {
+    const { tags, categories } = await getSitemapBlogTagsAndCategories();
+    for (const tag of tags) {
+      const loc = `${origin}/blog/tag/${encodeURIComponent(tag)}`;
+      if (!seenLoc.has(loc)) { seenLoc.add(loc); entries.push({ loc }); }
+    }
+    for (const cat of categories) {
+      const loc = `${origin}/blog/category/${encodeURIComponent(cat)}`;
+      if (!seenLoc.has(loc)) { seenLoc.add(loc); entries.push({ loc }); }
+    }
+  } catch (e) {
+    safeServerLog("seo", "sitemap_blog_tag_category_collection_failed", {
+      error: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
+    });
   }
 
   logSeoEmittedUrlBatch("sitemap_blog", entries.map((e) => e.loc), {

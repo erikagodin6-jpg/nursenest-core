@@ -180,6 +180,7 @@ export async function runSitemapSegmentationValidation(options: {
       "sitemap-clinical-modules.xml": () => import("@/app/sitemap-clinical-modules.xml/route"),
       "sitemap-allied.xml": () => import("@/app/sitemap-allied.xml/route"),
       "sitemap-new-grad.xml": () => import("@/app/sitemap-new-grad.xml/route"),
+      "sitemap-cnple.xml": () => import("@/app/sitemap-cnple.xml/route"),
     } satisfies Record<string, RouteGetter>);
 
   async function fetchXml(routeFile: string): Promise<SegmentFetchResult> {

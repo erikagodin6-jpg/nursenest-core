@@ -2,20 +2,13 @@
 @import "./theme-palettes.css";
 @import "./color-roles.css";
 @import "./semantic-status-tokens.css";
-@import "./learner-exam-shell.css";
-@import "./learner-exam-session-premium.css";
-@import "./learner-flashcard-premium.css";
 @import "./premium-redesign-2026.css";
 @import "./marketing-brand-atmosphere.css";
-@import "./learner-cockpit-premium.css";
 @import "./full-platform-convergence.css";
 @import "./premium-color-depth-convergence.css";
 @import "./premium-atmospheric-ecosystem-convergence.css";
 @import "./premium-mobile-study-experience-audit.css";
 @import "./premium-allied-newgrad-convergence.css";
-@import "../../styles/tokens.css";
-@import "../../styles/learner-ds.css";
-@import "./learner-surface-primitives.css";
 @import "./mobile-ux-standards.css";
 
 html,

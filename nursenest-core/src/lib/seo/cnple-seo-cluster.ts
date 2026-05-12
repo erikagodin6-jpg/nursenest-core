@@ -18,7 +18,11 @@ export const CNPLE_HUB = "/canada/np/cnple" as const;
 export const CNPLE_LESSONS = "/canada/np/cnple/lessons" as const;
 export const CNPLE_QUESTIONS = "/canada/np/cnple/questions" as const;
 export const CNPLE_PRICING = "/canada/np/cnple/pricing" as const;
-export const CNPLE_SIMULATION = "/canada/np/cnple/cat" as const;
+/**
+ * CNPLE simulation landing. Uses /simulation (not /cat) — CNPLE is LOFT, not CAT.
+ * The shared /cat route still works but should not be linked from CNPLE marketing copy.
+ */
+export const CNPLE_SIMULATION = "/canada/np/cnple/simulation" as const;
 export const CNPLE_FLASHCARDS_HUB = "/canada/np/cnple/flashcards" as const;
 
 // ──────────────────────────────────────────────────────────────────────────────

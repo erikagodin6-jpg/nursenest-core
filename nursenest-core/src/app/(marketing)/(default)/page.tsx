@@ -20,10 +20,11 @@ import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketi
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
 
 /**
- * Keep dynamic rendering, but remove unnecessary complexity
+ * Dynamic rendering required (layout reads cookies for region/locale).
+ * Removing revalidate=0 restores unstable_cache (1-hour TTL) for home stats,
+ * so the DB is not hit on every warm request.
  */
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 function safeRegionCards(): string[] {
   try {

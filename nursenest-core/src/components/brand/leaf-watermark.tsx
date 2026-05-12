@@ -25,7 +25,7 @@ export function LeafWatermark({ className = "", imageClassName = "", size = 420 
         width={size}
         height={size}
         sizes={`${size}px`}
-        unoptimized
+        loading="lazy"
         draggable={false}
         className={`h-auto w-auto max-w-none grayscale ${imageClassName}`.trim()}
       />

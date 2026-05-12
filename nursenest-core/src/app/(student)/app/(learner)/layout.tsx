@@ -1,3 +1,11 @@
+import "@/app/learner-exam-shell.css";
+import "@/app/learner-exam-session-premium.css";
+import "@/app/learner-flashcard-premium.css";
+import "@/app/learner-cockpit-premium.css";
+import "@/app/learner-surface-primitives.css";
+import "../../../../../styles/tokens.css";
+import "../../../../../styles/learner-ds.css";
+
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { headers } from "next/headers";

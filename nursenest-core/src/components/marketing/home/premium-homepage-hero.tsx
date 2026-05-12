@@ -478,8 +478,13 @@ export function PremiumHomepageHero(props: {
             </p>
           </div>
 
-          {/* ── Clinical dashboard panel ──────────────────────────── */}
-          <HeroClinicalPanel copy={panelCopy} />
+          {/* ── Clinical dashboard panel — desktop only ───────────── */}
+          {/* Hidden on mobile: single-column stack adds ~300px to hero height
+              and hydrates Lucide icons + ECG SVG above the fold. Desktop shows
+              the full two-column clinical dashboard layout. */}
+          <div className="hidden lg:block">
+            <HeroClinicalPanel copy={panelCopy} />
+          </div>
         </div>
       </div>
     </section>

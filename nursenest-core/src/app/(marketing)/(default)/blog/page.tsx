@@ -32,17 +32,21 @@ const BLOG_INLINE_KEYS = [
 
 export const dynamicParams = true;
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ page?: string }> }): Promise<Metadata> {
+  const sp = await searchParams;
+  const rawPage = Number(sp.page ?? "1");
+  const page = Number.isFinite(rawPage) && rawPage >= 1 ? Math.floor(rawPage) : 1;
+  const canonicalPath = page <= 1 ? "/blog" : `/blog?page=${page}`;
   return safeGenerateMetadata(
     async () => {
       return {
         title: DEFAULT_MARKETING_BLOG_INDEX.metadataTitle,
         description: DEFAULT_MARKETING_BLOG_INDEX.metadataDescription,
         robots: { index: true, follow: true },
-        alternates: { canonical: absoluteUrl("/blog") },
+        alternates: { canonical: absoluteUrl(canonicalPath) },
         openGraph: {
           title: DEFAULT_MARKETING_BLOG_INDEX.openGraphTitle,
-          url: absoluteUrl("/blog"),
+          url: absoluteUrl(canonicalPath),
           type: "website",
         },
       };

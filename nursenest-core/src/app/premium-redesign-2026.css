@@ -193,7 +193,8 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
   grid-template-columns: 1fr;
   gap: 22px;
   align-items: center;
-  min-height: clamp(34rem, 72dvh, 46rem);
+  /* Mobile: no min-height — dvh recalculates as the browser URL bar shows/hides,
+     causing CLS on every scroll-back-to-top. Copy content defines its own height. */
 }
 @media (min-width: 1024px) {
   .nn-premium-hero-grid {
@@ -1595,6 +1596,8 @@ html[data-theme="midnight"] [data-nn-header-layout="marketing-row4"] .nn-marketi
   padding-block: var(--nn-rhythm-section-y, 4rem);
   background: var(--page-bg, #ffffff);
   min-height: var(--nn-premium-home-section-min, 34rem);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 34rem;
 }
 
 .nn-premium-home-section::before {

@@ -23,7 +23,7 @@ export const CANADA_NAV: CountryNavConfig = {
         { label: "What is the CNPLE?", href: "/what-is-the-cnple" },
         { label: "Practice Questions", href: "/canada/np/cnple/questions" },
         { label: "Lessons", href: "/canada/np/cnple/lessons" },
-        { label: "Simulation", href: "/canada/np/cnple/cat" },
+        { label: "Simulation", href: "/canada/np/cnple/simulation" },
         { label: "Study Guide", href: "/cnple-study-guide" },
         { label: "LOFT Testing Explained", href: "/cnple-loft-testing" },
       ],
