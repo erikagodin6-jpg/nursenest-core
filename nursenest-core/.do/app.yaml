@@ -127,12 +127,10 @@ services:
       - key: NEXT_PUBLIC_ENABLE_ECG_MODULE
         scope: RUN_AND_BUILD_TIME
         value: "true"
-      # Advanced ECG module gate (separate SKU from core ECG).
-      # Set to "false" until ECG inventory reaches 300 learner-visible questions.
-      # Set ALLOW_ECG_EARLY_ACCESS_CHECKOUT=true to enable early-access checkout before threshold.
+      # Advanced ECG module — 160 curated questions seeded 2026-05-12; live for RN/NP subscribers.
       - key: ENABLE_ADVANCED_ECG_MODULE
         scope: RUN_TIME
-        value: "false"
+        value: "true"
       # Set to "true" only when explicitly launching ECG early access below inventory threshold.
       - key: ALLOW_ECG_EARLY_ACCESS_CHECKOUT
         scope: RUN_TIME

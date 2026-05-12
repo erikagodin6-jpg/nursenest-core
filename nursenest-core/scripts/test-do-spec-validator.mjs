@@ -56,7 +56,7 @@ function makeSpec(overrideEnvs = []) {
     // ECG publish flags
     { key: "ENABLE_ECG_MODULE", scope: "RUN_TIME", value: "true" },
     { key: "NEXT_PUBLIC_ENABLE_ECG_MODULE", scope: "RUN_AND_BUILD_TIME", value: "true" },
-    { key: "ENABLE_ADVANCED_ECG_MODULE", scope: "RUN_TIME", value: "false" },
+    { key: "ENABLE_ADVANCED_ECG_MODULE", scope: "RUN_TIME", value: "true" },
     { key: "ALLOW_ECG_EARLY_ACCESS_CHECKOUT", scope: "RUN_TIME", value: "false" },
     // NP subscription prices
     { key: "STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_np_1m" },
