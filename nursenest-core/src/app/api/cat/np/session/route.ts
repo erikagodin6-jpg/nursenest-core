@@ -37,6 +37,7 @@ import {
   selectNextQuestion,
 } from "@/lib/cat/cat-engine";
 import { createNpCatSession } from "@/lib/cat/session-persistence";
+import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-question-completeness";
 import type { CatSessionConfig } from "@/lib/cat/types";
 
 // ─── Validation ────────────────────────────────────────────────────────────────
@@ -103,10 +104,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   const rows = await prisma.examQuestion.findMany({
     where: {
-      exam: { in: NP_EXAM_KEYS },
-      status: "published",
-      isAdaptiveEligible: true,
-      NOT: { id: { in: [...recentIds].slice(0, 500) } },
+      AND: [
+        {
+          exam: { in: NP_EXAM_KEYS },
+          status: "published",
+          isAdaptiveEligible: true,
+          NOT: { id: { in: [...recentIds].slice(0, 500) } },
+        },
+        NON_ECG_PRACTICE_EXAM_WHERE,
+      ],
     },
     select: CAT_QUESTION_SELECT,
     take: POOL_SIZE,
