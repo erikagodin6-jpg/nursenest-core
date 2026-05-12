@@ -127,6 +127,16 @@ services:
       - key: NEXT_PUBLIC_ENABLE_ECG_MODULE
         scope: RUN_AND_BUILD_TIME
         value: "true"
+      # Advanced ECG module gate (separate SKU from core ECG).
+      # Set to "false" until ECG inventory reaches 300 learner-visible questions.
+      # Set ALLOW_ECG_EARLY_ACCESS_CHECKOUT=true to enable early-access checkout before threshold.
+      - key: ENABLE_ADVANCED_ECG_MODULE
+        scope: RUN_TIME
+        value: "false"
+      # Set to "true" only when explicitly launching ECG early access below inventory threshold.
+      - key: ALLOW_ECG_EARLY_ACCESS_CHECKOUT
+        scope: RUN_TIME
+        value: "false"
       # NP subscription Stripe price IDs (canonical). Listed here so doctl apps update cannot delete them.
       - key: STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION
         scope: RUN_TIME

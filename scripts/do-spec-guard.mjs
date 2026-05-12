@@ -37,6 +37,8 @@ export const REQUIRED_RUNTIME_ENV_KEYS = Object.freeze([
   // ECG module publish flags — must remain set after any spec update.
   "ENABLE_ECG_MODULE",
   "NEXT_PUBLIC_ENABLE_ECG_MODULE",
+  "ENABLE_ADVANCED_ECG_MODULE",
+  "ALLOW_ECG_EARLY_ACCESS_CHECKOUT",
   // NP subscription Stripe price IDs (canonical keys, required for NP checkout).
   "STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION",
   "STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION",
