@@ -481,6 +481,31 @@ export const AUTHORITY_CLUSTER_PAGES: readonly AuthorityClusterPage[] = [
     ["Analyze cues", "Distinguish likely from dangerous and stable from unstable.", "Questions"],
     ["Take action", "Select diagnostics, therapy, referral, or monitoring that fits NP scope.", "Lessons"],
   ], "Clinical judgment improves when you narrate your reasoning. If you cannot explain why the action fits the cue, review the related lesson before doing more questions."),
+  buildCnplePage("practice-questions", "CNPLE practice questions bank", "high-intent question practice for Canadian NP candidates who need exam-style application", [
+    ["Diagnostic block", "Mixed primary care, pharmacology, diagnostics, and professional-role vignettes.", "Question bank"],
+    ["Focused block", "A single weak domain with rationales and Canadian NP terminology.", "Study plan"],
+    ["Exam-mode block", "Timed practice that protects pacing and decision stamina.", "LOFT exam format"],
+  ], "Use this page when you are ready to move from reading to retrieval. The best conversion point is a question block followed by immediate lesson repair."),
+  buildCnplePage("pharmacology-questions", "CNPLE pharmacology questions", "prescribing, monitoring, adverse effects, and contraindication practice", [
+    ["Before prescribing", "Indication, allergy, pregnancy, renal function, hepatic risk, and interaction screen.", "Pharmacology"],
+    ["After prescribing", "Monitoring labs, follow-up interval, teaching, and when to stop therapy.", "Practice questions"],
+    ["High-risk choices", "Anticoagulants, opioids, insulin, antibiotics, steroids, and controlled substances.", "Flashcards"],
+  ], "Pharmacology questions convert well when learners see why one safe prescribing cue changes the whole answer. Pair every medication miss with a safety-screen flashcard."),
+  buildCnplePage("study-plan", "CNPLE study plan", "an 8 to 12 week plan for CNPLE diagnostics, prescribing, cases, and simulation", [
+    ["Weeks 1-2", "Baseline diagnostic, blueprint mapping, and miss-log setup.", "Practice questions"],
+    ["Weeks 3-8", "Rotating clinical domains, prescribing safety, and case review.", "Study guide"],
+    ["Weeks 9-12", "Timed LOFT-style simulation, flashcards, and final weak-area repair.", "Simulation"],
+  ], "The plan should keep active recall in every week. If a learner only rereads notes, they may feel prepared without proving exam-ready decision speed."),
+  buildCnplePage("exam-format", "CNPLE exam format", "LOFT-style pacing, question types, timing, and readiness planning", [
+    ["Format mindset", "Prepare for sustained fixed-length performance rather than adaptive difficulty.", "LOFT exam"],
+    ["Question style", "Case-based prompts that test advanced assessment, treatment, and follow-up.", "Case-based questions"],
+    ["Readiness evidence", "Stable timed performance plus fewer repeated reasoning errors.", "Practice exam"],
+  ], "Format pages are high-intent because learners are close to scheduling. Use them to convert anxiety about logistics into timed practice and structured remediation."),
+  buildCnplePage("soap-note-scenarios", "CNPLE SOAP note scenarios", "documentation-style clinical reasoning for NP assessment and management", [
+    ["Subjective", "Chief concern, history, red flags, medications, allergies, and context.", "Case-based questions"],
+    ["Objective", "Focused exam, vitals, diagnostics, and findings that change risk.", "Clinical judgment"],
+    ["Assessment and plan", "Differential, working diagnosis, treatment, follow-up, and escalation.", "Lessons"],
+  ], "SOAP-note scenarios help candidates practise organizing clinical data. The exam may not ask for a note, but the thinking structure improves case-based answers."),
 
   buildRexPage("overview", "REx-PN exam prep", "Canadian practical nursing scope, client needs, and adaptive exam strategy", [
     ["Client needs", "Identify the tested need before choosing an intervention.", "Client needs guide"],
@@ -522,6 +547,36 @@ export const AUTHORITY_CLUSTER_PAGES: readonly AuthorityClusterPage[] = [
     ["Sample each bucket", "Use question blocks to expose actual weak areas.", "Questions"],
     ["Retest", "Confirm improvement with mixed sets.", "Practice exam"],
   ], "The test plan is most useful when it becomes your study calendar. Rotate categories, then increase mixed practice as the exam approaches."),
+  buildRexPage("practice-questions", "REx-PN practice questions bank", "high-intent Canadian practical nursing question practice with rationales", [
+    ["Mixed client-needs sets", "Expose gaps across safety, psychosocial, health promotion, and physiological categories.", "Question bank"],
+    ["Rationale review", "Turn each miss into a scope, priority, or content rule.", "Study plan"],
+    ["CAT transition", "Move from targeted sets into adaptive-style mixed sessions.", "CAT simulation"],
+  ], "This is the strongest conversion page for REx-PN learners because question practice reveals whether the learner can apply safe practical-nursing judgment under pressure."),
+  buildRexPage("delegation-questions", "REx-PN delegation questions", "assignment, supervision, scope, and safety decisions for practical nursing", [
+    ["Scope", "Separate what the RPN can do, what requires RN/provider escalation, and what can be assigned.", "Client needs"],
+    ["Stability", "Delegate predictable tasks only when the client and outcome are stable.", "Priority questions"],
+    ["Follow-up", "Know what must be reported back and what requires reassessment.", "Practice questions"],
+  ], "Delegation questions work best when learners name the task, the client condition, and the supervision requirement before reading answer choices."),
+  buildRexPage("priority-questions", "REx-PN priority questions", "which client to see first, what to do next, and what finding changes urgency", [
+    ["Acuity", "Unstable, new, unexpected, or worsening findings outrank chronic stable problems.", "Practice questions"],
+    ["Frameworks", "ABCs, safety, infection risk, Maslow, and expected versus unexpected cues.", "Study guide"],
+    ["Scope", "Pick the action a Canadian practical nurse should take now.", "CAT simulation"],
+  ], "Priority pages attract high-intent searchers because prioritization feels unpredictable. The fix is not more acronyms; it is repeated cue-to-action practice."),
+  buildRexPage("pharmacology-questions", "REx-PN pharmacology questions bank", "medication administration, teaching, adverse effects, and safety checks", [
+    ["Pre-administration", "Allergy, vitals, labs, dose, route, rights, and client readiness.", "Pharmacology"],
+    ["Teaching", "Expected effects, side effects, missed doses, and when to call for help.", "Flashcards"],
+    ["Escalation", "Hold, clarify, or report when the medication is unsafe.", "Practice questions"],
+  ], "Medication questions convert when learners see a concrete safety check they missed. Pair the question block with flashcards for repeated medication cues."),
+  buildRexPage("study-plan", "REx-PN study plan", "a practical weekly REx-PN plan for client needs, CAT practice, and remediation", [
+    ["Week 1", "Baseline mixed diagnostic and client-needs miss log.", "Practice questions"],
+    ["Weeks 2-6", "Weak-category lessons, pharmacology, priority, and delegation drills.", "Study guide"],
+    ["Final weeks", "CAT simulation, mixed practice, and repeated-error cleanup.", "CAT exam"],
+  ], "A strong REx-PN plan is measurable: fewer repeated misses by client need, cleaner priority decisions, and steadier CAT performance."),
+  buildRexPage("cat-simulation", "REx-PN CAT simulation", "adaptive-style practice strategy, readiness signals, and exam stamina", [
+    ["Before CAT", "Repair known weak categories so the session measures readiness, not avoidable gaps.", "Study plan"],
+    ["During CAT", "Expect changing item difficulty and avoid emotional score-guessing.", "CAT exam"],
+    ["After CAT", "Sort misses by client need, topic, and reasoning error.", "Practice questions"],
+  ], "CAT simulation is a conversion-ready page because learners want readiness evidence. The safest message is honest: CAT practice works only when paired with remediation."),
 
   buildRtPage("overview", "Respiratory therapy exam prep", "RT assessment, gas exchange, airway safety, and equipment decisions", [
     ["Assessment", "Work of breathing, breath sounds, SpO2, mental status, and trend.", "Practice questions"],
@@ -568,6 +623,36 @@ export const AUTHORITY_CLUSTER_PAGES: readonly AuthorityClusterPage[] = [
     ["Restriction", "Reduced volumes and clinical correlation.", "Lessons"],
     ["Quality", "Effort, repeatability, contraindications, and test coaching.", "Exam prep"],
   ], "PFT interpretation should connect pattern to patient story. Do not label a curve without checking quality and clinical context."),
+  buildRtPage("abg-practice-questions", "ABG practice questions", "high-intent ABG interpretation questions for respiratory therapy students", [
+    ["Classification", "pH, PaCO2, HCO3, compensation, and oxygenation status.", "ABG drills"],
+    ["Clinical link", "Connect the ABG to work of breathing, mental status, and intervention.", "Practice questions"],
+    ["Reassessment", "Predict the ABG or SpO2 change after oxygen or ventilator support.", "Oxygen therapy"],
+  ], "ABG question pages attract learners with immediate pain. Keep the workflow simple: classify, connect to patient status, choose action, then reassess."),
+  buildRtPage("mechanical-ventilation-questions", "Mechanical ventilation questions", "ventilator settings, alarms, waveform reasoning, and safety decisions", [
+    ["Mode reasoning", "What the ventilator controls and what the patient contributes.", "Ventilator modes"],
+    ["Alarm response", "High pressure, low pressure, apnea, leak, obstruction, and disconnection.", "Mechanical ventilation"],
+    ["Lung protection", "Tidal volume, plateau pressure, PEEP, FiO2, and ARDS risk.", "ARDS review"],
+  ], "Ventilator question pages should make equipment feel clinical, not mechanical. Every setting must connect to gas exchange, pressure, synchrony, or safety."),
+  buildRtPage("oxygen-therapy-questions", "Oxygen therapy questions", "oxygen device selection, FiO2 targets, escalation, and reassessment", [
+    ["Device choice", "Nasal cannula, Venturi, non-rebreather, high-flow, CPAP, or BiPAP.", "Oxygen therapy"],
+    ["Target", "Oxygenation goal, COPD risk, and signs of ventilatory failure.", "ABG practice questions"],
+    ["Escalation", "When oxygen is insufficient and ventilatory or airway support is needed.", "Airway scenarios"],
+  ], "Oxygen pages convert because they tie quick device recall to real patient decisions. The answer is not always more FiO2; sometimes it is ventilation or airway support."),
+  buildRtPage("ventilator-modes", "Ventilator modes quick review", "volume control, pressure control, SIMV, pressure support, CPAP, and BiPAP", [
+    ["Volume control", "Preset tidal volume; pressure varies with compliance and resistance.", "Mechanical ventilation questions"],
+    ["Pressure control", "Preset pressure; tidal volume varies with mechanics.", "ARDS review"],
+    ["Spontaneous support", "Pressure support, CPAP, BiPAP, and weaning readiness.", "Practice questions"],
+  ], "Ventilator-mode content is backlinkable when it is practical. Learners need the mode, what changes, what stays controlled, and what alarm pattern matters."),
+  buildRtPage("ards-review", "ARDS review for respiratory therapy", "oxygenation failure, lung-protective ventilation, PEEP, and escalation", [
+    ["Recognition", "Refractory hypoxemia, bilateral infiltrates, low compliance, and high FiO2 needs.", "ABG questions"],
+    ["Lung protection", "Low tidal volume, plateau pressure monitoring, PEEP, and permissive hypercapnia.", "Ventilator modes"],
+    ["Escalation", "Proning, recruitment considerations, hemodynamics, and team escalation.", "Mechanical ventilation"],
+  ], "ARDS review should stay clinically grounded: oxygenation is the problem, but unsafe pressure strategy can create a second problem."),
+  buildRtPage("airway-management-scenarios", "Airway management scenarios", "suctioning, adjuncts, bag-mask ventilation, intubation preparation, and reassessment", [
+    ["Initial assessment", "Patency, obstruction, secretions, stridor, mental status, and work of breathing.", "Airway management"],
+    ["Intervention", "Position, suction, adjunct, BVM, advanced airway preparation, or escalation.", "Practice questions"],
+    ["Confirmation", "Chest rise, breath sounds, SpO2, ETCO2, and ongoing reassessment.", "Mechanical ventilation"],
+  ], "Scenario pages are high-value because airway decisions are time-sensitive. The right answer often starts before the advanced device: positioning, oxygenation, and calling help."),
 ] as const;
 
 const byPath = new Map(AUTHORITY_CLUSTER_PAGES.map((page) => [page.path, page]));

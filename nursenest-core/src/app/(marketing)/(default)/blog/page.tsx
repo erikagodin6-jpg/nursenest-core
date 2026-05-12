@@ -32,6 +32,9 @@ const BLOG_INLINE_KEYS = [
 
 export const dynamicParams = true;
 
+// ISR + searchParams: without force-dynamic, Next.js serves ISR-cached page=1 metadata for all paginated variants.
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ page?: string }> }): Promise<Metadata> {
   const sp = await searchParams;
   const rawPage = Number(sp.page ?? "1");
