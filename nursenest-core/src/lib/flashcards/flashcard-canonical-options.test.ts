@@ -289,8 +289,9 @@ describe("hydrateCanonicalSata", () => {
     assert.equal(payload, null);
   });
 
-  it("returns null for short stem", () => {
-    const payload = hydrateCanonicalSata("Too short", SATA_OPTIONS, null);
+  it("returns null for short stem (< 8 chars)", () => {
+    // "Too short" is 9 chars and passes the guard; use a stem that is genuinely < 8 chars.
+    const payload = hydrateCanonicalSata("Short", SATA_OPTIONS, null);
     assert.equal(payload, null);
   });
 });

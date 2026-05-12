@@ -16,6 +16,8 @@ export const SITEMAP_INDEX_CHILD_FILENAMES = [
   "sitemap-clinical-modules.xml",
   "sitemap-allied.xml",
   "sitemap-new-grad.xml",
+  // CNPLE topical authority cluster — Canadian NP exam SEO lane
+  "sitemap-cnple.xml",
 ] as const;
 
 export function absoluteUrlsForSitemapIndexChildren(origin: string): string[] {

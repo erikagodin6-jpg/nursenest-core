@@ -67,6 +67,15 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+  // Explicitly pin react-hooks rules so they can't silently regress via
+  // eslint-config-next inheritance changes. The plugin is already loaded by
+  // eslint-config-next/core-web-vitals; this block just hard-sets the severity.
+  {
+    rules: {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

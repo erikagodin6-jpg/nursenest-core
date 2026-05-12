@@ -12,6 +12,7 @@ import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { CnpleReportCard, CNPLE_DOMAIN_LABELS } from "@/components/cnple/cnple-report-card";
 import type { CnpleDomainResult } from "@/components/cnple/cnple-report-card";
+import { CnpleProvisionalDisclaimer } from "@/components/cnple/cnple-provisional-disclaimer";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -93,6 +94,11 @@ export default async function PathwayReportCardPage({ params }: Props) {
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
 
       <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
+        {isCnple ? (
+          <div className="mb-6">
+            <CnpleProvisionalDisclaimer variant="subtle" surface="short" hideWhenConfirmed />
+          </div>
+        ) : null}
         {!isSignedIn ? (
           /* Not signed in — show preview + sign-in prompt */
           <div>

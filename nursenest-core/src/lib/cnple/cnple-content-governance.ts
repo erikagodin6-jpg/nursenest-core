@@ -14,6 +14,7 @@
 
 /** Strings that must NOT appear in CNPLE-facing marketing copy. */
 const FORBIDDEN_CNPLE_PHRASES: readonly string[] = [
+  // False official-replication claims
   "official cnple simulator",
   "official cnple replica",
   "exact cnple replica",
@@ -22,17 +23,24 @@ const FORBIDDEN_CNPLE_PHRASES: readonly string[] = [
   "identical to cnple",
   "exact replica of the cnple",
   "official exam simulator",
-  // NCLEX framing applied to CNPLE
+  "exact ccrnr simulation",
+  "official exam format",
+  "identical to the actual exam",
+  // "real CNPLE questions" implies sourced from official bank
+  "real cnple questions",
+  // Unconfirmed format/structural claims
   "cnple cat",
   "cnple computerized adaptive",
   "cnple adaptive shutdown",
-  // Wrong regulatory bodies
+  // Wrong regulatory bodies for Canadian NP
   "aanp canada",
   "ancc canada",
-  // Unconfirmed specifics
+  // Unconfirmed specifics — never state these as facts
   "official question count",
   "official timing",
   "official passing score",
+  "guaranteed to pass",
+  "pass guarantee",
 ];
 
 /**
@@ -45,6 +53,25 @@ export function auditCnpleMarketingCopy(copy: string): string[] {
   const lower = copy.toLowerCase();
   return FORBIDDEN_CNPLE_PHRASES.filter((phrase) => lower.includes(phrase));
 }
+
+/**
+ * Approved CNPLE phrasing patterns — use these instead of forbidden alternatives.
+ * Exported so tests can validate approved copy doesn't accidentally include forbidden phrases.
+ */
+export const CNPLE_APPROVED_PHRASES = [
+  "cnple-aligned",
+  "cnple-style",
+  "inspired by the cnple blueprint",
+  "canadian np competencies",
+  "competency-based",
+  "loft-style",
+  "linear simulation",
+  "canadian np readiness",
+  "prescribing readiness",
+  "simulation-based prep",
+  "independent preparation",
+  "not affiliated with ccrnr",
+] as const;
 
 /**
  * Throws in development/test if forbidden phrases are detected.

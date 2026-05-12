@@ -33,7 +33,7 @@ function walk(dir, out = []) {
   return out;
 }
 
-const nodeArgs = ["--test"];
+const nodeArgs = ["--import", "tsx", "--test"];
 if (args.length > 0) {
   const allTests = searchRoots.flatMap((dir) => walk(dir));
   const matches = allTests.filter((file) => args.some((arg) => path.basename(file).includes(arg) || file.includes(arg)));

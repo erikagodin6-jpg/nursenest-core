@@ -1,22 +1,18 @@
 /**
  * ECGQuestionLayout — unit tests
  *
- * Runs via: node --import tsx --test src/components/ecg-question-layout.test.tsx
+ * Run via: node --import tsx --test src/components/ecg-question-layout.test.tsx
  *
- * Uses renderToStaticMarkup (SSR) so no jsdom / happy-dom needed.
- * The component is imported via @legacy-client/* which resolves to
- * ../client/src/components/ecg-question-layout.tsx.
- * All @/ imports inside that component resolve to nursenest-core/src/* via
- * the nursenest-core tsconfig, which is intentional — button/badge/utils/lucide-react
- * exist in both apps and are API-compatible.
+ * Uses renderToStaticMarkup (no jsdom needed) to assert HTML structure.
+ * defaultSelectedAnswer + defaultSubmitted props let us render the post-submit
+ * state without requiring user interaction.
  */
 import assert from "node:assert/strict";
 import test from "node:test";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-// Import via the @legacy-client path alias declared in nursenest-core/tsconfig.json
-import { ECGQuestionLayout } from "@legacy-client/components/ecg-question-layout";
+import { ECGQuestionLayout } from "@/components/ecg-question-layout";
 
 // ─── Shared fixture ───────────────────────────────────────────────────────────
 

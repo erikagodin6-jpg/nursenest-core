@@ -1,10 +1,16 @@
-import { ContentStatus, DraftReviewStatus, type TierCode } from "@prisma/client";
+import { ContentStatus, DraftReviewStatus, FlashcardItemKind, type Prisma, type TierCode } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import type { NormalizedFlashcardDraft } from "@/lib/content/ai-draft-validation";
 import { prisma } from "@/lib/db";
 import { validateFlashcardCreationGuardrails } from "@/lib/flashcards/flashcard-creation-guardrails";
+import {
+  buildCanonicalOptionsFromAdminPayload,
+  buildSataBackField,
+} from "@/lib/flashcards/flashcard-admin-option-write";
+import { writeCanonicalOptions } from "@/lib/flashcards/flashcard-option-hydrate.server";
+import { correctAnswerLine, validateExamMicroQuestionInput } from "@/lib/flashcards/flashcard-exam-style";
 import {
   classifyFlashcardCorpus,
   collectClassificationViolations,
@@ -53,17 +59,91 @@ export async function POST(req: Request, ctx: Props) {
 
   const deckId = parsed.data.deckId;
 
+  // ── Attempt to build canonical options from embedded exam question ─────────
+  // `examQuestion` is present only when the AI generation run included a full
+  // micro-question alongside front/back. Gracefully skipped when absent.
+  type CanonicalOpt = import("@/lib/flashcards/flashcard-option-normalize").CanonicalOption;
+  let canonicalOptions: CanonicalOpt[] | null = null;
+  let examCreateData: Record<string, unknown> = {};
+  let promotedFront = n.front;
+  let promotedBack = n.back;
+
+  if (n.examQuestion) {
+    const eq = n.examQuestion;
+    const isSata = eq.examItemKind === "SATA";
+
+    if (isSata) {
+      const result = buildCanonicalOptionsFromAdminPayload({
+        examItemKind: FlashcardItemKind.SATA,
+        answerOptions: eq.answerOptions,
+        correctAnswer: eq.correctAnswer,
+        correctLetters: eq.correctLetters,
+        rationaleIncorrect: eq.rationaleIncorrect,
+        rationaleCorrect: eq.rationaleCorrect,
+      });
+      if (result.ok) {
+        canonicalOptions = result.options;
+        const resolvedCorrectLetters =
+          eq.correctLetters ?? (eq.correctAnswer?.split(",").map((l) => l.trim().toUpperCase()) ?? []);
+        promotedFront = eq.questionStem;
+        promotedBack = buildSataBackField(resolvedCorrectLetters, eq.rationaleCorrect);
+        examCreateData = {
+          examItemKind: FlashcardItemKind.SATA,
+          questionStem: eq.questionStem,
+          answerOptions: eq.answerOptions as unknown as Prisma.InputJsonValue,
+          correctAnswer: resolvedCorrectLetters.sort().join(","),
+          rationaleCorrect: eq.rationaleCorrect,
+          rationaleIncorrect: eq.rationaleIncorrect as unknown as Prisma.InputJsonValue,
+        };
+      }
+      // Non-fatal: if canonical build fails, fall through to front/back only promotion
+    } else {
+      // MCQ path — validate through existing pipeline
+      const itemKind = FlashcardItemKind[eq.examItemKind as keyof typeof FlashcardItemKind];
+      if (itemKind && eq.correctAnswer && eq.rationaleIncorrect.length) {
+        const v = validateExamMicroQuestionInput({
+          examItemKind: itemKind,
+          questionStem: eq.questionStem,
+          answerOptions: eq.answerOptions,
+          correctAnswer: eq.correctAnswer,
+          rationaleCorrect: eq.rationaleCorrect,
+          rationaleIncorrect: eq.rationaleIncorrect,
+        });
+        if (v.ok) {
+          promotedFront = v.payload.questionStem;
+          promotedBack = correctAnswerLine(v.payload);
+          examCreateData = {
+            examItemKind: v.payload.itemKind,
+            questionStem: v.payload.questionStem,
+            answerOptions: v.payload.answerOptions as unknown as Prisma.InputJsonValue,
+            correctAnswer: v.payload.correctLetter,
+            rationaleCorrect: v.payload.rationaleCorrect,
+            rationaleIncorrect: v.payload.rationaleIncorrect as unknown as Prisma.InputJsonValue,
+          };
+          const optResult = buildCanonicalOptionsFromAdminPayload({
+            examItemKind: itemKind,
+            answerOptions: eq.answerOptions,
+            correctAnswer: eq.correctAnswer,
+            rationaleIncorrect: eq.rationaleIncorrect,
+            rationaleCorrect: eq.rationaleCorrect,
+          });
+          if (optResult.ok) canonicalOptions = optResult.options;
+        }
+      }
+    }
+  }
+
   const guard = validateFlashcardCreationGuardrails({
     tier: draft.tier as TierCode,
-    front: n.front,
-    back: n.back,
+    front: promotedFront,
+    back: promotedBack,
     exam: null,
   });
   if (!guard.ok) {
     return NextResponse.json({ error: guard.error, code: guard.code }, { status: 400 });
   }
 
-  const flashClassification = classifyFlashcardCorpus({ front: n.front, back: n.back, extra: null });
+  const flashClassification = classifyFlashcardCorpus({ front: promotedFront, back: promotedBack, extra: null });
   const viol = collectClassificationViolations(flashClassification);
   if (viol.length > 0) {
     return NextResponse.json({ error: "Taxonomy classification invalid", violations: viol, code: "taxonomy_invalid" }, { status: 422 });
@@ -90,8 +170,8 @@ export async function POST(req: Request, ctx: Props) {
 
     const created = await tx.flashcard.create({
       data: {
-        front: n.front,
-        back: n.back,
+        front: promotedFront,
+        back: promotedBack,
         country: draft.country,
         tier: draft.tier,
         status: ContentStatus.DRAFT,
@@ -99,6 +179,7 @@ export async function POST(req: Request, ctx: Props) {
         categoryId: resolved.categoryId,
         deckId: deckId ?? null,
         positionInDeck: deckId ? nextPos : 0,
+        ...examCreateData,
       },
     });
 
@@ -107,6 +188,11 @@ export async function POST(req: Request, ctx: Props) {
         where: { id: deckId },
         data: { cardCount: { increment: 1 } },
       });
+    }
+
+    // Dual-write canonical options when exam question was embedded in the draft
+    if (canonicalOptions && canonicalOptions.length >= 3) {
+      await writeCanonicalOptions(created.id, canonicalOptions, tx);
     }
 
     await tx.generatedFlashcardDraft.update({
@@ -121,5 +207,9 @@ export async function POST(req: Request, ctx: Props) {
     return created;
   });
 
-  return NextResponse.json({ ok: true, flashcardId: fc.id });
+  return NextResponse.json({
+    ok: true,
+    flashcardId: fc.id,
+    canonicalOptionsWritten: canonicalOptions?.length ?? 0,
+  });
 }

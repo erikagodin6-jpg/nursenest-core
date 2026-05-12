@@ -219,6 +219,18 @@ export function FlashcardStudyQuestionStack({
                 answerChoicesHeading={labels?.answerChoicesHeading ?? "Select all that apply"}
                 revealHint={labels?.revealHint ?? "Choose all correct options, then reveal."}
               />
+              {!revealed && typeof onReveal === "function" ? (
+                <div className="mt-4 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={onReveal}
+                    data-testid="sata-reveal-btn"
+                    className="nn-flashcard-reveal-cta nn-flashcard-reveal-cta--premium inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
+                  >
+                    Submit & Reveal
+                  </button>
+                </div>
+              ) : null}
             </div>
           ) : null}
 

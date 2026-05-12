@@ -29,6 +29,7 @@ import {
 } from "@/lib/questions/grade-answer-match";
 import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
 import { recordRemediationCapture } from "@/lib/remediation/record-remediation";
+import { buildTopicLapseIndex, resolveTopicLapseCount, emptyLapseIndex } from "@/lib/remediation/lapse-resolution";
 import {
   parseGradeAttemptMode,
   recordQuestionPeerAnalyticsAndBuildPayload,
@@ -83,47 +84,56 @@ export async function POST(req: Request) {
   }
 
   try {
-    const row = await withRetry(() =>
-      prisma.examQuestion.findFirst({
-        where: questionIdWhereIfAllowed(questionId, gate.entitlement),
-        select: {
-          id: true,
-          stem: true,
-          questionType: true,
-          correctAnswer: true,
-          rationale: true,
-          correctAnswerExplanation: true,
-          clinicalReasoning: true,
-          keyTakeaway: true,
-          clinicalPearl: true,
-          examStrategy: true,
-          memoryHook: true,
-          clinicalTrap: true,
-          distractorRationales: true,
-          incorrectAnswerRationale: true,
-          topic: true,
-          subtopic: true,
-          bodySystem: true,
-          tags: true,
-          images: true,
-          questionFormat: true,
-          exhibitData: true,
-          exam: true,
-          difficulty: true,
-          nclexClientNeedsCategory: true,
-          nclexClientNeedsSubcategory: true,
-        },
+    // ── Parallel early fetches ────────────────────────────────────────────────
+    // Lapse index is fetched alongside the question + user row in a single
+    // Promise.all so there is no sequential overhead. It falls back to an empty
+    // map when the engine is disabled or on any error.
+    const [row, userPathwayRowEarly, lapseIndex] = await Promise.all([
+      withRetry(() =>
+        prisma.examQuestion.findFirst({
+          where: questionIdWhereIfAllowed(questionId, gate.entitlement),
+          select: {
+            id: true,
+            stem: true,
+            questionType: true,
+            correctAnswer: true,
+            rationale: true,
+            correctAnswerExplanation: true,
+            clinicalReasoning: true,
+            keyTakeaway: true,
+            clinicalPearl: true,
+            examStrategy: true,
+            memoryHook: true,
+            clinicalTrap: true,
+            distractorRationales: true,
+            incorrectAnswerRationale: true,
+            topic: true,
+            subtopic: true,
+            bodySystem: true,
+            tags: true,
+            images: true,
+            questionFormat: true,
+            exhibitData: true,
+            exam: true,
+            difficulty: true,
+            nclexClientNeedsCategory: true,
+            nclexClientNeedsSubcategory: true,
+          },
+        }),
+      ),
+      prisma.user.findUnique({
+        where: { id: gate.userId },
+        select: { learnerPath: true },
       }),
-    );
+      isRemediationEngineEnabled()
+        ? buildTopicLapseIndex(prisma, gate.userId)
+        : emptyLapseIndex(),
+    ]);
 
     if (!row) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    const userPathwayRowEarly = await prisma.user.findUnique({
-      where: { id: gate.userId },
-      select: { learnerPath: true },
-    });
     const effectivePathwayIdEarly = effectivePathwayIdForGrade(body.pathwayId, userPathwayRowEarly?.learnerPath ?? null);
 
     if (!correctAnswerIsConfigured(row.questionType, row.correctAnswer)) {
@@ -138,6 +148,19 @@ export async function POST(req: Request) {
     const attemptMode = parseGradeAttemptMode(body.attemptMode);
 
     const effectivePathwayId = effectivePathwayIdEarly;
+
+    // ── SATA partial-credit detection ────────────────────────────────────────
+    // gradeMatches returns false for SATA when the selected set is wrong. We
+    // detect partial credit (some correct choices selected) to route a stronger
+    // remediation signal than a full miss.
+    const qType = (row.questionType ?? "").toUpperCase();
+    const isSata = qType === "SATA" || qType === "SELECT_ALL_THAT_APPLY";
+    let sataPartialCredit = false;
+    if (!correct && isSata) {
+      const correctKeys = canonicalCorrectKeysForGrade(row.questionType, row.correctAnswer);
+      const userKeys = Array.isArray(body.answer) ? body.answer.map(String) : [];
+      sataPartialCredit = correctKeys.some((k) => userKeys.includes(k));
+    }
 
     if (
       correct &&
@@ -160,6 +183,9 @@ export async function POST(req: Request) {
         questionType: row.questionType,
         confidence: "low",
         catDifficultyHint: row.difficulty != null ? Number(row.difficulty) : null,
+        isSata,
+        lapseCount: resolveTopicLapseCount(lapseIndex, row.topic),
+        remediationSource: "practice_incorrect" as const,
       });
     }
 
@@ -180,6 +206,10 @@ export async function POST(req: Request) {
         questionType: row.questionType,
         confidence: null,
         catDifficultyHint: row.difficulty != null ? Number(row.difficulty) : null,
+        isSata,
+        sataPartialCredit,
+        lapseCount: resolveTopicLapseCount(lapseIndex, row.topic),
+        remediationSource: "practice_incorrect" as const,
       });
     }
 

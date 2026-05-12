@@ -411,7 +411,6 @@ const CANONICAL_ENTRIES: CanonicalTopicEntry[] = [
       "clinical management",
       "treatment planning",
       "care planning",
-      "care coordination",
       "chronic disease management",
     ],
   },

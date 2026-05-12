@@ -16,6 +16,19 @@ export const CANADA_NAV: CountryNavConfig = {
   heroExamLabel: "Canadian nursing exam prep",
   primary: [
     {
+      label: "CNPLE (NP)",
+      href: "/canada/np/cnple",
+      kind: "primary",
+      children: [
+        { label: "What is the CNPLE?", href: "/what-is-the-cnple" },
+        { label: "Practice Questions", href: "/canada/np/cnple/questions" },
+        { label: "Lessons", href: "/canada/np/cnple/lessons" },
+        { label: "Simulation", href: "/canada/np/cnple/cat" },
+        { label: "Study Guide", href: "/cnple-study-guide" },
+        { label: "LOFT Testing Explained", href: "/cnple-loft-testing" },
+      ],
+    },
+    {
       label: "REx-PN",
       href: "/canada/pn/rex-pn",
       kind: "primary",
@@ -33,11 +46,15 @@ export const CANADA_NAV: CountryNavConfig = {
     { label: "Pricing", href: "/pricing", kind: "cta" },
   ],
   secondary: [
+    { label: "CNPLE Practice Questions", href: "/cnple-practice-questions" },
+    { label: "Canada NP Exam Prep", href: "/canada-np-exam-prep" },
     { label: "For International Nurses", href: "/exams/canada" },
     { label: "Blog", href: "/blog" },
     { label: "About", href: "/about" },
   ],
   footerFeatured: [
+    { label: "CNPLE NP prep", href: "/canada/np/cnple" },
+    { label: "CNPLE practice questions", href: "/cnple-practice-questions" },
     { label: "REx-PN prep", href: "/canada/pn/rex-pn" },
     { label: "Canadian NCLEX-RN", href: "/lessons" },
     { label: "Nursing in Canada", href: "/canada" },
@@ -128,19 +145,23 @@ export const NAV_BY_COUNTRY: Record<CountryCode, CountryNavConfig> = {
 };
 
 export const CANADA_HOMEPAGE: CountryHomepageContent = {
-  headline: "NCLEX-RN & REx-PN prep for Canada",
+  headline: "CNPLE, REx-PN & NCLEX-RN prep for Canada",
   subheadline:
-    "Practice NCLEX-RN and REx-PN questions with rationales, lessons, flashcards, and adaptive CAT-style tests. Built for Canadian nurses.",
-  brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
-  primaryCta: { label: "Start REx-PN Prep", href: "/canada/pn/rex-pn" },
-  secondaryCta: { label: "Browse Canada RN & PN Prep", href: "/canada/rn" },
+    "Prepare for the Canadian NP licensure exam (CNPLE), REx-PN, and NCLEX-RN with clinical judgment practice, rationale-rich questions, lessons, and timed simulation. Built for Canadian nurses.",
+  brandLine: "Canada's first major CNPLE prep ecosystem — built before the exam launches.",
+  primaryCta: { label: "Start CNPLE Prep", href: "/canada/np/cnple" },
+  secondaryCta: { label: "REx-PN & NCLEX-RN Prep", href: "/canada/pn/rex-pn" },
   pathwayCards: [
+    {
+      title: "CNPLE (NP)",
+      href: "/canada/np/cnple",
+      description: "Canada's new single NP licensure exam — LOFT format, full lifespan scope. Launch July 2026.",
+    },
     { title: "REx-PN", href: "/canada/pn/rex-pn", description: "Practical nurse entry exam for Canada." },
     { title: "NCLEX-RN", href: "/lessons", description: "Registered nurse licensing aligned to Canadian regulators." },
-    { title: "PN in Canada", href: "/canada/pn", description: "PN tracks, lessons, and practice built for Canadian scope." },
     { title: "RN in Canada", href: "/canada/rn", description: "RN hubs, lessons, and question banks for Canadian pathways." },
   ],
-  proofStrip: ["Canada licensing depth", "Learners worldwide", "REx-PN support"],
+  proofStrip: ["Canada-first CNPLE prep", "LOFT simulation", "REx-PN + NCLEX-RN support"],
   crossBorderCta: {
     title: "Internationally educated and heading to Canada?",
     href: "/exams/canada",

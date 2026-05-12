@@ -11,7 +11,7 @@ import type {
   CaseStudyQuestion,
   CaseStudySubQuestion,
 } from "@/data/exam-questions/types";
-import { ECGQuestionLayout } from "@/components/ecg-question-layout";
+import { ECGQuestionLayout } from "../../../nursenest-core/src/components/ecg-question-layout";
 
 interface RendererProps<T> {
   question: T;

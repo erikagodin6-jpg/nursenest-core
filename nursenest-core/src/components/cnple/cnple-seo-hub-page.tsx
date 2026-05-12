@@ -7,6 +7,7 @@ import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { CnpleProvisionalDisclaimer } from "@/components/cnple/cnple-provisional-disclaimer";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -73,20 +74,9 @@ export function CnpleSeoHubPage({
           <h1 className="nn-marketing-h1 mt-2 text-balance">{h1}</h1>
           <p className="nn-marketing-lead mt-4 text-[var(--theme-muted-text)]">{lead}</p>
 
-          {/* Disclaimer */}
-          <div
-            className="mt-5 rounded-xl border px-4 py-3 text-[13px]"
-            style={{
-              borderColor: "var(--semantic-border-soft)",
-              background: "color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface))",
-              color: "var(--semantic-text-muted)",
-            }}
-          >
-            <strong style={{ color: "var(--semantic-text-secondary)" }}>Independent preparation.</strong>{" "}
-            NurseNest is an independent study platform and is not affiliated with CCRNR, the
-            Canadian Association of Schools of Nursing, or any regulatory body. CNPLE® is a
-            registered examination mark of its respective owners. NurseNest content is CNPLE-aligned
-            preparation, not an official replica.
+          {/* Provisional specification notice — text sourced from CNPLE_SPEC */}
+          <div className="mt-5">
+            <CnpleProvisionalDisclaimer variant="card" hideWhenConfirmed={false} />
           </div>
 
           {/* Body sections */}

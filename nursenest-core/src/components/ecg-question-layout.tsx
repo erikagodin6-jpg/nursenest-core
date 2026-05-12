@@ -1,11 +1,18 @@
 /**
  * ECGQuestionLayout — premium ECG/EKG question renderer.
  *
- * Wired into ImageBasedRenderer when imageType === "ecg".
- * Intentionally uses only Button, Badge, cn, and lucide-react so
- * it can be imported and SSR-tested from the nursenest-core/ test suite
- * via the @legacy-client/* path alias without needing tab/dialog shims.
+ * Lives in nursenest-core/src so the node:test suite (and react-dom/server)
+ * share the same React copy, avoiding the dual-React hook crash.
+ *
+ * The client dispatcher (client/src/components/advanced-question-renderers.tsx)
+ * imports this via a relative path.  All shadcn/ui primitives referenced here
+ * (button, badge, cn, lucide-react) exist in both apps with compatible APIs.
+ *
+ * The question shape is defined as ECGQuestionData (inline) so this file is
+ * importable without crossing the @/ alias boundary.
  */
+"use client";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,12 +35,43 @@ import {
   Crown,
   ArrowRight,
 } from "lucide-react";
-import type { ImageBasedQuestion } from "../data/exam-questions/types";
+
+// ─── Portable question shape ──────────────────────────────────────────────────
+// Defined inline so this component can be imported from any context without
+// requiring @/data/exam-questions/types, which only exists in client/src.
+
+export interface ECGQuestionData {
+  id: string;
+  stem: string;
+  imageDescription: string;
+  imageType: string;
+  clinicalFindings: string[];
+  options: string[];
+  correctAnswer: number;
+  rationale: string;
+  bodySystem: string;
+  tier: string;
+  difficulty?: number;
+  tags?: string[];
+  // Optional ECG-specific rhythm workspace fields
+  imageUrl?: string;
+  rhythmRate?: string;
+  rhythmRegularity?: string;
+  pWaves?: string;
+  prInterval?: string;
+  qrsWidth?: string;
+  clinicalSignificance?: string;
+  nursingAction?: string;
+  // Optional exhibit panel (labs, vitals, meds)
+  vitals?: Record<string, string>;
+  labs?: Record<string, string>;
+  medications?: string[];
+}
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
 export interface ECGQuestionLayoutProps {
-  question: ImageBasedQuestion;
+  question: ECGQuestionData;
   onAnswer?: (result: {
     correct: boolean;
     pointsEarned: number;
@@ -42,17 +80,20 @@ export interface ECGQuestionLayoutProps {
   }) => void;
   /** readOnly=true: display-only, no new answers accepted */
   readOnly?: boolean;
-  /** isLearningMode=true (practice): show rationale after submit. false (CAT/exam): suppress. */
+  /**
+   * isLearningMode=true (practice): show rationale after submit.
+   * isLearningMode=false (CAT/exam): suppress rationale.
+   */
   isLearningMode?: boolean;
-  /** locked=true: user's tier cannot access ECG; show paywall gate */
+  /** locked=true: learner's tier cannot access ECG; show paywall gate */
   locked?: boolean;
-  /** Pre-select an answer (used in tests to render post-submit state) */
+  /** Pre-select an answer without requiring a click — used in tests */
   defaultSelectedAnswer?: number;
-  /** Pre-set submitted state (used in tests) */
+  /** Pre-set submitted state — used in tests */
   defaultSubmitted?: boolean;
 }
 
-// ─── Rhythm workspace row ─────────────────────────────────────────────────────
+// ─── Sub-components ───────────────────────────────────────────────────────────
 
 function RhythmCell({
   label,
@@ -68,14 +109,14 @@ function RhythmCell({
     <div className="flex flex-col gap-1 p-3 bg-slate-800/60 rounded-xl min-w-0">
       <div className="flex items-center gap-1.5">
         {icon}
-        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{label}</span>
+        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          {label}
+        </span>
       </div>
       <span className="text-sm font-semibold text-slate-100 leading-tight">{value}</span>
     </div>
   );
 }
-
-// ─── Accordion section (exhibit panel) ───────────────────────────────────────
 
 function AccordionSection({
   title,
@@ -97,6 +138,7 @@ function AccordionSection({
         onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between px-4 py-3 bg-slate-50/80 hover:bg-slate-100/80 transition-colors text-left"
         aria-expanded={open}
+        type="button"
       >
         <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
           {icon}
@@ -108,18 +150,12 @@ function AccordionSection({
           <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
         )}
       </button>
-      {open && (
-        <div className="px-4 pb-4 pt-3 bg-white">
-          {children}
-        </div>
-      )}
+      {open && <div className="px-4 pb-4 pt-3 bg-white">{children}</div>}
     </div>
   );
 }
 
-// ─── Paywall gate ─────────────────────────────────────────────────────────────
-
-function ECGPaywallGate({ question }: { question: ImageBasedQuestion }) {
+function ECGPaywallGate({ question }: { question: ECGQuestionData }) {
   return (
     <div
       className="rounded-2xl border-2 border-violet-200/60 bg-gradient-to-br from-violet-50/80 via-purple-50/40 to-indigo-50/30 p-8 text-center"
@@ -134,9 +170,10 @@ function ECGPaywallGate({ question }: { question: ImageBasedQuestion }) {
         ECG interpretation questions are available to RN and NP subscribers.
       </p>
       <p className="text-xs text-slate-400 mb-6">
-        Topic: <span className="font-medium text-slate-600">{question.bodySystem}</span>
+        Topic:{" "}
+        <span className="font-medium text-slate-600">{question.bodySystem}</span>
       </p>
-      <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold shadow-sm hover:bg-violet-700 transition-colors cursor-pointer">
+      <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold shadow-sm">
         <Crown className="w-4 h-4" aria-hidden="true" />
         Upgrade to RN or NP Plan
       </div>
@@ -156,7 +193,7 @@ export function ECGQuestionLayout({
   defaultSubmitted = false,
 }: ECGQuestionLayoutProps) {
   const [selected, setSelected] = useState<number | null>(
-    defaultSelectedAnswer !== undefined ? defaultSelectedAnswer : null
+    defaultSelectedAnswer !== undefined ? defaultSelectedAnswer : null,
   );
   const [submitted, setSubmitted] = useState(defaultSubmitted);
 
@@ -183,32 +220,25 @@ export function ECGQuestionLayout({
     if (selected === null) return;
     setSubmitted(true);
     const isCorrect = selected === question.correctAnswer;
-    onAnswer?.({
-      correct: isCorrect,
-      pointsEarned: isCorrect ? 1 : 0,
-      maxPoints: 1,
-      selected,
-    });
+    onAnswer?.({ correct: isCorrect, pointsEarned: isCorrect ? 1 : 0, maxPoints: 1, selected });
   };
 
   const optionLabels = ["A", "B", "C", "D", "E"];
 
-  // ── Lock gate ──────────────────────────────────────────────────────────────
-  if (locked) {
-    return <ECGPaywallGate question={question} />;
-  }
+  // ── Paywall gate ─────────────────────────────────────────────────────────
+  if (locked) return <ECGPaywallGate question={question} />;
 
   return (
     <div className="space-y-4" data-testid={`ecg-question-${question.id}`}>
 
-      {/* ── ECG strip panel ─────────────────────────────────────────────── */}
+      {/* ── ECG strip panel ────────────────────────────────────────────── */}
       <div
         className="rounded-2xl overflow-hidden border border-slate-700/60 bg-slate-900 shadow-lg"
         data-testid="section-ecg-strip"
         role="region"
         aria-label="ECG/EKG clinical strip and findings"
       >
-        {/* Strip header */}
+        {/* Header bar */}
         <div className="flex items-center justify-between px-4 py-2.5 bg-slate-800/80 border-b border-slate-700/60">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-lg bg-emerald-500/20 flex items-center justify-center">
@@ -219,14 +249,14 @@ export function ECGQuestionLayout({
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+            <div className="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true" />
             <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
               {question.bodySystem || "Cardiology"}
             </span>
           </div>
         </div>
 
-        {/* Actual strip image OR description */}
+        {/* Strip image OR text description */}
         {question.imageUrl ? (
           <div className="bg-slate-950 overflow-x-auto">
             <img
@@ -250,7 +280,7 @@ export function ECGQuestionLayout({
           </div>
         )}
 
-        {/* Clinical findings grid */}
+        {/* Clinical findings */}
         {question.clinicalFindings.length > 0 && (
           <div className="px-5 py-4 border-t border-slate-700/60 bg-slate-800/40">
             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">
@@ -259,7 +289,10 @@ export function ECGQuestionLayout({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5">
               {question.clinicalFindings.map((finding, i) => (
                 <div key={i} className="flex items-start gap-2">
-                  <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" aria-hidden="true" />
+                  <div
+                    className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"
+                    aria-hidden="true"
+                  />
                   <span className="text-[13px] text-slate-300 leading-snug">{finding}</span>
                 </div>
               ))}
@@ -268,7 +301,7 @@ export function ECGQuestionLayout({
         )}
       </div>
 
-      {/* ── Rhythm interpretation workspace ─────────────────────────────── */}
+      {/* ── Rhythm interpretation workspace ────────────────────────────── */}
       {hasRhythm && (
         <div
           className="rounded-2xl overflow-hidden border border-slate-700/60 bg-slate-900 shadow-sm"
@@ -282,8 +315,9 @@ export function ECGQuestionLayout({
               Rhythm Analysis
             </span>
           </div>
+
           <div className="p-4 space-y-3">
-            {/* Row 1: rate, regularity, P waves, PR interval */}
+            {/* Row 1: rate / regularity / P waves / PR interval */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <RhythmCell
                 label="Rate"
@@ -306,7 +340,8 @@ export function ECGQuestionLayout({
                 icon={<TrendingUp className="w-3 h-3 text-slate-400" aria-hidden="true" />}
               />
             </div>
-            {/* Row 2: QRS width + significance */}
+
+            {/* Row 2: QRS width + clinical significance */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <RhythmCell
                 label="QRS Width"
@@ -314,7 +349,7 @@ export function ECGQuestionLayout({
                 icon={<Heart className="w-3 h-3 text-slate-400" aria-hidden="true" />}
               />
               {question.clinicalSignificance && (
-                <div className="flex flex-col gap-1 p-3 bg-amber-900/30 border border-amber-700/40 rounded-xl min-w-0">
+                <div className="flex flex-col gap-1 p-3 bg-amber-900/30 border border-amber-700/40 rounded-xl">
                   <div className="flex items-center gap-1.5">
                     <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" aria-hidden="true" />
                     <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400">
@@ -327,7 +362,8 @@ export function ECGQuestionLayout({
                 </div>
               )}
             </div>
-            {/* Row 3: nursing action */}
+
+            {/* Row 3: nursing / NP action */}
             {question.nursingAction && (
               <div
                 className="flex items-start gap-3 p-3 bg-teal-900/30 border border-teal-700/40 rounded-xl"
@@ -346,7 +382,7 @@ export function ECGQuestionLayout({
         </div>
       )}
 
-      {/* ── Exhibit panel (labs/vitals/meds) ────────────────────────────── */}
+      {/* ── Exhibit panel (labs / vitals / meds) ───────────────────────── */}
       {hasExhibit && (
         <AccordionSection
           title="Clinical Context"
@@ -404,7 +440,7 @@ export function ECGQuestionLayout({
         </AccordionSection>
       )}
 
-      {/* ── Question stem ───────────────────────────────────────────────── */}
+      {/* ── Question stem + answer options ─────────────────────────────── */}
       <div className="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
         <div className="px-5 md:px-7 pt-5 pb-3">
           <div className="flex items-center gap-2 mb-3">
@@ -426,7 +462,6 @@ export function ECGQuestionLayout({
           </p>
         </div>
 
-        {/* ── Answer options ──────────────────────────────────────────────── */}
         <div className="px-5 md:px-7 pb-5 md:pb-7 space-y-2.5">
           {question.options.map((option, idx) => {
             const isSelected = selected === idx;
@@ -454,7 +489,8 @@ export function ECGQuestionLayout({
               badgeCls = "border-primary bg-primary text-white";
               textCls = "text-slate-900 font-semibold";
             } else {
-              containerCls = "border-slate-200 hover:border-primary/40 hover:bg-primary/[0.025] hover:shadow-sm";
+              containerCls =
+                "border-slate-200 hover:border-primary/40 hover:bg-primary/[0.025] hover:shadow-sm";
               badgeCls = "border-slate-300 text-slate-500 bg-white";
               textCls = "text-slate-700";
             }
@@ -466,7 +502,7 @@ export function ECGQuestionLayout({
                 disabled={submitted || readOnly}
                 className={cn(
                   "w-full text-left px-5 py-4 rounded-2xl border-2 transition-all duration-200 flex items-center gap-4",
-                  containerCls
+                  containerCls,
                 )}
                 aria-pressed={isSelected}
                 data-testid={`button-option-ecg-${question.id}-${idx}`}
@@ -474,7 +510,7 @@ export function ECGQuestionLayout({
                 <span
                   className={cn(
                     "shrink-0 w-9 h-9 rounded-xl border-2 flex items-center justify-center text-sm font-bold transition-all duration-200",
-                    badgeCls
+                    badgeCls,
                   )}
                   aria-hidden="true"
                 >
@@ -506,7 +542,7 @@ export function ECGQuestionLayout({
         </div>
       </div>
 
-      {/* ── Rationale (practice mode only) ──────────────────────────────── */}
+      {/* ── Rationale — practice mode only ─────────────────────────────── */}
       {submitted && isLearningMode && (
         <div
           className="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden"
@@ -515,7 +551,6 @@ export function ECGQuestionLayout({
           aria-label="ECG question rationale and rhythm breakdown"
         >
           <div className="px-5 md:px-6 pt-5 pb-6 space-y-4">
-            {/* Header */}
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center">
                 <BookOpen className="w-3.5 h-3.5 text-violet-600" aria-hidden="true" />
@@ -539,12 +574,15 @@ export function ECGQuestionLayout({
 
             {/* Rationale text */}
             <div className="text-sm text-slate-700 leading-relaxed space-y-2">
-              {question.rationale.split(/\n\n+/).filter(Boolean).map((para, i) => (
-                <p key={i}>{para}</p>
-              ))}
+              {question.rationale
+                .split(/\n\n+/)
+                .filter(Boolean)
+                .map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
             </div>
 
-            {/* Rhythm breakdown (practice deepdive) */}
+            {/* Rhythm breakdown (practice deep-dive) */}
             {hasRhythm && (
               <div
                 className="rounded-xl border border-violet-200/60 bg-violet-50/30 p-3 space-y-2"
@@ -577,7 +615,7 @@ export function ECGQuestionLayout({
         </div>
       )}
 
-      {/* CAT/exam mode: rationale suppressed, show a subtle indicator */}
+      {/* ── CAT/exam mode: rationale suppressed ────────────────────────── */}
       {submitted && !isLearningMode && (
         <div
           className="text-center py-3 text-sm text-slate-400"

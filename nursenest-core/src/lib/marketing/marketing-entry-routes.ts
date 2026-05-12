@@ -84,6 +84,48 @@ export const NP = {
   caNpQuestions: "/canada/np/cnple/questions",
 } as const;
 
+/**
+ * CNPLE SEO content cluster — secondary pillar + uncertainty-capture + domain + population pages.
+ * These are self-canonical discovery surfaces, not redirects to the pathway hub.
+ * Internal links between these pages form the CNPLE topical authority knowledge graph.
+ */
+export const CNPLE = {
+  // ── Core hub (pathway-registered) ────────────────────────────────────────
+  hub: "/canada/np/cnple",
+  lessons: "/canada/np/cnple/lessons",
+  questions: "/canada/np/cnple/questions",
+  pricing: "/canada/np/cnple/pricing",
+  simulation: "/canada/np/cnple/cat",
+  flashcards: "/canada/np/cnple/flashcards",
+
+  // ── Primary discovery cluster ─────────────────────────────────────────────
+  practiceQuestions: "/cnple-practice-questions",
+  studyGuide: "/cnple-study-guide",
+  simulationExam: "/cnple-simulation-exam",
+  canadaNpExamPrep: "/canada-np-exam-prep",
+
+  // ── Phase 2: new-exam uncertainty capture ────────────────────────────────
+  whatIsCnple: "/what-is-the-cnple",
+  cnpleVsCnpe: "/cnple-vs-cnpe",
+  loftTesting: "/cnple-loft-testing",
+  blueprint: "/cnple-blueprint",
+
+  // ── Domain cluster ────────────────────────────────────────────────────────
+  clinicalJudgment: "/cnple-clinical-judgment",
+  prescribingQuestions: "/cnple-prescribing-questions",
+  pharmacology: "/cnple-pharmacology",
+  labInterpretation: "/cnple-lab-interpretation",
+  differentialDiagnosis: "/cnple-differential-diagnosis",
+  mentalHealth: "/cnple-mental-health",
+  caseStudies: "/cnple-case-studies",
+
+  // ── Population cluster ────────────────────────────────────────────────────
+  pediatrics: "/cnple-pediatrics",
+  geriatrics: "/cnple-geriatrics",
+  womensHealth: "/cnple-womens-health",
+  primaryCare: "/cnple-primary-care",
+} as const;
+
 /** Allied (in-app hubs) */
 export const ALLIED = {
   /** Core allied marketing index (unchanged from prior `mapLegacyMarketingHref("/allied-health")` — allied paths stay on Core). */

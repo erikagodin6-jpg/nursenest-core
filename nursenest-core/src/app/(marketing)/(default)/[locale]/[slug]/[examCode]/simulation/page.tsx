@@ -12,6 +12,7 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { CnpleProvisionalDisclaimer } from "@/components/cnple/cnple-provisional-disclaimer";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -122,19 +123,8 @@ export default async function CnpleSimulationLandingPage({ params }: Props) {
             diagnostics, lifespan care, and more.
           </p>
 
-          {/* Disclaimer */}
-          <div
-            className="mt-4 rounded-xl border px-4 py-3 text-[13px]"
-            style={{
-              borderColor: "var(--semantic-border-soft)",
-              background: "color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface))",
-              color: "var(--semantic-text-muted)",
-            }}
-          >
-            <strong style={{ color: "var(--semantic-text-secondary)" }}>Independent preparation only.</strong>{" "}
-            This simulation is not affiliated with CCRNR. It does not replicate the official CNPLE
-            environment and does not predict exam outcomes. We do not claim this is an exact CNPLE
-            replica.
+          <div className="mt-4">
+            <CnpleProvisionalDisclaimer variant="card" hideWhenConfirmed={false} />
           </div>
         </div>
 

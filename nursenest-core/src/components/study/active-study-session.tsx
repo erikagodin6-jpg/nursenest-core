@@ -181,7 +181,7 @@ export function ActiveStudySession({
 
   useEffect(() => {
     onStudyProgress?.({ index, revealed });
-  }, [index, revealed]);
+  }, [index, onStudyProgress, revealed]);
 
   useEffect(() => {
     if (sessionMode !== "test" || completed) return;
@@ -215,6 +215,43 @@ export function ActiveStudySession({
     },
     [index, onRate, onSessionComplete, sessionCards, telemetry],
   );
+
+  // Keyboard shortcuts — declared unconditionally (Rules of Hooks).
+  // Guards inside prevent execution when the session is in a non-interactive state.
+  useEffect(() => {
+    if (loading || !current || completed) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      const el = e.target as HTMLElement | null;
+      if (el?.closest("input, textarea, select, [contenteditable=true]")) return;
+
+      if ((e.key === " " || e.key === "Enter") && !revealed && !current.examMicroQuestion) {
+        e.preventDefault();
+        setRevealed(true);
+        if (current.id) telemetry.onReveal(current.id);
+        return;
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setIndex((i) => Math.max(0, i - 1));
+        return;
+      }
+      if (e.key === "ArrowRight") {
+        if (!revealed) return;
+        e.preventDefault();
+        setIndex((i) => Math.min(sessionCards.length - 1, i + 1));
+        return;
+      }
+      if (revealed && !saving && ["1", "2", "3", "4"].includes(e.key)) {
+        e.preventDefault();
+        const ratingMap = { "1": "again", "2": "hard", "3": "good", "4": "easy" } as const;
+        void submitRating(ratingMap[e.key as "1" | "2" | "3" | "4"]);
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [completed, current, loading, revealed, saving, sessionCards.length, submitRating, telemetry]);
 
   if (loading) {
     return (
@@ -268,39 +305,6 @@ export function ActiveStudySession({
       </div>
     );
   }
-
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      const el = e.target as HTMLElement | null;
-      if (el?.closest("input, textarea, select, [contenteditable=true]")) return;
-
-      if ((e.key === " " || e.key === "Enter") && !revealed && !current?.examMicroQuestion) {
-        e.preventDefault();
-        setRevealed(true);
-        if (current?.id) telemetry.onReveal(current.id);
-        return;
-      }
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        setIndex((i) => Math.max(0, i - 1));
-        return;
-      }
-      if (e.key === "ArrowRight") {
-        if (!revealed) return;
-        e.preventDefault();
-        setIndex((i) => Math.min(sessionCards.length - 1, i + 1));
-        return;
-      }
-      if (revealed && !saving && ["1", "2", "3", "4"].includes(e.key)) {
-        e.preventDefault();
-        const ratingMap = { "1": "again", "2": "hard", "3": "good", "4": "easy" } as const;
-        void submitRating(ratingMap[e.key as "1" | "2" | "3" | "4"]);
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [current?.examMicroQuestion, current?.id, revealed, saving, sessionCards.length, submitRating, telemetry]);
 
   const remainingCards = Math.max(0, sessionCards.length - index - 1);
   const ratedSession = ratingTally.again + ratingTally.hard + ratingTally.good + ratingTally.easy;

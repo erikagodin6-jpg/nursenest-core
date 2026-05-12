@@ -50,7 +50,8 @@ export type FlashcardStudyApiCard = {
   sourceKey: string | null;
   pathwayId: string | null;
   explanation?: string;
-  examMicroQuestion?: ExamMicroQuestionPayload;
+  /** MCQ (single-correct) or SATA (multi-correct) payload. Omitted for plain term/definition cards. */
+  examMicroQuestion?: ExamMicroQuestionPayload | SataQuestionPayload;
   /** Present on `lessonlink:v1|…` catalog-derived custom-session cards. */
   lessonLinkSectionKind?: string;
   lessonLinkCardType?: string;
@@ -60,9 +61,46 @@ export type FlashcardStudyApiCard = {
   lessonStudyTitle?: string;
   /** Exam-bank clinical image — omit from JSON when absent so clients render no image chrome. */
   clinicalImageUrl?: string | null;
+  /** Source of answer options: "canonical" = FlashcardOption rows; "json_fallback" = legacy JSON fields. */
+  optionSource?: "canonical" | "json_fallback";
 };
 
 export { parseLessonLinkSourceKey } from "@/lib/flashcards/lesson-link-source-key";
+
+/**
+ * Resolve the best available exam payload for a card.
+ * Prefers canonical FlashcardOption rows when present, falls back to JSON fields.
+ */
+function resolveExamPayload(
+  card: FlashcardStudySelectRow,
+  salt?: string | null,
+): {
+  payload: ExamMicroQuestionPayload | SataQuestionPayload | null;
+  source: "canonical" | "json_fallback" | null;
+} {
+  // 1. Try canonical options
+  if (card.canonicalOptions && card.canonicalOptions.length >= 3 && card.examItemKind && card.questionStem) {
+    const canonical = buildPayloadFromCanonical(
+      card.questionStem,
+      card.rationaleCorrect ?? "",
+      card.canonicalOptions,
+      card.examItemKind,
+    );
+    if (canonical) {
+      if (salt && canonical.itemKind !== "SATA" && "correctLetter" in canonical) {
+        return { payload: shuffleExamMicroQuestionOrder(canonical, `${salt}:${card.id}`), source: "canonical" };
+      }
+      return { payload: canonical, source: "canonical" };
+    }
+  }
+  // 2. Fall back to JSON fields
+  const jsonPayload = parseExamMicroQuestionFromDbFields(card);
+  if (jsonPayload) {
+    const shuffled = salt ? shuffleExamMicroQuestionOrder(jsonPayload, `${salt}:${card.id}`) : jsonPayload;
+    return { payload: shuffled, source: "json_fallback" };
+  }
+  return { payload: null, source: null };
+}
 
 export function serializeFlashcardForDeckStudy(
   card: FlashcardStudySelectRow,
@@ -74,17 +112,15 @@ export function serializeFlashcardForDeckStudy(
     examOptionShuffleSalt?: string | null;
   },
 ): FlashcardStudyApiCard {
-  let exam = parseExamMicroQuestionFromDbFields(card);
-  if (exam && opts.examOptionShuffleSalt?.trim()) {
-    exam = shuffleExamMicroQuestionOrder(exam, `${opts.examOptionShuffleSalt.trim()}:${card.id}`);
-  }
+  const { payload: exam, source: optionSource } = resolveExamPayload(card, opts.examOptionShuffleSalt);
   const loc = applyFlashcardCardOverlay(
     { id: card.id, front: card.front, back: card.back },
     opts.educationalLocale,
     opts.flashcardBundle,
   );
+  const isMcq = exam && "correctLetter" in exam;
   const front = exam ? exam.questionStem : loc.front;
-  const rawBack = exam ? correctAnswerLine(exam) : loc.back;
+  const rawBack = isMcq ? correctAnswerLine(exam as ExamMicroQuestionPayload) : loc.back;
   const back = opts.fullBackAvailable ? rawBack : truncateForPreview(rawBack);
   const explanation = exam
     ? undefined
@@ -107,6 +143,7 @@ export function serializeFlashcardForDeckStudy(
     pathwayId: card.deck?.pathwayId ?? null,
     ...(exam ? { examMicroQuestion: exam } : {}),
     ...(!exam && explanation ? { explanation } : {}),
+    ...(optionSource ? { optionSource } : {}),
     ...(lessonLink ? { lessonStudyHref: lessonLink.lessonStudyHref, lessonStudyTitle: lessonLink.lessonStudyTitle } : {}),
   };
 }
@@ -121,15 +158,13 @@ export function serializeFlashcardForCustomSession(
     examOptionShuffleSalt?: string | null;
   },
 ): Omit<FlashcardStudyApiCard, "fullBackAvailable"> & { rawTopic: string } {
-  let exam = parseExamMicroQuestionFromDbFields(card);
-  if (exam && opts.examOptionShuffleSalt?.trim()) {
-    exam = shuffleExamMicroQuestionOrder(exam, `${opts.examOptionShuffleSalt.trim()}:${card.id}`);
-  }
+  const { payload: exam, source: optionSource } = resolveExamPayload(card, opts.examOptionShuffleSalt);
+  const isMcq = exam && "correctLetter" in exam;
   let front = opts.swapFrontBack ? card.back : card.front;
   let back = opts.swapFrontBack ? card.front : card.back;
   if (exam) {
     front = exam.questionStem;
-    back = correctAnswerLine(exam);
+    back = isMcq ? correctAnswerLine(exam as ExamMicroQuestionPayload) : exam.rationaleCorrect;
   }
   const authoredRecall =
     !exam && typeof card.rationaleCorrect === "string" && card.rationaleCorrect.trim().length >= 8
@@ -160,6 +195,7 @@ export function serializeFlashcardForCustomSession(
     pathwayId: pid,
     ...(exam ? { examMicroQuestion: exam } : {}),
     ...(explanation ? { explanation } : {}),
+    ...(optionSource ? { optionSource } : {}),
     ...(img && img.startsWith("https://") ? { clinicalImageUrl: img } : {}),
     ...(link
       ? {

@@ -1489,11 +1489,9 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
 }
 
 html[data-theme="blossom"] .nn-header-brand-lockup {
-  /* --logo-primary = #c97a91 (Blossom pink) from ThemeStateHydration palette.logoPrimary.
-     --logo-text was incorrectly used here: it resolves to #1f2937 (near-black) on the white
-     Blossom nav background because it is readability-optimised, not brand-colour-optimised.
-     The leaf mask and wordmark both read currentColor, so this fix applies to both. */
-  color: var(--logo-primary);
+  /* --logo-primary is overridden to --nn-header-primary-fg (near-black) inside .nn-header-logo-row.
+     Use --theme-primary directly so the leaf and wordmark always render in the blossom pink. */
+  color: var(--theme-primary);
 }
 
 html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link,

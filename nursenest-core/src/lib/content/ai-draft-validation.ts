@@ -218,17 +218,51 @@ export function validateNormalizedQuestion(
   };
 }
 
+const aiFlashOptionItemSchema = z.object({
+  letter: z.string().min(1).max(1),
+  text: z.string().min(2),
+});
+
+const aiFlashRationaleItemSchema = z.object({
+  letter: z.string().min(1).max(1),
+  rationale: z.string().min(4),
+});
+
 const aiFlashItemSchema = z.object({
   front: z.string().optional(),
   back: z.string().optional(),
   tags: z.array(z.string()).optional(),
   difficulty: z.string().optional(),
+  // Optional exam-style micro-question fields (populated by advanced AI generation runs)
+  examItemKind: z.string().optional(),
+  questionStem: z.string().optional(),
+  answerOptions: z.array(aiFlashOptionItemSchema).min(3).max(6).optional(),
+  correctAnswer: z.string().optional(),
+  correctLetters: z.array(z.string().min(1).max(1)).min(2).max(5).optional(),
+  rationaleCorrect: z.string().optional(),
+  rationaleIncorrect: z.array(aiFlashRationaleItemSchema).optional(),
 });
+
+/**
+ * Exam-style micro-question fields that can optionally be embedded in a flashcard draft.
+ * When present in normalizedJson, the promote route will dual-write canonical FlashcardOption rows.
+ */
+export type NormalizedFlashcardDraftExamFields = {
+  examItemKind: string;
+  questionStem: string;
+  answerOptions: Array<{ letter: string; text: string }>;
+  correctAnswer?: string | null;
+  correctLetters?: string[] | null;
+  rationaleCorrect: string;
+  rationaleIncorrect: Array<{ letter: string; rationale: string }>;
+};
 
 export type NormalizedFlashcardDraft = {
   front: string;
   back: string;
   tags: string[];
+  /** Present only when the AI generation run included a full exam-style micro-question. */
+  examQuestion?: NormalizedFlashcardDraftExamFields;
 };
 
 export function normalizeAiFlashcardItem(raw: unknown): { ok: true; value: NormalizedFlashcardDraft } | { ok: false; error: string } {
@@ -238,12 +272,34 @@ export function normalizeAiFlashcardItem(raw: unknown): { ok: true; value: Norma
   const back = (p.data.back ?? "").trim();
   if (front.length < 3) return { ok: false, error: "Front too short" };
   if (back.length < 3) return { ok: false, error: "Back too short" };
+
+  // Carry exam fields through when a full micro-question is present
+  let examQuestion: NormalizedFlashcardDraftExamFields | undefined;
+  if (
+    p.data.examItemKind &&
+    p.data.questionStem &&
+    p.data.answerOptions &&
+    p.data.rationaleCorrect &&
+    (p.data.correctAnswer || (p.data.correctLetters && p.data.correctLetters.length >= 2))
+  ) {
+    examQuestion = {
+      examItemKind: p.data.examItemKind,
+      questionStem: p.data.questionStem,
+      answerOptions: p.data.answerOptions,
+      correctAnswer: p.data.correctAnswer ?? null,
+      correctLetters: p.data.correctLetters ?? null,
+      rationaleCorrect: p.data.rationaleCorrect,
+      rationaleIncorrect: p.data.rationaleIncorrect ?? [],
+    };
+  }
+
   return {
     ok: true,
     value: {
       front,
       back,
       tags: p.data.tags ?? [],
+      ...(examQuestion ? { examQuestion } : {}),
     },
   };
 }

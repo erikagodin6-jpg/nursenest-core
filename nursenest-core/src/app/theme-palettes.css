@@ -1923,9 +1923,9 @@ html[data-theme="midnight"] {
   --theme-card-text: #e5edf7;
   --theme-input-bg: #0b1220;
   --theme-input-border: #314466;
-  --theme-heading-text: #f8fafc;
-  --theme-body-text: #cbd5e1;
-  --theme-muted-text: #94a3b8;
+  --theme-heading-text: #ffffff;
+  --theme-body-text: #e5edf7;
+  --theme-muted-text: #b7c4d6;
   --theme-focus-ring: #38bdf8;
   --theme-separator: #314466;
   --theme-header-surface: #0b1220;

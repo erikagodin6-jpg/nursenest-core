@@ -7,6 +7,7 @@ import { withRetry } from "@/lib/resilience/with-retry";
 import { recordRemediationCapture } from "@/lib/remediation/record-remediation";
 import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildTopicLapseIndex, resolveTopicLapseCount, emptyLapseIndex } from "@/lib/remediation/lapse-resolution";
 
 export const dynamic = "force-dynamic";
 
@@ -55,14 +56,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "questionId required" }, { status: 400 });
     }
 
-    const userRow = await prisma.user.findUnique({
-      where: { id: gate.userId },
-      select: { learnerPath: true },
-    });
-    const pathwayId = effectivePathwayIdForCapture(body.pathwayId, userRow?.learnerPath ?? null);
-
-    const row = await withRetry(() =>
-      prisma.examQuestion.findFirst({
+    // Parallel: user row + question + lapse index — no sequential overhead.
+    const [userRow, row, lapseIndex] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: gate.userId },
+        select: { learnerPath: true },
+      }),
+      withRetry(() =>
+        prisma.examQuestion.findFirst({
         where: questionIdWhereIfAllowed(questionId, gate.entitlement),
         select: {
           id: true,
@@ -76,8 +77,13 @@ export async function POST(req: Request) {
           nclexClientNeedsCategory: true,
           nclexClientNeedsSubcategory: true,
         },
-      }),
-    );
+      )),
+      isRemediationEngineEnabled()
+        ? buildTopicLapseIndex(prisma, gate.userId)
+        : emptyLapseIndex(),
+    ]);
+
+    const pathwayId = effectivePathwayIdForCapture(body.pathwayId, userRow?.learnerPath ?? null);
 
     if (!row) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -99,6 +105,8 @@ export async function POST(req: Request) {
       questionType: row.questionType,
       confidence: "low",
       catDifficultyHint: row.difficulty != null ? Number(row.difficulty) : null,
+      lapseCount: resolveTopicLapseCount(lapseIndex, row.topic),
+      remediationSource: "practice_incorrect" as const,
     });
 
     return NextResponse.json({ ok: true });

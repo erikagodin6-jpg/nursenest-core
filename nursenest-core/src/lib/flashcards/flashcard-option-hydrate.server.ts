@@ -143,18 +143,23 @@ export async function batchHydrateFlashcardOptions(
 }
 
 /**
- * Dual-write helper: persists canonical options for a newly created/updated card.
- * Idempotent — uses upsert so it is safe to call multiple times.
+ * Dual-write helper: upserts canonical options for a card (safe for CREATE path).
+ * Uses upsert keyed on (flashcardId, optionKey) so repeated calls are idempotent.
+ * Does NOT remove option rows that are no longer present — use replaceCanonicalOptions for UPDATE.
+ *
+ * @param flashcardId - target card id
+ * @param options     - canonical options to persist (≥ 3 expected)
+ * @param tx          - optional Prisma transaction client; omit to use the global client
  */
 export async function writeCanonicalOptions(
   flashcardId: string,
   options: CanonicalOption[],
-  tx?: Parameters<typeof prisma.flashcardOption.upsert>[0] extends { where: unknown } ? never : Prisma.TransactionClient,
+  tx?: Prisma.TransactionClient,
 ): Promise<void> {
-  const client = tx ?? prisma;
+  const client = (tx ?? prisma) as typeof prisma;
   await Promise.all(
     options.map((opt) =>
-      (client as typeof prisma).flashcardOption.upsert({
+      client.flashcardOption.upsert({
         where: { flashcardId_optionKey: { flashcardId, optionKey: opt.optionKey } },
         create: {
           flashcardId,
@@ -173,4 +178,37 @@ export async function writeCanonicalOptions(
       }),
     ),
   );
+}
+
+/**
+ * Replace all canonical options for an existing card atomically.
+ * Deletes every existing FlashcardOption row for the card, then inserts the new set.
+ * Must be called inside a Prisma interactive transaction.
+ *
+ * Use this on UPDATE (PATCH) paths to avoid orphaned option rows when the option
+ * set changes (e.g. switching from 4 to 3 options, or changing option keys).
+ *
+ * @param flashcardId - target card id
+ * @param options     - the new canonical option set (replaces all existing rows)
+ * @param tx          - Prisma transaction client (required — caller owns the transaction)
+ */
+export async function replaceCanonicalOptions(
+  flashcardId: string,
+  options: CanonicalOption[],
+  tx: Prisma.TransactionClient,
+): Promise<void> {
+  const client = tx as typeof prisma;
+  await client.flashcardOption.deleteMany({ where: { flashcardId } });
+  if (options.length > 0) {
+    await client.flashcardOption.createMany({
+      data: options.map((opt) => ({
+        flashcardId,
+        optionKey: opt.optionKey,
+        content: opt.content,
+        isCorrect: opt.isCorrect,
+        rationale: opt.rationale,
+        displayOrder: opt.displayOrder,
+      })),
+    });
+  }
 }
