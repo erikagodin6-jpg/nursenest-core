@@ -11,7 +11,9 @@ import {
 } from "@/lib/flashcards/flashcard-exam-style";
 import {
   buildPayloadFromCanonical,
+  fromDbRows,
   type CanonicalOption,
+  type FlashcardOptionRow,
 } from "@/lib/flashcards/flashcard-option-normalize";
 import { applyFlashcardCardOverlay } from "@/lib/i18n/educational-content-overlay";
 import type { FlashcardEducationalBundle } from "@/lib/i18n/educational-content-overlay";
@@ -38,6 +40,8 @@ export type FlashcardStudySelectRow = {
   keyTakeaway?: string | null;
   /** Canonical relational options (preferred over JSON fields when present). */
   canonicalOptions?: CanonicalOption[] | null;
+  /** Raw Prisma relation rows; converted to canonicalOptions by the serializer. */
+  options?: FlashcardOptionRow[] | null;
 };
 
 export type FlashcardStudyApiCard = {
@@ -79,11 +83,15 @@ function resolveExamPayload(
   source: "canonical" | "json_fallback" | null;
 } {
   // 1. Try canonical options
-  if (card.canonicalOptions && card.canonicalOptions.length >= 3 && card.examItemKind && card.questionStem) {
+  const canonicalOptions =
+    card.canonicalOptions ??
+    (card.options && card.options.length > 0 ? fromDbRows(card.options) : null);
+
+  if (canonicalOptions && canonicalOptions.length >= 3 && card.examItemKind && card.questionStem) {
     const canonical = buildPayloadFromCanonical(
       card.questionStem,
       card.rationaleCorrect ?? "",
-      card.canonicalOptions,
+      canonicalOptions,
       card.examItemKind,
     );
     if (canonical) {
