@@ -136,5 +136,10 @@
     "client/build": true,
     "build": true
   },
-  "vibecheck.watchMode": true
+  "vibecheck.watchMode": true,
+  "builder.serverUrl": "",
+  "builder.command": "npm run dev",
+  "builder.runDevServer": false,
+  "builder.autoDetectDevServer": true,
+  "builder.launchType": "editor"
 }

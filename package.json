@@ -16,6 +16,7 @@
     "start": "node nursenest-core/scripts/start-standalone.mjs",
     "heroku:local": "node scripts/start-production.mjs",
     "verify:do-runtime": "node scripts/verify-digitalocean-runtime.mjs",
+    "verify:do-domains": "node scripts/verify-digitalocean-domain-persistence.mjs",
     "verify:dist": "node scripts/verify-dist-artifacts.mjs",
     "production:build": "bash scripts/production-build.sh",
     "check": "tsc",

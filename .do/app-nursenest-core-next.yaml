@@ -1,5 +1,10 @@
 name: nursenest-core-next
 region: tor
+domains:
+  - domain: nursenest.ca
+    type: PRIMARY
+  - domain: www.nursenest.ca
+    type: ALIAS
 ingress:
   rules:
     - component:
