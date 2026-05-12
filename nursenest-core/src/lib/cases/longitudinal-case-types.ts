@@ -308,6 +308,77 @@ export type CaseSessionAnalyticsPayload = {
   completedAt: string;
 };
 
+// ── Dynamic state mutation types ──────────────────────────────────────────────
+
+/** Lab value with an attached trend direction for UI rendering. */
+export type EvolvedLabValue = {
+  test: string;
+  value: string;
+  unit?: string;
+  referenceRange?: string;
+  flag?: "H" | "L" | "C";
+  /** Trend vs the authored baseline or prior step's value. */
+  trend?: "improving" | "worsening" | "stable";
+  /** Numeric change vs authored baseline (for UI). */
+  deltaFromBaseline?: number;
+};
+
+/** Vital sign with trend direction. */
+export type EvolvedVitalReading = {
+  label: string;
+  value: string;
+  unit?: string;
+  flag?: "high" | "low" | "critical";
+  trend?: "improving" | "worsening" | "stable";
+};
+
+/** Medication adherence record: what happened to a medication in this session. */
+export type MedicationAdherenceRecord = {
+  name: string;
+  status: "started" | "active" | "delayed" | "refused" | "contraindicated" | "duplicated" | "stopped";
+  /** Step this status change was recorded. */
+  stepIndex: number;
+  /** Human-readable reason for the status. */
+  reason?: string;
+};
+
+/** Short patient-reported message generated from trajectory state. */
+export type PatientMessage = {
+  /** Type for icon selection in UI. */
+  type: "symptom_improvement" | "symptom_worsening" | "side_effect" | "new_symptom" | "neutral";
+  text: string;
+  /** Step that generated this message. */
+  stepIndex: number;
+};
+
+/** A prior harmful/suboptimal decision whose consequence is now surfacing. */
+export type DelayedConsequence = {
+  /** Step the original decision was made. */
+  sourceStepIndex: number;
+  /** What went wrong. */
+  summary: string;
+  /** Suggested remediation action. */
+  clinicalNote: string;
+  severity: "warning" | "critical";
+};
+
+/**
+ * Full evolved state for a case step — computed from all prior decisions.
+ * Replaces or annotates the authored static values in the step payload.
+ */
+export type EvolvedStepState = {
+  /** Evolved lab values (may differ from authored). Null if no evolution to show. */
+  evolvedLabs: EvolvedLabValue[];
+  /** Evolved vital readings (may differ from authored). */
+  evolvedVitals: EvolvedVitalReading[];
+  /** What the patient reports at this step based on trajectory. */
+  patientMessages: PatientMessage[];
+  /** Current medication adherence records. */
+  medicationAdherenceRecords: MedicationAdherenceRecord[];
+  /** Delayed consequences from prior harmful decisions now becoming visible. */
+  delayedConsequences: DelayedConsequence[];
+};
+
 /** Public payload returned by the session API for the current step. */
 export type CaseStepPayload = {
   sessionId: string;
@@ -322,6 +393,8 @@ export type CaseStepPayload = {
   isLastStep: boolean;
   /** Current trajectory state (computed from prior decisions). */
   trajectoryState?: ClinicalTrajectoryState;
+  /** Dynamically evolved labs, vitals, messages, and delayed consequences. */
+  evolvedState?: EvolvedStepState;
 };
 
 /** Payload returned after the learner advances a step. */

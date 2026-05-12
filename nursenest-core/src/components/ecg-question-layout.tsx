@@ -36,6 +36,20 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+// ─── URL safety guard ─────────────────────────────────────────────────────────
+// Only HTTPS URLs are allowed for the ECG strip image.  Any other scheme
+// (http, javascript, data, blob, empty, malformed) falls back to the text
+// description panel, preventing mixed-content warnings and XSS vectors.
+
+function isSafeImageUrl(url: string | undefined): boolean {
+  if (!url || url.trim() === "") return false;
+  try {
+    return new URL(url).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 // ─── Portable question shape ──────────────────────────────────────────────────
 // Defined inline so this component can be imported from any context without
 // requiring @/data/exam-questions/types, which only exists in client/src.
@@ -256,8 +270,8 @@ export function ECGQuestionLayout({
           </div>
         </div>
 
-        {/* Strip image OR text description */}
-        {question.imageUrl ? (
+        {/* Strip image (HTTPS only) OR safe text description fallback */}
+        {isSafeImageUrl(question.imageUrl) ? (
           <div className="bg-slate-950 overflow-x-auto">
             <img
               src={question.imageUrl}

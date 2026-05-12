@@ -189,18 +189,20 @@ export function auditCaseAuthoring(patientCase: PatientCase): CaseAuthoringAudit
       }
     }
 
-    // Follow-up interval coherence
+    // Follow-up interval coherence.
+    // NOTE: followUpInterval is elapsed time SINCE the prior step (retrospective context for the
+    // narrative), NOT a prescribed future follow-up recommendation. Do not validate it as if it
+    // were a medical order — only check for obviously impossible values.
     if (step.followUpInterval) {
       const days = intervalToDays(step.followUpInterval);
-      if (days <= 0) {
-        violations.push(v("invalid_follow_up_interval", "warning",
-          `Follow-up interval at step ${step.index} must be positive (got ${step.followUpInterval.value} ${step.followUpInterval.unit}).`,
+      if (days < 0) {
+        violations.push(v("invalid_follow_up_interval", "critical",
+          `Follow-up interval at step ${step.index} is negative (got ${step.followUpInterval.value} ${step.followUpInterval.unit}). Elapsed time must be non-negative.`,
           `${loc}.followUpInterval`));
       }
-      // Detect implausibly long interval for a critical step
-      if (step.clinicalUpdate.direction === "critical" && days > 1) {
-        violations.push(v("critical_follow_up_too_long", "critical",
-          `Step ${step.index} has direction=critical but follow-up interval is ${days} days. Critical presentations require immediate escalation.`,
+      if (days > 3650) {
+        violations.push(v("follow_up_interval_implausibly_long", "warning",
+          `Follow-up interval at step ${step.index} exceeds 10 years. Verify the unit is correct.`,
           `${loc}.followUpInterval`));
       }
       totalTimeDays += days;

@@ -16,6 +16,7 @@ import {
   processStepAdvance,
   isValidOptionId,
 } from "@/lib/cases/longitudinal-case-engine";
+import { classifyPrescribingRiskSeverity } from "@/lib/cnple/prescribing-safety-engine";
 
 type RouteParams = { params: Promise<{ sessionId: string }> };
 
@@ -76,7 +77,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     typeof dwellMs === "number" ? dwellMs : undefined,
   );
 
-  // Persist updated session
+  // Persist updated session — include enriched decision fields from engine
   const nextStageIndex = result.completed ? stepIndex : stepIndex + 1;
   await prisma.longitudinalCaseSession.update({
     where: { id: sessionId },
@@ -91,6 +92,9 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
           cnpleDomainSlug: step.cnpleDomain,
           trajectory: result.trajectory,
           dwellMs: typeof dwellMs === "number" ? dwellMs : undefined,
+          // Phase 8 enriched fields — persisted so recomputation is accurate
+          prescribingRiskSeverity: classifyPrescribingRiskSeverity(step.question.family, result.trajectory) ?? undefined,
+          followUpAppropriateness: result.followUpAppropriateness ?? undefined,
         },
       ],
       status: result.completed ? "COMPLETED" : "IN_PROGRESS",

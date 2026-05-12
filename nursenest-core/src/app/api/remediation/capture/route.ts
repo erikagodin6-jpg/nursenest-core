@@ -77,7 +77,7 @@ export async function POST(req: Request) {
           nclexClientNeedsCategory: true,
           nclexClientNeedsSubcategory: true,
         },
-      )),
+      })),
       isRemediationEngineEnabled()
         ? buildTopicLapseIndex(prisma, gate.userId)
         : emptyLapseIndex(),

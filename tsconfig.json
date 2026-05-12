@@ -66,6 +66,9 @@
       ],
       "@/probe-wrapper": [
         "./probe-wrapper"
+      ],
+      "@nursenest-core/*": [
+        "./nursenest-core/src/*"
       ]
     },
     "types": [

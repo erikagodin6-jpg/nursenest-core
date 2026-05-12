@@ -59,6 +59,7 @@
     "verify:standalone-artifact": "node scripts/verify-standalone-artifact.mjs",
     "verify:dockerfile-npm-scripts": "node scripts/verify-dockerfile-npm-scripts.mjs",
     "production:build": "bash ../scripts/production-build.sh",
+    "lint": "eslint .",
     "check": "tsc",
     "test": "node scripts/run-node-test-filter.mjs",
     "typecheck": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && tsc --noEmit --incremental false",
@@ -501,6 +502,8 @@
     "zod-validation-error": "^3.5.4"
   },
   "devDependencies": {
+    "eslint": "^9.0.0",
+    "eslint-config-next": "16.2.6",
     "@aws-sdk/client-s3": "^3.750.0",
     "@aws-sdk/lib-storage": "^3.750.0",
     "@babel/generator": "^7.29.1",

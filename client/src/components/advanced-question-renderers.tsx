@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, GripVertical, ArrowRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
@@ -11,7 +11,7 @@ import type {
   CaseStudyQuestion,
   CaseStudySubQuestion,
 } from "@/data/exam-questions/types";
-import { ECGQuestionLayout } from "../../../nursenest-core/src/components/ecg-question-layout";
+import { ECGQuestionLayout } from "@nursenest-core/components/ecg-question-layout";
 
 interface RendererProps<T> {
   question: T;

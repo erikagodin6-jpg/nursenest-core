@@ -46,7 +46,7 @@ const PATTERN_THRESHOLD = 3.0;
 function assignPriority(weightedScore: number, isPattern: boolean): RemediationPriority {
   if (isPattern && weightedScore >= 4.0) return "urgent";
   if (weightedScore >= 3.5 || (isPattern && weightedScore >= 2.5)) return "high";
-  if (weightedScore >= 1.5) return "moderate";
+  if (weightedScore > 0) return "moderate";  // Any error → at least moderate
   return "low";
 }
 
@@ -153,8 +153,10 @@ export function deriveWeakAndStrongDomains(
   decisions: CaseDecisionRecord[],
   priorityMap: RemediationPriorityMap,
 ): { weakDomains: CnpleDomainSlug[]; strongDomains: CnpleDomainSlug[] } {
+  // Include all domains with at least moderate remediation priority.
+  // "Low" priority indicates an isolated minor mistake — not a true weakness.
   const weakDomains = priorityMap
-    .filter((e) => e.priority === "urgent" || e.priority === "high")
+    .filter((e) => e.priority !== "low")
     .map((e) => e.domain);
 
   // Strong = appeared at least once, zero errors, not in weak list

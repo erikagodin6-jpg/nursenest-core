@@ -90,6 +90,9 @@ export default defineConfig({
       "@": path.resolve(projectRoot, "client", "src"),
       "@shared": path.resolve(projectRoot, "shared"),
       "@assets": path.resolve(projectRoot, "attached_assets"),
+      // Stable alias so client/src code can import shared nursenest-core components
+      // without fragile deep relative paths (../../../nursenest-core/src/...).
+      "@nursenest-core": path.resolve(projectRoot, "nursenest-core", "src"),
     },
   },
 

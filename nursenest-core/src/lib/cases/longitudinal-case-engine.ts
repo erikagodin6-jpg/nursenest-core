@@ -41,6 +41,7 @@ import {
 import {
   buildCaseSessionAnalytics,
 } from "@/lib/cases/case-session-analytics";
+import { computeEvolvedStepState } from "@/lib/cases/longitudinal-state-mutation";
 
 // ── Step payload builder ───────────────────────────────────────────────────────
 
@@ -65,6 +66,10 @@ export function buildStepPayload(
     ? computeTrajectoryState(priorDecisions)
     : undefined;
 
+  const evolvedState = priorDecisions.length > 0
+    ? computeEvolvedStepState(patientCase, priorDecisions, stepIndex)
+    : undefined;
+
   return {
     sessionId,
     scenarioId: patientCase.id,
@@ -74,6 +79,7 @@ export function buildStepPayload(
     step: { ...step, question: questionPublic },
     isLastStep: stepIndex === patientCase.steps.length - 1,
     trajectoryState,
+    evolvedState,
   };
 }
 

@@ -6,6 +6,14 @@
  * Uses renderToStaticMarkup (no jsdom needed) to assert HTML structure.
  * defaultSelectedAnswer + defaultSubmitted props let us render the post-submit
  * state without requiring user interaction.
+ *
+ * Dispatcher smoke tests (tests 8–9):
+ *   ImageBasedRenderer itself is a pure pass-through with no hooks, so it can be
+ *   imported and rendered (ECG branch) from this context safely.
+ *   The NonECGImageRenderer branch uses useI18n (client-only hook) + a separate
+ *   copy of React from root/node_modules, which triggers a dual-React crash when
+ *   rendered via renderToStaticMarkup here.  Non-ECG rendering is therefore
+ *   covered by the Playwright CAT/practice smoke tests, not this file.
  */
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -13,6 +21,9 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import { ECGQuestionLayout } from "@/components/ecg-question-layout";
+// ImageBasedRenderer is imported for the dispatcher smoke tests (tests 8–9).
+// It lives in client/src and is accessed via the @legacy-client alias.
+import { ImageBasedRenderer } from "@legacy-client/components/advanced-question-renderers";
 
 // ─── Shared fixture ───────────────────────────────────────────────────────────
 
@@ -226,4 +237,98 @@ test("ECG strip panel has an aria-label for screen readers", () => {
     /data-testid="img-ecg-strip"/,
     "ECG strip image has testid",
   );
+});
+
+// ─── Test 7: invalid / non-HTTPS imageUrl safety guard ───────────────────────
+
+test("non-HTTPS / malformed / javascript: imageUrl falls back to text description", () => {
+  const unsafeUrls = [
+    "http://example.com/ecg.png",   // plain HTTP — mixed-content risk
+    "",                              // empty string
+    "javascript:alert(1)",           // XSS vector
+    "data:image/png;base64,abc",    // data URI — potential XSS payload
+    "//cdn.example.com/strip.png",  // protocol-relative — resolves to http in some contexts
+    "not-a-url-at-all",             // malformed
+    "ftp://files.example.com/ecg",  // non-web scheme
+  ];
+
+  for (const url of unsafeUrls) {
+    const html = renderToStaticMarkup(
+      React.createElement(ECGQuestionLayout, {
+        question: { ...ecgQuestion, imageUrl: url },
+        isLearningMode: true,
+      }),
+    );
+    assert.doesNotMatch(
+      html,
+      /data-testid="img-ecg-strip"/,
+      `<img> must NOT render for unsafe URL: "${url}"`,
+    );
+    assert.match(
+      html,
+      /data-testid="text-ecg-description"/,
+      `text description must show for unsafe URL: "${url}"`,
+    );
+  }
+
+  // Confirm a valid HTTPS URL still renders the <img>
+  const safeHtml = renderToStaticMarkup(
+    React.createElement(ECGQuestionLayout, {
+      question: { ...ecgQuestion, imageUrl: "https://cdn.nursenest.com/ecg/svt.png" },
+      isLearningMode: true,
+    }),
+  );
+  assert.match(safeHtml, /data-testid="img-ecg-strip"/, "HTTPS URL renders <img>");
+  assert.doesNotMatch(safeHtml, /data-testid="text-ecg-description"/, "description hidden when img renders");
+});
+
+// ─── Test 8: dispatcher module smoke ─────────────────────────────────────────
+
+test("ImageBasedRenderer module loads and exports a callable function", async () => {
+  // Static import already ran above; this async form makes the intent explicit
+  // and ensures the module resolves through @legacy-client without crashing.
+  const mod = await import("@legacy-client/components/advanced-question-renderers");
+  assert.equal(
+    typeof mod.ImageBasedRenderer,
+    "function",
+    "ImageBasedRenderer must be exported as a function",
+  );
+  // Verify other renderers are still present (regression guard)
+  assert.equal(typeof mod.MatrixRenderer, "function", "MatrixRenderer still exported");
+  assert.equal(typeof mod.TrendRenderer, "function", "TrendRenderer still exported");
+  assert.equal(typeof mod.DragDropRenderer, "function", "DragDropRenderer still exported");
+});
+
+// ─── Test 9: dispatcher ECG routing — no hook errors ─────────────────────────
+
+test("ImageBasedRenderer with imageType='ecg' renders ECGQuestionLayout without hook errors", () => {
+  // ImageBasedRenderer is a pure pass-through with no hooks of its own.
+  // The ECG branch renders ECGQuestionLayout, which lives in nursenest-core and
+  // shares the same React copy as this test's react-dom/server → hooks work.
+  const html = renderToStaticMarkup(
+    React.createElement(ImageBasedRenderer, { question: ecgQuestion }),
+  );
+
+  // ECGQuestionLayout root testid must be present
+  assert.match(
+    html,
+    new RegExp(`data-testid="ecg-question-${ecgQuestion.id}"`),
+    "ECGQuestionLayout rendered for imageType='ecg'",
+  );
+  // Legacy NonECGImageRenderer testid must NOT appear
+  assert.doesNotMatch(
+    html,
+    new RegExp(`data-testid="question-image-${ecgQuestion.id}"`),
+    "NonECGImageRenderer must NOT render for imageType='ecg'",
+  );
+  // Strip panel and stem must be present
+  assert.match(html, /data-testid="section-ecg-strip"/, "ECG strip panel present");
+  assert.match(html, /which rhythm is most likely present/i, "question stem rendered");
+
+  // Locked path: ecgLocked=true shows paywall, not the question
+  const lockedHtml = renderToStaticMarkup(
+    React.createElement(ImageBasedRenderer, { question: ecgQuestion, ecgLocked: true }),
+  );
+  assert.match(lockedHtml, /data-testid="section-ecg-paywall"/, "locked ECG shows paywall");
+  assert.doesNotMatch(lockedHtml, /data-testid="section-ecg-strip"/, "strip hidden when locked");
 });
