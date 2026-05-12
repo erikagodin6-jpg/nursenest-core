@@ -1,6 +1,6 @@
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
-import { CNPLE_SITEMAP_PATHS } from "@/lib/seo/cnple-seo-cluster";
+import { CNPLE_HUB, CNPLE_QUESTIONS, CNPLE_SITEMAP_PATHS, CNPLE_HUB_SITEMAP_PATHS } from "@/lib/seo/cnple-seo-cluster";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
   normalizeOrigin,
@@ -20,13 +20,18 @@ export const runtime = "nodejs";
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
+const PATHWAY_SITEMAP_OWNED_CNPLE_PATHS = new Set([CNPLE_HUB, CNPLE_QUESTIONS]);
+
 export async function GET(request: Request): Promise<Response> {
   const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
 
-  const entries: SitemapUrlEntry[] = CNPLE_SITEMAP_PATHS.map((path) => ({
+  const allPaths = [...CNPLE_SITEMAP_PATHS, ...CNPLE_HUB_SITEMAP_PATHS].filter(
+    (path) => !PATHWAY_SITEMAP_OWNED_CNPLE_PATHS.has(path),
+  );
+  const entries: SitemapUrlEntry[] = allPaths.map((path) => ({
     loc: `${origin}${path}`,
     changefreq: "weekly" as const,
-    priority: path === "/cnple-practice-questions" || path === "/canada-np-exam-prep" ? "0.9" : "0.8",
+    priority: path === "/cnple-practice-questions" || path === "/canada-np-exam-prep" || path === "/canada/np/cnple" ? "0.9" : "0.8",
   }));
 
   const filtered = filterPublicSitemapEntries(entries, origin);

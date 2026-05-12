@@ -288,6 +288,44 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       </FooterGuestAppLink>
                     </li>
                   </ul>
+                  {/* Authority cluster hub links for crawl depth ≤3 */}
+                  <div className="mt-4 rounded-xl border border-[var(--footer-border)] bg-[color-mix(in_srgb,var(--footer-bg)_88%,var(--semantic-brand))] px-3 py-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--footer-muted)]">
+                      Exam authority guides
+                    </p>
+                    <ul className="mt-2 space-y-1.5">
+                      <li>
+                        <FLink href="/canada/np/cnple/study-guide" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                          CNPLE study guide
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink href="/canada/np/cnple/loft-exam" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                          CNPLE LOFT format
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink href="/canada/rpn/rex-pn/cat" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                          REx-PN CAT exam
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink href="/canada/rpn/rex-pn/pharmacology" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                          REx-PN pharmacology
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink href="/allied-health/respiratory-therapy/ventilation" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                          RT ventilation
+                        </FLink>
+                      </li>
+                      <li>
+                        <FLink href="/allied-health/respiratory-therapy/oxygen-therapy" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                          Oxygen therapy
+                        </FLink>
+                      </li>
+                    </ul>
+                  </div>
                 </FooterPremiumNavColumn>
 
                 <FooterPremiumNavColumn

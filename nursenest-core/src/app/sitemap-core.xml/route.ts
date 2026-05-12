@@ -16,6 +16,34 @@ import {
 } from "@/lib/seo/sitemap-public-index-filter";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
+const CHILD_SEGMENT_OWNED_CORE_EXCLUSIONS = new Set([
+  "/canada/np/cnple/simulation",
+  "/canada/np/cnple/flashcards",
+  "/canada/np/cnple/report-card",
+  "/cnple-practice-questions",
+  "/cnple-simulation-exam",
+  "/cnple-study-guide",
+  "/cnple-flashcards",
+  "/cnple-case-studies",
+  "/cnple-clinical-judgment",
+  "/cnple-prescribing-questions",
+  "/cnple-lab-interpretation",
+  "/cnple-differential-diagnosis",
+  "/cnple-primary-care",
+  "/cnple-pediatrics",
+  "/cnple-womens-health",
+  "/cnple-geriatrics",
+  "/cnple-mental-health",
+]);
+
+function isChildSegmentOwnedCoreUrl(url: string, origin: string): boolean {
+  const normalized = normalizeSitemapLoc(url);
+  const o = origin.endsWith("/") ? origin.slice(0, -1) : origin;
+  if (!normalized.startsWith(o)) return false;
+  const pathname = normalized.slice(o.length) || "/";
+  return CHILD_SEGMENT_OWNED_CORE_EXCLUSIONS.has(pathname);
+}
+
 /**
  * Core marketing/programmatic urlset (everything from {@link collectCoreUrls} except DB pathway-lesson rows).
  * Blog `<loc>`s are excluded via {@link excludeAbsoluteUrlsMatchingBlogSitemapEntries} — blog posts remain in
@@ -45,7 +73,9 @@ export async function GET(request: Request): Promise<Response> {
       collectExamPathwayUrls(origin),
     ]);
     const pathwayExamOwned = new Set(pathwayExamOwnedUrls.map((u) => normalizeSitemapLoc(u)));
-    const coreUrlsWithoutPathwayExamOverlap = coreUrls.filter((u) => !pathwayExamOwned.has(normalizeSitemapLoc(u)));
+    const coreUrlsWithoutPathwayExamOverlap = coreUrls.filter(
+      (u) => !pathwayExamOwned.has(normalizeSitemapLoc(u)) && !isChildSegmentOwnedCoreUrl(u, origin),
+    );
 
     const coreWithoutBlog = excludeAbsoluteUrlsMatchingBlogSitemapEntries(coreUrlsWithoutPathwayExamOverlap, blogEntries);
 
@@ -61,9 +91,11 @@ export async function GET(request: Request): Promise<Response> {
 
     xml = buildSitemapUrlsetFromAbsoluteUrls(unique);
   } catch {
-    const fallbackEntries: SitemapUrlEntry[] = SITEMAP_FALLBACK_CORE_PATHS.map((path) => ({
-      loc: `${origin}${path === "/" ? "" : path}`,
-    }));
+    const fallbackEntries: SitemapUrlEntry[] = SITEMAP_FALLBACK_CORE_PATHS
+      .filter((path) => !CHILD_SEGMENT_OWNED_CORE_EXCLUSIONS.has(path))
+      .map((path) => ({
+        loc: `${origin}${path === "/" ? "" : path}`,
+      }));
     const filteredFallback = filterPublicSitemapEntries(fallbackEntries, origin);
     xml = buildSitemapUrlsetFromAbsoluteUrls(
       filteredFallback.length > 0 ? filteredFallback : [{ loc: `${origin}/` }],

@@ -8,9 +8,12 @@ export const revalidate = 86400;
 
 type Props = { params: Promise<{ topic: string }> };
 
+// These slugs have dedicated static pages that take routing precedence.
+const STATIC_PAGE_SLUGS = new Set(["study-guide", "case-based-questions", "provisional-registration", "loft-exam"]);
+
 export function generateStaticParams() {
   return listAuthorityClusterPages()
-    .filter((page) => page.cluster === "cnple" && page.slug !== "overview")
+    .filter((page) => page.cluster === "cnple" && page.slug !== "overview" && !STATIC_PAGE_SLUGS.has(page.slug))
     .map((page) => ({ topic: page.slug }));
 }
 

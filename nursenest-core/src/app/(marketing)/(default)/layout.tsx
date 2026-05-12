@@ -41,10 +41,11 @@ import type { CountryCode } from "@/lib/marketing/countries/types";
 
 export const dynamic = "force-dynamic";
 
-// Reduced from 2000ms: the layout previously awaited Sentry for up to 2s before
-// rendering anything, padding TTFB on every request. 150ms is generous for a
-// local disk import; if it exceeds that, the Sentry span is simply skipped.
-const MARKETING_LAYOUT_SENTRY_IMPORT_BUDGET_MS = 150;
+// Sentry is kicked off in the background and never awaited. Waiting even 150ms
+// before returning the first byte was measurable TTFB cost on every marketing
+// request. Sentry global error handlers are still active; we just skip the
+// per-request span wrapper on layout renders.
+const MARKETING_LAYOUT_SENTRY_IMPORT_BUDGET_MS = 0; // kept for reference; no longer used
 
 /**
  * Single slot for default marketing main: motion perf + main-column error isolation.
@@ -244,26 +245,10 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
     });
   }
 
-  const runtime = await safeAwait(
-    getMarketingDefaultLayoutSentryRuntimePromise(),
-    "marketing_default_layout.sentry_import",
-    MARKETING_LAYOUT_SENTRY_IMPORT_BUDGET_MS,
-  ).catch(() => null);
-
-  try {
-    if (shouldEmitNnHomeRouteDiag()) {
-      const hp0 = await getHeaderPathnameSafe();
-
-      if (hp0 === "/") {
-        emitNnHomeRouteDiag({
-          segment: "layout_after_sentry_import",
-          pathname: hp0,
-          elapsed_ms: safeNowMs() - layoutBootT0,
-          has_sentry_span: Boolean(runtime?.withSentryRuntimeSpan),
-        });
-      }
-    }
-  } catch {}
+  // Kick off Sentry in the background — never await. Span wrapping is skipped;
+  // global error handlers remain active for uncaught errors.
+  void getMarketingDefaultLayoutSentryRuntimePromise().catch(() => {});
+  const runtime = null;
 
   const marketingDefaultLayoutInner = async () => {
     const perfLayoutT0 = safeNowMs();

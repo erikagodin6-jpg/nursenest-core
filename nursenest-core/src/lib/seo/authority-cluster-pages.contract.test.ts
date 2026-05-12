@@ -31,6 +31,7 @@ const REQUIRED_PATHS = [
   "/allied-health/respiratory-therapy/exam-prep",
   "/allied-health/respiratory-therapy/practice-questions",
   "/allied-health/respiratory-therapy/abgs",
+  "/allied-health/respiratory-therapy/ventilation",
   "/allied-health/respiratory-therapy/mechanical-ventilation",
   "/allied-health/respiratory-therapy/oxygen-therapy",
   "/allied-health/respiratory-therapy/airway-management",

@@ -11,7 +11,10 @@ const NEXT_PRODUCTION_STATIC_PHASE = "phase-production-build";
 
 /** True while Next is running the production static generation phase (`next build`). */
 export function isProductionBuildInvocation(): boolean {
-  return process.env.NEXT_PHASE === NEXT_PRODUCTION_STATIC_PHASE;
+  if (process.env.NEXT_PHASE === NEXT_PRODUCTION_STATIC_PHASE) return true;
+  if (process.env.npm_lifecycle_event === "build") return true;
+  const argv = process.argv.join(" ");
+  return /\bnext\b/.test(argv) && /\bbuild\b/.test(argv);
 }
 
 /**

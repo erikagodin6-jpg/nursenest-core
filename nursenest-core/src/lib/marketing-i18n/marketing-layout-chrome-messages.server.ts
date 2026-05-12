@@ -12,8 +12,13 @@ import {
   MARKETING_CHROME_MESSAGE_SHARDS,
 } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
-const MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS = 2600;
-const LOCALE_CHROME_SHARD_TIMEOUT_MS = 2600;
+// i18n files live on the local filesystem (standalone deployment). Reads
+// complete in <30ms under normal conditions. 300ms gives generous slack for
+// cold-start I/O without blocking TTFB for 2.6s when something is slow.
+// The in-process cache means only the very first request per locale pays
+// this cost; all subsequent requests return immediately from the resolved cache.
+const MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS = 300;
+const LOCALE_CHROME_SHARD_TIMEOUT_MS = 300;
 const MARKETING_BUILD_PHASE = "phase-production-build";
 
 function defaultLayoutShardList() {

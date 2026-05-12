@@ -13,9 +13,23 @@ export const runtime = "nodejs";
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
+const OWNED_BY_EXISTING_SEGMENTS = new Set([
+  "/canada/np/cnple",
+  "/canada/np/cnple/questions",
+  "/canada/np/cnple/study-guide",
+  "/canada/np/cnple/case-based-questions",
+  "/canada/np/cnple/provisional-registration",
+  "/canada/np/cnple/loft-exam",
+  "/canada/np/cnple/pharmacology",
+  "/canada/np/cnple/clinical-judgment",
+  "/allied-health/respiratory-therapy",
+]);
+
 export async function GET(request: Request): Promise<Response> {
   const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
-  const entries: SitemapUrlEntry[] = listAuthorityClusterPaths().map((path) => ({ loc: `${origin}${path}` }));
+  const entries: SitemapUrlEntry[] = listAuthorityClusterPaths()
+    .filter((path) => !OWNED_BY_EXISTING_SEGMENTS.has(path))
+    .map((path) => ({ loc: `${origin}${path}` }));
   const filtered = filterPublicSitemapEntries(entries, origin);
   const seen = new Set<string>();
   const unique = filtered.filter((entry) => {

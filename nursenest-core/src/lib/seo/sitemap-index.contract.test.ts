@@ -29,6 +29,8 @@ test("canonical child filenames cover phase-3 segments", () => {
     "sitemap-clinical-modules.xml",
     "sitemap-allied.xml",
     "sitemap-new-grad.xml",
+    "sitemap-cnple.xml",
+    "sitemap-authority-clusters.xml",
   ]);
 });
 

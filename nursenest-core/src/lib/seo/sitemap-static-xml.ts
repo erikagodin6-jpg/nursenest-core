@@ -56,6 +56,7 @@ import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 import { listPublishedNclexCommercialLandingPaths } from "@/lib/seo/nclex-commercial-landing-pages";
+import { CNPLE_SITEMAP_PATHS } from "@/lib/seo/cnple-seo-cluster";
 export {
   buildSitemapIndexXml,
   buildSitemapUrlsetFromAbsoluteUrls,
@@ -69,6 +70,22 @@ const SORTED_SITEMAP_LOCALES = [...getSitemapIncludedLocales()].sort();
 
 /** Hard cap for pathway lesson + topic URLs in core sitemap (prevents multi‑GB XML / OOM). */
 const MAX_PATHWAY_DERIVED_SITEMAP_URLS = 48_000;
+
+const CORE_SITEMAP_CHILD_SEGMENT_PATHS = new Set<string>([
+  ...CNPLE_SITEMAP_PATHS,
+  "/canada/np/cnple/simulation",
+  "/canada/np/cnple/flashcards",
+  "/canada/np/cnple/report-card",
+]);
+
+function excludeCoreChildSegmentUrls(urls: string[], origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return urls.filter((url) => {
+    if (!url.startsWith(o)) return true;
+    const path = url.slice(o.length) || "/";
+    return !CORE_SITEMAP_CHILD_SEGMENT_PATHS.has(path);
+  });
+}
 
 /** Programmatic SEO slugs for sitemap URL lists (bounded; logs if registry exceeds cap). */
 function getProgrammaticSlugsForSitemap(): string[] {
@@ -551,7 +568,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     });
     return base;
   }
-  const expandedBase = [
+  const expandedBase = excludeCoreChildSegmentUrls([
     ...base,
     ...(omitLocalizedMarketingUrls
       ? []
@@ -562,7 +579,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     ...listPublishedExpansionExamMarketingPaths().map((p) => add(p)),
     ...regionalTopicPaths.map((p) => add(p)),
     ...collectNclexCommercialLandingUrls(o),
-  ];
+  ], o);
   if (productionSafe) {
     const pathwayTopicUrls = omitExamPathwayAndTopicProgrammaticUrls ? [] : await collectPathwayTopicProgrammaticUrls(o);
     const examHubUrls = omitExamPathwayAndTopicProgrammaticUrls ? [] : await collectExamPathwayUrls(o);

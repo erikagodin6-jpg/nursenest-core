@@ -4,9 +4,11 @@ import {
   PricingDeferredSeoLocalized,
   PricingMarketingPlansRscLocalized,
 } from "@/components/marketing/pricing-page-rsc-parts";
+import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { serializeMarketingPageSearchParams } from "@/lib/marketing/serialize-marketing-search-params";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = {
@@ -43,9 +45,18 @@ export default async function LocalizedPricingPage({ params, searchParams }: Pro
   const { locale } = await params;
   const resolvedSearch = searchParams ? await searchParams : {};
   const initialSearchParamsString = serializeMarketingPageSearchParams(resolvedSearch);
+  const m = await loadMarketingMetadataMessages(locale, [...PRICING_META_KEYS]);
 
   return (
     <>
+      <WebPageJsonLd
+        {...buildMarketingWebPageJsonLdProps({
+          locale,
+          enPath: "/pricing",
+          title: m["pages.pricing.title"]!,
+          description: m["pages.pricing.description"]!,
+        })}
+      />
       <Suspense fallback={null}>
         <PricingMarketingPlansRscLocalized
           locale={locale}

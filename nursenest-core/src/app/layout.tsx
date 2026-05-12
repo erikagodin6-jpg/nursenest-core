@@ -80,6 +80,24 @@ async function getSessionSafe() {
   );
   if (!hasSecret) return null;
 
+  // Skip the auth DB call when no session cookie is present. Unauthenticated
+  // visitors (the vast majority of marketing traffic) pay zero DB latency;
+  // the client-side SessionProvider fetches the session via /api/auth/session
+  // on hydration if needed. Authenticated users still trigger the full auth()
+  // call because a session cookie is present.
+  try {
+    const { cookies } = await import("next/headers");
+    const jar = await cookies();
+    const hasSession =
+      jar.has("authjs.session-token") ||
+      jar.has("__Secure-authjs.session-token") ||
+      jar.has("next-auth.session-token") ||
+      jar.has("__Secure-next-auth.session-token");
+    if (!hasSession) return null;
+  } catch {
+    // Can't read cookies (e.g. static export) — fall through to auth()
+  }
+
   try {
     const { auth } = await import("@/lib/auth");
     return await auth();

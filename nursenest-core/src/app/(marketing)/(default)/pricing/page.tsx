@@ -5,11 +5,13 @@ import {
   PricingMarketingPlansRscDefault,
 } from "@/components/marketing/pricing-page-rsc-parts";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { serializeMarketingPageSearchParams } from "@/lib/marketing/serialize-marketing-search-params";
 import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const PRICING_META_KEYS = ["pages.pricing.title", "pages.pricing.description"] as const;
@@ -47,9 +49,18 @@ export default async function PricingPage({ searchParams }: PricingPageProps) {
   const resolvedSearch = searchParams ? await searchParams : {};
   const initialSearchParamsString = serializeMarketingPageSearchParams(resolvedSearch);
   const { crumbs } = marketingPricingBreadcrumbs();
+  const m = await loadMarketingMetadataMessages(DEFAULT_MARKETING_LOCALE, [...PRICING_META_KEYS]);
 
   return (
     <>
+      <WebPageJsonLd
+        {...buildMarketingWebPageJsonLdProps({
+          locale: DEFAULT_MARKETING_LOCALE,
+          enPath: "/pricing",
+          title: m["pages.pricing.title"]!,
+          description: m["pages.pricing.description"]!,
+        })}
+      />
       <div className="mx-auto max-w-6xl nn-marketing-x pb-1 pt-1 sm:pb-2 sm:pt-2">
         <BreadcrumbTrail items={crumbs} />
       </div>

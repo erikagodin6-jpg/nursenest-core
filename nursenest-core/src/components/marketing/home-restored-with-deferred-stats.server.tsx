@@ -57,7 +57,10 @@ async function getStatsSafe(): Promise<PublicHomeStatsPayload> {
  */
 async function loadServerIslandMessagesSafe(): Promise<Record<string, string>> {
   try {
-    const TIMEOUT_MS = 500;
+    // 100ms: i18n files are on the local filesystem (standalone) and should load
+    // in <30ms. Falling back to empty (English defaults) after 100ms prevents
+    // a single slow disk read from padding TTFB by up to 500ms.
+    const TIMEOUT_MS = 100;
     const timeoutFallback = new Promise<Record<string, string>>((resolve) =>
       setTimeout(() => resolve({}), TIMEOUT_MS),
     );

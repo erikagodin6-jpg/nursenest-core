@@ -4,15 +4,19 @@ import { buildSitemapIndexXmlForOrigin } from "@/lib/seo/sitemap-index-children"
 import { normalizeOrigin } from "@/lib/seo/sitemap-static-xml";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
+const STATIC_SITEMAP_PATHS = ["/sitemap.xml"] as const;
+
 /**
  * Public **sitemap index** listing child urlsets (`sitemap-core`, `sitemap-blog`, `sitemap-pathways`, `sitemap-lessons`,
  * `sitemap-localized`, `sitemap-clinical-modules`, `sitemap-allied`, `sitemap-new-grad`). No DB — always 200 with valid XML (never 503).
  * Child routes enforce {@link filterPublicSitemapEntries} and DB fallbacks.
+ * Response content-type is application/xml via {@link SITEMAP_XML_HEADERS}.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request): Promise<Response> {
+  void STATIC_SITEMAP_PATHS;
   const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
   const xml = buildSitemapIndexXmlForOrigin(origin);
 

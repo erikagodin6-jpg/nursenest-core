@@ -1,4 +1,4 @@
-import { isExamPathwayCountrySlug, isLocalePrefixedDefaultOnlyExpansionExamPath } from "@/lib/i18n/exam-hub-path";
+import { isLocalePrefixedDefaultOnlyExpansionExamPath } from "@/lib/i18n/exam-hub-path";
 import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale, isMarketingLocaleCode } from "@/lib/i18n/marketing-locale-policy";
 
 /** Path segments after splitting on `/` (no empty strings). */
@@ -17,7 +17,8 @@ export function pathnameHasLocalePrefixBeforeExamCountry(pathname: string): bool
   if (parts.length < 2) return false;
   const first = parts[0]!;
   if (!isCoreHostedNonDefaultLocale(first)) return false;
-  return isExamPathwayCountrySlug(parts[1]!);
+  const country = parts[1]!;
+  return country === "us" || country === "canada";
 }
 
 /**

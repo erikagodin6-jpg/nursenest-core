@@ -20,6 +20,14 @@ export type AuthorityClusterPage = {
   mistakes: readonly string[];
   examDay: readonly string[];
   faq: readonly { question: string; answer: string }[];
+  // Phase 3 authority enrichment fields
+  whatYoullLearn: readonly string[];
+  whoThisIsFor: string;
+  studyOrder: readonly string[];
+  nextSteps: readonly { label: string; href: string }[];
+  highYieldTips?: readonly string[];
+  datePublished?: string;
+  dateModified?: string;
 };
 
 const CNPLE_BASE = "/canada/np/cnple";
@@ -52,7 +60,7 @@ function pagePath(base: string, slug: string): string {
 }
 
 function commonFaq(exam: string, questionHref: string, format: string): AuthorityClusterPage["faq"] {
-  return [
+  const base = [
     {
       question: `How should I start studying for ${exam}?`,
       answer: `Start with a mixed diagnostic set, tag every miss by clinical concept, then use short lesson blocks before retesting. That sequence shows whether the issue is knowledge, cue recognition, or exam strategy.`,
@@ -70,6 +78,79 @@ function commonFaq(exam: string, questionHref: string, format: string): Authorit
       answer: `Use the linked ${exam} question hub for active recall, then move into lessons, flashcards, and exam-mode practice so the content becomes usable under time pressure.`,
     },
   ];
+  if (exam === "CNPLE") {
+    return [
+      ...base,
+      {
+        question: "How hard is the CNPLE?",
+        answer:
+          "The CNPLE is challenging because it tests nurse practitioner judgment, not isolated nursing recall. Candidates need to connect differential diagnosis, prescribing safety, diagnostics, follow-up, and provincial practice context inside case-based stems.",
+      },
+      {
+        question: "Is the CNPLE adaptive?",
+        answer:
+          "CNPLE preparation should not be treated like a CAT exam. Learners should build fixed-length stamina, steady pacing, and consistent clinical reasoning across a full exam block.",
+      },
+      {
+        question: "How many questions are on the CNPLE?",
+        answer:
+          "Question counts and administrative details can change, so candidates should confirm current details with the exam administrator or provincial regulator. For study, practise long timed sets so pacing and fatigue are part of preparation.",
+      },
+      {
+        question: "How long should I study for the CNPLE?",
+        answer:
+          "Most candidates benefit from an 8 to 12 week plan that combines diagnostic questions, Canadian NP lessons, prescribing review, case-based practice, and final timed simulation. Shorter plans should still include mixed-question review, not only notes.",
+      },
+    ];
+  }
+  if (exam === "REx-PN") {
+    return [
+      ...base,
+      {
+        question: "Is the REx-PN adaptive?",
+        answer:
+          "Yes. REx-PN candidates should prepare for computerized adaptive testing by mixing targeted remediation with CAT-style sessions that train uncertainty tolerance, pacing, and client-needs switching.",
+      },
+      {
+        question: "How many questions are on the REx-PN?",
+        answer:
+          "The REx-PN uses a variable-length adaptive format. Instead of preparing for one fixed number, practise staying clinically disciplined when the exam feels easier or harder from item to item.",
+      },
+      {
+        question: "Is the REx-PN harder than NCLEX-PN?",
+        answer:
+          "The exams overlap in practical nursing concepts, but the REx-PN uses Canadian registration language, client-needs framing, and local scope expectations. Difficulty depends on how well your preparation matches that context.",
+      },
+      {
+        question: "What topics are most important on the REx-PN?",
+        answer:
+          "Prioritization, safety, medication administration, infection control, delegation, therapeutic communication, and physiological adaptation are consistently high-yield because they appear across many client-needs categories.",
+      },
+    ];
+  }
+  return [
+    ...base,
+    {
+      question: "How do you interpret ABGs?",
+      answer:
+        "Start with pH to identify acidemia or alkalemia, compare PaCO2 and HCO3 to identify the primary respiratory or metabolic driver, assess compensation, then connect PaO2, SpO2, and the patient's work of breathing to the next intervention.",
+    },
+    {
+      question: "What ventilator modes should RT students know?",
+      answer:
+        "RT students should understand volume control, pressure control, SIMV, pressure support, CPAP, BiPAP, and high-frequency concepts at a decision level: what the mode controls, what the patient controls, and which alarms or waveforms suggest trouble.",
+    },
+    {
+      question: "What is PEEP?",
+      answer:
+        "PEEP is positive end-expiratory pressure. It helps keep alveoli recruited and can improve oxygenation, but excessive PEEP can reduce venous return, worsen hypotension, and increase barotrauma risk.",
+    },
+    {
+      question: "How do you calculate oxygenation?",
+      answer:
+        "Oxygenation is assessed with SpO2, PaO2, FiO2 requirement, work of breathing, and trends. In higher-acuity questions, learners may also use P/F ratio, alveolar-arterial gradient context, and response after oxygen or ventilator changes.",
+    },
+  ];
 }
 
 function buildCnplePage(
@@ -84,10 +165,16 @@ function buildCnplePage(
     cluster: "cnple",
     slug,
     path,
-    title: `${topic} for CNPLE prep | Canadian NP exam | NurseNest`,
-    description: `${topic} for CNPLE preparation with Canadian NP clinical judgment, prescribing safety, LOFT-style pacing, case reasoning, common mistakes, FAQs, and practice links.`,
-    h1: slug === "overview" ? "CNPLE exam prep for Canadian nurse practitioners" : `${topic} for CNPLE preparation`,
-    eyebrow: "Canadian NP licensure exam authority hub",
+    title:
+      slug === "overview"
+        ? `CNPLE Exam Prep (2026) — Canadian NP Licensure Examination | NurseNest`
+        : `${topic} (2026) — CNPLE Prep | NurseNest`,
+    description:
+      slug === "overview"
+        ? `Prepare for the 2026 CNPLE with case-based NP questions, LOFT simulation, prescribing safety drills, and Canadian guideline content. Aligned with CCRNR competency frameworks.`
+        : `${topic} for CNPLE preparation — Canadian NP clinical reasoning, prescribing safety, LOFT pacing, common mistakes, and rationale-first practice questions.`,
+    h1: slug === "overview" ? "CNPLE exam prep for Canadian nurse practitioners (2026)" : `${topic} for CNPLE preparation`,
+    eyebrow: "Canadian NP licensure exam — 2026 authority guide",
     lead: `Use this CNPLE guide to connect ${angle} with Canadian nurse practitioner exam reasoning. The goal is not memorizing isolated facts. It is learning to move from patient cues to differential diagnosis, prescribing decisions, diagnostic selection, escalation, follow-up, and documentation under a fixed-length LOFT-style testing experience.`,
     examTerms: ["CNPLE", "Canadian NP", "LOFT", "clinical judgment", "prescribing safety", "differential diagnosis"],
     ctas: cnpleCtas,
@@ -132,6 +219,29 @@ function buildCnplePage(
       "Use elimination by safety: first remove options that delay escalation, ignore contraindications, or exceed scope.",
     ],
     faq: commonFaq("CNPLE", `${CNPLE_BASE}/questions`, "CNPLE preparation should include fixed-length timed sets because LOFT-style practice rewards consistent pacing across the whole exam."),
+    whatYoullLearn: [
+      `How ${topic} is assessed in CNPLE LOFT-format clinical vignettes`,
+      "Canadian NP prescribing and guideline context that differs from US preparation materials",
+      "The specific reasoning errors that cost marks on case-based questions",
+      "A repeatable study loop — diagnostic, lesson review, retesting — for this topic area",
+    ],
+    whoThisIsFor:
+      "NP graduates completing their CNPLE preparation, working nurse practitioners in provisional registration, and RNs exploring Canadian NP programmes who want to understand the CNPLE's clinical scope and content depth.",
+    studyOrder: [
+      "Run a 25–40 question mixed diagnostic block to measure baseline accuracy in this area",
+      "Review the lesson content for every missed concept — read the rationale, not just the answer",
+      "Complete a second focused block of 20 questions in this domain",
+      "Flag difficult items and add them to a spaced-repetition flashcard deck",
+      "Return to mixed-domain blocks after 48 hours to confirm retention",
+    ],
+    nextSteps: [
+      { label: "CNPLE practice questions", href: `${CNPLE_BASE}/questions` },
+      { label: "CNPLE lessons", href: `${CNPLE_BASE}/lessons` },
+      { label: "LOFT simulation", href: `${CNPLE_BASE}/simulation` },
+      { label: "CNPLE hub", href: CNPLE_BASE },
+    ],
+    datePublished: "2026-01-15",
+    dateModified: "2026-05-12",
   };
 }
 
@@ -147,10 +257,16 @@ function buildRexPage(
     cluster: "rex-pn",
     slug,
     path,
-    title: `${topic} for REx-PN prep | Canadian RPN exam | NurseNest`,
-    description: `${topic} for REx-PN preparation with client needs, Canadian practical nursing scope, CAT strategy, pharmacology, practice questions, FAQs, and study links.`,
-    h1: slug === "overview" ? "REx-PN exam prep for Canadian practical nurses" : `${topic} for REx-PN preparation`,
-    eyebrow: "Canadian RPN licensure exam authority hub",
+    title:
+      slug === "overview"
+        ? `REx-PN Exam Prep (2026) — Canadian Practical Nurse Licensure | NurseNest`
+        : `${topic} (2026) — REx-PN Prep | NurseNest`,
+    description:
+      slug === "overview"
+        ? `Prepare for the REx-PN with CAT-adaptive practice questions, client needs category review, Canadian RPN pharmacology, and rationale-first study content. Pass the 2026 REx-PN.`
+        : `${topic} for REx-PN preparation — client needs categories, Canadian RPN clinical scope, CAT strategy, pharmacology safety, and rationale-driven practice questions.`,
+    h1: slug === "overview" ? "REx-PN exam prep for Canadian practical nurses (2026)" : `${topic} for REx-PN preparation`,
+    eyebrow: "Canadian RPN entry-to-practice exam — 2026 authority guide",
     lead: `Use this REx-PN guide to connect ${angle} with practical nursing decisions in Canada. REx-PN success depends on recognizing client needs, safety priorities, therapeutic communication, medication risk, delegation limits, and when a stable-looking scenario is actually changing.`,
     examTerms: ["REx-PN", "RPN", "client needs", "CAT", "practical nursing", "clinical judgment"],
     ctas: rexCtas,
@@ -195,6 +311,29 @@ function buildRexPage(
       "Do not infer extra data that the stem does not give you.",
     ],
     faq: commonFaq("REx-PN", `${REX_BASE}/questions`, "REx-PN preparation should include CAT-style practice plus targeted remediation so you are ready for adaptive difficulty and client-needs switching."),
+    whatYoullLearn: [
+      `How ${topic} is tested across REx-PN client needs categories`,
+      "Why Canadian RPN scope of practice differs from US NCLEX-PN preparation",
+      "The priority framework that resolves most client-needs questions correctly",
+      "A CAT-aligned practice strategy — targeted remediation plus mixed sessions",
+    ],
+    whoThisIsFor:
+      "Canadian practical nursing graduates preparing for the REx-PN, bridging-programme students, and internationally educated nurses completing Canadian registration requirements who need to understand the REx-PN's client needs framework and CAT format.",
+    studyOrder: [
+      "Complete a 30-question mixed client-needs diagnostic to identify your weakest category",
+      "Review the lesson for each missed concept — write the client need and the safety rule",
+      "Practise a targeted block of 20 questions in your weakest client needs area",
+      "Rotate to CAT-style mixed sessions after two targeted blocks",
+      "Track miss patterns by client need — group errors, not individual questions",
+    ],
+    nextSteps: [
+      { label: "REx-PN practice questions", href: `${REX_BASE}/questions` },
+      { label: "REx-PN CAT exam", href: `${REX_BASE}/cat` },
+      { label: "REx-PN lessons", href: `${REX_BASE}/lessons` },
+      { label: "REx-PN hub", href: REX_BASE },
+    ],
+    datePublished: "2026-01-15",
+    dateModified: "2026-05-12",
   };
 }
 
@@ -210,10 +349,19 @@ function buildRtPage(
     cluster: "respiratory-therapy",
     slug,
     path,
-    title: `${topic} for respiratory therapy exam prep | NurseNest`,
-    description: `${topic} for respiratory therapy students with ABG interpretation, oxygenation, ventilation, airway safety, practice questions, FAQs, and clinical reasoning links.`,
-    h1: slug === "overview" ? "Respiratory therapy exam prep and practice questions" : `${topic} for respiratory therapy exam prep`,
-    eyebrow: "Respiratory therapy authority hub",
+    title:
+      slug === "overview"
+        ? `Respiratory Therapy Exam Prep (2026) — NBRC TMC & RRT Practice | NurseNest`
+        : `${topic} (2026) — Respiratory Therapy Exam Practice | NurseNest`,
+    description:
+      slug === "overview"
+        ? `Prepare for the NBRC TMC and RRT exams with ABG interpretation, mechanical ventilation practice, oxygen therapy drills, and clinical reasoning questions. 2026-aligned RT exam prep.`
+        : `${topic} for RT exam preparation — ABG interpretation, ventilation reasoning, equipment decisions, clinical case practice, and rationale-first questions for NBRC candidates.`,
+    h1:
+      slug === "overview"
+        ? "Respiratory therapy exam prep: NBRC TMC and RRT practice (2026)"
+        : `${topic} for respiratory therapy exam prep`,
+    eyebrow: "NBRC respiratory therapy exam — 2026 authority guide",
     lead: `Use this respiratory therapy guide to connect ${angle} with patient assessment, oxygenation, ventilation, airway risk, equipment decisions, and rationale-based practice. The page is built for learners who need more than range memorization: you should be able to explain what the data means and what to do next.`,
     examTerms: ["respiratory therapy", "ABG", "oxygen therapy", "mechanical ventilation", "airway management", "pulmonary function testing"],
     ctas: rtCtas,
@@ -258,6 +406,37 @@ function buildRtPage(
       "Choose answers that include reassessment when the intervention changes respiratory support.",
     ],
     faq: commonFaq("respiratory therapy", `${RT_BASE}/practice-questions`, "RT exam practice should include interpretation-heavy cases, ABG drills, oxygen device selection, airway safety, and ventilator reasoning."),
+    whatYoullLearn: [
+      `How ${topic} appears in NBRC TMC and RRT clinical simulation exam questions`,
+      "The systematic interpretation approach that connects ABGs, SpO2, and clinical presentation",
+      "Which interventions require safety checks before implementation",
+      "How to build from interpretation to action to reassessment in RT practice questions",
+    ],
+    whoThisIsFor:
+      "Respiratory therapy students preparing for the NBRC TMC exam, RRT candidates studying for the clinical simulation examination, and clinical educators who want rigorous case-based RT content aligned with current practice standards.",
+    studyOrder: [
+      "Start with ABG interpretation — pH, PaCO2, HCO3 — before any other topic",
+      "Connect ABG findings to oxygenation and ventilation decisions",
+      "Practice oxygen device selection with patient-specific constraints (COPD, post-operative, hypoxic drive)",
+      "Add ventilator mode and settings reasoning after oxygenation is solid",
+      "Finish with airway management, suctioning, and escalation judgment",
+    ],
+    nextSteps: [
+      { label: "RT practice questions", href: `${RT_BASE}/practice-questions` },
+      { label: "ABG interpretation", href: `${RT_BASE}/abgs` },
+      { label: "Mechanical ventilation", href: `${RT_BASE}/mechanical-ventilation` },
+      { label: "Oxygen therapy", href: `${RT_BASE}/oxygen-therapy` },
+    ],
+    highYieldTips: [
+      "Always classify the ABG (acidosis vs alkalosis, respiratory vs metabolic) before looking at PaO2 or SpO2.",
+      "An SpO2 of 88–92% is the target for COPD patients on supplemental oxygen — higher risks CO2 retention.",
+      "High plateau pressure (>30 cmH2O) signals barotrauma risk — reduce tidal volume before increasing PEEP.",
+      "When in doubt between two oxygen devices, choose the one that delivers a consistent FiO2 (Venturi mask beats simple mask for COPD).",
+      "Silent chest in a known asthmatic is a critical finding — do not wait for wheeze to return.",
+      "Suctioning must be preoxygenated, time-limited (<15 sec), and followed by immediate reassessment of SpO2.",
+    ],
+    datePublished: "2026-01-15",
+    dateModified: "2026-05-12",
   };
 }
 
@@ -364,6 +543,11 @@ export const AUTHORITY_CLUSTER_PAGES: readonly AuthorityClusterPage[] = [
     ["PaCO2/HCO3", "Respiratory versus metabolic driver and compensation.", "Lessons"],
     ["PaO2/SpO2", "Oxygenation problem and support decision.", "Oxygen therapy"],
   ], "ABG mastery means linking numbers to the patient. A compensated result still requires clinical context before deciding whether to intervene."),
+  buildRtPage("ventilation", "Respiratory therapy ventilation fundamentals", "ventilation physiology, control of breathing, hypoventilation, and respiratory support decisions", [
+    ["Physiology", "Minute ventilation, dead space, V/Q ratio, and gas exchange.", "Practice questions"],
+    ["Hypoventilation", "Rising PaCO2, hypoxemia, and support escalation triggers.", "ABGs"],
+    ["Support", "NIV, high-flow, intubation decision, and reassessment.", "Oxygen therapy"],
+  ], "Ventilation fundamentals anchor the rest of RT decision-making. Connect physiology to ABG pattern before selecting or adjusting a support level."),
   buildRtPage("mechanical-ventilation", "Mechanical ventilation review", "ventilator settings, alarms, graphics, and patient-ventilator safety", [
     ["Settings", "Mode, tidal volume, rate, FiO2, PEEP, and pressure limits.", "Ventilator training"],
     ["Alarms", "High pressure, low pressure, apnea, and disconnection reasoning.", "Practice questions"],
