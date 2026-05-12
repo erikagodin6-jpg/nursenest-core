@@ -19,6 +19,9 @@ import {
   stripePriceEnvKey,
   alliedStripePriceEnvKey,
   sharedAlliedStripePriceEnvKey,
+  canonicalNursingStripePriceEnvKey,
+  canonicalSharedAlliedStripePriceEnvKey,
+  canonicalAlliedStripePriceEnvKey,
   STRIPE_TRIAL_DAYS,
   ALLIED_CAREER_KEYS,
   isFreeStripeBillingNursingTier,
@@ -321,12 +324,15 @@ export async function POST(req: Request) {
       }
     }
 
+    // Resolve diagnostic key: canonical preferred; per-career fallback for allied when shared not set.
+    // Always surfaces canonical key so operators know what to set.
     const missingEnvKey =
       tierCode === "ALLIED" && careerKey
-        ? process.env[sharedAlliedStripePriceEnvKey(durationCode)]?.trim()
-          ? sharedAlliedStripePriceEnvKey(durationCode)
-          : alliedStripePriceEnvKey(country, careerKey, durationCode)
-        : stripePriceEnvKey(country, tierCode, durationCode);
+        ? process.env[canonicalSharedAlliedStripePriceEnvKey(durationCode)]?.trim() ||
+          process.env[sharedAlliedStripePriceEnvKey(durationCode)]?.trim()
+          ? canonicalSharedAlliedStripePriceEnvKey(durationCode)
+          : canonicalAlliedStripePriceEnvKey(careerKey, durationCode)
+        : canonicalNursingStripePriceEnvKey(tierCode, durationCode);
     safeServerLog("stripe_checkout", "checkout_price_resolution", {
       pathway: requestedPathway,
       tier: tierCode,

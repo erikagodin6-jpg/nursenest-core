@@ -1656,11 +1656,14 @@ model FlashcardProgress {
   nextReviewAt   DateTime? @map("next_review_at")
   lastQuality    Int?      @map("last_quality")
   lastReviewedAt DateTime? @map("last_reviewed_at")
+  /// * Incremented each time the card is rated "again" after it has been learned (repetitions > 0). Used to surface lapsing cards in the weak queue.
+  lapses         Int       @default(0)
   flashcard      Flashcard @relation(fields: [flashcardId], references: [id], onDelete: Cascade)
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, flashcardId])
   @@index([userId, nextReviewAt])
+  @@index([userId, lapses])
   @@index([flashcardId])
   @@map("flashcard_progress")
 }
@@ -3399,6 +3402,16 @@ enum FlashcardItemKind {
   CLINICAL
   PRIORITY
   CONCEPT
+  /// * Select All That Apply — multi-select answer list; correct set must be recorded separately.
+  SATA
+  /// * ECG strip interpretation — requires clinical image URL and rhythm identification options.
+  ECG_STRIP
+  /// * Bowtie / clinical judgment — split left (condition) / center (action) / right (outcome) columns.
+  BOWTIE
+  /// * Medication safety — 5 rights, high-alert drugs, dose-calculation framing.
+  MED_SAFETY
+  /// * Lab trend interpretation — sequential values, trajectory analysis.
+  LAB_TREND
 }
 
 /// * Verified study card deck visibility (not the marketing flashcard deck visibility enum).

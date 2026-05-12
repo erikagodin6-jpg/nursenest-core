@@ -4,6 +4,9 @@ import {
   stripePriceEnvKey,
   alliedStripePriceEnvKey,
   sharedAlliedStripePriceEnvKey,
+  canonicalNursingStripePriceEnvKey,
+  canonicalSharedAlliedStripePriceEnvKey,
+  canonicalAlliedStripePriceEnvKey,
   type AlliedCareerKey,
   type PricedCombination,
 } from "@/lib/pricing/display-catalog";
@@ -21,47 +24,86 @@ export type PriceEntry = {
   planCode: string;
 };
 
+export type PriceSource = "canonical" | "legacy" | "missing";
+
 export type StripePriceMatrixRow = {
   country: "CA" | "US";
   tier: TierCode;
   duration: BillingDuration;
   alliedCareer?: AlliedCareerKey;
   planCode: string;
+  /** Canonical env key (STRIPE_PRICE_NURSENEST_*) — preferred name for diagnostics. */
   envKey: string;
+  /** Legacy env key (STRIPE_PRICE_*) — fallback alias, set during migration. */
+  legacyEnvKey: string;
   priceId: string | null;
+  /** Which env key actually provided the price, or "missing" if neither is set. */
+  priceSource: PriceSource;
 };
 
-function envKeyForCombination(c: PricedCombination): string {
-  if (c.alliedCareer) {
-    const shared = sharedAlliedStripePriceEnvKey(c.duration);
-    if (process.env[shared]?.trim()) return shared;
-    return alliedStripePriceEnvKey(c.country, c.alliedCareer, c.duration);
-  }
-  return stripePriceEnvKey(c.country, c.tier, c.duration);
+function resolvePrice(
+  canonicalKey: string,
+  legacyKey: string,
+): { priceId: string | null; source: PriceSource } {
+  const cv = process.env[canonicalKey]?.trim();
+  if (cv) return { priceId: cv, source: "canonical" };
+  const lv = process.env[legacyKey]?.trim();
+  if (lv) return { priceId: lv, source: "legacy" };
+  return { priceId: null, source: "missing" };
 }
 
 export function eachStripePriceMatrixRow(): StripePriceMatrixRow[] {
   const rows: StripePriceMatrixRow[] = [];
   for (const combo of eachPricedCombination()) {
-    const envKey = envKeyForCombination(combo);
-    const v = process.env[envKey]?.trim();
+    let canonicalKey: string;
+    let legacyKey: string;
+    let resolved: { priceId: string | null; source: PriceSource };
+
+    if (combo.alliedCareer) {
+      const cShared = canonicalSharedAlliedStripePriceEnvKey(combo.duration);
+      const lShared = sharedAlliedStripePriceEnvKey(combo.duration);
+      const cCareer = canonicalAlliedStripePriceEnvKey(combo.alliedCareer, combo.duration);
+      const lCareer = alliedStripePriceEnvKey(combo.country, combo.alliedCareer, combo.duration);
+
+      // Shared price takes precedence over per-career price
+      const sharedResult = resolvePrice(cShared, lShared);
+      if (sharedResult.source !== "missing") {
+        canonicalKey = cShared;
+        legacyKey = lShared;
+        resolved = sharedResult;
+      } else {
+        canonicalKey = cCareer;
+        legacyKey = lCareer;
+        resolved = resolvePrice(cCareer, lCareer);
+      }
+    } else {
+      canonicalKey = canonicalNursingStripePriceEnvKey(combo.tier, combo.duration);
+      legacyKey = stripePriceEnvKey(combo.country, combo.tier, combo.duration);
+      resolved = resolvePrice(canonicalKey, legacyKey);
+    }
+
     rows.push({
       country: combo.country,
       tier: combo.tier,
       duration: combo.duration,
       alliedCareer: combo.alliedCareer,
       planCode: combo.planCode,
-      envKey,
-      priceId: v || null,
+      envKey: canonicalKey,
+      legacyEnvKey: legacyKey,
+      priceId: resolved.priceId,
+      priceSource: resolved.source,
     });
   }
   return rows;
 }
 
+/** Returns canonical env keys for unconfigured plans. Deduplicates CA/US rows sharing the same key. */
 export function listMissingStripePriceEnvKeys(): string[] {
+  const seen = new Set<string>();
   return eachStripePriceMatrixRow()
     .filter((r) => !r.priceId)
-    .map((r) => r.envKey);
+    .map((r) => r.envKey)
+    .filter((k) => (seen.has(k) ? false : (seen.add(k), true)));
 }
 
 export function isStripePricingFullyConfigured(): boolean {
@@ -77,9 +119,9 @@ export function logStripeProductionPricingMisconfiguration(): void {
   safeServerLogCritical(
     "stripe_pricing",
     "production_stripe_key_set_but_price_envs_missing",
-    { missingCount: missing.length },
+    { missingCount: missing.length, exampleKey: missing[0] },
     new Error(
-      `Missing ${missing.length} STRIPE_PRICE_* env var(s); checkout will fail for those plans. Example: ${missing[0]}`,
+      `Missing ${missing.length} canonical STRIPE_PRICE_NURSENEST_* env var(s); checkout will return 400 for those plans. Example: ${missing[0]}`,
     ),
   );
 }
@@ -90,12 +132,31 @@ export function logStripeCheckoutEnvStartupStatus(): void {
     console.error(
       "[nursenest-core] stripe checkout env: STRIPE_SECRET_KEY is missing — checkout session creation will fail.",
     );
+    return;
   }
 
-  const missingPriceEnvKeys = listMissingStripePriceEnvKeys();
-  if (missingPriceEnvKeys.length > 0) {
+  const rows = eachStripePriceMatrixRow();
+  // Deduplicate by canonical key (CA + US rows share the same env key)
+  const seenCanonical = new Set<string>();
+  const unique = rows.filter((r) => (seenCanonical.has(r.envKey) ? false : (seenCanonical.add(r.envKey), true)));
+
+  const canonical = unique.filter((r) => r.priceSource === "canonical");
+  const legacy = unique.filter((r) => r.priceSource === "legacy");
+  const missing = unique.filter((r) => r.priceSource === "missing");
+
+  console.log(
+    `[nursenest-core] stripe pricing: ${canonical.length} canonical, ${legacy.length} legacy-alias, ${missing.length} missing`,
+  );
+  if (legacy.length > 0) {
+    console.warn(
+      `[nursenest-core] stripe pricing: ${legacy.length} plan(s) using legacy env keys — migrate to canonical:\n` +
+        legacy.map((r) => `  ${r.legacyEnvKey} → ${r.envKey}`).join("\n"),
+    );
+  }
+  if (missing.length > 0) {
     console.error(
-      `[nursenest-core] stripe checkout env: missing ${missingPriceEnvKeys.length} STRIPE_PRICE_* key(s): ${missingPriceEnvKeys.join(", ")}`,
+      `[nursenest-core] stripe pricing: ${missing.length} plan(s) unconfigured — checkout returns 400 for these plans:\n` +
+        missing.map((r) => `  ${r.envKey}`).join("\n"),
     );
   }
 }

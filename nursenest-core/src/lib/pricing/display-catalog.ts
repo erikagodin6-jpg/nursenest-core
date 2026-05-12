@@ -184,6 +184,61 @@ export function durationMonths(duration: BillingDuration): number {
 
 // ── Env key helpers ─────────────────────────────────────────────────────────
 
+// ── Canonical (STRIPE_PRICE_NURSENEST_*) env key helpers ─────────────────────
+// Canonical keys are the preferred production names.
+// Legacy keys (STRIPE_PRICE_*) remain as fallback aliases so existing
+// deployments continue working during migration.
+
+/** Canonical env var for nursing tiers: exact names as configured in Stripe. */
+export function canonicalNursingStripePriceEnvKey(tier: TierCode, duration: BillingDuration): string {
+  // RPN uses YEARLY_SUBSCRIPTION for yearly (not 1_YEAR)
+  if (tier === "RPN") {
+    switch (duration) {
+      case "monthly": return "STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION";
+      case "3-month": return "STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION";
+      case "6-month": return "STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION";
+      case "yearly":  return "STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION";
+    }
+  }
+  // RN and NP use 1_YEAR_SUBSCRIPTION for yearly
+  if (tier === "RN") {
+    switch (duration) {
+      case "monthly": return "STRIPE_PRICE_NURSENEST_RN_1_MONTH_SUBSCRIPTION";
+      case "3-month": return "STRIPE_PRICE_NURSENEST_RN_3_MONTH_SUBSCRIPTION";
+      case "6-month": return "STRIPE_PRICE_NURSENEST_RN_6_MONTH_SUBSCRIPTION";
+      case "yearly":  return "STRIPE_PRICE_NURSENEST_RN_1_YEAR_SUBSCRIPTION";
+    }
+  }
+  if (tier === "NP") {
+    switch (duration) {
+      case "monthly": return "STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION";
+      case "3-month": return "STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION";
+      case "6-month": return "STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION";
+      case "yearly":  return "STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION";
+    }
+  }
+  // Other tiers (NEW_GRAD, LVN_LPN) use the legacy pattern as canonical
+  return `STRIPE_PRICE_${tier}_${durationEnvSuffix(duration)}`;
+}
+
+/** Canonical shared allied env var: exact names as configured in Stripe. */
+export function canonicalSharedAlliedStripePriceEnvKey(duration: BillingDuration): string {
+  switch (duration) {
+    case "monthly": return "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY";
+    case "3-month": return "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_3_MONTHS";
+    case "6-month": return "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_6_MONTH_SUBSCRIPTION";
+    case "yearly":  return "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY";
+    default:        return "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY";
+  }
+}
+
+/** Canonical per-career allied env var (fallback when shared key is unset). */
+export function canonicalAlliedStripePriceEnvKey(career: AlliedCareerKey, duration: BillingDuration): string {
+  return `STRIPE_PRICE_NURSENEST_ALLIED_${career.toUpperCase()}_${durationEnvSuffix(duration)}`;
+}
+
+// ── Legacy (STRIPE_PRICE_*) env key helpers — kept as fallback aliases ────────
+
 function durationEnvSuffix(duration: BillingDuration): string {
   switch (duration) {
     case "monthly": return "MONTHLY";
@@ -194,12 +249,12 @@ function durationEnvSuffix(duration: BillingDuration): string {
   }
 }
 
-/** Env var for nursing tier Stripe Price id: STRIPE_PRICE_RN_MONTHLY, etc. */
+/** @deprecated Use {@link canonicalNursingStripePriceEnvKey}. Legacy: STRIPE_PRICE_RN_MONTHLY, etc. */
 export function stripePriceEnvKey(_country: "CA" | "US", tier: TierCode, duration: BillingDuration): string {
   return `STRIPE_PRICE_${tier}_${durationEnvSuffix(duration)}`;
 }
 
-/** Env var for allied career Stripe Price id: STRIPE_PRICE_ALLIED_PARAMEDIC_MONTHLY, etc. */
+/** @deprecated Use {@link canonicalAlliedStripePriceEnvKey}. Legacy: STRIPE_PRICE_ALLIED_PARAMEDIC_MONTHLY, etc. */
 export function alliedStripePriceEnvKey(
   _country: "CA" | "US",
   career: AlliedCareerKey,
@@ -208,11 +263,7 @@ export function alliedStripePriceEnvKey(
   return `STRIPE_PRICE_ALLIED_${career.toUpperCase()}_${durationEnvSuffix(duration)}`;
 }
 
-/**
- * **Preferred** Allied Stripe Price env — one shared price id per billing interval for every occupation.
- * When set for a duration, checkout and {@link eachStripePriceMatrixRow} use it for all allied careers.
- * Legacy per-career env vars remain as fallback until fully migrated.
- */
+/** @deprecated Use {@link canonicalSharedAlliedStripePriceEnvKey}. Legacy: STRIPE_PRICE_ALLIED_MONTHLY, etc. */
 export function sharedAlliedStripePriceEnvKey(duration: BillingDuration): string {
   return `STRIPE_PRICE_ALLIED_${durationEnvSuffix(duration)}`;
 }

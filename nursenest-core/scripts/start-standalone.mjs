@@ -12,7 +12,7 @@
  * - **`NN_BYPASS_BOOTSTRAP`:** deprecated for mode selection; still gates **readiness watchdog bypass**
  *   in `bootstrap_proxy` when not conflicting (see `resolveBootstrapStartupMode`).
  */
-import { existsSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import http from "node:http";
 import net from "node:net";
 import { once } from "node:events";
@@ -38,32 +38,6 @@ import { logRuntimeEnvSnapshot, validateRuntimeEnvOrThrow } from "./runtime-env-
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const runtimeBootstrap = join(pkgRoot, "scripts", "start-standalone-runtime.cjs");
-const standaloneBundle = join(pkgRoot, ".next-standalone-runtime.tar.gz");
-
-function extractStandaloneRuntimeBundleIfNeeded() {
-  const standaloneRoot = join(pkgRoot, ".next", "standalone");
-  if (existsSync(standaloneRoot) || !existsSync(standaloneBundle)) {
-    return;
-  }
-
-  mkdirSync(join(pkgRoot, ".next"), { recursive: true });
-  console.error(`[nursenest-core] extracting_standalone_runtime_bundle bundle=${standaloneBundle}`);
-
-  const result = spawnSync("tar", ["-xzf", standaloneBundle, "-C", join(pkgRoot, ".next")], {
-    cwd: pkgRoot,
-    stdio: "inherit",
-  });
-
-  if (result.status !== 0) {
-    console.error(
-      `[nursenest-core] FATAL: standalone runtime bundle extraction failed status=${result.status ?? "null"}`,
-    );
-    process.exit(1);
-  }
-
-  rmSync(standaloneBundle, { force: true });
-  console.error("[nursenest-core] extracted_standalone_runtime_bundle");
-}
 
 /**
  * Merge `.env` / `.env.local` / `.env.production` into `process.env` without overwriting non-empty
@@ -155,7 +129,6 @@ function logMissingDatabaseUrlRuntimeEvidence() {
 
 logStandaloneRuntimeDiagnostics("standalone_parent_pre_hydrate");
 logStandaloneRuntimeProbe("standalone_parent_pre_hydrate");
-extractStandaloneRuntimeBundleIfNeeded();
 
 let entry;
 try {
@@ -234,11 +207,16 @@ const readinessProbePath = "/readyz";
 const childBootstrapProbePath = "/_nn_bootstrap_ready_check__";
 /** Probe the child server bind path directly; public readiness still gates on `handlersReady`. */
 const childHealthProbePath = childBootstrapProbePath;
-const forcedHandlersReadyFallbackMs = 5000;
+// Last-resort fallback: mark ready after 90s if the internal probe never succeeded.
+// The normal path (probe loop every 250ms) flips ready as soon as Next binds (~15-30s).
+// 5000ms caused premature traffic forwarding before Next.js was listening → 502 errors.
+const forcedHandlersReadyFallbackMs = 90_000;
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
+// 720 × 250ms sleep ≈ 3 minutes of probe window; 120 exhausted in ~30s on cold start
+// causing readiness_fatal_max_attempts → parent exit → DO restart loop.
 const bootstrapReadyMaxAttempts = Math.max(
   1,
-  Number.parseInt(process.env.NN_BOOTSTRAP_READY_MAX_ATTEMPTS ?? "120", 10) || 120,
+  Number.parseInt(process.env.NN_BOOTSTRAP_READY_MAX_ATTEMPTS ?? "720", 10) || 720,
 );
 const bootstrapTestDelayMs = Number.parseInt(process.env.NN_BOOTSTRAP_TEST_DELAY_MS ?? "0", 10) || 0;
 const childHealthProbeTimeoutMs = Number.parseInt(process.env.NN_CHILD_HEALTH_TIMEOUT_MS ?? "1000", 10) || 1000;
@@ -352,18 +330,6 @@ function handleBootstrapRequest(req, res) {
         res.end("bootstrap: request handlers not ready");
       }
       logReadyzTrace("bootstrap_handler_close", { status: 503, handled: true });
-      return true;
-    }
-    if (state.handlersReadyForced) {
-      res.statusCode = 200;
-      res.setHeader("content-type", "text/plain; charset=utf-8");
-      res.setHeader("cache-control", "no-store");
-      if (method === "HEAD") {
-        res.end();
-      } else {
-        res.end("ready");
-      }
-      logReadyzTrace("bootstrap_handler_close", { status: 200, handled: true, forced: true });
       return true;
     }
     res.statusCode = 200;
@@ -667,13 +633,19 @@ const state = {
   childExitSignal: null,
   childPid: null,
   handlersReady: false,
-  handlersReadyForced: false,
 };
+
+// Set just before spawn so markHandlersReady can always compute childBindOffsetMs safely.
+// Initialized to bootAt so bypass-mode (no spawn) reports total boot time instead.
+let childSpawnAt = bootAt;
 
 function markHandlersReady(reason) {
   if (state.handlersReady) return;
   const wasReady = state.handlersReady;
   state.handlersReady = true;
+  const now = Date.now();
+  const totalBootstrapMs = now - bootAt;
+  const childBindOffsetMs = now - childSpawnAt;
   emit("handlers_ready_flip", {
     pid: process.pid,
     childPid: state.childPid,
@@ -682,6 +654,8 @@ function markHandlersReady(reason) {
     reason,
     handlersReadyBefore: wasReady,
     handlersReadyAfter: true,
+    totalBootstrapMs,
+    childBindOffsetMs,
   });
   emit("handlers_ready", {
     pid: process.pid,
@@ -691,6 +665,8 @@ function markHandlersReady(reason) {
     reason,
     handlersReadyBefore: wasReady,
     handlersReadyAfter: true,
+    totalBootstrapMs,
+    childBindOffsetMs,
   });
 }
 
@@ -790,6 +766,7 @@ if (BYPASS) {
   markHandlersReady("watchdog_bypass_after_bind");
 }
 
+childSpawnAt = Date.now();
 const child = spawn(process.execPath, childArgs, {
   stdio: ["ignore", "pipe", "pipe"],
   cwd: pkgRoot,
@@ -804,20 +781,22 @@ child.stderr?.on("data", (chunk) => process.stderr.write(chunk));
 
 state.childPid = child.pid ?? null;
 
+// Liveness-only fallback: /healthz is already always-200, so this timer only emits a
+// diagnostic breadcrumb. It deliberately does NOT call markHandlersReady — /readyz must
+// remain 503 until the internal probe confirms the child has actually bound its port.
 const forcedHandlersReadyTimer =
   !BYPASS && FORCED_READINESS_FALLBACK_ENABLED
     ? setTimeout(() => {
         if (state.handlersReady || state.childExited || child.exitCode != null || child.killed) {
           return;
         }
-        state.handlersReadyForced = true;
-        markHandlersReady("forced_fallback");
-        emit("handlers_ready_forced", {
+        emit("handlers_ready_forced_liveness_only", {
           pid: process.pid,
           childPid: state.childPid,
           internalPort,
           publicPort,
           fallbackAfterMs: forcedHandlersReadyFallbackMs,
+          note: "handlersReady NOT flipped; /readyz stays 503 until probe succeeds",
           viaEnv: process.env.NN_ENABLE_FORCED_READINESS_FALLBACK === "1",
           viaAppPlatformBuild: process.env.NN_APP_PLATFORM_BUILD === "true",
           viaDigitalOceanRuntime: Boolean(String(process.env.DIGITALOCEAN_APP_ID ?? "").trim()),
@@ -831,6 +810,7 @@ emit("standalone_spawn", {
   parentExecArgv: process.execArgv,
   nodeOptions: process.env.NODE_OPTIONS,
   entry,
+  childSpawnOffsetMs: childSpawnAt - bootAt,
   runtimeBootstrap,
   pid: process.pid,
   childPid: state.childPid,
@@ -853,7 +833,6 @@ child.on("exit", async (code, signal) => {
   state.childExitCode = code ?? null;
   state.childExitSignal = signal ?? null;
   state.handlersReady = false;
-  state.handlersReadyForced = false;
   emit("watchdog_child_process_exit", {
     pid: process.pid,
     childPid: state.childPid,

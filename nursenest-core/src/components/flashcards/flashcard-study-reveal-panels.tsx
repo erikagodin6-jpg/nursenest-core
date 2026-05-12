@@ -67,19 +67,28 @@ export function FlashcardStudyRevealPanels({
       ) : null}
 
       {exam?.rationaleIncorrect?.length ? (
-        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)]">
-          <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-            {labels?.whyIncorrectHeading ?? "Why the others are incorrect"}
-          </div>
+        <details
+          className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)] open:pb-4"
+          open
+          data-testid="flashcard-wrong-answer-menu"
+        >
+          <summary className="cursor-pointer list-none p-4 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)] [&::-webkit-details-marker]:hidden">
+            <span className="flex items-center justify-between gap-2">
+              <span>{labels?.whyIncorrectHeading ?? "Why the others are incorrect"}</span>
+              <span className="text-[10px] font-normal normal-case tracking-normal text-[var(--semantic-text-muted)] sm:hidden">
+                tap to collapse
+              </span>
+            </span>
+          </summary>
 
-          <div className="space-y-2 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
+          <div className="space-y-2 px-4 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
             {exam.rationaleIncorrect.map((r) => (
-              <div key={r.letter}>
+              <div key={r.letter} data-testid={`flashcard-distractor-${r.letter}`}>
                 <strong className="text-[var(--semantic-chart-2)]">{r.letter}</strong>: {r.rationale}
               </div>
             ))}
           </div>
-        </div>
+        </details>
       ) : null}
 
       {pearl ? (

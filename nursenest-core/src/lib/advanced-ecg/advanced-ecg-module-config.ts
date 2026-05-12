@@ -31,7 +31,10 @@ export function isAdvancedEcgPlanCode(planCode: string | null | undefined): bool
   return planCode?.trim().toLowerCase().startsWith(ADVANCED_ECG_PLAN_CODE_PREFIX) ?? false;
 }
 
-export function advancedEcgStripePriceEnvKey(duration: BillingDuration): string {
-  const durationToken = duration.toUpperCase().replace(/[^A-Z0-9]+/g, "_");
-  return `STRIPE_PRICE_MODULE_ADVANCED_ECG_${durationToken}`;
+/** Env var for the Advanced ECG add-on Stripe price. Single price covers all billing durations. */
+export function advancedEcgStripePriceEnvKey(_duration?: BillingDuration): string {
+  return "STRIPE_PRICE_ADVANCED_ECG";
 }
+
+/** @deprecated Use {@link advancedEcgStripePriceEnvKey}. */
+export const canonicalAdvancedEcgStripePriceEnvKey = advancedEcgStripePriceEnvKey;

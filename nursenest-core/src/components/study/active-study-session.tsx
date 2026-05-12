@@ -63,7 +63,7 @@ type Props = {
   cards: ActiveStudyCard[];
   header: ActiveStudyHeader;
   loading?: boolean;
-  onRate?: (cardId: string, rating: "incorrect" | "unsure" | "known") => Promise<void>;
+  onRate?: (cardId: string, rating: "again" | "hard" | "good" | "easy") => Promise<void>;
   onExit?: () => void;
   sessionMeta?: {
     requestedCount?: number;
@@ -147,7 +147,7 @@ export function ActiveStudySession({
   const [completed, setCompleted] = useState(false);
   const [saving, setSaving] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  const [ratingTally, setRatingTally] = useState({ incorrect: 0, unsure: 0, known: 0 });
+  const [ratingTally, setRatingTally] = useState({ again: 0, hard: 0, good: 0, easy: 0 });
 
   const current = sessionCards[index] ?? null;
   const pinState = current?.id && enableLocalStudyPins ? getStudyItemState(current.id) : {};
@@ -158,7 +158,7 @@ export function ActiveStudySession({
     setRevealed(initialRevealed);
     setCompleted(false);
     setElapsed(0);
-    setRatingTally({ incorrect: 0, unsure: 0, known: 0 });
+    setRatingTally({ again: 0, hard: 0, good: 0, easy: 0 });
   }, [deduped, initialCardIndex, initialRevealed]);
 
   useEffect(() => {
@@ -175,7 +175,7 @@ export function ActiveStudySession({
     sessionCards.length > 0 ? Math.min(100, Math.round(((index + 1) / sessionCards.length) * 100)) : 0;
 
   const submitRating = useCallback(
-    async (rating: "incorrect" | "unsure" | "known") => {
+    async (rating: "again" | "hard" | "good" | "easy") => {
       const card = sessionCards[index];
       if (!card) return;
       setSaving(true);
@@ -271,9 +271,10 @@ export function ActiveStudySession({
         setIndex((i) => Math.min(sessionCards.length - 1, i + 1));
         return;
       }
-      if (revealed && !saving && (e.key === "1" || e.key === "2" || e.key === "3")) {
+      if (revealed && !saving && ["1", "2", "3", "4"].includes(e.key)) {
         e.preventDefault();
-        void submitRating(e.key === "1" ? "incorrect" : e.key === "2" ? "unsure" : "known");
+        const ratingMap = { "1": "again", "2": "hard", "3": "good", "4": "easy" } as const;
+        void submitRating(ratingMap[e.key as "1" | "2" | "3" | "4"]);
       }
     }
 
@@ -348,6 +349,47 @@ export function ActiveStudySession({
           takeawayHeading: t("pages.flashcards.pearl"),
           answerChoicesHeading: "Answer choices",
         }}
+        revealLinksSection={
+          revealed && (current.lessonHref || current.practiceTestsTopicHref || current.practiceTopicHref) ? (
+            <div
+              className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,var(--semantic-panel-muted))] px-3 py-2.5"
+              data-testid="flashcard-inline-study-links"
+            >
+              <div className="mb-1.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--semantic-text-muted)]">
+                Related study
+              </div>
+              <div className="flex flex-col gap-1.5">
+                {current.lessonHref ? (
+                  <Link
+                    href={current.lessonHref}
+                    data-testid="flashcard-lesson-link-inline"
+                    className="text-xs font-medium text-[var(--semantic-brand)] underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"
+                  >
+                    {current.lessonTitle?.trim() || t("learner.studyLoop.reviewLessonCta")}
+                  </Link>
+                ) : null}
+                {current.practiceTestsTopicHref ? (
+                  <Link
+                    href={current.practiceTestsTopicHref}
+                    data-testid="flashcard-practice-tests-link-inline"
+                    className="text-xs font-medium text-[var(--semantic-chart-2)] underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-chart-2)_45%,transparent)]"
+                  >
+                    {t("learner.studyLoop.practiceQuestionsThisTopic")}
+                  </Link>
+                ) : null}
+                {current.practiceTopicHref ? (
+                  <Link
+                    href={current.practiceTopicHref}
+                    data-testid="flashcard-topic-drill-link-inline"
+                    className="text-xs font-medium text-[var(--semantic-info)] underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-info)_45%,transparent)]"
+                  >
+                    {t("learner.qbank.ui.topicDrillSameCode")}
+                  </Link>
+                ) : null}
+              </div>
+            </div>
+          ) : null
+        }
         rail={
           <div className="nn-flashcard-rail-panel flex flex-col gap-3 p-1">
             <header className="flex flex-wrap items-center justify-between gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] pb-3">
@@ -403,13 +445,16 @@ export function ActiveStudySession({
               </div>
               <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[11px] tabular-nums">
                 <span className="text-[color-mix(in_srgb,var(--semantic-danger)_85%,var(--semantic-text-secondary))]">
-                  {ratingTally.incorrect} wrong
+                  {ratingTally.again} again
                 </span>
                 <span className="text-[color-mix(in_srgb,var(--semantic-warning)_75%,var(--semantic-text-secondary))]">
-                  {ratingTally.unsure} unsure
+                  {ratingTally.hard} hard
                 </span>
                 <span className="text-[color-mix(in_srgb,var(--semantic-success)_80%,var(--semantic-text-secondary))]">
-                  {ratingTally.known} known
+                  {ratingTally.good} good
+                </span>
+                <span className="text-[color-mix(in_srgb,var(--semantic-brand)_80%,var(--semantic-text-secondary))]">
+                  {ratingTally.easy} easy
                 </span>
               </div>
             </div>
@@ -484,8 +529,7 @@ export function ActiveStudySession({
                   <kbd className="nn-flashcard-kbd">Space</kbd> or <kbd className="nn-flashcard-kbd">Enter</kbd> reveal
                 </li>
                 <li>
-                  <kbd className="nn-flashcard-kbd">1</kbd> · <kbd className="nn-flashcard-kbd">2</kbd> ·{" "}
-                  <kbd className="nn-flashcard-kbd">3</kbd> rate (after reveal)
+                  <kbd className="nn-flashcard-kbd">1</kbd>–<kbd className="nn-flashcard-kbd">4</kbd> rate: Again / Hard / Good / Easy
                 </li>
                 <li>
                   <kbd className="nn-flashcard-kbd">←</kbd> / <kbd className="nn-flashcard-kbd">→</kbd> navigate
@@ -540,33 +584,46 @@ export function ActiveStudySession({
             ) : null}
 
             {revealed ? (
-              <div className="nn-flashcard-confidence-controls grid grid-cols-1 gap-2 sm:grid-cols-3" data-nn-premium-flashcard-confidence>
+              <div className="nn-flashcard-confidence-controls grid grid-cols-2 gap-2 sm:grid-cols-4" data-nn-premium-flashcard-confidence>
                 <button
                   type="button"
-                  data-nn-flashcard-rating="incorrect"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
-                  onClick={() => submitRating("incorrect")}
+                  data-nn-flashcard-rating="again"
+                  aria-label="Again — needs more review (key 1)"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-danger)_14%,var(--semantic-surface))]"
+                  onClick={() => submitRating("again")}
                   disabled={saving}
                 >
-                  <XCircle className="h-4 w-4" aria-hidden /> Incorrect
+                  <XCircle className="h-4 w-4 shrink-0" aria-hidden /> Again
                 </button>
                 <button
                   type="button"
-                  data-nn-flashcard-rating="unsure"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
-                  onClick={() => submitRating("unsure")}
+                  data-nn-flashcard-rating="hard"
+                  aria-label="Hard — struggled (key 2)"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))]"
+                  onClick={() => submitRating("hard")}
                   disabled={saving}
                 >
-                  <RefreshCw className="h-4 w-4" aria-hidden /> Unsure
+                  <RefreshCw className="h-4 w-4 shrink-0" aria-hidden /> Hard
                 </button>
                 <button
                   type="button"
-                  data-nn-flashcard-rating="known"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
-                  onClick={() => submitRating("known")}
+                  data-nn-flashcard-rating="good"
+                  aria-label="Good — recalled with effort (key 3)"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-success)_16%,var(--semantic-surface))]"
+                  onClick={() => submitRating("good")}
                   disabled={saving}
                 >
-                  <CheckCircle2 className="h-4 w-4" aria-hidden /> Known
+                  <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden /> Good
+                </button>
+                <button
+                  type="button"
+                  data-nn-flashcard-rating="easy"
+                  aria-label="Easy — recalled instantly (key 4)"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))]"
+                  onClick={() => submitRating("easy")}
+                  disabled={saving}
+                >
+                  <Star className="h-4 w-4 shrink-0" aria-hidden /> Easy
                 </button>
               </div>
             ) : null}

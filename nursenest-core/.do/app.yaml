@@ -73,7 +73,7 @@ services:
         value: 0.0.0.0
       - key: NODE_MAX_OLD_SPACE_SIZE_MB
         scope: RUN_TIME
-        value: "768"
+        value: "1280"
       - key: AUTH_TRUST_HOST
         scope: RUN_TIME
         value: "true"
@@ -100,6 +100,12 @@ services:
         type: SECRET
       - key: NN_ENV_VALIDATION_MODE
         scope: RUN_TIME
+      - key: NN_BOOTSTRAP_TEST_DELAY_MS
+        scope: RUN_TIME
+        value: "5000"
+      - key: NN_CHILD_HEALTH_TIMEOUT_MS
+        scope: RUN_TIME
+        value: "3000"
     github:
       branch: main
       deploy_on_push: true
@@ -114,7 +120,7 @@ services:
       timeout_seconds: 15
     http_port: 8080
     instance_count: 1
-    instance_size_slug: basic-xs
+    instance_size_slug: basic-s
     liveness_health_check:
       failure_threshold: 12
       http_path: /healthz

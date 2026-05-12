@@ -132,7 +132,7 @@ test("bootstrap timeout and readyz re-probe both target the internal port", () =
 test("bootstrap readiness loop has a bounded attempt cap before terminal failure", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
   assert.equal(source.includes("const bootstrapReadyMaxAttempts ="), true);
-  assert.equal(source.includes('process.env.NN_BOOTSTRAP_READY_MAX_ATTEMPTS ?? "120"'), true);
+  assert.equal(source.includes('process.env.NN_BOOTSTRAP_READY_MAX_ATTEMPTS ?? "720"'), true);
   assert.equal(source.includes("if (attempt >= bootstrapReadyMaxAttempts)"), true);
   assert.equal(source.includes('emit("internal_probe_exhausted"'), true);
   assert.equal(source.includes('reason: "attempt_cap"'), true);
@@ -168,16 +168,21 @@ test("bootstrap runtime hard-guards child readiness probes to the internal port"
   assert.equal(source.includes("assertInternalProbePort(probePort);"), true);
 });
 
-test("bootstrap runtime never force-marks handlers ready", () => {
+test("forced fallback emits liveness-only diagnostic without flipping handlersReady", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
+  // Timer infrastructure must still exist (diagnostic breadcrumb for ops).
   assert.equal(source.includes("forcedHandlersReadyFallbackMs"), true);
-  assert.equal(source.includes('emit("handlers_ready_forced"'), true);
-  assert.equal(source.includes("state.handlersReadyForced"), true);
+  assert.equal(source.includes("!BYPASS && FORCED_READINESS_FALLBACK_ENABLED"), true);
   assert.equal(source.includes("NN_ENABLE_FORCED_READINESS_FALLBACK === \"1\""), true);
   assert.equal(source.includes("NN_APP_PLATFORM_BUILD === \"true\""), true);
   assert.equal(source.includes("DIGITALOCEAN_APP_ID"), true);
-  assert.equal(source.includes("!BYPASS && FORCED_READINESS_FALLBACK_ENABLED"), true);
-  assert.equal(source.includes('markHandlersReady("forced_fallback")'), true);
+  // Liveness-only event — NOT the old readiness-flipping event name.
+  assert.equal(source.includes('emit("handlers_ready_forced_liveness_only"'), true);
+  assert.equal(source.includes('emit("handlers_ready_forced"'), false);
+  // Must NOT call markHandlersReady from the fallback timer — only the probe may flip readiness.
+  assert.equal(source.includes('markHandlersReady("forced_fallback")'), false);
+  // handlersReadyForced state field must be gone — it existed only to allow the old forced flip.
+  assert.equal(source.includes("handlersReadyForced"), false);
 });
 
 test("bootstrap runtime supports an env-guarded watchdog bypass after bind", () => {

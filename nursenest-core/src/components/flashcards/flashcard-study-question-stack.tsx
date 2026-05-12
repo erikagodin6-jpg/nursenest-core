@@ -77,6 +77,7 @@ export function FlashcardStudyQuestionStack({
   labels,
   rail,
   mainFooter,
+  revealLinksSection,
 }: {
   sessionModeLabel: string;
   topicLine?: string | null;
@@ -93,6 +94,8 @@ export function FlashcardStudyQuestionStack({
   labels?: StackLabels;
   rail?: ReactNode;
   mainFooter?: ReactNode;
+  /** Links shown inline in the reveal zone (lesson, practice questions). Use lg:hidden when mirroring to rail on desktop. */
+  revealLinksSection?: ReactNode;
 }) {
   const exam = examMicroQuestion;
   const tutorMcq = Boolean(exam && (mcqInteractionMode ?? "tutor_select") === "tutor_select");
@@ -178,6 +181,11 @@ export function FlashcardStudyQuestionStack({
 
           {exam ? (
             <div className="relative z-[1] mt-6">
+              {!revealed ? (
+                <p className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                  Think before selecting →
+                </p>
+              ) : null}
               <FlashcardExamMcqAnswerList
                 exam={exam}
                 revealed={revealed}
@@ -233,6 +241,11 @@ export function FlashcardStudyQuestionStack({
                   }}
                 />
               </div>
+              {revealLinksSection ? (
+                <div className="relative z-[1] mt-3" data-testid="flashcard-reveal-links">
+                  {revealLinksSection}
+                </div>
+              ) : null}
             </section>
           ) : null}
 

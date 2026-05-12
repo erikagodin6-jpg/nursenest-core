@@ -150,10 +150,10 @@ test.describe("Flashcards premium interaction (paid)", () => {
         await expect(layout).toHaveAttribute("data-nn-revealed", "1", { timeout: 30_000 });
         await expect(page.locator("[data-nn-premium-flashcard-reveal]").first()).toBeVisible({ timeout: 30_000 });
         await expect(page.locator("[data-nn-premium-flashcard-confidence]").first()).toBeVisible({ timeout: 30_000 });
-        const known = page.getByRole("button", { name: /^Known$/ });
-        await expect(known).toBeVisible({ timeout: 30_000 });
-        await expect(known).toBeEnabled();
-        await known.click();
+        const easyBtn = page.getByRole("button", { name: /^Easy$/i });
+        await expect(easyBtn).toBeVisible({ timeout: 30_000 });
+        await expect(easyBtn).toBeEnabled();
+        await easyBtn.click();
       }
 
       await assertVisibleHttpImagesNotBroken(page);

@@ -20,6 +20,9 @@ import { z } from "zod";
 import { JSON_BODY_LEARNER_CAT, parseJsonBodyWithLimit } from "@/lib/http/json-body-limit";
 import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
+import { assertNpCatPathwayEntitlement } from "@/lib/entitlements/np-cat-pathway-guard";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   CAT_QUESTION_SELECT,
   dbRowsToCatQuestions,
@@ -53,7 +56,34 @@ const POOL_SIZE = 200;
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const session = await requireSubscriberSession();
   if (!session.ok) return session.response;
-  const { userId } = session;
+  const { userId, entitlement } = session;
+
+  // ── NP-pathway entitlement check ─────────────────────────────────────────
+  // Generic subscriber access is not sufficient — the user must hold an NP-tier
+  // subscription. RN / RPN / Allied paid subscribers are denied here.
+
+  const npGuard = assertNpCatPathwayEntitlement(entitlement);
+  if (!npGuard.ok) {
+    safeServerLog("access", "denied", {
+      reason: "np_cat_pathway_not_in_plan",
+      surface: "np_cat_session_api",
+      tier: String(entitlement.tier ?? ""),
+      userIdPrefix: userId.slice(0, 8),
+      severity: "expected_denial",
+    });
+    return NextResponse.json(
+      { error: "NP pathway subscription required", code: "pathway_not_in_plan" },
+      { status: 403, headers: mergeSubscriberPrivateCacheHeaders() },
+    );
+  }
+
+  if (npGuard.isAdminOverride) {
+    safeServerLog("access", "admin_override_np_cat", {
+      surface: "np_cat_session_api",
+      userIdPrefix: userId.slice(0, 8),
+      severity: "audit",
+    });
+  }
 
   const rawParsed = await parseJsonBodyWithLimit(req, JSON_BODY_LEARNER_CAT);
   if (!rawParsed.ok) return rawParsed.response;

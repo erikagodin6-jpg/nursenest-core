@@ -192,7 +192,7 @@ export function FlashcardCustomStudyClient() {
     };
   }, [summary, searchParamString, cards.length]);
 
-  const onRate = useCallback(async (cardId: string, rating: "incorrect" | "unsure" | "known") => {
+  const onRate = useCallback(async (cardId: string, rating: "again" | "hard" | "good" | "easy") => {
     if (isSyntheticFlashcardStudyId(cardId)) return;
     try {
       await fetch(`/api/flashcards/cards/${encodeURIComponent(cardId)}/review`, {

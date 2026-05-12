@@ -107,7 +107,7 @@ export function BowtieQuestionRenderer({
   );
 
   return (
-    <div className="bowtie-ngn bowtie-ngn--premium font-sans" data-nn-qa-exam-format="bowtie">
+    <div className="bowtie-ngn bowtie-ngn--premium w-full min-w-0 overflow-x-hidden font-sans" data-nn-qa-exam-format="bowtie">
       <div className="flex flex-col gap-6 lg:gap-8">
         {showScenarioBanner ? <div className="order-1">{scenarioBlock}</div> : null}
 
@@ -135,7 +135,7 @@ export function BowtieQuestionRenderer({
                   }`}
                 >
                   {selected ? (
-                    <span className="text-sm font-medium leading-snug text-[var(--semantic-text-primary)]">{chipLabel}</span>
+                    <span className="break-words text-sm font-medium leading-snug text-[var(--semantic-text-primary)]">{chipLabel}</span>
                   ) : (
                     <span className="text-sm text-[var(--semantic-text-muted)]">Tap an option below, or focus this slot first.</span>
                   )}
@@ -194,7 +194,7 @@ export function BowtieQuestionRenderer({
                       : "border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_8%,var(--semantic-surface))] text-[var(--semantic-text-primary)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))]"
                   }`}
                 >
-                  <span className="font-medium text-[var(--semantic-text-secondary)]">{item.label}</span>
+                  <span className="break-words font-medium text-[var(--semantic-text-secondary)]">{item.label}</span>
                 </button>
               );
             })}

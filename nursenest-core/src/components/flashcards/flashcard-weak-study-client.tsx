@@ -22,7 +22,7 @@ type WeakCard = {
   lessonStudyTitle?: string;
 };
 
-const SIMPLE = ["incorrect", "unsure", "known"] as const;
+const SIMPLE = ["again", "hard", "good", "easy"] as const;
 
 export function FlashcardWeakStudyClient({
   userId: _userId,

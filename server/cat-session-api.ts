@@ -52,6 +52,7 @@ async function selectNextQuestion(
        AND difficulty IS NOT NULL
        AND correct_answer IS NOT NULL
        AND (is_adaptive_eligible=true OR is_adaptive_eligible IS NULL)
+       AND (module IS NULL OR module != 'ecg')
        ${seenIds.length ? "AND id != ALL($2)" : ""}
      ORDER BY ABS(difficulty - $3), RANDOM()
      LIMIT 20`,
@@ -75,7 +76,11 @@ router.post("/api/cat/start", async (req, res) => {
       return res.status(403).json({ error: "Premium required" });
     }
 
-    const tier = req.body.tier || user.tier || "rpn";
+    // Always derive tier from the authenticated user — never trust caller-supplied tier.
+    // Admins may override via req.body.tier for testing.
+    const tier = user.tier === "admin" && req.body.tier
+      ? req.body.tier
+      : (user.tier || "rpn");
     const maxQuestions = req.body.questionCount || 150;
 
     const state = {
