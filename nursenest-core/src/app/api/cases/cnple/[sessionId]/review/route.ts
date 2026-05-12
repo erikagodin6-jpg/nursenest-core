@@ -4,9 +4,8 @@
  */
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth/auth-options";
-import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
 import { CNPLE_SAMPLE_CASES } from "@/content/cases/cnple-sample-cases";
 import {
   parseDecisionsJson,
@@ -18,7 +17,7 @@ import type { CaseSessionScore } from "@/lib/cases/longitudinal-case-types";
 type RouteParams = { params: Promise<{ sessionId: string }> };
 
 export async function GET(_req: NextRequest, { params }: RouteParams) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
   }
