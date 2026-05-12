@@ -41,6 +41,7 @@ export type MarketingHubCategoryDescriptor = {
   label: string;
   slug: string;
   legacyCategory?: LessonCategory;
+  description?: string;
 };
 
 /** Resolve `…/lessons/{segment}` when {@link lessonCategoryFromMarketingHubPathSegment} matches. */
@@ -78,6 +79,7 @@ export function pathwayMarketingHubCategories(pathwayId: string): MarketingHubCa
       id: category.id,
       label: category.displayName ?? category.title,
       slug: category.slug ?? genericSlug(category.displayName ?? category.title),
+      description: category.description,
     }));
   }
   return LESSON_CATEGORIES.map((category) => ({

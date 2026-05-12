@@ -1489,7 +1489,11 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
 }
 
 html[data-theme="blossom"] .nn-header-brand-lockup {
-  color: var(--logo-text);
+  /* --logo-primary = #c97a91 (Blossom pink) from ThemeStateHydration palette.logoPrimary.
+     --logo-text was incorrectly used here: it resolves to #1f2937 (near-black) on the white
+     Blossom nav background because it is readability-optimised, not brand-colour-optimised.
+     The leaf mask and wordmark both read currentColor, so this fix applies to both. */
+  color: var(--logo-primary);
 }
 
 html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link,
@@ -1931,6 +1935,88 @@ html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-det
     inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 65%, transparent);
 }
 
+/* Ocean — calm aqua/blue ambient in the hub hero */
+html[data-theme="ocean"] .nn-premium-lessons-hub-hero {
+  border-color: color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
+  background:
+    radial-gradient(560px 240px at 4% 0%, color-mix(in srgb, var(--semantic-chart-2) 16%, transparent), transparent 60%),
+    radial-gradient(480px 210px at 98% 8%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 58%),
+    radial-gradient(380px 180px at 50% 102%, color-mix(in srgb, var(--semantic-info) 8%, transparent), transparent 62%);
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--semantic-info) 28%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-info) 12%, transparent);
+}
+
+/* Blossom — soft pink/lavender hero lift */
+html[data-theme="blossom"] .nn-premium-lessons-hub-hero,
+html[data-theme="aurora"] .nn-premium-lessons-hub-hero {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 18%, var(--semantic-border-soft));
+  background:
+    radial-gradient(560px 240px at 4% 0%, color-mix(in srgb, var(--semantic-chart-1) 20%, transparent), transparent 60%),
+    radial-gradient(480px 210px at 96% 8%, color-mix(in srgb, var(--semantic-chart-5) 16%, transparent), transparent 58%),
+    radial-gradient(380px 180px at 50% 102%, color-mix(in srgb, var(--semantic-brand) 10%, transparent), transparent 62%);
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--semantic-brand) 24%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-chart-5) 14%, transparent);
+}
+
+/* Midnight/Apex — rich teal + clinical depth */
+html[data-theme="midnight"] .nn-premium-lessons-hub-hero,
+html[data-theme="apex"] .nn-premium-lessons-hub-hero {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background:
+    radial-gradient(560px 240px at 4% 0%, color-mix(in srgb, var(--semantic-info) 13%, transparent), transparent 60%),
+    radial-gradient(480px 210px at 96% 8%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 58%),
+    radial-gradient(380px 180px at 50% 102%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 62%),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--semantic-info) 7%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-3) 4%, var(--theme-page-bg)) 52%,
+      transparent 100%
+    );
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--semantic-info) 32%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-info) 18%, transparent);
+}
+
+/* --- Exam-critical category card visual treatment --- */
+.nn-hub-category-card--exam-critical {
+  border-color: color-mix(in srgb, var(--nn-hub-cat-accent) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-hub-cat-accent) 6%, var(--semantic-surface));
+}
+
+.nn-hub-category-card--exam-critical:hover {
+  border-color: color-mix(in srgb, var(--nn-hub-cat-accent) 40%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-hub-cat-accent) 10%, var(--semantic-surface));
+}
+
+/* --- Zero-lesson (empty) category card — muted/coming-soon appearance --- */
+.nn-hub-category-card--empty {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* --- Individual lesson row in category drill-down --- */
+.nn-lessons-hub-lesson-row {
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nn-lessons-hub-lesson-row:hover {
+  transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-lessons-hub-lesson-row,
+  .nn-lessons-hub-lesson-row:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 .nn-premium-lessons-hub-body {
   position: relative;
   overflow: hidden;
@@ -1951,6 +2037,69 @@ html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-det
 
 .nn-premium-lessons-hub-body a[href*="/lessons/"]:hover {
   transform: translateY(-1px);
+}
+
+/* --- Lessons hub stat card (hero lesson count) --- */
+.nn-lessons-hub-stat-card {
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+html[data-theme="ocean"] .nn-lessons-hub-stat-card,
+html[data-theme="blossom"] .nn-lessons-hub-stat-card {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 80%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-border-soft));
+}
+
+html[data-theme="midnight"] .nn-lessons-hub-stat-card,
+html[data-theme="apex"] .nn-lessons-hub-stat-card {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 72%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+}
+
+/* --- Lessons hub trust badge pills --- */
+.nn-lessons-hub-trust-badge {
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+html[data-theme="ocean"] .nn-lessons-hub-trust-badge {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-info) 16%, var(--semantic-border-soft));
+}
+
+html[data-theme="blossom"] .nn-lessons-hub-trust-badge {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 70%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+}
+
+html[data-theme="midnight"] .nn-lessons-hub-trust-badge,
+html[data-theme="apex"] .nn-lessons-hub-trust-badge {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 65%, transparent);
+  border-color: color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+}
+
+/* --- Hub category cards (icon + description style) --- */
+.nn-hub-category-card {
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nn-hub-category-card:hover {
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-hub-category-card,
+  .nn-hub-category-card:hover {
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 .nn-premium-lesson-detail-shell {

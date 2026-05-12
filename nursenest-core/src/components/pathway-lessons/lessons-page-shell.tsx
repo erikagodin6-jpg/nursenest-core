@@ -19,6 +19,10 @@ type Props = {
   /** Single primary hero action: signup for guests, resume/next lesson for subscribers. */
   heroPrimaryCta?: { label: string; href: string };
   backLink?: { label: string; href: string };
+  /** Prominent stat card shown in the hero (lesson count, etc.). */
+  statCard?: { value: string; label: string };
+  /** Trust/quality badge pills rendered below the subtitle. */
+  trustBadges?: string[];
   children: ReactNode;
 };
 
@@ -48,6 +52,8 @@ export function LessonsPageShell({
   ctas,
   heroPrimaryCta,
   backLink,
+  statCard,
+  trustBadges,
   children,
 }: Props) {
   return (
@@ -75,21 +81,49 @@ export function LessonsPageShell({
               </div>
             ) : null}
 
-            {eyebrow ? <p className="nn-premium-home-eyebrow">{eyebrow}</p> : null}
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="min-w-0 flex-1">
+                {eyebrow ? <p className="nn-premium-home-eyebrow">{eyebrow}</p> : null}
 
-            <h1
-              id="nn-lessons-hub-title"
-              className={`nn-marketing-h1 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)] ${eyebrow ? "mt-4" : backLink ? "mt-1" : "mt-0"}`}
-            >
-              {title}
-            </h1>
-            {subtitle ? (
-              <p className="nn-marketing-body mt-4 max-w-3xl text-pretty text-[var(--palette-text-muted)]">
-                {subtitle}
-              </p>
-            ) : null}
+                <h1
+                  id="nn-lessons-hub-title"
+                  className={`nn-marketing-h1 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)] ${eyebrow ? "mt-4" : backLink ? "mt-1" : "mt-0"}`}
+                >
+                  {title}
+                </h1>
+                {subtitle ? (
+                  <p className="nn-marketing-body mt-4 max-w-3xl text-pretty text-[var(--palette-text-muted)]">
+                    {subtitle}
+                  </p>
+                ) : null}
 
-            {toolbar ? <div className="mx-auto mt-5 w-full max-w-3xl">{toolbar}</div> : null}
+                {trustBadges && trustBadges.length > 0 ? (
+                  <div className="mt-4 flex flex-wrap gap-2" aria-label="Quality indicators">
+                    {trustBadges.map((badge) => (
+                      <span
+                        key={badge}
+                        className="nn-lessons-hub-trust-badge inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5 text-xs font-medium text-[var(--theme-muted-text)]"
+                      >
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
+              {statCard ? (
+                <div className="nn-lessons-hub-stat-card self-start shrink-0 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-5 py-4 text-center shadow-[var(--semantic-shadow-soft)] sm:min-w-[9rem]">
+                  <span className="block text-3xl font-black leading-none text-[var(--semantic-brand)]">
+                    {statCard.value}
+                  </span>
+                  <span className="mt-1.5 block text-xs font-medium text-[var(--theme-muted-text)]">
+                    {statCard.label}
+                  </span>
+                </div>
+              ) : null}
+            </div>
+
+            {toolbar ? <div className="mt-5 w-full">{toolbar}</div> : null}
 
             {heroPrimaryCta ? (
               <div className="mx-auto mt-6 flex w-full max-w-2xl justify-center sm:justify-start">

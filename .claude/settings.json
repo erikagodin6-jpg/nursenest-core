@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --import tsx --test src/lib/lessons/premium-lessons-hub-layout-convergence.contract.test.ts src/lib/lessons/marketing-hub-category-page-cap.contract.test.ts src/lib/lessons/marketing-lessons-hub-verify-invariant-ui.contract.test.ts src/lib/lessons/pathway-lessons-hub-marketing-ux.contract.test.ts src/lib/marketing/pathway-lessons-hub-page-safety.test.ts src/lib/theme/site-header-marketing-chrome.contract.test.ts)",
+      "Bash(node --import tsx --test src/lib/lessons/pathway-lesson-admin-option-b.test.ts src/lib/lessons/pathway-lesson-route-access.test.ts src/lib/lessons/marketing-pathway-lesson-staff-bypass.test.ts src/lib/lessons/marketing-pathway-lesson-viewer-context.contract.test.ts src/lib/lessons/pathway-lessons-hub-marketing-ux.contract.test.ts src/lib/marketing/pathway-lessons-hub-page-safety.test.ts src/lib/lessons/marketing-hub-category-page-cap.contract.test.ts src/lib/lessons/marketing-hub-category-rows-db-resilient.test.ts)",
+      "Bash(node --import tsx --test src/lib/lessons/pathway-lesson-admin-option-b.test.ts src/lib/lessons/marketing-pathway-lesson-viewer-context.contract.test.ts src/lib/lessons/pathway-lessons-hub-marketing-ux.contract.test.ts src/lib/marketing/pathway-lessons-hub-page-safety.test.ts src/lib/lessons/marketing-hub-category-page-cap.contract.test.ts src/lib/lessons/marketing-hub-category-rows-db-resilient.test.ts src/lib/marketing/marketing-region-equivalent-hub.test.ts)",
+      "Bash(git -C /root/nursenest-core/nursenest-core log --oneline --all --follow -- src/components/pathway-lessons/lessons-page-shell.tsx)",
+      "Bash(git -C /root/nursenest-core/nursenest-core show fa3a444cd -- src/components/pathway-lessons/lessons-page-shell.tsx)"
+    ]
+  }
+}

@@ -1,4 +1,7 @@
+import React, { type CSSProperties } from "react";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
+import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
@@ -55,6 +58,15 @@ type Props = {
   examCode: string;
   lessonContentLocale: string;
 };
+
+/** Categories that are consistently exam-critical across all pathways — get a subtle elevated visual treatment. */
+const EXAM_CRITICAL_CATEGORY_IDS = new Set([
+  "cardiovascular", "respiratory", "pharmacology", "pharmacology_prescribing",
+  "neurological", "renal_urinary", "fundamentals_safety", "mental_health",
+  "primary_care", "health_assessment", "Cardiovascular", "Respiratory",
+  "Pharmacology", "Neurological", "Renal & Urinary", "Mental Health",
+  "Safety & Prioritization",
+]);
 
 export async function MarketingLessonsHubCategoryFirstIndex({
   pathway,
@@ -128,10 +140,11 @@ export async function MarketingLessonsHubCategoryFirstIndex({
 
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
-  const pageTitle = formatTitleCase("Lessons");
+  const pageTitle = formatTitleCase(`${pathway.shortName.trim() || pathway.displayName} Lesson Library`);
   const headerDescription = formatSentenceCase(
-    `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`,
+    `High-yield lessons, clinical insights, and exam-focused content to help you pass the ${examName} with confidence.`,
   );
+  const hubTrustBadges = ["Evidence-based content", "Exam-focused", "Created by nurses", "Updated regularly"];
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
@@ -191,6 +204,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         pathwayTrack={pathway.roleTrack}
         toolbar={toolbar}
         backLink={{ label: `${examName} overview`, href: overviewHref }}
+        trustBadges={hubTrustBadges}
       >
         <MarketingHubSmokeDiagnosticsJson
           payload={{
@@ -237,6 +251,8 @@ export async function MarketingLessonsHubCategoryFirstIndex({
       pathwayTrack={pathway.roleTrack}
       toolbar={toolbar}
       backLink={{ label: `${examName} overview`, href: overviewHref }}
+      statCard={{ value: `${catalog.length.toLocaleString()}+`, label: "High-yield lessons" }}
+      trustBadges={hubTrustBadges}
     >
       <MarketingHubSmokeDiagnosticsJson
         payload={{
@@ -275,10 +291,10 @@ export async function MarketingLessonsHubCategoryFirstIndex({
       >
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
           <h2 id="lesson-library-heading" className="nn-marketing-h3 max-w-[min(100%,36rem)]">
-            Lesson Library
+            Browse Clinical Areas
           </h2>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
-            {catalog.length.toLocaleString()} {catalog.length === 1 ? "Lesson" : "Lessons"} · Browse By Area
+            {catalog.length.toLocaleString()} {catalog.length === 1 ? "Lesson" : "Lessons"}
           </span>
         </div>
 
@@ -317,52 +333,92 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         ) : null}
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {hubCategories.map((cat) => {
-            const n = counts.get(cat.id) ?? 0;
-            const href = marketingPathwayLessonsCategoryPath(pathway, cat.slug);
-            const categoryProgress = showPaidProgressChrome
-              ? buildLessonCategoryProgress({
-                  lessons: catalog.filter((lesson) => displayCategoryForPathwayMarketingHubLesson(lesson, pathway.id).id === cat.id),
-                  progressMap,
-                })
-              : null;
-            return (
-              <Link
-                key={cat.id}
-                href={href}
-                className="group flex min-h-[72px] flex-col justify-center rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))] px-4 py-3 transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-positive)_40%,var(--semantic-surface))]"
-              >
-                <span className="text-sm font-semibold text-[var(--theme-heading-text)] group-hover:text-primary">
-                  {cat.label}
-                </span>
-                <span className="mt-1 text-xs text-[var(--theme-muted-text)]">
-                  {showPaidProgressChrome && categoryProgress ? (
-                    <>
-                      <span className="hidden sm:inline">
-                        {categoryProgress.percentComplete}% complete ·{" "}
+          {hubCategories
+            .filter((cat) => {
+              // review_required has its own section above; exclude from the category grid
+              if (cat.id === "review_required") return false;
+              // hide zero-lesson categories for anonymous visitors (keeps grid clean)
+              const n = counts.get(cat.id) ?? 0;
+              return showPaidProgressChrome || n > 0;
+            })
+            .map((cat) => {
+              const n = counts.get(cat.id) ?? 0;
+              const href = marketingPathwayLessonsCategoryPath(pathway, cat.slug);
+              const visual = getLessonHubSystemVisual(cat.id);
+              const Icon = visual.icon;
+              const accentStyle = { "--nn-hub-cat-accent": `var(${visual.accentVar})` } as CSSProperties;
+              const isExamCritical = EXAM_CRITICAL_CATEGORY_IDS.has(cat.id);
+              const isEmpty = n === 0 && !showPaidProgressChrome;
+              const categoryProgress = showPaidProgressChrome
+                ? buildLessonCategoryProgress({
+                    lessons: catalog.filter((lesson) => displayCategoryForPathwayMarketingHubLesson(lesson, pathway.id).id === cat.id),
+                    progressMap,
+                  })
+                : null;
+              const cardClass = [
+                "nn-hub-category-card group relative flex items-start gap-3.5 rounded-2xl border",
+                "border-[color-mix(in_srgb,var(--nn-hub-cat-accent)_16%,var(--semantic-border-soft))]",
+                "bg-[color-mix(in_srgb,var(--nn-hub-cat-accent)_4%,var(--semantic-surface))]",
+                "px-4 py-4 transition-all",
+                "hover:border-[color-mix(in_srgb,var(--nn-hub-cat-accent)_32%,var(--semantic-border-soft))]",
+                "hover:bg-[color-mix(in_srgb,var(--nn-hub-cat-accent)_7%,var(--semantic-surface))]",
+                "hover:shadow-[0_4px_16px_color-mix(in_srgb,var(--nn-hub-cat-accent)_10%,transparent)]",
+                isExamCritical ? "nn-hub-category-card--exam-critical" : "",
+                isEmpty ? "nn-hub-category-card--empty" : "",
+              ].filter(Boolean).join(" ");
+              return (
+                <Link
+                  key={cat.id}
+                  href={href}
+                  style={accentStyle}
+                  className={cardClass}
+                  aria-disabled={isEmpty || undefined}
+                >
+                  <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-hub-cat-accent)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-hub-cat-accent)_10%,var(--semantic-panel-muted))] text-[var(--nn-hub-cat-accent)]">
+                    <Icon className="h-4 w-4" aria-hidden />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold text-[var(--theme-heading-text)] transition-colors group-hover:text-[var(--nn-hub-cat-accent)]">
+                      {cat.label}
+                    </span>
+                    {cat.description ? (
+                      <span className="mt-0.5 line-clamp-2 block text-xs leading-relaxed text-[var(--theme-muted-text)]">
+                        {cat.description}
                       </span>
-                      <span aria-hidden="true">
-                        {categoryProgress.completedCount.toLocaleString()}/
-                        {categoryProgress.totalCount.toLocaleString()} lessons
-                      </span>
-                      <span className="sr-only">
-                        {`${categoryProgress.completedCount.toLocaleString()} of ${categoryProgress.totalCount.toLocaleString()} lessons completed`}
-                      </span>
-                    </>
-                  ) : (
-                    `${n.toLocaleString()} ${n === 1 ? "lesson" : "lessons"}`
-                  )}
-                </span>
-                {showPaidProgressChrome && categoryProgress ? (
-                  <CategoryProgressBar
-                    completedCount={categoryProgress.completedCount}
-                    inProgressCount={categoryProgress.inProgressCount}
-                    totalCount={Math.max(categoryProgress.totalCount, 1)}
+                    ) : null}
+                    <span className="mt-1.5 block text-xs font-medium text-[var(--theme-muted-text)]">
+                      {showPaidProgressChrome && categoryProgress ? (
+                        <>
+                          <span className="hidden sm:inline">
+                            {categoryProgress.percentComplete}% complete ·{" "}
+                          </span>
+                          <span aria-hidden="true">
+                            {categoryProgress.completedCount.toLocaleString()}/
+                            {categoryProgress.totalCount.toLocaleString()} lessons
+                          </span>
+                          <span className="sr-only">
+                            {`${categoryProgress.completedCount.toLocaleString()} of ${categoryProgress.totalCount.toLocaleString()} lessons completed`}
+                          </span>
+                        </>
+                      ) : (
+                        `${n.toLocaleString()} ${n === 1 ? "lesson" : "lessons"}`
+                      )}
+                    </span>
+                    {showPaidProgressChrome && categoryProgress ? (
+                      <CategoryProgressBar
+                        completedCount={categoryProgress.completedCount}
+                        inProgressCount={categoryProgress.inProgressCount}
+                        totalCount={Math.max(categoryProgress.totalCount, 1)}
+                      />
+                    ) : null}
+                  </div>
+                  <ChevronRight
+                    className="mt-1 h-4 w-4 shrink-0 text-[var(--theme-muted-text)] transition group-hover:translate-x-0.5 group-hover:text-[var(--nn-hub-cat-accent)]"
+                    aria-hidden
                   />
-                ) : null}
-              </Link>
-            );
-          })}
+                </Link>
+              );
+            })}
         </div>
       </section>
 

@@ -269,7 +269,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
             </p>
           </div>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-1.5">
             {rows.map((l) => {
               const href = pathwayLessonMarketingHubVerifiedCardHref(base, l);
               const label = cleanLessonTitleForDisplay((l.seoTitle ?? "").trim() || l.title);
@@ -279,13 +279,16 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
                   {href ? (
                     <Link
                       href={href}
-                      className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm font-medium text-primary shadow-[var(--semantic-shadow-soft)] transition-colors hover:border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))]"
+                      className="nn-lessons-hub-lesson-row group flex items-center justify-between gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 py-2.5 text-sm font-medium text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] hover:text-primary"
                     >
-                      <span className="min-w-0 flex-1">{label}</span>
-                      {showPaidProgressChrome ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
+                      <span className="min-w-0 flex-1 truncate">{label}</span>
+                      <span className="flex shrink-0 items-center gap-2">
+                        {showPaidProgressChrome ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
+                        <svg className="h-3.5 w-3.5 shrink-0 text-[var(--theme-muted-text)] transition group-hover:translate-x-0.5 group-hover:text-primary" aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                      </span>
                     </Link>
                   ) : (
-                    <span className="text-sm text-[var(--theme-muted-text)]">{label}</span>
+                    <span className="block rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 py-2.5 text-sm text-[var(--theme-muted-text)]">{label}</span>
                   )}
                 </li>
               );

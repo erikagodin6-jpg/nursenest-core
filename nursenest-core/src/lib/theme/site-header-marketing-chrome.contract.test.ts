@@ -68,3 +68,35 @@ describe("SiteHeader sticky chrome wrapper (site-header.tsx)", () => {
     assert.ok(closePrimary !== -1 && tierRail !== -1 && closePrimary < tierRail, "tier rail must follow primary band");
   });
 });
+
+describe("Blossom theme brand wordmark and leaf logo color contract", () => {
+  const premiumCssPath = path.join(__dirname, "../../app/premium-redesign-2026.css");
+
+  it("Blossom brand lockup uses --logo-primary (brand pink), not --logo-text (near-black readability token)", () => {
+    const css = fs.readFileSync(premiumCssPath, "utf8");
+
+    // The Blossom-specific brand lockup rule MUST use --logo-primary.
+    // --logo-text resolves to #1f2937 (near-black) on Blossom's white nav background because
+    // it is a readability-optimised token, not the brand colour token. The fix uses --logo-primary
+    // which ThemeStateHydration sets from palette.logoPrimary = #c97a91 (Blossom pink).
+    assert.match(
+      css,
+      /html\[data-theme="blossom"\]\s+\.nn-header-brand-lockup\s*\{[^}]*color:\s*var\(--logo-primary\)/s,
+      "Blossom brand lockup must use var(--logo-primary) so the wordmark and leaf render in Blossom pink",
+    );
+    assert.doesNotMatch(
+      css,
+      /html\[data-theme="blossom"\]\s+\.nn-header-brand-lockup\s*\{[^}]*color:\s*var\(--logo-text\)/s,
+      "Blossom brand lockup must NOT use var(--logo-text) — that token resolves to near-black on light Blossom nav",
+    );
+  });
+
+  it("generic marketing-row4 brand lockup rule still uses semantic-brand mix (Ocean/other themes unaffected)", () => {
+    const css = fs.readFileSync(premiumCssPath, "utf8");
+    assert.match(
+      css,
+      /\[data-nn-header-layout="marketing-row4"\]\s+\.nn-header-brand-lockup\s*\{[^}]*color:\s*color-mix\(in srgb,\s*var\(--semantic-brand\)/s,
+      "The generic marketing-row4 brand lockup rule must still use the semantic-brand color-mix formula",
+    );
+  });
+});

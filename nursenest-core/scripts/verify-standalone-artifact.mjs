@@ -197,6 +197,58 @@ export function verifyPathwayLessonGeneratedIndexesArtifact(root = packageRoot) 
   );
 }
 
+/**
+ * Verify that public/i18n assets are present both at the package root and inside every
+ * discovered standalone server directory. Missing i18n causes silent English-fallback
+ * rendering for non-English locales.
+ *
+ * Two checks:
+ *   1. Package root public/i18n/en/ must exist and contain at least 1 shard file.
+ *   2. Each standalone server directory must have an adjacent public/i18n/en/ (written
+ *      by ensure-standalone-public.mjs). Warns rather than throws for this check so that
+ *      runs of verify-standalone-artifact without the copy step don't block CI.
+ */
+export function verifyPublicI18nArtifact(root = packageRoot) {
+  // 1. Package-root check (hard fail — i18n source must always be present)
+  const pkgI18nDir = path.join(root, "public", "i18n", "en");
+  if (!existsSync(pkgI18nDir)) {
+    throw new Error(
+      `[i18n-artifact] FATAL: public/i18n/en/ not found at package root:\n  ${pkgI18nDir}\n` +
+        `Ensure the i18n compilation pipeline has run before the build.`,
+    );
+  }
+  const pkgShards = readdirSync(pkgI18nDir).filter((n) => n.endsWith(".json"));
+  if (pkgShards.length === 0) {
+    throw new Error(
+      `[i18n-artifact] FATAL: public/i18n/en/ is empty (no *.json files) at ${pkgI18nDir}.`,
+    );
+  }
+
+  // 2. Standalone-adjacent check (warn-only — populated by ensure-standalone-public.mjs)
+  const servers = discoverStandaloneServerJsPaths(root);
+  if (servers.length > 0) {
+    for (const serverPath of servers) {
+      const adjacentI18n = path.join(path.dirname(serverPath), "public", "i18n", "en");
+      if (!existsSync(adjacentI18n)) {
+        console.warn(
+          `[i18n-artifact] WARN: standalone-adjacent public/i18n/en/ missing: ${adjacentI18n}\n` +
+            `  Run \`node scripts/ensure-standalone-public.mjs\` after \`next build\`.\n` +
+            `  Docker deployments are unaffected (Dockerfile COPY handles public/).`,
+        );
+      } else {
+        const adjacentShards = readdirSync(adjacentI18n).filter((n) => n.endsWith(".json"));
+        console.log(
+          `[i18n-artifact] standalone-adjacent public/i18n/en/ OK: ${adjacentShards.length} shard(s) at ${adjacentI18n}`,
+        );
+      }
+    }
+  }
+
+  console.log(
+    `[i18n-artifact] package-root public/i18n/en/ OK: ${pkgShards.length} shard(s) at ${pkgI18nDir}`,
+  );
+}
+
 const scriptPath = fileURLToPath(import.meta.url);
 const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === scriptPath;
 
@@ -205,6 +257,7 @@ if (isDirectRun) {
     const standaloneServerPath = verifyStandaloneArtifact();
     verifyStandaloneStaticAssetsPresent();
     verifyPathwayLessonGeneratedIndexesArtifact();
+    verifyPublicI18nArtifact();
     const staticTargets = getStandaloneStaticSyncTargets().length;
     console.log(
       `[verify-standalone-artifact] verified ${standaloneServerPath} and ${staticTargets} static asset tree(s)`,
