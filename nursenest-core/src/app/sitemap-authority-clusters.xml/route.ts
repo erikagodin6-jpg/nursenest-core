@@ -1,5 +1,7 @@
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
+import { listAuthorityComparisonPaths } from "@/lib/seo/authority-comparison-pages";
 import { listAuthorityClusterPaths } from "@/lib/seo/authority-cluster-pages";
+import { listAuthorityResourcePaths } from "@/lib/seo/authority-resource-pages";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
@@ -27,7 +29,12 @@ const OWNED_BY_EXISTING_SEGMENTS = new Set([
 
 export async function GET(request: Request): Promise<Response> {
   const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
-  const entries: SitemapUrlEntry[] = listAuthorityClusterPaths()
+  const authorityPaths = [
+    ...listAuthorityClusterPaths(),
+    ...listAuthorityComparisonPaths(),
+    ...listAuthorityResourcePaths(),
+  ];
+  const entries: SitemapUrlEntry[] = authorityPaths
     .filter((path) => !OWNED_BY_EXISTING_SEGMENTS.has(path))
     .map((path) => ({ loc: `${origin}${path}` }));
   const filtered = filterPublicSitemapEntries(entries, origin);

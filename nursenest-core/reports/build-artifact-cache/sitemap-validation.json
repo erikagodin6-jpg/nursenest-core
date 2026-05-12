@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "4bdd4fb6ffc9e033efe3548456a5d7c3ad6d59f2a08846ebffdf8f877dabe9fb",
-  "generatedAt": "2026-05-11T12:17:31.411Z",
+  "fingerprint": "72618889088c27ce22e8af42835a4d8ced358a4eec208927a54b2c47b490b870",
+  "generatedAt": "2026-05-12T20:09:38.762Z",
   "inputs": [
     {
       "type": "file",
@@ -195,6 +195,14 @@
     {
       "type": "file",
       "path": "src/app/(admin)/admin/feedback/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/flashcards/[flashcardId]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(admin)/admin/flashcards/page.tsx"
     },
     {
       "type": "file",
@@ -430,6 +438,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/flashcards/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/layout.tsx"
     },
     {
@@ -487,6 +499,14 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/questions/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/report-card/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/simulation/page.tsx"
     },
     {
       "type": "file",
@@ -571,6 +591,14 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/allied-health/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/allied-health/respiratory-therapy/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/allied-health/respiratory-therapy/page.tsx"
     },
     {
       "type": "file",
@@ -682,6 +710,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/canada-np-exam-prep/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/canada/new-grad/[workArea]/page.tsx"
     },
     {
@@ -694,7 +726,39 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/np/cnple/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/np/cnple/case-based-questions/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/np/cnple/loft-exam/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/np/cnple/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/np/cnple/provisional-registration/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/np/cnple/study-guide/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/canada/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/rpn/rex-pn/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/canada/rpn/rex-pn/page.tsx"
     },
     {
       "type": "file",
@@ -711,6 +775,82 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/china/[topic]/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-blueprint/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-case-studies/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-clinical-judgment/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-differential-diagnosis/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-flashcards/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-geriatrics/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-lab-interpretation/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-loft-testing/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-mental-health/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-pediatrics/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-pharmacology/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-practice-questions/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-prescribing-questions/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-primary-care/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-simulation-exam/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-study-guide/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-vs-cnpe/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple-womens-health/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/cnple/page.tsx"
     },
     {
       "type": "file",
@@ -1075,6 +1215,10 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/us/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/what-is-the-cnple/page.tsx"
     },
     {
       "type": "file",
@@ -1722,6 +1866,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/admin/flashcards/[flashcardId]/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/admin/flashcards/decks/[deckId]/route.ts"
     },
     {
@@ -1879,6 +2027,10 @@
     {
       "type": "file",
       "path": "src/app/api/admin/modules/ecg/publish/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/admin/modules/ecg/readiness/route.ts"
     },
     {
       "type": "file",
@@ -2134,6 +2286,18 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/cases/cnple/[sessionId]/advance/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/cases/cnple/[sessionId]/review/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/cases/cnple/session/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/cat/np/analysis/route.ts"
     },
     {
@@ -2282,11 +2446,23 @@
     },
     {
       "type": "file",
+      "path": "src/app/api/flashcards/options/[flashcardId]/select/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/flashcards/remediation-signal/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/api/flashcards/route.ts"
     },
     {
       "type": "file",
       "path": "src/app/api/flashcards/stats/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/flashcards/study-queue/route.ts"
     },
     {
       "type": "file",
@@ -2327,6 +2503,10 @@
     {
       "type": "file",
       "path": "src/app/api/internal/reliability/self-heal/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/api/internal/runtime-env-health/route.ts"
     },
     {
       "type": "file",
@@ -2926,11 +3106,19 @@
     },
     {
       "type": "file",
+      "path": "src/app/sitemap-authority-clusters.xml/route.ts"
+    },
+    {
+      "type": "file",
       "path": "src/app/sitemap-blog.xml/route.ts"
     },
     {
       "type": "file",
       "path": "src/app/sitemap-clinical-modules.xml/route.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/app/sitemap-cnple.xml/route.ts"
     },
     {
       "type": "file",
@@ -3515,6 +3703,10 @@
     {
       "type": "file",
       "path": "src/lib/blog/blog-seo-depth-profile.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/blog/blog-seo-hardening.test.ts"
     },
     {
       "type": "file",
@@ -4834,6 +5026,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/lessons/premium-lessons-hub-layout-convergence.contract.test.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/lessons/respiratory-sounds-library-data.ts"
     },
     {
@@ -5158,6 +5354,22 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/authority-cluster-pages.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/authority-cluster-pages.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/authority-comparison-pages.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/authority-resource-pages.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/blog-content-examples.ts"
     },
     {
@@ -5211,6 +5423,10 @@
     {
       "type": "file",
       "path": "src/lib/seo/clinical-title-patterns.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/cnple-seo-cluster.ts"
     },
     {
       "type": "file",
@@ -5626,7 +5842,15 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/rex-pn-seo-cluster.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/robots-route-source.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/rt-seo-cluster.ts"
     },
     {
       "type": "file",
@@ -5635,6 +5859,10 @@
     {
       "type": "file",
       "path": "src/lib/seo/safe-marketing-metadata.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/seo-authority-clusters.contract.test.ts"
     },
     {
       "type": "file",
@@ -5797,6 +6025,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 18720
+    "durationMs": 9141
   }
 }

@@ -3,8 +3,10 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
+import { listAuthorityComparisonPages } from "@/lib/seo/authority-comparison-pages";
 import type { AuthorityClusterPage } from "@/lib/seo/authority-cluster-pages";
 import { listAuthorityClusterSiblings } from "@/lib/seo/authority-cluster-pages";
+import { listAuthorityResourcePages } from "@/lib/seo/authority-resource-pages";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 
 const clusterLabels: Record<AuthorityClusterPage["cluster"], string> = {
@@ -55,9 +57,85 @@ function ArticleJsonLd({ page }: { page: AuthorityClusterPage }) {
   );
 }
 
+function relatedAssetLinks(page: AuthorityClusterPage) {
+  const resources = listAuthorityResourcePages();
+  return resources.filter((asset) => {
+    if (page.cluster === "cnple") return asset.cluster === "cnple" || asset.slug === "pharmacology-mnemonic-sheet";
+    if (page.cluster === "rex-pn") return asset.cluster === "rex-pn" || asset.slug === "pharmacology-mnemonic-sheet";
+    return asset.cluster === "respiratory-therapy" || asset.cluster === "ecg";
+  });
+}
+
+function relatedComparisonLinks(page: AuthorityClusterPage) {
+  const comparisons = listAuthorityComparisonPages();
+  return comparisons.filter((comparison) => {
+    if (page.cluster === "cnple") return comparison.slug.includes("cnple") || comparison.slug.startsWith("nursenest-vs");
+    if (page.cluster === "rex-pn") return comparison.slug.includes("rex-pn") || comparison.slug.startsWith("nursenest-vs");
+    return comparison.slug.startsWith("nursenest-vs");
+  });
+}
+
+function VisualAuthorityPanel({ page }: { page: AuthorityClusterPage }) {
+  if (page.cluster !== "respiratory-therapy") return null;
+
+  const rows =
+    page.slug.includes("abg") || page.slug === "abgs"
+      ? [
+          ["Respiratory acidosis", "pH down, PaCO2 up", "Assess ventilation, mental status, airway protection, and need for ventilatory support."],
+          ["Respiratory alkalosis", "pH up, PaCO2 down", "Look for hyperventilation drivers such as pain, anxiety, hypoxemia, sepsis, or over-ventilation."],
+          ["Metabolic acidosis", "pH down, HCO3 down", "Connect to shock, DKA, renal failure, lactic acidosis, and compensation status."],
+        ]
+      : page.slug.includes("vent")
+        ? [
+            ["Volume control", "Set tidal volume; pressure varies", "Watch high pressure, plateau pressure, compliance, and obstruction."],
+            ["Pressure control", "Set pressure; tidal volume varies", "Watch delivered volume, minute ventilation, and worsening compliance."],
+            ["Pressure support", "Patient-triggered support", "Watch apnea, fatigue, synchrony, and weaning readiness."],
+          ]
+        : [
+            ["Nasal cannula", "Low-flow oxygen", "Mild hypoxemia with stable work of breathing."],
+            ["Venturi mask", "Fixed FiO2", "COPD or when controlled oxygen delivery matters."],
+            ["Non-rebreather", "High FiO2", "Severe hypoxemia while preparing escalation or definitive support."],
+          ];
+
+  return (
+    <section
+      className="mt-10 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_5%,var(--semantic-surface))] p-6"
+      aria-labelledby="visual-authority"
+    >
+      <h2 id="visual-authority" className="text-base font-bold text-[var(--theme-heading-text)]">
+        Quick clinical reference
+      </h2>
+      <div className="mt-4 overflow-x-auto">
+        <table className="w-full min-w-[40rem] border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-[var(--semantic-border-soft)]">
+              <th scope="col" className="px-3 py-2 text-left text-xs font-bold uppercase text-[var(--theme-muted-text)]">Pattern</th>
+              <th scope="col" className="px-3 py-2 text-left text-xs font-bold uppercase text-[var(--theme-muted-text)]">Signal</th>
+              <th scope="col" className="px-3 py-2 text-left text-xs font-bold uppercase text-[var(--theme-muted-text)]">Decision focus</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row[0]} className="border-t border-[var(--semantic-border-soft)]">
+                {row.map((cell, index) => (
+                  <td key={cell} className={`px-3 py-3 align-top text-[var(--theme-body-text)] ${index === 0 ? "font-semibold text-[var(--theme-heading-text)]" : ""}`}>
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 export function AuthorityClusterPageView({ page }: { page: AuthorityClusterPage }) {
   const siblings = listAuthorityClusterSiblings(page);
   const siblingLinks = siblings.slice(0, 7);
+  const assetLinks = relatedAssetLinks(page).slice(0, 4);
+  const comparisonLinks = relatedComparisonLinks(page).slice(0, 4);
   const crumbs = [
     { name: "Home", href: "/" },
     { name: clusterLabels[page.cluster], href: clusterBasePath(page) },
@@ -208,6 +286,43 @@ export function AuthorityClusterPageView({ page }: { page: AuthorityClusterPage 
             </tbody>
           </table>
         </div>
+
+        <VisualAuthorityPanel page={page} />
+
+        <section
+          className="mt-10 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6"
+          aria-labelledby="related-study-system"
+        >
+          <h2 id="related-study-system" className="text-base font-bold text-[var(--theme-heading-text)]">
+            Related study system
+          </h2>
+          <div className="mt-5 grid gap-5 md:grid-cols-2">
+            <div>
+              <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Downloadable and printable assets</h3>
+              <ul className="mt-3 space-y-2">
+                {assetLinks.map((asset) => (
+                  <li key={asset.path}>
+                    <Link className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline" href={asset.path}>
+                      {asset.h1}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Comparisons and buying guides</h3>
+              <ul className="mt-3 space-y-2">
+                {comparisonLinks.map((comparison) => (
+                  <li key={comparison.path}>
+                    <Link className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline" href={comparison.path}>
+                      {comparison.h1}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
 
         {/* ── Body sections ─────────────────────────────────────────────────── */}
         <div className="mt-10 space-y-10">

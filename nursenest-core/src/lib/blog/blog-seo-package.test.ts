@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { CountryCode } from "@prisma/client";
 import {
+  BLOG_DEFAULT_OG_IMAGE_URL,
   BLOG_SEO_BUNDLE_VERSION,
   resolveBlogOgImageAbsolute,
   type BlogSeoBundle,
@@ -90,8 +91,8 @@ describe("rebuildSeoBundleFromStoredBlogPost", () => {
 });
 
 describe("resolveBlogOgImageAbsolute", () => {
-  it("returns undefined for empty input", () => {
-    assert.equal(resolveBlogOgImageAbsolute(null, null), undefined);
+  it("returns default OG image for empty input", () => {
+    assert.equal(resolveBlogOgImageAbsolute(null, null), BLOG_DEFAULT_OG_IMAGE_URL);
   });
 
   it("passes through valid https URLs from bundle", () => {

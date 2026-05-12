@@ -1,6 +1,6 @@
 # Sitemap segmentation validation report
 
-Generated: **2026-05-11T04:53:18.923Z** (Phase 4 offline validator — App Router GET handlers).
+Generated: **2026-05-12T20:11:02.599Z** (Phase 4 offline validator — App Router GET handlers).
 
 ## Summary
 
@@ -18,22 +18,24 @@ Generated: **2026-05-11T04:53:18.923Z** (Phase 4 offline validator — App Route
 
 | Segment | URLs | Invalid locs | Gen time (ms) | 48k band |
 | --- | ---: | ---: | ---: | --- |
-| **core** (`sitemap-core.xml`) | 18 | 0 | 2217 | OK |
-| **blog** (`sitemap-blog.xml`) | 3916 | 0 | 178 | OK |
-| **fr-blog** (`sitemap-fr-blog.xml`) | 1 | 0 | 47 | OK |
-| **es-blog** (`sitemap-es-blog.xml`) | 2 | 0 | 100 | OK |
-| **pathways** (`sitemap-pathways.xml`) | 25 | 0 | 1059 | OK |
-| **lessons** (`sitemap-lessons.xml`) | 1 | 0 | 153 | OK |
-| **localized** (`sitemap-localized.xml`) | 48 | 0 | 6 | OK |
-| **clinical-modules** (`sitemap-clinical-modules.xml`) | 5 | 0 | 2 | OK |
-| **allied** (`sitemap-allied.xml`) | 24 | 0 | 2 | OK |
-| **new-grad** (`sitemap-new-grad.xml`) | 46 | 0 | 2 | OK |
+| **core** (`sitemap-core.xml`) | 19 | 0 | 1882 | OK |
+| **blog** (`sitemap-blog.xml`) | 5472 | 0 | 275 | OK |
+| **fr-blog** (`sitemap-fr-blog.xml`) | 1 | 0 | 112 | OK |
+| **es-blog** (`sitemap-es-blog.xml`) | 2 | 0 | 150 | OK |
+| **pathways** (`sitemap-pathways.xml`) | 28 | 0 | 1625 | OK |
+| **lessons** (`sitemap-lessons.xml`) | 1 | 0 | 272 | OK |
+| **localized** (`sitemap-localized.xml`) | 48 | 0 | 24 | OK |
+| **clinical-modules** (`sitemap-clinical-modules.xml`) | 5 | 0 | 6 | OK |
+| **allied** (`sitemap-allied.xml`) | 24 | 0 | 3 | OK |
+| **new-grad** (`sitemap-new-grad.xml`) | 46 | 0 | 6 | OK |
+| **cnple** (`sitemap-cnple.xml`) | 24 | 0 | 2 | OK |
+| **authority-clusters** (`sitemap-authority-clusters.xml`) | 45 | 0 | 3 | OK |
 
 ## Index validation
 
-- Generation time: **67** ms
+- Generation time: **87** ms
 - XML well-formed: **yes**
-- Approved children (`10`): `https://www.nursenest.ca/sitemap-core.xml`, `https://www.nursenest.ca/sitemap-blog.xml`, `https://www.nursenest.ca/sitemap-fr-blog.xml`, `https://www.nursenest.ca/sitemap-es-blog.xml`, `https://www.nursenest.ca/sitemap-pathways.xml`, `https://www.nursenest.ca/sitemap-lessons.xml`, `https://www.nursenest.ca/sitemap-localized.xml`, `https://www.nursenest.ca/sitemap-clinical-modules.xml`, `https://www.nursenest.ca/sitemap-allied.xml`, `https://www.nursenest.ca/sitemap-new-grad.xml`
+- Approved children (`12`): `https://www.nursenest.ca/sitemap-core.xml`, `https://www.nursenest.ca/sitemap-blog.xml`, `https://www.nursenest.ca/sitemap-fr-blog.xml`, `https://www.nursenest.ca/sitemap-es-blog.xml`, `https://www.nursenest.ca/sitemap-pathways.xml`, `https://www.nursenest.ca/sitemap-lessons.xml`, `https://www.nursenest.ca/sitemap-localized.xml`, `https://www.nursenest.ca/sitemap-clinical-modules.xml`, `https://www.nursenest.ca/sitemap-allied.xml`, `https://www.nursenest.ca/sitemap-new-grad.xml`, `https://www.nursenest.ca/sitemap-cnple.xml`, `https://www.nursenest.ca/sitemap-authority-clusters.xml`
 
 ## Tests run
 

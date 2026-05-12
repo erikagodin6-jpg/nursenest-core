@@ -249,26 +249,34 @@ export function resolveOpenGraphCopy(
 }
 
 /**
+ * Site-wide default og:image / twitter:image for blog posts that have no post-specific cover.
+ * Same asset the root layout uses — a 1200×630 NurseNest branded screenshot hosted on DO Spaces CDN.
+ */
+export const BLOG_DEFAULT_OG_IMAGE_URL =
+  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
+
+/**
  * Absolute `og:image` / `twitter:image` URL from bundle or post cover.
+ * Falls back to {@link BLOG_DEFAULT_OG_IMAGE_URL} so every indexed blog post always emits og:image.
  * Accepts https URLs or site-root-relative paths (e.g. `/cdn/...`).
  */
 export function resolveBlogOgImageAbsolute(
   seo: BlogSeoBundle | null,
   coverImage: string | null | undefined,
-): string | undefined {
+): string {
   const raw = (seo?.openGraphImageUrl ?? coverImage)?.trim();
-  if (!raw) return undefined;
+  if (!raw) return BLOG_DEFAULT_OG_IMAGE_URL;
   if (/^https:\/\//i.test(raw)) {
     try {
       const u = new URL(raw);
       if (u.protocol === "https:" && u.hostname.includes(".")) return raw.slice(0, 2000);
     } catch {
-      return undefined;
+      return BLOG_DEFAULT_OG_IMAGE_URL;
     }
-    return undefined;
+    return BLOG_DEFAULT_OG_IMAGE_URL;
   }
   if (raw.startsWith("/")) return absoluteUrl(raw);
-  return undefined;
+  return BLOG_DEFAULT_OG_IMAGE_URL;
 }
 
 /**

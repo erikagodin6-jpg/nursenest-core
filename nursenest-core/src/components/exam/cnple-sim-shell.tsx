@@ -346,7 +346,7 @@ export function CnpleSimToolbar({
         <button
           type="button"
           onClick={onFlag}
-          className="flex items-center gap-1.5 rounded px-3 py-1.5 text-[12px] font-semibold transition-colors"
+          className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-[12px] font-semibold transition-colors sm:px-3"
           style={{
             background: flagged
               ? "color-mix(in srgb, var(--semantic-warning) 15%, transparent)"
@@ -360,7 +360,8 @@ export function CnpleSimToolbar({
           title={flagged ? "Remove flag from this question" : "Flag question for review"}
         >
           <FlagIcon filled={flagged} />
-          {flagged ? "Flagged" : "Flag for Review"}
+          {/* Label always visible — was hidden on mobile before this fix */}
+          <span className="inline">{flagged ? "Flagged" : "Flag"}</span>
         </button>
       </div>
     </div>

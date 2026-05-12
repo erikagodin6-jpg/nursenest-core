@@ -19,6 +19,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import {
+  BLOG_DEFAULT_OG_IMAGE_URL,
   resolveBlogOgImageAbsolute,
   resolveOpenGraphCopy,
   type BlogSeoBundle,
@@ -47,11 +48,11 @@ function minBundle(overrides?: Partial<BlogSeoBundle>): BlogSeoBundle {
 
 // ── OG / Twitter metadata helpers ────────────────────────────────────────────
 
-test("resolveBlogOgImageAbsolute returns undefined when no image provided", () => {
-  assert.equal(resolveBlogOgImageAbsolute(null, null), undefined);
-  assert.equal(resolveBlogOgImageAbsolute(null, undefined), undefined);
-  assert.equal(resolveBlogOgImageAbsolute(null, ""), undefined);
-  assert.equal(resolveBlogOgImageAbsolute(null, "  "), undefined);
+test("resolveBlogOgImageAbsolute returns default OG image when no post-specific image provided", () => {
+  assert.equal(resolveBlogOgImageAbsolute(null, null), BLOG_DEFAULT_OG_IMAGE_URL);
+  assert.equal(resolveBlogOgImageAbsolute(null, undefined), BLOG_DEFAULT_OG_IMAGE_URL);
+  assert.equal(resolveBlogOgImageAbsolute(null, ""), BLOG_DEFAULT_OG_IMAGE_URL);
+  assert.equal(resolveBlogOgImageAbsolute(null, "  "), BLOG_DEFAULT_OG_IMAGE_URL);
 });
 
 test("resolveBlogOgImageAbsolute accepts well-formed absolute https cover image URL", () => {
@@ -75,12 +76,12 @@ test("resolveBlogOgImageAbsolute prefers bundle openGraphImageUrl over cover ima
   assert.equal(result, bundleUrl);
 });
 
-test("resolveBlogOgImageAbsolute rejects bare relative paths (no leading slash)", () => {
-  assert.equal(resolveBlogOgImageAbsolute(null, "img/relative.jpg"), undefined);
+test("resolveBlogOgImageAbsolute falls back to default for bare relative paths (no leading slash)", () => {
+  assert.equal(resolveBlogOgImageAbsolute(null, "img/relative.jpg"), BLOG_DEFAULT_OG_IMAGE_URL);
 });
 
-test("resolveBlogOgImageAbsolute rejects insecure http URLs", () => {
-  assert.equal(resolveBlogOgImageAbsolute(null, "http://cdn.nursenest.ca/img/nclex.jpg"), undefined);
+test("resolveBlogOgImageAbsolute falls back to default for insecure http URLs", () => {
+  assert.equal(resolveBlogOgImageAbsolute(null, "http://cdn.nursenest.ca/img/nclex.jpg"), BLOG_DEFAULT_OG_IMAGE_URL);
 });
 
 test("resolveOpenGraphCopy falls back to title and description when no bundle", () => {

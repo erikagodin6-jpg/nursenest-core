@@ -199,7 +199,7 @@ export function ActiveStudySession({
       setSaving(true);
 
       setRatingTally((t) => ({ ...t, [rating]: t[rating] + 1 }));
-      telemetry.onRated(card.id, rating);
+      telemetry.onRated(card.id, rating, buildCardMeta(card));
 
       await onRate?.(card.id, rating);
 
@@ -228,7 +228,7 @@ export function ActiveStudySession({
       if ((e.key === " " || e.key === "Enter") && !revealed && !current.examMicroQuestion) {
         e.preventDefault();
         setRevealed(true);
-        if (current.id) telemetry.onReveal(current.id);
+        if (current.id) telemetry.onReveal(current.id, buildCardMeta(current));
         return;
       }
       if (e.key === "ArrowLeft") {
@@ -366,7 +366,19 @@ export function ActiveStudySession({
         revealed={revealed}
         onReveal={() => {
           setRevealed(true);
-          if (current?.id) telemetry.onReveal(current.id);
+          if (current?.id) telemetry.onReveal(current.id, buildCardMeta(current));
+        }}
+        onAnswerSubmitted={(letter, isCorrect) => {
+          if (!current?.id) return;
+          const meta = buildCardMeta(current);
+          telemetry.onAnswerSubmitted(current.id, {
+            selectedLetter: letter,
+            correctLetter: current.examMicroQuestion && !isSataPayload(current.examMicroQuestion)
+              ? current.examMicroQuestion.correctLetter
+              : undefined,
+            isCorrect,
+            meta,
+          });
         }}
         labels={{
           revealHint: t("flashcards.tapToReveal"),

@@ -28,14 +28,33 @@ export type CnpleDomain =
   | "pediatrics"
   | "geriatrics";
 
+export type CnpleDomainTrend = "improving" | "declining" | "stable";
+
+/** Urgency tier for targeted learner action. */
+export type CnpleRemediationUrgency = "critical" | "high" | "moderate" | "on_track";
+
 export type CnpleDomainResult = {
   domain: CnpleDomain;
   label: string;
   score: number;
   total: number;
   percentile?: number;
+  /** Direction of change vs. the learner's previous session on this domain. */
+  trend?: CnpleDomainTrend;
+  /** Remediation urgency — drives visual prominence. */
+  urgencyTier?: CnpleRemediationUrgency;
+  /** True when this domain involves prescribing decisions — escalates the alert. */
+  isPrescribingSafety?: boolean;
   remediationLessonsHref?: string;
   remediationFlashcardsHref?: string;
+};
+
+/** A specific high-risk gap surfaced from the prescribing safety engine. */
+export type CnplePrescribingSafetyAlert = {
+  domain: string;
+  summary: string;
+  detail: string;
+  remediationHref?: string;
 };
 
 export type CnpleReadinessLevel = "not_ready" | "developing" | "approaching" | "ready";
@@ -51,6 +70,10 @@ export type CnpleReportCardProps = {
   weakDomains?: CnpleDomain[];
   strongDomains?: CnpleDomain[];
   overallRecommendation?: string;
+  /** Prescribing safety alerts from the prescribing-safety engine — shown prominently above domain rows. */
+  prescribingSafetyAlerts?: CnplePrescribingSafetyAlert[];
+  /** Domains flagged as high-risk weaknesses (low score AND prescribing-safety domain). */
+  highRiskWeaknesses?: CnpleDomain[];
   cnpleHubHref?: string;
   practiceHref?: string;
   flashcardsHref?: string;
@@ -69,6 +92,8 @@ export function CnpleReportCard({
   weakDomains = [],
   strongDomains = [],
   overallRecommendation,
+  prescribingSafetyAlerts = [],
+  highRiskWeaknesses = [],
   cnpleHubHref = "/canada/np/cnple",
   practiceHref = "/canada/np/cnple/questions",
   flashcardsHref = "/canada/np/cnple/flashcards",
@@ -91,6 +116,20 @@ export function CnpleReportCard({
         readinessLevel={readinessLevel}
       />
 
+      {/* Prescribing safety alerts — shown before domain rows for prominence */}
+      {prescribingSafetyAlerts.length > 0 ? (
+        <PrescribingSafetyAlertsPanel alerts={prescribingSafetyAlerts} />
+      ) : null}
+
+      {/* High-risk weakness panel */}
+      {highRiskWeaknesses.length > 0 ? (
+        <HighRiskWeaknessPanel
+          weaknesses={highRiskWeaknesses}
+          domains={domains}
+          practiceHref={practiceHref}
+        />
+      ) : null}
+
       {/* Domain performance */}
       <section aria-labelledby="cnple-domain-heading">
         <h2
@@ -102,7 +141,12 @@ export function CnpleReportCard({
         </h2>
         <div className="space-y-3">
           {domains.map((d) => (
-            <DomainRow key={d.domain} result={d} isWeak={weakDomains.includes(d.domain)} isStrong={strongDomains.includes(d.domain)} />
+            <DomainRow
+              key={d.domain}
+              result={d}
+              isWeak={weakDomains.includes(d.domain)}
+              isStrong={strongDomains.includes(d.domain)}
+            />
           ))}
         </div>
       </section>
@@ -255,38 +299,60 @@ function DomainRow({
 }) {
   const [showLinks, setShowLinks] = useState(false);
   const domainPct = Math.round((result.score / result.total) * 100);
-  const barColor = isWeak
+
+  const urgency = result.urgencyTier ?? (isWeak ? (result.isPrescribingSafety ? "critical" : "high") : isStrong ? "on_track" : "moderate");
+  const isCritical = urgency === "critical";
+
+  const barColor = isCritical
     ? "var(--semantic-danger)"
-    : isStrong
-      ? "var(--semantic-success)"
-      : domainPct >= 70
+    : isWeak
+      ? "var(--semantic-danger)"
+      : isStrong
         ? "var(--semantic-success)"
-        : domainPct >= 50
-          ? "var(--semantic-warning-contrast)"
-          : "var(--semantic-danger)";
+        : domainPct >= 70
+          ? "var(--semantic-success)"
+          : domainPct >= 50
+            ? "var(--semantic-warning-contrast)"
+            : "var(--semantic-danger)";
 
   return (
     <div
       className="rounded-xl border px-4 py-3"
       style={{
-        borderColor: isWeak
-          ? "color-mix(in srgb, var(--semantic-danger) 30%, transparent)"
-          : isStrong
-            ? "color-mix(in srgb, var(--semantic-success) 30%, transparent)"
-            : "var(--semantic-border-soft)",
-        background: isWeak
-          ? "color-mix(in srgb, var(--semantic-danger) 4%, var(--semantic-surface))"
-          : isStrong
-            ? "color-mix(in srgb, var(--semantic-success) 4%, var(--semantic-surface))"
-            : "var(--semantic-surface)",
+        borderColor: isCritical
+          ? "color-mix(in srgb, var(--semantic-danger) 50%, transparent)"
+          : isWeak
+            ? "color-mix(in srgb, var(--semantic-danger) 30%, transparent)"
+            : isStrong
+              ? "color-mix(in srgb, var(--semantic-success) 30%, transparent)"
+              : "var(--semantic-border-soft)",
+        background: isCritical
+          ? "color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface))"
+          : isWeak
+            ? "color-mix(in srgb, var(--semantic-danger) 4%, var(--semantic-surface))"
+            : isStrong
+              ? "color-mix(in srgb, var(--semantic-success) 4%, var(--semantic-surface))"
+              : "var(--semantic-surface)",
       }}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
           <span className="text-[14px] font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
             {result.label}
           </span>
-          {isWeak ? (
+
+          {/* Urgency tier badge */}
+          {isCritical ? (
+            <span
+              className="rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+              style={{
+                background: "color-mix(in srgb, var(--semantic-danger) 18%, transparent)",
+                color: "var(--semantic-danger)",
+              }}
+            >
+              ⚠ Critical Gap
+            </span>
+          ) : isWeak ? (
             <span className="text-[10px] font-bold uppercase" style={{ color: "var(--semantic-danger)" }}>
               ▼ Focus Area
             </span>
@@ -295,10 +361,34 @@ function DomainRow({
               ▲ Strength
             </span>
           ) : null}
+
+          {/* Trend arrow */}
+          {result.trend ? (
+            <span
+              className="text-[11px] font-semibold"
+              style={{
+                color:
+                  result.trend === "improving"
+                    ? "var(--semantic-success)"
+                    : result.trend === "declining"
+                      ? "var(--semantic-danger)"
+                      : "var(--semantic-text-muted)",
+              }}
+              title={`Trend vs previous session: ${result.trend}`}
+            >
+              {result.trend === "improving" ? "↑ Improving" : result.trend === "declining" ? "↓ Declining" : "→ Stable"}
+            </span>
+          ) : null}
         </div>
-        <span className="text-[14px] font-bold tabular-nums" style={{ color: barColor }}>
-          {result.score}/{result.total}
-        </span>
+
+        <div className="flex shrink-0 items-center gap-3">
+          <span className="text-[14px] font-bold tabular-nums" style={{ color: barColor }}>
+            {result.score}/{result.total}
+          </span>
+          <span className="text-[12px] tabular-nums" style={{ color: "var(--semantic-text-muted)" }}>
+            ({domainPct}%)
+          </span>
+        </div>
       </div>
 
       {/* Progress bar */}
@@ -308,6 +398,13 @@ function DomainRow({
           style={{ width: `${domainPct}%`, background: barColor }}
         />
       </div>
+
+      {/* Confidence indicator — question count */}
+      {result.total < 5 ? (
+        <p className="mt-1 text-[11px]" style={{ color: "var(--semantic-text-muted)" }}>
+          Low confidence — only {result.total} question{result.total === 1 ? "" : "s"} in this domain.
+        </p>
+      ) : null}
 
       {/* Remediation links */}
       {isWeak && (result.remediationLessonsHref || result.remediationFlashcardsHref) ? (
@@ -344,6 +441,118 @@ function DomainRow({
           ) : null}
         </div>
       ) : null}
+    </div>
+  );
+}
+
+// ── Prescribing safety alerts panel ──────────────────────────────────────────
+
+function PrescribingSafetyAlertsPanel({ alerts }: { alerts: CnplePrescribingSafetyAlert[] }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <section
+      aria-labelledby="cnple-prescribing-alert-heading"
+      className="rounded-2xl border-2 p-4"
+      style={{
+        borderColor: "color-mix(in srgb, var(--semantic-danger) 40%, transparent)",
+        background: "color-mix(in srgb, var(--semantic-danger) 5%, var(--semantic-surface))",
+      }}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p
+            id="cnple-prescribing-alert-heading"
+            className="text-[12px] font-bold uppercase tracking-widest"
+            style={{ color: "var(--semantic-danger)" }}
+          >
+            ⚠ Prescribing Safety — Priority Review
+          </p>
+          <p className="mt-1 text-[13px]" style={{ color: "var(--semantic-text-secondary)" }}>
+            {alerts.length === 1
+              ? "1 high-risk prescribing gap identified."
+              : `${alerts.length} high-risk prescribing gaps identified.`}{" "}
+            Safe prescribing is the highest-stakes domain for Canadian NP practice.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="shrink-0 text-[12px] font-semibold"
+          style={{ color: "var(--semantic-brand)" }}
+          aria-expanded={expanded}
+        >
+          {expanded ? "Collapse ↑" : "Details ↓"}
+        </button>
+      </div>
+
+      {expanded ? (
+        <div className="mt-3 space-y-3 border-t pt-3" style={{ borderColor: "color-mix(in srgb, var(--semantic-danger) 20%, transparent)" }}>
+          {alerts.map((alert, i) => (
+            <div key={i}>
+              <p className="text-[13px] font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
+                {alert.summary}
+              </p>
+              <p className="mt-0.5 text-[12px] leading-relaxed" style={{ color: "var(--semantic-text-secondary)" }}>
+                {alert.detail}
+              </p>
+              {alert.remediationHref ? (
+                <Link
+                  href={alert.remediationHref}
+                  className="mt-1 inline-block text-[12px] font-semibold underline-offset-2 hover:underline"
+                  style={{ color: "var(--semantic-brand)" }}
+                >
+                  Review this topic →
+                </Link>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+// ── High-risk weakness panel ──────────────────────────────────────────────────
+
+function HighRiskWeaknessPanel({
+  weaknesses,
+  domains,
+  practiceHref,
+}: {
+  weaknesses: CnpleDomain[];
+  domains: CnpleDomainResult[];
+  practiceHref: string;
+}) {
+  const domainLabel = (d: CnpleDomain) => domains.find((r) => r.domain === d)?.label ?? d;
+  return (
+    <div
+      className="rounded-xl border p-4"
+      style={{
+        borderColor: "color-mix(in srgb, var(--semantic-warning) 40%, transparent)",
+        background: "color-mix(in srgb, var(--semantic-warning) 6%, var(--semantic-surface))",
+      }}
+    >
+      <p className="text-[12px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-warning-contrast)" }}>
+        High-Risk Weaknesses
+      </p>
+      <p className="mt-1 text-[13px]" style={{ color: "var(--semantic-text-secondary)" }}>
+        These domains combine low performance with patient safety relevance — prioritise them in your next study session.
+      </p>
+      <ul className="mt-2 space-y-1">
+        {weaknesses.map((d) => (
+          <li key={d} className="flex items-center gap-2 text-[13px] font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
+            <span style={{ color: "var(--semantic-warning-contrast)" }}>▶</span>
+            {domainLabel(d)}
+          </li>
+        ))}
+      </ul>
+      <Link
+        href={practiceHref}
+        className="mt-3 inline-block text-[13px] font-semibold underline-offset-2 hover:underline"
+        style={{ color: "var(--semantic-brand)" }}
+      >
+        Targeted practice on these domains →
+      </Link>
     </div>
   );
 }

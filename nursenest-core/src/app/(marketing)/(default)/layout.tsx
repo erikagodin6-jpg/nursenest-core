@@ -24,7 +24,6 @@ import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-
 import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
 import { resolveDefaultLayoutMarketingExamRegion } from "@/lib/marketing/resolve-default-layout-marketing-exam-region";
 import { detectedIpCountryFromHeaders } from "@/lib/region/detected-ip-country.server";
-import { safeAwait } from "@/lib/async/safe-await";
 import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observability/home-perf-trace";
 import {
   emitNnHomeRouteDiag,
@@ -248,7 +247,9 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
   // Kick off Sentry in the background — never await. Span wrapping is skipped;
   // global error handlers remain active for uncaught errors.
   void getMarketingDefaultLayoutSentryRuntimePromise().catch(() => {});
-  const runtime = null;
+  // Typed as the real union so downstream runtime?.foo optional chains still
+  // compile. The value is always null at runtime — Sentry loads in background.
+  const runtime: Awaited<ReturnType<typeof getMarketingDefaultLayoutSentryRuntimePromise>> = null;
 
   const marketingDefaultLayoutInner = async () => {
     const perfLayoutT0 = safeNowMs();
