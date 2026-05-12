@@ -14,6 +14,7 @@ import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import { flashcardLessonCrossLinkForDeckStudyRow } from "@/lib/flashcards/flashcard-lesson-cross-link";
 import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-serialize";
+import { applyRemediationBoost, loadRemediationBoostMap } from "@/lib/flashcards/flashcard-remediation-bridge";
 
 const MAX_WEAK_TOPIC_TERMS = 8;
 const FETCH_CAP = 96;
@@ -138,6 +139,10 @@ export async function loadWeakAreaFlashcardsForUser(
   });
 
   const shuffledRows = shuffleSeeded(rows, `${randomUUID()}:weak-flashcards`);
+
+  // Apply remediation boost: missed-topic cards surface before the shuffle order.
+  const boostMap = await loadRemediationBoostMap(userId, scopedPathwayId);
+
   const cards: WeakFlashcardRow[] = [];
   for (const c of shuffledRows) {
     if (!c.deck?.slug) continue;
@@ -174,5 +179,7 @@ export async function loadWeakAreaFlashcardsForUser(
     if (cards.length >= RETURN_CAP) break;
   }
 
-  return { weakTopics: topics, topicCodes, cards };
+  const reorderedCards = applyRemediationBoost(cards, boostMap);
+
+  return { weakTopics: topics, topicCodes, cards: reorderedCards };
 }

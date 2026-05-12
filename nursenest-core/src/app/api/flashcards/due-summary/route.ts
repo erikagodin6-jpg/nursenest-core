@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
   const cardScope = flashcardAccessWhere(entitlement);
 
   try {
-    const [dueToday, overdue, learning] = await Promise.all([
+    const [dueToday, overdue, learning, lapsingCards, totalReviewed, totalAccessible] = await Promise.all([
       prisma.flashcardProgress.count({
         where: {
           userId,
@@ -76,7 +76,27 @@ export async function GET(req: NextRequest) {
           flashcard: cardScope,
         },
       }),
+      prisma.flashcardProgress.count({
+        where: {
+          userId,
+          lapses: { gt: 0 },
+          nextReviewAt: { lte: todayEnd },
+          flashcard: cardScope,
+        },
+      }),
+      prisma.flashcardProgress.count({
+        where: {
+          userId,
+          repetitions: { gt: 0 },
+          flashcard: cardScope,
+        },
+      }),
+      prisma.flashcard.count({
+        where: { status: "PUBLISHED", deckId: { not: null }, ...cardScope },
+      }),
     ]);
+
+    const newCards = Math.max(0, totalAccessible - totalReviewed);
 
     logCoreApiStudyDiagnostic({
       endpoint: "GET /api/flashcards/due-summary",
@@ -89,6 +109,9 @@ export async function GET(req: NextRequest) {
       dueToday,
       overdue,
       learning,
+      lapsingCards,
+      newCards,
+      totalReviewed,
       asOf: now.toISOString(),
     });
   } catch (e) {

@@ -11,6 +11,25 @@ export type ExamMicroQuestionPayload = {
   rationaleIncorrect: Array<{ letter: string; rationale: string }>;
 };
 
+/**
+ * SATA (Select All That Apply) payload — multiple correct answers.
+ * correctLetters is a sorted array of the letters that are correct (≥ 2).
+ */
+export type SataQuestionPayload = {
+  itemKind: "SATA";
+  questionStem: string;
+  answerOptions: Array<{ letter: string; text: string }>;
+  correctLetters: string[];
+  rationaleCorrect: string;
+  rationaleByLetter: Array<{ letter: string; rationale: string; correct: boolean }>;
+};
+
+export function isSataPayload(
+  payload: ExamMicroQuestionPayload | SataQuestionPayload | null | undefined,
+): payload is SataQuestionPayload {
+  return payload?.itemKind === "SATA";
+}
+
 const LETTER_RE = /^[A-D]$/;
 
 /**

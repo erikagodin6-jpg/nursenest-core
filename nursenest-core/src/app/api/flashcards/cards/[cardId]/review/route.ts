@@ -103,6 +103,7 @@ export async function POST(req: NextRequest, { params }: Props) {
             easeFactor: prev.easeFactor,
             intervalDays: prev.intervalDays,
             repetitions: prev.repetitions,
+            lapses: prev.lapses,
           }
         : initialSm2State();
       nextSchedule = computeNextSchedule(base, rating, now);
@@ -121,6 +122,7 @@ export async function POST(req: NextRequest, { params }: Props) {
             easeFactor: nextSchedule.easeFactor,
             intervalDays: nextSchedule.intervalDays,
             repetitions: nextSchedule.repetitions,
+            lapses: nextSchedule.lapses,
             nextReviewAt: nextSchedule.nextReviewAt,
             lastQuality: qualityNumeric(rating),
             lastReviewedAt: now,
@@ -129,6 +131,7 @@ export async function POST(req: NextRequest, { params }: Props) {
             easeFactor: nextSchedule.easeFactor,
             intervalDays: nextSchedule.intervalDays,
             repetitions: nextSchedule.repetitions,
+            lapses: nextSchedule.lapses,
             nextReviewAt: nextSchedule.nextReviewAt,
             lastQuality: qualityNumeric(rating),
             lastReviewedAt: now,
@@ -170,6 +173,7 @@ export async function POST(req: NextRequest, { params }: Props) {
         easeFactor: nextSchedule.easeFactor,
         intervalDays: nextSchedule.intervalDays,
         repetitions: nextSchedule.repetitions,
+        lapses: nextSchedule.lapses,
       });
     } catch (e) {
       safeServerLogCritical("api_flashcards_card_review", "transaction_failed", { flashcardId: flashcardId.slice(0, 12) }, e);

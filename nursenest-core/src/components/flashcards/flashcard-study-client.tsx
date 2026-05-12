@@ -17,6 +17,7 @@ import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { FlashcardSrsStatsStrip } from "@/components/flashcards/flashcard-srs-stats-strip";
 
 type CardPayload = {
   id: string;
@@ -213,8 +214,11 @@ export function FlashcardStudyClient({
           ← {t("learner.flashcards.hub.title")}
         </Link>
 
-        <div className="max-w-[min(100%,14rem)] truncate text-sm font-semibold text-[var(--semantic-text-primary)] sm:max-w-md">
-          {title || t("learner.flashcards.hub.title")}
+        <div className="flex flex-wrap items-center gap-3">
+          <FlashcardSrsStatsStrip className="hidden sm:flex" />
+          <div className="max-w-[min(100%,14rem)] truncate text-sm font-semibold text-[var(--semantic-text-primary)] sm:max-w-md">
+            {title || t("learner.flashcards.hub.title")}
+          </div>
         </div>
       </div>
 

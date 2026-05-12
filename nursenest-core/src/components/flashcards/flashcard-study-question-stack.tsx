@@ -4,8 +4,10 @@ import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
+import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
 import { FlashcardStudyRevealPanels } from "@/components/flashcards/flashcard-study-reveal-panels";
-import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import type { ExamMicroQuestionPayload, SataQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 type PromptImageSplit = {
   imageHtml: string | null;
@@ -81,7 +83,7 @@ export function FlashcardStudyQuestionStack({
 }: {
   sessionModeLabel: string;
   topicLine?: string | null;
-  examMicroQuestion?: ExamMicroQuestionPayload | null;
+  examMicroQuestion?: ExamMicroQuestionPayload | SataQuestionPayload | null;
   itemKindCaption?: string | null;
   clinicalImageUrl?: string | null;
   prompt: string;
@@ -97,7 +99,9 @@ export function FlashcardStudyQuestionStack({
   /** Links shown inline in the reveal zone (lesson, practice questions). Use lg:hidden when mirroring to rail on desktop. */
   revealLinksSection?: ReactNode;
 }) {
-  const exam = examMicroQuestion;
+  const isSata = isSataPayload(examMicroQuestion);
+  const exam = isSata ? null : (examMicroQuestion as ExamMicroQuestionPayload | null);
+  const sata = isSata ? (examMicroQuestion as SataQuestionPayload) : null;
   const tutorMcq = Boolean(exam && (mcqInteractionMode ?? "tutor_select") === "tutor_select");
 
   const [pickedLetter, setPickedLetter] = useState<string | null>(null);
