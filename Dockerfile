@@ -92,7 +92,7 @@ WORKDIR /app/nursenest-core
 ENV NODE_ENV=production \
   PORT=8080 \
   HOSTNAME=0.0.0.0 \
-  NODE_MAX_OLD_SPACE_SIZE_MB=768 \
+  NODE_MAX_OLD_SPACE_SIZE_MB=1280 \
   NEXT_TELEMETRY_DISABLED=1
 
 COPY --from=builder /app/nursenest-core/.next-standalone-runtime.tar.gz ./.next-standalone-runtime.tar.gz
