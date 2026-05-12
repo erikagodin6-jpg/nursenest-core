@@ -24,9 +24,11 @@ import { FlashcardStudySessionSkeleton } from "@/components/skeletons/hub-page-s
 import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
-import { useFlashcardStudyTelemetry } from "@/lib/flashcards/use-flashcard-study-telemetry";
+import { useFlashcardStudyTelemetry, deriveCardFlags } from "@/lib/flashcards/use-flashcard-study-telemetry";
+import type { CardEventMeta } from "@/lib/flashcards/use-flashcard-study-telemetry";
 
 /* ================= TYPES ================= */
 
