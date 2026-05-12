@@ -1638,12 +1638,39 @@ model Flashcard {
   category        Category            @relation(fields: [categoryId], references: [id])
   deck            FlashcardDeck?      @relation(fields: [deckId], references: [id])
   progressRecords FlashcardProgress[]
+  /// * Canonical answer options (preferred over JSON answerOptions for new cards; JSON is the fallback for legacy rows).
+  options         FlashcardOption[]
 
   @@index([status, country, tier])
   @@index([deckId, positionInDeck])
   @@index([deckId, status])
   @@index([lessonId])
   @@index([examQuestionId])
+}
+
+/// * Canonical relational answer options — preferred persistence for MCQ and SATA cards.
+/// * Replaces the JSON answerOptions + rationaleIncorrect fields for new content.
+/// * Legacy cards without rows fall back to JSON fields transparently.
+model FlashcardOption {
+  id                 String    @id @default(cuid())
+  flashcardId        String    @map("flashcard_id")
+  /// * Option key within the card: "A", "B", "C", "D" for MCQ/SATA.
+  /// * Extended namespaces for future types: "action:A", "condition:1" (bowtie), "row:1:col:A" (matrix).
+  optionKey          String    @map("option_key")
+  content            String
+  isCorrect          Boolean   @default(false) @map("is_correct")
+  /// * Teaching rationale shown after reveal. Required for wrong answers; optional for correct options (card-level rationaleCorrect is used).
+  rationale          String?
+  displayOrder       Int       @default(0) @map("display_order")
+  /// * Denormalized aggregate: how many times this option was selected (any user, all time). Updated atomically on each review.
+  selectCount        Int       @default(0) @map("select_count")
+  /// * Denormalized aggregate: how many times this option was selected by a user who got the card correct (SATA: partial credit counts).
+  correctSelectCount Int       @default(0) @map("correct_select_count")
+  flashcard          Flashcard @relation(fields: [flashcardId], references: [id], onDelete: Cascade)
+
+  @@unique([flashcardId, optionKey])
+  @@index([flashcardId])
+  @@map("flashcard_options")
 }
 
 model FlashcardProgress {

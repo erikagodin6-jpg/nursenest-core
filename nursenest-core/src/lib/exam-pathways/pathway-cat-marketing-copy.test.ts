@@ -55,12 +55,16 @@ describe("pathway CAT marketing copy", () => {
     }
   });
 
-  it("CNPLE beta public copy names the track when pathway context is passed", () => {
+  it("CNPLE public copy uses LOFT simulation label, not CAT beta", () => {
     const pathway = getExamPathwayById("ca-np-cnple");
     assert.ok(pathway);
     const rc = readinessConfigForPathway(pathway);
+    assert.equal(rc.engineType, "LOFT", "CNPLE must use LOFT engine, not CAT");
     const pc = publicCopyForReadinessConfig(rc, pathway);
-    assert.equal(pc.betaLabel, "Canadian NP (CNPLE) beta");
+    assert.equal(pc.effectiveMode, "loft_simulation");
+    assert.doesNotMatch(pc.title, /CAT/i, "CNPLE title must not say CAT");
+    assert.doesNotMatch(pc.subtitle, /computerized adaptive/i, "CNPLE subtitle must not say computerized adaptive testing");
+    assert.match(pc.subtitle, /LOFT|linear/i, "CNPLE subtitle must mention LOFT or linear");
   });
 });
 

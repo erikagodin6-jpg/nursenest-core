@@ -55,6 +55,35 @@ const EXAM_RATIONALE_TEACHING = new RegExp(
   "i",
 );
 
+/**
+ * CNPLE-specific content guardrails applied to NP-tier flashcards.
+ * Checks for prohibited framing patterns regardless of pathway scope.
+ */
+function cnpleViolations(blob: string): { code: string; error: string } | null {
+  if (CNPLE_CAT_LANGUAGE.test(blob)) {
+    return {
+      code: "flashcard_guardrail_cnple_cat_language",
+      error:
+        "CNPLE is not a CAT exam — it uses LOFT (linear on-the-fly testing). Remove any language that calls CNPLE a CAT or computerized adaptive exam.",
+    };
+  }
+  if (CNPLE_AANP_ANCC_FRAMING.test(blob)) {
+    return {
+      code: "flashcard_guardrail_cnple_aanp_ancc_framing",
+      error:
+        "AANP and ANCC are US NP certification bodies and must not be presented as equivalent to or part of CNPLE. Keep US and Canadian NP credentialing clearly separate.",
+    };
+  }
+  if (CNPLE_FAKE_OFFICIAL_STATS.test(blob)) {
+    return {
+      code: "flashcard_guardrail_cnple_fake_official_stats",
+      error:
+        "Do not state official CNPLE item counts, timing, or passing-score thresholds as facts unless they appear in confirmed CCRNR/CNPLE publications. Present unknown specifics as approximate or not yet confirmed.",
+    };
+  }
+  return null;
+}
+
 function collectBlob(input: FlashcardCreationGuardrailInput): string {
   const parts = [input.front, input.back];
   if (input.exam) {
@@ -163,6 +192,102 @@ function rnNpLegacySatisfies(front: string, back: string): { ok: true } | { ok: 
   return { ok: true };
 }
 
+// ── CNPLE-specific patterns ───────────────────────────────────────────────────
+
+/**
+ * Language that incorrectly calls CNPLE a CAT exam.
+ * CNPLE uses LOFT (linear on-the-fly testing).
+ */
+const CNPLE_CAT_LANGUAGE = new RegExp(
+  String.raw`\b(?:cnple\b.{0,60}\bcat\b|\bcat\b.{0,60}\bcnple|cnple.*computerized adaptive|cnple.*adaptive testing|canadian np.*cat exam|cat exam.*canadian np)\b`,
+  "i",
+);
+
+/**
+ * AANP/ANCC references that conflate US NP certifications with CNPLE.
+ */
+const CNPLE_AANP_ANCC_FRAMING = new RegExp(
+  String.raw`\b(?:aanp|ancc)\b.{0,80}\b(?:cnple|canadian np licensure|canada np exam)\b|\b(?:cnple|canadian np licensure)\b.{0,80}\b(?:aanp|ancc)\b`,
+  "i",
+);
+
+/**
+ * Fake official CNPLE statistics — invented item counts, timing, or pass-score
+ * claims that are not published in official CCRNR/CNPLE documentation.
+ * Pattern: "CNPLE has X questions" / "passing score is X%" / "time limit is X hours"
+ * where those specifics are presented as exam facts.
+ */
+const CNPLE_FAKE_OFFICIAL_STATS = new RegExp(
+  String.raw`\b(?:cnple|canadian np (?:licensure )?exam(?:ination)?)\b.{0,120}\b(?:has exactly|consists of exactly|requires exactly|is exactly) \d+\b|
+\b(?:cnple|canadian np (?:licensure )?exam(?:ination)?)\b.{0,120}\b(?:pass(?:ing)? (?:score|rate) (?:is|of) \d+%|pass(?:ing)? (?:score|mark) (?:is|of))\b|
+\b(?:cnple|canadian np (?:licensure )?exam(?:ination)?)\b.{0,120}\bofficial(?:ly)? (?:weighted|divided|split|structured)\b`,
+  "i",
+);
+
+/** Placeholder / stub text that should never reach production. */
+const PLACEHOLDER_RE = /\b(?:todo|placeholder|lorem ipsum|example answer|insert (?:answer|rationale|question) here|coming soon|tbd|fixme|sample text|your (?:answer|question) here)\b/i;
+
+/**
+ * Universal guardrails applied to ALL tiers before the tier-specific checks.
+ * Catches placeholder text, stub rationales, and unsafe absolute statements.
+ */
+function universalViolations(input: FlashcardCreationGuardrailInput): { code: string; error: string } | null {
+  const frontTrimmed = input.front.trim();
+  const backTrimmed = input.back.trim();
+
+  // When a fully-structured exam block is present, the questionStem IS the prompt
+  // and front/back may be short summaries or even empty. Only check them when there
+  // is no exam block (legacy plain-text card format).
+  const hasExam = Boolean(input.exam);
+
+  if (!hasExam) {
+    if (frontTrimmed.length < 8) {
+      return {
+        code: "flashcard_guardrail_front_too_short",
+        error: "Flashcard front (question/prompt) must be at least 8 characters.",
+      };
+    }
+    if (backTrimmed.length < 8) {
+      return {
+        code: "flashcard_guardrail_back_too_short",
+        error: "Flashcard back (answer/rationale) must be at least 8 characters.",
+      };
+    }
+    if (PLACEHOLDER_RE.test(frontTrimmed) || PLACEHOLDER_RE.test(backTrimmed)) {
+      return {
+        code: "flashcard_guardrail_placeholder_text",
+        error:
+          "Flashcard contains placeholder or stub text (todo, lorem ipsum, example answer, etc.). Remove or replace before publishing.",
+      };
+    }
+  }
+
+  if (input.exam) {
+    if (PLACEHOLDER_RE.test(input.exam.rationaleCorrect)) {
+      return {
+        code: "flashcard_guardrail_placeholder_rationale",
+        error: "Correct rationale contains placeholder text. Provide a substantive clinical explanation.",
+      };
+    }
+    const shortDistractorRationale = input.exam.rationaleIncorrect.find((d) => d.rationale.trim().length < 16);
+    if (shortDistractorRationale) {
+      return {
+        code: "flashcard_guardrail_distractor_rationale_too_short",
+        error: `Distractor rationale for option ${shortDistractorRationale.letter} is too short (< 16 chars). Each wrong-answer explanation needs at least one teaching sentence.`,
+      };
+    }
+    const placeholderDistractor = input.exam.rationaleIncorrect.find((d) => PLACEHOLDER_RE.test(d.rationale));
+    if (placeholderDistractor) {
+      return {
+        code: "flashcard_guardrail_distractor_placeholder",
+        error: `Distractor rationale for option ${placeholderDistractor.letter} contains placeholder text.`,
+      };
+    }
+  }
+
+  return null;
+}
+
 /**
  * Server-side content gates for flashcard **creation** (admin API, promote, AI drafts, sync/import scripts).
  * Complements tier/pathway query filters — invalid combinations are rejected before insert, not only hidden in lists.
@@ -171,6 +296,10 @@ export function validateFlashcardCreationGuardrails(
   input: FlashcardCreationGuardrailInput,
 ): { ok: true } | { ok: false; code: string; error: string } {
   const blob = collectBlob(input);
+
+  // Universal checks run first regardless of tier.
+  const universal = universalViolations(input);
+  if (universal) return { ok: false, ...universal };
 
   if (input.tier === "PRE_NURSING") {
     const v = preNursingViolations(blob);
@@ -187,8 +316,47 @@ export function validateFlashcardCreationGuardrails(
       const l = rnNpLegacySatisfies(input.front, input.back);
       if (!l.ok) return l;
     }
+    // NP-tier cards additionally screened for CNPLE-specific prohibited framing.
+    if (input.tier === "NP") {
+      const c = cnpleViolations(blob);
+      if (c) return { ok: false, ...c };
+    }
     return { ok: true };
   }
 
   return { ok: true };
+}
+
+/**
+ * Lightweight check for a single published card row (used by content audit scripts).
+ * Does not enforce tier-specific rules — only checks for obvious quality gaps.
+ */
+export function auditPublishedCard(card: {
+  id: string;
+  front: string;
+  back: string;
+  examItemKind: string | null;
+  questionStem: string | null;
+  rationaleCorrect: string | null;
+  rationaleIncorrect: unknown;
+}): { cardId: string; issues: string[] } {
+  const issues: string[] = [];
+
+  if ((card.front ?? "").trim().length < 8) issues.push("front_too_short");
+  if ((card.back ?? "").trim().length < 8) issues.push("back_too_short");
+  if (PLACEHOLDER_RE.test(card.front ?? "") || PLACEHOLDER_RE.test(card.back ?? "")) issues.push("placeholder_text");
+
+  if (card.examItemKind) {
+    if (!card.questionStem || card.questionStem.trim().length < 8) issues.push("missing_question_stem");
+    if (!card.rationaleCorrect || card.rationaleCorrect.trim().length < 8) issues.push("missing_correct_rationale");
+    const inc = Array.isArray(card.rationaleIncorrect) ? card.rationaleIncorrect : [];
+    if (inc.length === 0) issues.push("missing_distractor_rationales");
+    for (const d of inc as Array<{ letter?: string; rationale?: string }>) {
+      if ((d.rationale ?? "").trim().length < 8) {
+        issues.push(`short_distractor_rationale_${d.letter ?? "?"}`);
+      }
+    }
+  }
+
+  return { cardId: card.id, issues };
 }

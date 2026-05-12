@@ -1,5 +1,5 @@
-export type PathwayReadinessType = "CAT" | "SIMULATION";
-export type PathwayReadinessMode = "production_ready" | "beta" | "mini_adaptive" | "simulation";
+export type PathwayReadinessType = "CAT" | "SIMULATION" | "LOFT";
+export type PathwayReadinessMode = "production_ready" | "beta" | "mini_adaptive" | "simulation" | "loft_simulation";
 
 export type PathwayReadinessConfig = {
   label: string;
@@ -61,8 +61,8 @@ const PATHWAY_READINESS_OVERRIDES: Record<string, Omit<PathwayReadinessConfig, "
     allowBackNavigation: false,
   },
   "ca-np-cnple": {
-    engineType: "CAT",
-    mode: "beta",
+    engineType: "LOFT",
+    mode: "loft_simulation",
     minQuestions: 150,
     maxQuestions: 150,
     timeLimitMinutes: 240,
@@ -163,6 +163,11 @@ export function formatTimeLimitPhrase(minutes: number): string {
 export function readinessConfigForPathway(pathway: { id: string; shortName: string; roleTrack: string }): PathwayReadinessConfig {
   const override = PATHWAY_READINESS_OVERRIDES[pathway.id];
   const questionRangeLabel = (base: Omit<PathwayReadinessConfig, "label" | "questionRange" | "timeEstimate">): string => {
+    if (base.engineType === "LOFT") {
+      return base.minQuestions === base.maxQuestions
+        ? `${base.minQuestions} items (linear fixed-length)`
+        : `${base.minQuestions}–${base.maxQuestions} items (linear fixed-length)`;
+    }
     if (base.engineType === "CAT") {
       if (base.minQuestions === base.maxQuestions) {
         return `${base.minQuestions} items (fixed length)`;
@@ -177,7 +182,7 @@ export function readinessConfigForPathway(pathway: { id: string; shortName: stri
     return `${base.minQuestions}–${base.maxQuestions} questions`;
   };
   const timeEstimateLabel = (base: Omit<PathwayReadinessConfig, "label" | "questionRange" | "timeEstimate">): string => {
-    if (base.engineType === "CAT") {
+    if (base.engineType === "LOFT" || base.engineType === "CAT") {
       return formatTimeLimitPhrase(base.timeLimitMinutes);
     }
     const h = Math.floor(base.timeLimitMinutes / 60);
@@ -216,7 +221,7 @@ export async function readinessConfigForPathwayId(pathwayId: string | null | und
   return readinessConfigForPathway(pathway);
 }
 
-/** Optional pathway so beta / public labels can name the licensure track (not generic “Beta”). */
+/** Optional pathway so beta / public labels can name the licensure track (not generic "Beta"). */
 export type PublicCopyPathwayContext = { id: string; shortName?: string };
 
 export function publicCopyForReadinessConfig(
@@ -228,10 +233,27 @@ export function publicCopyForReadinessConfig(
       ? "mini_adaptive"
       : config.mode;
 
+  // LOFT pathways (CNPLE) must never fall through to CAT copy.
+  if (config.engineType === "LOFT" && effectiveMode !== "loft_simulation") {
+    return publicCopyForReadinessConfig({ ...config, mode: "loft_simulation" }, pathway);
+  }
+
+  if (effectiveMode === "loft_simulation" && config.engineType === "LOFT") {
+    return {
+      effectiveMode,
+      title: `CNPLE-style simulation · ${config.label}`,
+      subtitle:
+        "Linear fixed-length exam session, no per-item rationale until review. CNPLE uses LOFT (not CAT). This simulation is NurseNest practice only — not official CNPLE, not adaptive.",
+      strongSimulationClaim: false,
+      betaLabel: "CNPLE-style simulation (pre-launch)",
+      experienceLabel:
+        "Fixed-length linear session: timed, no rationale until post-session review. Not official CNPLE.",
+    };
+  }
   if (effectiveMode === "production_ready" && config.engineType === "CAT") {
     return {
       effectiveMode,
-      /** Product-facing name for CAT surfaces — not “readiness exam” (reserved for report-card / readiness analytics). */
+      /** Product-facing name for CAT surfaces — not "readiness exam" (reserved for report-card / readiness analytics). */
       title: `Adaptive exam simulation · ${config.label}`,
       subtitle:
         "One item at a time, timed, with pathway min/max counts and no backtracking. NurseNest practice ability estimates and stopping rules are not official board algorithms or outcomes.",
@@ -263,18 +285,16 @@ export function publicCopyForReadinessConfig(
     };
   }
   const betaLabel =
-    pathway?.id === "ca-np-cnple"
-      ? "Canadian NP (CNPLE) beta"
-      : pathway?.shortName
-        ? `${pathway.shortName} beta`
-        : "Beta";
+    pathway?.shortName
+      ? `${pathway.shortName} beta`
+      : "Beta";
   return {
     effectiveMode: "beta",
-    title: `Adaptive CAT (beta) · ${config.label}`,
+    title: `Practice session (beta) · ${config.label}`,
     subtitle:
-      "Beta adaptive session: rules and pool coverage may change. Pair with lessons and targeted question practice before high-stakes testing.",
+      "Beta practice session: rules and pool coverage may change. Pair with lessons and targeted question practice before high-stakes testing.",
     strongSimulationClaim: false,
     betaLabel,
-    experienceLabel: "Adaptive practice flow in active beta.",
+    experienceLabel: "Practice flow in active beta.",
   };
 }

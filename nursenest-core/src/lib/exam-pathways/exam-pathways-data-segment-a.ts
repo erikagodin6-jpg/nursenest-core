@@ -41,7 +41,7 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     status: "active",
     acquisitionMode: "subscribe",
   },
-  // —— Canada — NP (transition-ready; extensible) ——
+  // —— Canada — NP (CNPLE; single-classification model; LOFT format; live July 2026) ——
   {
     id: "ca-np-cnple",
     countrySlug: "canada",
@@ -50,18 +50,18 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     examCode: "cnple",
     examFamily: ExamFamily.NP,
     examKey: "CA_NP_LICENSURE",
-    displayName: "Canadian NP Licensure (CNPLE Track)",
+    displayName: "Canadian Nurse Practitioner Licensure Examination",
     shortName: "CNPLE",
     stripeTier: TierCode.NP,
     contentExamKeys: ["NP", "CNPLE", "CAN-NP"],
-    boardLabel: "Canadian NP licensure pathway",
-    seoTitle: "NP exam prep for Canada | NurseNest",
+    boardLabel: "CCRNR / Canadian NP licensure pathway",
+    seoTitle: "CNPLE exam prep — Canadian NP | NurseNest",
     seoDescription:
-      "Practice NP exam prep with case-style questions, rationales, and adaptive review. Built for Canadian nurses (CNPLE-aligned pathway).",
+      "Prepare for the Canadian Nurse Practitioner Licensure Examination (CNPLE). Practice clinical judgment across lifespan, primary care, prescribing, diagnostics, and professional practice. Built for Canada's single-classification NP model.",
     status: "upcoming",
     acquisitionMode: "waitlist",
     internalNotes:
-      "2026+ transition: keep status/contentExamKeys configurable; add parallel pathway rows if regulators split exams.",
+      "CNPLE: LOFT (linear on-the-fly testing), not CAT. Goes live July 1, 2026 under Canada's single NP classification model (CCRNR). Do NOT label as CAT. Extend contentExamKeys and status when regulatory details are confirmed.",
   },
   // —— US — LVN/LPN ——
   {

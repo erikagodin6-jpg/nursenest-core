@@ -125,7 +125,7 @@ export function FlashcardStudyQuestionStack({
   const promptSplit = splitPromptLeadingImage(prompt);
   const promptBody = promptSplit.remainingPrompt || String(prompt ?? "");
 
-  const showPlainRevealCta = !exam && !revealed && typeof onReveal === "function";
+  const showPlainRevealCta = !exam && !sata && !revealed && typeof onReveal === "function";
 
   return (
     <div className="nn-premium-flashcard-stack-outer nn-flashcard-study-stack-premium mx-auto flex w-full max-w-6xl flex-col gap-4">
@@ -198,6 +198,24 @@ export function FlashcardStudyQuestionStack({
                 answerChoicesHeading={labels?.answerChoicesHeading ?? "Answer choices"}
                 revealHint={labels?.revealHint ?? "Choose an answer to reveal the rationale."}
                 onPickLetter={commitPick}
+              />
+            </div>
+          ) : null}
+
+          {sata ? (
+            <div className="relative z-[1] mt-6">
+              {!revealed ? (
+                <p className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                  Select all that apply →
+                </p>
+              ) : null}
+              <FlashcardSataAnswerList
+                options={sata.answerOptions}
+                correctLetters={sata.correctLetters}
+                rationaleByLetter={revealed ? sata.rationaleByLetter : []}
+                revealed={revealed}
+                answerChoicesHeading={labels?.answerChoicesHeading ?? "Select all that apply"}
+                revealHint={labels?.revealHint ?? "Choose all correct options, then reveal."}
               />
             </div>
           ) : null}

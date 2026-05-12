@@ -1,14 +1,15 @@
 /**
  * Server-side helpers for building segmented SRS study queues.
  *
- * Segments:
- *   new      — never reviewed (no FlashcardProgress row, or repetitions === 0 && lapses === 0)
- *   due      — nextReviewAt within UTC today
- *   overdue  — nextReviewAt before UTC today
- *   lapsing  — reviewed cards with lapses > 0 that are due now or overdue
- *   weak     — low lastQuality (< 3) or lapses ≥ 2
+ * Segments (mutually exclusive in count display):
+ *   lapsing  — cards with lapses > 0 that are due/overdue (highest priority)
+ *   overdue  — nextReviewAt before UTC today AND lapses === 0
+ *   due      — nextReviewAt within UTC today AND lapses === 0
+ *   new      — never reviewed (no progress row, or repetitions === 0 && lapses === 0)
  *
+ * Lapsing cards are excluded from the overdue count to avoid double-counting.
  * All queries are scoped to the subscriber's entitlement (tier + country + allied occupation).
+ * Only deck-based cards (deckId != null) are counted; lesson-linked synthetics are excluded.
  */
 
 import { ContentStatus } from "@prisma/client";
@@ -49,7 +50,7 @@ function utcDayBounds(d: Date): { start: Date; end: Date } {
 }
 
 /**
- * Returns per-segment counts for the SRS dashboard.
+ * Returns per-segment counts for the SRS dashboard (mutually exclusive buckets).
  * Does NOT fetch full card rows — use `loadStudyQueueSegments` for that.
  */
 export async function loadStudyQueueCounts(
@@ -61,52 +62,61 @@ export async function loadStudyQueueCounts(
   const { start: todayStart, end: todayEnd } = utcDayBounds(now);
   const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathwayId ?? null);
   const cardScope = flashcardAccessWhere(entitlement, pathwayOpts);
-  const baseCardWhere = { status: ContentStatus.PUBLISHED, ...cardScope };
 
-  const [dueToday, overdue, lapsing, totalReviewed] = await Promise.all([
+  // Restrict to deck-based cards only — matches the totalAccessible count and avoids
+  // inflating totalReviewed with lesson-linked synthetic progress rows.
+  const deckCardWhere = { status: ContentStatus.PUBLISHED, deckId: { not: null as null }, ...cardScope };
+
+  const [dueToday, overdue, lapsing, totalReviewed, totalAccessible] = await Promise.all([
+    // Due today — lapses === 0 only (lapsing cards are counted separately)
     prisma.flashcardProgress.count({
       where: {
         userId,
+        lapses: 0,
         nextReviewAt: { gte: todayStart, lte: todayEnd },
-        flashcard: baseCardWhere,
+        flashcard: deckCardWhere,
       },
     }),
+    // Overdue — excludes lapsing cards to avoid double-counting
     prisma.flashcardProgress.count({
       where: {
         userId,
+        lapses: 0,
         nextReviewAt: { lt: todayStart },
-        flashcard: baseCardWhere,
+        flashcard: deckCardWhere,
       },
     }),
+    // Lapsing: lapses > 0 AND due/overdue now (the highest-priority bucket)
     prisma.flashcardProgress.count({
       where: {
         userId,
         lapses: { gt: 0 },
         nextReviewAt: { lte: todayEnd },
-        flashcard: baseCardWhere,
+        flashcard: deckCardWhere,
       },
     }),
+    // Total reviewed: any card where the user has ever rated it (repetitions > 0 or lapses > 0)
     prisma.flashcardProgress.count({
       where: {
         userId,
-        repetitions: { gt: 0 },
-        flashcard: baseCardWhere,
+        OR: [{ repetitions: { gt: 0 } }, { lapses: { gt: 0 } }],
+        flashcard: deckCardWhere,
       },
+    }),
+    // Total accessible deck cards (denominator for newCards)
+    prisma.flashcard.count({
+      where: { status: ContentStatus.PUBLISHED, deckId: { not: null }, ...cardScope },
     }),
   ]);
 
-  // New cards: published flashcards with no progress row for this user.
-  // We approximate this with a count query on accessible decks minus total reviewed.
-  const totalAccessible = await prisma.flashcard.count({
-    where: { status: ContentStatus.PUBLISHED, deckId: { not: null }, ...cardScope },
-  });
   const newCards = Math.max(0, totalAccessible - totalReviewed);
-
   return { newCards, dueToday, overdue, lapsing, totalReviewed };
 }
 
 /**
- * Loads actual card rows for each segment (capped per segment to avoid oversized payloads).
+ * Loads actual card rows for each segment, then fetches counts in parallel.
+ * Ordering: lapsing (highest priority) → overdue → due today.
+ * Deduplication via seenIds ensures a card appears in at most one segment.
  */
 export async function loadStudyQueueSegments(
   userId: string,
@@ -118,7 +128,7 @@ export async function loadStudyQueueSegments(
   const { start: todayStart, end: todayEnd } = utcDayBounds(now);
   const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathwayId ?? null);
   const cardScope = flashcardAccessWhere(entitlement, pathwayOpts);
-  const baseCardWhere = { status: ContentStatus.PUBLISHED, deckId: { not: null }, ...cardScope };
+  const deckCardWhere = { status: ContentStatus.PUBLISHED, deckId: { not: null as null }, ...cardScope };
 
   const cardSelect = {
     id: true,
@@ -137,12 +147,14 @@ export async function loadStudyQueueSegments(
     flashcard: { select: cardSelect },
   } as const;
 
-  const [overdueRows, dueTodayRows, lapsingRows] = await Promise.all([
+  // Run segment queries AND count queries in parallel (single DB round-trip batch)
+  const [overdueRows, dueTodayRows, lapsingRows, counts] = await Promise.all([
     prisma.flashcardProgress.findMany({
       where: {
         userId,
+        lapses: 0,
         nextReviewAt: { lt: todayStart },
-        flashcard: baseCardWhere,
+        flashcard: deckCardWhere,
       },
       select: progressSelect,
       orderBy: { nextReviewAt: "asc" },
@@ -151,8 +163,9 @@ export async function loadStudyQueueSegments(
     prisma.flashcardProgress.findMany({
       where: {
         userId,
+        lapses: 0,
         nextReviewAt: { gte: todayStart, lte: todayEnd },
-        flashcard: baseCardWhere,
+        flashcard: deckCardWhere,
       },
       select: progressSelect,
       orderBy: { nextReviewAt: "asc" },
@@ -163,17 +176,21 @@ export async function loadStudyQueueSegments(
         userId,
         lapses: { gt: 0 },
         nextReviewAt: { lte: todayEnd },
-        flashcard: baseCardWhere,
+        flashcard: deckCardWhere,
       },
       select: progressSelect,
       orderBy: { lapses: "desc" },
       take: limitPerSegment,
     }),
+    loadStudyQueueCounts(userId, entitlement, pathwayId),
   ]);
 
   const seenIds = new Set<string>();
 
-  function toCard(row: typeof overdueRows[number], segment: StudyQueueCard["segment"]): StudyQueueCard | null {
+  function toCard(
+    row: (typeof overdueRows)[number],
+    segment: StudyQueueCard["segment"],
+  ): StudyQueueCard | null {
     const c = row.flashcard;
     if (!c || seenIds.has(row.flashcardId)) return null;
     seenIds.add(row.flashcardId);
@@ -206,8 +223,6 @@ export async function loadStudyQueueSegments(
     const c = toCard(r, "due");
     if (c) cards.push(c);
   }
-
-  const counts = await loadStudyQueueCounts(userId, entitlement, pathwayId);
 
   return { counts, cards };
 }

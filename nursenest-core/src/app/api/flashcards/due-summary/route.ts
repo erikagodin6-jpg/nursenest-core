@@ -51,44 +51,53 @@ export async function GET(req: NextRequest) {
   const now = new Date();
   const { start: todayStart, end: todayEnd } = utcDayBounds(now);
   const cardScope = flashcardAccessWhere(entitlement);
+  // Restrict progress counts to deck-based cards only, matching totalAccessible denominator.
+  const deckCardScope = { ...cardScope, deckId: { not: null as null } };
 
   try {
     const [dueToday, overdue, learning, lapsingCards, totalReviewed, totalAccessible] = await Promise.all([
+      // Due today — exclude lapsing (handled separately)
       prisma.flashcardProgress.count({
         where: {
           userId,
+          lapses: 0,
           nextReviewAt: { gte: todayStart, lte: todayEnd },
-          flashcard: cardScope,
+          flashcard: deckCardScope,
         },
       }),
+      // Overdue — exclude lapsing to avoid double-count
       prisma.flashcardProgress.count({
         where: {
           userId,
+          lapses: 0,
           nextReviewAt: { lt: todayStart },
-          flashcard: cardScope,
+          flashcard: deckCardScope,
         },
       }),
+      // Learning: low repetitions with scheduled review (early retention stage)
       prisma.flashcardProgress.count({
         where: {
           userId,
           repetitions: { lt: 2 },
           nextReviewAt: { not: null },
-          flashcard: cardScope,
+          flashcard: deckCardScope,
         },
       }),
+      // Lapsing: lapses > 0 AND due/overdue — separate bucket from overdue
       prisma.flashcardProgress.count({
         where: {
           userId,
           lapses: { gt: 0 },
           nextReviewAt: { lte: todayEnd },
-          flashcard: cardScope,
+          flashcard: deckCardScope,
         },
       }),
+      // Total reviewed (deck cards only, matches totalAccessible denominator)
       prisma.flashcardProgress.count({
         where: {
           userId,
-          repetitions: { gt: 0 },
-          flashcard: cardScope,
+          OR: [{ repetitions: { gt: 0 } }, { lapses: { gt: 0 } }],
+          flashcard: deckCardScope,
         },
       }),
       prisma.flashcard.count({

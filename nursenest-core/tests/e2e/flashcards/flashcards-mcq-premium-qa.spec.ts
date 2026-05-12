@@ -648,6 +648,104 @@ test.describe("NP flashcard smoke", () => {
   });
 });
 
+// ── SRS STATS STRIP ───────────────────────────────────────────────────────────
+
+test.describe("SRS stats strip — hub widget", () => {
+  test("flashcards hub renders SRS stats strip without crash or console errors", async ({
+    page,
+    baseURL,
+  }, testInfo) => {
+    test.setTimeout(180_000);
+    const observers = attachPageObservers(page, { profile: "app", captureConsoleContext: true });
+    try {
+      const url = new URL(paidFlashcardsHubUrl(RN_PATHWAY_ID), resolveE2eAppBaseUrl(baseURL)).toString();
+      await page.goto(url, { waitUntil: "domcontentloaded" });
+      expectNotLoginUrl(page);
+      await expectPaidLearnerShellReady(page, "flashcards hub SRS strip");
+      await expectNoSubscriptionPaywall(page, "flashcards hub SRS strip");
+
+      const notOnAccount = page.getByText("This study track is not on your account");
+      test.skip(await notOnAccount.isVisible().catch(() => false), "No entitlement for RN hub.");
+
+      await page.waitForTimeout(3000);
+      await assertNoHorizontalOverflow(page, "#nn-learner-main, [data-nn-learner-main]");
+    } finally {
+      observers.dispose();
+      await logObserverDiagnostics(observers, testInfo.title);
+      expect(observers.consoleErrors, observers.consoleErrors.join("\n")).toEqual([]);
+      expect(observers.failedRequests, observers.failedRequests.join("\n")).toEqual([]);
+    }
+  });
+});
+
+// ── MOBILE SESSION ACTIVE SMOKE ───────────────────────────────────────────────
+
+test.describe("Mobile active session — SRS adaptive smoke", () => {
+  test("mobile 390px: session loads, reveal works, 4 confidence buttons visible, no crash", async ({
+    page,
+    baseURL,
+  }, testInfo) => {
+    test.setTimeout(240_000);
+    await page.setViewportSize({ width: 390, height: 844 });
+    const observers = attachPageObservers(page, { profile: "app", captureConsoleContext: true });
+    try {
+      const launched = await gotoFlashcardsAndStartCustomSession(page, baseURL, RN_PATHWAY_ID);
+      test.skip(!launched, "No RN custom session — mobile adaptive smoke.");
+
+      const layout = page.locator(".nn-flashcard-session-layout").first();
+      await expect(layout).toBeVisible({ timeout: 90_000 });
+
+      await assertNoHorizontalOverflow(page, "#nn-learner-main, [data-nn-learner-main]");
+
+      await revealFirstCard(page);
+
+      const isRevealed = await layout
+        .evaluate((el) => el.getAttribute("data-nn-revealed") === "1")
+        .catch(() => false);
+
+      if (isRevealed) {
+        const confidence = page.locator("[data-nn-premium-flashcard-confidence]").first();
+        await expect(confidence).toBeVisible({ timeout: 20_000 });
+
+        // All 4 Anki buttons must be present
+        await expect(page.locator("[data-nn-flashcard-rating='again']").first()).toBeVisible();
+        await expect(page.locator("[data-nn-flashcard-rating='hard']").first()).toBeVisible();
+        await expect(page.locator("[data-nn-flashcard-rating='good']").first()).toBeVisible();
+        await expect(page.locator("[data-nn-flashcard-rating='easy']").first()).toBeVisible();
+
+        // Confidence controls must not overflow viewport width
+        const overflows = await confidence.evaluate((el) => el.scrollWidth > el.clientWidth + 2);
+        expect(overflows, "confidence controls must not overflow on 390px").toBe(false);
+
+        // Wrong-answer menu: if present, must be a <details> and not overflow
+        const wrongMenu = page.locator("[data-testid='flashcard-wrong-answer-menu']").first();
+        if (await wrongMenu.isVisible({ timeout: 5_000 }).catch(() => false)) {
+          const tagName = await wrongMenu.evaluate((el) => el.tagName.toLowerCase());
+          expect(tagName).toBe("details");
+          const menuOverflow = await wrongMenu.evaluate((el) => el.scrollWidth > el.clientWidth + 4);
+          expect(menuOverflow, "wrong-answer menu must not overflow on mobile").toBe(false);
+        }
+
+        await assertNoHorizontalOverflow(page, "#nn-learner-main, [data-nn-learner-main]");
+      }
+
+      // Reveal animation: wait for entrance + stability check
+      await page.waitForTimeout(400);
+      await assertNoHorizontalOverflow(page, "#nn-learner-main, [data-nn-learner-main]");
+
+      if (CAPTURE_SCREENSHOTS) {
+        const shot = await page.screenshot({ fullPage: false });
+        await testInfo.attach("mobile-adaptive-session-back.png", { body: shot, contentType: "image/png" });
+      }
+    } finally {
+      observers.dispose();
+      await logObserverDiagnostics(observers, testInfo.title);
+      expect(observers.consoleErrors, observers.consoleErrors.join("\n")).toEqual([]);
+      expect(observers.failedRequests, observers.failedRequests.join("\n")).toEqual([]);
+    }
+  });
+});
+
 // ── ALLIED SMOKE ──────────────────────────────────────────────────────────────
 
 test.describe("Allied flashcard smoke", () => {

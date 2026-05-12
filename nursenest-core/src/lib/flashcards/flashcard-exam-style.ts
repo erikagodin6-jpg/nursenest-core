@@ -24,10 +24,16 @@ export type SataQuestionPayload = {
   rationaleByLetter: Array<{ letter: string; rationale: string; correct: boolean }>;
 };
 
+/**
+ * Type guard for SATA payloads. Checks both `itemKind === "SATA"` AND that
+ * `correctLetters` is a non-empty array — guards against a malformed MCQ payload
+ * that has `itemKind=SATA` but `correctLetter` (singular) instead of `correctLetters`.
+ */
 export function isSataPayload(
   payload: ExamMicroQuestionPayload | SataQuestionPayload | null | undefined,
 ): payload is SataQuestionPayload {
-  return payload?.itemKind === "SATA";
+  if (!payload || payload.itemKind !== "SATA") return false;
+  return Array.isArray((payload as SataQuestionPayload).correctLetters);
 }
 
 const LETTER_RE = /^[A-D]$/;

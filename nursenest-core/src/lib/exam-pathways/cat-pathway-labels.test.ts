@@ -31,8 +31,17 @@ test("FNP US NP", () => {
   assert.equal(catPathwayShortCatLabel(p!), "FNP CAT");
 });
 
-test("CNPLE Canada NP", () => {
+test("CNPLE Canada NP regional line", () => {
   const p = getExamPathwayById("ca-np-cnple");
   assert.ok(p);
   assert.equal(catPathwayRegionalExamLine(p!), "Canada NP · CNPLE");
+});
+
+test("CNPLE short CAT label must not say CAT (CNPLE uses LOFT not CAT)", () => {
+  const p = getExamPathwayById("ca-np-cnple");
+  assert.ok(p);
+  // catPathwayShortCatLabel is intentionally NOT used for LOFT pathways.
+  // This test asserts the exam code label alone is CNPLE (no CAT suffix).
+  assert.equal(catPathwayExamCodeLabel(p!), "CNPLE");
+  // Callers should use pathwayCatLandingTitle (which is LOFT-aware) instead of catPathwayShortCatLabel for CNPLE.
 });

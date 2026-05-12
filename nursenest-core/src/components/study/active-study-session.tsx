@@ -26,6 +26,7 @@ import { SuccessLeaf } from "@/components/ui/success-leaf";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
+import { useFlashcardStudyTelemetry } from "@/lib/flashcards/use-flashcard-study-telemetry";
 
 /* ================= TYPES ================= */
 
@@ -152,6 +153,15 @@ export function ActiveStudySession({
   const current = sessionCards[index] ?? null;
   const pinState = current?.id && enableLocalStudyPins ? getStudyItemState(current.id) : {};
 
+  // Derive stable session-level pathwayId from the first card with one.
+  // This avoids recreating telemetry callbacks on every card change.
+  const sessionPathwayId = useMemo(
+    () => sessionCards.find((c) => c.pathwayId)?.pathwayId ?? null,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [sessionCards.length],
+  );
+  const telemetry = useFlashcardStudyTelemetry({ pathwayId: sessionPathwayId });
+
   useEffect(() => {
     setSessionCards(deduped);
     setIndex(initialCardIndex);
@@ -160,6 +170,14 @@ export function ActiveStudySession({
     setElapsed(0);
     setRatingTally({ again: 0, hard: 0, good: 0, easy: 0 });
   }, [deduped, initialCardIndex, initialRevealed]);
+
+  // Track dwell time from card front shown → reveal. Fires on mount (card 0) and each card advance.
+  const currentId = current?.id ?? null;
+  useEffect(() => {
+    if (!currentId) return;
+    telemetry.onCardShown();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentId]);
 
   useEffect(() => {
     onStudyProgress?.({ index, revealed });
@@ -181,6 +199,7 @@ export function ActiveStudySession({
       setSaving(true);
 
       setRatingTally((t) => ({ ...t, [rating]: t[rating] + 1 }));
+      telemetry.onRated(card.id, rating);
 
       await onRate?.(card.id, rating);
 
@@ -194,7 +213,7 @@ export function ActiveStudySession({
 
       setSaving(false);
     },
-    [index, onRate, onSessionComplete, sessionCards],
+    [index, onRate, onSessionComplete, sessionCards, telemetry],
   );
 
   if (loading) {
@@ -258,6 +277,7 @@ export function ActiveStudySession({
       if ((e.key === " " || e.key === "Enter") && !revealed && !current?.examMicroQuestion) {
         e.preventDefault();
         setRevealed(true);
+        if (current?.id) telemetry.onReveal(current.id);
         return;
       }
       if (e.key === "ArrowLeft") {
@@ -280,10 +300,10 @@ export function ActiveStudySession({
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [current?.examMicroQuestion, revealed, saving, sessionCards.length, submitRating]);
+  }, [current?.examMicroQuestion, current?.id, revealed, saving, sessionCards.length, submitRating, telemetry]);
 
   const remainingCards = Math.max(0, sessionCards.length - index - 1);
-  const ratedSession = ratingTally.incorrect + ratingTally.unsure + ratingTally.known;
+  const ratedSession = ratingTally.again + ratingTally.hard + ratingTally.good + ratingTally.easy;
   const readinessLabel = Math.min(100, progressPct);
 
   return (
@@ -340,7 +360,10 @@ export function ActiveStudySession({
         explanation={resolveMeasurementTokens(current.explanation ?? current.examMicroQuestion?.rationaleCorrect ?? "", measurementSystem)}
         pearl={buildClinicalPearl(current, "No clinical pearl available.")}
         revealed={revealed}
-        onReveal={() => setRevealed(true)}
+        onReveal={() => {
+          setRevealed(true);
+          if (current?.id) telemetry.onReveal(current.id);
+        }}
         labels={{
           revealHint: t("flashcards.tapToReveal"),
           answerHeading: t("flashcards.answer"),
