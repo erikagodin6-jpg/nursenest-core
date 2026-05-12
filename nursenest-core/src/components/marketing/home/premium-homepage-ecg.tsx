@@ -138,7 +138,7 @@ export function PremiumHomepageEcg() {
             <div className="relative">
               <p className="inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_40%,transparent)] bg-[color-mix(in_srgb,var(--semantic-warning)_12%,var(--semantic-surface))] px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-warning-contrast)]">
                 <Sparkles className="h-3.5 w-3.5" aria-hidden />
-                {tr("pages.home.premium.ecg.advancedBadge", "Coming soon")}
+                {tr("pages.home.premium.ecg.advancedBadge", "Add-On Module")}
               </p>
               <h3
                 id="premium-home-ecg-advanced-heading"
@@ -149,7 +149,7 @@ export function PremiumHomepageEcg() {
               <p className="nn-marketing-body-sm mt-3 text-pretty text-[var(--palette-text-muted)]">
                 {tr(
                   "pages.home.premium.ecg.advancedBody",
-                  "A future specialty premium program for immersive workstation-style telemetry training — advanced rhythms, 12-lead depth, ICU scenarios, and telemetry analytics.",
+                  "A separate paid add-on for immersive workstation-style telemetry training — advanced rhythms, 12-lead depth, ICU scenarios, and telemetry analytics. Available now for RN and NP learners.",
                 )}
               </p>
               <ul className="mt-5 space-y-2 text-sm text-[var(--palette-text-muted)]">
@@ -160,7 +160,16 @@ export function PremiumHomepageEcg() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-6">
+              <div className="mt-6 flex flex-wrap gap-3">
+                <MarketingTrackedLink
+                  href="/modules/ecg-advanced"
+                  event={PH.marketingHomeExploreHubClick}
+                  eventProps={{ region, surface: "premium_home_ecg", lane: "advanced_teaser", choice: "module" }}
+                  className={`${MARKETING_TERTIARY_LINK_CLASS} inline-flex`}
+                  data-testid="premium-ecg-advanced-module"
+                >
+                  {tr("pages.home.premium.ecg.advancedCtaModule", "Explore Advanced ECG")}
+                </MarketingTrackedLink>
                 <MarketingTrackedLink
                   href={hrefs.pricing}
                   event={PH.marketingHomeExploreHubClick}
@@ -168,13 +177,13 @@ export function PremiumHomepageEcg() {
                   className={`${MARKETING_TERTIARY_LINK_CLASS} inline-flex`}
                   data-testid="premium-ecg-advanced-pricing"
                 >
-                  {tr("pages.home.premium.ecg.advancedCta", "View plans & upgrades")}
+                  {tr("pages.home.premium.ecg.advancedCta", "View add-on pricing")}
                 </MarketingTrackedLink>
               </div>
               <p className="nn-marketing-caption mt-4 border-t border-[var(--semantic-border-soft)] pt-4 text-[var(--palette-text-muted)]">
                 {tr(
                   "pages.home.premium.ecg.advancedDisclaimer",
-                  "Advanced ECG & Telemetry Mastery is not included with standard RN/PN/NP/allied subscriptions. Availability and pricing will be announced separately.",
+                  "Advanced ECG & Telemetry Mastery is a separate paid add-on and is not included with standard RN/PN/NP/allied subscriptions.",
                 )}
               </p>
             </div>

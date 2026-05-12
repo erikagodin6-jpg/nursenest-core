@@ -17,10 +17,15 @@ export function collectClinicalMarketingToolTeaserUrls(origin: string): string[]
   return TOOL_SLUGS.map((slug) => `${o}/tools/${slug}`);
 }
 
+/** Public ECG marketing pages — always indexed, no entitlement gate on these routes. */
+const ECG_MARKETING_PATHS = ["/ecg-interpretation"] as const;
+
 /**
- * Clinical readiness marketing urlset: OSCE + clinical-scenario pathway hubs (feature-flagged) + `/tools/*` teasers.
- * Used by `/sitemap-clinical-modules.xml` only — never emit learner `/app/*` or hidden mastery-module shells here.
+ * Clinical readiness marketing urlset: ECG marketing pages + OSCE + clinical-scenario pathway hubs + `/tools/*` teasers.
+ * Used by `/sitemap-clinical-modules.xml` only — never emit learner `/app/*` or gated `/modules/*` shells here.
  */
 export function collectClinicalModulesSitemapUrls(origin: string): string[] {
-  return [...collectClinicalMarketingToolTeaserUrls(origin), ...collectOsceScenariosMarketingHubUrls(origin)];
+  const o = normalizeOrigin(origin);
+  const ecgUrls = ECG_MARKETING_PATHS.map((path) => `${o}${path}`);
+  return [...ecgUrls, ...collectClinicalMarketingToolTeaserUrls(origin), ...collectOsceScenariosMarketingHubUrls(origin)];
 }
