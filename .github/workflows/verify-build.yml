@@ -45,6 +45,9 @@ jobs:
       - name: Guard DigitalOcean production domains
         run: node ../scripts/verify-digitalocean-domain-persistence.mjs
 
+      - name: Validate DigitalOcean app spec env protection
+        run: node ../scripts/do-spec-guard.mjs ../.do/app-nursenest-core-next.yaml
+
       - name: CI environment diagnostics
         run: node ../scripts/ci/diagnose-actions-environment.mjs
         env:

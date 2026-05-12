@@ -104,6 +104,19 @@ services:
       - key: AI_ADMIN_GENERATION_ENABLED
         scope: RUN_TIME
         value: "false"
+      - key: STRIPE_SECRET_KEY
+        # Stripe live/test secret key. Must be present at runtime for billing routes.
+        # Listed here as a placeholder so doctl apps update never deletes it.
+        scope: RUN_TIME
+        type: SECRET
+      - key: STRIPE_WEBHOOK_SECRET
+        # Stripe webhook signing secret (whsec_...). Required to validate incoming Stripe events.
+        scope: RUN_TIME
+        type: SECRET
+      - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        # Stripe publishable key (pk_live_... or pk_test_...). Baked into client bundle at build time.
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
       - key: AI_INTEGRATIONS_OPENAI_API_KEY
         scope: RUN_TIME
         type: SECRET
