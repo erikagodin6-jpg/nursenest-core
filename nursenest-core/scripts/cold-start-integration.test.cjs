@@ -180,18 +180,31 @@ test("cold-start: forcedHandlersReadyFallbackMs is ≥ 90_000", () => {
   assert.ok(val >= 90_000, `forcedHandlersReadyFallbackMs=${val} must be ≥ 90000`);
 });
 
-test("cold-start: Dockerfile COPYs .next/standalone directory (no tar)", () => {
+test("cold-start: Dockerfile tars standalone in builder, COPYs tar to runner, extracts at build time", () => {
   const dockerfilePath = path.join(PKG_ROOT, "..", "Dockerfile");
   assert.ok(fs.existsSync(dockerfilePath), "Dockerfile must exist");
   const src = fs.readFileSync(dockerfilePath, "utf8");
-  assert.match(src, /COPY --from=builder.*\.next\/standalone.*\.\/\.next\/standalone/,
-    "runner stage must COPY .next/standalone directory");
-  assert.equal(src.includes(".next-standalone-runtime.tar.gz"), false,
-    "Dockerfile must not reference the tar bundle");
-  assert.equal(src.includes("tar -C .next"), false,
-    "Dockerfile must not tar standalone at build time");
-  assert.equal(src.includes("rm -rf .next/standalone"), false,
-    "Dockerfile must not delete standalone after build");
+
+  // Builder: tar is created (single file for fast kaniko COPY) and standalone deleted
+  assert.match(src, /tar -C \.next -czf \.next-standalone-runtime\.tar\.gz standalone/,
+    "builder must tar the standalone directory into a single file");
+  assert.match(src, /rm -rf \.next\/standalone/,
+    "builder must delete standalone after tarring");
+
+  // Runner: COPY the tar (single-file layer — avoids kaniko snapshot timeout on thousands of files)
+  assert.match(src, /COPY --from=builder.*\.next-standalone-runtime\.tar\.gz.*\.next-standalone-runtime\.tar\.gz/,
+    "runner must COPY the tar bundle as a single file");
+
+  // Runner: extract at build time (NOT at container startup) and delete tar
+  assert.match(src, /RUN mkdir -p \.next && tar -xzf \.next-standalone-runtime\.tar\.gz -C \.next && rm \.next-standalone-runtime\.tar\.gz/,
+    "runner must extract the tar at BUILD time and delete it — no runtime extraction");
+
+  // start-standalone.mjs must NOT extract at runtime
+  const startSrc = fs.readFileSync(START_SCRIPT, "utf8");
+  assert.equal(startSrc.includes("extractStandaloneRuntimeBundleIfNeeded"), false,
+    "start-standalone.mjs must not contain runtime extraction function");
+  assert.equal(startSrc.includes("tar -xzf"), false,
+    "start-standalone.mjs must not contain runtime tar command");
 });
 
 test("cold-start: full startup sequence — healthz immediate, readyz probe-driven, app proxied", async () => {

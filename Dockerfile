@@ -78,6 +78,8 @@ RUN DATABASE_URL="${DATABASE_URL}" \
   rm -rf .next .turbo node_modules/.cache \
   && npm run heroku-postbuild \
   && npm run build:deploy \
+  && tar -C .next -czf .next-standalone-runtime.tar.gz standalone \
+  && rm -rf .next/standalone \
   && npm prune --omit=dev --no-fund --no-audit \
   && rm -rf .next/cache .turbo node_modules/.cache
 
@@ -93,7 +95,8 @@ ENV NODE_ENV=production \
   NODE_MAX_OLD_SPACE_SIZE_MB=768 \
   NEXT_TELEMETRY_DISABLED=1
 
-COPY --from=builder /app/nursenest-core/.next/standalone ./.next/standalone
+COPY --from=builder /app/nursenest-core/.next-standalone-runtime.tar.gz ./.next-standalone-runtime.tar.gz
+RUN mkdir -p .next && tar -xzf .next-standalone-runtime.tar.gz -C .next && rm .next-standalone-runtime.tar.gz
 COPY --from=builder /app/nursenest-core/public ./public
 COPY --from=builder /app/nursenest-core/scripts ./scripts
 COPY --from=builder /app/scripts ../scripts
