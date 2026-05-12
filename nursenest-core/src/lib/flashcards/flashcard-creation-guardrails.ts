@@ -309,17 +309,17 @@ export function validateFlashcardCreationGuardrails(
 
   /** Licensed RN/NP exam prep — requires clinical reasoning + teaching rationale (not query filters alone). */
   if (input.tier === "RN" || input.tier === "NP") {
+    // CNPLE content violations are hard-blocked regardless of clinical reasoning quality.
+    if (input.tier === "NP") {
+      const c = cnpleViolations(blob);
+      if (c) return { ok: false, ...c };
+    }
     if (input.exam) {
       const e = rnNpExamSatisfies(input.exam);
       if (!e.ok) return e;
     } else {
       const l = rnNpLegacySatisfies(input.front, input.back);
       if (!l.ok) return l;
-    }
-    // NP-tier cards additionally screened for CNPLE-specific prohibited framing.
-    if (input.tier === "NP") {
-      const c = cnpleViolations(blob);
-      if (c) return { ok: false, ...c };
     }
     return { ok: true };
   }

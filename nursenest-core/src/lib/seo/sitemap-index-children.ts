@@ -61,6 +61,25 @@ export const SITEMAP_FALLBACK_PATHS_ALL = [
   "/canada/pn/rex-pn/lessons",
   "/canada/np/cnple",
   "/canada/np/cnple/lessons",
+  "/canada/np/cnple/simulation",
+  "/canada/np/cnple/flashcards",
+  "/canada/np/cnple/report-card",
+  // CNPLE SEO content hubs
+  "/cnple",
+  "/cnple-practice-questions",
+  "/cnple-simulation-exam",
+  "/cnple-study-guide",
+  "/cnple-flashcards",
+  "/cnple-case-studies",
+  "/cnple-clinical-judgment",
+  "/cnple-prescribing-questions",
+  "/cnple-lab-interpretation",
+  "/cnple-differential-diagnosis",
+  "/cnple-primary-care",
+  "/cnple-pediatrics",
+  "/cnple-womens-health",
+  "/cnple-geriatrics",
+  "/cnple-mental-health",
 ] as const;
 
 /** Core segment fallback: no `/blog`, no pathway-lesson `/…/lessons`, no exam hubs (owned by `/sitemap-pathways.xml`). */
@@ -120,6 +139,9 @@ export const SITEMAP_FALLBACK_PATHWAYS_PATHS = [
   "/canada/np/cnple/pricing",
   "/canada/np/cnple/questions",
   "/canada/np/cnple/lessons",
+  "/canada/np/cnple/simulation",
+  "/canada/np/cnple/flashcards",
+  "/canada/np/cnple/report-card",
 ] as const;
 
 /** Localized segment fallback when DB/registry collectors throw — representative tier-full locale slice. */

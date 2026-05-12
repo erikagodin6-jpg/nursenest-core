@@ -1,5 +1,10 @@
 import type { FlashcardItemKind, Prisma } from "@prisma/client";
 import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
+import {
+  normalizeLegacyAnswerPayload,
+  hydrateCanonicalSata,
+  type CanonicalOption,
+} from "./flashcard-canonical-options";
 
 /** Client + API shape for NCLEX-style micro-questions on flashcards. */
 export type ExamMicroQuestionPayload = {
@@ -208,4 +213,105 @@ export function validateExamMicroQuestionInput(input: {
     };
   }
   return { ok: true, payload: parsed };
+}
+
+// ─── SATA parsing ─────────────────────────────────────────────────────────────
+
+type SataDbFields = {
+  examItemKind: FlashcardItemKind | null;
+  questionStem: string | null;
+  answerOptions: Prisma.JsonValue | null;
+  correctAnswer: string | null;
+  rationaleCorrect: string | null;
+  rationaleIncorrect: Prisma.JsonValue | null;
+};
+
+/**
+ * Parses a SATA payload from legacy JSON DB fields.
+ *
+ * The legacy model stores SATA correct letters as a comma-separated string in
+ * `correctAnswer` (e.g. "A,C,D"). Cards that only have a single letter stored
+ * are treated as single-correct SATA (1-correct) and returned, but callers
+ * should prefer canonical FlashcardOption rows when available.
+ *
+ * Returns null when the card is not a valid SATA card.
+ */
+export function parseSataFromDbFields(card: SataDbFields): SataQuestionPayload | null {
+  if (card.examItemKind !== "SATA") return null;
+
+  const options = normalizeLegacyAnswerPayload({
+    examItemKind: card.examItemKind,
+    answerOptions: card.answerOptions,
+    correctAnswer: card.correctAnswer,
+    rationaleCorrect: card.rationaleCorrect,
+    rationaleIncorrect: card.rationaleIncorrect,
+  });
+
+  if (!options) return null;
+
+  // Need at least 2 correct for a valid SATA (1 correct = likely a data error)
+  const correctCount = options.filter((o) => o.isCorrect).length;
+  if (correctCount < 2) return null;
+
+  return hydrateCanonicalSata(
+    card.questionStem ?? "",
+    options,
+    card.rationaleCorrect,
+  );
+}
+
+/**
+ * Parses a SATA payload from canonical FlashcardOption rows.
+ * Preferred over parseSataFromDbFields when canonical rows exist.
+ */
+export function parseSataFromCanonicalOptions(
+  stem: string | null,
+  options: CanonicalOption[],
+  rationaleCorrect: string | null,
+): SataQuestionPayload | null {
+  if (!stem || options.length === 0) return null;
+  const correctCount = options.filter((o) => o.isCorrect).length;
+  if (correctCount < 2) return null;
+  return hydrateCanonicalSata(stem, options, rationaleCorrect);
+}
+
+/**
+ * Shuffles SATA options deterministically by session seed.
+ * Keeps correctLetters, rationaleByLetter, and answerOptions aligned.
+ */
+export function shuffleSataQuestionOrder(
+  sata: SataQuestionPayload,
+  seed: string,
+): SataQuestionPayload {
+  if (sata.answerOptions.length <= 1) return sata;
+
+  const base = [...sata.answerOptions].sort((a, b) => a.letter.localeCompare(b.letter));
+  const shuffled = shuffleSeeded(base, `${seed}:sata`);
+
+  const oldToNew = new Map<string, string>();
+  shuffled.forEach((opt, idx) => {
+    oldToNew.set(opt.letter, String.fromCharCode("A".charCodeAt(0) + idx));
+  });
+
+  const newOptions = shuffled.map((opt, idx) => ({
+    letter: String.fromCharCode("A".charCodeAt(0) + idx),
+    text: opt.text,
+  }));
+
+  const newCorrectLetters = sata.correctLetters
+    .map((l) => oldToNew.get(l) ?? l)
+    .sort();
+
+  const newRationaleByLetter = sata.rationaleByLetter.map((r) => ({
+    letter: oldToNew.get(r.letter) ?? r.letter,
+    rationale: r.rationale,
+    correct: r.correct,
+  }));
+
+  return {
+    ...sata,
+    answerOptions: newOptions,
+    correctLetters: newCorrectLetters,
+    rationaleByLetter: newRationaleByLetter,
+  };
 }

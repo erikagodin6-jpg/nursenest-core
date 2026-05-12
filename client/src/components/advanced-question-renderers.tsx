@@ -11,11 +11,16 @@ import type {
   CaseStudyQuestion,
   CaseStudySubQuestion,
 } from "@/data/exam-questions/types";
+import { ECGQuestionLayout } from "@/components/ecg-question-layout";
 
 interface RendererProps<T> {
   question: T;
   onAnswer?: (result: { correct: boolean; pointsEarned: number; maxPoints: number; selected: any }) => void;
   readOnly?: boolean;
+  /** ECG-specific: whether the learner's tier can access ECG content (RPN/LVN = false) */
+  ecgLocked?: boolean;
+  /** ECG-specific: true = practice mode shows rationale; false = CAT/exam mode suppresses it */
+  isLearningMode?: boolean;
 }
 
 export function MatrixRenderer({ question, onAnswer, readOnly }: RendererProps<MatrixQuestion>) {
@@ -325,12 +330,13 @@ export function TrendRenderer({ question, onAnswer, readOnly }: RendererProps<Tr
   );
 }
 
-export function ImageBasedRenderer({ question, onAnswer, readOnly }: RendererProps<ImageBasedQuestion>) {
+/** Renderer for non-ECG image-based questions (xray, wound, skin, lab_result, etc.) */
+function NonECGImageRenderer({ question, onAnswer, readOnly }: RendererProps<ImageBasedQuestion>) {
+  const { t } = useI18n();
   const [selected, setSelected] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   const imageTypeLabels: Record<string, string> = {
-    ecg: "ECG/EKG Reading",
     xray: "X-Ray Description",
     wound: "Wound Assessment",
     skin: "Skin Condition",
@@ -349,7 +355,9 @@ export function ImageBasedRenderer({ question, onAnswer, readOnly }: RendererPro
     <div className="space-y-4" data-testid={`question-image-${question.id}`}>
       <p className="text-sm font-medium text-gray-800 leading-relaxed">{question.stem}</p>
       <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg">
-        <p className="text-xs font-semibold text-amber-700 mb-1">{imageTypeLabels[question.imageType] || "Clinical Finding"}</p>
+        <p className="text-xs font-semibold text-amber-700 mb-1">
+          {imageTypeLabels[question.imageType] ?? "Clinical Finding"}
+        </p>
         <p className="text-sm text-gray-800 italic">{question.imageDescription}</p>
         {question.clinicalFindings.length > 0 && (
           <ul className="mt-2 space-y-1">
@@ -401,12 +409,39 @@ export function ImageBasedRenderer({ question, onAnswer, readOnly }: RendererPro
         </Button>
       )}
       {submitted && (
-        <div className="p-3 rounded-lg text-xs leading-relaxed bg-blue-50 border border-blue-200 text-blue-800" data-testid={`text-rationale-image-${question.id}`}>
+        <div
+          className="p-3 rounded-lg text-xs leading-relaxed bg-blue-50 border border-blue-200 text-blue-800"
+          data-testid={`text-rationale-image-${question.id}`}
+        >
           <p className="font-semibold mb-1">{t("components.advancedQuestionRenderers.rationale4")}</p>
           <p>{question.rationale}</p>
         </div>
       )}
     </div>
+  );
+}
+
+/** Public dispatcher — routes ECG to ECGQuestionLayout, all others to NonECGImageRenderer */
+export function ImageBasedRenderer({
+  question,
+  onAnswer,
+  readOnly,
+  ecgLocked,
+  isLearningMode,
+}: RendererProps<ImageBasedQuestion>) {
+  if (question.imageType === "ecg") {
+    return (
+      <ECGQuestionLayout
+        question={question}
+        onAnswer={onAnswer}
+        readOnly={readOnly}
+        isLearningMode={isLearningMode ?? !readOnly}
+        locked={ecgLocked ?? false}
+      />
+    );
+  }
+  return (
+    <NonECGImageRenderer question={question} onAnswer={onAnswer} readOnly={readOnly} />
   );
 }
 

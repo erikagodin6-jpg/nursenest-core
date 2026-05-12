@@ -7,7 +7,12 @@ import {
   parseExamMicroQuestionFromDbFields,
   shuffleExamMicroQuestionOrder,
   type ExamMicroQuestionPayload,
+  type SataQuestionPayload,
 } from "@/lib/flashcards/flashcard-exam-style";
+import {
+  buildPayloadFromCanonical,
+  type CanonicalOption,
+} from "@/lib/flashcards/flashcard-option-normalize";
 import { applyFlashcardCardOverlay } from "@/lib/i18n/educational-content-overlay";
 import type { FlashcardEducationalBundle } from "@/lib/i18n/educational-content-overlay";
 import type { FlashcardItemKind, Prisma } from "@prisma/client";
@@ -31,6 +36,8 @@ export type FlashcardStudySelectRow = {
   clinicalImageUrl?: string | null;
   clinicalPearl?: string | null;
   keyTakeaway?: string | null;
+  /** Canonical relational options (preferred over JSON fields when present). */
+  canonicalOptions?: CanonicalOption[] | null;
 };
 
 export type FlashcardStudyApiCard = {

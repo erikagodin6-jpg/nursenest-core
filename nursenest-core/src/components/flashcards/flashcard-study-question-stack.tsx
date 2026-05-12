@@ -98,6 +98,8 @@ export function FlashcardStudyQuestionStack({
   mainFooter?: ReactNode;
   /** Links shown inline in the reveal zone (lesson, practice questions). Use lg:hidden when mirroring to rail on desktop. */
   revealLinksSection?: ReactNode;
+  /** Fired when the learner commits an MCQ or SATA answer (before or simultaneously with reveal). */
+  onAnswerSubmitted?: (selectedLetter: string, isCorrect: boolean) => void;
 }) {
   const isSata = isSataPayload(examMicroQuestion);
   const exam = isSata ? null : (examMicroQuestion as ExamMicroQuestionPayload | null);

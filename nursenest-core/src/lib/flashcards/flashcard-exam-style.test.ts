@@ -6,7 +6,11 @@ import {
   parseExamMicroQuestionFromDbFields,
   shuffleExamMicroQuestionOrder,
   validateExamMicroQuestionInput,
+  parseSataFromDbFields,
+  parseSataFromCanonicalOptions,
+  shuffleSataQuestionOrder,
 } from "@/lib/flashcards/flashcard-exam-style";
+import type { CanonicalOption } from "@/lib/flashcards/flashcard-canonical-options";
 
 test("parseExamMicroQuestionFromDbFields accepts a valid 4-option card", () => {
   const payload = parseExamMicroQuestionFromDbFields({
@@ -154,4 +158,177 @@ test("shuffleExamMicroQuestionOrder varies order by seed", () => {
   const orderA = a.answerOptions.map((o) => o.text).join("|");
   const orderB = b.answerOptions.map((o) => o.text).join("|");
   assert.notEqual(orderA, orderB);
+});
+
+// ─── SATA: parseSataFromDbFields ──────────────────────────────────────────────
+
+const SATA_STEM = "A nurse is caring for a client who develops acute pulmonary edema. Which interventions should the nurse implement?";
+const SATA_OPTIONS_JSON = [
+  { letter: "A", text: "Place the client in high-Fowler's position" },
+  { letter: "B", text: "Encourage increased oral fluid intake" },
+  { letter: "C", text: "Administer oxygen as prescribed" },
+  { letter: "D", text: "Decrease IV fluid rate" },
+  { letter: "E", text: "Monitor lung sounds and oxygen saturation" },
+];
+const SATA_RATIONALE_INCORRECT_JSON = [
+  { letter: "B", rationale: "Oral fluids are contraindicated in pulmonary edema as they worsen fluid overload." },
+];
+
+test("parseSataFromDbFields accepts valid SATA with comma-separated correctAnswer", () => {
+  const payload = parseSataFromDbFields({
+    examItemKind: FlashcardItemKind.SATA,
+    questionStem: SATA_STEM,
+    answerOptions: SATA_OPTIONS_JSON,
+    correctAnswer: "A,C,D,E",
+    rationaleCorrect: "These interventions address hypoxia and reduce the fluid overload contributing to pulmonary edema.",
+    rationaleIncorrect: SATA_RATIONALE_INCORRECT_JSON,
+  });
+
+  assert.ok(payload, "should return a SataQuestionPayload");
+  assert.equal(payload!.itemKind, "SATA");
+  assert.deepEqual(payload!.correctLetters.sort(), ["A", "C", "D", "E"]);
+  assert.equal(payload!.answerOptions.length, 5);
+  assert.equal(payload!.rationaleByLetter.length, 5);
+});
+
+test("parseSataFromDbFields returns null for non-SATA itemKind", () => {
+  const payload = parseSataFromDbFields({
+    examItemKind: FlashcardItemKind.CLINICAL,
+    questionStem: SATA_STEM,
+    answerOptions: SATA_OPTIONS_JSON,
+    correctAnswer: "A,C",
+    rationaleCorrect: "Rationale.",
+    rationaleIncorrect: null,
+  });
+  assert.equal(payload, null);
+});
+
+test("parseSataFromDbFields returns null when fewer than 2 correct letters", () => {
+  const payload = parseSataFromDbFields({
+    examItemKind: FlashcardItemKind.SATA,
+    questionStem: SATA_STEM,
+    answerOptions: SATA_OPTIONS_JSON,
+    correctAnswer: "A",
+    rationaleCorrect: "Rationale.",
+    rationaleIncorrect: null,
+  });
+  assert.equal(payload, null, "single correct answer is not valid SATA");
+});
+
+test("parseSataFromDbFields returns null when answerOptions is null", () => {
+  const payload = parseSataFromDbFields({
+    examItemKind: FlashcardItemKind.SATA,
+    questionStem: SATA_STEM,
+    answerOptions: null,
+    correctAnswer: "A,C",
+    rationaleCorrect: "Rationale.",
+    rationaleIncorrect: null,
+  });
+  assert.equal(payload, null);
+});
+
+test("parseSataFromDbFields rationaleByLetter marks correct vs incorrect", () => {
+  const payload = parseSataFromDbFields({
+    examItemKind: FlashcardItemKind.SATA,
+    questionStem: SATA_STEM,
+    answerOptions: SATA_OPTIONS_JSON,
+    correctAnswer: "A,C,D,E",
+    rationaleCorrect: "These reduce hypoxia and fluid overload.",
+    rationaleIncorrect: SATA_RATIONALE_INCORRECT_JSON,
+  });
+  assert.ok(payload);
+  const byLetter = new Map(payload!.rationaleByLetter.map((r) => [r.letter, r]));
+  assert.equal(byLetter.get("A")?.correct, true);
+  assert.equal(byLetter.get("B")?.correct, false);
+  assert.equal(byLetter.get("C")?.correct, true);
+  assert.equal(byLetter.get("E")?.correct, true);
+});
+
+// ─── SATA: parseSataFromCanonicalOptions ──────────────────────────────────────
+
+const CANONICAL_SATA_OPTIONS: CanonicalOption[] = [
+  { optionKey: "A", content: "High-Fowler's position", isCorrect: true, rationale: "Improves oxygenation.", displayOrder: 0 },
+  { optionKey: "B", content: "Increase oral fluids", isCorrect: false, rationale: "Contraindicated in fluid overload.", displayOrder: 1 },
+  { optionKey: "C", content: "Administer O2", isCorrect: true, rationale: "Treats hypoxia directly.", displayOrder: 2 },
+  { optionKey: "D", content: "Decrease IV rate", isCorrect: true, rationale: "Reduces fluid overload.", displayOrder: 3 },
+];
+
+test("parseSataFromCanonicalOptions returns a valid SATA payload", () => {
+  const payload = parseSataFromCanonicalOptions(
+    SATA_STEM,
+    CANONICAL_SATA_OPTIONS,
+    "These interventions manage pulmonary edema.",
+  );
+  assert.ok(payload);
+  assert.equal(payload!.itemKind, "SATA");
+  assert.deepEqual(payload!.correctLetters.sort(), ["A", "C", "D"]);
+  assert.equal(payload!.answerOptions.length, 4);
+});
+
+test("parseSataFromCanonicalOptions returns null for 1 correct option", () => {
+  const one = CANONICAL_SATA_OPTIONS.map((o, i) => ({ ...o, isCorrect: i === 0 }));
+  const payload = parseSataFromCanonicalOptions(SATA_STEM, one, null);
+  assert.equal(payload, null);
+});
+
+test("parseSataFromCanonicalOptions returns null for null stem", () => {
+  const payload = parseSataFromCanonicalOptions(null, CANONICAL_SATA_OPTIONS, null);
+  assert.equal(payload, null);
+});
+
+test("parseSataFromCanonicalOptions returns null for empty options", () => {
+  const payload = parseSataFromCanonicalOptions(SATA_STEM, [], null);
+  assert.equal(payload, null);
+});
+
+// ─── SATA: shuffleSataQuestionOrder ──────────────────────────────────────────
+
+test("shuffleSataQuestionOrder preserves correctLetters after shuffle", () => {
+  const payload = parseSataFromDbFields({
+    examItemKind: FlashcardItemKind.SATA,
+    questionStem: SATA_STEM,
+    answerOptions: SATA_OPTIONS_JSON,
+    correctAnswer: "A,C,D,E",
+    rationaleCorrect: "Treats hypoxia and fluid overload.",
+    rationaleIncorrect: SATA_RATIONALE_INCORRECT_JSON,
+  });
+  assert.ok(payload);
+  const shuffled = shuffleSataQuestionOrder(payload!, "test-seed-42");
+
+  // All original option texts are still present
+  const shuffledTexts = new Set(shuffled.answerOptions.map((o) => o.text));
+  for (const opt of SATA_OPTIONS_JSON) {
+    assert.ok(shuffledTexts.has(opt.text), `missing option text: ${opt.text}`);
+  }
+
+  // correctLetters are still the same set (remapped to new positions)
+  assert.equal(shuffled.correctLetters.length, 4);
+
+  // Each correctLetter maps to an option that was originally correct
+  const originalCorrect = new Set(["A", "C", "D", "E"]);
+  const originalTexts = new Map(SATA_OPTIONS_JSON.map((o) => [o.letter, o.text]));
+  for (const letter of shuffled.correctLetters) {
+    const opt = shuffled.answerOptions.find((o) => o.letter === letter);
+    assert.ok(opt, `correct letter ${letter} not found in shuffled options`);
+    // Find the original letter for this text and confirm it was correct
+    const origLetter = SATA_OPTIONS_JSON.find((o) => o.text === opt!.text)?.letter;
+    assert.ok(originalCorrect.has(origLetter!), `option text "${opt!.text}" was not originally correct`);
+  }
+});
+
+test("shuffleSataQuestionOrder produces different order with different seed", () => {
+  const payload = parseSataFromDbFields({
+    examItemKind: FlashcardItemKind.SATA,
+    questionStem: SATA_STEM,
+    answerOptions: SATA_OPTIONS_JSON,
+    correctAnswer: "A,C,D,E",
+    rationaleCorrect: "Rationale.",
+    rationaleIncorrect: SATA_RATIONALE_INCORRECT_JSON,
+  });
+  assert.ok(payload);
+  const s1 = shuffleSataQuestionOrder(payload!, "seed-one");
+  const s2 = shuffleSataQuestionOrder(payload!, "seed-two");
+  const order1 = s1.answerOptions.map((o) => o.text).join("|");
+  const order2 = s2.answerOptions.map((o) => o.text).join("|");
+  assert.notEqual(order1, order2, "different seeds should produce different orderings");
 });

@@ -142,6 +142,7 @@ model User {
   verifiedStudyDeckReports      VerifiedStudyDeckReport[]    @relation("VerifiedStudyDeckReporter")
   clinicalNursingScenariosCreated ClinicalNursingScenario[]  @relation("ClinicalNursingScenarioAuthor")
   clinicalScenarioSimulationRuns ClinicalScenarioSimulationRun[]
+  longitudinalCaseSessions      LongitudinalCaseSession[]
   mediaAssetsUploaded           MediaAsset[]                @relation("MediaAssetUploadedBy")
   pathway_lessons               PathwayLesson[]
   practiceTests                 PracticeTest[]
@@ -1673,6 +1674,22 @@ model FlashcardOption {
   @@map("flashcard_options")
 }
 
+/// Option-level telemetry for distractor analytics, misconception heatmaps, and remediation targeting.
+/// No FK to FlashcardOption intentionally — append-friendly at ingestion scale.
+model FlashcardOptionResponse {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  flashcardId String   @map("flashcard_id")
+  optionKey   String   @map("option_key") @db.VarChar(8)
+  wasCorrect  Boolean  @map("was_correct")
+  sessionId   String?  @map("session_id")
+  respondedAt DateTime @default(now()) @map("responded_at")
+
+  @@index([flashcardId, optionKey])
+  @@index([userId, flashcardId])
+  @@map("flashcard_option_responses")
+}
+
 model FlashcardProgress {
   id             String    @id @default(cuid())
   userId         String    @map("user_id")
@@ -1916,6 +1933,44 @@ model ClinicalScenarioSimulationRun {
   @@index([userId, createdAt(sort: Desc)])
   @@index([scenarioId])
   @@map("clinical_scenario_simulation_runs")
+}
+
+/// * Tracks a learner's progress through one multi-stage longitudinal clinical case.
+model LongitudinalCaseSession {
+  id                String                        @id @default(cuid())
+  userId            String                        @map("user_id")
+  scenarioId        String                        @map("scenario_id") @db.VarChar(64)
+  pathwayId         String                        @map("pathway_id") @db.VarChar(64)
+  /// CNPLE domain slugs covered by this case (from cnple-domain-tags.ts)
+  cnpleDomains      String[]                      @map("cnple_domains") @db.VarChar(80)
+  status            LongitudinalCaseSessionStatus @default(IN_PROGRESS)
+  currentStageIndex Int                           @default(0) @map("current_stage_index")
+  /// [{stageIndex, chosenOptionId, isCorrect, cnpleDomainSlug, dwellMs}]
+  decisionsJson     Json                          @default("[]") @map("decisions_json")
+  /// {totalStages, correctCount, score0to100, weakDomains: string[]}
+  scoreJson         Json?                         @map("score_json")
+  mode              LongitudinalCaseSessionMode   @default(PRACTICE)
+  completedAt       DateTime?                     @map("completed_at")
+  createdAt         DateTime                      @default(now()) @map("created_at")
+  updatedAt         DateTime                      @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([userId, pathwayId])
+  @@index([scenarioId])
+  @@map("longitudinal_case_sessions")
+}
+
+enum LongitudinalCaseSessionStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+enum LongitudinalCaseSessionMode {
+  PRACTICE
+  SIMULATION
 }
 
 model Exam {

@@ -104,6 +104,19 @@ export interface ImageBasedQuestion {
   tier: string;
   difficulty: Difficulty;
   tags?: string[];
+  // Optional ECG-specific rhythm workspace fields
+  imageUrl?: string;
+  rhythmRate?: string;
+  rhythmRegularity?: string;
+  pWaves?: string;
+  prInterval?: string;
+  qrsWidth?: string;
+  clinicalSignificance?: string;
+  nursingAction?: string;
+  // Optional exhibit panel (labs, vitals, meds context)
+  vitals?: Record<string, string>;
+  labs?: Record<string, string>;
+  medications?: string[];
 }
 
 export interface DragDropQuestion {
