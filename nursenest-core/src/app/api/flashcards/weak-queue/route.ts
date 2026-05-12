@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     }
 
     const pathwayId = resolved.pathwayId;
-    const { weakTopics, topicCodes, cards } = await loadWeakAreaFlashcardsForUser(
+    const { weakTopics, topicCodes, cards, boostedTopics } = await loadWeakAreaFlashcardsForUser(
       gate.userId,
       gate.entitlement,
       pathwayId,
@@ -60,6 +60,7 @@ export async function GET(req: NextRequest) {
       weakTopics,
       topicCodes,
       cards,
+      boostedTopics,
       confidenceBreakdown: {
         high: cards.filter((c) => c.confidence === "high").length,
         medium: cards.filter((c) => c.confidence === "medium").length,

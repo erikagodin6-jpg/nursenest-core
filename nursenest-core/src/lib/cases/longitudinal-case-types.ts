@@ -9,6 +9,45 @@
  */
 import type { CnpleDomainSlug } from "@/lib/np/cnple-domain-tags";
 
+// ── Clinical governance metadata ───────────────────────────────────────────────
+
+/**
+ * Review status lifecycle for authored cases.
+ * - draft: authored, not reviewed
+ * - internal_review: under NurseNest clinical writer review
+ * - clinician_reviewed: reviewed by a qualified clinician
+ * - published: live for learners
+ * - flagged: flagged for revision (accuracy concern raised)
+ * - archived: removed from active pools
+ */
+export type CaseReviewStatus =
+  | "draft"
+  | "internal_review"
+  | "clinician_reviewed"
+  | "published"
+  | "flagged"
+  | "archived";
+
+/** Governance record attached to authored cases — supports clinical credibility and freshness tracking. */
+export type CaseGovernanceRecord = {
+  /** Current review status. */
+  reviewStatus: CaseReviewStatus;
+  /** Role/credential of reviewer (e.g. "NP, Ontario"). Never include PII. */
+  reviewedBy?: string;
+  /** ISO-8601 date of last clinical review. */
+  reviewedAt?: string;
+  /** ISO-8601 date the case was last substantively updated. */
+  contentUpdatedAt?: string;
+  /**
+   * Guideline sources supporting clinical decisions in this case.
+   * Format: "Guideline name (year)" — no URLs (link rot risk).
+   * Example: "Diabetes Canada Clinical Practice Guidelines (2024)"
+   */
+  guidelineSources?: string[];
+  /** Authoring notes for internal teams — never surfaced to learners. */
+  authoringNotes?: string;
+};
+
 // ── Case anatomy ───────────────────────────────────────────────────────────────
 
 /** Demographic and contextual info shown persistently in the patient summary panel. */
@@ -43,6 +82,8 @@ export type PatientCase = {
   estimatedMinutes: number;
   isPremium: boolean;
   steps: CaseStep[];
+  /** Clinical governance — review status, reviewer credential, freshness, and guideline sources. */
+  governance?: CaseGovernanceRecord;
 };
 
 /** One step in the longitudinal case. Corresponds to a ClinicalNursingScenarioStage row. */

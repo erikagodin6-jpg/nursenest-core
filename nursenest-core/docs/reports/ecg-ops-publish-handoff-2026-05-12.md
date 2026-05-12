@@ -42,7 +42,7 @@ Expected output when all vars are set:
 ✅ All required ECG env vars are configured.
 ```
 
-### Vars to set in DigitalOcean App Platform / Railway environment
+### Vars to set in DigitalOcean App Platform environment
 
 | Var | Value | Notes |
 |---|---|---|
@@ -258,7 +258,7 @@ ENABLE_ECG_MODULE=false → isEcgModuleEnabled() = false
 
 | Blocker | Owner | Resolution |
 |---|---|---|
-| `ENABLE_ECG_MODULE` not set in staging | DevOps | Set in DigitalOcean/Railway env panel |
+| `ENABLE_ECG_MODULE` not set in staging | DevOps | Set in **DigitalOcean App Platform** environment variables panel |
 | `NEXT_PUBLIC_ENABLE_ECG_MODULE` not set | DevOps | Same |
 | 4 Stripe price IDs missing | Product + DevOps | Create products in Stripe dashboard, copy price IDs |
 | DB readiness unknown (need ≥300 clinician-reviewed questions) | Content | Admin panel `/admin/modules/ecg` → generate + submit for clinician review |

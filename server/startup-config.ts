@@ -15,7 +15,7 @@ export function validateCriticalStartupConfig(): StartupValidationResult {
 
   if (!process.env.ADMIN_JWT_SECRET?.trim()) {
     errors.push(
-      "Required for production boot: ADMIN_JWT_SECRET — set a non-empty secret in your host env (e.g. Railway/Render dashboard).",
+      "Required for production boot: ADMIN_JWT_SECRET — set a non-empty secret in the DigitalOcean App Platform environment variables panel.",
     );
   }
 

@@ -99,6 +99,27 @@ services:
     value: EV[1:DGi1tt1DaIJvQeSeMmOV1RinySVmwgj1:1ZsaCJe//lchsNnZrE1Wpw==]
   - key: NN_ENV_VALIDATION_MODE
     scope: RUN_TIME
+  # ── Stripe Checkout — NP subscription prices ──────────────────────────────
+  # Required secrets: set actual price_* values in the DigitalOcean App Platform
+  # console under App Settings → Environment Variables. Checkout returns HTTP 400
+  # if any of these are absent. Values are managed via DO console, not this spec.
+  - key: STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  # ── Stripe Checkout — Advanced ECG add-on price ───────────────────────────
+  # Single price ID covers all billing durations (monthly / 3-month / 6-month / yearly).
+  - key: STRIPE_PRICE_ADVANCED_ECG
+    scope: RUN_TIME
+    type: SECRET
   github:
     branch: main
     deploy_on_push: true

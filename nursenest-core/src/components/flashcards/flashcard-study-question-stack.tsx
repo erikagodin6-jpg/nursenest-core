@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
@@ -80,6 +80,9 @@ export function FlashcardStudyQuestionStack({
   rail,
   mainFooter,
   revealLinksSection,
+  onAnswerSubmitted,
+  onSataReveal,
+  onRationaleOpened,
 }: {
   sessionModeLabel: string;
   topicLine?: string | null;
@@ -98,8 +101,12 @@ export function FlashcardStudyQuestionStack({
   mainFooter?: ReactNode;
   /** Links shown inline in the reveal zone (lesson, practice questions). Use lg:hidden when mirroring to rail on desktop. */
   revealLinksSection?: ReactNode;
-  /** Fired when the learner commits an MCQ or SATA answer (before or simultaneously with reveal). */
+  /** Fired when the learner commits an MCQ answer (before reveal). */
   onAnswerSubmitted?: (selectedLetter: string, isCorrect: boolean) => void;
+  /** Fired when the learner commits a SATA answer by pressing Reveal. */
+  onSataReveal?: (selectedLetters: string[], correctLetters: string[]) => void;
+  /** Fired once when the rationale panel first mounts for this card. */
+  onRationaleOpened?: () => void;
 }) {
   const isSata = isSataPayload(examMicroQuestion);
   const exam = isSata ? null : (examMicroQuestion as ExamMicroQuestionPayload | null);
@@ -107,10 +114,13 @@ export function FlashcardStudyQuestionStack({
   const tutorMcq = Boolean(exam && (mcqInteractionMode ?? "tutor_select") === "tutor_select");
 
   const [pickedLetter, setPickedLetter] = useState<string | null>(null);
+  // Tracks current SATA selections so the reveal button can report them before reveal fires.
+  const sataSelectionsRef = useRef<string[]>([]);
 
   useEffect(() => {
     setPickedLetter(null);
-  }, [exam?.questionStem, prompt]);
+    sataSelectionsRef.current = [];
+  }, [exam?.questionStem, sata?.questionStem, prompt]);
 
   useEffect(() => {
     if (!pickedLetter || revealed || !tutorMcq || !exam) return;
@@ -218,12 +228,16 @@ export function FlashcardStudyQuestionStack({
                 revealed={revealed}
                 answerChoicesHeading={labels?.answerChoicesHeading ?? "Select all that apply"}
                 revealHint={labels?.revealHint ?? "Choose all correct options, then reveal."}
+                onSelectionsChange={(letters) => { sataSelectionsRef.current = letters; }}
               />
               {!revealed && typeof onReveal === "function" ? (
                 <div className="mt-4 flex justify-center">
                   <button
                     type="button"
-                    onClick={onReveal}
+                    onClick={() => {
+                      onSataReveal?.(sataSelectionsRef.current, sata.correctLetters);
+                      onReveal();
+                    }}
                     data-testid="sata-reveal-btn"
                     className="nn-flashcard-reveal-cta nn-flashcard-reveal-cta--premium inline-flex min-h-12 min-w-[min(100%,280px)] items-center justify-center rounded-2xl px-8 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-[0.96] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_50%,transparent)]"
                   >
@@ -275,6 +289,7 @@ export function FlashcardStudyQuestionStack({
                     whyIncorrectHeading: labels?.whyIncorrectHeading,
                     takeawayHeading: labels?.takeawayHeading,
                   }}
+                  onRationaleOpened={onRationaleOpened}
                 />
               </div>
               {revealLinksSection ? (

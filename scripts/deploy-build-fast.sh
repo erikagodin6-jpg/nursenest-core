@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Legacy fast path (custom esbuild flags). For production deploys on Render/Railway,
+# Legacy fast path (custom esbuild flags). For production deploys on DigitalOcean App Platform,
 # use scripts/production-build.sh so behavior matches package.json "build" + verify.
 set -e
 

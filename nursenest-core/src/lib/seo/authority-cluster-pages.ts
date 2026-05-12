@@ -352,7 +352,7 @@ function buildRtPage(
     title:
       slug === "overview"
         ? `Respiratory Therapy Exam Prep (2026) — NBRC TMC & RRT Practice | NurseNest`
-        : `${topic} (2026) — Respiratory Therapy Exam Practice | NurseNest`,
+        : `${topic} | RT Exam Prep 2026 — NurseNest`,
     description:
       slug === "overview"
         ? `Prepare for the NBRC TMC and RRT exams with ABG interpretation, mechanical ventilation practice, oxygen therapy drills, and clinical reasoning questions. 2026-aligned RT exam prep.`

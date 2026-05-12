@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Includes optional DB pre-migration steps. For a standard image build (Render/Railway),
+# Includes optional DB pre-migration steps. For a standard image build on DigitalOcean App Platform,
 # prefer scripts/production-build.sh unless you explicitly need this migration hook.
 set -e
 

@@ -15,6 +15,7 @@ import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/fla
 import { flashcardLessonCrossLinkForDeckStudyRow } from "@/lib/flashcards/flashcard-lesson-cross-link";
 import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-serialize";
 import { applyRemediationBoost, loadRemediationBoostMap } from "@/lib/flashcards/flashcard-remediation-bridge";
+import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 
 const MAX_WEAK_TOPIC_TERMS = 8;
 const FETCH_CAP = 96;
@@ -33,6 +34,8 @@ export type WeakFlashcardRow = {
   /** Catalog lesson review link when resolvable from `lessonId` / `sourceKey` — no duplicated bodies. */
   lessonStudyHref?: string;
   lessonStudyTitle?: string;
+  /** True when the remediation engine elevated this card above shuffle order. */
+  remediationBoosted: boolean;
 };
 
 const PRE_NURSING_PATHWAY_SENTINEL = "pre-nursing" as const;
@@ -90,14 +93,16 @@ export async function resolveSubscriberWeakQueuePathwayId(
  *   (intersection cap — no broader tier expansion beyond the pathway ladder). Callers must resolve via
  *   {@link resolveSubscriberWeakQueuePathwayId} first — do not pass null to widen the pool.
  */
+export type BoostedTopic = { topic: string; priorityScore: number };
+
 export async function loadWeakAreaFlashcardsForUser(
   userId: string,
   entitlement: AccessScope,
   pathwayId: string | null = null,
-): Promise<{ weakTopics: string[]; topicCodes: string[]; cards: WeakFlashcardRow[] }> {
+): Promise<{ weakTopics: string[]; topicCodes: string[]; cards: WeakFlashcardRow[]; boostedTopics: BoostedTopic[] }> {
   const scopedPathwayId = pathwayId?.trim() ?? "";
   if (!scopedPathwayId) {
-    return { weakTopics: [], topicCodes: [], cards: [] };
+    return { weakTopics: [], topicCodes: [], cards: [], boostedTopics: [] };
   }
 
   const perf = await loadUnifiedTopicPerformance(userId, entitlement, MAX_WEAK_TOPIC_TERMS);
@@ -109,7 +114,7 @@ export async function loadWeakAreaFlashcardsForUser(
     MAX_WEAK_TOPIC_TERMS,
   );
   if (topics.length === 0 || topicCodes.length === 0) {
-    return { weakTopics: [], topicCodes: [], cards: [] };
+    return { weakTopics: [], topicCodes: [], cards: [], boostedTopics: [] };
   }
   const confidenceByCode = new Map(targets.map((t) => [t.topicCode, t.confidence]));
   const or: Prisma.FlashcardWhereInput[] = topicCodes.map((code) => ({ category: { topicCode: code } }));
@@ -175,11 +180,17 @@ export async function loadWeakAreaFlashcardsForUser(
       ...(lessonLink
         ? { lessonStudyHref: lessonLink.lessonStudyHref, lessonStudyTitle: lessonLink.lessonStudyTitle }
         : {}),
+      remediationBoosted: boostMap.size > 0 && (boostMap.get(normalizeTopicLabel(c.category.name)) ?? 0) > 0,
     });
     if (cards.length >= RETURN_CAP) break;
   }
 
   const reorderedCards = applyRemediationBoost(cards, boostMap);
 
-  return { weakTopics: topics, topicCodes, cards: reorderedCards };
+  const boostedTopics: BoostedTopic[] = [...boostMap.entries()].map(([topic, priorityScore]) => ({
+    topic,
+    priorityScore,
+  }));
+
+  return { weakTopics: topics, topicCodes, cards: reorderedCards, boostedTopics };
 }

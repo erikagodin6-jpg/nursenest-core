@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
@@ -17,13 +18,22 @@ export function FlashcardStudyRevealPanels({
   explanation,
   pearl,
   labels,
+  onRationaleOpened,
 }: {
   exam?: ExamMicroQuestionPayload | null;
   answer: string;
   explanation?: string;
   pearl?: string | null;
   labels?: StackLabels;
+  /** Fired exactly once when this panel first mounts (card revealed). */
+  onRationaleOpened?: () => void;
 }) {
+  // Fire exactly once when the reveal panel mounts — the component only exists
+  // when revealed=true, so this fires on first reveal and never again for this card.
+  useEffect(() => {
+    onRationaleOpened?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const correctOptionText = exam
     ? stripRedundantMcqLetterPrefix(
         exam.answerOptions.find((o) => o.letter === exam.correctLetter)?.text ?? "",

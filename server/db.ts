@@ -25,16 +25,21 @@ function currentProdUrl(): string | undefined {
 
 /**
  * Use the production DB pool for all generic app access. Wider than NODE_ENV alone so
- * Railway/Render do not hit getDevPool() → DATABASE_URL when NODE_ENV is unset.
+ * managed platforms that do not reliably set NODE_ENV=production do not fall through to
+ * getDevPool() → DATABASE_URL.
+ *
+ * Production platform: DigitalOcean App Platform (DO sets APP_ID, APP_DOMAIN, and
+ * DIGITALOCEAN_APP_ID at runtime; DATABASE_URL contains ondigitalocean.com).
  */
 export function isProductionLikeRuntime(): boolean {
   if (NODE_ENV === "production") return true;
+  // DigitalOcean App Platform runtime signal
+  if (Boolean(process.env.APP_ID?.trim())) return true;
+  if (Boolean(process.env.DIGITALOCEAN_APP_ID?.trim())) return true;
+  // Heroku/Render legacy signals retained for any auxiliary services
   if (Boolean(process.env.DYNO?.trim())) return true;
   if (process.env.REPLIT_DEPLOYMENT === "1") return true;
   if (String(process.env.RENDER || "").toLowerCase() === "true") return true;
-  if (String(process.env.RAILWAY_ENVIRONMENT || "").toLowerCase() === "production") return true;
-  // Any deployed Railway replica (NODE_ENV is often unset on default templates).
-  if (Boolean(process.env.RAILWAY_SERVICE_ID?.trim())) return true;
   return false;
 }
 

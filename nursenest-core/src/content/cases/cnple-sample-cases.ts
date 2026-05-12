@@ -12,6 +12,18 @@ export const CASE_HYPERTENSION_FOLLOWUP: PatientCase = {
   id: "cnple-sample-htn-001",
   title: "Mrs. Nakamura — Hypertension and Cardiovascular Risk",
   tagline: "Chronic Disease · Prescribing Safety",
+  governance: {
+    reviewStatus: "published",
+    reviewedBy: "NurseNest Clinical Team",
+    reviewedAt: "2026-04-01",
+    contentUpdatedAt: "2026-04-01",
+    guidelineSources: [
+      "Hypertension Canada Guidelines (2020)",
+      "Diabetes Canada Clinical Practice Guidelines (2023)",
+      "KDIGO CKD Guidelines (2022)",
+      "CPS/Canadian Cardiovascular Society DVT/PE guidance",
+    ],
+  },
   patient: {
     age: 58,
     sex: "Female",
@@ -298,6 +310,16 @@ export const CASE_DIABETES_METABOLIC: PatientCase = {
   stepCount: 3,
   estimatedMinutes: 16,
   isPremium: true,
+  governance: {
+    reviewStatus: "internal_review",
+    reviewedBy: "NurseNest Clinical Team",
+    contentUpdatedAt: "2026-05-12",
+    guidelineSources: [
+      "Diabetes Canada Clinical Practice Guidelines (2023)",
+      "KDIGO CKD Guidelines (2022)",
+      "Canadian Obesity Clinical Practice Guidelines (2020)",
+    ],
+  },
   steps: [
     {
       index: 0,
@@ -512,6 +534,15 @@ export const CASE_ANTICOAGULATION_AF: PatientCase = {
   stepCount: 3,
   estimatedMinutes: 15,
   isPremium: true,
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-12",
+    guidelineSources: [
+      "Canadian Cardiovascular Society AF Guidelines (2020)",
+      "CCS Heart Failure Guidelines (2021)",
+      "KDIGO CKD Guidelines (2022)",
+    ],
+  },
   steps: [
     {
       index: 0,
@@ -548,20 +579,20 @@ export const CASE_ANTICOAGULATION_AF: PatientCase = {
       followUpInterval: null,
       cnpleDomain: "pharmacotherapeutics",
       question: {
-        stem: "Mr. Mensah has paroxysmal AF with CHA₂DS₂-VASc score 5 (age 67, male, hypertension, diabetes, prior TIA). CrCl is 46 mL/min. He has no contraindications to anticoagulation. What is the most appropriate anticoagulation decision?",
+        stem: "Mr. Mensah has paroxysmal AF with CHA₂DS₂-VASc score 5 (age 67, male, hypertension, diabetes, prior TIA). CrCl is 46 mL/min (Cockcroft-Gault). He has no contraindications to anticoagulation. What is the most appropriate anticoagulation decision?",
         family: "safe-prescribing-medication-management",
         options: [
           { id: "A", label: "Start warfarin (target INR 2.0–3.0) — preferred over DOACs in CKD." },
-          { id: "B", label: "Start apixaban 5 mg BID — standard dose, CrCl is above the dose-reduction threshold." },
+          { id: "B", label: "Start apixaban 5 mg BID — standard dose, CrCl is above the dose-reduction threshold and dose-reduction criteria are not met." },
           { id: "C", label: "Start apixaban 2.5 mg BID — reduce dose given CrCl 46 mL/min and age 67." },
           { id: "D", label: "Defer anticoagulation — he is currently in sinus rhythm so the risk is low." },
         ],
-        correctOptionId: "C",
+        correctOptionId: "B",
         rationale:
-          "Apixaban is preferred over warfarin in most AF patients including CKD given superior efficacy-safety profile. The dose of apixaban requires reduction to 2.5 mg BID when ≥2 of 3 criteria are met: age ≥80, weight ≤60 kg, or serum creatinine ≥133 µmol/L. Mr. Mensah is age 67 (< 80) and weight is not below 60 kg, but his creatinine is 112 — below the ≥133 threshold. By the standard criteria he does NOT meet apixaban dose reduction criteria. However, his CrCl of 46 mL/min (Cockcroft-Gault) raises a prescriber concern. The Canadian Cardiovascular Society AF guidelines use the Cockcroft-Gault-derived CrCl for DOAC dosing — apixaban standard dose (5 mg BID) is appropriate down to CrCl ≥25 mL/min in standard dose unless the dose-reduction criteria are met. Standard 5 mg BID is correct here. **Correction: Option B is correct.** Re-assessing: CrCl 46, age 67, creatinine 112 — none of the three apixaban dose-reduction criteria are met. Standard dose 5 mg BID is appropriate.",
+          "Apixaban is preferred over warfarin in most AF patients including CKD given its superior efficacy-safety profile. Apixaban dose reduction to 2.5 mg BID requires meeting ≥2 of 3 criteria: age ≥80, weight ≤60 kg, or serum creatinine ≥133 µmol/L. Mr. Mensah is age 67 (not ≥80), weight is not ≤60 kg, and his creatinine is 112 µmol/L (below the ≥133 threshold) — he meets none of the three criteria. Standard dose 5 mg BID is correct. Although CrCl 46 mL/min warrants awareness, the Canadian Cardiovascular Society guidelines base apixaban dose selection on the three-criteria rule, not on CrCl alone. Standard dose 5 mg BID is safe and provides superior stroke protection vs. under-dosing.",
         whyWrongByOptionId: {
-          A: "Warfarin is second-line in AF anticoagulation — DOACs are preferred unless there is a specific contraindication (mechanical valve, severe mitral stenosis, CrCl <15). CKD G3a does not mandate warfarin.",
-          C: "Dose reduction to 2.5 mg BID requires meeting ≥2 of 3 criteria: age ≥80, weight ≤60 kg, creatinine ≥133 µmol/L. Mr. Mensah meets none. Dose reduction is not indicated and provides inferior stroke protection.",
+          A: "Warfarin is second-line in AF anticoagulation — DOACs are preferred unless there is a specific contraindication (mechanical valve, severe mitral stenosis, CrCl <15). CKD G3a does not mandate warfarin over DOACs.",
+          C: "Dose reduction to 2.5 mg BID requires meeting ≥2 of 3 criteria: age ≥80, weight ≤60 kg, creatinine ≥133 µmol/L. Mr. Mensah meets none of these. Under-dosing apixaban provides inferior stroke protection without benefit.",
           D: "CHA₂DS₂-VASc ≥2 mandates anticoagulation in AF regardless of rhythm at the time of assessment — paroxysmal AF carries the same stroke risk as persistent AF. Deferring anticoagulation in a patient with prior TIA and CHA₂DS₂-VASc 5 is a serious error.",
         },
         clinicalJudgmentFocus: "DOAC selection and dosing in AF with moderate CKD — applying CHA₂DS₂-VASc and apixaban dose-reduction criteria.",
@@ -710,6 +741,14 @@ export const CASE_MENTAL_HEALTH_SSRI: PatientCase = {
   stepCount: 3,
   estimatedMinutes: 15,
   isPremium: true,
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-12",
+    guidelineSources: [
+      "CANMAT Depression Guidelines (2023)",
+      "Health Canada Drug Product Database — tramadol/SSRI interaction",
+    ],
+  },
   steps: [
     {
       index: 0,
@@ -866,6 +905,13 @@ export const CASE_PAEDIATRIC_FEVER: PatientCase = {
   stepCount: 3,
   estimatedMinutes: 12,
   isPremium: false,
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-12",
+    guidelineSources: [
+      "Canadian Paediatric Society — Acute Otitis Media (2016, updated 2023)",
+    ],
+  },
   steps: [
     {
       index: 0,
@@ -1021,6 +1067,14 @@ export const CASE_PERIMENOPAUSE_MHT: PatientCase = {
   stepCount: 3,
   estimatedMinutes: 14,
   isPremium: true,
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-12",
+    guidelineSources: [
+      "SOGC Menopause and Osteoporosis Guidelines (2021)",
+      "Canadian Menopause Society — MHT Position Statement (2023)",
+    ],
+  },
   steps: [
     {
       index: 0,
@@ -1202,6 +1256,15 @@ export const CASE_GERIATRIC_POLYPHARMACY: PatientCase = {
   stepCount: 3,
   estimatedMinutes: 20,
   isPremium: true,
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-12",
+    guidelineSources: [
+      "American Geriatrics Society Beers Criteria (2023 update)",
+      "STOPP/START Criteria v3 (2023)",
+      "CMA Driver Fitness Guidelines (2017)",
+    ],
+  },
   steps: [
     {
       index: 0,
@@ -1384,6 +1447,15 @@ export const CASE_CHF_COPD_OVERLAP: PatientCase = {
   stepCount: 3,
   estimatedMinutes: 18,
   isPremium: true,
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-12",
+    guidelineSources: [
+      "CCS Heart Failure Guidelines (2021)",
+      "GOLD COPD Management Strategy (2024)",
+      "CCS AF Guidelines (2020)",
+    ],
+  },
   steps: [
     {
       index: 0,

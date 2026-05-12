@@ -118,6 +118,24 @@ function formatTopicLine(card: ActiveStudyCard): string | null {
   return null;
 }
 
+function buildCardMeta(card: ActiveStudyCard): CardEventMeta {
+  const exam = card.examMicroQuestion;
+  const sata = isSataPayload(exam);
+  const questionType = sata ? "SATA" : exam ? "MCQ" : "plain";
+  const flags = deriveCardFlags({
+    topic: card.topic,
+    questionStem: exam?.questionStem,
+    sourceKey: card.sourceKey,
+  });
+  return {
+    itemKind: exam?.itemKind ?? null,
+    questionType,
+    topic: card.topic ?? null,
+    domain: card.subtopic ?? null,
+    ...flags,
+  };
+}
+
 /* ================= COMPONENT ================= */
 
 export function ActiveStudySession({
@@ -378,6 +396,23 @@ export function ActiveStudySession({
               : undefined,
             isCorrect,
             meta,
+          });
+        }}
+        onRationaleOpened={() => {
+          if (!current?.id) return;
+          telemetry.onRationaleOpened(current.id, buildCardMeta(current));
+        }}
+        onSataReveal={(selectedLetters, correctLetters) => {
+          if (!current?.id) return;
+          const allCorrectSelected =
+            correctLetters.length > 0 &&
+            correctLetters.every((l) => selectedLetters.includes(l)) &&
+            selectedLetters.every((l) => correctLetters.includes(l));
+          telemetry.onAnswerSubmitted(current.id, {
+            selectedLetters,
+            correctLetters,
+            isCorrect: allCorrectSelected,
+            meta: buildCardMeta(current),
           });
         }}
         labels={{

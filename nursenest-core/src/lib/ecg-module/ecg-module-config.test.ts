@@ -11,18 +11,28 @@ import {
   normalizeEcgMode,
 } from "@/lib/ecg-module/ecg-module-config";
 
-test("ECG module feature flag is explicit", () => {
+test("ECG module feature flag defaults to enabled; explicit false/0 disables it", () => {
+  // Explicit enable
   assert.equal(isEcgModuleEnabled({ ENABLE_ECG_MODULE: "true" }), true);
   assert.equal(isEcgModuleEnabled({ ENABLE_ECG_MODULE: "1" }), true);
+  // Explicit disable
   assert.equal(isEcgModuleEnabled({ ENABLE_ECG_MODULE: "false" }), false);
-  assert.equal(isEcgModuleEnabled({ ENABLE_ECG_MODULE: undefined }), false);
+  assert.equal(isEcgModuleEnabled({ ENABLE_ECG_MODULE: "0" }), false);
+  // Default ON when env var absent (matches isAdvancedEcgModuleEnabled pattern)
+  assert.equal(isEcgModuleEnabled({ ENABLE_ECG_MODULE: undefined }), true);
+  assert.equal(isEcgModuleEnabled({}), true);
 });
 
-test("ECG marketing inventory flag is separate public env", () => {
+test("ECG marketing inventory flag defaults to enabled; explicit false/0 disables it", () => {
+  // Explicit enable
   assert.equal(isEcgModuleMarketingInventoryEnabled({ NEXT_PUBLIC_ENABLE_ECG_MODULE: "true" }), true);
   assert.equal(isEcgModuleMarketingInventoryEnabled({ NEXT_PUBLIC_ENABLE_ECG_MODULE: "1" }), true);
+  // Explicit disable
   assert.equal(isEcgModuleMarketingInventoryEnabled({ NEXT_PUBLIC_ENABLE_ECG_MODULE: "false" }), false);
-  assert.equal(isEcgModuleMarketingInventoryEnabled({}), false);
+  assert.equal(isEcgModuleMarketingInventoryEnabled({ NEXT_PUBLIC_ENABLE_ECG_MODULE: "0" }), false);
+  // Default ON when env var absent (matches isAdvancedEcgModuleEnabled pattern)
+  assert.equal(isEcgModuleMarketingInventoryEnabled({}), true);
+  assert.equal(isEcgModuleMarketingInventoryEnabled({ NEXT_PUBLIC_ENABLE_ECG_MODULE: undefined }), true);
 });
 
 test("RPN cannot access ECG module while RN and NP can", () => {

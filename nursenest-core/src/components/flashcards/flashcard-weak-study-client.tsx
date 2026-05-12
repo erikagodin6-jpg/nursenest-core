@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
@@ -20,7 +21,10 @@ type WeakCard = {
   subtopic: string | null;
   lessonStudyHref?: string;
   lessonStudyTitle?: string;
+  remediationBoosted?: boolean;
 };
+
+type BoostedTopic = { topic: string; priorityScore: number };
 
 const SIMPLE = ["again", "hard", "good", "easy"] as const;
 
@@ -47,10 +51,15 @@ export function FlashcardWeakStudyClient({
   const [resolvedPathwayId, setResolvedPathwayId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Deduplication guard: each load() call gets a fresh token; the effect only fires
+  // telemetry for the most recent load so rapid refreshes don't double-fire.
+  const loadTokenRef = useRef(0);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
+
+    const token = ++loadTokenRef.current;
 
     try {
       const qs = new URLSearchParams();
@@ -70,6 +79,20 @@ export function FlashcardWeakStudyClient({
       setHint(data.hint ?? null);
       setPathwayRequired(Boolean(data.pathwayRequired));
       setResolvedPathwayId(data.pathwayId ?? null);
+
+      // Fire remediation_triggered once per boosted topic — only for this load token
+      // (guards against rapid refresh producing duplicates).
+      if (token === loadTokenRef.current) {
+        const boosted: BoostedTopic[] = data.boostedTopics ?? [];
+        for (const { topic, priorityScore } of boosted) {
+          void trackClientEvent("remediation_triggered", {
+            topic,
+            priority_score: priorityScore,
+            pathway_id: data.pathwayId ?? undefined,
+            trigger_source: "weak_queue_load",
+          });
+        }
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error");
       setQueue([]);

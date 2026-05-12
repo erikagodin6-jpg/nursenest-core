@@ -133,18 +133,18 @@ register("us", "np", "pmhnp-practice-test", {
 
 register("canada", "np", "cnple-practice-test", {
   pathwayId: "ca-np-cnple",
-  title: "CNPLE Practice Test | Canadian NP Prep | NurseNest",
+  title: "CNPLE Practice Test | Canadian NP Exam Prep | NurseNest",
   description:
-    "Canadian NP preparation hub: pathway-scoped content and practice as national CNPLE integration evolves. Join waitlist or study active tracks in parallel.",
-  heroTitle: "CNPLE practice test & Canadian NP prep",
+    "CNPLE-aligned practice questions, longitudinal case studies, and LOFT simulation for Canadian nurse practitioners. Built for Canada’s single-classification NP model.",
+  heroTitle: "CNPLE practice test — Canadian NP exam prep",
   heroLead:
-    "NurseNest’s Canadian NP pathway keeps copy and content scoped for CNPLE-oriented candidates. Exam branding and registration rules can change—this hub stays current as requirements finalize.",
-  supportSectionHeading: "Canadian NP / CNPLE context in one pathway",
+    "NurseNest offers the most clinically comprehensive CNPLE preparation available: LOFT-format simulation, longitudinal clinical cases, prescribing safety practice, and adaptive question banks scoped to Canadian NP competencies.",
+  supportSectionHeading: "Canada’s CNPLE preparation hub — now live",
   supportSectionBody:
-    "This URL mirrors the Canadian NP hub (`/canada/np/cnple`)—one pathway row, one entitlement scope. Use it when readers search for CNPLE by name.",
-  conversionSectionHeading: "Questions, lessons, and plans for Canadian NP",
+    "This URL mirrors the Canadian NP hub at `/canada/np/cnple` — one pathway, one entitlement scope. CNPLE prep is now purchasable as part of the NP subscription plan.",
+  conversionSectionHeading: "Questions, simulations, and cases for the CNPLE",
   conversionSectionLead:
-    "Explore pathway-scoped content from here; checkout still uses your NP tier for Canada when the pathway is active.",
+    "Subscribe to the NP plan to unlock the full CNPLE question bank, LOFT simulation experience, longitudinal clinical cases, and domain-specific remediation.",
 });
 
 export function getNpPracticeTestLandingCopy(

@@ -83,19 +83,27 @@ export const ECG_ROUTE_CONFIGS: Record<string, EcgRouteConfig> = {
 };
 
 /**
- * Client-safe rollout signal for marketing hub tiles (mirrors OSCE `NEXT_PUBLIC_ENABLE_*`).
- * Keep in sync with {@link isEcgModuleEnabled} in production (set both when shipping inventory).
+ * Client-safe rollout signal for marketing hub tiles.
+ * Defaults to TRUE when the env var is absent — consistent with isAdvancedEcgModuleEnabled.
+ * Set NEXT_PUBLIC_ENABLE_ECG_MODULE=false to disable marketing surfaces in a specific env.
  */
 export function isEcgModuleMarketingInventoryEnabled(
   env: Record<string, string | undefined> = process.env as Record<string, string | undefined>,
 ): boolean {
   const pub = env.NEXT_PUBLIC_ENABLE_ECG_MODULE?.trim().toLowerCase();
-  return pub === "true" || pub === "1";
+  if (!pub) return true;
+  return pub !== "false" && pub !== "0";
 }
 
+/**
+ * Server-side ECG module gate.
+ * Defaults to TRUE when the env var is absent — consistent with isAdvancedEcgModuleEnabled.
+ * Set ENABLE_ECG_MODULE=false to disable module access in a specific env.
+ */
 export function isEcgModuleEnabled(env: Record<string, string | undefined> = process.env as Record<string, string | undefined>): boolean {
   const raw = env.ENABLE_ECG_MODULE?.trim().toLowerCase();
-  return raw === "true" || raw === "1";
+  if (!raw) return true;
+  return raw !== "false" && raw !== "0";
 }
 
 export function normalizeEcgLevel(value: string | null | undefined): EcgLevel | null {

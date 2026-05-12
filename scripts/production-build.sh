@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Canonical production build for Render, Railway, and CI.
+# Canonical production build for DigitalOcean App Platform and CI.
 # Installs devDependencies (build toolchain), produces dist/, verifies artifacts, prunes for runtime.
 set -euo pipefail
 
