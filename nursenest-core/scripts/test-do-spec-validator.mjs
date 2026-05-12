@@ -53,6 +53,16 @@ function makeSpec(overrideEnvs = []) {
     { key: "STRIPE_WEBHOOK_SECRET", scope: "RUN_TIME", type: "SECRET" },
     { key: "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY", scope: "RUN_AND_BUILD_TIME", type: "SECRET" },
     { key: "OPENAI_API_KEY", scope: "RUN_TIME", type: "SECRET" },
+    // ECG publish flags
+    { key: "ENABLE_ECG_MODULE", scope: "RUN_TIME", value: "true" },
+    { key: "NEXT_PUBLIC_ENABLE_ECG_MODULE", scope: "RUN_AND_BUILD_TIME", value: "true" },
+    // NP subscription prices
+    { key: "STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_np_1m" },
+    { key: "STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_np_3m" },
+    { key: "STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_np_6m" },
+    { key: "STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_np_1y" },
+    // Advanced ECG add-on price
+    { key: "STRIPE_PRICE_ADVANCED_ECG", scope: "RUN_TIME", value: "price_test_advanced_ecg" },
   ];
   const envMap = new Map(defaultEnvs.map((e) => [e.key, e]));
   for (const e of overrideEnvs) {
@@ -170,6 +180,30 @@ test("missing AUTH_URL fails", () => {
   const { ok, failures } = validateSpec(makeSpecWithout("AUTH_URL"));
   assert.equal(ok, false);
   assert.ok(failures.some((f) => f.includes("AUTH_URL")));
+});
+
+test("missing ENABLE_ECG_MODULE fails", () => {
+  const { ok, failures } = validateSpec(makeSpecWithout("ENABLE_ECG_MODULE"));
+  assert.equal(ok, false);
+  assert.ok(failures.some((f) => f.includes("ENABLE_ECG_MODULE")));
+});
+
+test("missing NEXT_PUBLIC_ENABLE_ECG_MODULE fails", () => {
+  const { ok, failures } = validateSpec(makeSpecWithout("NEXT_PUBLIC_ENABLE_ECG_MODULE"));
+  assert.equal(ok, false);
+  assert.ok(failures.some((f) => f.includes("NEXT_PUBLIC_ENABLE_ECG_MODULE")));
+});
+
+test("missing STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION fails", () => {
+  const { ok, failures } = validateSpec(makeSpecWithout("STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION"));
+  assert.equal(ok, false);
+  assert.ok(failures.some((f) => f.includes("STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION")));
+});
+
+test("missing STRIPE_PRICE_ADVANCED_ECG fails", () => {
+  const { ok, failures } = validateSpec(makeSpecWithout("STRIPE_PRICE_ADVANCED_ECG"));
+  assert.equal(ok, false);
+  assert.ok(failures.some((f) => f.includes("STRIPE_PRICE_ADVANCED_ECG")));
 });
 
 // --- Structural checks ---

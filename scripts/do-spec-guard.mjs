@@ -34,6 +34,16 @@ export const REQUIRED_RUNTIME_ENV_KEYS = Object.freeze([
   "STRIPE_SECRET_KEY",
   "STRIPE_WEBHOOK_SECRET",
   "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+  // ECG module publish flags — must remain set after any spec update.
+  "ENABLE_ECG_MODULE",
+  "NEXT_PUBLIC_ENABLE_ECG_MODULE",
+  // NP subscription Stripe price IDs (canonical keys, required for NP checkout).
+  "STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION",
+  // Advanced ECG add-on price ID — separate from base subscription matrix.
+  "STRIPE_PRICE_ADVANCED_ECG",
 ]);
 
 /** At least one of these must be present (AI provider key). */

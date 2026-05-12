@@ -134,6 +134,30 @@ services:
       - key: NN_CHILD_HEALTH_TIMEOUT_MS
         scope: RUN_TIME
         value: "3000"
+      # ECG module publish flags — must be present so doctl apps update never deletes them.
+      - key: ENABLE_ECG_MODULE
+        scope: RUN_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_ECG_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      # NP subscription Stripe price IDs (canonical). Listed here so doctl apps update cannot delete them.
+      - key: STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuJ7Fbgp0Ub5P79Kd4k3Lh
+      - key: STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuJiFbgp0Ub5P7XIK12Ehi
+      - key: STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuK8Fbgp0Ub5P7skiOC7II
+      - key: STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION
+        scope: RUN_TIME
+        value: price_1TAuKUFbgp0Ub5P7iEkkFK6U
+      # Advanced ECG add-on Stripe price ID — single price covers all billing durations.
+      - key: STRIPE_PRICE_ADVANCED_ECG
+        scope: RUN_TIME
+        value: price_1TVo8vFbgp0Ub5P7aTySWrbU
     github:
       branch: main
       deploy_on_push: true

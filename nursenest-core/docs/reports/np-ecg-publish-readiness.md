@@ -229,7 +229,7 @@ Pre-existing failures (not caused by this work):
 |---|---|---|
 | ECG content volume: 37 learner-visible questions (vs. 300-question gate) | Low | Gate is aspirational; curated content is clinically reviewed and appropriate for launch. Expand via `ensureEcgMinimumContent()` + question generation when ready. |
 | ECG video/strip media: all 37 questions use deterministic live-strip renderer | Low | No video URLs required — strips render via waveform generator. No broken media. |
-| Advanced ECG Stripe price: `STRIPE_PRICE_ADVANCED_ECG` not in .env.local | Medium | Checkout flow for Advanced ECG add-on requires this in production. Must be set in Railway/deploy env before Advanced ECG purchases can complete. |
+| Advanced ECG Stripe price: `STRIPE_PRICE_ADVANCED_ECG` not in .env.local | Medium | Checkout flow for Advanced ECG add-on requires this in production. Must be set in the DigitalOcean App Platform env before Advanced ECG purchases can complete. Now present in `.do/app-nursenest-core-next.yaml` as `price_1TVo8vFbgp0Ub5P7aTySWrbU`. |
 | E2E Playwright smoke tests: not run (no browser in environment) | Low | Route structure verified via contract tests and typecheck. |
 | CNPLE simulation route (`/canada/np/cnple/simulation`): links to `/app/practice-tests` | Low | NP learners access via practice-tests hub; no 404. |
 | NP learner dashboard ECG quick-launch: gated by `pathwayAllowsEcgLinkedLearning` | None | Correct — RPN/PN learners do not see the ECG tile. |
@@ -249,8 +249,10 @@ All blocking items are resolved:
 - Sitemaps updated
 - Typecheck passes
 
-**Pre-deploy production checklist:**
-1. Set `ENABLE_ECG_MODULE=true` and `NEXT_PUBLIC_ENABLE_ECG_MODULE=true` in Railway env
-2. Set `STRIPE_PRICE_ADVANCED_ECG` in Railway env (required for Advanced ECG checkout)
-3. Run `npx tsx scripts/seed-ecg-premium-curated-pack.mts` on production DB (or verify seed already ran)
-4. Confirm `ecg-mastery-module` and `advanced-ecg-module` records exist in production DB with `status: published`
+**Pre-deploy production checklist (DigitalOcean App Platform):**
+1. Confirm `.do/app-nursenest-core-next.yaml` is the spec deployed via `doctl apps update` — it now includes `ENABLE_ECG_MODULE=true`, `NEXT_PUBLIC_ENABLE_ECG_MODULE=true`, all 4 NP Stripe price IDs, and `STRIPE_PRICE_ADVANCED_ECG=price_1TVo8vFbgp0Ub5P7aTySWrbU`.
+2. Run `npx tsx scripts/seed-ecg-premium-curated-pack.mts` against the DigitalOcean-connected production DB (or verify the seed already ran against it).
+3. Confirm `ecg-mastery-module` and `advanced-ecg-module` records exist in the production DB with `status: published`.
+4. Run `npm run do:spec:validate` from the repo root before any `doctl apps update` to verify no required keys have been dropped.
+
+> **Note:** This app is deployed on **DigitalOcean App Platform**, not Railway. The canonical deploy spec is `.do/app-nursenest-core-next.yaml`. Any reference to "Railway" in earlier versions of this report was incorrect.
