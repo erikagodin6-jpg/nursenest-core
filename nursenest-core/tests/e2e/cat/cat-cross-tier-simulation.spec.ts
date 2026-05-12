@@ -405,11 +405,14 @@ test.describe("Block 1 — RN / NCLEX-RN CAT (authenticated)", () => {
 
 test.describe("Block 2 — RPN / REx-PN CAT (public marketing)", () => {
   test("2-1: /canada/rpn/rex-pn/cat sign-in callback preserves RPN path", async ({ page }) => {
+    // Navigate via the rpn slug (canonical pathway URL); the page generates CTAs using
+    // the marketing slug "pn" (marketingHubRoleSegment maps rpn→pn for display URLs).
     const catPath = "/canada/rpn/rex-pn/cat";
+    const marketingCatPath = "/canada/pn/rex-pn/cat";
     const obs = attachPageObservers(page, { profile: "public" });
     try {
       await page.goto(catPath, { waitUntil: "domcontentloaded" });
-      const encodedPath = encodeURIComponent(catPath);
+      const encodedPath = encodeURIComponent(marketingCatPath);
       const signInForCat = page.locator(`a[href*="callbackUrl=${encodedPath}"]`).first();
       await expect(signInForCat).toBeVisible({ timeout: 30_000 });
 
@@ -434,12 +437,13 @@ test.describe("Block 2 — RPN / REx-PN CAT (public marketing)", () => {
     const obs = attachPageObservers(page, { profile: "public" });
     try {
       await page.goto("/canada/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
-      // Pathway-scoped fallback navigation must be accessible regardless of auth state
+      // The page renders fallback links using the marketing slug "pn" (rpn→pn per
+      // marketingHubRoleSegment), which the registry resolves correctly back to the pathway.
       await expect(
-        page.locator('a[href="/canada/rpn/rex-pn/lessons"]').first(),
+        page.locator('a[href="/canada/pn/rex-pn/lessons"]').first(),
       ).toBeVisible({ timeout: 30_000 });
       await expect(
-        page.locator('a[href="/canada/rpn/rex-pn/questions"]').first(),
+        page.locator('a[href="/canada/pn/rex-pn/questions"]').first(),
       ).toBeVisible({ timeout: 30_000 });
 
       await page.screenshot({
