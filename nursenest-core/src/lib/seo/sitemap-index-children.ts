@@ -18,6 +18,8 @@ export const SITEMAP_INDEX_CHILD_FILENAMES = [
   "sitemap-new-grad.xml",
   // CNPLE topical authority cluster — Canadian NP exam SEO lane
   "sitemap-cnple.xml",
+  // Fast-ranking authority clusters for CNPLE, REx-PN, and Respiratory Therapy.
+  "sitemap-authority-clusters.xml",
 ] as const;
 
 export function absoluteUrlsForSitemapIndexChildren(origin: string): string[] {

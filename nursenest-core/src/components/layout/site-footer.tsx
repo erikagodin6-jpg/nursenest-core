@@ -233,8 +233,17 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                           <FLink href={NP.caNpHub} className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
                             CNPLE
                           </FLink>
+                          <FLink href="/canada/np/cnple/questions" className="nn-footer-link nn-footer-premium-link text-xs leading-relaxed">
+                            CNPLE questions
+                          </FLink>
                         </div>
                       </div>
+                    </li>
+                    <li>
+                      <FLink href="/canada/rpn/rex-pn/questions">REx-PN questions</FLink>
+                    </li>
+                    <li>
+                      <FLink href="/allied-health/respiratory-therapy/abgs">RT ABG practice</FLink>
                     </li>
                     <li>
                       <FLink href={newGrad.hubHref}>{formatTitleCase(t("footer.newGradHub"), locale)}</FLink>

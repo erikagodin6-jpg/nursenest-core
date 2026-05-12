@@ -169,3 +169,78 @@ export function appShellBreadcrumbs(
 }
 
 export * from "@/lib/seo/pathway-breadcrumbs";
+
+// ── Authority cluster breadcrumbs ─────────────────────────────────────────────
+
+/** Home > CNPLE > [leaf] — for /canada/np/cnple/* sub-pages. */
+export function cnpleHubClusterBreadcrumbs(leafName: string, leafPath: string): BreadcrumbResolution {
+  return {
+    crumbs: [
+      HOME,
+      { name: "CNPLE", href: "/cnple" },
+      { name: leafName, href: undefined },
+    ],
+    schemaItems: [
+      { name: "Home", item: abs("/") },
+      { name: "CNPLE", item: abs("/cnple") },
+      { name: leafName, item: abs(leafPath) },
+    ],
+  };
+}
+
+/** Home > REx-PN Hub — for /canada/rpn/rex-pn. */
+export function rexPnHubBreadcrumbs(): BreadcrumbResolution {
+  return simpleMarketingBreadcrumbs("REx-PN", "/canada/rpn/rex-pn");
+}
+
+/** Home > REx-PN > [leaf] — for /canada/rpn/rex-pn/* sub-pages. */
+export function rexPnClusterBreadcrumbs(leafName: string, leafPath: string): BreadcrumbResolution {
+  const hubPath = "/canada/rpn/rex-pn";
+  return {
+    crumbs: [
+      HOME,
+      { name: "REx-PN", href: hubPath },
+      { name: leafName, href: undefined },
+    ],
+    schemaItems: [
+      { name: "Home", item: abs("/") },
+      { name: "REx-PN", item: abs(hubPath) },
+      { name: leafName, item: abs(leafPath) },
+    ],
+  };
+}
+
+/** Home > Allied Health > Respiratory Therapy — for /allied-health/respiratory-therapy. */
+export function rtHubBreadcrumbs(): BreadcrumbResolution {
+  return {
+    crumbs: [
+      HOME,
+      { name: "Allied Health", href: "/allied-health" },
+      { name: "Respiratory Therapy", href: undefined },
+    ],
+    schemaItems: [
+      { name: "Home", item: abs("/") },
+      { name: "Allied Health", item: abs("/allied-health") },
+      { name: "Respiratory Therapy", item: abs("/allied-health/respiratory-therapy") },
+    ],
+  };
+}
+
+/** Home > Allied Health > Respiratory Therapy > [leaf] — for /allied-health/respiratory-therapy/* sub-pages. */
+export function rtClusterBreadcrumbs(leafName: string, leafPath: string): BreadcrumbResolution {
+  const hubPath = "/allied-health/respiratory-therapy";
+  return {
+    crumbs: [
+      HOME,
+      { name: "Allied Health", href: "/allied-health" },
+      { name: "Respiratory Therapy", href: hubPath },
+      { name: leafName, href: undefined },
+    ],
+    schemaItems: [
+      { name: "Home", item: abs("/") },
+      { name: "Allied Health", item: abs("/allied-health") },
+      { name: "Respiratory Therapy", item: abs(hubPath) },
+      { name: leafName, item: abs(leafPath) },
+    ],
+  };
+}

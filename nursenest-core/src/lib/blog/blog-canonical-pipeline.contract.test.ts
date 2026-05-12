@@ -61,3 +61,61 @@ test("import-hidden-blog-content script only mutates when --apply and Prisma cli
   assert.match(script, /if \(!args\.apply \|\| !prisma\) continue/);
   assert.match(script, /--publish requires --apply/);
 });
+
+// ─── SEO hardening pass (2026-05-12) ────────────────────────────────────────
+
+test("blog post metadata emits twitter card with summary_large_image", () => {
+  const page = readSrc("app/(marketing)/(default)/blog/[slug]/page.tsx");
+  assert.match(page, /twitter/, "metadata must include twitter object");
+  assert.match(page, /summary_large_image/, "twitter card must be summary_large_image");
+});
+
+test("blog post metadata emits OG image via resolveBlogOgImageAbsolute", () => {
+  const page = readSrc("app/(marketing)/(default)/blog/[slug]/page.tsx");
+  assert.match(page, /resolveBlogOgImageAbsolute/, "must import resolveBlogOgImageAbsolute");
+  assert.match(page, /ogImage.*images.*url.*ogImage|images.*url.*ogImage/s, "must spread ogImage into openGraph.images");
+});
+
+test("blog index generateMetadata reads searchParams for pagination canonical", () => {
+  const page = readSrc("app/(marketing)/(default)/blog/page.tsx");
+  assert.match(page, /searchParams.*Promise.*page/, "generateMetadata must accept searchParams");
+  assert.match(
+    page,
+    /canonicalPath.*page <= 1.*\/blog.*\/blog\?page=\$\{page\}/s,
+    "canonical must be /blog for page 1 and /blog?page=N for page N",
+  );
+});
+
+test("blog index canonical uses page-aware path in alternates", () => {
+  const page = readSrc("app/(marketing)/(default)/blog/page.tsx");
+  assert.match(page, /alternates.*canonical.*absoluteUrl\(canonicalPath\)/s, "alternates.canonical must use canonicalPath variable");
+  assert.match(page, /openGraph.*url.*absoluteUrl\(canonicalPath\)/s, "openGraph.url must also use canonicalPath");
+});
+
+test("blog detail page redirects career-scoped posts to canonical path", () => {
+  const page = readSrc("app/(marketing)/(default)/blog/[slug]/page.tsx");
+  assert.match(page, /from "next\/navigation".*redirect|redirect.*from "next\/navigation"/s, "must import redirect from next/navigation");
+  assert.match(page, /expectedCanonicalBlogPath/, "must import expectedCanonicalBlogPath");
+  assert.match(
+    page,
+    /expectedCanonicalBlogPath\(slug, post\.careerSlug\)/,
+    "must call expectedCanonicalBlogPath with slug and post.careerSlug",
+  );
+  assert.match(
+    page,
+    /if \(canonicalPath !== `\/blog\/\$\{slug\}`\) redirect\(canonicalPath\)/,
+    "must redirect when canonical path differs from /blog/{slug}",
+  );
+});
+
+test("blog tag page emits page-specific canonical for paginated results", () => {
+  const page = readSrc("app/(marketing)/(default)/blog/tag/[tag]/page.tsx");
+  assert.match(page, /canonicalPath.*page <= 1.*path.*page/s, "tag page canonical must vary by page number");
+  assert.match(page, /alternates.*canonical.*absoluteUrl\(canonicalPath\)/s, "alternates.canonical must use canonical path");
+});
+
+test("blog category page emits page-specific canonical for paginated results", () => {
+  const page = readSrc("app/(marketing)/(default)/blog/category/[category]/page.tsx");
+  assert.match(page, /canonicalPath.*page <= 1.*path.*page/s, "category page canonical must vary by page number");
+  assert.match(page, /alternates.*canonical.*absoluteUrl\(canonicalPath\)/s, "alternates.canonical must use canonical path");
+});

@@ -360,3 +360,44 @@ export const CNPLE_SITEMAP_PATHS = [
   CNPLE_CLUSTER.womensHealth,
   CNPLE_CLUSTER.primaryCare,
 ] as const satisfies readonly CnpleClusterSlug[];
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Authority cluster sub-pages — nested under the canonical /canada/np/cnple hub.
+// These are static marketing pages providing depth on discrete exam subtopics.
+// ──────────────────────────────────────────────────────────────────────────────
+
+export const CNPLE_HUB_CLUSTER = {
+  /** Comprehensive CNPLE study guide and preparation timeline. */
+  studyGuide: "/canada/np/cnple/study-guide",
+  /** Case-based clinical reasoning questions for CNPLE preparation. */
+  caseBasedQuestions: "/canada/np/cnple/case-based-questions",
+  /** CNPLE provisional registration pathway, eligibility, and jurisdiction rules. */
+  provisionalRegistration: "/canada/np/cnple/provisional-registration",
+  /** LOFT exam format deep-dive: structure, strategy, and pacing. */
+  loftExam: "/canada/np/cnple/loft-exam",
+} as const;
+
+export type CnpleHubClusterPath = (typeof CNPLE_HUB_CLUSTER)[keyof typeof CNPLE_HUB_CLUSTER];
+
+/** All authority sub-page paths that must be included in the CNPLE sitemap. */
+export const CNPLE_HUB_SITEMAP_PATHS: readonly string[] = [
+  CNPLE_HUB,
+  CNPLE_QUESTIONS,
+  CNPLE_HUB_CLUSTER.studyGuide,
+  CNPLE_HUB_CLUSTER.caseBasedQuestions,
+  CNPLE_HUB_CLUSTER.provisionalRegistration,
+  CNPLE_HUB_CLUSTER.loftExam,
+];
+
+export const CNPLE_HUB_RELATED_LINKS: readonly { href: string; label: string }[] = [
+  { href: CNPLE_HUB, label: "CNPLE Hub" },
+  { href: CNPLE_QUESTIONS, label: "Practice Questions" },
+  { href: CNPLE_HUB_CLUSTER.studyGuide, label: "Study Guide" },
+  { href: CNPLE_HUB_CLUSTER.caseBasedQuestions, label: "Case-Based Questions" },
+  { href: CNPLE_HUB_CLUSTER.provisionalRegistration, label: "Provisional Registration" },
+  { href: CNPLE_HUB_CLUSTER.loftExam, label: "LOFT Exam Format" },
+  { href: CNPLE_SIMULATION, label: "CNPLE Simulation" },
+  { href: "/cnple", label: "CNPLE Overview" },
+  { href: "/cnple-practice-questions", label: "Practice Questions Hub" },
+  { href: "/cnple-study-guide", label: "Study Guide Hub" },
+];
