@@ -60,7 +60,7 @@ export const PAID_LEARNER_SEEDS: SeedSet = {
     "/app/lessons",
     "/app/questions",
     "/app/practice-tests",
-    "/app/exams",
+    "/app/practice-tests?startMode=practice_exam",
     "/app/flashcards",
     "/app/account",
     "/app/account/subscription",

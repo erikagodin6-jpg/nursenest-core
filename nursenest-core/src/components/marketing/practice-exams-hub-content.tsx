@@ -19,7 +19,7 @@ export async function PracticeExamsHubContent({ locale }: Props) {
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
   const marketingRegion = await getMarketingRegionFromCookies();
 
-  const appExams = loginWithCallback("/app/exams");
+  const appExams = loginWithCallback("/app/practice-tests?startMode=practice_exam");
   const examStripItems = getExamNavStripItems(marketingRegion);
   const practiceExamsPath = withMarketingLocale(locale, "/practice-exams");
   const questionBankHref = withMarketingLocale(locale, HUB.questionBank);

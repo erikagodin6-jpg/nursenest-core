@@ -32,7 +32,7 @@ export const RN = {
   usQuestions: HUB.questionBank,
   caQuestions: HUB.questionBank,
   /** Subscriber app route (timed practice exams, history). Public entry: {@link HUB.practiceExams}. */
-  appExams: "/app/exams",
+  appExams: "/app/practice-tests?startMode=practice_exam",
 } as const;
 
 /** LPN / RPN / PN */

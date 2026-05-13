@@ -54,7 +54,7 @@ export function LearnerDashboardActionCards({
     {
       title: "Mock exams",
       description: "Timed blocks with autosave and score history.",
-      href: "/app/exams",
+      href: "/app/practice-tests?startMode=practice_exam",
       icon: ClipboardList,
     },
   ];

@@ -67,7 +67,7 @@ export function firstExamEmailHtml(
     <p>Nice work finishing a practice block.</p>
     <p>Score: ${esc(String(score))}/${esc(String(total))} (${esc(String(pct))}%).</p>
     <p>Use misses as a study map: revisit related lessons, then try another short timed set this week.</p>
-    ${cta("/app/exams", "View exams")}
+    ${cta("/app/practice-tests?startMode=practice_exam", "View exams")}
     ${cta("/app/questions", "Practice questions")}
   `;
   const html = htmlEmailShell(subject, wrapEngagementBody(ctx, inner));
@@ -132,7 +132,7 @@ export function progressDigestEmailHtml(
     <p>Timed practice blocks completed so far: ${esc(String(attempts))}. ${pctLine}</p>
     <p>Keep mixing lessons with active recall.</p>
     ${cta("/app", "Open dashboard")}
-    ${cta("/app/exams", "Practice hub")}
+    ${cta("/app/practice-tests?startMode=practice_exam", "Practice hub")}
   `;
   const html = htmlEmailShell(subject, wrapEngagementBody(ctx, inner));
   const text = `Progress (${ctx.trackLabel}): ${attempts} block(s). ${lastPct !== null ? `Latest about ${lastPct}%.` : ""} ${appOriginForEmail()}/app`;

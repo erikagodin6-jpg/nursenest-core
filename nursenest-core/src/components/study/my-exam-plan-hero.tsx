@@ -208,7 +208,7 @@ export function MyExamPlanHero({
             Review weak areas
           </Link>
           <Link
-            href="/app/exams"
+            href="/app/practice-tests?startMode=practice_exam"
             className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition hover:opacity-90"
             style={{
               border: "1px solid var(--semantic-border-soft)",

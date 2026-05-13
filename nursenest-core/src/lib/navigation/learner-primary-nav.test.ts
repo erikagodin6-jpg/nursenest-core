@@ -34,6 +34,13 @@ test("buildLearnerPrimaryNavItems: primary key maps to canonical route", () => {
   }
 });
 
+test("buildLearnerPrimaryNavItems: legacy Exams label still opens premium practice-tests surface", () => {
+  const cat = buildLearnerPrimaryNavItems("us-rn-nclex-rn", { examsLabel: "Exams" }).find((i) => i.key === "cat");
+  assert.ok(cat);
+  assert.equal(cat!.href, "/app/practice-tests?startMode=practice_exam");
+  assert.equal(cat!.matchBase, "/app/practice-tests");
+});
+
 test("buildOptionalPrintablesShellNavItem: hidden when navVisible is false", () => {
   assert.equal(buildOptionalPrintablesShellNavItem("us-rn-nclex-rn", false), null);
 });

@@ -264,7 +264,7 @@ const LEGEND_ITEMS: Array<{ type: ActivityType; href: string }> = [
   { type: "review",    href: "/app/review" },
   { type: "flashcard", href: "/app/flashcards" },
   { type: "lesson",    href: "/app/lessons" },
-  { type: "mock",      href: "/app/exams" },
+  { type: "mock",      href: "/app/practice-tests?startMode=practice_exam" },
 ];
 
 function Legend() {

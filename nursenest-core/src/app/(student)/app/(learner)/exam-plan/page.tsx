@@ -368,7 +368,7 @@ export default async function ExamPlanPage() {
         {[
           { label: "Practice questions", href: "/app/questions" },
           { label: "Lessons", href: "/app/lessons" },
-          { label: "Adaptive CAT", href: "/app/exams" },
+          { label: "Adaptive CAT", href: "/app/practice-tests/start" },
           { label: "Review queue", href: "/app/review" },
           { label: "Flashcards", href: "/app/flashcards" },
           { label: "Analytics", href: "/app/account/analytics" },

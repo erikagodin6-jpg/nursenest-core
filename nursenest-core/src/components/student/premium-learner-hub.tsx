@@ -447,12 +447,12 @@ export function PremiumLearnerHub({
             </ul>
           ) : (
             <p className="mt-4 rounded-lg border border-dashed border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-muted">
-              No mocks logged yet. When you complete one from the exams page, scores and trends will appear here for a
+              No mocks logged yet. When you complete one from the practice tests page, scores and trends will appear here for a
               high-level view.
             </p>
           )}
           <div className="mt-4 flex flex-wrap gap-4">
-            <Link href="/app/exams" className="inline-flex text-sm font-semibold text-primary hover:underline">
+            <Link href="/app/practice-tests?startMode=practice_exam" className="inline-flex text-sm font-semibold text-primary hover:underline">
               Open practice exams
             </Link>
             <Link href="/app/lessons" className="inline-flex text-sm font-semibold text-primary hover:underline">

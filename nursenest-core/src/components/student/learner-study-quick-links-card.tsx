@@ -25,7 +25,7 @@ const DEFAULT_STUDY_LINKS: {
   accent: "cat" | "exams" | "bank" | "lessons" | "flashcards" | "planner" | "report" | "readiness" | "review";
 }[] = [
   { href: "/app/practice-tests/start", labelKey: "learner.profile.quickLinks.catPractice", icon: Crosshair, accent: "cat" },
-  { href: "/app/exams", labelKey: "nav.practiceExams", icon: GraduationCap, accent: "exams" },
+  { href: "/app/practice-tests?startMode=practice_exam", labelKey: "nav.practiceExams", icon: GraduationCap, accent: "exams" },
   { href: "/app/questions", labelKey: "nav.questionBank", icon: LayoutList, accent: "bank" },
   { href: "/app/lessons", labelKey: "learner.profile.quickLinks.lessons", icon: BookOpen, accent: "lessons" },
   { href: "/app/flashcards", labelKey: "learner.profile.quickLinks.flashcards", icon: Brain, accent: "flashcards" },

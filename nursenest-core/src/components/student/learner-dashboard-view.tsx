@@ -380,7 +380,7 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
               </span>
               <div>
                 <p className="font-medium text-foreground">Timed practice</p>
-                <Link href="/app/exams" className="text-primary underline-offset-4 hover:underline">
+                <Link href="/app/practice-tests?startMode=practice_exam" className="text-primary underline-offset-4 hover:underline">
                   Run a practice exam in your tier
                 </Link>
               </div>
@@ -434,7 +434,7 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
                 headline={t("learner.dashboard.empty.weakSignalsTitle")}
                 body={t("learner.dashboard.empty.weakSignalsBody")}
                 hint={emptyStateCopy.noWeakTopicsYet().body}
-                primaryCta={{ label: t("learner.dashboard.empty.openPracticeExams"), href: "/app/exams", variant: "primary" }}
+                primaryCta={{ label: t("learner.dashboard.empty.openPracticeExams"), href: "/app/practice-tests?startMode=practice_exam", variant: "primary" }}
               />
             </div>
           )}
@@ -472,7 +472,7 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
                 headline={t("learner.dashboard.empty.recentMocksTitle")}
                 body={t("learner.dashboard.empty.recentMocksBody")}
                 hint={emptyStateCopy.noRecentPractice().hint}
-                primaryCta={{ label: t("learner.dashboard.empty.openPracticeExams"), href: "/app/exams", variant: "primary" }}
+                primaryCta={{ label: t("learner.dashboard.empty.openPracticeExams"), href: "/app/practice-tests?startMode=practice_exam", variant: "primary" }}
               />
             </div>
           )}

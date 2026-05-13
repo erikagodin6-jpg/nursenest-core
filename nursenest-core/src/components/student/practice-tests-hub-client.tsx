@@ -107,7 +107,7 @@ function StudyToolsRail({
         </span>
         <span className="min-w-0 leading-snug">{t("learner.profile.quickLinks.catPractice")}</span>
       </TrackedStudyLoopCatLink>
-      <Link href="/app/exams" className={rowClass}>
+      <Link href="/app/practice-tests?startMode=practice_exam" className={rowClass}>
         <span className={iconWrap} aria-hidden>
           <GraduationCap className="h-4 w-4" strokeWidth={2} />
         </span>

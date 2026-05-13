@@ -334,7 +334,7 @@ function buildMockAction(daysUntilExam: number | null, mockCount: number): Recov
         : "Another mock-style block will sharpen pacing and show where to concentrate remaining effort.",
     evidence: "Adds pacing data before the exam window gets tighter.",
     concreteTarget: "1 timed session this week",
-    href: "/app/exams",
+    href: "/app/practice-tests?startMode=practice_exam",
     ctaLabel: "Schedule next mock",
   };
 }

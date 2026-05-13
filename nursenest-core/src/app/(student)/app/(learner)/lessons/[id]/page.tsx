@@ -459,7 +459,7 @@ async function LessonDetailPageInner({ params }: Props) {
               {t("learner.lessons.detail.ctaQuestionBank")}
             </Link>
             <Link
-              href="/app/exams"
+              href="/app/practice-tests?startMode=practice_exam"
               className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
               style={{ borderColor: "var(--border-subtle)", color: "var(--semantic-text-secondary)", background: "var(--bg-card)" }}
             >
@@ -893,7 +893,7 @@ async function LessonDetailPageInner({ params }: Props) {
                 <PathwayLessonQuizEmbedSection
                   lessonSlug={record.slug}
                   links={{
-                    practiceExamsHref: "/app/exams",
+                    practiceExamsHref: "/app/practice-tests?startMode=practice_exam",
                     flashcardsHref: pathwayHubAppFlashcardsHref(pathway.id, record.topicSlug),
                     practiceQuestionsHref: pathwayHubAppQuestionsHref(pathway.id, record.topic),
                     relatedLessonsHref: `/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`,
@@ -1228,7 +1228,7 @@ async function LessonDetailPageInner({ params }: Props) {
             {t("learner.lessons.detail.ctaQuestionBank")}
           </Link>
           <Link
-            href="/app/exams"
+            href="/app/practice-tests?startMode=practice_exam"
             className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
             style={{ borderColor: "var(--border-subtle)", color: "var(--semantic-text-secondary)", background: "var(--bg-card)" }}
           >

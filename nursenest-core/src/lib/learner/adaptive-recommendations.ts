@@ -361,7 +361,7 @@ export function buildAdaptiveRecommendations(args: {
     if (urgency === "final_stretch" && args.mockCount < 2) {
       return {
         title: "Run a timed practice exam",
-        href: "/app/exams",
+        href: "/app/practice-tests?startMode=practice_exam",
         reason: "Near your date. Rehearsal under time mirrors test day.",
         kind: "exams",
       };
@@ -436,7 +436,7 @@ export function buildAdaptiveRecommendations(args: {
   } else {
     secondaryCandidates.push({
       title: "Timed mock exam",
-      href: "/app/exams",
+      href: "/app/practice-tests?startMode=practice_exam",
       reason: "Mocks show pacing and stamina. Use occasionally even early on.",
       kind: "mock",
     });

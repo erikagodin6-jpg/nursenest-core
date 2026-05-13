@@ -73,7 +73,7 @@ export type LearnerExamsSurfaceLabel = "CAT Exams" | "Exams";
 
 /**
  * Ordered: Lessons → Practice → Flashcards → CAT → Reports → Profile (max 6).
- * @param examsLabel — from learner shell: CAT surfaces use practice-tests; generic "Exams" uses `/app/exams`.
+ * @param examsLabel — label-only; all exam entries land on the live premium practice-tests surface.
  */
 export function buildLearnerPrimaryNavItems(
   pathwayId: string | null,
@@ -88,8 +88,8 @@ export function buildLearnerPrimaryNavItems(
         pathwayId,
         availablePathwayIds: pathwayId ? [pathwayId] : [],
       })
-    : "/app/exams";
-  const catMatch = useCatBuilder ? "/app/practice-tests" : "/app/exams";
+    : "/app/practice-tests?startMode=practice_exam";
+  const catMatch = "/app/practice-tests";
 
   return [
     { key: "lessons", href: lessonsHref, matchBase: "/app/lessons" },

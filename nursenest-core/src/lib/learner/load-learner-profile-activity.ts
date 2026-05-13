@@ -118,7 +118,7 @@ async function loadLearnerProfileActivityUncached(
         total: a.total,
         pct,
         at: a.createdAt.toISOString(),
-        href: "/app/exams",
+        href: "/app/practice-tests?startMode=practice_exam",
       };
     });
 
