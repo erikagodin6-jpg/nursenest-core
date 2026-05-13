@@ -41,13 +41,20 @@ test("HomeRestoredWithDeferredStats forwards children into HomeRestoredClient", 
   assert.match(stats, /<HomeRestoredClient[\s\S]*>\s*\{\s*children\s*\}\s*<\/HomeRestoredClient>/s);
 });
 
-test("HomeRestoredClient renders PremiumHomepageHero before children slot (global hub strip)", () => {
+test("HomeRestoredClient renders heroSlot (server island) before children slot (global hub strip)", () => {
+  // PremiumHomepageHero is now a server island rendered by HomeRestoredWithDeferredStats
+  // and passed as heroSlot to HomeRestoredClient — no direct JSX tag in the client file.
   const client = readSrc("components/marketing/home-restored-client.tsx");
-  const hero = client.indexOf("<PremiumHomepageHero");
+  const hero = client.indexOf("{heroSlot}");
   const childrenSlot = client.indexOf("{children}");
-  assert.ok(hero !== -1, "expected PremiumHomepageHero");
+  assert.ok(hero !== -1, "expected heroSlot (server island for PremiumHomepageHero)");
   assert.ok(childrenSlot !== -1, "expected children slot");
-  assert.ok(hero < childrenSlot, "hero must precede children slot in source order");
+  assert.ok(hero < childrenSlot, "heroSlot must precede children slot in source order");
+
+  // Verify the RSC (HomeRestoredWithDeferredStats) renders PremiumHomepageHero and passes it.
+  const rsc = readSrc("components/marketing/home-restored-with-deferred-stats.server.tsx");
+  assert.match(rsc, /PremiumHomepageHero/, "RSC must render PremiumHomepageHero server island");
+  assert.match(rsc, /heroSlot/, "RSC must pass heroSlot prop to HomeRestoredClient");
 });
 
 /**

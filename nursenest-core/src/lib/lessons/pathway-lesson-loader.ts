@@ -99,6 +99,10 @@ import {
   type AlliedTaxonomyCluster,
 } from "@/lib/allied/allied-profession-taxonomy";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import {
+  getGlobalSlugRedirectMap,
+  rewriteDeprecatedSlugsInLesson,
+} from "@/lib/lessons/canonical-link-rewriter";
 import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import {
   getCatalogLessonRawBySlug,
@@ -115,7 +119,13 @@ import {
   countMarketingPathwayContextFilterStages,
   sortAndFilterLessonsForPathwayContext,
   summarizePathwayContextPipelineDrops,
+  initCatalogSlugRedirectMap,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
+
+// Initialize the slug→redirect map once at module load so link rewriting
+// is active for all lessons rendered through applyOverlayAndStructural.
+import { initCatalogSlugRedirectMap as _initRedirectMap } from "@/lib/lessons/pathway-lesson-catalog-sync";
+_initRedirectMap();
 
 export {
   getCatalogLessonRawBySlug,
@@ -374,7 +384,13 @@ function applyOverlayAndStructural(
   dbLessonOverlayBundle?: Record<string, PathwayLessonEducationalOverlay>,
 ): PathwayLessonRecord {
   const after = applyLessonEducationalOverlay(lesson, marketingLocale, pathwayId, dbLessonOverlayBundle);
-  return { ...after, structuralQuality: evaluatePathwayLessonStructuralGate(after) };
+  const withGate = { ...after, structuralQuality: evaluatePathwayLessonStructuralGate(after) };
+  // Rewrite any deprecated slug references in section bodies + relatedLessonRefs.
+  // The redirect map is populated at startup from lessons with redirectToSlug set.
+  const redirectMap = getGlobalSlugRedirectMap();
+  return redirectMap && redirectMap.size > 0
+    ? rewriteDeprecatedSlugsInLesson(withGate, redirectMap)
+    : withGate;
 }
 
 function lessonLocaleMeta(
@@ -2447,6 +2463,11 @@ export async function listPathwayLessonSlugBatch(
             pathwayId,
             status: ContentStatus.PUBLISHED,
             locale: loc,
+            // Exclude deprecated/merged lessons so their URLs are not indexed.
+            // canonicalLessonId non-null = this row is a deprecated duplicate.
+            // deprecatedAt non-null = lesson was merged and should redirect.
+            canonicalLessonId: null,
+            deprecatedAt: null,
             ...publicSurfaceStructuralWhere,
           },
           select: { slug: true, topicSlug: true },
@@ -2469,6 +2490,9 @@ export async function listPathwayLessonSlugBatch(
             pathwayId,
             status: ContentStatus.PUBLISHED,
             locale: loc,
+            // Exclude deprecated/merged lessons — they redirect to their canonical.
+            canonicalLessonId: null,
+            deprecatedAt: null,
             ...publicSurfaceStructuralWhere,
           },
           select: PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS,
@@ -2505,7 +2529,9 @@ export async function listPathwayLessonSlugBatch(
       lessonDbOverlays,
     ),
   );
-  const catalogForPaging = surfaceOnly ? rawFull.filter(pathwayLessonEligibleForPublicMarketingSurface) : rawFull;
+  // Also exclude deprecated catalog lessons (canonicalLessonId or deprecatedAt set)
+  const nonDeprecated = rawFull.filter((l) => !l.canonicalLessonId && !l.deprecatedAt);
+  const catalogForPaging = surfaceOnly ? nonDeprecated.filter(pathwayLessonEligibleForPublicMarketingSurface) : nonDeprecated;
   const raw = catalogForPaging.slice(sk, sk + take);
   return raw.map((l) => ({ slug: l.slug, topicSlug: l.topicSlug }));
 }

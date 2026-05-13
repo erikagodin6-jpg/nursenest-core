@@ -310,7 +310,10 @@
           "What are the acute complications of Pain Assessment and how should the nurse respond?",
           "What does the nurse do in the first 15 minutes of recognizing Pain Assessment?",
           "What should a patient with Pain Assessment know before discharge?"
-        ]
+        ],
+        "canonicalLessonId": "ca-rn-pain-management",
+        "deprecatedAt": "2026-05-13T12:59:06.019Z",
+        "redirectToSlug": "ca-rn-pain-management"
       },
       {
         "slug": "proc-skill-head-to-toe-assessment-rn",
@@ -6934,7 +6937,10 @@
           "What are the acute complications of Pain Assessment and how should the nurse respond?",
           "What does the nurse do in the first 15 minutes of recognizing Pain Assessment?",
           "What should a patient with Pain Assessment know before discharge?"
-        ]
+        ],
+        "canonicalLessonId": "us-rn-pain-management",
+        "deprecatedAt": "2026-05-13T12:59:06.785Z",
+        "redirectToSlug": "us-rn-pain-management"
       },
       {
         "slug": "proc-skill-head-to-toe-assessment-rn",

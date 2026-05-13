@@ -211,6 +211,7 @@ export function NursingTierHubPage({
         data-nn-nursing-tier-hub="surface"
         data-nn-new-grad-convergence={isNewGradHub ? "1" : undefined}
         data-pathway-track={pathway.roleTrack}
+        data-premium-layout-version="2026-05-tests-hubs-v1"
       >
         <section className="nn-hub-tier-study-band" aria-labelledby="nn-nursing-tier-hub-title">
           {pnHub ? (

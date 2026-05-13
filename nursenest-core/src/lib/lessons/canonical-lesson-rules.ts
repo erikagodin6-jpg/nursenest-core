@@ -164,7 +164,10 @@ export type MergeDecision = {
 
 /**
  * Approved merge decisions from the 2026-05-13 duplicate audit.
- * Execute via `scripts/execute-lesson-merges.mjs --dry-run` before applying.
+ * Execute via `npx tsx scripts/execute-lesson-merges.mts --dry-run` before applying.
+ *
+ * Slugs verified against catalog + expansion catalog files 2026-05-13.
+ * Canonical lessons live in catalog.json; merge sources live in expansion catalogs.
  *
  * Status: PENDING REVIEW — do not execute until audit report is reviewed.
  */
@@ -172,8 +175,8 @@ export const APPROVED_MERGES: MergeDecision[] = [
   // ── Priority 2: Within-pathway semantic duplicates ─────────────────────
   {
     pathwayId: "ca-rn-nclex-rn",
-    canonicalSlug: "pain-management",
-    mergeSlugs: ["pain-assessment"],
+    canonicalSlug: "ca-rn-pain-management",        // catalog.json
+    mergeSlugs: ["proc-skill-pain-assessment-rn"],  // rn-nclex-procedures-skills-expansion-catalog.json
     canonicalTitle: "Pain: Assessment & Management",
     rationale:
       "Pain assessment and management are inseparable in nursing practice and exam curriculum. Two separate lessons create fragmentation and redundant content.",
@@ -181,16 +184,16 @@ export const APPROVED_MERGES: MergeDecision[] = [
   },
   {
     pathwayId: "us-rn-nclex-rn",
-    canonicalSlug: "pain-management",
-    mergeSlugs: ["pain-assessment"],
+    canonicalSlug: "us-rn-pain-management",        // catalog.json
+    mergeSlugs: ["proc-skill-pain-assessment-rn"],  // rn-nclex-procedures-skills-expansion-catalog.json
     canonicalTitle: "Pain: Assessment & Management",
     rationale: "Same as ca-rn: assessment + management belong in one lesson.",
     risk: "low",
   },
   {
     pathwayId: "ca-rn-nclex-rn",
-    canonicalSlug: "spinal-cord-injury",
-    mergeSlugs: ["spinal-cord-injury-basics"],
+    canonicalSlug: "spinal-cord-injury-autonomic-dysreflexia", // catalog.json (actual SCI slug)
+    mergeSlugs: ["spinal-cord-injury-basics-nclex"],            // rn-nclex-musculoskeletal-expansion-catalog.json
     canonicalTitle: "Spinal Cord Injury",
     rationale:
       "'Basics' suffix is a fragmentation red flag. All SCI content belongs in one comprehensive canonical lesson.",
@@ -198,16 +201,16 @@ export const APPROVED_MERGES: MergeDecision[] = [
   },
   {
     pathwayId: "us-rn-nclex-rn",
-    canonicalSlug: "spinal-cord-injury",
-    mergeSlugs: ["spinal-cord-injury-basics"],
+    canonicalSlug: "spinal-cord-injury-autonomic-dysreflexia",
+    mergeSlugs: ["spinal-cord-injury-basics-nclex"],
     canonicalTitle: "Spinal Cord Injury",
     rationale: "Same as ca-rn.",
     risk: "low",
   },
   {
     pathwayId: "ca-rn-nclex-rn",
-    canonicalSlug: "dvt-prevention-management",
-    mergeSlugs: ["dvt-pe-prevention"],
+    canonicalSlug: "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn", // catalog.json
+    mergeSlugs: ["dvt-pe-prevention-nursing"],                                              // rn-nclex-hematology-oncology-expansion-catalog.json
     canonicalTitle: "DVT: Prevention & Management",
     rationale:
       "PE prevention overlaps >70% with DVT prevention content. PE as a standalone acute lesson ('Pulmonary Embolism: Assessment & Management') is appropriate; 'DVT & PE Prevention' is duplicative.",
@@ -215,8 +218,8 @@ export const APPROVED_MERGES: MergeDecision[] = [
   },
   {
     pathwayId: "us-rn-nclex-rn",
-    canonicalSlug: "dvt-prevention-management",
-    mergeSlugs: ["dvt-pe-prevention"],
+    canonicalSlug: "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+    mergeSlugs: ["dvt-pe-prevention-nursing"],
     canonicalTitle: "DVT: Prevention & Management",
     rationale: "Same as ca-rn.",
     risk: "low",

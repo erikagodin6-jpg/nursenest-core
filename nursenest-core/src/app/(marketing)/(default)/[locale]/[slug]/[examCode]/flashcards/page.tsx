@@ -95,7 +95,7 @@ export default async function PathwayFlashcardsPage({ params }: Props) {
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
       {isCnple ? <FaqJsonLd items={CNPLE_FAQ} /> : null}
 
-      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
+      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-12" data-premium-layout-version="2026-05-tests-hubs-v1">
         {/* Hero */}
         <div className="mb-8">
           <p

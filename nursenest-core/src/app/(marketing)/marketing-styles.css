@@ -3,3 +3,5 @@
    from the global bundle and scope to marketing routes only. */
 @import "../premium-redesign-2026.css";
 @import "../premium-allied-newgrad-convergence.css";
+/* Extracted from globals.css Phase 2 — marketing-surface, home, hub, hero selectors */
+@import "./styles/marketing/marketing-global.css";

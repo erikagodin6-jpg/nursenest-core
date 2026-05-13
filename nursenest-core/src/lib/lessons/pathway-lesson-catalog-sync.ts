@@ -2164,6 +2164,30 @@ export function listCatalogPathwayIdsWithLessonsSync(): string[] {
 }
 
 /**
+ * Build and cache the slug→redirectToSlug map from all catalog lessons that have
+ * `redirectToSlug` set (i.e. lessons deprecated via a merge).
+ *
+ * Called once at module init — result is injected into the global canonical-link-rewriter
+ * so every lesson rendered through `applyOverlayAndStructural` gets link-rewriting for free.
+ */
+export function initCatalogSlugRedirectMap(): void {
+  const { buildSlugRedirectMap, setGlobalSlugRedirectMap } =
+    // Lazy import avoids circular dep; catalog-sync is a leaf module
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require("@/lib/lessons/canonical-link-rewriter") as typeof import("@/lib/lessons/canonical-link-rewriter");
+
+  const pathwayIds = listCatalogPathwayIdsWithLessonsSync();
+  const allLessons: Array<{ slug: string; redirectToSlug?: string | null }> = [];
+  for (const pwId of pathwayIds) {
+    for (const lesson of getCatalogLessonsRaw(pwId)) {
+      const l = lesson as { slug?: string; redirectToSlug?: string | null };
+      if (l.slug) allLessons.push({ slug: l.slug, redirectToSlug: l.redirectToSlug });
+    }
+  }
+  setGlobalSlugRedirectMap(buildSlugRedirectMap(allLessons));
+}
+
+/**
  * Marker for `pathway_lessons.sections` JSON when pre/post quizzes are stored alongside section bodies
  * (plain array cannot hold `preTest` / `postTest` at the top level).
  */

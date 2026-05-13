@@ -30,6 +30,17 @@ export const PATHWAY_LESSON_SLUG_REDIRECTS: readonly PathwayLessonSlugRedirect[]
   { pathwayId: "ca-rn-nclex-rn", fromSlug: "heart-failure-nclex-rn", toSlug: "ca-rn-heart-failure" },
   { pathwayId: "ca-rn-nclex-rn", fromSlug: "myocardial-infarction-nclex-rn", toSlug: "ca-rn-myocardial-infarction" },
   { pathwayId: "ca-rn-nclex-rn", fromSlug: "insulin-hypoglycemia-hy", toSlug: "ca-rn-insulin-hypoglycemia" },
+
+  // ── 2026-05-13 canonical merge redirects ─────────────────────────────────
+  // Pain Assessment → Pain: Assessment & Management
+  { pathwayId: "ca-rn-nclex-rn", fromSlug: "proc-skill-pain-assessment-rn", toSlug: "ca-rn-pain-management" },
+  { pathwayId: "us-rn-nclex-rn", fromSlug: "proc-skill-pain-assessment-rn", toSlug: "us-rn-pain-management" },
+  // Spinal Cord Injury Basics → Spinal Cord Injury
+  { pathwayId: "ca-rn-nclex-rn", fromSlug: "spinal-cord-injury-basics-nclex", toSlug: "spinal-cord-injury-autonomic-dysreflexia" },
+  { pathwayId: "us-rn-nclex-rn", fromSlug: "spinal-cord-injury-basics-nclex", toSlug: "spinal-cord-injury-autonomic-dysreflexia" },
+  // DVT & PE Prevention → DVT: Prevention & Management
+  { pathwayId: "ca-rn-nclex-rn", fromSlug: "dvt-pe-prevention-nursing", toSlug: "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn" },
+  { pathwayId: "us-rn-nclex-rn", fromSlug: "dvt-pe-prevention-nursing", toSlug: "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn" },
 ];
 
 const MAX_CHAIN = 12;

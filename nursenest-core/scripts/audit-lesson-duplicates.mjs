@@ -1,7 +1,13 @@
 #!/usr/bin/env node
 /**
- * Lesson Duplicate Audit (v2 — fast token-fingerprint approach)
- * Groups lessons by normalized title tokens instead of O(n²) Levenshtein.
+ * Lesson Duplicate Audit (v3 — token-fingerprint with false-positive filters)
+ *
+ * Excludes:
+ *  - Numbered review series (e.g. "Cardiovascular: Review 11") — intentional spaced repetition
+ *  - Cross-tier variants (RN vs RPN vs NP same topic) — expected and intentional
+ *  - Lessons with canonicalLessonId set (already deprecated/merged)
+ *
+ * Exit code 0 = no actionable duplicates, 1 = duplicates found above threshold.
  */
 import fs from "fs";
 import path from "path";
@@ -87,6 +93,11 @@ function loadAllLessons() {
 
     const extractLesson = (lesson, pathwayId) => {
       if (!lesson.slug || !lesson.title) return;
+      // Skip already-deprecated lessons (already handled)
+      if (lesson.canonicalLessonId || lesson.deprecatedAt) return;
+      // Skip numbered spaced-repetition review lessons (false positive)
+      if (/:\s*review\s+\d+\s*$/i.test(lesson.title.trim())) return;
+      if (lesson.isReviewLesson) return;
       lessons.push({
         slug: lesson.slug,
         title: lesson.title,
@@ -411,6 +422,25 @@ function main() {
 
   console.log(`\nJSON report → ${jsonPath}`);
   console.log(`MD report  → ${mdPath}`);
+
+  // ── CI gate: fail if within-same-pathway duplicates exceed threshold ──────
+  // Cross-pathway (CA vs US, RN vs NP) are architectural decisions, not CI failures.
+  // Only within-pathway semantic duplicates with HIGH risk fail the build.
+  const withinPathwayHigh = clusters.filter(c => {
+    if (assessRisk(c) !== "HIGH") return false;
+    const pathways = new Set([c.canonical.pathwayId, ...c.toMerge.map(m => m.pathwayId)]);
+    return pathways.size === 1; // all lessons in same pathway
+  });
+
+  if (withinPathwayHigh.length > 0) {
+    console.error(
+      `\n✗ CI GATE FAILED: ${withinPathwayHigh.length} HIGH-risk within-pathway duplicate clusters.`
+    );
+    console.error("  Resolve by merging into canonical lessons or adding to APPROVED_MERGES in canonical-lesson-rules.ts.\n");
+    process.exit(1);
+  }
+
+  console.log("\n✓ CI gate passed — no unresolved within-pathway HIGH-risk duplicates.");
 }
 
 main();

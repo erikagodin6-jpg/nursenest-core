@@ -211,7 +211,7 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
       : `Results summarize performance against this pathway’s practice simulation rules.`;
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <div className="mx-auto max-w-3xl px-4 py-12" data-premium-layout-version="2026-05-tests-hubs-v1">
       <MarketingPathwayCatViewBeacon pathway={pathway} hubPath={marketingCatPath} />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <Link href={overviewHref} className="text-sm font-medium text-primary hover:underline">

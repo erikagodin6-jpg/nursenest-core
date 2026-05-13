@@ -9,7 +9,12 @@ import { marketingThemeBeforeInteractiveInlineScript } from "@/lib/theme/marketi
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 
+// Global CSS — cascade order matters: Tailwind + @imports must come first.
 import "./globals.css";
+// Design tokens (:root custom properties) extracted from globals.css.
+import "./styles/global/tokens.css";
+// Global keyboard focus / accessibility rules.
+import "./styles/global/accessibility.css";
 import "./(marketing)/marketing-dark-utilities.css";
 
 /**

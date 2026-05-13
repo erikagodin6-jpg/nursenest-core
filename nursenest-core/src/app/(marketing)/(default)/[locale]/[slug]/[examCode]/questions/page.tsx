@@ -320,6 +320,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
     <div
       className="nn-premium-pathway-hub mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8"
       data-nn-qa-marketing-pathway-questions-hub="true"
+      data-premium-layout-version="2026-05-tests-hubs-v1"
     >
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
 

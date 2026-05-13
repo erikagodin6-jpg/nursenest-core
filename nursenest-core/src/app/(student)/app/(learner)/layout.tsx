@@ -9,6 +9,9 @@ import "../../../../../styles/learner-ds.css";
 // Contains: learner-ds-ambient, learner-dashboard-hero, CAT exam chrome, practice exam runner,
 // flashcard session surfaces.
 import "@/app/learner-premium-ds.css";
+// Phase 2 extraction: CAT exam, practice session, lesson detail, dashboard, review,
+// coach, study queue, question/option rendering, confidence controls from globals.css.
+import "@/app/styles/learner/learner-global.css";
 
 import type { ReactNode } from "react";
 import { Suspense } from "react";

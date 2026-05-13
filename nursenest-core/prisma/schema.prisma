@@ -1229,6 +1229,98 @@ model ContentItem {
   @@map("content_items")
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CANONICAL TOPIC GRAPH
+//
+// Architecture: canonical clinical foundation + pathway overlays
+//
+//   CanonicalTopic            — top-level topic node (COPD, Heart Failure, …)
+//   CanonicalTopicSharedSection — reusable clinical foundation blocks
+//                               (pathophysiology, core S/S, diagnostics)
+//                               shared across all tiers/countries for a topic
+//   PathwayLesson             — existing model; gains `canonicalTopicId` FK
+//                               Tier/exam/country-specific overlay sections
+//                               live inside PathwayLesson.sections as before
+//
+// Rendering pipeline:
+//   1. Load CanonicalTopicSharedSection for the topic's foundation sections
+//   2. Load PathwayLesson (tier/exam/country specific)
+//   3. Merge: shared sections are injected unless the lesson has an override
+//      section of the same `kind`
+//   4. Apply educational overlay (locale/i18n)
+//   5. Rewrite deprecated slugs
+//   6. Evaluate structural gate
+//
+// This eliminates the NP triplication problem at the content layer:
+// instead of 3 identical lesson rows, one canonical shared section
+// is referenced by all three pathway lessons.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// * Top-level clinical topic node connecting lessons, flashcards, questions, and study plans.
+/// * One node per clinical condition (COPD, Heart Failure, Diabetes, …) regardless of tier/country.
+model CanonicalTopic {
+  id               String   @id @default(cuid())
+  /// * Stable, kebab-case key used as the join key across cross-surface systems.
+  /// * Examples: "copd", "heart-failure", "type-2-diabetes", "aki"
+  topicKey         String   @unique @map("topic_key") @db.VarChar(120)
+  displayName      String   @map("display_name")
+  bodySystem       String?  @map("body_system") @db.VarChar(80)
+  clinicalCategory String?  @map("clinical_category") @db.VarChar(80)
+
+  // ── Cross-surface connection keys (future-ready) ──────────────────────
+  /// * Flashcard deck topic key for this condition.
+  flashcardTopicKey    String? @map("flashcard_topic_key") @db.VarChar(120)
+  /// * Practice question topic tag for this condition.
+  practiceTopicKey     String? @map("practice_topic_key") @db.VarChar(120)
+  /// * CAT pool key for adaptive testing.
+  catPoolKey           String? @map("cat_pool_key") @db.VarChar(120)
+  /// * Remediation tag used by the remediation engine.
+  remediationTagKey    String? @map("remediation_tag_key") @db.VarChar(120)
+  /// * Blog topic slug for SEO cross-linking.
+  blogTopicKey         String? @map("blog_topic_key") @db.VarChar(120)
+
+  // ── Relations ─────────────────────────────────────────────────────────
+  sharedSections   CanonicalTopicSharedSection[]
+  lessons          PathwayLesson[]
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("canonical_topics")
+}
+
+/// * Reusable clinical foundation sections shared across all tier/country variants of a topic.
+/// * These contain medical-science facts (pathophysiology, core S/S, diagnostics, anatomy)
+/// * that are tier-agnostic. Tier/exam/country-specific content stays in PathwayLesson.sections.
+/// *
+/// * Rendering: injected before pathway-lesson sections unless the lesson has
+/// * a same-kind override section (lesson section wins on kind conflict).
+model CanonicalTopicSharedSection {
+  id               String         @id @default(cuid())
+  canonicalTopicId String         @map("canonical_topic_id")
+  canonicalTopic   CanonicalTopic @relation(fields: [canonicalTopicId], references: [id])
+
+  /// * Section kind — must match PathwayLessonSectionKind enum values.
+  /// * Shared sections are limited to: pathophysiology_overview, signs_symptoms,
+  /// * labs_diagnostics, anatomy (future). Tier-specific kinds stay in PathwayLesson.
+  kind             String @db.VarChar(80)
+  heading          String
+  body             String @db.Text
+
+  /// * Which tiers this section applies to. Empty = all tiers.
+  /// * Use to restrict a shared section to specific tiers (e.g. only RPN/PN).
+  applicableTiers     String[] @default([]) @map("applicable_tiers")
+  /// * Which country codes this section applies to. Empty = all countries.
+  applicableCountries String[] @default([]) @map("applicable_countries")
+
+  contentVersion   Int      @default(1) @map("content_version")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@index([canonicalTopicId, kind])
+  @@map("canonical_topic_shared_sections")
+}
+
 /// *
 /// * Marketing exam-pathway lessons (`/[locale]/[slug]/[exam]/lessons/...`).
 /// * The loader prefers published rows for each `pathwayId` and falls back to `catalog.json` when that pathway has no DB rows.
@@ -1282,6 +1374,12 @@ model PathwayLesson {
   /// * Excludes from duplicate detection; these are sequential content, not semantic duplicates.
   isReviewLesson       Boolean       @default(false) @map("is_review_lesson")
 
+  /// * FK to CanonicalTopic — the clinical topic node shared across RN/RPN/NP/CA/US variants.
+  /// * Multiple PathwayLessons share the same canonicalTopicId.
+  /// * Null = not yet mapped to a topic node (legacy lessons during migration).
+  canonicalTopicId     String?         @map("canonical_topic_id")
+  canonicalTopic       CanonicalTopic? @relation(fields: [canonicalTopicId], references: [id])
+
   @@unique([pathwayId, slug, locale])
   @@unique([pathwayId, slug])
   @@index([pathwayId, status, sortOrder])
@@ -1290,6 +1388,7 @@ model PathwayLesson {
   @@index([pathwayId, locale, status, sortOrder], map: "pathway_lessons_pathway_locale_status_sort_idx")
   @@index([pathwayId, topicSlug, locale, status], map: "pathway_lessons_pathway_topic_locale_status_idx")
   @@index([canonicalLessonId], map: "pathway_lessons_canonical_lesson_idx")
+  @@index([canonicalTopicId], map: "pathway_lessons_canonical_topic_idx")
   @@map("pathway_lessons")
 }
 

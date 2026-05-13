@@ -1406,7 +1406,10 @@
           "What are the acute complications of Spinal Cord Injury Basics and how should the nurse respond?",
           "What does the nurse do in the first 15 minutes of recognizing Spinal Cord Injury Basics?",
           "What should a patient with Spinal Cord Injury Basics know before discharge?"
-        ]
+        ],
+        "canonicalLessonId": "spinal-cord-injury-autonomic-dysreflexia",
+        "deprecatedAt": "2026-05-13T12:59:07.511Z",
+        "redirectToSlug": "spinal-cord-injury-autonomic-dysreflexia"
       },
       {
         "slug": "mobility-aids-safe-patient-handling-nclex",
@@ -3892,7 +3895,10 @@
           "What are the acute complications of Spinal Cord Injury Basics and how should the nurse respond?",
           "What does the nurse do in the first 15 minutes of recognizing Spinal Cord Injury Basics?",
           "What should a patient with Spinal Cord Injury Basics know before discharge?"
-        ]
+        ],
+        "canonicalLessonId": "spinal-cord-injury-autonomic-dysreflexia",
+        "deprecatedAt": "2026-05-13T12:59:08.338Z",
+        "redirectToSlug": "spinal-cord-injury-autonomic-dysreflexia"
       },
       {
         "slug": "mobility-aids-safe-patient-handling-nclex",

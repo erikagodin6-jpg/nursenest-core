@@ -61,6 +61,7 @@ export function LessonsPageShell({
       className="nn-premium-pathway-hub nn-premium-lessons-system"
       data-nn-lessons-marketing-hub="1"
       data-nn-premium-lessons-system="hub"
+      data-premium-layout-version="2026-05-tests-hubs-v1"
       {...(pathwayTrack ? { "data-pathway-track": pathwayTrack } : {})}
     >
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8">

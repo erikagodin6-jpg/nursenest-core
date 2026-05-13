@@ -1190,7 +1190,10 @@
           "What are the acute complications of DVT & PE Prevention and how should the nurse respond?",
           "What does the nurse do in the first 15 minutes of recognizing DVT & PE Prevention?",
           "What should a patient with DVT & PE Prevention know before discharge?"
-        ]
+        ],
+        "canonicalLessonId": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+        "deprecatedAt": "2026-05-13T12:59:08.940Z",
+        "redirectToSlug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn"
       },
       {
         "slug": "anticoagulant-safety-heparin-warfarin-doacs",
@@ -5296,7 +5299,10 @@
           "What are the acute complications of DVT & PE Prevention and how should the nurse respond?",
           "What does the nurse do in the first 15 minutes of recognizing DVT & PE Prevention?",
           "What should a patient with DVT & PE Prevention know before discharge?"
-        ]
+        ],
+        "canonicalLessonId": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+        "deprecatedAt": "2026-05-13T12:59:09.609Z",
+        "redirectToSlug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn"
       },
       {
         "slug": "anticoagulant-safety-heparin-warfarin-doacs",

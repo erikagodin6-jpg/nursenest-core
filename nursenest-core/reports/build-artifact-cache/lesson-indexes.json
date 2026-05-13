@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "lesson_indexes",
-  "fingerprint": "3b3abbfee2ffbbfec8c06ffb2750f8f4bab5c075e2545f0d8d57e246237e9113",
-  "generatedAt": "2026-05-12T18:03:42.945Z",
+  "fingerprint": "a8fcad8df995bb6e9e7d0415bea4e3889c274865cc27cc69bbf272ce4392eb8d",
+  "generatedAt": "2026-05-13T12:48:03.175Z",
   "inputs": [
     {
       "type": "file",
@@ -387,6 +387,10 @@
     {
       "type": "file",
       "path": "src/lib/lessons/ca-rn-nclex-marketing-lessons-hub-pipeline.release.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/lessons/canonical-lesson-rules.ts"
     },
     {
       "type": "file",
@@ -1643,7 +1647,7 @@
   ],
   "metadata": {
     "verifyMode": "deep",
-    "buildLessonIndexesMs": 126252,
-    "verifyLessonIndexesMs": 112512
+    "buildLessonIndexesMs": 130643,
+    "verifyLessonIndexesMs": 118994
   }
 }
