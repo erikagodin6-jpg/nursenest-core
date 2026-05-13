@@ -193,8 +193,10 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
   grid-template-columns: 1fr;
   gap: 22px;
   align-items: center;
-  /* Mobile: no min-height — dvh recalculates as the browser URL bar shows/hides,
-     causing CLS on every scroll-back-to-top. Copy content defines its own height. */
+  /* vw-based clamp: stable across all breakpoints — does not recalculate when
+     the mobile URL bar shows/hides (unlike dvh). Locks above-fold geometry
+     before hydration so the hero never collapses to 0 during React mount. */
+  min-height: clamp(18rem, 52vw, 30rem);
 }
 @media (min-width: 1024px) {
   .nn-premium-hero-grid {
@@ -598,6 +600,13 @@ html[data-theme="sunset"] .nn-home-marketing-rich-hero {
 
    Gradient tokens: `--nn-header-primary-bg`, `--semantic-info`, `--semantic-brand` (Phase 3 block).
    --------------------------------------------------------------------- */
+
+/* Reserve header height before JS hydration — prevents CLS when the sticky
+   wrapper paint (box-shadow, backdrop) and auth-state both resolve. The value
+   matches the sm:min-h-[4.5rem] on the inner top-bar plus nav-band padding. */
+[data-nn-header-layout="marketing-row4"] {
+  min-height: 4.5rem;
+}
 
 .nn-header-nav-row,
 [data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"] {
@@ -3700,6 +3709,7 @@ html[data-theme="midnight"] .nn-header-dark-surface {
   background-color: var(--semantic-surface, var(--theme-card-bg));
   border-color: color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-brand));
 }
+/* =====================================================================
    NP pathway vertical slice — homepage design-system parity + graduate polish.
    Scope: marketing NP hubs + NP lesson hubs (`.nn-np-hub-root`). Tokens only.
    ===================================================================== */

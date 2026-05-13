@@ -374,6 +374,34 @@ export type PathwayLessonRecord = {
    * Set in {@link normalizeLesson}; used for audits and learner CTAs.
    */
   linkedLearningSignals?: PathwayLessonLinkedLearningSignals;
+
+  // ── Canonical lesson consolidation ─────────────────────────────────────
+  /**
+   * Non-null when this lesson is a deprecated duplicate.
+   * Points to the canonical lesson's DB id. Hub indexes and sitemaps must
+   * exclude lessons where this field is set.
+   */
+  canonicalLessonId?: string | null;
+  /**
+   * Slugs of lessons that were merged INTO this lesson (set on the canonical,
+   * not the deprecated copies). Used to generate redirects.
+   */
+  mergedFromSlugs?: string[];
+  /**
+   * ISO timestamp when this lesson was deprecated/merged. Null = active.
+   * Deprecated lessons are excluded from sitemaps and hub indexes.
+   */
+  deprecatedAt?: string | null;
+  /**
+   * Slug to redirect to when this lesson is deprecated. Used by routing
+   * middleware to issue a 301 to the canonical lesson URL.
+   */
+  redirectToSlug?: string | null;
+  /**
+   * True for intentionally numbered spaced-repetition review lessons
+   * (e.g. "Cardiovascular: Review 11"). Excluded from duplicate detection.
+   */
+  isReviewLesson?: boolean;
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */

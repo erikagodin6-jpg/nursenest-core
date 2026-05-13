@@ -1269,6 +1269,19 @@ model PathwayLesson {
   published_by_user_id String?
   User                 User?         @relation(fields: [published_by_user_id], references: [id])
 
+  /// * Canonical lesson consolidation metadata.
+  /// * canonicalLessonId: non-null means this row is a deprecated duplicate; the value is the ID of the canonical lesson to serve instead.
+  canonicalLessonId    String?       @map("canonical_lesson_id")
+  /// * Slugs of lessons that were merged INTO this lesson. Populated on the canonical lesson, not the deprecated ones.
+  mergedFromSlugs      String[]      @default([]) @map("merged_from_slugs")
+  /// * Timestamp when this lesson was deprecated/merged. Used to exclude from sitemap and hub indexes.
+  deprecatedAt         DateTime?     @map("deprecated_at")
+  /// * Redirect target slug for deprecated lessons. Used by middleware to issue 301 to canonical URL.
+  redirectToSlug       String?       @map("redirect_to_slug") @db.VarChar(512)
+  /// * True for intentional numbered spaced-repetition review lessons (e.g. "Cardiovascular: Review 11").
+  /// * Excludes from duplicate detection; these are sequential content, not semantic duplicates.
+  isReviewLesson       Boolean       @default(false) @map("is_review_lesson")
+
   @@unique([pathwayId, slug, locale])
   @@unique([pathwayId, slug])
   @@index([pathwayId, status, sortOrder])
@@ -1276,6 +1289,7 @@ model PathwayLesson {
   @@index([pathwayId, topicSlug, locale, status])
   @@index([pathwayId, locale, status, sortOrder], map: "pathway_lessons_pathway_locale_status_sort_idx")
   @@index([pathwayId, topicSlug, locale, status], map: "pathway_lessons_pathway_topic_locale_status_idx")
+  @@index([canonicalLessonId], map: "pathway_lessons_canonical_lesson_idx")
   @@map("pathway_lessons")
 }
 

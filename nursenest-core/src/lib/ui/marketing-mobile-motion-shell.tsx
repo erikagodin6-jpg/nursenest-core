@@ -21,9 +21,10 @@ const PageTransitionShellLazy = dynamic(
  * `serverNarrowViewportHint` comes from Edge `proxy` (`x-nn-marketing-narrow-viewport-hint`) so the
  * first paint matches mobile layout without waiting for `matchMedia`. Client syncs on resize.
  *
- * Perf: `mounted` state removed — it caused an extra re-render cycle on every marketing page.
- * The server hint seeds the initial `narrow` state; the effect syncs once after hydration.
- * `PageTransitionShellLazy` is `{ ssr: false }` so it never adds to SSR/hydration payload.
+ * CLS guard: `narrow || !mounted` renders children directly until hydration completes.
+ * Without it, `PageTransitionShellLazy` mounts as null (ssr:false) then swaps in the Framer
+ * wrapper, causing a layout shift on the first paint frame on desktop. The single extra
+ * re-render when `mounted` flips is negligible vs the CLS saved.
  */
 export function MarketingMobileMotionShell({
   children,
@@ -33,7 +34,9 @@ export function MarketingMobileMotionShell({
   serverNarrowViewportHint?: boolean;
 }) {
   const [narrow, setNarrow] = useState(serverNarrowViewportHint);
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
+    setMounted(true);
     const mq = window.matchMedia("(max-width: 768px)");
     const sync = () => setNarrow(mq.matches);
     sync();
@@ -42,7 +45,7 @@ export function MarketingMobileMotionShell({
   }, []);
   return (
     <MarketingMobilePerfProvider value={narrow}>
-      {narrow ? children : <PageTransitionShellLazy>{children}</PageTransitionShellLazy>}
+      {narrow || !mounted ? children : <PageTransitionShellLazy>{children}</PageTransitionShellLazy>}
     </MarketingMobilePerfProvider>
   );
 }
