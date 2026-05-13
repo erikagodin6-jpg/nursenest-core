@@ -51,6 +51,13 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
+  if (locale === "allied" && slug === "allied-health" && examCode === "cat") {
+    const { generateMetadata: generateAlliedCatMetadata } = await import(
+      "@/app/(marketing)/(default)/allied/allied-health/cat/page"
+    );
+    return generateAlliedCatMetadata();
+  }
+
   const pathname = `/${locale}/${slug}/${examCode}`;
   const pathwayPre = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
 
@@ -103,6 +110,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ExamPathwayOverviewPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
+  if (locale === "allied" && slug === "allied-health" && examCode === "cat") {
+    const { default: GlobalAlliedCatPage } = await import(
+      "@/app/(marketing)/(default)/allied/allied-health/cat/page"
+    );
+    return <GlobalAlliedCatPage />;
+  }
+
   const pathname = `/${locale}/${slug}/${examCode}`;
 
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
