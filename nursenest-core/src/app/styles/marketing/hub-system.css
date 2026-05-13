@@ -1,0 +1,932 @@
+/* ==========================================================================
+   hub-system.css — NurseNest Premium Marketing Design System
+   
+   Ownership: Pre-nursing convergence, lessons hub, hub category cards, premium auth convergence
+   
+   Source: extracted from src/app/premium-redesign-2026.css (lines 1637–2556)
+   Import order: preserved — do not reorder imports in styles/marketing/index.css
+   Cascade: rules depend on cascade order across all section files; changes
+            to this file may affect other sections if shared selectors are involved.
+   
+   DO NOT add new rules here that belong to a different section file.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------------
+   Premium Pre-Nursing convergence — public hub + learner pathway bridge
+   --------------------------------------------------------------------- */
+
+.nn-pre-nursing-marketing-hub {
+  --nn-prenursing-accent-primary: var(--nn-module-clinical-pearls, var(--semantic-brand));
+  --nn-prenursing-accent-science: var(--nn-module-labs, var(--semantic-chart-7));
+  --nn-prenursing-accent-dosage: var(--nn-module-practice, var(--semantic-chart-3));
+  --nn-prenursing-accent-safety: var(--nn-module-safety, var(--semantic-danger));
+  --nn-prenursing-accent-flashcards: var(--nn-module-flashcards, var(--semantic-chart-5));
+  position: relative;
+  isolation: isolate;
+}
+
+html[data-theme="ocean"] .nn-pre-nursing-marketing-hub,
+html[data-theme="blossom"] .nn-pre-nursing-marketing-hub,
+html[data-theme="midnight"] .nn-pre-nursing-marketing-hub,
+html[data-theme="sunset"] .nn-pre-nursing-marketing-hub,
+html[data-theme="aurora"] .nn-pre-nursing-marketing-hub {
+  --nn-prenursing-theme-covered: 1;
+}
+
+.nn-pre-nursing-marketing-hub::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -1.5rem -0.75rem auto;
+  height: min(32rem, 48vh);
+  border-radius: 9999px;
+  background:
+    radial-gradient(720px 320px at 2% 0%, color-mix(in srgb, var(--semantic-chart-7) 12%, transparent), transparent 68%),
+    radial-gradient(680px 300px at 100% 8%, color-mix(in srgb, var(--semantic-chart-8) 10%, transparent), transparent 66%),
+    radial-gradient(560px 260px at 58% 100%, color-mix(in srgb, var(--semantic-chart-6) 8%, transparent), transparent 70%);
+  opacity: 0.78;
+  z-index: -1;
+}
+
+.nn-pre-nursing-hub-shell {
+  scroll-padding-top: 1rem;
+}
+
+.nn-pre-nursing-hub-hero,
+.nn-pre-nursing-readiness-panel,
+.nn-pre-nursing-foundations-section,
+.nn-pre-nursing-module-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-pre-nursing-hub-hero {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 68%, var(--nn-prenursing-accent-primary) 18%);
+  border-radius: 1.65rem;
+  padding: clamp(1.35rem, 3vw, 2.4rem);
+  background:
+    radial-gradient(620px 240px at 100% 0%, color-mix(in srgb, var(--semantic-chart-8) 9%, transparent), transparent 64%),
+    radial-gradient(560px 220px at 0% 100%, color-mix(in srgb, var(--semantic-chart-7) 9%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-pre-nursing-hub-hero::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  right: 1.5rem;
+  top: 1.4rem;
+  width: min(18rem, 36vw);
+  height: min(18rem, 36vw);
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-chart-7) 18%, transparent);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--semantic-chart-7) 11%, transparent), transparent),
+    color-mix(in srgb, var(--semantic-surface) 36%, transparent);
+  opacity: 0.34;
+}
+
+.nn-pre-nursing-readiness-panel {
+  display: grid;
+  gap: 1.25rem;
+  align-items: stretch;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 66%, var(--nn-prenursing-accent-dosage) 18%);
+  border-radius: 1.45rem;
+  padding: clamp(1.1rem, 2.4vw, 1.55rem);
+  background:
+    radial-gradient(600px 220px at 100% 0%, color-mix(in srgb, var(--semantic-chart-8) 8%, transparent), transparent 66%),
+    color-mix(in srgb, var(--semantic-panel-cool) 13%, var(--semantic-surface));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (min-width: 900px) {
+  .nn-pre-nursing-readiness-panel {
+    grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.75fr);
+  }
+}
+
+.nn-pre-nursing-readiness-panel__metrics {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.nn-pre-nursing-readiness-metric {
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-chart-7) 18%);
+  border-radius: 1rem;
+  padding: 0.85rem;
+  background: color-mix(in srgb, var(--semantic-surface) 90%, var(--semantic-panel-muted));
+}
+
+.nn-pre-nursing-readiness-metric:nth-child(2) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-warning) 20%);
+}
+
+.nn-pre-nursing-readiness-metric:nth-child(3) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-success) 20%);
+}
+
+.nn-pre-nursing-readiness-metric__value {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: var(--semantic-text-primary);
+}
+
+.nn-pre-nursing-readiness-metric__label {
+  display: block;
+  margin-top: 0.12rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--semantic-text-muted);
+}
+
+.nn-pre-nursing-quick-mode-grid .nn-study-card,
+.nn-pre-nursing-quick-mode-grid a,
+.nn-pre-nursing-module-card {
+  border-radius: 1.2rem;
+}
+
+.nn-pre-nursing-quick-mode-grid > li:nth-child(1) .nn-study-card,
+.nn-pre-nursing-quick-mode-grid > li:nth-child(1) a {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--nn-prenursing-accent-science) 22%);
+}
+
+.nn-pre-nursing-quick-mode-grid > li:nth-child(2) .nn-study-card,
+.nn-pre-nursing-quick-mode-grid > li:nth-child(2) a {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--nn-prenursing-accent-flashcards) 22%);
+}
+
+.nn-pre-nursing-quick-mode-grid > li:nth-child(3) .nn-study-card,
+.nn-pre-nursing-quick-mode-grid > li:nth-child(3) a {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--nn-prenursing-accent-dosage) 22%);
+}
+
+.nn-pre-nursing-quick-mode-grid > li:nth-child(4) .nn-study-card,
+.nn-pre-nursing-quick-mode-grid > li:nth-child(4) a {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 62%, var(--semantic-chart-8) 22%);
+}
+
+.nn-pre-nursing-foundations-section {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-prenursing-accent-primary) 14%);
+  border-radius: 1.45rem;
+  padding: clamp(1.1rem, 2.4vw, 1.5rem);
+  background:
+    radial-gradient(640px 240px at 100% 0%, color-mix(in srgb, var(--semantic-chart-7) 7%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-pre-nursing-category-rail {
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding: 0.2rem 0 0.4rem;
+  scrollbar-width: thin;
+}
+
+.nn-pre-nursing-category-pill {
+  flex: 0 0 auto;
+  min-height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-chart-8) 16%);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 48%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.nn-pre-nursing-module-card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-chart-7) 14%);
+  background:
+    radial-gradient(320px 120px at 100% 0%, color-mix(in srgb, var(--semantic-chart-8) 7%, transparent), transparent 68%),
+    var(--semantic-surface);
+  transition:
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.nn-pre-nursing-module-card:nth-child(6n + 2) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-chart-3) 16%);
+}
+
+.nn-pre-nursing-module-card:nth-child(6n + 3) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-chart-5) 16%);
+}
+
+.nn-pre-nursing-module-card:nth-child(6n + 4) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-warning) 16%);
+}
+
+.nn-pre-nursing-module-card:nth-child(6n + 5) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-success) 16%);
+}
+
+.nn-pre-nursing-module-card:nth-child(6n) {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-chart-8) 16%);
+}
+
+.nn-pre-nursing-module-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (max-width: 640px) {
+  .nn-pre-nursing-marketing-hub {
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .nn-pre-nursing-hub-hero {
+    border-radius: 1.2rem;
+    padding: 1.15rem;
+  }
+
+  .nn-pre-nursing-readiness-panel__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .nn-pre-nursing-foundations-section {
+    border-radius: 1.2rem;
+    padding: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-pre-nursing-module-card,
+  .nn-pre-nursing-module-card:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Premium Lessons convergence — hubs, reading surfaces, section system
+   --------------------------------------------------------------------- */
+
+.nn-premium-lessons-system,
+.nn-premium-lesson-detail-shell {
+  --nn-lessons-accent-primary: var(--nn-module-clinical-pearls, var(--semantic-brand));
+  --nn-lessons-accent-progress: var(--nn-module-readiness, var(--semantic-success));
+  --nn-lessons-accent-practice: var(--nn-module-practice, var(--semantic-chart-3));
+  --nn-lessons-accent-flashcards: var(--nn-module-flashcards, var(--semantic-chart-5));
+  --nn-lessons-accent-labs: var(--nn-module-labs, var(--semantic-chart-7));
+  --nn-lessons-radius-card: 1.35rem;
+  --nn-lessons-reading-measure: 72ch;
+}
+
+html[data-theme="ocean"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell),
+html[data-theme="blossom"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell),
+html[data-theme="midnight"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell),
+html[data-theme="sunset"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell),
+html[data-theme="aurora"] :is(.nn-premium-lessons-system, .nn-premium-lesson-detail-shell) {
+  --nn-lessons-theme-covered: 1;
+}
+
+.nn-premium-lessons-system,
+.nn-premium-lesson-detail-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.nn-premium-lessons-system::before,
+.nn-premium-lesson-detail-shell::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -1.25rem -0.75rem auto;
+  height: min(30rem, 46vh);
+  border-radius: 9999px;
+  background:
+    radial-gradient(760px 340px at 4% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 10%, transparent), transparent 68%),
+    radial-gradient(720px 320px at 100% 10%, color-mix(in srgb, var(--nn-lessons-accent-flashcards) 9%, transparent), transparent 66%),
+    radial-gradient(600px 280px at 54% 100%, color-mix(in srgb, var(--nn-lessons-accent-progress) 8%, transparent), transparent 72%);
+  opacity: 0.72;
+  z-index: -1;
+}
+
+.nn-premium-lessons-hub-hero {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--nn-lessons-accent-primary) 18%);
+  box-shadow:
+    var(--semantic-shadow-soft),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 65%, transparent);
+}
+
+/* Ocean — calm aqua/blue ambient in the hub hero */
+html[data-theme="ocean"] .nn-premium-lessons-hub-hero {
+  border-color: color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
+  background:
+    radial-gradient(560px 240px at 4% 0%, color-mix(in srgb, var(--semantic-chart-2) 16%, transparent), transparent 60%),
+    radial-gradient(480px 210px at 98% 8%, color-mix(in srgb, var(--semantic-chart-3) 12%, transparent), transparent 58%),
+    radial-gradient(380px 180px at 50% 102%, color-mix(in srgb, var(--semantic-info) 8%, transparent), transparent 62%);
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--semantic-info) 28%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-info) 12%, transparent);
+}
+
+/* Blossom — soft pink/lavender hero lift */
+html[data-theme="blossom"] .nn-premium-lessons-hub-hero,
+html[data-theme="aurora"] .nn-premium-lessons-hub-hero {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 18%, var(--semantic-border-soft));
+  background:
+    radial-gradient(560px 240px at 4% 0%, color-mix(in srgb, var(--semantic-chart-1) 20%, transparent), transparent 60%),
+    radial-gradient(480px 210px at 96% 8%, color-mix(in srgb, var(--semantic-chart-5) 16%, transparent), transparent 58%),
+    radial-gradient(380px 180px at 50% 102%, color-mix(in srgb, var(--semantic-brand) 10%, transparent), transparent 62%);
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--semantic-brand) 24%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-chart-5) 14%, transparent);
+}
+
+/* Midnight/Apex — rich teal + clinical depth */
+html[data-theme="midnight"] .nn-premium-lessons-hub-hero,
+html[data-theme="apex"] .nn-premium-lessons-hub-hero {
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+  background:
+    radial-gradient(560px 240px at 4% 0%, color-mix(in srgb, var(--semantic-info) 13%, transparent), transparent 60%),
+    radial-gradient(480px 210px at 96% 8%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 58%),
+    radial-gradient(380px 180px at 50% 102%, color-mix(in srgb, var(--semantic-chart-4) 8%, transparent), transparent 62%),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--semantic-info) 7%, var(--theme-page-bg)) 0%,
+      color-mix(in srgb, var(--semantic-chart-3) 4%, var(--theme-page-bg)) 52%,
+      transparent 100%
+    );
+  box-shadow:
+    0 22px 50px -36px color-mix(in srgb, var(--semantic-info) 32%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-info) 18%, transparent);
+}
+
+/* --- Exam-critical category card visual treatment --- */
+.nn-hub-category-card--exam-critical {
+  border-color: color-mix(in srgb, var(--nn-hub-cat-accent) 24%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-hub-cat-accent) 6%, var(--semantic-surface));
+}
+
+.nn-hub-category-card--exam-critical:hover {
+  border-color: color-mix(in srgb, var(--nn-hub-cat-accent) 40%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-hub-cat-accent) 10%, var(--semantic-surface));
+}
+
+/* --- Zero-lesson (empty) category card — muted/coming-soon appearance --- */
+.nn-hub-category-card--empty {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* --- Individual lesson row in category drill-down --- */
+.nn-lessons-hub-lesson-row {
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nn-lessons-hub-lesson-row:hover {
+  transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-lessons-hub-lesson-row,
+  .nn-lessons-hub-lesson-row:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+.nn-premium-lessons-hub-body {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(720px 300px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 6%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+}
+
+.nn-premium-lessons-hub-body [data-testid="lesson-hub-surface-chips"] {
+  border-radius: 999px;
+  padding: 0.35rem;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 42%, transparent);
+}
+
+.nn-premium-lessons-hub-body a[href*="/lessons/"] {
+  border-radius: var(--nn-lessons-radius-card);
+}
+
+.nn-premium-lessons-hub-body a[href*="/lessons/"]:hover {
+  transform: translateY(-1px);
+}
+
+/* --- Lessons hub stat card (hero lesson count) --- */
+.nn-lessons-hub-stat-card {
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+html[data-theme="ocean"] .nn-lessons-hub-stat-card,
+html[data-theme="blossom"] .nn-lessons-hub-stat-card {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 80%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 16%, var(--semantic-border-soft));
+}
+
+html[data-theme="midnight"] .nn-lessons-hub-stat-card,
+html[data-theme="apex"] .nn-lessons-hub-stat-card {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 72%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
+}
+
+/* --- Lessons hub trust badge pills --- */
+.nn-lessons-hub-trust-badge {
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+html[data-theme="ocean"] .nn-lessons-hub-trust-badge {
+  background: color-mix(in srgb, var(--semantic-panel-cool) 55%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-info) 16%, var(--semantic-border-soft));
+}
+
+html[data-theme="blossom"] .nn-lessons-hub-trust-badge {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 70%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+}
+
+html[data-theme="midnight"] .nn-lessons-hub-trust-badge,
+html[data-theme="apex"] .nn-lessons-hub-trust-badge {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 65%, transparent);
+  border-color: color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+}
+
+/* --- Hub category cards (icon + description style) --- */
+.nn-hub-category-card {
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nn-hub-category-card:hover {
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-hub-category-card,
+  .nn-hub-category-card:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+.nn-premium-lesson-detail-shell {
+  border-radius: 2rem;
+  background:
+    radial-gradient(900px 360px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 7%, transparent), transparent 70%),
+    color-mix(in srgb, var(--theme-page-bg) 94%, var(--semantic-panel-muted));
+}
+
+.nn-premium-pathway-lesson-header[data-nn-premium-lessons-reading-hero] {
+  border-radius: 1.45rem;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 68%, var(--nn-lessons-accent-primary) 18%);
+  background:
+    radial-gradient(760px 260px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 8%, transparent), transparent 68%),
+    radial-gradient(640px 220px at 0% 100%, color-mix(in srgb, var(--nn-lessons-accent-progress) 7%, transparent), transparent 72%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow:
+    var(--semantic-shadow-soft),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 72%, transparent);
+}
+
+.nn-individual-lesson-study-meta > span {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-lessons-accent-primary) 16%);
+  background: color-mix(in srgb, var(--semantic-surface) 78%, var(--semantic-panel-muted));
+  padding: 0.28rem 0.7rem;
+  color: var(--theme-heading-text);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.nn-lesson-main[data-nn-premium-lessons-reading-main] {
+  max-width: min(100%, calc(var(--nn-lessons-reading-measure) + 8rem));
+}
+
+.nn-premium-lesson-article[data-nn-premium-lessons-section-system] {
+  line-height: 1.78;
+  scroll-padding-top: 6rem;
+}
+
+.nn-premium-lesson-article[data-nn-premium-lessons-section-system] :is(p, li) {
+  max-width: var(--nn-lessons-reading-measure);
+}
+
+.nn-premium-lesson-article[data-nn-premium-lessons-section-system] li + li {
+  margin-top: 0.45rem;
+}
+
+.nn-lesson-section-card {
+  transition:
+    transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.nn-lesson-section-card:hover {
+  transform: translateY(-1px);
+}
+
+.nn-lesson-section-card[data-lsc-theme="clinicalPearls"] {
+  border-color: color-mix(in srgb, var(--nn-lessons-accent-flashcards) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="pathophysiology"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-8) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="diagnosticsLabs"] {
+  border-color: color-mix(in srgb, var(--nn-lessons-accent-labs) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="medicationsTreatments"] {
+  border-color: color-mix(in srgb, var(--semantic-success) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="nursingInterventions"] {
+  border-color: color-mix(in srgb, var(--semantic-info) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="patientTeaching"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-7) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="redFlags"] {
+  border-color: color-mix(in srgb, var(--semantic-danger) 24%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="safety"] {
+  border-color: color-mix(in srgb, var(--semantic-danger) 28%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="ecgConcepts"] {
+  border-color: color-mix(in srgb, var(--semantic-info) 30%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="communication"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-7) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="documentation"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-8) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="delegation"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-4) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="culturalConsiderations"] {
+  border-color: color-mix(in srgb, var(--semantic-warning) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-card[data-lsc-theme="ngnClinicalJudgment"] {
+  border-color: color-mix(in srgb, var(--semantic-chart-5) 28%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-nav[data-nn-premium-lessons-on-this-page] {
+  border-radius: 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 76%, var(--nn-lessons-accent-primary) 14%);
+  background:
+    radial-gradient(420px 160px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-labs) 8%, transparent), transparent 66%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-lesson-nav-item[data-active="true"] {
+  background: color-mix(in srgb, var(--nn-lessons-accent-primary) 12%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--nn-lessons-accent-primary) 26%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-nav-mobile__panel[data-nn-premium-lessons-mobile-nav] {
+  max-height: min(62vh, 32rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+[data-nn-premium-lessons-study-rail] {
+  border-radius: 1.25rem;
+}
+
+.nn-lesson-utilities-rail [class*="nn-premium-rail-section"],
+.nn-lesson-utility-card {
+  border-radius: 1rem;
+}
+
+[data-nn-premium-lessons-linked-learning] {
+  background:
+    radial-gradient(460px 180px at 100% 0%, color-mix(in srgb, var(--nn-lessons-accent-flashcards) 7%, transparent), transparent 70%),
+    color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
+}
+
+.lv-lesson-actions[data-testid="pathway-lesson-continue-studying"] {
+  border-radius: 1.35rem;
+  background:
+    radial-gradient(560px 180px at 0% 0%, color-mix(in srgb, var(--nn-lessons-accent-practice) 8%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-panel-cool) 28%, var(--semantic-surface));
+}
+
+.lv-lesson-actions[data-nn-premium-individual-lesson-actions] {
+  position: sticky;
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  z-index: 12;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.nn-individual-lesson-recommendations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  gap: 0.5rem;
+}
+
+.nn-individual-lesson-recommendations > :is(a, span) {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-lessons-accent-primary) 18%);
+  background: color-mix(in srgb, var(--semantic-surface) 72%, var(--semantic-panel-muted));
+  padding: 0.55rem 0.85rem;
+  color: var(--theme-heading-text);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.nn-individual-lesson-recommendations > a:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--nn-lessons-accent-practice) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 46%, var(--semantic-surface));
+}
+
+.nn-individual-lesson-recommendations > span[aria-disabled="true"] {
+  opacity: 0.58;
+}
+
+.nn-lesson-phase-strip[data-nn-premium-individual-lesson-progress] {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 76%, var(--nn-lessons-accent-progress) 18%);
+  background:
+    radial-gradient(560px 180px at 0% 0%, color-mix(in srgb, var(--nn-lessons-accent-progress) 8%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 92%, var(--semantic-panel-muted));
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+@media (max-width: 1024px) {
+  .nn-lesson-main[data-nn-premium-lessons-reading-main] {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .nn-premium-lessons-system,
+  .nn-premium-lesson-detail-shell {
+    --nn-lessons-radius-card: 1.05rem;
+    --nn-lessons-reading-measure: 64ch;
+  }
+
+  .nn-premium-lessons-hub-hero,
+  .nn-premium-pathway-lesson-header[data-nn-premium-lessons-reading-hero] {
+    border-radius: 1.15rem;
+  }
+
+  .nn-premium-lessons-hub-body {
+    border-radius: 1.2rem;
+  }
+
+  .nn-premium-lesson-detail-shell {
+    border-radius: 1.25rem;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  }
+
+  .nn-individual-lesson-study-meta {
+    gap: 0.35rem;
+  }
+
+  .nn-individual-lesson-study-meta > span {
+    font-size: 0.67rem;
+    padding-inline: 0.55rem;
+  }
+
+  .lv-lesson-actions[data-nn-premium-individual-lesson-actions] {
+    margin-inline: -0.25rem;
+    border-radius: 1.15rem;
+  }
+
+  .nn-premium-lesson-article[data-nn-premium-lessons-section-system] {
+    gap: 1rem;
+    line-height: 1.72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-lessons-hub-body a[href*="/lessons/"],
+  .nn-premium-lessons-hub-body a[href*="/lessons/"]:hover,
+  .nn-lesson-section-card,
+  .nn-lesson-section-card:hover,
+  .lv-lesson-actions[data-nn-premium-individual-lesson-actions],
+  .nn-individual-lesson-recommendations > :is(a, span),
+  .nn-individual-lesson-recommendations > a:hover {
+    transform: none !important;
+    transition: none !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Premium Auth convergence — Sign In, Sign Up, reset, verification, errors
+   --------------------------------------------------------------------- */
+
+.nn-premium-auth-system {
+  --nn-auth-accent-primary: var(--semantic-brand);
+  --nn-auth-accent-secondary: var(--semantic-info);
+  --nn-auth-accent-warm: var(--semantic-warning);
+  --nn-auth-accent-success: var(--semantic-success);
+  --nn-auth-radius-card: 1.55rem;
+  --nn-auth-input-height: 3rem;
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 78rem);
+  margin-inline: auto;
+  padding-top: clamp(1rem, 2vw, 1.75rem);
+  padding-bottom: max(clamp(1.25rem, 3vw, 2rem), env(safe-area-inset-bottom, 0px));
+}
+
+html[data-theme="ocean"] .nn-premium-auth-system,
+html[data-theme="blossom"] .nn-premium-auth-system,
+html[data-theme="midnight"] .nn-premium-auth-system,
+html[data-theme="sunset"] .nn-premium-auth-system,
+html[data-theme="aurora"] .nn-premium-auth-system {
+  --nn-auth-theme-covered: 1;
+}
+
+.nn-premium-auth-system::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: -2rem -1.5rem auto;
+  height: min(34rem, 54vh);
+  border-radius: 9999px;
+  background:
+    radial-gradient(760px 340px at 0% 0%, color-mix(in srgb, var(--nn-auth-accent-secondary) 12%, transparent), transparent 66%),
+    radial-gradient(720px 320px at 100% 8%, color-mix(in srgb, var(--nn-auth-accent-warm) 10%, transparent), transparent 68%),
+    radial-gradient(640px 260px at 52% 100%, color-mix(in srgb, var(--nn-auth-accent-primary) 8%, transparent), transparent 72%);
+  opacity: 0.72;
+  z-index: -1;
+}
+
+.nn-premium-auth-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.88fr) minmax(24rem, 0.72fr);
+  gap: clamp(1rem, 2.2vw, 1.75rem);
+  align-items: stretch;
+}
+
+.nn-premium-auth-story,
+.nn-premium-auth-card {
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 74%, var(--nn-auth-accent-primary) 16%);
+  border-radius: var(--nn-auth-radius-card);
+  background:
+    radial-gradient(560px 220px at 100% 0%, color-mix(in srgb, var(--nn-auth-accent-secondary) 8%, transparent), transparent 68%),
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  box-shadow:
+    var(--semantic-shadow-soft),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 72%, transparent);
+}
+
+.nn-premium-auth-story {
+  min-height: 39rem;
+  padding: clamp(1.4rem, 3vw, 2.35rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.nn-premium-auth-card {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.25rem, 2.5vw, 2.15rem);
+}
+
+.nn-premium-auth-brand-row,
+.nn-premium-auth-mobile-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nn-premium-auth-mobile-brand {
+  display: none;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+}
+
+.nn-premium-auth-theme-pill,
+.nn-premium-auth-pathway-rail > span,
+.nn-premium-auth-ecosystem-grid > span {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-auth-accent-primary) 16%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 48%, var(--semantic-surface));
+  color: var(--theme-heading-text);
+  padding: 0.38rem 0.76rem;
+  font-size: 0.74rem;
+  font-weight: 850;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.nn-premium-auth-story-copy {
+  max-width: 34rem;
+}
+
+.nn-premium-auth-eyebrow {
+  color: var(--nn-auth-accent-primary);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nn-premium-auth-story h2,
+.nn-premium-auth-header h1 {
+  color: var(--theme-heading-text);
+  letter-spacing: -0.035em;
+}
+
+.nn-premium-auth-story h2 {
+  margin-top: 0.8rem;
+  max-width: 12em;
+  font-size: clamp(2.2rem, 5vw, 4.6rem);
+  line-height: 0.95;
+}
+
+.nn-premium-auth-story p,
+.nn-premium-auth-header p,
+.nn-premium-auth-legal,
+.nn-premium-auth-disclaimer,
+.nn-premium-auth-account-link {
+  color: var(--semantic-text-secondary);
+}
+
+.nn-premium-auth-story-copy > p:last-child {
+  margin-top: 1rem;
+  max-width: 35rem;
+  font-size: clamp(0.95rem, 1.4vw, 1.12rem);
+  line-height: 1.7;
+}
+
+.nn-premium-auth-ecosystem-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-block: 1.4rem;
+}
+
+.nn-premium-auth-disclaimer,
+.nn-premium-auth-account-link {
+  max-width: 42rem;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.nn-premium-auth-account-link a,
+.nn-premium-auth-legal a {
+  color: var(--semantic-brand);
+  font-weight: 800;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}

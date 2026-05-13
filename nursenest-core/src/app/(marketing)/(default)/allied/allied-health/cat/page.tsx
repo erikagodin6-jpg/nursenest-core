@@ -49,7 +49,14 @@ export default async function GlobalAlliedCatPage() {
   });
   if (!pathway) notFound();
 
-  const { questionSnapshot } = await loadMarketingExamHubOptionalBlocks(pathway.id);
+  const { questionSnapshot } = await loadMarketingExamHubOptionalBlocks(pathway, {
+    pathname: CAT_PATH,
+    locale: ALLIED_LOCALE,
+    country: ALLIED_LOCALE,
+    examCode: ALLIED_EXAM,
+    pathwayId: pathway.id,
+    roleTrack: ALLIED_ROLE,
+  });
   const assessment = assessMarketingCatSurfaceWithoutAuth(pathway, questionSnapshot);
 
   const lessonsHref = buildAlliedGlobalHubPath("lessons");
