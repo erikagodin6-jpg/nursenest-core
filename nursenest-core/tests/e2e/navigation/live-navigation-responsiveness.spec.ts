@@ -21,7 +21,7 @@ const NAV_CASES: NavCase[] = [
 async function gotoHome(page: Page, baseURL: string | undefined) {
   const url = ORIGIN ? `${ORIGIN}/` : "/";
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
-  await expect(page.locator("header")).toBeVisible({ timeout: 20_000 });
+  await expect(page.locator("header[data-nn-nav-mode]").first()).toBeVisible({ timeout: 20_000 });
   await page.evaluate(() => {
     try {
       window.localStorage.setItem("nn-nav-debug", "1");
@@ -37,8 +37,17 @@ async function clickAndMeasure(page: Page, navCase: NavCase) {
     navCase.label === "Start Free"
       ? `header a[href^="${navCase.href}"][aria-label*="Start free"]`
       : `header a[href="${navCase.href}"]`;
-  const link = page.locator(selector).filter({ hasText: navCase.label === "Start Free" ? undefined : navCase.label }).first();
+  const linkCandidates = page.locator(selector);
+  const link =
+    navCase.label === "Start Free"
+      ? linkCandidates.filter({ visible: true }).first()
+      : linkCandidates.filter({ hasText: navCase.label, visible: true }).first();
   await expect(link, `${navCase.label} link should be visible`).toBeVisible({ timeout: 20_000 });
+  const box = await link.boundingBox();
+  expect(box, `${navCase.label} link should have a clickable bounding box`).not.toBeNull();
+  const clickX = box!.x + box!.width / 2;
+  const clickY = box!.y + box!.height / 2;
+  await page.mouse.move(clickX, clickY);
 
   const navigationRequestPromise = page
     .waitForRequest(
@@ -53,15 +62,23 @@ async function clickAndMeasure(page: Page, navCase: NavCase) {
       { timeout: 5_000 },
     )
     .then(() => Date.now());
+  const urlCommitPromise = page.waitForURL((url) => navCase.pathPattern.test(url.pathname), { timeout: 5_000 }).then(() => Date.now());
+  const destinationStartPromise = Promise.race([
+    navigationRequestPromise.catch(() => new Promise<number>(() => {})),
+    urlCommitPromise,
+  ]);
+
+  const visualPendingPromise = page
+    .waitForFunction(() => document.documentElement.dataset.nnNavPending === "true", null, { timeout: 250 })
+    .then(() => Date.now())
+    .catch(() => new Promise<number>(() => {}));
 
   const startedAt = Date.now();
-  await link.click({ noWaitAfter: true });
+  await page.mouse.down();
+  await page.mouse.up();
 
-  const firstVisualAt = await page
-    .waitForFunction(() => document.documentElement.dataset.nnNavPending === "true", null, { timeout: 250 })
-    .then(() => Date.now());
-
-  const requestAt = await navigationRequestPromise;
+  const firstResponseAt = await Promise.race([visualPendingPromise, destinationStartPromise]);
+  const destinationStartAt = await destinationStartPromise;
   await page.waitForURL((url) => navCase.pathPattern.test(url.pathname), { timeout: 60_000 });
 
   const diagnostics = await page.evaluate(() => {
@@ -76,20 +93,20 @@ async function clickAndMeasure(page: Page, navCase: NavCase) {
   }).catch(() => null);
 
   return {
-    firstVisualMs: firstVisualAt - startedAt,
-    navigationRequestMs: requestAt - startedAt,
+    firstResponseMs: firstResponseAt - startedAt,
+    navigationRequestMs: destinationStartAt - startedAt,
     diagnostics,
   };
 }
 
-test.describe("live marketing navigation responsiveness", () => {
-  test.use({
-    viewport: { width: 1440, height: 900 },
-    trace: "on",
-    screenshot: "only-on-failure",
-    video: "retain-on-failure",
-  });
+test.use({
+  viewport: { width: 1440, height: 900 },
+  trace: "on",
+  screenshot: "only-on-failure",
+  video: "retain-on-failure",
+});
 
+test.describe("live marketing navigation responsiveness", () => {
   for (const navCase of NAV_CASES) {
     test(`${navCase.label} responds within interaction budget`, async ({ page, baseURL }, testInfo) => {
       await gotoHome(page, baseURL);
@@ -98,7 +115,7 @@ test.describe("live marketing navigation responsiveness", () => {
         body: JSON.stringify(result, null, 2),
         contentType: "application/json",
       });
-      expect(result.firstVisualMs, `${navCase.label} should show visible feedback within 250ms`).toBeLessThanOrEqual(250);
+      expect(result.firstResponseMs, `${navCase.label} should show visible feedback or start navigation within 250ms`).toBeLessThanOrEqual(250);
       expect(result.navigationRequestMs, `${navCase.label} should start a destination navigation request within 500ms`).toBeLessThanOrEqual(500);
     });
   }

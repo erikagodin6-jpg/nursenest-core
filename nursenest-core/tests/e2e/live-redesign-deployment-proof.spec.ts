@@ -49,6 +49,7 @@ async function expectNoOldLayoutSelectors(page: Page) {
 }
 
 async function expectNoHorizontalOverflow(page: Page) {
+  await page.waitForTimeout(500);
   const overflow = await page.evaluate(() => {
     const root = document.documentElement;
     const body = document.body;
@@ -68,6 +69,7 @@ async function expectPrimaryCta(page: Page) {
 async function captureProofScreenshots(page: Page, testInfo: TestInfo, id: string) {
   mkdirSync(SCREENSHOT_DIR, { recursive: true });
   await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.waitForLoadState("networkidle", { timeout: 15_000 }).catch(() => {});
   await expectNoHorizontalOverflow(page);
   await page.screenshot({
     path: path.join(SCREENSHOT_DIR, `${testInfo.project.name}-${id}-desktop.png`),
@@ -76,6 +78,7 @@ async function captureProofScreenshots(page: Page, testInfo: TestInfo, id: strin
 
   await page.setViewportSize({ width: 375, height: 812 });
   await page.reload({ waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle", { timeout: 15_000 }).catch(() => {});
   await expectNoHorizontalOverflow(page);
   await page.screenshot({
     path: path.join(SCREENSHOT_DIR, `${testInfo.project.name}-${id}-mobile-375.png`),
@@ -85,21 +88,26 @@ async function captureProofScreenshots(page: Page, testInfo: TestInfo, id: strin
 
 async function verifyInternalNavigationWorks(page: Page) {
   const current = new URL(page.url());
-  const candidate = page
+  const candidates = page
     .locator('header a[href^="/"], nav a[href^="/"], [data-nn-learner-shell-study-nav] a[href^="/"]')
-    .filter({ hasNotText: /sign out|logout/i })
-    .first();
-  if ((await candidate.count()) === 0) return;
-  const href = await candidate.getAttribute("href");
-  if (!href || href === current.pathname || href.startsWith("#")) return;
-  await candidate.click();
-  await page.waitForURL((url) => url.pathname !== current.pathname || url.search !== current.search, {
-    timeout: 15_000,
-  });
+    .filter({ hasNotText: /sign out|logout/i });
+  const count = await candidates.count();
+  for (let i = 0; i < Math.min(count, 20); i += 1) {
+    const candidate = candidates.nth(i);
+    if (!(await candidate.isVisible().catch(() => false))) continue;
+    const href = await candidate.getAttribute("href");
+    if (!href || href.startsWith("#")) continue;
+    const url = new URL(href, current.origin);
+    if (url.pathname === current.pathname && url.search === current.search) continue;
+    await candidate.click();
+    await page.waitForURL((nextUrl) => nextUrl.pathname === url.pathname, { timeout: 15_000 });
+    return;
+  }
 }
 
 async function runTarget(page: Page, testInfo: TestInfo, target: { id: string; path: string; surface: string; clickFirstLesson?: boolean }) {
   await page.goto(target.path, { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle", { timeout: 15_000 }).catch(() => {});
   await expect(page.locator("body")).toBeVisible({ timeout: 30_000 });
 
   if (target.clickFirstLesson) {

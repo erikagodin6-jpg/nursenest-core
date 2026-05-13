@@ -26,6 +26,37 @@ const siteUrl = MARKETING_SITE_ORIGIN || "https://www.nursenest.ca";
 const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
 
+function navigationIntentBeforeInteractiveInlineScript(): string {
+  return `
+(function () {
+  window.__nnNavIntentSeedMounted = true;
+  function mark(href) {
+    if (!href || !document.documentElement) return;
+    document.documentElement.dataset.nnNavPending = "true";
+    try {
+      window.dispatchEvent(new CustomEvent("nn:navigation-intent", {
+        detail: { href: href, t: performance.now(), source: "beforeInteractive" }
+      }));
+    } catch (error) {}
+    window.setTimeout(function () {
+      if (document.documentElement.dataset.nnNavPending === "true") {
+        delete document.documentElement.dataset.nnNavPending;
+      }
+    }, 8000);
+  }
+  function handle(event) {
+    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    var target = event.target;
+    if (target && target.nodeType !== 1) target = target.parentElement;
+    var anchor = target && target.closest ? target.closest("header a[href]") : null;
+    if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+    mark(anchor.getAttribute("href"));
+  }
+  window.addEventListener("pointerdown", handle, { capture: true, passive: true });
+  window.addEventListener("click", handle, { capture: true, passive: true });
+})();`;
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -138,6 +169,9 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)]">
         <Script id="nn-marketing-theme-seed" strategy="beforeInteractive">
           {marketingThemeBeforeInteractiveInlineScript()}
+        </Script>
+        <Script id="nn-navigation-intent-seed" strategy="beforeInteractive">
+          {navigationIntentBeforeInteractiveInlineScript()}
         </Script>
         <SafeProviders session={session}>{children}</SafeProviders>
       </body>
