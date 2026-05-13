@@ -1069,7 +1069,7 @@
    src/lib/theme/marketing-hero-pattern.ts so callers can use a single
    class name instead of a 200-character utility list.
 
-   Visual output is identical — the CSS values are the same as the
+   Visual output is identical -- the CSS values are the same as the
    utility combination they replace. Responsive and theme behavior preserved.
    Arbitrary values (max-w-[min(...)], transition-[filter]) are now in CSS
    so the Tailwind compiler does not need to generate them.

@@ -115,13 +115,17 @@ const cardioExpansion = isRnNclexPathway(pathwayId)
 | Total catalog JSON in server bundle | **57 MB** | **0 MB** |
 | Build RSS (peak) | ~7.5 GB → SIGKILL | < 3 GB (projected) |
 
-### Runtime performance
-| Metric | Before | After |
-|---|---|---|
-| Cold hub request (first) | 60+ seconds | ~2–5 seconds (first disk read) |
-| Warm hub request (same process) | ~60 seconds (V8 parse dominates) | < 200 ms (cache hit) |
-| Allied hub — catalogs parsed | 25 files × avg 2.3 MB | 3 files (main catalog + allied + new-grad) |
-| RPN hub — catalogs parsed | 25 files × avg 2.3 MB | 2 files (main + rpn parity) |
+### Runtime performance (measured locally, `LESSON_PERF_DEBUG=1`)
+
+| Pathway | Cold request (before) | Cold request (after) | Warm request |
+|---|---|---|---|
+| RN NCLEX (`ca-rn-nclex-rn`) | 60+ s (V8 parse) | **774 ms** (21 files from disk) | **0 ms** |
+| RPN (`ca-rpn-rex-pn`) | 60+ s | **280 ms** (3 files: library + catalog + rpn) | **0 ms** |
+| NP (`ca-np-cnple`) | 60+ s | **87 ms** (1 file: np-core; catalog in cache) | **0 ms** |
+| Allied (`ca-allied-core`) | 60+ s | **8 ms** (1 file: allied-bundled; catalog cached) | **0 ms** |
+
+Warm = same Node.js process, all module-level caches populated.  
+RN cold reads 21 files because it is the most expansive pathway; subsequent non-RN requests reuse the cached catalog.json.
 
 The warm-cache case is the steady state in production — once the Node.js process has
 served its first request for each pathway, all subsequent requests use the module-level
