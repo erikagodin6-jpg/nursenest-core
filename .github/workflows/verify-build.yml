@@ -45,8 +45,39 @@ jobs:
       - name: Guard DigitalOcean production domains
         run: node ../scripts/verify-digitalocean-domain-persistence.mjs
 
-      - name: Validate DigitalOcean app spec env protection
+      # ── Deployment governance guards ──────────────────────────────────────
+      # Rule: Only .do/app-nursenest-core-next.yaml may be used with doctl apps update.
+      # These steps enforce that:
+      #   1. The canonical spec passes all required-key checks (no missing env names).
+      #   2. Known dangerous/non-canonical files are explicitly rejected by the guard.
+      # A PR that removes a required env key or makes a forbidden file deployable fails here.
+
+      - name: "[deploy-guard] Canonical spec passes env protection checks"
         run: node ../scripts/do-spec-guard.mjs ../.do/app-nursenest-core-next.yaml
+
+      - name: "[deploy-guard] Forbidden spec: nursenest-core/live-app-spec.yaml is rejected"
+        run: |
+          if node ../scripts/do-spec-guard.mjs live-app-spec.yaml 2>/dev/null; then
+            echo "ERROR: live-app-spec.yaml unexpectedly passed the guard — it must be rejected."
+            exit 1
+          fi
+          echo "OK: live-app-spec.yaml correctly rejected by guard."
+
+      - name: "[deploy-guard] Forbidden spec: nursenest-core/.do/app.yaml is rejected"
+        run: |
+          if node ../scripts/do-spec-guard.mjs .do/app.yaml 2>/dev/null; then
+            echo "ERROR: nursenest-core/.do/app.yaml unexpectedly passed the guard — it must be rejected."
+            exit 1
+          fi
+          echo "OK: nursenest-core/.do/app.yaml correctly rejected by guard."
+
+      - name: "[deploy-guard] Forbidden spec: .do/app.yaml (root) is rejected"
+        run: |
+          if node ../scripts/do-spec-guard.mjs ../.do/app.yaml 2>/dev/null; then
+            echo "ERROR: .do/app.yaml (root) unexpectedly passed the guard — it must be rejected."
+            exit 1
+          fi
+          echo "OK: .do/app.yaml (root) correctly rejected by guard."
 
       - name: CI environment diagnostics
         run: node ../scripts/ci/diagnose-actions-environment.mjs

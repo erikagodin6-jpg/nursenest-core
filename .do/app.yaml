@@ -1,63 +1,27 @@
-# LEGACY DEPLOY CONFIG - NOT THE ACTIVE DIGITALOCEAN APP PLATFORM SPEC
-# Active DO deploy spec: `.do/app-nursenest-core-next.yaml`
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║            LEGACY FILE — DO NOT USE FOR PRODUCTION DEPLOYS                 ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
 #
-name: nursenest
-region: tor
-domains:
-  - domain: nursenest.ca
-    type: PRIMARY
-  - domain: www.nursenest.ca
-    type: ALIAS
-
-services:
-  - name: web
-    # Use Dockerfile build (not a buildpack slug — environment_slug is for node-js, go, etc.)
-    dockerfile_path: Dockerfile
-    source_dir: /
-    run_command: node scripts/start-standalone.mjs
-    http_port: 8080
-    internal_ports:
-      - 8080
-    instance_count: 1
-    instance_size_slug: basic-xxs
-    routes:
-      - path: /
-    health_check:
-      # Lightweight endpoint; matches root Express server/index.ts
-      http_path: /healthz
-      port: 8080
-      # basic-xxs + large bundle: allow slow cold start before failing the deploy
-      initial_delay_seconds: 180
-      period_seconds: 10
-      timeout_seconds: 10
-      success_threshold: 1
-      failure_threshold: 12
-    liveness_health_check:
-      http_path: /healthz
-      port: 8080
-      initial_delay_seconds: 180
-      period_seconds: 10
-      timeout_seconds: 10
-      success_threshold: 1
-      failure_threshold: 12
-    envs:
-      - key: NODE_ENV
-        value: production
-        scope: RUN_TIME
-      - key: PORT
-        value: "8080"
-        scope: RUN_TIME
-      # Cap V8 heap on small instances so the kernel OOM killer does not silently kill the process.
-      - key: NODE_OPTIONS
-        value: --max-old-space-size=384
-        scope: RUN_TIME
-      - key: ADMIN_JWT_SECRET
-        scope: RUN_TIME
-        type: SECRET
-      - key: DATABASE_URL
-        scope: RUN_TIME
-        type: SECRET
-      # Auth.js (nursenest-core): required when Next.js is deployed behind a proxy
-      - key: AUTH_TRUST_HOST
-        value: "true"
-        scope: RUN_TIME
+# This file is a legacy artifact from an early version of the app (app name
+# "nursenest", before the current "nursenest-core-next"). It references instance
+# size "basic-xxs" and lacks all current Stripe, auth, and ECG env vars.
+#
+# DEPLOYING FROM THIS FILE WILL:
+#   • Rename the app and create deployment conflicts
+#   • Delete every env var not listed here (including all STRIPE_PRICE_*, AUTH_SECRET,
+#     DATABASE_URL, CRON_SECRET, SPACES_KEY, SPACES_SECRET, OPENAI_API_KEY, ...)
+#   • Revert instance size to basic-xxs (OOM-crash risk)
+#   • Break checkout, auth, database, AI, and ECG permanently
+#
+# THE CANONICAL DEPLOY SPEC IS:
+#   .do/app-nursenest-core-next.yaml   ← same directory, correct file
+#
+# SAFE DEPLOY COMMANDS (from repo root):
+#   npm run do:deploy:dry       # validate + diff, print command
+#   npm run do:deploy:execute   # validate + diff + deploy
+#
+# GUARD STATUS: do-spec-guard.mjs exits 1 on this file.
+#
+# SEE: docs/ops/digitalocean-deploy-governance.md
+# ─────────────────────────────────────────────────────────────────────────────
+# This file contains no deployable YAML spec — only documentation.

@@ -1,65 +1,85 @@
-# ============================================================================
-# DOCUMENTATION ARTIFACT — DO NOT USE WITH doctl apps update
-# ============================================================================
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  ██████╗  ██████╗     ███╗   ██╗ ██████╗ ████████╗    ██████╗ ███████╗██████╗  ║
+# ║  ██╔══██╗██╔═══██╗    ████╗  ██║██╔═══██╗╚══██╔══╝    ██╔══██╗██╔════╝██╔══██╗ ║
+# ║  ██║  ██║██║   ██║    ██╔██╗ ██║██║   ██║   ██║       ██║  ██║█████╗  ██████╔╝ ║
+# ║  ██║  ██║██║   ██║    ██║╚██╗██║██║   ██║   ██║       ██║  ██║██╔══╝  ██╔═══╝  ║
+# ║  ██████╔╝╚██████╔╝    ██║ ╚████║╚██████╔╝   ██║       ██████╔╝███████╗██║      ║
+# ║  ╚═════╝  ╚═════╝     ╚═╝  ╚═══╝ ╚═════╝    ╚═╝       ╚═════╝ ╚══════╝╚═╝      ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
 #
-# This file is a reference snapshot of what the live DigitalOcean App Platform
-# spec looks like after a deployment. It is kept for auditing and comparison
-# ONLY. It is NOT the deploy source of truth.
+# ┌─────────────────────────────────────────────────────────────────────────────┐
+# │  EXPORT ARTIFACT — NOT A DEPLOY FILE                                        │
+# │  THIS FILE MUST NEVER BE PASSED TO: doctl apps update --spec                │
+# └─────────────────────────────────────────────────────────────────────────────┘
 #
-# THE CANONICAL SPEC FOR ALL doctl OPERATIONS IS:
-#   .do/app-nursenest-core-next.yaml   (repo root)
+# PURPOSE:
+#   Snapshot of the DigitalOcean App Platform spec exported via:
+#     doctl apps spec get <APP_ID> --format yaml
+#   Used for auditing and change comparison ONLY.
 #
-# WHY THIS FILE IS DANGEROUS:
-#   Passing this file to `doctl apps update APP_ID --spec live-app-spec.yaml`
-#   WILL DELETE env vars that are absent from this snapshot, including
-#   NEXTAUTH_URL, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
-#   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, ENABLE_ECG_MODULE, and others.
-#   The guard script confirms: `node scripts/do-spec-guard.mjs` exits 1 on
-#   this file with 8 FAIL messages.
+# WHY THIS FILE IS DANGEROUS FOR DEPLOY:
+#   1. This file is a snapshot — it drifts from the canonical spec within minutes
+#      of any dashboard change.
+#   2. doctl apps update --spec replaces ALL env vars with whatever is in the file.
+#      Any env var absent from this file WILL BE PERMANENTLY DELETED from production.
+#   3. This file does NOT contain values for type:SECRET vars — deploying it
+#      would wipe STRIPE_SECRET_KEY, DATABASE_URL, AUTH_SECRET, and all secrets.
+#   4. The guard (scripts/do-spec-guard.mjs) intentionally fails on this file.
 #
-# HOW TO DEPLOY SAFELY:
-#   npm run do:deploy:safe            # validates guard + diff + prints command
-#   # Or run the guard first:
-#   node scripts/do-spec-guard.mjs    # validates canonical spec
+# THE ONLY CANONICAL DEPLOY SPEC IS:
+#   .do/app-nursenest-core-next.yaml   (repo root — never in a subdirectory)
 #
-# HOW TO REFRESH THIS FILE (for audit purposes only):
-#   doctl apps spec get <APP_ID> | \
-#     sed 's/EV\[1:[^]]*\]/__REDACTED__/g' > nursenest-core/live-app-spec.yaml
-#   # Then commit the redacted version for audit trail.
+# SAFE DEPLOY COMMANDS (from repo root only):
+#   npm run do:deploy:dry       # validate + diff, no deploy
+#   npm run do:deploy:execute   # validate + diff + deploy
 #
-# See: docs/ops/digitalocean-env-protection.md
-# ============================================================================
+# TO UPDATE THIS SNAPSHOT (for audit use only):
+#   doctl apps spec get d6a4b825-4d70-4dd4-8d71-04b354d36f43 --format yaml \
+#     | sed 's/\(value: \)\(sk_\|pk_\|whsec_\|postgres\|EV\[1\)/\1__REDACTED__/g' \
+#     > nursenest-core/live-app-spec.yaml
+#   # Commit the redacted version — never commit raw secret values.
 #
-# NOTE: All EV[1:...] encrypted values have been removed from this file.
-# Secret values live exclusively in the DigitalOcean App Platform dashboard.
-# Env var NAMES are listed below for audit reference only.
+# SEE: docs/ops/digitalocean-deploy-governance.md
+# ─────────────────────────────────────────────────────────────────────────────
 #
-# Last known live app name: nursenest-core-next
-# Last known instance: basic-xs → promoted to basic-s (2026-05-12)
-# Guard validation: FAILS — do not use with doctl apps update
+# GUARD STATUS: This file intentionally FAILS do-spec-guard.mjs.
+# Running: node scripts/do-spec-guard.mjs nursenest-core/live-app-spec.yaml
+# Returns: exit 1 — MISSING required env key ... (multiple)
 #
-# Runtime env var names present in last captured live spec (values redacted):
+# If you are trying to debug why env vars were wiped, see the incident report:
+# nursenest-core/docs/reports/digitalocean-env-persistence-p0.md
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# LAST SNAPSHOT: 2026-05-13
+# SNAPSHOT CONTENTS (names only — values redacted):
 #   NODE_VERSION, NODE_ENV, NEXT_TELEMETRY_DISABLED, RUN_HEAVY_BUILD_TASKS,
 #   SKIP_I18N_PREBUILD, NN_APP_PLATFORM_BUILD, NN_LESSON_INDEX_VERIFY_MODE,
 #   NN_SKIP_HEAVY_BUILD_REPORTS, NN_LOW_MEMORY_BUILD, NN_BUILD_COMMIT,
 #   NN_BUILD_BRANCH, NN_FORCE_SINGLE_BUILD_WORKER, NN_TIMED_INCLUDE_NPM_PRUNE,
 #   SENTRY_ENABLED, NODE_OPTIONS, BUILD_NODE_MAX_OLD_SPACE_SIZE_MB,
 #   BUILD_WEBPACK_PARALLELISM, TMPDIR, PORT, HOSTNAME, NODE_MAX_OLD_SPACE_SIZE_MB,
-#   AUTH_TRUST_HOST, AUTH_SECRET, DATABASE_URL, NEXT_PUBLIC_APP_URL, AUTH_URL,
-#   AI_ADMIN_GENERATION_ENABLED, AI_INTEGRATIONS_OPENAI_API_KEY, OPENAI_API_KEY,
-#   NN_ENV_VALIDATION_MODE,
-#   STRIPE_PRICE_NURSENEST_NP_{1_MONTH,3_MONTH,6_MONTH,1_YEAR}_SUBSCRIPTION,
-#   STRIPE_PRICE_ADVANCED_ECG,
-#   STRIPE_PRICE_NURSENEST_RPN_{1_MONTH,3_MONTH,6_MONTH,YEARLY}_SUBSCRIPTION,
-#   STRIPE_PRICE_NURSENEST_RN_{1_MONTH,3_MONTH,6_MONTH,1_YEAR}_SUBSCRIPTION,
-#   STRIPE_PRICE_NEW_GRAD_{MONTHLY,6MONTH,YEARLY},
-#   STRIPE_PRICE_LVN_LPN_{MONTHLY,3MONTH,6MONTH,YEARLY},
-#   STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_{EXAM_PREP_MONTHLY,EXAM_PREP_3_MONTHS,
-#     6_MONTH_SUBSCRIPTION,EXAM_PREP_YEARLY}
+#   AUTH_TRUST_HOST, AUTH_SECRET (__REDACTED__), DATABASE_URL (__REDACTED__),
+#   NEXT_PUBLIC_APP_URL, AUTH_URL, NEXTAUTH_URL, AI_ADMIN_GENERATION_ENABLED,
+#   AI_INTEGRATIONS_OPENAI_API_KEY (__REDACTED__), OPENAI_API_KEY (__REDACTED__),
+#   NN_ENV_VALIDATION_MODE, NN_BOOTSTRAP_TEST_DELAY_MS, NN_CHILD_HEALTH_TIMEOUT_MS,
+#   STRIPE_PRICE_CA_ADVANCED_ECG_ONETIME, NEXTAUTH_SECRET (__REDACTED__),
+#   STRIPE_PRICE_ADVANCED_ECG, STRIPE_PRICE_NEW_GRAD_{YEARLY,6MONTH,MONTHLY},
+#   STRIPE_PRICE_NURSENEST_NEW_GRAD_PREP_{YEARLY,6_MONTH_SUBSCRIPTION,MONTHLY},
+#   STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_{EXAM_PREP_YEARLY,6_MONTH_SUBSCRIPTION,
+#     EXAM_PREP_3_MONTHS,EXAM_PREP_MONTHLY},
+#   STRIPE_PRICE_NURSENEST_NP_{1_YEAR,6_MONTH,3_MONTH,1_MONTH}_SUBSCRIPTION,
+#   STRIPE_PRICE_NURSENEST_RN_{1_YEAR,6_MONTH,3_MONTH,1_MONTH}_SUBSCRIPTION,
+#   STRIPE_PRICE_NURSENEST_RPN_{YEARLY,6_MONTH,3_MONTH,1_MONTH}_SUBSCRIPTION,
+#   SPACES_KEY (__REDACTED__), SPACES_SECRET (__REDACTED__),
+#   CRON_SECRET (__REDACTED__), AI_PROVIDER, OPENROUTER_MODEL,
+#   OPENROUTER_API_KEY (__REDACTED__),
+#   STRIPE_SECRET_KEY (__REDACTED__), STRIPE_WEBHOOK_SECRET (__REDACTED__),
+#   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY (empty — must be set in DO dashboard)
 #
-# MISSING from this snapshot (would be deleted on doctl apps update — see guard):
-#   NEXTAUTH_URL, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
-#   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, ENABLE_ECG_MODULE,
-#   NEXT_PUBLIC_ENABLE_ECG_MODULE, ENABLE_ADVANCED_ECG_MODULE,
-#   ALLOW_ECG_EARLY_ACCESS_CHECKOUT
-# ============================================================================
+# MISSING FROM THIS SNAPSHOT vs canonical spec:
+#   ENABLE_ECG_MODULE, NEXT_PUBLIC_ENABLE_ECG_MODULE,
+#   ENABLE_ADVANCED_ECG_MODULE, ALLOW_ECG_EARLY_ACCESS_CHECKOUT,
+#   DIRECT_URL, STRIPE_PRICE_LVN_LPN_{MONTHLY,3MONTH,6MONTH,YEARLY}
+# ─────────────────────────────────────────────────────────────────────────────
+# This file contains no deployable YAML spec — only documentation.
+# The guard script rejects it. You cannot accidentally deploy from it.

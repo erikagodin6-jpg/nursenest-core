@@ -8,6 +8,8 @@
  *
  * Import as a module from other scripts, or run directly:
  *   node scripts/do-spec-guard.mjs [path/to/spec.yaml]
+ *
+ * SEE: docs/ops/digitalocean-deploy-governance.md
  */
 import { createRequire } from "node:module";
 import { existsSync, readFileSync } from "node:fs";
@@ -19,10 +21,26 @@ const yaml = require("js-yaml");
 
 const __dir = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dir, "..");
+
+/** The one and only spec file that may be used with doctl apps update. */
 export const CANONICAL_SPEC_PATH = path.join(ROOT, ".do", "app-nursenest-core-next.yaml");
 
 /**
- * Required runtime env var NAMES that must be present in any spec that is pushed to DigitalOcean.
+ * Spec paths that must NEVER be used with doctl apps update.
+ * These files are known to be incomplete and will delete production env vars if deployed.
+ * Keyed by relative path from repo root → reason string.
+ */
+export const FORBIDDEN_SPEC_PATHS = Object.freeze({
+  "nursenest-core/live-app-spec.yaml":
+    "Dashboard export artifact — incomplete env vars, will wipe STRIPE_SECRET_KEY, DATABASE_URL, ECG flags, and others.",
+  "nursenest-core/.do/app.yaml":
+    "Stale duplicate — missing CRON_SECRET, SPACES_KEY, SPACES_SECRET and many price IDs.",
+  ".do/app.yaml":
+    'Legacy spec with wrong app name ("nursenest") and missing 50+ required env vars.',
+});
+
+/**
+ * Required runtime env var NAMES that must be present in any spec pushed to DigitalOcean.
  * A missing name means that key gets deleted from the live app on next `doctl apps update`.
  * Values/secrets are never checked here — only that the key entry exists.
  *
@@ -128,6 +146,19 @@ export function collectRuntimeEnvMap(spec) {
 }
 
 /**
+ * Check if a resolved absolute spec path is one of the known forbidden (non-canonical) files.
+ * Returns the reason string if forbidden, undefined if allowed.
+ */
+export function isForbiddenSpecPath(resolvedAbsPath) {
+  for (const [rel, reason] of Object.entries(FORBIDDEN_SPEC_PATHS)) {
+    if (resolvedAbsPath === path.resolve(ROOT, rel)) {
+      return reason;
+    }
+  }
+  return undefined;
+}
+
+/**
  * Validate a parsed spec object against the required env var contract.
  * @returns {{ ok: boolean, failures: string[], warnings: string[] }}
  */
@@ -176,13 +207,31 @@ export function validateSpec(spec) {
 
 /**
  * Parse a YAML spec file from disk and validate it.
+ * Automatically fails with a descriptive message if the path is a known forbidden file.
  * @returns {{ ok: boolean, failures: string[], warnings: string[], spec: object|null }}
  */
 export function validateSpecFile(specPath) {
-  if (!existsSync(specPath)) {
+  const resolvedPath = path.resolve(specPath);
+
+  // Hard-block known forbidden paths before even parsing
+  const forbiddenReason = isForbiddenSpecPath(resolvedPath);
+  if (forbiddenReason) {
+    const rel = path.relative(ROOT, resolvedPath);
     return {
       ok: false,
-      failures: [`Spec file not found: ${specPath}`],
+      failures: [
+        `FORBIDDEN spec file "${rel}" must never be used with doctl apps update. ${forbiddenReason}`,
+        `Use the canonical spec instead: ${path.relative(ROOT, CANONICAL_SPEC_PATH)}`,
+      ],
+      warnings: [],
+      spec: null,
+    };
+  }
+
+  if (!existsSync(resolvedPath)) {
+    return {
+      ok: false,
+      failures: [`Spec file not found: ${resolvedPath}`],
       warnings: [],
       spec: null,
     };
@@ -190,11 +239,21 @@ export function validateSpecFile(specPath) {
 
   let spec;
   try {
-    spec = yaml.load(readFileSync(specPath, "utf8"));
+    spec = yaml.load(readFileSync(resolvedPath, "utf8"));
   } catch (error) {
     return {
       ok: false,
-      failures: [`Failed to parse spec YAML at ${specPath}: ${error instanceof Error ? error.message : String(error)}`],
+      failures: [`Failed to parse spec YAML at ${resolvedPath}: ${error instanceof Error ? error.message : String(error)}`],
+      warnings: [],
+      spec: null,
+    };
+  }
+
+  // Null spec means the file was empty or comment-only (valid YAML parses to null)
+  if (spec === null || spec === undefined) {
+    return {
+      ok: false,
+      failures: [`Spec file at "${path.relative(ROOT, resolvedPath)}" parsed to null — file is empty or comment-only and cannot be deployed.`],
       warnings: [],
       spec: null,
     };
@@ -211,7 +270,15 @@ const isMain =
 
 if (isMain) {
   const specPath = process.argv[2] ?? CANONICAL_SPEC_PATH;
-  const { ok, failures, warnings } = validateSpecFile(specPath);
+  const resolvedPath = path.resolve(specPath);
+
+  // Warn loudly when validating a non-canonical path
+  if (resolvedPath !== path.resolve(CANONICAL_SPEC_PATH)) {
+    console.warn(`[do-spec-guard] WARN: Validating non-canonical spec: ${path.relative(ROOT, resolvedPath)}`);
+    console.warn(`[do-spec-guard] WARN: The canonical spec for deploy is: ${path.relative(ROOT, CANONICAL_SPEC_PATH)}`);
+  }
+
+  const { ok, failures, warnings } = validateSpecFile(resolvedPath);
 
   for (const w of warnings) {
     console.warn(`[do-spec-guard] WARN: ${w}`);
@@ -222,6 +289,6 @@ if (isMain) {
     }
     process.exit(1);
   }
-  console.log(`[do-spec-guard] OK: ${path.relative(ROOT, specPath)} passes all required env protection checks.`);
+  console.log(`[do-spec-guard] OK: ${path.relative(ROOT, resolvedPath)} passes all required env protection checks.`);
   process.exit(0);
 }
