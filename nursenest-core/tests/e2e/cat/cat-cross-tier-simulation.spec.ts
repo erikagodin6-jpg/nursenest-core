@@ -405,14 +405,13 @@ test.describe("Block 1 — RN / NCLEX-RN CAT (authenticated)", () => {
 
 test.describe("Block 2 — RPN / REx-PN CAT (public marketing)", () => {
   test("2-1: /canada/rpn/rex-pn/cat sign-in callback preserves RPN path", async ({ page }) => {
-    // Navigate via the rpn slug (canonical pathway URL); the page generates CTAs using
-    // the marketing slug "pn" (marketingHubRoleSegment maps rpn→pn for display URLs).
+    // The URL is owned by the rex-pn authority cluster (page.path = /canada/rpn/rex-pn/cat).
+    // The CTA sign-in block uses page.path directly so callbackUrl carries the rpn slug.
     const catPath = "/canada/rpn/rex-pn/cat";
-    const marketingCatPath = "/canada/pn/rex-pn/cat";
     const obs = attachPageObservers(page, { profile: "public" });
     try {
       await page.goto(catPath, { waitUntil: "domcontentloaded" });
-      const encodedPath = encodeURIComponent(marketingCatPath);
+      const encodedPath = encodeURIComponent(catPath);
       const signInForCat = page.locator(`a[href*="callbackUrl=${encodedPath}"]`).first();
       await expect(signInForCat).toBeVisible({ timeout: 30_000 });
 
@@ -437,13 +436,13 @@ test.describe("Block 2 — RPN / REx-PN CAT (public marketing)", () => {
     const obs = attachPageObservers(page, { profile: "public" });
     try {
       await page.goto("/canada/rpn/rex-pn/cat", { waitUntil: "domcontentloaded" });
-      // The page renders fallback links using the marketing slug "pn" (rpn→pn per
-      // marketingHubRoleSegment), which the registry resolves correctly back to the pathway.
+      // The URL is owned by the rex-pn authority cluster — CTAs in the page header use
+      // the canonical rpn slug (not the marketing-hub pn alias).
       await expect(
-        page.locator('a[href="/canada/pn/rex-pn/lessons"]').first(),
+        page.locator('a[href="/canada/rpn/rex-pn/lessons"]').first(),
       ).toBeVisible({ timeout: 30_000 });
       await expect(
-        page.locator('a[href="/canada/pn/rex-pn/questions"]').first(),
+        page.locator('a[href="/canada/rpn/rex-pn/questions"]').first(),
       ).toBeVisible({ timeout: 30_000 });
 
       await page.screenshot({
@@ -488,12 +487,14 @@ test.describe("Block 3 — NP / FNP CAT (public marketing, waitlist/fallback)", 
   }) => {
     const obs = attachPageObservers(page, { profile: "public" });
     try {
+      // FNP CAT uses Next.js streaming SSR — links may arrive after initial HTML.
+      // 60s timeout accommodates cold-start streaming latency on the current instance.
       await page.goto("/us/np/fnp/cat", { waitUntil: "domcontentloaded" });
       await expect(page.locator('a[href="/us/np/fnp/lessons"]').first()).toBeVisible({
-        timeout: 30_000,
+        timeout: 60_000,
       });
       await expect(page.locator('a[href="/us/np/fnp/questions"]').first()).toBeVisible({
-        timeout: 30_000,
+        timeout: 60_000,
       });
       // No sign-in CTA pointing back to this CAT path (confirm no broken loop)
       await expect(

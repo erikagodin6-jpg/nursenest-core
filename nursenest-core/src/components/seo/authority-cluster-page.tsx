@@ -157,6 +157,43 @@ export function AuthorityClusterPageView({ page }: { page: AuthorityClusterPage 
       <article className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />
 
+        {/* ── CAT product CTA — only for authority pages that own a /cat URL ── */}
+        {page.slug === "cat" ? (
+          <section
+            className="nn-cat-authority-cta mt-6 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] p-6"
+            aria-label="Start or sign in to practise"
+            data-nn-qa-cat-authority-cta="true"
+          >
+            <h2 className="text-base font-bold text-[var(--theme-heading-text)]">
+              Practice with adaptive questions
+            </h2>
+            <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+              Sign in to launch an adaptive exam session or browse lessons and practice questions first.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link
+                href={`/login?callbackUrl=${encodeURIComponent(page.path)}`}
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-6 py-2.5 text-[14px] font-semibold text-white shadow-sm transition hover:opacity-90"
+                data-nn-qa-cat-authority-signin="true"
+              >
+                Sign In to Start
+              </Link>
+              {page.ctas
+                .filter((c) => c.href !== page.path)
+                .slice(0, 2)
+                .map((cta) => (
+                  <Link
+                    key={cta.href}
+                    href={cta.href}
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-2.5 text-[14px] font-semibold text-[var(--theme-body-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
+                  >
+                    {cta.label}
+                  </Link>
+                ))}
+            </div>
+          </section>
+        ) : null}
+
         {/* ── Premium hero ─────────────────────────────────────────────────── */}
         <header className="mt-6 overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] px-6 py-8 sm:px-10 sm:py-10">
           <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
