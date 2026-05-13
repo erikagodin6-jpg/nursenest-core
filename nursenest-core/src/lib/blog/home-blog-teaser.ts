@@ -8,7 +8,7 @@ const homeBlogTeaserSentryRuntimePromise = import("@/lib/observability/sentry-ru
 
 const HOME_BLOG_TEASER_SLOW_MS = 800;
 const HOME_BLOG_TEASER_TIMEOUT_MS = 1000;
-const HOME_BLOG_TEASER_SENTRY_IMPORT_BUDGET_MS = 2000;
+const HOME_BLOG_TEASER_SENTRY_IMPORT_BUDGET_MS = 150;
 
 /**
  * Bounded recent posts for the marketing homepage teaser — isolated from the rest of the page so a

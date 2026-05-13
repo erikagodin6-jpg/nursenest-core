@@ -5,6 +5,10 @@ import "@/app/learner-cockpit-premium.css";
 import "@/app/learner-surface-primitives.css";
 import "../../../../../styles/tokens.css";
 import "../../../../../styles/learner-ds.css";
+// Learner-specific styles extracted from premium-redesign-2026.css (moved to marketing layout).
+// Contains: learner-ds-ambient, learner-dashboard-hero, CAT exam chrome, practice exam runner,
+// flashcard session surfaces.
+import "@/app/learner-premium-ds.css";
 
 import type { ReactNode } from "react";
 import { Suspense } from "react";

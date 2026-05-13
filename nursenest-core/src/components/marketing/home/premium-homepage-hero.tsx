@@ -259,7 +259,7 @@ function HeroClinicalPanel({
 
 /* ──────────────────────────────────────────────────────────────────
    Premium homepage hero — server component.
-   Props replace the removed useMarketingI18n / useNursenestRegion hooks.
+   Props replace the removed i18n and region hooks (see file header).
    ────────────────────────────────────────────────────────────────── */
 export function PremiumHomepageHero(props: {
   questionCount?: number;

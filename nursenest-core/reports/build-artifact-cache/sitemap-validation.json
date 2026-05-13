@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "stepName": "sitemap_validation",
-  "fingerprint": "72618889088c27ce22e8af42835a4d8ced358a4eec208927a54b2c47b490b870",
-  "generatedAt": "2026-05-12T20:09:38.762Z",
+  "fingerprint": "9a0061203a754e43c27cd61750dc8dcbd0bc1aabdde71901a43fcc5059ce569c",
+  "generatedAt": "2026-05-13T12:13:44.692Z",
   "inputs": [
     {
       "type": "file",
@@ -550,6 +550,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/advanced-ecg-nursing/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/allied-health/[slug]/blog/[postSlug]/page.tsx"
     },
     {
@@ -854,6 +858,10 @@
     },
     {
       "type": "file",
+      "path": "src/app/(marketing)/(default)/compare/[slug]/page.tsx"
+    },
+    {
+      "type": "file",
       "path": "src/app/(marketing)/(default)/contact/page.tsx"
     },
     {
@@ -863,6 +871,14 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/disclaimer/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/ecg-interpretation/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/ecg-telemetry-mastery/page.tsx"
     },
     {
       "type": "file",
@@ -1163,6 +1179,10 @@
     {
       "type": "file",
       "path": "src/app/(marketing)/(default)/reset-password/page.tsx"
+    },
+    {
+      "type": "file",
+      "path": "src/app/(marketing)/(default)/resources/[slug]/page.tsx"
     },
     {
       "type": "file",
@@ -5542,6 +5562,10 @@
     },
     {
       "type": "file",
+      "path": "src/lib/seo/long-form-seo-blog-posts-chunk3.ts"
+    },
+    {
+      "type": "file",
       "path": "src/lib/seo/long-form-seo-blog-posts.ts"
     },
     {
@@ -5663,6 +5687,14 @@
     {
       "type": "file",
       "path": "src/lib/seo/pathway-topic-programmatic-registry.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/phase2-authority-expansion-seo.contract.test.ts"
+    },
+    {
+      "type": "file",
+      "path": "src/lib/seo/phase3-authority-expansion-seo.contract.test.ts"
     },
     {
       "type": "file",
@@ -6025,6 +6057,6 @@
     "/root/nursenest-core/nursenest-core/reports/build-artifact-cache/sitemap-validation.json"
   ],
   "metadata": {
-    "durationMs": 9141
+    "durationMs": 9582
   }
 }

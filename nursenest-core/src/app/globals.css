@@ -2,13 +2,14 @@
 @import "./theme-palettes.css";
 @import "./color-roles.css";
 @import "./semantic-status-tokens.css";
-@import "./premium-redesign-2026.css";
+/* premium-redesign-2026.css and premium-allied-newgrad-convergence.css moved to
+   (marketing) layout — they contain no learner-specific styles and are only
+   needed on marketing routes. This keeps ~224 KB off the learner/admin CSS bundle. */
 @import "./marketing-brand-atmosphere.css";
 @import "./full-platform-convergence.css";
 @import "./premium-color-depth-convergence.css";
 @import "./premium-atmospheric-ecosystem-convergence.css";
 @import "./premium-mobile-study-experience-audit.css";
-@import "./premium-allied-newgrad-convergence.css";
 @import "./mobile-ux-standards.css";
 
 html,

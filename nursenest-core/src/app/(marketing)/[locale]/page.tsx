@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
+import { PremiumHomepageHero } from "@/components/marketing/home/premium-homepage-hero";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -101,6 +102,15 @@ export default async function LocalizedHomePage({ params }: Props) {
   );
   const { crumbs, schemaItems } = localizeBreadcrumbResolutionForLocale(raw, messages, locale);
   const homeHeroCarouselSlides = buildHomeHeroPrimarySlidesFromMessages(messages);
+  const heroSlot = (
+    <PremiumHomepageHero
+      locale={locale}
+      region={marketingRegion}
+      questionCount={homeStatsRaw.questionCount}
+      lessonCount={homeStatsRaw.totalLessons}
+      messages={messages}
+    />
+  );
   return (
     <>
       <WebPageJsonLd
@@ -122,6 +132,7 @@ export default async function LocalizedHomePage({ params }: Props) {
         homeMarketingStats={homeMarketingStats}
         publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
         homeHeroCarouselSlides={homeHeroCarouselSlides}
+        heroSlot={heroSlot}
       />
     </>
   );

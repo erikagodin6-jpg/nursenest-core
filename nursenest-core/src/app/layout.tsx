@@ -171,6 +171,10 @@ export default async function RootLayout({
       data-theme={NURSENEST_DEFAULT_THEME}
       suppressHydrationWarning
     >
+      {/* React 19 hoists these <link> elements to <head>. They eliminate the
+          DNS + TLS handshake cost for the CDN before any image requests fire. */}
+      <link rel="preconnect" href="https://nursenest-images.tor1.cdn.digitaloceanspaces.com" />
+      <link rel="dns-prefetch" href="https://nursenest-images.tor1.cdn.digitaloceanspaces.com" />
       <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)]">
         <Script id="nn-marketing-theme-seed" strategy="beforeInteractive">
           {marketingThemeBeforeInteractiveInlineScript()}

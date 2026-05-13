@@ -601,7 +601,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
         >
         <div className="nn-section-shell nn-header-primary-inner-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
-          <div className="top-bar nn-header-mobile-only-flex min-h-0 w-full items-center justify-between gap-2 overflow-visible border-b border-[var(--header-border)] py-1.5 pt-[max(0.25rem,env(safe-area-inset-top,0px))] sm:min-h-[4.5rem] sm:gap-3 sm:py-0">
+          <div className="top-bar nn-header-mobile-only-flex min-h-[3.5rem] w-full items-center justify-between gap-2 overflow-visible border-b border-[var(--header-border)] py-1.5 pt-[max(0.25rem,env(safe-area-inset-top,0px))] sm:min-h-[4.5rem] sm:gap-3 sm:py-0">
             <div className="nn-header-mobile-brand-auth-cluster flex min-w-0 flex-1 items-center gap-2 overflow-hidden sm:gap-3">
               <div className="flex min-w-0 shrink items-center gap-2 overflow-hidden">
                 <Link
