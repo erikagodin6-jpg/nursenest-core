@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { buildLessonBlueprintCoverageDashboard } from "@/lib/content-blueprint/lesson-blueprint-coverage-dashboard";
@@ -6,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminLessonBlueprintCoveragePage() {
   await requireAdmin();
-  const catalog = require("@/content/pathway-lessons/catalog.json");
+  const catalog = JSON.parse(readFileSync(join(process.cwd(), "src/content/pathway-lessons/catalog.json"), "utf8"));
   const dashboard = buildLessonBlueprintCoverageDashboard(catalog);
 
   return (

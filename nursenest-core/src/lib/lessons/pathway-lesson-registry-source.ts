@@ -2,6 +2,8 @@
  * Ops-facing matrix: registry pathways vs pathway_lessons DB vs static catalog.json.
  * Used by `npm run ops:pathway-lesson-sources` and admin scalability-style tooling.
  */
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
@@ -14,7 +16,7 @@ let catalogCache: CatalogShape | null = null;
 
 function getCatalog(): CatalogShape {
   if (catalogCache) return catalogCache;
-  catalogCache = require("@/content/pathway-lessons/catalog.json") as CatalogShape;
+  catalogCache = JSON.parse(readFileSync(join(process.cwd(), "src/content/pathway-lessons/catalog.json"), "utf8")) as CatalogShape;
   return catalogCache;
 }
 

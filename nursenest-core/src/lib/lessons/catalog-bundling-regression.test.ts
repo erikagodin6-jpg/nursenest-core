@@ -60,6 +60,27 @@ describe("Catalog bundling regression guard", () => {
   });
 });
 
+describe("Secondary catalog require() guard — admin/ops files", () => {
+  const SECONDARY_FILES = [
+    "src/lib/content/topic-map-catalog-dedupe.ts",
+    "src/lib/lessons/pathway-lesson-registry-source.ts",
+    "src/lib/scalability/build-content-scalability-report.ts",
+    "src/lib/content-blueprint/rn-nclex-master-map.ts",
+    "src/lib/content-blueprint/rn-nclex-lesson-depth-gate.ts",
+    "src/app/(admin)/admin/lessons/blueprint-coverage/page.tsx",
+  ];
+
+  for (const file of SECONDARY_FILES) {
+    it(`${file} does not use bare require() for catalog JSON`, () => {
+      const src = readSrc(file);
+      const lines = src.split("\n").filter((l) => !l.trim().startsWith("//") && !l.trim().startsWith("*"));
+      const bareRequire = lines.filter((l) => /\brequire\s*\(["']@\/content/.test(l));
+      assert.equal(bareRequire.length, 0,
+        `${file} has bare require() for catalog JSON (causes static bundling):\n  ${bareRequire.slice(0, 2).join("\n  ")}\n  Use readFileSync instead.`);
+    });
+  }
+});
+
 describe("Server chunk size budget", () => {
   it("no .next/server/chunks/*.js file exceeds 10 MB (catalog bundling guard)", () => {
     const { readdirSync, statSync } = require("node:fs");

@@ -117,7 +117,9 @@ test("admin blueprint coverage page avoids top-level catalog JSON imports", () =
   const adminBlueprintPage = readAppFile("app/(admin)/admin/lessons/blueprint-coverage/page.tsx");
 
   assert.doesNotMatch(adminBlueprintPage, /import catalog from "@\/content\/pathway-lessons\/catalog\.json"/);
-  assert.match(adminBlueprintPage, /require\("@\/content\/pathway-lessons\/catalog\.json"\)/);
+  // Must use readFileSync (not require) to avoid static bundling of catalog JSON
+  assert.doesNotMatch(adminBlueprintPage, /require\("@\/content\/pathway-lessons\/catalog\.json"\)/);
+  assert.match(adminBlueprintPage, /readFileSync.*catalog\.json/);
 });
 
 test("pathway lesson catalog sync avoids top-level heavy catalog JSON imports", () => {
@@ -128,7 +130,7 @@ test("pathway lesson catalog sync avoids top-level heavy catalog JSON imports", 
   assert.doesNotMatch(source, /import newGradTransitionCatalog from ["']@\/content\/pathway-lessons\/new-grad-transition-catalog\.json["']/);
 });
 
-test("priority content and catalog helper modules avoid top-level JSON imports", () => {
+test("priority content and catalog helper modules avoid top-level JSON imports and bare require()", () => {
   const sourcePaths = [
     "lib/content/master-topic-map.ts",
     "lib/content-blueprint/rn-nclex-master-map.ts",
@@ -139,8 +141,14 @@ test("priority content and catalog helper modules avoid top-level JSON imports",
 
   for (const sourcePath of sourcePaths) {
     const source = readAppFile(sourcePath);
-    assert.doesNotMatch(source, /import\s+.+\s+from\s+["']@\/(content|data)\/.+\.json["']/);
-    assert.match(source, /require\(["']@\/content\/.+\.json["']\)/);
+    // No static import of JSON (would cause bundling)
+    assert.doesNotMatch(source, /import\s+.+\s+from\s+["']@\/(content|data)\/.+\.json["']/,
+      `${sourcePath}: must not have static JSON import`);
+    // No bare require() of catalog JSON (causes Turbopack/webpack to statically bundle catalog files)
+    const lines = source.split("\n").filter((l: string) => !l.trim().startsWith("//") && !l.trim().startsWith("*"));
+    const bareRequire = lines.filter((l: string) => /\brequire\s*\(["']@\/content/.test(l));
+    assert.equal(bareRequire.length, 0,
+      `${sourcePath}: must not use require() for catalog JSON — use readFileSync instead. Found: ${bareRequire.slice(0, 1).join(", ")}`);
   }
 });
 

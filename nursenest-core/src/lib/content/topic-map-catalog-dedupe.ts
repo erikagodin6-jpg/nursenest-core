@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { flattenTopicMap } from "./master-topic-map";
 
 export type TopicCatalogCollision = {
@@ -15,7 +17,7 @@ let catalogCache: CatalogShape | null = null;
 
 function getCatalog(): CatalogShape {
   if (catalogCache) return catalogCache;
-  catalogCache = require("@/content/pathway-lessons/catalog.json") as CatalogShape;
+  catalogCache = JSON.parse(readFileSync(join(process.cwd(), "src/content/pathway-lessons/catalog.json"), "utf8")) as CatalogShape;
   return catalogCache;
 }
 

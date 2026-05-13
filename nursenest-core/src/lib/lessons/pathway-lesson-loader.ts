@@ -1912,6 +1912,71 @@ export async function getPathwayLessonForMarketingHubVerify(
   });
 }
 
+/**
+ * Lightweight hub verify: loads only hub-card metadata + `structuralPublicComplete` (no sections JSONB).
+ *
+ * Used by `verifyMarketingHubLessonRowsResolve` in the marketing lessons hub page. Replacing the
+ * default full-lesson loader here saves ~50 KB per lesson × 60 lessons = ~3 MB per verify pass,
+ * reducing hub verify from a potential 30-second multi-round DB scan to under 2 seconds.
+ * The verify step only needs publicComplete + pathway-context check — both work from metadata
+ * columns without section bodies.
+ *
+ * Falls back to `getPathwayLessonForMarketingHubVerify` when `structuralPublicComplete` column is absent
+ * (older DB schema) or when the slim query says `structuralPublicComplete=false` (detail verify needed).
+ */
+export async function getPathwayLessonForHubVerifySlim(
+  pathwayId: string,
+  slug: string,
+  hubMarketingLocale?: string,
+  lessonDbShardLocale?: string,
+): Promise<PathwayLessonRecord | undefined> {
+  const structuralColPresent = await isPathwayLessonStructuralPublicCompleteColumnPresent();
+  if (!structuralColPresent) {
+    return getPathwayLessonForMarketingHubVerify(pathwayId, slug, hubMarketingLocale, lessonDbShardLocale);
+  }
+
+  const locale = lessonDbShardLocale?.trim()
+    ? normalizePathwayLessonLocale(lessonDbShardLocale)
+    : PATHWAY_LESSON_CANONICAL_DB_LOCALE;
+
+  const row = await dbCall(
+    () =>
+      prisma.pathwayLesson.findUnique({
+        where: { pathwayId_slug_locale: { pathwayId, slug: slug.trim(), locale } },
+        select: {
+          ...PATHWAY_LESSON_HUB_LIST_SELECT,
+          status: true,
+          structuralPublicComplete: true,
+        },
+      }),
+    null,
+    PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS,
+  );
+
+  if (!row || row.status !== "PUBLISHED") return undefined;
+  // When the DB column says not structurally complete, fall back to full verify (catalog fallback may apply).
+  if (!row.structuralPublicComplete) {
+    return getPathwayLessonForMarketingHubVerify(pathwayId, slug, hubMarketingLocale, lessonDbShardLocale);
+  }
+
+  // Normalize with empty sections (fast: no section processing). Then override publicComplete from DB column.
+  const meta = lessonLocaleMeta(hubMarketingLocale, locale, false, false);
+  const input = pathwayLessonRowToInput({ ...row, sections: null });
+  const normalized = normalizeLesson(input, pathwayId);
+  const withPublicComplete: PathwayLessonRecord = {
+    ...normalized,
+    structuralQuality: {
+      ...normalized.structuralQuality,
+      publicComplete: true,
+      structureMode: normalized.structuralQuality?.structureMode ?? "premium",
+      issues: normalized.structuralQuality?.issues ?? [],
+      warnings: normalized.structuralQuality?.warnings ?? [],
+      internalStudyLinkCount: normalized.structuralQuality?.internalStudyLinkCount ?? 0,
+    },
+  };
+  return stripPathwayLessonToHubListShape(withLocaleMeta(withPublicComplete, meta));
+}
+
 export type PathwayLessonSeoMeta = {
   slug: string;
   title: string;

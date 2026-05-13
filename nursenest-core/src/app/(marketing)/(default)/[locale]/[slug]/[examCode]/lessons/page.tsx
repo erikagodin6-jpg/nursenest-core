@@ -18,6 +18,7 @@ import {
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import {
+  getPathwayLessonForHubVerifySlim,
   getPathwayLessonListWarehouseLocaleForHub,
   listAlliedProfessionTaxonomyClustersForPublicHub,
   listTopicClustersForPublicNavigation,
@@ -780,6 +781,7 @@ export default async function PathwayLessonsHubPage({
     listWarehouseLocale,
     prepareStages: hubPrepareStages,
     maxUniqueSlugsToVerify: pageVerifyCap,
+    resolveLessonDetail: getPathwayLessonForHubVerifySlim,
   });
   const verifyDurationMs = Math.round(performance.now() - verifyT0);
   console.error(`[lessons-perf] verify_done pathway=${pathway.id} kept=${vr.kept.length} excluded=${vr.excluded.length} ms=${verifyDurationMs}`);

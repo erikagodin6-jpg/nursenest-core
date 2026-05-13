@@ -1,8 +1,8 @@
 # Lesson Hub P0 Performance Fix
 
-**Date:** 2026-05-13  
+**Date:** 2026-05-13 (updated 2026-05-13)  
 **Severity:** P0 — production lesson hubs loading 60+ seconds  
-**Status:** Fixed
+**Status:** Fixed (Phase 2 — verify + secondary bundling)
 
 ---
 
@@ -33,12 +33,30 @@ all 25 catalog files. V8 had to parse and compile 44 MB of JS on every cold modu
 
 ## Files Changed
 
+### Phase 1 — Primary catalog bundling fix (previous session)
+
 | File | Change |
 |---|---|
 | `src/lib/lessons/pathway-lesson-catalog-sync.ts` | Replaced `createRequire`/`catalogBundleRequire` with `readFileSync`-based loader; added pathway type guards |
 | `src/lib/lessons/catalog-bundling-regression.test.ts` | New regression tests (7 checks) |
 | `scripts/check-performance-budgets.mjs` | Added server chunk size budget (10 MB hard limit) |
 | `package.json` | Added `test:lesson-catalog` script |
+
+### Phase 2 — Secondary bundling + verify step optimization (this session)
+
+| File | Change |
+|---|---|
+| `src/lib/content/topic-map-catalog-dedupe.ts` | `require("catalog.json")` → `readFileSync` |
+| `src/lib/content/master-topic-map.ts` | `require("master-topic-map.json")` → `readFileSync` |
+| `src/lib/lessons/pathway-lesson-registry-source.ts` | `require("catalog.json")` → `readFileSync` |
+| `src/lib/scalability/build-content-scalability-report.ts` | `require("catalog.json")` → `readFileSync` |
+| `src/lib/content-blueprint/rn-nclex-master-map.ts` | `require("rn-nclex-master-map.json")` → `readFileSync` |
+| `src/lib/content-blueprint/rn-nclex-lesson-depth-gate.ts` | `require("rn-nclex-master-map.json")` → `readFileSync` |
+| `src/app/(admin)/admin/lessons/blueprint-coverage/page.tsx` | `require("catalog.json")` → `readFileSync` |
+| `src/lib/lessons/pathway-lesson-loader.ts` | Added `getPathwayLessonForHubVerifySlim` — no-sections verify |
+| `src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx` | Wired slim verify into `verifyMarketingHubLessonRowsResolve` |
+| `src/lib/lessons/catalog-bundling-regression.test.ts` | Extended: 6 new tests for secondary files |
+| `src/lib/marketing/build-phase-memory-guards.test.ts` | Updated: tests now enforce `readFileSync` pattern |
 
 ---
 

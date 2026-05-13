@@ -2,6 +2,8 @@
  * Optional depth check for catalog lessons on RN pathways when the slug exists in
  * `rn-nclex-master-map.json` — total plain-text words vs tier band from the map.
  */
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 import {
   type RnNclexTier,
@@ -18,7 +20,7 @@ let bySlugCache: Map<string, RnNclexDepthRow> | null = null;
 function getRnNclexDepthRowsBySlug(): Map<string, RnNclexDepthRow> {
   if (bySlugCache) return bySlugCache;
 
-  const map = require("@/content/pathway-lessons/rn-nclex-master-map.json") as {
+  const map = JSON.parse(readFileSync(join(process.cwd(), "src/content/pathway-lessons/rn-nclex-master-map.json"), "utf8")) as {
     lessons?: RnNclexDepthRow[];
   };
 

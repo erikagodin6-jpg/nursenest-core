@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { ExamKey, MasterTopicMapDocument, MasterTopicMapExam, MasterTopicMapTopic } from "./master-topic-map.types";
 
 export type { ExamKey, MasterTopicMapDocument, MasterTopicMapExam, MasterTopicMapCategory, MasterTopicMapTopic } from "./master-topic-map.types";
@@ -6,7 +8,7 @@ let masterTopicMapCache: MasterTopicMapDocument | null = null;
 
 export function getMasterTopicMap(): MasterTopicMapDocument {
   if (masterTopicMapCache) return masterTopicMapCache;
-  masterTopicMapCache = require("@/content/topic-maps/master-topic-map.json") as MasterTopicMapDocument;
+  masterTopicMapCache = JSON.parse(readFileSync(join(process.cwd(), "src/content/topic-maps/master-topic-map.json"), "utf8")) as MasterTopicMapDocument;
   return masterTopicMapCache;
 }
 

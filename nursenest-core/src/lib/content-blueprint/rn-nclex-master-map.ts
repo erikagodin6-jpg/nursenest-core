@@ -8,6 +8,8 @@
  * (`exam-complete-lesson-template.ts`) and **RN tier depth rules** (`rn-nclex-content-depth-rules.ts`).
  * Do not bulk-append thin placeholders to `catalog.json` — merge in batches with full prose meeting tier word targets.
  */
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { RnNclexTier } from "@/lib/content-blueprint/rn-nclex-content-depth-rules";
 
 export type { RnNclexTier } from "@/lib/content-blueprint/rn-nclex-content-depth-rules";
@@ -47,7 +49,7 @@ let rnNclexMasterMapCache: RnNclexMasterMap | null = null;
 
 export function getRnNclexMasterMap(): RnNclexMasterMap {
   if (rnNclexMasterMapCache) return rnNclexMasterMapCache;
-  rnNclexMasterMapCache = require("@/content/pathway-lessons/rn-nclex-master-map.json") as RnNclexMasterMap;
+  rnNclexMasterMapCache = JSON.parse(readFileSync(join(process.cwd(), "src/content/pathway-lessons/rn-nclex-master-map.json"), "utf8")) as RnNclexMasterMap;
   return rnNclexMasterMapCache;
 }
 
