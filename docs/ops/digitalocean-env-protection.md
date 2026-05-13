@@ -160,6 +160,27 @@ logged.
 
 ---
 
+## Spec File Inventory
+
+| File | Role | Guard result | Safe for doctl? |
+|---|---|---|---|
+| `.do/app-nursenest-core-next.yaml` | **CANONICAL** | ✅ Passes | ✅ Yes — only this file |
+| `.do/app.yaml` | **LEGACY** (labeled in header) | N/A — wrong app name | ❌ No |
+| `nursenest-core/.do/app.yaml` | **STALE DUPLICATE** (labeled in header) | ❌ Fails guard — missing CRON_SECRET, SPACES_KEY, SPACES_SECRET | ❌ No |
+| `nursenest-core/live-app-spec.yaml` | **DOCUMENTATION ARTIFACT** (neutered, no env values) | ❌ Fails guard — missing 8+ required keys | ❌ No |
+
+### Why `live-app-spec.yaml` is dangerous
+
+This file is a snapshot from the DO dashboard (`doctl apps spec get`). Running `doctl apps update`
+with it would delete `NEXTAUTH_URL`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
+`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, all ECG flags, and more from production.
+
+The file has been neutered — all `EV[1:...]` encrypted values stripped, YAML content replaced with
+a comment stub. It exists only to document which env var names were present in the last captured
+live spec.
+
+---
+
 ## Architecture Notes
 
 - `DATABASE_URL` and `AUTH_SECRET` are scoped `RUN_AND_BUILD_TIME` (not `RUN_TIME`) as a workaround

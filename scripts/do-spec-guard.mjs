@@ -25,27 +25,71 @@ export const CANONICAL_SPEC_PATH = path.join(ROOT, ".do", "app-nursenest-core-ne
  * Required runtime env var NAMES that must be present in any spec that is pushed to DigitalOcean.
  * A missing name means that key gets deleted from the live app on next `doctl apps update`.
  * Values/secrets are never checked here — only that the key entry exists.
+ *
+ * RULE: When a new Stripe product or feature flag is added, add its env key here AND to
+ * .do/app-nursenest-core-next.yaml before running doctl apps update.
  */
 export const REQUIRED_RUNTIME_ENV_KEYS = Object.freeze([
+  // ── Core auth + DB ───────────────────────────────────────────────────────
   "DATABASE_URL",
   "AUTH_SECRET",
   "NEXTAUTH_URL",
   "AUTH_URL",
+  "NEXT_PUBLIC_APP_URL",
+
+  // ── Stripe API keys ───────────────────────────────────────────────────────
   "STRIPE_SECRET_KEY",
   "STRIPE_WEBHOOK_SECRET",
   "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
-  // ECG module publish flags — must remain set after any spec update.
+
+  // ── ECG module publish flags ──────────────────────────────────────────────
   "ENABLE_ECG_MODULE",
   "NEXT_PUBLIC_ENABLE_ECG_MODULE",
   "ENABLE_ADVANCED_ECG_MODULE",
   "ALLOW_ECG_EARLY_ACCESS_CHECKOUT",
-  // NP subscription Stripe price IDs (canonical keys, required for NP checkout).
+
+  // ── Stripe price IDs: Advanced ECG ───────────────────────────────────────
+  "STRIPE_PRICE_ADVANCED_ECG",
+
+  // ── Stripe price IDs: NP (Nurse Practitioner / CNPLE) ─────────────────────
   "STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION",
   "STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION",
   "STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION",
   "STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION",
-  // Advanced ECG add-on price ID — separate from base subscription matrix.
-  "STRIPE_PRICE_ADVANCED_ECG",
+
+  // ── Stripe price IDs: RN (NCLEX-RN) ──────────────────────────────────────
+  "STRIPE_PRICE_NURSENEST_RN_1_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RN_3_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RN_6_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RN_1_YEAR_SUBSCRIPTION",
+
+  // ── Stripe price IDs: RPN (REx-PN / NCLEX-PN Canada) ─────────────────────
+  "STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION",
+
+  // ── Stripe price IDs: New Grad ────────────────────────────────────────────
+  "STRIPE_PRICE_NEW_GRAD_MONTHLY",
+  "STRIPE_PRICE_NEW_GRAD_6MONTH",
+  "STRIPE_PRICE_NEW_GRAD_YEARLY",
+
+  // ── Stripe price IDs: Allied Health (4 shared prices, all 7 careers) ─────
+  "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY",
+  "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_3_MONTHS",
+  "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_6_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY",
+
+  // ── Stripe price IDs: LVN/LPN (NCLEX-PN US) — keys required even if values pending ──
+  "STRIPE_PRICE_LVN_LPN_MONTHLY",
+  "STRIPE_PRICE_LVN_LPN_3MONTH",
+  "STRIPE_PRICE_LVN_LPN_6MONTH",
+  "STRIPE_PRICE_LVN_LPN_YEARLY",
+
+  // ── Cron + Storage (deletion causes silent runtime failures) ──────────────
+  "CRON_SECRET",
+  "SPACES_KEY",
+  "SPACES_SECRET",
 ]);
 
 /** At least one of these must be present (AI provider key). */

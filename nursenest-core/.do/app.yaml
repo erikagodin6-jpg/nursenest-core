@@ -1,3 +1,21 @@
+# ============================================================================
+# STALE DUPLICATE — DO NOT USE WITH doctl apps update
+# ============================================================================
+# The canonical DO app spec is: .do/app-nursenest-core-next.yaml (repo root)
+#
+# This file diverges from the canonical on:
+#   - Stripe RPN/RN/New Grad/LVN/Allied prices (empty string vs type:SECRET)
+#   - Variable scopes for BUILD_WEBPACK_PARALLELISM, TMPDIR
+#   - NODE_MAX_OLD_SPACE_SIZE_MB may be stale
+#
+# Running `doctl apps update --spec nursenest-core/.do/app.yaml` from the repo
+# root will use THIS file instead of the canonical, potentially deleting or
+# corrupting production Stripe price env vars.
+#
+# DO NOT run doctl apps update with this file.
+# DO use:  npm run do:deploy:safe   (repo root)
+# See:     docs/ops/digitalocean-env-protection.md
+# ============================================================================
 name: nursenest-core-next
 region: tor
 domains:

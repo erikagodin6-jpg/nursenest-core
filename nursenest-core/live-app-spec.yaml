@@ -1,214 +1,65 @@
-ingress:
-  rules:
-  - component:
-      name: web
-    match:
-      path:
-        prefix: /
-name: nursenest-core-next
-region: tor
-services:
-- dockerfile_path: Dockerfile
-  envs:
-  - key: NODE_VERSION
-    scope: RUN_AND_BUILD_TIME
-    value: 22.22.2
-  - key: NODE_ENV
-    scope: RUN_AND_BUILD_TIME
-    value: production
-  - key: NEXT_TELEMETRY_DISABLED
-    scope: BUILD_TIME
-    value: "1"
-  - key: RUN_HEAVY_BUILD_TASKS
-    scope: BUILD_TIME
-    value: "false"
-  - key: SKIP_I18N_PREBUILD
-    scope: BUILD_TIME
-    value: "1"
-  - key: NN_APP_PLATFORM_BUILD
-    scope: BUILD_TIME
-    value: "true"
-  - key: NN_LESSON_INDEX_VERIFY_MODE
-    scope: BUILD_TIME
-    value: manifest
-  - key: NN_SKIP_HEAVY_BUILD_REPORTS
-    scope: BUILD_TIME
-    value: "1"
-  - key: NN_LOW_MEMORY_BUILD
-    scope: BUILD_TIME
-    value: "1"
-  - key: NN_BUILD_COMMIT
-    scope: RUN_TIME
-    value: ${web.COMMIT_HASH}
-  - key: NN_BUILD_BRANCH
-    scope: RUN_TIME
-    value: main
-  - key: NN_FORCE_SINGLE_BUILD_WORKER
-    scope: BUILD_TIME
-    value: "true"
-  - key: NN_TIMED_INCLUDE_NPM_PRUNE
-    scope: BUILD_TIME
-    value: "1"
-  - key: SENTRY_ENABLED
-    scope: BUILD_TIME
-    value: "false"
-  - key: NODE_OPTIONS
-    scope: BUILD_TIME
-    value: --max-old-space-size=4096
-  - key: BUILD_NODE_MAX_OLD_SPACE_SIZE_MB
-    scope: BUILD_TIME
-    value: "4096"
-  - key: BUILD_WEBPACK_PARALLELISM
-    scope: RUN_TIME
-    value: "1"
-  - key: TMPDIR
-    scope: RUN_TIME
-    value: /tmp
-  - key: PORT
-    scope: RUN_TIME
-    value: "8080"
-  - key: HOSTNAME
-    scope: RUN_TIME
-    value: 0.0.0.0
-  - key: NODE_MAX_OLD_SPACE_SIZE_MB
-    scope: RUN_TIME
-    value: "768"
-  - key: AUTH_TRUST_HOST
-    scope: RUN_TIME
-    value: "true"
-  - key: AUTH_SECRET
-    scope: RUN_TIME
-    type: SECRET
-    value: EV[1:rs6qdryWryx/WYE3sfAKUJh0Cov/SPDk:NR84+jZ9xSxNTzav+jWELQ==]
-  - key: DATABASE_URL
-    scope: RUN_TIME
-    type: SECRET
-    value: EV[1:epn2WKfjCszP6t4y3HVIH0npBDHw1gl4:VQDVd0phuUp1+VG9MmsAog==]
-  - key: NEXT_PUBLIC_APP_URL
-    scope: RUN_AND_BUILD_TIME
-    value: https://nursenest.ca
-  - key: AUTH_URL
-    scope: RUN_TIME
-  - key: AI_ADMIN_GENERATION_ENABLED
-    scope: RUN_TIME
-    value: "false"
-  - key: AI_INTEGRATIONS_OPENAI_API_KEY
-    scope: RUN_TIME
-    type: SECRET
-    value: EV[1:r2I65JIXdA3G7laYXfqXPezE4FfO5gjZ:UMiQ1EncFIJt2alQhr/skQ==]
-  - key: OPENAI_API_KEY
-    scope: RUN_TIME
-    type: SECRET
-    value: EV[1:DGi1tt1DaIJvQeSeMmOV1RinySVmwgj1:1ZsaCJe//lchsNnZrE1Wpw==]
-  - key: NN_ENV_VALIDATION_MODE
-    scope: RUN_TIME
-  # ── Stripe Checkout — NP subscription prices ──────────────────────────────
-  # Required secrets: set actual price_* values in the DigitalOcean App Platform
-  # console under App Settings → Environment Variables. Checkout returns HTTP 400
-  # if any of these are absent. Values are managed via DO console, not this spec.
-  - key: STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  # ── Stripe Checkout — Advanced ECG add-on price ───────────────────────────
-  # Single price ID covers all billing durations (monthly / 3-month / 6-month / yearly).
-  - key: STRIPE_PRICE_ADVANCED_ECG
-    scope: RUN_TIME
-    type: SECRET
-  # ── Stripe Checkout — RPN (REx-PN / NCLEX-PN Canada) prices ─────────────
-  # Set actual price_* values in DO App Platform console → Environment Variables.
-  - key: STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  # ── Stripe Checkout — RN (NCLEX-RN) prices ───────────────────────────────
-  - key: STRIPE_PRICE_NURSENEST_RN_1_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_RN_3_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_RN_6_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_RN_1_YEAR_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  # ── Stripe Checkout — New Grad prices ────────────────────────────────────
-  - key: STRIPE_PRICE_NEW_GRAD_MONTHLY
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NEW_GRAD_6MONTH
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NEW_GRAD_YEARLY
-    scope: RUN_TIME
-    type: SECRET
-  # ── Stripe Checkout — LVN/LPN (NCLEX-PN US) prices ───────────────────────
-  - key: STRIPE_PRICE_LVN_LPN_MONTHLY
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_LVN_LPN_3MONTH
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_LVN_LPN_6MONTH
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_LVN_LPN_YEARLY
-    scope: RUN_TIME
-    type: SECRET
-  # ── Stripe Checkout — Allied Health shared prices (all 7 careers) ─────────
-  - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_3_MONTHS
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_6_MONTH_SUBSCRIPTION
-    scope: RUN_TIME
-    type: SECRET
-  - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY
-    scope: RUN_TIME
-    type: SECRET
-  github:
-    branch: main
-    deploy_on_push: true
-    repo: erikagodin6-jpg/nursenest-core
-  health_check:
-    failure_threshold: 12
-    http_path: /readyz
-    initial_delay_seconds: 240
-    period_seconds: 15
-    port: 8080
-    success_threshold: 1
-    timeout_seconds: 15
-  http_port: 8080
-  instance_count: 1
-  instance_size_slug: basic-xs
-  liveness_health_check:
-    failure_threshold: 12
-    http_path: /healthz
-    initial_delay_seconds: 240
-    period_seconds: 15
-    port: 8080
-    success_threshold: 1
-    timeout_seconds: 15
-  name: web
-  run_command: node scripts/start-standalone.mjs
-  source_dir: .
+# ============================================================================
+# DOCUMENTATION ARTIFACT — DO NOT USE WITH doctl apps update
+# ============================================================================
+#
+# This file is a reference snapshot of what the live DigitalOcean App Platform
+# spec looks like after a deployment. It is kept for auditing and comparison
+# ONLY. It is NOT the deploy source of truth.
+#
+# THE CANONICAL SPEC FOR ALL doctl OPERATIONS IS:
+#   .do/app-nursenest-core-next.yaml   (repo root)
+#
+# WHY THIS FILE IS DANGEROUS:
+#   Passing this file to `doctl apps update APP_ID --spec live-app-spec.yaml`
+#   WILL DELETE env vars that are absent from this snapshot, including
+#   NEXTAUTH_URL, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
+#   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, ENABLE_ECG_MODULE, and others.
+#   The guard script confirms: `node scripts/do-spec-guard.mjs` exits 1 on
+#   this file with 8 FAIL messages.
+#
+# HOW TO DEPLOY SAFELY:
+#   npm run do:deploy:safe            # validates guard + diff + prints command
+#   # Or run the guard first:
+#   node scripts/do-spec-guard.mjs    # validates canonical spec
+#
+# HOW TO REFRESH THIS FILE (for audit purposes only):
+#   doctl apps spec get <APP_ID> | \
+#     sed 's/EV\[1:[^]]*\]/__REDACTED__/g' > nursenest-core/live-app-spec.yaml
+#   # Then commit the redacted version for audit trail.
+#
+# See: docs/ops/digitalocean-env-protection.md
+# ============================================================================
+#
+# NOTE: All EV[1:...] encrypted values have been removed from this file.
+# Secret values live exclusively in the DigitalOcean App Platform dashboard.
+# Env var NAMES are listed below for audit reference only.
+#
+# Last known live app name: nursenest-core-next
+# Last known instance: basic-xs → promoted to basic-s (2026-05-12)
+# Guard validation: FAILS — do not use with doctl apps update
+#
+# Runtime env var names present in last captured live spec (values redacted):
+#   NODE_VERSION, NODE_ENV, NEXT_TELEMETRY_DISABLED, RUN_HEAVY_BUILD_TASKS,
+#   SKIP_I18N_PREBUILD, NN_APP_PLATFORM_BUILD, NN_LESSON_INDEX_VERIFY_MODE,
+#   NN_SKIP_HEAVY_BUILD_REPORTS, NN_LOW_MEMORY_BUILD, NN_BUILD_COMMIT,
+#   NN_BUILD_BRANCH, NN_FORCE_SINGLE_BUILD_WORKER, NN_TIMED_INCLUDE_NPM_PRUNE,
+#   SENTRY_ENABLED, NODE_OPTIONS, BUILD_NODE_MAX_OLD_SPACE_SIZE_MB,
+#   BUILD_WEBPACK_PARALLELISM, TMPDIR, PORT, HOSTNAME, NODE_MAX_OLD_SPACE_SIZE_MB,
+#   AUTH_TRUST_HOST, AUTH_SECRET, DATABASE_URL, NEXT_PUBLIC_APP_URL, AUTH_URL,
+#   AI_ADMIN_GENERATION_ENABLED, AI_INTEGRATIONS_OPENAI_API_KEY, OPENAI_API_KEY,
+#   NN_ENV_VALIDATION_MODE,
+#   STRIPE_PRICE_NURSENEST_NP_{1_MONTH,3_MONTH,6_MONTH,1_YEAR}_SUBSCRIPTION,
+#   STRIPE_PRICE_ADVANCED_ECG,
+#   STRIPE_PRICE_NURSENEST_RPN_{1_MONTH,3_MONTH,6_MONTH,YEARLY}_SUBSCRIPTION,
+#   STRIPE_PRICE_NURSENEST_RN_{1_MONTH,3_MONTH,6_MONTH,1_YEAR}_SUBSCRIPTION,
+#   STRIPE_PRICE_NEW_GRAD_{MONTHLY,6MONTH,YEARLY},
+#   STRIPE_PRICE_LVN_LPN_{MONTHLY,3MONTH,6MONTH,YEARLY},
+#   STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_{EXAM_PREP_MONTHLY,EXAM_PREP_3_MONTHS,
+#     6_MONTH_SUBSCRIPTION,EXAM_PREP_YEARLY}
+#
+# MISSING from this snapshot (would be deleted on doctl apps update — see guard):
+#   NEXTAUTH_URL, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
+#   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, ENABLE_ECG_MODULE,
+#   NEXT_PUBLIC_ENABLE_ECG_MODULE, ENABLE_ADVANCED_ECG_MODULE,
+#   ALLOW_ECG_EARLY_ACCESS_CHECKOUT
+# ============================================================================
