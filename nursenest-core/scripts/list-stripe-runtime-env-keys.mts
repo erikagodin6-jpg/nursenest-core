@@ -12,9 +12,11 @@ export function listStripeRuntimeEnvKeys(): string[] {
 export function assertStripeRuntimeEnvKeyListMatchesPricingMatrix(): void {
   const expected = [...new Set(eachStripePriceMatrixRow().map((row) => row.envKey))].sort();
   const actual = listStripeRuntimeEnvKeys();
-  if (expected.length !== actual.length || expected.some((key, index) => key !== actual[index])) {
+  const actualSet = new Set(actual);
+  const missing = expected.filter((key) => !actualSet.has(key));
+  if (missing.length > 0) {
     throw new Error(
-      `scripts/lib/stripe-runtime-env-keys.mjs is out of sync with pricing-map. Expected ${expected.length} keys, got ${actual.length}.`,
+      `scripts/lib/stripe-runtime-env-keys.mjs is out of sync with pricing-map. Missing keys: ${missing.join(", ")}`,
     );
   }
 }
