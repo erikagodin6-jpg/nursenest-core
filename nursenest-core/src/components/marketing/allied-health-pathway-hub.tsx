@@ -185,12 +185,20 @@ export function AlliedHealthPathwayHub({
             >
               {profession ? "All Occupation Tracks" : "Choose Your Occupation Track"}
             </Link>
-            {showFullStudySurface ? (
+            {showFullStudySurface || isGlobalAlliedHub ? (
               <Link
                 href={lessonsHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-info)] transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))]"
               >
                 {profession ? "Lessons for This Track" : "Browse Lessons Hub"}
+              </Link>
+            ) : null}
+            {showFullStudySurface || isGlobalAlliedHub ? (
+              <Link
+                href={questionsHref}
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-2)_35%,var(--semantic-border-soft))] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-chart-2)] transition hover:bg-[color-mix(in_srgb,var(--semantic-chart-2)_8%,var(--semantic-surface))]"
+              >
+                {profession ? "Questions for This Track" : "Practice Questions Hub"}
               </Link>
             ) : null}
           </div>
