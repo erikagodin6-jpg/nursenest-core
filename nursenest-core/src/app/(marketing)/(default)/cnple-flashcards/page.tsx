@@ -12,7 +12,7 @@ const PATH = "/cnple-flashcards";
 const PAGE_TITLE = `CNPLE Flashcards — ${CNPLE_INVENTORY.flashcardsLabel} NP-Level Study Cards | NurseNest`;
 const PAGE_H1 = "CNPLE flashcards for Canadian NP exam preparation";
 const PAGE_DESCRIPTION =
-  `${CNPLE_INVENTORY.flashcardsLabel} CNPLE-aligned flashcards — including ${CNPLE_INVENTORY.curatedFlashcardsLabel} hand-authored Canadian clinical reasoning cards — with spaced repetition for Canadian Nurse Practitioner Licensure Examination preparation. Condition-specific NP-level cards covering prescribing decisions, diagnostic workup, management priorities, red flags, and Canadian NP scope — across 20 CNPLE competency domains.`;
+  `${CNPLE_INVENTORY.flashcardsLabel} CNPLE-aligned flashcards — ${CNPLE_INVENTORY.curatedFlashcardsLabel} hand-authored Canadian clinical cards. Spaced repetition across prescribing, diagnostics, and lifespan domains.`;
 
 const FAQ_ITEMS = [
   {

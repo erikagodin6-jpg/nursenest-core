@@ -173,8 +173,8 @@ function buildCnplePage(
         : `${topic} (2026) — CNPLE Prep | NurseNest`,
     description:
       slug === "overview"
-        ? `Prepare for the 2026 CNPLE with ${CNPLE_INVENTORY.lessonsLabel} NP lessons, ${CNPLE_INVENTORY.caQuestionsLabel} Canadian-aligned NP practice questions, ${CNPLE_INVENTORY.flashcardsLabel} flashcards, and LOFT-style simulation. Canadian NP clinical reasoning, prescribing safety, and differential diagnosis — aligned to CCRNR competency frameworks.`
-        : `${topic} for CNPLE preparation — Canadian NP clinical reasoning, prescribing safety, LOFT pacing, common mistakes, and rationale-first practice questions.`,
+        ? `CNPLE 2026 prep: ${CNPLE_INVENTORY.caQuestionsLabel} Canadian-aligned NP practice questions, ${CNPLE_INVENTORY.flashcardsLabel} flashcards, LOFT simulation, and ${CNPLE_INVENTORY.lessonsLabel} lessons. Aligned to CCRNR competency frameworks.`
+        : `${topic} for CNPLE preparation — Canadian NP clinical reasoning, prescribing safety, LOFT pacing, and rationale-first practice questions.`,
     h1: slug === "overview" ? "CNPLE exam prep for Canadian nurse practitioners (2026)" : `${topic} for CNPLE preparation`,
     eyebrow: "Canadian NP licensure exam — 2026 authority guide",
     lead:
