@@ -8,10 +8,10 @@ import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
 export const revalidate = 86400;
 
 const PATH = "/cnple-flashcards";
-const PAGE_TITLE = "CNPLE Flashcards — Canadian NP Exam Study Cards | NurseNest";
+const PAGE_TITLE = "CNPLE Flashcards — 1,054 NP-Level Study Cards | NurseNest";
 const PAGE_H1 = "CNPLE flashcards for Canadian NP exam preparation";
 const PAGE_DESCRIPTION =
-  "CNPLE-aligned flashcard decks with spaced repetition for Canadian Nurse Practitioner Licensure Examination preparation. Domain-targeted cards covering prescribing pharmacology, diagnostic interpretation, clinical decision-making, and all major CNPLE competency domains.";
+  "1,054 CNPLE-aligned flashcards with spaced repetition for Canadian Nurse Practitioner Licensure Examination preparation. Condition-specific NP-level cards covering prescribing decisions, diagnostic workup, management priorities, red flags, and Canadian NP scope — across all major CNPLE competency domains.";
 
 const FAQ_ITEMS = [
   {

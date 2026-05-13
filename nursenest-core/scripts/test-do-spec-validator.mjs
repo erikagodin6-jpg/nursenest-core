@@ -53,18 +53,48 @@ function makeSpec(overrideEnvs = []) {
     { key: "STRIPE_WEBHOOK_SECRET", scope: "RUN_TIME", type: "SECRET" },
     { key: "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY", scope: "RUN_AND_BUILD_TIME", type: "SECRET" },
     { key: "OPENAI_API_KEY", scope: "RUN_TIME", type: "SECRET" },
+    // App URL
+    { key: "NEXT_PUBLIC_APP_URL", scope: "RUN_AND_BUILD_TIME", value: "https://example.com" },
     // ECG publish flags
     { key: "ENABLE_ECG_MODULE", scope: "RUN_TIME", value: "true" },
     { key: "NEXT_PUBLIC_ENABLE_ECG_MODULE", scope: "RUN_AND_BUILD_TIME", value: "true" },
     { key: "ENABLE_ADVANCED_ECG_MODULE", scope: "RUN_TIME", value: "true" },
     { key: "ALLOW_ECG_EARLY_ACCESS_CHECKOUT", scope: "RUN_TIME", value: "false" },
+    // Advanced ECG add-on price
+    { key: "STRIPE_PRICE_ADVANCED_ECG", scope: "RUN_TIME", value: "price_test_advanced_ecg" },
     // NP subscription prices
     { key: "STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_np_1m" },
     { key: "STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_np_3m" },
     { key: "STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_np_6m" },
     { key: "STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_np_1y" },
-    // Advanced ECG add-on price
-    { key: "STRIPE_PRICE_ADVANCED_ECG", scope: "RUN_TIME", value: "price_test_advanced_ecg" },
+    // RN prices
+    { key: "STRIPE_PRICE_NURSENEST_RN_1_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_rn_1m" },
+    { key: "STRIPE_PRICE_NURSENEST_RN_3_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_rn_3m" },
+    { key: "STRIPE_PRICE_NURSENEST_RN_6_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_rn_6m" },
+    { key: "STRIPE_PRICE_NURSENEST_RN_1_YEAR_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_rn_1y" },
+    // RPN prices
+    { key: "STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_rpn_1m" },
+    { key: "STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_rpn_3m" },
+    { key: "STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_rpn_6m" },
+    { key: "STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_rpn_12m" },
+    // New Grad prices
+    { key: "STRIPE_PRICE_NEW_GRAD_MONTHLY", scope: "RUN_TIME", value: "price_test_ng_1m" },
+    { key: "STRIPE_PRICE_NEW_GRAD_6MONTH", scope: "RUN_TIME", value: "price_test_ng_6m" },
+    { key: "STRIPE_PRICE_NEW_GRAD_YEARLY", scope: "RUN_TIME", value: "price_test_ng_12m" },
+    // Allied Health shared prices
+    { key: "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY", scope: "RUN_TIME", value: "price_test_allied_1m" },
+    { key: "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_3_MONTHS", scope: "RUN_TIME", value: "price_test_allied_3m" },
+    { key: "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_6_MONTH_SUBSCRIPTION", scope: "RUN_TIME", value: "price_test_allied_6m" },
+    { key: "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY", scope: "RUN_TIME", value: "price_test_allied_12m" },
+    // LVN/LPN prices (placeholder — no Stripe price IDs yet)
+    { key: "STRIPE_PRICE_LVN_LPN_MONTHLY", scope: "RUN_TIME", type: "SECRET" },
+    { key: "STRIPE_PRICE_LVN_LPN_3MONTH", scope: "RUN_TIME", type: "SECRET" },
+    { key: "STRIPE_PRICE_LVN_LPN_6MONTH", scope: "RUN_TIME", type: "SECRET" },
+    { key: "STRIPE_PRICE_LVN_LPN_YEARLY", scope: "RUN_TIME", type: "SECRET" },
+    // Cron + Storage
+    { key: "CRON_SECRET", scope: "RUN_TIME", type: "SECRET" },
+    { key: "SPACES_KEY", scope: "RUN_TIME", type: "SECRET" },
+    { key: "SPACES_SECRET", scope: "RUN_TIME", type: "SECRET" },
   ];
   const envMap = new Map(defaultEnvs.map((e) => [e.key, e]));
   for (const e of overrideEnvs) {

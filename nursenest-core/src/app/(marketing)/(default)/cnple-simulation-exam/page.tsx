@@ -25,10 +25,10 @@ export const revalidate = 86400;
 
 const PATH = "/cnple-simulation-exam";
 
-const PAGE_TITLE = "CNPLE Simulation Exam — LOFT-Format Practice | NurseNest";
+const PAGE_TITLE = "CNPLE Simulation Exam — 15 LOFT-Format Cases | NurseNest";
 const PAGE_H1 = "CNPLE simulation exam: LOFT-format practice for the Canadian NP licensure test";
 const PAGE_DESCRIPTION =
-  "Practice for the CNPLE with timed fixed-length simulation sessions that mirror the LOFT format. Build pacing discipline, identify domain gaps under pressure, and track performance trends across practice runs.";
+  "Practice for the CNPLE with 15 longitudinal clinical cases and timed fixed-length simulation sessions that mirror the LOFT format. Covers primary care, prescribing safety, chronic disease, women's health, pediatrics, geriatrics, mental health, urgent care, and professional practice. Build pacing discipline, identify domain gaps under pressure, and track performance trends across practice runs.";
 
 const FAQ_ITEMS = [
   {

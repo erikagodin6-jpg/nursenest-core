@@ -1610,6 +1610,807 @@ export const CASE_CHF_COPD_OVERLAP: PatientCase = {
   ],
 };
 
+// ── Case 9: Hypothyroidism — levothyroxine titration ─────────────────────────
+
+export const CASE_HYPOTHYROIDISM: PatientCase = {
+  id: "cnple-sample-thyroid-001",
+  title: "Mr. Osei — Hypothyroidism and Fatigue",
+  tagline: "Endocrine · Prescribing Safety",
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-13",
+    guidelineSources: ["Thyroid Foundation of Canada Clinical Practice Guidelines", "Canadian Thyroid Association 2021 Update"],
+  },
+  patient: { age: 46, sex: "Male", pronouns: "he/him", setting: "Primary Care Clinic" },
+  chiefComplaint: "Fatigue, weight gain, and cold intolerance over 6 months.",
+  pmhx: ["Type 2 DM managed with metformin", "No prior thyroid history", "Family history of autoimmune thyroid disease (sister)"],
+  medications: [
+    { name: "Metformin", dose: "1000 mg", route: "PO", frequency: "twice daily", indication: "Type 2 DM" },
+  ],
+  allergies: [],
+  primaryDomain: "endocrine-metabolic",
+  secondaryDomains: ["pharmacotherapeutics", "diagnostics-labs"],
+  difficulty: 2,
+  stepCount: 3,
+  estimatedMinutes: 14,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "Initial presentation — fatigue and weight gain",
+      scenarioText:
+        "Mr. Osei, a 46-year-old man, presents with 6 months of progressive fatigue, 7 kg weight gain, cold intolerance, constipation, and dry skin. He works as an office manager and reports he 'just feels slow.' He has no dyspnoea, chest pain, or leg swelling. BP 126/80, HR 58 bpm, RR 14, T 36.3°C. On exam: dry coarse skin, periorbital puffiness, delayed ankle reflexes bilaterally, and a small firm diffuse thyroid enlargement without nodules.",
+      clinicalUpdate: { direction: "worsening", summary: "Progressive symptoms consistent with hypothyroidism; exam supports diagnosis.", newFindings: ["HR 58 bpm (bradycardia)", "Periorbital puffiness", "Delayed DTRs", "Diffuse firm goitre"] },
+      vitals: [
+        { label: "BP", value: "126/80", unit: "mmHg" },
+        { label: "HR", value: "58", unit: "bpm", flag: "low" },
+        { label: "T", value: "36.3", unit: "°C" },
+      ],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "endocrine-metabolic",
+      question: {
+        stem: "Mr. Osei has classic hypothyroid symptoms, bradycardia, delayed DTRs, and a firm goitre. What is the most appropriate initial diagnostic step?",
+        family: "endocrine-diagnostics",
+        options: [
+          { id: "A", label: "TSH alone — a normal TSH effectively excludes primary hypothyroidism." },
+          { id: "B", label: "TSH and free T4 — TSH confirms function; free T4 assesses severity and guides dosing." },
+          { id: "C", label: "TSH, free T4, and free T3 — T3 needed to distinguish conversion issues." },
+          { id: "D", label: "Thyroid ultrasound first — goitre must be imaged before lab work." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "TSH is the most sensitive first-line test for primary hypothyroidism; an elevated TSH with low free T4 confirms overt hypothyroidism and guides levothyroxine dosing. Free T3 is not routinely needed in primary hypothyroidism and adds cost without clinical benefit. Ultrasound is useful for nodule evaluation but is not the initial step when clinical diagnosis is suspected — labs first. A TSH alone is adequate for screening but free T4 is needed alongside an elevated TSH to assess severity and confirm treatment threshold in overt disease.",
+      },
+    },
+    {
+      index: 1,
+      heading: "Lab results — starting levothyroxine",
+      scenarioText:
+        "Results: TSH 18.4 mIU/L (ref 0.4–4.0), free T4 8.2 pmol/L (ref 12–22), TPO antibody 485 IU/mL (positive). CBC, CMP, and lipids: mild dyslipidaemia (LDL 3.8 mmol/L), otherwise normal. Diagnosis: Hashimoto's hypothyroidism (overt). You plan to start levothyroxine.",
+      clinicalUpdate: { direction: "worsening", summary: "Overt primary hypothyroidism confirmed — Hashimoto's. Dyslipidaemia likely secondary.", newFindings: ["TSH 18.4", "Free T4 8.2 (low)", "TPO-Ab positive", "LDL 3.8 mmol/L"] },
+      vitals: [],
+      diagnosticArtifacts: [
+        { label: "TSH", value: "18.4 mIU/L", interpretation: "Elevated — primary hypothyroidism", isAbnormal: true },
+        { label: "Free T4", value: "8.2 pmol/L", interpretation: "Below reference range", isAbnormal: true },
+        { label: "TPO-Ab", value: "485 IU/mL", interpretation: "Strongly positive — Hashimoto's", isAbnormal: true },
+      ],
+      medicationChanges: [],
+      followUpInterval: "6–8 weeks",
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Mr. Osei is 46 with no cardiac history and overt hypothyroidism (TSH 18.4, free T4 8.2). What is the most appropriate levothyroxine starting dose?",
+        family: "prescribing-endocrine",
+        options: [
+          { id: "A", label: "Full replacement: 1.6 mcg/kg/day (~112 mcg) — start at target dose for a healthy adult." },
+          { id: "B", label: "Low start: 25–50 mcg/day — safer to titrate up over weeks." },
+          { id: "C", label: "25 mcg/day and increase by 25 mcg every 4 weeks — standard cardiac-cautious titration." },
+          { id: "D", label: "Defer until TSH exceeds 20 mIU/L — subclinical at this level." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "In otherwise healthy adults under 60 without cardiac disease, full replacement levothyroxine (1.6 mcg/kg/day) can be started directly. Mr. Osei is 46 with no cardiac comorbidities — cautious titration is reserved for the elderly (>60) or those with known ischaemic heart disease where rapid correction could trigger angina or arrhythmia. His TSH of 18.4 with low free T4 constitutes overt hypothyroidism requiring treatment. TSH below 10 with normal free T4 is subclinical hypothyroidism and has a separate treatment threshold discussion. Recheck TSH in 6–8 weeks after starting; titrate to maintain TSH 0.5–2.5 mIU/L. Secondary dyslipidaemia from hypothyroidism often resolves with treatment — reassess lipids after euthyroidism achieved.",
+      },
+    },
+    {
+      index: 2,
+      heading: "Follow-up at 8 weeks — titration",
+      scenarioText:
+        "Mr. Osei returns at 8 weeks on levothyroxine 112 mcg/day. He reports improved energy, less constipation, and 2 kg weight loss. TSH now 3.2 mIU/L (within range). He asks whether he can stop the medication once his thyroid 'heals.'",
+      clinicalUpdate: { direction: "improving", summary: "Good clinical and biochemical response to levothyroxine at 8 weeks.", newFindings: ["TSH 3.2 (normalized)", "Symptom improvement", "Weight trending down"] },
+      vitals: [{ label: "HR", value: "68", unit: "bpm" }],
+      diagnosticArtifacts: [{ label: "TSH", value: "3.2 mIU/L", interpretation: "Within reference range", isAbnormal: false }],
+      medicationChanges: [{ name: "Levothyroxine", change: "continue", note: "Maintain 112 mcg/day; recheck TSH in 6 months" }],
+      followUpInterval: "6 months",
+      cnpleDomain: "health-promotion-prevention",
+      question: {
+        stem: "Mr. Osei's TSH has normalized. He asks if he can stop levothyroxine once he feels better. What is the most accurate NP response?",
+        family: "patient-education",
+        options: [
+          { id: "A", label: "Hashimoto's hypothyroidism is typically a permanent condition — lifelong therapy is usually required." },
+          { id: "B", label: "A 3-month drug holiday will confirm whether the thyroid has recovered function." },
+          { id: "C", label: "The medication can be reduced to 50% once TSH normalizes." },
+          { id: "D", label: "Therapy duration depends on anti-TPO antibody levels — recheck in 1 year." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Hashimoto's thyroiditis causes progressive autoimmune destruction of thyroid tissue. While rare spontaneous remissions occur, the overwhelming majority of patients with overt hypothyroidism from Hashimoto's require lifelong levothyroxine replacement. Drug holidays should not be advised — stopping therapy leads to symptomatic relapse and potential complications (cardiac, cognitive, lipid). Anti-TPO titers do not guide treatment duration. The NP's role here is patient education: normalize the need for lifelong medication, address adherence strategies (morning fasting, consistent timing), and explain that annual TSH monitoring is sufficient once stable.",
+      },
+    },
+  ],
+};
+
+// ── Case 10: COPD Exacerbation — acute management ────────────────────────────
+
+export const CASE_COPD_EXACERBATION: PatientCase = {
+  id: "cnple-sample-copd-001",
+  title: "Mr. Thibodeau — COPD Exacerbation",
+  tagline: "Respiratory · Acute Urgent Care",
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-13",
+    guidelineSources: ["Canadian Thoracic Society COPD Guidelines (2023)", "GOLD COPD Report 2024"],
+  },
+  patient: { age: 67, sex: "Male", pronouns: "he/him", setting: "Primary Care Clinic — walk-in" },
+  chiefComplaint: "Increased breathlessness and productive green sputum for 3 days.",
+  pmhx: ["COPD (GOLD Stage 2B, FEV1 55% predicted)", "Former smoker — quit 8 years ago", "Type 2 DM", "No home oxygen"],
+  medications: [
+    { name: "Tiotropium", dose: "18 mcg", route: "INH", frequency: "once daily", indication: "COPD" },
+    { name: "Salbutamol (SABA)", dose: "100 mcg", route: "INH", frequency: "PRN", indication: "COPD rescue" },
+    { name: "Metformin", dose: "500 mg", route: "PO", frequency: "twice daily", indication: "Type 2 DM" },
+  ],
+  allergies: [{ substance: "Azithromycin", reaction: "QTc prolongation on prior ECG", severity: "moderate" }],
+  primaryDomain: "acute-urgent-care",
+  secondaryDomains: ["pharmacotherapeutics", "diagnostics-labs"],
+  difficulty: 3,
+  stepCount: 4,
+  estimatedMinutes: 18,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "Walk-in — acute dyspnoea",
+      scenarioText:
+        "Mr. Thibodeau, 67, walks into your primary care clinic with 3 days of worsening dyspnoea, increased sputum production (purulent green), and reduced exercise tolerance. He has been using his salbutamol inhaler every 2 hours without adequate relief. He has not had a fever. He is alert and oriented. On exam: RR 26 br/min, SpO2 88% on room air, HR 104 bpm, BP 138/84, T 37.2°C. Diffuse expiratory wheeze, prolonged expiratory phase. Accessory muscle use noted.",
+      clinicalUpdate: { direction: "worsening", summary: "Moderate-severe COPD exacerbation: SpO2 88%, RR 26, accessory muscle use, inadequate SABA response.", newFindings: ["SpO2 88%", "RR 26", "HR 104", "Accessory muscle use", "Purulent sputum"] },
+      vitals: [
+        { label: "SpO2", value: "88%", unit: "", flag: "critical" },
+        { label: "RR", value: "26", unit: "br/min", flag: "high" },
+        { label: "HR", value: "104", unit: "bpm", flag: "high" },
+        { label: "BP", value: "138/84", unit: "mmHg" },
+        { label: "T", value: "37.2", unit: "°C" },
+      ],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "acute-urgent-care",
+      question: {
+        stem: "Mr. Thibodeau has a COPD exacerbation with SpO2 88%, RR 26, accessory muscle use, and inadequate SABA response. What is the immediate priority?",
+        family: "acute-respiratory",
+        options: [
+          { id: "A", label: "Controlled oxygen via Venturi mask to target SpO2 88–92%, then assess for bronchodilators." },
+          { id: "B", label: "High-flow oxygen at 10 L/min via non-rebreather mask to rapidly correct hypoxaemia." },
+          { id: "C", label: "Start oral prednisone before oxygen — steroids are the priority in COPD exacerbation." },
+          { id: "D", label: "Transfer to ED immediately without any intervention — he is too unstable for clinic management." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "In COPD exacerbation, controlled oxygen is given to target SpO2 88–92% — NOT 94–98%. COPD patients with chronic CO2 retention may lose their hypoxic drive if over-oxygenated, leading to CO2 narcosis and respiratory failure. Use a Venturi mask (24–28% FiO2) to titrate precisely. High-flow O2 via non-rebreather is contraindicated in COPD unless the patient is near arrest. Bronchodilators (salbutamol + ipratropium nebulised) are the next immediate step after oxygen. Systemic steroids follow. Transfer to ED is indicated for severe exacerbations (altered mental status, rising CO2, CPAP/intubation need) — but controlled O2 and assessment happen first.",
+      },
+    },
+    {
+      index: 1,
+      heading: "Initial stabilization — antibiotic decision",
+      scenarioText:
+        "Controlled O2 via Venturi 28% applied; SpO2 improved to 92%. Ipratropium + salbutamol nebulisation given × 1. RR down to 22 br/min. He is less distressed. You need to decide on antibiotic therapy. His sputum is purulent green, he has no focal consolidation on chest X-ray (hyperinflation, no infiltrate). He is allergic to azithromycin (QTc prolongation).",
+      clinicalUpdate: { direction: "improving", summary: "Partial response to O2 and bronchodilators. No pneumonia on CXR. Antibiotic decision required.", newFindings: ["SpO2 92% on 28% FiO2", "No CXR infiltrate", "Purulent sputum", "Azithromycin allergy — QTc"] },
+      vitals: [{ label: "SpO2", value: "92%", unit: "" }, { label: "RR", value: "22", unit: "br/min" }],
+      diagnosticArtifacts: [{ label: "CXR", value: "Hyperinflation, no infiltrate", interpretation: "No pneumonia", isAbnormal: false }],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Mr. Thibodeau has a moderate COPD exacerbation with purulent sputum, no consolidation on CXR, and azithromycin allergy. What is the most appropriate antibiotic choice?",
+        family: "prescribing-respiratory",
+        options: [
+          { id: "A", label: "Amoxicillin 500 mg three times daily for 5 days — narrow spectrum first-line." },
+          { id: "B", label: "Doxycycline 200 mg loading then 100 mg daily for 5 days — covers Haemophilus, Streptococcus, Moraxella." },
+          { id: "C", label: "Amoxicillin-clavulanate 875/125 mg twice daily for 7 days — broader spectrum, good lung penetration." },
+          { id: "D", label: "No antibiotics — sputum colour alone is insufficient to indicate bacterial infection." },
+        ],
+        correctOptionId: "C",
+        rationale:
+          "Purulent sputum plus increased dyspnoea meets Anthonisen criteria for antibiotic treatment in moderate-severe COPD exacerbation. Amoxicillin-clavulanate is appropriate for moderate-severe COPD exacerbations with risk factors — Mr. Thibodeau has GOLD 2B disease, DM (immunocompromised), and inadequate response to bronchodilators. Amoxicillin alone may miss beta-lactamase-producing Haemophilus influenzae strains. Doxycycline is a reasonable alternative but amoxicillin-clavulanate provides superior beta-lactamase coverage. Azithromycin is contraindicated (allergy with QTc risk). 5–7 days is the guideline-recommended duration. CTS guidelines support antibiotics when ≥2 of 3 Anthonisen criteria are met.",
+      },
+    },
+    {
+      index: 2,
+      heading: "Steroid decision and disposition",
+      scenarioText:
+        "Mr. Thibodeau has responded well to initial treatment. SpO2 93%, RR 18, HR 88. He is more comfortable. You need to decide on systemic corticosteroids and disposition (home vs. ED transfer).",
+      clinicalUpdate: { direction: "improving", summary: "Good response to O2 + bronchodilators. Now decide on steroids and safe discharge criteria.", newFindings: ["SpO2 93%", "RR 18", "Clinically improved", "SABA response achieved"] },
+      vitals: [{ label: "SpO2", value: "93%", unit: "" }, { label: "RR", value: "18", unit: "br/min" }, { label: "HR", value: "88", unit: "bpm" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [
+        { name: "Prednisone", change: "start", note: "40 mg PO daily × 5 days" },
+        { name: "Amoxicillin-clavulanate", change: "start", note: "875/125 mg BID × 7 days" },
+      ],
+      followUpInterval: "48–72 hours",
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Mr. Thibodeau has improved but still has COPD with DM. He asks about steroids. What is the NP prescribing decision?",
+        family: "prescribing-respiratory-steroid",
+        options: [
+          { id: "A", label: "Prednisone 40 mg daily for 5 days is standard — monitor blood glucose given his DM." },
+          { id: "B", label: "Methylprednisolone IV — oral steroids are not absorbed reliably in COPD exacerbations." },
+          { id: "C", label: "Inhaled budesonide only — systemic steroids are contraindicated with DM." },
+          { id: "D", label: "Defer steroids until repeat CXR confirms no infiltrate." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Systemic corticosteroids reduce exacerbation duration, treatment failure rate, and hospitalisation in moderate-severe COPD exacerbations. Prednisone 40 mg PO for 5 days is equivalent to IV methylprednisolone and is the preferred outpatient approach. DM is not a contraindication — it is a caution requiring blood glucose monitoring and patient education about hyperglycaemia. Inhaled corticosteroids alone are insufficient for acute exacerbation management. Steroids should not be withheld pending CXR — treatment decision is clinical. The NP must counsel Mr. Thibodeau to monitor capillary glucose BID and contact the clinic if glucose exceeds 15 mmol/L.",
+      },
+    },
+    {
+      index: 3,
+      heading: "Discharge plan and follow-up",
+      scenarioText:
+        "Mr. Thibodeau is discharged on prednisone 40 mg × 5 days and amoxicillin-clavulanate 875/125 mg BID × 7 days. His SpO2 on room air is now 91%. He has a follow-up booked in 48 hours.",
+      clinicalUpdate: { direction: "improving", summary: "Safe for discharge with close follow-up. SpO2 91% on RA acceptable at baseline for GOLD 2B.", newFindings: ["SpO2 91% RA (near his baseline)", "Medications prescribed", "Follow-up 48h"] },
+      vitals: [{ label: "SpO2", value: "91%", unit: "" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: "48 hours mandatory",
+      cnpleDomain: "health-promotion-prevention",
+      question: {
+        stem: "Before Mr. Thibodeau leaves, what is the most important point in your discharge teaching?",
+        family: "patient-education-copd",
+        options: [
+          { id: "A", label: "Return immediately if dyspnoea worsens, SpO2 drops below 88%, or confusion develops." },
+          { id: "B", label: "Stop the prednisone after 3 days if symptoms are improved." },
+          { id: "C", label: "Restart smoking to reduce anxiety — nicotine withdrawal can worsen breathlessness." },
+          { id: "D", label: "SpO2 monitoring at home is not necessary — follow prescribed treatment only." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Clear return precautions are the most critical discharge safety instruction: worsening dyspnoea, SpO2 <88%, altered mental status, inability to tolerate oral medications, or no improvement at 48 hours are all indications for ED reassessment or hospital admission. Completing the full steroid course is essential — early discontinuation risks rebound inflammation and treatment failure. Home SpO2 monitoring is appropriate for COPD patients who own pulse oximeters. Smoking cessation reinforcement at every visit is a GOLD-standard intervention for COPD management.",
+      },
+    },
+  ],
+};
+
+// ── Case 11: Opioid Use Disorder — buprenorphine/naloxone prescribing ─────────
+
+export const CASE_OPIOID_USE_DISORDER: PatientCase = {
+  id: "cnple-sample-oud-001",
+  title: "Ms. Chartrand — Opioid Use Disorder",
+  tagline: "Substance Use · Professional Practice",
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-13",
+    guidelineSources: ["Canadian Guidelines for Safe and Effective Use of Opioids for CNCP (NOUGG)", "CAMH Opioid Use Disorder Practice Guidance", "College of Physicians and Surgeons of Ontario (CPSO) OUD Guidelines"],
+  },
+  patient: { age: 31, sex: "Female", pronouns: "she/her", setting: "Primary Care Clinic" },
+  chiefComplaint: "Requesting help to stop opioids — on prescription oxycodone from another provider.",
+  pmhx: ["Chronic low back pain (MVA 3 years ago)", "Anxiety disorder", "No prior OUD treatment", "No hepatitis B or C"],
+  medications: [
+    { name: "Oxycodone IR", dose: "10 mg", route: "PO", frequency: "4× daily", indication: "Chronic pain (prescribed elsewhere)" },
+    { name: "Sertraline", dose: "100 mg", route: "PO", frequency: "once daily", indication: "Anxiety" },
+  ],
+  allergies: [],
+  primaryDomain: "mental-health-substance-use",
+  secondaryDomains: ["pharmacotherapeutics", "professional-practice"],
+  difficulty: 3,
+  stepCount: 3,
+  estimatedMinutes: 16,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "First visit — assessment for OAT",
+      scenarioText:
+        "Ms. Chartrand, 31, presents requesting help to stop opioids. She reports she has been prescribed oxycodone 10 mg QID for chronic back pain but now takes 4–6 tabs daily, often running out early. She describes intense cravings, missed work, and fear of withdrawal. She is taking opioids first thing in the morning to feel 'normal.' She denies IV drug use. AUDIT-C: 2 (low risk alcohol). She has never tried to quit before and is scared of withdrawal symptoms.",
+      clinicalUpdate: { direction: "worsening", summary: "Opioid use disorder: loss of control, tolerance, morning use to avoid withdrawal, cravings, functional impairment.", newFindings: ["Early refills", "Morning use", "Cravings", "Work impairment", "Fear of withdrawal"] },
+      vitals: [{ label: "BP", value: "134/86", unit: "mmHg" }, { label: "HR", value: "92", unit: "bpm" }, { label: "RR", value: "16", unit: "br/min" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "mental-health-substance-use",
+      question: {
+        stem: "Ms. Chartrand meets DSM-5 criteria for opioid use disorder. She is motivated to start treatment. Which is the most appropriate NP action?",
+        family: "oud-oat",
+        options: [
+          { id: "A", label: "Refer to addictions psychiatry and defer prescribing OAT — NPs should not initiate buprenorphine independently." },
+          { id: "B", label: "Initiate buprenorphine/naloxone after appropriate assessment and training — Canadian NPs with prescribing authority can prescribe OAT under provincial scope." },
+          { id: "C", label: "Offer supervised opioid taper only — abrupt cessation or rapid taper is the safest approach for prescription opioid dependence." },
+          { id: "D", label: "Continue current oxycodone prescription and add naloxone kit — harm reduction only at this stage." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "In Canada, NPs with prescribing authority can initiate buprenorphine/naloxone (Suboxone) for opioid use disorder in most provinces without requiring a special exemption (unlike methadone in some provinces). Evidence strongly supports opioid agonist therapy (OAT) with buprenorphine/naloxone as first-line treatment for OUD — it reduces mortality by 50–60%, decreases illicit use, and improves social functioning. Referral to addictions psychiatry is not mandatory; wait times may be prohibitive and immediate NP-initiated OAT is guideline-supported. Opioid taper alone has very high relapse rates (>90%) and is not recommended as first-line for moderate-severe OUD. Harm reduction (naloxone kit) is important but not a substitute for OAT when the patient is motivated and meets criteria.",
+      },
+    },
+    {
+      index: 1,
+      heading: "Starting buprenorphine/naloxone",
+      scenarioText:
+        "Ms. Chartrand agrees to start buprenorphine/naloxone. You assess her with the Clinical Opioid Withdrawal Scale (COWS): score 10 (mild-moderate withdrawal). Her last oxycodone dose was 8 hours ago. You plan to initiate buprenorphine/naloxone today.",
+      clinicalUpdate: { direction: "stable", summary: "COWS 10 — adequate withdrawal for safe buprenorphine induction. Can proceed with first dose.", newFindings: ["COWS 10 (mild-moderate)", "8h since last opioid", "Vitals stable"] },
+      vitals: [],
+      diagnosticArtifacts: [{ label: "COWS Score", value: "10", interpretation: "Mild-moderate withdrawal — appropriate for induction", isAbnormal: false }],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Ms. Chartrand has COWS 10 and her last opioid was 8 hours ago. What is the correct buprenorphine/naloxone induction approach?",
+        family: "oat-induction",
+        options: [
+          { id: "A", label: "Buprenorphine/naloxone 2 mg/0.5 mg SL — give first dose now, observe for 1 hour, then 2 mg/0.5 mg if tolerated." },
+          { id: "B", label: "Buprenorphine/naloxone 8 mg/2 mg SL as a single loading dose — faster to therapeutic level." },
+          { id: "C", label: "Wait until COWS ≥ 13 (moderate withdrawal) before giving first dose to avoid precipitated withdrawal." },
+          { id: "D", label: "Give 16 mg/4 mg on day 1 — Canadian guidelines recommend reaching therapeutic dose in 24 hours." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Buprenorphine induction requires a minimum COWS of 8–12 (some guidelines say ≥8, others ≥12) to reduce precipitated withdrawal risk. COWS 10 is adequate. The low-dose induction approach (2 mg SL, observe 1h, repeat 2 mg if tolerated, titrate to 8–16 mg total on Day 1) is standard and well-tolerated. The first dose should be given in-office with 1-hour observation. Day 1 total dose is typically 8–16 mg; Day 2 is typically 16 mg; titrate to suppress cravings and withdrawal (often 16–24 mg/day maintenance). High loading doses (16 mg in one shot) without observation increase precipitated withdrawal risk for less-experienced prescribers. Waiting for COWS ≥13 prolongs suffering unnecessarily; ≥8–10 is standard.",
+      },
+    },
+    {
+      index: 2,
+      heading: "Day 7 — follow-up on OAT",
+      scenarioText:
+        "Ms. Chartrand returns 7 days later. She is on buprenorphine/naloxone 16 mg/4 mg daily. She reports no cravings, no withdrawal symptoms, better sleep, and she went back to work. Her urine drug screen (UDS) shows buprenorphine present, no other opioids, no benzodiazepines. She asks about how long she will need to take it.",
+      clinicalUpdate: { direction: "improving", summary: "Excellent OAT response at Day 7: stable, working, no illicit opioids, good sleep.", newFindings: ["No cravings", "Returned to work", "UDS: buprenorphine only", "No illicit opioids"] },
+      vitals: [],
+      diagnosticArtifacts: [{ label: "UDS", value: "Buprenorphine positive only", interpretation: "Adherent to OAT, no illicit opioids", isAbnormal: false }],
+      medicationChanges: [{ name: "Buprenorphine/naloxone", change: "continue", note: "16 mg/4 mg daily — stable dose" }],
+      followUpInterval: "2–4 weeks",
+      cnpleDomain: "health-promotion-prevention",
+      question: {
+        stem: "Ms. Chartrand asks how long she needs to stay on buprenorphine/naloxone. What is the most evidence-based NP response?",
+        family: "oat-duration",
+        options: [
+          { id: "A", label: "At least 6 months — most patients can safely taper after 6 months of stability." },
+          { id: "B", label: "At least 1–2 years — relapse rates are significantly lower with longer duration; many continue indefinitely." },
+          { id: "C", label: "Until cravings are gone — stopping once cravings resolve is safe for most patients." },
+          { id: "D", label: "Indefinitely only if heroin history — prescription opioid OUD typically requires shorter treatment." },
+        ],
+        correctOptionId: "B",
+        rationale:
+          "Evidence clearly demonstrates that longer duration of OAT is associated with lower relapse rates and overdose mortality. Guidelines recommend a minimum of 1–2 years of stable OAT before considering tapering, and many patients benefit from indefinite maintenance. Tapering within 6 months has a relapse rate exceeding 80%. OAT duration should not be based on opioid type (heroin vs prescription) — the neurobiological basis of opioid use disorder is the same. The NP frames OAT as a long-term medical treatment for a chronic condition (analogous to antihypertensives for hypertension), not a detox program with a fixed endpoint. Shared decision-making about duration is essential; patient autonomy is respected while presenting the evidence clearly.",
+      },
+    },
+  ],
+};
+
+// ── Case 12: Chest Pain — primary care differential ──────────────────────────
+
+export const CASE_CHEST_PAIN_DIFFERENTIAL: PatientCase = {
+  id: "cnple-sample-cp-001",
+  title: "Ms. Abramowitz — Chest Pain Evaluation",
+  tagline: "Urgent Care · Differential Diagnosis",
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-13",
+    guidelineSources: ["Canadian Cardiovascular Society Stable Ischemic Heart Disease Guidelines", "ACC/AHA Chest Pain Evaluation Guidelines 2021"],
+  },
+  patient: { age: 52, sex: "Female", pronouns: "she/her", setting: "Primary Care Clinic — same day appointment" },
+  chiefComplaint: "Chest pain for 2 weeks — worse with exertion.",
+  pmhx: ["Hypertension (controlled)", "Type 2 DM", "Non-smoker", "BMI 29", "Family history: father MI at 58"],
+  medications: [
+    { name: "Perindopril", dose: "8 mg", route: "PO", frequency: "once daily", indication: "Hypertension" },
+    { name: "Metformin", dose: "1000 mg", route: "PO", frequency: "twice daily", indication: "Type 2 DM" },
+  ],
+  allergies: [],
+  primaryDomain: "acute-urgent-care",
+  secondaryDomains: ["diagnostics-labs", "chronic-disease-management"],
+  difficulty: 3,
+  stepCount: 3,
+  estimatedMinutes: 16,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "Assessment — 2 weeks of exertional chest pain",
+      scenarioText:
+        "Ms. Abramowitz, 52, presents with a 2-week history of substernal chest tightness that occurs with brisk walking or climbing stairs. Pain is 5/10 intensity, lasts 5–10 minutes, and resolves with rest. No pain at rest. No radiation to arm or jaw. No dyspnoea, diaphoresis, nausea, or palpitations. She is post-menopausal (natural menopause at 50). Vitals: BP 132/78, HR 72, RR 14, SpO2 99%, T 36.9°C. Exam: no cardiac murmur, no S3/S4, no peripheral oedema, lungs clear.",
+      clinicalUpdate: { direction: "stable", summary: "Classic exertional chest pain in a post-menopausal woman with cardiovascular risk factors. Stable angina presentation.", newFindings: ["Exertional onset", "Rest relief", "Multiple CVD risk factors", "Post-menopausal"] },
+      vitals: [{ label: "BP", value: "132/78", unit: "mmHg" }, { label: "HR", value: "72", unit: "bpm" }, { label: "SpO2", value: "99%", unit: "" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "acute-urgent-care",
+      question: {
+        stem: "Ms. Abramowitz has 2 weeks of stable exertional chest pain, multiple CVD risk factors, and a positive family history. What is the NP's most appropriate immediate action?",
+        family: "chest-pain-differential",
+        options: [
+          { id: "A", label: "Order resting ECG and troponin — rule out NSTEMI before outpatient workup." },
+          { id: "B", label: "Send to ED via EMS — any exertional chest pain in a diabetic must be treated as ACS." },
+          { id: "C", label: "Reassure her it is musculoskeletal — the 2-week stable history and lack of radiation makes cardiac cause unlikely." },
+          { id: "D", label: "Prescribe a PPI empirically — GERD is the most common cause of chest pain in perimenopausal women." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Stable exertional chest pain in a post-menopausal woman with DM, hypertension, obesity, and positive family history is a classic stable angina presentation requiring urgent but not emergency workup. The NP's immediate priority is to exclude NSTEMI/UA with a resting ECG and troponin (even if presentation is 2 weeks old — silent MI is more common in diabetics). If troponin is negative and ECG shows no acute changes, she requires same-day or next-day referral to cardiology or stress testing. Sending to ED by EMS is appropriate for active ACS symptoms (rest pain, diaphoresis, dynamic ECG changes) — this is not that presentation. Reassurance without workup is dangerous given her risk profile. PPI empirically is not the priority.",
+      },
+    },
+    {
+      index: 1,
+      heading: "Initial investigations — stable angina confirmed",
+      scenarioText:
+        "Resting ECG: normal sinus rhythm, no ST changes, no pathological Q waves. Troponin I: <0.01 ng/mL (negative ×2 at 3h). Fasting lipid panel: LDL 3.4 mmol/L, HDL 1.1 mmol/L, TG 2.1 mmol/L. HbA1c: 7.8%. You confirm a clinical diagnosis of stable ischemic heart disease (SIHD)/stable angina pending functional stress testing.",
+      clinicalUpdate: { direction: "stable", summary: "NSTEMI excluded. Stable angina confirmed clinically. Cardiovascular risk factors under-treated: LDL 3.4, HbA1c 7.8%.", newFindings: ["Negative troponin", "Normal resting ECG", "LDL 3.4 (above target for high-risk)", "HbA1c 7.8%"] },
+      vitals: [],
+      diagnosticArtifacts: [
+        { label: "Troponin I", value: "<0.01 ng/mL", interpretation: "Negative ×2 — NSTEMI excluded", isAbnormal: false },
+        { label: "LDL", value: "3.4 mmol/L", interpretation: "Above target (<1.8 for high CVD risk)", isAbnormal: true },
+        { label: "HbA1c", value: "7.8%", interpretation: "Above target; consider intensification", isAbnormal: true },
+      ],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "Troponin negative, ECG normal. Ms. Abramowitz has stable angina pending stress test, LDL 3.4, HbA1c 7.8%. What is the NP's priority pharmacotherapy change?",
+        family: "sihd-prescribing",
+        options: [
+          { id: "A", label: "Start aspirin 81 mg daily and high-intensity statin (rosuvastatin 20–40 mg) — antiplatelet + statin is first-line SIHD." },
+          { id: "B", label: "Start sublingual nitroglycerin PRN only — wait for stress test before adding other medications." },
+          { id: "C", label: "Start amlodipine for chest pain management — calcium channel blockers are first-line for stable angina." },
+          { id: "D", label: "Increase metformin dose first — DM control is the priority before addressing lipids." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "In stable ischemic heart disease, aspirin 81 mg and high-intensity statin therapy are class I guideline recommendations regardless of symptom severity. For a patient with SIHD (or very high CVD risk), LDL target is <1.8 mmol/L — her LDL of 3.4 requires high-intensity statin (rosuvastatin 20–40 mg or atorvastatin 40–80 mg). Aspirin reduces event risk in confirmed SIHD. SL nitroglycerin PRN is appropriate for symptom relief but does not address underlying disease risk. Amlodipine and beta-blockers are first-line anti-anginal agents but are added after confirming diagnosis by stress testing — she needs stress testing first. HbA1c optimization is important but does not take priority over evidence-based SIHD pharmacotherapy.",
+      },
+    },
+    {
+      index: 2,
+      heading: "Referral and follow-up plan",
+      scenarioText:
+        "You start aspirin 81 mg daily and rosuvastatin 20 mg nightly. SL nitroglycerin PRN is prescribed with education. You arrange urgent cardiology referral for stress testing (appointment in 5 days). Ms. Abramowitz asks what to do if pain occurs again tonight.",
+      clinicalUpdate: { direction: "improving", summary: "Initial medications started. Urgent cardiology referral in place. Safety planning needed.", newFindings: ["ASA started", "Rosuvastatin started", "Stress test pending"] },
+      vitals: [],
+      diagnosticArtifacts: [],
+      medicationChanges: [
+        { name: "Aspirin", change: "start", note: "81 mg daily" },
+        { name: "Rosuvastatin", change: "start", note: "20 mg nightly" },
+        { name: "Nitroglycerin SL", change: "start", note: "0.4 mg PRN — 1 tab q5min × 3, then 911 if no relief" },
+      ],
+      followUpInterval: "Cardiology in 5 days; NP review in 1–2 weeks",
+      cnpleDomain: "health-promotion-prevention",
+      question: {
+        stem: "You are teaching Ms. Abramowitz how to use nitroglycerin. What is the critical safety instruction?",
+        family: "patient-education-angina",
+        options: [
+          { id: "A", label: "If chest pain is not relieved by 3 nitroglycerin tablets 5 minutes apart, call 911 immediately." },
+          { id: "B", label: "Take up to 5 nitroglycerin tablets before calling for help — angina can take time to respond." },
+          { id: "C", label: "NTG is safe with sildenafil — both are vasodilators and the combination is additive." },
+          { id: "D", label: "Take NTG lying down to prevent hypotension, then wait 30 minutes before reassessing." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "The CCS/ACC/AHA guideline teaching for nitroglycerin use in stable angina: one SL tablet every 5 minutes, maximum 3 tablets. If pain persists after 3 tablets, call 911 — this may indicate an ACS. The rule of three (3 × 5 minutes = 15 minutes) is the international standard. Sitting (not lying) when taking NTG reduces risk of falls from orthostatic hypotension. The combination of nitroglycerin with PDE5 inhibitors (sildenafil, tadalafil, vardenafil) is absolutely contraindicated due to catastrophic hypotension — this must be explicitly counselled. Waiting 30 minutes is dangerous and delays ACS recognition.",
+      },
+    },
+  ],
+};
+
+// ── Case 13: Preventive Care — 45-year-old health maintenance ─────────────────
+
+export const CASE_PREVENTIVE_HEALTH: PatientCase = {
+  id: "cnple-sample-prev-001",
+  title: "Mr. Mehta — 45-Year-Old Health Maintenance Visit",
+  tagline: "Preventive Care · Health Promotion",
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-13",
+    guidelineSources: [
+      "Canadian Task Force on Preventive Health Care Recommendations",
+      "Canadian Cancer Society Screening Guidelines",
+      "Diabetes Canada — Screening for Type 2 DM",
+      "Heart & Stroke — Cardiovascular Risk Screening",
+    ],
+  },
+  patient: { age: 45, sex: "Male", pronouns: "he/him", setting: "Primary Care Clinic" },
+  chiefComplaint: "Annual health check — no acute complaints.",
+  pmhx: ["No known chronic diseases", "Father had MI at 62, bowel cancer at 70", "BMI 26.4", "Non-smoker", "Drinks 10–12 standard drinks/week"],
+  medications: [],
+  allergies: [],
+  primaryDomain: "health-promotion-prevention",
+  secondaryDomains: ["diagnostics-labs", "professional-practice"],
+  difficulty: 2,
+  stepCount: 3,
+  estimatedMinutes: 14,
+  isPremium: false,
+  steps: [
+    {
+      index: 0,
+      heading: "45-year-old male annual visit",
+      scenarioText:
+        "Mr. Mehta, 45, presents for his first health check in 3 years. He has no acute complaints. He is a project manager, reports high work stress, and drinks wine with dinner most nights (10–12 drinks/week). Non-smoker. BMI 26.4. BP 138/84 (repeated: 136/82), HR 76, SpO2 99%, T 36.8°C. Exam: no abnormal findings. He has a family history of paternal MI and bowel cancer. He is interested in knowing what screenings he is due for.",
+      clinicalUpdate: { direction: "stable", summary: "Well male, 45. Borderline elevated BP. Alcohol above low-risk drinking guidelines. Positive family history.", newFindings: ["BP 136/82 (borderline HTN)", "Alcohol 10–12 drinks/week (above guideline)", "Family hx: MI, bowel CA"] },
+      vitals: [{ label: "BP", value: "136/82", unit: "mmHg", flag: "borderline" }, { label: "BMI", value: "26.4", unit: "kg/m²" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "health-promotion-prevention",
+      question: {
+        stem: "Mr. Mehta, 45 years old, borderline BP, family history of MI and bowel cancer, 10–12 drinks/week. Which screening battery is most aligned with Canadian Task Force recommendations?",
+        family: "preventive-screening",
+        options: [
+          { id: "A", label: "Fasting glucose/HbA1c, lipid panel, colorectal cancer screening (FIT), blood pressure monitoring, AUDIT-C, and FRAX." },
+          { id: "B", label: "PSA, colonoscopy, lipids, stress ECG, and fasting glucose — comprehensive for a 45-year-old man with family history." },
+          { id: "C", label: "Fasting lipids and blood pressure only — other screening is not indicated until age 50." },
+          { id: "D", label: "Colonoscopy only — bowel cancer is the dominant risk given his family history." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "The Canadian Task Force on Preventive Health Care (CTFPHC) and Diabetes Canada recommend: (1) DM screening starting at 40 with risk factors (family history positive first-degree relative with CVD) using FPG or HbA1c; (2) lipid panel for CVD risk calculation (Framingham or pooled cohort equations) at 40+ with risk factors; (3) Colorectal cancer screening with FIT (fecal immunochemical test) starting at age 45–50 (some provinces initiate at 50, but 45 with positive FH is a reasonable start; some guidelines offer colonoscopy for first-degree relative with CRC under 60); (4) blood pressure monitoring at every visit; (5) alcohol brief intervention (AUDIT/AUDIT-C) — 10–12 drinks/week exceeds Canada's low-risk drinking guidelines (≤14/week but framed as 2 standard drinks/day max; 10+ is above moderate-risk guidance); (6) FRAX bone health assessment at 40+ with risk factors. PSA is not recommended by CTFPHC (weak evidence, no survival benefit, harm from overdiagnosis). Routine resting stress ECG is not indicated. Colonoscopy is higher sensitivity but FIT is appropriate first step.",
+      },
+    },
+    {
+      index: 1,
+      heading: "Lab review and risk counselling",
+      scenarioText:
+        "Labs return: FPG 6.2 mmol/L (ref 3.9–6.0 — impaired fasting glucose), HbA1c 6.0% (prediabetes), total cholesterol 5.8 mmol/L, LDL 3.6 mmol/L, HDL 1.3 mmol/L, TG 1.8 mmol/L. 10-year CVD risk (Framingham): 12% (intermediate risk). eGFR 95 mL/min. FIT ordered. You now counsel Mr. Mehta on his results.",
+      clinicalUpdate: { direction: "stable", summary: "Prediabetes, intermediate CVD risk, LDL above optimal. Modifiable risk factors present.", newFindings: ["FPG 6.2 (impaired fasting)", "HbA1c 6.0% (prediabetes)", "LDL 3.6 (above optimal for intermediate risk)", "10-year CVD risk 12%"] },
+      vitals: [],
+      diagnosticArtifacts: [
+        { label: "FPG", value: "6.2 mmol/L", interpretation: "Impaired fasting glucose (prediabetes)", isAbnormal: true },
+        { label: "HbA1c", value: "6.0%", interpretation: "Prediabetes range (5.7–6.4%)", isAbnormal: true },
+        { label: "LDL", value: "3.6 mmol/L", interpretation: "Above target for intermediate CVD risk (<3.5)", isAbnormal: true },
+        { label: "10-yr CVD risk", value: "12%", interpretation: "Intermediate (10–20%)", isAbnormal: false },
+      ],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "health-promotion-prevention",
+      question: {
+        stem: "Mr. Mehta has prediabetes, intermediate CVD risk, and LDL 3.6. What is the most appropriate initial management strategy?",
+        family: "prediabetes-cvd-risk",
+        options: [
+          { id: "A", label: "Lifestyle intervention first: structured physical activity (150 min/week), dietary modification, and alcohol reduction — defer medications." },
+          { id: "B", label: "Start metformin immediately — prediabetes with cardiovascular risk factors meets threshold for metformin." },
+          { id: "C", label: "Start statin immediately — LDL 3.6 with 12% CVD risk meets CCS threshold for pharmacotherapy." },
+          { id: "D", label: "Start both metformin and a statin — risk level warrants dual pharmacotherapy now." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "For prediabetes (FPG 6.1–6.9 or HbA1c 6.0–6.4%), Diabetes Canada recommends lifestyle intervention as first-line: structured physical activity (150 min/week moderate intensity), 5–10% weight reduction if overweight, and healthy eating patterns. Metformin may be considered for high-risk prediabetes (HbA1c >6.0%, FPG >6.1, combined risk factors), but lifestyle intervention should be trialled first for 3–6 months. For CVD risk: CCS guidelines suggest statin initiation when 10-year risk ≥20% (high) regardless of LDL, or when LDL ≥4.9. At 12% risk and LDL 3.6, lifestyle modification and risk reassessment in 3–6 months is appropriate before statin initiation. Alcohol reduction alone (from 12 to <7 drinks/week) would meaningfully improve his CVD risk, blood pressure, lipid profile, and metabolic markers.",
+      },
+    },
+    {
+      index: 2,
+      heading: "Alcohol screening and brief intervention",
+      scenarioText:
+        "Mr. Mehta reports drinking 2 glasses of wine nightly 'to unwind from work stress.' He does not consider this a problem. AUDIT score: 12 (hazardous drinking). He has never had a drink-driving conviction or blackouts. You address alcohol as part of a brief intervention.",
+      clinicalUpdate: { direction: "stable", summary: "AUDIT 12 — hazardous drinking. Brief motivational intervention indicated.", newFindings: ["AUDIT 12 (hazardous range)", "Daily use linked to stress", "No dependency markers"] },
+      vitals: [],
+      diagnosticArtifacts: [{ label: "AUDIT Score", value: "12", interpretation: "Hazardous drinking (8–15)", isAbnormal: true }],
+      medicationChanges: [],
+      followUpInterval: "3 months",
+      cnpleDomain: "health-promotion-prevention",
+      question: {
+        stem: "Mr. Mehta's AUDIT score is 12 (hazardous). He does not see it as a problem. What is the most effective NP response?",
+        family: "alcohol-brief-intervention",
+        options: [
+          { id: "A", label: "Brief motivational intervention: provide personalised feedback linking his drinking to BP, CVD risk, and prediabetes — set a collaborative reduction goal." },
+          { id: "B", label: "Refer to an addictions specialist — AUDIT ≥8 requires specialist assessment." },
+          { id: "C", label: "Document and defer — he is not ready to change; confrontation risks damaging the therapeutic relationship." },
+          { id: "D", label: "Prescribe naltrexone — pharmacotherapy is first-line for AUDIT score above 10." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Brief motivational intervention (BMI/BI) is evidence-based, NP-appropriate first-line care for hazardous drinking (AUDIT 8–15). The approach: (1) give personalised feedback — his 10–12 drinks/week raises BP, worsens lipid and glucose control, and adds hepatic and cancer risk; (2) ask about readiness to change; (3) provide Canada's low-risk drinking guidelines (≤14/week, ≤3/occasion); (4) set a collaborative reduction goal (e.g., target ≤7/week). Referral to addictions specialist is for dependent or high-risk drinking (AUDIT ≥16 or overt dependency markers). Deferring because 'he's not ready' is not best practice — brief intervention works even in ambivalent patients. Naltrexone is for alcohol dependence or relapse prevention, not hazardous drinking in a person without dependency.",
+      },
+    },
+  ],
+};
+
+// ── Case 14: Skin Infection — cellulitis assessment + prescribing ──────────────
+
+export const CASE_CELLULITIS: PatientCase = {
+  id: "cnple-sample-skin-001",
+  title: "Mrs. Fontaine — Lower Leg Cellulitis",
+  tagline: "Dermatology · Prescribing Safety",
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-13",
+    guidelineSources: [
+      "Infectious Diseases Society of America (IDSA) Skin and Soft Tissue Infection Guidelines 2014 (updated 2024)",
+      "Canada Communicable Disease Report — Community-Acquired MRSA",
+    ],
+  },
+  patient: { age: 61, sex: "Female", pronouns: "she/her", setting: "Walk-in / Primary Care" },
+  chiefComplaint: "Right lower leg redness, swelling, and warmth — 3 days.",
+  pmhx: ["Type 2 DM (HbA1c 8.2% last year)", "Obesity (BMI 34)", "Bilateral leg oedema", "No prior cellulitis", "No IV drug use"],
+  medications: [
+    { name: "Metformin", dose: "1000 mg", route: "PO", frequency: "twice daily", indication: "Type 2 DM" },
+    { name: "Furosemide", dose: "40 mg", route: "PO", frequency: "once daily", indication: "Leg oedema" },
+  ],
+  allergies: [],
+  primaryDomain: "dermatology-wound-care",
+  secondaryDomains: ["pharmacotherapeutics", "diagnostics-labs"],
+  difficulty: 2,
+  stepCount: 3,
+  estimatedMinutes: 12,
+  isPremium: false,
+  steps: [
+    {
+      index: 0,
+      heading: "Presenting with right leg redness",
+      scenarioText:
+        "Mrs. Fontaine, 61, presents with 3 days of increasing right lower leg redness, warmth, swelling, and tenderness. The area extends from the ankle to mid-calf. There is no fluctuance, no central necrosis, no obvious wound, and no bullae. She notes a small crack between the fourth and fifth toes (interdigital fissure). T 38.1°C, HR 92, BP 142/86, RR 16. Systemic CBC pending. She has been taking ibuprofen with minimal relief.",
+      clinicalUpdate: { direction: "worsening", summary: "Non-purulent cellulitis with systemic features (fever, tachycardia). Likely portal of entry: toe web fissure.", newFindings: ["T 38.1°C", "HR 92", "Erythema ankle to mid-calf", "Interdigital fissure (portal of entry)", "No abscess/fluctuance"] },
+      vitals: [
+        { label: "T", value: "38.1", unit: "°C", flag: "high" },
+        { label: "HR", value: "92", unit: "bpm", flag: "borderline" },
+        { label: "BP", value: "142/86", unit: "mmHg" },
+      ],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "dermatology-wound-care",
+      question: {
+        stem: "Mrs. Fontaine has non-purulent cellulitis with low-grade fever and tachycardia in a diabetic. What is the first-line antibiotic choice?",
+        family: "cellulitis-prescribing",
+        options: [
+          { id: "A", label: "Cephalexin 500 mg four times daily for 5–7 days — first-line for non-purulent cellulitis (beta-haemolytic Streptococcus coverage)." },
+          { id: "B", label: "TMP-SMX 1–2 DS tablets twice daily — MRSA coverage is essential given her diabetes." },
+          { id: "C", label: "Clindamycin 300 mg three times daily — broad coverage including anaerobes and MRSA." },
+          { id: "D", label: "Flucloxacillin 500 mg four times daily — Staphylococcal coverage is first priority in cellulitis." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Non-purulent cellulitis (without abscess, folliculitis, or purulent discharge) is primarily caused by beta-haemolytic Streptococcus (Group A, B, C, G). IDSA guidelines recommend cephalexin (or amoxicillin-clavulanate) as first-line for non-purulent cellulitis. TMP-SMX and clindamycin provide MRSA coverage but do NOT reliably cover beta-haemolytic Streptococcus — using them for non-purulent cellulitis risks treatment failure. MRSA coverage (TMP-SMX or clindamycin) is reserved for purulent cellulitis/abscess or confirmed MRSA exposure. Flucloxacillin is appropriate in UK guidelines but cephalexin is preferred in Canada. Duration: 5–7 days minimum; extend if not improving at 48–72 hours. Treating the interdigital tinea/fissure (topical antifungal) prevents recurrence.",
+      },
+    },
+    {
+      index: 1,
+      heading: "Marking progression and 48-hour reassessment",
+      scenarioText:
+        "You mark the borders of erythema and instruct Mrs. Fontaine to return in 48 hours. She returns: erythema is extending 2 cm beyond marked border. T 38.4°C, HR 96, BP 136/80. She has taken all antibiotic doses. CBC now available: WBC 16.2 × 10⁹/L (neutrophilia), CRP 68 mg/L.",
+      clinicalUpdate: { direction: "worsening", summary: "Treatment failure at 48 hours — spreading erythema, rising fever, systemic inflammatory response. Consider IV antibiotics or admission.", newFindings: ["Erythema beyond marked border", "WBC 16.2", "CRP 68", "T 38.4°C"] },
+      vitals: [{ label: "T", value: "38.4", unit: "°C", flag: "high" }, { label: "WBC", value: "16.2", unit: "×10⁹/L", flag: "high" }],
+      diagnosticArtifacts: [{ label: "WBC", value: "16.2 × 10⁹/L", interpretation: "Elevated neutrophilia", isAbnormal: true }, { label: "CRP", value: "68 mg/L", interpretation: "Elevated", isAbnormal: true }],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "acute-urgent-care",
+      question: {
+        stem: "Cellulitis is progressing despite 48 hours of oral cephalexin. She has systemic features. What is the most appropriate NP action?",
+        family: "cellulitis-escalation",
+        options: [
+          { id: "A", label: "Refer to ED for IV antibiotics — treatment failure with systemic features in a diabetic warrants escalation." },
+          { id: "B", label: "Switch to oral TMP-SMX — MRSA is now the likely cause of treatment failure." },
+          { id: "C", label: "Increase cephalexin dose and add topical antibiotic — give more time on current regimen." },
+          { id: "D", label: "Admit under NP service and start IV cefazolin in clinic — home IV therapy is sufficient." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Cellulitis progressing beyond marked borders at 48 hours despite adequate oral antibiotics, combined with worsening systemic features (rising fever, tachycardia, elevated WBC/CRP) in a diabetic, meets indications for IV antibiotic therapy and emergency department assessment. IDSA criteria for hospital admission include: failure to respond to oral antibiotics, fever ≥38.5°C, rapidly spreading erythema, immunocompromised host (DM with HbA1c >8%). IV cefazolin 1–2 g q8h is the standard hospital regimen. Switching to TMP-SMX alone without addressing the streptococcal possibility risks ongoing failure. The NP's role is to recognise treatment failure thresholds and refer appropriately — this is an essential professional practice competency for the CNPLE.",
+      },
+    },
+    {
+      index: 2,
+      heading: "Follow-up after hospital discharge",
+      scenarioText:
+        "Mrs. Fontaine was admitted, treated with IV cefazolin for 48 hours, then transitioned to oral cephalexin. She returns to your clinic 1 week later, cellulitis resolved. You now address underlying risk factors for recurrence.",
+      clinicalUpdate: { direction: "improving", summary: "Cellulitis resolved post-IV treatment. Recurrence prevention required — tinea pedis, oedema, DM control.", newFindings: ["Cellulitis resolved", "Interdigital tinea still present", "Oedema persists", "HbA1c still 8.2%"] },
+      vitals: [],
+      diagnosticArtifacts: [],
+      medicationChanges: [{ name: "Topical antifungal", change: "start", note: "Clotrimazole 1% cream BID × 4 weeks — treat interdigital tinea (recurrence prevention)" }],
+      followUpInterval: "6–8 weeks",
+      cnpleDomain: "health-promotion-prevention",
+      question: {
+        stem: "What is the most important recurrence-prevention measure for Mrs. Fontaine's cellulitis?",
+        family: "cellulitis-prevention",
+        options: [
+          { id: "A", label: "Treat interdigital tinea pedis, optimize glycaemic control, and manage lower extremity oedema." },
+          { id: "B", label: "Prophylactic oral penicillin V for 6 months — antibiotic prophylaxis is first-line for cellulitis recurrence." },
+          { id: "C", label: "Compression stockings only — venous insufficiency is the primary risk factor." },
+          { id: "D", label: "Topical mupirocin to both legs daily — decolonisation reduces Staphylococcal carriage." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Recurrent cellulitis risk is highest when portal-of-entry risk factors are unaddressed. For Mrs. Fontaine, three modifiable factors require NP attention: (1) interdigital tinea pedis is the most common portal of entry for leg cellulitis — treat with topical antifungal (clotrimazole 1% BID × 4 weeks); (2) poorly controlled DM (HbA1c 8.2%) impairs immune response and skin barrier — intensify DM management; (3) bilateral oedema creates skin fragility and impaired lymphatic clearance — ensure optimal diuretic dosing and consider compression stockings. Antibiotic prophylaxis (phenoxymethylpenicillin 250 mg BID) is IDSA-guideline supported for recurrent cellulitis (≥3 episodes/year) but is NOT first-line at first recurrence; address underlying risk factors first.",
+      },
+    },
+  ],
+};
+
+// ── Case 15: Professional Practice — NP Scope and Ethical Dilemma ─────────────
+
+export const CASE_PROFESSIONAL_PRACTICE: PatientCase = {
+  id: "cnple-sample-pp-001",
+  title: "NP Scope and Collaborative Practice",
+  tagline: "Professional Practice · Ethics",
+  governance: {
+    reviewStatus: "internal_review",
+    contentUpdatedAt: "2026-05-13",
+    guidelineSources: [
+      "CNA Code of Ethics for Registered Nurses (2017)",
+      "CNPS Professional Liability Program Scope of Practice Guidance",
+      "CNO Entry-to-Practice Competencies for Nurse Practitioners",
+    ],
+  },
+  patient: { age: 38, sex: "Female", pronouns: "she/her", setting: "Remote NP-Led Clinic" },
+  chiefComplaint: "NP consultation — chest pain, recent weight loss, night sweats.",
+  pmhx: ["Recent immigration (6 months ago)", "No Canadian health records available", "Reports prior TB contact in home country"],
+  medications: [],
+  allergies: [],
+  primaryDomain: "professional-practice",
+  secondaryDomains: ["diagnostics-labs", "health-promotion-prevention"],
+  difficulty: 3,
+  stepCount: 3,
+  estimatedMinutes: 14,
+  isPremium: true,
+  steps: [
+    {
+      index: 0,
+      heading: "Remote clinic assessment — possible TB",
+      scenarioText:
+        "You are the only NP in a remote northern Ontario community. Ms. Abubakar, 38, presents with 3 months of productive cough, night sweats, 6 kg weight loss, and fatigue. She emigrated from a high-burden TB country 6 months ago. She has no documented TB screening in Canada. Vitals: T 37.8°C, HR 96, RR 20, SpO2 96%, BP 112/72. Exam: decreased breath sounds and dullness to percussion at the left lower lobe.",
+      clinicalUpdate: { direction: "worsening", summary: "High-probability active tuberculosis in a recent immigrant with classic systemic symptoms and focal respiratory findings.", newFindings: ["3-month constitutional symptoms", "LLL dullness", "T 37.8°C", "High-burden country origin", "6 kg weight loss"] },
+      vitals: [{ label: "T", value: "37.8", unit: "°C", flag: "high" }, { label: "SpO2", value: "96%", unit: "" }, { label: "HR", value: "96", unit: "bpm" }],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "professional-practice",
+      question: {
+        stem: "You have high clinical suspicion for active pulmonary tuberculosis. What is the most appropriate immediate NP action in a remote clinic without on-site radiology?",
+        family: "tb-professional-practice",
+        options: [
+          { id: "A", label: "Isolate the patient, arrange urgent telehealth/physician consultation, arrange transport for CXR and sputum AFB, and notify public health." },
+          { id: "B", label: "Start empirical TB therapy (HRZE) immediately — clinical diagnosis is sufficient to initiate treatment in a remote setting." },
+          { id: "C", label: "Prescribe azithromycin for atypical pneumonia and re-evaluate in 2 weeks." },
+          { id: "D", label: "Defer management until the patient can be seen in a city hospital — remote NP scope does not include infectious disease management." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Active TB is a notifiable disease under the Public Health Agency of Canada and all provincial public health acts — mandatory reporting is a legal and professional obligation for any regulated health professional. In a remote NP-led clinic, the NP's immediate actions are: (1) respiratory isolation — separate from waiting area, provide surgical mask; (2) urgent telehealth consultation with infectious disease or public health physician to confirm workup and management plan; (3) arrange transfer for CXR (two views), sputum AFB × 3 (morning specimens), and full labs; (4) notify the local Medical Officer of Health. Empirical TB therapy should not be started without confirmatory testing — incorrect regimen, drug resistance, and contact tracing all depend on microbiological confirmation. This is NOT outside NP scope — recognising, isolating, reporting, and coordinating is core NP professional practice in any setting.",
+      },
+    },
+    {
+      index: 1,
+      heading: "Patient declines investigation",
+      scenarioText:
+        "Ms. Abubakar understands the concern but refuses to be transported to the nearest city 4 hours away. She has two young children and her husband is away working. She asks if she can 'just take some medicine' at home and come back in a week.",
+      clinicalUpdate: { direction: "worsening", summary: "Patient refusing necessary diagnostic transport. Public health risk and patient autonomy conflict.", newFindings: ["Patient refusing transport", "Active TB highly likely", "Community infection risk", "Children at home"] },
+      vitals: [],
+      diagnosticArtifacts: [],
+      medicationChanges: [],
+      followUpInterval: null,
+      cnpleDomain: "professional-practice",
+      question: {
+        stem: "Ms. Abubakar is refusing transport for diagnosis despite high TB suspicion. How does the NP best balance autonomy and public health responsibility?",
+        family: "professional-ethics-autonomy",
+        options: [
+          { id: "A", label: "Document refusal, provide respiratory precautions education, arrange sputum collection at clinic, and activate public health reporting — patient autonomy is respected while fulfilling legal obligations." },
+          { id: "B", label: "Comply with her request — patient autonomy overrides all other considerations in NP practice." },
+          { id: "C", label: "Invoke mandatory detention under the Public Health Act immediately — she is a clear public health risk." },
+          { id: "D", label: "Discharge and refer to her family physician — this case is beyond NP scope in a remote setting." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "The NP must navigate the tension between respecting patient autonomy and fulfilling public health and professional obligations. The correct approach is: (1) Acknowledge her legitimate concerns (childcare, distance) — validate and problem-solve (e.g., social work consult for childcare support, telehealth follow-up, home nursing visit); (2) Explain the legal reporting obligation clearly and honestly — she must understand reporting will occur regardless of her decision about transport; (3) Proceed with what CAN be done at clinic: sputum collection in isolation, contact tracing conversation, home precautions education (separate sleep room, no visitors, wear mask); (4) Document a detailed informed refusal noting capacity, options offered, and plans. Mandatory detention (quarantine order) requires physician/MOH order — it is not a unilateral NP action. Abdicating care ('refer to family physician') is not appropriate when there is an active public health threat. CNA Code of Ethics: NPs have a duty to both the individual patient and the health of the public.",
+      },
+    },
+    {
+      index: 2,
+      heading: "Sputum results and treatment decision",
+      scenarioText:
+        "Three sputum AFB smears are positive. CXR (tele-radiology): left upper lobe infiltrate with cavitation — highly consistent with active pulmonary TB. Public health is notified. Infectious disease telehealth consultation confirms: start 4-drug HRZE therapy. You are asked to prescribe the initial TB regimen as part of the collaborative management plan.",
+      clinicalUpdate: { direction: "stable", summary: "Active TB confirmed by smear and CXR. Starting HRZE under physician collaborative plan.", newFindings: ["AFB smear positive ×3", "CXR: LUL cavitation", "ID physician plan: HRZE"] },
+      vitals: [],
+      diagnosticArtifacts: [
+        { label: "AFB Smear", value: "Positive ×3", interpretation: "Active pulmonary TB confirmed", isAbnormal: true },
+        { label: "CXR", value: "LUL infiltrate with cavitation", interpretation: "Classic active TB pattern", isAbnormal: true },
+      ],
+      medicationChanges: [
+        { name: "Isoniazid (H)", change: "start", note: "5 mg/kg/day (max 300 mg) — note pyridoxine co-prescription needed" },
+        { name: "Rifampin (R)", change: "start", note: "10 mg/kg/day (max 600 mg)" },
+        { name: "Pyrazinamide (Z)", change: "start", note: "15–30 mg/kg/day" },
+        { name: "Ethambutol (E)", change: "start", note: "15–20 mg/kg/day" },
+      ],
+      followUpInterval: "2 months (intensive phase completion)",
+      cnpleDomain: "pharmacotherapeutics",
+      question: {
+        stem: "You are prescribing isoniazid as part of the TB regimen. What co-prescription is essential and why?",
+        family: "tb-prescribing",
+        options: [
+          { id: "A", label: "Pyridoxine (vitamin B6) 25–50 mg daily — isoniazid depletes B6, causing peripheral neuropathy." },
+          { id: "B", label: "Folic acid — isoniazid depletes folate, causing megaloblastic anaemia." },
+          { id: "C", label: "Magnesium — isoniazid chelates divalent cations, causing hypomagnesaemia." },
+          { id: "D", label: "No co-prescription needed — pyridoxine is only added if the patient develops symptoms." },
+        ],
+        correctOptionId: "A",
+        rationale:
+          "Isoniazid inhibits pyridoxine (vitamin B6) metabolism by competing with pyridoxal phosphate, the active form of B6. Peripheral neuropathy is the main adverse effect — risk is higher with malnutrition, alcoholism, diabetes, renal failure, HIV, and pregnancy. Pyridoxine 25–50 mg daily is co-prescribed with every isoniazid-containing TB regimen in Canada to prevent neuropathy. This is standard of care in Canadian TB guidelines — it is not optional or reserved for symptomatic patients. The NP should also counsel Ms. Abubakar about rifampin's significant drug interactions (including oral contraceptives — ineffective), orange discolouration of body fluids (expected), and the critical importance of adherence (DOTS — directly observed therapy may be arranged through public health).",
+      },
+    },
+  ],
+};
+
 // ── Exported catalog ───────────────────────────────────────────────────────────
 
 export const CNPLE_SAMPLE_CASES: PatientCase[] = [
@@ -1621,6 +2422,14 @@ export const CNPLE_SAMPLE_CASES: PatientCase[] = [
   CASE_PERIMENOPAUSE_MHT,
   CASE_GERIATRIC_POLYPHARMACY,
   CASE_CHF_COPD_OVERLAP,
+  // New cases — commercial readiness sprint 2026-05-13
+  CASE_HYPOTHYROIDISM,
+  CASE_COPD_EXACERBATION,
+  CASE_OPIOID_USE_DISORDER,
+  CASE_CHEST_PAIN_DIFFERENTIAL,
+  CASE_PREVENTIVE_HEALTH,
+  CASE_CELLULITIS,
+  CASE_PROFESSIONAL_PRACTICE,
 ];
 
 /** Free-tier preview: returns cases with isPremium=false, steps limited to first 2. */

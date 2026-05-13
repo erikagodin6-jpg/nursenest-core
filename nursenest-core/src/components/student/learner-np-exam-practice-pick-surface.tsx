@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { isCnplePathway } from "@/lib/exam-pathways/cnple-pathway";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 export type NpExamPracticePickRow = {
@@ -9,7 +10,10 @@ export type NpExamPracticePickRow = {
 
 /**
  * NP-only practice entry: explicit exam cards (FNP, PMHNP, CNPLE, …) with separate deep links to the
- * practice-tests hub and the question bank — avoids a single generic “NP practice” destination.
+ * practice-tests hub and the question bank — avoids a single generic "NP practice" destination.
+ *
+ * CNPLE uses LOFT simulation (linear on-the-fly testing), not CAT adaptive.
+ * Its practice tile links to /app/cases/cnple instead of the CAT-launch route.
  */
 export function LearnerNpExamPracticePickSurface({
   title,
@@ -34,7 +38,11 @@ export function LearnerNpExamPracticePickSurface({
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2">
           {pathways.map((p) => {
-            const practiceHref = `/app/practice-tests?pathwayId=${encodeURIComponent(p.id)}`;
+            const isCnple = isCnplePathway(p.id);
+            // CNPLE: LOFT simulation via /app/cases/cnple instead of CAT adaptive
+            const practiceHref = isCnple
+              ? "/app/cases/cnple"
+              : `/app/practice-tests?pathwayId=${encodeURIComponent(p.id)}`;
             const questionsHref = pathwayHubAppQuestionsHref(p.id);
             return (
               <li
@@ -48,7 +56,7 @@ export function LearnerNpExamPracticePickSurface({
                     href={practiceHref}
                     className="inline-flex items-center justify-center rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-3 py-2 text-sm font-medium text-[var(--semantic-text-primary)] transition-colors hover:border-[var(--semantic-info)]"
                   >
-                    Practice exams &amp; CAT
+                    {isCnple ? "LOFT Simulation" : "Practice exams & CAT"}
                   </Link>
                   <Link
                     href={questionsHref}
@@ -56,6 +64,14 @@ export function LearnerNpExamPracticePickSurface({
                   >
                     Question bank
                   </Link>
+                  {isCnple ? (
+                    <Link
+                      href="/canada/np/cnple/lessons"
+                      className="inline-flex items-center justify-center rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-3 py-2 text-sm font-medium text-[var(--semantic-text-primary)] transition-colors hover:border-[var(--semantic-success)]"
+                    >
+                      Lessons
+                    </Link>
+                  ) : null}
                 </div>
               </li>
             );

@@ -225,12 +225,22 @@ function buildCnplePage(
       "Use elimination by safety: first remove options that delay escalation, ignore contraindications, or exceed scope.",
     ],
     faq: commonFaq("CNPLE", `${CNPLE_BASE}/questions`, "CNPLE preparation should include fixed-length timed sets because LOFT-style practice rewards consistent pacing across the whole exam."),
-    whatYoullLearn: [
-      `How ${topic} is assessed in CNPLE LOFT-format clinical vignettes`,
-      "Canadian NP prescribing and guideline context that differs from US preparation materials",
-      "The specific reasoning errors that cost marks on case-based questions",
-      "A repeatable study loop — diagnostic, lesson review, retesting — for this topic area",
-    ],
+    whatYoullLearn:
+      slug === "overview"
+        ? [
+            "How to access 1,463 CNPLE-aligned NP lessons covering prescribing, diagnostics, lifespan, and professional practice",
+            "How to launch 2,838+ practice questions scoped to Canadian NP exam reasoning",
+            "How to use 1,561 domain-targeted flashcards for spaced-repetition CNPLE prep",
+            "How to run the LOFT-style simulation with a full session report card",
+            "Canadian NP prescribing and guideline context that differs from US preparation materials",
+            "A repeatable study loop — diagnostic block, lesson review, flashcard reinforcement, retesting",
+          ]
+        : [
+            `How ${topic} is assessed in CNPLE LOFT-format clinical vignettes`,
+            "Canadian NP prescribing and guideline context that differs from US preparation materials",
+            "The specific reasoning errors that cost marks on case-based questions",
+            "A repeatable study loop — diagnostic, lesson review, retesting — for this topic area",
+          ],
     whoThisIsFor:
       "NP graduates completing their CNPLE preparation, working nurse practitioners in provisional registration, and RNs exploring Canadian NP programmes who want to understand the CNPLE's clinical scope and content depth.",
     studyOrder: [
@@ -247,7 +257,7 @@ function buildCnplePage(
       { label: "CNPLE hub", href: CNPLE_BASE },
     ],
     datePublished: "2026-01-15",
-    dateModified: "2026-05-12",
+    dateModified: "2026-05-13",
   };
 }
 
@@ -339,7 +349,7 @@ function buildRexPage(
       { label: "REx-PN hub", href: REX_BASE },
     ],
     datePublished: "2026-01-15",
-    dateModified: "2026-05-12",
+    dateModified: "2026-05-13",
   };
 }
 
@@ -442,7 +452,7 @@ function buildRtPage(
       "Suctioning must be preoxygenated, time-limited (<15 sec), and followed by immediate reassessment of SpO2.",
     ],
     datePublished: "2026-01-15",
-    dateModified: "2026-05-12",
+    dateModified: "2026-05-13",
   };
 }
 

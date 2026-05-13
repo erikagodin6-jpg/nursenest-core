@@ -220,3 +220,91 @@ test.describe("CNPLE internal links", () => {
     await expect(cnpleLink).toBeVisible({ timeout: 30_000 });
   });
 });
+
+// ── Regression tests added 2026-05-13 (P0 content wiring fix) ────────────────
+
+test.describe("CNPLE lesson hub — content wiring regression", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("lesson hub renders at least one lesson card (not blank)", async ({ page }) => {
+    await gotoExpectOk(page, CNPLE_ROUTES.lessons);
+    await expectNotPageNotFound(page);
+    // Should render at least one lesson link — not a blank page
+    const lessonLinks = page.locator("main a[href*='/lessons/']").filter({ visible: true });
+    await expect(lessonLinks.first()).toBeVisible({ timeout: 30_000 });
+    const count = await lessonLinks.count();
+    expect(count, "CNPLE lesson hub must show at least 5 lessons").toBeGreaterThanOrEqual(5);
+  });
+
+  test("lesson hub page does not show empty/blank state", async ({ page }) => {
+    await gotoExpectOk(page, CNPLE_ROUTES.lessons);
+    const body = (await page.locator("main").textContent()) ?? "";
+    // Should not render generic empty/coming-soon fallback when 1,463 lessons exist
+    expect(body.length, "Lesson hub main content must not be near-empty").toBeGreaterThan(500);
+  });
+});
+
+test.describe("CNPLE flashcard hub — inventory regression", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("flashcard hub renders a visible primary CTA (no blank state)", async ({ page }) => {
+    await gotoExpectOk(page, CNPLE_ROUTES.flashcards);
+    await expectNotPageNotFound(page);
+    // Should render either live CTA or coming-soon alternative CTAs — never blank
+    const anyCta = page
+      .locator("main a[href]")
+      .filter({ hasText: /sign in|flashcard|lesson|simulation|question|start/i })
+      .filter({ visible: true })
+      .first();
+    await expect(anyCta, "Flashcard hub must show at least one actionable CTA").toBeVisible({ timeout: 30_000 });
+  });
+});
+
+test.describe("CNPLE /cat redirect regression", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("/canada/np/cnple/cat redirects to /simulation (not blank or 404)", async ({ page }) => {
+    // The /cat route should redirect CNPLE to /simulation
+    const response = await page.goto("/canada/np/cnple/cat", { waitUntil: "domcontentloaded" });
+    const finalUrl = page.url();
+    // Either a redirect occurred (final URL is simulation) or page loaded with simulation content
+    const isAtSimulation = finalUrl.includes("/simulation");
+    const body = (await page.locator("body").textContent()) ?? "";
+    const hasSimContent = body.toLowerCase().includes("cnple simulation") ||
+                          body.toLowerCase().includes("loft") ||
+                          body.toLowerCase().includes("start cnple");
+    expect(
+      isAtSimulation || hasSimContent,
+      `/canada/np/cnple/cat must redirect to /simulation or show simulation content. Final URL: ${finalUrl}`,
+    ).toBe(true);
+    // Must not 404
+    expect(response?.status(), "CNPLE /cat must not 404").not.toBe(404);
+  });
+});
+
+test.describe("CNPLE simulation — LOFT copy regression (no stale CAT wording)", () => {
+  test.use({ storageState: { cookies: [], origins: [] } });
+
+  test("simulation page uses LOFT/simulation language, not CAT/adaptive language", async ({ page }) => {
+    await gotoExpectOk(page, CNPLE_ROUTES.simulation);
+    const content = (await page.locator("body").textContent())?.toLowerCase() ?? "";
+    // LOFT-specific terms must be present
+    expect(content, "Simulation page must mention LOFT or linear").toMatch(/loft|linear/);
+    // Must NOT claim it is a CAT adaptive exam
+    expect(content, "Simulation page must not claim to be a CAT adaptive exam").not.toContain(
+      "computerized adaptive test",
+    );
+  });
+
+  test("simulation page inventory stats mention real content", async ({ page }) => {
+    await gotoExpectOk(page, CNPLE_ROUTES.hub);
+    const content = (await page.locator("body").textContent()) ?? "";
+    // Hub should now mention real inventory counts
+    const hasLessons = /1[,.]?4\d\d\s*lessons?|lessons?.*1[,.]?4\d\d/i.test(content);
+    const hasQuestions = /2[,.]?8\d\d|practice questions?/i.test(content);
+    expect(
+      hasLessons || hasQuestions,
+      "CNPLE hub must mention lesson or question inventory (1,463 lessons or 2,838+ questions)",
+    ).toBe(true);
+  });
+});

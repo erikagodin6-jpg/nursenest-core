@@ -8,6 +8,7 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
+import { isCnplePathway } from "@/lib/exam-pathways/cnple-pathway";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
@@ -36,6 +37,12 @@ export default async function CatDirectLaunchPage({ searchParams }: Props) {
 
   if (!pathwayId) {
     redirect("/app/practice-tests/start");
+  }
+
+  // CNPLE uses LOFT (linear on-the-fly testing), not the CAT adaptive engine.
+  // Redirect any CNPLE launch attempt to the dedicated CNPLE cases hub.
+  if (isCnplePathway(pathwayId)) {
+    redirect("/app/cases/cnple");
   }
 
   const session = await getProtectedRouteSession("(student).app.(learner).practice-tests.cat_launch");

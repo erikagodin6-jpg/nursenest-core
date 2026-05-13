@@ -137,7 +137,9 @@
     "mobile:eas:build": "npm --prefix apps/mobile run eas:build",
     "mobile:release:readiness": "npm --prefix apps/mobile run release:readiness",
     "mobile:typecheck:shared": "npm --prefix packages/nursenest-mobile-shared run typecheck",
-    "mobile:lint:shared": "npm --prefix packages/nursenest-mobile-shared run lint"
+    "mobile:lint:shared": "npm --prefix packages/nursenest-mobile-shared run lint",
+    "do:deploy:execute": "node scripts/do-predeploy.mjs --execute",
+    "do:deploy:dry": "node scripts/do-predeploy.mjs"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.19.0",
