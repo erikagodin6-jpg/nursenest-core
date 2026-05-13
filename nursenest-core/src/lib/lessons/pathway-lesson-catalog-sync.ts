@@ -9,8 +9,15 @@
  * (`evaluatePathwayLessonStructuralGate`): uses {@link lessonQualifiesForPremiumStructuralGate} (the premium-spine
  * portion of that union) so meaningful-clinical / authoritative bypasses keep legacy structural validation while
  * still skipping `expandToStandardFiveSections` in `normalizeLesson`.
+ *
+ * P0 PERF FIX: Lesson catalog JSON is loaded via `fs.readFileSync` + `JSON.parse` (not
+ * `require`/`createRequire`). Using `require` caused Turbopack to statically trace all 25
+ * catalog files (~57 MB) into a single 44 MB server chunk at build time, causing 60+ second
+ * hub load times and build OOMs. `readFileSync` is not statically traceable — catalogs stay
+ * on disk and are read on-demand into process-level module caches.
  */
-import { createRequire } from "node:module";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lessons-hubs";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
 import { buildLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
@@ -30,8 +37,28 @@ import {
 } from "@/lib/lessons/pathway-lesson-premium";
 import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scale";
 
-/** JSON bundles use `createRequire` so this module stays loadable under ESM `node:test` / `tsx` (bare `require` throws). */
-const catalogBundleRequire = createRequire(import.meta.url);
+// ─── Catalog file reader ───────────────────────────────────────────────────
+// `readFileSync` is intentionally NOT traceable by Turbopack/webpack static
+// analysis, so these JSON files are NEVER bundled into server chunks. They are
+// read from disk on first access per catalog file and held in the module-level
+// caches below. Do NOT switch back to require() or createRequire() — that
+// caused a 44 MB server bundle and 60+ second load times (see file header).
+//
+// Path resolution: `process.cwd()` in Next.js server == the project root where
+// package.json lives (i.e. nursenest-core/). All src/ paths are relative to it.
+function readCatalogJsonSync<T>(srcRelPath: string): T {
+  const abs = join(process.cwd(), srcRelPath);
+  const perfEnabled =
+    process.env.LESSON_PERF_DEBUG === "1" || process.env.NODE_ENV !== "production";
+  const t0 = perfEnabled ? Date.now() : 0;
+  const raw = readFileSync(abs, "utf8");
+  const parsed = JSON.parse(raw) as T;
+  if (perfEnabled) {
+    const kb = Math.round(raw.length / 1024);
+    console.info(`[catalog-read] ${srcRelPath} ${Date.now() - t0}ms ${kb}KB`);
+  }
+  return parsed;
+}
 import {
   type PathwayEmbeddedSoundLibraryId,
   type PathwayLessonAudienceTier,
@@ -181,7 +208,7 @@ let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pat
 function getCatalogData(): CatalogShape {
   if (catalogDataCache) return catalogDataCache;
   lessonsPerfMark("catalog_build_start", { scope: "bundled_catalog_json" });
-  catalogDataCache = catalogBundleRequire("@/content/pathway-lessons/catalog.json") as CatalogShape;
+  catalogDataCache = readCatalogJsonSync("src/content/pathway-lessons/catalog.json") as CatalogShape;
   lessonsPerfMark("catalog_build_end", { scope: "bundled_catalog_json" });
   const pathwayCount = Object.keys(catalogDataCache.pathways ?? {}).length;
   const lessonRows = Object.values(catalogDataCache.pathways ?? {}).reduce(
@@ -195,7 +222,7 @@ function getCatalogData(): CatalogShape {
 function getAlliedBundledPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (alliedBundledPathwaysCache) return alliedBundledPathwaysCache;
   alliedBundledPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/allied-bundled-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/allied-bundled-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return alliedBundledPathwaysCache;
@@ -205,7 +232,7 @@ function getAlliedBundledPathways(): Record<string, CatalogShape["pathways"][str
 function getRnCardiovascularExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnCardiovascularExpansionPathwaysCache) return rnCardiovascularExpansionPathwaysCache;
   rnCardiovascularExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-cardiovascular-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-cardiovascular-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnCardiovascularExpansionPathwaysCache;
@@ -220,7 +247,7 @@ function rnCardiovascularExpansionLessonsForPathway(pathwayId: string): LessonIn
 function getRnNeurologicalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnNeurologicalExpansionPathwaysCache) return rnNeurologicalExpansionPathwaysCache;
   rnNeurologicalExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-neurological-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-neurological-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnNeurologicalExpansionPathwaysCache;
@@ -235,7 +262,7 @@ function rnNeurologicalExpansionLessonsForPathway(pathwayId: string): LessonInpu
 function getRnHematologyOncologyExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnHematologyOncologyExpansionPathwaysCache) return rnHematologyOncologyExpansionPathwaysCache;
   rnHematologyOncologyExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-hematology-oncology-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-hematology-oncology-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnHematologyOncologyExpansionPathwaysCache;
@@ -250,7 +277,7 @@ function rnHematologyOncologyExpansionLessonsForPathway(pathwayId: string): Less
 function getRnGastrointestinalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnGastrointestinalExpansionPathwaysCache) return rnGastrointestinalExpansionPathwaysCache;
   rnGastrointestinalExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-gastrointestinal-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-gastrointestinal-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnGastrointestinalExpansionPathwaysCache;
@@ -265,7 +292,7 @@ function rnGastrointestinalExpansionLessonsForPathway(pathwayId: string): Lesson
 function getRnIntegumentaryWoundCareExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnIntegumentaryWoundCareExpansionPathwaysCache) return rnIntegumentaryWoundCareExpansionPathwaysCache;
   rnIntegumentaryWoundCareExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-integumentary-wound-care-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-integumentary-wound-care-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnIntegumentaryWoundCareExpansionPathwaysCache;
@@ -280,7 +307,7 @@ function rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId: string): 
 function getRnInfectionControlExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnInfectionControlExpansionPathwaysCache) return rnInfectionControlExpansionPathwaysCache;
   rnInfectionControlExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-infection-control-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-infection-control-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnInfectionControlExpansionPathwaysCache;
@@ -295,7 +322,7 @@ function rnInfectionControlExpansionLessonsForPathway(pathwayId: string): Lesson
 function getRnLeadershipDelegationExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnLeadershipDelegationExpansionPathwaysCache) return rnLeadershipDelegationExpansionPathwaysCache;
   rnLeadershipDelegationExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-leadership-delegation-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-leadership-delegation-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnLeadershipDelegationExpansionPathwaysCache;
@@ -310,7 +337,7 @@ function rnLeadershipDelegationExpansionLessonsForPathway(pathwayId: string): Le
 function getRnMaternalNewbornExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnMaternalNewbornExpansionPathwaysCache) return rnMaternalNewbornExpansionPathwaysCache;
   rnMaternalNewbornExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-maternal-newborn-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-maternal-newborn-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnMaternalNewbornExpansionPathwaysCache;
@@ -324,7 +351,7 @@ function rnMaternalNewbornExpansionLessonsForPathway(pathwayId: string): LessonI
 function getRnProceduresSkillsExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnProceduresSkillsExpansionPathwaysCache) return rnProceduresSkillsExpansionPathwaysCache;
   rnProceduresSkillsExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-procedures-skills-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-procedures-skills-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnProceduresSkillsExpansionPathwaysCache;
@@ -339,7 +366,7 @@ function rnProceduresSkillsExpansionLessonsForPathway(pathwayId: string): Lesson
 function getRnNutritionExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnNutritionExpansionPathwaysCache) return rnNutritionExpansionPathwaysCache;
   rnNutritionExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-nutrition-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-nutrition-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnNutritionExpansionPathwaysCache;
@@ -353,7 +380,7 @@ function rnNutritionExpansionLessonsForPathway(pathwayId: string): LessonInput[]
 function getRnExamStrategyExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnExamStrategyExpansionPathwaysCache) return rnExamStrategyExpansionPathwaysCache;
   rnExamStrategyExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-exam-strategy-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-exam-strategy-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnExamStrategyExpansionPathwaysCache;
@@ -367,7 +394,7 @@ function rnExamStrategyExpansionLessonsForPathway(pathwayId: string): LessonInpu
 function getRnRespiratoryExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnRespiratoryExpansionPathwaysCache) return rnRespiratoryExpansionPathwaysCache;
   rnRespiratoryExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-respiratory-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-respiratory-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnRespiratoryExpansionPathwaysCache;
@@ -381,7 +408,7 @@ function rnRespiratoryExpansionLessonsForPathway(pathwayId: string): LessonInput
 function getRnRenalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnRenalExpansionPathwaysCache) return rnRenalExpansionPathwaysCache;
   rnRenalExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-renal-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-renal-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnRenalExpansionPathwaysCache;
@@ -395,7 +422,7 @@ function rnRenalExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
 function getRnEndocrineExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnEndocrineExpansionPathwaysCache) return rnEndocrineExpansionPathwaysCache;
   rnEndocrineExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-endocrine-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-endocrine-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnEndocrineExpansionPathwaysCache;
@@ -409,7 +436,7 @@ function rnEndocrineExpansionLessonsForPathway(pathwayId: string): LessonInput[]
 function getRnMusculoskeletalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnMusculoskeletalExpansionPathwaysCache) return rnMusculoskeletalExpansionPathwaysCache;
   rnMusculoskeletalExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-musculoskeletal-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-musculoskeletal-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnMusculoskeletalExpansionPathwaysCache;
@@ -423,7 +450,7 @@ function rnMusculoskeletalExpansionLessonsForPathway(pathwayId: string): LessonI
 function getRnFluidsElectrolytesExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnFluidsElectrolytesExpansionPathwaysCache) return rnFluidsElectrolytesExpansionPathwaysCache;
   rnFluidsElectrolytesExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-fluids-electrolytes-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-fluids-electrolytes-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnFluidsElectrolytesExpansionPathwaysCache;
@@ -437,7 +464,7 @@ function rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId: string): Less
 function getRnExamNotesIntegrationExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnExamNotesIntegrationExpansionPathwaysCache) return rnExamNotesIntegrationExpansionPathwaysCache;
   rnExamNotesIntegrationExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-exam-notes-integration-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-exam-notes-integration-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnExamNotesIntegrationExpansionPathwaysCache;
@@ -451,7 +478,7 @@ function rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId: string): Le
 function getRnExamNotesIntegrationBatch3ExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnExamNotesIntegrationBatch3ExpansionPathwaysCache) return rnExamNotesIntegrationBatch3ExpansionPathwaysCache;
   rnExamNotesIntegrationBatch3ExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-exam-notes-integration-batch3-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-exam-notes-integration-batch3-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnExamNotesIntegrationBatch3ExpansionPathwaysCache;
@@ -465,7 +492,7 @@ function rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId: strin
 export function getRnExamNotesIntegrationBatch4ExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnExamNotesIntegrationBatch4ExpansionPathwaysCache) return rnExamNotesIntegrationBatch4ExpansionPathwaysCache;
   rnExamNotesIntegrationBatch4ExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-exam-notes-integration-batch4-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rn-nclex-exam-notes-integration-batch4-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnExamNotesIntegrationBatch4ExpansionPathwaysCache;
@@ -479,7 +506,7 @@ function rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId: strin
 function getRpnParityExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rpnParityExpansionPathwaysCache) return rpnParityExpansionPathwaysCache;
   rpnParityExpansionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/rpn-rex-pn-parity-expansion-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/rpn-rex-pn-parity-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rpnParityExpansionPathwaysCache;
@@ -500,7 +527,7 @@ const npPathwayMetadata: Record<string, { examName: string; country: string; cou
 
 function getNpCoreLessons(): CatalogShape["pathways"][string]["lessons"] {
   if (npCoreLessonsCache) return npCoreLessonsCache;
-  const coreData = catalogBundleRequire("@/content/pathway-lessons/np-core-catalog.json") as {
+  const coreData = readCatalogJsonSync("src/content/pathway-lessons/np-core-catalog.json") as {
     lessons?: CatalogShape["pathways"][string]["lessons"];
   };
   npCoreLessonsCache = coreData.lessons ?? [];
@@ -523,7 +550,7 @@ function npParityExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
 function getNewGradTransitionPathways(): Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> {
   if (newGradTransitionPathwaysCache) return newGradTransitionPathwaysCache;
   newGradTransitionPathwaysCache =
-    (catalogBundleRequire("@/content/pathway-lessons/new-grad-transition-catalog.json") as {
+    (readCatalogJsonSync("src/content/pathway-lessons/new-grad-transition-catalog.json") as {
       pathways?: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }>;
     }).pathways ?? {};
   return newGradTransitionPathwaysCache;
@@ -1796,43 +1823,87 @@ let lessonLibraryCache: LessonLibraryFile | null | undefined;
 function readLessonLibrarySync(): LessonLibraryFile | null {
   if (lessonLibraryCache !== undefined) return lessonLibraryCache;
   try {
-    lessonLibraryCache = catalogBundleRequire("@/content/lessons/lesson-library.json") as LessonLibraryFile;
+    lessonLibraryCache = readCatalogJsonSync("src/content/lessons/lesson-library.json") as LessonLibraryFile;
   } catch {
     lessonLibraryCache = null;
   }
   return lessonLibraryCache;
 }
 
+// ─── Pathway type guards ───────────────────────────────────────────────────
+// EXPLICIT allowlists — do NOT use string matching like pathwayId.includes("rn").
+// Each expansion catalog is verified to only contain entries for the pathways
+// listed here. New pathways must be added to the appropriate set to receive
+// their expansion lessons.
+//
+// Verified against catalog file pathway keys 2026-05-13 (P0 perf fix).
+
+/** RN NCLEX expansion catalogs only have entries for these two pathway IDs. */
+const RN_NCLEX_PATHWAY_IDS = new Set(["ca-rn-nclex-rn", "us-rn-nclex-rn"]);
+
+/** RPN Rex-PN parity expansion only covers this pathway. */
+const RPN_PATHWAY_IDS = new Set(["ca-rpn-rex-pn"]);
+
+/** NP core + parity lessons only apply to NP pathways. */
+const NP_PATHWAY_IDS = new Set(["ca-np-cnple", "us-np-fnp"]);
+
+/** Allied bundled catalog only has entries for allied core pathways. */
+const ALLIED_CORE_PATHWAY_IDS = new Set(["us-allied-core", "ca-allied-core"]);
+
+/** New-grad transition catalog is scoped to this pathway. */
+const NEW_GRAD_PATHWAY_IDS = new Set(["us-rn-new-grad-transition"]);
+
+function isRnNclexPathway(id: string): boolean { return RN_NCLEX_PATHWAY_IDS.has(id); }
+function isRpnPathway(id: string): boolean { return RPN_PATHWAY_IDS.has(id); }
+function isNpPathway(id: string): boolean { return NP_PATHWAY_IDS.has(id); }
+function isAlliedCorePathway(id: string): boolean { return ALLIED_CORE_PATHWAY_IDS.has(id); }
+function isNewGradPathway(id: string): boolean { return NEW_GRAD_PATHWAY_IDS.has(id); }
+
 /**
  * Catalog + allied + new-grad + scoped-gold merge **without** reading `lesson-library.json`.
  * Use for build tooling that must not recurse through the library file.
+ *
+ * P0 PERF: Each expansion loader is guarded by a pathway type check so catalogs
+ * are only read from disk when the requested pathway actually has entries in that
+ * catalog. An Allied Health hub request no longer reads all 25 RN expansion files.
  */
 export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonInput[] {
   const bucket = getCatalogData().pathways[pathwayId];
   const fromJson = bucket?.lessons?.length ? bucket.lessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
-  const allied = alliedBundledLessonsForPathway(pathwayId);
-  const cardioExpansion = rnCardiovascularExpansionLessonsForPathway(pathwayId);
-  const neuroExpansion = rnNeurologicalExpansionLessonsForPathway(pathwayId);
-  const hemOncExpansion = rnHematologyOncologyExpansionLessonsForPathway(pathwayId);
-  const giExpansion = rnGastrointestinalExpansionLessonsForPathway(pathwayId);
-  const integumentaryExpansion = rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId);
-  const infectionControlExpansion = rnInfectionControlExpansionLessonsForPathway(pathwayId);
-  const leadershipDelegationExpansion = rnLeadershipDelegationExpansionLessonsForPathway(pathwayId);
-  const maternalNewbornExpansion = rnMaternalNewbornExpansionLessonsForPathway(pathwayId);
-  const proceduresSkillsExpansion = rnProceduresSkillsExpansionLessonsForPathway(pathwayId);
-  const nutritionExpansion = rnNutritionExpansionLessonsForPathway(pathwayId);
-  const examStrategyExpansion = rnExamStrategyExpansionLessonsForPathway(pathwayId);
-  const respiratoryExpansion = rnRespiratoryExpansionLessonsForPathway(pathwayId);
-  const renalExpansion = rnRenalExpansionLessonsForPathway(pathwayId);
-  const endocrineExpansion = rnEndocrineExpansionLessonsForPathway(pathwayId);
-  const musculoskeletalExpansion = rnMusculoskeletalExpansionLessonsForPathway(pathwayId);
-  const fluidsElectrolytesExpansion = rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId);
-  const examNotesIntegrationExpansion = rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId);
-  const examNotesIntegrationBatch3Expansion = rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId);
-  const examNotesIntegrationBatch4Expansion = rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId);
-  const rpnParityExpansion = rpnParityExpansionLessonsForPathway(pathwayId);
-  const npParityExpansion = npParityExpansionLessonsForPathway(pathwayId);
-  const newGrad = newGradTransitionLessonsForPathway(pathwayId);
+
+  // Allied bundled lessons — only for allied core pathways
+  const allied = isAlliedCorePathway(pathwayId) ? alliedBundledLessonsForPathway(pathwayId) : [];
+
+  // RN NCLEX expansion catalogs — only for RN pathways
+  const cardioExpansion            = isRnNclexPathway(pathwayId) ? rnCardiovascularExpansionLessonsForPathway(pathwayId) : [];
+  const neuroExpansion             = isRnNclexPathway(pathwayId) ? rnNeurologicalExpansionLessonsForPathway(pathwayId) : [];
+  const hemOncExpansion            = isRnNclexPathway(pathwayId) ? rnHematologyOncologyExpansionLessonsForPathway(pathwayId) : [];
+  const giExpansion                = isRnNclexPathway(pathwayId) ? rnGastrointestinalExpansionLessonsForPathway(pathwayId) : [];
+  const integumentaryExpansion     = isRnNclexPathway(pathwayId) ? rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId) : [];
+  const infectionControlExpansion  = isRnNclexPathway(pathwayId) ? rnInfectionControlExpansionLessonsForPathway(pathwayId) : [];
+  const leadershipDelegationExpansion = isRnNclexPathway(pathwayId) ? rnLeadershipDelegationExpansionLessonsForPathway(pathwayId) : [];
+  const maternalNewbornExpansion   = isRnNclexPathway(pathwayId) ? rnMaternalNewbornExpansionLessonsForPathway(pathwayId) : [];
+  const proceduresSkillsExpansion  = isRnNclexPathway(pathwayId) ? rnProceduresSkillsExpansionLessonsForPathway(pathwayId) : [];
+  const nutritionExpansion         = isRnNclexPathway(pathwayId) ? rnNutritionExpansionLessonsForPathway(pathwayId) : [];
+  const examStrategyExpansion      = isRnNclexPathway(pathwayId) ? rnExamStrategyExpansionLessonsForPathway(pathwayId) : [];
+  const respiratoryExpansion       = isRnNclexPathway(pathwayId) ? rnRespiratoryExpansionLessonsForPathway(pathwayId) : [];
+  const renalExpansion             = isRnNclexPathway(pathwayId) ? rnRenalExpansionLessonsForPathway(pathwayId) : [];
+  const endocrineExpansion         = isRnNclexPathway(pathwayId) ? rnEndocrineExpansionLessonsForPathway(pathwayId) : [];
+  const musculoskeletalExpansion   = isRnNclexPathway(pathwayId) ? rnMusculoskeletalExpansionLessonsForPathway(pathwayId) : [];
+  const fluidsElectrolytesExpansion = isRnNclexPathway(pathwayId) ? rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId) : [];
+  const examNotesIntegrationExpansion = isRnNclexPathway(pathwayId) ? rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId) : [];
+  const examNotesIntegrationBatch3Expansion = isRnNclexPathway(pathwayId) ? rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId) : [];
+  const examNotesIntegrationBatch4Expansion = isRnNclexPathway(pathwayId) ? rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId) : [];
+
+  // RPN parity — only for RPN pathways
+  const rpnParityExpansion = isRpnPathway(pathwayId) ? rpnParityExpansionLessonsForPathway(pathwayId) : [];
+
+  // NP parity — only for NP pathways
+  const npParityExpansion = isNpPathway(pathwayId) ? npParityExpansionLessonsForPathway(pathwayId) : [];
+
+  // New-grad transition — only for the dedicated new-grad pathway
+  const newGrad = isNewGradPathway(pathwayId) ? newGradTransitionLessonsForPathway(pathwayId) : [];
+
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
   for (const l of [
@@ -1879,127 +1950,34 @@ function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
       });
       const seen = new Set(stripped.map((l) => l.slug.trim()));
       const merged: LessonInput[] = [...stripped];
-      for (const extra of rnCardiovascularExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnNeurologicalExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnHematologyOncologyExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnGastrointestinalExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnInfectionControlExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnLeadershipDelegationExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnMaternalNewbornExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnProceduresSkillsExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnNutritionExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnExamStrategyExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnRespiratoryExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnRenalExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnEndocrineExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnMusculoskeletalExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of rpnParityExpansionLessonsForPathway(pathwayId)) {
-        const s = extra.slug.trim();
-        if (!s || seen.has(s)) continue;
-        seen.add(s);
-        merged.push(extra);
-      }
-      for (const extra of npParityExpansionLessonsForPathway(pathwayId)) {
+      // P0 PERF: apply same pathway type guards as getCatalogLessonsRawFromBundledOnly
+      const rnExpansionSources = isRnNclexPathway(pathwayId)
+        ? [
+            rnCardiovascularExpansionLessonsForPathway(pathwayId),
+            rnNeurologicalExpansionLessonsForPathway(pathwayId),
+            rnHematologyOncologyExpansionLessonsForPathway(pathwayId),
+            rnGastrointestinalExpansionLessonsForPathway(pathwayId),
+            rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId),
+            rnInfectionControlExpansionLessonsForPathway(pathwayId),
+            rnLeadershipDelegationExpansionLessonsForPathway(pathwayId),
+            rnMaternalNewbornExpansionLessonsForPathway(pathwayId),
+            rnProceduresSkillsExpansionLessonsForPathway(pathwayId),
+            rnNutritionExpansionLessonsForPathway(pathwayId),
+            rnExamStrategyExpansionLessonsForPathway(pathwayId),
+            rnRespiratoryExpansionLessonsForPathway(pathwayId),
+            rnRenalExpansionLessonsForPathway(pathwayId),
+            rnEndocrineExpansionLessonsForPathway(pathwayId),
+            rnMusculoskeletalExpansionLessonsForPathway(pathwayId),
+            rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId),
+            rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId),
+            rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId),
+            rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId),
+          ]
+        : [];
+      const rpnSources = isRpnPathway(pathwayId) ? [rpnParityExpansionLessonsForPathway(pathwayId)] : [];
+      const npSources  = isNpPathway(pathwayId)  ? [npParityExpansionLessonsForPathway(pathwayId)]  : [];
+
+      for (const extra of [...rnExpansionSources.flat(), ...rpnSources.flat(), ...npSources.flat()]) {
         const s = extra.slug.trim();
         if (!s || seen.has(s)) continue;
         seen.add(s);

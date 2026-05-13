@@ -22,7 +22,7 @@ const WARN_ONLY = process.argv.includes("--warn-only");
 const CSS_BUDGETS = [
   {
     file: "src/app/globals.css",
-    budget: 220 * 1024,  // 220 KB — currently 213 KB; tight to catch regressions
+    budget: 192 * 1024,  // 192 KB — post-extraction (was 213 KB); tight to catch regressions
     label: "globals.css (all-routes CSS)",
   },
   {
@@ -81,6 +81,10 @@ const CHUNK_BUDGETS = [
     label: "polyfills chunk",
   },
 ];
+
+/** Server chunk budget — any single chunk over 10 MB indicates catalog bundling regression.
+ *  Before the P0 fix, createRequire caused a 44 MB server chunk (57 MB raw catalog JSON). */
+const SERVER_CHUNK_HARD_LIMIT = 10 * 1024 * 1024;  // 10 MB
 
 // ─── Helper functions ──────────────────────────────────────────────────────
 
@@ -171,6 +175,32 @@ if (existsSync(chunksDir)) {
 } else {
   console.log("\n⚠️  No build output found (.next/static/chunks) — skipping JS chunk checks");
   console.log("    Run: npm run build && node scripts/check-performance-budgets.mjs");
+}
+
+// ─── Server chunk size check (catalog bundling regression guard) ───────────
+
+const serverChunksDir = join(ROOT, ".next/server/chunks");
+if (existsSync(serverChunksDir)) {
+  console.log("\n=== Server Chunk Budgets (Catalog Bundling Guard) ===\n");
+  const serverFiles = readdirSync(serverChunksDir).filter(f => f.endsWith(".js"));
+  const oversized = serverFiles
+    .map(f => ({ file: f, size: statSync(join(serverChunksDir, f)).size }))
+    .filter(({ size }) => size > SERVER_CHUNK_HARD_LIMIT)
+    .sort((a, b) => b.size - a.size);
+
+  if (oversized.length === 0) {
+    console.log(`✅ No server chunks exceed ${Math.round(SERVER_CHUNK_HARD_LIMIT/1024/1024)}MB limit`);
+    passed++;
+  } else {
+    for (const { file, size } of oversized) {
+      const mb = (size / 1024 / 1024).toFixed(1);
+      console.log(`❌ Server chunk over limit: ${file} (${mb}MB > ${Math.round(SERVER_CHUNK_HARD_LIMIT/1024/1024)}MB)`);
+      console.log(`   This usually means createRequire was re-introduced in pathway-lesson-catalog-sync.ts`);
+    }
+    failed += oversized.length;
+  }
+} else {
+  console.log("\nℹ️  No server chunks found — skipping catalog bundling check");
 }
 
 // ─── Summary ──────────────────────────────────────────────────────────────

@@ -135,10 +135,14 @@ export function assessMarketingCatSurfaceWithoutAuth(
 
   const marketingCatPath = marketingCatPathForPathway(pathway);
   const minMarketingPool = catReadinessMinCompletePoolRows(pathway.id);
-  const poolOk =
-    questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount >= minMarketingPool;
+  // Only block on a confirmed small pool (status === "ok" and count confirmed below floor).
+  // When snapshot is unavailable (timeout/DB error), don't block the sign-in CTA — the
+  // in-app readiness gate is the authoritative check; a marketing-page timeout should not
+  // leave users with no action to take.
+  const poolConfirmedTooSmall =
+    questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount < minMarketingPool;
 
-  if (!poolOk) {
+  if (poolConfirmedTooSmall) {
     const cat = catPathwayShortCatLabel(pathway);
     return {
       eligible: false,

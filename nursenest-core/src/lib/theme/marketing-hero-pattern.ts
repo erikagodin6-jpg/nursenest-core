@@ -10,12 +10,18 @@ export const MARKETING_HERO_SECTION_CLASS =
 /** Home conversion closing block: stack on mobile, centered wrap on `sm+` (see `globals.css`). */
 export const MARKETING_FINAL_CTA_ROW_CLASS = "nn-final-cta-row" as const;
 
+/**
+ * Phase 4 pilot: the full utility list is now encoded in .nn-marketing-cta-primary
+ * (marketing-global.css). Callers still see a string constant — no call-site changes.
+ * The arbitrary values (transition-[filter], sm:max-w-[min(...)]) are now in CSS,
+ * removing them from the Tailwind arbitrary-value compiler output.
+ */
 export const MARKETING_PRIMARY_CTA_CLASS =
-  "nn-btn-primary inline-flex min-h-[48px] min-w-0 w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 overflow-visible px-7 py-3 text-center text-base font-semibold text-balance break-words transition-[filter] hover:bg-role-cta-hover sm:min-h-[52px] sm:w-auto sm:max-w-[min(100%,min(24rem,calc(100vw-2rem)))] sm:px-10 sm:text-lg" as const;
+  “nn-btn-primary nn-marketing-cta-primary” as const;
 
 /** Secondary: lighter than primary (smaller type) — keeps one clear “main” action per section. */
 export const MARKETING_SECONDARY_CTA_CLASS =
-  "nn-btn-secondary inline-flex min-h-[48px] min-w-0 w-full flex-wrap items-center justify-center gap-x-2 gap-y-1 overflow-visible px-5 py-3 text-center text-sm font-semibold text-balance break-words sm:min-h-[52px] sm:w-auto sm:max-w-[min(100%,min(22rem,calc(100vw-2rem)))] sm:px-7 sm:text-base" as const;
+  “nn-btn-secondary nn-marketing-cta-secondary” as const;
 
 export const MARKETING_TERTIARY_LINK_CLASS =
   "nn-link-quiet inline-flex min-h-[44px] min-w-0 items-center justify-center gap-2 px-4 py-2 text-sm sm:min-h-0" as const;

@@ -335,6 +335,16 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
                 >
                   View Plans for CAT Access
                 </Link>
+              ) : pathway.acquisitionMode === "subscribe" ? (
+                // Fallback for unhandled reasons (e.g. snapshot timeout, internal errors):
+                // always show a sign-in CTA on subscribe-mode pathways so the page is never
+                // left without a primary action. In-app readiness gates catch any real issues.
+                <Link
+                  href={signInReturnHref}
+                  className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
+                >
+                  Sign In to Check Access
+                </Link>
               ) : null}
               <Link
                 href={questionsHrefWithProfession}
