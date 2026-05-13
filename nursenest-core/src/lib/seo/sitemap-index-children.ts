@@ -151,5 +151,11 @@ export const SITEMAP_FALLBACK_PATHWAYS_PATHS = [
 /** Localized segment fallback when DB/registry collectors throw — representative tier-full locale slice. */
 export const SITEMAP_FALLBACK_LOCALIZED_PATHS = ["/fr", "/fr/pricing", "/fr/lessons"] as const;
 
-/** Clinical-modules segment fallback — ECG marketing page + tool teasers (OSCE pathway hubs require runtime flags). */
-export const SITEMAP_FALLBACK_CLINICAL_MODULES_PATHS = ["/ecg-interpretation", "/tools/lab-values", "/tools/med-math"] as const;
+/** Clinical-modules segment fallback — ECG specialty pages + tool teasers (OSCE pathway hubs require runtime flags). */
+export const SITEMAP_FALLBACK_CLINICAL_MODULES_PATHS = [
+  "/ecg-interpretation",
+  "/ecg-telemetry-mastery",
+  "/advanced-ecg-nursing",
+  "/tools/lab-values",
+  "/tools/med-math",
+] as const;

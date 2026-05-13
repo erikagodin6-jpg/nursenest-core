@@ -17,8 +17,15 @@ export function collectClinicalMarketingToolTeaserUrls(origin: string): string[]
   return TOOL_SLUGS.map((slug) => `${o}/tools/${slug}`);
 }
 
-/** Public ECG marketing pages — always indexed, no entitlement gate on these routes. */
-const ECG_MARKETING_PATHS = ["/ecg-interpretation"] as const;
+/**
+ * Public ECG + telemetry specialty marketing pages.
+ * All indexed, no entitlement gate — pure SEO/conversion surfaces.
+ */
+const ECG_MARKETING_PATHS = [
+  "/ecg-interpretation",
+  "/ecg-telemetry-mastery",
+  "/advanced-ecg-nursing",
+] as const;
 
 /**
  * Clinical readiness marketing urlset: ECG marketing pages + OSCE + clinical-scenario pathway hubs + `/tools/*` teasers.
