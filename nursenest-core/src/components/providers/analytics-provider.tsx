@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { FrontendUxInit } from "@/components/observability/frontend-ux-init";
-import { touchUxNavigation } from "@/lib/observability/frontend-ux-tracking";
+import { recordNavigationMounted, touchUxNavigation } from "@/lib/observability/frontend-ux-tracking";
 import { addClientBreadcrumbIfEnabled } from "@/lib/observability/sentry-if-enabled";
 import { capturePosthogPageview, initPosthogClient, trackClientEvent } from "@/lib/observability/posthog-client";
 
@@ -23,6 +23,7 @@ function PostHogPageViews() {
     if (last.current === url) return;
     last.current = url;
     touchUxNavigation();
+    recordNavigationMounted(pathname);
     if (typeof window === "undefined") return;
     void capturePosthogPageview(pathname, window.location.href).catch(() => {
       void trackClientEvent("page_view_fallback", { path: pathname });

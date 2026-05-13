@@ -175,6 +175,87 @@ export function captureHydrationUxHint(message: string): void {
 }
 
 let uxGlobalsMounted = false;
+let navDiagnosticsMounted = false;
+
+type NavDiagnosticsWindow = Window & {
+  __nnNavDiagnostics?: {
+    hydrationCompleteAt?: number;
+    clicks: Array<{ t: number; label: string; href: string }>;
+    intents: Array<{ t: number; href: string }>;
+    routeMounted: Array<{ t: number; path: string }>;
+    longTasks: Array<{ start: number; duration: number }>;
+  };
+};
+
+function navDiagnosticsEnabled(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    if (new URLSearchParams(window.location.search).get("nnNavDebug") === "1") return true;
+    return window.localStorage?.getItem("nn-nav-debug") === "1";
+  } catch {
+    return false;
+  }
+}
+
+function navDiagnostics(): NonNullable<NavDiagnosticsWindow["__nnNavDiagnostics"]> | null {
+  if (!navDiagnosticsEnabled()) return null;
+  const w = window as NavDiagnosticsWindow;
+  w.__nnNavDiagnostics ??= {
+    clicks: [],
+    intents: [],
+    routeMounted: [],
+    longTasks: [],
+  };
+  return w.__nnNavDiagnostics;
+}
+
+export function recordNavigationMounted(path: string): void {
+  if (typeof document !== "undefined") delete document.documentElement.dataset.nnNavPending;
+  if (typeof window === "undefined") return;
+  const d = navDiagnostics();
+  if (!d) return;
+  d.routeMounted.push({ t: performance.now(), path: path.slice(0, 240) });
+}
+
+function mountNavigationDiagnostics(): void {
+  if (typeof window === "undefined" || navDiagnosticsMounted || !navDiagnosticsEnabled()) return;
+  navDiagnosticsMounted = true;
+  const d = navDiagnostics();
+  if (!d) return;
+  d.hydrationCompleteAt = performance.now();
+  window.addEventListener("nn:navigation-intent", (event) => {
+    const detail = (event as CustomEvent<{ href?: string; t?: number }>).detail;
+    d.intents.push({
+      t: typeof detail?.t === "number" ? detail.t : performance.now(),
+      href: String(detail?.href ?? "").slice(0, 300),
+    });
+  });
+  document.addEventListener(
+    "click",
+    (event) => {
+      const target = event.target instanceof Element ? event.target.closest("a,button") : null;
+      if (!target) return;
+      d.clicks.push({
+        t: performance.now(),
+        label: (target.textContent ?? "").trim().slice(0, 120),
+        href: target instanceof HTMLAnchorElement ? target.href.slice(0, 300) : "",
+      });
+    },
+    true,
+  );
+  try {
+    new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        d.longTasks.push({
+          start: Math.round(entry.startTime),
+          duration: Math.round(entry.duration),
+        });
+      }
+    }).observe({ type: "longtask", buffered: true });
+  } catch {
+    /* ignore */
+  }
+}
 
 /** Call on client navigations (e.g. pathname change) to correlate chunk failures with route changes. */
 let lastNavigationAt = Date.now();
@@ -186,6 +267,7 @@ export function touchUxNavigation(): void {
 export function mountGlobalUxListeners(): void {
   if (typeof window === "undefined" || uxGlobalsMounted) return;
   uxGlobalsMounted = true;
+  mountNavigationDiagnostics();
 
   window.addEventListener(
     "error",

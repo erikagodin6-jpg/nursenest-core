@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type AnchorHTMLAttributes, type ComponentType } from "react";
 import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
 import { getNavChrome, getNavChromeVars } from "@/lib/theme/nav-chrome";
@@ -65,6 +65,47 @@ type EngagementNudgePayload = {
   kind?: string;
   href?: string;
 };
+
+function markHeaderNavigationIntent(href: string): void {
+  if (typeof document === "undefined") return;
+  document.documentElement.dataset.nnNavPending = "true";
+  if (typeof window !== "undefined") {
+    window.setTimeout(() => {
+      if (document.documentElement.dataset.nnNavPending === "true") {
+        delete document.documentElement.dataset.nnNavPending;
+      }
+    }, 8000);
+    try {
+      window.dispatchEvent(
+        new CustomEvent("nn:navigation-intent", {
+          detail: {
+            href,
+            t: performance.now(),
+          },
+        }),
+      );
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+type HeaderNavAnchorProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+  href: string;
+};
+
+function HeaderNavAnchor({ href, onClick, ...props }: HeaderNavAnchorProps) {
+  return (
+    <a
+      {...props}
+      href={href}
+      onClick={(event) => {
+        markHeaderNavigationIntent(href);
+        onClick?.(event);
+      }}
+    />
+  );
+}
 
 function isActivePath(current: string, base: string): boolean {
   if (!base || base === "/") return current === "/";
@@ -592,15 +633,15 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                 </div>
               ) : !isAuthenticated ? (
                 <div className="nn-header-mobile-public-ctas flex min-w-0 flex-1 shrink items-center justify-end gap-1.5 sm:flex-none sm:justify-start sm:gap-2">
-                  <Link
+                  <HeaderNavAnchor
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
                     className="nav-item inline-flex min-h-[44px] min-w-0 max-w-none flex-1 shrink items-center justify-center whitespace-nowrap rounded-xl border border-[var(--nav-border)] px-2 py-2 text-[11px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:flex-none sm:px-3 sm:text-sm"
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Log in to your NurseNest account"
                   >
                     {formatTitleCase(t("nav.logIn"), locale)}
-                  </Link>
-                  <Link
+                  </HeaderNavAnchor>
+                  <HeaderNavAnchor
                     href={guestMarketingSignupHref}
                     className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[44px] min-w-0 max-w-none flex-1 shrink items-center justify-center whitespace-nowrap rounded-xl px-2.5 py-2 text-[11px] font-medium sm:max-w-none sm:flex-none sm:px-4 sm:text-sm`}
                     onClick={closeMegaBeforeAuthNav}
@@ -608,7 +649,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     title="Start free — no credit card required"
                   >
                     {formatTitleCase(t("nav.signup"), locale)}
-                  </Link>
+                  </HeaderNavAnchor>
                 </div>
               ) : null}
             </div>
@@ -739,7 +780,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
               className="nav nn-header-main-marketing-nav flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-0.5 px-2 sm:gap-1 sm:px-3 xl:gap-1.5"
             >
               {marketingMoreLinks.map((item) => (
-                <Link
+                <HeaderNavAnchor
                   key={item.key}
                   href={localizeHref(item.href)}
                   aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
@@ -754,7 +795,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   }
                 >
                   {item.label}
-                </Link>
+                </HeaderNavAnchor>
               ))}
             </nav>
 
@@ -778,15 +819,15 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                 </div>
               ) : !isAuthenticated ? (
                 <div className="flex shrink-0 items-center gap-2">
-                  <Link
+                  <HeaderNavAnchor
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
                     className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
                     onClick={closeMegaBeforeAuthNav}
                     aria-label="Log in to your NurseNest account"
                   >
                     {formatTitleCase(t("nav.logIn"), locale)}
-                  </Link>
-                  <Link
+                  </HeaderNavAnchor>
+                  <HeaderNavAnchor
                     href={guestMarketingSignupHref}
                     className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
                     onClick={closeMegaBeforeAuthNav}
@@ -794,7 +835,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     title="Start free — no credit card required"
                   >
                     {formatTitleCase(t("nav.signup"), locale)}
-                  </Link>
+                  </HeaderNavAnchor>
                 </div>
               ) : isAdminAuthenticated ? (
                 <div className="flex shrink-0 items-center gap-2">
@@ -870,7 +911,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
               className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 xl:gap-1.5"
             >
               {tierHubMenus.map((menu) => (
-                <Link
+                <HeaderNavAnchor
                   key={menu.key}
                   href={localizeHref(menu.hubHref)}
                   data-active={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) || undefined}
@@ -891,7 +932,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   }}
                 >
                   {menu.label}
-                </Link>
+                </HeaderNavAnchor>
               ))}
             </nav>
           </div>
@@ -986,7 +1027,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                       return (
                         <>
                           {flowPractice ? (
-                            <Link
+                            <HeaderNavAnchor
                               key={flowPractice.key}
                               href={localizeHref(flowPractice.href)}
                               aria-current={isActivePath(strippedPath, flowPractice.matchBase) ? "page" : undefined}
@@ -1002,11 +1043,11 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                               }}
                             >
                               {flowPractice.label}
-                            </Link>
+                            </HeaderNavAnchor>
                           ) : null}
                           <div className="mb-3 grid grid-cols-1 gap-2.5 min-[400px]:grid-cols-2">
                             {flowRest.map((item) => (
-                              <Link
+                              <HeaderNavAnchor
                                 key={item.key}
                                 href={localizeHref(item.href)}
                                 aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
@@ -1022,14 +1063,14 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                                 }}
                               >
                                 {item.label}
-                              </Link>
+                              </HeaderNavAnchor>
                             ))}
                           </div>
                         </>
                       );
                     })()}
                     {tierHubMenus.map((menu) => (
-                      <Link
+                      <HeaderNavAnchor
                         key={menu.key}
                         href={localizeHref(menu.hubHref)}
                         aria-current={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "page" : undefined}
@@ -1051,14 +1092,14 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                           aria-hidden
                         />
                         {menu.label}
-                      </Link>
+                      </HeaderNavAnchor>
                     ))}
                     <div className="space-y-1 border-t border-[var(--header-border)] pt-3">
                       <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
                         {formatTitleCase(t("nav.marketingMore"), locale)}
                       </p>
                       {marketingMoreLinks.map((item) => (
-                        <Link
+                        <HeaderNavAnchor
                           key={item.key}
                           href={localizeHref(item.href)}
                           aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
@@ -1079,7 +1120,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                             aria-hidden
                           />
                           {item.label}
-                        </Link>
+                        </HeaderNavAnchor>
                       ))}
                     </div>
                 </>
@@ -1093,7 +1134,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   </div>
                 ) : !isAuthenticated ? (
                   <>
-                    <Link
+                    <HeaderNavAnchor
                       href={guestMarketingSignupHref}
                       className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={scheduleMobileDrawerClose}
@@ -1101,15 +1142,15 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                       title="Start free — no credit card required"
                     >
                       {formatTitleCase(t("nav.signup"), locale)}
-                    </Link>
-                    <Link
+                    </HeaderNavAnchor>
+                    <HeaderNavAnchor
                       href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
                       className="nav-item inline-flex min-h-[46px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-3 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                       onClick={scheduleMobileDrawerClose}
                       aria-label="Log in to your NurseNest account"
                     >
                       {formatTitleCase(t("nav.logIn"), locale)}
-                    </Link>
+                    </HeaderNavAnchor>
                   </>
                 ) : isAdminAuthenticated ? (
                   <>
