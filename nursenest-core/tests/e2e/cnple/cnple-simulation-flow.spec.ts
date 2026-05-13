@@ -299,12 +299,12 @@ test.describe("CNPLE simulation — LOFT copy regression (no stale CAT wording)"
   test("simulation page inventory stats mention real content", async ({ page }) => {
     await gotoExpectOk(page, CNPLE_ROUTES.hub);
     const content = (await page.locator("body").textContent()) ?? "";
-    // Hub should now mention real inventory counts
+    // Hub should now mention real inventory counts (lessons or CA-eligible question count)
     const hasLessons = /1[,.]?4\d\d\s*lessons?|lessons?.*1[,.]?4\d\d/i.test(content);
-    const hasQuestions = /2[,.]?8\d\d|practice questions?/i.test(content);
+    const hasQuestions = /4[,.]?0{3}\+?|1[,.]?4\d\d.*question|practice questions?/i.test(content);
     expect(
       hasLessons || hasQuestions,
-      "CNPLE hub must mention lesson or question inventory (1,463 lessons or 2,838+ questions)",
+      "CNPLE hub must mention lesson or question inventory (1,463 lessons or 4,000+ Canadian-aligned questions)",
     ).toBe(true);
   });
 });

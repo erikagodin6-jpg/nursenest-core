@@ -1,8 +1,14 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
 import type { HubCurriculumPrepareStageDiagnostics } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
-import { getPathwayLessonListWarehouseLocaleForHub } from "@/lib/lessons/pathway-lesson-loader";
-import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import {
+  getPathwayLessonForHubVerifySlim,
+  getPathwayLessonListWarehouseLocaleForHub,
+} from "@/lib/lessons/pathway-lesson-loader";
+import {
+  type ResolveMarketingLessonDetailFn,
+  verifyMarketingHubLessonRowsResolve,
+} from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -11,6 +17,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 export type MarketingHubCategoryRowsDbResilientDeps = {
   getWarehouseLocale?: typeof getPathwayLessonListWarehouseLocaleForHub;
   verifyRows?: typeof verifyMarketingHubLessonRowsResolve;
+  resolveLessonDetail?: ResolveMarketingLessonDetailFn;
 };
 
 /**
@@ -35,6 +42,7 @@ export async function resolveMarketingHubCategoryLessonRowsWithDbResilience(args
 
   const getLocale = deps?.getWarehouseLocale ?? getPathwayLessonListWarehouseLocaleForHub;
   const verify = deps?.verifyRows ?? verifyMarketingHubLessonRowsResolve;
+  const resolveLessonDetail = deps?.resolveLessonDetail ?? getPathwayLessonForHubVerifySlim;
 
   let listWarehouseLocale = args.lessonContentLocale;
   try {
@@ -57,6 +65,7 @@ export async function resolveMarketingHubCategoryLessonRowsWithDbResilience(args
       listWarehouseLocale,
       prepareStages: args.prepareStages,
       maxUniqueSlugsToVerify: args.maxUniqueSlugsToVerify,
+      resolveLessonDetail,
     });
     return vr.kept;
   } catch (e) {

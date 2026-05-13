@@ -4,14 +4,15 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
+import { CNPLE_INVENTORY } from "@/lib/marketing/cnple-inventory-metrics";
 
 export const revalidate = 86400;
 
 const PATH = "/cnple-flashcards";
-const PAGE_TITLE = "CNPLE Flashcards — 1,054 NP-Level Study Cards | NurseNest";
+const PAGE_TITLE = `CNPLE Flashcards — ${CNPLE_INVENTORY.flashcardsLabel} NP-Level Study Cards | NurseNest`;
 const PAGE_H1 = "CNPLE flashcards for Canadian NP exam preparation";
 const PAGE_DESCRIPTION =
-  "1,054 CNPLE-aligned flashcards with spaced repetition for Canadian Nurse Practitioner Licensure Examination preparation. Condition-specific NP-level cards covering prescribing decisions, diagnostic workup, management priorities, red flags, and Canadian NP scope — across all major CNPLE competency domains.";
+  `${CNPLE_INVENTORY.flashcardsLabel} CNPLE-aligned flashcards — including ${CNPLE_INVENTORY.curatedFlashcardsLabel} hand-authored Canadian clinical reasoning cards — with spaced repetition for Canadian Nurse Practitioner Licensure Examination preparation. Condition-specific NP-level cards covering prescribing decisions, diagnostic workup, management priorities, red flags, and Canadian NP scope — across 20 CNPLE competency domains.`;
 
 const FAQ_ITEMS = [
   {

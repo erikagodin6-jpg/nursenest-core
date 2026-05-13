@@ -1,3 +1,5 @@
+import { CNPLE_INVENTORY } from "@/lib/marketing/cnple-inventory-metrics";
+
 export type AuthorityClusterKey = "cnple" | "rex-pn" | "respiratory-therapy";
 
 export type AuthorityClusterPage = {
@@ -171,17 +173,17 @@ function buildCnplePage(
         : `${topic} (2026) — CNPLE Prep | NurseNest`,
     description:
       slug === "overview"
-        ? `Prepare for the 2026 CNPLE with 1,463 NP lessons, 2,838+ practice questions, 1,561 flashcards, and LOFT-style simulation. Canadian NP clinical reasoning, prescribing safety, and differential diagnosis — aligned to CCRNR competency frameworks.`
+        ? `Prepare for the 2026 CNPLE with ${CNPLE_INVENTORY.lessonsLabel} NP lessons, ${CNPLE_INVENTORY.caQuestionsLabel} Canadian-aligned NP practice questions, ${CNPLE_INVENTORY.flashcardsLabel} flashcards, and LOFT-style simulation. Canadian NP clinical reasoning, prescribing safety, and differential diagnosis — aligned to CCRNR competency frameworks.`
         : `${topic} for CNPLE preparation — Canadian NP clinical reasoning, prescribing safety, LOFT pacing, common mistakes, and rationale-first practice questions.`,
     h1: slug === "overview" ? "CNPLE exam prep for Canadian nurse practitioners (2026)" : `${topic} for CNPLE preparation`,
     eyebrow: "Canadian NP licensure exam — 2026 authority guide",
     lead:
       slug === "overview"
-        ? `NurseNest includes 1,463 CNPLE-aligned NP lessons, 2,838+ practice questions, 1,561 flashcards, and a LOFT-style simulation experience built for Canadian nurse practitioner licensure. Content covers prescribing safety, differential diagnosis, diagnostics, lifespan care, women's health, mental health, and professional practice — all framed around fixed-length CNPLE exam reasoning, not adaptive CAT.`
+        ? `NurseNest includes ${CNPLE_INVENTORY.lessonsLong}, ${CNPLE_INVENTORY.caQuestionsLong}, ${CNPLE_INVENTORY.flashcardsLabel} flashcards (including ${CNPLE_INVENTORY.curatedFlashcardsLabel} hand-authored Canadian clinical reasoning cards), and a LOFT-style simulation experience built for Canadian nurse practitioner licensure. Content covers prescribing safety, differential diagnosis, diagnostics, lifespan care, women's health, mental health, and professional practice — all framed around fixed-length CNPLE exam reasoning, not adaptive CAT.`
         : `Use this CNPLE guide to connect ${angle} with Canadian nurse practitioner exam reasoning. The goal is not memorizing isolated facts. It is learning to move from patient cues to differential diagnosis, prescribing decisions, diagnostic selection, escalation, follow-up, and documentation under a fixed-length LOFT-style testing experience.`,
     examTerms:
       slug === "overview"
-        ? ["CNPLE", "Canadian NP", "LOFT simulation", "1,463 lessons", "2,838+ questions", "1,561 flashcards", "prescribing safety"]
+        ? ["CNPLE", "Canadian NP", "LOFT simulation", `${CNPLE_INVENTORY.lessonsLabel} lessons`, `${CNPLE_INVENTORY.caQuestionsLabel} Canadian NP questions`, `${CNPLE_INVENTORY.flashcardsLabel} flashcards`, "prescribing safety"]
         : ["CNPLE", "Canadian NP", "LOFT", "clinical judgment", "prescribing safety", "differential diagnosis"],
     ctas: cnpleCtas,
     table: {
@@ -228,9 +230,9 @@ function buildCnplePage(
     whatYoullLearn:
       slug === "overview"
         ? [
-            "How to access 1,463 CNPLE-aligned NP lessons covering prescribing, diagnostics, lifespan, and professional practice",
-            "How to launch 2,838+ practice questions scoped to Canadian NP exam reasoning",
-            "How to use 1,561 domain-targeted flashcards for spaced-repetition CNPLE prep",
+            `How to access ${CNPLE_INVENTORY.lessonsLong} covering prescribing, diagnostics, lifespan, and professional practice`,
+            `How to launch ${CNPLE_INVENTORY.caQuestionsLong} scoped to Canadian NP exam reasoning`,
+            `How to use ${CNPLE_INVENTORY.flashcardsLabel} domain-targeted flashcards — including ${CNPLE_INVENTORY.curatedFlashcardsLabel} hand-authored Canadian clinical reasoning cards — for spaced-repetition CNPLE prep`,
             "How to run the LOFT-style simulation with a full session report card",
             "Canadian NP prescribing and guideline context that differs from US preparation materials",
             "A repeatable study loop — diagnostic block, lesson review, flashcard reinforcement, retesting",

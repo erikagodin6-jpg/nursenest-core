@@ -795,6 +795,7 @@ export default async function PathwayLessonsHubPage({
     verifiedKept: vr.kept,
     hubCurriculumPrepared,
     loaderRenderable: rawHubLessonRowsFull,
+    deps: { resolveLessonDetail: getPathwayLessonForHubVerifySlim },
   });
   let hubCurriculumLessons = fillResult.lessons;
   const hubVerifyDiagnostics = vr.diagnostics;

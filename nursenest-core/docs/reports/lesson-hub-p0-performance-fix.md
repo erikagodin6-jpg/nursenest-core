@@ -186,8 +186,11 @@ LESSON_PERF_DEBUG=1 npm run dev
 # Type safety
 npm run typecheck:critical --prefix nursenest-core
 
-# Regression tests (source-level checks — no build required)
+# Regression tests — catalog bundling + secondary file guards (15 checks)
 npm run test:lesson-catalog --prefix nursenest-core
+
+# Build-phase memory guards (20 checks, covers all require() files)
+node --import tsx --test nursenest-core/src/lib/marketing/build-phase-memory-guards.test.ts
 
 # Homepage contract tests
 npm run test:homepage --prefix nursenest-core
@@ -199,7 +202,64 @@ npm run perf:budgets --prefix nursenest-core
 grep -n "createRequire\|catalogBundleRequire" \
   nursenest-core/src/lib/lessons/pathway-lesson-catalog-sync.ts
 # Expected: only comment lines (2 references in comments)
+
+# Verify no bare require() for catalog JSON in secondary files
+grep -rn "require.*@/content/pathway-lessons\|require.*@/content/topic-maps" \
+  nursenest-core/src/ --include="*.ts" --include="*.tsx" | grep -v "//\|test\|spec"
+# Expected: zero results
 ```
+
+---
+
+---
+
+## Fix 3: Eliminate secondary `require()` calls (admin/ops files)
+
+Six additional files still used `require("@/content/...")` for catalog and map JSON,
+causing those JSON files to be bundled into admin-route server chunks (a 9.7 MB
+`5499.js` chunk). While these files are not on the lesson hub hot path, they:
+
+- Bloat admin route server bundles
+- Are a latent risk if any admin module is ever imported by a shared path
+- Break the project-wide invariant that catalog JSON is never statically bundled
+
+All six files now use `readFileSync` with `process.cwd()` resolution.
+
+---
+
+## Fix 4: Lightweight hub verify (`getPathwayLessonForHubVerifySlim`)
+
+**Before:** The lesson hub verify step called `getPathwayLessonForMarketingHubVerify`
+for each of 60 lessons (page 1). This loaded the **full lesson row including
+`sections` JSONB** — typically 50–150 KB per lesson.
+
+```
+60 lessons × 100 KB sections JSONB = 6 MB per verify pass
+60/8 concurrency = 8 rounds × DB query time
+Slow DB: 8 rounds × 500ms = 4+ seconds per hub page load
+```
+
+**After:** `getPathwayLessonForHubVerifySlim` is wired as the `resolveLessonDetail`
+in the hub page's verify call. It:
+1. Queries only hub-card metadata fields (no `sections` JSONB) + `structuralPublicComplete`
+2. When `structuralPublicComplete = true` in the DB, normalizes with empty sections and
+   overrides `publicComplete = true` — skipping the expensive section analysis
+3. Falls back to the full `getPathwayLessonForMarketingHubVerify` when:
+   - The `structuralPublicComplete` column is absent (older schema)
+   - The DB column is `false` (lesson needs catalog fallback check)
+
+**The `kept` records in the hub still come from the pre-loaded hub list** (not the slim
+verify records), so hub card display is unaffected.
+
+**Estimated savings per hub page load (cold cache, slow DB):**
+
+| Phase | Before | After | Saving |
+|---|---|---|---|
+| Verify DB bytes | ~6 MB (60 × 100KB sections) | ~90 KB (60 × 1.5KB metadata) | **~6 MB** |
+| Verify rounds | 8 rounds × 500ms = **4s** | 8 rounds × 50ms = **400ms** | **~3.6s** |
+| Secondary bundling | 9.7 MB admin chunk | < 1 MB | **~9 MB** |
+
+Hub warm request time: unchanged (Next Data Cache, module caches).
 
 ---
 
