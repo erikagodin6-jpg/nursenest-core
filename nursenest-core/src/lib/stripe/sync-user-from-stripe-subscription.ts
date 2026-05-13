@@ -2,7 +2,7 @@ import { CountryCode, TierCode, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { canonicalProfessionKeyForAlliedCareer } from "@/lib/allied/allied-billing-career-resolution";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { planFromCheckoutMetadata } from "@/lib/stripe/checkout-plan-metadata";
+import { planFromCheckoutMetadata, type CheckoutPlan } from "@/lib/stripe/checkout-plan-metadata";
 import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
 import type { AlliedCareerKey } from "@/lib/pricing/display-catalog";
 
@@ -38,7 +38,7 @@ export async function syncUserFromCheckoutSessionMetadata(
 export async function syncUserFromStripePriceId(
   userId: string,
   priceId: string,
-  countryOverride?: CountryCode | null,
+  planOverride?: CountryCode | CheckoutPlan | null,
 ): Promise<void> {
   const mapped = findTierCountryByPriceId(priceId);
   if (!mapped) {
@@ -47,8 +47,16 @@ export async function syncUserFromStripePriceId(
     });
     return;
   }
+  const overridePlan =
+    planOverride && typeof planOverride === "object" && "tier" in planOverride ? planOverride : null;
+  const countryOverride = overridePlan
+    ? overridePlan.country
+    : planOverride === undefined || typeof planOverride === "object"
+      ? undefined
+      : planOverride;
+  const resolvedTier = overridePlan?.tier ?? mapped.tier;
   const resolvedCountry = countryOverride === undefined ? mapped.country : countryOverride;
-  const data: Prisma.UserUpdateInput = { tier: mapped.tier };
+  const data: Prisma.UserUpdateInput = { tier: resolvedTier };
   if (resolvedCountry != null) {
     data.country = resolvedCountry;
   }
@@ -56,13 +64,14 @@ export async function syncUserFromStripePriceId(
    * Shared Allied Stripe prices do not encode occupation — never infer `alliedProfessionKey` from price id alone
    * (would incorrectly pin a single career from duplicate matrix rows).
    */
-  if (mapped.tier === TierCode.ALLIED && mapped.alliedCareer) {
-    data.alliedProfessionKey = canonicalProfessionKeyForAlliedCareer(mapped.alliedCareer as AlliedCareerKey);
+  const alliedCareer = overridePlan?.alliedCareer ?? mapped.alliedCareer;
+  if (resolvedTier === TierCode.ALLIED && alliedCareer) {
+    data.alliedProfessionKey = canonicalProfessionKeyForAlliedCareer(alliedCareer as AlliedCareerKey);
   }
   await prisma.user.update({ where: { id: userId }, data });
   safeServerLog("stripe_sync", "user_profile_from_price_id", {
-    tier: mapped.tier,
+    tier: resolvedTier,
     country: resolvedCountry ?? undefined,
-    alliedCareer: mapped.alliedCareer ?? undefined,
+    alliedCareer: alliedCareer ?? undefined,
   });
 }

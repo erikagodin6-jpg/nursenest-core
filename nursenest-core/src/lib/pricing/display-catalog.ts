@@ -72,7 +72,7 @@ export function professionKeyToCareerKey(professionKey: string): AlliedCareerKey
 // Source of truth: Stripe prices exported 2026-03-14.
 // NEW_GRAD has no 3-month Stripe price — that duration is intentionally absent.
 // Pre-Nursing is **free** (see FREE_STRIPE_BILLING_NURSING_TIERS) — no list prices here.
-// LVN_LPN: display amounts mirror Canadian PN until dedicated Stripe rows exist; checkout requires STRIPE_PRICE_*.
+// LVN_LPN: display amounts mirror Canadian PN and checkout intentionally reuses the RPN Stripe Prices.
 // Amounts must match what is configured in Stripe for tiers that checkout; checkout charges the Stripe
 // price, not these display values.
 
@@ -193,6 +193,15 @@ export function durationMonths(duration: BillingDuration): number {
 export function canonicalNursingStripePriceEnvKey(tier: TierCode, duration: BillingDuration): string {
   // RPN uses YEARLY_SUBSCRIPTION for yearly (not 1_YEAR)
   if (tier === "RPN") {
+    switch (duration) {
+      case "monthly": return "STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION";
+      case "3-month": return "STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION";
+      case "6-month": return "STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION";
+      case "yearly":  return "STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION";
+    }
+  }
+  // US LVN/LPN is the same PN subscription ladder as Canada RPN; checkout metadata preserves LVN_LPN.
+  if (tier === "LVN_LPN") {
     switch (duration) {
       case "monthly": return "STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION";
       case "3-month": return "STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION";

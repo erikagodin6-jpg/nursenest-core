@@ -31,6 +31,20 @@ describe("Stripe price env matrix excludes free nursing pathways", () => {
     assert.equal(missing.length, unique.size, `listMissingStripePriceEnvKeys returned duplicates: ${missing.join(", ")}`);
   });
 
+  it("LVN/LPN intentionally reuses the RPN Stripe price env keys", () => {
+    const monthly = eachStripePriceMatrixRow().filter(
+      (r) => (r.tier === "RPN" || r.tier === "LVN_LPN") && r.duration === "monthly",
+    );
+    assert.ok(monthly.some((r) => r.tier === "RPN"), "expected RPN monthly row");
+    assert.ok(monthly.some((r) => r.tier === "LVN_LPN"), "expected LVN/LPN monthly row");
+    assert.equal(
+      new Set(monthly.map((r) => r.envKey)).size,
+      1,
+      `RPN and LVN/LPN should share one monthly Stripe env key: ${monthly.map((r) => r.envKey).join(", ")}`,
+    );
+    assert.equal(monthly[0]?.envKey, "STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION");
+  });
+
   it("all matrix rows carry both envKey (canonical) and legacyEnvKey fields", () => {
     for (const row of eachStripePriceMatrixRow()) {
       assert.ok(row.envKey.length > 0, `row missing envKey: ${JSON.stringify(row)}`);

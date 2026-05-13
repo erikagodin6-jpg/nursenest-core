@@ -28,14 +28,14 @@ const CONFIGURED_PRICE_ENVS: Record<string, string> = {
   STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY: "price_test_allied_yearly",
 };
 
-const CONFIGURED_NURSING_TIERS = new Set<TierCode>(["NEW_GRAD", "RPN", "RN", "NP"]);
+const CONFIGURED_NURSING_TIERS = new Set<TierCode>(["NEW_GRAD", "RPN", "LVN_LPN", "RN", "NP"]);
 const CONFIGURED_DURATIONS: Record<TierCode, ReadonlySet<BillingDuration>> = {
   NEW_GRAD: new Set(["monthly", "6-month", "yearly"]),
   RPN: new Set(["monthly", "3-month", "6-month", "yearly"]),
   RN: new Set(["monthly", "3-month", "6-month", "yearly"]),
   NP: new Set(["monthly", "3-month", "6-month", "yearly"]),
   PRE_NURSING: new Set(),
-  LVN_LPN: new Set(),
+  LVN_LPN: new Set(["monthly", "3-month", "6-month", "yearly"]),
   ALLIED: new Set(),
 };
 

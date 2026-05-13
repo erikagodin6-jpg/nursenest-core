@@ -203,7 +203,7 @@ async function applyCustomerSubscriptionUpsert(
     });
   }
   if (row?.userId && priceId) {
-    await syncUserFromStripePriceId(row.userId, priceId, metadataPlan?.country ?? row.planCountry ?? null);
+    await syncUserFromStripePriceId(row.userId, priceId, metadataPlan ?? row.planCountry ?? null);
   }
   if (!row) {
     const resolvedUserId = await resolveUserIdForOrphanStripeSubscription(sub);
