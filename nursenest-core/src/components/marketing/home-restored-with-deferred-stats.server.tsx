@@ -4,6 +4,7 @@ import type { PropsWithChildren } from "react";
 
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
 import { PremiumClinicalDepth } from "@/components/marketing/home/premium-clinical-depth";
+import { PremiumHomepageHero } from "@/components/marketing/home/premium-homepage-hero";
 import { PremiumHomepageTrust } from "@/components/marketing/home/premium-homepage-trust";
 import {
   getDegradedPublicHomeStatsFallback,
@@ -11,6 +12,7 @@ import {
 } from "@/lib/marketing/public-home-stats-payload";
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { loadHomeHeroPrimaryCarouselSlidesForLocale } from "@/lib/marketing/load-home-hero-carousel-slides.server";
 
 export type HomeRestoredWithDeferredStatsProps = PropsWithChildren<{
@@ -91,11 +93,12 @@ export async function HomeRestoredWithDeferredStats({
   const safeCardIds = safeRegionCardIds(publishedGlobalRegionCardIds);
 
   // Promise.allSettled: a single rejected promise cannot bring down the entire homepage.
-  // All three are already fail-safe, but allSettled adds a final safety net.
-  const [statsResult, slidesResult, messagesResult] = await Promise.allSettled([
+  // All four are already fail-safe, but allSettled adds a final safety net.
+  const [statsResult, slidesResult, messagesResult, regionResult] = await Promise.allSettled([
     skipOptionalDbReads ? Promise.resolve(getDegradedPublicHomeStatsFallback("db_skipped")) : getStatsSafe(),
     loadHomeHeroPrimaryCarouselSlidesForLocale(DEFAULT_MARKETING_LOCALE),
     loadServerIslandMessagesSafe(),
+    getMarketingRegionFromCookies(),
   ]);
 
   const stats = statsResult.status === "fulfilled"
@@ -103,9 +106,23 @@ export async function HomeRestoredWithDeferredStats({
     : getDegradedPublicHomeStatsFallback("promise_rejected");
   const homeHeroCarouselSlides = slidesResult.status === "fulfilled" ? slidesResult.value : [];
   const serverIslandMessages = messagesResult.status === "fulfilled" ? messagesResult.value : {};
+  const region = regionResult.status === "fulfilled" ? regionResult.value : "CA";
 
   // Server-rendered islands: rendered here as RSC, slotted into the client wrapper.
   // These sections have zero browser API usage and are fully static — no hydration needed.
+  //
+  // heroSlot: PremiumHomepageHero is now a server component. Passing it as a slot
+  // eliminates above-fold client hydration cost — the hero HTML is fully static.
+  // Only MarketingTrackedLink (CTA buttons) and LeafWatermark inside it hydrate.
+  const heroSlot = (
+    <PremiumHomepageHero
+      locale={DEFAULT_MARKETING_LOCALE}
+      region={region}
+      questionCount={safeNumber(stats?.questionCount)}
+      lessonCount={safeNumber(stats?.totalLessons)}
+      messages={serverIslandMessages}
+    />
+  );
   const clinicalDepthSlot = (
     <PremiumClinicalDepth messages={serverIslandMessages} locale={DEFAULT_MARKETING_LOCALE} />
   );
@@ -118,6 +135,7 @@ export async function HomeRestoredWithDeferredStats({
       homeMarketingStats={homeMarketingStatsFromPayload(stats)}
       publishedGlobalRegionCardIds={safeCardIds}
       homeHeroCarouselSlides={homeHeroCarouselSlides}
+      heroSlot={heroSlot}
       clinicalDepthSlot={clinicalDepthSlot}
       trustSlot={trustSlot}
     >

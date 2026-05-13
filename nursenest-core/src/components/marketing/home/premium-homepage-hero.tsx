@@ -1,41 +1,21 @@
-"use client";
-
 /**
- * Premium homepage hero (Phase 4) — replaces the visual treatment of the
- * existing `HomeConversionHero` on the live public homepage.
+ * Premium homepage hero (Phase 4) — server component island.
  *
- * What this preserves (and intentionally does not change):
- *   - i18n keys for the existing copy column. Headline + sub use new
- *     premium-only keys (`*.headlinePremium`, `*.subheadingPremium`) so
- *     existing translations of `pages.home.hero.headline` /
- *     `pages.home.hero.subheading` are not silently overwritten.
- *   - CTA destinations (HUB.questionBank for primary, HUB.examLessons for
- *     secondary), analytics events (PH.marketingHomeHeroPrimaryCta /
- *     SecondaryCta), region + locale wiring, fallback paths, ShieldCheck
- *     trust line, and the dynamic `q questions · lessons` stats line.
- *   - The outer wrapper class `nn-home-marketing-rich-hero` so the
- *     production CSS in `src/app/premium-redesign-2026.css` (already
- *     imported by `globals.css`) styles this hero with no new CSS.
+ * Converted from "use client" to RSC so the hero HTML is static (no
+ * hydration). Client islands inside it (MarketingTrackedLink, LeafWatermark)
+ * still hydrate independently — they are the only interactive/dynamic parts.
  *
- * What is new:
- *   - A 2-column premium-hero-grid layout on lg+, mobile stacks naturally.
- *   - Right-side clinical dashboard panel composed of:
- *       * Illustrative sinus-style rhythm strip (inline SVG, educational only)
- *       * Readiness / streak / mastered semantic stat tiles
- *       * Two semantic mini lesson cards with mastery progress bars
- *   - Trust pills row directly under the CTAs.
- *
- * What this component intentionally does NOT do:
- *   - Render or modify any other homepage section (handled by Phase 5).
- *   - Touch SEO/JSON-LD/canonical/sitemap/robots/server pages.
- *   - Replace `HomeConversionHero` (kept in tree for emergency fallback).
+ * Props replace the removed hooks:
+ *   locale, region  — passed from the parent RSC (replaces useMarketingI18n /
+ *                     useNursenestRegion).
+ *   messages        — flat i18n record from the server-side message loader.
+ *   questionCount, lessonCount — stats from the DB, pre-resolved in the RSC.
  */
 
 import { ArrowRight, BookMarked, Flame, ShieldCheck, Target } from "lucide-react";
-import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
+import { safeHomepageMarketingT } from "@/lib/marketing/homepage-marketing-visible-copy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
-import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import {
@@ -57,6 +37,17 @@ function safePath(locale: string, path: string) {
   } catch {
     return path;
   }
+}
+
+/** Derive a translation lookup from a flat messages record (server-side equivalent of the i18n hook). */
+function makeT(messages: Record<string, string> | undefined) {
+  return (key: string, params?: Record<string, string | number | undefined>): string => {
+    if (!messages) return "";
+    const template = messages[key] ?? "";
+    if (!template) return "";
+    if (!params) return template;
+    return template.replace(/\{\{(\w+)\}\}/g, (_, k) => String(params[k] ?? ""));
+  };
 }
 
 /**
@@ -112,7 +103,6 @@ function stripMustachePlaceholders(value: string): string {
 function singleNsrBeatPath(offset: number, baselineY: number, beatWidth: number): string {
   const y = baselineY;
   const o = offset;
-  // Baseline → small rounded P → isoelectric PR → QRS (qR pattern) → ST → asymmetric T → baseline
   return [
     `M${o},${y}`,
     `L${o + 12},${y}`,
@@ -147,7 +137,6 @@ function buildSinusRhythmPath(beats: number, beatWidth: number, baselineY: numbe
    clinical ECG interpretation. Static (no animation).
    ────────────────────────────────────────────────────────────────── */
 
-// Hoisted module-level constants — path is deterministic; compute once at module load time.
 const _ECG_BEAT_W = 138;
 const _ECG_BEAT_COUNT = 3;
 const _ECG_BASELINE = 46;
@@ -269,25 +258,26 @@ function HeroClinicalPanel({
 }
 
 /* ──────────────────────────────────────────────────────────────────
-   Premium homepage hero — public component.
+   Premium homepage hero — server component.
+   Props replace the removed useMarketingI18n / useNursenestRegion hooks.
    ────────────────────────────────────────────────────────────────── */
 export function PremiumHomepageHero(props: {
   questionCount?: number;
   lessonCount?: number;
+  /** Flat i18n message record from the server-side shard loader. Falls back to English defaults. */
+  messages?: Record<string, string>;
+  /** BCP-47 locale string (e.g. "en", "fr"). Defaults to "en". */
+  locale?: string;
+  /** Marketing region slug ("CA" | "US"). Defaults to "CA". */
+  region?: string;
 }) {
-  // Hooks must run unconditionally at top level (never inside try/catch).
-  // Marketing layout wraps this tree with `MarketingI18nProvider` +
-  // `NursenestRegionRoot`; `useMarketingI18n` degrades safely outside provider.
-  const { locale: rawLocale, t } = useMarketingI18n();
-  const { region: rawRegion } = useNursenestRegion();
-  const locale = safeLocale(rawLocale);
-  const region = safeRegion(rawRegion);
+  const locale = safeLocale(props.locale);
+  const region = safeRegion(props.region);
+  const t = makeT(props.messages);
 
   const q = props.questionCount ?? 0;
   const lessons = props.lessonCount ?? 0;
 
-  // Premium hero copy. Headline + sub use NEW i18n keys so existing
-  // translations of `pages.home.hero.headline` are not silently changed.
   const eyebrow = formatTitleCase(
     safeHomepageMarketingT(t, "pages.home.hero.eyebrowAdaptive", "Adaptive Clinical Readiness"),
     locale,
@@ -356,8 +346,6 @@ export function PremiumHomepageHero(props: {
       ? stripMustachePlaceholders([qPart, lPart].filter(Boolean).join(statsSep))
       : stripMustachePlaceholders(safeHomepageMarketingT(t, "pages.home.hero.statsFallback", "Updated regularly"));
 
-  // Right-panel copy — all overridable via i18n, with safe defaults that
-  // never claim a specific learner / outcome / institution.
   const { lead: heroHeadlineLead, emphasis: heroHeadlineEmphasis } = splitPremiumHeroHeadline(headline);
 
   const panelCopy = {
