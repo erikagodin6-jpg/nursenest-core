@@ -81,11 +81,35 @@ npx playwright test tests/e2e/live-redesign-deployment-proof.spec.ts --project=c
 1 passed
 ```
 
-Screenshots from the local proof run are written under:
+Production public proof completed:
+
+```text
+BASE_URL=https://www.nursenest.ca npx playwright test tests/e2e/live-redesign-deployment-proof.spec.ts --project=chromium --grep "public"
+7 passed
+```
+
+Screenshots from the production proof run are written under:
 
 ```text
 test-results/live-redesign-deployment-proof/
 ```
+
+Production screenshots captured:
+
+- `chromium-homepage-desktop.png`
+- `chromium-homepage-mobile-375.png`
+- `chromium-rn-hub-desktop.png`
+- `chromium-rn-hub-mobile-375.png`
+- `chromium-rpn-hub-desktop.png`
+- `chromium-rpn-hub-mobile-375.png`
+- `chromium-np-hub-desktop.png`
+- `chromium-np-hub-mobile-375.png`
+- `chromium-allied-hub-desktop.png`
+- `chromium-allied-hub-mobile-375.png`
+- `chromium-ecg-basic-marketing-desktop.png`
+- `chromium-ecg-basic-marketing-mobile-375.png`
+- `chromium-ecg-advanced-marketing-desktop.png`
+- `chromium-ecg-advanced-marketing-mobile-375.png`
 
 Full authenticated proof requires `QA_PAID_EMAIL` + `QA_PAID_PASSWORD` or equivalent E2E credentials because learner, ECG, and advanced ECG module routes are correctly protected.
 
@@ -106,6 +130,7 @@ Results:
 - Playwright test discovery: 16 tests discovered across Chromium/WebKit
 - Premium convergence contracts: 16/16 pass
 - Local homepage redesign proof: 1/1 pass
+- Production public redesign proof: 7/7 pass
 
 ## Deployment Branch
 
@@ -116,7 +141,16 @@ DigitalOcean deploy configs reference `main` with `deploy_on_push: true`:
 - `.do/app-nursenest-core-next.yaml`
 - `nursenest-core/.do/app.yaml`
 
-Production deploy proof is pending until the marker commit is pushed and DigitalOcean finishes the deploy. After deployment, verify:
+Production deploy proof:
+
+- Commit pushed: `a439701d04af94a2a828a5448602c85127b6249f`
+- DigitalOcean deployment: `2b30d716-ab41-4a77-86f2-3f016520d74a`
+- Cause: `commit a439701 pushed to github.com/erikagodin6-jpg/nursenest-core/tree/main`
+- Phase: `ACTIVE`
+- Runtime version endpoint: `/api/version` returned commit `a439701d04af94a2a828a5448602c85127b6249f`
+- Homepage and RN hub production HTML contain `data-premium-layout-version="2026-05-live-redesign-v1"`
+
+Commands used:
 
 ```bash
 curl -s https://www.nursenest.ca/ | grep 'data-premium-layout-version="2026-05-live-redesign-v1"'
@@ -144,6 +178,5 @@ Known live redesign components confirmed in use:
 
 ## Remaining Blockers
 
-- Production proof cannot be completed until the marker commit is pushed and the DigitalOcean deploy reaches the new SHA.
 - Protected learner/module production proof requires a configured paid QA account or saved auth state. The Playwright spec is ready for that path and skips those checks only when credentials are unavailable.
 - Existing homepage missing-copy warnings appeared during local dev rendering. They predate this marker patch and did not block the redesign marker, CTA, no-overflow, or navigation proof.

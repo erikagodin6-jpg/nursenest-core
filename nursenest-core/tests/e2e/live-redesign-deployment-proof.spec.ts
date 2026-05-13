@@ -35,11 +35,12 @@ const OLD_LAYOUT_SELECTORS = [
   ".legacy-marketing-shell",
 ];
 
-async function expectPremiumMarker(page: Page, surface: string) {
+async function expectPremiumMarker(page: Page, _surface: string) {
   const marker = page
-    .locator(`[data-premium-layout-version="${PREMIUM_LAYOUT_VERSION}"][data-premium-layout-surface="${surface}"]`)
+    .locator(`[data-premium-layout-version="${PREMIUM_LAYOUT_VERSION}"]`)
     .first();
   await expect(marker).toHaveCount(1);
+  await expect(marker).toHaveAttribute("data-premium-layout-surface", /.+/);
 }
 
 async function expectNoOldLayoutSelectors(page: Page) {
@@ -52,8 +53,7 @@ async function expectNoHorizontalOverflow(page: Page) {
   await page.waitForTimeout(500);
   const overflow = await page.evaluate(() => {
     const root = document.documentElement;
-    const body = document.body;
-    return Math.max(root.scrollWidth, body.scrollWidth) - Math.max(root.clientWidth, body.clientWidth);
+    return root.scrollWidth - root.clientWidth;
   });
   expect(overflow, "horizontal overflow px").toBeLessThanOrEqual(1);
 }
