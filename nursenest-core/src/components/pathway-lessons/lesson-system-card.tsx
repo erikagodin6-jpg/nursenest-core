@@ -51,11 +51,11 @@ export function LessonSystemCard({
     <section
       id={section.id}
       style={systemStyle}
-      className="nn-qa-pathway-lessons-group nn-lesson-system-card overflow-hidden rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]"
+      className="nn-qa-pathway-lessons-group nn-lesson-system-card rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)]"
       aria-labelledby={`lesson-system-card-${section.id}`}
     >
-      {/* Accent stripe across the top — 3px, matches the body-system accent colour */}
-      <div className="h-[3px] w-full bg-[var(--nn-system-accent)] opacity-60" aria-hidden />
+      {/* Accent stripe across the top — 3px, inner radius matches card (xl=12px minus 1px border). */}
+      <div className="h-[3px] w-full rounded-t-[11px] bg-[var(--nn-system-accent)] opacity-60" aria-hidden />
 
       <div className="px-3 pb-3 pt-2.5 sm:px-3.5 sm:pb-3.5">
         {/* Section header: icon + label + count */}

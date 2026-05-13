@@ -17,11 +17,11 @@ export const MARKETING_FINAL_CTA_ROW_CLASS = "nn-final-cta-row" as const;
  * removing them from the Tailwind arbitrary-value compiler output.
  */
 export const MARKETING_PRIMARY_CTA_CLASS =
-  “nn-btn-primary nn-marketing-cta-primary” as const;
+  "nn-btn-primary nn-marketing-cta-primary" as const;
 
-/** Secondary: lighter than primary (smaller type) — keeps one clear “main” action per section. */
+/** Secondary: lighter than primary (smaller type) — keeps one clear "main" action per section. */
 export const MARKETING_SECONDARY_CTA_CLASS =
-  “nn-btn-secondary nn-marketing-cta-secondary” as const;
+  "nn-btn-secondary nn-marketing-cta-secondary" as const;
 
 export const MARKETING_TERTIARY_LINK_CLASS =
   "nn-link-quiet inline-flex min-h-[44px] min-w-0 items-center justify-center gap-2 px-4 py-2 text-sm sm:min-h-0" as const;

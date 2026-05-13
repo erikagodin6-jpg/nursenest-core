@@ -24,8 +24,7 @@ export function LessonRow({ href, title, progressStatus, showProgress = false, d
     <Link
       href={href}
       data-testid="lesson-card-link"
-      className="nn-qa-pathway-lesson-card group flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
-      data-testid="lesson-card"
+      className="nn-qa-pathway-lesson-card group flex min-h-[44px] items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)] sm:min-h-0"
     >
       {/* Progress badge (subscribers) */}
       {showProgress ? (
