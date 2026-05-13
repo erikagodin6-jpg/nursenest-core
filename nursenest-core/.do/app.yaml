@@ -88,6 +88,9 @@ services:
       - key: DATABASE_URL
         scope: RUN_TIME
         type: SECRET
+      - key: NEXT_PUBLIC_APP_URL
+        scope: RUN_AND_BUILD_TIME
+        value: https://nursenest.ca
       - key: AUTH_URL
         scope: RUN_TIME
         value: https://nursenestcore-njhcf.ondigitalocean.app
@@ -152,6 +155,68 @@ services:
       - key: STRIPE_PRICE_ADVANCED_ECG
         scope: RUN_TIME
         value: price_1TVo8vFbgp0Ub5P7aTySWrbU
+      # RPN (REx-PN / NCLEX-PN Canada) — replace with live Stripe price IDs.
+      - key: STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION
+        scope: RUN_TIME
+        value: ""
+      # RN (NCLEX-RN) — replace with live Stripe price IDs.
+      - key: STRIPE_PRICE_NURSENEST_RN_1_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NURSENEST_RN_3_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NURSENEST_RN_6_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NURSENEST_RN_1_YEAR_SUBSCRIPTION
+        scope: RUN_TIME
+        value: ""
+      # New Grad — replace with live Stripe price IDs.
+      - key: STRIPE_PRICE_NEW_GRAD_MONTHLY
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NEW_GRAD_6MONTH
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NEW_GRAD_YEARLY
+        scope: RUN_TIME
+        value: ""
+      # LVN/LPN (NCLEX-PN US) — replace with live Stripe price IDs.
+      - key: STRIPE_PRICE_LVN_LPN_MONTHLY
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_LVN_LPN_3MONTH
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_LVN_LPN_6MONTH
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_LVN_LPN_YEARLY
+        scope: RUN_TIME
+        value: ""
+      # Allied Health shared prices (all 7 careers use these 4 IDs) — replace with live Stripe price IDs.
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_3_MONTHS
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_6_MONTH_SUBSCRIPTION
+        scope: RUN_TIME
+        value: ""
+      - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY
+        scope: RUN_TIME
+        value: ""
     github:
       branch: main
       deploy_on_push: true

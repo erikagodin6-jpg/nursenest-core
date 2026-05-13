@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, permanentRedirect } from "next/navigation";
+import { notFound, permanentRedirect, redirect } from "next/navigation";
+import { isCnplePathway } from "@/lib/exam-pathways/cnple-pathway";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
@@ -80,6 +81,14 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: `${pathname}/cat` });
   if (!pathway) notFound();
+
+  // CNPLE uses LOFT (linear on-the-fly testing), not CAT adaptive.
+  // Any visitor who arrives at /canada/np/cnple/cat is permanently redirected
+  // to the dedicated /simulation page which has LOFT-specific copy and CTAs.
+  if (isCnplePathway(pathway.id)) {
+    redirect(buildExamPathwayPath(pathway, "simulation"));
+  }
+
   if (isAlliedHealthPathway(pathway)) {
     const spCat = searchParams ? await searchParams : {};
     const qs = new URLSearchParams();

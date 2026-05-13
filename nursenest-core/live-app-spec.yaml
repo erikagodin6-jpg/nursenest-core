@@ -84,6 +84,9 @@ services:
     scope: RUN_TIME
     type: SECRET
     value: EV[1:epn2WKfjCszP6t4y3HVIH0npBDHw1gl4:VQDVd0phuUp1+VG9MmsAog==]
+  - key: NEXT_PUBLIC_APP_URL
+    scope: RUN_AND_BUILD_TIME
+    value: https://nursenest.ca
   - key: AUTH_URL
     scope: RUN_TIME
   - key: AI_ADMIN_GENERATION_ENABLED
@@ -118,6 +121,69 @@ services:
   # ── Stripe Checkout — Advanced ECG add-on price ───────────────────────────
   # Single price ID covers all billing durations (monthly / 3-month / 6-month / yearly).
   - key: STRIPE_PRICE_ADVANCED_ECG
+    scope: RUN_TIME
+    type: SECRET
+  # ── Stripe Checkout — RPN (REx-PN / NCLEX-PN Canada) prices ─────────────
+  # Set actual price_* values in DO App Platform console → Environment Variables.
+  - key: STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  # ── Stripe Checkout — RN (NCLEX-RN) prices ───────────────────────────────
+  - key: STRIPE_PRICE_NURSENEST_RN_1_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_RN_3_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_RN_6_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_RN_1_YEAR_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  # ── Stripe Checkout — New Grad prices ────────────────────────────────────
+  - key: STRIPE_PRICE_NEW_GRAD_MONTHLY
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NEW_GRAD_6MONTH
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NEW_GRAD_YEARLY
+    scope: RUN_TIME
+    type: SECRET
+  # ── Stripe Checkout — LVN/LPN (NCLEX-PN US) prices ───────────────────────
+  - key: STRIPE_PRICE_LVN_LPN_MONTHLY
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_LVN_LPN_3MONTH
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_LVN_LPN_6MONTH
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_LVN_LPN_YEARLY
+    scope: RUN_TIME
+    type: SECRET
+  # ── Stripe Checkout — Allied Health shared prices (all 7 careers) ─────────
+  - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_3_MONTHS
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_6_MONTH_SUBSCRIPTION
+    scope: RUN_TIME
+    type: SECRET
+  - key: STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY
     scope: RUN_TIME
     type: SECRET
   github:

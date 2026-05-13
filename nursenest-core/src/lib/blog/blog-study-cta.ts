@@ -99,7 +99,8 @@ export function marketingStudyHubsForBlogExam(exam: string, country: BlogCountry
       practiceExamsHub: HUB.practiceExams,
       flashcardsHub: HUB.flashcards,
       pathwayQuestionsHub: buildExamPathwayPath(cnple, "questions"),
-      pathwayCatHub: buildExamPathwayPath(cnple, "cat"),
+      // CNPLE uses LOFT simulation, not CAT — canonical route is /simulation
+      pathwayCatHub: buildExamPathwayPath(cnple, "simulation"),
       practiceProgrammatic: NP.practiceProgrammaticCa,
     };
   }

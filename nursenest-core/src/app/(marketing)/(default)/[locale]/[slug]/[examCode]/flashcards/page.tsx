@@ -11,6 +11,8 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loginWithCallback, HUB } from "@/lib/marketing/marketing-entry-routes";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
+import { prisma } from "@/lib/db";
+import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -84,6 +86,21 @@ export default async function PathwayFlashcardsPage({ params }: Props) {
   const hubHref = buildExamPathwayPath(pathway);
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const questionsHref = buildExamPathwayPath(pathway, "questions");
+  const simulationHref = buildExamPathwayPath(pathway, "simulation");
+
+  // For CNPLE, check whether any flashcard deck has cards available for learners.
+  // The CNPLE flashcard deck exists but may have cardCount: 0 while content is authored.
+  const cnpleFlashcardLive = isCnple
+    ? await withDatabaseFallbackTimeout(
+        () =>
+          prisma.flashcardDeck.count({
+            where: { tier: "NP", country: "CA", status: "PUBLISHED", cardCount: { gt: 0 } },
+          }),
+        0,
+        1000,
+        { scope: "marketing.pathway_flashcards", label: "cnple_fc_deck_count" },
+      ).then((n) => n > 0)
+    : true;
 
   return (
     <>
@@ -119,27 +136,61 @@ export default async function PathwayFlashcardsPage({ params }: Props) {
           ) : null}
         </div>
 
-        {/* CTA */}
-        <div className="mb-10 flex flex-col gap-3 sm:flex-row">
-          <Link
-            href={flashcardAppHref}
-            className="flex-1 rounded-2xl px-8 py-4 text-center text-[15px] font-bold shadow-sm transition-all"
-            style={{ background: "var(--semantic-brand)", color: "#fff" }}
-          >
-            {isSignedIn ? "Open Flashcards" : "Sign in to study flashcards"}
-          </Link>
-          <Link
-            href={HUB.flashcards}
-            className="rounded-2xl border px-8 py-4 text-center text-[15px] font-semibold transition-all"
-            style={{
-              borderColor: "var(--semantic-border-soft)",
-              color: "var(--semantic-text-secondary)",
-              background: "var(--semantic-surface)",
-            }}
-          >
-            Browse all decks
-          </Link>
-        </div>
+        {/* CTA — CNPLE shows coming-soon with study alternatives when flashcard inventory is not yet live */}
+        {isCnple && !cnpleFlashcardLive ? (
+          <div className="mb-10 rounded-2xl border p-6" style={{ borderColor: "var(--semantic-border-soft)", background: "color-mix(in srgb, var(--semantic-brand) 4%, var(--semantic-surface))" }}>
+            <p className="text-[15px] font-bold" style={{ color: "var(--semantic-text-primary)" }}>
+              CNPLE flashcards are being prepared
+            </p>
+            <p className="mt-1 text-[14px] leading-relaxed" style={{ color: "var(--semantic-text-muted)" }}>
+              Domain-targeted flashcard decks are actively authored and will be published here as they complete quality review. In the meantime, prepare with CNPLE lessons and practice questions.
+            </p>
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href={simulationHref}
+                className="flex-1 rounded-2xl px-6 py-3 text-center text-[14px] font-bold shadow-sm"
+                style={{ background: "var(--semantic-brand)", color: "#fff" }}
+              >
+                Start CNPLE Simulation
+              </Link>
+              <Link
+                href={lessonsHref}
+                className="rounded-2xl border px-6 py-3 text-center text-[14px] font-semibold"
+                style={{ borderColor: "var(--semantic-border-soft)", color: "var(--semantic-text-secondary)", background: "var(--semantic-surface)" }}
+              >
+                Browse Lessons
+              </Link>
+              <Link
+                href={questionsHref}
+                className="rounded-2xl border px-6 py-3 text-center text-[14px] font-semibold"
+                style={{ borderColor: "var(--semantic-border-soft)", color: "var(--semantic-text-secondary)", background: "var(--semantic-surface)" }}
+              >
+                Practice Questions
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="mb-10 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href={flashcardAppHref}
+              className="flex-1 rounded-2xl px-8 py-4 text-center text-[15px] font-bold shadow-sm transition-all"
+              style={{ background: "var(--semantic-brand)", color: "#fff" }}
+            >
+              {isSignedIn ? "Open Flashcards" : "Sign in to study flashcards"}
+            </Link>
+            <Link
+              href={HUB.flashcards}
+              className="rounded-2xl border px-8 py-4 text-center text-[15px] font-semibold transition-all"
+              style={{
+                borderColor: "var(--semantic-border-soft)",
+                color: "var(--semantic-text-secondary)",
+                background: "var(--semantic-surface)",
+              }}
+            >
+              Browse all decks
+            </Link>
+          </div>
+        )}
 
         {/* Domain coverage (CNPLE only) */}
         {isCnple ? (

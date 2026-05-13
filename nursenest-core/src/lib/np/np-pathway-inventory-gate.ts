@@ -18,10 +18,16 @@ const NP_INVENTORY_TIMEOUT_MS = 1000;
  */
 export async function loadNpCanadaInventoryGate(): Promise<NpPathwayInventoryGate | null> {
   if (!isDatabaseUrlConfigured()) return null;
+  // NP Canada questions use regionScope "BOTH" or "CA_ONLY" with countryCode null —
+  // they do NOT set countryCode: "CA". Filtering on countryCode: CA returns 0; use regionScope.
   const publishedNpCanada = await withDatabaseFallbackTimeout(
     () =>
       prisma.examQuestion.count({
-        where: { status: "published", tier: "NP", countryCode: CountryCode.CA },
+        where: {
+          status: "published",
+          tier: "NP",
+          OR: [{ regionScope: "BOTH" }, { regionScope: "CA_ONLY" }],
+        },
       }),
     -1,
     NP_INVENTORY_TIMEOUT_MS,

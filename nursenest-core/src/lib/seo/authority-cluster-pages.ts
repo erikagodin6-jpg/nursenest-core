@@ -171,12 +171,18 @@ function buildCnplePage(
         : `${topic} (2026) — CNPLE Prep | NurseNest`,
     description:
       slug === "overview"
-        ? `Prepare for the 2026 CNPLE with case-based NP questions, LOFT simulation, prescribing safety drills, and Canadian guideline content. Aligned with CCRNR competency frameworks.`
+        ? `Prepare for the 2026 CNPLE with 1,463 NP lessons, 2,838+ practice questions, 1,561 flashcards, and LOFT-style simulation. Canadian NP clinical reasoning, prescribing safety, and differential diagnosis — aligned to CCRNR competency frameworks.`
         : `${topic} for CNPLE preparation — Canadian NP clinical reasoning, prescribing safety, LOFT pacing, common mistakes, and rationale-first practice questions.`,
     h1: slug === "overview" ? "CNPLE exam prep for Canadian nurse practitioners (2026)" : `${topic} for CNPLE preparation`,
     eyebrow: "Canadian NP licensure exam — 2026 authority guide",
-    lead: `Use this CNPLE guide to connect ${angle} with Canadian nurse practitioner exam reasoning. The goal is not memorizing isolated facts. It is learning to move from patient cues to differential diagnosis, prescribing decisions, diagnostic selection, escalation, follow-up, and documentation under a fixed-length LOFT-style testing experience.`,
-    examTerms: ["CNPLE", "Canadian NP", "LOFT", "clinical judgment", "prescribing safety", "differential diagnosis"],
+    lead:
+      slug === "overview"
+        ? `NurseNest includes 1,463 CNPLE-aligned NP lessons, 2,838+ practice questions, 1,561 flashcards, and a LOFT-style simulation experience built for Canadian nurse practitioner licensure. Content covers prescribing safety, differential diagnosis, diagnostics, lifespan care, women's health, mental health, and professional practice — all framed around fixed-length CNPLE exam reasoning, not adaptive CAT.`
+        : `Use this CNPLE guide to connect ${angle} with Canadian nurse practitioner exam reasoning. The goal is not memorizing isolated facts. It is learning to move from patient cues to differential diagnosis, prescribing decisions, diagnostic selection, escalation, follow-up, and documentation under a fixed-length LOFT-style testing experience.`,
+    examTerms:
+      slug === "overview"
+        ? ["CNPLE", "Canadian NP", "LOFT simulation", "1,463 lessons", "2,838+ questions", "1,561 flashcards", "prescribing safety"]
+        : ["CNPLE", "Canadian NP", "LOFT", "clinical judgment", "prescribing safety", "differential diagnosis"],
     ctas: cnpleCtas,
     table: {
       caption: `${topic}: what to practise`,
