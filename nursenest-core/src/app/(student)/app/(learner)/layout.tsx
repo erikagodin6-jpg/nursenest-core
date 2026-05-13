@@ -65,6 +65,7 @@ import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stat
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
+import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
 import type { AdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
@@ -284,6 +285,7 @@ export default async function LearnerShellLayout({ children }: { children: React
               data-learner-exam-chrome={isFocusedExamShell ? "hidden" : undefined}
               data-testid="learner-shell"
             >
+              <PremiumLayoutVersionMarker surface="learner-shell" />
               <LearnerMainLandmarkAudit />
               <PathwayLessonProgressRefreshListener />
               <LearnerDegradedModeBanner

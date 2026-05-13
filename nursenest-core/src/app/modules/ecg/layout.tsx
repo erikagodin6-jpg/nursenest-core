@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { EcgModulePublicationNotice } from "@/components/ecg-module/ecg-module-publication-notice";
+import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { PremiumEducationalModuleShell } from "@/components/modules/premium-educational-module-shell";
 import { requireEcgModuleAccess } from "@/lib/ecg-module/ecg-module.server";
 import { getEcgModuleStatus } from "@/lib/ecg-module/ecg-module-status";
@@ -36,6 +37,7 @@ export default async function EcgModuleLayout({ children }: { children: ReactNod
       description="Rhythm interpretation, worksheets, video drills, and scenario practice connected back to the NurseNest learner ecosystem."
       backHref="/app"
     >
+      <PremiumLayoutVersionMarker surface="ecg-module" />
       <EcgModulePublicationNotice />
       {children}
     </PremiumEducationalModuleShell>

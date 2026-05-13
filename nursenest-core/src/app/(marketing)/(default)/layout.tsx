@@ -36,6 +36,7 @@ import { loadMarketingLayoutObservability } from "@/lib/observability/deferred-m
 import { loadRenderTrace } from "@/lib/observability/deferred-render-trace";
 import { MarketingPublicContentEditProvider } from "@/components/marketing/marketing-public-content-edit-provider";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
+import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import type { CountryCode } from "@/lib/marketing/countries/types";
 
 export const dynamic = "force-dynamic";
@@ -156,6 +157,7 @@ function marketingDefaultLayoutStaticShellForHome({
             <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegion}>
               <CheckoutGlobalRegionContextPathStamp />
               <MarketingDefaultLayoutChromeFailsafeShell>
+                <PremiumLayoutVersionMarker surface="marketing-default-static-home" />
                 <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
                   {children}
                 </MarketingDefaultMainMotionSlot>
@@ -395,6 +397,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                   <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
                     <CheckoutGlobalRegionContextPathStamp />
                     <div className="nn-marketing-surface nn-marketing-brand-root flex min-h-screen flex-col">
+                      <PremiumLayoutVersionMarker surface="marketing-default" />
                       <SiteHeaderServer serverHasStaffSession={staffSession != null} />
                       {shouldLayerMainPageShards() ? (
                         <MarketingMainI18nShards
@@ -484,6 +487,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                 <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={failsafeGlobalRegion}>
                   <CheckoutGlobalRegionContextPathStamp />
                   <MarketingDefaultLayoutChromeFailsafeShell>
+                    <PremiumLayoutVersionMarker surface="marketing-default-failsafe" />
                     <MarketingDefaultMainMotionSlot serverNarrowViewportHint={failsafeNarrowHint}>
                       {children}
                     </MarketingDefaultMainMotionSlot>

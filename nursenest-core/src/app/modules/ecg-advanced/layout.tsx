@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { AdvancedEcgModuleShell } from "@/components/advanced-ecg/advanced-ecg-module-shell";
 
 export const dynamic = "force-dynamic";
@@ -16,5 +17,10 @@ export const metadata: Metadata = {
 };
 
 export default function AdvancedEcgLayout({ children }: { children: ReactNode }) {
-  return <AdvancedEcgModuleShell>{children}</AdvancedEcgModuleShell>;
+  return (
+    <AdvancedEcgModuleShell>
+      <PremiumLayoutVersionMarker surface="advanced-ecg-module" />
+      {children}
+    </AdvancedEcgModuleShell>
+  );
 }
