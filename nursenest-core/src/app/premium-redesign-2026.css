@@ -1499,9 +1499,11 @@ html[data-theme="blossom"] .nn-premium-home-section::before {
 }
 
 html[data-theme="blossom"] .nn-header-brand-lockup {
-  /* --logo-primary is overridden to --nn-header-primary-fg (near-black) inside .nn-header-logo-row.
-     Use --theme-primary directly so the leaf and wordmark always render in the blossom pink. */
-  color: var(--theme-primary);
+  /* --logo-primary carries palette.logoPrimary = Blossom pink (#c97a91).
+     --logo-text resolves to near-black (readability token) — do not use it here.
+     ThemeStateHydration sets --logo-primary from the theme palette, so this is
+     always the correct brand-colour token for the leaf and wordmark. */
+  color: var(--logo-primary);
 }
 
 html[data-theme="blossom"] [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid > nav a.nn-marketing-nav-link,

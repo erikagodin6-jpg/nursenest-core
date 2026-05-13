@@ -1,3 +1,4 @@
+import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
@@ -170,6 +171,7 @@ export default async function MarketingLocaleLayout({
                   >
                     <main className="flex min-h-0 flex-1 flex-col">
                       <MarketingMainErrorBoundary name="marketing_locale_main">
+                        <PremiumLayoutVersionMarker surface="marketing-locale" />
                         <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
                           {children}
                         </MarketingMobileMotionShell>
