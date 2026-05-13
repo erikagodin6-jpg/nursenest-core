@@ -9,6 +9,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
+import { resolveCssFile } from "@/lib/test-utils/resolve-css-imports";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteHeaderTsx = path.join(__dirname, "../../components/layout/site-header.tsx");
@@ -73,7 +74,7 @@ describe("Blossom theme brand wordmark and leaf logo color contract", () => {
   const premiumCssPath = path.join(__dirname, "../../app/premium-redesign-2026.css");
 
   it("Blossom brand lockup uses --logo-primary (brand pink), not --logo-text (near-black readability token)", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
 
     // The Blossom-specific brand lockup rule MUST use --logo-primary.
     // --logo-text resolves to #1f2937 (near-black) on Blossom's white nav background because
@@ -92,7 +93,7 @@ describe("Blossom theme brand wordmark and leaf logo color contract", () => {
   });
 
   it("generic marketing-row4 brand lockup rule still uses semantic-brand mix (Ocean/other themes unaffected)", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
     assert.match(
       css,
       /\[data-nn-header-layout="marketing-row4"\]\s+\.nn-header-brand-lockup\s*\{[^}]*color:\s*color-mix\(in srgb,\s*var\(--semantic-brand\)/s,

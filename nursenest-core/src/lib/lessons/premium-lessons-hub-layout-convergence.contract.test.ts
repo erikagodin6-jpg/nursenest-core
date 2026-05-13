@@ -13,6 +13,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
+import { resolveCssFile } from "@/lib/test-utils/resolve-css-imports";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -125,36 +126,36 @@ describe("MarketingHubCategoryDescriptor description contract", () => {
 
 describe("Premium redesign CSS hub primitives", () => {
   it("defines nn-lessons-hub-stat-card styles", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
     assert.match(css, /\.nn-lessons-hub-stat-card/, "must define .nn-lessons-hub-stat-card");
   });
 
   it("defines nn-lessons-hub-trust-badge styles", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
     assert.match(css, /\.nn-lessons-hub-trust-badge/, "must define .nn-lessons-hub-trust-badge");
   });
 
   it("defines nn-hub-category-card styles with transition", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
     assert.match(css, /\.nn-hub-category-card/, "must define .nn-hub-category-card");
     assert.match(css, /\.nn-hub-category-card\s*\{[\s\S]{0,80}transition/, "must include transition on hub category card");
   });
 
   it("includes prefers-reduced-motion guard for category card hover lift", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
     const reducedSection = css.match(/@media \(prefers-reduced-motion: reduce\)[\s\S]{0,600}nn-hub-category-card/);
     assert.ok(reducedSection, "must guard nn-hub-category-card transform with prefers-reduced-motion");
   });
 
   it("defines theme-aware stat card backgrounds for Ocean, Blossom, Midnight", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
     assert.match(css, /\[data-theme="ocean"\][\s\S]{0,80}nn-lessons-hub-stat-card/s);
     assert.match(css, /\[data-theme="blossom"\][\s\S]{0,200}nn-lessons-hub-stat-card/s);
     assert.match(css, /\[data-theme="midnight"\][\s\S]{0,200}nn-lessons-hub-stat-card/s);
   });
 
   it("defines theme-specific hero backgrounds for Ocean, Blossom, Midnight", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
     assert.match(
       css,
       /html\[data-theme="ocean"\]\s+\.nn-premium-lessons-hub-hero/s,
@@ -173,13 +174,13 @@ describe("Premium redesign CSS hub primitives", () => {
   });
 
   it("defines exam-critical and empty category card modifier classes", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
     assert.match(css, /\.nn-hub-category-card--exam-critical/, "must define exam-critical modifier class");
     assert.match(css, /\.nn-hub-category-card--empty/, "must define empty modifier class");
   });
 
   it("defines nn-lessons-hub-lesson-row with transition and reduced-motion guard", () => {
-    const css = fs.readFileSync(premiumCssPath, "utf8");
+    const css = resolveCssFile(premiumCssPath);
     assert.match(css, /\.nn-lessons-hub-lesson-row/, "must define .nn-lessons-hub-lesson-row");
     const reducedSection = css.match(/@media \(prefers-reduced-motion: reduce\)[\s\S]{0,400}nn-lessons-hub-lesson-row/);
     assert.ok(reducedSection, "must guard nn-lessons-hub-lesson-row with prefers-reduced-motion");

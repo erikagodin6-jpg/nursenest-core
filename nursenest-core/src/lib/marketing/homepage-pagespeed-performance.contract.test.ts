@@ -3,11 +3,17 @@ import { join } from "node:path";
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { getMarketingHeroImageUrlChain } from "@/lib/marketing-hero-image";
+import { resolveCssFile } from "@/lib/test-utils/resolve-css-imports";
 
 const ROOT = process.cwd();
 
 function source(path: string) {
   return readFileSync(join(ROOT, path), "utf8");
+}
+
+/** Load a CSS file resolving one level of @import — needed after the CSS split. */
+function sourceCss(path: string) {
+  return resolveCssFile(join(ROOT, path));
 }
 
 describe("homepage PageSpeed performance contracts", () => {
@@ -34,7 +40,7 @@ describe("homepage PageSpeed performance contracts", () => {
   });
 
   it("does not animate backdrop filters on sticky or hero chrome", () => {
-    const premiumCss = source("src/app/premium-redesign-2026.css");
+    const premiumCss = sourceCss("src/app/premium-redesign-2026.css");
 
     assert.doesNotMatch(premiumCss, /transition:\s*[^;]*backdrop-filter/);
     assert.match(premiumCss, /\.nn-premium-hero-panel[^{]*\{[^}]*backdrop-filter:\s*none/s);
@@ -120,10 +126,16 @@ describe("homepage PageSpeed performance contracts", () => {
   });
 
   it("locks above-the-fold homepage geometry before hydration", () => {
-    const premiumCss = source("src/app/premium-redesign-2026.css");
+    const premiumCss = sourceCss("src/app/premium-redesign-2026.css");
     const globals = source("src/app/globals.css");
-
-    assert.match(globals, /\.nn-header-animate-in\s*\{[^}]*animation:\s*none/s);
+    // nn-header-animate-in CLS guard: rule was extracted from globals.css to
+    // marketing-global.css (marketing routes only) — check either location is valid.
+    const marketingGlobal = sourceCss("src/app/styles/marketing/marketing-global.css");
+    const animNonePattern = /\.nn-header-animate-in\s*\{[^}]*animation:\s*none/s;
+    assert.ok(
+      animNonePattern.test(globals) || animNonePattern.test(marketingGlobal),
+      "nn-header-animate-in CLS guard (animation:none) must be in globals.css or marketing-global.css",
+    );
     assert.match(premiumCss, /\[data-nn-header-layout="marketing-row4"\]\s*\{[^}]*min-height:/s);
     assert.match(premiumCss, /\.nn-premium-hero-grid\s*\{[^}]*min-height:\s*clamp/s);
     assert.match(premiumCss, /\.nn-premium-home-section\s*\{[^}]*min-height:/s);
@@ -142,7 +154,7 @@ describe("homepage PageSpeed performance contracts", () => {
   });
 
   it("contains below-fold premium homepage paint while preserving gradients", () => {
-    const premiumCss = source("src/app/premium-redesign-2026.css");
+    const premiumCss = sourceCss("src/app/premium-redesign-2026.css");
 
     assert.match(premiumCss, /\.nn-home-marketing-root \.nn-premium-home-section\s*\{[^}]*content-visibility:\s*auto/s);
     assert.match(premiumCss, /contain-intrinsic-size:\s*auto/);

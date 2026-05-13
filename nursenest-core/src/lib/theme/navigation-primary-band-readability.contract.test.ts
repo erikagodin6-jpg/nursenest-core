@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
+import { resolveCssFile } from "@/lib/test-utils/resolve-css-imports";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PREMIUM_CSS = path.join(__dirname, "../../app/premium-redesign-2026.css");
@@ -14,7 +15,7 @@ const GLOBALS_CSS = path.join(__dirname, "../../app/globals.css");
 
 describe("navigation primary band readability (CSS contracts)", () => {
   it("premium primary band rules do not tint with var(--nav-bg)", () => {
-    const css = fs.readFileSync(PREMIUM_CSS, "utf8");
+    const css = resolveCssFile(PREMIUM_CSS);
     const marker = "/* Primary marketing band:";
     const idx = css.indexOf(marker);
     assert.ok(idx >= 0, `expected premium CSS section ${marker}`);
@@ -28,7 +29,7 @@ describe("navigation primary band readability (CSS contracts)", () => {
   });
 
   it("premium phase-3 shell/logo-row primary selectors do not use var(--nav-bg)", () => {
-    const css = fs.readFileSync(PREMIUM_CSS, "utf8");
+    const css = resolveCssFile(PREMIUM_CSS);
     const phase3 = css.slice(css.indexOf("Phase 3 — Premium global navigation"));
     const shellBlock = phase3.match(
       /\[data-nn-header-layout="marketing-row4"\]\s+\[data-nn-header-band="primary"\]\s*\{[^}]+}/s,

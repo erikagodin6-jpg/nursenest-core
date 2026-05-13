@@ -6,6 +6,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
+import { resolveCssFile } from "@/lib/test-utils/resolve-css-imports";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const globalsCss = path.join(__dirname, "../../app/globals.css");
@@ -34,7 +35,7 @@ describe("marketing header band tokens (globals.css)", () => {
   });
 
   it("premium dark header keeps v31 frame transparent (no inner slab under sticky glass)", () => {
-    const css = fs.readFileSync(premiumCss, "utf8");
+    const css = resolveCssFile(premiumCss);
     assert.match(
       css,
       /\.nn-header-dark-surface \[data-nn-header-band="primary"\],\s*\.nn-header-dark-surface \.nn-marketing-nav-v31-frame/s,
