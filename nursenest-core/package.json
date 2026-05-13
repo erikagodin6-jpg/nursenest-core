@@ -64,6 +64,8 @@
     "test": "node scripts/run-node-test-filter.mjs",
     "typecheck": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && tsc --noEmit --incremental false",
     "typecheck:critical": "tsc --noEmit --incremental false -p tsconfig.typecheck-critical.json",
+    "perf:budgets": "node scripts/check-performance-budgets.mjs",
+    "perf:budgets:warn": "node scripts/check-performance-budgets.mjs --warn-only",
     "test:e2e": "npx playwright test -c playwright.config.ts",
     "test:e2e:full-regression": "npx playwright test -c playwright.full-regression.config.ts",
     "test:e2e:cat-entrypoints": "npx playwright test -c playwright.config.ts tests/e2e/cat/cat-entrypoints.spec.ts --project=chromium",
