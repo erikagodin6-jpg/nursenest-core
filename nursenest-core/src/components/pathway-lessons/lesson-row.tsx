@@ -24,38 +24,41 @@ export function LessonRow({ href, title, progressStatus, showProgress = false, d
     <Link
       href={href}
       data-testid="lesson-card-link"
-      className="nn-qa-pathway-lesson-card group block rounded-xl px-3 py-2 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+      className="nn-qa-pathway-lesson-card group flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+      data-testid="lesson-card"
     >
-      <div className="flex items-start gap-2.5 sm:gap-3" data-testid="lesson-card">
-        {showProgress ? (
-          <PathwayLessonProgressBadge
-            status={progressStatus}
-            className="max-w-[7.5rem] shrink-0 truncate sm:max-w-none"
-            data-testid="lesson-row-progress-badge"
-          />
-        ) : null}
-        <div className="min-w-0 flex-1">
-          <p
-            data-testid="lesson-card-title"
-            className="line-clamp-3 text-sm font-semibold leading-snug text-[var(--theme-body-text)] sm:line-clamp-2"
-          >
-            {displayTitle}
-          </p>
-          <div className="mt-1 flex flex-wrap items-center gap-1.5">
-            {yieldBadgeLabel ? (
-              <span className="rounded-full border border-[var(--semantic-border-soft)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                {yieldBadgeLabel}
-              </span>
-            ) : null}
-            <span className="text-xs font-medium text-[var(--theme-muted-text)]">{durationLabel}</span>
-            <DifficultyBadge difficulty={difficulty} />
-          </div>
-        </div>
-        <ChevronRight
-          className="mt-1 h-4 w-4 shrink-0 text-[var(--semantic-text-muted)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--theme-heading-text)]"
-          aria-hidden
+      {/* Progress badge (subscribers) */}
+      {showProgress ? (
+        <PathwayLessonProgressBadge
+          status={progressStatus}
+          className="shrink-0"
+          data-testid="lesson-row-progress-badge"
         />
-      </div>
+      ) : null}
+
+      {/* Title — single line with truncation */}
+      <p
+        data-testid="lesson-card-title"
+        className="min-w-0 flex-1 truncate text-sm font-medium leading-snug text-[var(--theme-body-text)]"
+      >
+        {displayTitle}
+      </p>
+
+      {/* Metadata: yield · duration · difficulty — right-aligned, compact */}
+      <span className="ml-auto flex shrink-0 items-center gap-1.5 pl-2" aria-hidden>
+        {yieldBadgeLabel ? (
+          <span className="hidden rounded-full border border-[var(--semantic-border-soft)] px-1.5 py-px text-[9px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)] sm:inline">
+            {yieldBadgeLabel}
+          </span>
+        ) : null}
+        <span className="hidden text-[11px] text-[var(--theme-muted-text)] sm:inline">
+          {durationLabel}
+        </span>
+        <DifficultyBadge difficulty={difficulty} />
+        <ChevronRight
+          className="h-3 w-3 shrink-0 text-[var(--semantic-text-muted)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--theme-heading-text)]"
+        />
+      </span>
     </Link>
   );
 }

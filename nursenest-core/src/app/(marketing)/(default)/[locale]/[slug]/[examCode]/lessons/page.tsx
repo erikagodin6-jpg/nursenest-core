@@ -1312,12 +1312,15 @@ export default async function PathwayLessonsHubPage({
           }}
         />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-        <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
-        <LessonHubClinicalModulesStrip
-          pathway={pathway}
-          marketingLocale={lessonContentLocale}
-          signedIn={viewerSignedInZeroTotal}
-        />
+        <MarketingLessonsHubStickyStudyChrome>
+          <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+          <LessonHubClinicalModulesStrip
+            pathway={pathway}
+            marketingLocale={lessonContentLocale}
+            signedIn={viewerSignedInZeroTotal}
+            compact
+          />
+        </MarketingLessonsHubStickyStudyChrome>
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             {qEffective
@@ -1440,12 +1443,13 @@ export default async function PathwayLessonsHubPage({
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <MarketingLessonsHubStickyStudyChrome>
         <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+        <LessonHubClinicalModulesStrip
+          pathway={pathway}
+          marketingLocale={lessonContentLocale}
+          signedIn={viewerSignedInLessonsHub}
+          compact
+        />
       </MarketingLessonsHubStickyStudyChrome>
-      <LessonHubClinicalModulesStrip
-        pathway={pathway}
-        marketingLocale={lessonContentLocale}
-        signedIn={viewerSignedInLessonsHub}
-      />
       {lessonsPageLoad.status === "ok" && lessonsPageLoad.sourceUsed === "secondary" ? (
         <div className="mt-3">
           <LearnerStudyLiveSyncBanner />

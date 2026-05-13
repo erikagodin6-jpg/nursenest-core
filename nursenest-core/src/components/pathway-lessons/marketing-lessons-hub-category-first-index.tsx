@@ -47,6 +47,7 @@ import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentat
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { loadMarketingHubLessonProgressMapWithTimeout } from "@/lib/lessons/marketing-hub-progress-safe";
+import { MarketingLessonsHubStickyStudyChrome } from "@/components/pathway-lessons/marketing-lessons-hub-sticky-study-chrome";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -217,12 +218,15 @@ export async function MarketingLessonsHubCategoryFirstIndex({
           }}
         />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-        <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
-        <LessonHubClinicalModulesStrip
-          pathway={pathway}
-          marketingLocale={lessonContentLocale}
-          signedIn={viewerSignedIn}
-        />
+        <MarketingLessonsHubStickyStudyChrome>
+          <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+          <LessonHubClinicalModulesStrip
+            pathway={pathway}
+            marketingLocale={lessonContentLocale}
+            signedIn={viewerSignedIn}
+            compact
+          />
+        </MarketingLessonsHubStickyStudyChrome>
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
             No Lessons Are Indexed In The Bundled Catalog For This Pathway Yet.
@@ -267,12 +271,15 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         }}
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-      <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
-      <LessonHubClinicalModulesStrip
-        pathway={pathway}
-        marketingLocale={lessonContentLocale}
-        signedIn={viewerSignedIn}
-      />
+      <MarketingLessonsHubStickyStudyChrome>
+        <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+        <LessonHubClinicalModulesStrip
+          pathway={pathway}
+          marketingLocale={lessonContentLocale}
+          signedIn={viewerSignedIn}
+          compact
+        />
+      </MarketingLessonsHubStickyStudyChrome>
       {questionSnapshotLoadRejected ? (
         <div
           className="mt-3 rounded-xl border border-[var(--semantic-warning)]/40 bg-[color-mix(in_srgb,var(--semantic-warning)_12%,transparent)] px-4 py-3 text-sm text-[var(--theme-heading-text)]"

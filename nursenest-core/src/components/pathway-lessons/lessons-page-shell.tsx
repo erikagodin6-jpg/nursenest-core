@@ -19,9 +19,9 @@ type Props = {
   /** Single primary hero action: signup for guests, resume/next lesson for subscribers. */
   heroPrimaryCta?: { label: string; href: string };
   backLink?: { label: string; href: string };
-  /** Prominent stat card shown in the hero (lesson count, etc.). */
+  /** Compact stat shown inline with the eyebrow (lesson count, etc.). */
   statCard?: { value: string; label: string };
-  /** Trust/quality badge pills rendered below the subtitle. */
+  /** Trust badges — rendered as a compact inline row below the H1. */
   trustBadges?: string[];
   children: ReactNode;
 };
@@ -42,6 +42,9 @@ function ctaClass(variant: CtaButton["variant"]): string {
 /**
  * Page shell for lessons hub pages.
  * Uses a div because marketing layouts already provide the document main landmark.
+ *
+ * Option C compact hero: eyebrow + stat pill on one line, H1 on the next,
+ * trust badges as a slim inline row, toolbar flush below the title band.
  */
 export function LessonsPageShell({
   title,
@@ -61,72 +64,72 @@ export function LessonsPageShell({
       className="nn-premium-pathway-hub nn-premium-lessons-system"
       data-nn-lessons-marketing-hub="1"
       data-nn-premium-lessons-system="hub"
-      data-premium-layout-version="2026-05-tests-hubs-v1"
+      data-premium-layout-version="2026-05-v2-compact"
       {...(pathwayTrack ? { "data-pathway-track": pathwayTrack } : {})}
     >
-      <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 sm:py-5 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 sm:py-4 lg:px-8">
+        {/* ── Compact hero band ── */}
         <section aria-labelledby="nn-lessons-hub-title">
           <div className="nn-nursing-tier-hub-hero-band nn-premium-lessons-hub-hero" data-nn-premium-lessons-hero>
-            {backLink ? (
-              <div className="mb-3 sm:mb-4">
+
+            {/* Back + eyebrow + stat inline row */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              {backLink ? (
                 <Link
                   href={backLink.href}
-                  className="inline-flex max-w-full items-center gap-1 text-xs font-medium text-[var(--theme-muted-text)] underline-offset-2 transition hover:text-[var(--semantic-brand)] hover:underline sm:text-sm"
+                  className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-[var(--theme-muted-text)] underline-offset-2 transition hover:text-[var(--semantic-brand)] hover:underline"
                 >
-                  <span className="shrink-0 text-[var(--theme-muted-text)]" aria-hidden>
-                    ←
-                  </span>
-                  <span className="truncate">{backLink.label}</span>
+                  <span aria-hidden>←</span>
+                  <span className="max-w-[14rem] truncate">{backLink.label}</span>
                 </Link>
-              </div>
-            ) : null}
+              ) : null}
 
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-              <div className="min-w-0 flex-1">
-                {eyebrow ? <p className="nn-premium-home-eyebrow">{eyebrow}</p> : null}
-
-                <h1
-                  id="nn-lessons-hub-title"
-                  className={`nn-marketing-h1 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)] ${eyebrow ? "mt-4" : backLink ? "mt-1" : "mt-0"}`}
-                >
-                  {title}
-                </h1>
-                {subtitle ? (
-                  <p className="nn-marketing-body mt-4 max-w-3xl text-pretty text-[var(--palette-text-muted)]">
-                    {subtitle}
-                  </p>
-                ) : null}
-
-                {trustBadges && trustBadges.length > 0 ? (
-                  <div className="mt-4 flex flex-wrap gap-2" aria-label="Quality indicators">
-                    {trustBadges.map((badge) => (
-                      <span
-                        key={badge}
-                        className="nn-lessons-hub-trust-badge inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5 text-xs font-medium text-[var(--theme-muted-text)]"
-                      >
-                        {badge}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
+              {eyebrow ? (
+                <p className="nn-premium-home-eyebrow shrink-0">{eyebrow}</p>
+              ) : null}
 
               {statCard ? (
-                <div className="nn-lessons-hub-stat-card self-start shrink-0 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-5 py-4 text-center shadow-[var(--semantic-shadow-soft)] sm:min-w-[9rem]">
-                  <span className="block text-3xl font-black leading-none text-[var(--semantic-brand)]">
-                    {statCard.value}
-                  </span>
-                  <span className="mt-1.5 block text-xs font-medium text-[var(--theme-muted-text)]">
-                    {statCard.label}
-                  </span>
-                </div>
+                <span
+                  className="nn-lessons-hub-stat-pill inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-2.5 py-0.5 text-xs font-semibold text-[var(--theme-muted-text)]"
+                  aria-label={`${statCard.value} ${statCard.label}`}
+                >
+                  <span className="font-black text-[var(--semantic-brand)]">{statCard.value}</span>
+                  <span>{statCard.label}</span>
+                </span>
               ) : null}
             </div>
 
-            {toolbar ? <div className="mt-5 w-full">{toolbar}</div> : null}
+            <h1
+              id="nn-lessons-hub-title"
+              className="nn-marketing-h1 mt-2 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]"
+            >
+              {title}
+            </h1>
+
+            {subtitle ? (
+              <p className="nn-marketing-body mt-2 max-w-2xl text-pretty text-[var(--palette-text-muted)]">
+                {subtitle}
+              </p>
+            ) : null}
+
+            {/* Trust badges — compact inline chips */}
+            {trustBadges && trustBadges.length > 0 ? (
+              <div className="mt-2 flex flex-wrap gap-1.5" aria-label="Quality indicators">
+                {trustBadges.map((badge) => (
+                  <span
+                    key={badge}
+                    className="nn-lessons-hub-trust-badge inline-flex items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-2 py-0.5 text-[10px] font-medium text-[var(--theme-muted-text)]"
+                  >
+                    {badge}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+
+            {toolbar ? <div className="mt-3 w-full">{toolbar}</div> : null}
 
             {heroPrimaryCta ? (
-              <div className="mx-auto mt-6 flex w-full max-w-2xl justify-center sm:justify-start">
+              <div className="mt-4 flex w-full justify-start">
                 <Link href={heroPrimaryCta.href} className={ctaClass("primary")}>
                   {heroPrimaryCta.label}
                 </Link>
@@ -134,7 +137,7 @@ export function LessonsPageShell({
             ) : null}
 
             {ctas && ctas.length > 0 ? (
-              <div className="mx-auto mt-4 flex max-w-2xl flex-wrap justify-center gap-2">
+              <div className="mt-3 flex flex-wrap gap-2">
                 {ctas.map((cta) => (
                   <Link key={cta.href + cta.label} href={cta.href} className={ctaClass(cta.variant)}>
                     {cta.label}
@@ -145,12 +148,13 @@ export function LessonsPageShell({
           </div>
         </section>
 
-        <section
-          className="nn-premium-lessons-hub-body mt-3 rounded-[2rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-[0_14px_40px_color-mix(in_srgb,var(--palette-heading)_8%,transparent)] sm:mt-4 sm:p-4 lg:p-5"
+        {/* ── Hub body — no heavy card wrapper; subtle surface separation ── */}
+        <div
+          className="nn-premium-lessons-hub-body mt-3 rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-[0_8px_28px_color-mix(in_srgb,var(--palette-heading)_6%,transparent)] sm:mt-3 sm:p-4"
           data-nn-premium-lessons-hub-body
         >
           {children}
-        </section>
+        </div>
       </div>
     </div>
   );
