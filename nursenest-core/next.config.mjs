@@ -396,7 +396,7 @@ const nextConfig = {
        * 1-hour CDN cache with 24-hour SWR background revalidation.
        */
       {
-        source: "/cnple-:slug*",
+        source: "/cnple-:slug",
         headers: [
           { key: "Cache-Control", value: "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" },
           { key: "Vary", value: "Cookie" },

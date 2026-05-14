@@ -20,7 +20,7 @@ export type PageTransitionShellProps = {
 };
 
 /**
- * Subtle route transition: translateY only (opacity stays 1 so marketing shell never “blinks”).
+ * Subtle route transition: translateY only (opacity stays 1 so marketing shell never "blinks").
  * First paint / direct loads: no enter animation (avoids hydration mismatch and flash).
  * `prefers-reduced-motion`: pass-through, no animation.
  *
@@ -35,7 +35,7 @@ export function PageTransitionShell({
   disabled = false,
   shouldDisableTransition,
 }: PageTransitionShellProps) {
-  const pathname = usePathname() ?? “”;
+  const pathname = usePathname() ?? "";
   const reduced = useReducedMotion();
   const previousPathname = usePreviousPathname(pathname);
   const marketingMobileNarrow = useMarketingMobilePerfIsMobile() === true;
@@ -46,7 +46,7 @@ export function PageTransitionShell({
     marketingMobileNarrow ||
     (shouldDisableTransition?.(pathname) ?? false);
 
-  // On first page load, previousPathname is undefined — no transition to animate.
+  // On first page load, previousPathname is undefined - no transition to animate.
   // Return children directly to avoid the motion.div wrapper disrupting the flex chain.
   if (excluded || previousPathname === undefined) {
     return children;
@@ -60,7 +60,7 @@ export function PageTransitionShell({
       initial={shouldAnimateEnter ? { opacity: 1, y: ENTER_Y } : { opacity: 1, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: DURATION, ease: EASE_LUXURY }}
-      className=”flex min-h-0 flex-1 flex-col”
+      className="flex min-h-0 flex-1 flex-col"
     >
       {children}
     </motion.div>
