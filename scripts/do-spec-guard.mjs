@@ -110,6 +110,33 @@ export const REQUIRED_RUNTIME_ENV_KEYS = Object.freeze([
   "SPACES_SECRET",
 ]);
 
+/**
+ * Stripe price ID keys that must have a non-empty plain `value:` in the spec.
+ * These are public price IDs (not secrets) — a type:SECRET or empty value means
+ * checkout will return "Coming soon" for every plan in production.
+ */
+export const REQUIRED_CHECKOUT_PRICE_VALUE_KEYS = Object.freeze([
+  "STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RN_1_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RN_3_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RN_6_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RN_1_YEAR_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RPN_1_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RPN_3_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RPN_6_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_RPN_YEARLY_SUBSCRIPTION",
+  "STRIPE_PRICE_NEW_GRAD_MONTHLY",
+  "STRIPE_PRICE_NEW_GRAD_6MONTH",
+  "STRIPE_PRICE_NEW_GRAD_YEARLY",
+  "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_MONTHLY",
+  "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_3_MONTHS",
+  "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_6_MONTH_SUBSCRIPTION",
+  "STRIPE_PRICE_NURSENEST_ALLIED_HEALTH_EXAM_PREP_YEARLY",
+]);
+
 /** At least one of these must be present (AI provider key). */
 export const REQUIRED_AI_KEY_GROUP = Object.freeze([
   "AI_INTEGRATIONS_OPENAI_API_KEY",
@@ -172,6 +199,25 @@ export function validateSpec(spec) {
     if (!envMap.has(key)) {
       failures.push(
         `MISSING required env key "${key}" — a doctl apps update with this spec WILL DELETE IT from the live app.`,
+      );
+    }
+  }
+
+  // Stripe price ID value check: must have non-empty plain value (not SECRET) or checkout shows "Coming soon"
+  for (const key of REQUIRED_CHECKOUT_PRICE_VALUE_KEYS) {
+    const entry = envMap.get(key);
+    if (!entry) continue; // already caught by REQUIRED_RUNTIME_ENV_KEYS check above
+    const isSecret = entry.type === "SECRET";
+    const hasValue = typeof entry.value === "string" && entry.value.trim().startsWith("price_");
+    if (isSecret) {
+      failures.push(
+        `Stripe price key "${key}" has type:SECRET — price IDs are not secrets and must use value: "price_..." directly. ` +
+        `Using type:SECRET with no value set causes checkout to show "Coming soon" for every plan in production.`,
+      );
+    } else if (!hasValue) {
+      failures.push(
+        `Stripe price key "${key}" is missing a valid value (expected "price_..." string). ` +
+        `An empty or placeholder value causes checkout to show "Coming soon" for this plan in production.`,
       );
     }
   }
