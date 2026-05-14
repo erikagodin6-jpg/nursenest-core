@@ -25,14 +25,23 @@ export function LearnerNpExamPracticePickSurface({
   pathways: NpExamPracticePickRow[];
 }) {
   return (
-    <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
-      <header className="space-y-2">
+    <div
+      className="nn-practice-tests-hub-premium mx-auto w-full max-w-4xl space-y-6 px-4 py-8 sm:px-6"
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="exam-study"
+      data-nn-premium-platform-module="practice-tests"
+      data-nn-practice-exam-hub-convergence=""
+    >
+      <header className="nn-learner-page-hero space-y-2">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+          Practice exams
+        </p>
         <h1 className="text-2xl font-semibold text-[var(--semantic-text-primary)]">{title}</h1>
-        <p className="text-sm text-[var(--semantic-text-secondary)]">{subtitle}</p>
+        <p className="max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{subtitle}</p>
       </header>
 
       {pathways.length === 0 ? (
-        <p className="text-sm text-[var(--semantic-text-secondary)]">
+        <p className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
           No NP exam tracks are available on this account yet. Update study preferences after your subscription syncs.
         </p>
       ) : (
@@ -47,7 +56,7 @@ export function LearnerNpExamPracticePickSurface({
             return (
               <li
                 key={p.id}
-                className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm"
+                className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-[var(--semantic-shadow-soft)]"
               >
                 <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">{p.title}</h2>
                 <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{p.subtitle}</p>

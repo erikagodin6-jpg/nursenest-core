@@ -627,8 +627,14 @@ export default async function LessonsPage({ searchParams }: Props) {
         : null;
 
   return (
-    <div className="min-w-0 space-y-6 sm:space-y-8">
-      <div className="nn-learner-page-hero">
+    <div
+      className="nn-premium-lessons-system nn-app-lessons-hub-premium min-w-0 space-y-6 sm:space-y-8"
+      data-nn-premium-full-platform-convergence=""
+      data-nn-premium-platform-family="exam-study"
+      data-nn-premium-platform-module="lessons"
+      data-nn-premium-lessons-system="app-hub"
+    >
+      <div className="nn-learner-page-hero nn-premium-lessons-hub-hero" data-nn-premium-lessons-hero="">
         <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-[1.75rem]">
           {t("learner.lessons.list.title")}
         </h1>
@@ -651,7 +657,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         </p>
       ) : null}
 
-      <div className="mt-4">
+      <div className="mt-4" data-nn-premium-lessons-hub-body="">
         <LearnerLessonsVirtualList
           lessons={resolvedRenderableLessons}
           progressByRowId={progressByRowId}

@@ -39,8 +39,9 @@ export function LearnerLessonsVirtualList({
   return (
     <div
       ref={parentRef}
-      className="max-h-[min(70vh,880px)] overflow-auto rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_22%,var(--semantic-surface))] px-4 pb-9 pt-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:pb-10 sm:pt-5"
+      className="nn-premium-lessons-app-list max-h-[min(70vh,880px)] overflow-auto rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_22%,var(--semantic-surface))] px-4 pb-9 pt-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:pb-10 sm:pt-5"
       style={{ contain: "strict" }}
+      data-nn-premium-lessons-hub-body=""
     >
       <div
         className="relative w-full"

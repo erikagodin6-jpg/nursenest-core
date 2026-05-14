@@ -29,6 +29,15 @@ function sectionShell(children: ReactNode, className = "") {
   return <section className={`lv-shell nn-premium-cat-section ${className}`.trim()}>{children}</section>;
 }
 
+const CAT_START_ROOT_CLASS =
+  "nn-cat-premium-convergence mx-auto max-w-3xl space-y-7 px-3 text-[var(--semantic-text-primary)] sm:px-0";
+
+const CAT_START_CONVERGENCE_ATTRS = {
+  "data-nn-cat-premium-convergence": "",
+  "data-nn-premium-full-platform-convergence": "",
+  "data-nn-premium-platform-family": "exam-study",
+} as const;
+
 export function PathwayCatSessionStartClient({
   initialPathwayId,
   pathwayOptions,
@@ -261,7 +270,11 @@ export function PathwayCatSessionStartClient({
 
   if (pathwayOptions.length === 0) {
     return (
-      <div className="lv-shell nn-premium-cat-section p-6 text-sm text-[var(--semantic-text-secondary)]">
+      <div
+        className="lv-shell nn-premium-cat-section nn-cat-premium-convergence p-6 text-sm text-[var(--semantic-text-secondary)]"
+        {...CAT_START_CONVERGENCE_ATTRS}
+        data-nn-premium-platform-module="cat"
+      >
         <p>No exam pathways match your subscription region and tier.</p>
         <Link
           href="/app/practice-tests"
@@ -274,7 +287,7 @@ export function PathwayCatSessionStartClient({
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-7 px-3 text-[var(--semantic-text-primary)] sm:px-0">
+    <div className={CAT_START_ROOT_CLASS} {...CAT_START_CONVERGENCE_ATTRS} data-nn-premium-platform-module="cat">
       <nav aria-label="Pathway context" className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
         <div className="min-w-0 space-y-1">
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">

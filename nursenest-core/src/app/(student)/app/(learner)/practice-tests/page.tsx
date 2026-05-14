@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import { ExamFamily, TierCode } from "@prisma/client";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
@@ -33,13 +34,24 @@ import { getPathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pat
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 
 type PageProps = {
-  searchParams: Promise<{ pathwayId?: string | string[] | undefined; topic?: string | string[] | undefined }>;
+  searchParams: Promise<{
+    pathwayId?: string | string[] | undefined;
+    topic?: string | string[] | undefined;
+    cat?: string | string[] | undefined;
+  }>;
 };
 
 export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
   const rawPid = sp.pathwayId;
+  const rawCat = sp.cat;
+  const catRequested =
+    typeof rawCat === "string"
+      ? rawCat.trim().length > 0 && rawCat.trim() !== "0"
+      : Array.isArray(rawCat) && typeof rawCat[0] === "string"
+        ? rawCat[0].trim().length > 0 && rawCat[0].trim() !== "0"
+        : false;
   const pathwayQueryRaw =
     typeof rawPid === "string" && rawPid.trim().length > 2
       ? rawPid.trim()
@@ -99,6 +111,12 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const requestedPathwayId = pathwayQueryRaw
     ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
     : null;
+
+  if (catRequested) {
+    const q = new URLSearchParams();
+    if (requestedPathwayId) q.set("pathwayId", requestedPathwayId);
+    redirect(q.toString() ? `/app/practice-tests/start?${q.toString()}` : "/app/practice-tests/start");
+  }
 
   let pathwayOptions: {
     id: string;
