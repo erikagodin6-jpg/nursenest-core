@@ -10,7 +10,6 @@ import { LessonHubClinicalModulesStrip } from "@/components/pathway-lessons/less
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
-import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot.server";
@@ -22,18 +21,8 @@ import {
   countPathwayMarketingHubLessonsByCategoryForPathway,
   displayCategoryForPathwayMarketingHubLesson,
   getMarketingLessonsHubCatalogLessons,
-  MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX,
   pathwayMarketingHubCategories,
-  pickReviewRequiredCatalogLessons,
 } from "@/lib/lessons/marketing-lessons-hub-category";
-import { PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP } from "@/lib/lessons/pathway-lesson-loader";
-import { prepareLessonsForHubCurriculumWithDiagnostics } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
-import { resolveMarketingHubCategoryLessonRowsWithDbResilience } from "@/lib/lessons/marketing-hub-category-rows-db-resilient";
-import {
-  pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingHubVerifiedCardHref,
-  type PathwayLessonRecord,
-} from "@/lib/lessons/pathway-lesson-types";
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import {
@@ -43,7 +32,6 @@ import {
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
-import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { loadMarketingHubLessonProgressMapWithTimeout } from "@/lib/lessons/marketing-hub-progress-safe";
@@ -90,44 +78,14 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     sessionPathname: routePathLessons,
     sessionSurface: "marketing.exam_hub.lessons",
   });
-  /** Anonymous public hubs: index/catalog only — no warehouse locale query or per-slug DB verify. */
-  const skipMarketingHubDbVerify = !progressCtx.userId.trim();
-
-  const reviewPick = pickReviewRequiredCatalogLessons(
-    catalog,
-    pathway.id,
-    MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX,
-  );
-  const reviewPrepared = prepareLessonsForHubCurriculumWithDiagnostics(
-    reviewPick.filter(pathwayLessonHasRenderableHubSlug),
-    { pathwayId: pathway.id, lessonsBasePath: base },
-  );
   lessonsPerfMark("catalog_size", {
     surface: "category_index_pre_verify",
     pathwayId: pathway.id,
-    review_pick: reviewPick.length,
     elapsed_ms: Math.round(performance.now() - categoryIndexT0),
   });
-
-  const reviewRows = await resolveMarketingHubCategoryLessonRowsWithDbResilience(
-    {
-      pathway,
-      lessonContentLocale,
-      skipDbVerify: skipMarketingHubDbVerify,
-      preparedLessons: reviewPrepared.lessons,
-      prepareStages: reviewPrepared.prepareStages,
-      maxUniqueSlugsToVerify: Math.min(
-        PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
-        MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX * 2,
-      ),
-      surface: "category_first_index",
-    },
-  );
   lessonsPerfMark("route_end", {
     surface: "marketing_lessons_category_index",
     pathwayId: pathway.id,
-    kept: reviewRows.length,
-    verify_skipped: skipMarketingHubDbVerify ? "anonymous_index_only" : "db_verify_or_resilient_fallback",
     elapsed_ms: Math.round(performance.now() - categoryIndexT0),
   });
 
@@ -266,8 +224,6 @@ export async function MarketingLessonsHubCategoryFirstIndex({
           routePathname: routePathLessons,
           contentLocale: lessonContentLocale,
           catalogLen: catalog.length,
-          reviewRequiredPrepared: reviewPrepared.lessons.length,
-          reviewRequiredVerified: reviewRows.length,
         }}
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
@@ -305,45 +261,12 @@ export async function MarketingLessonsHubCategoryFirstIndex({
           </span>
         </div>
 
-        {reviewRows.length > 0 ? (
-          <div
-            className="mb-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] p-4 sm:p-5"
-            data-nn-qa-lessons-review-required="true"
-          >
-            <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Review Required</h3>
-            <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
-              These lessons still need clinical-area tagging before they appear in a category below.
-            </p>
-            <ul className="mt-3 space-y-2">
-              {reviewRows.map((l) => {
-                const href = pathwayLessonMarketingHubVerifiedCardHref(base, l);
-                const label = cleanLessonTitleForDisplay((l.seoTitle ?? "").trim() || l.title);
-                const prog = progressMap[l.slug];
-                return (
-                  <li key={l.slug}>
-                    {href ? (
-                      <Link
-                        href={href}
-                        className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm font-medium text-primary hover:underline"
-                      >
-                        <span className="min-w-0 flex-1">{label}</span>
-                        {showPaidProgressChrome ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
-                      </Link>
-                    ) : (
-                      <span className="text-sm text-[var(--theme-muted-text)]">{label}</span>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ) : null}
-
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {hubCategories
             .filter((cat) => {
-              // review_required has its own section above; exclude from the category grid
-              if (cat.id === "review_required") return false;
+              // review_required is an internal taxonomy state, not a learner-facing hub category.
+              const categoryId = cat.id.trim().toLowerCase();
+              if (categoryId === "review_required" || cat.slug === "review-required") return false;
               // hide zero-lesson categories for anonymous visitors (keeps grid clean)
               const n = counts.get(cat.id) ?? 0;
               return showPaidProgressChrome || n > 0;

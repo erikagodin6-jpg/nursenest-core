@@ -188,12 +188,18 @@ describe("Premium redesign CSS hub primitives", () => {
 });
 
 describe("Category grid content hierarchy contract", () => {
-  it("filters review_required from the category grid", () => {
+  it("filters review_required from the public hub grid", () => {
     const src = fs.readFileSync(categoryFirstIndexPath, "utf8");
     assert.match(
       src,
-      /cat\.id === "review_required"/,
+      /categoryId === "review_required"/,
       "must explicitly filter review_required from category grid",
+    );
+    assert.match(src, /cat\.slug === "review-required"/, "must also filter review-required slug variants");
+    assert.doesNotMatch(
+      src,
+      /data-nn-qa-lessons-review-required|Review Required/,
+      "must not render a learner-facing Review Required hub block",
     );
   });
 
