@@ -103,6 +103,16 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
     order: 50,
     mobileDrawerOrder: 40,
   }),
+  LEAF({
+    id: "marketing-ecg-mastery",
+    labelKey: "nav.ecgMastery",
+    href: "/advanced-ecg-nursing",
+    group: "learn-practice",
+    surfaces: [DD, MD],
+    order: 60,
+    mobileDrawerOrder: 45,
+    icon: "heart",
+  }),
 ];
 
 /**

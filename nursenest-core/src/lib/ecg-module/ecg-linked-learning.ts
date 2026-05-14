@@ -2,7 +2,6 @@ import type { TierCode } from "@prisma/client";
 import type { PathwayLesson } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { LinkCandidate } from "@/lib/linking/internal-link-types";
-import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
 /** Same fields as {@link PathwayLessonAutoLinkSnapshot} — kept local to avoid a circular import with automatic-internal-links. */
 export type EcgLinkedLearningLessonSnapshot = Pick<
@@ -50,9 +49,91 @@ export function weakTopicSuggestsEcgFocus(topicKey: string): boolean {
 /** Core ECG entry — integrated nursing telemetry literacy. Not the future Advanced ECG Program vertical. */
 export const ECG_MODULE_ENTRY = "/modules/ecg/basic/lessons" as const;
 
+/** Marketing pillar page for ECG — primary SEO target for all ECG-related internal links. */
+export const ECG_PILLAR_MARKETING_PATH = "/advanced-ecg-nursing" as const;
+
+/** Clinical modules hub — discovery page for all specialty modules. */
+export const CLINICAL_MODULES_HUB_PATH = "/clinical-modules" as const;
+
 /**
- * Optional “Explore” hub link to gated **core** ECG entry (same URL learners use in-app).
- * Entitlement remains enforced by {@link requireEcgModuleAccess}; does not imply Advanced ECG Program access.
+ * ECG ecosystem sub-pages — deep-link targets for topic-specific lesson completions.
+ * Keyed by lesson signal pattern for targeted internal linking.
+ */
+export const ECG_ECOSYSTEM_SUBPAGE_PATHS = {
+  rhythmPractice: "/advanced-ecg-nursing/rhythm-practice",
+  stemi: "/advanced-ecg-nursing/12-lead-stemi",
+  acls: "/advanced-ecg-nursing/acls-rhythms",
+  electrolyte: "/advanced-ecg-nursing/electrolyte-ecg-changes",
+  medications: "/advanced-ecg-nursing/medication-induced-ecg-changes",
+  criticalCare: "/advanced-ecg-nursing/critical-care-ecg",
+  pediatric: "/advanced-ecg-nursing/pediatric-ecg",
+  telemetry: "/advanced-ecg-nursing/telemetry-monitoring",
+  caseSimulations: "/advanced-ecg-nursing/ecg-case-simulations",
+} as const;
+
+/**
+ * Resolve the most relevant ECG ecosystem sub-page for a given lesson topic signal.
+ * Falls back to the pillar page when no specific sub-page matches.
+ */
+export function resolveEcgEcosystemTargetPath(lesson: EcgLinkedLearningLessonSnapshot): string {
+  const h = [lesson.title, lesson.topic, lesson.topicSlug, lesson.bodySystem].filter(Boolean).join(" ").toLowerCase();
+  if (/\b(stemi|nstemi|12[\s-]*lead|myocardial infarction|mi |acute coronary|omi|posterior mi|de winter|wellens)\b/.test(h)) {
+    return ECG_ECOSYSTEM_SUBPAGE_PATHS.stemi;
+  }
+  if (/\b(acls|cardiac arrest|pulseless|defibrillat|cardioversion|rosc|code blue|vfib|v[\s-]?fib|pea|asystole)\b/.test(h)) {
+    return ECG_ECOSYSTEM_SUBPAGE_PATHS.acls;
+  }
+  if (/\b(hyperkalemia|hypokalemia|hypercalcemia|hypocalcemia|magnesium|electrolyte.*ecg|electrolyte.*cardiac)\b/.test(h)) {
+    return ECG_ECOSYSTEM_SUBPAGE_PATHS.electrolyte;
+  }
+  if (/\b(digoxin|qt prolongation|torsades|antiarrhythm|sodium channel|tca|tricyclic|medication.*ecg|drug.*ecg)\b/.test(h)) {
+    return ECG_ECOSYSTEM_SUBPAGE_PATHS.medications;
+  }
+  if (/\b(icu|critical care|bundle branch|bbb|lbbb|rbbb|sgarbossa|artifact|ectopy|pvcs?)\b/.test(h)) {
+    return ECG_ECOSYSTEM_SUBPAGE_PATHS.criticalCare;
+  }
+  if (/\b(pediatric|paediatric|neonatal|infant.*ecg|ecg.*infant|congenital|wpw|lqts|brugada|svt.*child)\b/.test(h)) {
+    return ECG_ECOSYSTEM_SUBPAGE_PATHS.pediatric;
+  }
+  if (/\b(telemetry|alarm|monitor.*ecg|continuous.*ecg|ecg.*monitor|st.*segment.*monitor)\b/.test(h)) {
+    return ECG_ECOSYSTEM_SUBPAGE_PATHS.telemetry;
+  }
+  if (/\b(simulation|case stud|clinical scenario|ecg.*case|case.*ecg)\b/.test(h)) {
+    return ECG_ECOSYSTEM_SUBPAGE_PATHS.caseSimulations;
+  }
+  if (/\b(arrhythm|rhythm|afib|aflutter|svt|vtach|vfib|heart block|paced|pacemaker malfunction)\b/.test(h)) {
+    return ECG_ECOSYSTEM_SUBPAGE_PATHS.rhythmPractice;
+  }
+  return ECG_PILLAR_MARKETING_PATH;
+}
+
+/**
+ * Varied anchor text for ECG internal links — rotate to avoid over-optimisation of a single phrase.
+ * Used by {@link buildEcgModuleHubLinkCandidate} and contextual lesson-level link candidates.
+ */
+export const ECG_LINK_ANCHOR_VARIANTS = [
+  "Advanced ECG interpretation and cardiac rhythm mastery",
+  "ECG interpretation for nurses",
+  "cardiac rhythm mastery module",
+  "12-lead ECG training for RN and NP",
+  "ECG practice system for advanced telemetry",
+  "advanced ECG module",
+  "ECG mastery training",
+  "telemetry rhythm interpretation",
+  "cardiac ECG mastery ecosystem",
+] as const;
+
+/**
+ * Learner-facing recommendation copy for weak cardiac performance.
+ * Surfaces in remediation flows, cardiovascular lesson completions, and telemetry-related results.
+ */
+export const ECG_WEAK_PERFORMANCE_RECOMMENDATION =
+  "Strengthen your cardiac rhythm interpretation with the Advanced ECG Mastery ecosystem." as const;
+
+/**
+ * Optional "Explore" hub link to the ECG ecosystem — links to the most relevant sub-page
+ * for the lesson topic, falling back to the pillar marketing page.
+ * Entitlement remains enforced by {@link requireEcgModuleAccess}.
  */
 export function buildEcgModuleHubLinkCandidate(input: {
   pathway: ExamPathwayDefinition;
@@ -62,13 +143,18 @@ export function buildEcgModuleHubLinkCandidate(input: {
   if (!pathwayAllowsEcgLinkedLearning(input.pathway)) return null;
   if (!lessonSignalsEcgLinkedLearning(input.lesson)) return null;
 
-  const href = withMarketingLocale(input.locale, ECG_MODULE_ENTRY);
+  // Vary anchor text by lesson slug hash (deterministic, stable, not random)
+  const slugHash = input.lesson.slug.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  const anchorText = ECG_LINK_ANCHOR_VARIANTS[slugHash % ECG_LINK_ANCHOR_VARIANTS.length]!;
+
+  // Route to the most relevant ECG ecosystem sub-page for this lesson's topic
+  const targetPath = resolveEcgEcosystemTargetPath(input.lesson);
 
   return {
     kind: "hub",
     topicKey: "ecg-mastery",
-    href,
-    anchorText: `ECG mastery training — ${input.pathway.shortName}`,
+    href: targetPath,
+    anchorText,
     score: 12,
     strength: "moderate",
     localeMatch: true,
