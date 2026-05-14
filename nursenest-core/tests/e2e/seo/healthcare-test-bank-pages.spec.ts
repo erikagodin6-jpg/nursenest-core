@@ -49,19 +49,20 @@ test.describe("healthcare test-bank SEO pages", () => {
         await expect(page.locator(`a[href="${href}"]`).first(), `${pageDef.path} missing ${href}`).toBeVisible();
       }
 
-      const jsonLdTypes = await page.locator('script[type="application/ld+json"]').evaluateAll((nodes) =>
-        nodes.flatMap((node) => {
-          try {
-            const parsed = JSON.parse(node.textContent || "{}");
-            return Array.isArray(parsed["@type"]) ? parsed["@type"] : [parsed["@type"]];
-          } catch {
-            return [];
-          }
-        }),
+      const readJsonLdTypes = () =>
+        page.locator('script[type="application/ld+json"]').evaluateAll((nodes) =>
+          nodes.flatMap((node) => {
+            try {
+              const parsed = JSON.parse(node.textContent || "{}");
+              return Array.isArray(parsed["@type"]) ? parsed["@type"] : [parsed["@type"]];
+            } catch {
+              return [];
+            }
+          }),
+        );
+      await expect.poll(readJsonLdTypes, { timeout: 15_000 }).toEqual(
+        expect.arrayContaining(["FAQPage", "BreadcrumbList", "EducationalCourse"]),
       );
-      expect(jsonLdTypes).toContain("FAQPage");
-      expect(jsonLdTypes).toContain("BreadcrumbList");
-      expect(jsonLdTypes).toContain("EducationalCourse");
       expect(consoleErrors).toEqual([]);
     });
   }
