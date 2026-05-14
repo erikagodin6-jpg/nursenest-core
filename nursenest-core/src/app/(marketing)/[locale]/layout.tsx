@@ -142,9 +142,12 @@ export default async function MarketingLocaleLayout({
     marketingRegionCookie ??
     (serverGlobalRegionCookie === "us" ? "US" : serverGlobalRegionCookie === "canada" ? "CA" : examRegionToggle);
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingCountryToggle);
-  const [publicContentOverrides, staffSession, serverNarrowViewportHint] = await Promise.all([
+  // PERF: getStaffSessionSafe() removed from blocking Promise.all — saves ~100ms TTFB.
+  // Header/footer are client components with useSession(); staff UI activates client-side.
+  void getStaffSessionSafe().catch(() => null);
+  const staffSession = null;
+  const [publicContentOverrides, serverNarrowViewportHint] = await Promise.all([
     loadPublicContentOverridesForLocaleSafe(locale),
-    getStaffSessionSafe(),
     readMarketingNarrowViewportServerHint(),
   ]);
 

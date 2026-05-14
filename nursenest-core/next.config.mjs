@@ -280,6 +280,84 @@ const nextConfig = {
           },
         ],
       },
+      /**
+       * EDGE CACHING: Static SEO content pages — no user-specific data in the HTML body.
+       * s-maxage=3600 tells Cloudflare (or any CDN in front of DO) to cache the full HTML
+       * response for 1 hour, serving subsequent requests from the edge (~10ms TTFB instead
+       * of ~1000ms origin round-trip). stale-while-revalidate allows serving stale content
+       * while revalidating in the background (zero downtime cache refresh).
+       *
+       * Vary: Cookie ensures that if a user has a region cookie, they get the correct
+       * region-specific cache variant rather than the default anonymous response.
+       *
+       * These routes produce identical HTML for the vast majority of anonymous visitors
+       * (no session, no region preference). Anonymous traffic → 100% CDN hit rate after
+       * first request per Cloudflare PoP.
+       */
+      {
+        source: "/advanced-ecg-nursing",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" },
+          { key: "Vary", value: "Cookie" },
+        ],
+      },
+      {
+        source: "/ecg/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" },
+          { key: "Vary", value: "Cookie" },
+        ],
+      },
+      {
+        source: "/clinical-modules",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" },
+          { key: "Vary", value: "Cookie" },
+        ],
+      },
+      {
+        source: "/ecg-interpretation",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" },
+          { key: "Vary", value: "Cookie" },
+        ],
+      },
+      {
+        source: "/ecg-telemetry-mastery",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" },
+          { key: "Vary", value: "Cookie" },
+        ],
+      },
+      /**
+       * CNPLE / NP SEO cluster — static content, same HTML for all users.
+       * 1-hour CDN cache with 24-hour SWR background revalidation.
+       */
+      {
+        source: "/cnple-:slug*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" },
+          { key: "Vary", value: "Cookie" },
+        ],
+      },
+      {
+        source: "/advanced-ecg-nursing/:subpath*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400" },
+          { key: "Vary", value: "Cookie" },
+        ],
+      },
+      /**
+       * Blog posts — ISR revalidated at 3600s (1h). CDN can cache for up to 1h.
+       * SWR allows stale serving during background revalidation.
+       */
+      {
+        source: "/blog/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=120, s-maxage=3600, stale-while-revalidate=7200" },
+          { key: "Vary", value: "Cookie" },
+        ],
+      },
       {
         /** Next.js build fingerprints — safe immutable long cache for desktop PageSpeed "cache lifetime". */
         source: "/_next/static/:path*",

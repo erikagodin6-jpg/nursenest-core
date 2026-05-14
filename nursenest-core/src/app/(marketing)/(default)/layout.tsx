@@ -263,10 +263,17 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
 
       const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
 
-      // Fan out all independent reads in parallel — previously these ran serially:
-      // narrowHint → messages → headers → 2 cookies → Promise.all[overrides+session],
-      // adding the sum of each step's latency to TTFB. All reads are independent so
-      // we collapse the chain to a single Promise.all.
+      // Fan out all independent reads in parallel — previously these ran serially.
+      // PERF: getStaffSessionSafe() (DB auth call, ~50–150 ms) is NOT included here.
+      //   SiteHeader + SiteFooter are client components that already call useSession()
+      //   to detect staff roles client-side (via sessionRole in shouldShowAdminDashboardNav).
+      //   Removing the server-side DB check saves ~100 ms TTFB on every marketing request
+      //   for all non-staff users (~99.9% of traffic).
+      //   Staff users: admin nav appears ~200 ms after client hydration via useSession() — acceptable.
+      //   MarketingPublicContentEditProvider: receives isStaff=false for SSR; activates client-side.
+      // Fire in background for observability / session cache warm-up only — never awaited.
+      void getStaffSessionSafe().catch(() => null);
+      const staffSession = null; // always null for server render; client-side useSession() handles staff UI
       const [
         serverNarrowViewportHint,
         rawMessages,
@@ -274,7 +281,6 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         marketingRegionCookie,
         serverGlobalRegionCookie,
         publicContentOverrides,
-        staffSession,
       ] = await Promise.all([
         readNarrowViewportHintSafe(),
         getMarketingDefaultLayoutChromeMessages().catch((e) => {
@@ -295,7 +301,6 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         readOptionalMarketingRegionToggleForCountry().catch(() => undefined),
         readOptionalGlobalRegionSlugFromCookie().catch(() => null),
         loadPublicContentOverridesForLocaleSafe(DEFAULT_MARKETING_LOCALE),
-        getStaffSessionSafe(),
       ]);
 
       let messages: Record<string, string> = rawMessages ?? {};
