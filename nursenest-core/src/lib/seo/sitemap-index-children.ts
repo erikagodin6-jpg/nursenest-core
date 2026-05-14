@@ -122,6 +122,7 @@ export const SITEMAP_FALLBACK_PATHWAYS_PATHS = [
   "/us/rn/nclex-rn",
   "/us/rn/nclex-rn/pricing",
   "/us/rn/nclex-rn/questions",
+  "/us/rn/nclex-rn/test-bank",
   "/us/rn/nclex-rn/lessons",
   "/us/pn/nclex-pn",
   "/us/pn/nclex-pn/pricing",
@@ -130,7 +131,9 @@ export const SITEMAP_FALLBACK_PATHWAYS_PATHS = [
   "/us/np/fnp",
   "/us/np/fnp/pricing",
   "/us/np/fnp/questions",
+  "/us/np/fnp/test-bank",
   "/us/np/fnp/lessons",
+  "/us/np/agpcnp/test-bank",
   "/canada/rn/nclex-rn",
   "/canada/rn/nclex-rn/pricing",
   "/canada/rn/nclex-rn/questions",
@@ -142,10 +145,12 @@ export const SITEMAP_FALLBACK_PATHWAYS_PATHS = [
   "/canada/np/cnple",
   "/canada/np/cnple/pricing",
   "/canada/np/cnple/questions",
+  "/canada/np/cnple/test-bank",
   "/canada/np/cnple/lessons",
   "/canada/np/cnple/simulation",
   "/canada/np/cnple/flashcards",
   "/canada/np/cnple/report-card",
+  "/canada/rpn/rex-pn/test-bank",
 ] as const;
 
 /** Localized segment fallback when DB/registry collectors throw — representative tier-full locale slice. */

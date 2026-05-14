@@ -1,14 +1,14 @@
 # Healthcare Exam SEO Authority Architecture
 
-Generated: 2026-05-14T19:08:12.870Z
+Generated: 2026-05-14T19:23:21.677Z
 
 ## Summary
 
 - Pillars: 14
 - Ecosystem page definitions: 70
 - Long-tail topic clusters: 7
-- Live indexable URLs: 33
-- Planned expansion rows: 58
+- Live indexable URLs: 38
+- Planned expansion rows: 53
 
 ## Live Pillar Routes
 
@@ -48,18 +48,23 @@ Generated: 2026-05-14T19:08:12.870Z
 | pillar | allied | `/allied/psychotherapy` | live |
 | pillar | allied | `/allied/psw-hca` | live |
 | ecosystem | nclex-rn | `/us/rn/nclex-rn/questions` | live |
+| ecosystem | nclex-rn | `/us/rn/nclex-rn/test-bank` | live |
 | ecosystem | nclex-rn | `/us/rn/nclex-rn/cat` | live |
 | ecosystem | nclex-rn | `/us/rn/nclex-rn/flashcards` | live |
 | ecosystem | rex-pn | `/canada/rpn/rex-pn/questions` | live |
+| ecosystem | rex-pn | `/canada/rpn/rex-pn/test-bank` | live |
 | ecosystem | rex-pn | `/canada/rpn/rex-pn/cat` | live |
 | ecosystem | rex-pn | `/canada/rpn/rex-pn/flashcards` | live |
 | ecosystem | cnple | `/canada/np/cnple/questions` | live |
+| ecosystem | cnple | `/canada/np/cnple/test-bank` | live |
 | ecosystem | cnple | `/canada/np/cnple/cat` | live |
 | ecosystem | cnple | `/canada/np/cnple/flashcards` | live |
 | ecosystem | np | `/us/np/fnp/questions` | live |
+| ecosystem | np | `/us/np/fnp/test-bank` | live |
 | ecosystem | np | `/us/np/fnp/cat` | live |
 | ecosystem | np | `/us/np/fnp/flashcards` | live |
 | ecosystem | np | `/us/np/agpcnp/questions` | live |
+| ecosystem | np | `/us/np/agpcnp/test-bank` | live |
 | ecosystem | np | `/us/np/agpcnp/cat` | live |
 | ecosystem | np | `/us/np/agpcnp/flashcards` | live |
 | ecosystem | np | `/us/np/pmhnp/questions` | live |
@@ -71,15 +76,10 @@ Generated: 2026-05-14T19:08:12.870Z
 
 | Kind | Family | Canonical Target | Planned Alias | Intent / Title |
 |---|---|---|---|---|
-| ecosystem | nclex-rn | `/us/rn/nclex-rn/test-bank` | `/nclex-rn/test-bank` | Test Bank and Question Bank |
 | ecosystem | nclex-rn | `/us/rn/nclex-rn/study-guide` | `/nclex-rn/study-guide` | Study Guide |
-| ecosystem | rex-pn | `/canada/rpn/rex-pn/test-bank` | `/rex-pn/test-bank` | Test Bank and Question Bank |
 | ecosystem | rex-pn | `/canada/rpn/rex-pn/study-guide` | `/rex-pn/study-guide` | Study Guide |
-| ecosystem | cnple | `/canada/np/cnple/test-bank` | `/cnple/test-bank` | Test Bank and Question Bank |
 | ecosystem | cnple | `/canada/np/cnple/study-guide` | `/cnple/study-guide` | Study Guide |
-| ecosystem | np | `/us/np/fnp/test-bank` | `/np/test-bank` | Test Bank and Question Bank |
 | ecosystem | np | `/us/np/fnp/study-guide` | `/np/study-guide` | Study Guide |
-| ecosystem | np | `/us/np/agpcnp/test-bank` | `/np/test-bank` | Test Bank and Question Bank |
 | ecosystem | np | `/us/np/agpcnp/study-guide` | `/np/study-guide` | Study Guide |
 | ecosystem | np | `/us/np/pmhnp/test-bank` | `/np/test-bank` | Test Bank and Question Bank |
 | ecosystem | np | `/us/np/pmhnp/study-guide` | `/np/study-guide` | Study Guide |

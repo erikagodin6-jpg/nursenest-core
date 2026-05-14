@@ -103,6 +103,14 @@ export type HealthcareExamAuthorityUrlInventoryRow = {
 const REQUIRED_PILLAR_SCHEMA = ["FAQPage", "EducationalCourse", "BreadcrumbList"] as const;
 const REQUIRED_HUB_SCHEMA = ["FAQPage", "BreadcrumbList", "ItemList"] as const;
 const REQUIRED_ARTICLE_SCHEMA = ["FAQPage", "BreadcrumbList", "Article"] as const;
+const REQUIRED_TEST_BANK_SCHEMA = ["FAQPage", "EducationalCourse", "BreadcrumbList", "ItemList"] as const;
+const PHASE_1_LIVE_TEST_BANK_PAGE_IDS = new Set([
+  "us-rn-nclex-rn-test-bank",
+  "ca-rpn-rex-pn-test-bank",
+  "ca-np-cnple-test-bank",
+  "us-np-fnp-test-bank",
+  "us-np-agpcnp-test-bank",
+]);
 
 function pillar(args: Omit<HealthcareExamAuthorityPillar, "robots" | "schema"> & {
   schema?: readonly HealthcareExamSchemaKind[];
@@ -272,7 +280,7 @@ const ecosystemBlueprints: readonly Omit<HealthcareExamEcosystemPage, "id" | "pi
     targetQueries: ["test bank", "question bank", "qbank"],
     title: "Test Bank and Question Bank",
     description: "Dedicated commercial test bank page covering rationales, CAT, SATA, analytics, and remediation.",
-    schema: REQUIRED_HUB_SCHEMA,
+    schema: REQUIRED_TEST_BANK_SCHEMA,
     plannedAliasPath: undefined,
   },
   {
@@ -331,16 +339,22 @@ function aliasSlugForIntent(intent: HealthcareExamSearchIntent): string {
 }
 
 export const HEALTHCARE_EXAM_ECOSYSTEM_PAGES = HEALTHCARE_EXAM_AUTHORITY_PILLARS.flatMap((pillar) =>
-  ecosystemBlueprints.map((blueprint) => ({
-    ...blueprint,
-    id: `${pillar.id}-${blueprint.intent}`,
-    family: pillar.family,
-    pillarId: pillar.id,
-    canonicalPath: ecosystemPathFor(pillar, blueprint.intent),
-    plannedAliasPath: `${aliasBaseForFamily(pillar.family)}/${aliasSlugForIntent(blueprint.intent)}`,
-    status: pillar.family === "allied" ? "planned" : blueprint.status,
-    linksBackTo: pillar.canonicalPath,
-  })),
+  ecosystemBlueprints.map((blueprint) => {
+    const id = `${pillar.id}-${blueprint.intent}`;
+    return {
+      ...blueprint,
+      id,
+      family: pillar.family,
+      pillarId: pillar.id,
+      canonicalPath: ecosystemPathFor(pillar, blueprint.intent),
+      plannedAliasPath: `${aliasBaseForFamily(pillar.family)}/${aliasSlugForIntent(blueprint.intent)}`,
+      status:
+        PHASE_1_LIVE_TEST_BANK_PAGE_IDS.has(id)
+          ? "live"
+          : pillar.family === "allied" ? "planned" : blueprint.status,
+      linksBackTo: pillar.canonicalPath,
+    };
+  }),
 ) as readonly HealthcareExamEcosystemPage[];
 
 export const HEALTHCARE_EXAM_TOPIC_CLUSTERS = [

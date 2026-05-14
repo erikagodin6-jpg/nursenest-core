@@ -18,6 +18,7 @@ function exists(relativePath: string): boolean {
 
 function routeExistsForLivePath(urlPath: string): boolean {
   const parts = urlPath.split("/").filter(Boolean);
+  if (exists(`src/app/(marketing)/(default)${urlPath}/page.tsx`)) return true;
   if (parts[0] === "allied" && parts.length === 2) {
     return exists("src/app/(marketing)/(default)/allied/[career]/page.tsx");
   }
@@ -99,6 +100,25 @@ test("planned short aliases are not emitted as live indexable URLs", () => {
   for (const row of buildHealthcareExamAuthorityUrlInventory()) {
     if (row.plannedAliasPath) {
       assert.ok(!live.has(row.plannedAliasPath), `planned alias leaked into live URL set: ${row.plannedAliasPath}`);
+    }
+  }
+});
+
+test("phase 1 healthcare test-bank rows are live and aliases remain planned-only", () => {
+  const rows = buildHealthcareExamAuthorityUrlInventory().filter(
+    (row) => row.kind === "ecosystem" && row.id.endsWith("-test-bank"),
+  );
+  const live = rows.filter((row) => row.status === "live").map((row) => row.canonicalPath).sort();
+  assert.deepEqual(live, [
+    "/canada/np/cnple/test-bank",
+    "/canada/rpn/rex-pn/test-bank",
+    "/us/np/agpcnp/test-bank",
+    "/us/np/fnp/test-bank",
+    "/us/rn/nclex-rn/test-bank",
+  ]);
+  for (const row of rows) {
+    if (row.plannedAliasPath) {
+      assert.notEqual(row.canonicalPath, row.plannedAliasPath, `${row.id} must not activate a short alias`);
     }
   }
 });

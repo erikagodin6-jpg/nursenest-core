@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-05-14T19:08:12.869Z",
+  "generatedAt": "2026-05-14T19:23:21.675Z",
   "counts": {
     "pillars": 14,
     "ecosystemPages": 70,
     "topicClusters": 7,
     "inventoryRows": 91,
-    "liveUrls": 33,
-    "plannedRows": 58
+    "liveUrls": 38,
+    "plannedRows": 53
   },
   "liveUrls": [
     "/us/rn/nclex-rn",
@@ -24,18 +24,23 @@
     "/allied/psychotherapy",
     "/allied/psw-hca",
     "/us/rn/nclex-rn/questions",
+    "/us/rn/nclex-rn/test-bank",
     "/us/rn/nclex-rn/cat",
     "/us/rn/nclex-rn/flashcards",
     "/canada/rpn/rex-pn/questions",
+    "/canada/rpn/rex-pn/test-bank",
     "/canada/rpn/rex-pn/cat",
     "/canada/rpn/rex-pn/flashcards",
     "/canada/np/cnple/questions",
+    "/canada/np/cnple/test-bank",
     "/canada/np/cnple/cat",
     "/canada/np/cnple/flashcards",
     "/us/np/fnp/questions",
+    "/us/np/fnp/test-bank",
     "/us/np/fnp/cat",
     "/us/np/fnp/flashcards",
     "/us/np/agpcnp/questions",
+    "/us/np/agpcnp/test-bank",
     "/us/np/agpcnp/cat",
     "/us/np/agpcnp/flashcards",
     "/us/np/pmhnp/questions",
@@ -252,7 +257,7 @@
       "family": "nclex-rn",
       "canonicalPath": "/us/rn/nclex-rn/test-bank",
       "plannedAliasPath": "/nclex-rn/test-bank",
-      "status": "planned",
+      "status": "live",
       "title": "Test Bank and Question Bank",
       "targetQueries": [
         "test bank",
@@ -322,7 +327,7 @@
       "family": "rex-pn",
       "canonicalPath": "/canada/rpn/rex-pn/test-bank",
       "plannedAliasPath": "/rex-pn/test-bank",
-      "status": "planned",
+      "status": "live",
       "title": "Test Bank and Question Bank",
       "targetQueries": [
         "test bank",
@@ -392,7 +397,7 @@
       "family": "cnple",
       "canonicalPath": "/canada/np/cnple/test-bank",
       "plannedAliasPath": "/cnple/test-bank",
-      "status": "planned",
+      "status": "live",
       "title": "Test Bank and Question Bank",
       "targetQueries": [
         "test bank",
@@ -462,7 +467,7 @@
       "family": "np",
       "canonicalPath": "/us/np/fnp/test-bank",
       "plannedAliasPath": "/np/test-bank",
-      "status": "planned",
+      "status": "live",
       "title": "Test Bank and Question Bank",
       "targetQueries": [
         "test bank",
@@ -532,7 +537,7 @@
       "family": "np",
       "canonicalPath": "/us/np/agpcnp/test-bank",
       "plannedAliasPath": "/np/test-bank",
-      "status": "planned",
+      "status": "live",
       "title": "Test Bank and Question Bank",
       "targetQueries": [
         "test bank",

@@ -253,22 +253,84 @@ const nextConfig = {
           },
         ],
       },
+      /**
+       * CACHE BYPASS — authenticated and private routes.
+       * These headers tell Cloudflare (and any CDN) to NEVER cache these responses.
+       * Combined with the cookie-based bypass rules in Cloudflare Cache Rules, this
+       * provides defence-in-depth: the origin itself instructs the CDN not to cache,
+       * and Cloudflare's cookie rules add a second layer of bypass.
+       *
+       * Covered routes:
+       *   /app/*       — learner shell (session-gated, personalised progress data)
+       *   /admin/*     — staff admin (RBAC-gated)
+       *   /account/*   — billing + profile (private)
+       *   /checkout/*  — Stripe checkout (session + payment state)
+       *   /login       — auth flow
+       *   /signup      — auth flow
+       *   /modules/*   — gated content shell (entitlement-based, per-user state)
+       */
       {
         source: "/app",
         headers: [
-          {
-            key: "Cache-Control",
-            value: "private, no-cache, no-store, must-revalidate",
-          },
+          { key: "Cache-Control", value: "private, no-cache, no-store, must-revalidate" },
+          { key: "CDN-Cache-Control", value: "no-store" },
+          { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
         ],
       },
       {
         source: "/app/:path*",
         headers: [
-          {
-            key: "Cache-Control",
-            value: "private, no-cache, no-store, must-revalidate",
-          },
+          { key: "Cache-Control", value: "private, no-cache, no-store, must-revalidate" },
+          { key: "CDN-Cache-Control", value: "no-store" },
+          { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
+        ],
+      },
+      {
+        source: "/admin/:path*",
+        headers: [
+          { key: "Cache-Control", value: "private, no-cache, no-store, must-revalidate" },
+          { key: "CDN-Cache-Control", value: "no-store" },
+          { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
+        ],
+      },
+      {
+        source: "/account/:path*",
+        headers: [
+          { key: "Cache-Control", value: "private, no-cache, no-store, must-revalidate" },
+          { key: "CDN-Cache-Control", value: "no-store" },
+          { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
+        ],
+      },
+      {
+        source: "/checkout/:path*",
+        headers: [
+          { key: "Cache-Control", value: "private, no-cache, no-store, must-revalidate" },
+          { key: "CDN-Cache-Control", value: "no-store" },
+          { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
+        ],
+      },
+      {
+        source: "/login",
+        headers: [
+          { key: "Cache-Control", value: "private, no-cache, no-store, must-revalidate" },
+          { key: "CDN-Cache-Control", value: "no-store" },
+          { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
+        ],
+      },
+      {
+        source: "/signup",
+        headers: [
+          { key: "Cache-Control", value: "private, no-cache, no-store, must-revalidate" },
+          { key: "CDN-Cache-Control", value: "no-store" },
+          { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
+        ],
+      },
+      {
+        source: "/modules/:path*",
+        headers: [
+          { key: "Cache-Control", value: "private, no-cache, no-store, must-revalidate" },
+          { key: "CDN-Cache-Control", value: "no-store" },
+          { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
         ],
       },
       {

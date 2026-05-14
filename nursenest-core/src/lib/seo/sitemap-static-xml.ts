@@ -56,6 +56,7 @@ import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 import { listPublishedNclexCommercialLandingPaths } from "@/lib/seo/nclex-commercial-landing-pages";
+import { listHealthcareTestBankPagePaths } from "@/lib/seo/healthcare-test-bank-pages";
 import { CNPLE_SITEMAP_PATHS } from "@/lib/seo/cnple-seo-cluster";
 export {
   buildSitemapIndexXml,
@@ -474,7 +475,8 @@ export async function collectPathwaysSegmentUrls(
     collectPathwayTopicProgrammaticUrls(o),
     collectPathwayLessonHubAndTopicSeoUrls(o, opts),
   ]);
-  return [...examHubUrls, ...pathwayTopicUrls, ...hubTopicLessonUrls];
+  const healthcareTestBankUrls = listHealthcareTestBankPagePaths().map((path) => `${o}${path}`);
+  return [...examHubUrls, ...healthcareTestBankUrls, ...pathwayTopicUrls, ...hubTopicLessonUrls];
 }
 
 /** Tier-full localized marketing URLs (`/{locale}/…`) for `/sitemap-localized.xml` (same eligibility as legacy core slice). */
