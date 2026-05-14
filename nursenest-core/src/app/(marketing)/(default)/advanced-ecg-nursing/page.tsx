@@ -13,7 +13,7 @@ const PAGE_TITLE = "Advanced ECG Nursing — Cardiac Rhythm Mastery | NurseNest"
 const PAGE_H1 = "Advanced ECG for nurses: 12-lead, arrhythmia, and cardiac rhythm mastery";
 // ≤155 chars
 const PAGE_DESCRIPTION =
-  "Advanced ECG interpretation for RN and NP. 12-lead analysis, STEMI equivalents, heart blocks, arrhythmia recognition, and ACLS-integrated clinical decision-making for ICU, CCU, ER, and telemetry nurses.";
+  "Advanced ECG for RN and NP nurses: 12-lead, STEMI equivalents, heart blocks, arrhythmia, and ACLS-integrated decision-making. ICU, CCU, ER, and telemetry.";
 
 const SITE_ORIGIN = "https://nursenest.ca";
 

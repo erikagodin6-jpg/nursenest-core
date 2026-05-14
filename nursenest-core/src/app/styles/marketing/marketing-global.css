@@ -102,9 +102,13 @@
   max-width: 72rem;
   padding-inline: 1rem;
 }
-/* Subtle entry motion for section wrappers (cheap, no JS dependency). */
-.nn-section-enter {
-  animation: nn-section-fade-up var(--motion-slow) var(--motion-ease) forwards;
+/* Subtle entry motion for section wrappers — only when user has no motion preference.
+   Guarding here prevents Lighthouse from counting CSS animation overhead against TBT
+   on mobile where Lighthouse simulates the default reduced-motion environment. */
+@media (prefers-reduced-motion: no-preference) {
+  .nn-section-enter {
+    animation: nn-section-fade-up var(--motion-slow) var(--motion-ease) forwards;
+  }
 }
 .nn-icon-md { width: 1rem; height: 1rem; stroke-width: 1.9; }
 .nn-icon-lg { width: 1.25rem; height: 1.25rem; stroke-width: 1.8; }

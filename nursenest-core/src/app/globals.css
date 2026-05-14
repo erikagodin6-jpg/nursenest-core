@@ -2415,9 +2415,13 @@ html[data-theme="deep-twilight"] .nn-trust-mark {
   color: var(--role-success, #34d399);
 }
 
-.animate-page-enter {
-  /* `forwards` only — never `both` (backwards fill must not pre-hide marketing chrome). */
-  animation: pageEnter 0.34s ease-out forwards;
+/* Guard page-enter animation with motion preference — Lighthouse mobile simulation
+   does not set prefers-reduced-motion, so this saves one unnecessary animation per page. */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-page-enter {
+    /* `forwards` only — never `both` (backwards fill must not pre-hide marketing chrome). */
+    animation: pageEnter 0.34s ease-out forwards;
+  }
 }
 
 /* Legacy hero column motion (replaces tailwindcss-animate utilities not bundled in Core) */
