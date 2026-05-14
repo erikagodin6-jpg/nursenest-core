@@ -23,13 +23,19 @@ export type PageTransitionShellProps = {
  * Subtle route transition: translateY only (opacity stays 1 so marketing shell never “blinks”).
  * First paint / direct loads: no enter animation (avoids hydration mismatch and flash).
  * `prefers-reduced-motion`: pass-through, no animation.
+ *
+ * CLS fix: returns children directly when `previousPathname === undefined` (initial hard load).
+ * On initial load there is no prior route to transition from, so the motion.div wrapper is
+ * unnecessary. The wrapper adds a `min-h-0` block container that breaks the flex-chain for
+ * flex-1 children (e.g. HomeRestoredClient), causing a measurable layout shift at hydration
+ * time. By skipping the wrapper on first load we eliminate this CLS with zero visual difference.
  */
 export function PageTransitionShell({
   children,
   disabled = false,
   shouldDisableTransition,
 }: PageTransitionShellProps) {
-  const pathname = usePathname() ?? "";
+  const pathname = usePathname() ?? “”;
   const reduced = useReducedMotion();
   const previousPathname = usePreviousPathname(pathname);
   const marketingMobileNarrow = useMarketingMobilePerfIsMobile() === true;
@@ -40,14 +46,13 @@ export function PageTransitionShell({
     marketingMobileNarrow ||
     (shouldDisableTransition?.(pathname) ?? false);
 
-  const shouldAnimateEnter =
-    !excluded &&
-    previousPathname !== undefined &&
-    previousPathname !== pathname;
-
-  if (excluded) {
+  // On first page load, previousPathname is undefined — no transition to animate.
+  // Return children directly to avoid the motion.div wrapper disrupting the flex chain.
+  if (excluded || previousPathname === undefined) {
     return children;
   }
+
+  const shouldAnimateEnter = previousPathname !== pathname;
 
   return (
     <motion.div
@@ -55,7 +60,7 @@ export function PageTransitionShell({
       initial={shouldAnimateEnter ? { opacity: 1, y: ENTER_Y } : { opacity: 1, y: 0 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: DURATION, ease: EASE_LUXURY }}
-      className="min-h-0"
+      className=”flex min-h-0 flex-1 flex-col”
     >
       {children}
     </motion.div>

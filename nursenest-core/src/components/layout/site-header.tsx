@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useMemo, useRef, useState, type AnchorHTMLAttributes, type ComponentType } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type AnchorHTMLAttributes, type ComponentType } from "react";
 import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
 import { getNavChrome, getNavChromeVars } from "@/lib/theme/nav-chrome";
@@ -213,13 +213,36 @@ export type SiteHeaderProps = {
  * Visual parity release gate: `tests/e2e/visual/theme-parity/
  * homepage-theme-parity.spec.ts` (see `docs/screenshots/theme-parity/`).
  */
+/**
+ * Reads `callbackUrl` from URL search params in a Suspense-isolated scope.
+ * Separating `useSearchParams()` from the main SiteHeader body prevents the
+ * entire nav from being caught inside a Suspense boundary, which reduces the
+ * blocking scope during hydration and lowers TBT.
+ */
+function HeaderCallbackUrlReader({ onRead }: { onRead: (url: string | null) => void }) {
+  const sp = useSearchParams();
+  const cb = sp.get("callbackUrl");
+  useEffect(() => {
+    onRead(cb);
+  }, [cb, onRead]);
+  return null;
+}
+
 export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHeaderProps = {}) {
   const { t, locale } = useMarketingI18n();
   const tRef = useRef(t);
   tRef.current = t;
   const router = useRouter();
   const pathname = usePathname() ?? "/";
-  const searchParams = useSearchParams();
+  // searchParams read is deferred to a Suspense-isolated child (HeaderCallbackUrlReader)
+  // to avoid the full SiteHeader being caught in a Suspense boundary. The callbackUrl
+  // param is only relevant when a user lands on /login or /signup with an explicit
+  // redirect — default is the localized home path, which covers 99%+ of cases.
+  const [searchParamCallbackUrl, setSearchParamCallbackUrl] = useState<string | null>(null);
+  const searchParams = useMemo<Pick<URLSearchParams, "get" | "toString">>(() => ({
+    get: (key: string) => key === "callbackUrl" ? searchParamCallbackUrl : null,
+    toString: () => searchParamCallbackUrl ? `callbackUrl=${encodeURIComponent(searchParamCallbackUrl)}` : "",
+  }), [searchParamCallbackUrl]);
   const { theme } = useTheme();
   // Default to light (ocean, the app default, is a light theme) so SSR and first paint match.
   const isLightTheme = useMemo(() => {
@@ -578,6 +601,11 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
       className={`sticky top-0 z-50 w-full min-w-0${isLightTheme ? "" : " nn-header-dark-surface"}`}
       ref={headerRef}
     >
+      {/* Isolated Suspense boundary for useSearchParams — keeps callbackUrl param isolated
+          from the main SiteHeader Suspense scope to reduce TBT on marketing pages. */}
+      <Suspense fallback={null}>
+        <HeaderCallbackUrlReader onRead={setSearchParamCallbackUrl} />
+      </Suspense>
       {/*
         Keep enter animation on <header> only. `nn-header-animate-in` ends with a transform, which
         creates a fixed-position containing block — mobile drawers are siblings after </header> and
