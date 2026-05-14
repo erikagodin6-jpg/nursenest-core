@@ -174,12 +174,17 @@ export default async function MultilingualMarketingBlogPostPage({ params }: Prop
 
           {entry.coverImageUrl ?
             <figure className="mt-8">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={entry.coverImageUrl}
-                alt={entry.localizedCoverImageAlt ?? ""}
-                className="w-full rounded-xl border border-[var(--theme-card-border)] object-cover"
-              />
+              {/* Aspect-ratio wrapper stabilizes layout before image loads (CLS prevention). */}
+              <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[var(--theme-card-border)]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={entry.coverImageUrl}
+                  alt={entry.localizedCoverImageAlt ?? ""}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
             </figure>
           : null}
 

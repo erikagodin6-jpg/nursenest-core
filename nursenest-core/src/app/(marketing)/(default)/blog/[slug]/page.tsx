@@ -258,12 +258,19 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
           {post.coverImage ? (
             <figure className="mt-8">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={post.coverImage}
-                alt={"coverImageAlt" in post ? (post.coverImageAlt ?? "") : ""}
-                className="w-full rounded-xl border border-[var(--theme-card-border)] object-cover"
-              />
+              {/* Aspect-ratio wrapper prevents CLS when image dimensions aren't known ahead of time.
+                  16:9 is the most common blog cover ratio; object-cover handles actual ratio variance.
+                  loading=lazy defers off-screen decoding; decoding=async avoids main-thread stall. */}
+              <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[var(--theme-card-border)]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={post.coverImage}
+                  alt={"coverImageAlt" in post ? (post.coverImageAlt ?? "") : ""}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
               {"coverImageCaption" in post && post.coverImageCaption ? (
                 <figcaption className="mt-2 text-xs text-muted-foreground">
                   {post.coverImageCaption}

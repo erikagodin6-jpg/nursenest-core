@@ -56,19 +56,21 @@ export const ECG_PILLAR_MARKETING_PATH = "/advanced-ecg-nursing" as const;
 export const CLINICAL_MODULES_HUB_PATH = "/clinical-modules" as const;
 
 /**
- * ECG ecosystem sub-pages — deep-link targets for topic-specific lesson completions.
- * Keyed by lesson signal pattern for targeted internal linking.
+ * ECG ecosystem targets — topic-specific recommendations should only point at live,
+ * substantive routes. Advanced ECG specialty pages are not guaranteed to exist on
+ * production yet, so deep signals map to existing /ecg/[topic] cluster pages or
+ * the pillar until dedicated pages are fully built.
  */
 export const ECG_ECOSYSTEM_SUBPAGE_PATHS = {
-  rhythmPractice: "/advanced-ecg-nursing/rhythm-practice",
-  stemi: "/advanced-ecg-nursing/12-lead-stemi",
-  acls: "/advanced-ecg-nursing/acls-rhythms",
-  electrolyte: "/advanced-ecg-nursing/electrolyte-ecg-changes",
-  medications: "/advanced-ecg-nursing/medication-induced-ecg-changes",
-  criticalCare: "/advanced-ecg-nursing/critical-care-ecg",
-  pediatric: "/advanced-ecg-nursing/pediatric-ecg",
-  telemetry: "/advanced-ecg-nursing/telemetry-monitoring",
-  caseSimulations: "/advanced-ecg-nursing/ecg-case-simulations",
+  rhythmPractice: "/ecg/ecg-practice-questions",
+  stemi: "/ecg/stemi-localization",
+  acls: "/ecg/ventricular-tachycardia",
+  electrolyte: "/ecg/hyperkalemia-ecg-changes",
+  medications: "/ecg/qt-prolongation",
+  criticalCare: "/ecg/ventricular-tachycardia",
+  pediatric: ECG_PILLAR_MARKETING_PATH,
+  telemetry: "/ecg/ecg-practice-questions",
+  caseSimulations: ECG_PILLAR_MARKETING_PATH,
 } as const;
 
 /**

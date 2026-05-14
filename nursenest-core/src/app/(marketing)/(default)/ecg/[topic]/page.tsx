@@ -138,10 +138,16 @@ export default async function EcgTopicPage({ params }: PageProps) {
           </p>
         </header>
 
-        {/* Main content */}
+        {/* Main content — first section is above fold (no containment); subsequent sections get
+            content-visibility:auto to defer layout/paint cost until they scroll into view. */}
         <article className="mb-10 space-y-8">
-          {page.sections.map((section) => (
-            <section key={section.id} id={section.id} aria-labelledby={`h-${section.id}`}>
+          {page.sections.map((section, idx) => (
+            <section
+              key={section.id}
+              id={section.id}
+              aria-labelledby={`h-${section.id}`}
+              className={idx > 0 ? "nn-content-visibility-auto" : undefined}
+            >
               <h2 id={`h-${section.id}`} className="mb-4 text-lg font-semibold text-[var(--semantic-text-primary)]">
                 {section.heading}
               </h2>

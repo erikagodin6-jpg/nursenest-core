@@ -117,6 +117,15 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           ],
         },
         {
+          key: "specialties",
+          heading: ls(),
+          links: [
+            { key: "rn-ecg-mastery", label: "ECG Mastery", href: "/advanced-ecg-nursing" },
+            { key: "rn-ecg-telemetry", label: "Telemetry Interpretation", href: "/ecg-telemetry-mastery" },
+            { key: "rn-clinical-modules", label: "Clinical Modules", href: "/clinical-modules" },
+          ],
+        },
+        {
           key: "tools",
           heading: gt(),
           links: [{ key: "rn-study-plan", label: lplan(), href: studyPlanSignupHref }],

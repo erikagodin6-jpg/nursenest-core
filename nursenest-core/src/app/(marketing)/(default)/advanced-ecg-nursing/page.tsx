@@ -385,8 +385,8 @@ export default function AdvancedEcgNursingPage() {
             </div>
           </section>
 
-          {/* 6. Electrolyte ECG Changes */}
-          <section id="electrolyte-ecg-changes" aria-labelledby="h-electrolyte">
+          {/* 6. Electrolyte ECG Changes — below fold on most devices */}
+          <section id="electrolyte-ecg-changes" aria-labelledby="h-electrolyte" className="nn-content-visibility-auto">
             <h2 id="h-electrolyte" className="mb-4 text-xl font-semibold text-[var(--semantic-text-primary)]">
               Electrolyte ECG changes: hyperkalemia, hypokalemia, and QT prolongation
             </h2>
@@ -404,7 +404,7 @@ export default function AdvancedEcgNursingPage() {
           </section>
 
           {/* 7. ECG Practice Questions */}
-          <section id="ecg-practice-questions" aria-labelledby="h-practice-q">
+          <section id="ecg-practice-questions" aria-labelledby="h-practice-q" className="nn-content-visibility-auto">
             <h2 id="h-practice-q" className="mb-4 text-xl font-semibold text-[var(--semantic-text-primary)]">
               ECG practice questions: strip-based adaptive learning
             </h2>
@@ -434,7 +434,7 @@ export default function AdvancedEcgNursingPage() {
           </section>
 
           {/* 8. ECG Flashcards */}
-          <section id="ecg-flashcards" aria-labelledby="h-flashcards">
+          <section id="ecg-flashcards" aria-labelledby="h-flashcards" className="nn-content-visibility-auto">
             <h2 id="h-flashcards" className="mb-4 text-xl font-semibold text-[var(--semantic-text-primary)]">
               ECG flashcards: spaced repetition for cardiac rhythm mastery
             </h2>
@@ -449,7 +449,7 @@ export default function AdvancedEcgNursingPage() {
           </section>
 
           {/* 9. ECG Clinical Case Simulations */}
-          <section id="ecg-clinical-cases" aria-labelledby="h-cases">
+          <section id="ecg-clinical-cases" aria-labelledby="h-cases" className="nn-content-visibility-auto">
             <h2 id="h-cases" className="mb-4 text-xl font-semibold text-[var(--semantic-text-primary)]">
               ECG clinical case simulations
             </h2>
@@ -471,7 +471,7 @@ export default function AdvancedEcgNursingPage() {
           </section>
 
           {/* 10. ECG for RN/RPN/NP Students */}
-          <section id="ecg-rn-rpn-np" aria-labelledby="h-pathways">
+          <section id="ecg-rn-rpn-np" aria-labelledby="h-pathways" className="nn-content-visibility-auto">
             <h2 id="h-pathways" className="mb-4 text-xl font-semibold text-[var(--semantic-text-primary)]">
               ECG for RN, RPN, and NP students
             </h2>
@@ -501,7 +501,7 @@ export default function AdvancedEcgNursingPage() {
           </section>
 
           {/* Pacemaker / toxicology (existing content compressed) */}
-          <section id="pacemaker-toxicology" aria-labelledby="h-pacer-tox">
+          <section id="pacemaker-toxicology" aria-labelledby="h-pacer-tox" className="nn-content-visibility-auto">
             <h2 id="h-pacer-tox" className="mb-4 text-xl font-semibold text-[var(--semantic-text-primary)]">
               Pacemaker malfunction and toxicology ECG patterns
             </h2>
