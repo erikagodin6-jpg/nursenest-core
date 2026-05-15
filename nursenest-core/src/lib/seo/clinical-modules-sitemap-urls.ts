@@ -1,6 +1,13 @@
 import { collectOsceScenariosMarketingHubUrls } from "@/lib/scenarios/scenario-marketing-sitemap-urls";
 import { TOOL_SLUGS } from "@/lib/tools/tool-registry";
 import { getAllEcgClusterSlugs } from "@/lib/ecg-module/ecg-seo-cluster";
+import {
+  ECG_CORE_PUBLIC_ROUTES,
+  ECG_ADVANCED_PUBLIC_ROUTES,
+  ECG_LEARNER_PRIVATE_ROUTES,
+  ADVANCED_ECG_LEARNER_PRIVATE_ROUTES,
+  isLearnerPrivateEcgRoute,
+} from "@/lib/ecg-module/ecg-platform-taxonomy";
 
 function normalizeOrigin(origin: string): string {
   return origin.endsWith("/") ? origin.slice(0, -1) : origin;
@@ -19,45 +26,39 @@ export function collectClinicalMarketingToolTeaserUrls(origin: string): string[]
 }
 
 /**
- * Public ECG + telemetry specialty marketing pages.
- * All indexed, no entitlement gate — pure SEO/conversion surfaces.
- * Never include gated `/modules/ecg/*` or `/app/*` routes here.
+ * SEGMENT A — Core ECG authority routes.
+ * All publicly indexed, no entitlement gate, full educational content without auth.
+ * Source of truth: ECG_CORE_PUBLIC_ROUTES from ecg-platform-taxonomy.ts.
+ *
+ * Includes: /ecg, /ecg-interpretation, /telemetry-nursing, /acls-rhythms,
+ *           /pals-rhythms, /pediatric-ecg
  */
-const ECG_MARKETING_PATHS = [
-  "/ecg-interpretation",
-  "/ecg-telemetry-mastery",
-  "/advanced-ecg-nursing",
-] as const;
+export function collectCoreEcgAuthorityUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return ECG_CORE_PUBLIC_ROUTES.map((path) => `${o}${path}`);
+}
 
 /**
- * ECG authority hub — top-level canonical SEO destination for all ECG content.
- * Separate from ECG_MARKETING_PATHS (which is auto-reverted by a project hook).
- */
-const ECG_HUB_PATHS = ["/ecg"] as const;
-
-/**
- * ECG ecosystem sub-pages under `/advanced-ecg-nursing/[module]` — 9 specialty tracks.
- * All indexed marketing pages with no entitlement gate.
- */
-const ECG_ECOSYSTEM_PATHS = [
-  "/advanced-ecg-nursing/rhythm-practice",
-  "/advanced-ecg-nursing/12-lead-stemi",
-  "/advanced-ecg-nursing/acls-rhythms",
-  "/advanced-ecg-nursing/electrolyte-ecg-changes",
-  "/advanced-ecg-nursing/medication-induced-ecg-changes",
-  "/advanced-ecg-nursing/critical-care-ecg",
-  "/advanced-ecg-nursing/pediatric-ecg",
-  "/advanced-ecg-nursing/telemetry-monitoring",
-  "/advanced-ecg-nursing/ecg-case-simulations",
-] as const;
-
-/**
- * ECG topical cluster pages under `/ecg/[topic]` — 10 supporting authority pages.
- * Generated from the ECG SEO cluster definition in {@link getAllEcgClusterSlugs}.
+ * SEGMENT B — Core ECG topical cluster pages (/ecg/[topic] × 10+).
+ * Generated from the ECG SEO cluster definition.
+ * All indexed, authority cluster supporting the /ecg pillar.
  */
 export function collectEcgClusterUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
   return getAllEcgClusterSlugs().map((slug) => `${o}/ecg/${slug}`);
+}
+
+/**
+ * SEGMENT C — Advanced ECG premium authority routes.
+ * Indexed with premium positioning. Educational content public; premium CTA additive.
+ * Source of truth: ECG_ADVANCED_PUBLIC_ROUTES from ecg-platform-taxonomy.ts.
+ *
+ * Includes: /advanced-ecg-nursing, /advanced-ecg-nursing/[9 modules],
+ *           /ecg-telemetry-mastery
+ */
+export function collectAdvancedEcgAuthorityUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return ECG_ADVANCED_PUBLIC_ROUTES.map((path) => `${o}${path}`);
 }
 
 /**
@@ -66,30 +67,67 @@ export function collectEcgClusterUrls(origin: string): string[] {
 const CLINICAL_HUB_PATHS = ["/clinical-modules"] as const;
 
 /**
- * Clinical readiness marketing urlset:
- *   - ECG marketing pillar + satellite pages
- *   - ECG topical cluster (/ecg/[topic] × 10)
- *   - Clinical modules hub (/clinical-modules)
- *   - OSCE + clinical-scenario pathway hubs
- *   - Tools teasers (/tools/*)
+ * Guard: ensures no learner-private ECG routes are accidentally added to the sitemap.
+ * Throws during development if a private route is found.
+ */
+function assertNoPrivateEcgRoutes(urls: string[], origin: string): void {
+  const o = normalizeOrigin(origin);
+  for (const url of urls) {
+    const path = url.startsWith(o) ? url.slice(o.length) : url;
+    if (isLearnerPrivateEcgRoute(path)) {
+      throw new Error(
+        `[sitemap-guard] Attempted to add learner-private ECG route to sitemap: "${path}". ` +
+        "Learner routes must have robots: { index: false } and must NOT appear in sitemaps.",
+      );
+    }
+  }
+}
+
+/**
+ * Clinical readiness marketing urlset — complete ECG authority hierarchy:
+ *
+ *   SEGMENT A: Core ECG public authority (/ecg, /ecg-interpretation, /telemetry-nursing, …)
+ *   SEGMENT B: Core ECG cluster (/ecg/[topic] × 10+)
+ *   SEGMENT C: Advanced ECG premium authority (/advanced-ecg-nursing/*, /ecg-telemetry-mastery)
+ *   SEGMENT D: Clinical hub (/clinical-modules)
+ *   SEGMENT E: OSCE + clinical scenario hubs
+ *   SEGMENT F: Tools teasers (/tools/*)
+ *
+ * EXCLUDED — must never appear in this sitemap:
+ *   /modules/ecg/* (learner-private, auth-gated, robots: noindex)
+ *   /modules/ecg-advanced (learner-private)
+ *   /app/* (learner application shell)
  *
  * Used by `/sitemap-clinical-modules.xml` only.
- * Never emit learner `/app/*` or gated `/modules/ecg/*` shells here.
  */
 export function collectClinicalModulesSitemapUrls(origin: string): string[] {
-  const o = normalizeOrigin(origin);
-  const ecgHubUrls = ECG_HUB_PATHS.map((path) => `${o}${path}`);
-  const ecgUrls = ECG_MARKETING_PATHS.map((path) => `${o}${path}`);
-  const ecgEcosystemUrls = ECG_ECOSYSTEM_PATHS.map((path) => `${o}${path}`);
+  const coreEcgUrls = collectCoreEcgAuthorityUrls(origin);
   const ecgClusterUrls = collectEcgClusterUrls(origin);
-  const clinicalHubUrls = CLINICAL_HUB_PATHS.map((path) => `${o}${path}`);
-  return [
-    ...ecgHubUrls,
-    ...ecgUrls,
-    ...ecgEcosystemUrls,
+  const advancedEcgUrls = collectAdvancedEcgAuthorityUrls(origin);
+  const clinicalHubUrls = CLINICAL_HUB_PATHS.map((path) => `${normalizeOrigin(origin)}${path}`);
+
+  const all = [
+    ...coreEcgUrls,
     ...ecgClusterUrls,
+    ...advancedEcgUrls,
     ...clinicalHubUrls,
     ...collectClinicalMarketingToolTeaserUrls(origin),
     ...collectOsceScenariosMarketingHubUrls(origin),
   ];
+
+  // Safety guard: fail loudly in development if a private route is accidentally included
+  if (process.env.NODE_ENV === "development") {
+    assertNoPrivateEcgRoutes(all, origin);
+  }
+
+  return all;
 }
+
+/**
+ * Export all learner-private ECG routes for use by sitemap filters.
+ * These routes must be explicitly excluded from any public sitemap.
+ */
+export const ECG_PRIVATE_ROUTES_FOR_SITEMAP_EXCLUSION = [
+  ...ECG_LEARNER_PRIVATE_ROUTES,
+  ...ADVANCED_ECG_LEARNER_PRIVATE_ROUTES,
+] as const;

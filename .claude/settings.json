@@ -13,7 +13,12 @@
       "Bash(git fetch *)",
       "Bash(psql postgresql://doadmin:AVNS_DRoNu4ElqWngndjlm0Q@nursenestdatabase-do-user-35062022-0.g.db.ondigitalocean.com:25060/defaultdb?sslmode=require -c ' *)",
       "Bash(curl -s --max-time 10 -c /tmp/nn-v2.txt 'https://nursenest.ca/api/auth/csrf')",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(node --import tsx --test src/lib/stripe/np-ecg-stripe-env-names.contract.test.ts)",
+      "Bash(node --import tsx --test src/lib/ecg-module/advanced-ecg-checkout.contract.test.ts)",
+      "Bash(node --import tsx --test src/lib/stripe/np-ecg-stripe-env-names.contract.test.ts src/lib/ecg-module/advanced-ecg-checkout.contract.test.ts src/lib/ecg-module/ecg-platform-architecture.contract.test.ts src/lib/advanced-ecg/advanced-ecg-pricing-payload.contract.test.ts src/lib/advanced-ecg/advanced-ecg-access.test.ts)",
+      "Bash(node --import tsx --test src/lib/ecg-module/ecg-platform-architecture.contract.test.ts)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(k,':',v\\) for k,v in d.get\\('scripts',{}\\).items\\(\\) if 'audit' in k.lower\\(\\) or 'ecg' in k.lower\\(\\) or 'test' in k.lower\\(\\) or 'lint' in k.lower\\(\\)]\")"
     ]
   }
 }

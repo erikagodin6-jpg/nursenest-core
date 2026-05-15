@@ -190,13 +190,31 @@ export type ClinicalModulesLinkStatus =
  * Taxonomy group for grouping links in multi-column flyout layouts.
  * Extend as the platform grows.
  */
+/**
+ * Taxonomy group for grouping links in multi-column flyout layouts.
+ *
+ * Groups added for future hemodynamics expansion:
+ *   "hemodynamics"          — Arterial lines, CVP, cardiac output
+ *   "invasive_monitoring"   — Swan-Ganz, PCWP, SvO₂, PAC
+ *   "shock_states"          — Shock physiology classification
+ *   "arterial_waveforms"    — A-line waveform analysis
+ *
+ * Reserved groups must not be used for non-hemodynamics links.
+ * When hemodynamics content ships, import HEMODYNAMICS_RESERVED_NAV_ENTRIES
+ * from ecg-hemodynamics-taxonomy.ts and add them here.
+ */
 export type ClinicalModulesLinkGroup =
   | "cardiology"
   | "diagnostics"
   | "calculations"
   | "critical_care"
   | "pharmacology"
-  | "telemetry";
+  | "telemetry"
+  // ── Reserved: Hemodynamics expansion ────────────────────────────────────────
+  | "hemodynamics"          // Arterial lines, CVP, MAP, fluid responsiveness
+  | "invasive_monitoring"   // Swan-Ganz, PCWP, SvO₂, PAC
+  | "shock_states"          // Cardiogenic/distributive/obstructive/hypovolemic
+  | "arterial_waveforms";   // A-line waveform interpretation
 
 /** A link within the Clinical Modules flyout dropdown. */
 export type ClinicalModulesNavLink = {
@@ -301,14 +319,32 @@ export function buildClinicalModulesNavLinks(pathwayId: string | null, ecgNavEna
       status: "available",
       group: "calculations",
     },
-    // ── Critical Care ──
+    // ── Hemodynamics (reserved — content in development) ──
+    // When hemodynamics content ships, import HEMODYNAMICS_RESERVED_NAV_ENTRIES
+    // from ecg-hemodynamics-taxonomy.ts and replace these entries.
     {
       key: "hemodynamics",
       href: "/app/study-tools",
-      label: "Hemodynamics",
+      label: "Hemodynamic Monitoring",
       description: "Arterial lines, CVP, cardiac output interpretation",
       status: "coming_soon",
-      group: "critical_care",
+      group: "hemodynamics",
+    },
+    {
+      key: "advanced-hemodynamics",
+      href: "/app/study-tools",
+      label: "Advanced Hemodynamics",
+      description: "Swan-Ganz catheter, PCWP, SvO₂, shock physiology",
+      status: "coming_soon",
+      group: "hemodynamics",
+    },
+    {
+      key: "icu-waveform-analysis",
+      href: "/app/study-tools",
+      label: "ICU Waveform Analysis",
+      description: "Arterial waveform, respiratory variation, critical care telemetry",
+      status: "coming_soon",
+      group: "invasive_monitoring",
     },
   ];
 }

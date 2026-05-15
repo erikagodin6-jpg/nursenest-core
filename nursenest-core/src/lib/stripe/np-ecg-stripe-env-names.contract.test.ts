@@ -166,12 +166,19 @@ describe("checkout fail-closed: missing NP price env var excludes row from price
   });
 });
 
-// ─── 4. DigitalOcean app spec documents the 5 required keys ──────────────────
+// ─── 4. Canonical DigitalOcean deploy spec documents the 5 required keys ─────
+//
+// NOTE: live-app-spec.yaml is a doc-only audit snapshot (no deployable YAML).
+// The canonical source of truth for deployed env vars is .do/app-nursenest-core-next.yaml
+// at the repo root (one level above the nursenest-core/ app directory).
+// Stripe price IDs are plain value: entries (not type: SECRET) since they are
+// non-sensitive public identifiers. Actual secrets (STRIPE_SECRET_KEY etc.) remain SECRET.
 
-describe("DigitalOcean live-app-spec.yaml — Stripe price key stubs", () => {
-  const specSrc = readFileSync(join(ROOT, "live-app-spec.yaml"), "utf-8");
+describe("Canonical DigitalOcean deploy spec (.do/app-nursenest-core-next.yaml) — Stripe price keys", () => {
+  const CANONICAL_SPEC_PATH = join(ROOT, "../.do/app-nursenest-core-next.yaml");
+  const specSrc = readFileSync(CANONICAL_SPEC_PATH, "utf-8");
 
-  const REQUIRED_KEYS = [
+  const REQUIRED_PRICE_KEYS = [
     "STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION",
     "STRIPE_PRICE_NURSENEST_NP_3_MONTH_SUBSCRIPTION",
     "STRIPE_PRICE_NURSENEST_NP_6_MONTH_SUBSCRIPTION",
@@ -179,41 +186,69 @@ describe("DigitalOcean live-app-spec.yaml — Stripe price key stubs", () => {
     "STRIPE_PRICE_ADVANCED_ECG",
   ] as const;
 
-  for (const key of REQUIRED_KEYS) {
-    it(`live-app-spec.yaml documents required secret key: ${key}`, () => {
+  for (const key of REQUIRED_PRICE_KEYS) {
+    it(`canonical deploy spec declares required Stripe price key: ${key}`, () => {
       assert.match(
         specSrc,
         new RegExp(`key:\\s*${key}`),
-        `live-app-spec.yaml must document "${key}" as a required secret — set the actual value in the DigitalOcean App Platform console`,
+        `canonical spec must declare "${key}" — add it to .do/app-nursenest-core-next.yaml and deploy`,
       );
     });
   }
 
-  it("all 5 NP/ECG Stripe keys are typed as SECRET in the app spec", () => {
-    // Find each key block and verify type: SECRET follows it
-    for (const key of REQUIRED_KEYS) {
+  it("all 5 NP/ECG Stripe price keys have a non-empty value: (not SECRET — price IDs are non-sensitive)", () => {
+    for (const key of REQUIRED_PRICE_KEYS) {
       const keyIdx = specSrc.indexOf(`key: ${key}`);
-      assert.ok(keyIdx >= 0, `Key "${key}" not found in spec`);
-      // Look for type: SECRET within the next 150 chars of the key declaration
-      const nearBlock = specSrc.slice(keyIdx, keyIdx + 150);
+      assert.ok(keyIdx >= 0, `Key "${key}" not found in canonical spec`);
+      // Price IDs use plain value: (not type: SECRET). Verify value: price_* follows within 120 chars.
+      const nearBlock = specSrc.slice(keyIdx, keyIdx + 180);
       assert.match(
         nearBlock,
-        /type:\s*SECRET/,
-        `Key "${key}" must be typed as SECRET in live-app-spec.yaml`,
+        /value:\s*price_[A-Za-z0-9]+/,
+        `Key "${key}" must have value: price_... in canonical spec (not SECRET — Stripe price IDs are non-sensitive)`,
       );
     }
+  });
+
+  it("STRIPE_PRICE_ADVANCED_ECG has the canonical live price ID", () => {
+    const keyIdx = specSrc.indexOf("key: STRIPE_PRICE_ADVANCED_ECG");
+    assert.ok(keyIdx >= 0, "STRIPE_PRICE_ADVANCED_ECG must be declared in canonical spec");
+    const nearBlock = specSrc.slice(keyIdx, keyIdx + 200);
+    assert.match(
+      nearBlock,
+      /value:\s*price_1TVo8vFbgp0Ub5P7aTySWrbU/,
+      "STRIPE_PRICE_ADVANCED_ECG must have the live price ID price_1TVo8vFbgp0Ub5P7aTySWrbU",
+    );
   });
 
   it("NP yearly key uses 1_YEAR_SUBSCRIPTION (not YEARLY) — catches common misconfiguration", () => {
     assert.match(
       specSrc,
       /key:\s*STRIPE_PRICE_NURSENEST_NP_1_YEAR_SUBSCRIPTION/,
-      "App spec must use 1_YEAR_SUBSCRIPTION (matching Stripe price key) not YEARLY_SUBSCRIPTION",
+      "Canonical spec must use 1_YEAR_SUBSCRIPTION (not YEARLY_SUBSCRIPTION) for NP yearly price",
     );
     assert.doesNotMatch(
       specSrc,
       /key:\s*STRIPE_PRICE_NURSENEST_NP_YEARLY_SUBSCRIPTION/,
-      "App spec must NOT use YEARLY_SUBSCRIPTION for NP — correct key is 1_YEAR_SUBSCRIPTION",
+      "Canonical spec must NOT use YEARLY_SUBSCRIPTION for NP — correct key is 1_YEAR_SUBSCRIPTION",
+    );
+  });
+
+  it("STRIPE_PRICE_CA_ADVANCED_ECG_ONETIME alias in spec is NOT referenced in app source", () => {
+    // The onetime alias exists in the deploy spec for webhook backward compat,
+    // but must never be used by app source code — the canonical key is STRIPE_PRICE_ADVANCED_ECG.
+    assert.match(
+      specSrc,
+      /key:\s*STRIPE_PRICE_CA_ADVANCED_ECG_ONETIME/,
+      "Backward-compat alias must still be declared in canonical spec",
+    );
+    // Verify the alias shares the same price ID as the canonical key
+    const aliasIdx = specSrc.indexOf("key: STRIPE_PRICE_CA_ADVANCED_ECG_ONETIME");
+    const nearBlock = specSrc.slice(aliasIdx, aliasIdx + 200);
+    assert.match(
+      nearBlock,
+      /value:\s*price_1TVo8vFbgp0Ub5P7aTySWrbU/,
+      "STRIPE_PRICE_CA_ADVANCED_ECG_ONETIME alias must share the same price ID as STRIPE_PRICE_ADVANCED_ECG",
     );
   });
 });
@@ -307,6 +342,58 @@ describe("NP main checkout source — reads price via canonicalNursingStripePric
       checkoutSrc,
       /['"`]price_1[A-Za-z0-9]{10,}/,
       "Stripe price IDs (price_1...) must never be hardcoded in checkout source — use env vars only",
+    );
+  });
+});
+
+// ─── 7. Taxonomy ↔ Checkout env consistency (Platform Architecture binding) ────
+//
+// Binds ADVANCED_ECG_PRODUCT.stripeEnvKey from ecg-platform-taxonomy.ts
+// to advancedEcgStripePriceEnvKey() from advanced-ecg-module-config.ts.
+// These two references must always agree — divergence = broken checkout.
+
+describe("Taxonomy ↔ Checkout env consistency", () => {
+  it("ADVANCED_ECG_PRODUCT.stripeEnvKey === advancedEcgStripePriceEnvKey()", () => {
+    // Import both and assert they are identical.
+    // This is the canonical binding between the SEO platform taxonomy and the
+    // Stripe checkout implementation — the two must always agree.
+    const { ADVANCED_ECG_PRODUCT } = require("../ecg-module/ecg-platform-taxonomy");
+    const { advancedEcgStripePriceEnvKey } = require("../advanced-ecg/advanced-ecg-module-config");
+
+    assert.equal(
+      advancedEcgStripePriceEnvKey(),
+      ADVANCED_ECG_PRODUCT.stripeEnvKey,
+      `Taxonomy mismatch: ADVANCED_ECG_PRODUCT.stripeEnvKey="${ADVANCED_ECG_PRODUCT.stripeEnvKey}" ` +
+      `but advancedEcgStripePriceEnvKey()="${advancedEcgStripePriceEnvKey()}". ` +
+      "These must match — one reference is stale.",
+    );
+  });
+
+  it("ADVANCED_ECG_PRODUCT.entitlementKey is not empty and matches advanced-ecg-module-config constant", () => {
+    const { ADVANCED_ECG_PRODUCT } = require("../ecg-module/ecg-platform-taxonomy");
+    const { ADVANCED_ECG_MODULE_ENTITLEMENT } = require("../advanced-ecg/advanced-ecg-module-config");
+
+    assert.ok(
+      ADVANCED_ECG_PRODUCT.entitlementKey.length > 0,
+      "ADVANCED_ECG_PRODUCT.entitlementKey must not be empty",
+    );
+    assert.equal(
+      ADVANCED_ECG_PRODUCT.entitlementKey,
+      ADVANCED_ECG_MODULE_ENTITLEMENT,
+      `Entitlement key mismatch between taxonomy (${ADVANCED_ECG_PRODUCT.entitlementKey}) ` +
+      `and module config (${ADVANCED_ECG_MODULE_ENTITLEMENT})`,
+    );
+  });
+
+  it("CORE_ECG_PRODUCT.entitlementKey matches ECG_MASTERY_ENTITLEMENT", () => {
+    const { CORE_ECG_PRODUCT } = require("../ecg-module/ecg-platform-taxonomy");
+    const { ECG_MASTERY_ENTITLEMENT } = require("../ecg-module/ecg-module-config");
+
+    assert.equal(
+      CORE_ECG_PRODUCT.entitlementKey,
+      ECG_MASTERY_ENTITLEMENT,
+      `Core ECG entitlement key mismatch: taxonomy says "${CORE_ECG_PRODUCT.entitlementKey}" ` +
+      `but module config says "${ECG_MASTERY_ENTITLEMENT}"`,
     );
   });
 });
