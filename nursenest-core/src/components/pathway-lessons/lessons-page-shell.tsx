@@ -67,7 +67,7 @@ export function LessonsPageShell({
       data-premium-layout-version="2026-05-v2-compact"
       {...(pathwayTrack ? { "data-pathway-track": pathwayTrack } : {})}
     >
-      <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 sm:py-4 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
         {/* ── Compact hero band ── */}
         <section aria-labelledby="nn-lessons-hub-title">
           <div className="nn-nursing-tier-hub-hero-band nn-premium-lessons-hub-hero" data-nn-premium-lessons-hero>
@@ -150,7 +150,7 @@ export function LessonsPageShell({
 
         {/* ── Hub body — no heavy card wrapper; subtle surface separation ── */}
         <div
-          className="nn-premium-lessons-hub-body mt-3 rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-[0_8px_28px_color-mix(in_srgb,var(--palette-heading)_6%,transparent)] sm:mt-3 sm:p-4"
+          className="nn-premium-lessons-hub-body mt-6 rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-white p-5 shadow-[0_2px_12px_color-mix(in_srgb,var(--palette-heading)_4%,transparent)] sm:mt-8 sm:p-8"
           data-nn-premium-lessons-hub-body
         >
           {children}

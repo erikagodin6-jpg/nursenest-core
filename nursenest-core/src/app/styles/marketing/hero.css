@@ -95,6 +95,7 @@
 @media (min-width: 1024px) {
   .nn-home-marketing-rich-hero .nn-hero-headline-visual::before {
     filter: blur(34px);
+    will-change: opacity;
   }
 }
 
@@ -130,6 +131,9 @@
   -webkit-box-decoration-break: clone;
   text-shadow: var(--hero-headline-shadow);
   filter: var(--hero-headline-glow);
+  /* Promote to its own compositor layer so the drop-shadow filter does not force
+     ancestor elements to repaint. Eliminates non-composited animation flag on this element. */
+  will-change: filter, opacity;
 }
 
 @media (max-width: 639.98px) {

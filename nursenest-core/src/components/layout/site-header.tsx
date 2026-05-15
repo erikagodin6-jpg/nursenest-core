@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState, type AnchorHTMLAttributes, type ComponentType } from "react";
 import { createPortal } from "react-dom";
+import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
 import { getNavChrome, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, MapPin, Menu, Settings, User, X } from "lucide-react";
@@ -16,11 +17,9 @@ import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-regi
 import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { effectiveMarketingHeaderGlobalRegion } from "@/lib/marketing/marketing-header-global-region";
-import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HeaderBrandLockup } from "@/components/brand/header-brand-lockup";
-import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
@@ -39,6 +38,29 @@ import { formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
 import { THEME_OPTIONS, publicMarketingThemeChoiceCount } from "@/lib/theme/theme-registry";
 import { MarketingHeaderUtilityCluster } from "@/components/layout/marketing-header-utility-strip";
+
+/**
+ * ThemePicker is only rendered inside the mobile drawer (never on initial paint).
+ * Dynamic import keeps its 300-line code out of the initial JS bundle, reducing
+ * SiteHeader parse time and TBT on marketing pages.
+ */
+const ThemePickerLazy = dynamic(
+  () => import("@/components/theme/theme-picker").then((m) => ({ default: m.ThemePicker })),
+  { ssr: false },
+);
+
+/**
+ * MarketingLanguagePreferenceList is only rendered inside the mobile drawer
+ * when the user taps the language selector. Dynamic import splits it from the
+ * initial bundle.
+ */
+const MarketingLanguagePreferenceListLazy = dynamic(
+  () =>
+    import("@/components/i18n/marketing-language-preference").then((m) => ({
+      default: m.MarketingLanguagePreferenceList,
+    })),
+  { ssr: false },
+);
 
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
 const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta nn-text-on-solid-fill";
@@ -648,19 +670,16 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   </span>
                 ) : null}
               </div>
-              {/* Guests: keep logo + auth CTAs adjacent; settings/hamburger stay trailing (justify-between). */}
-              {isSessionPending ? (
+              {/* Guests: keep logo + auth CTAs adjacent; settings/hamburger stay trailing (justify-between).
+                  CLS guard: show guest buttons immediately (including during session load) — the SSR and
+                  initial client render both have isAuthenticated=false (session is "loading" on first render),
+                  so the DOM matches without a loading→guest layout shift. Authenticated users see a brief
+                  guest→authenticated swap after useSession resolves, which is a one-time visual update, not CLS. */}
+              {!isAuthenticated ? (
                 <div
                   className="nn-header-mobile-public-ctas flex min-w-0 flex-1 shrink items-center justify-end gap-1.5 sm:flex-none sm:justify-start sm:gap-2"
-                  aria-busy="true"
-                  aria-label={t("nav.logIn")}
+                  aria-busy={isSessionPending || undefined}
                 >
-                  {/* Mirror guest flex-1 CTA geometry so width/height do not jump when session resolves */}
-                  <div className="h-11 min-h-[44px] min-w-0 max-w-none flex-1 shrink animate-pulse rounded-xl border border-transparent bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))] sm:max-w-none sm:flex-none sm:w-20" />
-                  <div className="h-11 min-h-[44px] min-w-0 max-w-none flex-1 shrink animate-pulse rounded-xl border border-transparent bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))] sm:max-w-none sm:flex-none sm:w-28" />
-                </div>
-              ) : !isAuthenticated ? (
-                <div className="nn-header-mobile-public-ctas flex min-w-0 flex-1 shrink items-center justify-end gap-1.5 sm:flex-none sm:justify-start sm:gap-2">
                   <HeaderNavAnchor
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
                     className="nav-item inline-flex min-h-[44px] min-w-0 max-w-none flex-1 shrink items-center justify-center whitespace-nowrap rounded-xl border border-[var(--nav-border)] px-2 py-2 text-[11px] font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:flex-none sm:px-3 sm:text-sm"
@@ -840,13 +859,9 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   />
                 </div>
               ) : null}
-              {isSessionPending ? (
-                <div className="flex shrink-0 items-center gap-2" aria-busy="true" aria-label={t("nav.logIn")}>
-                  <div className="h-10 w-20 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />
-                  <div className="h-10 w-28 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />
-                </div>
-              ) : !isAuthenticated ? (
-                <div className="flex shrink-0 items-center gap-2">
+              {/* CLS guard: show guest buttons immediately during session load (same as mobile fix above). */}
+              {!isAuthenticated ? (
+                <div className="flex shrink-0 items-center gap-2" aria-busy={isSessionPending || undefined}>
                   <HeaderNavAnchor
                     href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
                     className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
@@ -1155,12 +1170,8 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
               </div>
 
               <div className="mt-1 flex flex-col gap-2 border-t border-[var(--header-border)] pt-5">
-                {isSessionPending ? (
-                  <div className="flex flex-col gap-2" aria-busy="true" aria-label={t("nav.logIn")}>
-                    <div className="h-12 w-full animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />
-                    <div className="h-11 w-full animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))]" />
-                  </div>
-                ) : !isAuthenticated ? (
+                {/* CLS guard: no skeleton — show guest buttons immediately (drawer is not visible on load). */}
+                {!isAuthenticated ? (
                   <>
                     <HeaderNavAnchor
                       href={guestMarketingSignupHref}
@@ -1302,7 +1313,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                 </button>
                 {mobileLangOpen ? (
                   <div className="mt-1 max-h-48 overflow-y-auto rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] p-1 shadow-[var(--shadow-elevated)]">
-                    <MarketingLanguagePreferenceList
+                    <MarketingLanguagePreferenceListLazy
                       onDone={() => setMobileLangOpen(false)}
                       renderItem={({ code, name, flag, disabled, onSelect }) => (
                         <button
@@ -1326,7 +1337,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
 
               {publicMarketingThemeChoiceCount() > 1 ? (
                 <div className="mb-2">
-                  <ThemePicker
+                  <ThemePickerLazy
                     pickerScope="publicMarketing"
                     labels={{
                       navTheme: t("nav.theme"),

@@ -256,7 +256,7 @@ export function MarketingPracticeQuestionsHubClient({
       });
       const res = await fetch("/api/practice-tests", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "x-nn-study-launch-surface": "marketing_questions_hub" },
+        headers: { "Content-Type": "application/json", "x-nn-study-launch-surface": "practice_exams" },
         body: JSON.stringify(payload),
       });
       const raw = await res.text();
@@ -271,7 +271,8 @@ export function MarketingPracticeQuestionsHubClient({
         window.location.href = `/app/practice-tests/${data.id}`;
         return;
       }
-      setAdaptiveError(typeof data.error === "string" && data.error.trim() ? data.error : "Could not start session.");
+      const rawErr = typeof data.error === "string" && data.error.trim() ? data.error : "";
+      setAdaptiveError(rawErr && rawErr !== "INVALID_SURFACE" ? rawErr : "Could not start session.");
     } catch {
       setAdaptiveError("Could not start session.");
     } finally {
@@ -533,7 +534,7 @@ export function MarketingPracticeQuestionsHubClient({
               className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 py-2 text-sm font-semibold text-[var(--semantic-brand)] hover:bg-[var(--semantic-panel-muted)]"
               data-testid="marketing-cat-overview-link"
             >
-              CAT Overview (Marketing)
+              CAT Overview
             </Link>
           ) : null}
         </div>

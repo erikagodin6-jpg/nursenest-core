@@ -559,7 +559,7 @@ html[data-theme="dark-mode"] .nn-premium-lesson-detail-shell.nn-lesson-reading-s
 
 .nn-premium-cta-tile {
   display: block;
-  transition: transform 160ms ease, border-color 160ms ease;
+  transition: transform 160ms ease;
 }
 
 .nn-premium-cta-tile:hover {

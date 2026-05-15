@@ -248,12 +248,12 @@ export async function MarketingLessonsHubCategoryFirstIndex({
 
       <section
         id="pathway-lesson-library"
-        className="nn-qa-pathway-lessons-hub mt-2 scroll-mt-24"
+        className="nn-qa-pathway-lessons-hub mt-8 scroll-mt-8"
         data-nn-qa-pathway-lessons-hub="true"
         aria-labelledby="lesson-library-heading"
       >
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
-          <h2 id="lesson-library-heading" className="nn-marketing-h3 max-w-[min(100%,36rem)]">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-5">
+          <h2 id="lesson-library-heading" className="nn-marketing-h3 max-w-[min(100%,36rem)]" data-testid="browse-clinical-areas-heading">
             Browse Clinical Areas
           </h2>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">

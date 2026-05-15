@@ -748,7 +748,29 @@ export function FlashcardsHubClient({
           heading={t("learner.flashcards.hub.bodySystemsHeading")}
           headingId="nn-flashcards-categories-heading"
           searchPlaceholder="Search systems…"
+          intro="Select one or more body systems to focus your session. Counts show available cards per area."
         />
+
+        {/* Quick selection row */}
+        <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] pt-3">
+          <button
+            type="button"
+            onClick={() => setSelectedCanonicalIds([])}
+            data-nn-e2e-all-systems-btn
+            className={`inline-flex min-h-8 items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold transition ${
+              selectedCanonicalIds.length === 0
+                ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))]"
+            }`}
+          >
+            All systems {selectedCanonicalIds.length === 0 ? "✓" : ""}
+          </button>
+          {selectedCanonicalIds.length > 0 ? (
+            <span className="text-xs text-[var(--semantic-text-muted)]">
+              {selectedCanonicalIds.length} selected — or pick All systems above
+            </span>
+          ) : null}
+        </div>
       </section>
 
       {hubContextualNotice}
@@ -757,7 +779,7 @@ export function FlashcardsHubClient({
         className="nn-flashcards-deck-match-band rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 shadow-[var(--semantic-shadow-soft)] sm:px-5"
         data-nn-e2e-flashcards-deck-band
       >
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <div className="min-w-0 flex-1 space-y-2">
             <div className="flex items-baseline justify-between gap-2 text-xs text-[var(--semantic-text-secondary)]">
               <span className="font-medium text-[var(--semantic-text-primary)]">Deck match</span>
@@ -776,6 +798,16 @@ export function FlashcardsHubClient({
             </div>
             <p className="text-[11px] leading-snug text-[var(--semantic-text-muted)]">{sessionSummaryLine}</p>
           </div>
+          {/* Bottom Start CTA — saves scrolling after choosing systems */}
+          <LearnerCtaLink
+            href={startHref}
+            data-nn-e2e-start-review-bottom
+            className="inline-flex shrink-0 min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold shadow-[var(--semantic-shadow-soft)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_32%,transparent)]"
+          >
+            {selectedCanonicalIds.length > 0
+              ? `Start — ${selectedCanonicalIds.length} system${selectedCanonicalIds.length === 1 ? "" : "s"} →`
+              : "Start — All systems →"}
+          </LearnerCtaLink>
         </div>
       </div>
 

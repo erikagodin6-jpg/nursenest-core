@@ -171,14 +171,28 @@ export function FlashcardCustomStudyClient() {
     [cards, practiceTopicHref, practiceTestsTopicHref],
   );
 
+  const categoriesLabel = useMemo(() => {
+    if (summary?.selectedCategories && summary.selectedCategories.length > 0) {
+      const n = summary.selectedCategories.length;
+      return `${n} system${n === 1 ? "" : "s"} selected`;
+    }
+    const q = new URLSearchParams(searchParamString);
+    const cats = q.get("categories")?.trim();
+    if (cats) {
+      const n = cats.split(",").filter(Boolean).length;
+      if (n > 0) return `${n} system${n === 1 ? "" : "s"} selected`;
+    }
+    return "All systems";
+  }, [summary, searchParamString]);
+
   const header: ActiveStudyHeader = useMemo(
     () => ({
       sessionTitle: t("learner.flashcards.hub.title"),
       modeLabel: "Study",
-      categoriesLabel: "",
+      categoriesLabel,
       exitHref,
     }),
-    [exitHref, t],
+    [exitHref, t, categoriesLabel],
   );
 
   const sessionMeta = useMemo(() => {

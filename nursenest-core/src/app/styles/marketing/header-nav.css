@@ -69,21 +69,15 @@
   -webkit-backdrop-filter: none;
 }
 
-/* Add a soft elevation when the sticky wrapper has scrolled past the top.
-   Detected via `:has()` on the immediate parent that holds `sticky top-0`.
-   Falls back gracefully when :has() is unsupported. */
-.sticky.top-0.z-50 {
-  transition: box-shadow 220ms ease;
-}
-@supports selector(:has(*)) {
-  body:has(.sticky.top-0.z-50) .sticky.top-0.z-50 {
-    box-shadow: 0 12px 24px -18px rgba(15, 23, 42, 0.18);
-  }
-}
+/* Scroll shadow is managed by JS (SiteHeader stickyChromeStyle / isScrolled state) — no CSS
+   transition here. box-shadow transitions are non-composited and cause PSI "non-composited
+   animations" warnings; the :has() rule also triggered a box-shadow paint on initial load. */
 
-/* Refined hover treatment for nav links (uses existing class). */
+/* Refined hover treatment for nav links — compositor-safe: only transform and color (color
+   does not affect layout/paint on composited layers). background-color removed from transition:
+   it is non-composited and was flagging 20+ nav elements in the PSI non-composited audit. */
 .nn-marketing-nav-link {
-  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+  transition: color 160ms ease, transform 160ms ease;
 }
 .nn-marketing-nav-link:hover {
   background-color: color-mix(in srgb, var(--nav-hover-bg, var(--nav-hover, #f3eef9)) 70%, transparent);

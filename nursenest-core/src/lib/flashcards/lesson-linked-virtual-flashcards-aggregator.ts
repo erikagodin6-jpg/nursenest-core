@@ -1,4 +1,7 @@
 import { stripToPlainText } from "@/lib/content-quality/plain-text";
+
+/** Marker string present in rationaleCorrect for all padding cards — used to exclude them from learner sessions. */
+export const FLASHCARD_PADDING_CARD_RATIONALE_MARKER = "Padding card to reach lesson-linked minimum";
 import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-serialize";
 import { collectLessonRecallFlashcardsForPathway } from "@/lib/flashcards/lesson-recall-flashcards-for-pathway";
 import { collectLessonSectionDerivedFlashcardsForPathway } from "@/lib/flashcards/lesson-section-derived-flashcards-for-pathway";

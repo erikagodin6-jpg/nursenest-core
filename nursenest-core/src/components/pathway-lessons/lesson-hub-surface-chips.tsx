@@ -17,7 +17,7 @@ export function LessonHubSurfaceChips({ links }: Props) {
       aria-label="Quick study surfaces for this exam pathway"
       data-testid="lesson-hub-surface-chips"
     >
-      <ul className="m-0 flex list-none flex-nowrap gap-1.5 overflow-x-auto p-0 scrollbar-none">
+      <ul className="m-0 flex list-none flex-wrap gap-x-1.5 gap-y-1.5 p-0">
         {links.map((link) => (
           <li key={`${link.href}-${link.label}`} className="shrink-0">
             <Link

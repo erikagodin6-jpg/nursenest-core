@@ -378,11 +378,9 @@
   line-height: 1;
   white-space: nowrap;
   flex-shrink: 0;
+  /* Compositor-safe: only transform and opacity — box-shadow and background-color are
+     non-composited and cause PSI "avoid non-composited animations" audit failures. */
   transition:
-    background-color var(--motion-base) var(--motion-ease),
-    color var(--motion-base) var(--motion-ease),
-    border-color var(--motion-base) var(--motion-ease),
-    box-shadow var(--motion-base) var(--motion-ease),
     transform var(--brand-motion-normal) var(--brand-motion-ease-luxury),
     opacity var(--brand-motion-normal) var(--brand-motion-ease-luxury);
 }
@@ -538,6 +536,18 @@
 }
 .nn-header-animate-in {
   animation: none;
+}
+/* CLS guard: reserve a stable floor for the marketing sticky header wrapper
+   so no layout child changing on hydration can collapse the header height.
+   The wrapper is the first child of .nn-marketing-brand-root (the flex column).
+   Mobile: 3.5rem minimum brand row; desktop (sm+): 4.5rem. */
+.nn-marketing-brand-root > .sticky {
+  min-height: 3.5rem;
+}
+@media (min-width: 640px) {
+  .nn-marketing-brand-root > .sticky {
+    min-height: 4.5rem;
+  }
 }
 /* Marketing carousels: compositor-friendly opacity + transform transitions. */
 .nn-carousel-slide-crossfade {
@@ -1022,7 +1032,7 @@
   border-radius: 1rem;
   border: 1.5px solid var(--semantic-border-soft);
   background: var(--semantic-surface);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  transition: transform 0.18s ease;
 }
 .nn-hiw-step-card:hover {
   border-color: color-mix(in srgb, var(--theme-primary) 20%, var(--semantic-border-soft));
@@ -1034,7 +1044,7 @@
   border-radius: 1rem;
   border: 1.5px solid color-mix(in srgb, var(--semantic-border-soft) 60%, transparent);
   background: var(--semantic-surface);
-  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  transition: transform 0.15s;
 }
 .nn-hiw-feature-card:hover {
   border-color: color-mix(in srgb, var(--theme-primary) 20%, var(--semantic-border-soft));
@@ -1046,7 +1056,7 @@
   border-radius: 1rem;
   border: 1.5px solid var(--semantic-border-soft);
   background: var(--semantic-surface);
-  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  transition: transform 0.18s ease;
 }
 .nn-hiw-preview-card:hover {
   border-color: color-mix(in srgb, var(--theme-primary) 20%, var(--semantic-border-soft));

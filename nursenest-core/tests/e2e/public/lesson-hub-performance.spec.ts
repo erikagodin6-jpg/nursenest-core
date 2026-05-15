@@ -23,6 +23,49 @@ const MAX_LESSON_CARDS_PER_CATEGORY_PAGE = 60;
 /** Warm-path stability gate for anonymous marketing hubs (raise locally if cold-cache dev server exceeds). */
 const HUB_INTERACTIVE_STABILITY_MS = 5_000;
 
+/** Viewports required by acceptance criteria. */
+const LAYOUT_VIEWPORTS = [
+  { width: 375, height: 812, label: "mobile-375" },
+  { width: 768, height: 1024, label: "tablet-768" },
+  { width: 1024, height: 768, label: "desktop-1024" },
+  { width: 1440, height: 900, label: "desktop-1440" },
+] as const;
+
+const BROWSE_HEADING = '[data-testid="browse-clinical-areas-heading"]';
+const PILL_NAV = '[data-testid="lesson-hub-sticky-nav"]';
+
+test.describe("lesson hub — layout smoke (title visibility + no pill overlap)", () => {
+  for (const vp of LAYOUT_VIEWPORTS) {
+    test(`${vp.label}: "Browse Clinical Areas" is visible and not behind pill nav`, async ({ page, baseURL }) => {
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      const origin = requireOrigin(baseURL);
+      await seedUsMarketingCookie(page, origin);
+      await gotoExpectOk(page, "/us/rn/nclex-rn/lessons");
+      await expect(page.locator(LESSONS_SECTION)).toBeVisible({ timeout: HUB_TIMEOUT });
+
+      const heading = page.locator(BROWSE_HEADING);
+      await expect(heading).toBeVisible();
+
+      const pillNav = page.locator(PILL_NAV);
+      await expect(pillNav).toBeVisible();
+
+      const headingBox = await heading.boundingBox();
+      const pillBox = await pillNav.boundingBox();
+
+      expect(headingBox, "heading bounding box must be resolvable").not.toBeNull();
+      expect(pillBox, "pill nav bounding box must be resolvable").not.toBeNull();
+
+      if (headingBox && pillBox) {
+        const pillBottom = pillBox.y + pillBox.height;
+        expect(
+          headingBox.y,
+          `at ${vp.label}: "Browse Clinical Areas" top (${headingBox.y}px) must be below the pill nav bottom (${pillBottom}px)`,
+        ).toBeGreaterThan(pillBottom);
+      }
+    });
+  }
+});
+
 test.describe("lesson hub — performance smoke", () => {
   test("console: no page errors on hub + category + lesson navigation", async ({ page, baseURL }) => {
     const errors: string[] = [];

@@ -73,6 +73,9 @@ const POOL_EXHAUSTED_CODES = new Set([
   "cat_starred_items_empty",
 ]);
 
+/** Internal API error codes that must never be shown verbatim in the learner UI. */
+const INTERNAL_ERROR_CODES = new Set(["INVALID_SURFACE", "session_create_failed", "session_id_missing"]);
+
 const QUESTION_COUNTS = [10, 20, 30, 50] as const;
 const DEFAULT_QUESTION_COUNT = 30;
 
@@ -182,13 +185,15 @@ export function PracticeQuestionSessionSetupClient({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-nn-study-launch-surface": "practice_questions_hub",
+        "x-nn-study-launch-surface": "practice_exams",
       },
       body: JSON.stringify(payload),
     });
     const data = (await res.json()) as { id?: string; error?: string; code?: string };
     if (res.ok && data.id) return data.id;
-    const err = new Error(typeof data.error === "string" && data.error.trim() ? data.error : "session_create_failed");
+    const rawError = typeof data.error === "string" && data.error.trim() ? data.error : "session_create_failed";
+    const safeError = INTERNAL_ERROR_CODES.has(rawError) ? "session_create_failed" : rawError;
+    const err = new Error(safeError);
     (err as Error & { code?: string }).code = typeof data.code === "string" ? data.code : undefined;
     throw err;
   }
@@ -218,7 +223,7 @@ export function PracticeQuestionSessionSetupClient({
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
       setStartError(
-        msg && msg !== "session_create_failed" && msg !== "session_id_missing"
+        msg && !INTERNAL_ERROR_CODES.has(msg)
           ? msg
           : "Could not start your practice session. Please try again.",
       );

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { FlashcardSataAnswerList } from "@/components/flashcards/flashcard-sata-answer-list";
@@ -114,6 +115,8 @@ export function FlashcardStudyQuestionStack({
   const tutorMcq = Boolean(exam && (mcqInteractionMode ?? "tutor_select") === "tutor_select");
 
   const [pickedLetter, setPickedLetter] = useState<string | null>(null);
+  // Study Pulse rail: hidden by default at tablet (< lg) so it doesn't crowd the card
+  const [tabletRailOpen, setTabletRailOpen] = useState(false);
   // Tracks current SATA selections so the reveal button can report them before reveal fires.
   const sataSelectionsRef = useRef<string[]>([]);
 
@@ -141,7 +144,6 @@ export function FlashcardStudyQuestionStack({
 
   return (
     <div className="nn-premium-flashcard-stack-outer nn-flashcard-study-stack-premium mx-auto flex w-full max-w-6xl flex-col gap-4">
-      <div className="nn-flashcard-session-ambient" aria-hidden />
       <div
         className="nn-flashcard-session-layout nn-premium-flashcard-stack mx-auto w-full"
         data-nn-revealed={revealed ? "1" : "0"}
@@ -304,9 +306,30 @@ export function FlashcardStudyQuestionStack({
         </div>
 
         {rail ? (
-          <aside className="nn-flashcard-session-rail nn-flashcard-rail-utility nn-flashcard-rail-surface relative shrink-0">
-            {rail}
-          </aside>
+          <>
+            {/* Tablet toggle — only visible below lg breakpoint */}
+            <button
+              type="button"
+              onClick={() => setTabletRailOpen((o) => !o)}
+              aria-expanded={tabletRailOpen}
+              aria-controls="nn-study-pulse-rail"
+              className="lg:hidden flex w-full items-center justify-between rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-[var(--semantic-shadow-soft)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_60%,var(--semantic-surface))]"
+              data-testid="study-pulse-toggle"
+            >
+              <span>Study Pulse</span>
+              {tabletRailOpen ? (
+                <ChevronUp className="h-4 w-4 text-[var(--semantic-text-muted)]" aria-hidden />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-[var(--semantic-text-muted)]" aria-hidden />
+              )}
+            </button>
+            <aside
+              id="nn-study-pulse-rail"
+              className={`nn-flashcard-session-rail nn-flashcard-rail-utility nn-flashcard-rail-surface relative shrink-0 ${!tabletRailOpen ? "max-lg:hidden" : ""}`}
+            >
+              {rail}
+            </aside>
+          </>
         ) : null}
       </div>
     </div>

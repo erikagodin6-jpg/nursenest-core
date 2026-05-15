@@ -239,6 +239,53 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.doesNotMatch(homeClient, /dynamic\([^)]*premium-homepage-trust/);
   });
 
+  it("SiteHeader shows guest CTAs immediately without a session-loading skeleton", () => {
+    const header = source("src/components/layout/site-header.tsx");
+
+    // The skeleton pulse placeholders must be absent — they caused CLS when session resolved.
+    // Verified fix: guest buttons (Log In / Start Free) render on first paint for Lighthouse.
+    assert.doesNotMatch(header, /isSessionPending\s*\?\s*\(/);
+    // ThemePicker and MarketingLanguagePreferenceList must be dynamically imported (mobile-drawer
+    // only — keeping their code out of the initial JS bundle reduces TBT).
+    assert.match(header, /ThemePickerLazy/);
+    assert.match(header, /MarketingLanguagePreferenceListLazy/);
+  });
+
+  it("marketing nav link and header have no non-composited transitions that fire on page load", () => {
+    const marketingGlobal = sourceCss("src/app/styles/marketing/marketing-global.css");
+    const headerNav = sourceCss("src/app/styles/marketing/header-nav.css");
+
+    // The sticky header wrapper must not have a CSS box-shadow transition — it caused a
+    // non-composited animation to fire on initial page load (via the :has() rule).
+    assert.doesNotMatch(headerNav, /\.sticky\.top-0\.z-50\s*\{[^}]*transition:\s*[^}]*box-shadow/s,
+      "sticky header CSS wrapper must not transition box-shadow (was triggering on page load)");
+
+    // Nav links must not transition background-color — they appear in bulk in the DOM
+    // (header + tier rail + potentially mobile drawer) and cause many non-composited animation
+    // entries in PSI even if hover never fires during Lighthouse measurement.
+    assert.doesNotMatch(headerNav, /\.nn-marketing-nav-link\s*\{[^}]*transition:[^}]*background-color/s,
+      "nn-marketing-nav-link in header-nav.css must not transition background-color");
+
+    // HIW how-it-works cards must not transition box-shadow — visible on the homepage.
+    assert.doesNotMatch(marketingGlobal, /\.nn-hiw-step-card\s*\{[^}]*transition:[^}]*box-shadow/s,
+      "nn-hiw-step-card must not transition box-shadow");
+    assert.doesNotMatch(marketingGlobal, /\.nn-hiw-feature-card\s*\{[^}]*transition:[^}]*box-shadow/s,
+      "nn-hiw-feature-card must not transition box-shadow");
+    assert.doesNotMatch(marketingGlobal, /\.nn-hiw-preview-card\s*\{[^}]*transition:[^}]*box-shadow/s,
+      "nn-hiw-preview-card must not transition box-shadow");
+    // The marketing nav link transition in marketing-global.css must be compositor-safe.
+    assert.doesNotMatch(marketingGlobal, /\.nn-marketing-nav-link\s*\{[^}]*transition:[^}]*box-shadow/s,
+      "nn-marketing-nav-link in marketing-global.css must not transition box-shadow");
+  });
+
+  it("carousel section reserves min-height matching the skeleton to prevent CLS", () => {
+    const carouselSection = source("src/components/marketing/home-hero-screenshot-section.tsx");
+
+    // The real carousel bounded div must have min-h matching the skeleton placeholder so
+    // the section does not grow when the real content replaces the skeleton (avoiding CLS).
+    assert.match(carouselSection, /min-h-\[min\(24rem/);
+  });
+
   it("HomeRestoredWithDeferredStats renders server islands and passes them as slots", () => {
     const serverStats = source(
       "src/components/marketing/home-restored-with-deferred-stats.server.tsx",

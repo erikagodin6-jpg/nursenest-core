@@ -135,8 +135,9 @@ export function HomeHeroScreenshotSection({ serverPreparedSlides }: HomeHeroScre
           </p>
         </div>
 
+        {/* min-h matches skeleton placeholder to prevent CLS when this section is near the viewport */}
         <div
-          className="mx-auto w-full max-w-2xl"
+          className="mx-auto w-full max-w-2xl min-h-[min(24rem,calc(100vw*0.72+6rem))]"
           data-testid="home-marketing-hero-carousel-bounded"
         >
           <HomeMarketingHeroCarouselErrorBoundary fallback={carouselHandoffFallback}>

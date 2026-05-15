@@ -41,7 +41,7 @@ export async function LessonHubClinicalModulesStrip({ pathway, marketingLocale, 
   if (compact) {
     return (
       <nav
-        className="mt-1.5 flex flex-nowrap gap-1.5 overflow-x-auto scrollbar-none"
+        className="mt-1.5 flex flex-wrap gap-x-1.5 gap-y-1.5"
         aria-label={heading}
         data-testid="lesson-hub-clinical-modules-strip"
       >
