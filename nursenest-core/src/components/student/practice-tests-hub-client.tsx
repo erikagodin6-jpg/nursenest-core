@@ -767,7 +767,7 @@ export function PracticeTestsHubClient({
 
   return (
     <LearnerStudyPageShell
-      className="nn-practice-tests-hub-premium space-y-5 py-2 sm:space-y-6 sm:py-4"
+      className="nn-practice-tests-hub-premium space-y-7 py-2 sm:space-y-8 sm:py-4"
       data-nn-learner-area="practice-tests"
       data-nn-premium-full-platform-convergence=""
       data-nn-premium-platform-family="exam-study"
@@ -780,10 +780,10 @@ export function PracticeTestsHubClient({
       ) : null}
       <h1 className="sr-only">{t("learner.practiceTests.title")}</h1>
 
-      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(240px,280px)] lg:items-start lg:gap-10">
-        <div className="min-w-0 space-y-6 sm:space-y-7">
+      <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(240px,280px)] xl:items-start xl:gap-10">
+        <div className="min-w-0 space-y-7 sm:space-y-8">
       <header
-        className="nn-premium-practice-hub-hero relative overflow-hidden rounded-[1.75rem] border-2 border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))_0%,var(--semantic-surface)_38%,color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))_100%)] p-6 text-[var(--semantic-text-primary)] shadow-[0_22px_48px_color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] ring-1 ring-[color-mix(in_srgb,var(--semantic-info)_22%,transparent)] sm:p-8"
+        className="nn-premium-practice-hub-hero relative overflow-hidden rounded-[1.5rem] border border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[linear-gradient(145deg,color-mix(in_srgb,var(--semantic-panel-cool)_32%,var(--semantic-surface))_0%,var(--semantic-surface)_58%,color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))_100%)] p-6 text-[var(--semantic-text-primary)] shadow-[var(--semantic-shadow-soft)] sm:p-8"
         data-nn-e2e-practice-exam-first-hero
         data-nn-premium-platform-sticky-controls
       >
@@ -840,7 +840,7 @@ export function PracticeTestsHubClient({
           <div className={`grid gap-3 ${resumeSession ? "sm:grid-cols-2" : ""}`}>
             <button
               type="button"
-              className="flex min-h-[3.5rem] flex-col justify-center gap-1 rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--semantic-surface))] px-4 py-3.5 text-left shadow-[var(--semantic-shadow-soft)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--semantic-surface))] sm:min-h-[3.25rem]"
+              className="flex min-h-[3.5rem] flex-col justify-center gap-1 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] px-4 py-3.5 text-left shadow-[var(--semantic-shadow-soft)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_36%,var(--semantic-surface))] sm:min-h-[3.25rem]"
               data-nn-e2e-exam-first-cta-custom
               onClick={() => builderSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
             >
@@ -858,7 +858,7 @@ export function PracticeTestsHubClient({
                 href={`/app/practice-tests/${encodeURIComponent(resumeSession.id)}${
                   pathwayId.trim() ? `?pathwayId=${encodeURIComponent(pathwayId.trim())}` : ""
                 }`}
-                className="flex min-h-[3.5rem] flex-col justify-center gap-1 rounded-2xl border-2 border-[color-mix(in_srgb,var(--semantic-success)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_55%,var(--semantic-surface))] px-4 py-3.5 text-left shadow-[var(--semantic-shadow-soft)] transition hover:brightness-[1.02] sm:min-h-[3.25rem]"
+                className="flex min-h-[3.5rem] flex-col justify-center gap-1 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_40%,var(--semantic-surface))] px-4 py-3.5 text-left shadow-[var(--semantic-shadow-soft)] transition hover:brightness-[1.02] sm:min-h-[3.25rem]"
                 data-nn-e2e-exam-first-cta-continue
               >
                 <span className="flex items-center gap-2 text-sm font-bold text-[var(--semantic-text-primary)]">
@@ -1866,10 +1866,10 @@ export function PracticeTestsHubClient({
         </div>
 
         <aside
-          className="mt-8 max-lg:hidden lg:mt-0 lg:sticky lg:top-24"
+          className="mt-8 max-xl:hidden xl:mt-0 xl:sticky xl:top-24"
           aria-label={t("learner.practiceTests.examFirst.studyToolsRailTitle")}
         >
-          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] ring-1 ring-[color-mix(in_srgb,var(--semantic-info)_12%,transparent)]">
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_16%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)]">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
               {t("learner.practiceTests.examFirst.studyToolsRailTitle")}
             </p>

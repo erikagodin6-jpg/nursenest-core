@@ -264,7 +264,7 @@
     "seed:clinical-scenarios-real": "npx tsx scripts/seed-clinical-scenarios-real-runner.mts",
     "seed:clinical-nursing-scenarios": "npx tsx scripts/seed-clinical-nursing-scenarios.mts",
     "test:clinical-scenarios": "node --import tsx --test src/lib/clinical-scenarios/branching-scenario-engine.test.ts src/lib/clinical-scenarios/clinical-scenario-outcome-engine.test.ts src/lib/clinical-scenarios/real-clinical-scenarios-twenty.test.ts src/lib/clinical-scenarios/clinical-scenarios-core.contract.test.ts src/lib/clinical-scenarios/clinical-scenario-publish-guard.test.ts src/lib/clinical-scenarios/seed-clinical-nursing-scenarios-pipeline.test.ts src/components/clinical-scenarios/clinical-scenario-unfolding-preview.test.tsx src/lib/scenarios/osce-stations-sot.contract.test.ts",
-    "test:ecg-video-quiz": "node --import tsx --test src/lib/ecg-video-quiz/ecg-video-question.test.ts src/lib/ecg-video-quiz/admin-ecg-video-question-draft.test.ts src/lib/ecg-module/ecg-module-config.test.ts src/lib/ecg-module/ecg-module-contract.test.ts src/lib/ecg-module/ecg-deterministic-strip.test.tsx",
+    "test:ecg-video-quiz": "node --import tsx --test src/lib/ecg-video-quiz/ecg-video-question.test.ts src/lib/ecg-video-quiz/admin-ecg-video-question-draft.test.ts src/lib/ecg-module/ecg-module-config.test.ts src/lib/ecg-module/ecg-module-contract.test.ts src/lib/ecg-module/ecg-deterministic-strip.test.tsx src/lib/ecg-module/ecg-curriculum-content.test.ts",
     "test:ecg-video-quiz:routes": "npx playwright test tests/e2e/ecg-video-quiz/ecg-video-quiz.spec.ts --project=chromium",
     "check:server": "tsc --noEmit -p tsconfig.server.json",
     "check:bundle-size": "node ../scripts/check-bundle-size.mjs",

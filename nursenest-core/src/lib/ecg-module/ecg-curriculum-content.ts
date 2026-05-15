@@ -895,7 +895,7 @@ const LEVEL_3_UNITS: EcgCurriculumUnit[] = [
     ],
     notThisBecause: [
       { rhythm: "Acute MI T waves", distinguisher: "Hyperacute MI T waves: asymmetric, broad-based, associated with ST elevation in a vascular territory. Hyperkalemia T waves: symmetric, tent-shaped, diffuse across multiple leads." },
-      { rhythm: "BBB", distinguishing: "BBB: wide QRS with specific morphology (RSR' in RBBB, broad R in LBBB). Hyperkalemia QRS widening: no specific bundle branch pattern — diffuse slowing." },
+      { rhythm: "BBB", distinguisher: "BBB: wide QRS with specific morphology (RSR' in RBBB, broad R in LBBB). Hyperkalemia QRS widening: no specific bundle branch pattern — diffuse slowing." },
     ],
   },
   {

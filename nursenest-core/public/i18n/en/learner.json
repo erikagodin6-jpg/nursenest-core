@@ -2195,6 +2195,7 @@
   "learner.sessionInsight.focusTopicDrill": "When you are ready, a short question drill on {{topic}} matches what this run showed.",
   "learner.sessionInsight.struggle": "Most misses in this session clustered around: {{topics}}.",
   "learner.shell.nav.cat": "CAT",
+  "learner.shell.nav.clinicalModules": "Clinical Modules",
   "learner.shell.nav.clinicalScenarios": "Clinical scenarios",
   "learner.shell.nav.examsSurface": "Exams",
   "learner.shell.nav.flashcards": "Flashcards",

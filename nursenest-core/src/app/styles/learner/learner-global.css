@@ -6460,3 +6460,93 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app,
   border: 1px solid color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-border-soft));
   background: color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface));
 }
+
+/* ==========================================================================
+ * Visual convergence — shared learner hub rhythm (2026-05 pass)
+ * Applied to canonical learner routes: lessons, practice-tests, flashcards,
+ * questions. Token-only; no layout logic.
+ * ========================================================================== */
+
+/* Learner page hero: bottom breathing room + heading scale */
+.nn-learner-page-hero {
+  padding-bottom: 0.25rem;
+}
+
+.nn-learner-page-hero h1 {
+  font-size: clamp(1.35rem, 0.55vw + 1.2rem, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.024em;
+  line-height: 1.24;
+  color: var(--semantic-text-primary);
+}
+
+@media (min-width: 640px) {
+  .nn-learner-page-hero {
+    padding-bottom: 0.5rem;
+  }
+}
+
+/* Lessons hub top breathing room below sticky nav */
+.nn-app-lessons-hub-premium {
+  padding-top: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .nn-app-lessons-hub-premium {
+    padding-top: 0.5rem;
+  }
+}
+
+/* Shared surface card for learner hubs: consistent corner radius + shadow */
+.nn-learner-hub-card {
+  border-radius: 1.25rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+/* Softer practice hub builder on tablet — remove overcrowding */
+@media (min-width: 640px) and (max-width: 1279px) {
+  .nn-premium-practice-hub-builder {
+    padding: 1.5rem;
+  }
+}
+
+/* Flashcard hub hero compact-header: taller on tablet for reading comfort */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .nn-flashcards-hub-hero {
+    padding: 1.5rem;
+  }
+}
+
+/* Flashcard rail: never compress main content — only show on xl+ */
+@media (max-width: 1023px) {
+  .nn-flashcard-session-rail {
+    position: static;
+  }
+}
+
+/* Practice-tests hub: sidebar is xl-only — tablet is single column */
+@media (max-width: 1279px) {
+  .nn-practice-tests-hub-premium .nn-premium-cat-tools-rail {
+    display: none;
+  }
+}
+
+/* Improve QBank accordion form control sizing on tablet */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .nn-qbank-skeleton {
+    border-radius: 1.25rem;
+  }
+}
+
+/* History list rows: less cluttered — single border, consistent radius */
+.nn-practice-tests-hub-premium .nn-student-card-lift {
+  border-radius: 1.1rem;
+}
+
+/* Ensure learner hub headers are never orphaned from their content */
+.nn-learner-page-hero + * {
+  margin-top: 0;
+}
+

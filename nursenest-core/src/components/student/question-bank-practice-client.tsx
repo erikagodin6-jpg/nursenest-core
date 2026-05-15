@@ -1165,11 +1165,11 @@ export function QuestionBankPracticeClient({
         <p className="rounded-lg border border-role-warning-border bg-role-warning-soft px-3 py-2 text-sm text-role-warning-text">{softNotice}</p>
       ) : null}
 
-      <details className="nn-card mb-4 overflow-hidden rounded-xl border border-[var(--semantic-border-soft)]">
-        <summary className="cursor-pointer px-4 py-3.5 text-sm font-semibold text-[var(--semantic-text-primary)] outline-none hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_30%,transparent)]">
+      <details className="mb-6 overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)]">
+        <summary className="cursor-pointer px-5 py-4 text-sm font-semibold text-[var(--semantic-text-primary)] outline-none hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_30%,transparent)]">
           {t("learner.qbank.examUi.sessionSetup")}
         </summary>
-        <div className="space-y-6 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_10%,transparent)] p-4">
+        <div className="space-y-7 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_6%,transparent)] p-5 sm:p-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
               {t("learner.qbank.filters.sessionBuilderHeading")}
@@ -1337,7 +1337,7 @@ export function QuestionBankPracticeClient({
             ) : null}
           </div>
 
-          <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)] bg-[color-mix(in_srgb,var(--semantic-surface)_40%,transparent)] p-3">
+          <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)] bg-[color-mix(in_srgb,var(--semantic-surface)_40%,transparent)] p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
               {t("learner.qbank.filters.presetsHeading")}
             </p>

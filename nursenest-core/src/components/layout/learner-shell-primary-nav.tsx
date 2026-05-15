@@ -248,6 +248,19 @@ function useLearnerNavItems({
       });
       insertAt += 1;
     }
+    // Clinical Modules flyout — always present after optional items, before Reports.
+    // Positioned at insertAt (after optional modules) so it groups with specialty content.
+    const clinicalModules = buildClinicalModulesShellNavItem(pathwayId);
+    const clinicalModulesLabel = formatTitleCase(
+      t(clinicalModules.labelKey) || "Clinical Modules",
+      locale,
+    );
+    rows.splice(insertAt, 0, {
+      id: clinicalModules.id,
+      href: clinicalModules.href,
+      matchPrefix: clinicalModules.matchPrefix,
+      label: clinicalModulesLabel,
+    });
     return rows;
   }, [pathwayId, examsLabel, printablesNavVisible, t, locale]);
 }
@@ -288,6 +301,11 @@ export function LearnerShellDesktopStudyLinks({
 }: Pick<LearnerShellNavProps, "pathwayId" | "examsLabel" | "printablesNavVisible">) {
   const pathname = usePathname();
   const items = useLearnerNavItems({ pathwayId, examsLabel, printablesNavVisible });
+  // Pre-build Clinical Modules links so flyout doesn't need pathwayId re-lookup.
+  const clinicalModulesLinks: ClinicalModulesNavLink[] = useMemo(
+    () => buildClinicalModulesShellNavItem(pathwayId).links,
+    [pathwayId],
+  );
 
   // `max-md:hidden` — avoid Tailwind v4 `hidden` + `md:block` display ordering bugs (desktop nav stuck display:none).
   return (
@@ -300,6 +318,20 @@ export function LearnerShellDesktopStudyLinks({
         {items.map((item) => {
           const active = isLearnerShellNavActive(pathname, item);
           const isPrimarySurface = isLearnerPrimaryNavKey(item.id);
+
+          // Clinical Modules renders as a flyout dropdown, not a plain link.
+          if (item.id === CLINICAL_MODULES_SHELL_NAV_ID) {
+            return (
+              <ClinicalModulesFlyout
+                key={item.id}
+                label={item.label}
+                links={clinicalModulesLinks}
+                isActive={active}
+                pathwayId={pathwayId}
+              />
+            );
+          }
+
           return (
             <Link
               key={item.id}

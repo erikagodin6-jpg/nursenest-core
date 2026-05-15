@@ -691,7 +691,7 @@ export function FlashcardsHubClient({
 
   return (
     <LearnerStudyPageShell
-      className="nn-flashcards-hub-premium space-y-4 py-4 sm:space-y-5 sm:py-5"
+      className="nn-flashcards-hub-premium space-y-6 py-4 sm:space-y-8 sm:py-5"
       data-nn-premium-flashcard-convergence
       data-nn-premium-full-platform-convergence=""
       data-nn-premium-platform-family="exam-study"
@@ -703,7 +703,7 @@ export function FlashcardsHubClient({
       <h1 className="sr-only">{heroTitle}</h1>
 
       <header
-        className="nn-flashcards-hub-hero rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_10%,var(--semantic-surface))] px-4 py-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:py-4"
+        className="nn-flashcards-hub-hero rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_10%,var(--semantic-surface))] px-5 py-5 shadow-[var(--semantic-shadow-soft)] sm:px-6 sm:py-5"
         data-nn-e2e-flashcards-compact-header
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -721,7 +721,7 @@ export function FlashcardsHubClient({
           <LearnerCtaLink
             href={startHref}
             data-nn-e2e-start-review
-            className="inline-flex min-h-12 shrink-0 items-center justify-center px-6 py-3 text-base font-semibold shadow-[var(--semantic-shadow-soft)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_32%,transparent)] sm:min-h-11 sm:px-7"
+            className="inline-flex min-h-12 shrink-0 items-center justify-center px-6 py-3 text-base font-semibold shadow-[var(--semantic-shadow-soft)] sm:min-h-11 sm:px-7"
           >
             {t("flashcards.startSession")}
           </LearnerCtaLink>
@@ -735,7 +735,7 @@ export function FlashcardsHubClient({
       ) : null}
 
       <section
-        className="nn-flashcards-deck-library-surface relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5"
+        className="nn-flashcards-deck-library-surface relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_8%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
         aria-labelledby="nn-flashcards-categories-heading"
         data-nn-e2e-flashcards-canonical-grid
       >
@@ -776,7 +776,7 @@ export function FlashcardsHubClient({
       {hubContextualNotice}
 
       <div
-        className="nn-flashcards-deck-match-band rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 shadow-[var(--semantic-shadow-soft)] sm:px-5"
+        className="nn-flashcards-deck-match-band rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-4 shadow-[var(--semantic-shadow-soft)] sm:px-6"
         data-nn-e2e-flashcards-deck-band
       >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
@@ -802,7 +802,7 @@ export function FlashcardsHubClient({
           <LearnerCtaLink
             href={startHref}
             data-nn-e2e-start-review-bottom
-            className="inline-flex shrink-0 min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold shadow-[var(--semantic-shadow-soft)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_32%,transparent)]"
+            className="inline-flex shrink-0 min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold shadow-[var(--semantic-shadow-soft)]"
           >
             {selectedCanonicalIds.length > 0
               ? `Start — ${selectedCanonicalIds.length} system${selectedCanonicalIds.length === 1 ? "" : "s"} →`
