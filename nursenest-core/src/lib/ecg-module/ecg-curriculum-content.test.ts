@@ -360,3 +360,137 @@ describe("Level 3 — Advanced content specific checks", () => {
     );
   });
 });
+
+// ─── Governance metadata ─────────────────────────────────────────────────────
+
+describe("Curriculum governance metadata", () => {
+  it("NSR unit (the reference implementation) has full governance metadata", () => {
+    const nsr = ECG_CURRICULUM.find((l) => l.level === 1)!.units.find((u) => u.id === "normal-sinus-rhythm");
+    assert.ok(nsr, "NSR unit must exist as the canonical governance reference");
+    assert.ok(nsr!.governance, "NSR unit must have governance metadata");
+    assert.ok(nsr!.governance!.authoredAt, "governance.authoredAt must be set");
+    assert.ok(nsr!.governance!.reviewedAt, "governance.reviewedAt must be set");
+    assert.ok(nsr!.governance!.reviewedBy.trim().length > 0, "governance.reviewedBy must be non-empty");
+    assert.equal(nsr!.governance!.clinicalReviewStatus, "reviewed", "NSR governance status must be 'reviewed'");
+  });
+
+  it("all units with governance metadata have valid clinicalReviewStatus", () => {
+    const VALID_STATUSES = new Set(["draft", "reviewed", "stale"]);
+    for (const level of ECG_CURRICULUM) {
+      for (const unit of level.units) {
+        if (!unit.governance) continue;
+        assert.ok(
+          VALID_STATUSES.has(unit.governance.clinicalReviewStatus),
+          `Unit "${unit.id}".governance.clinicalReviewStatus "${unit.governance.clinicalReviewStatus}" is not a valid value`,
+        );
+      }
+    }
+  });
+
+  it("no governance block has clinicalReviewStatus='stale' (triggers content refresh requirement)", () => {
+    for (const level of ECG_CURRICULUM) {
+      for (const unit of level.units) {
+        if (!unit.governance) continue;
+        assert.notEqual(
+          unit.governance.clinicalReviewStatus,
+          "stale",
+          `Unit "${unit.id}" has governance.clinicalReviewStatus="stale" — update content and set to "reviewed"`,
+        );
+      }
+    }
+  });
+
+  it("units with governance have non-empty guidelineVersion", () => {
+    for (const level of ECG_CURRICULUM) {
+      for (const unit of level.units) {
+        if (!unit.governance) continue;
+        assert.ok(
+          unit.governance.guidelineVersion.trim().length > 0,
+          `Unit "${unit.id}".governance.guidelineVersion must not be empty`,
+        );
+      }
+    }
+  });
+});
+
+// ─── relatedConceptUnitIds linkage ───────────────────────────────────────────
+
+describe("relatedConceptUnitIds — no orphaned foundation units", () => {
+  it("all relatedConceptUnitIds reference existing unit IDs", () => {
+    const allIds = new Set(ECG_CURRICULUM.flatMap((l) => l.units.map((u) => u.id)));
+    for (const level of ECG_CURRICULUM) {
+      for (const unit of level.units) {
+        if (!unit.relatedConceptUnitIds) continue;
+        for (const relId of unit.relatedConceptUnitIds) {
+          assert.ok(
+            allIds.has(relId),
+            `Unit "${unit.id}".relatedConceptUnitIds references unknown unit ID "${relId}"`,
+          );
+        }
+      }
+    }
+  });
+
+  it("AF unit links to rhythm-regularity and p-wave-identification foundational units", () => {
+    const af = ECG_CURRICULUM.find((l) => l.level === 2)!.units.find((u) => u.id === "atrial-fibrillation");
+    assert.ok(af, "AF unit must exist");
+    assert.ok(
+      af!.relatedConceptUnitIds?.includes("rhythm-regularity"),
+      "AF must link to rhythm-regularity (AF diagnosis depends on irregularity recognition)",
+    );
+  });
+
+  it("VT unit links to qrs-width foundational unit", () => {
+    const vt = ECG_CURRICULUM.find((l) => l.level === 2)!.units.find((u) => u.id === "ventricular-tachycardia");
+    assert.ok(vt, "VT unit must exist");
+    assert.ok(
+      vt!.relatedConceptUnitIds?.includes("qrs-width"),
+      "VT must link to qrs-width (VT diagnosis depends on wide QRS recognition)",
+    );
+  });
+});
+
+// ─── Rhythm tag registry integration ────────────────────────────────────────
+
+describe("Rhythm tag registry — coverage integrity", () => {
+  it("all rhythm tags in ECG_RHYTHM_TAG_REGISTRY with curriculumUnitId reference existing unit IDs", async () => {
+    const { ECG_RHYTHM_TAG_REGISTRY } = await import("./ecg-rhythm-tag-registry");
+    const allIds = new Set(ECG_CURRICULUM.flatMap((l) => l.units.map((u) => u.id)));
+    for (const entry of ECG_RHYTHM_TAG_REGISTRY) {
+      if (!entry.curriculumUnitId) continue;
+      assert.ok(
+        allIds.has(entry.curriculumUnitId),
+        `Registry entry "${entry.tag}".curriculumUnitId "${entry.curriculumUnitId}" references unknown curriculum unit`,
+      );
+    }
+  });
+
+  it("all registry fallbackUnitIds reference existing unit IDs", async () => {
+    const { ECG_RHYTHM_TAG_REGISTRY } = await import("./ecg-rhythm-tag-registry");
+    const allIds = new Set(ECG_CURRICULUM.flatMap((l) => l.units.map((u) => u.id)));
+    for (const entry of ECG_RHYTHM_TAG_REGISTRY) {
+      if (!entry.fallbackUnitId) continue;
+      assert.ok(
+        allIds.has(entry.fallbackUnitId),
+        `Registry entry "${entry.tag}".fallbackUnitId "${entry.fallbackUnitId}" references unknown curriculum unit`,
+      );
+    }
+  });
+
+  it("PAC tag maps to pvcs-pacs curriculum unit", async () => {
+    const { getEcgRhythmTagEntry } = await import("./ecg-rhythm-tag-registry");
+    const pac = getEcgRhythmTagEntry("PAC");
+    assert.ok(pac, "PAC must be in the rhythm tag registry");
+    assert.equal(pac!.curriculumUnitId, "pvcs-pacs", "PAC must map to the pvcs-pacs unit");
+    assert.equal(pac!.coverage, "full", "PAC must have full coverage via the pvcs-pacs unit");
+  });
+
+  it("Asystole and PEA have fallback units (not silently null)", async () => {
+    const { getEcgRhythmTagEntry } = await import("./ecg-rhythm-tag-registry");
+    for (const tag of ["Asystole", "Pulseless electrical activity"]) {
+      const entry = getEcgRhythmTagEntry(tag);
+      assert.ok(entry, `"${tag}" must be in the registry`);
+      assert.ok(entry!.fallbackUnitId, `"${tag}" must have a fallbackUnitId — learners must never see a blank state`);
+    }
+  });
+});

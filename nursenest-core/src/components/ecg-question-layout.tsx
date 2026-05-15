@@ -132,31 +132,73 @@ function RhythmCell({
   );
 }
 
+/**
+ * Section priority tiers drive the progressive disclosure default state.
+ *
+ *   "primary"    — default expanded: mechanism, nursing priorities, correct-answer call-out.
+ *                  Learners must see these before moving on.
+ *   "secondary"  — default collapsed: rationale body, rhythm breakdown.
+ *                  Important context but not required for every review pass.
+ *   "advanced"   — default collapsed, visually deprioritized: differentials, extended pearls,
+ *                  telemetry pitfalls. Surfaced on demand by learners seeking depth.
+ *
+ * This prevents post-answer overload — the most common cause of learners scrolling past
+ * teaching content without reading it.
+ */
+type AccordionSectionPriority = "primary" | "secondary" | "advanced";
+
 function AccordionSection({
   title,
   icon,
   children,
   defaultOpen = false,
+  priority = "secondary",
   testId,
 }: {
   title: string;
   icon: React.ReactNode;
   children: React.ReactNode;
   defaultOpen?: boolean;
+  priority?: AccordionSectionPriority;
   testId?: string;
 }) {
   const [open, setOpen] = useState(defaultOpen);
+
+  const headerBg =
+    priority === "primary"
+      ? "bg-violet-50/60 hover:bg-violet-50"
+      : priority === "advanced"
+        ? "bg-slate-50/50 hover:bg-slate-100/60"
+        : "bg-slate-50/80 hover:bg-slate-100/80";
+
+  const titleCls =
+    priority === "primary"
+      ? "text-sm font-semibold text-violet-800"
+      : priority === "advanced"
+        ? "text-sm font-medium text-slate-500"
+        : "text-sm font-semibold text-slate-700";
+
   return (
-    <div className="rounded-2xl border border-slate-200/70 overflow-hidden" data-testid={testId}>
+    <div
+      className="rounded-2xl border border-slate-200/70 overflow-hidden"
+      data-testid={testId}
+      data-section-priority={priority}
+    >
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-slate-50/80 hover:bg-slate-100/80 transition-colors text-left"
+        className={cn(
+          "w-full flex items-center justify-between px-4 py-3 transition-colors text-left",
+          headerBg,
+        )}
         aria-expanded={open}
         type="button"
       >
-        <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+        <div className={cn("flex items-center gap-2", titleCls)}>
           {icon}
           {title}
+          {priority === "advanced" && !open && (
+            <span className="ml-1 text-[10px] font-normal text-slate-400 tracking-wide">(advanced)</span>
+          )}
         </div>
         {open ? (
           <ChevronUp className="w-4 h-4 text-slate-400 shrink-0" />
@@ -239,6 +281,20 @@ export function ECGQuestionLayout({
 
   const optionLabels = ["A", "B", "C", "D", "E"];
 
+  // Build a machine-readable strip description for screen readers.
+  // Combines rhythm metadata into a single sentence so keyboard/VoiceOver
+  // users receive a clinically meaningful description of the strip findings.
+  const stripAriaDescription = [
+    question.imageDescription,
+    question.rhythmRate ? `Rate: ${question.rhythmRate}.` : "",
+    question.rhythmRegularity ? `Rhythm: ${question.rhythmRegularity}.` : "",
+    question.pWaves ? `P waves: ${question.pWaves}.` : "",
+    question.qrsWidth ? `QRS: ${question.qrsWidth}.` : "",
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+
   // ── Paywall gate ─────────────────────────────────────────────────────────
   if (locked) return <ECGPaywallGate question={question} />;
 
@@ -251,7 +307,15 @@ export function ECGQuestionLayout({
         data-testid="section-ecg-strip"
         role="region"
         aria-label="ECG/EKG clinical strip and findings"
+        aria-describedby={`ecg-strip-desc-${question.id}`}
       >
+        {/* Hidden machine-readable description for screen readers */}
+        <p
+          id={`ecg-strip-desc-${question.id}`}
+          className="sr-only"
+        >
+          {stripAriaDescription || `ECG strip for question ${question.id}.`}
+        </p>
         {/* Header bar */}
         <div className="flex items-center justify-between px-4 py-2.5 bg-slate-800/80 border-b border-slate-700/60">
           <div className="flex items-center gap-2">
@@ -272,10 +336,10 @@ export function ECGQuestionLayout({
 
         {/* Strip image (HTTPS only) OR safe text description fallback */}
         {isSafeImageUrl(question.imageUrl) ? (
-          <div className="bg-slate-950 overflow-x-auto">
+          <div className="bg-slate-950 overflow-x-auto" role="img" aria-label={stripAriaDescription || `ECG strip: ${question.imageDescription}`}>
             <img
               src={question.imageUrl}
-              alt={`ECG rhythm strip: ${question.imageDescription}`}
+              alt={stripAriaDescription || `ECG rhythm strip: ${question.imageDescription}`}
               className="w-full max-w-full object-contain block"
               style={{ minHeight: "120px", maxHeight: "220px" }}
               data-testid="img-ecg-strip"
@@ -454,6 +518,20 @@ export function ECGQuestionLayout({
         </AccordionSection>
       )}
 
+      {/* Screen-reader live region: announces grading result immediately on submission */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+      >
+        {submitted && (
+          selected === question.correctAnswer
+            ? `Correct. ${optionLabels[question.correctAnswer] ?? ""}: ${question.options[question.correctAnswer] ?? ""}`
+            : `Incorrect. The correct answer is ${optionLabels[question.correctAnswer] ?? ""}: ${question.options[question.correctAnswer] ?? ""}`
+        )}
+      </div>
+
       {/* ── Question stem + answer options ─────────────────────────────── */}
       <div className="bg-white rounded-2xl border border-slate-200/70 shadow-sm overflow-hidden">
         <div className="px-5 md:px-7 pt-5 pb-3">
@@ -564,15 +642,8 @@ export function ECGQuestionLayout({
           role="region"
           aria-label="ECG question rationale and rhythm breakdown"
         >
-          <div className="px-5 md:px-6 pt-5 pb-6 space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center">
-                <BookOpen className="w-3.5 h-3.5 text-violet-600" aria-hidden="true" />
-              </div>
-              <span className="text-sm font-bold text-slate-800">Rationale</span>
-            </div>
-
-            {/* Correct answer call-out */}
+          <div className="px-5 md:px-6 pt-5 pb-4 space-y-3">
+            {/* ── Always visible: correct answer call-out ───────────── */}
             <div className="rounded-xl border border-emerald-200/70 bg-emerald-50/40 p-3">
               <div className="flex items-center gap-2 mb-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
@@ -586,44 +657,66 @@ export function ECGQuestionLayout({
               </p>
             </div>
 
-            {/* Rationale text */}
-            <div className="text-sm text-slate-700 leading-relaxed space-y-2">
-              {question.rationale
-                .split(/\n\n+/)
-                .filter(Boolean)
-                .map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
-            </div>
-
-            {/* Rhythm breakdown (practice deep-dive) */}
-            {hasRhythm && (
-              <div
-                className="rounded-xl border border-violet-200/60 bg-violet-50/30 p-3 space-y-2"
-                data-testid="section-rhythm-breakdown"
-              >
-                <p className="text-[11px] font-bold uppercase tracking-widest text-violet-700 mb-2">
-                  Rhythm Breakdown
-                </p>
-                {[
-                  { label: "Rate", value: question.rhythmRate },
-                  { label: "Regularity", value: question.rhythmRegularity },
-                  { label: "P Waves", value: question.pWaves },
-                  { label: "PR Interval", value: question.prInterval },
-                  { label: "QRS Width", value: question.qrsWidth },
-                  { label: "Clinical Significance", value: question.clinicalSignificance },
-                  { label: "Nursing / NP Action", value: question.nursingAction },
-                ]
-                  .filter((r) => r.value)
-                  .map(({ label, value }) => (
-                    <div key={label} className="flex gap-2 text-sm">
-                      <span className="font-semibold text-violet-700 shrink-0 min-w-[140px]">
-                        {label}:
-                      </span>
-                      <span className="text-slate-700">{value}</span>
-                    </div>
+            {/* ── Primary (default open): rationale explanation ─────── */}
+            <AccordionSection
+              title="Explanation"
+              icon={<BookOpen className="w-4 h-4 text-violet-600" aria-hidden="true" />}
+              defaultOpen={true}
+              priority="primary"
+              testId="section-ecg-explanation"
+            >
+              <div className="text-sm text-slate-700 leading-relaxed space-y-2">
+                {question.rationale
+                  .split(/\n\n+/)
+                  .filter(Boolean)
+                  .map((para, i) => (
+                    <p key={i}>{para}</p>
                   ))}
               </div>
+            </AccordionSection>
+
+            {/* ── Primary (default open): nursing priorities / action ── */}
+            {question.nursingAction && (
+              <AccordionSection
+                title="Nursing / NP Priority"
+                icon={<ArrowRight className="w-4 h-4 text-teal-600" aria-hidden="true" />}
+                defaultOpen={true}
+                priority="primary"
+                testId="section-nursing-priority"
+              >
+                <p className="text-sm text-teal-900 leading-snug">{question.nursingAction}</p>
+              </AccordionSection>
+            )}
+
+            {/* ── Secondary (default collapsed): rhythm breakdown ───── */}
+            {hasRhythm && (
+              <AccordionSection
+                title="Rhythm Breakdown"
+                icon={<TrendingUp className="w-4 h-4 text-violet-500" aria-hidden="true" />}
+                defaultOpen={false}
+                priority="secondary"
+                testId="section-rhythm-breakdown"
+              >
+                <div className="space-y-1.5">
+                  {[
+                    { label: "Rate", value: question.rhythmRate },
+                    { label: "Regularity", value: question.rhythmRegularity },
+                    { label: "P Waves", value: question.pWaves },
+                    { label: "PR Interval", value: question.prInterval },
+                    { label: "QRS Width", value: question.qrsWidth },
+                    { label: "Clinical Significance", value: question.clinicalSignificance },
+                  ]
+                    .filter((r) => r.value)
+                    .map(({ label, value }) => (
+                      <div key={label} className="flex gap-2 text-sm">
+                        <span className="font-semibold text-violet-700 shrink-0 min-w-[140px]">
+                          {label}:
+                        </span>
+                        <span className="text-slate-700">{value}</span>
+                      </div>
+                    ))}
+                </div>
+              </AccordionSection>
             )}
           </div>
         </div>

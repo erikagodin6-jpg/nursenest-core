@@ -1,13 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import type { EcgLevel, EcgMode, EcgRouteKind } from "@/lib/ecg-module/ecg-module-config";
 import { EcgLiveStrip } from "@/components/study/ecg-live-strip";
 import { isEcgLiveStripMediaConfig } from "@/lib/ecg-module/ecg-strip-clinical-validation";
 import { ECG_LIVE_STRIP_MEDIA_TYPE } from "@/lib/ecg-video-quiz/ecg-video-question";
 import { EcgInterpretationScaffold } from "@/components/ecg-module/ecg-interpretation-scaffold";
-import { getEcgCurriculumUnitByRhythmTag } from "@/lib/ecg-module/ecg-curriculum-content";
+import {
+  getEcgCurriculumUnitByRhythmTag,
+  type EcgCurriculumUnit,
+} from "@/lib/ecg-module/ecg-curriculum-content";
+import {
+  trackEcgQuestionAnswered,
+  trackEcgLessonCardExpanded,
+  trackEcgLessonCardSectionOpened,
+  trackEcgRationaleViewed,
+  trackEcgAnswerApiFailed,
+  trackEcgCurriculumUnitMissing,
+  trackEcgLevelStarted,
+} from "@/lib/ecg-module/ecg-telemetry";
+import {
+  resolveEcgCurriculumUnitIdForTag,
+  getEcgRhythmTagEntry,
+} from "@/lib/ecg-module/ecg-rhythm-tag-registry";
 
 type EcgQuestion = {
   id: string;
@@ -45,8 +61,16 @@ type AnswerResult = {
   commonWrongAnswers: string[];
 };
 
-/** Phase of a single question card */
 type QuestionPhase = "scaffold" | "answering" | "submitted";
+
+/** Scroll into view respecting prefers-reduced-motion. */
+function scrollIntoViewAccessible(el: HTMLElement | null, block: ScrollLogicalPosition = "nearest") {
+  if (!el) return;
+  const prefersReduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ behavior: prefersReduced ? "instant" : "smooth", block });
+}
 
 // ─── VideoPreview ────────────────────────────────────────────────────────────
 
@@ -72,8 +96,8 @@ function VideoPreview({
       loop={autoplay}
       preload="metadata"
       poster={thumbnailUrl ?? undefined}
-      onLoadedMetadata={(event) => {
-        if (slow) event.currentTarget.playbackRate = 0.75;
+      onLoadedMetadata={(e) => {
+        if (slow) e.currentTarget.playbackRate = 0.75;
       }}
     >
       <source src={source} />
@@ -81,22 +105,151 @@ function VideoPreview({
   );
 }
 
-// ─── CurriculumLessonCard ────────────────────────────────────────────────────
+// ─── LessonSection ───────────────────────────────────────────────────────────
 
-function CurriculumLessonCard({ rhythmTag }: { rhythmTag: string }) {
+function LessonSection({
+  title,
+  body,
+  defaultOpen = false,
+  onOpen,
+}: {
+  title: string;
+  body: string;
+  defaultOpen?: boolean;
+  onOpen?: (title: string) => void;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  function handleToggle() {
+    const next = !open;
+    setOpen(next);
+    if (next && onOpen) onOpen(title);
+  }
+
+  return (
+    <div className="rounded-lg border border-[var(--semantic-border-soft)]">
+      <button
+        type="button"
+        className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left"
+        onClick={handleToggle}
+        aria-expanded={open}
+      >
+        <span className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+          {title}
+        </span>
+        {open ? (
+          <ChevronUp className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-text-muted)]" aria-hidden />
+        ) : (
+          <ChevronDown className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-text-muted)]" aria-hidden />
+        )}
+      </button>
+      {open ? (
+        <div className="border-t border-[var(--semantic-border-soft)] px-3 pb-3 pt-2">
+          <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{body}</p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+// ─── CurriculumLessonCard ─────────────────────────────────────────────────────
+
+function CurriculumLessonCard({
+  rhythmTag,
+  level,
+  mode,
+  questionId,
+  isCorrect,
+}: {
+  rhythmTag: string;
+  level: string;
+  mode: string;
+  questionId: string;
+  isCorrect: boolean;
+}) {
   const [open, setOpen] = useState(false);
-  const unit = getEcgCurriculumUnitByRhythmTag(rhythmTag);
+
+  // Use registry to resolve unit (handles fallback/excluded tags)
+  const registryEntry = getEcgRhythmTagEntry(rhythmTag);
+  const resolvedUnitId = resolveEcgCurriculumUnitIdForTag(rhythmTag);
+  const unit: EcgCurriculumUnit | undefined = resolvedUnitId
+    ? getEcgCurriculumUnitByRhythmTag(rhythmTag) ??
+      (resolvedUnitId !== rhythmTag ? getEcgCurriculumUnitByRhythmTag(resolvedUnitId) : undefined)
+    : undefined;
+
+  const base = { rhythm_tag: rhythmTag, level, mode, question_id: questionId, is_correct: isCorrect };
+
+  // Graceful fallback for unknown tags (not in registry at all)
+  if (!registryEntry) {
+    // Fire observability event — this should not happen in production if seeding is correct
+    useEffect(() => {
+      trackEcgCurriculumUnitMissing(
+        { rhythm_tag: rhythmTag, level, mode, question_id: questionId },
+        { lookupType: "rhythmTag" },
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rhythmTag]);
+
+    return (
+      <div
+        className="rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-warning)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_05%,var(--semantic-surface))] px-4 py-3"
+        data-testid="curriculum-lesson-card-missing"
+        role="note"
+        aria-label="Curriculum lesson unavailable"
+      >
+        <p className="text-xs font-semibold text-[var(--semantic-text-muted)]">
+          Rhythm lesson not yet available
+        </p>
+        <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--semantic-text-secondary)]">
+          Deep teaching content for <span className="font-medium">{rhythmTag}</span> is being developed.
+          Review the rationale above and explore related rhythms in the ECG Foundations hub.
+        </p>
+      </div>
+    );
+  }
+
+  // Fallback/excluded tags: show a contextual redirect, not a blank state
+  if (!unit && registryEntry.fallbackUnitId) {
+    const fallbackUnit = getEcgCurriculumUnitByRhythmTag(registryEntry.fallbackUnitId);
+    return (
+      <div
+        className="rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_04%,var(--semantic-surface))] px-4 py-3"
+        data-testid="curriculum-lesson-card-fallback"
+        role="note"
+        aria-label="Related curriculum content"
+      >
+        <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+          Related lesson
+        </p>
+        <p className="mt-0.5 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+          {registryEntry.coverageNote ??
+            `A dedicated lesson for "${rhythmTag}" is in development. Study the related "${fallbackUnit?.title ?? registryEntry.fallbackUnitId}" topic for clinical context.`}
+        </p>
+      </div>
+    );
+  }
+
   if (!unit) return null;
+
+  function handleExpand() {
+    const next = !open;
+    setOpen(next);
+    if (next) trackEcgLessonCardExpanded(base);
+  }
+
+  const onSectionOpen = (title: string) => {
+    trackEcgLessonCardSectionOpened(base, { sectionTitle: title });
+  };
 
   return (
     <div
-      className="mt-4 rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_05%,var(--semantic-surface))]"
+      className="rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_05%,var(--semantic-surface))]"
       data-testid="curriculum-lesson-card"
     >
       <button
         type="button"
         className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
-        onClick={() => setOpen((o) => !o)}
+        onClick={handleExpand}
         aria-expanded={open}
       >
         <div className="min-w-0">
@@ -116,53 +269,58 @@ function CurriculumLessonCard({ rhythmTag }: { rhythmTag: string }) {
 
       {open ? (
         <div
-          className="space-y-5 border-t border-[color-mix(in_srgb,var(--semantic-chart-3)_14%,var(--semantic-border-soft))] px-4 py-4 text-sm leading-relaxed"
+          className="space-y-2 border-t border-[color-mix(in_srgb,var(--semantic-chart-3)_14%,var(--semantic-border-soft))] px-4 py-4"
           data-testid="curriculum-lesson-body"
         >
+          {/* Rhythm parameters table — always visible when expanded */}
           {unit.parameters ? (
-            <div className="space-y-2">
-              <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-                Rhythm Parameters
-              </p>
-              <dl className="grid gap-1.5 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 sm:grid-cols-2">
-                {(
-                  [
-                    ["Rate", unit.parameters.rate],
-                    ["Regularity", unit.parameters.regularity],
-                    ["P Waves", unit.parameters.pWaves],
-                    ["PR Interval", unit.parameters.prInterval],
-                    ["QRS Width", unit.parameters.qrsWidth],
-                    ["ST Changes", unit.parameters.stChanges],
-                  ] as [string, string][]
-                ).map(([label, value]) => (
-                  <div key={label} className="min-w-0">
-                    <dt className="text-[11px] font-semibold text-[var(--semantic-text-muted)]">{label}</dt>
-                    <dd className="text-xs font-medium text-[var(--semantic-text-primary)]">{value}</dd>
-                  </div>
-                ))}
-              </dl>
+            <div className="mb-3 grid gap-1.5 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 sm:grid-cols-2">
+              {(
+                [
+                  ["Rate", unit.parameters.rate],
+                  ["Regularity", unit.parameters.regularity],
+                  ["P Waves", unit.parameters.pWaves],
+                  ["PR Interval", unit.parameters.prInterval],
+                  ["QRS Width", unit.parameters.qrsWidth],
+                  ["ST Changes", unit.parameters.stChanges],
+                ] as [string, string][]
+              ).map(([label, value]) => (
+                <div key={label} className="min-w-0">
+                  <dt className="text-[11px] font-semibold text-[var(--semantic-text-muted)]">{label}</dt>
+                  <dd className="text-xs font-medium text-[var(--semantic-text-primary)]">{value}</dd>
+                </div>
+              ))}
             </div>
           ) : null}
 
-          <LessonSection title="Mechanism" body={unit.mechanism} />
-          <LessonSection title="Conduction Pathway" body={unit.conductionPath} />
-          <LessonSection title="Why the Strip Looks This Way" body={unit.whyStripLooksThisWay} />
-          <LessonSection title="Clinical Implications" body={unit.clinicalImplications} />
+          {/* Priority sections — expanded by default */}
+          <LessonSection title="Mechanism" body={unit.mechanism} defaultOpen onOpen={onSectionOpen} />
+          <LessonSection title="Nursing Priorities" body={unit.nursingPriorities.join(" · ")} defaultOpen onOpen={onSectionOpen} />
 
-          {unit.hemodynamics ? (
-            <LessonSection title="Hemodynamic Consequences" body={unit.hemodynamics} />
-          ) : null}
+          {/* Secondary sections — collapsed by default (reduces cognitive overload) */}
+          <LessonSection title="Conduction Pathway" body={unit.conductionPath} onOpen={onSectionOpen} />
+          <LessonSection title="Why This Strip Looks This Way" body={unit.whyStripLooksThisWay} onOpen={onSectionOpen} />
+          <LessonSection title="Clinical Implications" body={unit.clinicalImplications} onOpen={onSectionOpen} />
+          <LessonSection title="Hemodynamic Consequences" body={unit.hemodynamics} onOpen={onSectionOpen} />
 
+          {/* NCLEX Traps — visually distinct */}
           {unit.nclexTraps.length > 0 ? (
-            <div className="space-y-1.5">
-              <p className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-warning)_80%,var(--semantic-text-primary))]">
-                NCLEX Traps
-              </p>
-              <ul className="space-y-1.5 text-xs">
+            <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_20%,var(--semantic-border-soft))]">
+              <button
+                type="button"
+                className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left"
+                onClick={() => onSectionOpen("NCLEX Traps")}
+                aria-label="NCLEX Traps section"
+              >
+                <span className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-warning)_80%,var(--semantic-text-primary))]">
+                  NCLEX Traps ({unit.nclexTraps.length})
+                </span>
+              </button>
+              <ul className="border-t border-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-border-soft))] space-y-1.5 px-3 pb-3 pt-2">
                 {unit.nclexTraps.map((trap, i) => (
                   <li
                     key={i}
-                    className="flex gap-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_07%,var(--semantic-surface))] px-3 py-2"
+                    className="flex gap-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_06%,var(--semantic-surface))] px-3 py-2 text-xs"
                   >
                     <span className="mt-px shrink-0 text-[var(--semantic-warning)]">⚠</span>
                     <span className="leading-relaxed text-[var(--semantic-text-primary)]">{trap}</span>
@@ -172,29 +330,15 @@ function CurriculumLessonCard({ rhythmTag }: { rhythmTag: string }) {
             </div>
           ) : null}
 
-          {unit.nursingPriorities.length > 0 ? (
-            <div className="space-y-1.5">
-              <p className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-info)_80%,var(--semantic-text-primary))]">
-                Nursing Priorities
-              </p>
-              <ol className="list-decimal space-y-1 pl-4 text-xs">
-                {unit.nursingPriorities.map((priority, i) => (
-                  <li key={i} className="leading-relaxed text-[var(--semantic-text-secondary)]">
-                    {priority}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ) : null}
-
+          {/* Recognition pearls */}
           {unit.recognitionPearls.length > 0 ? (
-            <div className="space-y-1.5">
+            <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-success)_16%,var(--semantic-border-soft))] px-3 py-2.5">
               <p className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-success)_80%,var(--semantic-text-primary))]">
                 Recognition Pearls
               </p>
-              <ul className="space-y-1 text-xs">
+              <ul className="mt-1.5 space-y-1">
                 {unit.recognitionPearls.map((pearl, i) => (
-                  <li key={i} className="flex gap-2">
+                  <li key={i} className="flex gap-2 text-xs">
                     <span className="shrink-0 text-[var(--semantic-success)]">◆</span>
                     <span className="leading-relaxed text-[var(--semantic-text-secondary)]">{pearl}</span>
                   </li>
@@ -203,17 +347,15 @@ function CurriculumLessonCard({ rhythmTag }: { rhythmTag: string }) {
             </div>
           ) : null}
 
+          {/* Differential teaching */}
           {unit.notThisBecause && unit.notThisBecause.length > 0 ? (
-            <div className="space-y-1.5">
+            <div className="rounded-lg border border-[var(--semantic-border-soft)] px-3 py-2.5">
               <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
                 Why Not the Other Options
               </p>
-              <ul className="space-y-1.5 text-xs">
+              <ul className="mt-1.5 space-y-1.5">
                 {unit.notThisBecause.map((item, i) => (
-                  <li
-                    key={i}
-                    className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2"
-                  >
+                  <li key={i} className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-xs">
                     <span className="font-semibold text-[var(--semantic-text-primary)]">{item.rhythm}: </span>
                     <span className="text-[var(--semantic-text-secondary)]">{item.distinguisher}</span>
                   </li>
@@ -227,15 +369,6 @@ function CurriculumLessonCard({ rhythmTag }: { rhythmTag: string }) {
   );
 }
 
-function LessonSection({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="space-y-1">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">{title}</p>
-      <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{body}</p>
-    </div>
-  );
-}
-
 // ─── EcgQuestionCard ─────────────────────────────────────────────────────────
 
 function EcgQuestionCard({
@@ -245,6 +378,8 @@ function EcgQuestionCard({
   onSubmit,
   result,
   submitting,
+  submitError,
+  onRetry,
 }: {
   item: EcgQuestion;
   kind: EcgRouteKind;
@@ -252,16 +387,29 @@ function EcgQuestionCard({
   onSubmit: (item: EcgQuestion, optionId: string) => Promise<void>;
   result: AnswerResult | undefined;
   submitting: boolean;
+  submitError: string | null;
+  onRetry: (item: EcgQuestion) => void;
 }) {
   const isGuidedLessonMode = level === "basic" && kind === "lessons";
   const isDrillMode = kind === "video-drills";
 
-  // For drill mode: skip scaffold, submit immediately on option click
-  const initialPhase: QuestionPhase = isDrillMode ? "answering" : isGuidedLessonMode ? "scaffold" : "answering";
+  const initialPhase: QuestionPhase = isDrillMode
+    ? "answering"
+    : isGuidedLessonMode
+      ? "scaffold"
+      : "answering";
+
   const [phase, setPhase] = useState<QuestionPhase>(initialPhase);
   const [pendingOptionId, setPendingOptionId] = useState<string | null>(null);
-  const [lessonExpanded, setLessonExpanded] = useState(false);
+  // Track scaffold state for analytics
+  const scaffoldStartedAt = useRef<number | null>(null);
+  const scaffoldStepsCompleted = useRef<number>(0);
+  const scaffoldWasCompleted = useRef(false);
+  const scaffoldWasSkipped = useRef(false);
+
   const resultRef = useRef<HTMLDivElement>(null);
+  const questionRef = useRef<HTMLHeadingElement>(null);
+  const liveRegionRef = useRef<HTMLDivElement>(null);
 
   const isSubmitted = Boolean(result);
   const isCorrect = result?.isCorrect ?? false;
@@ -270,14 +418,38 @@ function EcgQuestionCard({
   const selectedOptionLabel =
     item.options.find((o) => o.id === result?.selectedOptionId)?.text ?? "";
 
+  // Emit level_started telemetry once on mount
+  useEffect(() => {
+    if (kind === "lessons" || kind === "quizzes") {
+      trackEcgLevelStarted({ level, mode: kind });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Scaffold mount — record start time
+  useEffect(() => {
+    if (phase === "scaffold") {
+      scaffoldStartedAt.current = Date.now();
+    }
+  }, [phase]);
+
   function handleScaffoldComplete() {
+    const elapsed = scaffoldStartedAt.current ? Date.now() - scaffoldStartedAt.current : 0;
+    scaffoldWasCompleted.current = true;
     setPhase("answering");
+    // Focus the question heading so screen readers announce it
+    requestAnimationFrame(() => questionRef.current?.focus());
+  }
+
+  function handleScaffoldSkipped() {
+    scaffoldWasSkipped.current = true;
+    setPhase("answering");
+    requestAnimationFrame(() => questionRef.current?.focus());
   }
 
   async function handleOptionClick(optionId: string) {
     if (isSubmitted || submitting) return;
     if (isDrillMode) {
-      // Drills: immediate submit on click (quick-fire mode)
       await onSubmit(item, optionId);
       return;
     }
@@ -288,22 +460,41 @@ function EcgQuestionCard({
     if (!pendingOptionId || isSubmitted || submitting) return;
     await onSubmit(item, pendingOptionId);
     setPhase("submitted");
-    // Scroll result into view
-    setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 150);
+    // Scroll result into view — respects prefers-reduced-motion
+    setTimeout(() => scrollIntoViewAccessible(resultRef.current), 150);
+    // Move focus to result for screen readers
+    requestAnimationFrame(() => resultRef.current?.focus());
   }
+
+  // Announce result via live region when result arrives
+  useEffect(() => {
+    if (!result || !liveRegionRef.current) return;
+    liveRegionRef.current.textContent = result.isCorrect
+      ? `Correct. The rhythm is ${result.correctRhythm}.`
+      : `Incorrect. You selected ${selectedOptionLabel}. The correct answer is ${correctOptionLabel}.`;
+  }, [result, correctOptionLabel, selectedOptionLabel]);
 
   return (
     <li
       className="rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5"
       data-testid="ecg-question-card"
     >
+      {/* Screen-reader live region — announces grading result without scroll */}
+      <div
+        ref={liveRegionRef}
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+        data-testid="ecg-result-live-region"
+      />
+
       {item.clinicalPriority ? (
         <p className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-warning)_92%,var(--semantic-text-primary))]">
           Clinical priority: {item.clinicalPriority}
         </p>
       ) : null}
 
-      {/* Rhythm tag badge */}
       <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
         {item.rhythmTag}
       </p>
@@ -324,17 +515,29 @@ function EcgQuestionCard({
         />
       ) : null}
 
-      {/* Phase: scaffold */}
+      {/* Scaffold — only in guided lesson mode, before submission */}
       {phase === "scaffold" && !isSubmitted ? (
         <div className="mt-4">
-          <EcgInterpretationScaffold onComplete={handleScaffoldComplete} />
+          <EcgInterpretationScaffold
+            onComplete={handleScaffoldComplete}
+            onSkip={handleScaffoldSkipped}
+            questionId={item.id}
+            rhythmTag={item.rhythmTag}
+            level={level}
+            mode={kind}
+          />
         </div>
       ) : null}
 
-      {/* Phase: answering or submitted — question + options */}
+      {/* Question + options (visible after scaffold or in non-guided modes) */}
       {(phase === "answering" || phase === "submitted" || isDrillMode) ? (
         <div className="mt-4 space-y-3">
-          <h2 className="text-sm font-semibold leading-snug text-[var(--semantic-text-primary)] sm:text-base">
+          {/* tabIndex={-1} allows programmatic focus for focus management */}
+          <h2
+            ref={questionRef}
+            tabIndex={-1}
+            className="text-sm font-semibold leading-snug text-[var(--semantic-text-primary)] outline-none sm:text-base"
+          >
             {item.questionText}
           </h2>
 
@@ -345,26 +548,19 @@ function EcgQuestionCard({
                 const isSelected = result?.selectedOptionId === option.id;
                 const isCorrectOption = result?.correctAnswerId === option.id;
 
-                let cls =
-                  "w-full rounded-xl border px-3 py-2.5 text-left text-sm font-medium transition";
-
+                let cls = "w-full rounded-xl border px-3 py-2.5 text-left text-sm font-medium transition";
                 if (isSubmitted) {
                   if (isCorrectOption) {
-                    cls +=
-                      " border-[color-mix(in_srgb,var(--semantic-success)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]";
-                  } else if (isSelected && !isCorrectOption) {
-                    cls +=
-                      " border-[color-mix(in_srgb,var(--semantic-danger)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_08%,var(--semantic-surface))] text-[var(--semantic-text-secondary)] opacity-80";
+                    cls += " border-[color-mix(in_srgb,var(--semantic-success)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]";
+                  } else if (isSelected) {
+                    cls += " border-[color-mix(in_srgb,var(--semantic-danger)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_08%,var(--semantic-surface))] text-[var(--semantic-text-secondary)] opacity-80";
                   } else {
-                    cls +=
-                      " border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] opacity-50";
+                    cls += " border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] opacity-50";
                   }
                 } else if (isPending) {
-                  cls +=
-                    " border-[color-mix(in_srgb,var(--semantic-brand)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_11%,var(--semantic-surface))] text-[var(--semantic-text-primary)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_20%,transparent)]";
+                  cls += " border-[color-mix(in_srgb,var(--semantic-brand)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_11%,var(--semantic-surface))] text-[var(--semantic-text-primary)] ring-1 ring-[color-mix(in_srgb,var(--semantic-brand)_20%,transparent)]";
                 } else {
-                  cls +=
-                    " border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[var(--semantic-panel-muted)]";
+                  cls += " border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[var(--semantic-panel-muted)]";
                 }
 
                 return (
@@ -380,7 +576,7 @@ function EcgQuestionCard({
                   >
                     <span className="flex items-start gap-2">
                       {isSubmitted ? (
-                        <span className="mt-0.5 shrink-0 text-base leading-none">
+                        <span className="mt-0.5 shrink-0 text-base leading-none" aria-hidden>
                           {isCorrectOption ? "✓" : isSelected ? "✗" : ""}
                         </span>
                       ) : null}
@@ -392,7 +588,6 @@ function EcgQuestionCard({
             </div>
           ) : null}
 
-          {/* Submit button — appears after selection, before submission */}
           {!isSubmitted && !isDrillMode && pendingOptionId ? (
             <button
               type="button"
@@ -405,19 +600,40 @@ function EcgQuestionCard({
             </button>
           ) : null}
 
-          {/* Prompt to select an answer */}
           {!isSubmitted && !isDrillMode && !pendingOptionId ? (
             <p className="text-[11px] text-[var(--semantic-text-muted)]">
               Select an answer above, then click Submit.
             </p>
           ) : null}
+
+          {/* Submission API error with retry */}
+          {submitError && !isSubmitted ? (
+            <div
+              className="flex flex-wrap items-center gap-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_06%,var(--semantic-surface))] px-4 py-3"
+              role="alert"
+            >
+              <p className="text-xs text-[var(--semantic-danger)]">{submitError}</p>
+              <button
+                type="button"
+                onClick={() => onRetry(item)}
+                className="text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+              >
+                Try again
+              </button>
+            </div>
+          ) : null}
         </div>
       ) : null}
 
-      {/* Post-submission result */}
+      {/* Post-submission result area */}
       {isSubmitted ? (
-        <div className="mt-4 space-y-3" ref={resultRef}>
-          {/* Correct/incorrect banner */}
+        <div
+          ref={resultRef}
+          tabIndex={-1}
+          className="mt-4 space-y-3 outline-none"
+          data-testid="ecg-result-area"
+        >
+          {/* Result banner */}
           <div
             className={`flex items-start gap-3 rounded-xl border px-4 py-3 ${
               isCorrect
@@ -425,8 +641,10 @@ function EcgQuestionCard({
                 : "border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_06%,var(--semantic-surface))]"
             }`}
             data-testid="ecg-result-banner"
+            role="status"
+            aria-label={isCorrect ? "Correct answer" : "Incorrect answer"}
           >
-            <span className="mt-0.5 text-lg leading-none">{isCorrect ? "✓" : "✗"}</span>
+            <span className="mt-0.5 text-lg leading-none" aria-hidden>{isCorrect ? "✓" : "✗"}</span>
             <div className="min-w-0 text-sm">
               <p className="font-semibold text-[var(--semantic-text-primary)]">
                 {isCorrect ? "Correct" : "Incorrect"}
@@ -444,26 +662,42 @@ function EcgQuestionCard({
             </div>
           </div>
 
-          {/* Rationale (not shown in drill mode) */}
+          {/* Rationale */}
           {kind !== "video-drills" && result?.rationale ? (
-            <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
-              <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-                Rationale
-              </p>
-              <p className="mt-1.5 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-                {result.rationale}
-              </p>
-            </div>
+            <RationaleSection
+              rationale={result.rationale}
+              onView={() =>
+                trackEcgRationaleViewed({
+                  rhythm_tag: item.rhythmTag,
+                  level,
+                  mode: kind,
+                  question_id: item.id,
+                  is_correct: isCorrect,
+                })
+              }
+            />
           ) : null}
 
-          {/* Curriculum lesson card — deep teaching post-answer */}
+          {/* Deep curriculum lesson card */}
           {kind !== "video-drills" ? (
-            <CurriculumLessonCard rhythmTag={item.rhythmTag} />
+            <CurriculumLessonCard
+              rhythmTag={item.rhythmTag}
+              level={level}
+              mode={kind}
+              questionId={item.id}
+              isCorrect={isCorrect}
+            />
           ) : null}
 
-          {/* Guided scaffold review (lesson mode only) */}
-          {isGuidedLessonMode && phase === "scaffold" ? (
-            <EcgInterpretationScaffold reviewMode />
+          {/* Scaffold review (guided lesson mode only) — fixed condition: phase === "submitted" */}
+          {isGuidedLessonMode && phase === "submitted" ? (
+            <EcgInterpretationScaffold
+              reviewMode
+              questionId={item.id}
+              rhythmTag={item.rhythmTag}
+              level={level}
+              mode={kind}
+            />
           ) : null}
 
           {/* Performance stats */}
@@ -472,19 +706,40 @@ function EcgQuestionCard({
               ? "Not enough attempts yet to show class statistics."
               : `${result.percentCorrect}% of learners answered this correctly`}
             {result?.commonWrongAnswers.length ? (
-              <span> · Most common wrong answers: {result.commonWrongAnswers.join(", ")}</span>
+              <span> · Most common wrong: {result.commonWrongAnswers.join(", ")}</span>
             ) : null}
           </div>
         </div>
       ) : null}
 
-      {/* Pre-answer stats */}
       {!isSubmitted && item.percentCorrect != null ? (
         <p className="mt-3 text-xs text-[var(--semantic-text-muted)]">
           {item.percentCorrect}% of learners answered this correctly
         </p>
       ) : null}
     </li>
+  );
+}
+
+/** Rationale section — fires telemetry on first render (learner has seen it). */
+function RationaleSection({ rationale, onView }: { rationale: string; onView: () => void }) {
+  useEffect(() => {
+    onView();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div
+      className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3"
+      data-testid="ecg-rationale-section"
+    >
+      <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+        Rationale
+      </p>
+      <p className="mt-1.5 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+        {rationale}
+      </p>
+    </div>
   );
 }
 
@@ -501,6 +756,8 @@ export function EcgQuestionList({
 }) {
   const [items, setItems] = useState<EcgQuestion[]>([]);
   const [results, setResults] = useState<Record<string, AnswerResult>>({});
+  const [submitErrors, setSubmitErrors] = useState<Record<string, string>>({});
+  const [pendingRetry, setPendingRetry] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submittingId, setSubmittingId] = useState<string | null>(null);
@@ -516,12 +773,7 @@ export function EcgQuestionList({
     })
       .then(async (res) => {
         let data: { ok?: boolean; items?: EcgQuestion[]; detail?: string } = {};
-        try {
-          data = (await res.json()) as typeof data;
-        } catch {
-          if (!controller.signal.aborted) setError("We could not read the ECG question response. Try again shortly.");
-          return;
-        }
+        try { data = (await res.json()) as typeof data; } catch { /* ignore */ }
         if (controller.signal.aborted) return;
         if (res.status === 401) { setError("Sign in to load ECG questions."); return; }
         if (res.status === 403) {
@@ -551,20 +803,14 @@ export function EcgQuestionList({
     return () => controller.abort();
   }, [kind, level, mode]);
 
-  if (loading) return <p className="text-sm text-[var(--semantic-text-muted)]">Loading ECG items…</p>;
-  if (error) return <p className="text-sm text-[var(--semantic-danger)]">{error}</p>;
-  if (items.length === 0) {
-    return <p className="text-sm text-[var(--semantic-text-secondary)]">No ECG items are published for this mode yet.</p>;
-  }
-
   const answeredCount = Object.keys(results).length;
   const correctCount = Object.values(results).filter((r) => r.isCorrect).length;
   const percentCorrect = answeredCount > 0 ? Math.round((correctCount / answeredCount) * 100) : null;
-  const wrongItems = items.filter((item) => results[item.id] && !results[item.id]!.isCorrect);
 
   async function submitAnswer(item: EcgQuestion, optionId: string) {
     if (submittingId) return;
     setSubmittingId(item.id);
+    setSubmitErrors((prev) => { const next = { ...prev }; delete next[item.id]; return next; });
     try {
       const attemptMode = kind === "video-drills" ? "practice" : "quiz";
       const res = await fetch(`/api/modules/ecg/questions/${encodeURIComponent(item.id)}/answer`, {
@@ -574,39 +820,79 @@ export function EcgQuestionList({
         body: JSON.stringify({ selectedOptionId: optionId, attemptMode }),
       });
       const data = (await res.json()) as { ok?: boolean; result?: AnswerResult };
-      if (!res.ok || !data.ok || !data.result) throw new Error("answer_failed");
+      if (!res.ok || !data.ok || !data.result) throw Object.assign(new Error("answer_failed"), { httpStatus: res.status });
       setResults((prev) => ({ ...prev, [item.id]: data.result! }));
-    } catch {
-      setError("Unable to grade this ECG question right now. Please try again.");
+      // Telemetry: answer submitted
+      trackEcgQuestionAnswered(
+        {
+          rhythm_tag: item.rhythmTag,
+          level,
+          mode: kind,
+          question_id: item.id,
+          is_correct: data.result.isCorrect,
+        },
+        { scaffoldWasCompleted: false, scaffoldWasSkipped: false },
+      );
+    } catch (err) {
+      const httpStatus = (err as { httpStatus?: number }).httpStatus;
+      // Telemetry: API failure observable
+      trackEcgAnswerApiFailed(
+        { rhythm_tag: item.rhythmTag, level, mode: kind, question_id: item.id },
+        { httpStatus, errorCode: "answer_api_error" },
+      );
+      setSubmitErrors((prev) => ({
+        ...prev,
+        [item.id]: "Could not grade your answer. Check your connection and try again.",
+      }));
     } finally {
       setSubmittingId(null);
     }
   }
 
+  function handleRetry(item: EcgQuestion) {
+    setPendingRetry(item.id);
+    // Clear the error so the submit button re-appears
+    setSubmitErrors((prev) => { const next = { ...prev }; delete next[item.id]; return next; });
+    setTimeout(() => setPendingRetry(null), 100);
+  }
+
+  if (loading) return <p className="text-sm text-[var(--semantic-text-muted)]">Loading ECG items…</p>;
+  if (error) return <p className="text-sm text-[var(--semantic-danger)]" role="alert">{error}</p>;
+  if (items.length === 0) {
+    return (
+      <div
+        className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-6 text-center"
+        role="status"
+      >
+        <p className="text-sm font-medium text-[var(--semantic-text-secondary)]">
+          No ECG items are published for this mode yet.
+        </p>
+        <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
+          Check back soon — content is actively being added.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {/* Quiz score summary */}
       {kind === "quizzes" && answeredCount > 0 ? (
         <div className="rounded-[1.25rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
           <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
-            {percentCorrect === null ? "Answer questions to see your score." : `${percentCorrect}% correct (${correctCount}/${answeredCount})`}
+            {percentCorrect === null
+              ? "Answer questions to see your score."
+              : `${percentCorrect}% correct (${correctCount}/${answeredCount})`}
           </p>
-          {wrongItems.length > 0 ? (
-            <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
-              Incorrect: {wrongItems.map((i) => i.rhythmTag).join(" · ")}
-            </p>
-          ) : null}
         </div>
       ) : null}
 
-      {/* Guided mode notice for basic lessons */}
       {level === "basic" && kind === "lessons" ? (
         <div className="rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] px-4 py-3">
           <p className="text-xs font-semibold text-[color-mix(in_srgb,var(--semantic-info)_85%,var(--semantic-text-primary))]">
             Guided interpretation mode active
           </p>
           <p className="mt-0.5 text-[11px] leading-relaxed text-[var(--semantic-text-secondary)]">
-            Each question begins with a 7-step analysis scaffold. Work through it before selecting your answer — this builds the systematic habit that prevents misdiagnosis on NCLEX and at the bedside. You can skip the scaffold at any time.
+            Each question starts with a 7-step analysis scaffold. Work through it before selecting your answer. You can skip at any time.
           </p>
         </div>
       ) : null}
@@ -621,6 +907,8 @@ export function EcgQuestionList({
             onSubmit={submitAnswer}
             result={results[item.id]}
             submitting={submittingId === item.id}
+            submitError={submitErrors[item.id] ?? null}
+            onRetry={handleRetry}
           />
         ))}
       </ul>
@@ -646,34 +934,25 @@ export function EcgWorksheetList({ level }: { level: EcgLevel }) {
     })
       .then(async (res) => {
         let data: { ok?: boolean; items?: EcgWorksheet[]; detail?: string } = {};
-        try {
-          data = (await res.json()) as typeof data;
-        } catch {
-          if (!controller.signal.aborted) setError("We could not read the ECG worksheet response. Try again shortly.");
-          return;
-        }
+        try { data = (await res.json()) as typeof data; } catch { /* ignore */ }
         if (controller.signal.aborted) return;
         if (res.status === 401) { setError("Sign in to load ECG worksheets."); return; }
         if (res.status === 403) {
-          setError(
-            data.detail === "premium_required"
-              ? "An active subscription that includes ECG is required to view these worksheets."
-              : "Your plan or pathway does not include this ECG surface.",
-          );
+          setError(data.detail === "premium_required"
+            ? "An active subscription that includes ECG is required to view these worksheets."
+            : "Your plan or pathway does not include this ECG surface.");
           return;
         }
         if (!res.ok || !data.ok) {
-          setError(
-            data.detail === "disabled"
-              ? "ECG worksheets are not enabled in this environment yet."
-              : "Unable to reach the ECG worksheet service. Try again shortly.",
-          );
+          setError(data.detail === "disabled"
+            ? "ECG worksheets are not enabled in this environment yet."
+            : "Unable to reach the ECG worksheet service. Try again shortly.");
           return;
         }
         setItems(Array.isArray(data.items) ? data.items : []);
       })
       .catch((err) => {
-        if ((err as Error).name !== "AbortError") setError("Unable to reach the ECG worksheet service. Try again shortly.");
+        if ((err as Error).name !== "AbortError") setError("Unable to reach the ECG worksheet service.");
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false);
@@ -682,8 +961,10 @@ export function EcgWorksheetList({ level }: { level: EcgLevel }) {
   }, [level]);
 
   if (loading) return <p className="text-sm text-[var(--semantic-text-muted)]">Loading ECG worksheets…</p>;
-  if (error) return <p className="text-sm text-[var(--semantic-danger)]">{error}</p>;
-  if (items.length === 0) return <p className="text-sm text-[var(--semantic-text-secondary)]">No ECG worksheets are published yet.</p>;
+  if (error) return <p className="text-sm text-[var(--semantic-danger)]" role="alert">{error}</p>;
+  if (items.length === 0) return (
+    <p className="text-sm text-[var(--semantic-text-secondary)]">No ECG worksheets are published yet.</p>
+  );
 
   async function downloadWorksheet(item: EcgWorksheet) {
     if (!item.downloadUrl) return;
@@ -734,13 +1015,6 @@ export function EcgWorksheetList({ level }: { level: EcgLevel }) {
                 {item.accessState === "admin_preview" ? "Admin preview" : "Unlock worksheet"}
               </span>
             )}
-            <span className="text-xs text-[var(--semantic-text-muted)]">
-              {item.accessState === "admin_preview"
-                ? "Download remains hidden until launch."
-                : item.accessState === "locked"
-                  ? "Free preview"
-                  : "Unlocked"}
-            </span>
           </div>
         </li>
       ))}

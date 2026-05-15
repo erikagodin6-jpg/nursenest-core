@@ -167,73 +167,128 @@ export function buildOptionalClinicalScenariosShellNavItem(pathwayId: string | n
 /** Nav section ID for the Clinical Modules flyout. */
 export const CLINICAL_MODULES_SHELL_NAV_ID = "clinical_modules" as const;
 
+/**
+ * Availability state for a Clinical Modules nav link.
+ *   "available"   — fully accessible to entitled learners
+ *   "premium"     — requires a paid add-on (Advanced ECG, etc.)
+ *   "new"         — recently launched, surface with a "New" badge
+ *   "coming_soon" — not yet live; render non-interactively
+ *   "locked"      — exists but gated by tier (not the same as premium add-on)
+ */
+export type ClinicalModulesLinkStatus =
+  | "available"
+  | "premium"
+  | "new"
+  | "coming_soon"
+  | "locked";
+
+/**
+ * Taxonomy group for grouping links in multi-column flyout layouts.
+ * Extend as the platform grows.
+ */
+export type ClinicalModulesLinkGroup =
+  | "cardiology"
+  | "diagnostics"
+  | "calculations"
+  | "critical_care"
+  | "pharmacology"
+  | "telemetry";
+
 /** A link within the Clinical Modules flyout dropdown. */
 export type ClinicalModulesNavLink = {
   key: string;
+  /** Learner-scoped destination inside /app/* or /modules/*. Never a marketing URL. */
   href: string;
   label: string;
   description: string;
-  isPremiumAddOn?: boolean;
-  isComingSoon?: boolean;
+  /** Availability state — drives badge rendering and interactivity. */
+  status: ClinicalModulesLinkStatus;
+  /** Taxonomy group for future grouped/columnar flyout rendering. */
+  group: ClinicalModulesLinkGroup;
+  /** Optional sub-grouping within a group. */
+  subgroup?: string;
 };
+
+/** Derived convenience — true when the link should not be interactive. */
+export function isClinicalModuleLinkDisabled(link: ClinicalModulesNavLink): boolean {
+  return link.status === "coming_soon" || link.status === "locked";
+}
 
 /**
  * Returns the ordered list of Clinical Modules links for the flyout dropdown.
- * ECG Fundamentals and Advanced ECG are flagship entries; remaining modules
- * are progression destinations for the expanding clinical platform.
+ * All hrefs are learner-scoped (/app/* or /modules/*) — never marketing URLs.
+ * Grouped for future two-column rendering.
  */
 export function buildClinicalModulesNavLinks(pathwayId: string | null): ClinicalModulesNavLink[] {
   return [
+    // ── Cardiology ──
     {
       key: "ecg-fundamentals",
       href: withPathwayQuery("/modules/ecg/basic/lessons", pathwayId),
       label: "ECG Fundamentals",
       description: "Rhythm recognition, AV blocks, strip interpretation",
+      status: "available",
+      group: "cardiology",
     },
     {
       key: "advanced-ecg",
       href: withPathwayQuery("/modules/ecg-advanced", pathwayId),
       label: "Advanced ECG",
       description: "STEMI, electrolytes, telemetry mastery, ICU ECG",
-      isPremiumAddOn: true,
+      status: "premium",
+      group: "cardiology",
     },
     {
       key: "ecg-drills",
       href: withPathwayQuery("/modules/ecg/basic/quizzes", pathwayId),
       label: "ECG Practice Drills",
       description: "Adaptive rhythm identification drills",
+      status: "available",
+      group: "cardiology",
     },
+    // ── Telemetry ──
+    {
+      key: "telemetry-mastery",
+      href: withPathwayQuery("/modules/ecg-advanced", pathwayId),
+      label: "Telemetry Mastery",
+      description: "Alarm management, lead selection, ST monitoring",
+      status: "premium",
+      group: "telemetry",
+    },
+    // ── Diagnostics ──
     {
       key: "lab-values",
-      href: "/tools/lab-values",
+      href: "/app/study-tools/labs",
       label: "Lab Values",
       description: "Critical lab interpretation and clinical correlation",
+      status: "available",
+      group: "diagnostics",
     },
+    {
+      key: "abg-interpretation",
+      href: "/app/study-tools/labs",
+      label: "ABG Interpretation",
+      description: "Acid-base, respiratory vs metabolic disorders",
+      status: "coming_soon",
+      group: "diagnostics",
+    },
+    // ── Calculations ──
     {
       key: "med-calculations",
       href: withPathwayQuery("/app/med-calculations", pathwayId),
       label: "Medication Calculations",
       description: "IV drip, weight-based dosing, unit conversions",
+      status: "available",
+      group: "calculations",
     },
-    {
-      key: "telemetry-mastery",
-      href: "/advanced-ecg-nursing/telemetry-monitoring",
-      label: "Telemetry Mastery",
-      description: "Alarm management, lead selection, ST monitoring",
-    },
+    // ── Critical Care ──
     {
       key: "hemodynamics",
-      href: "/clinical-modules",
+      href: "/app/study-tools",
       label: "Hemodynamics",
       description: "Arterial lines, CVP, cardiac output interpretation",
-      isComingSoon: true,
-    },
-    {
-      key: "abg-interpretation",
-      href: "/clinical-modules",
-      label: "ABG Interpretation",
-      description: "Acid-base, respiratory vs metabolic disorders",
-      isComingSoon: true,
+      status: "coming_soon",
+      group: "critical_care",
     },
   ];
 }
@@ -251,7 +306,7 @@ export function buildClinicalModulesShellNavItem(pathwayId: string | null): {
 } {
   return {
     id: CLINICAL_MODULES_SHELL_NAV_ID,
-    href: "/clinical-modules",
+    href: "/app/study-tools",
     matchPrefix: "/modules",
     labelKey: "learner.shell.nav.clinicalModules",
     links: buildClinicalModulesNavLinks(pathwayId),

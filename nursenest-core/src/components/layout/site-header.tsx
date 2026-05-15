@@ -445,6 +445,20 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
       const preStrip = precomputedNavData?.tierHubStrip;
       const preRegion = precomputedNavData?.serverRegion;
       if (preStrip && preRegion === region) return preStrip;
+
+      // Mismatch: server region differs from client region (e.g. cookie changed after SSR,
+      // or the precomputed strip was absent). Falling back to synchronous client computation.
+      // Emit a data attribute on <html> so DevTools + Datadog can count mismatch rate.
+      if (typeof document !== "undefined") {
+        document.documentElement.dataset.nnRegionMismatch = "1";
+        if (process.env.NODE_ENV !== "production") {
+          console.warn(
+            `[SiteHeader] tier hub strip region mismatch: server=${preRegion ?? "none"}, client=${region}. ` +
+            "Falling back to client-side buildMarketingTierHubStrip — this is a TBT regression. " +
+            "Check readOptionalMarketingRegionToggleForCountry cookie alignment.",
+          );
+        }
+      }
       return buildMarketingTierHubStrip(region, (k) => t(k));
     },
     [precomputedNavData?.tierHubStrip, precomputedNavData?.serverRegion, region, t],

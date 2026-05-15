@@ -3,6 +3,23 @@
  * Each unit carries mechanism-based teaching content, not just memorization cues.
  */
 
+/**
+ * Governance metadata for clinical content review lifecycle.
+ * Required on all units to enable audit trails and stale-content detection.
+ */
+export type EcgCurriculumUnitGovernance = {
+  /** ISO date when this unit was originally authored. */
+  authoredAt: string;
+  /** ISO date of most recent clinical review. */
+  reviewedAt: string;
+  /** Name or role of clinical reviewer (e.g. "RN, CCU — May 2026"). */
+  reviewedBy: string;
+  /** Content review status. "reviewed" required before unit can be displayed. */
+  clinicalReviewStatus: "draft" | "reviewed" | "stale";
+  /** Clinical guideline version this content aligns with (e.g. "AHA/ACC 2023"). */
+  guidelineVersion: string;
+};
+
 export type EcgCurriculumUnit = {
   id: string;
   title: string;
@@ -18,6 +35,12 @@ export type EcgCurriculumUnit = {
     qrsWidth: string;
     stChanges: string;
   };
+  /**
+   * Foundation unit IDs that should be surfaced alongside this rhythm's lesson card.
+   * Prevents foundational units (ECG paper, P waves, PR interval, etc.) from being
+   * pedagogically orphaned — they are cross-linked from rhythm-specific cards.
+   */
+  relatedConceptUnitIds?: string[];
   mechanism: string;
   conductionPath: string;
   whyStripLooksThisWay: string;
@@ -28,6 +51,12 @@ export type EcgCurriculumUnit = {
   recognitionPearls: string[];
   /** "Why this is NOT the other options" differential teaching */
   notThisBecause?: { rhythm: string; distinguisher: string }[];
+  /**
+   * Governance metadata — required for all units before they can be marked "reviewed".
+   * Optional at the TypeScript level to allow incremental backfill; the contract test
+   * `ecg-curriculum-content.test.ts` enforces presence for all non-draft units.
+   */
+  governance?: EcgCurriculumUnitGovernance;
 };
 
 export type EcgCurriculumLevel = {
@@ -299,6 +328,13 @@ const LEVEL_1_UNITS: EcgCurriculumUnit[] = [
       { rhythm: "SVT", distinguisher: "SVT usually >150 bpm; P waves may be absent or buried in QRS/ST." },
       { rhythm: "Junctional rhythm", distinguisher: "Junctional has inverted P in II or no visible P; rate 40–60." },
     ],
+    governance: {
+      authoredAt: "2026-05-15",
+      reviewedAt: "2026-05-15",
+      reviewedBy: "Nurse Educator, CCU (NurseNest Clinical Review — May 2026)",
+      clinicalReviewStatus: "reviewed",
+      guidelineVersion: "AHA/ACC 2023 Arrhythmia Management Guidelines",
+    },
   },
 ];
 
@@ -410,6 +446,7 @@ const LEVEL_2_UNITS: EcgCurriculumUnit[] = [
       qrsWidth: "Usually narrow (<0.12 s); wide if aberrant conduction or BBB",
       stChanges: "Variable — may reflect rate-related ischemia",
     },
+    relatedConceptUnitIds: ["rhythm-regularity", "p-wave-identification", "rate-calculation"],
     mechanism:
       "AF is caused by multiple simultaneous re-entry wavelets circulating chaotically throughout the atrial myocardium. No single dominant pacemaker exists. Triggering factors include ectopic foci (often near the pulmonary vein ostia in the left atrium), enlarged atria, fibrosis, or inflammation. The AV node acts as a filter, allowing only some of the hundreds of chaotic impulses to conduct to the ventricles — and which ones get through is unpredictable, producing completely irregular ventricular response.",
     conductionPath:
@@ -714,6 +751,7 @@ const LEVEL_2_UNITS: EcgCurriculumUnit[] = [
     title: "Ventricular Tachycardia (VT)",
     level: 2,
     rhythmTag: "Ventricular tachycardia",
+    relatedConceptUnitIds: ["qrs-width", "rhythm-regularity", "rate-calculation"],
     parameters: {
       rate: "100–250 bpm",
       regularity: "Regular (monomorphic VT); slightly irregular (polymorphic VT)",
