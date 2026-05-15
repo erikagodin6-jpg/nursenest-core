@@ -39,14 +39,16 @@ export function resolveSubscribedQuestionBankPathways(args: {
     return { state: "scoped", defaultPathwayId: hit.id, pathwayOptions: [hit] };
   }
 
-  if (requireExplicitRequestedPathwayId) {
-    return { state: "no_pathway_context" };
-  }
-
+  // learnerPath overrides the explicit-pathwayId gate — if the user has a profile pathway
+  // that matches the entitlement, use it directly rather than forcing a picker.
   const lp = learnerPath?.trim() || null;
   if (lp && byId.has(lp)) {
     const hit = byId.get(lp)!;
     return { state: "scoped", defaultPathwayId: hit.id, pathwayOptions: [hit] };
+  }
+
+  if (requireExplicitRequestedPathwayId) {
+    return { state: "no_pathway_context" };
   }
 
   if (compatible.length === 1) {

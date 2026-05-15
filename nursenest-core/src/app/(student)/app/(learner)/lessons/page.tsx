@@ -529,7 +529,13 @@ export default async function LessonsPage({ searchParams }: Props) {
       });
 
       return (
-        <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
+        <div
+          className="nn-premium-lessons-system nn-app-lessons-hub-premium mx-auto max-w-3xl space-y-6 px-4 py-8"
+          data-nn-premium-full-platform-convergence=""
+          data-nn-premium-platform-family="exam-study"
+          data-nn-premium-platform-module="lessons"
+          data-nn-premium-lessons-system="app-hub"
+        >
           <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.title")}</h1>
           <ContentEmptyState
             variant="generic"
