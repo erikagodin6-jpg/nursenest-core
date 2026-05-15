@@ -279,7 +279,7 @@ export const HEALTHCARE_TEST_BANK_PAGES = [
     id: "us-np-fnp-test-bank",
     pathwayId: "us-np-fnp",
     path: "/us/np/fnp/test-bank",
-    title: "FNP Test Bank & Practice Questions | NurseNest",
+    title: "FNP Test Bank — Primary Care Practice",
     description: "FNP test bank with primary care questions, diagnostics, prescribing safety, rationales, flashcards, lessons, and remediation.",
     h1: "FNP test bank for primary care clinical reasoning",
     eyebrow: "FNP question bank",
