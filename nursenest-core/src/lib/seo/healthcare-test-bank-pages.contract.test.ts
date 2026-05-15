@@ -80,3 +80,11 @@ test("healthcare test-bank sitemap fallback includes only activated canonical ro
     assert.ok(!fallback.has(alias), `planned alias leaked into sitemap fallback: ${alias}`);
   }
 });
+
+test("planned short test-bank aliases have explicit inactive route files", () => {
+  for (const alias of ["/nclex-rn/test-bank", "/rex-pn/test-bank", "/cnple/test-bank", "/np/test-bank"]) {
+    const file = path.join(appRoot, ...alias.split("/").filter(Boolean), "page.tsx");
+    assert.ok(fs.existsSync(file), `missing inactive alias route file for ${alias}`);
+    assert.match(fs.readFileSync(file, "utf8"), /notFound\(\)/, `${alias} must remain inactive until substantive content exists`);
+  }
+});

@@ -220,7 +220,7 @@ export default function AdvancedEcgNursingPage() {
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
             <Link
-              href="/modules/ecg/basic/lessons"
+              href="/ecg-interpretation"
               className="inline-flex items-center gap-2 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-surface-alt)]"
             >
               <BookOpen className="h-4 w-4" aria-hidden />
@@ -297,11 +297,11 @@ export default function AdvancedEcgNursingPage() {
               </p>
               <p>
                 For RN and NP students targeting NCLEX, CNPLE, or specialty certification, advanced ECG interpretation is examined through integrated clinical vignettes — not isolated rhythm labeling. NurseNest{" "}
-                <Link href="/modules/ecg/advanced/lessons" className="font-medium text-[var(--semantic-info)] hover:underline">
+                <Link href="/advanced-ecg-nursing" className="font-medium text-[var(--semantic-info)] hover:underline">
                   Advanced ECG lessons
                 </Link>{" "}
                 and{" "}
-                <Link href="/modules/ecg/advanced/scenarios" className="font-medium text-[var(--semantic-info)] hover:underline">
+                <Link href="/advanced-ecg-nursing/ecg-case-simulations" className="font-medium text-[var(--semantic-info)] hover:underline">
                   clinical scenarios
                 </Link>{" "}
                 build this integrated reasoning explicitly.
@@ -323,7 +323,7 @@ export default function AdvancedEcgNursingPage() {
               </p>
               <p>
                 For NP learners, 12-lead ECG analysis includes the outpatient perspective: interpreting an incidental ECG in a chest pain evaluation, recognizing when left ventricular hypertrophy (LVH) voltage criteria require further evaluation, and identifying the ECG findings that demand same-day cardiology referral versus routine follow-up. NurseNest{" "}
-                <Link href="/modules/ecg/advanced/video-drills" className="font-medium text-[var(--semantic-info)] hover:underline">
+                <Link href="/advanced-ecg-nursing/12-lead-stemi" className="font-medium text-[var(--semantic-info)] hover:underline">
                   Advanced ECG video drills
                 </Link>{" "}
                 provide strip-by-strip 12-lead analysis with full rationale.
@@ -411,7 +411,7 @@ export default function AdvancedEcgNursingPage() {
             <div className="space-y-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
               <p>
                 ECG practice questions integrated into the NurseNest{" "}
-                <Link href="/modules/ecg/advanced/lessons" className="font-medium text-[var(--semantic-info)] hover:underline">
+                <Link href="/advanced-ecg-nursing" className="font-medium text-[var(--semantic-info)] hover:underline">
                   Advanced ECG module
                 </Link>{" "}
                 use deterministic waveform strips — purpose-built for nursing education, not deidentified clinical tracings — ensuring consistent, unambiguous morphologic teaching. Every question includes a detailed rationale covering why the correct answer is right and why each distractor is wrong.
@@ -421,11 +421,11 @@ export default function AdvancedEcgNursingPage() {
               </p>
               <p>
                 For RN and NP exam preparation, ECG questions on NCLEX (RN and PN), CNPLE, AANP, and ANCC examinations use clinical vignettes rather than isolated strip identification. The NurseNest approach mirrors this format: ECG strips are embedded in a patient scenario with vital signs, history, and medication context, requiring the learner to integrate rhythm recognition with clinical decision-making. Practice with{" "}
-                <Link href="/modules/ecg/basic/quizzes" className="font-medium text-[var(--semantic-info)] hover:underline">
+                <Link href="/ecg/ecg-practice-questions" className="font-medium text-[var(--semantic-info)] hover:underline">
                   Basic ECG quizzes
                 </Link>{" "}
                 builds the recognition foundation before{" "}
-                <Link href="/modules/ecg/advanced/scenarios" className="font-medium text-[var(--semantic-info)] hover:underline">
+                <Link href="/advanced-ecg-nursing/ecg-case-simulations" className="font-medium text-[var(--semantic-info)] hover:underline">
                   Advanced ECG scenarios
                 </Link>{" "}
                 add the clinical reasoning layer.
@@ -456,7 +456,7 @@ export default function AdvancedEcgNursingPage() {
             <div className="space-y-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
               <p>
                 The{" "}
-                <Link href="/modules/ecg/advanced/scenarios" className="font-medium text-[var(--semantic-info)] hover:underline">
+                <Link href="/advanced-ecg-nursing/ecg-case-simulations" className="font-medium text-[var(--semantic-info)] hover:underline">
                   Advanced ECG scenario track
                 </Link>{" "}
                 presents multi-step clinical cases integrating ECG interpretation with nursing priority decisions. A scenario might present a post-cardiac surgery patient with a new wide-complex tachycardia: the learner must apply the Brugada algorithm to classify the rhythm, assess hemodynamic stability, identify the correct ACLS pathway, and recognize that pacemaker-mediated tachycardia is in the differential given the surgical context.
@@ -578,15 +578,14 @@ export default function AdvancedEcgNursingPage() {
               { href: "/advanced-ecg-nursing/ecg-case-simulations", label: "ECG Case Simulations" },
               { href: "/ecg-interpretation", label: "ECG Interpretation for Nurses" },
               { href: "/ecg-telemetry-mastery", label: "ECG Telemetry Mastery" },
-              { href: "/modules/ecg", label: "ECG Telemetry Hub" },
-              { href: "/modules/ecg/basic/lessons", label: "Basic ECG Lessons" },
-              { href: "/modules/ecg/basic/quizzes", label: "Basic ECG Quizzes" },
-              { href: "/modules/ecg-advanced", label: "Advanced ECG Module" },
-              { href: "/modules/ecg/advanced/lessons", label: "Advanced ECG Lessons" },
-              { href: "/modules/ecg/advanced/video-drills", label: "Advanced ECG Drills" },
-              { href: "/modules/ecg/advanced/scenarios", label: "ECG Clinical Scenarios" },
-              { href: "/modules/ecg/advanced/worksheets", label: "ECG Worksheets" },
               { href: "/clinical-modules", label: "Clinical Modules Hub" },
+              { href: "/ecg-interpretation", label: "Basic ECG Lessons" },
+              { href: "/ecg/ecg-practice-questions", label: "Basic ECG Quizzes" },
+              { href: "/modules/ecg-advanced", label: "Advanced ECG Module" },
+              { href: "/advanced-ecg-nursing", label: "Advanced ECG Lessons" },
+              { href: "/advanced-ecg-nursing/rhythm-practice", label: "Advanced ECG Drills" },
+              { href: "/advanced-ecg-nursing/ecg-case-simulations", label: "ECG Clinical Scenarios" },
+              { href: "/ecg/ecg-practice-questions", label: "ECG Worksheets" },
               { href: "/us/rn/nclex-rn/lessons", label: "NCLEX-RN Lessons" },
               { href: "/canada/np/cnple/lessons", label: "CNPLE Lessons" },
               { href: "/ecg/stemi-localization", label: "STEMI Localization Guide" },
