@@ -146,6 +146,13 @@ export type EcgWaveformResult = {
   viewBox: string;
   path: string;
   grid: { minor: number; major: number };
+  /**
+   * Respiration phase at each sample point — only populated for
+   * respiratory_sinus_arrhythmia strips in educationalMode.
+   * "inspiration" = R-R shortening phase; "expiration" = R-R lengthening phase.
+   * Empty array for all other rhythms.
+   */
+  respirationPhases: ReadonlyArray<"inspiration" | "expiration">;
 };
 
 // ─── Strip Continuity Validation ──────────────────────────────────────────
@@ -282,15 +289,21 @@ function pulse(t: number, center: number, width: number, amplitude: number): num
  *   - Matches real telemetry behavior (the trace is already running when the
  *     strip window opens; learners see the rhythm in progress from frame 1).
  */
+/**
+ * Breathing cycle length for RSA waveform generation (seconds).
+ * ~20 breaths/min in children = 3.0s cycle.
+ * Exported so ecg-live-strip.tsx can compute the respiration overlay width.
+ */
+export const RSA_BREATHING_CYCLE_SECONDS = 3.0;
+/** Maximum R-R modulation depth for RSA — ±18% of base cycle. */
+export const RSA_RR_MODULATION_DEPTH = 0.18;
+
 function beatOffsets(config: EcgStripMediaConfig, seconds: number): number[] {
   if (config.rhythmKey === "asystole" || config.rhythmKey === "ventricular_fibrillation") return [];
   const rate = clamp(config.rate || 60, 20, 260);
   const base = 60 / rate;
   const out: number[] = [];
   // Set start so that t + first_advance ≈ 0.20s (first beat appears at strip start).
-  // For regular rhythms: t = 0.20 - base (exact).
-  // For irregular rhythms: the pseudoNoise offset may shift ±a fraction of base,
-  // keeping the first beat within one cardiac cycle of t=0.
   let t = 0.20 - Math.max(0.22, base);
   let i = 0;
   while (t < seconds + 0.5) {
@@ -298,7 +311,15 @@ function beatOffsets(config: EcgStripMediaConfig, seconds: number): number[] {
       config.regularity === "irregular" ? (pseudoNoise(i + rate) - 0.5) * base * 0.55 :
       config.regularity === "regularly_irregular" && i % 4 === 3 ? base * 0.75 :
       0;
-    t += Math.max(0.22, base + irregular);
+
+    // RSA: sinusoidal R-R modulation synchronized to respiratory cycle.
+    // -sin(2π*t/T) means: at t=T/4 (early inspiration) R-R shortens (faster rate);
+    // at t=3T/4 (expiration) R-R lengthens (slower rate). Matches clinical physiology.
+    const rsa = config.rhythmKey === "respiratory_sinus_arrhythmia"
+      ? -Math.sin((2 * Math.PI * t) / RSA_BREATHING_CYCLE_SECONDS) * base * RSA_RR_MODULATION_DEPTH
+      : 0;
+
+    t += Math.max(0.22, base + irregular + rsa);
     out.push(t);
     i += 1;
   }
@@ -489,7 +510,6 @@ export function generateEcgWaveform(config: EcgStripMediaConfig, options: EcgWav
   const height = options.height ?? 220;
   const seconds = options.seconds ?? 6;
   const sampleRate = options.sampleRate ?? 120;
-  // Artifact level: explicit config value overrides educational mode default.
   const modeArtifact = config.educationalMode
     ? ECG_MODE_ARTIFACT_LEVELS[config.educationalMode]
     : 0.02;
@@ -498,6 +518,8 @@ export function generateEcgWaveform(config: EcgStripMediaConfig, options: EcgWav
   const beats = beatOffsets(config, seconds);
   const points: EcgPoint[] = [];
   const total = Math.max(2, Math.floor(seconds * sampleRate));
+  const isRsa = config.rhythmKey === "respiratory_sinus_arrhythmia";
+  const respirationPhases: Array<"inspiration" | "expiration"> = [];
 
   for (let i = 0; i <= total; i += 1) {
     const t = (i / total) * seconds;
@@ -507,6 +529,13 @@ export function generateEcgWaveform(config: EcgStripMediaConfig, options: EcgWav
     });
     signal += (pseudoNoise(i + config.rate) - 0.5) * artifact;
     points.push({ x: (t / seconds) * width, y: height / 2 - signal * amplitude });
+
+    // Respiration phase overlay: only for RSA in educational mode
+    if (isRsa) {
+      // Phase within breathing cycle. -sin < 0 = inspiration (faster), -sin > 0 = expiration.
+      const phase = -Math.sin((2 * Math.PI * t) / RSA_BREATHING_CYCLE_SECONDS);
+      respirationPhases.push(phase <= 0 ? "inspiration" : "expiration");
+    }
   }
 
   return {
@@ -514,6 +543,7 @@ export function generateEcgWaveform(config: EcgStripMediaConfig, options: EcgWav
     viewBox: `0 0 ${width} ${height}`,
     path: points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" "),
     grid: { minor: 8, major: 40 },
+    respirationPhases,
   };
 }
 

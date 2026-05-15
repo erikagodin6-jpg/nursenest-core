@@ -12,6 +12,8 @@ import {
   advancedEcgStripePriceEnvKey,
   isAdvancedEcgModuleEnabled,
 } from "@/lib/advanced-ecg/advanced-ecg-module-config";
+import { getPediatricCurriculumReadinessGates } from "@/lib/ecg-module/ecg-pediatric-governance";
+import { PEDIATRIC_SEED_QUESTION_COUNT, PEDIATRIC_SEED_QUESTION_COUNTS_BY_CATEGORY } from "@/lib/ecg-module/ecg-pediatric-questions-seed";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -60,6 +62,10 @@ export async function GET(req: Request) {
   const gateFailures = summarizeEcgModuleGates(readiness);
   const allBlockers = [...env.blockers, ...gateFailures];
 
+  // Pediatric lane readiness gates (pure — no DB calls)
+  const pediatricGates = getPediatricCurriculumReadinessGates();
+  const pediatricGateFailures = pediatricGates.filter((g) => !g.passed).map((g) => g.reason);
+
   return NextResponse.json({
     ok: allBlockers.length === 0,
     canPublish: readiness.canPublish && env.coreModuleEnabled && env.stripeAdvancedEcgConfigured,
@@ -71,6 +77,13 @@ export async function GET(req: Request) {
       percentages: readiness.percentages,
       gates: readiness.gates,
       gateFailures,
+    },
+    pediatric: {
+      canPublish: pediatricGateFailures.length === 0,
+      gates: pediatricGates,
+      gateFailures: pediatricGateFailures,
+      seedQuestionCount: PEDIATRIC_SEED_QUESTION_COUNT,
+      seedCountsByCategory: PEDIATRIC_SEED_QUESTION_COUNTS_BY_CATEGORY,
     },
     blockers: allBlockers,
   });

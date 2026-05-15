@@ -5,7 +5,15 @@
       "Bash(node --import tsx --test src/lib/lessons/pathway-lesson-admin-option-b.test.ts src/lib/lessons/pathway-lesson-route-access.test.ts src/lib/lessons/marketing-pathway-lesson-staff-bypass.test.ts src/lib/lessons/marketing-pathway-lesson-viewer-context.contract.test.ts src/lib/lessons/pathway-lessons-hub-marketing-ux.contract.test.ts src/lib/marketing/pathway-lessons-hub-page-safety.test.ts src/lib/lessons/marketing-hub-category-page-cap.contract.test.ts src/lib/lessons/marketing-hub-category-rows-db-resilient.test.ts)",
       "Bash(node --import tsx --test src/lib/lessons/pathway-lesson-admin-option-b.test.ts src/lib/lessons/marketing-pathway-lesson-viewer-context.contract.test.ts src/lib/lessons/pathway-lessons-hub-marketing-ux.contract.test.ts src/lib/marketing/pathway-lessons-hub-page-safety.test.ts src/lib/lessons/marketing-hub-category-page-cap.contract.test.ts src/lib/lessons/marketing-hub-category-rows-db-resilient.test.ts src/lib/marketing/marketing-region-equivalent-hub.test.ts)",
       "Bash(git -C /root/nursenest-core/nursenest-core log --oneline --all --follow -- src/components/pathway-lessons/lessons-page-shell.tsx)",
-      "Bash(git -C /root/nursenest-core/nursenest-core show fa3a444cd -- src/components/pathway-lessons/lessons-page-shell.tsx)"
+      "Bash(git -C /root/nursenest-core/nursenest-core show fa3a444cd -- src/components/pathway-lessons/lessons-page-shell.tsx)",
+      "Bash(node --import tsx --test src/lib/ecg-module/ecg-nav-tier-guard.contract.test.ts src/lib/ecg-module/ecg-pediatric-governance.contract.test.ts)",
+      "Bash(node --import tsx --test src/lib/ecg-module/ecg-module-config.test.ts src/lib/ecg-module/ecg-module-contract.test.ts src/lib/ecg-module/ecg-mastery-governance.contract.test.ts src/lib/ecg-module/ecg-curriculum-config.contract.test.ts src/lib/navigation/learner-primary-nav.test.ts)",
+      "Bash(node --import tsx --test src/lib/ecg-module/ecg-module-contract.test.ts)",
+      "Bash(git -C /root/nursenest-core/nursenest-core log --oneline -5)",
+      "Bash(git fetch *)",
+      "Bash(psql postgresql://doadmin:AVNS_DRoNu4ElqWngndjlm0Q@nursenestdatabase-do-user-35062022-0.g.db.ondigitalocean.com:25060/defaultdb?sslmode=require -c ' *)",
+      "Bash(curl -s --max-time 10 -c /tmp/nn-v2.txt 'https://nursenest.ca/api/auth/csrf')",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

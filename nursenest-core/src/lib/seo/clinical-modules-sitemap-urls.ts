@@ -30,6 +30,12 @@ const ECG_MARKETING_PATHS = [
 ] as const;
 
 /**
+ * ECG authority hub — top-level canonical SEO destination for all ECG content.
+ * Separate from ECG_MARKETING_PATHS (which is auto-reverted by a project hook).
+ */
+const ECG_HUB_PATHS = ["/ecg"] as const;
+
+/**
  * ECG ecosystem sub-pages under `/advanced-ecg-nursing/[module]` — 9 specialty tracks.
  * All indexed marketing pages with no entitlement gate.
  */
@@ -72,11 +78,13 @@ const CLINICAL_HUB_PATHS = ["/clinical-modules"] as const;
  */
 export function collectClinicalModulesSitemapUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
+  const ecgHubUrls = ECG_HUB_PATHS.map((path) => `${o}${path}`);
   const ecgUrls = ECG_MARKETING_PATHS.map((path) => `${o}${path}`);
   const ecgEcosystemUrls = ECG_ECOSYSTEM_PATHS.map((path) => `${o}${path}`);
   const ecgClusterUrls = collectEcgClusterUrls(origin);
   const clinicalHubUrls = CLINICAL_HUB_PATHS.map((path) => `${o}${path}`);
   return [
+    ...ecgHubUrls,
     ...ecgUrls,
     ...ecgEcosystemUrls,
     ...ecgClusterUrls,

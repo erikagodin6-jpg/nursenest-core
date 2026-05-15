@@ -70,6 +70,13 @@ export type PediatricDifferentialEdge = {
 // ─── Graph nodes ────────────────────────────────────────────────────────────────
 
 export const PEDIATRIC_DIFFERENTIAL_NODES: readonly PediatricDifferentialNode[] = [
+  // RSA — physiologic variant; palsCritical=false, must not trigger arrhythmia alerts
+  {
+    rhythmTag: "Respiratory sinus arrhythmia",
+    clusters: ["pediatric_normal_variants"],
+    palsCritical: false,
+    primaryAgeGroups: ["infant", "toddler", "child", "adolescent"],
+  },
   {
     rhythmTag: "Pediatric SVT",
     clusters: ["pals_tachyarrhythmias"],
@@ -165,6 +172,13 @@ export const PEDIATRIC_DIFFERENTIAL_NODES: readonly PediatricDifferentialNode[] 
     clusters: ["pediatric_conduction_disorders"],
     palsCritical: true,
     primaryAgeGroups: ["neonate", "infant", "toddler"],
+  },
+  // Second-degree AV block — confusion target from CHB and post-op patterns
+  {
+    rhythmTag: "Pediatric second-degree AV block",
+    clusters: ["pediatric_conduction_disorders"],
+    palsCritical: true,
+    primaryAgeGroups: ["neonate", "infant", "toddler", "child"],
   },
 ];
 
@@ -356,6 +370,82 @@ export const PEDIATRIC_DIFFERENTIAL_EDGES: readonly PediatricDifferentialEdge[] 
       "WPW: short PR + delta wave on baseline ECG. Pre-excited AFib is irregular. " +
       "Antidromic AVRT is regular. VT history in structural heart disease.",
     mostDangerousInAgeGroup: "adolescent",
+  },
+
+  // ── RSA vs pathologic rhythms (false-positive escalation pairs) ─────────────
+  // clinicalDanger is lower because RSA itself never directly harms the patient.
+  // The danger is UNNECESSARY intervention (sedation, cardioversion, workup) or
+  // delayed discharge from over-investigation of a normal finding.
+
+  // RSA vs PAC run (most common confuser in ambulatory/outpatient pediatric ECG reads)
+  // Note: adult AFib is not a valid PEDIATRIC_ECG_RHYTHM_REGISTRY tag; the confusion
+  // is expressed through Pediatric PAC (clustered PACs can mimic irregular rhythm).
+  {
+    correctRhythm: "Respiratory sinus arrhythmia",
+    wrongRhythm: "Pediatric PAC",
+    confusionLikelihood: 0.55,
+    clinicalDanger: 0.40,
+    contraindicated: false,
+    palsConsequence:
+      "Calling clustered RSA variation 'PACs' or irregular atrial rhythm triggers " +
+      "unnecessary monitoring escalation, Holter referral, and family anxiety in a healthy child.",
+    keyDiscriminator:
+      "RSA: smooth R-R variation tied to respiration, all P-waves identical, no early beats. " +
+      "PAC: one beat arrives early with a morphologically distinct P-wave; R-R irregularity is abrupt not gradual.",
+    mostDangerousInAgeGroup: "child",
+  },
+  {
+    correctRhythm: "Respiratory sinus arrhythmia",
+    wrongRhythm: "Pediatric PAC",
+    confusionLikelihood: 0.50,
+    clinicalDanger: 0.30,
+    contraindicated: false,
+    palsConsequence:
+      "Calling RSA 'PACs' triggers unnecessary monitoring escalation and cardiac workup. " +
+      "Neonatal PAC surveillance protocols may be incorrectly initiated for a healthy child.",
+    keyDiscriminator:
+      "RSA: all QRS complexes arrive with progressively varying timing; every P-wave is identical. " +
+      "PACs: one beat arrives EARLY with a morphologically distinct P-wave.",
+    mostDangerousInAgeGroup: "infant",
+  },
+  {
+    correctRhythm: "Respiratory sinus arrhythmia",
+    wrongRhythm: "Pediatric second-degree AV block",
+    confusionLikelihood: 0.35,
+    clinicalDanger: 0.40,
+    contraindicated: false,
+    palsConsequence:
+      "Diagnosing RSA as 2nd-degree AV block triggers pacing evaluation and cardiology consult. " +
+      "The key difference: RSA never drops a QRS complex.",
+    keyDiscriminator:
+      "RSA: no dropped beats — every P-wave is followed by a QRS. " +
+      "2nd-degree AV block: P-waves occur without QRS complexes (dropped beats).",
+    mostDangerousInAgeGroup: "child",
+  },
+  {
+    correctRhythm: "Respiratory sinus arrhythmia",
+    wrongRhythm: "Pediatric sinus bradycardia",
+    confusionLikelihood: 0.40,
+    clinicalDanger: 0.20,
+    contraindicated: false,
+    keyDiscriminator:
+      "RSA's slowest rate during expiration may be mis-measured as bradycardia. " +
+      "Obtain the rate during inspiration — if normal, it is RSA, not bradycardia.",
+    mostDangerousInAgeGroup: "adolescent",
+  },
+  {
+    correctRhythm: "Respiratory sinus arrhythmia",
+    wrongRhythm: "Post-op congenital heart telemetry pattern",
+    confusionLikelihood: 0.20,
+    clinicalDanger: 0.35,
+    contraindicated: false,
+    palsConsequence:
+      "Mistaking RSA for post-op rhythm abnormality in a cardiac surgery patient delays " +
+      "discharge and may prompt unnecessary intervention.",
+    keyDiscriminator:
+      "RSA: smooth sinusoidal variation exactly correlated with breathing. " +
+      "Post-op rhythms: AV dissociation, junctional rates, or irregular changes not synchronized with respiration.",
+    mostDangerousInAgeGroup: "toddler",
   },
 ];
 

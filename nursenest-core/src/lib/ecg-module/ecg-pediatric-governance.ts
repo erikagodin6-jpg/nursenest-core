@@ -253,9 +253,21 @@ function checkRpnAccessConsistency(): PediatricGovernanceViolation[] {
 function checkPediatricRateRangeValidity(): PediatricGovernanceViolation[] {
   const violations: PediatricGovernanceViolation[] = [];
 
+  // Bradycardia rhythms and conduction blocks are EXPECTED to have neonate max < 100 —
+  // that is the clinical definition of the rhythm. Only flag non-bradycardia, non-block,
+  // non-arrest rhythms where a low max rate suggests an adult default was incorrectly copied.
+  const BRADYCARDIA_EXEMPT_CATEGORIES = new Set(["ventilate_first", "pacing_indicated", "non_shockable", "shockable"]);
+
   for (const entry of PEDIATRIC_ECG_RHYTHM_REGISTRY) {
     const neonateRange = entry.rateRangesByAgeGroup["neonate"];
-    if (neonateRange && neonateRange.max <= 100) {
+    const isBradycardiaOrBlock =
+      entry.tag.toLowerCase().includes("bradycardia") ||
+      entry.tag.toLowerCase().includes("block") ||
+      entry.tag.toLowerCase().includes("asystole") ||
+      entry.tag.toLowerCase().includes("pea") ||
+      BRADYCARDIA_EXEMPT_CATEGORIES.has(entry.palsCategory);
+
+    if (neonateRange && neonateRange.max <= 100 && !isBradycardiaOrBlock) {
       violations.push({
         rule: "pediatric_rate_ranges",
         severity: "error",

@@ -41,6 +41,9 @@ export const ECG_RHYTHM_TEMPLATES: EcgRhythmTemplate[] = [
   template("hypokalemia_pattern", "Hypokalemia pattern", [50, 120], "regular", "present", "normal", [0.06, 0.11], ["flattened T waves", "prominent U waves"], ["peaked tented T waves", "sine-wave QRS"], "intermediate", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["electrolytes"]),
   template("torsades_de_pointes", "Torsades de pointes", [150, 250], "regularly_irregular", "absent", "not_measurable", [0.14, 0.24], ["polymorphic VT", "twisting QRS amplitude around baseline"], ["monomorphic amplitude", "narrow QRS"], "advanced", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["ventricular", "qt", "acls"], true, "prolonged"),
   template("paced_rhythm", "Paced rhythm", [50, 100], "regular", "paced", "variable", [0.12, 0.18], ["pacemaker spikes", "wide paced QRS capture"], ["no pacer spikes", "narrow native-only QRS"], "advanced", ["RN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["pacemaker"]),
+  // Pediatric normal variant — cyclic R-R variation, NOT a pathologic arrhythmia.
+  // regularity "regularly_irregular" triggers special RSA sinusoidal modulation in beatOffsets().
+  template("respiratory_sinus_arrhythmia", "Respiratory sinus arrhythmia", [55, 120], "regularly_irregular", "present", "normal", [0.06, 0.10], ["cyclic R-R variation with breathing", "uniform sinus P-waves throughout", "narrow QRS"], ["chaotic R-R without respiratory correlation", "absent or variable P-wave morphology"], "basic", ["RN", "PN", "RPN", "NP", "PARAMEDIC", "CARDIAC_TECH"], ["sinus", "pediatric", "normal_variant"]),
 ];
 
 function template(

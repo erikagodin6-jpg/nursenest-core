@@ -82,6 +82,14 @@ export const ECG_EVENTS = {
   aclsReadinessChanged: "ecg_acls_readiness_changed", // learner crossed ACLS-readiness threshold
   nclexReadinessChanged: "ecg_nclex_readiness_changed",
 
+  // Pediatric false-positive escalation tracking
+  // These events fire when learners over-escalate benign pediatric rhythms.
+  // High rates → content/pedagogy review; PostHog alert at > 30% false-positive rate.
+  rsaFalsePositiveEscalation: "ecg_rsa_false_positive_escalation",  // RSA incorrectly escalated
+  rsaAfibConfusion: "ecg_rsa_afib_confusion",         // RSA misidentified as AFib
+  rsaPacConfusion: "ecg_rsa_pac_confusion",           // RSA misidentified as PACs
+  benignPediatricOvercall: "ecg_benign_pediatric_overcall", // any benign ped rhythm over-escalated
+
   // Degraded / error states (observability events)
   answerApiFailed: "ecg_answer_api_failed",
   curriculumUnitMissing: "ecg_curriculum_unit_missing",
@@ -483,5 +491,78 @@ export function trackEcgStripRenderFailed(
     ...base,
     error_message: opts.errorMessage,
     rhythm_key: opts.rhythmKey,
+  });
+}
+
+// ─── Pediatric false-positive escalation tracking ─────────────────────────────
+
+/**
+ * RSA false-positive escalation — fired when a learner selects an escalation action
+ * for a strip that is respiratory sinus arrhythmia (a normal variant).
+ *
+ * PostHog alert threshold: > 30% RSA false-positive escalation rate → P2 content review.
+ * This measures overcalling of benign pediatric rhythms, which is the primary
+ * educational goal of the RSA curriculum unit.
+ */
+export function trackEcgRsaFalsePositiveEscalation(
+  base: Omit<EcgEventBase, "is_correct">,
+  opts: {
+    selectedAction: string;  // what the learner incorrectly chose to do
+    questionId: string;
+    ageGroup: string;
+  },
+) {
+  track(ECG_EVENTS.rsaFalsePositiveEscalation, {
+    ...base,
+    selected_action: opts.selectedAction,
+    question_id: opts.questionId,
+    age_group: opts.ageGroup,
+  });
+}
+
+/**
+ * Fired when a learner selects AFib as the answer for an RSA strip.
+ * This is the most common RSA misidentification error.
+ * Used to compute RSA→AFib confusion rate for dashboard monitoring.
+ */
+export function trackEcgRsaAfibConfusion(
+  base: Omit<EcgEventBase, "is_correct">,
+  opts: { questionId: string; ageGroup: string },
+) {
+  track(ECG_EVENTS.rsaAfibConfusion, {
+    ...base,
+    question_id: opts.questionId,
+    age_group: opts.ageGroup,
+  });
+}
+
+/**
+ * Fired when a learner selects PACs as the answer for an RSA strip.
+ * Second most common RSA misidentification error.
+ */
+export function trackEcgRsaPacConfusion(
+  base: Omit<EcgEventBase, "is_correct">,
+  opts: { questionId: string; ageGroup: string },
+) {
+  track(ECG_EVENTS.rsaPacConfusion, {
+    ...base,
+    question_id: opts.questionId,
+    age_group: opts.ageGroup,
+  });
+}
+
+/**
+ * General benign pediatric rhythm overcall — fired when any normal pediatric rhythm
+ * (RSA, sinus bradycardia in athlete, isolated PAC) is over-escalated.
+ */
+export function trackEcgBenignPediatricOvercall(
+  base: Omit<EcgEventBase, "is_correct">,
+  opts: { correctRhythm: string; selectedRhythm: string; questionId: string },
+) {
+  track(ECG_EVENTS.benignPediatricOvercall, {
+    ...base,
+    correct_rhythm: opts.correctRhythm,
+    selected_rhythm: opts.selectedRhythm,
+    question_id: opts.questionId,
   });
 }

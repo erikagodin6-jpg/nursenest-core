@@ -553,7 +553,7 @@ export const PEDIATRIC_CASE_SIMULATIONS: readonly PediatricCaseSimulation[] = [
           "QT-prolonging medications in LQTS: azithromycin, fluoroquinolones, ondansetron, many antihistamines, antifungals. Always review medication list when QTc is prolonged.",
       },
     ],
-    palsBranch: "Active torsades → IV magnesium 25–50 mg/kg (max 2g) → defibrillation if VF; Underlying LQTS → beta-blocker therapy + ICD evaluation",
+    palsBranch: "PALS Tachycardia/Arrest Algorithm — active torsades → IV magnesium 25–50 mg/kg (max 2g) → defibrillation if torsades degenerates to VF arrest; confirmed LQTS → beta-blocker therapy + ICD evaluation",
     learningObjectives: [
       "Calculate and interpret QTc in an adolescent using age/gender-specific norms",
       "Connect swimming-triggered syncope with LQT1 genotype",
@@ -643,7 +643,7 @@ export const PEDIATRIC_CASE_SIMULATIONS: readonly PediatricCaseSimulation[] = [
           "Hyperkalemia cardiac emergency treatment order: (1) IV calcium (membrane stabilization — immediate effect), (2) insulin + dextrose (K+ shift — 15–30 min), (3) sodium bicarbonate, (4) kayexalate/resonium for elimination.",
       },
     ],
-    palsBranch: "Hyperkalemia with cardiac toxicity → IV calcium first (membrane stabilization) → potassium-lowering measures",
+    palsBranch: "PALS Pulseless/Pre-Arrest Algorithm — hyperkalemia with cardiac toxicity (sine-wave QRS = pre-arrest) → IV calcium gluconate first (membrane stabilization) → sodium bicarbonate → insulin/glucose → potassium elimination; if arrest: CPR + defibrillation + epinephrine with concurrent calcium",
     learningObjectives: [
       "Recognize hyperkalemia ECG progression: peaked T → QRS widening → sine wave",
       "Know that IV calcium is first-line for cardiac hyperkalemia toxicity (not potassium elimination)",
@@ -751,7 +751,7 @@ export const PEDIATRIC_CASE_SIMULATIONS: readonly PediatricCaseSimulation[] = [
           "PALS threshold for CPR: HR < 60 with poor perfusion (not just bradycardia alone) that does not improve after 30 seconds of effective assisted ventilation with O₂.",
       },
     ],
-    palsBranch: "PALS Bradycardia Algorithm → HR < 60 with poor perfusion → ventilate first → CPR if not improving → epinephrine → identify reversible cause (hypoxia)",
+    palsBranch: "PALS Bradycardia/Pre-Arrest Algorithm → HR < 60 with poor perfusion → BVM ventilation with 100% O₂ (primary intervention) → if no improvement in 30 sec: CPR + epinephrine 0.01 mg/kg IV/IO → identify and treat reversible cause (hypoxia first); untreated hypoxic bradycardia progresses to pulseless cardiac arrest within minutes",
     learningObjectives: [
       "Recognize hypoxic bradycardia as the clinical emergency immediately preceding pediatric arrest",
       "Know that ventilation precedes all other interventions for hypoxic bradycardia",

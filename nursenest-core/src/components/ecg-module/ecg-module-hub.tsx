@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Activity, ChevronRight, Gauge, Zap, BookOpen, ShieldCheck } from "lucide-react";
+import { Activity, ChevronRight, Gauge, Zap, BookOpen, ShieldCheck, Baby } from "lucide-react";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { ECG_CURRICULUM } from "@/lib/ecg-module/ecg-curriculum-content";
 
@@ -229,6 +229,74 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
               </div>
             );
           })}
+        </div>
+      </section>
+
+      {/* ── Pediatric ECG Lane ───────────────────────────────────────────── */}
+      <section
+        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_04%,var(--semantic-surface))] p-5 sm:p-6"
+        aria-labelledby="ecg-pediatric-heading"
+        data-testid="ecg-pediatric-lane-card"
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0 flex-1 space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-3)_90%,var(--semantic-text-primary))]">
+                <Baby className="h-4 w-4" aria-hidden />
+              </span>
+              <p className="text-[11px] font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-chart-3)_88%,var(--semantic-text-primary))]">
+                Pediatric ECG
+              </p>
+            </div>
+            <h2
+              id="ecg-pediatric-heading"
+              className="text-xl font-semibold text-[var(--semantic-text-primary)]"
+            >
+              Pediatric Rhythm Recognition & PALS Scenarios
+            </h2>
+            <p className="max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              Age-specific rate ranges, PALS algorithm integration, and hemodynamic
+              deterioration case simulations — including RSA as a normal variant and
+              why it must not be over-escalated.
+            </p>
+            <ul
+              className="flex flex-wrap gap-1.5"
+              aria-label="Pediatric ECG topics covered"
+            >
+              {[
+                "Respiratory sinus arrhythmia",
+                "Pediatric SVT vs sinus tach",
+                "Hypoxic bradycardia",
+                "PALS arrest rhythms",
+                "Post-op JET recognition",
+                "Long QT / torsades risk",
+              ].map((topic) => (
+                <li
+                  key={topic}
+                  className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_06%,var(--semantic-surface))] px-2.5 py-1 text-[11px] font-medium text-[var(--semantic-text-primary)]"
+                >
+                  {topic}
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <Link
+                href="/modules/ecg/pediatric"
+                className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-3)_85%,var(--semantic-text-primary))] px-5 text-sm font-semibold text-white shadow-sm"
+                data-testid="ecg-pediatric-start-btn"
+              >
+                Start Pediatric ECG
+                <ChevronRight className="h-4 w-4" aria-hidden />
+              </Link>
+              <Link
+                href="/modules/ecg/pediatric/cases"
+                className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+              >
+                PALS case simulations
+              </Link>
+            </div>
+          </div>
+          <Baby className="mt-1 hidden h-6 w-6 shrink-0 text-[color-mix(in_srgb,var(--semantic-chart-3)_60%,var(--semantic-text-muted))] lg:block" aria-hidden />
         </div>
       </section>
 
