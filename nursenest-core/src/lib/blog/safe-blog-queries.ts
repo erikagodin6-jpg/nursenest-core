@@ -1109,10 +1109,37 @@ async function resolveScopedBlogPostBySlug(slug: string, scope?: BlogQueryScope)
   return localizedVariant ?? canonical;
 }
 
+function blogMetaFromLongtailRecord(lt: BlogStaticLongtailRecord): BlogPostMeta {
+  return {
+    title: lt.title,
+    excerpt: lt.excerpt,
+    postStatus: BlogPostStatus.PUBLISHED,
+    workflowStatus: BlogWorkflowStatus.PUBLISHED,
+    publishAt: null,
+    scheduledAt: null,
+    seoTitle: lt.seoTitle?.trim() || null,
+    seoDescription: lt.seoDescription?.trim() || null,
+    createdAt: new Date(`${lt.createdAt}T12:00:00Z`),
+    internalLinkPlan: null,
+    tags: lt.tags ?? [],
+    category: lt.category ?? null,
+    exam: null,
+    countryTarget: null,
+    coverImage: null,
+  };
+}
+
 export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPostMeta | null> {
+<<<<<<< Updated upstream
   if (shouldSkipBlogDbForProductionBuild()) {
     const s = getStaticBlogPost(slug);
     if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) {
+=======
+  if (isBlogSlugHiddenFromPublicMarketingCatalog(slug)) return null;
+  if (shouldSkipBlogDbForProductionBuild() || !isDatabaseUrlConfigured()) {
+    const s = getStaticBlogPost(slug);
+    if (s) {
+>>>>>>> Stashed changes
       return {
         title: s.title,
         excerpt: s.excerpt,
@@ -1132,6 +1159,7 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
       };
     }
     const lt = getBlogStaticLongtailRecord(slug);
+<<<<<<< Updated upstream
     return lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title) ? blogMetaFromLongtailRecord(lt) : null;
   }
   if (!isDatabaseUrlConfigured()) {
@@ -1157,6 +1185,9 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
     }
     const lt = getBlogStaticLongtailRecord(slug);
     return lt && !isBlogPublicE2eTestArtifact(lt.slug, lt.title) ? blogMetaFromLongtailRecord(lt) : null;
+=======
+    return lt ? blogMetaFromLongtailRecord(lt) : null;
+>>>>>>> Stashed changes
   }
   const db = await resolveScopedBlogPostBySlug(slug, scope);
   if (db && !isBlogPublicE2eTestArtifact(db.slug, db.title)) {
@@ -1178,6 +1209,12 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
       coverImage: db.coverImage,
     };
   }
+<<<<<<< Updated upstream
+=======
+  const lt = getBlogStaticLongtailRecord(slug);
+  if (lt) return blogMetaFromLongtailRecord(lt);
+  if (!(await canUseStaticBlogFallback())) return null;
+>>>>>>> Stashed changes
   const s = getStaticBlogPost(slug);
   if (s && !isBlogPublicE2eTestArtifact(s.slug, s.title)) {
     return {

@@ -50,7 +50,9 @@ export function metadataForHealthcareTestBankPage(path: string): Metadata {
   }
   const canonical = absoluteUrl(page.path);
   return {
-    title: page.title,
+    // `absolute` bypasses the root layout template: "%s | NurseNest" — title already
+    // includes the brand suffix, so we must not apply the template again.
+    title: { absolute: page.title },
     description: page.description,
     alternates: { canonical },
     robots: { index: true, follow: true },
