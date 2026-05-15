@@ -530,7 +530,7 @@ export default async function LessonsPage({ searchParams }: Props) {
 
       return (
         <div
-          className="nn-premium-lessons-system nn-app-lessons-hub-premium mx-auto max-w-3xl space-y-6 px-4 py-8"
+          className="nn-premium-lessons-system nn-app-lessons-hub-premium nn-premium-lessons-app-list mx-auto max-w-3xl space-y-6 px-4 py-8"
           data-nn-premium-full-platform-convergence=""
           data-nn-premium-platform-family="exam-study"
           data-nn-premium-platform-module="lessons"
@@ -663,7 +663,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         </p>
       ) : null}
 
-      <div data-nn-premium-lessons-hub-body="">
+      <div className="nn-premium-lessons-app-list" data-nn-premium-lessons-hub-body="">
         <LearnerLessonsVirtualList
           lessons={resolvedRenderableLessons}
           progressByRowId={progressByRowId}
