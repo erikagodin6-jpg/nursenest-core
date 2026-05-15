@@ -4,16 +4,11 @@
  * shared surfaces should use smaller teaser/query helpers instead.
  */
 import { createRequire } from "node:module";
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 import type { BlogPost } from "@prisma/client";
 import { BlogImageStatus, BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 import type { StaticBlogPostRecord } from "@/content/blog-static-posts";
 import type { BlogStaticLongtailRecord } from "@/lib/blog/blog-static-longtail-types";
 import { isBlogSlugHiddenFromPublicMarketingCatalog } from "@/lib/blog/blog-visibility";
-import type { BlogStaticLongtailRecord } from "@/lib/blog/blog-static-longtail-types";
 
 const require = createRequire(import.meta.url);
 
@@ -21,19 +16,11 @@ type StaticBlogPostsModule = {
   STATIC_BLOG_POSTS: StaticBlogPostRecord[];
 };
 
-const requireStaticBlogPosts = createRequire(import.meta.url);
-
 let staticBlogPostsCache: StaticBlogPostRecord[] | null = null;
 
 function getStaticBlogPosts(): StaticBlogPostRecord[] {
   if (staticBlogPostsCache) return staticBlogPostsCache;
-<<<<<<< Updated upstream
   staticBlogPostsCache = (require("../../content/blog-static-posts") as StaticBlogPostsModule).STATIC_BLOG_POSTS;
-=======
-  staticBlogPostsCache = (
-    requireStaticBlogPosts("../../content/blog-static-posts.ts") as StaticBlogPostsModule
-  ).STATIC_BLOG_POSTS;
->>>>>>> Stashed changes
   return staticBlogPostsCache;
 }
 
@@ -182,7 +169,6 @@ function escapeHtmlLite(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-<<<<<<< Updated upstream
 /**
  * Minimal `BlogPost` for repo-backed long-tail markdown (`src/content/blog-static-longtail/`).
  * Same public `/blog/[slug]` contract as {@link publishedBlogPostFromStaticRecord}; DB live rows win on slug overlap.
@@ -193,16 +179,6 @@ export function publishedBlogPostFromLongtailRecord(r: BlogStaticLongtailRecord)
   const disclaimerBlock =
     r.disclaimer.trim().length > 0
       ? `<aside class="nn-blog-longtail-disclaimer mt-8 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_6%,var(--theme-card-bg))] p-4 text-xs leading-relaxed text-[var(--theme-body-text)]"><p>${escapeHtmlLite(r.disclaimer)}</p></aside>`
-=======
-/** Minimal `BlogPost` for repo-backed long-tail markdown; live CMS wins on slug overlap. */
-export function publishedBlogPostFromLongtailRecord(r: BlogStaticLongtailRecord): BlogPost {
-  const createdAt = new Date(`${r.createdAt}T12:00:00Z`);
-  const updatedAt = new Date(`${r.updatedAt}T12:00:00Z`);
-  const disc = r.medicalDisclaimer.trim();
-  const disclaimerBlock =
-    disc.length > 0
-      ? `<aside class="nn-blog-longtail-disclaimer mt-8 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_6%,var(--theme-card-bg))] p-4 text-xs leading-relaxed text-[var(--theme-body-text)]"><p>${escapeHtmlLite(disc)}</p></aside>`
->>>>>>> Stashed changes
       : "";
   const body = `${r.bodyHtml.trim()}\n${disclaimerBlock}`;
   return {
@@ -278,13 +254,8 @@ export function publishedBlogPostFromLongtailRecord(r: BlogStaticLongtailRecord)
     updateNeeded: false,
     rankingNote: null,
     careerSlug: null,
-<<<<<<< Updated upstream
     locale: (r.locale?.trim() || "en").slice(0, 32),
     translationGroupId: r.translationGroupId?.trim() || null,
-=======
-    locale: "en",
-    translationGroupId: null,
->>>>>>> Stashed changes
     sourceLocale: null,
     isAutoTranslated: false,
     translationSource: null,
