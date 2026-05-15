@@ -1135,7 +1135,7 @@ export function QuestionBankPracticeClient({
     const body = t(keys.bodyKey, keys.bodyParams);
     return (
       <div className="nn-card mt-4 p-6 text-sm text-muted">
-        <p className="font-medium text-foreground">{title}</p>
+        <p className="font-medium text-[var(--semantic-text-primary)]">{title}</p>
         <p className="mt-2">{body}</p>
       </div>
     );
@@ -1157,7 +1157,7 @@ export function QuestionBankPracticeClient({
         <p className="rounded-lg border border-role-warning-border bg-role-warning-soft px-3 py-2 text-sm text-role-warning-text">{discoveryNotice}</p>
       ) : null}
       {topicMenuTruncationNotice ? (
-        <p className="rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+        <p className="rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,transparent)] px-3 py-2 text-sm text-[var(--semantic-text-muted)]">
           {topicMenuTruncationNotice}
         </p>
       ) : null}
@@ -1165,20 +1165,20 @@ export function QuestionBankPracticeClient({
         <p className="rounded-lg border border-role-warning-border bg-role-warning-soft px-3 py-2 text-sm text-role-warning-text">{softNotice}</p>
       ) : null}
 
-      <details className="nn-card mb-4 overflow-hidden rounded-xl border border-border">
-        <summary className="cursor-pointer px-4 py-3.5 text-sm font-semibold text-foreground outline-none hover:bg-muted/30">
+      <details className="nn-card mb-4 overflow-hidden rounded-xl border border-[var(--semantic-border-soft)]">
+        <summary className="cursor-pointer px-4 py-3.5 text-sm font-semibold text-[var(--semantic-text-primary)] outline-none hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_30%,transparent)]">
           {t("learner.qbank.examUi.sessionSetup")}
         </summary>
-        <div className="space-y-6 border-t border-border bg-muted/10 p-4">
+        <div className="space-y-6 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_10%,transparent)] p-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
               {t("learner.qbank.filters.sessionBuilderHeading")}
             </p>
             <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end">
               <label className="block min-w-[min(100%,160px)] text-sm">
-                <span className="text-muted-foreground">{t("learner.qbank.filters.sessionSize")}</span>
+                <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.filters.sessionSize")}</span>
                 <select
-                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  className="mt-1 w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm"
                   value={sessionSize}
                   onChange={(e) => setSessionSize(Number(e.target.value))}
                 >
@@ -1190,9 +1190,9 @@ export function QuestionBankPracticeClient({
                 </select>
               </label>
               <label className="block min-w-[min(100%,220px)] text-sm">
-                <span className="text-muted-foreground">{t("learner.qbank.filters.practiceMode")}</span>
+                <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.filters.practiceMode")}</span>
                 <select
-                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  className="mt-1 w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm"
                   value={examShell ? "exam" : "practice"}
                   onChange={(e) => {
                     const exam = e.target.value === "exam";
@@ -1208,14 +1208,14 @@ export function QuestionBankPracticeClient({
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
               {t("learner.qbank.filters.filtersHeading")}
             </p>
             <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end">
               <label className="block min-w-[min(100%,200px)] text-sm">
-                <span className="text-muted-foreground">{t("learner.qbank.ui.studyMode")}</span>
+                <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.ui.studyMode")}</span>
                 <select
-                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  className="mt-1 w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm"
                   value={preset}
                   onChange={(e) => {
                     const v = e.target.value as QuestionBankPreset;
@@ -1234,9 +1234,9 @@ export function QuestionBankPracticeClient({
               </label>
               {pathwayOptions.length > 0 ? (
                 <label className="block min-w-[min(100%,240px)] text-sm">
-                  <span className="text-muted-foreground">{t("learner.qbank.ui.pathwayFilter")}</span>
+                  <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.ui.pathwayFilter")}</span>
                   <select
-                    className="mt-1 w-full max-w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                    className="mt-1 w-full max-w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm"
                     value={pathwayIdFilter ?? ""}
                     onChange={(e) => setPathwayIdFilter(e.target.value === "" ? null : e.target.value)}
                     disabled={preset === "random_bank"}
@@ -1253,9 +1253,9 @@ export function QuestionBankPracticeClient({
                 </label>
               ) : null}
               <label className="block min-w-[min(100%,240px)] text-sm">
-                <span className="text-muted-foreground">{t("learner.qbank.filters.topicOptional")}</span>
+                <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.filters.topicOptional")}</span>
                 <select
-                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  className="mt-1 w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm"
                   value={topic ?? ""}
                   onChange={(e) => setTopic(e.target.value === "" ? null : e.target.value)}
                 >
@@ -1271,9 +1271,9 @@ export function QuestionBankPracticeClient({
               </label>
               {examBucketsForPathway.length > 0 ? (
                 <label className="block min-w-[min(100%,220px)] text-sm">
-                  <span className="text-muted-foreground">{t("learner.qbank.filters.examFamily")}</span>
+                  <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.filters.examFamily")}</span>
                   <select
-                    className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                    className="mt-1 w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm"
                     value={examFilter ?? ""}
                     onChange={(e) => setExamFilter(e.target.value === "" ? null : e.target.value)}
                   >
@@ -1289,9 +1289,9 @@ export function QuestionBankPracticeClient({
                 </label>
               ) : null}
               <label className="block min-w-[min(100%,200px)] text-sm">
-                <span className="text-muted-foreground">{t("learner.qbank.filters.difficulty")}</span>
+                <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.filters.difficulty")}</span>
                 <select
-                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  className="mt-1 w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm"
                   value={difficultyBand}
                   onChange={(e) => setDifficultyBand(e.target.value as QuestionBankDifficultyBand)}
                 >
@@ -1301,19 +1301,19 @@ export function QuestionBankPracticeClient({
                   <option value="hard">{t("learner.qbank.filters.difficultyHard")}</option>
                 </select>
               </label>
-              <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-border bg-card px-3 py-2.5 text-sm sm:min-w-[220px]">
+              <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm sm:min-w-[220px]">
                 <input
                   type="checkbox"
-                  className="size-5 rounded border-border"
+                  className="size-5 rounded border-[var(--semantic-border-soft)]"
                   checked={incorrectOnly}
                   onChange={(e) => setIncorrectOnly(e.target.checked)}
                 />
-                <span className="text-foreground">{t("learner.qbank.filters.incorrectOnly")}</span>
+                <span className="text-[var(--semantic-text-primary)]">{t("learner.qbank.filters.incorrectOnly")}</span>
               </label>
               <label className="block min-w-[min(100%,200px)] text-sm">
-                <span className="text-muted-foreground">{t("learner.qbank.ui.efficiencyMode")}</span>
+                <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.ui.efficiencyMode")}</span>
                 <select
-                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  className="mt-1 w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm"
                   value={efficiencyMode ?? ""}
                   onChange={(e) => {
                     const v = e.target.value;
@@ -1333,28 +1333,28 @@ export function QuestionBankPracticeClient({
               </label>
             </div>
             {incorrectOnly ? (
-              <p className="mt-2 text-xs text-muted-foreground">{t("learner.qbank.filters.incorrectOnlyHint")}</p>
+              <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">{t("learner.qbank.filters.incorrectOnlyHint")}</p>
             ) : null}
           </div>
 
-          <div className="rounded-lg border border-border/80 bg-card/40 p-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)] bg-[color-mix(in_srgb,var(--semantic-surface)_40%,transparent)] p-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
               {t("learner.qbank.filters.presetsHeading")}
             </p>
             <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
               <label className="block min-w-[min(100%,200px)] flex-1 text-sm">
-                <span className="text-muted-foreground">{t("learner.qbank.filters.presetName")}</span>
+                <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.filters.presetName")}</span>
                 <input
                   type="text"
                   value={presetNameDraft}
                   onChange={(e) => setPresetNameDraft(e.target.value)}
                   placeholder={t("learner.qbank.filters.presetNamePlaceholder")}
-                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                  className="mt-1 w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
                 />
               </label>
               <button
                 type="button"
-                className="min-h-11 rounded-full border-2 border-border px-4 text-sm font-semibold hover:bg-muted/60"
+                className="min-h-11 rounded-full border-2 border-[var(--semantic-border-soft)] px-4 text-sm font-semibold hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_60%,transparent)]"
                 onClick={() => saveNamedPreset()}
               >
                 {t("learner.qbank.filters.savePreset")}
@@ -1362,9 +1362,9 @@ export function QuestionBankPracticeClient({
               {savedPresets.length > 0 ? (
                 <div className="flex min-w-[min(100%,280px)] flex-1 flex-col gap-2 sm:flex-row sm:items-end">
                   <label className="block flex-1 text-sm">
-                    <span className="text-muted-foreground">{t("learner.qbank.filters.loadPreset")}</span>
+                    <span className="text-[var(--semantic-text-muted)]">{t("learner.qbank.filters.loadPreset")}</span>
                     <select
-                      className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                      className="mt-1 w-full min-h-11 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm"
                       defaultValue=""
                       onChange={(e) => {
                         const id = e.target.value;
@@ -1384,10 +1384,10 @@ export function QuestionBankPracticeClient({
               ) : null}
             </div>
             {savedPresets.length > 0 ? (
-              <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
+              <ul className="mt-3 space-y-1 text-xs text-[var(--semantic-text-muted)]">
                 {savedPresets.map((p) => (
-                  <li key={p.id} className="flex items-center justify-between gap-2 rounded-md bg-muted/30 px-2 py-1">
-                    <span className="truncate font-medium text-foreground">{p.name}</span>
+                  <li key={p.id} className="flex items-center justify-between gap-2 rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_30%,transparent)] px-2 py-1">
+                    <span className="truncate font-medium text-[var(--semantic-text-primary)]">{p.name}</span>
                     <button
                       type="button"
                       className="shrink-0 rounded-md px-2 py-1 text-destructive hover:underline"
@@ -1401,7 +1401,7 @@ export function QuestionBankPracticeClient({
             ) : null}
           </div>
 
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-[var(--semantic-text-muted)]">
             {sessionTotal > 0
               ? t("learner.qbank.ui.sessionLine", { correct: sessionRight, total: sessionTotal })
               : t("learner.qbank.ui.sessionLineIdle")}
@@ -1491,7 +1491,7 @@ export function QuestionBankPracticeClient({
               <div>
                 <p className="nn-question-options-label">{t("learner.qbank.examUi.answersHeading")}</p>
                 {!g && !isBowtie ? (
-                  <p className="mb-3 text-xs text-muted-foreground">{t("learner.qbank.examUi.toolsHint")}</p>
+                  <p className="mb-3 text-xs text-[var(--semantic-text-muted)]">{t("learner.qbank.examUi.toolsHint")}</p>
                 ) : null}
 
                 {isBowtie && bowtiePayload ? (
@@ -1545,11 +1545,11 @@ export function QuestionBankPracticeClient({
                                 const next = e.target.checked ? [...prevAns, canonical] : prevAns.filter((x) => x !== canonical);
                                 setAnswer(next);
                               }}
-                              className="mt-1 size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 sm:size-5"
+                              className="mt-1 size-[1.125rem] shrink-0 rounded border-[var(--semantic-border-soft)] text-primary focus-visible:ring-2 focus-visible:ring-primary/30 sm:size-5"
                             />
                             <QuestionChoiceLetter index={i} />
                             <span
-                              className={`min-w-0 flex-1 text-base leading-relaxed text-[var(--theme-body-text)] ${struck && !g ? "text-muted-foreground line-through" : ""}`}
+                              className={`min-w-0 flex-1 text-base leading-relaxed text-[var(--theme-body-text)] ${struck && !g ? "text-[var(--semantic-text-muted)] line-through" : ""}`}
                             >
                               {label}
                             </span>

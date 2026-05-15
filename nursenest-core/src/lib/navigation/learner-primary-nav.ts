@@ -56,7 +56,8 @@ export type LearnerShellStudyNavRowId =
   | typeof STUDY_TOOLS_SHELL_NAV_ID
   | typeof PRINTOUTS_SHELL_NAV_ID
   | typeof OSCE_SHELL_NAV_ID
-  | typeof CLINICAL_SCENARIOS_SHELL_NAV_ID;
+  | typeof CLINICAL_SCENARIOS_SHELL_NAV_ID
+  | typeof CLINICAL_MODULES_SHELL_NAV_ID;
 
 /** Whether this nav row is the designated primary study entry (visual emphasis in header + shell). */
 export function isLearnerPrimaryNavKey(key: LearnerShellStudyNavRowId | string): boolean {
@@ -160,6 +161,104 @@ export function buildOptionalClinicalScenariosShellNavItem(pathwayId: string | n
     labelKey: "learner.shell.nav.clinicalScenarios",
   };
 }
+
+// ─── Clinical Modules flyout ───────────────────────────────────────────────
+
+/** Nav section ID for the Clinical Modules flyout. */
+export const CLINICAL_MODULES_SHELL_NAV_ID = "clinical_modules" as const;
+
+/** A link within the Clinical Modules flyout dropdown. */
+export type ClinicalModulesNavLink = {
+  key: string;
+  href: string;
+  label: string;
+  description: string;
+  isPremiumAddOn?: boolean;
+  isComingSoon?: boolean;
+};
+
+/**
+ * Returns the ordered list of Clinical Modules links for the flyout dropdown.
+ * ECG Fundamentals and Advanced ECG are flagship entries; remaining modules
+ * are progression destinations for the expanding clinical platform.
+ */
+export function buildClinicalModulesNavLinks(pathwayId: string | null): ClinicalModulesNavLink[] {
+  return [
+    {
+      key: "ecg-fundamentals",
+      href: withPathwayQuery("/modules/ecg/basic/lessons", pathwayId),
+      label: "ECG Fundamentals",
+      description: "Rhythm recognition, AV blocks, strip interpretation",
+    },
+    {
+      key: "advanced-ecg",
+      href: withPathwayQuery("/modules/ecg-advanced", pathwayId),
+      label: "Advanced ECG",
+      description: "STEMI, electrolytes, telemetry mastery, ICU ECG",
+      isPremiumAddOn: true,
+    },
+    {
+      key: "ecg-drills",
+      href: withPathwayQuery("/modules/ecg/basic/quizzes", pathwayId),
+      label: "ECG Practice Drills",
+      description: "Adaptive rhythm identification drills",
+    },
+    {
+      key: "lab-values",
+      href: "/tools/lab-values",
+      label: "Lab Values",
+      description: "Critical lab interpretation and clinical correlation",
+    },
+    {
+      key: "med-calculations",
+      href: withPathwayQuery("/app/med-calculations", pathwayId),
+      label: "Medication Calculations",
+      description: "IV drip, weight-based dosing, unit conversions",
+    },
+    {
+      key: "telemetry-mastery",
+      href: "/advanced-ecg-nursing/telemetry-monitoring",
+      label: "Telemetry Mastery",
+      description: "Alarm management, lead selection, ST monitoring",
+    },
+    {
+      key: "hemodynamics",
+      href: "/clinical-modules",
+      label: "Hemodynamics",
+      description: "Arterial lines, CVP, cardiac output interpretation",
+      isComingSoon: true,
+    },
+    {
+      key: "abg-interpretation",
+      href: "/clinical-modules",
+      label: "ABG Interpretation",
+      description: "Acid-base, respiratory vs metabolic disorders",
+      isComingSoon: true,
+    },
+  ];
+}
+
+/**
+ * Clinical Modules nav item for the learner shell. Always shown for RN/NP
+ * pathways; modules within are individually gated by entitlement.
+ */
+export function buildClinicalModulesShellNavItem(pathwayId: string | null): {
+  id: typeof CLINICAL_MODULES_SHELL_NAV_ID;
+  href: string;
+  matchPrefix: string;
+  labelKey: string;
+  links: ClinicalModulesNavLink[];
+} {
+  return {
+    id: CLINICAL_MODULES_SHELL_NAV_ID,
+    href: "/clinical-modules",
+    matchPrefix: "/modules",
+    labelKey: "learner.shell.nav.clinicalModules",
+    links: buildClinicalModulesNavLinks(pathwayId),
+  };
+}
+
+// ─── Printables ────────────────────────────────────────────────────────────
 
 /**
  * When `navVisible` is true (typically from `isPrintableStorePublicNavEnabled()` in the learner layout),

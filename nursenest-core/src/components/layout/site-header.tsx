@@ -190,6 +190,18 @@ export type SiteHeaderPrecomputedNav = {
   loginLabel: string;
   /** "Start Free" CTA label computed server-side. */
   signupLabel: string;
+  /**
+   * Tier hub strip precomputed server-side (RN/PN/NP/New Grad/Allied labels + hrefs).
+   * Eliminates `buildMarketingTierHubStrip(region, t)` useMemo from the client hydration
+   * critical path. Client falls back to hook-computed if absent or region changes.
+   * -- TBT fix: removes one synchronous useMemo from the 53-hook hydration sequence.
+   */
+  tierHubStrip?: ReadonlyArray<{ key: string; label: string; hubHref: string }>;
+  /**
+   * Server region used to compute tierHubStrip. If the client detects a different
+   * region (cookie mismatch), it discards the precomputed strip and recomputes.
+   */
+  serverRegion?: string;
 };
 
 export type SiteHeaderProps = {
@@ -426,8 +438,16 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
 
   const activeNav = useActiveNavContext();
   const tierHubMenus = useMemo(
-    () => buildMarketingTierHubStrip(region, (k) => t(k)),
-    [region, t],
+    () => {
+      // Use server-precomputed strip when region matches to avoid synchronous computation
+      // during hydration. buildMarketingTierHubStrip calls marketingExamHubPath and
+      // publicNewGradStudyDestinations on every render — deferring this saves ~1 long task.
+      const preStrip = precomputedNavData?.tierHubStrip;
+      const preRegion = precomputedNavData?.serverRegion;
+      if (preStrip && preRegion === region) return preStrip;
+      return buildMarketingTierHubStrip(region, (k) => t(k));
+    },
+    [precomputedNavData?.tierHubStrip, precomputedNavData?.serverRegion, region, t],
   );
   const [intlRegionDisplayName, setIntlRegionDisplayName] = useState<string | null>(null);
   const [alliedProfessionAbbrev, setAlliedProfessionAbbrev] = useState<string | null>(null);
@@ -622,6 +642,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
       style={stickyChromeStyle}
       className={`sticky top-0 z-50 w-full min-w-0${isLightTheme ? "" : " nn-header-dark-surface"}`}
       ref={headerRef}
+      data-nn-cls-region="site-header"
     >
       {/* Isolated Suspense boundary for useSearchParams — keeps callbackUrl param isolated
           from the main SiteHeader Suspense scope to reduce TBT on marketing pages. */}

@@ -2,20 +2,24 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import {
+  buildClinicalModulesShellNavItem,
   buildLearnerPrimaryNavItems,
   buildOptionalClinicalScenariosShellNavItem,
   buildOptionalOsceScenarioShellNavItems,
   buildOptionalPrintablesShellNavItem,
   buildOptionalStudyToolsShellNavItem,
+  CLINICAL_MODULES_SHELL_NAV_ID,
   isLearnerPrimaryNavKey,
   learnerPrimaryNavLabelKey,
+  type ClinicalModulesNavLink,
   type LearnerShellStudyNavRowId,
 } from "@/lib/navigation/learner-primary-nav";
 import { SignOutButton } from "@/components/auth/sign-out-button";
@@ -28,6 +32,129 @@ const STUDY_TOOLS_ACTIVE_PREFIXES = [
   "/app/lab-drills",
   "/app/medication-drills",
 ] as const;
+
+// ─── Clinical Modules flyout ───────────────────────────────────────────────
+
+/**
+ * Desktop Clinical Modules flyout button + dropdown panel.
+ * Opens on click; closes on outside click or Escape.
+ * Architecture: positioned relative to the nav row, not portal-based,
+ * so it stays inside the learner shell layout without z-index conflicts.
+ */
+function ClinicalModulesFlyout({
+  links,
+  label,
+  isActive,
+  pathwayId,
+}: {
+  links: ClinicalModulesNavLink[];
+  label: string;
+  isActive: boolean;
+  pathwayId: string | null;
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  const handleBlur = (e: React.FocusEvent) => {
+    if (!containerRef.current?.contains(e.relatedTarget as Node)) {
+      setOpen(false);
+    }
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative"
+      onBlur={handleBlur}
+      data-nn-clinical-modules-flyout=""
+    >
+      <button
+        type="button"
+        aria-haspopup="true"
+        aria-expanded={open}
+        onClick={() => setOpen((prev) => !prev)}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") setOpen(false);
+        }}
+        className={
+          isActive
+            ? "nn-marketing-body-sm inline-flex min-h-11 min-w-0 touch-manipulation items-center gap-1 rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-2.5 py-1.5 font-medium leading-snug text-[var(--semantic-brand)] transition-colors duration-150 sm:px-3 sm:py-2"
+            : "nn-marketing-body-sm inline-flex min-h-11 min-w-0 touch-manipulation items-center gap-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-2.5 py-1.5 font-medium leading-snug text-[var(--theme-body-text)] transition-colors duration-150 hover:bg-[var(--accent-soft)] hover:text-primary sm:px-3 sm:py-2"
+        }
+      >
+        {label}
+        <ChevronDown
+          className={`h-3.5 w-3.5 shrink-0 transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+          aria-hidden
+        />
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          aria-label="Clinical Modules"
+          className="absolute left-0 top-full z-50 mt-1.5 w-72 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-2 shadow-[0_8px_32px_-8px_color-mix(in_srgb,var(--semantic-text-primary)_18%,transparent)]"
+        >
+          {links.map((link) => (
+            <Link
+              key={link.key}
+              href={link.isComingSoon ? "#" : link.href}
+              role="menuitem"
+              aria-disabled={link.isComingSoon}
+              onClick={(e) => {
+                if (link.isComingSoon) {
+                  e.preventDefault();
+                  return;
+                }
+                setOpen(false);
+                trackClientEvent(PH.learnerNavClick, {
+                  actor: "authenticated",
+                  nav_id: `clinical_modules.${link.key}`,
+                  href: link.href,
+                  country: readMarketingRegionFromDocument(),
+                  surface: "learner_clinical_modules_flyout",
+                });
+              }}
+              className={`flex flex-col gap-0.5 rounded-xl px-3 py-2.5 transition-colors duration-100 ${
+                link.isComingSoon
+                  ? "cursor-default opacity-40"
+                  : "hover:bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))] hover:text-[var(--semantic-brand)]"
+              }`}
+            >
+              <span className="flex items-center gap-1.5 text-sm font-semibold text-[var(--semantic-text-primary)]">
+                {link.label}
+                {link.isPremiumAddOn && (
+                  <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] px-1.5 py-0.5 text-[10px] font-bold text-[var(--semantic-brand)]">
+                    ADD-ON
+                  </span>
+                )}
+                {link.isComingSoon && (
+                  <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-text-muted)_10%,var(--semantic-surface))] px-1.5 py-0.5 text-[10px] font-bold text-[var(--semantic-text-muted)]">
+                    SOON
+                  </span>
+                )}
+              </span>
+              <span className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+                {link.description}
+              </span>
+            </Link>
+          ))}
+          <div className="mt-1.5 border-t border-[var(--semantic-border-soft)] pt-1.5">
+            <Link
+              href="/clinical-modules"
+              role="menuitem"
+              onClick={() => setOpen(false)}
+              className="flex items-center rounded-xl px-3 py-2 text-xs font-semibold text-[var(--semantic-text-muted)] transition-colors hover:text-[var(--semantic-brand)]"
+            >
+              View all Clinical Modules
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 type LearnerShellNavRow = {
   id: LearnerShellStudyNavRowId;

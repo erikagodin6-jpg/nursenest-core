@@ -880,7 +880,7 @@ export function PracticeTestsHubClient({
       </header>
 
       {topicSlugFromUrl && pathwayId.trim() ? (
-        <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+        <div className="flex flex-wrap gap-3 text-sm text-[var(--semantic-text-muted)]">
           <Link
             href={buildAppFlashcardsTopicHref(pathwayId.trim(), topicSlugFromUrl)}
             className="font-semibold text-[var(--semantic-info)] underline underline-offset-2"
@@ -1003,10 +1003,10 @@ export function PracticeTestsHubClient({
         {pathwayOptions.length > 0 ? (
           <div className="mt-4">
             <label className="block text-sm">
-              <span className="text-muted-foreground">{t("learner.practiceTests.hub.pathwayLabel")}</span>
+              <span className="text-[var(--semantic-text-muted)]">{t("learner.practiceTests.hub.pathwayLabel")}</span>
               <select
                 data-nn-qa-practice-hub-pathway-select
-                className="mt-1 w-full max-w-xl rounded-lg border border-border px-3 py-2 text-sm"
+                className="mt-1 w-full max-w-xl rounded-lg border border-[var(--semantic-border-soft)] px-3 py-2 text-sm"
                 value={pathwayId}
                 onChange={(e) => {
                   const next = e.target.value;
@@ -1026,7 +1026,7 @@ export function PracticeTestsHubClient({
                 ))}
               </select>
             </label>
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
               {isNpPathway
                 ? t("learner.practiceTests.hub.pathwayNpHint")
                 : selectedExamLabel
@@ -1211,7 +1211,7 @@ export function PracticeTestsHubClient({
             />
             {topicPicks.length > 0 ? (
               <div className="flex flex-wrap gap-2">
-                <span className="w-full text-xs font-medium text-muted-foreground">{t("learner.practiceTests.hub.topicPicksLabel")}</span>
+                <span className="w-full text-xs font-medium text-[var(--semantic-text-muted)]">{t("learner.practiceTests.hub.topicPicksLabel")}</span>
                 {topicPicks.map((pickedTopic) => (
                   <button
                     key={pickedTopic}
@@ -1393,17 +1393,17 @@ export function PracticeTestsHubClient({
                     </div>
                   </div>
                   {linearDeliveryMode === "practice" ? (
-                    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-3 text-sm text-foreground shadow-sm">
+                    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-3 text-sm text-[var(--semantic-text-primary)] shadow-sm">
                       <input
                         type="checkbox"
-                        className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
+                        className="mt-0.5 h-4 w-4 shrink-0 rounded border-[var(--semantic-border-soft)]"
                         checked={linearAllowReviewNavigation}
                         onChange={(e) => setLinearAllowReviewNavigation(e.target.checked)}
                         data-nn-qa-practice-hub-linear-allow-review-nav
                       />
                       <span>
                         <span className="font-medium">{t("learner.practiceTests.hub.linearAllowReviewNavLabel")}</span>
-                        <span className="mt-1 block text-xs text-muted-foreground">
+                        <span className="mt-1 block text-xs text-[var(--semantic-text-muted)]">
                           {t("learner.practiceTests.hub.linearAllowReviewNavHelp")}
                         </span>
                       </span>
@@ -1426,8 +1426,8 @@ export function PracticeTestsHubClient({
                                 : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                             }`}
                           >
-                            <span className="font-semibold text-foreground">{t("learner.practiceTests.hub.catSessionStyleAdaptiveTitle")}</span>
-                            <span className="mt-1 block text-xs text-muted-foreground">{t("learner.practiceTests.hub.catSessionStyleAdaptiveDesc")}</span>
+                            <span className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.catSessionStyleAdaptiveTitle")}</span>
+                            <span className="mt-1 block text-xs text-[var(--semantic-text-muted)]">{t("learner.practiceTests.hub.catSessionStyleAdaptiveDesc")}</span>
                           </button>
                           <button
                             type="button"
@@ -1441,8 +1441,8 @@ export function PracticeTestsHubClient({
                                 : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                             }`}
                           >
-                            <span className="font-semibold text-foreground">{t("learner.practiceTests.hub.catSessionStyleGuidedTitle")}</span>
-                            <span className="mt-1 block text-xs text-muted-foreground">{t("learner.practiceTests.hub.catSessionStyleGuidedDesc")}</span>
+                            <span className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.catSessionStyleGuidedTitle")}</span>
+                            <span className="mt-1 block text-xs text-[var(--semantic-text-muted)]">{t("learner.practiceTests.hub.catSessionStyleGuidedDesc")}</span>
                           </button>
                         </div>
                       </div>
@@ -1594,7 +1594,7 @@ export function PracticeTestsHubClient({
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <select
-                      className="rounded-lg border border-border px-2 py-1.5 text-sm"
+                      className="rounded-lg border border-[var(--semantic-border-soft)] px-2 py-1.5 text-sm"
                       value=""
                       onChange={(e) => {
                         addTopicFromMenu(e.target.value);
@@ -1609,7 +1609,7 @@ export function PracticeTestsHubClient({
                       ))}
                     </select>
                     <input
-                      className="rounded-lg border border-border px-2 py-1.5 text-sm"
+                      className="rounded-lg border border-[var(--semantic-border-soft)] px-2 py-1.5 text-sm"
                       placeholder={t("learner.practiceTests.hub.customTopicPlaceholder")}
                       value={topicInput}
                       onChange={(e) => setTopicInput(e.target.value)}
@@ -1617,7 +1617,7 @@ export function PracticeTestsHubClient({
                     />
                     <button
                       type="button"
-                      className="nn-premium-action-chip rounded-lg border border-border px-3 py-1.5 text-sm"
+                      className="nn-premium-action-chip rounded-lg border border-[var(--semantic-border-soft)] px-3 py-1.5 text-sm"
                       onClick={addCustomTopic}
                     >
                       {t("learner.practiceTests.hub.add")}
@@ -1651,7 +1651,7 @@ export function PracticeTestsHubClient({
                       type="number"
                       min={1}
                       max={5}
-                      className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
+                      className="mt-1 w-full rounded-lg border border-[var(--semantic-border-soft)] px-3 py-2 text-sm"
                       value={difficultyMin}
                       onChange={(e) => setDifficultyMin(e.target.value === "" ? "" : Number(e.target.value))}
                     />
@@ -1662,13 +1662,13 @@ export function PracticeTestsHubClient({
                       type="number"
                       min={1}
                       max={5}
-                      className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
+                      className="mt-1 w-full rounded-lg border border-[var(--semantic-border-soft)] px-3 py-2 text-sm"
                       value={difficultyMax}
                       onChange={(e) => setDifficultyMax(e.target.value === "" ? "" : Number(e.target.value))}
                     />
                   </label>
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">{t("learner.practiceTests.hub.difficultyFootnote")}</p>
+                <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{t("learner.practiceTests.hub.difficultyFootnote")}</p>
               </div>
             </div>
           </details>
@@ -1723,7 +1723,7 @@ export function PracticeTestsHubClient({
         <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.hub.savedHistoryIntro")}</p>
         {historyPriorityMessage ? <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">{historyPriorityMessage}</p> : null}
         {loading ? (
-          <p className="mt-4 text-sm text-muted-foreground">{t("learner.practiceTests.hub.loading")}</p>
+          <p className="mt-4 text-sm text-[var(--semantic-text-muted)]">{t("learner.practiceTests.hub.loading")}</p>
         ) : error ? (
           <div
             className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,transparent)] p-4 text-sm text-[var(--semantic-text-secondary)]"
@@ -1812,9 +1812,9 @@ export function PracticeTestsHubClient({
                   }`}
                 >
                 <div>
-                  <p className="font-medium text-foreground">{row.title || t("learner.practiceTests.hub.rowUntitled")}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{metaBits.join(" · ")}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
+                  <p className="font-medium text-[var(--semantic-text-primary)]">{row.title || t("learner.practiceTests.hub.rowUntitled")}</p>
+                  <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{metaBits.join(" · ")}</p>
+                  <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">
                     {new Date(row.startedAt).toLocaleString()}
                     {row.elapsedMs != null ? ` · ${formatDuration(row.elapsedMs)}` : null}
                   </p>
@@ -1834,10 +1834,10 @@ export function PracticeTestsHubClient({
                   ) : row.status === "COMPLETED" ? (
                     <Link
                       href={`/app/practice-tests/${row.id}`}
-                      className={`nn-premium-action-chip rounded-full border px-4 py-2 text-xs font-semibold hover:bg-muted ${
+                      className={`nn-premium-action-chip rounded-full border px-4 py-2 text-xs font-semibold hover:bg-[var(--semantic-panel-muted)] ${
                         emphasis.actionEmphasis === "review_recent"
                           ? "border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))]"
-                          : "border-border"
+                          : "border-[var(--semantic-border-soft)]"
                       }`}
                     >
                       {t("learner.practiceTests.hub.reviewCta")}
