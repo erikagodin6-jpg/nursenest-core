@@ -51,13 +51,17 @@ export const CLINICAL_SCENARIOS_SHELL_NAV_ID = "clinical_scenarios" as const;
 /** Shown only when {@link isPrintableStorePublicNavEnabled} is true (passed from learner layout). */
 export const PRINTOUTS_SHELL_NAV_ID = "printouts" as const;
 
+/** Dedicated ECG nav item — shown for RN/NP learners only, never for RPN/LVN_LPN. */
+export const ECG_SHELL_NAV_ID = "ecg" as const;
+
 export type LearnerShellStudyNavRowId =
   | LearnerPrimaryNavItem["key"]
   | typeof STUDY_TOOLS_SHELL_NAV_ID
   | typeof PRINTOUTS_SHELL_NAV_ID
   | typeof OSCE_SHELL_NAV_ID
   | typeof CLINICAL_SCENARIOS_SHELL_NAV_ID
-  | typeof CLINICAL_MODULES_SHELL_NAV_ID;
+  | typeof CLINICAL_MODULES_SHELL_NAV_ID
+  | typeof ECG_SHELL_NAV_ID;
 
 /** Whether this nav row is the designated primary study entry (visual emphasis in header + shell). */
 export function isLearnerPrimaryNavKey(key: LearnerShellStudyNavRowId | string): boolean {
@@ -218,43 +222,59 @@ export function isClinicalModuleLinkDisabled(link: ClinicalModulesNavLink): bool
  * Returns the ordered list of Clinical Modules links for the flyout dropdown.
  * All hrefs are learner-scoped (/app/* or /modules/*) — never marketing URLs.
  * Grouped for future two-column rendering.
+ *
+ * @param ecgNavEnabled - When false (RPN/LVN_LPN), ECG and telemetry items are excluded.
  */
-export function buildClinicalModulesNavLinks(pathwayId: string | null): ClinicalModulesNavLink[] {
+export function buildClinicalModulesNavLinks(pathwayId: string | null, ecgNavEnabled = true): ClinicalModulesNavLink[] {
+  const ecgLinks: ClinicalModulesNavLink[] = ecgNavEnabled
+    ? [
+        // ── Cardiology / ECG ──
+        {
+          key: "ecg-fundamentals",
+          href: withPathwayQuery("/modules/ecg/basic/lessons", pathwayId),
+          label: "ECG Fundamentals",
+          description: "Rhythm recognition, AV blocks, strip interpretation",
+          status: "available",
+          group: "cardiology",
+        },
+        {
+          key: "advanced-ecg",
+          href: withPathwayQuery("/modules/ecg-advanced", pathwayId),
+          label: "Advanced ECG",
+          description: "STEMI, electrolytes, telemetry mastery, ICU ECG",
+          status: "premium",
+          group: "cardiology",
+        },
+        {
+          key: "ecg-drills",
+          href: withPathwayQuery("/modules/ecg/basic/quizzes", pathwayId),
+          label: "ECG Practice Drills",
+          description: "Adaptive rhythm identification drills",
+          status: "available",
+          group: "cardiology",
+        },
+        {
+          key: "pediatric-ecg",
+          href: withPathwayQuery("/modules/ecg/pediatric", pathwayId),
+          label: "Pediatric ECG",
+          description: "PALS rhythms, SVT in infants, LQTS, post-op congenital heart",
+          status: "new",
+          group: "cardiology",
+        },
+        // ── Telemetry ──
+        {
+          key: "telemetry-mastery",
+          href: withPathwayQuery("/modules/ecg-advanced", pathwayId),
+          label: "Telemetry Mastery",
+          description: "Alarm management, lead selection, ST monitoring",
+          status: "premium",
+          group: "telemetry",
+        },
+      ]
+    : [];
+
   return [
-    // ── Cardiology ──
-    {
-      key: "ecg-fundamentals",
-      href: withPathwayQuery("/modules/ecg/basic/lessons", pathwayId),
-      label: "ECG Fundamentals",
-      description: "Rhythm recognition, AV blocks, strip interpretation",
-      status: "available",
-      group: "cardiology",
-    },
-    {
-      key: "advanced-ecg",
-      href: withPathwayQuery("/modules/ecg-advanced", pathwayId),
-      label: "Advanced ECG",
-      description: "STEMI, electrolytes, telemetry mastery, ICU ECG",
-      status: "premium",
-      group: "cardiology",
-    },
-    {
-      key: "ecg-drills",
-      href: withPathwayQuery("/modules/ecg/basic/quizzes", pathwayId),
-      label: "ECG Practice Drills",
-      description: "Adaptive rhythm identification drills",
-      status: "available",
-      group: "cardiology",
-    },
-    // ── Telemetry ──
-    {
-      key: "telemetry-mastery",
-      href: withPathwayQuery("/modules/ecg-advanced", pathwayId),
-      label: "Telemetry Mastery",
-      description: "Alarm management, lead selection, ST monitoring",
-      status: "premium",
-      group: "telemetry",
-    },
+    ...ecgLinks,
     // ── Diagnostics ──
     {
       key: "lab-values",
@@ -296,8 +316,10 @@ export function buildClinicalModulesNavLinks(pathwayId: string | null): Clinical
 /**
  * Clinical Modules nav item for the learner shell. Always shown for RN/NP
  * pathways; modules within are individually gated by entitlement.
+ *
+ * @param ecgNavEnabled - When false (RPN/LVN_LPN), ECG items are excluded from the flyout.
  */
-export function buildClinicalModulesShellNavItem(pathwayId: string | null): {
+export function buildClinicalModulesShellNavItem(pathwayId: string | null, ecgNavEnabled = true): {
   id: typeof CLINICAL_MODULES_SHELL_NAV_ID;
   href: string;
   matchPrefix: string;
@@ -309,7 +331,26 @@ export function buildClinicalModulesShellNavItem(pathwayId: string | null): {
     href: "/app/study-tools",
     matchPrefix: "/modules",
     labelKey: "learner.shell.nav.clinicalModules",
-    links: buildClinicalModulesNavLinks(pathwayId),
+    links: buildClinicalModulesNavLinks(pathwayId, ecgNavEnabled),
+  };
+}
+
+/**
+ * Dedicated ECG nav item for the learner shell.
+ * Only rendered when `ecgNavEnabled` is true (RN/NP tiers only).
+ * Points to the core ECG module hub inside the learner module shell.
+ */
+export function buildEcgShellNavItem(pathwayId: string | null): {
+  id: typeof ECG_SHELL_NAV_ID;
+  href: string;
+  matchPrefix: string;
+  labelKey: string;
+} {
+  return {
+    id: ECG_SHELL_NAV_ID,
+    href: withPathwayQuery("/modules/ecg", pathwayId),
+    matchPrefix: "/modules/ecg",
+    labelKey: "learner.shell.nav.ecg",
   };
 }
 

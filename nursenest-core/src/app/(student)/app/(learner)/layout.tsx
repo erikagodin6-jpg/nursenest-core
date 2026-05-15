@@ -183,6 +183,14 @@ export default async function LearnerShellLayout({ children }: { children: React
   const { showBaselinePrompt, pathwayId, pathwayShortLabel } = pathwayNav;
   let { pathwayHubHref, examsLabel, pathwayContextBar } = pathwayNav;
 
+  // ECG nav is shown only for RN/NP tiers — hidden from RPN/LVN_LPN and unresolved sessions.
+  const sessionTierUpper = (
+    qaShell && adminQaSimulationHelpers
+      ? adminQaSimulationHelpers.learnerQaChromeTierFallbackString(qaShell.track)
+      : ((session?.user as { tier?: string | null })?.tier ?? "")
+  ).toUpperCase();
+  const ecgNavEnabled = sessionTierUpper === "RN" || sessionTierUpper === "NP";
+
   if (!pathwayHubHref) {
     const tier = (
       qaShell && adminQaSimulationHelpers
@@ -376,6 +384,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                       pathwayId={pathwayId}
                       examsLabel={examsLabel}
                       printablesNavVisible={printablesNavVisible}
+                      ecgNavEnabled={ecgNavEnabled}
                     />
                   </div>
                   <LearnerStudyPathStrip pathwayId={pathwayId} />
@@ -386,6 +395,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   pathwayHubHref={pathwayHubHref}
                   examsLabel={examsLabel}
                   printablesNavVisible={printablesNavVisible}
+                  ecgNavEnabled={ecgNavEnabled}
                 />
               </div>
               {studyNextBlock && !isLearnerDashboardRoute ? (

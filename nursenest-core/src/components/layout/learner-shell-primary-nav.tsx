@@ -12,12 +12,14 @@ import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import {
   buildClinicalModulesShellNavItem,
+  buildEcgShellNavItem,
   buildLearnerPrimaryNavItems,
   buildOptionalClinicalScenariosShellNavItem,
   buildOptionalOsceScenarioShellNavItems,
   buildOptionalPrintablesShellNavItem,
   buildOptionalStudyToolsShellNavItem,
   CLINICAL_MODULES_SHELL_NAV_ID,
+  ECG_SHELL_NAV_ID,
   isClinicalModuleLinkDisabled,
   isLearnerPrimaryNavKey,
   learnerPrimaryNavLabelKey,
@@ -414,13 +416,16 @@ export type LearnerShellNavProps = {
   examsLabel: "CAT Exams" | "Exams";
   /** When true, show Printouts in learner shell nav (server: printable store + public flag). */
   printablesNavVisible?: boolean;
+  /** When true (RN/NP only), show dedicated ECG nav item and ECG items in Clinical Modules flyout. Hidden from RPN/LVN_LPN. */
+  ecgNavEnabled?: boolean;
 };
 
 function useLearnerNavItems({
   pathwayId,
   examsLabel,
   printablesNavVisible = false,
-}: Pick<LearnerShellNavProps, "pathwayId" | "examsLabel" | "printablesNavVisible">) {
+  ecgNavEnabled = false,
+}: Pick<LearnerShellNavProps, "pathwayId" | "examsLabel" | "printablesNavVisible" | "ecgNavEnabled">) {
   const { t } = useMarketingI18n();
   const locale = useMarketingLocale();
 
@@ -484,9 +489,20 @@ function useLearnerNavItems({
       });
       insertAt += 1;
     }
+    // ECG standalone nav — RN/NP only. Appears before Clinical Modules flyout.
+    if (ecgNavEnabled) {
+      const ecgItem = buildEcgShellNavItem(pathwayId);
+      rows.splice(insertAt, 0, {
+        id: ecgItem.id,
+        href: ecgItem.href,
+        matchPrefix: ecgItem.matchPrefix,
+        label: formatTitleCase(t(ecgItem.labelKey) || "ECG", locale),
+      });
+      insertAt += 1;
+    }
     // Clinical Modules flyout — always present after optional items, before Reports.
-    // Positioned at insertAt (after optional modules) so it groups with specialty content.
-    const clinicalModules = buildClinicalModulesShellNavItem(pathwayId);
+    // ECG items inside the flyout are filtered by ecgNavEnabled.
+    const clinicalModules = buildClinicalModulesShellNavItem(pathwayId, ecgNavEnabled);
     const clinicalModulesLabel = formatTitleCase(
       t(clinicalModules.labelKey) || "Clinical Modules",
       locale,
@@ -498,7 +514,7 @@ function useLearnerNavItems({
       label: clinicalModulesLabel,
     });
     return rows;
-  }, [pathwayId, examsLabel, printablesNavVisible, t, locale]);
+  }, [pathwayId, examsLabel, printablesNavVisible, ecgNavEnabled, t, locale]);
 }
 
 /** Pathway hub pill — sits in the top chrome row next to the logo. */
@@ -534,13 +550,14 @@ export function LearnerShellDesktopStudyLinks({
   pathwayId,
   examsLabel,
   printablesNavVisible,
-}: Pick<LearnerShellNavProps, "pathwayId" | "examsLabel" | "printablesNavVisible">) {
+  ecgNavEnabled,
+}: Pick<LearnerShellNavProps, "pathwayId" | "examsLabel" | "printablesNavVisible" | "ecgNavEnabled">) {
   const pathname = usePathname();
-  const items = useLearnerNavItems({ pathwayId, examsLabel, printablesNavVisible });
+  const items = useLearnerNavItems({ pathwayId, examsLabel, printablesNavVisible, ecgNavEnabled });
   // Pre-build Clinical Modules links so flyout doesn't need pathwayId re-lookup.
   const clinicalModulesLinks: ClinicalModulesNavLink[] = useMemo(
-    () => buildClinicalModulesShellNavItem(pathwayId).links,
-    [pathwayId],
+    () => buildClinicalModulesShellNavItem(pathwayId, ecgNavEnabled).links,
+    [pathwayId, ecgNavEnabled],
   );
 
   // `max-md:hidden` — avoid Tailwind v4 `hidden` + `md:block` display ordering bugs (desktop nav stuck display:none).
@@ -604,9 +621,10 @@ export function LearnerShellMobileBottomNav({
   pathwayHubHref,
   examsLabel,
   printablesNavVisible,
+  ecgNavEnabled,
 }: LearnerShellNavProps) {
   const pathname = usePathname();
-  const items = useLearnerNavItems({ pathwayId, examsLabel, printablesNavVisible });
+  const items = useLearnerNavItems({ pathwayId, examsLabel, printablesNavVisible, ecgNavEnabled });
   const pathwayHref = pathwayHubHref ?? "/app";
   const pathwayLabel = pathwayPillLabel ?? "Pathway";
 
