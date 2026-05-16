@@ -1,0 +1,118 @@
+/* =====================================================================
+   lesson-readability-hotfix.css
+   Public pathway lesson detail readability pass.
+
+   Goal: stop lesson pages from reading like a tall narrow card stack. Keep
+   the contents and study utilities rails, but make the teaching body feel like
+   a readable clinical lesson with sane line length, spacing, and section rhythm.
+   ===================================================================== */
+
+.nn-premium-lesson-detail-shell {
+  --nn-lesson-reader-max: 78ch;
+  --nn-lesson-reader-wide: 92ch;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-layout--triple {
+  width: 100%;
+  align-items: start;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-main {
+  width: 100%;
+  max-width: min(100%, var(--nn-lesson-reader-wide));
+  margin-inline: auto;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-main > * {
+  min-width: 0;
+}
+
+.nn-premium-lesson-detail-shell .nn-premium-lesson-article.nn-lesson-article-grid {
+  display: block;
+  max-width: var(--nn-lesson-reader-max);
+  margin-inline: auto;
+}
+
+.nn-premium-lesson-detail-shell .nn-premium-lesson-article.nn-lesson-article-grid > * + * {
+  margin-top: clamp(1rem, 2vw, 1.35rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card {
+  max-width: 100%;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--editorial {
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 86%, var(--semantic-brand) 14%);
+  background: transparent;
+  box-shadow: none;
+  padding: clamp(1rem, 2vw, 1.35rem) 0 clamp(1.15rem, 2.2vw, 1.55rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--editorial:hover {
+  border-bottom-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  box-shadow: none;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--callout,
+.nn-premium-lesson-detail-shell .nn-lesson-section-card:not(.nn-lesson-section-card--editorial) {
+  border-radius: 1rem;
+  padding: clamp(1rem, 2vw, 1.25rem);
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-heading {
+  max-width: 34ch;
+  font-size: clamp(1.15rem, 0.72vw + 1rem, 1.42rem);
+  line-height: 1.25;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose,
+.nn-premium-lesson-detail-shell .nn-lesson-prose {
+  max-width: var(--nn-lesson-reader-max);
+  font-size: clamp(0.96rem, 0.18vw + 0.92rem, 1.03rem);
+  line-height: 1.72;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(p, li) {
+  line-height: 1.72;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(ul, ol) {
+  margin-top: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(li + li) {
+  margin-top: 0.38rem;
+}
+
+.nn-premium-lesson-detail-shell .nn-lesson-section-chip,
+.nn-premium-lesson-detail-shell .nn-lesson-section-eyebrow {
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 1280px) {
+  .nn-premium-lesson-detail-shell .nn-lesson-layout--triple {
+    grid-template-columns:
+      minmax(12.5rem, 14rem)
+      minmax(0, 1fr)
+      minmax(14rem, 16.5rem);
+    gap: clamp(1.25rem, 1.8vw, 2rem);
+  }
+
+  .nn-premium-lesson-detail-shell .nn-lesson-study-rail-aside,
+  .nn-premium-lesson-detail-shell .nn-lesson-section-nav {
+    max-width: 17rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .nn-premium-lesson-detail-shell .nn-premium-lesson-article.nn-lesson-article-grid {
+    max-width: 100%;
+  }
+
+  .nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--editorial {
+    padding-inline: 0;
+  }
+}
