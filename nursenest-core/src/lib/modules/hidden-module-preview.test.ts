@@ -50,7 +50,7 @@ test("lab values registry is hidden and keeps basics future-free but not public"
   assert.equal(LAB_VALUES_MODULES[0]?.entitlementKey, LAB_VALUES_ENTITLEMENTS.BASICS_FREE);
   assert.equal(LAB_VALUES_MODULES[1]?.entitlementKey, LAB_VALUES_ENTITLEMENTS.MASTERY_PAID);
   assert.equal(LAB_VALUES_MODULES[2]?.entitlementKey, LAB_VALUES_ENTITLEMENTS.MASTERY_PAID);
-  assert.equal(ECG_MASTERY_PAID, "ECG_MASTERY_PAID");
+  assert.equal(ECG_MASTERY_PAID, "ecg_mastery_paid");
 });
 
 test("admin preview access helper fails closed for signed-out and non-admin users", async () => {
