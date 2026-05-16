@@ -4,6 +4,7 @@ name: Verify Build
 
 on:
   push:
+    branches-ignore: [deploy]
   pull_request:
 
 concurrency:
