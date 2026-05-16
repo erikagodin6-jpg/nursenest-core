@@ -7,6 +7,7 @@ import {
   THEME_OPTIONS,
   THEME_STORAGE_KEY,
 } from "@/lib/theme/theme-registry";
+import { ThemeFaviconSync } from "@/components/theme/theme-favicon-sync";
 import { ThemeStateHydration } from "@/components/theme/theme-state-hydration";
 
 /**
@@ -26,6 +27,7 @@ export function AppThemeProvider({ children }: { children: ReactNode }) {
       disableTransitionOnChange
     >
       <ThemeStateHydration />
+      <ThemeFaviconSync />
       {children}
     </ThemeProvider>
   );
