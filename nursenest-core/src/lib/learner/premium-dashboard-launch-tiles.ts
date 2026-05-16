@@ -31,6 +31,7 @@ import {
 import { isStudyToolsPubliclyEnabled } from "@/lib/study-tools/study-tools-feature-flag";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { isCnplePathway } from "@/lib/exam-pathways/cnple-pathway";
 import { isPracticalNursingMarketingPathway } from "@/lib/marketing/is-practical-nursing-marketing-pathway";
 import { isNpPremiumConvergencePathway } from "@/lib/marketing/np-premium-convergence-pathways";
 import { pathwayAllowsEcgLinkedLearning } from "@/lib/ecg-module/ecg-linked-learning";
@@ -82,12 +83,13 @@ export function buildPremiumDashboardLaunchTiles(args: {
 
   const pnPractical = pathwayDef ? isPracticalNursingMarketingPathway(pathwayDef) : false;
   const npPremium = pathwayDef ? isNpPremiumConvergencePathway(pathwayDef) : false;
+  const cnple = isCnplePathway(pathwayId ?? pathwayDef?.id ?? null);
 
   const lessonsHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.lessons, pathwayId);
   const flashHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.flashcards, pathwayId);
   const practiceHref = withPathwayQuery(CANONICAL_LEARNER_ROUTES.practice, pathwayId);
   const practiceTestsHref = withPathwayQuery("/app/practice-tests", pathwayId);
-  const catHref = catStartHrefFromPremiumSnapshot(snapshot);
+  const catHref = cnple ? "/app/cases/cnple" : catStartHrefFromPremiumSnapshot(snapshot);
   const labsTileHref = labsHref(pathwayId);
   const ecgHref = "/modules/ecg";
   const medCalcHref = withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.medCalculations, pathwayId);
@@ -131,13 +133,15 @@ export function buildPremiumDashboardLaunchTiles(args: {
       icon: ListChecks,
     },
     {
-      key: "cat",
+      key: cnple ? "cnpleLoftSimulation" : "cat",
       href: catHref,
-      title: t("learner.shell.nav.cat"),
-      desc: t("learner.studyHome.quickLaunch.catDesc"),
-      cta: t("learner.studyModes.cat.cta"),
+      title: cnple ? "LOFT Simulation" : t("learner.shell.nav.cat"),
+      desc: cnple
+        ? "Practice the CNPLE linear case flow with Canadian NP clinical judgment scenarios."
+        : t("learner.studyHome.quickLaunch.catDesc"),
+      cta: cnple ? "Start simulation" : t("learner.studyModes.cat.cta"),
       tone: "chart4",
-      icon: Crosshair,
+      icon: cnple ? Theater : Crosshair,
     },
   ];
 
