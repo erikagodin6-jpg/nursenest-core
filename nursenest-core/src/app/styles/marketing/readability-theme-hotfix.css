@@ -1,0 +1,74 @@
+/* =====================================================================
+   Marketing readability + Blossom/Aurora brand hotfix
+
+   Purpose:
+   - Remove the multicolour text-gradient/filter treatment from the homepage
+     headline emphasis because it can shimmer / blur and reduce legibility.
+   - Keep theme personality with one solid, high-contrast accent colour.
+   - Force Blossom and Aurora brand lockups to use the berry/pink theme brand
+     colour instead of near-black text.
+
+   Loaded last from marketing/index.css so this intentionally overrides earlier
+   hero/theme rules without changing layout structure.
+   ===================================================================== */
+
+.nn-home-marketing-rich-hero {
+  --hero-headline-solid: color-mix(
+    in srgb,
+    var(--hero-headline-accent, var(--semantic-brand, var(--theme-primary))) 88%,
+    var(--palette-heading, #0f172a)
+  );
+}
+
+.nn-home-marketing-rich-hero .nn-hero-headline-emphasis,
+.nn-home-marketing-rich-hero .nn-blossom-hero-gradient-copy {
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  color: var(--hero-headline-solid) !important;
+  -webkit-text-fill-color: var(--hero-headline-solid) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  will-change: auto !important;
+}
+
+html[data-theme="ocean"] .nn-home-marketing-rich-hero {
+  --hero-headline-solid: color-mix(in srgb, var(--semantic-info) 78%, var(--palette-heading));
+}
+
+html[data-theme="blossom"] .nn-home-marketing-rich-hero {
+  --hero-headline-solid: color-mix(in srgb, var(--semantic-chart-1) 82%, var(--palette-heading));
+}
+
+html[data-theme="aurora"] .nn-home-marketing-rich-hero {
+  --hero-headline-solid: color-mix(in srgb, var(--semantic-chart-5) 82%, var(--palette-heading));
+}
+
+:is(
+  html[data-theme="dark-clinical"],
+  html[data-theme="dark-academia"],
+  html[data-theme="dark-mode"],
+  html[data-theme="midnight-indigo"],
+  html[data-theme="deep-twilight"],
+  html[data-theme="evergreen-steel"],
+  html[data-theme="midnight-ink"],
+  html[data-theme="storm-slate"],
+  html[data-theme="midnight"],
+  html[data-theme="apex"]
+) .nn-home-marketing-rich-hero {
+  --hero-headline-solid: color-mix(in srgb, var(--semantic-info) 72%, var(--palette-heading));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-header-brand-lockup {
+  color: var(--logo-primary, var(--semantic-brand, var(--theme-primary))) !important;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"])
+  [data-nn-header-layout="marketing-row4"]
+  .nn-header-brand-lockup {
+  color: var(--logo-primary, var(--semantic-brand, var(--theme-primary))) !important;
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-header-logo-link :where(span, strong, b) {
+  color: var(--logo-primary, var(--semantic-brand, var(--theme-primary))) !important;
+}
