@@ -849,6 +849,23 @@ export function Navigation({ compact = false }: { compact?: boolean } = {}) {
               </Button>
             </SheetClose>
             <Separator className="my-1 bg-gray-100" />
+            <p className="text-[10px] font-semibold text-blue-600 uppercase tracking-wider mb-1 px-3">Hemodynamics</p>
+            <SheetClose asChild>
+              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-primary hover:bg-primary/5 gap-2 h-9" onClick={() => navTo("/hemodynamic-monitoring")} data-testid="button-hemodynamics-mobile">
+                <Activity className="w-4 h-4 text-blue-500" /> Hemodynamic Monitoring
+              </Button>
+            </SheetClose>
+            <SheetClose asChild>
+              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-primary hover:bg-primary/5 gap-2 h-9" onClick={() => navTo("/advanced-hemodynamic-monitoring")} data-testid="button-advanced-hemodynamics-mobile">
+                <HeartPulse className="w-4 h-4 text-blue-500" /> Advanced Hemodynamics
+              </Button>
+            </SheetClose>
+            <SheetClose asChild>
+              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-primary hover:bg-primary/5 gap-2 h-9" onClick={() => navTo("/shock-and-perfusion")} data-testid="button-shock-perfusion-mobile">
+                <Activity className="w-4 h-4 text-blue-500" /> Shock & Perfusion
+              </Button>
+            </SheetClose>
+            <Separator className="my-1 bg-gray-100" />
             <p className="text-[10px] font-semibold text-gray-300 uppercase tracking-wider mb-1 px-3">{t("nav.clinicalSimulators")}</p>
             <SheetClose asChild>
               <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-primary hover:bg-primary/5 gap-2 h-9" onClick={() => navTo("/first-action-simulator")}>
@@ -1261,6 +1278,20 @@ export function Navigation({ compact = false }: { compact?: boolean } = {}) {
                   <DropdownMenuItem className="cursor-pointer gap-2 text-gray-700 hover:text-primary hover:bg-primary/5" onClick={() => navTo("/advanced-ecg-nursing")} data-testid="nav-advanced-ecg-desktop">
                     <Activity className="w-4 h-4 text-rose-500/80" />
                     Advanced ECG & Telemetry
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase px-2 mb-1.5 tracking-wider">Hemodynamics</p>
+                  <DropdownMenuItem className="cursor-pointer gap-2 text-gray-700 hover:text-primary hover:bg-primary/5" onClick={() => navTo("/hemodynamic-monitoring")} data-testid="nav-hemodynamics-desktop">
+                    <Activity className="w-4 h-4 text-blue-500/80" />
+                    Hemodynamic Monitoring
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer gap-2 text-gray-700 hover:text-primary hover:bg-primary/5" onClick={() => navTo("/advanced-hemodynamic-monitoring")} data-testid="nav-advanced-hemodynamics-desktop">
+                    <HeartPulse className="w-4 h-4 text-blue-500/80" />
+                    Advanced Hemodynamics
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer gap-2 text-gray-700 hover:text-primary hover:bg-primary/5" onClick={() => navTo("/shock-and-perfusion")} data-testid="nav-shock-perfusion-desktop">
+                    <Activity className="w-4 h-4 text-blue-500/80" />
+                    Shock & Perfusion
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <p className="text-[10px] font-bold text-muted-foreground uppercase px-2 mb-1.5 tracking-wider">{t("nav.premiumTools")}</p>

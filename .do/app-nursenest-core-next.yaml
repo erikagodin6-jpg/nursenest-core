@@ -216,6 +216,20 @@ services:
         scope: RUN_AND_BUILD_TIME
         value: "false"
 
+      # ── Hemodynamics module flags ────────────────────────────────────────────
+      - key: ENABLE_HEMODYNAMICS_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_HEMODYNAMICS_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: ENABLE_ADVANCED_HEMODYNAMICS_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+      - key: NEXT_PUBLIC_ENABLE_ADVANCED_HEMODYNAMICS_MODULE
+        scope: RUN_AND_BUILD_TIME
+        value: "true"
+
       # ── Stripe price IDs ────────────────────────────────────────────────────
       # Price IDs are safe to commit (not secret). Values sourced from live spec 2026-05-13.
       # To update: get new price_id from Stripe dashboard, update value here, run:
@@ -225,6 +239,16 @@ services:
       - key: STRIPE_PRICE_ADVANCED_ECG
         scope: RUN_AND_BUILD_TIME
         value: price_1TVo8vFbgp0Ub5P7aTySWrbU
+      # Advanced Hemodynamic Monitoring add-on ($149 CAD one-time)
+      # TODO: replace placeholder with live price ID from Stripe dashboard after product creation
+      - key: STRIPE_PRICE_ADVANCED_HEMODYNAMICS
+        scope: RUN_AND_BUILD_TIME
+        value: price_ADVANCED_HEMODYNAMICS_PLACEHOLDER
+      # Critical Care Bundle ($249 CAD one-time — Advanced ECG + Advanced Hemodynamics)
+      # TODO: replace placeholder with live price ID from Stripe dashboard after product creation
+      - key: STRIPE_PRICE_CRITICAL_CARE_BUNDLE
+        scope: RUN_AND_BUILD_TIME
+        value: price_CRITICAL_CARE_BUNDLE_PLACEHOLDER
       # Alias kept for backward compatibility with older webhook handlers
       - key: STRIPE_PRICE_CA_ADVANCED_ECG_ONETIME
         scope: RUN_AND_BUILD_TIME

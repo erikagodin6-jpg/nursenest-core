@@ -673,6 +673,417 @@ export const ECG_CLUSTER_TOPICS: EcgClusterTopic[] = [
       },
     ],
   },
+
+  // ─── Phase 1 Traffic Acceleration Sprint — 19 new cluster topics ────────────
+
+  {
+    slug: "atrial-flutter-ecg",
+    title: "Atrial Flutter ECG — Sawtooth Pattern & Rate Recognition",
+    description:
+      "Atrial flutter ECG recognition for nurses: sawtooth flutter waves, 2:1 and 4:1 conduction ratios, rate calculation, AFib differential, and cardioversion indications.",
+    h1: "Atrial flutter ECG: sawtooth flutter waves, conduction ratios, and nursing management",
+    keywords: ["atrial flutter ECG nursing", "atrial flutter rhythm strip", "flutter waves ECG", "atrial flutter vs AFib", "atrial flutter nursing management"],
+    sections: [
+      {
+        id: "flutter-recognition",
+        heading: "Atrial flutter ECG recognition: the sawtooth pattern",
+        content:
+          "Atrial flutter is a macro-reentrant atrial arrhythmia producing a distinctive sawtooth baseline pattern — organized atrial activity at approximately 250–350 bpm. The flutter waves are continuous, regular, and saw-toothed, most prominent in the inferior leads (II, III, aVF) and V1.\n\nConduction ratios determine the ventricular rate. In typical 2:1 flutter, every other flutter wave conducts: atrial rate 300 → ventricular rate 150 bpm. 4:1 flutter produces ventricular rate 75 bpm. Variable block (2:1 and 4:1 alternating) produces irregular ventricular response mimicking AFib — measure the flutter-to-QRS timing to differentiate.\n\nKey recognition feature: QRS morphology is normal and narrow (unless bundle branch block exists). The QRS rides on the continuous flutter wave baseline. Identifying the flutter-wave frequency (measure F-F interval) confirms atrial rate and rules out AFib.",
+      },
+      {
+        id: "flutter-vs-afib",
+        heading: "Atrial flutter vs atrial fibrillation: the clinical distinction",
+        content:
+          "Atrial flutter and AFib are both supraventricular arrhythmias and require similar anticoagulation assessment — but their ECG recognition and some management details differ. Flutter: organized sawtooth flutter waves at fixed rate (~300/min), often regular ventricular response (unless variable block). AFib: chaotic fibrillatory baseline, always irregularly irregular ventricular response, no organized P waves.\n\nAdenosine differentiates them when in doubt: adenosine transiently blocks AV conduction, slowing the ventricular rate and revealing the underlying atrial activity. In flutter, the sawtooth pattern becomes unmistakable. Adenosine does not terminate flutter — it only unmasks it. Treatment is synchronized cardioversion for unstable flutter or rate control with antiarrhythmics for stable flutter.",
+      },
+    ],
+    faq: [
+      { question: "What does atrial flutter look like on ECG?", answer: "Atrial flutter produces a continuous sawtooth baseline in lead II at approximately 250–350 bpm (typically ~300 bpm). Flutter waves are regularly spaced and best seen in leads II, III, aVF, and V1. At 2:1 conduction, the ventricular rate is typically 150 bpm — a regular narrow-complex tachycardia at exactly 150 bpm should prompt flutter consideration." },
+      { question: "What is the ventricular rate in atrial flutter with 2:1 block?", answer: "With 2:1 block, every other flutter wave conducts: if atrial rate is 300 bpm, ventricular rate = 150 bpm. With 4:1 block, ventricular rate = 75 bpm. Any regular narrow-complex tachycardia at exactly 150 bpm should raise immediate suspicion for atrial flutter with 2:1 conduction." },
+    ],
+  },
+  {
+    slug: "ventricular-fibrillation-ecg",
+    title: "Ventricular Fibrillation ECG — Chaotic Rhythm & ACLS Response",
+    description:
+      "Ventricular fibrillation ECG recognition: chaotic waveform, no organized QRS, defibrillation thresholds, artifact vs true VF, and ACLS management priorities for nurses.",
+    h1: "Ventricular fibrillation ECG: recognizing the chaotic waveform and initiating ACLS",
+    keywords: ["ventricular fibrillation ECG nursing", "VF ECG recognition", "VF vs artifact telemetry", "ventricular fibrillation ACLS", "defibrillation VF nursing"],
+    sections: [
+      {
+        id: "vf-recognition",
+        heading: "Ventricular fibrillation ECG recognition",
+        content:
+          "Ventricular fibrillation is characterized by completely chaotic electrical activity with no organized QRS complexes, P waves, or T waves. The baseline shows irregular, rapid oscillations of varying amplitude and morphology — 'coarse' VF has larger oscillations; 'fine' VF has lower amplitude and can be confused with asystole.\n\nCritical safety rule: NEVER diagnose VF or initiate defibrillation based solely on the monitor. Confirm the patient is unresponsive and pulseless before beginning CPR and defibrillation. Motion artifact can perfectly mimic coarse VF — a responsive, perfusing patient cannot be in ventricular fibrillation.\n\nFine vs coarse VF: coarse VF (higher amplitude) responds better to defibrillation. If fine VF is suspected, confirm in a second lead — perpendicular lead orientation may reveal residual waveform amplitude confirming VF over asystole. VF is always shockable; asystole is not.",
+      },
+      {
+        id: "vf-management",
+        heading: "VF ACLS management: defibrillation sequence",
+        content:
+          "ACLS pulseless VF algorithm: (1) Begin CPR immediately. (2) Apply defibrillator pads — biphasic energy 120–200J (device-specific); monophasic 360J. (3) Shock → immediately resume CPR for 2 minutes without checking rhythm first. (4) After 2 minutes: rhythm check. If persistent VF/pVT → shock again. (5) Epinephrine 1mg IV/IO after 3rd cycle, then every 3–5 minutes. (6) Amiodarone 300mg IV/IO for refractory VF (second dose 150mg if needed). (7) Search for reversible causes: 6Hs and 5Ts.\n\nPost-ROSC priorities: avoid hyperoxia (target SpO₂ 94–99%), maintain MAP ≥ 65 mmHg, consider targeted temperature management (TTM) per institutional protocol, 12-lead ECG for STEMI evaluation, continuous ST monitoring.",
+      },
+    ],
+    faq: [
+      { question: "What does ventricular fibrillation look like on a monitor?", answer: "VF produces a chaotic, irregular waveform with no organized QRS complexes — just rapid, irregular oscillations of varying amplitude. Coarse VF has higher-amplitude waves; fine VF has low-amplitude waves that can resemble asystole. The key distinction: VF has some waveform activity; true asystole is flat. Always confirm in two leads before withholding defibrillation." },
+      { question: "How do you tell VF from motion artifact on telemetry?", answer: "Assess the patient first — not the monitor. VF requires CPR immediately only if the patient is unresponsive and pulseless. Motion artifact, even when it resembles VF, occurs in a responsive, perfusing patient. Three rapid checks: (1) Is the patient responsive? (2) Is there a palpable carotid pulse? (3) Does the pulse oximetry plethysmograph show organized pulsatile flow? Any YES = artifact." },
+    ],
+  },
+  {
+    slug: "pac-vs-pvc-ecg",
+    title: "PAC vs PVC — Premature Beats ECG Recognition for Nurses",
+    description:
+      "PAC vs PVC ECG differentiation for nurses: premature atrial contractions vs premature ventricular contractions — morphology, compensatory pause, clinical significance, and escalation criteria.",
+    h1: "PAC vs PVC: distinguishing premature atrial from ventricular contractions on ECG",
+    keywords: ["PAC vs PVC ECG nursing", "premature atrial contractions nursing", "premature ventricular contractions ECG", "PVC recognition nursing", "ectopic beats ECG nursing"],
+    sections: [
+      {
+        id: "pac-recognition",
+        heading: "PAC recognition: early narrow beat with different P-wave morphology",
+        content:
+          "A premature atrial contraction (PAC) originates from an ectopic atrial focus outside the SA node. ECG features: (1) Early (premature) beat — arrives before the next expected sinus beat. (2) Different P-wave morphology — the ectopic P wave differs in shape, axis, or amplitude from sinus P waves because it activates the atria from a different starting point. (3) Narrow QRS — ventricular conduction is normal via the His-Purkinje system, producing a narrow QRS identical to sinus beats (unless aberrant conduction occurs). (4) Non-compensatory pause — the SA node is reset by the PAC, so the interval from the PAC to the next sinus beat is not full-compensatory.\n\nClinical significance: isolated PACs are benign in otherwise healthy patients. In neonates and infants, frequent PACs may trigger SVT — monitor closely. Frequent PACs (>1% of beats) warrant clinical evaluation.",
+      },
+      {
+        id: "pvc-recognition",
+        heading: "PVC recognition: wide bizarre premature beat with compensatory pause",
+        content:
+          "A premature ventricular contraction (PVC) originates from an ectopic ventricular focus. ECG features: (1) Early (premature) beat. (2) Wide, bizarre QRS (≥120 ms) — depolarization bypasses the normal His-Purkinje network, producing slow cell-to-cell conduction. (3) Morphology opposite to the sinus QRS — discordant ST-T changes (T wave opposite in direction to QRS). (4) Compensatory pause — the SA node is NOT reset; the post-PVC R-R interval is fully compensatory (the PVC-to-next-sinus R-R = 2× normal R-R).\n\nPVC patterns: unifocal PVCs (all look identical — one ectopic focus); multifocal PVCs (different morphologies — multiple foci — more concerning); bigeminy (PVC every other beat); trigeminy (PVC every third beat); couplets (two consecutive PVCs — non-sustained VT); salvos (3+ consecutive PVCs = non-sustained VT — escalate immediately).",
+      },
+    ],
+    faq: [
+      { question: "How do you tell a PAC from a PVC on a rhythm strip?", answer: "The key discriminator is QRS width. PAC: early beat with narrow QRS (same as sinus beats) and a different P-wave morphology before it. PVC: early beat with wide, bizarre QRS (≥120 ms), no identifiable P wave before it, discordant T wave, and a compensatory pause after. When in doubt: narrow QRS = supraventricular origin; wide QRS = ventricular origin until proven otherwise." },
+      { question: "When does a PVC require escalation?", answer: "Escalate for: PVCs in salvos (3+ consecutive = non-sustained VT), multifocal PVCs (multiple morphologies indicating multiple ectopic foci), R-on-T phenomenon (PVC falling on T wave — VF risk when QT is prolonged), PVCs in the setting of acute MI or ischemia, new PVCs in a hemodynamically compromised patient. Isolated uniform PVCs in a stable patient with normal hemodynamics typically require documentation and monitoring, not immediate intervention." },
+    ],
+  },
+  {
+    slug: "anterior-stemi-ecg",
+    title: "Anterior STEMI ECG — LAD Territory Recognition for Nurses",
+    description:
+      "Anterior STEMI ECG recognition for nurses: ST elevation in V1–V4, LAD territory, high-risk features, De Winter T-waves, and immediate cath lab activation criteria.",
+    h1: "Anterior STEMI ECG: V1–V4 ST elevation, LAD territory, and high-risk pattern recognition",
+    keywords: ["anterior STEMI ECG nursing", "anterior MI ECG recognition", "V1 V2 V3 V4 ST elevation", "LAD occlusion ECG nursing", "anterior STEMI cath lab nursing"],
+    sections: [
+      {
+        id: "anterior-stemi-recognition",
+        heading: "Anterior STEMI ECG recognition: V1–V4 ST elevation",
+        content:
+          "Anterior STEMI presents with ST elevation in the precordial leads V1–V4, reflecting occlusion of the left anterior descending (LAD) artery or one of its major branches. The LAD supplies the anterior wall, most of the interventricular septum, and the anterolateral wall — making anterior STEMI the highest-mortality STEMI territory.\n\nST elevation criteria: ≥2mm in two contiguous precordial leads. V1–V4 = LAD territory (anterior wall). V1–V2 only = septal involvement. V3–V5 = mid-LAD. V4–V6 = anterior-lateral (diagonal branch involvement). Extensive anterior STEMI shows ST elevation from V1 through V6 — indicating proximal LAD occlusion.\n\nReciprocal changes: inferior reciprocal ST depression (in II, III, aVF) may be seen with large anterior STEMIs. New deep Q waves in V1–V4 may appear within 30–60 minutes — pathologic Q waves confirm irreversible myocardial injury.",
+      },
+      {
+        id: "anterior-stemi-high-risk",
+        heading: "High-risk anterior STEMI patterns: left main and proximal LAD equivalents",
+        content:
+          "ST elevation in aVR with diffuse ST depression: ST elevation in lead aVR ≥ 1mm with diffuse ST depression in multiple leads (I, II, V4–V6) is the 'left main equivalent' pattern — suggests left main or very proximal LAD occlusion with global subendocardial ischemia. This carries the highest mortality of all STEMI presentations. Immediate cath lab activation.\n\nDe Winter T-waves: J-point depression (not elevation) with tall, symmetric, upright T waves in V1–V6. This represents LAD occlusion without the classic ST elevation — it is a STEMI equivalent requiring immediate cath lab activation. Often missed on initial triage review because it lacks ST elevation.\n\nNew LBBB with chest pain: new left bundle branch block in the context of typical ischemic symptoms carries the same urgency as overt STEMI. Apply modified Sgarbossa criteria to identify superimposed ischemia. Concordant ST elevation (ST in same direction as QRS) of any magnitude in LBBB = acute occlusion.",
+      },
+    ],
+    faq: [
+      { question: "Which leads show ST elevation in anterior STEMI?", answer: "Anterior STEMI: ST elevation in V1–V4 (LAD territory). The specific leads involved help localize: V1–V2 = septal (LAD septal perforators), V3–V4 = anterior (mid-LAD), V4–V6 = anterolateral (LAD diagonal branches). Widespread V1–V6 ST elevation = proximal LAD or left main occlusion — highest risk, most urgent." },
+      { question: "What are De Winter T-waves and why are they important?", answer: "De Winter T-waves are J-point depression with tall symmetric upright T waves in V1–V6 in a patient with ischemic chest pain. They represent LAD occlusion WITHOUT the classic ST elevation. They are a STEMI equivalent — cath lab activation is required. De Winter T-waves are one of the most commonly missed patterns on nursing and physician ECG review because they lack the expected ST elevation." },
+    ],
+  },
+  {
+    slug: "inferior-stemi-ecg",
+    title: "Inferior STEMI ECG — RCA Territory & RV Involvement",
+    description:
+      "Inferior STEMI ECG recognition for nurses: leads II, III, aVF, RCA territory, right ventricular involvement, nitrate contraindication, and reciprocal changes in aVL.",
+    h1: "Inferior STEMI ECG: II, III, aVF ST elevation, RV assessment, and nitrate safety",
+    keywords: ["inferior STEMI ECG nursing", "inferior MI ECG leads", "inferior STEMI RV involvement", "nitrates inferior STEMI contraindication", "inferior STEMI nursing management"],
+    sections: [
+      {
+        id: "inferior-stemi-recognition",
+        heading: "Inferior STEMI ECG recognition: leads II, III, and aVF",
+        content:
+          "Inferior STEMI presents with ST elevation in leads II, III, and aVF — reflecting occlusion of the right coronary artery (RCA) in ~80% of patients, or the left circumflex artery (LCx) in the remaining 20%. The inferior wall of the left ventricle is the territory at risk.\n\nReciprocal ST depression: reciprocal depression in lead aVL (and often lead I) is the most reliable confirmatory sign of inferior STEMI. Reciprocal changes increase diagnostic specificity substantially and should be actively sought on every inferior STEMI evaluation. Lead aVL reciprocal depression occurring alongside inferior ST elevation warrants STEMI protocol activation even before troponin results.\n\nST elevation magnitude: lead III typically shows more ST elevation than lead II in inferior STEMI. If lead II > lead III, consider pericarditis, benign early repolarization, or non-ischemic causes in the differential.",
+      },
+      {
+        id: "rv-involvement",
+        heading: "Right ventricular involvement: V4R assessment and nitrate contraindication",
+        content:
+          "Right ventricular infarction complicates inferior STEMI in approximately 30–40% of cases. Assessment is MANDATORY in all inferior STEMIs before administering nitrates.\n\nRight-sided leads (V4R): apply right-sided lead V4R (mirror position of V4 on the right chest). ST elevation ≥ 1mm in V4R confirms right ventricular involvement. This single finding changes management.\n\nNitrate contraindication: NEVER give nitroglycerin to a patient with inferior STEMI and right ventricular involvement. RV infarction requires preload to maintain right ventricular output. Nitroglycerin drops venous return (preload), causing precipitous hypotension in the preload-dependent RV — potentially fatal. IV fluid challenge (NS 500mL) is the correct hemodynamic support for RV infarction. Atropine for bradycardia (inferior STEMI commonly involves the AV node).",
+      },
+    ],
+    faq: [
+      { question: "Which leads show inferior STEMI?", answer: "Inferior STEMI: ST elevation in leads II, III, and aVF. Reciprocal ST depression in aVL (and often lead I) confirms the diagnosis. Lead III typically shows more elevation than lead II. Always assess right-sided leads (especially V4R) before giving nitrates — right ventricular involvement requires different management (IV fluids, not vasodilators)." },
+      { question: "Why are nitrates contraindicated in some inferior STEMIs?", answer: "Nitrates are contraindicated when inferior STEMI involves the right ventricle (RV). The RV MI makes the right heart preload-dependent for maintaining cardiac output. Nitroglycerin reduces venous return (preload), which in a normal heart is tolerated — but in RV infarction it causes abrupt hemodynamic collapse. Always apply right-sided leads (V4R) before giving nitrates to any inferior STEMI patient." },
+    ],
+  },
+  {
+    slug: "posterior-stemi-ecg",
+    title: "Posterior STEMI ECG — The Most Missed Pattern for Nurses",
+    description:
+      "Posterior STEMI ECG recognition for nurses: ST depression in V1–V3, dominant R wave in V2, posterior leads V7–V9, and why posterior MI is the most commonly missed STEMI.",
+    h1: "Posterior STEMI ECG: ST depression V1–V3, dominant R wave V2, and why it gets missed",
+    keywords: ["posterior STEMI ECG nursing", "posterior MI recognition", "ST depression V1 V2 V3 STEMI", "posterior leads V7 V8 V9 nursing", "missed STEMI posterior nursing"],
+    sections: [
+      {
+        id: "posterior-stemi-recognition",
+        heading: "Posterior STEMI: why standard 12-lead ECG shows ST depression, not elevation",
+        content:
+          "Posterior STEMI is the most commonly missed STEMI pattern on both nursing and physician ECG review. The reason: the standard 12-lead ECG has no leads that directly face the posterior wall of the left ventricle. V1–V3 look at the posterior wall from the anterior direction — the opposite side.\n\nThe result: posterior STEMI produces ST DEPRESSION (not elevation) in V1–V3, representing the reciprocal view of posterior wall ST elevation. The pattern mimics NSTEMI or subendocardial ischemia — leading to missed cath lab activation.\n\nKey recognition features: (1) New ST depression in V1–V3, especially in a patient with typical chest pain presentation. (2) Tall, broad R wave in V1–V2 — the Q-wave equivalent for posterior infarction (the Q wave, seen as a positive deflection when viewed from the posterior direction, appears as a dominant R from the anterior V1–V2 view). (3) Upright T waves in V1–V2 (normally negative or biphasic).",
+      },
+      {
+        id: "posterior-leads",
+        heading: "Posterior leads V7–V9: confirming the missed STEMI",
+        content:
+          "Standard rule: any patient with ST depression in V1–V3 and clinical chest pain presentation should have posterior leads applied BEFORE STEMI is excluded.\n\nPosterior lead placement: V7 — left posterior axillary line, same horizontal level as V4–V6. V8 — left mid-scapular line. V9 — left paravertebral border, same level. Apply like standard precordial leads, same horizontal level, patient supine.\n\nDiagnostic criterion: ST elevation ≥0.5mm in V7–V9 = posterior STEMI. This is a lower threshold than anterior STEMI (2mm) because posterior leads have inherently lower voltage. Posterior STEMI is predominantly from circumflex artery (LCx) occlusion — often accompanied by inferior or lateral changes.",
+      },
+    ],
+    faq: [
+      { question: "Why does posterior STEMI show ST depression instead of elevation?", answer: "The standard 12-lead ECG has no leads facing the posterior wall. V1–V3 look from the front (anterior) at the back of the heart. Posterior wall ST elevation — when viewed from the opposite direction — appears as ST depression in V1–V3. This is the electrically mirrored, 'reciprocal' view. Posterior leads V7–V9, placed on the patient's back, directly face the posterior wall and reveal the true ST elevation." },
+      { question: "What is the dominant R wave sign in posterior STEMI?", answer: "The dominant R wave in V1–V2 is the Q-wave equivalent for posterior infarction. The Q wave of infarction (negative deflection) appears from the posterior leads V7–V9 — but when viewed from V1–V2 (opposite direction), the Q wave becomes a tall positive R wave. A new tall broad R wave in V1–V2 with ST depression in the clinical context of chest pain should prompt immediate posterior lead placement." },
+    ],
+  },
+  {
+    slug: "lateral-stemi-ecg",
+    title: "Lateral STEMI ECG — Circumflex Territory Recognition",
+    description:
+      "Lateral STEMI ECG recognition for nurses: leads I, aVL, V5, V6 ST elevation, circumflex territory, high lateral pattern, and reciprocal changes in inferior leads.",
+    h1: "Lateral STEMI ECG: I, aVL, V5–V6 ST elevation and circumflex territory recognition",
+    keywords: ["lateral STEMI ECG nursing", "lateral MI ECG", "high lateral STEMI aVL", "circumflex occlusion ECG", "lateral wall MI nursing"],
+    sections: [
+      {
+        id: "lateral-stemi-recognition",
+        heading: "Lateral STEMI: leads I, aVL, V5, V6 involvement",
+        content:
+          "Lateral STEMI involves the lateral wall of the left ventricle, typically supplied by the left circumflex artery (LCx) or the diagonal branches of the LAD. ST elevation appears in leads I, aVL (high lateral) and/or V5–V6 (low lateral).\n\nHigh lateral STEMI (I, aVL only): the most commonly missed lateral STEMI pattern. ST elevation isolated to leads I and aVL without involvement of other precordial or inferior leads is subtle and frequently overlooked on initial triage review. Reciprocal ST depression in leads III and aVF confirms the diagnosis.\n\nAnterolateral STEMI (V1–V6 + I, aVL): extensive lateral involvement — large circumflex or combined LAD-circumflex territory. Highest-risk lateral pattern.\n\nReciprocal changes: inferior ST depression (in II, III, aVF) typically accompanies lateral STEMI when aVL is elevated. The aVL-to-III relationship is important: any time you see ST depression in III and the patient has chest pain, assess lead aVL for reciprocal confirmation of high lateral STEMI.",
+      },
+    ],
+    faq: [
+      { question: "Which leads identify lateral STEMI?", answer: "Lateral STEMI: ST elevation in leads I, aVL (high lateral wall), V5, V6 (low lateral wall). Reciprocal ST depression in leads II, III, aVF confirms lateral involvement. High lateral STEMI (only I and aVL elevated) is the most easily missed pattern — look for reciprocal inferior depression as a clue when aVL elevation is subtle." },
+    ],
+  },
+  {
+    slug: "stemi-equivalents-ecg",
+    title: "STEMI Equivalents ECG — De Winter T-waves, Wellens, Posterior MI",
+    description:
+      "STEMI equivalents for nurses: De Winter T-waves, Wellens syndrome, posterior STEMI, LBBB with Sgarbossa criteria — patterns requiring emergent cath lab activation without classic ST elevation.",
+    h1: "STEMI equivalents: De Winter T-waves, Wellens syndrome, and other missed occlusion patterns",
+    keywords: ["STEMI equivalents nursing", "De Winter T-waves nursing", "Wellens syndrome ECG", "STEMI without ST elevation nursing", "occlusion MI nursing"],
+    sections: [
+      {
+        id: "stemi-equivalents",
+        heading: "Why STEMI equivalents matter: same urgency, different appearance",
+        content:
+          "Traditional STEMI criteria require ST elevation ≥1mm in two contiguous limb leads or ≥2mm in precordial leads. But acute coronary occlusion — which requires emergent reperfusion — can present without meeting these criteria. STEMI equivalents are patterns indicating total or near-total coronary occlusion without classic ST elevation.\n\nDe Winter T-waves: J-point depression (1–3mm) with tall, symmetric, upright T waves in V1–V6. Caused by proximal LAD occlusion. No ST elevation is present — commonly misdiagnosed as early repolarization or hyperkalemia. These patients need cath lab activation now, not troponin-guided workup.\n\nWellens syndrome (reperfusion T-wave pattern): biphasic T waves (Type A) or deep symmetric T-wave inversions (Type B) in V2–V3 in a pain-free patient. Represents reperfused proximal LAD stenosis — the plaque has momentarily reperfused but remains critically narrow. These patients are at extremely high risk for sudden re-occlusion. Stress testing is contraindicated — they need urgent cardiology consultation and likely PCI.",
+      },
+    ],
+    faq: [
+      { question: "What are De Winter T-waves and when should you activate the cath lab?", answer: "De Winter T-waves: J-point depression + tall symmetric upright T waves in V1–V6 in a patient with chest pain. They represent proximal LAD occlusion without classic ST elevation. Cath lab activation is indicated immediately — same urgency as overt STEMI. De Winter T-waves are one of the most commonly missed high-risk ECG patterns in emergency triage." },
+      { question: "What does Wellens syndrome look like on ECG?", answer: "Wellens syndrome: biphasic T waves (Type A) or deep symmetric T-wave inversions (Type B) in V2–V3, occurring in a patient who is pain-FREE but recently had ischemic symptoms. This 'reperfusion pattern' indicates a critically narrow proximal LAD that temporarily reperfused. Stress testing is absolutely contraindicated — exercise can trigger re-occlusion. Urgent cardiology referral is required." },
+    ],
+  },
+  {
+    slug: "pr-interval-ecg",
+    title: "PR Interval ECG — Normal Values, Prolongation & Clinical Significance",
+    description:
+      "PR interval explained for nurses: normal 120–200 ms, measurement method, prolonged PR in AV block, short PR in WPW, clinical significance, and nursing monitoring priorities.",
+    h1: "PR interval ECG: measurement, normal values, prolonged PR, and AV block significance",
+    keywords: ["PR interval ECG nursing", "PR interval normal value", "PR interval prolonged AV block", "short PR WPW ECG", "PR interval measurement nursing"],
+    sections: [
+      {
+        id: "pr-interval-basics",
+        heading: "PR interval: what it measures and how to calculate it",
+        content:
+          "The PR interval measures the time from the beginning of atrial depolarization (start of P wave) to the beginning of ventricular depolarization (start of QRS complex). It represents conduction time through the atria, AV node, Bundle of His, and proximal bundle branches — the entire supraventricular conduction pathway.\n\nNormal PR interval: 120–200 ms (3–5 small boxes on standard ECG paper at 25 mm/s). Measure from the beginning of the P wave to the first deflection of the QRS complex (whether Q or R wave). Use the same lead consistently for serial comparisons — lead II is standard.\n\nPR interval should be measured in the lead where P wave onset is clearest and QRS begins earliest. At faster heart rates, the PR interval normally shortens slightly; at slower rates, it may lengthen mildly. This rate-dependence is normal and distinct from pathologic PR prolongation.",
+      },
+      {
+        id: "pr-interval-abnormalities",
+        heading: "Abnormal PR intervals: prolonged (AV block) and short (pre-excitation)",
+        content:
+          "Prolonged PR (> 200 ms): first-degree AV block. All beats conduct but with delayed AV nodal conduction. Common causes: inferior MI, vagal tone, medications (digoxin, beta-blockers, CCBs), Lyme disease, aging. Usually benign but warrants monitoring for progression.\n\nProgressively lengthening PR: Wenckebach (Mobitz I second-degree AV block). PR lengthens until a QRS is dropped, then resets. Occurs at the AV node level — usually benign, commonly seen with inferior MI, high vagal tone.\n\nConstant PR before sudden dropped QRS: Mobitz II second-degree AV block. Infranodal block — dangerous, may progress to complete heart block without warning. Requires urgent pacemaker evaluation.\n\nShort PR (< 120 ms): pre-excitation (WPW syndrome). The accessory pathway conducts before the AV node, producing early ventricular activation — short PR plus delta wave. Short PR without delta wave may represent accelerated AV node conduction (LGL syndrome).",
+      },
+    ],
+    faq: [
+      { question: "What is the normal PR interval in adults?", answer: "Normal PR interval: 120–200 ms (3–5 small boxes at 25 mm/s paper speed). Measured from the beginning of the P wave to the beginning of the QRS complex. PR > 200 ms = first-degree AV block (all beats conduct but with delay). PR < 120 ms = pre-excitation (WPW) or accelerated AV conduction." },
+      { question: "What does a prolonged PR interval indicate?", answer: "Prolonged PR (> 200 ms) = first-degree AV block — the electrical impulse is delayed in the AV node but still conducts to the ventricle. All P waves are followed by QRS complexes. Common causes: inferior MI, increased vagal tone, digoxin toxicity, beta-blockers, calcium channel blockers, Lyme carditis. Usually benign but monitor for progression to higher-degree block." },
+    ],
+  },
+  {
+    slug: "qrs-complex-ecg",
+    title: "QRS Complex ECG — Width, Morphology & Clinical Interpretation",
+    description:
+      "QRS complex explained for nurses: normal width < 120 ms, wide QRS significance, bundle branch block, ventricular tachycardia differential, and Brugada algorithm for wide-complex tachycardia.",
+    h1: "QRS complex ECG: normal width, wide QRS significance, and the VT vs SVT differential",
+    keywords: ["QRS complex ECG nursing", "wide QRS ECG nursing", "QRS width interpretation", "bundle branch block QRS", "VT vs SVT wide complex nursing"],
+    sections: [
+      {
+        id: "qrs-basics",
+        heading: "QRS complex: what it represents and normal duration",
+        content:
+          "The QRS complex represents ventricular depolarization — the electrical activation of both ventricles from the His-Purkinje network outward through the ventricular myocardium. Normal QRS duration: < 120 ms (< 3 small boxes). A narrow QRS indicates normal conduction through the His-Purkinje system. A wide QRS indicates either abnormal conduction pathways (bundle branch block, pre-excitation) or ventricular origin (ectopic focus in the myocardium, ventricular tachycardia).\n\nQRS components: Q wave (initial negative deflection, representing septal depolarization left-to-right), R wave (dominant positive deflection), S wave (terminal negative deflection after R). Not all leads show all three components. In lead V1, a normal pattern is rS (small r, deep S). In lead V6, the pattern is qRS or Rs.\n\nR-wave progression: R waves should increase in amplitude from V1 to V5 (called 'normal R-wave progression'). Poor R-wave progression — small R waves persisting to V4 — suggests prior anterior MI, LBBB, left ventricular hypertrophy, or COPD.",
+      },
+      {
+        id: "wide-qrs",
+        heading: "Wide QRS: bundle branch block, VT, and the most important clinical rule",
+        content:
+          "Wide QRS (≥ 120 ms) differential: RBBB (right bundle branch block): rSR' in V1 ('rabbit ear'), wide S wave in V5–V6. LBBB (left bundle branch block): broad notched R in V5–V6, QS in V1, no septal Q in V5–V6. VT (ventricular tachycardia): wide QRS tachycardia with AV dissociation, capture beats, or fusion beats.\n\nThe most critical clinical rule: wide-complex tachycardia = VT until proven otherwise. Never assume SVT with aberrancy as the first diagnosis. The consequence of treating VT as SVT (with verapamil) can be fatal. Apply the Brugada 4-step algorithm: (1) Absence of RS complex in any precordial lead → VT. (2) RS interval > 100 ms → VT. (3) AV dissociation → VT. (4) RBBB morphology criteria (monophasic R in V1, rS in V6) → VT.",
+      },
+    ],
+    faq: [
+      { question: "What does a wide QRS complex mean on ECG?", answer: "Wide QRS (≥ 120 ms) indicates either: bundle branch block (RBBB or LBBB — conduction delay within the ventricles), ventricular tachycardia (ectopic ventricular pacemaker — most dangerous interpretation), pre-excitation/WPW (accessory pathway conduction), or rate-related aberrancy (RBBB morphology at faster rates, resolving at slower rates). In tachycardia: wide QRS = VT until proven otherwise by the Brugada algorithm." },
+      { question: "How do you use the Brugada algorithm for wide-complex tachycardia?", answer: "Brugada 4-step: (1) Is there an RS complex in any precordial lead? NO → VT (specificity 100%). (2) Is any RS interval > 100 ms? YES → VT. (3) Is there AV dissociation (P waves independent of QRS)? YES → VT. (4) Do V1 and V6 meet VT morphology criteria? YES → VT. Each YES step = VT diagnosis. Proceed to step 2 only if step 1 is NO. The default interpretation when uncertain is VT." },
+    ],
+  },
+  {
+    slug: "hypokalemia-ecg-changes",
+    title: "Hypokalemia ECG Changes — U Waves, T-Wave Flattening, Arrhythmia Risk",
+    description:
+      "Hypokalemia ECG changes for nurses: T-wave flattening, prominent U waves, QT/QU prolongation, torsades de pointes risk, and treatment priorities with electrolyte correction.",
+    h1: "Hypokalemia ECG changes: U waves, T-wave flattening, and torsades de pointes risk",
+    keywords: ["hypokalemia ECG changes nursing", "U waves hypokalemia ECG", "hypokalemia arrhythmia risk nursing", "low potassium ECG nursing", "hypokalemia QT prolongation"],
+    sections: [
+      {
+        id: "hypokalemia-ecg",
+        heading: "Hypokalemia ECG progression: from flattened T waves to torsades risk",
+        content:
+          "Hypokalemia produces characteristic ECG changes that correlate with increasing potassium deficiency. The progression: (1) T-wave flattening: the earliest finding. T waves flatten or invert as repolarization is affected. (2) Prominent U waves: a U wave is a positive deflection after the T wave, best seen in leads V2–V4. Normally small or absent, hypokalemia produces prominent U waves that may exceed the T-wave amplitude. (3) T-U fusion: the T wave and U wave merge, creating an apparent single broad 'T wave' — this is actually a QU interval, not QT. Measuring this as the QT interval falsely identifies QT prolongation. (4) ST depression: mild baseline ST depression may accompany hypokalemia. (5) QU prolongation and torsades de pointes: true torsades de pointes risk exists even when the measured 'QTc' reflects QU fusion rather than true QT.",
+      },
+      {
+        id: "hypokalemia-clinical",
+        heading: "Hypokalemia clinical significance: arrhythmia risk and replacement priorities",
+        content:
+          "Hypokalemia potentiates arrhythmias from two mechanisms: (1) increased automaticity (ectopic beats, atrial and ventricular arrhythmias), and (2) prolonged repolarization (QU prolongation increases torsades risk). The combination of hypokalemia + QT-prolonging medications (sotalol, amiodarone, azithromycin, haloperidol) is particularly dangerous.\n\nNursing priorities: Monitor potassium in all patients on diuretics (especially loop diuretics and thiazides), with diarrhea/vomiting, or receiving QT-prolonging medications. Target serum K+ ≥ 4.0 mEq/L in patients with arrhythmia risk or QT-prolonging medications. IV potassium replacement: maximum 10–20 mEq/hr via peripheral IV (concentrations > 20 mEq/100 mL require central access and continuous cardiac monitoring).\n\nHypokalemia + hypomagnesemia: magnesium is required for intracellular potassium retention. Replacing potassium without correcting magnesium fails — the K+ is lost again immediately. Always check and replace magnesium concurrently in hypokalemic patients.",
+      },
+    ],
+    faq: [
+      { question: "What is a U wave and why does it appear with hypokalemia?", answer: "A U wave is a positive deflection following the T wave, best seen in leads V2–V4. It represents repolarization of the interventricular septum or Purkinje fibers. In normokalemia, U waves are small. Hypokalemia prolongs repolarization, making U waves prominent and sometimes taller than the T wave. Prominent U waves (especially if > T wave amplitude) should prompt potassium level measurement." },
+      { question: "Why must magnesium be replaced alongside potassium in hypokalemia?", answer: "Magnesium is required for the Na-K-ATPase pump to maintain intracellular potassium. Low magnesium impairs this pump, causing renal potassium wasting regardless of the amount given IV. If magnesium is not corrected, IV potassium replacement is partially ineffective — potassium is lost in the urine faster than it's being replaced. Always measure serum magnesium and replace to ≥ 2.0 mg/dL when treating hypokalemia in patients with arrhythmia risk." },
+    ],
+  },
+  {
+    slug: "ecg-artifacts-explained",
+    title: "ECG Artifacts Explained — Motion, Baseline Wander, Electrical Interference",
+    description:
+      "ECG artifacts for nurses: motion artifact vs true arrhythmia, baseline wander, 60-Hz electrical interference, lead-off artifact, and how to distinguish artifacts from lethal rhythms.",
+    h1: "ECG artifacts: motion, baseline wander, interference, and distinguishing artifact from true arrhythmia",
+    keywords: ["ECG artifacts nursing", "motion artifact ECG", "ECG artifact vs arrhythmia", "telemetry artifact nursing", "baseline wander ECG nursing"],
+    sections: [
+      {
+        id: "artifact-types",
+        heading: "Types of ECG artifacts and their causes",
+        content:
+          "ECG artifacts are non-cardiac signals recorded by the monitoring system. Major types:\n\nMotion artifact: caused by patient movement, shivering, seizure activity, or CPR. Can resemble VF, VT, or asystole. Key feature: underlying QRS complexes may be visible within the artifact waveform if looked for carefully. The clinical gold standard: a patient who is responsive and has a palpable pulse cannot be in VF regardless of what the monitor shows.\n\nBaseline wander: low-frequency (< 1 Hz) oscillation of the entire waveform, causing the baseline to drift up and down rhythmically. Caused by patient breathing, lead movement, or loose lead attachment. Makes ST-segment interpretation difficult — the apparent ST elevation or depression may be baseline drift, not true ischemia.\n\n60-Hz interference: regular high-frequency noise (60 cycles/second in North America) that creates a 'hairy' appearance on the waveform. Caused by electrical equipment proximity, poor skin contact, or broken lead wires. Eliminate by improving skin preparation or removing nearby electrical devices.",
+      },
+      {
+        id: "artifact-clinical",
+        heading: "The cardinal rule: assess the patient, not the monitor",
+        content:
+          "The most dangerous clinical error in telemetry nursing is acting on monitor data without clinical correlation. Motion artifact can perfectly mimic VF, VT, asystole, or complete heart block. Electrical interference can simulate tachyarrhythmias.\n\nClinical assessment protocol for any alarming rhythm: (1) Look at the patient — are they awake? Talking? (2) Check for pulse — brachial (infants), carotid (adults). (3) Check SpO₂ — active pulse oximetry waveform confirms cardiac output. (4) Check blood pressure — NIBP or arterial line. (5) Look at the monitor AFTER confirming clinical status.\n\nArtifact identification clues: (a) Normal QRS complexes visible within the 'arrhythmia' at the expected rate — suggests the underlying rhythm is intact and the abnormal waveform is superimposed artifact. (b) Sudden onset and sudden resolution corresponding to patient movement. (c) The 'arrhythmia' corresponds to when the patient moved, coughed, shivered, or was touched.",
+      },
+    ],
+    faq: [
+      { question: "How do you tell motion artifact from true ventricular fibrillation?", answer: "Assess the patient, not the monitor. VF requires the patient to be unresponsive and pulseless. If the patient is responsive and you can feel a pulse, the monitor shows artifact — not VF. Three rapid checks: (1) Is the patient awake and responsive? (2) Is there a palpable pulse? (3) Is the SpO₂ waveform showing organized pulsatile flow? Any YES = artifact. Never defibrillate based on monitor findings alone." },
+      { question: "What causes baseline wander on ECG and how do you fix it?", answer: "Baseline wander causes: patient breathing (normal if < 1 Hz drift), loose lead attachment, poor skin preparation (oils, lotions, hair), lead movement during patient repositioning. Fix: clean skin with alcohol prep pad before applying electrodes, clip or shave hair under electrode sites, ensure electrode tabs are firmly secured, check lead connections. Baseline wander makes ST-segment analysis unreliable — ensure clean baseline before interpreting ST changes." },
+    ],
+  },
+  {
+    slug: "ecg-axis-interpretation",
+    title: "ECG Axis Interpretation — Normal Axis, LAD, RAD for Nurses",
+    description:
+      "ECG axis interpretation for nurses: normal axis 0°–+90°, left axis deviation causes, right axis deviation causes, extreme axis, and the quick I-aVF method for axis determination.",
+    h1: "ECG axis interpretation: determining normal axis, left axis deviation, and right axis deviation",
+    keywords: ["ECG axis interpretation nursing", "left axis deviation ECG nursing", "right axis deviation ECG", "normal ECG axis", "ECG axis quick method nursing"],
+    sections: [
+      {
+        id: "axis-basics",
+        heading: "ECG axis: the quick I and aVF method",
+        content:
+          "The electrical axis of the heart refers to the net direction of ventricular depolarization in the frontal plane. Normal axis is +0° to +90° (sometimes defined as -30° to +90°).\n\nQuick determination using leads I and aVF: (1) Lead I positive + aVF positive = normal axis (+0° to +90°). (2) Lead I positive + aVF negative = left axis deviation (LAD, more negative than -30°). (3) Lead I negative + aVF positive = right axis deviation (RAD, > +90°). (4) Lead I negative + aVF negative = extreme axis (northwest axis, -90° to ±180°).\n\nMore precise determination: if both I and aVF are positive, the axis is normal. For borderline cases between normal and LAD, check lead II — if lead II is also positive, axis is normal. If lead II is negative, axis is LAD (> -30°).",
+      },
+      {
+        id: "axis-causes",
+        heading: "Clinical causes of axis deviation",
+        content:
+          "Left axis deviation (LAD, more negative than -30°): most common causes — left anterior fascicular block (LAFB), inferior MI (loss of inferior electrical forces pulls axis leftward), LBBB, ventricular pacing, WPW (type B pattern). LAFB: LAD in a narrow-QRS rhythm without other cause = LAFB until proven otherwise.\n\nRight axis deviation (RAD, > +90°): most common causes — right ventricular hypertrophy (RVH — cor pulmonale, pulmonary hypertension, congenital heart disease), left posterior fascicular block (LPFB), lateral MI, RBBB, normal variant in young slender adults (vertical heart position). New RAD in a patient with dyspnea warrants echocardiography to assess RV pressure.\n\nExtreme axis (northwest, -90° to ±180°): consider lead reversal FIRST before diagnosing pathologic extreme axis. Lead reversal — particularly right arm/left arm swap — produces pseudo-extreme axis. Check lead aVR: it should normally be negative. If aVR is positive, suspect lead reversal.",
+      },
+    ],
+    faq: [
+      { question: "What is left axis deviation on ECG and what causes it?", answer: "Left axis deviation (LAD): the heart's electrical axis points more leftward than -30°. Quick ECG identification: lead I is positive AND lead aVF is negative. Most common causes: left anterior fascicular block (LAFB — narrow QRS with LAD, no other cause), inferior MI (loss of inferior electrical forces), LBBB, ventricular pacing. LAD alone is not an indication for intervention but warrants clinical context evaluation." },
+      { question: "What is the first thing to check when you see extreme axis?", answer: "Check for lead reversal before diagnosing extreme axis. The most common cause of extreme northwest axis (lead I negative, aVF negative) is right arm/left arm lead reversal. Check lead aVR: it should normally be predominantly negative. If aVR is positive (looks like the 'expected' lead I pattern), suspect RA-LA lead reversal. Correct the leads and repeat the ECG before attributing axis deviation to cardiac pathology." },
+    ],
+  },
+  {
+    slug: "lead-placement-ecg",
+    title: "ECG Lead Placement — 12-Lead & Telemetry Electrode Positioning",
+    description:
+      "ECG lead placement for nurses: 12-lead electrode placement, telemetry lead positioning, common errors and their ECG effects, right-sided leads, and posterior lead placement.",
+    h1: "ECG lead placement: 12-lead electrode positioning, telemetry leads, and common placement errors",
+    keywords: ["ECG lead placement nursing", "12-lead ECG electrode placement", "ECG electrode placement guide", "telemetry lead placement nursing", "ECG lead positioning errors"],
+    sections: [
+      {
+        id: "twelve-lead-placement",
+        heading: "12-lead ECG electrode placement: limb leads and precordial leads",
+        content:
+          "Limb lead electrode placement: (1) RA — right arm or right wrist. (2) LA — left arm or left wrist. (3) RL (ground) — right leg or right ankle. (4) LL — left leg or left ankle. Place electrodes on the limb itself (wrist, inner forearm, or ankle) rather than the torso — torso placement changes the electrical axis and affects lead morphology.\n\nPrecordial (chest) lead placement (critical for diagnostic accuracy): V1 — 4th intercostal space (ICS), right sternal border. V2 — 4th ICS, left sternal border. V3 — between V2 and V4 (diagonal placement). V4 — 5th ICS, midclavicular line. V5 — anterior axillary line, same horizontal level as V4. V6 — midaxillary line, same horizontal level as V4–V5.\n\nFinding the 4th ICS: palpate the sternal angle (Angle of Louis — the bony horizontal ridge on the sternum where the manubrium meets the body). The rib attached here is the 2nd rib. Count down to the 2nd ICS (space below 2nd rib), 3rd rib, 3rd ICS, 4th rib, 4th ICS. V1 and V2 are placed at the 4th ICS.",
+      },
+      {
+        id: "placement-errors",
+        heading: "Common placement errors and their ECG effects",
+        content:
+          "V1–V2 too high (3rd ICS instead of 4th): produces falsely elevated P waves in V1–V2, poor R-wave progression, may create false RBBB morphology, and changes ST-segment appearance — misdiagnosis risk.\n\nV4 too lateral (placing V4 at axillary line instead of midclavicular): makes V5 and V6 appear on the posterolateral wall, losing anterior transition and creating false poor R-wave progression.\n\nLimb leads on torso: produces significant axis changes and altered waveform morphology. Particularly problematic in patients with amputations or casts — document the electrode placement location if non-standard.\n\nRA/LA reversal: produces inverted P waves and QRS in lead I, negative aVR (normally negative in I, aVR positive after reversal), mirror-image changes. Lead II and III swap appearances.\n\nRight-sided leads (V3R, V4R) for RV assessment: mirror-position of standard leads on the right chest. V4R is the most clinically valuable — 4th ICS, right midclavicular line (mirror of V4).",
+      },
+    ],
+    faq: [
+      { question: "Where does V1 go on a 12-lead ECG?", answer: "V1: 4th intercostal space, RIGHT sternal border. Find the sternal angle (Angle of Louis — bony ridge where manubrium meets sternal body), which marks the 2nd rib. Count down: 2nd ICS, 3rd rib, 3rd ICS, 4th rib, 4th ICS. Place V1 just to the right of the sternum at the 4th ICS. V2 mirrors V1 on the left side. Placing V1–V2 too high (3rd ICS) is one of the most common errors — it creates false RBBB morphology and poor R-wave progression." },
+      { question: "How do you place right-sided leads for RV infarction assessment?", answer: "Right-sided leads (V3R–V6R) are the mirror of standard precordial leads on the right chest. V4R — the most clinically important — is placed at the 5th ICS, RIGHT midclavicular line (mirror position of standard V4). Apply all precordial leads normally, then move V3–V6 to their right-chest mirror positions. V4R with ST elevation ≥ 1mm confirms right ventricular involvement in inferior STEMI — this finding mandates IV fluids (not nitrates) as the hemodynamic management approach." },
+    ],
+  },
+  {
+    slug: "bedside-telemetry-interpretation",
+    title: "Bedside Telemetry Interpretation — Rhythm Surveillance for Nurses",
+    description:
+      "Bedside telemetry interpretation for nurses: systematic rhythm surveillance, when to call the provider, interpreting alarm notifications, and bedside rhythm documentation standards.",
+    h1: "Bedside telemetry interpretation: rhythm surveillance, alarm response, and clinical decision-making",
+    keywords: ["bedside telemetry interpretation nursing", "cardiac monitoring bedside nursing", "telemetry rhythm surveillance", "cardiac alarm response nursing", "telemetry nursing skills"],
+    sections: [
+      {
+        id: "bedside-surveillance",
+        heading: "Systematic bedside telemetry rhythm surveillance",
+        content:
+          "Effective bedside telemetry interpretation is a systematic, continuous skill — not a reactive alarm-response skill. Proactive pattern monitoring catches evolving problems before alarms trigger.\n\nRoutine assessment integration: at each patient assessment (minimum every 2–4 hours for monitored patients), print a rhythm strip and systematically interpret it using the 7-step method: rate, rhythm, P waves, PR interval, QRS width, ST/T changes, interpretation. Document the rhythm and any changes from the previous baseline. New findings — even subtle — require provider notification and documentation.\n\nRate trending: note whether the rate is stable, gradually rising, or suddenly changing. Gradual rate rise may precede clinical deterioration (infection, hypovolemia, pain). Sudden rate change at a new fixed rate (not responsive to state change) suggests SVT or other tachyarrhythmia.\n\nBaseline comparison: always compare today's rhythm to the admission/baseline rhythm strip. New findings — even 'benign' ones like new PACs or new first-degree block — may represent evolving pathology.",
+      },
+    ],
+    faq: [
+      { question: "What should a nurse do when a telemetry alarm fires?", answer: "Three-step response: (1) Look at the monitor — is the waveform consistent with an arrhythmia or artifact? (2) Assess the patient — go to the bedside. Is the patient responsive? Comfortable? Is there a pulse? (3) Act based on clinical findings — not monitor alone. A patient who is responsive, talking, and has a palpable pulse is not in VF regardless of the monitor. Document your assessment and notify the provider with clinical context, not just 'monitor showed an alarm.'" },
+    ],
+  },
+  {
+    slug: "icu-telemetry-monitoring",
+    title: "ICU Telemetry Monitoring — Critical Care Rhythm Surveillance",
+    description:
+      "ICU telemetry monitoring for nurses: continuous ST monitoring, arrhythmia surveillance in critical care, artifact identification, post-arrest ECG priorities, and advanced monitoring parameters.",
+    h1: "ICU telemetry monitoring: continuous ST surveillance, post-arrest ECG, and critical care rhythm management",
+    keywords: ["ICU telemetry monitoring nursing", "critical care cardiac monitoring", "continuous ST monitoring ICU", "post-arrest ECG monitoring", "ICU arrhythmia surveillance"],
+    sections: [
+      {
+        id: "icu-continuous-monitoring",
+        heading: "ICU telemetry: beyond basic rhythm — continuous ST and parameter trending",
+        content:
+          "ICU cardiac monitoring extends beyond rhythm identification. Key capabilities in ICU monitoring:\n\nContinuous ST monitoring: most modern ICU monitors provide real-time ST-segment trending in multiple leads simultaneously. This detects silent ischemia in sedated, intubated, or post-operative patients who cannot report chest symptoms. Set ST alert thresholds (typically ±1–2mm from baseline) and review trends at minimum every 4 hours. New ST changes require immediate 12-lead ECG and provider notification.\n\nMulti-parameter trending: ICU monitors integrate heart rate, rhythm, SpO₂, NIBP or arterial line BP, ETCO₂, and in some configurations pulmonary artery pressures. Correlate rhythm changes with hemodynamic parameters — a new tachyarrhythmia accompanied by BP drop has different urgency than the same rhythm with stable hemodynamics.\n\nPost-cardiac arrest monitoring: patients achieving ROSC require continuous monitoring for recurrent arrhythmia, ST changes (identify STEMI requiring emergent PCI), QTc trending (targeted temperature management prolongs QTc — antiarrhythmics may need dose adjustment), and rhythm during rewarming (risk of arrhythmias at temperature transitions).",
+      },
+    ],
+    faq: [
+      { question: "What is continuous ST monitoring in the ICU?", answer: "Continuous ST monitoring tracks the ST segment position in real time from multiple leads simultaneously. Modern ICU monitors display ST trend graphs showing whether ST is stable, rising, or falling over hours. In sedated or intubated patients who cannot report chest pain, ST monitoring may be the only indicator of acute ischemia. Alerts should be set at ±1–2mm from baseline, and all significant changes prompt an immediate 12-lead ECG and provider notification." },
+    ],
+  },
+  {
+    slug: "cardiac-monitoring-basics",
+    title: "Cardiac Monitoring Basics — How Telemetry Works for Nurses",
+    description:
+      "Cardiac monitoring basics for nurses: how telemetry systems work, lead selection, monitor setup, alarm parameters, documentation standards, and cardiac monitoring indications.",
+    h1: "Cardiac monitoring basics: how telemetry works, lead selection, and monitoring setup for nurses",
+    keywords: ["cardiac monitoring basics nursing", "how telemetry works nursing", "cardiac monitor setup nursing", "telemetry lead selection nursing", "cardiac monitoring indications nursing"],
+    sections: [
+      {
+        id: "monitoring-basics",
+        heading: "How telemetry monitoring works: from patient to display",
+        content:
+          "Cardiac monitoring records the electrical signals generated by cardiac depolarization and repolarization through skin electrodes. In bedside monitoring: electrodes → electrode cables → bedside unit → central station. In wireless telemetry: electrodes → telemetry transmitter (worn by patient) → wireless network → central monitoring station.\n\nLead selection for telemetry: Lead II — best for P-wave and QRS morphology; the standard rhythm strip lead used in most monitoring environments. Lead V1 — best for distinguishing RBBB from LBBB morphology, identifying bundle branch blocks, and detecting right-sided events. Dual-lead monitoring (II + V1) is standard in high-acuity settings — II for rhythm identification, V1 for morphology details.\n\nMCL1 (Modified Chest Lead 1): when only 3 electrodes are available, MCL1 approximates V1. Place positive electrode at V1 position (4th ICS, right sternal border), negative electrode at left shoulder, ground at right shoulder. This approximates the V1 view using limb lead electrodes.",
+      },
+    ],
+    faq: [
+      { question: "Which lead is best for cardiac monitoring in telemetry?", answer: "Lead II is the standard for most telemetry monitoring because it aligns with the normal electrical axis, producing tall upright P waves and QRS complexes that are easiest to identify systematically. For detecting bundle branch block morphology or distinguishing wide-complex tachycardias, V1 provides additional information. High-acuity settings typically monitor both Lead II and V1 simultaneously for complete rhythm + morphology assessment." },
+    ],
+  },
 ];
 
 export function getEcgClusterTopic(slug: string): EcgClusterTopic | undefined {

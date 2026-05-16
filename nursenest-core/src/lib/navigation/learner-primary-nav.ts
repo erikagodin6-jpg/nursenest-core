@@ -288,6 +288,23 @@ export function buildClinicalModulesNavLinks(pathwayId: string | null, ecgNavEna
           status: "premium",
           group: "telemetry",
         },
+        // ── Hemodynamics ──
+        {
+          key: "hemodynamics-fundamentals",
+          href: withPathwayQuery("/modules/hemodynamics", pathwayId),
+          label: "Hemodynamic Monitoring",
+          description: "Perfusion, MAP, preload, afterload, shock states",
+          status: "available",
+          group: "hemodynamics",
+        },
+        {
+          key: "advanced-hemodynamics",
+          href: withPathwayQuery("/modules/hemodynamics-advanced", pathwayId),
+          label: "Advanced Hemodynamics",
+          description: "Swan-Ganz, cardiac index, SVR, PAOP, vasopressor reasoning",
+          status: "premium",
+          group: "hemodynamics",
+        },
       ]
     : [];
 

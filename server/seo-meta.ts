@@ -1598,6 +1598,34 @@ const staticPages: Record<string, { title: string; description: string }> = {
     title: "Advanced ECG for Nurses | 12-Lead, Hemodynamics & Arrhythmia | NurseNest",
     description: "Advanced ECG interpretation for RN and NP learners. 12-lead analysis, hemodynamic correlation, complex arrhythmias, and ACLS-relevant rhythms with clinical decision-making frameworks.",
   },
+  "/hemodynamic-monitoring": {
+    title: "Hemodynamic Monitoring for Nurses | MAP, Preload, Afterload & Shock States | NurseNest",
+    description: "Hemodynamic monitoring fundamentals for nursing practice. Perfusion, MAP, preload, afterload, arterial lines, CVP, cardiac output, and shock state recognition. Included with RN and NP subscriptions.",
+  },
+  "/advanced-hemodynamic-monitoring": {
+    title: "Advanced Hemodynamic Monitoring | Swan-Ganz, SVR, PAOP & ICU Simulation | NurseNest",
+    description: "Advanced hemodynamics for RN and NP: Swan-Ganz catheter, cardiac index, SVR, PAOP/wedge, SvO2, vasopressor reasoning, fluid responsiveness, and ICU case simulations. $149 CAD one-time add-on.",
+  },
+  "/shock-and-perfusion": {
+    title: "Shock & Perfusion for Nurses | Distributive, Cardiogenic & Obstructive Shock | NurseNest",
+    description: "Master shock classification for nursing. Distributive, cardiogenic, hypovolemic, and obstructive shock — hemodynamic profiles, clinical signs, vasopressor selection, and nursing priorities.",
+  },
+  "/arterial-line-interpretation": {
+    title: "Arterial Line Interpretation for Nurses | Waveform Analysis & Troubleshooting | NurseNest",
+    description: "Arterial line interpretation for nursing practice. Normal A-line waveform, dicrotic notch, dampening patterns, zeroing technique, pulse pressure variation, and clinical troubleshooting.",
+  },
+  "/pulmonary-artery-catheter": {
+    title: "Pulmonary Artery Catheter for Nurses | Swan-Ganz Waveforms & PAOP | NurseNest",
+    description: "Pulmonary artery catheter (Swan-Ganz) interpretation for nurses. Insertion waveform progression, PAOP/wedge pressure, cardiac output, SvO2, and clinical application in shock management.",
+  },
+  "/cardiac-output-monitoring": {
+    title: "Cardiac Output Monitoring for Nurses | Thermodilution, Fick & Cardiac Index | NurseNest",
+    description: "Cardiac output monitoring for nursing practice. Thermodilution technique, Fick principle, non-invasive methods, cardiac index interpretation, and clinical ICU hemodynamic management.",
+  },
+  "/critical-care-bundle": {
+    title: "Critical Care Bundle | Advanced ECG + Hemodynamic Monitoring | NurseNest",
+    description: "Complete ICU/CCU clinical readiness bundle: Advanced ECG Interpretation + Advanced Hemodynamic Monitoring. $249 CAD one-time for RN and NP — save $49 vs purchasing separately.",
+  },
 };
 
 function escapeHtml(str: string): string {
