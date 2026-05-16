@@ -17,7 +17,7 @@ services:
     dockerfile_path: Dockerfile
     source_dir: .
     github:
-      branch: deploy
+      branch: deploy-main
       deploy_on_push: true
       repo: erikagodin6-jpg/nursenest-core
     run_command: node scripts/start-standalone.mjs
