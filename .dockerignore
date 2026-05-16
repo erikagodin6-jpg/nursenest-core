@@ -8,6 +8,19 @@
 # Optional local monorepo checkouts / huge trees (not part of DO GitHub context; keep tar small)
 external
 
+# Mobile app — never referenced in Dockerfile, saves ~490 MB
+apps/
+
+# Legacy Vite client assets — 835 MB of PNGs not imported by Next.js build.
+# Only client/src/{data,pages,components,lib,...} TS files are needed (@legacy-client/* alias).
+client/src/assets
+client/public
+client/replit_integrations
+
+# Docs, screenshots, and nested client public — not needed in production image
+nursenest-core/docs
+nursenest-core/client
+
 # Dependencies & build outputs (reinstalled / rebuilt in image)
 **/node_modules
 **/.next
