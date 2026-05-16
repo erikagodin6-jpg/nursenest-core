@@ -21,6 +21,7 @@
  * Set `NN_RUN_BUILDPACK_NEXT_BUILD=1` on DO to force a second `next build` (debug / parity).
  */
 import { spawnSync } from "node:child_process";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -30,16 +31,39 @@ function truthyEnv(name) {
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 
+function parsePositiveInt(value) {
+  const parsed = Number.parseInt(String(value ?? "").trim(), 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
+function dockerSafeHeapMb(requestedMb) {
+  const totalMb = Math.max(512, Math.floor(os.totalmem() / 1024 / 1024));
+  const lowMemoryBuild = truthyEnv("NN_LOW_MEMORY_BUILD") || truthyEnv("NN_APP_PLATFORM_BUILD") || process.env.GITHUB_ACTIONS === "true";
+  const defaultMb = requestedMb ?? 2304;
+
+  if (!lowMemoryBuild) return defaultMb;
+
+  // The failed GitHub/Docker build peaked near 4 GiB RSS with a 2816 MiB V8 heap.
+  // Keep V8 lower so webpack/native allocations have headroom before the container limit.
+  const ramBasedCap = Math.max(1536, Math.min(2304, Math.floor(totalMb * 0.35)));
+  const capped = Math.min(defaultMb, ramBasedCap);
+  if (requestedMb && requestedMb > capped) {
+    console.warn(
+      `[buildpack-build] clamped_compile_heap requestedMb=${requestedMb} cappedMb=${capped} totalRamMb=${totalMb}`,
+    );
+  }
+  return capped;
+}
+
 /** Mirrors `package.json` `build:compile` env (keep in sync when that script changes). */
 function buildCompileChildEnv() {
   const tmpdirRaw = process.env.TMPDIR;
   const tmpdir = tmpdirRaw != null && String(tmpdirRaw).trim() !== "" ? String(tmpdirRaw).trim() : "/tmp";
-  const heapRaw = process.env.BUILD_NODE_MAX_OLD_SPACE_SIZE_MB;
-  const heapMb = heapRaw != null && String(heapRaw).trim() !== "" ? String(heapRaw).trim() : "";
+  const requestedHeapMb = parsePositiveInt(process.env.BUILD_NODE_MAX_OLD_SPACE_SIZE_MB);
+  const heapMb = dockerSafeHeapMb(requestedHeapMb);
   const rawNodeOptions = String(process.env.NODE_OPTIONS ?? "").trim();
   const withoutHeap = rawNodeOptions.replace(/--max-old-space-size=\d+/, "").replace(/\s+/g, " ").trim();
-  const inheritedHeap = rawNodeOptions.match(/--max-old-space-size=\d+/)?.[0];
-  const heapFlag = heapMb ? `--max-old-space-size=${heapMb}` : (inheritedHeap ?? "--max-old-space-size=2816");
+  const heapFlag = `--max-old-space-size=${heapMb}`;
   const nodeOptions = [withoutHeap, heapFlag].filter(Boolean).join(" ").trim();
   return {
     ...process.env,
@@ -50,6 +74,9 @@ function buildCompileChildEnv() {
     SKIP_I18N_PREBUILD: "1",
     SENTRY_ENABLED: "false",
     BUILD_LOG_MEMORY_USAGE: process.env.BUILD_LOG_MEMORY_USAGE ?? "1",
+    BUILD_NODE_MAX_OLD_SPACE_SIZE_MB: String(heapMb),
+    BUILD_WEBPACK_PARALLELISM: process.env.BUILD_WEBPACK_PARALLELISM || "1",
+    NN_FORCE_SINGLE_BUILD_WORKER: process.env.NN_FORCE_SINGLE_BUILD_WORKER || "true",
     NODE_OPTIONS: nodeOptions,
   };
 }
