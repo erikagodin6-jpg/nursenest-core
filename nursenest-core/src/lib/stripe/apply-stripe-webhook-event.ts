@@ -678,6 +678,64 @@ export async function applyStripeWebhookEvent(
         planName: plan?.tier != null ? String(plan.tier) : null,
         planTier: plan?.tier,
       });
+    } else if (userId && session.mode === "payment" && typeof session.payment_intent === "string") {
+      // ── One-time payment mode (Advanced Hemodynamics, Critical Care Bundle) ──────
+      const paymentIntentId = session.payment_intent;
+      const planCodeMeta = session.metadata?.planCode?.trim() || undefined;
+      const bundleIncludes = session.metadata?.bundleIncludes?.split(",").map((s: string) => s.trim()).filter(Boolean) ?? [];
+      const customerId = typeof session.customer === "string" ? session.customer : session.customer?.id ?? "";
+
+      if (planCodeMeta) {
+        const entitlementRows = [
+          { planCode: planCodeMeta, stripePaymentIntentId: paymentIntentId },
+          ...bundleIncludes.map((inc: string) => ({ planCode: inc, stripePaymentIntentId: `${paymentIntentId}_${inc}` })),
+        ];
+
+        for (const row of entitlementRows) {
+          const uniqueId = row.stripePaymentIntentId;
+          await prisma.subscription.upsert({
+            where: { stripeSubscriptionId: uniqueId },
+            update: {
+              status: SubscriptionStatus.ACTIVE,
+              planCode: row.planCode,
+              planDuration: "one_time",
+              ...(customerId.trim() ? { stripeCustomerId: customerId.trim() } : {}),
+              currentPeriodEnd: null,
+              trialEnd: null,
+              cancelAtPeriodEnd: false,
+              pastDueSince: null,
+            },
+            create: {
+              userId,
+              status: SubscriptionStatus.ACTIVE,
+              stripeSubscriptionId: uniqueId,
+              stripeCustomerId: customerId,
+              planCode: row.planCode,
+              planDuration: "one_time",
+              currentPeriodEnd: null,
+              trialEnd: null,
+              cancelAtPeriodEnd: false,
+            },
+          });
+        }
+
+        safeServerLog("stripe_webhook", "one_time_payment_entitlement_granted", {
+          userIdPrefix: userId.slice(0, 8),
+          planCode: planCodeMeta,
+          bundleComponents: bundleIncludes.length,
+          paymentIntentPrefix: paymentIntentId.slice(0, 14),
+          eventIdPrefix,
+          correlation,
+        });
+      } else {
+        safeServerLog("stripe_webhook", "one_time_payment_missing_plan_code", {
+          userIdPrefix: userId.slice(0, 8),
+          paymentIntentPrefix: paymentIntentId.slice(0, 14),
+          eventIdPrefix,
+          correlation,
+          severity: "warning",
+        });
+      }
     }
     productEvent("stripe_webhook_ok", { eventType: event.type });
     return;

@@ -467,6 +467,212 @@ export const ECG_CLUSTER_TOPICS: EcgClusterTopic[] = [
       },
     ],
   },
+  // ─── New cluster topics — added in ECG cluster expansion sprint ────────────
+  {
+    slug: "how-to-read-ecg-strips",
+    title: "How to Read ECG Strips — Systematic Interpretation for Nurses",
+    description:
+      "Step-by-step guide to reading ECG rhythm strips for nurses: rate, rhythm, P waves, PR interval, QRS width, ST changes, and diagnosis. Systematic method prevents errors.",
+    h1: "How to read ECG strips: a systematic step-by-step method for nurses",
+    keywords: [
+      "how to read ECG strips nursing",
+      "ECG strip interpretation nursing",
+      "how to read rhythm strip nursing",
+      "ECG interpretation steps nursing",
+      "reading cardiac monitor strips nursing",
+    ],
+    sections: [
+      {
+        id: "seven-steps",
+        heading: "The 7-step systematic ECG strip interpretation method",
+        content:
+          "Reading ECG strips reliably requires a systematic approach applied to every strip — not pattern-matching shortcuts. The 7-step method prevents the most common clinical error: jumping to a diagnosis before completing the analysis.\n\nStep 1 — Rate: Count the ventricular rate. Methods: (a) 300 ÷ number of large boxes between R waves (for regular rhythms); (b) 1500 ÷ number of small boxes between R waves (precise, regular rhythms); (c) Count QRS complexes in a 6-second strip × 10 (for irregular rhythms like AFib). Normal: 60–100 bpm. Bradycardia < 60. Tachycardia > 100.\n\nStep 2 — Rhythm: Are R-R intervals consistent? Measure R-R intervals across the strip using calipers or the paper. Regular: all R-R intervals equal. Irregular: intervals differ. Regularly irregular: a pattern to the irregularity (e.g., Wenckebach group beating). Irregularly irregular: no pattern (AFib).\n\nStep 3 — P waves: Are P waves present? One P wave before every QRS? Are all P waves identical in morphology? Upright in lead II? Retrograde (inverted) or absent P waves change the differential significantly.\n\nStep 4 — PR interval: Measure from beginning of P wave to beginning of QRS. Normal: 120–200 ms (3–5 small boxes). Prolonged (> 200 ms) = AV block or drug effect. Short (< 120 ms) = pre-excitation (WPW). Variable (progressively longer) = Wenckebach.\n\nStep 5 — QRS width: Measure from beginning to end of QRS complex. Normal narrow: < 120 ms (< 3 small boxes). Wide (≥ 120 ms) = bundle branch block, ventricular origin, or aberrant conduction. Wide-complex tachycardia = VT until proven otherwise.\n\nStep 6 — ST segment and T waves: ST elevation (≥ 1mm in two contiguous limb leads, ≥ 2mm in precordial) = STEMI until proven otherwise. ST depression = ischemia, strain, digitalis. T-wave inversion = ischemia, PE, electrolyte abnormality. Peaked narrow T waves = hyperkalemia.\n\nStep 7 — Diagnosis: Synthesize all six findings. Apply the most dangerous interpretation when uncertain. In wide-complex tachycardia: VT until proven otherwise. In bradycardia: assess hemodynamics before treating rate alone.",
+      },
+      {
+        id: "common-errors",
+        heading: "Common ECG strip reading errors and how to avoid them",
+        content:
+          "The most dangerous ECG strip reading errors arise from incomplete systematic analysis. Seeing a fast rate and assuming SVT without checking QRS width — missing VT. Seeing an irregular rhythm and diagnosing AFib without checking P-wave morphology — missing PACs with compensatory pauses. Measuring one interval and extrapolating — missing the progressive PR prolongation of Wenckebach.\n\nArtifact recognition is essential: motion artifact can perfectly mimic VF or VT on a rhythm strip. The clinical rule is non-negotiable — assess the patient, not the monitor. A responsive patient with a palpable pulse cannot be in ventricular fibrillation regardless of what the strip shows.\n\nRate calculation errors with irregular rhythms: never use the 300 or 1500 rule for irregular rhythms. Use the 6-second strip count (count QRS complexes in 6 seconds × 10) or the 10-second strip count × 6.",
+      },
+    ],
+    faq: [
+      {
+        question: "How do you calculate heart rate from an ECG strip?",
+        answer:
+          "For regular rhythms: 300 ÷ number of large boxes between consecutive R waves (each large box = 0.2 seconds). If R waves are exactly 1, 2, 3, 4, 5, or 6 large boxes apart, the rate is 300, 150, 100, 75, 60, or 50 bpm respectively. For irregular rhythms: count QRS complexes in a 6-second strip and multiply by 10. The 6-second strip method is the only accurate method for AFib, irregular PAC rhythms, or any pattern without fixed R-R intervals.",
+      },
+      {
+        question: "What does a normal ECG strip look like?",
+        answer:
+          "Normal sinus rhythm on an ECG strip: rate 60–100 bpm, regular rhythm (consistent R-R intervals), upright P wave before every QRS in lead II, PR interval 120–200 ms, narrow QRS < 120 ms, isoelectric ST segment with upright T waves, no ectopic beats. The P wave reflects atrial depolarization from the SA node. The QRS reflects ventricular depolarization. The T wave reflects ventricular repolarization.",
+      },
+      {
+        question: "How many small boxes equal 1 second on ECG paper?",
+        answer:
+          "At the standard ECG paper speed of 25 mm/s: each small box is 1 mm wide = 0.04 seconds (40 ms). Each large box (5 small boxes) is 5 mm = 0.20 seconds (200 ms). One second = 5 large boxes = 25 small boxes. A 6-second strip = 30 large boxes. These measurements are foundational for all interval and rate calculations.",
+      },
+    ],
+  },
+  {
+    slug: "normal-sinus-rhythm-ecg",
+    title: "Normal Sinus Rhythm ECG — Features, Rate, and Clinical Significance",
+    description:
+      "Normal sinus rhythm ECG characteristics for nurses: rate 60–100 bpm, P waves, PR interval, QRS width, and what variations mean clinically.",
+    h1: "Normal sinus rhythm: ECG features, diagnostic criteria, and clinical significance",
+    keywords: [
+      "normal sinus rhythm ECG nursing",
+      "normal sinus rhythm features",
+      "sinus rhythm ECG interpretation",
+      "normal cardiac rhythm nursing",
+      "NSR ECG criteria",
+    ],
+    sections: [
+      {
+        id: "nsr-criteria",
+        heading: "Normal sinus rhythm: ECG diagnostic criteria",
+        content:
+          "Normal sinus rhythm (NSR) has five defining ECG characteristics that must ALL be present:\n\n1. Rate 60–100 bpm: the SA node fires within the physiologic normal range. Rates outside this range (sinus bradycardia < 60, sinus tachycardia > 100) are named variants, not NSR.\n\n2. Upright P wave before every QRS in lead II: the impulse originates at the SA node and depolarizes the atria in the normal superior-to-inferior and right-to-left direction, producing an upright P wave in the inferior leads. A different P-wave axis (inverted, biphasic, variable) indicates an ectopic atrial focus, not sinus origin.\n\n3. Consistent P-wave morphology: all P waves look identical — same height, duration, and shape. Variable P-wave morphology indicates wandering atrial pacemaker or multiple ectopic foci.\n\n4. PR interval 120–200 ms: normal AV conduction time. PR > 200 ms = first-degree AV block. PR < 120 ms = pre-excitation (WPW) or accelerated AV conduction.\n\n5. Narrow QRS < 120 ms: normal ventricular conduction via the His-Purkinje network. Wide QRS indicates bundle branch block or ventricular origin.\n\nOne common addition: regular R-R intervals. Note that respiratory sinus arrhythmia — physiologic cyclic rate variation with breathing — can be considered a normal variant and does not disqualify sinus rhythm.",
+      },
+      {
+        id: "nsr-variants",
+        heading: "Normal sinus rhythm variants: bradycardia, tachycardia, and RSA",
+        content:
+          "Sinus bradycardia: all NSR criteria met, rate < 60 bpm. Common causes: high vagal tone (athletes, sleep), inferior MI, medications (beta-blockers, calcium channel blockers, digoxin), hypothyroidism. Clinically benign when asymptomatic. Requires treatment only when symptomatic (hypotension, syncope, hemodynamic compromise).\n\nSinus tachycardia: all NSR criteria met, rate > 100 bpm. Always physiologically driven — fever, pain, anxiety, dehydration, hypoxia, anemia, PE, sepsis, thyrotoxicosis. The rate responds to the clinical state and decreases when the cause is addressed. Treatment targets the cause, not the rate.\n\nRespiratory sinus arrhythmia (RSA): cyclic rate variation synchronized with breathing — faster during inspiration, slower during expiration. All P-wave morphology is consistently sinus. No dropped beats. Most prominent in children and athletes (high vagal tone). Not a pathologic finding.",
+      },
+    ],
+    faq: [
+      {
+        question: "What is the normal heart rate in sinus rhythm?",
+        answer:
+          "Normal sinus rhythm has a rate of 60–100 bpm. Below 60 bpm = sinus bradycardia (same P-wave, QRS, and interval characteristics as NSR, just slower). Above 100 bpm = sinus tachycardia. Both are physiologically normal SA node rhythms at different rates — the 60–100 range is the arbitrarily defined 'normal' window.",
+      },
+      {
+        question: "How do you confirm a rhythm is sinus (not junctional or ectopic atrial)?",
+        answer:
+          "Three confirmatory features: (1) Upright P wave in lead II — sinus P waves are positive in lead II because the electrical axis from the SA node to the AV node aligns with lead II. Junctional rhythms produce inverted or retrograde P waves in lead II. (2) Consistent P-wave morphology across all beats — ectopic atrial rhythms show different P-wave shapes. (3) P-wave axis in the normal range (+0° to +75°) — confirmed on a 12-lead ECG by assessing multiple lead views.",
+      },
+    ],
+  },
+  {
+    slug: "atrial-fibrillation-ecg",
+    title: "Atrial Fibrillation ECG — Recognition, Features & Nursing Management",
+    description:
+      "Atrial fibrillation ECG recognition for nurses: irregularly irregular rhythm, absent P waves, fibrillatory baseline, rate control priorities, anticoagulation assessment, and cardioversion thresholds.",
+    h1: "Atrial fibrillation ECG: irregularly irregular rhythm, absent P waves, and nursing management",
+    keywords: [
+      "atrial fibrillation ECG nursing",
+      "AFib ECG recognition nursing",
+      "atrial fibrillation rhythm strip nursing",
+      "how to identify AFib on ECG",
+      "AFib nursing management",
+    ],
+    sections: [
+      {
+        id: "ecg-recognition",
+        heading: "Atrial fibrillation ECG recognition: the three hallmarks",
+        content:
+          "Atrial fibrillation has three defining ECG features that together make it one of the most recognizable arrhythmias:\n\n1. Irregularly irregular R-R intervals: no two consecutive R-R intervals are equal, and there is no predictable pattern. This is the most clinically important feature — it distinguishes AFib from all regularly irregular rhythms (Wenckebach, bigeminy) and all regular tachycardias (SVT, sinus tach). Even brief periods of regularity within AFib should prompt reconsideration of the diagnosis.\n\n2. Absent organized P waves: instead of discrete P waves, the baseline between QRS complexes shows fine fibrillatory activity — low-amplitude, rapid (350–600/min), irregular oscillations. This represents chaotic atrial electrical activity from multiple simultaneous re-entrant wavelets. In coarse AFib, these fibrillatory waves are more prominent; in fine AFib, the baseline may appear nearly flat.\n\n3. Narrow QRS (unless aberrancy): ventricular conduction remains normal via the His-Purkinje system, producing a narrow QRS. A wide QRS in AFib indicates either pre-existing bundle branch block, rate-related aberrancy (Ashman phenomenon), or pre-excitation via an accessory pathway (AFib + WPW — a dangerous combination requiring different management).",
+      },
+      {
+        id: "nursing-priorities",
+        heading: "AFib nursing priorities: rate, rhythm, and anticoagulation",
+        content:
+          "Hemodynamic assessment first: Is the patient hemodynamically stable (adequate BP, no altered mentation, no pulmonary edema)? Unstable → synchronized cardioversion. Stable → pharmacologic rate or rhythm control.\n\nRate control target: resting ventricular rate < 80–110 bpm. IV metoprolol (contraindicated in HFrEF) or diltiazem (contraindicated in preexcitation). Amiodarone for rate control in hemodynamically compromised patients.\n\nDuration assessment determines anticoagulation approach: onset < 48 hours — lower thrombus risk, cardioversion without prolonged anticoagulation may be safe. Onset unknown or > 48 hours — anticoagulate for ≥ 3 weeks before elective cardioversion, OR perform TEE to rule out LAA thrombus. Post-cardioversion: anticoagulate for ≥ 4 weeks regardless of duration.\n\nCHA₂DS₂-VASc score drives long-term anticoagulation decision: ≥ 2 in men or ≥ 3 in women = anticoagulation indicated (DOACs preferred over warfarin unless mechanical valve or CrCl < 15 mL/min).",
+      },
+    ],
+    faq: [
+      {
+        question: "How do you tell AFib from a regular rhythm on telemetry?",
+        answer:
+          "The most reliable bedside test: measure multiple consecutive R-R intervals using calipers or the paper. In AFib, no two intervals are equal and there is no predictable pattern. In normal sinus rhythm or SVT, intervals are equal. In Wenckebach (regularly irregular), there is a predictable repeating group pattern. The absence of organized P waves and the chaotic baseline between QRS complexes confirm AFib.",
+      },
+      {
+        question: "Can AFib look regular on a rhythm strip?",
+        answer:
+          "AFib with rapid ventricular rate (RVR) at very high rates (150–180 bpm) can appear nearly regular because the small absolute variation between R-R intervals is compressed. Always measure intervals precisely with calipers. AFib with complete heart block produces a regular slow ventricular rate (regular escape rhythm) — the combination looks regular but is actually a dangerous dual pathology. AF + WPW with rapid preexcited conduction can look like VT — wide, rapid, irregular.",
+      },
+    ],
+  },
+  {
+    slug: "telemetry-interpretation-nurses",
+    title: "Telemetry Interpretation for Nurses — Bedside Monitor Reading Guide",
+    description:
+      "Telemetry interpretation guide for nurses: reading continuous cardiac monitors, alarm management, rhythm recognition at the bedside, artifact identification, and escalation decisions.",
+    h1: "Telemetry interpretation for nurses: reading cardiac monitors, managing alarms, and recognizing arrhythmias",
+    keywords: [
+      "telemetry interpretation nurses",
+      "cardiac monitor interpretation nursing",
+      "bedside telemetry nursing",
+      "telemetry alarm management nursing",
+      "continuous cardiac monitoring nursing",
+    ],
+    sections: [
+      {
+        id: "telemetry-basics",
+        heading: "Telemetry interpretation basics: what nurses monitor and why",
+        content:
+          "Telemetry monitoring continuously records cardiac electrical activity in real time, typically from 2–3 leads (Lead II for rhythm, V1 for bundle branch morphology). Unlike the 12-lead ECG (a diagnostic snapshot), telemetry is a surveillance tool — alerting nurses to rhythm changes as they develop.\n\nTelemetry nurses in step-down, CCU, and progressive care units may monitor 8–16 patients simultaneously. The clinical skill is pattern surveillance: recognizing when a monitored rhythm represents a change from baseline, when it requires immediate bedside assessment versus documentation, and when to escalate versus reassure.\n\nKey telemetry concepts: rate trends (gradual HR increase may indicate developing infection or pain before other symptoms appear), rhythm variability (disappearance of respiratory sinus arrhythmia may signal physiologic stress), ST segment changes (continuous ST monitoring in high-risk patients catches silent ischemia), alarm threshold setting (individualizing alarm parameters to the patient's baseline reduces alarm fatigue without missing critical events).",
+      },
+      {
+        id: "alarm-management",
+        heading: "Telemetry alarm management: reducing alarm fatigue without missing critical events",
+        content:
+          "Alarm fatigue — the desensitization of nurses to alarms due to excessive false positives — is a recognized patient safety issue. The solution is not silence, but smart alarm parameter setting.\n\nIndividualize alarm parameters at each assessment: A patient in chronic AFib should not have an 'irregular rhythm' alarm active. A patient with resting heart rate 85 bpm should have HR alarms set at 50–120, not 60–100. Review and adjust at each shift assessment, not just on admission.\n\nAlarm categories: (1) Asystole, pulseless VT, VF — always active, never silenced. (2) Extreme rate (very high or low) — set based on patient baseline ±20–25 bpm. (3) Irregular rhythm — consider patient history (chronic AFib → off; new-onset irregular → active). (4) Lead-off, artifact — immediate bedside check.\n\nThe 'assess before you intervene' principle: never change a patient's clinical status based on monitor alone. A non-responsive patient with VF on monitor requires immediate CPR. A responsive, comfortable patient with 'VF' on monitor requires lead check and clinical assessment — the rhythm is artifact.",
+      },
+    ],
+    faq: [
+      {
+        question: "What is the difference between telemetry and bedside monitoring?",
+        answer:
+          "Telemetry monitoring uses a wireless transmitter worn by the patient, allowing continuous cardiac monitoring while the patient is mobile on the ward. The signal is transmitted to a central monitoring station and/or displayed at the bedside. Bedside monitoring (bedside unit, ICU monitor) uses direct cable connections and is used for patients who are stationary and require close surveillance. Both record rhythm continuously; telemetry enables ambulation; bedside monitoring typically offers more parameters (SpO₂, NIBP, ETCO₂, arterial waveform on ICU units).",
+      },
+      {
+        question: "What rhythms require immediate bedside response on telemetry?",
+        answer:
+          "Rhythms requiring immediate bedside assessment: (1) VF or asystole — code response; (2) VT with rate > 150 — assess hemodynamics immediately; (3) Complete heart block with slow rate and symptoms; (4) New ST elevation — STEMI protocol; (5) Pacemaker failure to capture in a pacemaker-dependent patient; (6) Any rhythm change accompanied by clinical deterioration (BP drop, altered mentation, chest pain). Rhythms that can be assessed at the next available opportunity (within 15–30 min): PVCs increasing in frequency, new PACs, rate trending up in a stable patient.",
+      },
+    ],
+  },
+  {
+    slug: "heart-rate-calculation-ecg",
+    title: "Heart Rate Calculation on ECG — Methods for Nurses",
+    description:
+      "How to calculate heart rate from an ECG or rhythm strip: the 300 rule, 1500 method, and 6-second count for nurses. Regular vs irregular rhythm rate calculation explained.",
+    h1: "How to calculate heart rate on ECG: the 300 rule, 1500 method, and 6-second count",
+    keywords: [
+      "heart rate calculation ECG nursing",
+      "how to calculate heart rate from ECG",
+      "ECG rate calculation nursing",
+      "300 rule ECG",
+      "heart rate rhythm strip nursing",
+    ],
+    sections: [
+      {
+        id: "calculation-methods",
+        heading: "Three methods for calculating heart rate from an ECG strip",
+        content:
+          "Method 1 — The 300 Rule (regular rhythms only):\nDivide 300 by the number of large boxes between two consecutive R waves. Each large box = 0.2 seconds at 25 mm/s paper speed. Memory aid: 1 box = 300, 2 = 150, 3 = 100, 4 = 75, 5 = 60, 6 = 50. If R-R spans 3 large boxes → rate 100 bpm. If 4 large boxes → rate 75 bpm. This method requires a regular rhythm — using it with AFib or other irregular rhythms produces inaccurate results.\n\nMethod 2 — The 1500 Method (regular rhythms, high precision):\nDivide 1500 by the number of small boxes between consecutive R waves. Each small box = 0.04 seconds. More precise than the 300 rule for rates between the memorized thresholds. Example: R-R = 18 small boxes → 1500 ÷ 18 = 83 bpm.\n\nMethod 3 — The 6-Second Count (all rhythms, including irregular):\nCount QRS complexes in a 6-second strip and multiply by 10. A 6-second strip contains 30 large boxes. This is the only accurate method for irregular rhythms (AFib, irregular PAC runs, variable rate). It is less precise for very regular rhythms but clinically sufficient for most nursing decision-making.\n\nMethod 4 — The 10-Second Count: Count QRS complexes in 10 seconds × 6. Used on strips that clearly mark the 10-second boundary (some monitor printouts).",
+      },
+      {
+        id: "clinical-application",
+        heading: "Clinical application: when precision matters vs. estimation",
+        content:
+          "For stable monitoring: The 6-second count or 300 rule gives adequate rate estimation for documenting and trending. The critical question is whether the rate is normal (60–100), bradycardic (< 60), or tachycardic (> 100), not whether it is exactly 74 vs 76 bpm.\n\nFor ACLS/intervention decisions: More precise calculation matters when the rate is near a clinical threshold — is this VT at 100 bpm or accelerated idioventricular rhythm? Is the bradycardia at 52 or 58 bpm (above the 50 bpm threshold for atropine consideration)? Use the 1500 method or direct calipers for precision in these cases.\n\nFor irregular rhythms: Always use the 6-second count. Never use the 300 rule or 1500 method for AFib, variable AV block, or frequent ectopy. The 'average' rate from a 6-second count gives the most clinically meaningful information for irregular rhythms.",
+      },
+    ],
+    faq: [
+      {
+        question: "How do you use the 300 rule for ECG rate calculation?",
+        answer:
+          "The 300 rule: memorize 300-150-100-75-60-50 for 1–2–3–4–5–6 large boxes between R waves. Find two consecutive R waves on the strip. Count the large boxes between them. Look up the corresponding rate: 1 box = 300 bpm (paced/very fast), 2 = 150 bpm (SVT range), 3 = 100 bpm (upper normal/tachycardia threshold), 4 = 75 bpm (mid-normal), 5 = 60 bpm (lower normal/bradycardia threshold), 6 = 50 bpm (bradycardia). Only valid for regular rhythms.",
+      },
+      {
+        question: "Which ECG rate calculation method should I use for atrial fibrillation?",
+        answer:
+          "Always use the 6-second count (or 10-second count) for atrial fibrillation. AFib is irregularly irregular — the R-R interval is never the same. Applying the 300 rule to any single R-R interval gives a misleading 'instantaneous rate' that does not represent the average ventricular rate. Count all QRS complexes in 6 seconds and multiply by 10 to get the average rate, which is what guides rate control decisions.",
+      },
+    ],
+  },
 ];
 
 export function getEcgClusterTopic(slug: string): EcgClusterTopic | undefined {

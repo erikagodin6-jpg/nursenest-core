@@ -837,6 +837,18 @@ export function Navigation({ compact = false }: { compact?: boolean } = {}) {
             </SheetClose>
 
             <Separator className="my-1 bg-gray-100" />
+            <p className="text-[10px] font-semibold text-rose-500 uppercase tracking-wider mb-1 px-3">ECG & Cardiology</p>
+            <SheetClose asChild>
+              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-primary hover:bg-primary/5 gap-2 h-9" onClick={() => navTo("/ecg-interpretation")} data-testid="button-ecg-interpretation-mobile">
+                <HeartPulse className="w-4 h-4 text-rose-500" /> ECG Interpretation
+              </Button>
+            </SheetClose>
+            <SheetClose asChild>
+              <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-primary hover:bg-primary/5 gap-2 h-9" onClick={() => navTo("/advanced-ecg-nursing")} data-testid="button-advanced-ecg-mobile">
+                <Activity className="w-4 h-4 text-rose-500" /> Advanced ECG & Telemetry
+              </Button>
+            </SheetClose>
+            <Separator className="my-1 bg-gray-100" />
             <p className="text-[10px] font-semibold text-gray-300 uppercase tracking-wider mb-1 px-3">{t("nav.clinicalSimulators")}</p>
             <SheetClose asChild>
               <Button variant="ghost" className="w-full justify-start text-gray-700 hover:text-primary hover:bg-primary/5 gap-2 h-9" onClick={() => navTo("/first-action-simulator")}>
@@ -1123,6 +1135,12 @@ export function Navigation({ compact = false }: { compact?: boolean } = {}) {
               <span className="hidden sm:inline">{t("components.navigation.internationalNurses")}</span>
               <span className="sm:hidden">IEN</span>
             </LocaleLink>
+            <span className="hidden sm:inline" style={{ opacity: 0.3 }}>|</span>
+            <LocaleLink href={appendUtmParams("/ecg-interpretation")} className="flex items-center gap-1.5 px-2 py-1 rounded-full transition-colors" style={{ color: "inherit" }} onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.15)")} onMouseLeave={e => (e.currentTarget.style.background = "transparent")} data-testid="ecosystem-link-ecg" onClick={() => trackCrossSectionClick(getPlatformSection(location), "ecg", "ECG")}>
+              <HeartPulse className="w-3 h-3" />
+              <span className="hidden sm:inline">ECG Interpretation</span>
+              <span className="sm:hidden">ECG</span>
+            </LocaleLink>
           </div>
         </div>
       </div>
@@ -1233,6 +1251,16 @@ export function Navigation({ compact = false }: { compact?: boolean } = {}) {
                   <DropdownMenuItem className="cursor-pointer gap-2 text-gray-700 hover:text-primary hover:bg-primary/5" onClick={() => navTo("/blood-transfusion-simulator")}>
                     <Heart className="w-4 h-4 text-primary/70" />
                     {t("nav.bloodTransfusion")}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <p className="text-[10px] font-bold text-muted-foreground uppercase px-2 mb-1.5 tracking-wider">ECG & Cardiology</p>
+                  <DropdownMenuItem className="cursor-pointer gap-2 text-gray-700 hover:text-primary hover:bg-primary/5" onClick={() => navTo("/ecg-interpretation")} data-testid="nav-ecg-interpretation-desktop">
+                    <HeartPulse className="w-4 h-4 text-rose-500/80" />
+                    ECG Interpretation
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer gap-2 text-gray-700 hover:text-primary hover:bg-primary/5" onClick={() => navTo("/advanced-ecg-nursing")} data-testid="nav-advanced-ecg-desktop">
+                    <Activity className="w-4 h-4 text-rose-500/80" />
+                    Advanced ECG & Telemetry
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <p className="text-[10px] font-bold text-muted-foreground uppercase px-2 mb-1.5 tracking-wider">{t("nav.premiumTools")}</p>

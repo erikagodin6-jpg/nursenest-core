@@ -49,28 +49,39 @@ export function weakTopicSuggestsEcgFocus(topicKey: string): boolean {
 /** Core ECG entry — integrated nursing telemetry literacy. Not the future Advanced ECG Program vertical. */
 export const ECG_MODULE_ENTRY = "/modules/ecg/basic/lessons" as const;
 
-/** Marketing pillar page for ECG — primary SEO target for all ECG-related internal links. */
-export const ECG_PILLAR_MARKETING_PATH = "/advanced-ecg-nursing" as const;
+/**
+ * Marketing pillar page for ECG — primary SEO target for all ECG-related internal links.
+ * /ecg-interpretation is the canonical Core ECG hub: always public, fully indexed,
+ * renders without auth, and targets the highest-volume search queries
+ * ("ECG interpretation for nurses", "telemetry interpretation").
+ */
+export const ECG_PILLAR_MARKETING_PATH = "/ecg-interpretation" as const;
+
+/** Secondary marketing path for Advanced ECG add-on. Use when context is specifically Advanced ECG. */
+export const ECG_ADVANCED_MARKETING_PATH = "/advanced-ecg-nursing" as const;
 
 /** Clinical modules hub — discovery page for all specialty modules. */
 export const CLINICAL_MODULES_HUB_PATH = "/clinical-modules" as const;
 
 /**
  * ECG ecosystem targets — topic-specific recommendations should only point at live,
- * substantive routes. Advanced ECG specialty pages are not guaranteed to exist on
- * production yet, so deep signals map to existing /ecg/[topic] cluster pages or
- * the pillar until dedicated pages are fully built.
+ * substantive routes. Updated to use /ecg-interpretation as the pillar
+ * and ECG cluster pages for topic-specific deep links.
  */
 export const ECG_ECOSYSTEM_SUBPAGE_PATHS = {
-  rhythmPractice: "/ecg/ecg-practice-questions",
+  rhythmPractice: "/ecg-practice-questions",
+  strips: "/ecg/how-to-read-ecg-strips",
   stemi: "/ecg/stemi-localization",
   acls: "/ecg/ventricular-tachycardia",
   electrolyte: "/ecg/hyperkalemia-ecg-changes",
   medications: "/ecg/qt-prolongation",
-  criticalCare: "/ecg/ventricular-tachycardia",
-  pediatric: ECG_PILLAR_MARKETING_PATH,
-  telemetry: "/ecg/ecg-practice-questions",
-  caseSimulations: ECG_PILLAR_MARKETING_PATH,
+  criticalCare: ECG_ADVANCED_MARKETING_PATH,
+  pediatric: "/pediatric-ecg",
+  telemetry: "/telemetry-nursing",
+  caseSimulations: ECG_ADVANCED_MARKETING_PATH,
+  afib: "/ecg/atrial-fibrillation-ecg",
+  bradycardia: "/ecg/sinus-bradycardia",
+  rsa: "/ecg/respiratory-sinus-arrhythmia",
 } as const;
 
 /**

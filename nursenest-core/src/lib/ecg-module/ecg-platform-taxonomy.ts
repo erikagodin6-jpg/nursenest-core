@@ -159,6 +159,66 @@ export const ADVANCED_ECG_LEARNER_PRIVATE_ROUTES = [
   "/modules/ecg-advanced",
 ] as const satisfies readonly string[];
 
+// ─── Hemodynamics Monitoring — Fundamentals (included with RN/NP) ──────────────
+
+export const HEMODYNAMICS_FUNDAMENTALS_PRODUCT = {
+  id: "hemodynamics_fundamentals",
+  name: "Hemodynamic Monitoring Fundamentals",
+  tagline: "Perfusion, preload, afterload, MAP, arterial lines, CVP, cardiac output, shock states",
+  tier: "hemodynamics" as EcgPlatformTier,
+  entitlementKey: "hemodynamics_fundamentals",
+  eligibleTiers: ["RN", "NP"] as const,
+  excludedTiers: ["RPN", "PN", "LVN_LPN"] as const,
+} as const;
+
+export const HEMODYNAMICS_PUBLIC_ROUTES = [
+  "/hemodynamic-monitoring",
+  "/shock-and-perfusion",
+  "/arterial-line-interpretation",
+  "/cardiac-output-monitoring",
+] as const satisfies readonly string[];
+
+export const HEMODYNAMICS_LEARNER_PRIVATE_ROUTES = [
+  "/modules/hemodynamics",
+] as const satisfies readonly string[];
+
+// ─── Advanced Hemodynamic Monitoring — Paid Add-On ────────────────────────────
+
+export const ADVANCED_HEMODYNAMICS_PRODUCT = {
+  id: "advanced_hemodynamics",
+  name: "Advanced Hemodynamic Monitoring",
+  tagline: "Swan-Ganz, cardiac index, SVR, SVV, PAOP, SvO2, ICU case simulations",
+  tier: "advanced_hemodynamics" as EcgPlatformTier,
+  entitlementKey: "advanced_hemodynamics_paid",
+  eligibleTiers: ["RN", "NP"] as const,
+  excludedTiers: ["RPN", "PN", "LVN_LPN"] as const,
+  stripeEnvKey: "STRIPE_PRICE_ADVANCED_HEMODYNAMICS",
+  billing: "one_time" as const,
+} as const;
+
+export const CRITICAL_CARE_BUNDLE_PRODUCT = {
+  id: "critical_care_bundle",
+  name: "Critical Care Bundle",
+  tagline: "Advanced ECG + Advanced Hemodynamic Monitoring — complete ICU/CCU clinical readiness",
+  tier: "critical_care_monitoring" as EcgPlatformTier,
+  entitlementKey: "critical_care_bundle_paid",
+  eligibleTiers: ["RN", "NP"] as const,
+  excludedTiers: ["RPN", "PN", "LVN_LPN"] as const,
+  stripeEnvKey: "STRIPE_PRICE_CRITICAL_CARE_BUNDLE",
+  billing: "one_time" as const,
+  includes: ["module_advanced_ecg", "advanced_hemodynamics_paid"] as const,
+} as const;
+
+export const ADVANCED_HEMODYNAMICS_PUBLIC_ROUTES = [
+  "/advanced-hemodynamic-monitoring",
+  "/pulmonary-artery-catheter",
+  "/critical-care-bundle",
+] as const satisfies readonly string[];
+
+export const ADVANCED_HEMODYNAMICS_LEARNER_PRIVATE_ROUTES = [
+  "/modules/hemodynamics-advanced",
+] as const satisfies readonly string[];
+
 // ─── SEO authority hierarchy ────────────────────────────────────────────────────
 
 /**
@@ -387,25 +447,44 @@ export const ECG_SEO_AUTHORITY_ROUTES: ReadonlyArray<EcgSeoAuthorityRoute> = [
     sitemapPriority: 0.0,
     linkingRole: "learner",
   })),
-  // ── Future hemodynamics (reserved) ────────────────────────────────────────
-  {
-    path: "/hemodynamic-monitoring",
-    indexability: "reserved_future",
+  // ── Hemodynamics Fundamentals (public, included with RN/NP) ─────────────────
+  ...HEMODYNAMICS_PUBLIC_ROUTES.map((path): EcgSeoAuthorityRoute => ({
+    path,
+    indexability: "indexed_public",
     tier: "hemodynamics",
-    category: "reserved",
-    schemaTypes: ["WebPage", "Course"],
+    category: path === "/hemodynamic-monitoring" ? "authority_hub" : "specialty_module",
+    schemaTypes: ["WebPage", "Course", "FAQPage"],
+    sitemapPriority: path === "/hemodynamic-monitoring" ? 0.85 : 0.75,
+    linkingRole: path === "/hemodynamic-monitoring" ? "pillar" : "cluster_member",
+  })),
+  ...HEMODYNAMICS_LEARNER_PRIVATE_ROUTES.map((path): EcgSeoAuthorityRoute => ({
+    path,
+    indexability: "noindex_learner",
+    tier: "hemodynamics",
+    category: "learner_module",
+    schemaTypes: [],
     sitemapPriority: 0.0,
-    linkingRole: "pillar",
-  },
-  {
-    path: "/advanced-hemodynamics",
-    indexability: "reserved_future",
+    linkingRole: "learner",
+  })),
+  // ── Advanced Hemodynamics (premium add-on) ───────────────────────────────────
+  ...ADVANCED_HEMODYNAMICS_PUBLIC_ROUTES.map((path): EcgSeoAuthorityRoute => ({
+    path,
+    indexability: "indexed_premium",
     tier: "advanced_hemodynamics",
-    category: "reserved",
-    schemaTypes: ["WebPage", "Course"],
+    category: path === "/advanced-hemodynamic-monitoring" ? "authority_hub" : "specialty_module",
+    schemaTypes: ["WebPage", "Course", "FAQPage"],
+    sitemapPriority: path === "/advanced-hemodynamic-monitoring" ? 0.85 : 0.75,
+    linkingRole: path === "/advanced-hemodynamic-monitoring" ? "pillar" : "cluster_member",
+  })),
+  ...ADVANCED_HEMODYNAMICS_LEARNER_PRIVATE_ROUTES.map((path): EcgSeoAuthorityRoute => ({
+    path,
+    indexability: "noindex_learner",
+    tier: "advanced_hemodynamics",
+    category: "learner_module",
+    schemaTypes: [],
     sitemapPriority: 0.0,
-    linkingRole: "pillar",
-  },
+    linkingRole: "learner",
+  })),
 ];
 
 // ─── Entitlement boundary map ───────────────────────────────────────────────────
@@ -440,6 +519,39 @@ export const ECG_PLATFORM_ENTITLEMENT_MAP = {
       "mastery_tracking",
       "adaptive_testing",
     ] as const,
+  },
+  hemodynamics: {
+    entitlementKey: HEMODYNAMICS_FUNDAMENTALS_PRODUCT.entitlementKey,
+    eligibleTiers: HEMODYNAMICS_FUNDAMENTALS_PRODUCT.eligibleTiers,
+    excludedTiers: HEMODYNAMICS_FUNDAMENTALS_PRODUCT.excludedTiers,
+    publicRoutes: HEMODYNAMICS_PUBLIC_ROUTES,
+    learnerRoutes: HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
+    gatingSurfaces: ["adaptive_drills", "quiz_attempts", "mastery_tracking"] as const,
+  },
+  advanced_hemodynamics: {
+    entitlementKey: ADVANCED_HEMODYNAMICS_PRODUCT.entitlementKey,
+    eligibleTiers: ADVANCED_HEMODYNAMICS_PRODUCT.eligibleTiers,
+    excludedTiers: ADVANCED_HEMODYNAMICS_PRODUCT.excludedTiers,
+    publicRoutes: ADVANCED_HEMODYNAMICS_PUBLIC_ROUTES,
+    learnerRoutes: ADVANCED_HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
+    billing: ADVANCED_HEMODYNAMICS_PRODUCT.billing,
+    gatingSurfaces: [
+      "icu_case_simulations",
+      "swan_ganz_drills",
+      "vasopressor_reasoning",
+      "fluid_responsiveness_practice",
+      "waveform_interpretation",
+    ] as const,
+  },
+  critical_care_bundle: {
+    entitlementKey: CRITICAL_CARE_BUNDLE_PRODUCT.entitlementKey,
+    eligibleTiers: CRITICAL_CARE_BUNDLE_PRODUCT.eligibleTiers,
+    excludedTiers: CRITICAL_CARE_BUNDLE_PRODUCT.excludedTiers,
+    publicRoutes: ["/critical-care-bundle"] as const,
+    learnerRoutes: [] as const,
+    billing: CRITICAL_CARE_BUNDLE_PRODUCT.billing,
+    includes: CRITICAL_CARE_BUNDLE_PRODUCT.includes,
+    gatingSurfaces: [] as const,
   },
 } as const;
 
@@ -508,13 +620,23 @@ export function isPubliclyIndexedEcgRoute(path: string): boolean {
 
 /** True when this route must have robots: { index: false } (learner private) */
 export function isLearnerPrivateEcgRoute(path: string): boolean {
-  const allPrivate = [...ECG_LEARNER_PRIVATE_ROUTES, ...ADVANCED_ECG_LEARNER_PRIVATE_ROUTES];
+  const allPrivate = [
+    ...ECG_LEARNER_PRIVATE_ROUTES,
+    ...ADVANCED_ECG_LEARNER_PRIVATE_ROUTES,
+    ...HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
+    ...ADVANCED_HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
+  ];
   return allPrivate.some((r) => path === r || path.startsWith(`${r}/`));
 }
 
-/** True when a route must NEVER redirect to login (public ECG authority page) */
+/** True when a route must NEVER redirect to login (public authority page) */
 export function mustNotRedirectToLogin(path: string): boolean {
-  const allPublic = [...ECG_CORE_PUBLIC_ROUTES, ...ECG_ADVANCED_PUBLIC_ROUTES];
+  const allPublic = [
+    ...ECG_CORE_PUBLIC_ROUTES,
+    ...ECG_ADVANCED_PUBLIC_ROUTES,
+    ...HEMODYNAMICS_PUBLIC_ROUTES,
+    ...ADVANCED_HEMODYNAMICS_PUBLIC_ROUTES,
+  ];
   return allPublic.some((r) => path === r || path.startsWith(`${r}/`));
 }
 

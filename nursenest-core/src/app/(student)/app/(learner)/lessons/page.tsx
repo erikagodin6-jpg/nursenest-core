@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ContentStatus, TierCode } from "@prisma/client";
+import { EcgAuthorityLinkBlock } from "@/components/ecg-module/ecg-authority-link-block";
 import { Suspense } from "react";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getStaffSession } from "@/lib/auth/staff-session";
@@ -684,6 +685,18 @@ export default async function LessonsPage({ searchParams }: Props) {
         limit={limitParsed}
         q={qEffective ?? undefined}
       />
+
+      {/* ECG authority links — surfaced for RN/NP tiers only.
+          ECG module access requires RN or NP tier (canAccessEcgModuleForTier).
+          Uses 'banner' variant to show descriptive ECG links with keyword-rich anchors. */}
+      {(learnerPathRow?.tier === TierCode.RN || learnerPathRow?.tier === TierCode.NP) ? (
+        <EcgAuthorityLinkBlock
+          variant="banner"
+          showAdvanced={true}
+          className="mt-2"
+          data-testid="lessons-hub-ecg-authority-block"
+        />
+      ) : null}
     </div>
   );
   } finally {

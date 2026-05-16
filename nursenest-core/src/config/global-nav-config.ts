@@ -103,10 +103,13 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
     order: 50,
     mobileDrawerOrder: 40,
   }),
+  // nav.ecgMastery resolves to "ECG Interpretation" — search-intent-aligned label.
+  // href points to /ecg-interpretation (canonical Core ECG hub, always public).
+  // Advanced ECG is discoverable from /ecg-interpretation and the RN/NP mega-menus.
   LEAF({
     id: "marketing-ecg-mastery",
     labelKey: "nav.ecgMastery",
-    href: "/advanced-ecg-nursing",
+    href: "/ecg-interpretation",
     group: "learn-practice",
     surfaces: [DD, MD],
     order: 60,

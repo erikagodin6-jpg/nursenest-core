@@ -249,16 +249,16 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-warmwhite flex flex-col font-sans md:animate-page-enter overflow-x-hidden">
       <SEO
-        title={`NurseNest - Healthcare Exam Prep | Nursing, NP, Allied Health & Certifications | ${examLabel} & NCLEX Test Bank`}
-        description={`Prepare for nursing, NP certification, and allied health exams with NurseNest. Access ${formatCount(questionCount)} practice questions, ${flashcardCount > 0 ? `${formatCount(flashcardCount)} flashcards across ${formatCount(deckCount)} decks, ` : ""}adaptive CAT exams, clinical case simulations, and ${formatCount(lessonCount)} lessons. Built for ${rpnLabel}, RN, NP, allied health students, and new graduates in Canada and the US. Start free.`}
-        keywords={`healthcare exam prep, nursing exam prep, NCLEX practice questions, ${examLabel} exam preparation, nursing question bank, clinical simulations, pharmacology flashcards, pathophysiology lessons, RPN study guide, RN exam review, NP exam prep, NP certification exam, AANP exam prep, ANCC certification review, FNP-BC exam questions, AGPCNP-BC study guide, AGACNP-BC practice test, PMHNP-BC exam prep, PNP-BC certification review, NNP-BC exam questions, ENP-C exam prep, nurse practitioner board exam, Next Generation NCLEX, NCLEX-RN practice questions, allied health exam prep, respiratory therapy RRT exam, paramedic NREMT exam prep, MLT exam prep, pharmacy technician PTCB, diagnostic imaging exam, social work ASWB exam, occupational therapy NBCOT, new grad nurse resources, nursing specialty certification, CCRN exam prep, CEN exam prep, nursing clinical reasoning, med-surg nursing review, nursing licensure exam, clinical judgment, nursing study tools, nursing board exam prep, pre-nursing program`}
+        title={`NCLEX-RN, REx-PN & CNPLE Exam Prep | Clinical Reasoning Platform | NurseNest`}
+        description={`Adaptive nursing exam prep with clinical reasoning training. NCLEX-RN, REx-PN, NCLEX-PN, CNPLE, ECG interpretation, and allied health. ${questionCount > 0 ? `${formatCount(questionCount)} practice questions, ` : ""}${flashcardCount > 0 ? `${formatCount(flashcardCount)} flashcards, ` : ""}${lessonCount > 0 ? `${formatCount(lessonCount)} lessons. ` : ""}SI-unit aligned, globally accessible. Start free.`}
+        keywords={`nursing exam prep, NCLEX-RN practice questions, REx-PN exam prep, CNPLE exam prep, ECG interpretation for nurses, clinical reasoning training, SI unit nursing, ${examLabel} exam preparation, adaptive nursing exam, globally accessible nursing education, international nursing learners, Canadian-aligned clinical standards, NP certification exam, AANP exam prep, ANCC certification review, CNPLE LOFT simulation, ECG arrhythmia training, telemetry interpretation nurses, nursing question bank, clinical simulations, pharmacology flashcards, pathophysiology lessons, RPN study guide, RN exam review, Next Generation NCLEX, allied health exam prep, respiratory therapy RRT exam, paramedic NREMT exam prep, MLT exam prep, pharmacy technician PTCB, diagnostic imaging exam, social work ASWB exam, occupational therapy NBCOT, new grad nurse resources, nursing clinical reasoning, clinical judgment, nursing study tools, nursing board exam prep`}
         canonicalPath="/"
         structuredData={{
           "@context": "https://schema.org",
           "@type": "WebSite",
           "name": "NurseNest",
           "url": "https://www.nursenest.ca/en",
-          "description": `Comprehensive healthcare exam preparation platform with ${formatCount(questionCount)} practice questions, clinical case simulations, and ${formatCount(lessonCount)} lessons for nursing, NP, and allied health exams. New content added weekly.`,
+          "description": `Globally accessible nursing and allied health exam prep platform with Canadian-aligned clinical standards. ${questionCount > 0 ? `${formatCount(questionCount)} practice questions, ` : ""}clinical reasoning training, ECG interpretation, and SI-unit aligned content for NCLEX-RN, REx-PN, CNPLE, NP, and allied health. New content added weekly.`,
           "potentialAction": {
             "@type": "SearchAction",
             "target": "https://www.nursenest.ca/lessons?q={search_term_string}",
@@ -291,8 +291,8 @@ export default function Home() {
             "@type": "EducationalOrganization",
             "name": "NurseNest",
             "url": "https://www.nursenest.ca/en",
-            "description": "Premier nursing and allied health education platform for RPN/LVN, RN/NCLEX, NP, RRT, MLT, paramedic, social work, psychotherapy, addictions counselling, and occupational therapy students.",
-            "educationalCredentialAwarded": "Healthcare Exam Preparation — Nursing, NP, Allied Health & Certifications",
+            "description": "Globally accessible nursing and allied health exam prep platform with Canadian-aligned clinical standards. Covers NCLEX-RN, REx-PN, CNPLE, ECG interpretation, NP certification, and 15+ allied health pathways. SI-unit aligned, internationally usable.",
+            "educationalCredentialAwarded": "Healthcare Exam Preparation — Nursing, NP, ECG, Allied Health & Certifications",
             "sameAs": [
               "https://www.instagram.com/nursenest.ca",
               "https://www.tiktok.com/@nursenest.ca",
@@ -309,7 +309,9 @@ export default function Home() {
               "itemListElement": [
                 { "@type": "Course", "name": "NCLEX-RN Exam Prep", "courseMode": "online" },
                 { "@type": "Course", "name": "REx-PN / NCLEX-PN Exam Prep", "courseMode": "online" },
-                { "@type": "Course", "name": "NP Certification Exam Prep", "courseMode": "online" },
+                { "@type": "Course", "name": "CNPLE Canadian NP Exam Prep", "courseMode": "online" },
+                { "@type": "Course", "name": "ECG Interpretation for Nurses", "courseMode": "online" },
+                { "@type": "Course", "name": "NP Certification Exam Prep (AANP/ANCC)", "courseMode": "online" },
                 { "@type": "Course", "name": "RRT Respiratory Therapy Exam Prep", "courseMode": "online" },
                 { "@type": "Course", "name": "MLT Medical Lab Technologist Exam Prep", "courseMode": "online" },
                 { "@type": "Course", "name": "Paramedic NREMT Exam Prep", "courseMode": "online" },
@@ -346,8 +348,30 @@ export default function Home() {
             "@context": "https://schema.org",
             "@type": "Course",
             "name": "NP Certification Exam Preparation",
-            "description": "Advanced nurse practitioner certification exam preparation covering AANP, ANCC, FNP-BC, AGPCNP-BC, AGACNP-BC, PMHNP-BC, PNP-BC, NNP-BC, and ENP-C exams.",
+            "description": "Advanced nurse practitioner certification exam preparation covering AANP, ANCC, FNP-BC, AGPCNP-BC, AGACNP-BC, PMHNP-BC, PNP-BC, NNP-BC, ENP-C, and Canadian CNPLE exams.",
             "url": "https://www.nursenest.ca/en/np-exam-practice-questions",
+            "provider": { "@type": "EducationalOrganization", "name": "NurseNest", "url": "https://www.nursenest.ca/en" },
+            "courseMode": "online",
+            "isAccessibleForFree": false,
+            "offers": { "@type": "Offer", "price": "49.99", "priceCurrency": "CAD", "availability": "https://schema.org/InStock" }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Course",
+            "name": "ECG Interpretation for Nurses",
+            "description": "ECG rhythm identification and telemetry interpretation for RN and NP learners. Covers basic rhythms, arrhythmia recognition, 12-lead analysis, and clinical nursing responses.",
+            "url": "https://www.nursenest.ca/en/ecg-interpretation",
+            "provider": { "@type": "EducationalOrganization", "name": "NurseNest", "url": "https://www.nursenest.ca/en" },
+            "courseMode": "online",
+            "isAccessibleForFree": false,
+            "offers": { "@type": "Offer", "price": "39.99", "priceCurrency": "CAD", "availability": "https://schema.org/InStock" }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Course",
+            "name": "CNPLE Canadian Nurse Practitioner Exam Preparation",
+            "description": "Complete CNPLE preparation for Canadian Nurse Practitioner candidates. LOFT simulation, clinical reasoning cases, pharmacology review, and advanced practice questions aligned to Canadian NP competencies.",
+            "url": "https://www.nursenest.ca/en/canada-np",
             "provider": { "@type": "EducationalOrganization", "name": "NurseNest", "url": "https://www.nursenest.ca/en" },
             "courseMode": "online",
             "isAccessibleForFree": false,

@@ -1,6 +1,6 @@
 import { collectOsceScenariosMarketingHubUrls } from "@/lib/scenarios/scenario-marketing-sitemap-urls";
 import { TOOL_SLUGS } from "@/lib/tools/tool-registry";
-import { getAllEcgClusterSlugs } from "@/lib/ecg-module/ecg-seo-cluster";
+import { getAllEcgClusterSlugsFromRegistry } from "@/lib/ecg-module/ecg-seo-cluster-registry";
 import {
   ECG_CORE_PUBLIC_ROUTES,
   ECG_ADVANCED_PUBLIC_ROUTES,
@@ -40,12 +40,17 @@ export function collectCoreEcgAuthorityUrls(origin: string): string[] {
 
 /**
  * SEGMENT B — Core ECG topical cluster pages (/ecg/[topic] × 10+).
- * Generated from the ECG SEO cluster definition.
- * All indexed, authority cluster supporting the /ecg pillar.
+ *
+ * Source of truth: getAllEcgClusterSlugsFromRegistry() in ecg-seo-cluster-registry.ts.
+ * This combines the original 10 cluster slugs (ecg-seo-cluster.ts) with additional
+ * registry slugs (ecg-seo-cluster-registry.ts added in the platform hardening sprint).
+ *
+ * DO NOT use getAllEcgClusterSlugs() (ecg-seo-cluster.ts only) here — it would omit the
+ * registry slugs from the sitemap, causing 404s on sitemapped URLs.
  */
 export function collectEcgClusterUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
-  return getAllEcgClusterSlugs().map((slug) => `${o}/ecg/${slug}`);
+  return getAllEcgClusterSlugsFromRegistry().map((slug) => `${o}/ecg/${slug}`);
 }
 
 /**

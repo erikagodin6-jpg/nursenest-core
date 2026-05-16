@@ -411,8 +411,8 @@ function slugToTitle(slug: string): string {
 
 const staticPages: Record<string, { title: string; description: string }> = {
   "/": {
-    title: "NurseNest - Healthcare Exam Prep | Nursing, NP, Allied Health & Certification Test Bank, Simulations & Flashcards",
-    description: "Prepare for NCLEX-RN, NCLEX-PN, REx-PN, NP certification, and allied health exams with NurseNest. 13,000+ practice questions, clinical case simulations, 13,000+ flashcards, and 8,000+ lessons for nursing students, NP candidates, allied health professionals, and new graduates in Canada and the US. Start free.",
+    title: "NCLEX-RN, REx-PN & Nursing Exam Prep | Clinical Reasoning + ECG | NurseNest",
+    description: "Adaptive nursing exam prep with clinical reasoning training. NCLEX-RN, REx-PN, CNPLE, ECG interpretation, and allied health. 13,000+ practice questions, 13,000+ flashcards, 8,000+ lessons. SI-unit aligned and globally accessible. Start free.",
   },
   "/new-grad": {
     title: "New Grad Career Hub — Resume, Interview & Career Resources | NurseNest",
@@ -635,8 +635,8 @@ const staticPages: Record<string, { title: string; description: string }> = {
     description: "Comprehensive acid-base disorders study guide for nursing students. Respiratory and metabolic acidosis/alkalosis, ABG interpretation, compensation, and clinical nursing interventions.",
   },
   "/nursing-study-guides/ecg-interpretation-study-guide": {
-    title: "ECG Interpretation — Cardiac Rhythm Study Guide for Nurses | NurseNest",
-    description: "Learn ECG interpretation for nursing exams. Normal sinus rhythm, atrial fibrillation, heart blocks, STEMI, and lethal rhythms — systematic approach with clinical nursing actions.",
+    title: "ECG Interpretation for Nurses | Rhythm, Arrhythmia & Telemetry | NurseNest",
+    description: "Master ECG interpretation for nursing exams and clinical practice. Normal sinus rhythm, atrial fibrillation, heart blocks, STEMI, and lethal rhythms — systematic strip-reading approach with nursing actions.",
   },
   "/nursing-study-guides/fluid-electrolyte-balance-guide": {
     title: "Fluid and Electrolyte Balance — Nursing Study Guide | NurseNest",
@@ -771,8 +771,8 @@ const staticPages: Record<string, { title: string; description: string }> = {
     description: "Pathway-scoped nursing practice questions for NCLEX-RN, NCLEX-PN, REx-PN, and NP tracks. Explore public hubs by exam, then sign in for the full bank in the app.",
   },
   "/practice-exams": {
-    title: "Practice Exams & Timed Mock Tests | NurseNest",
-    description: "Full-length timed practice exams and CAT-style sessions for nursing licensure. See how mocks work on NurseNest, then sign in to run exams matched to your pathway.",
+    title: "Nursing Practice Exams | Adaptive CAT Mock Tests | NurseNest",
+    description: "Full-length adaptive mock exams for NCLEX-RN, REx-PN, CNPLE, and NP certification. CAT-style computer adaptive testing with performance analytics and clinical rationales.",
   },
   "/nclex-rn/mock-exam": {
     title: "NCLEX-RN Mock Exam Simulator | Free Practice Test | NurseNest",
@@ -787,8 +787,8 @@ const staticPages: Record<string, { title: string; description: string }> = {
     description: "Practice the Canadian REx-PN exam with a realistic mock simulator. 170 questions covering competencies tested on the Regulatory Exam for Practical Nurses in Canada.",
   },
   "/canada-np/mock-exam": {
-    title: "Canadian NP Exam (CNPLE) Mock Simulator | NurseNest Canada",
-    description: "Prepare for the Canadian Nurse Practitioner Licensing Exam (CNPLE) with a realistic mock exam. 200 advanced practice questions with rationales for NP students in Canada.",
+    title: "CNPLE Mock Exam Simulator | 200 NP Practice Questions | NurseNest",
+    description: "Prepare for the Canadian Nurse Practitioner Licensing Exam (CNPLE) with a realistic LOFT-style mock exam. 200 advanced practice questions with rationales, clinical reasoning focus, and detailed score reporting.",
   },
   "/us-np/mock-exam": {
     title: "US NP Certification Exam Mock Simulator (AANP/ANCC) | NurseNest",
@@ -811,16 +811,16 @@ const staticPages: Record<string, { title: string; description: string }> = {
     description: "Complete perioperative nursing career guide. Learn about CNOR certification requirements, salary ranges ($75K-$95K+), job outlook, education pathways, and career advancement in surgical nursing.",
   },
   "/nclex-rn": {
-    title: "NCLEX-RN Exam Prep Hub | Study Guides, Mock Exams & Practice Questions | NurseNest",
-    description: "Your complete NCLEX-RN exam prep hub. Access mock exams, practice questions, pharmacology flashcards, study guides, and lab value review all in one place.",
+    title: "NCLEX-RN Practice Questions & Clinical Readiness | NurseNest",
+    description: "NCLEX-RN exam prep with adaptive clinical reasoning training. Practice questions, mock exams, pharmacology flashcards, and Next Generation NCLEX-style case stems. Start free.",
   },
   "/nclex-pn": {
-    title: "NCLEX-PN Exam Prep Hub | Study Guides, Mock Exams & Practice Questions | NurseNest",
-    description: "Your complete NCLEX-PN exam prep hub. Access mock exams, practice questions, pharmacology flashcards, study guides, and lab value review for LPN/LVN students.",
+    title: "NCLEX-PN Practice Questions & Exam Prep | NurseNest",
+    description: "NCLEX-PN exam prep with pathway-scoped practice questions, timed mock exams, pharmacology flashcards, and clinical reasoning cases for LPN/LVN students.",
   },
   "/canada-np": {
-    title: "Canadian NP (CNPLE) Exam Prep Hub | NurseNest Canada",
-    description: "Your complete Canadian Nurse Practitioner exam prep hub. Access CNPLE mock exams, advanced practice questions, pharmacology review, and study guides.",
+    title: "CNPLE Practice Questions & LOFT Simulation | NurseNest",
+    description: "Complete CNPLE exam preparation for Canadian Nurse Practitioners. LOFT simulation, advanced practice questions, pharmacology review, clinical reasoning cases, and score-boosting study guides.",
   },
   "/us-np": {
     title: "US NP Certification (AANP/ANCC) Exam Prep Hub | NurseNest",
@@ -839,8 +839,8 @@ const staticPages: Record<string, { title: string; description: string }> = {
     description: "Practice REx-PN questions with Canadian lab values, SI units, and scope-of-practice language. System-based question banks, timed mock exams, and study packs for Canadian RPN students.",
   },
   "/np-exam-practice-questions": {
-    title: "NP Exam Practice Questions | AANP & ANCC Certification Prep | NurseNest",
-    description: "Practice NP certification exam questions for AANP, ANCC, FNP-BC, and AGPCNP-BC. Advanced assessment, pharmacology, and clinical management questions with detailed rationales.",
+    title: "NP Exam Practice Questions | AANP, ANCC & CNPLE Prep | NurseNest",
+    description: "Nurse Practitioner practice questions for AANP, ANCC, and Canadian CNPLE certification. Advanced assessment, differential diagnosis, pharmacology, and clinical management with detailed rationales.",
   },
   "/free-practice": {
     title: "Free Nursing Practice Questions | Start Studying Now | NurseNest",
@@ -1577,6 +1577,26 @@ const staticPages: Record<string, { title: string; description: string }> = {
   "/nursing-clinical-assessment-complete-guide": {
     title: "Nursing Clinical Assessment: Complete Head-to-Toe Guide | NurseNest",
     description: "Comprehensive nursing clinical assessment guide covering head-to-toe examination, vital signs, neurological assessment, cardiovascular assessment, and documentation.",
+  },
+  "/lessons": {
+    title: "Clinical Nursing Lessons | Pathophysiology, Pharmacology & Reasoning | NurseNest",
+    description: "8,000+ clinical nursing lessons across pathophysiology, pharmacology, and clinical reasoning. Organized by exam tier — NCLEX-RN, REx-PN, CNPLE, and NP — with SI-unit aligned content.",
+  },
+  "/flashcards": {
+    title: "Nursing Flashcards | Pharmacology, Lab Values & Clinical Review | NurseNest",
+    description: "13,000+ nursing flashcards covering pharmacology, lab values, pathophysiology, and clinical reasoning. Spaced repetition with active recall — organized by exam pathway and topic.",
+  },
+  "/exam-prep": {
+    title: "Nursing Exam Prep | NCLEX, REx-PN, CNPLE & ECG | NurseNest",
+    description: "Adaptive nursing exam preparation for NCLEX-RN, REx-PN, NCLEX-PN, CNPLE, ECG interpretation, and allied health. Practice questions, mock exams, flashcards, and clinical reasoning lessons.",
+  },
+  "/ecg-interpretation": {
+    title: "ECG Interpretation for Nurses | Rhythm & Telemetry Training | NurseNest",
+    description: "Master ECG interpretation with strip-reading practice, arrhythmia identification, and telemetry monitoring skills. NCLEX-aligned and NP-level ECG content with clinical nursing actions.",
+  },
+  "/advanced-ecg-nursing": {
+    title: "Advanced ECG for Nurses | 12-Lead, Hemodynamics & Arrhythmia | NurseNest",
+    description: "Advanced ECG interpretation for RN and NP learners. 12-lead analysis, hemodynamic correlation, complex arrhythmias, and ACLS-relevant rhythms with clinical decision-making frameworks.",
   },
 };
 
@@ -2456,8 +2476,8 @@ const localeMatch = cleanPath.match(/^\/(en|fr|es|fil|hi|zh-tw|zh|ar|ko|pt|pa|vi
   }
 
   return {
-    title: "NurseNest - NCLEX & NCLEX-PN / REx-PN Exam Prep | Nursing Education Platform",
-    description: "Prepare for NCLEX, NCLEX-PN, and REx-PN with NurseNest. 1,200+ practice questions, 200+ clinical lessons, pharmacology flashcards, and case simulations for nursing students. New content added weekly.",
+    title: "Nursing Exam Prep | NCLEX-RN, REx-PN, CNPLE & ECG | NurseNest",
+    description: "Adaptive nursing exam prep with clinical reasoning training. NCLEX-RN, REx-PN, CNPLE, ECG interpretation, and allied health. 13,000+ practice questions, flashcards, and lessons. SI-unit aligned, globally accessible.",
     canonical,
     noindex,
     breadcrumbs,
@@ -2466,6 +2486,7 @@ const localeMatch = cleanPath.match(/^\/(en|fr|es|fil|hi|zh-tw|zh|ar|ko|pt|pa|vi
 
 const KNOWN_STATIC_PATHS = new Set(Object.keys(staticPages).concat([
   "/", "/lessons", "/flashcards", "/pricing", "/start-free", "/anatomy",
+  "/ecg-interpretation", "/advanced-ecg-nursing", "/exam-prep",
   "/med-math", "/lab-values", "/practice-exams", "/mock-exams", "/clinical-clarity", "/blog",
   "/pre-nursing", "/question-of-the-day", "/daily-question", "/question-bank", "/lectures",
   "/nursing", "/nursing-specialties", "/nursing-certifications", "/healthcare-certifications", "/nursing-schools",

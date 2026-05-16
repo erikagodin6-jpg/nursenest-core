@@ -388,7 +388,12 @@
     "production:preflight": "node scripts/production-preflight.mjs",
     "test:db-env-safety": "node --test src/lib/db/runtime-env-and-prisma-safety.contract.test.mjs",
     "mobile:typecheck": "npm -w @nursenest/mobile-shared run typecheck && npm -w @nursenest/mobile-app run typecheck",
-    "mobile:test:shared": "npm -w @nursenest/mobile-shared run test"
+    "mobile:test:shared": "npm -w @nursenest/mobile-shared run test",
+    "test:ecg-nav": "node --import tsx --test src/lib/navigation/ecg-nav-visibility.contract.test.ts",
+    "test:e2e:ecg-nav": "npx playwright test tests/e2e/ecg/ecg-nav-visibility.spec.ts --project=chromium",
+    "test:ecg-seo-authority": "node --import tsx --test src/lib/navigation/ecg-seo-authority.contract.test.ts src/lib/navigation/ecg-nav-visibility.contract.test.ts",
+    "test:ecg-cluster": "node --import tsx --test src/lib/ecg-module/ecg-cluster-sitemap.contract.test.ts",
+    "test:ecg-full": "node --import tsx --test src/lib/ecg-module/ecg-cluster-sitemap.contract.test.ts src/lib/navigation/ecg-nav-visibility.contract.test.ts src/lib/navigation/ecg-seo-authority.contract.test.ts src/lib/ecg-module/ecg-route-existence.contract.test.ts"
   },
   "dependencies": {
     "@auth/core": "0.37.2",

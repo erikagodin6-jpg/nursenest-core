@@ -15,16 +15,16 @@ import {
 import { usePremiumHomepageRoutes } from "./premium-homepage-routes";
 
 const CORE_FEATURES = [
-  { key: "telemetry", fallback: "Telemetry interpretation & rhythm foundations" },
-  { key: "adaptive", fallback: "Adaptive drills tied to lessons and practice" },
-  { key: "bedside", fallback: "Bedside judgment framing for exams and clinical reasoning" },
-  { key: "waveform", fallback: "Waveform literacy integrated with your study loop" },
+  { key: "telemetry", fallback: "Telemetry interpretation — rhythm recognition at the bedside" },
+  { key: "arrhythmia", fallback: "Arrhythmia recognition integrated with clinical reasoning" },
+  { key: "strips", fallback: "Rhythm strip analysis with mechanism-based rationales" },
+  { key: "waveform", fallback: "Waveform literacy built into your NCLEX/CNPLE study loop" },
 ] as const;
 
 const ADVANCED_TEASERS = [
-  { key: "lead12", fallback: "12-lead analysis & axis" },
-  { key: "icu", fallback: "ICU telemetry & deterioration scenarios" },
-  { key: "advancedStemi", fallback: "Advanced STEMI patterns & localization" },
+  { key: "lead12", fallback: "12-lead ECG interpretation & axis analysis" },
+  { key: "icu", fallback: "ICU telemetry & deterioration recognition scenarios" },
+  { key: "advancedStemi", fallback: "Advanced STEMI localization & ischemia patterns" },
 ] as const;
 
 /**
@@ -47,7 +47,7 @@ export function PremiumHomepageEcg() {
           {/* Core ECG — integrated capability */}
           <div className="min-w-0">
             <p className="nn-premium-home-eyebrow">
-              {formatTitleCase(tr("pages.home.premium.ecg.coreEyebrow", "Integrated Telemetry Learning"), locale)}
+              {formatTitleCase(tr("pages.home.premium.ecg.coreEyebrow", "ECG Interpretation & Telemetry Training"), locale)}
             </p>
             <h2
               id="premium-home-ecg-core-heading"
@@ -56,7 +56,7 @@ export function PremiumHomepageEcg() {
               {formatTitleCase(
                 tr(
                   "pages.home.premium.ecg.coreHeading",
-                  "Adaptive ECG Education Built Into NurseNest, Not a Bolt-On Simulator.",
+                  "Learn ECG Interpretation, Telemetry Monitoring, and Arrhythmia Recognition.",
                 ),
                 locale,
               )}
@@ -65,7 +65,7 @@ export function PremiumHomepageEcg() {
               {formatSentenceCase(
                 tr(
                   "pages.home.premium.ecg.coreBody",
-                  "Build telemetry literacy with nursing-focused rhythm recognition, interpretation workflows, and practice-aligned reinforcement across RN, NP, allied, and new grad pathways.",
+                  "Interactive waveform-based clinical training for rhythm strip interpretation, telemetry monitoring, and arrhythmia recognition — built into your NurseNest study loop for RN and NP learners.",
                 ),
                 locale,
               )}
@@ -95,28 +95,28 @@ export function PremiumHomepageEcg() {
 
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <MarketingTrackedLink
-                href={hrefs.lessons}
+                href="/ecg-interpretation"
                 event={PH.marketingHomeExploreHubClick}
-                eventProps={{ region, surface: "premium_home_ecg", lane: "core", choice: "lessons" }}
+                eventProps={{ region, surface: "premium_home_ecg", lane: "core", choice: "ecg_interpretation" }}
                 className={MARKETING_PRIMARY_CTA_CLASS}
-                data-testid="premium-ecg-core-lessons"
+                data-testid="premium-ecg-core-interpretation"
               >
-                {tr("pages.home.premium.ecg.coreCtaLessons", "Explore lessons")}
+                {tr("pages.home.premium.ecg.coreCtaInterpretation", "Start ECG Interpretation")}
               </MarketingTrackedLink>
               <MarketingTrackedLink
-                href={hrefs.questionBank}
+                href="/ecg-practice-questions"
                 event={PH.marketingHomeExploreHubClick}
-                eventProps={{ region, surface: "premium_home_ecg", lane: "core", choice: "questions" }}
+                eventProps={{ region, surface: "premium_home_ecg", lane: "core", choice: "ecg_practice" }}
                 className={MARKETING_TERTIARY_LINK_CLASS}
-                data-testid="premium-ecg-core-questions"
+                data-testid="premium-ecg-core-practice"
               >
-                {tr("pages.home.premium.ecg.coreCtaQuestions", "Practice questions")}
+                {tr("pages.home.premium.ecg.coreCtaPractice", "Practice rhythm recognition")}
               </MarketingTrackedLink>
             </div>
             <p className="nn-marketing-body-sm mt-4 max-w-xl text-pretty text-[var(--palette-text-muted)]">
               {tr(
                 "pages.home.premium.ecg.coreFootnote",
-                "Core ECG learning is woven into the NurseNest study ecosystem for eligible learners — pathways, practice, and readiness surfaces stay coordinated.",
+                "ECG interpretation training is integrated with your RN/NP study pathway — rhythm strips, adaptive drills, and telemetry practice tied to your clinical weak areas.",
               )}
             </p>
           </div>
@@ -144,12 +144,12 @@ export function PremiumHomepageEcg() {
                 id="premium-home-ecg-advanced-heading"
                 className="nn-marketing-h3 mt-5 text-balance text-[var(--palette-heading)]"
               >
-                {tr("pages.home.premium.ecg.advancedHeading", "Advanced ECG & Telemetry Mastery")}
+                {tr("pages.home.premium.ecg.advancedHeading", "Advanced ECG Interpretation for Critical Care")}
               </h3>
               <p className="nn-marketing-body-sm mt-3 text-pretty text-[var(--palette-text-muted)]">
                 {tr(
                   "pages.home.premium.ecg.advancedBody",
-                  "A separate paid add-on for immersive workstation-style telemetry training — advanced rhythms, 12-lead depth, ICU scenarios, and telemetry analytics. Available now for RN and NP learners.",
+                  "Deep ECG interpretation for ICU, CCU, ER, and telemetry nurses: STEMI localization, advanced arrhythmia recognition, pacemaker interpretation, electrolyte ECG changes, and critical care telemetry scenarios.",
                 )}
               </p>
               <ul className="mt-5 space-y-2 text-sm text-[var(--palette-text-muted)]">
@@ -162,13 +162,13 @@ export function PremiumHomepageEcg() {
               </ul>
               <div className="mt-6 flex flex-wrap gap-3">
                 <MarketingTrackedLink
-                  href="/modules/ecg-advanced"
+                  href="/advanced-ecg-nursing"
                   event={PH.marketingHomeExploreHubClick}
                   eventProps={{ region, surface: "premium_home_ecg", lane: "advanced_teaser", choice: "module" }}
                   className={`${MARKETING_TERTIARY_LINK_CLASS} inline-flex`}
                   data-testid="premium-ecg-advanced-module"
                 >
-                  {tr("pages.home.premium.ecg.advancedCtaModule", "Explore Advanced ECG")}
+                  {tr("pages.home.premium.ecg.advancedCtaModule", "Advanced ECG Interpretation")}
                 </MarketingTrackedLink>
                 <MarketingTrackedLink
                   href={hrefs.pricing}

@@ -120,7 +120,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "specialties",
           heading: ls(),
           links: [
-            { key: "rn-ecg-mastery", label: "ECG Mastery", href: "/advanced-ecg-nursing" },
+            { key: "rn-ecg-mastery", label: "ECG Interpretation", href: "/ecg-interpretation" },
             { key: "rn-ecg-telemetry", label: "Telemetry Interpretation", href: "/ecg-telemetry-mastery" },
             { key: "rn-clinical-modules", label: "Clinical Modules", href: "/clinical-modules" },
           ],
@@ -189,6 +189,15 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "specialties",
           heading: ls(),
           links: npSpecialtyLinks,
+        },
+        {
+          key: "clinical-modules",
+          heading: "Clinical Modules",
+          links: [
+            { key: "np-ecg-mastery", label: "ECG Interpretation", href: "/ecg-interpretation" },
+            { key: "np-ecg-telemetry", label: "Telemetry Interpretation", href: "/ecg-telemetry-mastery" },
+            { key: "np-ecg-interpretation", label: "ECG Interpretation", href: "/ecg-interpretation" },
+          ],
         },
         {
           key: "tools",

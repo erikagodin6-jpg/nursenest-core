@@ -7,9 +7,14 @@ import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import {
   ECG_CLUSTER_TOPICS,
-  getAllEcgClusterSlugs,
   getEcgClusterTopic,
 } from "@/lib/ecg-module/ecg-seo-cluster";
+import {
+  getAllEcgClusterSlugsFromRegistry,
+  getAdditionalEcgClusterTopic,
+  type EcgClusterRegistryEntry,
+} from "@/lib/ecg-module/ecg-seo-cluster-registry";
+import type { EcgClusterTopic } from "@/lib/ecg-module/ecg-seo-cluster";
 
 export const revalidate = 86400;
 
@@ -17,13 +22,22 @@ const SITE_ORIGIN = "https://nursenest.ca";
 
 type PageProps = { params: Promise<{ topic: string }> };
 
+/**
+ * generateStaticParams uses the unified registry (original 10 + additional registry slugs).
+ * This ensures all cluster URLs listed in the sitemap have matching static pages.
+ */
 export function generateStaticParams() {
-  return getAllEcgClusterSlugs().map((slug) => ({ topic: slug }));
+  return getAllEcgClusterSlugsFromRegistry().map((slug) => ({ topic: slug }));
+}
+
+/** Resolves a cluster topic from either the original or the registry extension. */
+function resolveClusterTopic(slug: string): EcgClusterTopic | EcgClusterRegistryEntry | null {
+  return getEcgClusterTopic(slug) ?? getAdditionalEcgClusterTopic(slug) ?? null;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { topic } = await params;
-  const page = getEcgClusterTopic(topic);
+  const page = resolveClusterTopic(topic);
   if (!page) return {};
   const PATH = `/ecg/${topic}`;
   return safeGenerateMetadata(
@@ -51,13 +65,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function EcgTopicPage({ params }: PageProps) {
   const { topic } = await params;
-  const page = getEcgClusterTopic(topic);
+  const page = resolveClusterTopic(topic);
   if (!page) notFound();
 
   const PATH = `/ecg/${topic}`;
   const breadcrumbs = [
     { name: "NurseNest", href: "/" },
-    { name: "Advanced ECG for Nurses", href: "/advanced-ecg-nursing" },
+    { name: "ECG Interpretation", href: "/ecg-interpretation" },
+    { name: "ECG Topics", href: "/ecg" },
     { name: page.h1.split(":")[0]?.trim() ?? page.title, href: PATH },
   ];
 

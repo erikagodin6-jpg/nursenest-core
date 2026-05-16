@@ -8,36 +8,46 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 export const revalidate = 86400;
 
 const PATH = "/ecg-interpretation";
-const PAGE_TITLE = "ECG Interpretation for Nurses — RN and NP Telemetry Training | NurseNest";
-const PAGE_H1 = "ECG interpretation training for RN and NP learners";
+const PAGE_TITLE = "ECG Interpretation for Nurses | Rhythm & Telemetry Training | NurseNest";
+const PAGE_H1 = "ECG interpretation for nurses: rhythm recognition, telemetry monitoring, and arrhythmia analysis";
 const PAGE_DESCRIPTION =
-  "Rhythm recognition, telemetry drills, and clinical reasoning for registered nurses and nurse practitioners. Integrated with your NurseNest pathway — lessons, quizzes, and adaptive practice.";
+  "ECG interpretation training for RN and NP nurses: rhythm strip analysis, arrhythmia recognition, telemetry monitoring, and ACLS-integrated clinical reasoning. 200+ waveform-based practice questions.";
 
 const FAQ_ITEMS = [
   {
+    question: "How do you interpret ECG rhythms as a nurse?",
+    answer:
+      "ECG rhythm interpretation uses a systematic 7-step method: (1) rate — count ventricular rate; (2) rhythm — regular or irregular R-R intervals; (3) P waves — present, absent, morphology; (4) PR interval — normal 120–200 ms, prolonged in AV block; (5) QRS width — narrow < 120 ms or wide ≥ 120 ms; (6) ST and T waves — elevation, depression, peaked, inverted; (7) interpretation — synthesize findings into the rhythm diagnosis. The system prevents the most common error: jumping to a conclusion before completing the analysis, which leads to dangerous misidentification (e.g., treating VT as SVT).",
+  },
+  {
+    question: "What is telemetry interpretation for nurses?",
+    answer:
+      "Telemetry interpretation is the clinical skill of reading continuous cardiac monitor data and making bedside decisions based on rhythm patterns. Nurses in telemetry, step-down, ICU, CCU, and emergency settings monitor multiple patients simultaneously and must distinguish lethal rhythms from artifact, identify when rate or rhythm changes require immediate escalation, and apply rhythm context to medication administration and clinical assessment decisions. It requires not just pattern recognition, but integration of rhythm with hemodynamics and clinical presentation.",
+  },
+  {
+    question: "How do nurses learn ECG interpretation effectively?",
+    answer:
+      "Effective ECG interpretation learning requires: (1) a systematic method applied consistently — not pattern-matching shortcuts; (2) strip-based practice where you see the waveform before the question, forcing visual analysis before answer selection; (3) mechanism-based rationales explaining why each answer is right or wrong; (4) integration with clinical context — connecting the rhythm to nursing priorities, medication decisions, and escalation criteria; and (5) spaced repetition targeting weak areas rather than random practice.",
+  },
+  {
+    question: "What is the difference between ECG and telemetry monitoring?",
+    answer:
+      "A 12-lead ECG is a snapshot — a brief recording of cardiac electrical activity from 12 leads simultaneously, used for diagnosis of arrhythmias, ischemia, conduction abnormalities, and ST changes. Telemetry monitoring is continuous — it records cardiac rhythm in real time from 1–2 leads (usually Lead II and V1) and alerts nurses to rhythm changes as they occur. Nurses interpret telemetry strips at the bedside; physicians typically interpret the formal 12-lead ECG for diagnosis, though advanced practice nurses may interpret both.",
+  },
+  {
+    question: "How do you recognize arrhythmias on a telemetry monitor?",
+    answer:
+      "Arrhythmia recognition on telemetry requires systematic strip analysis: check the rate (> 100 = tachycardia, < 60 = bradycardia), assess regularity (irregular irregular = AFib; regularly irregular = flutter or AV block patterns), identify P waves (absent = AFib or junctional; retrograde = SVT; dissociated from QRS = complete heart block), measure PR interval (prolonged = first-degree AV block; progressively longer = Wenckebach; fixed before dropped beat = Mobitz II), and assess QRS width (wide ≥ 120ms = ventricular or aberrant). The most critical assessment: always verify whether the patient has a pulse with the rhythm — this determines the ACLS algorithm.",
+  },
+  {
     question: "What is included in the NurseNest ECG module?",
     answer:
-      "The NurseNest ECG module includes basic and advanced tracks. Basic ECG covers rhythm recognition foundations, strip interpretation lessons, quiz banks, and printable worksheets. Advanced ECG covers clinical scenarios, high-acuity telemetry, medication-ECG integration, and ACLS-relevant rhythm progression. Both tracks use deterministic ECG strip illustrations and include rationale-rich questions.",
+      "The NurseNest ECG module includes core and advanced tracks. Core ECG covers rhythm recognition foundations, strip interpretation lessons, arrhythmia identification, AV block analysis, and ACLS-integrated scenarios. Advanced ECG (separate add-on) adds 12-lead STEMI interpretation, posterior MI recognition, electrolyte ECG patterns, pacemaker malfunction, ICU telemetry scenarios, and medication-ECG interaction. Both tracks use deterministic waveform-based questions with mechanism rationales.",
   },
   {
-    question: "Is ECG included with my RN or NP subscription?",
+    question: "Is ECG interpretation included with my RN or NP subscription?",
     answer:
-      "Core ECG (Basic track) is included with eligible RN and NP base subscriptions. Advanced ECG is a separate paid add-on module and is not included with standard subscriptions. RPN/PN pathways do not include ECG access.",
-  },
-  {
-    question: "How does NurseNest ECG training differ from a standalone simulator?",
-    answer:
-      "NurseNest ECG learning is woven into your existing study loop rather than requiring a separate platform. Strip questions are integrated with your question bank weak-area tracking, flashcards, and adaptive practice — so telemetry gaps surface in the same place as all other clinical gaps. This is intentional: ECG literacy is a clinical reasoning skill, not an isolated technical competency.",
-  },
-  {
-    question: "Can NPs access the Advanced ECG module?",
-    answer:
-      "Yes. Advanced ECG is available to both RN and NP learners as a separate add-on purchase. NP learners benefit from the advanced clinical context — including scenario-based differential reasoning and medication-ECG integration that aligns with NP scope of practice.",
-  },
-  {
-    question: "What rhythms are covered?",
-    answer:
-      "The core module covers sinus rhythms, atrial arrhythmias (AFib, flutter, SVT), ventricular rhythms (VT, VF, PVCs), AV blocks, paced rhythms, electrolyte effects (hyperkalemia, hypokalemia), and STEMI pattern recognition. The advanced module adds ACLS progression, clinical scenarios, and medication-ECG safety questions.",
+      "Core ECG (rhythm recognition, arrhythmia identification, telemetry basics) is included with eligible RN and NP base subscriptions. Advanced ECG interpretation — STEMI localization, complex arrhythmias, ICU telemetry, electrolyte patterns — is a separate paid add-on for RN and NP learners. RPN/PN pathways do not include ECG module access.",
   },
 ];
 

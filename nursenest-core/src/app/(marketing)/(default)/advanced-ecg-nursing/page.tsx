@@ -8,12 +8,10 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 export const revalidate = 86400;
 
 const PATH = "/advanced-ecg-nursing";
-// ≤60 chars: "Advanced ECG Nursing — Cardiac Rhythm Mastery | NurseNest" = 57
-const PAGE_TITLE = "Advanced ECG Nursing — Cardiac Rhythm Mastery | NurseNest";
-const PAGE_H1 = "Advanced ECG for nurses: 12-lead, arrhythmia, and cardiac rhythm mastery";
-// ≤155 chars
+const PAGE_TITLE = "Advanced ECG Interpretation for Critical Care Nurses | NurseNest";
+const PAGE_H1 = "Advanced ECG interpretation: 12-lead analysis, STEMI recognition, and critical care telemetry";
 const PAGE_DESCRIPTION =
-  "Advanced ECG for RN and NP nurses: 12-lead, STEMI equivalents, heart blocks, arrhythmia, and ACLS-integrated decision-making. ICU, CCU, ER, and telemetry.";
+  "Advanced ECG interpretation for RN and NP nurses: STEMI localization, arrhythmia recognition, 12-lead analysis, electrolyte ECG changes, and ICU/CCU telemetry scenarios. 200+ clinical questions.";
 
 const SITE_ORIGIN = "https://nursenest.ca";
 
