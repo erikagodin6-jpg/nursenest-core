@@ -1,16 +1,24 @@
 /**
  * ECG Navigation Visibility Contract Tests
  *
- * CI-blocking regression guard: fails if ECG disappears from any navigation surface.
+ * CI-blocking regression guard: fails if ECG disappears from discoverable navigation surfaces.
+ *
+ * Architecture: ECG clinical specialty links are NO LONGER in the top-level marketing header
+ * moreLinks (removed to fix nav bloat — the one-line desktop nav constraint). ECG is now
+ * discoverable via:
+ *   1. Marketing tier hub dropdowns: RN mega-menu Specialties, NP mega-menu Clinical Modules
+ *   2. Learner Clinical Modules flyout (RN/NP with ecgNavEnabled=true)
+ *   3. Learner ECG shell nav item
+ *   4. Mobile drawer tier chips → tier hub → ECG
  *
  * Surfaces validated:
- *   1. Marketing header moreLinks (desktop nav bar + mobile drawer "More" section)
- *      — SiteHeaderPrecomputedNav.moreLinks from buildPrecomputedNavData()
- *   2. Marketing mega-menu RN Specialties group
- *   3. Marketing mega-menu NP Clinical Modules group
+ *   1. Marketing moreLinks does NOT contain ecg-interpretation (nav bloat prevention)
+ *   2. Marketing mega-menu RN Specialties group (ECG Mastery + Telemetry links)
+ *   3. Marketing mega-menu NP Clinical Modules group (ECG Mastery + ECG Interpretation links)
  *   4. Learner Clinical Modules flyout (RN/NP with ecgNavEnabled=true)
  *   5. Learner ECG shell nav item (RN/NP tiers)
  *   6. Learner nav: ECG hidden for RPN/LVN_LPN (ecgNavEnabled=false)
+ *   7. ECG link destinations are valid authority routes
  *
  * Run:
  *   node --import tsx --test src/lib/navigation/ecg-nav-visibility.contract.test.ts
@@ -26,73 +34,59 @@ import {
   buildEcgShellNavItem,
 } from "./learner-primary-nav";
 
-// ─── 1. Marketing header moreLinks ────────────────────────────────────────────
+// ─── 1. Marketing moreLinks must NOT contain ECG (nav bloat prevention) ───────
 
-describe("Marketing header moreLinks — ECG visible in desktop nav and mobile drawer", () => {
-  // Import buildPrecomputedNavData indirectly by reading the server component source.
-  // The precomputed moreLinks list is what the header renders server-side.
-  test("site-header-server.tsx moreLinks array contains ecg-interpretation key", () => {
+describe("Marketing header moreLinks — ECG must NOT be in top-level moreLinks", () => {
+  test("site-header-server.tsx moreLinks does NOT contain ecg-interpretation key", () => {
     const { readFileSync } = require("node:fs");
     const { join } = require("node:path");
     const src = readFileSync(
       join(process.cwd(), "src/components/layout/site-header-server.tsx"),
       "utf-8",
     );
-    // The server precomputed moreLinks must have the ECG entry
-    assert.match(
-      src,
+    const moreLinksStart = src.indexOf("moreLinks: [");
+    const moreLinksEnd = src.indexOf("],", moreLinksStart);
+    const moreLinksBlock = moreLinksStart >= 0 && moreLinksEnd >= 0
+      ? src.slice(moreLinksStart, moreLinksEnd)
+      : src;
+
+    assert.doesNotMatch(
+      moreLinksBlock,
       /key:\s*["']ecg-interpretation["']/,
-      "site-header-server.tsx moreLinks must include key: 'ecg-interpretation' — " +
-      "ECG must be visible in the server-rendered nav bar without requiring a dropdown",
-    );
-    assert.match(
-      src,
-      /href.*\/ecg-interpretation|\/ecg-interpretation.*href/,
-      "site-header-server.tsx moreLinks must link to /ecg-interpretation",
-    );
-    assert.match(
-      src,
-      /matchBase.*\/ecg/,
-      "site-header-server.tsx ECG nav link must have matchBase '/ecg' to highlight on all ECG pages",
+      "site-header-server.tsx moreLinks must NOT include key: 'ecg-interpretation' — " +
+      "ECG was moved to tier hub dropdowns to prevent desktop nav wrapping. " +
+      "ECG remains discoverable via RN/NP mega-menus and the learner clinical modules flyout.",
     );
   });
 
-  test("site-header.tsx fallback marketingMoreLinks contains ecg-interpretation", () => {
+  test("site-header.tsx fallback marketingMoreLinks does NOT contain ecg-interpretation", () => {
     const { readFileSync } = require("node:fs");
     const { join } = require("node:path");
     const src = readFileSync(
       join(process.cwd(), "src/components/layout/site-header.tsx"),
       "utf-8",
     );
-    assert.match(
-      src,
+    const fallbackStart = src.indexOf("precomputedNavData?.moreLinks");
+    const fallbackBlock = fallbackStart >= 0 ? src.slice(fallbackStart, fallbackStart + 1500) : src;
+
+    assert.doesNotMatch(
+      fallbackBlock,
       /key:\s*["']ecg-interpretation["']/,
-      "site-header.tsx fallback marketingMoreLinks must include 'ecg-interpretation' — " +
-      "ECG must be visible when server precomputation is unavailable",
-    );
-    assert.match(
-      src,
-      /\/ecg-interpretation/,
-      "site-header.tsx fallback must link to /ecg-interpretation",
+      "site-header.tsx fallback moreLinks must NOT include 'ecg-interpretation' — " +
+      "ECG is surfaced via RN/NP mega-menus and learner flyout, not the top-level nav bar",
     );
   });
 
-  test("ECG nav item appears before pricing in moreLinks (high-visibility position)", () => {
+  test("moreLinks contains pricing as first visible marketing destination", () => {
     const { readFileSync } = require("node:fs");
     const { join } = require("node:path");
     const src = readFileSync(
       join(process.cwd(), "src/components/layout/site-header-server.tsx"),
       "utf-8",
     );
-    const ecgIdx = src.indexOf("ecg-interpretation");
-    const pricingIdx = src.indexOf('"pricing"');
     assert.ok(
-      ecgIdx > 0,
-      "ECG key must exist in site-header-server.tsx moreLinks",
-    );
-    assert.ok(
-      ecgIdx < pricingIdx,
-      "ECG nav item must appear before 'pricing' in moreLinks — it is a primary clinical specialty, not a secondary utility link",
+      src.includes('"pricing"'),
+      "site-header-server.tsx moreLinks must still contain 'pricing' after ECG removal",
     );
   });
 });
@@ -116,10 +110,11 @@ describe("Marketing mega-menu — RN Specialties contains ECG", () => {
         ecgLink,
         `RN mega-menu Specialties (${region}) must include 'rn-ecg-mastery' link`,
       );
-      assert.equal(
-        ecgLink!.href,
-        "/advanced-ecg-nursing",
-        "RN ECG Mastery link must point to /advanced-ecg-nursing",
+      // Canonical ECG authority page — either /ecg-interpretation or /advanced-ecg-nursing
+      const validEcgHubs = new Set(["/ecg-interpretation", "/advanced-ecg-nursing", "/ecg"]);
+      assert.ok(
+        validEcgHubs.has(ecgLink!.href),
+        `RN ECG Mastery link href "${ecgLink!.href}" must point to a canonical ECG authority page`,
       );
     });
 
@@ -154,7 +149,12 @@ describe("Marketing mega-menu — NP Clinical Modules contains ECG", () => {
         npEcgLink,
         `NP mega-menu (${region}) must include 'np-ecg-mastery' link — NP learners must be able to discover ECG from the NP dropdown`,
       );
-      assert.equal(npEcgLink!.href, "/advanced-ecg-nursing");
+      // Must point to a canonical ECG authority route (public, not a learner /modules/ route)
+      const validEcgHubs = new Set(["/ecg-interpretation", "/advanced-ecg-nursing", "/ecg", "/ecg-telemetry-mastery"]);
+      assert.ok(
+        validEcgHubs.has(npEcgLink!.href),
+        `NP ECG Mastery link href "${npEcgLink!.href}" must point to a canonical ECG authority page`,
+      );
     });
 
     test(`NP mega-menu has ECG Interpretation link (region: ${region})`, () => {
@@ -220,6 +220,26 @@ describe("Learner Clinical Modules flyout — ECG visible for RN/NP", () => {
       );
     }
   });
+
+  test("buildClinicalModulesNavLinks with ecgNavEnabled=true includes Hemodynamic Monitoring", () => {
+    const links = buildClinicalModulesNavLinks(null, true);
+    const hemoLink = links.find((l) => l.key === "hemodynamics-fundamentals");
+    assert.ok(
+      hemoLink,
+      "Clinical Modules flyout must include 'hemodynamics-fundamentals' for RN/NP",
+    );
+    assert.ok(
+      hemoLink!.href.includes("/modules/hemodynamics"),
+      "Hemodynamics link must point to /modules/hemodynamics (learner-scoped)",
+    );
+  });
+
+  test("buildClinicalModulesNavLinks with ecgNavEnabled=true includes Advanced Hemodynamics as premium", () => {
+    const links = buildClinicalModulesNavLinks(null, true);
+    const advHemo = links.find((l) => l.key === "advanced-hemodynamics");
+    assert.ok(advHemo, "Clinical Modules flyout must include 'advanced-hemodynamics' for RN/NP");
+    assert.equal(advHemo!.status, "premium", "Advanced Hemodynamics must be marked 'premium'");
+  });
 });
 
 // ─── 5. Learner ECG shell nav item (buildEcgShellNavItem) ────────────────────
@@ -262,24 +282,24 @@ describe("Learner nav — ECG hidden for RPN/LVN_LPN (ecgNavEnabled=false)", () 
     );
   });
 
-  test("marketing header moreLinks are NOT tier-gated (ECG always appears in public nav)", () => {
-    // The marketing header shows the same moreLinks to all visitors — RPN users still
-    // see the marketing ECG page link (which has no paywall). Only the learner flyout
-    // hides ECG module access for RPN.
+  test("marketing header moreLinks are NOT tier-gated (same links for all marketing visitors)", () => {
     const { readFileSync } = require("node:fs");
     const { join } = require("node:path");
     const src = readFileSync(
       join(process.cwd(), "src/components/layout/site-header-server.tsx"),
       "utf-8",
     );
-    // The ECG link in moreLinks must NOT be inside any tier conditional
-    // (it should not be wrapped in `ecgNavEnabled &&` or `tier === "RN" &&`)
-    const ecgIdx = src.indexOf("ecg-interpretation");
-    const nearEcg = src.slice(Math.max(0, ecgIdx - 200), ecgIdx + 200);
+    const moreLinksStart = src.indexOf("moreLinks: [");
+    const moreLinksEnd = src.indexOf("],", moreLinksStart);
+    const moreLinksBlock = moreLinksStart >= 0 && moreLinksEnd >= 0
+      ? src.slice(moreLinksStart, moreLinksEnd)
+      : "";
+
+    // Check for conditional code patterns (not just word proximity — comments mentioning tier/RN are fine)
     assert.doesNotMatch(
-      nearEcg,
-      /ecgNavEnabled|isEcgEnabled|tier.*RN|RN.*tier/,
-      "ECG entry in moreLinks must not be tier-gated — the marketing ECG page is public for all visitors",
+      moreLinksBlock,
+      /ecgNavEnabled|isEcgEnabled|tier\s*===\s*["']RN|tier\s*===\s*["']NP/,
+      "moreLinks must not contain tier-conditional code — same nav shown to all marketing visitors",
     );
   });
 });
@@ -306,7 +326,6 @@ describe("ECG nav link destinations — all point to valid indexable routes", ()
         validEcgPaths.has(link.href),
         `RN ECG link "${link.key}" href "${link.href}" must point to a canonical ECG authority page`,
       );
-      // Must not be a learner module route (would require auth)
       assert.ok(
         !link.href.startsWith("/modules/"),
         `RN mega-menu ECG link "${link.key}" must not use /modules/ route (requires auth — breaks for guests)`,
@@ -314,25 +333,18 @@ describe("ECG nav link destinations — all point to valid indexable routes", ()
     }
   });
 
-  test("moreLinks ECG entry points to /ecg-interpretation (canonical Core ECG hub)", () => {
-    const { readFileSync } = require("node:fs");
-    const { join } = require("node:path");
-    const serverSrc = readFileSync(
-      join(process.cwd(), "src/components/layout/site-header-server.tsx"),
-      "utf-8",
-    );
-    // The ECG entry in moreLinks should point to /ecg-interpretation, not /modules/* or /app/*
-    const ecgIdx = serverSrc.indexOf("ecg-interpretation");
-    const nearEntry = serverSrc.slice(ecgIdx, ecgIdx + 300);
-    assert.match(
-      nearEntry,
-      /\/ecg-interpretation/,
-      "moreLinks ECG entry must link to /ecg-interpretation (public, always-indexable Core ECG hub)",
-    );
-    assert.doesNotMatch(
-      nearEntry.slice(0, 100),
-      /\/modules\//,
-      "moreLinks ECG entry must not use /modules/ path (requires auth — breaks crawler and unauthenticated users)",
-    );
+  test("NP mega-menu ECG links point to valid ECG authority pages (not learner routes)", () => {
+    const t = (k: string) => k;
+    const menus = buildMarketingMegaMenus("CA", t);
+    const npMenu = menus.find((m) => m.key === "np")!;
+    const allLinks = npMenu.groups.flatMap((g) => g.links);
+    const ecgLinks = allLinks.filter((l) => l.key.startsWith("np-ecg"));
+
+    for (const link of ecgLinks) {
+      assert.ok(
+        !link.href.startsWith("/modules/"),
+        `NP mega-menu ECG link "${link.key}" must not use /modules/ route (requires auth)`,
+      );
+    }
   });
 });

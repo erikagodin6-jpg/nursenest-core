@@ -80,15 +80,9 @@ function buildPrecomputedNavData(
     loginLabel: formatTitleCase(tr("nav.logIn", "Log In"), locale),
     signupLabel: formatTitleCase(tr("nav.signup", "Start Free"), locale),
     moreLinks: [
-      // ECG is a primary clinical specialty — placed first in moreLinks so it is
-      // immediately visible in the desktop nav row and at the top of the mobile drawer
-      // "More" section. It must appear without requiring auth or opening a dropdown.
-      {
-        key: "ecg-interpretation",
-        href: localizeHref(locale, "/ecg-interpretation"),
-        matchBase: "/ecg",
-        label: formatTitleCase(tr("nav.ecgMastery", "ECG Interpretation"), locale),
-      },
+      // ECG and clinical specialty modules (ECG, Hemodynamics) are discoverable via the
+      // tier hub dropdowns (RN/NP mega-menus) and the learner clinical modules flyout.
+      // They are NOT in top-level moreLinks to keep the desktop nav to a single line.
       {
         key: "pricing",
         href: localizeHref(locale, HUB.pricing),

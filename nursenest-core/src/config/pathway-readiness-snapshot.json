@@ -1,11 +1,11 @@
 {
   "_meta": {
     "note": "Committed counts gate public launch checks. Regenerate with: npm run readiness:emit-snapshot",
-    "updatedAt": "2026-04-16T00:00:00.000Z"
+    "updatedAt": "2026-05-16T00:00:00.000Z"
   },
   "ca-rpn-rex-pn": { "lessons": 180, "questions": 350 },
   "ca-rn-nclex-rn": { "lessons": 190, "questions": 420 },
-  "ca-np-cnple": { "lessons": 0, "questions": 0 },
+  "ca-np-cnple": { "lessons": 436, "questions": 1496 },
   "us-lpn-nclex-pn": { "lessons": 175, "questions": 380 },
   "us-rn-nclex-rn": { "lessons": 200, "questions": 480 },
   "us-rn-new-grad-transition": { "lessons": 40, "questions": 120 },

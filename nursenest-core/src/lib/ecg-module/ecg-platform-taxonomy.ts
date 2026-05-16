@@ -173,6 +173,7 @@ export const HEMODYNAMICS_FUNDAMENTALS_PRODUCT = {
 
 export const HEMODYNAMICS_PUBLIC_ROUTES = [
   "/hemodynamic-monitoring",
+  "/hemodynamics-monitoring",
   "/shock-and-perfusion",
   "/arterial-line-interpretation",
   "/cardiac-output-monitoring",

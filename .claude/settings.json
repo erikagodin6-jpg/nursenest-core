@@ -47,7 +47,21 @@
       "Bash(grep -E \"\\\\.\\(ts|sql\\)$\")",
       "Bash(sed -n '155,220p' /root/nursenest-core/nursenest-core/src/lib/ecg-module/ecg-platform-taxonomy.ts)",
       "Bash(sed -n '380,420p' /root/nursenest-core/nursenest-core/src/lib/ecg-module/ecg-platform-taxonomy.ts)",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(k\\) for k in d['scripts'] if 'ecg' in k.lower\\(\\)]\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(k\\) for k in d['scripts'] if 'ecg' in k.lower\\(\\)]\")",
+      "Bash(node --import tsx --test src/lib/navigation/ecg-nav-visibility.contract.test.ts)",
+      "Bash(node --import tsx --test src/lib/advanced-hemodynamics/advanced-hemodynamics-checkout.contract.test.ts)",
+      "Bash(node --import tsx -e ' *)",
+      "Bash(node --import tsx /tmp/check-menu.ts)",
+      "Bash(node --import tsx /tmp/check-menu.mts)",
+      "Bash(node --import tsx /tmp/check2.mts)",
+      "Bash(node --import tsx /tmp/check3.mts)",
+      "Bash(node --import tsx --test src/components/layout/site-header-dynamic-import.contract.test.ts)",
+      "Bash(node --import tsx --test src/components/layout/site-header-server-islands.contract.test.ts)",
+      "Bash(node --import tsx --test src/components/layout/site-header-start-free.contract.test.ts)",
+      "Bash(node --import tsx --test src/lib/navigation/ecg-seo-authority.contract.test.ts)",
+      "Bash(xargs '-I{}' sh -c 'result=$\\(node --import tsx --test {} 2>&1 | tail -6\\); echo \"--- {}: $\\(echo \"$result\" | grep -E \"pass|fail\" | tr \"\\\\n\" \" \"\\)\"')",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); cnple=[x for x in d if 'cnple' in str\\(x\\).lower\\(\\) or 'ca-np' in str\\(x\\).lower\\(\\)]; print\\(json.dumps\\(cnple, indent=2\\)\\)\")",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('/root/nursenest-core/nursenest-core/src/config/pathway-readiness-snapshot.json'\\)\\); print\\(type\\(d\\)\\); print\\(list\\(d.keys\\(\\)\\)[:5] if isinstance\\(d, dict\\) else d[:5]\\)\")"
     ]
   }
 }

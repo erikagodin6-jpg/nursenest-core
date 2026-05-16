@@ -555,14 +555,9 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
       precomputedNavData?.moreLinks
         ? [...precomputedNavData.moreLinks]
         : [
-            // ECG first — must be visible without opening any dropdown.
-            // Matches /ecg/* so all ECG authority pages highlight this link as active.
-            {
-              key: "ecg-interpretation",
-              href: "/ecg-interpretation",
-              matchBase: "/ecg",
-              label: formatTitleCase(t("nav.ecgMastery"), locale), // resolves to "ECG Interpretation"
-            },
+            // ECG and clinical specialty modules are discoverable via the tier hub
+            // dropdowns (RN/NP mega-menus) and learner clinical modules flyout.
+            // They are NOT in top-level moreLinks to keep the desktop nav single-line.
             {
               key: "pricing",
               href: HUB.pricing,

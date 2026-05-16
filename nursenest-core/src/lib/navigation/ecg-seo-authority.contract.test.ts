@@ -51,18 +51,18 @@ describe("ECG nav i18n — 'ECG Interpretation' label (Phase 1)", () => {
     );
   });
 
-  test("site-header-server.tsx fallback label is 'ECG Interpretation' (not 'ECG Mastery')", () => {
+  test("site-header-server.tsx does NOT use 'ECG Mastery' as a label (ECG moved to mega-menus)", () => {
     const src = read("src/components/layout/site-header-server.tsx");
     assert.doesNotMatch(
       src,
       /"ECG Mastery"/,
-      "site-header-server.tsx must not use 'ECG Mastery' as fallback label — use 'ECG Interpretation'",
+      "site-header-server.tsx must not use 'ECG Mastery' as a label — " +
+      "ECG specialty links were moved from top-level moreLinks to the RN/NP mega-menu dropdowns " +
+      "to prevent desktop nav wrapping. The nav.ecgMastery i18n key is still valid in nav.json.",
     );
-    assert.match(
-      src,
-      /"ECG Interpretation"/,
-      "site-header-server.tsx must use 'ECG Interpretation' as ECG nav fallback label",
-    );
+    // ECG link was intentionally removed from moreLinks (nav bloat fix).
+    // Correctness of the label is enforced by the nav.json test above.
+    // ECG discoverability is enforced by ecg-nav-visibility.contract.test.ts (mega-menu tests).
   });
 });
 
