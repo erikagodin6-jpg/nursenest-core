@@ -83,10 +83,10 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
   if (!pathway) notFound();
 
   // CNPLE uses LOFT (linear on-the-fly testing), not CAT adaptive.
-  // Any visitor who arrives at /canada/np/cnple/cat is permanently redirected
-  // to the dedicated /simulation page which has LOFT-specific copy and CTAs.
+  // 308 Permanent Redirect: crawlers and browsers must update bookmarks/links to /simulation.
+  // Using permanentRedirect (not redirect) so Googlebot stops re-crawling /cat for CNPLE.
   if (isCnplePathway(pathway.id)) {
-    redirect(buildExamPathwayPath(pathway, "simulation"));
+    permanentRedirect(buildExamPathwayPath(pathway, "simulation"));
   }
 
   if (isAlliedHealthPathway(pathway)) {

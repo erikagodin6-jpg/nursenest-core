@@ -1,9 +1,27 @@
 #!/usr/bin/env npx tsx
 /**
- * Writes src/config/pathway-readiness-snapshot.json from DB lesson counts + question diagnostics.
- * Run from nursenest-core/: npm run readiness:emit-snapshot
+ * Writes src/config/pathway-readiness-snapshot.json from live DB lesson counts and question coverage.
  *
- * Requires DATABASE_URL. Safe to run in CI after migrations.
+ * Usage:
+ *   npm run readiness:emit-snapshot          # requires DATABASE_URL
+ *
+ * When to run:
+ *   - After a significant content push (lessons or questions) to any pathway.
+ *   - Before a production deploy when adding a new pathway or changing existing launch-readiness gates.
+ *   - When `npm run readiness:verify` (or `npm run test:cnple-hub`) fails with a stale-snapshot error.
+ *   - Maximum recommended staleness: 90 days (enforced by cnple-hub-readiness.contract.test.ts).
+ *
+ * After emitting, commit the updated snapshot:
+ *   git add src/config/pathway-readiness-snapshot.json
+ *   git commit -m "chore(readiness): regenerate pathway-readiness-snapshot"
+ *
+ * Validation after emit:
+ *   npm run readiness:verify
+ *
+ * Requires:
+ *   DATABASE_URL — points to a DB with seeded lessons and published questions.
+ *   Safe to run in CI after migrations when DATABASE_URL is configured.
+ *   Do NOT run in emit mode unless you intend to mutate the committed snapshot.
  */
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";

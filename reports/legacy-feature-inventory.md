@@ -1,6 +1,6 @@
 # Legacy feature inventory
 
-Generated: **2026-05-16T14:19:40.670Z**
+Generated: **2026-05-16T15:00:54.624Z**
 
 ## Summary
 

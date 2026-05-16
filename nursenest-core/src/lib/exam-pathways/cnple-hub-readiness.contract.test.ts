@@ -11,12 +11,16 @@
  *   1. Readiness snapshot — non-zero, above minimums, published=true
  *   2. Static delegator page — uses hub exports, not AuthorityClusterPageView
  *   3. Dynamic sub-route coverage — questions, lessons, simulation, flashcards, pricing
- *   4. CNPLE route semantics — /simulation canonical, LOFT copy, /cat redirects
+ *   4. CNPLE route semantics — /simulation canonical, LOFT copy, /cat permanentRedirects
  *   5. Nav and offer gate — isMarketingOfferingPublishedForPublicSite(CA, np) === true
  *   6. Stale snapshot guard — zero counts trigger a test failure for published pathways
+ *   7. /cat permanentRedirect — 308 not 307 for crawler deindexing
  *
  * Run:
  *   node --import tsx --test src/lib/exam-pathways/cnple-hub-readiness.contract.test.ts
+ * Or via npm:
+ *   npm run test:cnple-hub
+ *   npm run readiness:verify
  */
 
 import assert from "node:assert/strict";
@@ -419,22 +423,26 @@ describe("CNPLE sitemap coverage — hub and sub-routes indexed", () => {
 // ─── 6. Stale snapshot guard ──────────────────────────────────────────────────
 
 describe("Stale snapshot guard — published pathways must have non-zero counts", () => {
-  it("snapshot file updatedAt is not stale (must be within 60 days of 2026-05-16)", () => {
-    // This test is intentionally date-pinned: if the snapshot is regenerated, this check
-    // updates automatically. If someone reverts to a stale snapshot, this fails.
+  it("snapshot file updatedAt is not stale (max 90 days from today)", () => {
+    // Compares against Date.now() so the guard remains live: if the snapshot is not
+    // regenerated for 90 days, this test will start failing regardless of when the test runs.
+    // When it fails, run: npm run readiness:emit-snapshot  (requires DATABASE_URL)
+    // Then commit the updated snapshot and re-run: npm run readiness:verify
     const snapshot = JSON.parse(
       src("src/config/pathway-readiness-snapshot.json"),
     ) as { _meta?: { updatedAt?: string }; [key: string]: unknown };
     const updatedAt = snapshot._meta?.updatedAt;
     assert.ok(updatedAt, "snapshot._meta.updatedAt must be present");
     const snapshotDate = new Date(updatedAt);
-    const referenceDate = new Date("2026-05-16T00:00:00.000Z");
-    const diffMs = referenceDate.getTime() - snapshotDate.getTime();
-    const diffDays = diffMs / (1000 * 60 * 60 * 24);
+    assert.ok(!isNaN(snapshotDate.getTime()), `snapshot._meta.updatedAt is not a valid ISO date: "${updatedAt}"`);
+    const nowMs = Date.now();
+    const ageMs = nowMs - snapshotDate.getTime();
+    const ageDays = ageMs / (1000 * 60 * 60 * 24);
+    const MAX_AGE_DAYS = 90;
     assert.ok(
-      diffDays <= 60,
-      `pathway-readiness-snapshot.json was last updated ${Math.round(diffDays)} days before ` +
-        "the 2026-05-16 reference date (max 60 days). Regenerate with: npm run readiness:emit-snapshot",
+      ageDays <= MAX_AGE_DAYS,
+      `pathway-readiness-snapshot.json is ${Math.round(ageDays)} days old (max ${MAX_AGE_DAYS}). ` +
+        "Regenerate: npm run readiness:emit-snapshot — then commit and run: npm run readiness:verify",
     );
   });
 
@@ -551,6 +559,77 @@ describe("Marketing nav — CNPLE visible in NP mega-menu and tier chip", () => 
       id,
       "ca-np-cnple",
       "Canada NP default pathway ID must be ca-np-cnple",
+    );
+  });
+});
+
+// ─── 8. /cat permanentRedirect for CNPLE ────────────────────────────────────
+
+describe("/cat route — CNPLE uses permanentRedirect (308), not temporary redirect (307)", () => {
+  const CAT_PAGE = "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/cat/page.tsx";
+
+  it("imports permanentRedirect from next/navigation", () => {
+    const catSrc = src(CAT_PAGE);
+    assert.match(
+      catSrc,
+      /import\s*\{[^}]*permanentRedirect[^}]*\}\s*from\s*["']next\/navigation["']/,
+      "/cat page must import permanentRedirect from next/navigation",
+    );
+  });
+
+  it("CNPLE isCnplePathway block calls permanentRedirect (not redirect)", () => {
+    const catSrc = src(CAT_PAGE);
+    // Extract the block that handles isCnplePathway
+    const cnpleBlock = catSrc.match(/isCnplePathway[\s\S]{0,300}simulation/)?.[0] ?? "";
+    assert.ok(cnpleBlock.length > 0, "isCnplePathway block referencing simulation must exist");
+    assert.match(
+      cnpleBlock,
+      /permanentRedirect/,
+      "CNPLE /cat handler must use permanentRedirect (308) — not redirect (307). " +
+        "307 does not signal to crawlers that /cat is gone; 308 does.",
+    );
+    assert.doesNotMatch(
+      cnpleBlock,
+      /(?<!permanent)(?<!\w)redirect\s*\(/,
+      "CNPLE /cat handler must NOT use temporary redirect() — it must use permanentRedirect()",
+    );
+  });
+
+  it("non-CNPLE pathways still use redirect() or permanentRedirect() as appropriate (not changed)", () => {
+    const catSrc = src(CAT_PAGE);
+    // Allied health uses permanentRedirect — verify that still exists.
+    // Use a broad search: find permanentRedirect inside an isAlliedHealthPathway block.
+    const alliedBlock = catSrc.match(/isAlliedHealthPathway[\s\S]{1,500}?permanentRedirect/)?.[0] ?? "";
+    assert.ok(
+      alliedBlock.length > 0,
+      "Allied health /cat handler must still use permanentRedirect (not redirect)",
+    );
+    // The main CAT page body (non-CNPLE, non-allied) must still render normally
+    assert.match(
+      catSrc,
+      /catPathwayShortCatLabel|CatStartCard|appPathwayCatSessionStartPath/,
+      "Non-CNPLE /cat page must still render CAT UI for other pathways",
+    );
+  });
+
+  it("/cat comment explains the 308 semantic", () => {
+    const catSrc = src(CAT_PAGE);
+    // The comment in the file should document the 308 intent
+    assert.match(
+      catSrc,
+      /308|permanentl/i,
+      "/cat page comment must explain that the redirect is permanent (308)",
+    );
+  });
+
+  it("cnple-product-readiness.contract.test.ts also validates the /cat redirect direction", () => {
+    // Belt-and-suspenders: the existing product readiness test should still catch if
+    // the redirect target changes from /simulation back to /cat or elsewhere.
+    const existing = src("src/lib/exam-pathways/cnple-product-readiness.contract.test.ts");
+    assert.match(
+      existing,
+      /redirect.*buildExamPathwayPath.*["']simulation["']/s,
+      "cnple-product-readiness must still assert /cat → /simulation redirect direction",
     );
   });
 });
