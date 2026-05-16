@@ -149,6 +149,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
 
   const isGenericIntl = pathway.examFamily === ExamFamily.GENERIC;
   const isPnHub = isPracticalNursingMarketingPathway(pathway);
+  const isCnpleHub = isCnplePathway(pathway.id);
 
   const pnIntro =
     pathway.countrySlug === "canada"
@@ -176,6 +177,27 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
   const actionsPnExams =
     "Timed and linear practice-test sets in-app, scoped to this pathway, with performance summaries for remediation.";
 
+  const cnpleIntro = `${examLabel} prep for ${countryLabel}: build Canadian NP clinical reasoning with lessons, domain-tagged practice questions, flashcards, linear LOFT simulation, and timed practice exams.`;
+  const cnpleDescription =
+    "This NP hub is organized as a full preparation pathway: learn the clinical domain, drill the question bank, reinforce weak areas, then rehearse the fixed-length CNPLE simulation format with post-run remediation.";
+  const cnpleIncludedNote =
+    "Included for this tier: Canadian NP lessons, explicit CNPLE-tagged practice questions, Canadian-aligned NP question-bank coverage, flashcards, fixed-length LOFT simulation, timed practice exams, and pathway analytics.";
+  const cnpleStartHere =
+    "Suggested loop: Lessons for clinical framing → Practice Questions for domain-by-domain judgment → Flashcards for weak-area recall → Simulation for LOFT stamina → Practice Exam for timed review and remediation.";
+  const cnpleDifferenceBody =
+    "Lessons teach Canadian NP assessment, diagnostics, prescribing logic, safety, and follow-up planning. Practice Questions drill item-level reasoning by domain. Flashcards preserve high-yield recall. Simulation rehearses the CNPLE-style LOFT fixed-length experience, not CAT adaptive shutdown. Practice Exam blocks build timed stamina and expose weak slices before launch day.";
+
+  const actionsCnpleLessons =
+    "Canadian NP lessons for assessment, diagnostics, prescribing, chronic disease, pediatrics, women's health, mental health, safety, and follow-up planning.";
+  const actionsCnpleFlash =
+    "Recall decks for high-yield Canadian NP labs, medications, screening, red flags, guidelines, and weak-area remediation.";
+  const actionsCnplePractice =
+    "CNPLE-tagged and Canadian-aligned NP questions by domain, with rationales that connect symptoms, diagnostics, prescribing, safety, and follow-up.";
+  const actionsCnpleSimulation =
+    "LOFT linear simulation — fixed-length and fixed-sequence practice for CNPLE stamina. No CAT adaptive shutdown.";
+  const actionsCnpleExams =
+    "Timed linear practice-exam blocks for endurance, domain scoring, and remediation before repeating the full simulation.";
+
   return {
     audienceLabel,
     examLabel,
@@ -184,53 +206,55 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
       ? `${examLabel} preparation context for ${countryLabel}: start with lessons and drills that strengthen transferable clinical judgement, then confirm every regulatory step with your official body.`
       : isPnHub
         ? pnIntro
-        : isCnplePathway(pathway.id)
-          ? `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or the LOFT-style simulation next.`
+        : isCnpleHub
+          ? cnpleIntro
           : `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or adaptive CAT-style exams next.`,
     description: isGenericIntl
       ? `This hub explains how NurseNest can support ${audienceLabel} learners targeting registration in ${countryLabel} without claiming to replace regulator materials.`
       : isPnHub
         ? pnDescription
-        : `This area contains ${examLabel} learning and exam-prep resources for ${audienceLabel} learners in ${countryLabel}.`,
+        : isCnpleHub
+          ? cnpleDescription
+          : `This area contains ${examLabel} learning and exam-prep resources for ${audienceLabel} learners in ${countryLabel}.`,
     includedNote: isGenericIntl
       ? `Study tiles link to the same lesson, flashcard, and question surfaces used for North American pathways where noted; formats may include NCLEX-style items for cognitive rehearsal and are not copies of regulator-specific examinations.`
       : isPnHub
         ? pnIncludedNote
-        : isCnplePathway(pathway.id)
-          ? `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice questions, and a LOFT linear simulation for ${audienceLabel} learners in ${countryLabel}.`
+        : isCnpleHub
+          ? cnpleIncludedNote
           : `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice, and CAT readiness work for ${audienceLabel} learners in ${countryLabel}.`,
     startHere: isGenericIntl
       ? "Begin with Lessons for orientation, add Flashcards for recall, then use Practice Questions for drills. Treat optional adaptive sessions as reasoning practice only."
       : isPnHub
         ? pnStartHere
-        : isCnplePathway(pathway.id)
-          ? "Start with Lessons, move to Practice Questions, run Flashcards for recall, then add Simulation runs as you approach exam readiness."
+        : isCnpleHub
+          ? cnpleStartHere
           : "Start with Lessons, then move into Practice Questions, CAT, and Exams as your confidence grows.",
-    differenceHeading: isPnHub ? "How the modes fit PN / RPN prep" : isCnplePathway(pathway.id) ? "How the modes fit CNPLE prep" : "What is the difference?",
+    differenceHeading: isPnHub ? "How the modes fit PN / RPN prep" : isCnpleHub ? "How the modes fit CNPLE prep" : "What is the difference?",
     differenceBody: isGenericIntl
       ? "Lessons summarise concepts, Flashcards speed recall, Practice Questions build judgement under time pressure, and optional adaptive sessions mirror NCLEX-style pacing—not regulator-owned exam designs."
       : isPnHub
         ? pnDifferenceBody
-        : isCnplePathway(pathway.id)
-          ? "Use Lessons for Canadian NP clinical content, Flashcards for spaced-repetition recall, Practice Questions for item-level drills by domain, and Simulation for the LOFT linear fixed-length experience — CNPLE uses LOFT format, not CAT adaptive."
+        : isCnpleHub
+          ? cnpleDifferenceBody
           : "Use Lessons for core concepts, Flashcards for recall, Practice Questions for focused drills, CAT for adaptive item-level sessions, and Exams for longer linear or timed practice-test sets.",
     actions: [
       {
         id: "lessons",
         label: resolveMarketingDisplayCopy({ curatedCopy: "Lessons" }),
-        description: isPnHub ? actionsPnLessons : "Review concepts by topic.",
+        description: isPnHub ? actionsPnLessons : isCnpleHub ? actionsCnpleLessons : "Review concepts by topic.",
         href: marketingTierHubStudyActionHref(pathway, "lessons"),
       },
       {
         id: "flashcards",
         label: resolveMarketingDisplayCopy({ curatedCopy: "Flashcards" }),
-        description: isPnHub ? actionsPnFlash : "Strengthen recall quickly.",
+        description: isPnHub ? actionsPnFlash : isCnpleHub ? actionsCnpleFlash : "Strengthen recall quickly.",
         href: marketingTierHubStudyActionHref(pathway, "flashcards"),
       },
       {
         id: "practice_questions",
         label: resolveMarketingDisplayCopy({ curatedCopy: "Practice Questions" }),
-        description: isPnHub ? actionsPnPractice : "Drill by topic or weakness.",
+        description: isPnHub ? actionsPnPractice : isCnpleHub ? actionsCnplePractice : "Drill by topic or weakness.",
         href: marketingTierHubStudyActionHref(pathway, "practice_questions"),
       },
       {
@@ -238,16 +262,16 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
         // CNPLE uses LOFT (linear on-the-fly testing), NOT CAT adaptive.
         // The "cat" action ID is reused for both, but label/description/href differ.
         label: resolveMarketingDisplayCopy({
-          curatedCopy: isCnplePathway(pathway.id) ? "Simulation" : "CAT",
+          curatedCopy: isCnpleHub ? "Simulation" : "CAT",
         }),
-        description: isCnplePathway(pathway.id)
-          ? "LOFT linear simulation — fixed-length, no adaptive shutdown. Matches CNPLE exam format."
+        description: isCnpleHub
+          ? actionsCnpleSimulation
           : isGenericIntl
             ? "Computer-adaptive practice (NCLEX-style pacing)."
             : isPnHub
               ? actionsPnCat
               : "Adaptive sessions that adjust difficulty from your answers, scoped to this pathway.",
-        href: isCnplePathway(pathway.id)
+        href: isCnpleHub
           ? buildExamPathwayPath(pathway, "simulation")
           : marketingTierHubStudyActionHref(pathway, "cat"),
         disabled: isGenericIntl,
@@ -262,7 +286,9 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
           ? "Optional adaptive sessions (NCLEX-style pacing)."
           : isPnHub
             ? actionsPnExams
-            : "Linear and timed practice-test sets in the app, scoped to this pathway.",
+            : isCnpleHub
+              ? actionsCnpleExams
+              : "Linear and timed practice-test sets in the app, scoped to this pathway.",
         href: marketingTierHubStudyActionHref(pathway, "exams"),
         disabled: isGenericIntl,
         disabledNote: isGenericIntl
