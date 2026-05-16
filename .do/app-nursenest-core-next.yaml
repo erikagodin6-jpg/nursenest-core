@@ -14,12 +14,11 @@ ingress:
           prefix: /
 services:
   - name: web
-    dockerfile_path: Dockerfile
-    source_dir: .
-    github:
-      branch: deploy-main
-      deploy_on_push: true
-      repo: erikagodin6-jpg/nursenest-core
+    image:
+      registry_type: GHCR
+      registry: ghcr.io
+      repository: erikagodin6-jpg/nursenest
+      tag: latest
     run_command: node scripts/start-standalone.mjs
     http_port: 8080
     instance_count: 1

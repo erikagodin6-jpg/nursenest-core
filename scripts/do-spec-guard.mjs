@@ -147,8 +147,8 @@ export const REQUIRED_AI_KEY_GROUP = Object.freeze([
 /** Expected web component run_command. Must not change without explicit sign-off. */
 export const EXPECTED_RUN_COMMAND = "node scripts/start-standalone.mjs";
 
-/** Expected web component source_dir. Must not change without explicit sign-off. */
-export const EXPECTED_SOURCE_DIR = ".";
+/** Valid container registry types for the web service image source. */
+export const VALID_REGISTRY_TYPES = Object.freeze(["GHCR", "DOCR", "DOCKER_HUB"]);
 
 const RUNTIME_SCOPES = new Set(["RUN_TIME", "RUN_AND_BUILD_TIME"]);
 
@@ -236,10 +236,29 @@ export function validateSpec(spec) {
   if (!web) {
     failures.push('Missing "web" service component — the spec must contain a service named "web".');
   } else {
-    if (web.source_dir !== EXPECTED_SOURCE_DIR) {
+    // Must be image-based deploy — github: source causes the "Selecting branch" clone hang
+    if (web.github) {
       failures.push(
-        `source_dir is "${web.source_dir}" but must be "${EXPECTED_SOURCE_DIR}". Changing source_dir breaks the standalone startup path.`,
+        'Web service still has github: source — this causes DigitalOcean to clone the full GitHub repo and hang at "Selecting branch". ' +
+        'Remove github:, dockerfile_path:, and source_dir: and replace with an image: block pointing to a pre-built GHCR/DOCR image.',
       );
+    }
+    if (!web.image) {
+      failures.push(
+        'Web service is missing image: block. The spec must use a pre-built container image source (image.registry_type: GHCR | DOCR | DOCKER_HUB), not a GitHub source clone.',
+      );
+    } else {
+      if (!VALID_REGISTRY_TYPES.includes(web.image.registry_type)) {
+        failures.push(
+          `Web service image.registry_type is "${web.image.registry_type}" — must be one of: ${VALID_REGISTRY_TYPES.join(", ")}.`,
+        );
+      }
+      if (!web.image.repository) {
+        failures.push("Web service image.repository is missing.");
+      }
+      if (!web.image.tag && !web.image.digest) {
+        failures.push("Web service image must specify tag or digest.");
+      }
     }
     if (web.run_command !== EXPECTED_RUN_COMMAND) {
       failures.push(
