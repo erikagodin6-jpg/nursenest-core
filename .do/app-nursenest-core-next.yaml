@@ -239,12 +239,16 @@ services:
         scope: RUN_AND_BUILD_TIME
         value: price_1TVo8vFbgp0Ub5P7aTySWrbU
       # Advanced Hemodynamic Monitoring add-on ($149 CAD one-time)
-      # TODO: replace placeholder with live price ID from Stripe dashboard after product creation
+      # BLOCKED: checkout returns 400 until this is a real Stripe price ID.
+      # Steps: Stripe Dashboard → Products → Add product → "Advanced Hemodynamic Monitoring"
+      #   → One-time → $149 CAD → Save → copy price_... ID → replace value below → npm run do:deploy:execute
       - key: STRIPE_PRICE_ADVANCED_HEMODYNAMICS
         scope: RUN_AND_BUILD_TIME
         value: price_ADVANCED_HEMODYNAMICS_PLACEHOLDER
       # Critical Care Bundle ($249 CAD one-time — Advanced ECG + Advanced Hemodynamics)
-      # TODO: replace placeholder with live price ID from Stripe dashboard after product creation
+      # BLOCKED: checkout returns 400 until this is a real Stripe price ID.
+      # Steps: Stripe Dashboard → Products → Add product → "Critical Care Bundle"
+      #   → One-time → $249 CAD → Save → copy price_... ID → replace value below → npm run do:deploy:execute
       - key: STRIPE_PRICE_CRITICAL_CARE_BUNDLE
         scope: RUN_AND_BUILD_TIME
         value: price_CRITICAL_CARE_BUNDLE_PLACEHOLDER

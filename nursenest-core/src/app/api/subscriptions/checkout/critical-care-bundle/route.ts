@@ -109,7 +109,7 @@ export async function POST(req: Request) {
 
     const priceEnvKey = criticalCareBundleStripePriceEnvKey();
     const priceId = process.env[priceEnvKey]?.trim();
-    if (!priceId) {
+    if (!priceId || priceId.toUpperCase().includes("PLACEHOLDER")) {
       const payload: Record<string, string> = {
         code: STRIPE_PRICE_NOT_CONFIGURED_CODE,
         message: "This bundle is not available for checkout yet. Billing configuration is incomplete.",
