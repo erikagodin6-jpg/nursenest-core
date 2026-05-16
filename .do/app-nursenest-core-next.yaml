@@ -344,3 +344,23 @@ services:
       - key: STRIPE_PRICE_LVN_LPN_YEARLY
         scope: RUN_AND_BUILD_TIME
         type: SECRET
+
+      # ── QA + reliability runtime keys ─────────────────────────────────────
+      - key: BASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: NURSENEST_PRODUCTION_BASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: NURSENEST_RELIABILITY_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: PRODUCTION_CRON_BASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: QA_PAID_EMAIL
+        scope: RUN_TIME
+        type: SECRET
+      - key: QA_PAID_PASSWORD
+        scope: RUN_TIME
+        type: SECRET
