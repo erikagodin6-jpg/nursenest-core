@@ -65,8 +65,9 @@ export function ExamPathwayHub({
 
   return (
     <div
-      className="nn-premium-pathway-hub mx-auto max-w-4xl px-4 py-6 sm:py-8"
+      className="nn-premium-pathway-hub mx-auto max-w-6xl px-4 py-6 sm:py-8 lg:px-6"
       data-nn-nursing-tier-hub="surface"
+      data-nn-rn-slice-readiness={pathway.roleTrack === "rn" ? "1" : undefined}
       data-pathway-track={pathway.roleTrack}
     >
       <FunnelExamHubViewBeacon pathway={pathway} hubPath={marketingHubPath} />
@@ -88,15 +89,15 @@ export function ExamPathwayHub({
             {countryLine} · {pathway.boardLabel ?? pathway.roleTrack.toUpperCase()}
           </p>
         }
-        title={<h1 className="nn-marketing-h1 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]">{heroTitle ?? pathway.displayName}</h1>}
+        title={<h1 className="nn-marketing-h1 max-w-[min(100%,48rem)] text-balance text-[var(--palette-heading)]">{heroTitle ?? pathway.displayName}</h1>}
         intro={
-          <p className="nn-marketing-body max-w-2xl text-pretty text-[var(--palette-text-muted)] sm:text-lg">
+          <p className="nn-marketing-body max-w-3xl text-pretty text-[var(--palette-text-muted)] sm:text-lg">
             {heroLead ?? pathway.seoDescription}
           </p>
         }
       />
 
-      <div className="mt-4 max-w-2xl">
+      <div className="mt-4 max-w-3xl">
         <MarketingTrustSignalsStrip variant="compact" examHub />
       </div>
       <ExamHubComparisonLink />
