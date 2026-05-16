@@ -70,6 +70,25 @@ describe("pathway lesson catalog redundancy (shared-core discipline)", () => {
     assert.equal(canonicalLessonHubTitle("SVT Basics"), "Supraventricular Tachycardia (SVT)");
   });
 
+  it("canonicalizes common lesson-title drift patterns across nursing tiers", () => {
+    const cases: Array<[string, string]> = [
+      ["Management of Asthma", "Asthma"],
+      ["Treatment of Pneumonia", "Pneumonia"],
+      ["Nursing Assessment of Stroke", "Stroke"],
+      ["Nursing Assessment for Sepsis", "Sepsis"],
+      ["Diabetes Mellitus Pharmacology", "Diabetes"],
+      ["Hypertension Patient Teaching", "Hypertension"],
+      ["CVA Nursing Care", "Stroke"],
+      ["CHF Overview", "Heart Failure"],
+      ["Atrial Fib NCLEX Review", "Atrial Fibrillation"],
+      ["Chronic Obstructive Pulmonary Disease Fundamentals", "COPD"],
+    ];
+
+    for (const [input, expected] of cases) {
+      assert.equal(canonicalLessonHubTitle(input), expected, input);
+    }
+  });
+
   it("collapses common abbreviations and synonyms into one canonical lesson key", () => {
     assert.equal(canonicalLessonHubKey("Chronic Obstructive Pulmonary Disease"), "copd");
     assert.equal(canonicalLessonHubKey("CHF"), "heart failure");
@@ -104,6 +123,22 @@ describe("pathway lesson catalog redundancy (shared-core discipline)", () => {
     assert.equal(result.slugToCanonicalTitle["copd-management"], "COPD");
     assert.equal(result.duplicateRedirects["copd-management"], "copd");
     assert.equal(result.duplicateRedirects["copd-nursing-care"], "copd");
+  });
+
+  it("suppresses duplicate synonym variants without hiding unrelated topics", () => {
+    const result = buildCanonicalLessonHubIndex([
+      { slug: "heart-failure", title: "Heart Failure", sectionCount: 12, bodyLength: 12_000 },
+      { slug: "chf-overview", title: "CHF Overview", sectionCount: 4, bodyLength: 2_000 },
+      { slug: "stroke", title: "Stroke", sectionCount: 10, bodyLength: 10_000 },
+      { slug: "cva-nursing-care", title: "CVA Nursing Care", sectionCount: 3, bodyLength: 1_000 },
+      { slug: "sepsis", title: "Sepsis", sectionCount: 10, bodyLength: 10_000 },
+    ]);
+
+    assert.deepEqual([...result.visibleSlugs].sort(), ["heart-failure", "sepsis", "stroke"]);
+    assert.equal(result.duplicateRedirects["chf-overview"], "heart-failure");
+    assert.equal(result.duplicateRedirects["cva-nursing-care"], "stroke");
+    assert.equal(result.slugToCanonicalTitle["chf-overview"], "Heart Failure");
+    assert.equal(result.slugToCanonicalTitle["cva-nursing-care"], "Stroke");
   });
 
   it("preserves legitimate clinical split lessons", () => {
