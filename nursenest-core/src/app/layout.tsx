@@ -36,6 +36,8 @@ const siteUrl = MARKETING_SITE_ORIGIN || "https://www.nursenest.ca";
 const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
 
+const NURSENEST_LEAF_FAVICON = "/logos/arctic-frost-leaf.svg";
+
 function navigationIntentBeforeInteractiveInlineScript(): string {
   return `
 (function () {
@@ -78,12 +80,12 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: "/favicon-v2.ico", sizes: "any" },
+      { url: NURSENEST_LEAF_FAVICON, type: "image/svg+xml", sizes: "any" },
       { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
       { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
-    shortcut: ["/favicon-v2.ico"],
+    shortcut: [NURSENEST_LEAF_FAVICON],
   },
   openGraph: {
     type: "website",
@@ -120,74 +122,35 @@ async function getSessionSafe() {
       (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
   );
   if (!hasSecret) return null;
-
-  // Skip the auth DB call when no session cookie is present. Unauthenticated
-  // visitors (the vast majority of marketing traffic) pay zero DB latency;
-  // the client-side SessionProvider fetches the session via /api/auth/session
-  // on hydration if needed. Authenticated users still trigger the full auth()
-  // call because a session cookie is present.
-  try {
-    const { cookies } = await import("next/headers");
-    const jar = await cookies();
-    const hasSession =
-      jar.has("authjs.session-token") ||
-      jar.has("__Secure-authjs.session-token") ||
-      jar.has("next-auth.session-token") ||
-      jar.has("__Secure-next-auth.session-token");
-    if (!hasSession) return null;
-  } catch {
-    // Can't read cookies (e.g. static export) — fall through to auth()
-  }
-
   try {
     const { auth } = await import("@/lib/auth");
     return await auth();
-  } catch (error) {
-    console.error("[root-layout] auth failed; continuing without session", error);
+  } catch {
     return null;
   }
 }
 
-function SafeProviders({
-  session,
-  children,
-}: {
-  session: Awaited<ReturnType<typeof getSessionSafe>>;
-  children: React.ReactNode;
-}) {
-  return (
-    <AppThemeProvider>
-      <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
-    </AppThemeProvider>
-  );
-}
-
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const session = await getSessionSafe();
 
   return (
-    <html
-      lang="en"
-      className={`${dmSans.variable} h-full antialiased`}
-      data-theme={NURSENEST_DEFAULT_THEME}
-      suppressHydrationWarning
-    >
-      {/* React 19 hoists these <link> elements to <head>. They eliminate the
-          DNS + TLS handshake cost for the CDN before any image requests fire. */}
-      <link rel="preconnect" href="https://nursenest-images.tor1.cdn.digitaloceanspaces.com" />
-      <link rel="dns-prefetch" href="https://nursenest-images.tor1.cdn.digitaloceanspaces.com" />
-      <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)]">
-        <Script id="nn-marketing-theme-seed" strategy="beforeInteractive">
-          {marketingThemeBeforeInteractiveInlineScript()}
-        </Script>
-        <Script id="nn-navigation-intent-seed" strategy="beforeInteractive">
-          {navigationIntentBeforeInteractiveInlineScript()}
-        </Script>
-        <SafeProviders session={session}>{children}</SafeProviders>
+    <html lang="en" data-theme={NURSENEST_DEFAULT_THEME} suppressHydrationWarning>
+      <head>
+        <Script
+          id="nn-theme-seed"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: marketingThemeBeforeInteractiveInlineScript() }}
+        />
+        <Script
+          id="nn-nav-intent-seed"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: navigationIntentBeforeInteractiveInlineScript() }}
+        />
+      </head>
+      <body className={dmSans.className}>
+        <AuthSessionProvider session={session}>
+          <AppThemeProvider>{children}</AppThemeProvider>
+        </AuthSessionProvider>
       </body>
     </html>
   );
