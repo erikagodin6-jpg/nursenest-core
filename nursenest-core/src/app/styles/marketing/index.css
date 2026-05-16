@@ -6,14 +6,15 @@
    Cascade depends on this exact sequence — do not reorder.
 
    Section ownership:
-     hero.css             — homepage hero panel, stat tiles, ECG strip
-     header-nav.css       — marketing header glass, nav v4, dark unified
-     theme-overrides.css  — Blossom/Midnight/Aurora/Ocean colour overrides
-     hub-system.css       — pre-nursing, lessons, hub cards, auth
-     pathway-reading.css  — lesson reading rail, tier-hub hero bands
-     hub-tiers.css        — NP/RN/PN hubs, pricing/paywall, tools+FAQ
-     content-surfaces.css — lesson detail, analytics, blog
-     footer-seo.css       — footer glass, NCLEX commercial landing
+     hero.css                 — homepage hero panel, stat tiles, ECG strip
+     header-nav.css           — marketing header glass, nav v4, dark unified
+     header-single-line.css   — desktop nav containment / anti-wrap guards
+     theme-overrides.css      — Blossom/Midnight/Aurora/Ocean colour overrides
+     hub-system.css           — pre-nursing, lessons, hub cards, auth
+     pathway-reading.css      — lesson reading rail, tier-hub hero bands
+     hub-tiers.css            — NP/RN/PN hubs, pricing/paywall, tools+FAQ
+     content-surfaces.css     — lesson detail, analytics, blog
+     footer-seo.css           — footer glass, NCLEX commercial landing
 
    To add new CSS for a marketing surface, append to the appropriate
    section file. If a new surface does not fit an existing section,
@@ -22,6 +23,7 @@
 
 @import "./hero.css";
 @import "./header-nav.css";
+@import "./header-single-line.css";
 @import "./theme-overrides.css";
 @import "./hub-system.css";
 @import "./pathway-reading.css";
