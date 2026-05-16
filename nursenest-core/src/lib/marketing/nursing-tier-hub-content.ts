@@ -185,14 +185,14 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
   const cnpleStartHere =
     "Suggested loop: Lessons for clinical framing → Practice Questions for domain-by-domain judgment → Flashcards for weak-area recall → Simulation for LOFT stamina → Practice Exam for timed review and remediation.";
   const cnpleDifferenceBody =
-    "Lessons teach Canadian NP assessment, diagnostics, prescribing logic, safety, and follow-up planning. Practice Questions drill item-level reasoning by domain. Flashcards preserve high-yield recall. Simulation rehearses the CNPLE-style LOFT fixed-length experience, not CAT adaptive shutdown. Practice Exam blocks build timed stamina and expose weak slices before launch day.";
+    "Lessons teach Canadian NP assessment, diagnostics, prescribing logic, safety, and follow-up planning. Practice Questions are the main work block for item-level reasoning by domain. Flashcards preserve high-yield recall after misses. Simulation rehearses the CNPLE-style LOFT fixed-length experience, not CAT adaptive shutdown. Practice Exam blocks build timed stamina and expose weak slices before launch day.";
 
   const actionsCnpleLessons =
     "Canadian NP lessons for assessment, diagnostics, prescribing, chronic disease, pediatrics, women's health, mental health, safety, and follow-up planning.";
-  const actionsCnpleFlash =
-    "Recall decks for high-yield Canadian NP labs, medications, screening, red flags, guidelines, and weak-area remediation.";
   const actionsCnplePractice =
-    "CNPLE-tagged and Canadian-aligned NP questions by domain, with rationales that connect symptoms, diagnostics, prescribing, safety, and follow-up.";
+    "Primary work block: CNPLE-tagged and Canadian-aligned NP questions by domain, with rationales connecting symptoms, diagnostics, prescribing, safety, and follow-up.";
+  const actionsCnpleFlash =
+    "Recall decks for high-yield Canadian NP labs, medications, screening, red flags, guidelines, and weak-area remediation after question misses.";
   const actionsCnpleSimulation =
     "LOFT linear simulation — fixed-length and fixed-sequence practice for CNPLE stamina. No CAT adaptive shutdown.";
   const actionsCnpleExams =
@@ -208,7 +208,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
         ? pnIntro
         : isCnpleHub
           ? cnpleIntro
-          : `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or adaptive CAT-style exams next.`,
+          : `${examLabel} prep for ${countryLabel}: choose lessons, practice questions, flashcards, or adaptive CAT-style exams next.`,
     description: isGenericIntl
       ? `This hub explains how NurseNest can support ${audienceLabel} learners targeting registration in ${countryLabel} without claiming to replace regulator materials.`
       : isPnHub
@@ -224,20 +224,20 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
           ? cnpleIncludedNote
           : `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice, and CAT readiness work for ${audienceLabel} learners in ${countryLabel}.`,
     startHere: isGenericIntl
-      ? "Begin with Lessons for orientation, add Flashcards for recall, then use Practice Questions for drills. Treat optional adaptive sessions as reasoning practice only."
+      ? "Begin with Lessons for orientation, add Practice Questions for drills, then use Flashcards for recall. Treat optional adaptive sessions as reasoning practice only."
       : isPnHub
         ? pnStartHere
         : isCnpleHub
           ? cnpleStartHere
-          : "Start with Lessons, then move into Practice Questions, CAT, and Exams as your confidence grows.",
+          : "Start with Lessons, then move into Practice Questions, Flashcards, CAT, and Exams as your confidence grows.",
     differenceHeading: isPnHub ? "How the modes fit PN / RPN prep" : isCnpleHub ? "How the modes fit CNPLE prep" : "What is the difference?",
     differenceBody: isGenericIntl
-      ? "Lessons summarise concepts, Flashcards speed recall, Practice Questions build judgement under time pressure, and optional adaptive sessions mirror NCLEX-style pacing—not regulator-owned exam designs."
+      ? "Lessons summarise concepts, Practice Questions build judgement under time pressure, Flashcards speed recall, and optional adaptive sessions mirror NCLEX-style pacing—not regulator-owned exam designs."
       : isPnHub
         ? pnDifferenceBody
         : isCnpleHub
           ? cnpleDifferenceBody
-          : "Use Lessons for core concepts, Flashcards for recall, Practice Questions for focused drills, CAT for adaptive item-level sessions, and Exams for longer linear or timed practice-test sets.",
+          : "Use Lessons for core concepts, Practice Questions for focused drills, Flashcards for recall, CAT for adaptive item-level sessions, and Exams for longer linear or timed practice-test sets.",
     actions: [
       {
         id: "lessons",
@@ -246,16 +246,16 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
         href: marketingTierHubStudyActionHref(pathway, "lessons"),
       },
       {
-        id: "flashcards",
-        label: resolveMarketingDisplayCopy({ curatedCopy: "Flashcards" }),
-        description: isPnHub ? actionsPnFlash : isCnpleHub ? actionsCnpleFlash : "Strengthen recall quickly.",
-        href: marketingTierHubStudyActionHref(pathway, "flashcards"),
-      },
-      {
         id: "practice_questions",
         label: resolveMarketingDisplayCopy({ curatedCopy: "Practice Questions" }),
         description: isPnHub ? actionsPnPractice : isCnpleHub ? actionsCnplePractice : "Drill by topic or weakness.",
         href: marketingTierHubStudyActionHref(pathway, "practice_questions"),
+      },
+      {
+        id: "flashcards",
+        label: resolveMarketingDisplayCopy({ curatedCopy: "Flashcards" }),
+        description: isPnHub ? actionsPnFlash : isCnpleHub ? actionsCnpleFlash : "Strengthen recall quickly.",
+        href: marketingTierHubStudyActionHref(pathway, "flashcards"),
       },
       {
         id: "cat",
