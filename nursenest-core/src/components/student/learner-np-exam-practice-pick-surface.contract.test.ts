@@ -21,9 +21,23 @@ describe("Learner NP exam practice picker", () => {
     assert.match(src, /LOFT Simulation/);
   });
 
-  it("exposes learner navigation for lessons and question-bank access", () => {
+  it("exposes learner-app navigation for CNPLE", () => {
     const src = source("src/components/student/learner-np-exam-practice-pick-surface.tsx");
-    assert.match(src, /Question bank/);
+    assert.match(src, /Practice Tests/);
+    assert.match(src, /Flashcards/);
     assert.match(src, /Lessons/);
+    assert.match(src, /Question bank/);
+    assert.match(src, /app\/lessons\?pathwayId=/);
+    assert.match(src, /app\/flashcards\?pathwayId=/);
+  });
+
+  it("does not route signed-in CNPLE learners to the public lessons page", () => {
+    const src = source("src/components/student/learner-np-exam-practice-pick-surface.tsx");
+    assert.doesNotMatch(src, /\/canada\/np\/cnple\/lessons/);
+  });
+
+  it("preserves CAT wording for non-CNPLE NP pathways only", () => {
+    const src = source("src/components/student/learner-np-exam-practice-pick-surface.tsx");
+    assert.match(src, /Practice exams & CAT/);
   });
 });
