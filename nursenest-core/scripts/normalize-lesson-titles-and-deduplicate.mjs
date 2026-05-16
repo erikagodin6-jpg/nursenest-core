@@ -47,7 +47,7 @@ const SUFFIX_PATTERNS = [
 
 const PREFIX_PATTERNS = [
   /^\s*(rn|rpn|pn|np|allied)\s*[:\-–—]\s*/i,
-  /^\s*(nursing care for|nursing management of|management of|treatment of|care of the|care of|introduction to|overview of)\s+/i,
+  /^\s*(nursing interventions for|nursing assessment of|nursing assessment for|nursing care for|nursing management of|management of|treatment of|care of the|care of|introduction to|overview of)\s+/i,
 ];
 
 const LEGITIMATE_SPLITS = [
