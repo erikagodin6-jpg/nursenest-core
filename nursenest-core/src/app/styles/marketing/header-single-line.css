@@ -1,17 +1,18 @@
 /* ========================================================================== 
    header-single-line.css — Marketing header one-line containment
 
-   Keeps the desktop white marketing capsule from wrapping into a second text row.
-   Clinical modules remain discoverable in tier/clinical navigation, not the top link row.
+   Keeps the desktop marketing header from becoming a stacked three-row nav.
+   Pathway links and class/product links should feel like one intentional IA,
+   not separate rails competing for attention.
    ========================================================================== */
 
 @media (min-width: 1024px) {
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
     display: grid;
-    grid-template-columns: minmax(10rem, auto) minmax(0, 1fr) auto;
+    grid-template-columns: minmax(9rem, auto) minmax(0, 1fr) auto;
     align-items: center;
-    column-gap: clamp(0.45rem, 1vw, 0.9rem);
+    column-gap: clamp(0.35rem, 0.8vw, 0.8rem);
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav,
@@ -19,23 +20,37 @@
     flex-wrap: nowrap;
     justify-content: center;
     overflow: hidden;
-    gap: clamp(0.05rem, 0.28vw, 0.25rem);
+    gap: clamp(0.05rem, 0.22vw, 0.22rem);
   }
 
-  [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav a[href*="ecg-interpretation"],
-  [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav a[href*="advanced-ecg"],
-  [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav a[href*="hemodynamics"],
-  [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav a[href*="ecg-interpretation"],
-  [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav a[href*="advanced-ecg"],
-  [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav a[href*="hemodynamics"] {
-    display: none;
+  [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav .nn-marketing-nav-link,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav .nn-marketing-nav-link,
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail .nn-marketing-tier-chip,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-rail .nn-marketing-tier-chip {
+    min-width: 0;
+    white-space: nowrap;
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav .nn-marketing-nav-link,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav .nn-marketing-nav-link {
-    min-width: 0;
-    padding-inline: clamp(0.35rem, 0.55vw, 0.55rem);
-    white-space: nowrap;
+    padding-inline: clamp(0.32rem, 0.48vw, 0.5rem);
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-rail {
+    overflow: hidden;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail nav,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-rail nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail nav::-webkit-scrollbar,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-rail nav::-webkit-scrollbar {
+    display: none;
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster,
@@ -50,23 +65,25 @@
 @media (min-width: 1024px) and (max-width: 1279.98px) {
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
-    grid-template-columns: minmax(8.5rem, auto) minmax(0, 1fr) auto;
-    padding-inline: clamp(0.45rem, 0.9vw, 0.75rem);
+    grid-template-columns: minmax(8rem, auto) minmax(0, 1fr) auto;
+    padding-inline: clamp(0.4rem, 0.8vw, 0.7rem);
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-brand-lockup,
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-brand-lockup {
-    max-width: 9.75rem;
+    max-width: 9.25rem;
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-main-marketing-nav .nn-marketing-nav-link,
-  [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav .nn-marketing-nav-link {
-    font-size: 0.82rem;
-    padding-inline: 0.35rem;
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-main-marketing-nav .nn-marketing-nav-link,
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail .nn-marketing-tier-chip,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-rail .nn-marketing-tier-chip {
+    font-size: 0.78rem;
+    padding-inline: 0.3rem;
   }
 
   [data-nn-header-layout="marketing-row4"] .nn-header-desktop-auth-cluster :is(a, button),
   [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-auth-cluster :is(a, button) {
-    padding-inline: 0.7rem;
+    padding-inline: 0.65rem;
   }
 }
