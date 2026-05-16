@@ -1,0 +1,59 @@
+name: ECG Production Readiness
+
+on:
+  pull_request:
+    paths:
+      - "nursenest-core/src/app/modules/ecg/**"
+      - "nursenest-core/src/app/modules/ecg-advanced/**"
+      - "nursenest-core/src/app/modules/ecg-interpretation/**"
+      - "nursenest-core/src/app/(marketing)/(default)/ecg/**"
+      - "nursenest-core/src/app/(marketing)/(default)/ecg-practice-questions/**"
+      - "nursenest-core/src/components/study/ecg-*.tsx"
+      - "nursenest-core/src/lib/ecg-module/**"
+      - "nursenest-core/src/lib/advanced-ecg/**"
+      - "nursenest-core/scripts/check-ecg-publish-env.mjs"
+      - "nursenest-core/scripts/verify-ecg-production-readiness.mjs"
+      - ".github/workflows/ecg-production-readiness.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  readiness:
+    name: ECG production readiness gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - name: Install dependencies
+        working-directory: nursenest-core
+        run: npm ci --ignore-scripts
+
+      - name: Run ECG production readiness gate
+        working-directory: nursenest-core
+        run: node scripts/verify-ecg-production-readiness.mjs
+
+      - name: Verify ECG publish env checker is redaction-safe
+        working-directory: nursenest-core
+        run: |
+          set +e
+          OUTPUT=$(node scripts/check-ecg-publish-env.mjs 2>&1)
+          STATUS=$?
+          set -e
+          echo "$OUTPUT"
+          if echo "$OUTPUT" | grep -E "sk_(live|test)_|whsec_|postgres(ql)?://|AUTH_SECRET|DATABASE_URL|STRIPE_SECRET_KEY"; then
+            echo "ECG publish env checker printed sensitive values or sensitive key names."
+            exit 1
+          fi
+          exit 0
