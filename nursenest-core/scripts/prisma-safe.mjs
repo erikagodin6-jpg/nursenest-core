@@ -56,12 +56,29 @@ export function isBuildSafePrismaGenerateContext({ command, argv = process.argv,
   void command;
   const commandString = argv.join(" ");
   const isGenerate = commandString.includes("generate");
-  const isBuild = env.NN_APP_PLATFORM_BUILD === "true" || env.NN_LOW_MEMORY_BUILD === "1";
+  const isBuild =
+    env.NN_APP_PLATFORM_BUILD === "true" ||
+    env.NN_LOW_MEMORY_BUILD === "1" ||
+    env.GITHUB_ACTIONS === "true" ||
+    env.CI === "true";
   const isBuildGenerate = isBuild && isGenerate;
   return isBuildGenerate;
 }
 
+// prisma generate reads schema.prisma to emit TypeScript types — it never connects to the DB.
+// In CI/build contexts without DATABASE_URL, inject a syntactically valid dummy so Prisma's
+// env-var parser is satisfied without a real connection.
+const PRISMA_GENERATE_DUMMY_URL = "postgresql://ci:ci@localhost:5432/ci_generate_dummy";
+
 export function assertDatabaseUrlForBuildGenerate(env = process.env) {
+  if (!env.DATABASE_URL?.trim()) {
+    process.env.DATABASE_URL = PRISMA_GENERATE_DUMMY_URL;
+    if (!process.env.DIRECT_URL?.trim()) {
+      process.env.DIRECT_URL = PRISMA_GENERATE_DUMMY_URL;
+    }
+    console.log("[prisma-safe] generate: DATABASE_URL absent in CI/build — using dummy for schema codegen (no DB connection made).");
+    return;
+  }
   maskedPostgresTarget(env.DATABASE_URL?.trim(), "DATABASE_URL");
 }
 
