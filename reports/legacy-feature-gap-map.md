@@ -1,6 +1,6 @@
 # Legacy → Next gap map
 
-Generated: **2026-05-16T06:29:14.864Z**
+Generated: **2026-05-16T14:19:40.670Z**
 
 ## Top 20 migration priorities
 
