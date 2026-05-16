@@ -549,15 +549,26 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
     ],
     [marketingFlowDestinations, t, locale],
   );
-  // Use server-precomputed more-links when available — eliminates 6 t() calls for static desktop nav.
+  // Use server-precomputed more-links when available — eliminates 7 t() calls for static desktop nav.
   const marketingMoreLinks: HeaderNavLink[] = useMemo(
     () =>
       precomputedNavData?.moreLinks
         ? [...precomputedNavData.moreLinks]
         : [
-            // ECG and clinical specialty modules are discoverable via the tier hub
-            // dropdowns (RN/NP mega-menus) and learner clinical modules flyout.
-            // They are NOT in top-level moreLinks to keep the desktop nav single-line.
+            // Canonical nav order (after tier chips): Pre-Nursing, ECG, Tools, Pricing, About, Blog, FAQ
+            {
+              key: "pre-nursing",
+              href: "/pre-nursing",
+              matchBase: "/pre-nursing",
+              label: formatTitleCase(t("nav.preNursing"), locale),
+            },
+            {
+              key: "ecg",
+              href: "/ecg-interpretation",
+              matchBase: "/ecg-interpretation",
+              label: "ECG",
+            },
+            { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
             {
               key: "pricing",
               href: HUB.pricing,
@@ -577,13 +588,6 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
               label: formatTitleCase(t("footer.blog"), locale),
             },
             { key: "faq", href: "/faq", matchBase: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
-            {
-              key: "pre-nursing",
-              href: "/pre-nursing",
-              matchBase: "/pre-nursing",
-              label: formatTitleCase(t("nav.preNursing"), locale),
-            },
-            { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
           ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [precomputedNavData?.moreLinks, t, locale],
@@ -823,21 +827,10 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
             </div>
           ) : null}
 
-          {/* Bar A — utility (desktop xl+); theme-token triggers via MarketingHeaderUtilityCluster row4 */}
-          {marketingRow4Layout ? (
-            <div
-              data-testid="marketing-header-utility-band"
-              data-nn-header-band="utility"
-              data-nn-header-layer="utility"
-              data-nn-header-quiet="true"
-              className="nn-marketing-nav-v31-bar-a nn-header-layer-utility nn-header-hide-until-xl-flex w-full min-w-0 shrink-0 flex-wrap items-center justify-end gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_48%,var(--header-border))] py-1.5 pe-1 ps-1 md:py-2"
-            >
-              <MarketingHeaderUtilityCluster
-                chromeMode="row4"
-                includeUnpublishedRegions={isAdminAuthenticated}
-              />
-            </div>
-          ) : null}
+          {/* Bar A removed — utility controls now live in the desktop grid auth cluster (right side of Row 1).
+              This collapses the previous 3-row desktop layout (utility + logo/nav + tier) into 2 rows:
+              Row 1: logo (left) | utility + auth (right)
+              Row 2: unified nav (tier chips + all marketing links) */}
 
           {/* ── Desktop main header row: left logo | center core public links | right auth (utility on Bar A when light row4) ── */}
           <div
@@ -860,43 +853,46 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
               ) : null}
             </div>
 
-            <nav
-              aria-label={t("nav.marketingExplore")}
-              className="nav nn-header-main-marketing-nav flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-0.5 px-2 sm:gap-1 sm:px-3 xl:gap-1.5"
-            >
-              {marketingMoreLinks.map((item) => (
-                <HeaderNavAnchor
-                  key={item.key}
-                  href={localizeHref(item.href)}
-                  aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                  className={NAV_MARKETING_MORE_CLASS}
-                  onClick={() =>
-                    trackClientEvent(PH.marketingNavClick, {
-                      actor: navActor,
-                      nav_id: item.key,
-                      surface: "site_header_desktop",
-                      marketing_region: region,
-                    })
-                  }
-                >
-                  {item.label}
-                </HeaderNavAnchor>
-              ))}
-            </nav>
+            {/* row4: nav moves to the unified tier rail below; spacer preserves the 3-col grid so auth stays right-aligned */}
+            {marketingRow4Layout ? (
+              <div aria-hidden="true" />
+            ) : (
+              <nav
+                aria-label={t("nav.marketingExplore")}
+                className="nav nn-header-main-marketing-nav flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-0.5 px-2 sm:gap-1 sm:px-3 xl:gap-1.5"
+              >
+                {marketingMoreLinks.map((item) => (
+                  <HeaderNavAnchor
+                    key={item.key}
+                    href={localizeHref(item.href)}
+                    aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                    className={NAV_MARKETING_MORE_CLASS}
+                    onClick={() =>
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: navActor,
+                        nav_id: item.key,
+                        surface: "site_header_desktop",
+                        marketing_region: region,
+                      })
+                    }
+                  >
+                    {item.label}
+                  </HeaderNavAnchor>
+                ))}
+              </nav>
+            )}
 
             <div className="nn-header-desktop-auth-cluster relative z-[130] flex min-w-0 max-w-full shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1.5 xl:gap-x-2">
-              {!marketingRow4Layout ? (
-                <div
-                  data-testid="marketing-header-utility-inline"
-                  data-nn-header-band="utility"
-                  className="nn-header-desktop-marketing-utility-cluster flex min-w-0 max-w-full shrink flex-wrap items-center justify-end gap-y-1"
-                >
-                  <MarketingHeaderUtilityCluster
-                    chromeMode="dark-marketing"
-                    includeUnpublishedRegions={isAdminAuthenticated}
-                  />
-                </div>
-              ) : null}
+              <div
+                data-testid="marketing-header-utility-inline"
+                data-nn-header-band="utility"
+                className="nn-header-desktop-marketing-utility-cluster flex min-w-0 max-w-full shrink flex-wrap items-center justify-end gap-y-1"
+              >
+                <MarketingHeaderUtilityCluster
+                  chromeMode={marketingRow4Layout ? "row4" : "dark-marketing"}
+                  includeUnpublishedRegions={isAdminAuthenticated}
+                />
+              </div>
               {/* CLS guard: show guest buttons immediately during session load (same as mobile fix above). */}
               {!isAuthenticated ? (
                 <div className="flex shrink-0 items-center gap-2" aria-busy={isSessionPending || undefined}>
@@ -982,14 +978,19 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
           </div>{/* /nav-row */}
         </div>{/* /.nn-section-shell */}
         </div>{/* /.nn-header-marketing-primary-band */}
+        {/* ── Unified nav row — Row 2 of the 2-row desktop header ──
+            row4 (Ocean/Blossom/Midnight): all nav items here — tier pathway chips followed by
+            marketing links. flex-nowrap enforces single line on lg+ desktop.
+            Non-row4 dark themes: tier chips only (more links live in the desktop grid center nav). */}
         <div
           className="nn-marketing-nav-v31-tier-rail nn-header-hide-until-xl w-full nn-header-nav-row"
           data-nn-header-band="tier"
+          data-testid="marketing-header-unified-nav"
         >
-          <div className="nn-marketing-nav-v31-tier-inner nn-section-shell nn-header-primary-inner-shell flex min-h-[30px] flex-wrap items-center gap-x-1 gap-y-0 py-1 md:min-h-[32px] md:py-1.5 lg:gap-x-2">
+          <div className="nn-marketing-nav-v31-tier-inner nn-section-shell nn-header-primary-inner-shell flex min-h-[30px] items-center gap-x-1 gap-y-0 py-1 md:min-h-[32px] md:py-1.5">
             <nav
               aria-label={t("nav.marketingExplore")}
-              className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-1 xl:gap-1.5"
+              className="flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-x-0.5 xl:gap-x-1"
             >
               {tierHubMenus.map((menu) => (
                 <HeaderNavAnchor
@@ -998,10 +999,6 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   data-active={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) || undefined}
                   // Visual chrome (bg/border/text) for the tier chips lives in CSS
                   // (premium-redesign-2026.css `.nn-marketing-tier-chip` + globals.css `.nn-header-nav-row`).
-                  // Inlining `text-[var(--nav-fg)]` / `bg-[color-mix(...,var(--nav-bg))]` here washes
-                  // labels out: `--nav-fg`/`--nav-bg` cascade from theme nav chrome (white/dark navy)
-                  // because the `.nn-header-logo-row > .nn-header-nav-row` token override does not
-                  // match through the intermediate `.nn-marketing-nav-v31-frame` div.
                   className={`${NAV_TIER_LINK_CLASS} nn-marketing-tier-chip px-2 py-1.5 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]`}
                   onClick={() => {
                     trackClientEvent(PH.marketingNavClick, {
@@ -1013,6 +1010,27 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   }}
                 >
                   {menu.label}
+                </HeaderNavAnchor>
+              ))}
+              {/* row4 only: marketing links (Pre-Nursing, ECG, Tools, Pricing, About, Blog, FAQ)
+                  rendered here so all nav lives on one line. Non-row4 dark themes render these
+                  in the desktop grid center nav instead. */}
+              {marketingRow4Layout && marketingMoreLinks.map((item) => (
+                <HeaderNavAnchor
+                  key={item.key}
+                  href={localizeHref(item.href)}
+                  aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                  className={NAV_MARKETING_MORE_CLASS}
+                  onClick={() =>
+                    trackClientEvent(PH.marketingNavClick, {
+                      actor: navActor,
+                      nav_id: item.key,
+                      surface: "site_header_desktop",
+                      marketing_region: region,
+                    })
+                  }
+                >
+                  {item.label}
                 </HeaderNavAnchor>
               ))}
             </nav>

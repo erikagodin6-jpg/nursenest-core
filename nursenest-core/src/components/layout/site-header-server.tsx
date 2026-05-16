@@ -80,9 +80,26 @@ function buildPrecomputedNavData(
     loginLabel: formatTitleCase(tr("nav.logIn", "Log In"), locale),
     signupLabel: formatTitleCase(tr("nav.signup", "Start Free"), locale),
     moreLinks: [
-      // ECG and clinical specialty modules (ECG, Hemodynamics) are discoverable via the
-      // tier hub dropdowns (RN/NP mega-menus) and the learner clinical modules flyout.
-      // They are NOT in top-level moreLinks to keep the desktop nav to a single line.
+      // Ordered to match the unified nav row target sequence:
+      // RN/RPN/NP/New Grad/Allied (tier chips) → Pre-Nursing → ECG → Tools → Pricing → About → Blog → FAQ
+      {
+        key: "pre-nursing",
+        href: localizeHref(locale, "/pre-nursing"),
+        matchBase: "/pre-nursing",
+        label: formatTitleCase(tr("nav.preNursing", "Pre-Nursing"), locale),
+      },
+      {
+        key: "ecg",
+        href: localizeHref(locale, "/ecg-interpretation"),
+        matchBase: "/ecg-interpretation",
+        label: "ECG",
+      },
+      {
+        key: "tools",
+        href: localizeHref(locale, HUB.tools),
+        matchBase: HUB.tools,
+        label: formatTitleCase(tr("nav.tools", "Tools"), locale),
+      },
       {
         key: "pricing",
         href: localizeHref(locale, HUB.pricing),
@@ -106,18 +123,6 @@ function buildPrecomputedNavData(
         href: localizeHref(locale, "/faq"),
         matchBase: "/faq",
         label: formatTitleCase(tr("footer.faq", "FAQ"), locale),
-      },
-      {
-        key: "pre-nursing",
-        href: localizeHref(locale, "/pre-nursing"),
-        matchBase: "/pre-nursing",
-        label: formatTitleCase(tr("nav.preNursing", "Pre-Nursing"), locale),
-      },
-      {
-        key: "tools",
-        href: localizeHref(locale, HUB.tools),
-        matchBase: HUB.tools,
-        label: formatTitleCase(tr("nav.tools", "Tools"), locale),
       },
     ],
   };
