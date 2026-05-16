@@ -30,7 +30,11 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: nursenest-core/package-lock.json
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci?schema=public
+          DIRECT_URL: postgresql://ci:ci@localhost:5432/ci?schema=public
       - name: CI environment diagnostics
         run: node ../scripts/ci/diagnose-actions-environment.mjs
         env:

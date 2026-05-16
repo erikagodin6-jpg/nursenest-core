@@ -170,6 +170,21 @@ describe("prisma-safe build-time generate env policy", () => {
         );
       }),
     ));
+
+  it("CI low-memory build generate succeeds without DATABASE_URL (NN_LOW_MEMORY_BUILD=1, no NN_APP_PLATFORM_BUILD)", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        process.env.NN_LOW_MEMORY_BUILD = "1";
+        const logs = [];
+        const result = loadPrismaSafeEnvForCommand("generate", {
+          envRoot,
+          logger: { log: (line) => logs.push(line) },
+          argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+        });
+        assert.equal(result.buildSafeGenerate, true);
+        assert.equal(logs.some((line) => line.includes("Build-time Prisma generate detected; DIRECT_URL requirement skipped.")), true);
+      }),
+    ));
 });
 
 describe("schema readiness", () => {

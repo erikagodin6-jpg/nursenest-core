@@ -62,6 +62,9 @@ export function isBuildSafePrismaGenerateContext({ command, argv = process.argv,
 }
 
 export function assertDatabaseUrlForBuildGenerate(env = process.env) {
+  // Only hard-require DATABASE_URL on App Platform builds — NN_LOW_MEMORY_BUILD=1 is also
+  // set in the CI verify-build workflow (for RAM), but DATABASE_URL is intentionally absent there.
+  if (env.NN_APP_PLATFORM_BUILD !== "true") return;
   maskedPostgresTarget(env.DATABASE_URL?.trim(), "DATABASE_URL");
 }
 
