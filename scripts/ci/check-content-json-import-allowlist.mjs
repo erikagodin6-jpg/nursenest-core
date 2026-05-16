@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const srcRoot = path.join(repoRoot, "nursenest-core", "src");
 
-/** Only these pathway-lesson JSON files may be imported from application code. */
+/** Only these pathway-lesson JSON/catalog files may be imported from application code. */
 const PATHWAY_LESSONS_ALLOW = new Set([
   "catalog.json",
   "allied-bundled-catalog.json",
@@ -34,6 +34,11 @@ const PATHWAY_LESSONS_ALLOW = new Set([
   "rn-nclex-endocrine-expansion-catalog.json",
   "rn-nclex-musculoskeletal-expansion-catalog.json",
   "rn-nclex-fluids-electrolytes-expansion-catalog.json",
+
+  // Deliberate allied-profession RT shard manifest. Keep explicit so the guard
+  // still blocks accidental broad imports of new pathway lesson trees.
+  "registry",
+  "respiratory-therapy",
 ]);
 
 /** topic-maps/ — keep tiny; expand allowlist deliberately if adding files. */
