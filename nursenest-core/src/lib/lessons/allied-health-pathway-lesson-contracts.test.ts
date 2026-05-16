@@ -74,6 +74,34 @@ describe("Allied health — bundled catalog + URL contracts", () => {
     assert.match(src, /ALLIED_PROFESSION_DEDICATED_CATALOGS/);
   });
 
+  it("paramedic profession is wired to a dedicated EMS lesson shard", () => {
+    const profession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "paramedic");
+    assert.ok(profession);
+    assert.equal(profession?.dedicatedCatalogFile, "paramedic");
+    assert.ok(profession?.topicSlugsIn.includes("prehospital-ecg"));
+    assert.ok(profession?.topicSlugsIn.includes("trauma-care"));
+    assert.ok(profession?.topicSlugsIn.includes("airway-management"));
+  });
+
+  it("paramedic dedicated lessons are discoverable through the merged allied catalog", () => {
+    const lessons = getCatalogPathwayLessonsSync("us-allied-core");
+    const airway = lessons.find((l) => l.slug === "ems-airway-ventilation-and-oxygenation");
+    const trauma = lessons.find((l) => l.slug === "ems-trauma-hemorrhage-and-spinal-motion");
+    assert.ok(airway, "expected EMS airway lesson in merged allied catalog");
+    assert.ok(trauma, "expected EMS trauma lesson in merged allied catalog");
+    assert.equal(airway?.topicSlug, "airway-management");
+    assert.equal(trauma?.topicSlug, "trauma-care");
+  });
+
+  it("paramedic lessons preserve premium clinical section depth after normalization", () => {
+    const raw = getCatalogLessonRawBySlug("us-allied-core", "ems-shock-and-perfusion");
+    assert.ok(raw);
+    const lesson = normalizeLesson(raw!, "us-allied-core");
+    assert.ok(lesson.sections.length >= 5);
+    assert.ok(lesson.sections.some((s) => s.kind === "clinical_scenario"));
+    assert.ok(lesson.sections.some((s) => s.kind === "exam_relevance"));
+  });
+
   it("getLessonBySlug matches normalizeLesson(getCatalogLessonRawBySlug) for a sample US allied slug", () => {
     const pathwayId = "us-allied-core";
     const slug = getCatalogPathwayLessonsSync(pathwayId)[0]?.slug;
