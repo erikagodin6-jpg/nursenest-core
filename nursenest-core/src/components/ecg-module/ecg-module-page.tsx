@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ECG_ROUTE_CONFIGS, type EcgRouteConfig } from "@/lib/ecg-module/ecg-module-config";
 import { EcgQuestionList, EcgWorksheetList } from "@/components/ecg-module/ecg-module-client";
+import { EcgStructuredLessonList } from "@/components/ecg-module/ecg-structured-lesson-list";
 
 const PRIMARY_LINKS = [
   ["/modules/ecg/basic/lessons", "Basic lessons"],
@@ -54,7 +55,9 @@ export function EcgModulePage({ config }: { config: EcgRouteConfig }) {
         ))}
       </section>
 
-      {config.kind === "worksheets" ? (
+      {config.kind === "lessons" ? (
+        <EcgStructuredLessonList level={config.level} />
+      ) : config.kind === "worksheets" ? (
         <EcgWorksheetList level={config.level} />
       ) : config.questionMode ? (
         <EcgQuestionList level={config.level} mode={config.questionMode} kind={config.kind} />
