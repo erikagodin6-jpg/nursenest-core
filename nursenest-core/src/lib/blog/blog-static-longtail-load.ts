@@ -54,6 +54,23 @@ function parseDraftFlag(raw: string | undefined): boolean {
   return v === "true" || v === "1" || v === "yes";
 }
 
+function parseDateOnlyAtNoonUtc(raw: string | undefined): Date | null {
+  const v = raw?.trim();
+  if (!v || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return null;
+  const d = new Date(`${v}T12:00:00Z`);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+export function isBlogStaticLongtailRecordPublished(
+  record: Pick<BlogStaticLongtailRecord, "createdAt" | "draft">,
+  now: Date = new Date(),
+): boolean {
+  if (record.draft) return false;
+  const publishDate = parseDateOnlyAtNoonUtc(record.createdAt);
+  if (!publishDate) return true;
+  return publishDate.getTime() <= now.getTime();
+}
+
 function recordFromFields(bodyHtml: string, fields: Record<string, string>): BlogStaticLongtailRecord {
   const slug = fields.slug?.trim() ?? "";
   const title = fields.title?.trim() ?? "";
@@ -92,8 +109,8 @@ function recordFromFields(bodyHtml: string, fields: Record<string, string>): Blo
 }
 
 /**
- * Every `*.md` row under `src/content/blog-static-longtail/`, including `draft: true`
- * (for validators and tooling). Cached per process.
+ * Every `*.md` row under `src/content/blog-static-longtail/`, including `draft: true` and future-dated
+ * scheduled files (for validators and tooling). Cached per process.
  */
 export function listAllBlogStaticLongtailFileRecords(): { file: string; record: BlogStaticLongtailRecord }[] {
   if (cache) return cache;
@@ -113,18 +130,18 @@ export function listAllBlogStaticLongtailFileRecords(): { file: string; record: 
   return cache;
 }
 
-/** Published long-tail records (`draft` omitted or false). */
-export function listBlogStaticLongtailRecords(): BlogStaticLongtailRecord[] {
-  return listBlogStaticLongtailFileRecords().map((x) => x.record);
+/** Published long-tail records (`draft` omitted/false and `publishedAt`/`createdAt` is today or earlier). */
+export function listBlogStaticLongtailRecords(now: Date = new Date()): BlogStaticLongtailRecord[] {
+  return listBlogStaticLongtailFileRecords(now).map((x) => x.record);
 }
 
-/** Published long-tail files only (`draft` omitted or false). */
-export function listBlogStaticLongtailFileRecords(): { file: string; record: BlogStaticLongtailRecord }[] {
-  return listAllBlogStaticLongtailFileRecords().filter(({ record }) => !record.draft);
+/** Published long-tail files only (`draft` omitted/false and not future scheduled). */
+export function listBlogStaticLongtailFileRecords(now: Date = new Date()): { file: string; record: BlogStaticLongtailRecord }[] {
+  return listAllBlogStaticLongtailFileRecords().filter(({ record }) => isBlogStaticLongtailRecordPublished(record, now));
 }
 
-export function getBlogStaticLongtailRecord(slug: string): BlogStaticLongtailRecord | undefined {
-  return listBlogStaticLongtailRecords().find((r) => r.slug === slug);
+export function getBlogStaticLongtailRecord(slug: string, now: Date = new Date()): BlogStaticLongtailRecord | undefined {
+  return listBlogStaticLongtailRecords(now).find((r) => r.slug === slug);
 }
 
 export function blogStaticLongtailDirForDiagnostics(): string {
