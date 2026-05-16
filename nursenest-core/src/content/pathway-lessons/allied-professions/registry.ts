@@ -1,16 +1,11 @@
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import respiratoryTherapyCatalog from "@/content/pathway-lessons/allied-professions/respiratory-therapy";
+import paramedicCatalog from "@/content/pathway-lessons/allied-professions/paramedic";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
 };
 
-/**
- * Attach the RT dedicated catalog without forcing a full rewrite of the large
- * profession registry. `ALLIED_PROFESSIONS` is an exported mutable array; this
- * preserves existing route metadata while enabling the optional shard merge in
- * `loadAlliedProfessionDedicatedLessonsForPathway()`.
- */
 const respiratoryProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "respiratory");
 if (respiratoryProfession) {
   respiratoryProfession.dedicatedCatalogFile = "respiratory-therapy";
@@ -44,12 +39,43 @@ if (respiratoryProfession) {
   respiratoryProfession.premiumCtaHeadline = "Master ventilation, waveforms, ABGs, and ICU respiratory care";
 }
 
-/**
- * Static manifest for optional per-profession allied lesson shards.
- *
- * Keep this explicit so Turbopack never has to resolve an open-ended dynamic
- * import for `allied-professions/${file}` when no optional shards are present.
- */
+const paramedicProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "paramedic");
+if (paramedicProfession) {
+  paramedicProfession.dedicatedCatalogFile = "paramedic";
+  paramedicProfession.topicSlugsIn = [
+    "scene-size-up",
+    "patient-assessment",
+    "airway-management",
+    "shock-recognition",
+    "cardiac-emergencies",
+    "prehospital-ecg",
+    "neurologic-emergencies",
+    "trauma-care",
+    "pediatric-emergencies",
+    "ob-neonatal-emergencies",
+    "toxicology-overdose",
+    "ems-documentation",
+  ];
+  paramedicProfession.description =
+    "Deep paramedic and EMS education covering field assessment, airway management, STEMI recognition, trauma, shock, pediatrics, toxicology, scene safety, and protocol-first prehospital reasoning.";
+  paramedicProfession.examOverview = [
+    "Paramedic exams reward rapid scene judgment, airway and perfusion priorities, and protocol-safe escalation under pressure.",
+    "High-yield EMS preparation connects ECG findings, shock patterns, trauma priorities, destination decisions, and reassessment instead of isolated memorization.",
+    "Scenario-based repetition and timed field-style reasoning outperform passive reading for EMS certification preparation.",
+  ];
+  paramedicProfession.features = [
+    "Dedicated EMS lesson shard with mechanism-first prehospital reasoning.",
+    "Paramedic-specific airway, trauma, shock, ECG, stroke, toxicology, and pediatric content.",
+    "Scenario-heavy field cases with pre/post testing and protocol-aware rationales.",
+    "Profession-scoped allied lessons without RN-only inpatient leakage.",
+  ];
+  paramedicProfession.ctaLine =
+    "Train scene management, airway, ECG, trauma, and prehospital decision-making through the dedicated EMS pathway.";
+  paramedicProfession.premiumCtaHeadline =
+    "Master prehospital assessment, airway management, trauma, ECG, and EMS field judgment";
+}
+
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
   "respiratory-therapy": respiratoryTherapyCatalog,
+  paramedic: paramedicCatalog,
 };
