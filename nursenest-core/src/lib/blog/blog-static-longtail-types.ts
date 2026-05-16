@@ -7,7 +7,7 @@ export type BlogStaticLongtailRecord = {
   title: string;
   excerpt: string;
   category: string;
-  /** YYYY-MM-DD — used for index ordering */
+  /** YYYY-MM-DD — used for index ordering and static scheduled publishing gate */
   createdAt: string;
   /** YYYY-MM-DD — preferred for sort when present */
   updatedAt: string;
