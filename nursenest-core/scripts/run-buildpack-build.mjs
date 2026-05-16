@@ -39,7 +39,7 @@ function buildCompileChildEnv() {
   const rawNodeOptions = String(process.env.NODE_OPTIONS ?? "").trim();
   const withoutHeap = rawNodeOptions.replace(/--max-old-space-size=\d+/, "").replace(/\s+/g, " ").trim();
   const inheritedHeap = rawNodeOptions.match(/--max-old-space-size=\d+/)?.[0];
-  const heapFlag = heapMb ? `--max-old-space-size=${heapMb}` : (inheritedHeap ?? "--max-old-space-size=4096");
+  const heapFlag = heapMb ? `--max-old-space-size=${heapMb}` : (inheritedHeap ?? "--max-old-space-size=2816");
   const nodeOptions = [withoutHeap, heapFlag].filter(Boolean).join(" ").trim();
   return {
     ...process.env,
