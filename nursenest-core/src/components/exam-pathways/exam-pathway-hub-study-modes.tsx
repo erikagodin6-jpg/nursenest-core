@@ -115,7 +115,7 @@ export function ExamPathwayHubPrimaryStudyCards({
     ) : null;
 
   const questionsBadge = (
-    <span className="nn-marketing-label nn-marketing-label--accent mt-2 inline-block max-w-full">
+    <span className="nn-marketing-label nn-marketing-label--accent mt-2 inline-block max-w-full whitespace-normal break-words">
       {t("components.examPathwayHub.studyModes.questionsBadge")}
     </span>
   );
@@ -175,15 +175,16 @@ export function ExamPathwayHubPrimaryStudyCards({
       className="nn-hub-primary-study-modes nn-exam-hub-conversion"
       aria-labelledby="exam-hub-primary-study-heading"
       data-nn-hub-section="primary-study"
+      data-nn-rn-study-grid={pathway.roleTrack === "rn" ? "1" : undefined}
     >
       <h2 id="exam-hub-primary-study-heading" className="nn-marketing-h2 text-balance text-[var(--palette-heading)]">
         {t("components.examPathwayHub.studyModes.heading")}
       </h2>
-      <p className="nn-marketing-body-sm mt-3 max-w-2xl text-pretty leading-relaxed text-[var(--semantic-text-secondary)]">
+      <p className="nn-marketing-body-sm mt-3 max-w-3xl text-pretty leading-relaxed text-[var(--semantic-text-secondary)]">
         {t("components.examPathwayHub.studyModes.subhead")}
       </p>
 
-      <ul className="mt-8 grid list-none grid-cols-1 gap-5 p-0 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+      <ul className="mt-8 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-3 md:gap-6">
         {cardDefs.map((card) => {
           const trackEvent = () => {
             const props = {
@@ -216,7 +217,7 @@ export function ExamPathwayHubPrimaryStudyCards({
               : t(card.ctaKey);
 
           return (
-            <li key={card.key} {...(card.key === "cat" ? { "data-nn-qa-cat-hub-card": catExam } : {})}>
+            <li key={card.key} className="min-w-0" {...(card.key === "cat" ? { "data-nn-qa-cat-hub-card": catExam } : {})}>
               <StudyCard
                 surface="hub"
                 variant={card.variant}
@@ -228,7 +229,7 @@ export function ExamPathwayHubPrimaryStudyCards({
                 ctaVariant={card.ctaVariant}
                 footer={card.footer}
                 onClick={trackEvent}
-                className={card.extraClass}
+                className={`${card.extraClass ?? ""} min-w-0`}
                 ariaLabel={
                   card.key === "cat"
                     ? `${title} — ${catPathwayLine}`
@@ -240,7 +241,7 @@ export function ExamPathwayHubPrimaryStudyCards({
         })}
       </ul>
 
-      <p className="nn-marketing-caption mt-5">
+      <p className="nn-marketing-caption mt-5 max-w-3xl text-pretty">
         {t("components.examPathwayHub.studyModes.signInNote")}{" "}
         <Link href={signInContinueHref} className="font-medium text-primary underline-offset-4 hover:underline">
           {t("components.examPathwayHub.studyModes.signInLink")}
