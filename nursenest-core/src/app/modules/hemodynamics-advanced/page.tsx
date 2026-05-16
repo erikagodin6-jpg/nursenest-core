@@ -1,24 +1,15 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Activity, ArrowRight, Lock } from "lucide-react";
+import { Activity, ArrowRight, Clock, Lock } from "lucide-react";
 import { loadAdvancedHemodynamicsAccess } from "@/lib/advanced-hemodynamics/advanced-hemodynamics-access";
+import { ADVANCED_HEMODYNAMICS_LESSON_INDEX } from "@/lib/advanced-hemodynamics/advanced-hemodynamics-curriculum";
 
 export const dynamic = "force-dynamic";
 
-const ADVANCED_CURRICULUM = [
-  { title: "Swan-Ganz / Pulmonary Artery Catheter", desc: "Insertion waveform progression, wedge pressure, and troubleshooting" },
-  { title: "Cardiac Index & Output", desc: "Thermodilution, Fick principle, and clinical interpretation" },
-  { title: "SVR & PVR", desc: "Systemic and pulmonary vascular resistance: calculation and manipulation" },
-  { title: "Stroke Volume Variation (SVV)", desc: "Dynamic fluid responsiveness predictor with mechanical ventilation" },
-  { title: "PAOP / Wedge Pressure", desc: "Left heart preload estimation, cardiogenic vs non-cardiogenic pulmonary edema" },
-  { title: "Mixed Venous O2 Saturation (SvO2)", desc: "Oxygen delivery/consumption balance, SvO2 vs ScvO2" },
-  { title: "Septic Shock Hemodynamics", desc: "Vasodilation, low SVR, high CO, SvO2 misinterpretation pitfalls" },
-  { title: "Cardiogenic Shock", desc: "Low CO, elevated PAOP, elevated SVR — vasopressor + inotrope selection" },
-  { title: "Vasopressor Reasoning", desc: "Norepinephrine, vasopressin, epinephrine, phenylephrine — when to add vs switch" },
-  { title: "Fluid Responsiveness", desc: "PLR, SVV, PPV, IVC collapsibility — evidence-based assessment" },
-  { title: "Waveform Interpretation", desc: "PA waveform artifacts, overwedging, air emboli, catheter migration" },
-  { title: "ICU Case Simulations", desc: "Multi-parameter hemodynamic decision-making with clinical feedback" },
-];
+const LEVEL_STYLE: Record<string, string> = {
+  advanced: "bg-violet-50 text-violet-700",
+  mastery: "bg-rose-50 text-rose-700",
+};
 
 export default async function AdvancedHemodynamicsModulePage() {
   const access = await loadAdvancedHemodynamicsAccess();
@@ -44,17 +35,35 @@ export default async function AdvancedHemodynamicsModulePage() {
       <div className="max-w-4xl mx-auto px-4 py-10">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Advanced Hemodynamic Monitoring</h1>
-          <p className="text-gray-600">Swan-Ganz catheters, cardiac index, SVR, PAOP, SvO2, vasopressor reasoning, and ICU case simulations.</p>
+          <p className="text-gray-600">Swan-Ganz catheters, PAOP/wedge pressure, SvO₂, vasopressor reasoning, and fluid responsiveness — fully authored ICU-level lessons.</p>
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
-          {ADVANCED_CURRICULUM.map((module) => (
-            <div key={module.title} className="p-5 rounded-xl border border-gray-100 bg-white shadow-sm">
-              <h2 className="font-bold text-gray-900 mb-1 flex items-center gap-2">
-                <Activity className="w-4 h-4 text-rose-500 shrink-0" />
-                {module.title}
+          {ADVANCED_HEMODYNAMICS_LESSON_INDEX.map((lesson) => (
+            <Link
+              key={lesson.slug}
+              href={`/modules/hemodynamics-advanced/${lesson.slug}`}
+              className="group p-5 rounded-xl border border-gray-100 bg-white shadow-sm hover:border-rose-200 hover:shadow-md transition-all"
+            >
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-rose-500 shrink-0" />
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${LEVEL_STYLE[lesson.level] ?? ""}`}>
+                    {lesson.level.charAt(0).toUpperCase() + lesson.level.slice(1)}
+                  </span>
+                </div>
+                <span className="flex items-center gap-1 text-xs text-gray-400">
+                  <Clock className="w-3 h-3" />
+                  {lesson.estimatedMinutes} min
+                </span>
+              </div>
+              <h2 className="font-bold text-gray-900 mb-1 group-hover:text-rose-700 transition-colors text-sm leading-snug">
+                {lesson.title}
               </h2>
-              <p className="text-sm text-gray-600">{module.desc}</p>
-            </div>
+              <p className="text-xs text-gray-500 mb-3 leading-relaxed">{lesson.subtitle}</p>
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-rose-600 group-hover:gap-2 transition-all">
+                Open lesson <ArrowRight className="w-3.5 h-3.5" />
+              </span>
+            </Link>
           ))}
         </div>
       </div>
