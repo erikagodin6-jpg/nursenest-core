@@ -148,8 +148,8 @@ export async function POST(req: Request) {
       select: { stripeCustomerId: true },
     });
 
-    // Bundle grants both Advanced ECG and Advanced Hemodynamics entitlements.
-    // The webhook uses planCode "critical_care_bundle_paid" and grants both on checkout.session.completed.
+    // Bundle grants Advanced ECG + Advanced Hemodynamics + Advanced Labs entitlements.
+    // The webhook uses planCode "critical_care_bundle_paid" and grants all three on checkout.session.completed.
     const metadata = {
       userId,
       planCode: CRITICAL_CARE_BUNDLE_PLAN_CODE,
@@ -162,7 +162,7 @@ export async function POST(req: Request) {
       userTier: canonicalAccess.tier ?? "",
       baseTierAtCheckout: canonicalAccess.tier ?? "",
       baseCountryAtCheckout: canonicalAccess.country ?? "",
-      bundleIncludes: "module_advanced_ecg,advanced_hemodynamics_paid",
+      bundleIncludes: "module_advanced_ecg,advanced_hemodynamics_paid,advanced_labs_paid",
       app: "nursenest-core",
       legalPolicyVersion: body.data.policyVersion,
       legalPoliciesAcceptedAt: acceptedAt.toISOString(),

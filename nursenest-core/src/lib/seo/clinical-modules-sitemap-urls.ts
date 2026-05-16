@@ -10,6 +10,8 @@ import {
   ADVANCED_HEMODYNAMICS_PUBLIC_ROUTES,
   HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
   ADVANCED_HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
+  ADVANCED_LABS_PUBLIC_ROUTES,
+  ADVANCED_LABS_LEARNER_PRIVATE_ROUTES,
   isLearnerPrivateEcgRoute,
 } from "@/lib/ecg-module/ecg-platform-taxonomy";
 
@@ -113,7 +115,19 @@ export function collectAdvancedHemodynamicsAuthorityUrls(origin: string): string
 }
 
 /**
- * Clinical readiness marketing urlset — complete ECG + Hemodynamics authority hierarchy:
+ * SEGMENT F2 — Advanced Labs premium authority routes.
+ * Indexed with premium positioning. Educational content public; premium CTA additive.
+ * Source of truth: ADVANCED_LABS_PUBLIC_ROUTES from ecg-platform-taxonomy.ts.
+ *
+ * Includes: /labs-interpretation, /advanced-labs-interpretation
+ */
+export function collectAdvancedLabsAuthorityUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return ADVANCED_LABS_PUBLIC_ROUTES.map((path) => `${o}${path}`);
+}
+
+/**
+ * Clinical readiness marketing urlset — complete ECG + Hemodynamics + Labs authority hierarchy:
  *
  *   SEGMENT A: Core ECG public authority (/ecg, /ecg-interpretation, /telemetry-nursing, …)
  *   SEGMENT B: Core ECG cluster (/ecg/[topic] × 10+)
@@ -121,12 +135,13 @@ export function collectAdvancedHemodynamicsAuthorityUrls(origin: string): string
  *   SEGMENT D: Hemodynamics fundamentals (/hemodynamic-monitoring, /shock-and-perfusion, …)
  *   SEGMENT E: Advanced Hemodynamics (/advanced-hemodynamic-monitoring, /pulmonary-artery-catheter, …)
  *   SEGMENT F: Clinical hub (/clinical-modules)
+ *   SEGMENT F2: Advanced Labs (/labs-interpretation, /advanced-labs-interpretation)
  *   SEGMENT G: OSCE + clinical scenario hubs
  *   SEGMENT H: Tools teasers (/tools/*)
  *
  * EXCLUDED — must never appear in this sitemap:
  *   /modules/ecg/* /modules/ecg-advanced /modules/hemodynamics /modules/hemodynamics-advanced
- *   (learner-private, auth-gated, robots: noindex)
+ *   /modules/labs-advanced (learner-private, auth-gated, robots: noindex)
  *   /app/* (learner application shell)
  *
  * Used by `/sitemap-clinical-modules.xml` only.
@@ -137,6 +152,7 @@ export function collectClinicalModulesSitemapUrls(origin: string): string[] {
   const advancedEcgUrls = collectAdvancedEcgAuthorityUrls(origin);
   const hemodynamicsUrls = collectHemodynamicsAuthorityUrls(origin);
   const advancedHemodynamicsUrls = collectAdvancedHemodynamicsAuthorityUrls(origin);
+  const advancedLabsUrls = collectAdvancedLabsAuthorityUrls(origin);
   const clinicalHubUrls = CLINICAL_HUB_PATHS.map((path) => `${normalizeOrigin(origin)}${path}`);
 
   const all = [
@@ -145,6 +161,7 @@ export function collectClinicalModulesSitemapUrls(origin: string): string[] {
     ...advancedEcgUrls,
     ...hemodynamicsUrls,
     ...advancedHemodynamicsUrls,
+    ...advancedLabsUrls,
     ...clinicalHubUrls,
     ...collectClinicalMarketingToolTeaserUrls(origin),
     ...collectOsceScenariosMarketingHubUrls(origin),
@@ -167,4 +184,5 @@ export const ECG_PRIVATE_ROUTES_FOR_SITEMAP_EXCLUSION = [
   ...ADVANCED_ECG_LEARNER_PRIVATE_ROUTES,
   ...HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
   ...ADVANCED_HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
+  ...ADVANCED_LABS_LEARNER_PRIVATE_ROUTES,
 ] as const;

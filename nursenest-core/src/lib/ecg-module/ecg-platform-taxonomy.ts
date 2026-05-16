@@ -31,7 +31,8 @@ export type EcgPlatformTier =
   | "pediatric_ecg"     // Included with RN/NP, pediatric lane within Core
   | "hemodynamics"      // Future: Hemodynamic Monitoring (reserved)
   | "advanced_hemodynamics"  // Future: Advanced Hemodynamics (reserved)
-  | "critical_care_monitoring"; // Future: ICU/CCU Monitoring (reserved)
+  | "advanced_labs"     // Advanced Labs Interpretation — premium add-on
+  | "critical_care_monitoring"; // ICU/CCU Monitoring bundle
 
 export type EcgSeoIndexability =
   | "indexed_public"       // Full crawl, index, follow — must render without auth
@@ -197,17 +198,40 @@ export const ADVANCED_HEMODYNAMICS_PRODUCT = {
   billing: "one_time" as const,
 } as const;
 
+// ─── Advanced Labs Interpretation — Paid Add-On ───────────────────────────────
+
+export const ADVANCED_LABS_PRODUCT = {
+  id: "advanced_labs",
+  name: "Advanced Labs Interpretation",
+  tagline: "CBC, anion gap, DKA, ABG, AKI, coagulation, cardiac markers, and critical care electrolytes",
+  tier: "advanced_labs" as EcgPlatformTier,
+  entitlementKey: "advanced_labs_paid",
+  eligibleTiers: ["RN", "NP"] as const,
+  excludedTiers: ["RPN", "PN", "LVN_LPN"] as const,
+  stripeEnvKey: "STRIPE_PRICE_ADVANCED_LABS",
+  billing: "one_time" as const,
+} as const;
+
+export const ADVANCED_LABS_PUBLIC_ROUTES = [
+  "/labs-interpretation",
+  "/advanced-labs-interpretation",
+] as const satisfies readonly string[];
+
+export const ADVANCED_LABS_LEARNER_PRIVATE_ROUTES = [
+  "/modules/labs-advanced",
+] as const satisfies readonly string[];
+
 export const CRITICAL_CARE_BUNDLE_PRODUCT = {
   id: "critical_care_bundle",
   name: "Critical Care Bundle",
-  tagline: "Advanced ECG + Advanced Hemodynamic Monitoring — complete ICU/CCU clinical readiness",
+  tagline: "Advanced ECG + Advanced Hemodynamic Monitoring + Advanced Labs — complete ICU/CCU clinical readiness",
   tier: "critical_care_monitoring" as EcgPlatformTier,
   entitlementKey: "critical_care_bundle_paid",
   eligibleTiers: ["RN", "NP"] as const,
   excludedTiers: ["RPN", "PN", "LVN_LPN"] as const,
   stripeEnvKey: "STRIPE_PRICE_CRITICAL_CARE_BUNDLE",
   billing: "one_time" as const,
-  includes: ["module_advanced_ecg", "advanced_hemodynamics_paid"] as const,
+  includes: ["module_advanced_ecg", "advanced_hemodynamics_paid", "advanced_labs_paid"] as const,
 } as const;
 
 export const ADVANCED_HEMODYNAMICS_PUBLIC_ROUTES = [
@@ -626,6 +650,7 @@ export function isLearnerPrivateEcgRoute(path: string): boolean {
     ...ADVANCED_ECG_LEARNER_PRIVATE_ROUTES,
     ...HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
     ...ADVANCED_HEMODYNAMICS_LEARNER_PRIVATE_ROUTES,
+    ...ADVANCED_LABS_LEARNER_PRIVATE_ROUTES,
   ];
   return allPrivate.some((r) => path === r || path.startsWith(`${r}/`));
 }
@@ -637,6 +662,7 @@ export function mustNotRedirectToLogin(path: string): boolean {
     ...ECG_ADVANCED_PUBLIC_ROUTES,
     ...HEMODYNAMICS_PUBLIC_ROUTES,
     ...ADVANCED_HEMODYNAMICS_PUBLIC_ROUTES,
+    ...ADVANCED_LABS_PUBLIC_ROUTES,
   ];
   return allPublic.some((r) => path === r || path.startsWith(`${r}/`));
 }

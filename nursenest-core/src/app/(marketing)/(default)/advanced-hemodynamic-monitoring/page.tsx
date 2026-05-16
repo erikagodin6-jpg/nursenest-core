@@ -27,7 +27,7 @@ const FAQ_ITEMS = [
   {
     question: "What is the Critical Care Bundle?",
     answer:
-      "The Critical Care Bundle ($249 CAD one-time) includes both Advanced ECG Interpretation and Advanced Hemodynamic Monitoring at a combined discount of $49 CAD versus purchasing separately. It provides complete ICU/CCU clinical readiness: STEMI recognition, telemetry mastery, Swan-Ganz interpretation, vasopressor reasoning, and ICU case simulations.",
+      "The Critical Care Bundle ($299 CAD one-time) includes Advanced ECG Interpretation, Advanced Hemodynamic Monitoring, and Advanced Labs Interpretation at a combined discount of $148 CAD versus purchasing separately. It provides complete ICU/CCU clinical readiness: STEMI recognition, telemetry mastery, Swan-Ganz interpretation, vasopressor reasoning, advanced lab interpretation, and ICU case simulations.",
   },
   {
     question: "What does a pulmonary artery catheter (Swan-Ganz) measure?",
@@ -167,8 +167,8 @@ export default function AdvancedHemodynamicMonitoringPage() {
         </div>
         <div className="rounded-xl border border-rose-200 bg-rose-50 p-5">
           <p className="text-xs font-bold text-rose-600 uppercase tracking-wider mb-2">Best value</p>
-          <p className="text-3xl font-bold text-gray-900 mb-1">$249 <span className="text-base font-normal text-gray-500">CAD</span></p>
-          <p className="text-sm text-gray-600 mb-4">Critical Care Bundle · Advanced ECG + Advanced Hemodynamics</p>
+          <p className="text-3xl font-bold text-gray-900 mb-1">$299 <span className="text-base font-normal text-gray-500">CAD</span></p>
+          <p className="text-sm text-gray-600 mb-4">Critical Care Bundle · ECG + Hemodynamics + Labs</p>
           <Link href="/critical-care-bundle" className="block text-center px-4 py-2.5 rounded-full bg-rose-600 text-white font-semibold text-sm hover:brightness-110 transition-all">
             <Heart className="inline w-4 h-4 mr-1" />
             Get Critical Care Bundle

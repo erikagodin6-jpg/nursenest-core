@@ -84,8 +84,8 @@ export default async function AdvancedHemodynamicsModulePage() {
         </div>
         <div className="rounded-xl border border-rose-200 bg-rose-50 p-5">
           <p className="text-xs font-bold text-rose-600 uppercase tracking-wider mb-2">Best value</p>
-          <p className="text-2xl font-bold text-gray-900 mb-1">$249 <span className="text-sm font-normal text-gray-500">CAD</span></p>
-          <p className="text-sm text-gray-600 mb-4">Critical Care Bundle — Advanced ECG + Advanced Hemodynamics</p>
+          <p className="text-2xl font-bold text-gray-900 mb-1">$299 <span className="text-sm font-normal text-gray-500">CAD</span></p>
+          <p className="text-sm text-gray-600 mb-4">Critical Care Bundle — Advanced ECG + Hemodynamics + Labs</p>
           <Link href="/critical-care-bundle" className="block text-center px-4 py-2.5 rounded-full bg-rose-600 text-white font-semibold text-sm hover:brightness-110 transition-all">
             Get Critical Care Bundle
           </Link>

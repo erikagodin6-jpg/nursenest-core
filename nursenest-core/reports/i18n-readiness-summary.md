@@ -1,6 +1,6 @@
 # I18n Readiness Summary
 
-Generated: 2026-05-04T00:31:35.009Z
+Generated: 2026-05-16T22:17:41.520Z
 
 English status: pass
 French status: 15 surfaces blocked from indexing
