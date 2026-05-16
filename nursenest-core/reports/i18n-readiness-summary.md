@@ -1,38 +1,23 @@
 # I18n Readiness Summary
 
-Generated: 2026-05-16T22:17:41.520Z
+Generated: 2026-05-16T22:33:13.637Z
 
 English status: pass
 French status: 15 surfaces blocked from indexing
-Spanish status: pass
+Spanish status: blocked
 Hindi status: pass
 Tagalog status: pass
 Portuguese status: pass
 REx-PN French status: noindex until translations pass
-Spanish coverage: 100% (17563/17563)
+Spanish coverage: 100% (18722/18722)
 Hindi coverage: 100% (17563/17563)
 Tagalog coverage: 100% (17563/17563)
 Portuguese coverage: 100% (17563/17563)
 
 ## Missing French Keys
 
-- /app: learner.shell.nav.printouts
-- /app: learner.qbank.peer.heading
-- /app: learner.qbank.peer.youSelected
-- /app: learner.qbank.peer.correctAnswer
-- /app: learner.qbank.peer.noneSelected
-- /app: learner.qbank.peer.classCorrect
-- /app: learner.qbank.peer.optionDistributionAria
-- /app: learner.qbank.peer.tagCorrect
-- /app: learner.qbank.peer.tagYours
-- /app: learner.printables.title
-- /app: learner.printables.subtitle
-- /app: learner.printables.empty
-- /app: learner.printables.loadError
-- /app: learner.printables.locked
-- /app: learner.printables.download
-- /app: learner.printables.badgeFree
-- /app: learner.printables.badgeProIncluded
+- /app: learner.shell.nav.clinicalModules
+- /app: learner.shell.nav.ecg
 
 ## Missing Spanish Keys
 
@@ -78,17 +63,17 @@ Portuguese coverage: 100% (17563/17563)
 - /fr/np: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /fr/allied: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /fr/new-grad: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
-- /es: indexable (Spanish surface is structurally complete.)
-- /es/pricing: indexable (Spanish surface is structurally complete.)
-- /es/rn: indexable (Spanish surface is structurally complete.)
-- /es/rex-pn: indexable (Spanish surface is structurally complete.)
-- /es/np: indexable (Spanish surface is structurally complete.)
-- /es/allied: indexable (Spanish surface is structurally complete.)
+- /es: indexable (Spanish keys are structurally complete; review English-identical strings for translation quality.)
+- /es/pricing: indexable (Spanish keys are structurally complete; review English-identical strings for translation quality.)
+- /es/rn: indexable (Spanish keys are structurally complete; review English-identical strings for translation quality.)
+- /es/rex-pn: indexable (Spanish keys are structurally complete; review English-identical strings for translation quality.)
+- /es/np: indexable (Spanish keys are structurally complete; review English-identical strings for translation quality.)
+- /es/allied: indexable (Spanish keys are structurally complete; review English-identical strings for translation quality.)
 - /es/lessons: indexable (Spanish keys are structurally complete; review English-identical strings for translation quality.)
-- /es/question-bank: indexable (Spanish surface is structurally complete.)
+- /es/question-bank: indexable (Spanish keys are structurally complete; review English-identical strings for translation quality.)
 - /app/flashcards: noindex (Spanish keys are structurally complete; review English-identical strings for translation quality.)
-- /app/practice-tests/cat-launch: noindex (Spanish surface is structurally complete.)
-- /es/login: noindex (Spanish surface is structurally complete.)
+- /app/practice-tests/cat-launch: noindex (Spanish keys are structurally complete; review English-identical strings for translation quality.)
+- /es/login: noindex (Spanish keys are structurally complete; review English-identical strings for translation quality.)
 - /hi: indexable (Hindi surface is structurally complete.)
 - /hi/pricing: indexable (Hindi surface is structurally complete.)
 - /hi/rn: indexable (Hindi surface is structurally complete.)

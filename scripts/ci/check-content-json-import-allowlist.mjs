@@ -16,6 +16,9 @@ const srcRoot = path.join(repoRoot, "nursenest-core", "src");
 const PATHWAY_LESSONS_ALLOW = new Set([
   "catalog.json",
   "allied-bundled-catalog.json",
+  // TypeScript registry/shard files — small manifests, not bundle-bloating JSON
+  "registry",
+  "respiratory-therapy",
   "new-grad-transition-catalog.json",
   "rn-nclex-master-map.json",
   "rn-nclex-cardiovascular-expansion-catalog.json",
