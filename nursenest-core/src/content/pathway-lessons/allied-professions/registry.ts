@@ -1,3 +1,5 @@
+import respiratoryTherapyCatalog from "@/content/pathway-lessons/allied-professions/respiratory-therapy";
+
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
 };
@@ -8,4 +10,6 @@ type AlliedProfessionCatalogModule = {
  * Keep this explicit so Turbopack never has to resolve an open-ended dynamic
  * import for `allied-professions/${file}` when no optional shards are present.
  */
-export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {};
+export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
+  "respiratory-therapy": respiratoryTherapyCatalog,
+};
