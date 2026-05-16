@@ -8,6 +8,7 @@
  * - Does not fetch or list all lessons at runtime — only map rows for the requested category.
  * - Uses legacy five-block bodies with internal study-flow links (3–8) for hub/SEO wiring.
  * - Writes/merges `rn-map-import-state.json` when `--apply` (tracks completed categories).
+ * - Visible lesson titles are clinical/topic-first; SEO fields carry NCLEX/region context.
  *
  * If PathwayLesson DB has published rows for a pathway, the hub lists DB lessons — re-seed catalog
  * to DB separately (`npm run db:seed-pathway-lessons`) when you want parity.
@@ -128,6 +129,46 @@ const LEGACY_MIN: Record<string, number> = {
   takeaways: 100,
 };
 
+const EXACT_VISIBLE_TITLE_OVERRIDES: Record<string, string> = {
+  "Deep Vein Thrombosis (DVT): Prevention and Nursing Management": "Deep Vein Thrombosis",
+  "Diabetes Mellitus: Type 1 and Type 2 Nursing Management": "Diabetes Mellitus",
+  "Acute Kidney Injury: Prerenal, Intrarenal, and Postrenal Patterns": "Acute Kidney Injury",
+  "Hyperkalemia: Recognition and Correction": "Hyperkalemia",
+  "Seizures and Status Epilepticus: Acute Nursing Management": "Seizures and Status Epilepticus",
+  "Shock: Recognition, Classification, and Nursing Priorities": "Shock",
+  "Nursing Prioritization: ABCs and Urgent vs Important": "Nursing Prioritization",
+  "Defibrillation vs Synchronized Cardioversion": "Defibrillation and Cardioversion",
+  "Bowel Obstruction (Mechanical and Functional)": "Bowel Obstruction",
+  "Inflammatory Bowel Disease (Crohn Disease and Ulcerative Colitis)": "Inflammatory Bowel Disease",
+  "Upper and Lower Gastrointestinal Bleeding": "Gastrointestinal Bleeding",
+  "HIV/AIDS: Nursing Care and Post-Exposure Prophylaxis": "HIV/AIDS",
+  "Tuberculosis (Latent and Active)": "Tuberculosis",
+  "Blood Product Administration and Transfusion Reactions": "Blood Transfusion Reactions",
+  "Physical Restraints: Indications, Monitoring, and Alternatives": "Physical Restraints",
+  "High-Alert Medications: Systems Safety and Independent Double Checks": "High-Alert Medications",
+  "Multimodal Pain Management: Assessment and Escalation": "Multimodal Pain Management",
+  "Insulin: Types, Administration, and Hypoglycemia Response": "Insulin",
+  "Nitrates and Nitroglycerin: Routes and Monitoring": "Nitrates and Nitroglycerin",
+  "Morphine: ACS, PE, and Respiratory Depression Monitoring": "Morphine",
+  "SSRIs and SNRIs: Initiation, Monitoring, and Serotonin Syndrome": "SSRIs and SNRIs",
+  "Albuterol and Beta-Agonists in Bronchospasm and Adjunct Hyperkalemia Therapy": "Albuterol and Beta-Agonists",
+  "Dextrose: Hypoglycemia Rescue and DKA Adjunct Therapy": "Dextrose",
+  "Thrombolytic Therapy: tPA, Indications, and Bleeding Monitoring": "Thrombolytic Therapy",
+};
+
+function normalizedVisibleRnLessonTitle(canonicalTitle: string): string {
+  const exact = EXACT_VISIBLE_TITLE_OVERRIDES[canonicalTitle];
+  if (exact) return exact;
+  const colonIndex = canonicalTitle.indexOf(":");
+  if (colonIndex > 0) return canonicalTitle.slice(0, colonIndex).trim();
+  return canonicalTitle
+    .replace(/\s+Nursing Management$/i, "")
+    .replace(/\s+Patient Teaching$/i, "")
+    .replace(/\s+Nursing Care$/i, "")
+    .replace(/\s+and Nursing Management$/i, "")
+    .trim();
+}
+
 function paragraph(text: string): string {
   return text.trim();
 }
@@ -223,12 +264,9 @@ function buildLessonRow(args: {
   relatedSlugs: string[];
 }): CatalogLesson {
   const { map, region, relatedSlugs } = args;
-  const title =
-    region === "us"
-      ? `${map.canonicalTitle} (NCLEX-RN, US)`
-      : `${map.canonicalTitle} (NCLEX-RN, Canada)`;
-  const seoTitle = `${map.canonicalTitle} | NCLEX-RN | NurseNest`;
-  const seoDescription = `RN exam prep lesson for ${map.canonicalTitle}: clinical judgment, monitoring, prioritization, and safety within ${map.bodySystem} — structured for NCLEX-RN study with related hub links.`;
+  const title = normalizedVisibleRnLessonTitle(map.canonicalTitle);
+  const seoTitle = `${map.canonicalTitle} | NCLEX-RN ${region === "ca" ? "Canada" : "US"} | NurseNest`;
+  const seoDescription = `RN exam prep lesson for ${map.canonicalTitle}: clinical judgment, monitoring, prioritization, and safety within ${map.bodySystem} — structured for NCLEX-RN ${region === "ca" ? "Canada" : "US"} study with related hub links.`;
 
   const sections = buildLegacySections({
     canonicalTitle: map.canonicalTitle,
