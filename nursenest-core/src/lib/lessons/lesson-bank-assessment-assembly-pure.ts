@@ -29,8 +29,25 @@ function itemKey(q: PathwayLessonQuizItem): string {
   return `stem:${q.question.trim().slice(0, 160)}`;
 }
 
+function dedupeAssessmentItems(items: PathwayLessonQuizItem[], max: number): PathwayLessonQuizItem[] {
+  const seen = new Set<string>();
+  const out: PathwayLessonQuizItem[] = [];
+  for (const q of items) {
+    const k = itemKey(q);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(q);
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
 /**
  * Prefer catalog items first, then pad from bank up to `max`. Dedupes by exam id or stem prefix.
+ *
+ * This remains exported for legacy callers/tests, but the learner lesson assembler below intentionally
+ * does not use broad bank padding for pre/post quizzes. Pre/post checks must match the lesson objective;
+ * wider topic/pathway practice belongs in the separate practice rail after the lesson.
  */
 export function mergeAssessmentWithBank(
   catalog: PathwayLessonQuizItem[] | undefined,
@@ -38,26 +55,8 @@ export function mergeAssessmentWithBank(
   min: number,
   max: number,
 ): PathwayLessonQuizItem[] {
-  const seen = new Set<string>();
-  const out: PathwayLessonQuizItem[] = [];
-  const push = (q: PathwayLessonQuizItem) => {
-    const k = itemKey(q);
-    if (seen.has(k)) return;
-    seen.add(k);
-    out.push(q);
-  };
-  for (const q of catalog ?? []) {
-    push(q);
-    if (out.length >= max) return out.slice(0, max);
-  }
-  for (const q of bank) {
-    push(q);
-    if (out.length >= max) break;
-  }
-  const capped = out.slice(0, Math.min(max, out.length));
-  if (capped.length >= min) return capped;
-  if (capped.length > 0) return capped;
-  return [];
+  const out = dedupeAssessmentItems([...(catalog ?? []), ...bank], max);
+  return out.length >= min ? out : [];
 }
 
 /**
@@ -101,9 +100,22 @@ function sanitizeAssessmentQuizSides(items: PathwayLessonQuizItem[]): PathwayLes
   return out;
 }
 
+function lessonAuthoredAssessmentSide(
+  catalog: PathwayLessonQuizItem[] | undefined,
+  min: number,
+  max: number,
+): PathwayLessonQuizItem[] {
+  const authored = dedupeAssessmentItems(catalog ?? [], max);
+  return authored.length >= min ? authored : [];
+}
+
 /**
  * Pure merge of catalog + bank pool with optional explicit ExamQuestion-backed sides.
  * Applies {@link normalizePathwayLessonQuizItemForRender} so lesson mini-quiz shells always receive a consistent contract.
+ *
+ * Important: learner-facing pre/post checks are now strict. We do not backfill a sparse or missing
+ * lesson quiz from the broad pathway bank because that creates readiness/retention tests that do not
+ * match the actual teaching content. Generic reinforcement remains available in topic practice.
  */
 export function assemblePathwayLessonBankAssessmentsFromParts(args: {
   lesson: Pick<PathwayLessonRecord, "preTest" | "postTest">;
@@ -112,21 +124,19 @@ export function assemblePathwayLessonBankAssessmentsFromParts(args: {
   explicitPre: PathwayLessonQuizItem[] | null;
   explicitPost: PathwayLessonQuizItem[] | null;
 }): { preTest: PathwayLessonQuizItem[]; postTest: PathwayLessonQuizItem[] } {
-  const { preBank, postBank } = splitBankPrePost(args.lessonKey, args.pool);
-  const preMerged = mergeAssessmentWithBank(
+  const authoredPre = lessonAuthoredAssessmentSide(
     args.lesson.preTest,
-    preBank,
     LESSON_ASSESSMENT_PRE_MIN,
     LESSON_ASSESSMENT_PRE_MAX,
   );
-  const postMerged = mergeAssessmentWithBank(
+  const authoredPost = lessonAuthoredAssessmentSide(
     args.lesson.postTest,
-    postBank,
     LESSON_ASSESSMENT_POST_MIN,
     LESSON_ASSESSMENT_POST_MAX,
   );
+
   return {
-    preTest: sanitizeAssessmentQuizSides(preferExplicitAssessmentSide(args.explicitPre, preMerged)),
-    postTest: sanitizeAssessmentQuizSides(preferExplicitAssessmentSide(args.explicitPost, postMerged)),
+    preTest: sanitizeAssessmentQuizSides(preferExplicitAssessmentSide(args.explicitPre, authoredPre)),
+    postTest: sanitizeAssessmentQuizSides(preferExplicitAssessmentSide(args.explicitPost, authoredPost)),
   };
 }
