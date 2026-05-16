@@ -188,3 +188,14 @@ blob-report/
 .prisma/
 .vercel/
 .digitalocean/
+
+# AI/tooling artifacts - never deploy
+.claude/
+.agents/
+.syncause/
+.vibecheck/
+.codex
+a.out
+*.db
+*.sqlite
+*.sqlite3
