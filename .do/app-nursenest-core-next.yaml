@@ -237,25 +237,23 @@ services:
       # Advanced ECG add-on (single price ID covers all durations)
       - key: STRIPE_PRICE_ADVANCED_ECG
         scope: RUN_AND_BUILD_TIME
-        value: price_1TVo8vFbgp0Ub5P7aTySWrbU
-      # Advanced Hemodynamic Monitoring add-on ($149 CAD one-time)
-      # BLOCKED: checkout returns 400 until this is a real Stripe price ID.
-      # Steps: Stripe Dashboard → Products → Add product → "Advanced Hemodynamic Monitoring"
-      #   → One-time → $149 CAD → Save → copy price_... ID → replace value below → npm run do:deploy:execute
+        value: price_1TXlpKFbgp0Ub5P71bDALZDb
+      # Advanced Hemodynamic Monitoring add-on (one-time)
       - key: STRIPE_PRICE_ADVANCED_HEMODYNAMICS
         scope: RUN_AND_BUILD_TIME
-        value: price_ADVANCED_HEMODYNAMICS_PLACEHOLDER
-      # Critical Care Bundle ($249 CAD one-time — Advanced ECG + Advanced Hemodynamics)
-      # BLOCKED: checkout returns 400 until this is a real Stripe price ID.
-      # Steps: Stripe Dashboard → Products → Add product → "Critical Care Bundle"
-      #   → One-time → $249 CAD → Save → copy price_... ID → replace value below → npm run do:deploy:execute
+        value: price_1TXlpKFbgp0Ub5P71bDALZDb
+      # Advanced Labs add-on (one-time)
+      - key: STRIPE_PRICE_ADVANCED_LABS
+        scope: RUN_AND_BUILD_TIME
+        value: price_1TXlvwFbgp0Ub5P7NGdy9MM1
+      # Critical Care Bundle (one-time — Advanced ECG + Advanced Hemodynamics)
       - key: STRIPE_PRICE_CRITICAL_CARE_BUNDLE
         scope: RUN_AND_BUILD_TIME
-        value: price_CRITICAL_CARE_BUNDLE_PLACEHOLDER
+        value: price_1TXlpoFbgp0Ub5P7W7r5rDeN
       # Alias kept for backward compatibility with older webhook handlers
       - key: STRIPE_PRICE_CA_ADVANCED_ECG_ONETIME
         scope: RUN_AND_BUILD_TIME
-        value: price_1TVo8vFbgp0Ub5P7aTySWrbU
+        value: price_1TXlpKFbgp0Ub5P71bDALZDb
 
       # NP — Nurse Practitioner (CNPLE)
       - key: STRIPE_PRICE_NURSENEST_NP_1_MONTH_SUBSCRIPTION
