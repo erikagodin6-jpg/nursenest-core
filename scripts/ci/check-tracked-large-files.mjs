@@ -16,7 +16,7 @@ const ALLOW_PREFIXES = ["nursenest-core/public/i18n/"];
 const WARN_ALLOW = new Set(["scripts/english-content.json"]);
 
 function listTrackedFiles() {
-  return execSync("git ls-files", { encoding: "utf8" })
+  return execSync("git ls-files", { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 })
     .split("\n")
     .filter(Boolean);
 }

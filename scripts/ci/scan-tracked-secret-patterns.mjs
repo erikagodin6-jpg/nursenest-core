@@ -8,7 +8,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 function listTrackedFiles() {
-  return execSync("git ls-files", { encoding: "utf8" })
+  return execSync("git ls-files", { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 })
     .split("\n")
     .filter(Boolean);
 }
@@ -16,6 +16,7 @@ function listTrackedFiles() {
 /** Paths that may contain fake secret-shaped strings for tests or redaction demos. */
 const PATH_ALLOW = [
   /^nursenest-core\/src\/lib\/env\/redact-secrets\.test\.ts$/,
+  /^nursenest-core\/src\/lib\/env\/central-env-validation\.test\.ts$/,
   /^nursenest-core\/src\/lib\/stripe\/stripe-webhook-signature-contract\.test\.ts$/,
   /^nursenest-core\/src\/lib\/admin\/system-status-derive\.test\.ts$/,
   /^nursenest-core\/src\/lib\/db\/database-policy\.test\.ts$/,

@@ -7,7 +7,7 @@ import { execSync } from "node:child_process";
 import path from "node:path";
 
 function listTrackedFiles() {
-  return execSync("git ls-files", { encoding: "utf8" })
+  return execSync("git ls-files", { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 })
     .split("\n")
     .filter(Boolean);
 }
