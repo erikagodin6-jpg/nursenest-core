@@ -2,24 +2,50 @@
    lesson-readability-hotfix.css
    Signed-in learner lesson detail readability pass.
 
-   This mirrors the public reader fix for /app/lessons/[id]. The lesson body
-   should read like a structured clinical lesson, not a tall narrow card tower.
+   Production guardrail: learner lessons must render as a readable clinical
+   article. Side rails may never squeeze the article into a one-word column.
    Entitlements, progress, study loop, notes, and paywall logic remain untouched.
    ===================================================================== */
 
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell {
   --nn-learner-lesson-reader-max: 78ch;
-  --nn-learner-lesson-reader-wide: 92ch;
+  --nn-learner-lesson-reader-wide: 94ch;
+  width: 100%;
+  max-width: min(100%, 86rem);
+  margin-inline: auto;
+  padding-inline: clamp(0.875rem, 2.2vw, 1.5rem);
+  overflow-x: clip;
 }
 
-.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-layout--triple {
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell,
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell * {
+  min-width: 0;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-editorial-rail--hero {
   width: 100%;
-  align-items: start;
+  max-width: var(--nn-learner-lesson-reader-wide);
+  margin-inline: auto;
+}
+
+/*
+ * The previous desktop triple grid could collapse the center column in Safari,
+ * creating the one-word-per-line layout shown on production. Keep the semantic
+ * order but make the reader column the only layout authority.
+ */
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-layout--triple {
+  display: block !important;
+  width: 100%;
+  max-width: var(--nn-learner-lesson-reader-wide);
+  margin-inline: auto;
+  align-items: initial;
 }
 
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-main {
   width: 100%;
-  max-width: min(100%, var(--nn-learner-lesson-reader-wide));
+  max-width: var(--nn-learner-lesson-reader-wide);
   margin-inline: auto;
 }
 
@@ -27,16 +53,35 @@
   width: 100%;
   max-width: var(--nn-learner-lesson-reader-wide);
   margin-inline: auto;
-  padding-inline: clamp(0.75rem, 2vw, 1.25rem);
+  padding-inline: 0;
 }
 
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-premium-lesson-article {
+  width: 100%;
   max-width: var(--nn-learner-lesson-reader-max);
   margin-inline: auto;
 }
 
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-premium-lesson-article > * + * {
   margin-top: clamp(1rem, 2vw, 1.35rem);
+}
+
+/* Hide desktop rails on signed-in reader until the rail system is rebuilt.
+   The mobile contents disclosure remains available and does not constrain width. */
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-section-nav[data-nn-lesson-toc-desktop],
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-study-rail-aside {
+  display: none !important;
+}
+
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-section-nav-mobile {
+  width: 100%;
+  max-width: var(--nn-learner-lesson-reader-max);
+  margin: 0 auto 1rem;
+}
+
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-section-card {
+  width: 100%;
+  max-width: 100%;
 }
 
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--editorial {
@@ -60,7 +105,7 @@
 }
 
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-section-heading {
-  max-width: 34ch;
+  max-width: 38ch;
   font-size: clamp(1.15rem, 0.72vw + 1rem, 1.42rem);
   line-height: 1.25;
 }
@@ -68,34 +113,41 @@
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose,
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-prose {
   max-width: var(--nn-learner-lesson-reader-max);
-  font-size: clamp(0.96rem, 0.18vw + 0.92rem, 1.03rem);
+  font-size: clamp(0.98rem, 0.18vw + 0.94rem, 1.05rem);
   line-height: 1.72;
 }
 
-.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(p, li) {
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(p, li),
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-prose :where(p, li) {
+  max-width: 78ch;
   line-height: 1.72;
 }
 
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(ul, ol) {
   margin-top: 0.65rem;
   margin-bottom: 0.85rem;
+  padding-left: 1.25rem;
 }
 
 .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose :where(li + li) {
   margin-top: 0.38rem;
 }
 
-@media (min-width: 1280px) {
-  .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-layout--triple {
-    grid-template-columns:
-      minmax(12.5rem, 14rem)
-      minmax(0, 1fr)
-      minmax(14rem, 16.5rem);
-    gap: clamp(1.25rem, 1.8vw, 2rem);
+.nn-lesson-page--learner-app.nn-premium-lesson-detail-shell :where(.nn-card, .nn-lesson-card, .nn-lesson-section-card, article, section, aside) {
+  contain: none !important;
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-section-nav-mobile {
+    display: block !important;
   }
 }
 
 @media (max-width: 767px) {
+  .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell {
+    padding-inline: clamp(0.75rem, 3vw, 1rem);
+  }
+
   .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-lesson-editorial-rail--main,
   .nn-lesson-page--learner-app.nn-premium-lesson-detail-shell .nn-premium-lesson-article {
     max-width: 100%;
