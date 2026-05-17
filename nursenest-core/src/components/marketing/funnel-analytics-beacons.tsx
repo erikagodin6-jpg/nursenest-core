@@ -3,8 +3,38 @@
 import { useEffect, useRef } from "react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { pathwayAnalyticsDimensions, trackProductEvent } from "@/lib/observability/product-analytics";
 import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
+
+type AnalyticsProps = Record<string, string | number | boolean | undefined>;
+
+function scheduleMarketingAnalyticsCapture(event: string, props: AnalyticsProps): void {
+  if (typeof window === "undefined") return;
+
+  const run = () => {
+    void import("@/lib/observability/product-analytics")
+      .then(({ trackProductEvent }) => {
+        trackProductEvent(event, props);
+      })
+      .catch(() => {});
+  };
+
+  const scheduleIdle =
+    window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 500));
+  scheduleIdle(run, { timeout: 2500 });
+}
+
+function pathwayAnalyticsDimensionsLocal(
+  p: Pick<ExamPathwayDefinition, "id" | "countrySlug" | "roleTrack" | "examCode" | "examKey" | "stripeTier">,
+): Record<string, string> {
+  return {
+    pathway_id: p.id,
+    country_slug: p.countrySlug,
+    role_track: p.roleTrack,
+    exam_code: p.examCode,
+    exam_key: p.examKey,
+    stripe_tier: String(p.stripeTier),
+  };
+}
 
 /** One lightweight capture per homepage load (marketing region = US | CA). */
 export function FunnelHomepageViewBeacon({
@@ -17,16 +47,18 @@ export function FunnelHomepageViewBeacon({
 }) {
   const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
   const sent = useRef(false);
+
   useEffect(() => {
     if (marketingNarrow) return;
     if (sent.current) return;
     sent.current = true;
-    trackProductEvent(PH.funnelHomepageViewed, {
+    scheduleMarketingAnalyticsCapture(PH.funnelHomepageViewed, {
       actor: "anonymous",
       marketing_region: marketingRegion,
       marketing_locale: marketingLocale ?? "en",
     });
   }, [marketingNarrow, marketingRegion, marketingLocale]);
+
   return null;
 }
 
@@ -40,15 +72,17 @@ export function FunnelExamHubViewBeacon({
 }) {
   const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
   const sent = useRef(false);
+
   useEffect(() => {
     if (marketingNarrow) return;
     if (sent.current) return;
     sent.current = true;
-    trackProductEvent(PH.funnelExamHubViewed, {
+    scheduleMarketingAnalyticsCapture(PH.funnelExamHubViewed, {
       actor: "anonymous",
       hub_path: hubPath,
-      ...pathwayAnalyticsDimensions(pathway),
+      ...pathwayAnalyticsDimensionsLocal(pathway),
     });
   }, [marketingNarrow, pathway, hubPath]);
+
   return null;
 }
