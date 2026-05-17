@@ -32,7 +32,7 @@ import {
   marketingHeaderLearnPracticeFlowDestinations,
   type MarketingHeaderFlowTier,
 } from "@/lib/navigation/canonical-destinations";
-import { strippedPathActivatesMegaMenuKey } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
+import { strippedPathActivatesMegaMenuKey, type MarketingPathwayMegaMenuKey } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
 import { buildMarketingTierHubStrip } from "@/lib/navigation/marketing-tier-hub-strip";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { CONTINUE_STUDYING_CTA } from "@/lib/copy/cta-copy";
@@ -182,8 +182,16 @@ function examIndicatorLabelSync(
 export type SiteHeaderPrecomputedNav = {
   /** BCP-47 locale (e.g. "en", "fr") resolved server-side. */
   locale: string;
-  /** Static marketing nav links (Pricing, About, Blog, FAQ, Pre-nursing, Tools). */
-  moreLinks: ReadonlyArray<{ key: string; href: string; label: string; matchBase: string }>;
+  /**
+   * Brand/company nav links for the Row 1 center nav (Tools, Pricing, About, Blog, FAQ).
+   * These appear in the NurseNest brand nav row, NOT the class/pathway row.
+   */
+  brandNavLinks: ReadonlyArray<{ key: string; href: string; label: string; matchBase: string }>;
+  /**
+   * Pathway/class links for the Row 2 tier rail (Pre-Nursing, ECG, HESI, TEAS).
+   * These appear alongside the tier hub chips (RN/RPN/NP/New Grad/Allied).
+   */
+  pathwayNavLinks: ReadonlyArray<{ key: string; href: string; label: string; matchBase: string }>;
   /** Computed server-side; avoids t("brand.homeAriaLabel") on the client. */
   homeAriaLabel: string;
   /** "Log In" CTA label computed server-side. */
@@ -196,7 +204,7 @@ export type SiteHeaderPrecomputedNav = {
    * critical path. Client falls back to hook-computed if absent or region changes.
    * -- TBT fix: removes one synchronous useMemo from the 53-hook hydration sequence.
    */
-  tierHubStrip?: ReadonlyArray<{ key: string; label: string; hubHref: string }>;
+  tierHubStrip?: ReadonlyArray<{ key: MarketingPathwayMegaMenuKey; label: string; hubHref: string }>;
   /**
    * Server region used to compute tierHubStrip. If the client detects a different
    * region (cookie mismatch), it discards the precomputed strip and recomputes.
@@ -549,48 +557,42 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
     ],
     [marketingFlowDestinations, t, locale],
   );
-  // Use server-precomputed more-links when available — eliminates 7 t() calls for static desktop nav.
-  const marketingMoreLinks: HeaderNavLink[] = useMemo(
+  // Brand/company links → Row 1 center nav (Tools, Pricing, About, Blog, FAQ).
+  // These must NOT appear in the class/pathway row.
+  const brandNavLinks: HeaderNavLink[] = useMemo(
     () =>
-      precomputedNavData?.moreLinks
-        ? [...precomputedNavData.moreLinks]
+      precomputedNavData?.brandNavLinks
+        ? [...precomputedNavData.brandNavLinks]
         : [
-            // Canonical nav order (after tier chips): Pre-Nursing, ECG, Tools, Pricing, About, Blog, FAQ
-            {
-              key: "pre-nursing",
-              href: "/pre-nursing",
-              matchBase: "/pre-nursing",
-              label: formatTitleCase(t("nav.preNursing"), locale),
-            },
-            {
-              key: "ecg",
-              href: "/ecg-interpretation",
-              matchBase: "/ecg-interpretation",
-              label: "ECG",
-            },
             { key: "tools", href: HUB.tools, matchBase: HUB.tools, label: formatTitleCase(t("nav.tools"), locale) },
-            {
-              key: "pricing",
-              href: HUB.pricing,
-              matchBase: "/pricing",
-              label: formatTitleCase(t("nav.pricing"), locale),
-            },
-            {
-              key: "about",
-              href: "/about",
-              matchBase: "/about",
-              label: formatTitleCase(t("nav.about"), locale),
-            },
-            {
-              key: "blog",
-              href: "/blog",
-              matchBase: "/blog",
-              label: formatTitleCase(t("footer.blog"), locale),
-            },
+            { key: "pricing", href: HUB.pricing, matchBase: "/pricing", label: formatTitleCase(t("nav.pricing"), locale) },
+            { key: "about", href: "/about", matchBase: "/about", label: formatTitleCase(t("nav.about"), locale) },
+            { key: "blog", href: "/blog", matchBase: "/blog", label: formatTitleCase(t("footer.blog"), locale) },
             { key: "faq", href: "/faq", matchBase: "/faq", label: formatTitleCase(t("footer.faq"), locale) },
           ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [precomputedNavData?.moreLinks, t, locale],
+    [precomputedNavData?.brandNavLinks, t, locale],
+  );
+
+  // Class/pathway links → Row 2 tier rail (Pre-Nursing, ECG, HESI, TEAS).
+  // Rendered alongside RN/RPN/NP/New Grad/Allied tier hub chips.
+  // HESI and TEAS have no dedicated routes — both map to /pre-nursing.
+  const pathwayMoreLinks: HeaderNavLink[] = useMemo(
+    () =>
+      precomputedNavData?.pathwayNavLinks
+        ? [...precomputedNavData.pathwayNavLinks]
+        : [
+            { key: "pre-nursing", href: "/pre-nursing", matchBase: "/pre-nursing", label: formatTitleCase(t("nav.preNursing"), locale) },
+            { key: "ecg", href: "/ecg-interpretation", matchBase: "/ecg-interpretation", label: "ECG" },
+            { key: "hesi", href: "/pre-nursing", matchBase: "/hesi", label: "HESI" },
+            { key: "teas", href: "/pre-nursing", matchBase: "/teas", label: "TEAS" },
+          ],
+    [precomputedNavData?.pathwayNavLinks, t, locale],
+  );
+
+  // Combined list used for non-row4 dark themes where all links live in the Row 1 center nav.
+  const allMoreLinks: HeaderNavLink[] = useMemo(
+    () => [...brandNavLinks, ...pathwayMoreLinks],
+    [brandNavLinks, pathwayMoreLinks],
   );
   const darkHeaderShadow = useMemo(() => {
     const inset = "inset 0 1px 0 0 rgba(255,255,255,0.15)";
@@ -827,12 +829,88 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
             </div>
           ) : null}
 
-          {/* Bar A removed — utility controls now live in the desktop grid auth cluster (right side of Row 1).
-              This collapses the previous 3-row desktop layout (utility + logo/nav + tier) into 2 rows:
-              Row 1: logo (left) | utility + auth (right)
-              Row 2: unified nav (tier chips + all marketing links) */}
+          {/* ── Row 0: Utility row — desktop only, row4 themes (Ocean / Blossom / Midnight).
+              Country + Language + Theme + compact auth CTAs live here, above the logo row.
+              Thin, low visual weight, utility-only. Hidden on mobile (drawer handles these). */}
+          {marketingRow4Layout ? (
+            <div
+              className="nn-header-hide-until-xl w-full border-b border-[var(--header-border)]"
+              data-testid="marketing-header-utility-row"
+              data-nn-header-row="utility"
+            >
+              <div className="flex items-center justify-end gap-1.5 py-[3px] min-h-[30px]">
+                <MarketingHeaderUtilityCluster
+                  chromeMode="row4"
+                  includeUnpublishedRegions={isAdminAuthenticated}
+                />
+                {/* Compact auth CTAs — h-[26px] to match utility trigger height. Desktop-only so
+                    44px touch-target rule does not apply. Show immediately during session load (CLS guard). */}
+                {!isAuthenticated ? (
+                  <div className="flex shrink-0 items-center gap-1.5 pl-1" aria-busy={isSessionPending || undefined}>
+                    <HeaderNavAnchor
+                      href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
+                      className="inline-flex h-[26px] items-center rounded-lg border border-[var(--nav-border)] bg-transparent px-3 text-[11px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]"
+                      onClick={closeMegaBeforeAuthNav}
+                      aria-label="Log in to your NurseNest account"
+                      data-testid="utility-row-login"
+                    >
+                      {formatTitleCase(t("nav.logIn"), locale)}
+                    </HeaderNavAnchor>
+                    <HeaderNavAnchor
+                      href={guestMarketingSignupHref}
+                      className="nn-nav-cta inline-flex h-[26px] items-center rounded-lg px-3 text-[11px] font-semibold"
+                      onClick={closeMegaBeforeAuthNav}
+                      aria-label="Start free account — nursing and healthcare exam prep"
+                      data-testid="utility-row-signup"
+                    >
+                      {formatTitleCase(t("nav.signup"), locale)}
+                    </HeaderNavAnchor>
+                  </div>
+                ) : isAdminAuthenticated ? (
+                  <div className="flex shrink-0 items-center gap-1.5 pl-1">
+                    <Link
+                      href={ADMIN_DASHBOARD_HREF}
+                      prefetch={false}
+                      className="nn-nav-cta inline-flex h-[26px] items-center rounded-lg px-3 text-[11px] font-semibold"
+                      onClick={(e) => { closeMegaBeforeAuthNav(); navigateAdminDashboardHard(e); }}
+                    >
+                      {formatTitleCase(t("nav.admin"), locale)}
+                    </Link>
+                    <Link href="/app" className="inline-flex h-[26px] items-center rounded-lg border border-[var(--nav-border)] bg-transparent px-3 text-[11px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]">
+                      {formatTitleCase(t("nav.dashboard"), locale)}
+                    </Link>
+                  </div>
+                ) : isMarketingEntitledLearner ? (
+                  <div className="flex shrink-0 items-center gap-1.5 pl-1">
+                    <Link
+                      href={resumeStudyingCta?.href ?? "/app"}
+                      className="nn-nav-cta inline-flex h-[26px] items-center rounded-lg px-3 text-[11px] font-semibold"
+                    >
+                      {resumeStudyingCta?.label ?? formatTitleCase(t("nav.dashboard"), locale)}
+                    </Link>
+                    <Link href="/app" className="inline-flex h-[26px] items-center rounded-lg border border-[var(--nav-border)] bg-transparent px-3 text-[11px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]">
+                      {formatTitleCase(t("nav.dashboard"), locale)}
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex shrink-0 items-center gap-1.5 pl-1">
+                    <Link
+                      href={localizeHref(HUB.pricing)}
+                      className="nn-nav-cta inline-flex h-[26px] items-center rounded-lg px-3 text-[11px] font-semibold"
+                      onClick={closeMegaBeforeAuthNav}
+                    >
+                      {formatTitleCase(t("nav.pricing"), locale)}
+                    </Link>
+                    <Link href="/app" className="inline-flex h-[26px] items-center rounded-lg border border-[var(--nav-border)] bg-transparent px-3 text-[11px] font-medium text-[var(--nav-fg)] transition-colors hover:bg-[var(--nav-hover)]">
+                      {formatTitleCase(t("nav.dashboard"), locale)}
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : null}
 
-          {/* ── Desktop main header row: left logo | center core public links | right auth (utility on Bar A when light row4) ── */}
+          {/* ── Row 1: NurseNest brand nav row — logo | brand links | (auth cluster for dark themes) ── */}
           <div
             className="nn-header-desktop-grid overflow-visible"
             data-testid="marketing-header-primary-row"
@@ -853,127 +931,129 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
               ) : null}
             </div>
 
-            {/* row4: nav moves to the unified tier rail below; spacer preserves the 3-col grid so auth stays right-aligned */}
-            {marketingRow4Layout ? (
-              <div aria-hidden="true" />
-            ) : (
-              <nav
-                aria-label={t("nav.marketingExplore")}
-                className="nav nn-header-main-marketing-nav flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-0.5 px-2 sm:gap-1 sm:px-3 xl:gap-1.5"
-              >
-                {marketingMoreLinks.map((item) => (
-                  <HeaderNavAnchor
-                    key={item.key}
-                    href={localizeHref(item.href)}
-                    aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                    className={NAV_MARKETING_MORE_CLASS}
-                    onClick={() =>
-                      trackClientEvent(PH.marketingNavClick, {
-                        actor: navActor,
-                        nav_id: item.key,
-                        surface: "site_header_desktop",
-                        marketing_region: region,
-                      })
-                    }
-                  >
-                    {item.label}
-                  </HeaderNavAnchor>
-                ))}
-              </nav>
-            )}
+            {/* row4: brand nav links (Tools, Pricing, About, Blog, FAQ) in center.
+                Non-row4 dark themes: all links (brand + pathway combined) in center. */}
+            <nav
+              aria-label={t("nav.marketingExplore")}
+              className="nav nn-header-main-marketing-nav flex w-full min-w-0 max-w-full flex-wrap items-center justify-center gap-0.5 px-2 sm:gap-1 sm:px-3 xl:gap-1.5"
+              data-testid="marketing-header-brand-nav"
+              data-nn-header-row="brand-nav"
+            >
+              {(marketingRow4Layout ? brandNavLinks : allMoreLinks).map((item) => (
+                <HeaderNavAnchor
+                  key={item.key}
+                  href={localizeHref(item.href)}
+                  aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                  className={NAV_MARKETING_MORE_CLASS}
+                  onClick={() =>
+                    trackClientEvent(PH.marketingNavClick, {
+                      actor: navActor,
+                      nav_id: item.key,
+                      surface: "site_header_desktop",
+                      marketing_region: region,
+                    })
+                  }
+                >
+                  {item.label}
+                </HeaderNavAnchor>
+              ))}
+            </nav>
 
+            {/* row4: auth cluster is intentionally empty — auth lives in the utility row above.
+                Non-row4 dark themes: utility + auth here (no utility row). */}
             <div className="nn-header-desktop-auth-cluster relative z-[130] flex min-w-0 max-w-full shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1.5 xl:gap-x-2">
-              <div
-                data-testid="marketing-header-utility-inline"
-                data-nn-header-band="utility"
-                className="nn-header-desktop-marketing-utility-cluster flex min-w-0 max-w-full shrink flex-wrap items-center justify-end gap-y-1"
-              >
-                <MarketingHeaderUtilityCluster
-                  chromeMode={marketingRow4Layout ? "row4" : "dark-marketing"}
-                  includeUnpublishedRegions={isAdminAuthenticated}
-                />
-              </div>
-              {/* CLS guard: show guest buttons immediately during session load (same as mobile fix above). */}
-              {!isAuthenticated ? (
-                <div className="flex shrink-0 items-center gap-2" aria-busy={isSessionPending || undefined}>
-                  <HeaderNavAnchor
-                    href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                    className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
-                    onClick={closeMegaBeforeAuthNav}
-                    aria-label="Log in to your NurseNest account"
+              {!marketingRow4Layout ? (
+                <>
+                  <div
+                    data-testid="marketing-header-utility-inline"
+                    data-nn-header-band="utility"
+                    className="nn-header-desktop-marketing-utility-cluster flex min-w-0 max-w-full shrink flex-wrap items-center justify-end gap-y-1"
                   >
-                    {formatTitleCase(t("nav.logIn"), locale)}
-                  </HeaderNavAnchor>
-                  <HeaderNavAnchor
-                    href={guestMarketingSignupHref}
-                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
-                    onClick={closeMegaBeforeAuthNav}
-                    aria-label="Start free account — nursing and healthcare exam prep"
-                    title="Start free — no credit card required"
-                  >
-                    {formatTitleCase(t("nav.signup"), locale)}
-                  </HeaderNavAnchor>
-                </div>
-              ) : isAdminAuthenticated ? (
-                <div className="flex shrink-0 items-center gap-2">
-                  <Link
-                    href={ADMIN_DASHBOARD_HREF}
-                    prefetch={false}
-                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
-                    onClick={(e) => {
-                      closeMegaBeforeAuthNav();
-                      navigateAdminDashboardHard(e);
-                    }}
-                  >
-                    {formatTitleCase(t("nav.admin"), locale)}
-                  </Link>
-                  <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
-                    {formatTitleCase(t("nav.dashboard"), locale)}
-                  </Link>
-                  <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                    redirectTo={withMarketingLocale(locale, "/login")}
-                  />
-                </div>
-              ) : isMarketingEntitledLearner ? (
-                <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-                  <Link
-                    href={resumeStudyingCta?.href ?? "/app"}
-                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
-                  >
-                    {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
-                  </Link>
-                  <Link
-                    href="/app/account/overview"
-                    className="nn-header-account-trigger gap-1.5 px-2.5 sm:px-3"
-                    aria-label={formatTitleCase(t("nav.account"), locale)}
-                  >
-                    <User className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
-                    <span className="hidden 2xl:inline whitespace-nowrap">{formatTitleCase(t("nav.account"), locale)}</span>
-                  </Link>
-                  <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                    redirectTo={withMarketingLocale(locale, "/login")}
-                  />
-                </div>
-              ) : (
-                <div className="flex shrink-0 items-center gap-2">
-                  <Link
-                    href={localizeHref(HUB.pricing)}
-                    className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
-                    onClick={closeMegaBeforeAuthNav}
-                  >
-                    {formatTitleCase(t("nav.pricing"), locale)}
-                  </Link>
-                  <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
-                    {formatTitleCase(t("nav.dashboard"), locale)}
-                  </Link>
-                  <SignOutButton
-                    className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
-                    redirectTo={withMarketingLocale(locale, "/login")}
-                  />
-                </div>
-              )}
+                    <MarketingHeaderUtilityCluster
+                      chromeMode="dark-marketing"
+                      includeUnpublishedRegions={isAdminAuthenticated}
+                    />
+                  </div>
+                  {/* CLS guard: show guest buttons immediately during session load. */}
+                  {!isAuthenticated ? (
+                    <div className="flex shrink-0 items-center gap-2" aria-busy={isSessionPending || undefined}>
+                      <HeaderNavAnchor
+                        href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
+                        className={`${HEADER_DESKTOP_LOGIN_OUTLINE_CLASS} shrink-0 whitespace-nowrap`}
+                        onClick={closeMegaBeforeAuthNav}
+                        aria-label="Log in to your NurseNest account"
+                      >
+                        {formatTitleCase(t("nav.logIn"), locale)}
+                      </HeaderNavAnchor>
+                      <HeaderNavAnchor
+                        href={guestMarketingSignupHref}
+                        className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-[44px] shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                        onClick={closeMegaBeforeAuthNav}
+                        aria-label="Start free account — nursing and healthcare exam prep"
+                        title="Start free — no credit card required"
+                      >
+                        {formatTitleCase(t("nav.signup"), locale)}
+                      </HeaderNavAnchor>
+                    </div>
+                  ) : isAdminAuthenticated ? (
+                    <div className="flex shrink-0 items-center gap-2">
+                      <Link
+                        href={ADMIN_DASHBOARD_HREF}
+                        prefetch={false}
+                        className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                        onClick={(e) => { closeMegaBeforeAuthNav(); navigateAdminDashboardHard(e); }}
+                      >
+                        {formatTitleCase(t("nav.admin"), locale)}
+                      </Link>
+                      <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
+                        {formatTitleCase(t("nav.dashboard"), locale)}
+                      </Link>
+                      <SignOutButton
+                        className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
+                        redirectTo={withMarketingLocale(locale, "/login")}
+                      />
+                    </div>
+                  ) : isMarketingEntitledLearner ? (
+                    <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+                      <Link
+                        href={resumeStudyingCta?.href ?? "/app"}
+                        className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-3 py-2 text-sm font-medium sm:px-4`}
+                      >
+                        {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
+                      </Link>
+                      <Link
+                        href="/app/account/overview"
+                        className="nn-header-account-trigger gap-1.5 px-2.5 sm:px-3"
+                        aria-label={formatTitleCase(t("nav.account"), locale)}
+                      >
+                        <User className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
+                        <span className="hidden 2xl:inline whitespace-nowrap">{formatTitleCase(t("nav.account"), locale)}</span>
+                      </Link>
+                      <SignOutButton
+                        className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
+                        redirectTo={withMarketingLocale(locale, "/login")}
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex shrink-0 items-center gap-2">
+                      <Link
+                        href={localizeHref(HUB.pricing)}
+                        className={`${HEADER_NAV_PRIMARY_CTA} nn-nav-cta--premium-soft inline-flex min-h-0 shrink-0 items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium`}
+                        onClick={closeMegaBeforeAuthNav}
+                      >
+                        {formatTitleCase(t("nav.pricing"), locale)}
+                      </Link>
+                      <Link href="/app" className={`${HEADER_SECONDARY_ACTION_CLASS} shrink-0 whitespace-nowrap`}>
+                        {formatTitleCase(t("nav.dashboard"), locale)}
+                      </Link>
+                      <SignOutButton
+                        className={`${HEADER_SECONDARY_ACTION_CLASS} inline-flex min-h-0 shrink-0 whitespace-nowrap px-3 py-2`}
+                        redirectTo={withMarketingLocale(locale, "/login")}
+                      />
+                    </div>
+                  )}
+                </>
+              ) : null}
             </div>
           </div>{/* /nav-row */}
         </div>{/* /.nn-section-shell */}
@@ -985,13 +1065,15 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
         <div
           className="nn-marketing-nav-v31-tier-rail nn-header-hide-until-xl w-full nn-header-nav-row"
           data-nn-header-band="tier"
+          data-nn-header-row="class-pathway"
           data-testid="marketing-header-unified-nav"
         >
           <div className="nn-marketing-nav-v31-tier-inner nn-section-shell nn-header-primary-inner-shell flex min-h-[30px] items-center gap-x-1 gap-y-0 py-1 md:min-h-[32px] md:py-1.5">
             <nav
-              aria-label={t("nav.marketingExplore")}
+              aria-label={t("nav.marketingPathways")}
               className="flex min-w-0 flex-1 flex-nowrap items-center justify-center gap-x-0.5 xl:gap-x-1"
             >
+              {/* Tier hub chips: RN / RPN / NP / New Grad / Allied */}
               {tierHubMenus.map((menu) => (
                 <HeaderNavAnchor
                   key={menu.key}
@@ -1012,15 +1094,15 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                   {menu.label}
                 </HeaderNavAnchor>
               ))}
-              {/* row4 only: marketing links (Pre-Nursing, ECG, Tools, Pricing, About, Blog, FAQ)
-                  rendered here so all nav lives on one line. Non-row4 dark themes render these
-                  in the desktop grid center nav instead. */}
-              {marketingRow4Layout && marketingMoreLinks.map((item) => (
+              {/* row4 only: pathway/class links (Pre-Nursing, ECG, HESI, TEAS).
+                  Non-row4 dark themes have all links in the Row 1 center nav. */}
+              {marketingRow4Layout && pathwayMoreLinks.map((item) => (
                 <HeaderNavAnchor
                   key={item.key}
                   href={localizeHref(item.href)}
                   aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
                   className={NAV_MARKETING_MORE_CLASS}
+                  data-nn-pathway-link={item.key}
                   onClick={() =>
                     trackClientEvent(PH.marketingNavClick, {
                       actor: navActor,
@@ -1114,119 +1196,10 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                 <X className="h-5 w-5" />
               </Button>
             </div>
-            <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-y-contain px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:px-4 sm:pt-5">
-              <div className="space-y-1">
-                <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
-                  {t("nav.marketingExplore")}
-                </p>
-                <>
-                  {(() => {
-                      const flowPractice = marketingFlowLinks.find((l) => l.key === "flow-practice");
-                      const flowRest = marketingFlowLinks.filter((l) => l.key !== "flow-practice");
-                      return (
-                        <>
-                          {flowPractice ? (
-                            <HeaderNavAnchor
-                              key={flowPractice.key}
-                              href={localizeHref(flowPractice.href)}
-                              aria-current={isActivePath(strippedPath, flowPractice.matchBase) ? "page" : undefined}
-                              className={`nav-item ${HEADER_NAV_PRIMARY_CTA} mb-2 flex min-h-12 w-full touch-manipulation items-center justify-center rounded-xl px-4 py-3 text-[15px] font-semibold`}
-                              onClick={() => {
-                                trackClientEvent(PH.marketingNavClick, {
-                                  actor: navActor,
-                                  nav_id: flowPractice.key,
-                                  surface: "site_header_mobile_drawer",
-                                  marketing_region: region,
-                                });
-                                scheduleMobileDrawerClose();
-                              }}
-                            >
-                              {flowPractice.label}
-                            </HeaderNavAnchor>
-                          ) : null}
-                          <div className="mb-3 grid grid-cols-1 gap-2.5 min-[400px]:grid-cols-2">
-                            {flowRest.map((item) => (
-                              <HeaderNavAnchor
-                                key={item.key}
-                                href={localizeHref(item.href)}
-                                aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                                className={`nav-item flex min-h-12 touch-manipulation items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2.5 text-center text-sm font-medium leading-snug text-[var(--nav-muted)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] text-[var(--nav-link-active)]" : ""}`}
-                                onClick={() => {
-                                  trackClientEvent(PH.marketingNavClick, {
-                                    actor: navActor,
-                                    nav_id: item.key,
-                                    surface: "site_header_mobile_drawer",
-                                    marketing_region: region,
-                                  });
-                                  scheduleMobileDrawerClose();
-                                }}
-                              >
-                                {item.label}
-                              </HeaderNavAnchor>
-                            ))}
-                          </div>
-                        </>
-                      );
-                    })()}
-                    {tierHubMenus.map((menu) => (
-                      <HeaderNavAnchor
-                        key={menu.key}
-                        href={localizeHref(menu.hubHref)}
-                        aria-current={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "page" : undefined}
-                        data-active={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) || undefined}
-                        className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
-                        data-nn-mobile-tier-link
-                        onClick={() => {
-                          trackClientEvent(PH.marketingNavClick, {
-                            actor: navActor,
-                            nav_id: `${menu.key}_tier_hub`,
-                            surface: "site_header_mobile_drawer",
-                            marketing_region: region,
-                          });
-                          scheduleMobileDrawerClose();
-                        }}
-                      >
-                        <span
-                          className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
-                          aria-hidden
-                        />
-                        {menu.label}
-                      </HeaderNavAnchor>
-                    ))}
-                    <div className="space-y-1 border-t border-[var(--header-border)] pt-3">
-                      <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
-                        {formatTitleCase(t("nav.marketingMore"), locale)}
-                      </p>
-                      {marketingMoreLinks.map((item) => (
-                        <HeaderNavAnchor
-                          key={item.key}
-                          href={localizeHref(item.href)}
-                          aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                          className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
-                          data-nn-mobile-primary-link
-                          onClick={() => {
-                            trackClientEvent(PH.marketingNavClick, {
-                              actor: navActor,
-                              nav_id: item.key,
-                              surface: "site_header_mobile_drawer",
-                              marketing_region: region,
-                            });
-                            scheduleMobileDrawerClose();
-                          }}
-                        >
-                          <span
-                            className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)]" : "bg-transparent"}`}
-                            aria-hidden
-                          />
-                          {item.label}
-                        </HeaderNavAnchor>
-                      ))}
-                    </div>
-                </>
-              </div>
+            <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-y-contain px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:px-4 sm:pt-5">
 
-              <div className="mt-1 flex flex-col gap-2 border-t border-[var(--header-border)] pt-5">
-                {/* CLS guard: no skeleton — show guest buttons immediately (drawer is not visible on load). */}
+              {/* ── Section 1: Account / Utility ── */}
+              <div className="flex flex-col gap-2" data-nn-mobile-section="account">
                 {!isAuthenticated ? (
                   <>
                     <HeaderNavAnchor
@@ -1235,6 +1208,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                       onClick={scheduleMobileDrawerClose}
                       aria-label="Start free account — nursing and healthcare exam prep"
                       title="Start free — no credit card required"
+                      data-nn-mobile-utility-link
                     >
                       {formatTitleCase(t("nav.signup"), locale)}
                     </HeaderNavAnchor>
@@ -1243,6 +1217,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                       className="nav-item inline-flex min-h-[46px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-3 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                       onClick={scheduleMobileDrawerClose}
                       aria-label="Log in to your NurseNest account"
+                      data-nn-mobile-utility-link
                     >
                       {formatTitleCase(t("nav.logIn"), locale)}
                     </HeaderNavAnchor>
@@ -1253,30 +1228,19 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                       href={ADMIN_DASHBOARD_HREF}
                       prefetch={false}
                       className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
-                      onClick={(e) => {
-                        closeMegaBeforeAuthNav();
-                        scheduleMobileDrawerClose();
-                        navigateAdminDashboardHard(e);
-                      }}
+                      onClick={(e) => { closeMegaBeforeAuthNav(); scheduleMobileDrawerClose(); navigateAdminDashboardHard(e); }}
+                      data-nn-mobile-utility-link
                     >
                       {formatTitleCase(t("nav.admin"), locale)}
                     </Link>
-                    <Link
-                      href="/app"
-                      className={HEADER_SECONDARY_ACTION_CLASS}
-                      onClick={scheduleMobileDrawerClose}
-                    >
+                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
                       {formatTitleCase(t("nav.dashboard"), locale)}
                     </Link>
-                    <Link
-                      href="/app/account/overview"
-                      className={HEADER_SECONDARY_ACTION_CLASS}
-                      onClick={scheduleMobileDrawerClose}
-                    >
+                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton
-                      className="nav-item mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      className="nav-item mt-1 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
                       onBeforeSignOut={scheduleMobileDrawerClose}
                       redirectTo={withMarketingLocale(locale, "/login")}
                     />
@@ -1292,17 +1256,18 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                       href={resumeStudyingCta?.href ?? "/app"}
                       className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={scheduleMobileDrawerClose}
+                      data-nn-mobile-utility-link
                     >
                       {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                     </Link>
-                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose}>
+                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
                       {formatTitleCase(t("nav.dashboard"), locale)}
                     </Link>
-                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose}>
+                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton
-                      className="nav-item mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      className="nav-item mt-1 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
                       onBeforeSignOut={scheduleMobileDrawerClose}
                       redirectTo={withMarketingLocale(locale, "/login")}
                     />
@@ -1312,34 +1277,111 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     <Link
                       href={localizeHref(HUB.pricing)}
                       className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
-                      onClick={() => {
-                        closeMegaBeforeAuthNav();
-                        scheduleMobileDrawerClose();
-                      }}
+                      onClick={() => { closeMegaBeforeAuthNav(); scheduleMobileDrawerClose(); }}
+                      data-nn-mobile-utility-link
                     >
                       {formatTitleCase(t("nav.pricing"), locale)}
                     </Link>
-                    <Link
-                      href="/app"
-                      className={HEADER_SECONDARY_ACTION_CLASS}
-                      onClick={scheduleMobileDrawerClose}
-                    >
+                    <Link href="/app" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
                       {formatTitleCase(t("nav.dashboard"), locale)}
                     </Link>
-                    <Link
-                      href="/app/account/overview"
-                      className={HEADER_SECONDARY_ACTION_CLASS}
-                      onClick={scheduleMobileDrawerClose}
-                    >
+                    <Link href="/app/account/overview" className={HEADER_SECONDARY_ACTION_CLASS} onClick={scheduleMobileDrawerClose} data-nn-mobile-utility-link>
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton
-                      className="nav-item mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      className="nav-item mt-1 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
                       onBeforeSignOut={scheduleMobileDrawerClose}
                       redirectTo={withMarketingLocale(locale, "/login")}
                     />
                   </>
                 )}
+              </div>
+
+              {/* ── Section 2: NurseNest brand links (Tools, Pricing, About, Blog, FAQ) ── */}
+              <div className="space-y-1 border-t border-[var(--header-border)] pt-4" data-nn-mobile-section="nursenest">
+                <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
+                  NurseNest
+                </p>
+                {(() => {
+                  const flowPractice = marketingFlowLinks.find((l) => l.key === "flow-practice");
+                  const flowRest = marketingFlowLinks.filter((l) => l.key !== "flow-practice");
+                  return (
+                    <>
+                      {flowPractice ? (
+                        <HeaderNavAnchor
+                          href={localizeHref(flowPractice.href)}
+                          aria-current={isActivePath(strippedPath, flowPractice.matchBase) ? "page" : undefined}
+                          className={`nav-item ${HEADER_NAV_PRIMARY_CTA} mb-2 flex min-h-11 w-full touch-manipulation items-center justify-center rounded-xl px-4 py-2.5 text-[15px] font-semibold`}
+                          onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: flowPractice.key, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
+                          data-nn-mobile-brand-link
+                        >
+                          {flowPractice.label}
+                        </HeaderNavAnchor>
+                      ) : null}
+                      <div className="mb-2 grid grid-cols-1 gap-2 min-[400px]:grid-cols-2">
+                        {flowRest.map((item) => (
+                          <HeaderNavAnchor
+                            key={item.key}
+                            href={localizeHref(item.href)}
+                            aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                            className={`nav-item flex min-h-11 touch-manipulation items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2.5 text-center text-sm font-medium leading-snug text-[var(--nav-muted)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] text-[var(--nav-link-active)]" : ""}`}
+                            onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: item.key, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
+                            data-nn-mobile-brand-link
+                          >
+                            {item.label}
+                          </HeaderNavAnchor>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
+                {brandNavLinks.map((item) => (
+                  <HeaderNavAnchor
+                    key={item.key}
+                    href={localizeHref(item.href)}
+                    aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                    className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                    data-nn-mobile-brand-link
+                    onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: item.key, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
+                  >
+                    <span className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)]" : "bg-transparent"}`} aria-hidden />
+                    {item.label}
+                  </HeaderNavAnchor>
+                ))}
+              </div>
+
+              {/* ── Section 3: Classes & Pathways (tier hubs + Pre-Nursing / ECG / HESI / TEAS) ── */}
+              <div className="space-y-1 border-t border-[var(--header-border)] pt-4" data-nn-mobile-section="classes-pathways">
+                <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
+                  {formatTitleCase(t("nav.marketingExplore"), locale)}
+                </p>
+                {tierHubMenus.map((menu) => (
+                  <HeaderNavAnchor
+                    key={menu.key}
+                    href={localizeHref(menu.hubHref)}
+                    aria-current={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "page" : undefined}
+                    data-active={strippedPathActivatesMegaMenuKey(menu.key, strippedPath) || undefined}
+                    className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                    data-nn-mobile-tier-link
+                    onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: `${menu.key}_tier_hub`, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
+                  >
+                    <span className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${strippedPathActivatesMegaMenuKey(menu.key, strippedPath) ? "bg-[var(--text-accent)]" : "bg-transparent"}`} aria-hidden />
+                    {menu.label}
+                  </HeaderNavAnchor>
+                ))}
+                {pathwayMoreLinks.map((item) => (
+                  <HeaderNavAnchor
+                    key={item.key}
+                    href={localizeHref(item.href)}
+                    aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
+                    className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                    data-nn-mobile-pathway-link
+                    onClick={() => { trackClientEvent(PH.marketingNavClick, { actor: navActor, nav_id: item.key, surface: "site_header_mobile_drawer", marketing_region: region }); scheduleMobileDrawerClose(); }}
+                  >
+                    <span className={`h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-100 ${isActivePath(strippedPath, item.matchBase) ? "bg-[var(--text-accent)]" : "bg-transparent"}`} aria-hidden />
+                    {item.label}
+                  </HeaderNavAnchor>
+                ))}
               </div>
 
               <p className="mb-3 flex items-start gap-2 nn-marketing-body-sm text-[var(--nav-muted)]">

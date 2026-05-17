@@ -173,7 +173,7 @@ html[data-theme="sunset"] .nn-marketing-brand-root {
   z-index: 0;
   border-radius: 2.5rem;
   background: var(--nn-brand-page-wash-a), var(--nn-brand-page-wash-b);
-  opacity: 0.55;
+  opacity: 0.18;
 }
 
 .nn-marketing-brand-root .nn-premium-pathway-hub > * {

@@ -24,3 +24,17 @@
 @import "./styles/marketing/hub-tiers.css";
 @import "./styles/marketing/content-surfaces.css";
 @import "./styles/marketing/footer-seo.css";
+
+/* ── Brand lockup theme overrides ──────────────────────────────────────────
+   These rules are intentionally in the barrel file (not in section files) so
+   they load AFTER all @imports and act as the canonical last-word overrides.
+   Tests read this file directly to guard against regressions.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Blossom: wordmark must use the same semantic token as the CDN leaf raster.
+   --theme-primary = #d948a8 (blossom pink) — matches the CDN leaf PNG.
+   Do NOT use --logo-primary here: .nn-header-logo-row remaps it to
+   --nn-header-primary-fg (near-black) inside the row4 header, breaking the match. */
+html[data-theme="blossom"] .nn-header-brand-lockup {
+  color: var(--theme-primary);
+}

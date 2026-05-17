@@ -440,20 +440,13 @@
   isolation: isolate;
   overflow: hidden;
   border-radius: 1.15rem;
-  border-color: color-mix(in srgb, var(--semantic-chart-4) 22%, var(--border-subtle));
+  border-color: color-mix(in srgb, var(--semantic-brand) 14%, var(--border-subtle));
   box-shadow:
-    0 24px 52px -34px color-mix(in srgb, var(--palette-heading) 30%, transparent),
-    0 1px 0 color-mix(in srgb, var(--semantic-chart-4) 14%, transparent) inset;
+    0 16px 40px -28px color-mix(in srgb, var(--palette-heading) 16%, transparent),
+    0 1px 0 color-mix(in srgb, var(--semantic-brand) 8%, transparent) inset;
   background:
-    radial-gradient(520px 240px at 6% 0%, color-mix(in srgb, var(--semantic-chart-4) 14%, transparent), transparent 56%),
-    radial-gradient(480px 220px at 98% 10%, color-mix(in srgb, var(--semantic-info) 11%, transparent), transparent 54%),
-    radial-gradient(420px 200px at 44% 100%, color-mix(in srgb, var(--semantic-brand) 9%, transparent), transparent 58%),
-    linear-gradient(
-      128deg,
-      color-mix(in srgb, var(--semantic-panel-cool) 11%, var(--theme-page-bg)) 0%,
-      color-mix(in srgb, var(--semantic-chart-4) 6%, var(--theme-page-bg)) 46%,
-      transparent 100%
-    );
+    radial-gradient(480px 180px at 6% 0%, color-mix(in srgb, var(--semantic-brand) 6%, transparent), transparent 58%),
+    var(--theme-page-bg);
 }
 
 .nn-premium-pathway-hub--np-convergence .nn-np-pathway-hero-premium.nn-nursing-tier-hub-hero-band::after {

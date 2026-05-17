@@ -71,6 +71,10 @@ const trackAccentMap: Record<string, {
   announcementBg: string;
   announcementCta: string;
   ctaGradient: string;
+  heroCta: string;
+  heroCtaSecondary: string;
+  outcomeBorder: string;
+  outcomeText: string;
 }> = {
   rpn: {
     gradient: "from-emerald-50 via-white to-emerald-50/30",
@@ -87,6 +91,10 @@ const trackAccentMap: Record<string, {
     announcementBg: "bg-emerald-50/70 border-b border-emerald-200/40",
     announcementCta: "text-emerald-700 hover:text-emerald-800",
     ctaGradient: "from-slate-900 via-slate-800 to-slate-900",
+    heroCta: "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20",
+    heroCtaSecondary: "border-emerald-400/30 hover:bg-emerald-50/60",
+    outcomeBorder: "border-emerald-100",
+    outcomeText: "text-emerald-700",
   },
   rn: {
     gradient: "from-blue-50/60 via-white to-slate-50/30",
@@ -103,6 +111,10 @@ const trackAccentMap: Record<string, {
     announcementBg: "bg-blue-50/70 border-b border-blue-200/40",
     announcementCta: "text-blue-700 hover:text-blue-800",
     ctaGradient: "from-slate-950 via-blue-950 to-slate-900",
+    heroCta: "bg-blue-600 hover:bg-blue-700 shadow-blue-600/20",
+    heroCtaSecondary: "border-blue-400/30 hover:bg-blue-50/60",
+    outcomeBorder: "border-blue-100",
+    outcomeText: "text-blue-700",
   },
   np: {
     gradient: "from-violet-50 via-white to-violet-50/30",
@@ -119,6 +131,10 @@ const trackAccentMap: Record<string, {
     announcementBg: "bg-violet-50/60 border-b border-violet-200/40",
     announcementCta: "text-violet-700 hover:text-violet-800",
     ctaGradient: "from-slate-900 via-violet-950 to-slate-900",
+    heroCta: "bg-violet-600 hover:bg-violet-700 shadow-violet-600/20",
+    heroCtaSecondary: "border-violet-400/30 hover:bg-violet-50/60",
+    outcomeBorder: "border-violet-100",
+    outcomeText: "text-violet-700",
   },
 };
 
@@ -153,6 +169,10 @@ export default function TrackLandingPage({ track }: TrackLandingPageProps) {
     announcementBg: "bg-[#BFA6F6]/10 border-b border-[#BFA6F6]/20",
     announcementCta: "text-[#BFA6F6] hover:text-[#a98cf0]",
     ctaGradient: "from-[#BFA6F6]/5 via-[#BFA6F6]/10 to-[#BFA6F6]/5",
+    heroCta: "bg-[#BFA6F6] hover:bg-[#a98cf0] shadow-[#BFA6F6]/20",
+    heroCtaSecondary: "border-[#BFA6F6]/30 hover:bg-[#BFA6F6]/5",
+    outcomeBorder: "border-[#BFA6F6]/20",
+    outcomeText: "text-[#BFA6F6]",
   };
   const colors = trackAccentMap[track] || defaultAccent;
   const label = trackLabel[track] || "Nursing";
@@ -390,7 +410,7 @@ function HeroSection({
                 onNavigate(hero.primaryCtaPath);
               }
             }}
-            className="bg-[#BFA6F6] hover:bg-[#a98cf0] text-white border-none px-8 h-12 rounded-full text-base font-medium shadow-lg shadow-[#BFA6F6]/20"
+            className={`${colors.heroCta} text-white border-none px-8 h-12 rounded-full text-base font-semibold shadow-lg`}
             data-testid="hero-primary-cta"
           >
             {hero.primaryCta}
@@ -400,7 +420,7 @@ function HeroSection({
             size="lg"
             variant="outline"
             onClick={() => onNavigate(hero.secondaryCtaPath)}
-            className="border-[#BFA6F6]/30 text-[#2E3A59] px-8 h-12 rounded-full text-base hover:bg-[#BFA6F6]/5"
+            className={`${colors.heroCtaSecondary} text-[#2E3A59] px-8 h-12 rounded-full text-base`}
             data-testid="hero-secondary-cta"
           >
             {hero.secondaryCta}
@@ -419,7 +439,7 @@ function HeroSection({
         )}
 
         {hero.clarityBullets && hero.clarityBullets.length > 0 && (
-          <div className="max-w-2xl mx-auto mb-10 p-5 rounded-2xl bg-white/60 border border-[#BFA6F6]/10 backdrop-blur-sm" data-testid="hero-clarity-block">
+          <div className="max-w-2xl mx-auto mb-10 p-5 rounded-2xl bg-white/60 border border-white/50 backdrop-blur-sm" data-testid="hero-clarity-block">
             <p className="text-xs font-bold uppercase tracking-wider text-[#2E3A59]/40 mb-3">{t("pages.marketing.TrackLandingPage.whatYouGet")}</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {hero.clarityBullets.map((bullet, i) => (
@@ -481,6 +501,7 @@ function ProblemSection({
     <section className="py-16 md:py-24 bg-gray-50/50" data-testid="problem-section">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
+          <p className={`text-[0.65rem] font-bold uppercase tracking-widest ${colors.accent} mb-3`}>The challenge</p>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4" data-testid="problem-headline">
             {section.headline}
           </h2>
@@ -523,6 +544,7 @@ function SolutionSection({
     <section className="py-16 md:py-24" data-testid="solution-section">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
+          <p className={`text-[0.65rem] font-bold uppercase tracking-widest ${colors.accent} mb-3`}>Our approach</p>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4" data-testid="solution-headline">
             {r(solution.headline)}
           </h2>
@@ -537,7 +559,7 @@ function SolutionSection({
             return (
               <div
                 key={i}
-                className="text-center p-6 rounded-2xl border border-gray-100 bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                className="text-center p-6 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
                 data-testid={`solution-card-${i}`}
               >
                 <div className={`inline-flex items-center justify-center w-11 h-11 rounded-xl ${colors.light} mb-4 group-hover:scale-105 transition-transform duration-300`}>
@@ -567,9 +589,7 @@ function FeatureCardsSection({
     <section className="py-16 md:py-24 bg-gray-50/50" data-testid="feature-cards-section">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
-          <Badge variant="outline" className={`mb-4 ${colors.badge} text-xs px-3 py-1`}>
-            {label} Study Tools
-          </Badge>
+          <p className={`text-[0.65rem] font-bold uppercase tracking-widest ${colors.accent} mb-3`}>{label} study tools</p>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">
             Everything you need in one place
           </h2>
@@ -584,7 +604,7 @@ function FeatureCardsSection({
             return (
               <Card
                 key={i}
-                className="border-gray-100 bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+                className="border-gray-100 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
                 data-testid={`feature-card-${i}`}
               >
                 <CardContent className="p-6">
@@ -614,6 +634,7 @@ function HowItWorksSection({
     <section className="py-16 md:py-24" data-testid="how-it-works-section">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
+          <p className={`text-[0.65rem] font-bold uppercase tracking-widest ${colors.accent} mb-3`}>Getting started</p>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">
             How it works
           </h2>
@@ -715,6 +736,7 @@ function OutcomesSection({
     <section className="py-16 md:py-24 bg-gray-50/50" data-testid="outcomes-section">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
+          <p className={`text-[0.65rem] font-bold uppercase tracking-widest ${colors.accent} mb-3`}>What changes</p>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4" data-testid="outcomes-headline">
             {section.headline}
           </h2>
@@ -736,8 +758,8 @@ function OutcomesSection({
               <div className="hidden sm:flex items-center justify-center px-4">
                 <ChevronRight className={`w-5 h-5 ${colors.accent}`} />
               </div>
-              <div className="flex-1 p-4 rounded-xl bg-white border border-emerald-100 text-center sm:text-left sm:rounded-l-none sm:border-l-0">
-                <span className="text-sm text-emerald-700 font-medium">{outcome.after}</span>
+              <div className={`flex-1 p-4 rounded-xl bg-white border ${colors.outcomeBorder} text-center sm:text-left sm:rounded-l-none sm:border-l-0`}>
+                <span className={`text-sm ${colors.outcomeText} font-medium`}>{outcome.after}</span>
               </div>
             </div>
           ))}
@@ -758,6 +780,7 @@ function TestimonialsSection({
     <section className="py-16 md:py-24" data-testid="testimonials-section">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
+          <p className={`text-[0.65rem] font-bold uppercase tracking-widest ${colors.accent} mb-3`}>Learner voices</p>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">
             What learners are saying
           </h2>
@@ -770,7 +793,7 @@ function TestimonialsSection({
           {testimonials.map((t, i) => (
             <Card
               key={i}
-              className="border-gray-100 bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+              className="border-gray-100 bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
               data-testid={`testimonial-${i}`}
             >
               <CardContent className="p-7 flex flex-col h-full">
@@ -804,8 +827,9 @@ function ComparisonSection({
     <section className="py-16 md:py-24 bg-gray-50/50" data-testid="comparison-section">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
+          <p className={`text-[0.65rem] font-bold uppercase tracking-widest ${colors.accent} mb-3`}>Why NurseNest</p>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">
-            Why NurseNest for {label} prep?
+            Purpose-built for {label} prep
           </h2>
           <p className="text-[#2E3A59]/60 max-w-2xl mx-auto">
             See how role-specific preparation compares to generic nursing study tools.
@@ -816,7 +840,7 @@ function ComparisonSection({
           <div className="grid grid-cols-3 bg-gray-50/80 border-b border-gray-100">
             <div className="p-4 text-xs font-semibold text-[#2E3A59]/60 uppercase tracking-wider">{t("pages.marketing.TrackLandingPage.feature")}</div>
             <div className="p-4 text-xs font-semibold text-[#2E3A59]/40 text-center uppercase tracking-wider">{t("pages.marketing.TrackLandingPage.genericPlatforms")}</div>
-            <div className={`p-4 text-xs font-semibold text-center uppercase tracking-wider ${colors.accent}`}>NurseNest</div>
+            <div className={`p-4 text-xs font-bold text-center uppercase tracking-wider ${colors.accent} ${colors.light}`}>NurseNest</div>
           </div>
 
           {comparison.map((row, i) => (
@@ -831,9 +855,9 @@ function ComparisonSection({
                   <X className="w-3.5 h-3.5 text-red-300 flex-shrink-0" />
                   <span>{row.generic}</span>
                 </div>
-                <div className="p-4 text-sm text-[#2E3A59]/80 text-center flex items-center justify-center gap-2">
+                <div className={`p-4 text-sm text-[#2E3A59]/80 text-center flex items-center justify-center gap-2 ${colors.light}`}>
                   <Check className={`w-3.5 h-3.5 ${colors.accent} flex-shrink-0`} />
-                  <span>{row.nursenest}</span>
+                  <span className="font-medium">{row.nursenest}</span>
                 </div>
               </div>
               <div className="sm:hidden p-4 space-y-2">
@@ -870,6 +894,7 @@ function FaqSection({
     <section className="py-16 md:py-24" data-testid="faq-section">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
+          <p className={`text-[0.65rem] font-bold uppercase tracking-widest ${colors.accent} mb-3`}>Common questions</p>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">
             Frequently asked questions
           </h2>

@@ -21,15 +21,15 @@ export function MarketingPathwayHubHeroBand({
 }) {
   return (
     <div
-      className={`nn-gradient-safe nn-nursing-tier-hub-hero-band relative overflow-hidden px-6 py-9 shadow-[var(--semantic-shadow-soft)] sm:px-10 sm:py-11 ${className}`.trim()}
+      className={`nn-gradient-safe nn-nursing-tier-hub-hero-band relative overflow-hidden px-6 pt-6 pb-5 shadow-[var(--semantic-shadow-soft)] sm:px-10 sm:pt-8 sm:pb-6 ${className}`.trim()}
       data-nn-hub-section="identity-hero"
     >
       <div
-        className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_14%,transparent)] blur-3xl"
+        className="pointer-events-none !absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_10%,transparent)] blur-3xl"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-[color-mix(in_srgb,var(--semantic-success)_12%,transparent)] blur-3xl"
+        className="pointer-events-none !absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_8%,transparent)] blur-3xl"
         aria-hidden
       />
       <div className="relative">{eyebrow}</div>

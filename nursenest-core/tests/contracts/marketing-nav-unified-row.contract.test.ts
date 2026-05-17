@@ -1,21 +1,13 @@
 /**
- * === MARKETING HEADER UNIFIED NAV CONTRACT ===
+ * === MARKETING HEADER THREE-ROW CONTRACT ===
  *
- * Asserts that the marketing header renders all main nav items in a single row
- * (the tier rail / Row 2), not split across the Bar A utility band + desktop
- * grid center nav + tier rail.
+ * Guards the 3-row desktop marketing header structure:
+ *   Row 0 (utility):      Country + Language + Theme + compact auth CTAs
+ *   Row 1 (brand nav):    NurseNest logo + Tools / Pricing / About / Blog / FAQ
+ *   Row 2 (class rail):   RN / RPN / NP / New Grad / Allied + Pre-Nursing / ECG / HESI / TEAS
  *
- * Regression guard: if the nav regresses to 3 rows this test fails.
- *
- * Strategy: static source-text analysis of site-header.tsx (no browser, no DOM).
- *   1. Bar A (nn-marketing-nav-v31-bar-a) must NOT contain a <nav> or nav links.
- *   2. Desktop grid center nav must be absent/spacer for row4.
- *   3. Unified tier rail nav must render BOTH tierHubMenus items AND
- *      marketingMoreLinks items.
- *   4. Tier rail nav must use flex-nowrap (no flex-wrap class).
- *   5. ECG link (/ecg-interpretation) must appear in moreLinks.
- *   6. Server precomputed moreLinks (site-header-server.tsx) must include ECG
- *      and match the desired canonical order.
+ * Strategy: static source-text analysis of site-header.tsx and site-header-server.tsx.
+ * No browser, no DOM — fast and CI-friendly.
  *
  * Run from nursenest-core/:
  *   node --import tsx --test tests/contracts/marketing-nav-unified-row.contract.test.ts
@@ -32,38 +24,84 @@ function readSource(filePath: string): string {
   return fs.readFileSync(filePath, "utf8");
 }
 
-describe("marketing-nav-unified-row contract", () => {
+describe("marketing-nav-three-row contract", () => {
   const src = readSource(HEADER_PATH);
   const serverSrc = readSource(SERVER_PATH);
 
-  // ── 1. Bar A must not contain navigation links ────────────────────────────
-  it("Bar A block does not render a <nav> element or tier/more-link items", () => {
-    // The nn-marketing-nav-v31-bar-a className must not appear alongside nav item rendering
-    const barAIndex = src.indexOf("nn-marketing-nav-v31-bar-a");
-    // Bar A may still exist as a comment or removed entirely; it must not render nav links
-    if (barAIndex !== -1) {
-      // Find the opening block around the Bar A className
-      const barABlock = src.slice(Math.max(0, barAIndex - 200), barAIndex + 600);
-      assert.ok(
-        !barABlock.includes("tierHubMenus.map") && !barABlock.includes("marketingMoreLinks.map"),
-        "Bar A block must not render tier hub or more-link items — nav must live in the unified tier rail",
-      );
-    }
-    // If Bar A is completely absent (removed), that's fine too
-  });
-
-  // ── 2. Desktop grid center nav is guarded by !marketingRow4Layout ──────────
-  it("Desktop grid center <nav> is only rendered for non-row4 dark themes", () => {
-    // The marketingMoreLinks.map inside the desktop grid should be guarded
-    // The pattern is: spacer div for row4, nav for non-row4
+  // ── 1. Utility row exists and contains utility cluster ───────────────────
+  it("Utility row (Row 0) has data-testid=marketing-header-utility-row", () => {
     assert.ok(
-      src.includes("marketingRow4Layout ? (") && src.includes("<div aria-hidden"),
-      "Desktop grid must render a spacer div for row4 instead of the center nav",
+      src.includes('data-testid="marketing-header-utility-row"'),
+      "Header must have a utility row with data-testid for E2E targeting",
     );
   });
 
-  // ── 3. Unified tier rail renders both tier hub items AND more links ────────
-  it("Tier rail nav renders tierHubMenus.map AND marketingMoreLinks.map", () => {
+  it("Utility row renders MarketingHeaderUtilityCluster with row4 chromeMode", () => {
+    const utilityRowIdx = src.indexOf('data-testid="marketing-header-utility-row"');
+    assert.ok(utilityRowIdx !== -1, "Utility row must exist");
+    const utilityRowBlock = src.slice(utilityRowIdx, utilityRowIdx + 2000);
+    assert.ok(
+      utilityRowBlock.includes("MarketingHeaderUtilityCluster") && utilityRowBlock.includes('"row4"'),
+      "Utility row must contain MarketingHeaderUtilityCluster with row4 chromeMode",
+    );
+  });
+
+  // ── 2. Brand nav (Row 1) contains Tools/Pricing/About/Blog/FAQ ──────────
+  it("Brand nav row (Row 1) has data-testid=marketing-header-brand-nav", () => {
+    assert.ok(
+      src.includes('data-testid="marketing-header-brand-nav"'),
+      "Brand nav row must have data-testid for E2E targeting",
+    );
+  });
+
+  it("brandNavLinks client fallback contains tools, pricing, about, blog, faq", () => {
+    const brandNavStart = src.indexOf("const brandNavLinks");
+    assert.ok(brandNavStart !== -1, "brandNavLinks useMemo must exist in site-header.tsx");
+    const brandNavBlock = src.slice(brandNavStart, brandNavStart + 800);
+    for (const key of ["tools", "pricing", "about", "blog", "faq"]) {
+      assert.ok(
+        brandNavBlock.includes(`key: "${key}"`),
+        `brandNavLinks must include key: "${key}"`,
+      );
+    }
+  });
+
+  it("brandNavLinks client fallback does NOT contain pre-nursing, ecg, hesi, or teas", () => {
+    const brandNavStart = src.indexOf("const brandNavLinks");
+    assert.ok(brandNavStart !== -1, "brandNavLinks must exist");
+    const brandNavBlock = src.slice(brandNavStart, brandNavStart + 800);
+    for (const key of ["pre-nursing", "ecg", "hesi", "teas"]) {
+      assert.ok(
+        !brandNavBlock.includes(`key: "${key}"`),
+        `brandNavLinks must NOT include key: "${key}" — class/pathway links belong in pathwayMoreLinks`,
+      );
+    }
+  });
+
+  it("Server brandNavLinks contains tools, pricing, about, blog, faq", () => {
+    const brandNavStart = serverSrc.indexOf("brandNavLinks: [");
+    assert.ok(brandNavStart !== -1, "Server must precompute brandNavLinks");
+    const brandNavBlock = serverSrc.slice(brandNavStart, brandNavStart + 1000);
+    for (const key of ["tools", "pricing", "about", "blog", "faq"]) {
+      assert.ok(
+        brandNavBlock.includes(`key: "${key}"`),
+        `Server brandNavLinks must include key: "${key}"`,
+      );
+    }
+  });
+
+  // ── 3. Class/pathway row (Row 2) contains pathway links ──────────────────
+  it("Class/pathway row has data-nn-header-row=class-pathway", () => {
+    const tierRailIdx = src.indexOf("nn-marketing-nav-v31-tier-rail");
+    assert.ok(tierRailIdx !== -1, "Tier rail must exist");
+    const tierRailBlock = src.slice(tierRailIdx, tierRailIdx + 200);
+    assert.ok(
+      tierRailBlock.includes('data-nn-header-row="class-pathway"'),
+      "Tier rail must be labelled as the class/pathway row",
+    );
+  });
+
+  it("Tier rail renders tierHubMenus.map (RN/RPN/NP/New Grad/Allied)", () => {
     const tierRailIndex = src.indexOf("nn-marketing-nav-v31-tier-rail");
     assert.ok(tierRailIndex !== -1, "Tier rail element must exist");
     const tierRailBlock = src.slice(tierRailIndex, tierRailIndex + 3000);
@@ -71,13 +109,67 @@ describe("marketing-nav-unified-row contract", () => {
       tierRailBlock.includes("tierHubMenus.map"),
       "Tier rail must render tier hub pathway chips (RN/RPN/NP/New Grad/Allied)",
     );
+  });
+
+  it("Tier rail renders pathwayMoreLinks.map (Pre-Nursing/ECG/HESI/TEAS)", () => {
+    const tierRailIndex = src.indexOf("nn-marketing-nav-v31-tier-rail");
+    assert.ok(tierRailIndex !== -1, "Tier rail element must exist");
+    const tierRailBlock = src.slice(tierRailIndex, tierRailIndex + 3000);
     assert.ok(
-      tierRailBlock.includes("marketingMoreLinks.map"),
-      "Tier rail must also render marketingMoreLinks (Pre-Nursing/ECG/Tools/Pricing/About/Blog/FAQ)",
+      tierRailBlock.includes("pathwayMoreLinks.map"),
+      "Tier rail must also render pathwayMoreLinks (Pre-Nursing/ECG/HESI/TEAS)",
     );
   });
 
-  // ── 4. Unified nav uses flex-nowrap ───────────────────────────────────────
+  it("Tier rail does NOT render brandNavLinks (tools/pricing/about/blog/faq must not appear here)", () => {
+    const tierRailIndex = src.indexOf("nn-marketing-nav-v31-tier-rail");
+    assert.ok(tierRailIndex !== -1, "Tier rail must exist");
+    const tierRailBlock = src.slice(tierRailIndex, tierRailIndex + 3000);
+    assert.ok(
+      !tierRailBlock.includes("brandNavLinks.map"),
+      "Tier rail must NOT render brandNavLinks — brand links belong in the Row 1 center nav",
+    );
+  });
+
+  // ── 4. pathwayMoreLinks contains ECG, Pre-Nursing, HESI, TEAS ───────────
+  it("pathwayMoreLinks client fallback contains pre-nursing, ecg, hesi, teas", () => {
+    const pathwayStart = src.indexOf("const pathwayMoreLinks");
+    assert.ok(pathwayStart !== -1, "pathwayMoreLinks useMemo must exist");
+    const pathwayBlock = src.slice(pathwayStart, pathwayStart + 600);
+    for (const key of ["pre-nursing", "ecg", "hesi", "teas"]) {
+      assert.ok(
+        pathwayBlock.includes(`key: "${key}"`),
+        `pathwayMoreLinks must include key: "${key}"`,
+      );
+    }
+  });
+
+  it("pathwayMoreLinks does NOT contain tools, pricing, about, blog, or faq", () => {
+    const pathwayStart = src.indexOf("const pathwayMoreLinks");
+    assert.ok(pathwayStart !== -1, "pathwayMoreLinks must exist");
+    const pathwayBlock = src.slice(pathwayStart, pathwayStart + 600);
+    for (const key of ["tools", "pricing", "about", "blog", "faq"]) {
+      assert.ok(
+        !pathwayBlock.includes(`key: "${key}"`),
+        `pathwayMoreLinks must NOT include key: "${key}" — brand links belong in brandNavLinks`,
+      );
+    }
+  });
+
+  // ── 5. Server pathwayNavLinks contains ECG and HESI/TEAS ────────────────
+  it("Server pathwayNavLinks contains pre-nursing, ecg, hesi, teas", () => {
+    const pathwayStart = serverSrc.indexOf("pathwayNavLinks: [");
+    assert.ok(pathwayStart !== -1, "Server must precompute pathwayNavLinks");
+    const pathwayBlock = serverSrc.slice(pathwayStart, pathwayStart + 600);
+    for (const key of ["pre-nursing", "ecg", "hesi", "teas"]) {
+      assert.ok(
+        pathwayBlock.includes(`key: "${key}"`),
+        `Server pathwayNavLinks must include key: "${key}"`,
+      );
+    }
+  });
+
+  // ── 6. Unified nav uses flex-nowrap ─────────────────────────────────────
   it("Unified tier rail nav uses flex-nowrap to prevent wrapping into multiple rows", () => {
     const tierRailIndex = src.indexOf("nn-marketing-nav-v31-tier-rail");
     assert.ok(tierRailIndex !== -1, "Tier rail element must exist");
@@ -86,81 +178,67 @@ describe("marketing-nav-unified-row contract", () => {
       tierRailBlock.includes("flex-nowrap"),
       "Unified nav must use flex-nowrap — flex-wrap would allow 3rd-row regression",
     );
-    // Ensure the outer tier-inner div does NOT have flex-wrap
-    const tierInnerMatch = tierRailBlock.match(/nn-marketing-nav-v31-tier-inner[^"]*"/);
-    if (tierInnerMatch) {
-      assert.ok(
-        !tierInnerMatch[0].includes("flex-wrap"),
-        "Tier inner container must not use flex-wrap",
-      );
-    }
   });
 
-  // ── 5. ECG link present in client fallback moreLinks ─────────────────────
-  it("Client fallback marketingMoreLinks includes ECG link to /ecg-interpretation", () => {
+  // ── 7. Utility row is gated to marketingRow4Layout ──────────────────────
+  it("Utility row is only rendered for marketingRow4Layout (Ocean/Blossom/Midnight)", () => {
+    const utilityRowIdx = src.indexOf('data-testid="marketing-header-utility-row"');
+    assert.ok(utilityRowIdx !== -1, "Utility row must exist");
+    const preceding = src.slice(Math.max(0, utilityRowIdx - 300), utilityRowIdx);
     assert.ok(
-      src.includes('key: "ecg"') && src.includes('href: "/ecg-interpretation"'),
-      "Client fallback moreLinks must include ECG item linking to /ecg-interpretation",
+      preceding.includes("marketingRow4Layout"),
+      "Utility row must be conditional on marketingRow4Layout (Ocean/Blossom/Midnight)",
     );
   });
 
-  // ── 6. Server precomputed moreLinks includes ECG and correct order ────────
-  it("Server precomputed moreLinks includes ECG before Pricing", () => {
+  // ── 8. Mobile drawer section grouping ────────────────────────────────────
+  it("Mobile drawer has account section (data-nn-mobile-section=account)", () => {
     assert.ok(
-      serverSrc.includes('key: "ecg"') && serverSrc.includes('"/ecg-interpretation"'),
-      "Server precomputed moreLinks must include ECG item linking to /ecg-interpretation",
-    );
-    const ecgPos = serverSrc.indexOf('"ecg"');
-    const pricingPos = serverSrc.indexOf('"pricing"');
-    assert.ok(ecgPos !== -1 && pricingPos !== -1, "Both ECG and pricing keys must be present");
-    assert.ok(
-      ecgPos < pricingPos,
-      "ECG must appear before Pricing in server moreLinks (canonical nav order)",
+      src.includes('data-nn-mobile-section="account"'),
+      "Mobile drawer must have an account/utility section",
     );
   });
 
-  // ── 7. Pre-Nursing appears before ECG in both client and server ───────────
-  it("Pre-Nursing appears before ECG in both client and server moreLinks", () => {
-    // Client fallback
-    const clientPreNursingPos = src.indexOf('"pre-nursing"');
-    const clientEcgPos = src.indexOf('"ecg"');
+  it("Mobile drawer has nursenest brand section (data-nn-mobile-section=nursenest)", () => {
     assert.ok(
-      clientPreNursingPos !== -1 && clientEcgPos !== -1,
-      "Both pre-nursing and ecg keys must appear in client fallback",
-    );
-    assert.ok(
-      clientPreNursingPos < clientEcgPos,
-      "Pre-Nursing must appear before ECG in client fallback (canonical nav order)",
-    );
-    // Server precomputed
-    const serverPreNursingPos = serverSrc.indexOf('"pre-nursing"');
-    const serverEcgPos = serverSrc.indexOf('"ecg"');
-    assert.ok(
-      serverPreNursingPos < serverEcgPos,
-      "Pre-Nursing must appear before ECG in server precomputed moreLinks",
+      src.includes('data-nn-mobile-section="nursenest"'),
+      "Mobile drawer must have a NurseNest brand nav section",
     );
   });
 
-  // ── 8. Utility cluster always rendered in auth cluster ────────────────────
-  it("MarketingHeaderUtilityCluster is always rendered in the desktop auth cluster (no !marketingRow4Layout gate)", () => {
-    // Old pattern was: {!marketingRow4Layout ? <UtilityCluster> : null}
-    // New pattern: always rendered with conditional chromeMode
+  it("Mobile drawer has classes/pathways section (data-nn-mobile-section=classes-pathways)", () => {
     assert.ok(
-      !src.includes("!marketingRow4Layout ? (\n                <div\n                  data-testid=\"marketing-header-utility-inline\""),
-      "Utility cluster must not be gated behind !marketingRow4Layout in the auth cluster",
-    );
-    // Confirm the chromeMode is now conditional (not hardcoded to dark-marketing)
-    assert.ok(
-      src.includes('chromeMode={marketingRow4Layout ? "row4" : "dark-marketing"}'),
-      "Auth cluster utility chromeMode must be conditional on marketingRow4Layout",
+      src.includes('data-nn-mobile-section="classes-pathways"'),
+      "Mobile drawer must have a classes/pathways section",
     );
   });
 
-  // ── 9. data-testid for unified nav exists ─────────────────────────────────
+  it("Mobile brand links use data-nn-mobile-brand-link attribute", () => {
+    assert.ok(
+      src.includes("data-nn-mobile-brand-link"),
+      "Brand links in mobile drawer must be tagged data-nn-mobile-brand-link",
+    );
+  });
+
+  it("Mobile pathway links use data-nn-mobile-pathway-link attribute", () => {
+    assert.ok(
+      src.includes("data-nn-mobile-pathway-link"),
+      "Pathway links in mobile drawer must be tagged data-nn-mobile-pathway-link",
+    );
+  });
+
+  // ── 9. Primary row data-testid for E2E addressability ───────────────────
+  it("Primary row has data-testid=marketing-header-primary-row for E2E addressability", () => {
+    assert.ok(
+      src.includes('data-testid="marketing-header-primary-row"'),
+      "Primary (brand nav) row must have data-testid for E2E test targeting",
+    );
+  });
+
   it("Tier rail has data-testid=marketing-header-unified-nav for E2E addressability", () => {
     assert.ok(
       src.includes('data-testid="marketing-header-unified-nav"'),
-      "Unified nav rail must have data-testid for E2E test targeting",
+      "Tier (class/pathway) rail must have data-testid for E2E test targeting",
     );
   });
 });

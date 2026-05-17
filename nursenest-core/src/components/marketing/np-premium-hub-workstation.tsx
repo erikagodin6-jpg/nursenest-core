@@ -190,7 +190,7 @@ export function NpPremiumHubWorkstation({
       data-pathway-id={pathway.id}
     >
       {/* ── Readiness card ── */}
-      <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-5 shadow-[0_2px_20px_-6px_color-mix(in_srgb,var(--semantic-brand)_14%,transparent)] sm:p-6">
+      <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-5 shadow-[0_2px_16px_-6px_color-mix(in_srgb,var(--palette-heading)_10%,transparent)] sm:p-6">
         <p className="text-[0.6rem] font-bold uppercase tracking-[0.22em] text-[var(--semantic-brand)]">
           {t("components.examPathwayHub.npPremium.workstationEyebrow")}
         </p>
@@ -204,19 +204,19 @@ export function NpPremiumHubWorkstation({
               {t("components.examPathwayHub.npPremium.readinessLead")}
             </p>
             <dl className="grid gap-2 sm:grid-cols-3">
-              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] p-3">
+              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3">
                 <dt className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--semantic-brand)]">
                   {t("components.examPathwayHub.npPremium.metricItemBand")}
                 </dt>
                 <dd className="mt-1.5 text-sm font-semibold text-[var(--palette-heading)]">{rc.questionRange}</dd>
               </div>
-              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] p-3">
+              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3">
                 <dt className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--semantic-brand)]">
                   {t("components.examPathwayHub.npPremium.metricTimer")}
                 </dt>
                 <dd className="mt-1.5 text-sm font-semibold text-[var(--palette-heading)]">{rc.timeEstimate}</dd>
               </div>
-              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] p-3">
+              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3">
                 <dt className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--semantic-brand)]">
                   {t("components.examPathwayHub.npPremium.metricModeShort")}
                 </dt>
@@ -301,7 +301,7 @@ export function NpPremiumHubWorkstation({
           {t("components.examPathwayHub.npPremium.specialtyLead")}
         </p>
         <ul className="mt-5 grid gap-3 sm:grid-cols-3">
-          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-4">
+          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4">
             <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-[var(--semantic-brand)]">
               {t("components.examPathwayHub.npPremium.diagnosticBlockTitle")}
             </p>
@@ -325,7 +325,7 @@ export function NpPremiumHubWorkstation({
               {t("components.examPathwayHub.npPremium.diagnosticRouteNote")}
             </p>
           </li>
-          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-4">
+          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4">
             <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-[var(--semantic-brand)]">
               {t("components.examPathwayHub.npPremium.pharmBlockTitle")}
             </p>
@@ -346,7 +346,7 @@ export function NpPremiumHubWorkstation({
               {t("components.examPathwayHub.premiumModules.pharmCta")}
             </MarketingTrackedLink>
           </li>
-          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-4">
+          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4">
             <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-[var(--semantic-brand)]">
               {t("components.examPathwayHub.npPremium.assessmentTitle")}
             </p>

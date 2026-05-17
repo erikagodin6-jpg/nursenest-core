@@ -101,6 +101,15 @@
     );
 }
 
+/* Blossom: --footer-bg resolves to --theme-brand-strong (#b3359a, dark purplish-pink), but
+   --footer-fg inherits --nav-fg (#10182f, near-black) from the light-theme nav surface.
+   That pairing has no contrast. Force white foreground tokens in the footer context. */
+[data-theme="blossom"] [data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
+  --footer-fg: #ffffff;
+  --footer-muted: color-mix(in srgb, #ffffff 72%, var(--footer-bg));
+  --footer-border: color-mix(in srgb, #ffffff 22%, var(--footer-bg));
+}
+
 [data-theme="blossom"] [data-nn-footer-root][data-nn-footer-layout="marketing"].nn-footer-marketing-chrome--surface {
   background:
     radial-gradient(760px 320px at 0% 0%, color-mix(in srgb, var(--semantic-chart-1) 7%, transparent), transparent 64%),
@@ -277,6 +286,13 @@
 }
 
 @media (min-width: 768px) {
+  /* Hide accordion trigger on desktop — this block is intentionally AFTER the base display:flex rule
+     so cascade order lets it win (same specificity, later declaration). The static h3.nn-footer-col-heading
+     renders instead; no chevron or duplicate heading text is shown. */
+  [data-nn-footer-layout="marketing"] .nn-footer-premium-accordion-summary {
+    display: none;
+  }
+
   [data-nn-footer-layout="marketing"] .nn-footer-premium-accordion-panel {
     padding-top: 0;
   }

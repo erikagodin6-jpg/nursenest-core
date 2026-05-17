@@ -79,21 +79,9 @@ function buildPrecomputedNavData(
     homeAriaLabel: tr("brand.homeAriaLabel", "NurseNest home"),
     loginLabel: formatTitleCase(tr("nav.logIn", "Log In"), locale),
     signupLabel: formatTitleCase(tr("nav.signup", "Start Free"), locale),
-    moreLinks: [
-      // Ordered to match the unified nav row target sequence:
-      // RN/RPN/NP/New Grad/Allied (tier chips) → Pre-Nursing → ECG → Tools → Pricing → About → Blog → FAQ
-      {
-        key: "pre-nursing",
-        href: localizeHref(locale, "/pre-nursing"),
-        matchBase: "/pre-nursing",
-        label: formatTitleCase(tr("nav.preNursing", "Pre-Nursing"), locale),
-      },
-      {
-        key: "ecg",
-        href: localizeHref(locale, "/ecg-interpretation"),
-        matchBase: "/ecg-interpretation",
-        label: "ECG",
-      },
+    // Brand/company links → Row 1 center nav (NurseNest brand nav row).
+    // These must NOT appear in the class/pathway row.
+    brandNavLinks: [
       {
         key: "tools",
         href: localizeHref(locale, HUB.tools),
@@ -123,6 +111,34 @@ function buildPrecomputedNavData(
         href: localizeHref(locale, "/faq"),
         matchBase: "/faq",
         label: formatTitleCase(tr("footer.faq", "FAQ"), locale),
+      },
+    ],
+    // Class/pathway links → Row 2 tier rail (alongside RN/RPN/NP/New Grad/Allied chips).
+    // HESI and TEAS have no dedicated routes; they map to the pre-nursing hub.
+    pathwayNavLinks: [
+      {
+        key: "pre-nursing",
+        href: localizeHref(locale, "/pre-nursing"),
+        matchBase: "/pre-nursing",
+        label: formatTitleCase(tr("nav.preNursing", "Pre-Nursing"), locale),
+      },
+      {
+        key: "ecg",
+        href: localizeHref(locale, "/ecg-interpretation"),
+        matchBase: "/ecg-interpretation",
+        label: "ECG",
+      },
+      {
+        key: "hesi",
+        href: localizeHref(locale, "/pre-nursing"),
+        matchBase: "/hesi",
+        label: "HESI",
+      },
+      {
+        key: "teas",
+        href: localizeHref(locale, "/pre-nursing"),
+        matchBase: "/teas",
+        label: "TEAS",
       },
     ],
   };

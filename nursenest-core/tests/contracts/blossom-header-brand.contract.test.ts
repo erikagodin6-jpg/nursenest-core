@@ -1,7 +1,7 @@
 /**
  * Regression guard: blossom theme header brand lockup.
  *
- * Guards two bugs that were fixed:
+ * Guards three bugs that were fixed:
  * 1. Leaf logo was invisible — the component used a CSS mask-image approach
  *    (`useMonochromeLeaf`) for blossom only; CDN mask-image silently fails on
  *    CORS/opacity issues leaving an invisible box.  The fix renders the leaf as
@@ -10,6 +10,10 @@
  *    `var(--logo-primary)` which .nn-header-logo-row overrides to
  *    `--nn-header-primary-fg` (#1F2536, dark navy).  The fix uses
  *    `var(--theme-primary)` (blossom pink #d948a8) instead.
+ * 3. "NurseNest" wordmark was blue/purple — theme-palettes.css had
+ *    `--logo-primary: #3f5fd8` for blossom, giving the wordmark a blue/indigo
+ *    colour in contexts without .nn-header-logo-row.  The fix removes that
+ *    override so the global default `var(--theme-primary)` (#d948a8) applies.
  *
  * Run from nursenest-core/:
  *   node --import tsx --test tests/contracts/blossom-header-brand.contract.test.ts
@@ -25,6 +29,10 @@ const MARKETING_CSS = readFileSync(
   join(ROOT, "src/app/premium-redesign-2026.css"),
   "utf-8",
 );
+const THEME_OVERRIDES_CSS = readFileSync(
+  join(ROOT, "src/app/styles/marketing/theme-overrides.css"),
+  "utf-8",
+);
 const GLOBALS_CSS = readFileSync(
   join(ROOT, "src/app/globals.css"),
   "utf-8",
@@ -35,6 +43,14 @@ const HEADER_LOCKUP_SRC = readFileSync(
 );
 const PALETTES_CSS = readFileSync(
   join(ROOT, "src/app/theme-palettes.css"),
+  "utf-8",
+);
+const MARKETING_GLOBAL_CSS = readFileSync(
+  join(ROOT, "src/app/styles/marketing/marketing-global.css"),
+  "utf-8",
+);
+const LAYOUT_SRC = readFileSync(
+  join(ROOT, "src/app/layout.tsx"),
   "utf-8",
 );
 
@@ -175,16 +191,18 @@ describe("HeaderBrandLockup component — leaf renders as plain <img>", () => {
 
 describe("blossom marketing heading readability", () => {
   it(".nn-marketing-h1 uses var(--palette-heading) — inherits readable ink on blossom light bg", () => {
+    // Rule is in marketing-global.css (extracted from globals.css during CSS refactor)
     assert.match(
-      GLOBALS_CSS,
+      MARKETING_GLOBAL_CSS,
       /\.nn-marketing-h1\s*\{[^}]*color\s*:\s*var\(--palette-heading\)/s,
       ".nn-marketing-h1 must use var(--palette-heading) so dark ink (#111827 default) is readable on blossom's near-white background",
     );
   });
 
   it(".nn-marketing-h2 uses var(--palette-heading)", () => {
+    // Rule is in marketing-global.css (extracted from globals.css during CSS refactor)
     assert.match(
-      GLOBALS_CSS,
+      MARKETING_GLOBAL_CSS,
       /\.nn-marketing-h2\s*\{[^}]*color\s*:\s*var\(--palette-heading\)/s,
       ".nn-marketing-h2 must use var(--palette-heading)",
     );
@@ -226,6 +244,89 @@ describe("blossom nav/footer foreground readability", () => {
       GLOBALS_CSS,
       /\.nn-header-logo-row\s*\{[\s\S]*?--logo-primary\s*:\s*var\(--nn-header-primary-fg\)/s,
       ".nn-header-logo-row must override --logo-primary to --nn-header-primary-fg — this is why blossom cannot use var(--logo-primary) in its brand lockup rule",
+    );
+  });
+});
+
+// ─── Blossom theme-palettes --logo-primary guard ──────────────────────────────
+
+describe("blossom theme-palettes.css — no blue/indigo logo-primary override", () => {
+  it("blossom block does NOT override --logo-primary to #3f5fd8 (blue)", () => {
+    assert.doesNotMatch(
+      PALETTES_CSS,
+      /html\[data-theme="blossom"\]\s*\{[\s\S]*?--logo-primary\s*:\s*#3f5fd8/m,
+      "blossom must NOT set --logo-primary: #3f5fd8 — that blue override makes the wordmark blue/indigo instead of matching the pink CDN leaf",
+    );
+  });
+
+  it("blossom block does NOT override --logo-primary to any non-pink hex", () => {
+    // Extract blossom block
+    const blossomBlock =
+      PALETTES_CSS.match(/html\[data-theme="blossom"\]\s*\{[\s\S]*?\n\}/m)?.[0] ?? "";
+    // If --logo-primary is present, it must NOT be a hardcoded blue/purple hex
+    const logoPrimaryMatch = blossomBlock.match(/--logo-primary\s*:\s*([^;]+)/);
+    if (logoPrimaryMatch) {
+      const value = logoPrimaryMatch[1].trim();
+      // Only reject known blue/purple hardcodes
+      assert.doesNotMatch(
+        value,
+        /#3f5fd8|#5f6af5|#9357f2/i,
+        `blossom --logo-primary must not be a blue/purple hex; found: ${value}`,
+      );
+    }
+    // If absent, the global html[data-theme] default (var(--theme-primary)=#d948a8) applies — OK
+  });
+
+  it("theme-overrides.css blossom brand lockup rule does NOT use var(--logo-primary)", () => {
+    const body =
+      THEME_OVERRIDES_CSS.match(
+        /html\[data-theme="blossom"\]\s*\.nn-header-brand-lockup\s*\{([^}]+)\}/,
+      )?.[1] ?? "";
+    assert.doesNotMatch(
+      body,
+      /color\s*:\s*var\(--logo-primary\)/i,
+      "theme-overrides.css blossom brand lockup must not use var(--logo-primary) — use var(--theme-primary) instead",
+    );
+  });
+
+  it("theme-overrides.css blossom brand lockup rule uses var(--theme-primary)", () => {
+    const body =
+      THEME_OVERRIDES_CSS.match(
+        /html\[data-theme="blossom"\]\s*\.nn-header-brand-lockup\s*\{([^}]+)\}/,
+      )?.[1] ?? "";
+    assert.ok(body, "blossom .nn-header-brand-lockup rule must exist in theme-overrides.css");
+    assert.match(
+      body,
+      /color\s*:\s*var\(--theme-primary\)/i,
+      "theme-overrides.css blossom brand lockup must use var(--theme-primary) so wordmark matches CDN leaf",
+    );
+  });
+});
+
+// ─── Favicon metadata guard ───────────────────────────────────────────────────
+
+describe("favicon metadata in layout.tsx", () => {
+  it("layout.tsx metadata includes favicon.ico in icon array", () => {
+    assert.match(
+      LAYOUT_SRC,
+      /favicon\.ico/,
+      "layout.tsx must reference favicon.ico in the metadata icons so browsers that auto-request /favicon.ico see an updated asset",
+    );
+  });
+
+  it("favicon.ico reference includes a cache-busting version string", () => {
+    assert.match(
+      LAYOUT_SRC,
+      /favicon\.ico\?v=/,
+      "favicon.ico must include a cache-busting query param (e.g. ?v=2026-05-17) to force browser re-fetch after updates",
+    );
+  });
+
+  it("SVG favicon includes a cache-busting version string", () => {
+    assert.match(
+      LAYOUT_SRC,
+      /arctic-frost-leaf\.svg\?v=/,
+      "SVG favicon must include a cache-busting query param so browsers re-fetch updated assets",
     );
   });
 });

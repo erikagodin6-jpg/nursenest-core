@@ -1616,9 +1616,12 @@ html[data-theme="blossom"] {
   --state-info: color-mix(in srgb, #2f80ed 10%, #ffffff);
   --state-danger-soft: color-mix(in srgb, #d948a8 9%, #ffffff);
 
-  --logo-primary: #3f5fd8;
-  --logo-accent: #3f5fd8;
-  --logo-text: #3f5fd8;
+  /* --logo-primary / --logo-accent / --logo-text intentionally omitted:
+     globals html[data-theme] defaults resolve correctly for blossom:
+       --logo-primary → var(--theme-primary) = #d948a8 (pink, matches CDN leaf)
+       --logo-accent  → var(--theme-accent)  = light pink
+       --logo-text    → var(--theme-heading-text) = #10182f (readable dark)
+     Any override to blue/indigo here would break leaf/wordmark colour parity. */
   --theme-brand-accent: #9357f2;
   --theme-brand-strong: #b3359a;
   --theme-nav-background: color-mix(

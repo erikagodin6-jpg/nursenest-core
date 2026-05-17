@@ -36,7 +36,7 @@ const siteUrl = MARKETING_SITE_ORIGIN || "https://www.nursenest.ca";
 const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
 
-const NURSENEST_LEAF_FAVICON = "/logos/arctic-frost-leaf.svg";
+const NURSENEST_LEAF_FAVICON = "/logos/arctic-frost-leaf.svg?v=2026-05-17";
 
 function navigationIntentBeforeInteractiveInlineScript(): string {
   return `
@@ -80,12 +80,13 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
+      { url: "/favicon.ico?v=2026-05-17", type: "image/x-icon", sizes: "any" },
       { url: NURSENEST_LEAF_FAVICON, type: "image/svg+xml", sizes: "any" },
-      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
-      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+      { url: "/icon-192.png?v=2026-05-17", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png?v=2026-05-17", type: "image/png", sizes: "512x512" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
-    shortcut: [NURSENEST_LEAF_FAVICON],
+    apple: [{ url: "/apple-touch-icon.png?v=2026-05-17", sizes: "180x180" }],
+    shortcut: [{ url: "/favicon.ico?v=2026-05-17", type: "image/x-icon" }],
   },
   openGraph: {
     type: "website",
