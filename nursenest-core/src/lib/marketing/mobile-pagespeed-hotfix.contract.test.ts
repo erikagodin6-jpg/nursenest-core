@@ -66,4 +66,25 @@ describe("mobile PageSpeed hotfix contract", () => {
     assert.match(css, /\.nav-item[\s\S]*transition:\s*none\s*!important/);
     assert.match(css, /\.nn-nav-cta[\s\S]*transition:\s*none\s*!important/);
   });
+
+  it("keeps mobile decorative paint effects out of the critical path", () => {
+    const css = sourceCss("src/app/styles/marketing/index.css");
+
+    assert.match(css, /\.nn-premium-card/);
+    assert.match(css, /\.nn-pathway-card/);
+    assert.match(css, /\.nn-pricing-card/);
+    assert.match(css, /box-shadow:\s*none\s*!important/);
+    assert.match(css, /filter:\s*none\s*!important/);
+    assert.match(css, /backdrop-filter:\s*none\s*!important/);
+    assert.match(css, /-webkit-backdrop-filter:\s*none\s*!important/);
+  });
+
+  it("blocks mobile hover transforms from causing compositor churn", () => {
+    const css = sourceCss("src/app/styles/marketing/index.css");
+
+    assert.match(css, /hover:shadow/);
+    assert.match(css, /hover:-translate/);
+    assert.match(css, /hover:scale/);
+    assert.match(css, /transform:\s*none\s*!important/);
+  });
 });
