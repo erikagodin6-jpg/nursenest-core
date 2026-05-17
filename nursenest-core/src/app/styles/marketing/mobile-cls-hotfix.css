@@ -3,6 +3,11 @@
     --nn-marketing-header-mobile-reserved-height: 5.25rem;
   }
 
+  html,
+  html:focus-within {
+    scroll-behavior: auto !important;
+  }
+
   .sticky.top-0.z-50[data-nn-cls-region="site-header"] {
     position: relative !important;
     top: auto !important;
@@ -50,6 +55,13 @@
   .nav-item {
     animation: none !important;
     transition: none !important;
+  }
+
+  main :where([style*="will-change"], [class*="will-change"]),
+  .nn-home-marketing-root :where([style*="will-change"], [class*="will-change"]),
+  [data-nn-header-layout="marketing-row4"] :where([style*="will-change"], [class*="will-change"]),
+  [data-nn-header-layout="marketing-unified-dark"] :where([style*="will-change"], [class*="will-change"]) {
+    will-change: auto !important;
   }
 
   .nn-premium-hero-grid,
@@ -131,6 +143,7 @@
   .nn-header-overlay-mobile-only * {
     content-visibility: visible;
     contain: none;
+    will-change: transform, opacity;
   }
 }
 
