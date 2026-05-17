@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { BlogPostCard } from "@/components/blog/blog-post-card";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { CollectionPageJsonLd } from "@/components/seo/seo-json-ld";
 import {
   BLOG_LIST_PAGE_SIZE,
   countPublishedPostsWithCategory,
@@ -42,10 +43,23 @@ export async function generateMetadata({
       const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
       const path = `/blog/category/${encodeURIComponent(decoded)}`;
       const canonicalPath = page <= 1 ? path : `${path}?page=${page}`;
+      const description = `Browse ${count} NurseNest nursing and healthcare articles filed under ${decoded}. Clinical reasoning, NCLEX-style education, Canadian nursing guidance, and exam preparation resources.`;
+
       return {
         title: `Posts in “${decoded}” | NurseNest blog`,
+        description,
         alternates: { canonical: absoluteUrl(canonicalPath) },
-        openGraph: { url: absoluteUrl(canonicalPath) },
+        openGraph: {
+          title: `NurseNest ${decoded} articles`,
+          description,
+          url: absoluteUrl(canonicalPath),
+          type: "website",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: `NurseNest ${decoded} articles`,
+          description,
+        },
         ...(count === 0 ? { robots: { index: false, follow: true } } : {}),
       };
     },
@@ -66,10 +80,22 @@ export default async function BlogCategoryPage({ params, searchParams }: Props) 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const base = `/blog/category/${encodeURIComponent(decoded)}`;
   const { crumbs, schemaItems } = blogCategoryBreadcrumbs(decoded);
+  const canonicalPostPaths = posts
+    .map((p) => getCanonicalBlogPostHref(p.slug))
+    .filter((v): v is string => Boolean(v));
 
   return (
     <div className="nn-blog-index nn-premium-blog-index mx-auto max-w-7xl px-4 py-12 sm:px-6">
       {total > 0 ? <BreadcrumbJsonLd items={schemaItems} /> : null}
+      {total > 0 ? (
+        <CollectionPageJsonLd
+          title={`${decoded} articles | NurseNest blog`}
+          description={`Clinical nursing and healthcare articles categorized under ${decoded}.`}
+          path={page <= 1 ? base : `${base}?page=${page}`}
+          itemPaths={canonicalPostPaths}
+          collectionType="Blog"
+        />
+      ) : null}
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
       </div>
