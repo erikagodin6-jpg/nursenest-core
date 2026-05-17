@@ -9,6 +9,7 @@
      hero.css                 — homepage hero panel, stat tiles, ECG strip
      header-nav.css           — marketing header glass, nav v4, dark unified
      header-single-line.css   — desktop nav containment / anti-wrap guards
+     pagespeed-cls-hotfix.css — reserved geometry + PSI stabilization
      theme-overrides.css      — Blossom/Midnight/Aurora/Ocean colour overrides
      hub-system.css           — pre-nursing, lessons, hub cards, auth
      pathway-reading.css      — lesson reading rail, tier-hub hero bands
@@ -24,6 +25,7 @@
 @import "./hero.css";
 @import "./header-nav.css";
 @import "./header-single-line.css";
+@import "./pagespeed-cls-hotfix.css";
 @import "./theme-overrides.css";
 @import "./hub-system.css";
 @import "./pathway-reading.css";
