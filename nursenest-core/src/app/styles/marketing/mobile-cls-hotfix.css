@@ -1,0 +1,33 @@
+@media (max-width: 1023.98px) {
+  :root {
+    --nn-marketing-header-mobile-reserved-height: 5.25rem;
+  }
+
+  [data-nn-header-layout="marketing-row4"],
+  [data-nn-header-layout="marketing-unified-dark"] {
+    min-height: var(--nn-marketing-header-mobile-reserved-height, 5.25rem) !important;
+    contain: layout paint;
+  }
+
+  [data-nn-header-layout="marketing-row4"] [data-nn-header-band="primary"],
+  [data-nn-header-layout="marketing-unified-dark"] [data-nn-header-band="primary"],
+  [data-nn-header-layout="marketing-row4"] .top-bar,
+  [data-nn-header-layout="marketing-unified-dark"] .top-bar {
+    min-height: var(--nn-marketing-header-mobile-reserved-height, 5.25rem) !important;
+  }
+
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-tier-rail,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-tier-rail,
+  [data-nn-header-layout="marketing-row4"] .nn-header-desktop-grid,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-header-desktop-grid {
+    display: none !important;
+  }
+
+  .nn-header-dark-surface,
+  [data-nn-header-layout="marketing-row4"] .nn-marketing-nav-v31-frame,
+  [data-nn-header-layout="marketing-unified-dark"] .nn-marketing-nav-v31-frame {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+}
