@@ -70,3 +70,9 @@ jobs:
           EXTRA=""
           if [ -n "${{ inputs.start_date }}" ]; then EXTRA="--start=${{ inputs.start_date }}"; fi
           npx tsx scripts/blog/seed-year-long-seo-blog-schedule-v2.mts --apply --days=${{ inputs.days }} $EXTRA
+
+      - name: Verify scheduled BlogPost rows
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          MIN_EXPECTED=$(( ${{ inputs.days }} * 5 ))
+          npx tsx scripts/blog/verify-year-long-seo-blog-schedule.mts --min=$MIN_EXPECTED
