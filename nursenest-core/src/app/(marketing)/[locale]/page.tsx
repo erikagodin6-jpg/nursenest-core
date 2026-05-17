@@ -82,11 +82,13 @@ export default async function LocalizedHomePage({ params }: Props) {
     loadMarketingLayoutShardsOverlay(locale),
     listPublishedHomeGlobalRegionCardIds(),
   ]);
+
   const homeMarketingStats = {
     questionCount: homeStatsRaw.questionCount,
     registeredLearners: homeStatsRaw.registeredLearners,
     totalLessons: homeStatsRaw.totalLessons,
   };
+
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
   const title = getRequiredPublicMetadataLine(
     messages,
@@ -100,8 +102,10 @@ export default async function LocalizedHomePage({ params }: Props) {
     undefined,
     defaultHomeMetaDescription(marketingRegion),
   );
+
   const { crumbs, schemaItems } = localizeBreadcrumbResolutionForLocale(raw, messages, locale);
   const homeHeroCarouselSlides = buildHomeHeroPrimarySlidesFromMessages(messages);
+
   const heroSlot = (
     <PremiumHomepageHero
       locale={locale}
@@ -111,6 +115,7 @@ export default async function LocalizedHomePage({ params }: Props) {
       messages={messages}
     />
   );
+
   return (
     <>
       <WebPageJsonLd
@@ -123,12 +128,16 @@ export default async function LocalizedHomePage({ params }: Props) {
       />
       <BreadcrumbJsonLd items={schemaItems} />
       <FaqJsonLd items={MARKETING_HOME_FAQ_JSONLD} />
+
       {crumbs.length > 0 ? (
         <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
           <BreadcrumbTrail items={crumbs} />
         </div>
       ) : null}
+
       <HomeRestoredClient
+        locale={locale}
+        marketingRegion={marketingRegion}
         homeMarketingStats={homeMarketingStats}
         publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
         homeHeroCarouselSlides={homeHeroCarouselSlides}
