@@ -1,23 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { PropsWithChildren } from "react";
-
-import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { useEffect, useRef, useState, type PropsWithChildren, type ReactNode, type CSSProperties } from "react";
 
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 
-// ssr:false for all below-fold sections — eliminates Suspense hydration CLS.
-// With ssr:true (default), dynamic() creates a Suspense boundary on the client;
-// on slow connections the chunk hasn't loaded when React begins hydrating, so React
-// briefly renders null for each section, SSR content disappears, then reappears
-// when the chunk arrives — causing compounding CLS across 6 sections.
-// With ssr:false + loading skeleton: SSR HTML contains a height-stable placeholder
-// so the page geometry doesn't shift as real sections hydrate in. The skeleton
-// matches the section's min-height (--nn-premium-home-section-min default 34rem)
-// so CLS stays below threshold even when the user scrolls before hydration.
+// ssr:false for below-fold sections prevents hydration mismatch/CLS. The new
+// LazyWhenVisible wrapper below also prevents every chunk from downloading and
+// executing during the initial Lighthouse window.
 const PremiumPathwayShowcase = dynamic(() =>
   import("@/components/marketing/home/premium-pathway-showcase").then((m) => m.PremiumPathwayShowcase),
   { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-pathways" /> },
@@ -45,14 +36,12 @@ const PremiumHomepageCta = dynamic(() =>
   { ssr: false, loading: () => <PremiumSectionSkeleton testId="skeleton-cta" short /> },
 );
 
-/** Below-fold carousel — separate chunk; keep SSR for SEO (skeleton only covers streaming gaps). */
+/** Below-fold carousel — separate chunk; lazy-mounted near viewport for TBT. */
 const HomeHeroScreenshotSectionLazy = dynamic(
   () =>
     import("@/components/marketing/home-hero-screenshot-section").then((m) => ({
       default: m.HomeHeroScreenshotSection,
     })),
-  // ssr: false — carousel has 8+ effects/setInterval; skipping SSR reconciliation reduces initial TBT.
-  // Skeleton provides stable pre-hydration geometry so CLS stays below threshold.
   { loading: () => <HomeHeroScreenshotSectionSkeleton />, ssr: false },
 );
 
@@ -87,27 +76,59 @@ function HomeHeroScreenshotSectionSkeleton() {
 
 /**
  * Height-stable placeholder for below-fold premium sections.
- * Rendered by dynamic() `loading:` so the SSR HTML contains a div with the
- * same block size as the real section. This prevents the CLS spike that
- * occurs when 6 sections mount simultaneously after hydration and the page
- * grows by ~200rem in one frame.
- *
- * Uses `.nn-premium-home-section` so it inherits the same
- * `min-height: var(--nn-premium-home-section-min, 34rem)` and
- * `content-visibility: auto` rules already defined in globals.css.
- * The `short` prop halves the min-height for the CTA band.
+ * The placeholder keeps geometry while the real section waits for viewport
+ * proximity, preventing CLS without executing all homepage JS immediately.
  */
 function PremiumSectionSkeleton({ testId, short }: { testId: string; short?: boolean }) {
   return (
     <div
       className="nn-premium-home-section border-b border-[var(--border-subtle)]"
-      style={short ? { "--nn-premium-home-section-min": "16rem" } as React.CSSProperties : undefined}
+      style={short ? { "--nn-premium-home-section-min": "16rem" } as CSSProperties : undefined}
       aria-hidden
       data-testid={testId}
     />
   );
 }
 
+type LazyWhenVisibleProps = {
+  children: ReactNode;
+  fallback: ReactNode;
+  rootMargin?: string;
+};
+
+/**
+ * Defers below-fold client chunks until the user is close to them.
+ * This directly attacks Lighthouse TBT by avoiding immediate execution of the
+ * carousel/ECG/pathway/readiness/social chunks while preserving page height.
+ */
+function LazyWhenVisible({ children, fallback, rootMargin = "900px 0px" }: LazyWhenVisibleProps) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (visible) return;
+    const node = ref.current;
+    if (!node) return;
+
+    if (!("IntersectionObserver" in window)) {
+      const id = window.setTimeout(() => setVisible(true), 1200);
+      return () => window.clearTimeout(id);
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        setVisible(true);
+        observer.disconnect();
+      },
+      { rootMargin },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [rootMargin, visible]);
+
+  return <div ref={ref}>{visible ? children : fallback}</div>;
+}
 
 /* ------------------ TYPES ------------------ */
 
@@ -116,23 +137,15 @@ export type HomeRestoredClientProps = PropsWithChildren<{
   publishedGlobalRegionCardIds?: readonly string[] | null;
   /** Server-built carousel slides — avoids client-side slide assembly on hydration. */
   homeHeroCarouselSlides?: readonly HomeHeroSlide[] | null;
-  /**
-   * Server-rendered island for PremiumHomepageHero.
-   * When provided (from HomeRestoredWithDeferredStats RSC), the hero is fully
-   * static HTML — no above-fold hydration. Falls back to nothing when absent
-   * (locale route renders its own hero slot).
-   */
-  heroSlot?: React.ReactNode;
-  /**
-   * Server-rendered island for PremiumClinicalDepth.
-   * Passed from the parent Server Component so this section never hydrates.
-   */
-  clinicalDepthSlot?: React.ReactNode;
-  /**
-   * Server-rendered island for PremiumHomepageTrust.
-   * Passed from the parent Server Component so this section never hydrates.
-   */
-  trustSlot?: React.ReactNode;
+  /** Server-rendered island for PremiumHomepageHero. */
+  heroSlot?: ReactNode;
+  /** Server-rendered island for PremiumClinicalDepth. */
+  clinicalDepthSlot?: ReactNode;
+  /** Server-rendered island for PremiumHomepageTrust. */
+  trustSlot?: ReactNode;
+  /** Server-resolved locale/region avoids hydrating i18n + region contexts in this shell. */
+  locale?: string;
+  marketingRegion?: "US" | "CA" | string;
 }>;
 
 /* ------------------ COMPONENT ------------------ */
@@ -145,47 +158,53 @@ export default function HomeRestoredClient({
   clinicalDepthSlot,
   trustSlot,
   children,
+  locale = "en",
+  marketingRegion = "CA",
 }: HomeRestoredClientProps) {
-  const { locale } = useMarketingI18n();
-  const { region } = useNursenestRegion();
-
-  const marketingRegion = region === "US" ? "US" : "CA";
+  const normalizedMarketingRegion = marketingRegion === "US" ? "US" : "CA";
 
   /* ------------------ RENDER ------------------ */
 
   return (
     <div className="font-sans flex w-full min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)] nn-home-marketing-root">
-      <FunnelHomepageViewBeaconLazy marketingRegion={marketingRegion} marketingLocale={locale} />
+      <FunnelHomepageViewBeaconLazy marketingRegion={normalizedMarketingRegion} marketingLocale={locale} />
 
-      {/* HERO — server island (PremiumHomepageHero is now an RSC).
-          Rendered by HomeRestoredWithDeferredStats and passed here as heroSlot
-          so the hero HTML is static — no above-fold hydration.
-          Only the CTA buttons (MarketingTrackedLink) and LeafWatermark inside
-          it hydrate as client islands. */}
+      {/* HERO — server island; no above-fold homepage section hydration. */}
       {heroSlot}
 
-      <HomeHeroScreenshotSectionLazy serverPreparedSlides={homeHeroCarouselSlides} />
+      <LazyWhenVisible fallback={<HomeHeroScreenshotSectionSkeleton />} rootMargin="1100px 0px">
+        <HomeHeroScreenshotSectionLazy serverPreparedSlides={homeHeroCarouselSlides} />
+      </LazyWhenVisible>
 
-      <PremiumHomepageEcg />
-      <PremiumPathwayShowcase />
+      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-ecg" />}>
+        <PremiumHomepageEcg />
+      </LazyWhenVisible>
+      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-pathways" />}>
+        <PremiumPathwayShowcase />
+      </LazyWhenVisible>
 
-      {/* Server island — PremiumClinicalDepth is a Server Component rendered by the
-          parent RSC (HomeRestoredWithDeferredStats). React does not hydrate this subtree. */}
+      {/* Server island — keep as static server HTML when supplied. */}
       {clinicalDepthSlot}
 
-      <PremiumStudyEcosystem />
-      <PremiumSocialStudy />
-      <PremiumReadinessPreview />
+      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-ecosystem" />}>
+        <PremiumStudyEcosystem />
+      </LazyWhenVisible>
+      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-social-study" />}>
+        <PremiumSocialStudy />
+      </LazyWhenVisible>
+      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-readiness" />}>
+        <PremiumReadinessPreview />
+      </LazyWhenVisible>
 
-      {/* Server island — PremiumHomepageTrust is a Server Component rendered by the
-          parent RSC (HomeRestoredWithDeferredStats). React does not hydrate this subtree. */}
+      {/* Server island — keep as static server HTML when supplied. */}
       {trustSlot}
 
-      {/* Global hub strip — after pathway cards (supporting marketing, not above hero).
-          Pass as `children` from the server page so RSC streaming keeps DOM order under the hero. */}
+      {/* Global hub strip — after pathway cards (supporting marketing, not above hero). */}
       {children}
 
-      <PremiumHomepageCta />
+      <LazyWhenVisible fallback={<PremiumSectionSkeleton testId="skeleton-cta" short />}>
+        <PremiumHomepageCta />
+      </LazyWhenVisible>
     </div>
   );
 }
