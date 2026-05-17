@@ -36,7 +36,9 @@ export async function initPosthogClient(): Promise<void> {
   posthog.init(key, {
     api_host: host,
     capture_pageview: false,
-    capture_pageleave: true,
+    // Marketing/product analytics now uses explicit captures. Disabling automatic
+    // pageleave avoids extra lifecycle listeners and main-thread work during PSI.
+    capture_pageleave: false,
     persistence: "localStorage",
     loaded: () => {
       initialized = true;
