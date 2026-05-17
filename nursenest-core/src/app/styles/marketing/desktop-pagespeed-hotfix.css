@@ -1,0 +1,60 @@
+/* ========================================================================== 
+   desktop-pagespeed-hotfix.css — PSI desktop containment/paint guard
+
+   Complements mobile-cls-hotfix.css. Desktop PSI was dominated by TBT/CLS from
+   below-fold homepage sections and decorative paint work. This keeps the page
+   visually identical while letting Chromium skip layout/paint for offscreen
+   marketing sections during the initial Lighthouse window.
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  .nn-home-marketing-root .nn-premium-home-section,
+  .nn-home-marketing-root section:nth-of-type(n + 2),
+  main > section:nth-of-type(n + 2),
+  [data-nn-marketing-section]:not(:first-child),
+  [data-nn-pathway-section]:not(:first-child),
+  [data-nn-hub-section]:not(:first-child) {
+    content-visibility: auto;
+    contain: layout paint style;
+    contain-intrinsic-size: auto 760px;
+  }
+
+  .nn-home-marketing-root .nn-premium-home-section[aria-hidden="true"],
+  .nn-home-marketing-root [data-testid^="skeleton-"] {
+    content-visibility: auto;
+    contain: layout paint style;
+  }
+
+  .nn-home-marketing-root img[loading="lazy"],
+  .nn-home-marketing-root picture,
+  .nn-home-marketing-root video,
+  .nn-home-marketing-root svg:not(.nn-header-logo-leaf):not(.nn-premium-hero-ecg__svg),
+  main img[loading="lazy"],
+  main picture,
+  main video {
+    content-visibility: auto;
+    contain: paint;
+  }
+
+  .nn-premium-hero-panel,
+  .nn-premium-hero-mini__card,
+  .nn-premium-hero-stat,
+  .nn-home-hero-product-band,
+  .nn-premium-home-section {
+    will-change: auto;
+  }
+
+  .nn-home-marketing-root .nn-premium-home-section:not(:hover),
+  .nn-home-marketing-root section:not(:hover) {
+    transition-property: color, background-color, border-color, opacity, transform;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .nn-home-marketing-root *,
+  .nn-home-marketing-root *::before,
+  .nn-home-marketing-root *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
