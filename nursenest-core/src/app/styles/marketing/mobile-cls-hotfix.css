@@ -3,6 +3,12 @@
     --nn-marketing-header-mobile-reserved-height: 5.25rem;
   }
 
+  .sticky.top-0.z-50[data-nn-cls-region="site-header"] {
+    position: relative !important;
+    top: auto !important;
+    z-index: 50;
+  }
+
   [data-nn-header-layout="marketing-row4"],
   [data-nn-header-layout="marketing-unified-dark"] {
     min-height: var(--nn-marketing-header-mobile-reserved-height, 5.25rem) !important;
