@@ -17,12 +17,6 @@ import {
   MARKETING_NARROW_VIEWPORT_HINT_HEADER,
 } from "@/lib/marketing/marketing-narrow-viewport-hint";
 
-/**
- * -----------------------------
- * LAZY DEP LOADERS (SAFE)
- * -----------------------------
- */
-
 let authProxyDepsPromise: Promise<{ runAuthMiddleware: NextMiddleware }> | null = null;
 
 function loadAuthProxyDeps() {
@@ -37,12 +31,6 @@ function loadAuthProxyDeps() {
   }
   return authProxyDepsPromise;
 }
-
-/**
- * -----------------------------
- * CORE HELPERS
- * -----------------------------
- */
 
 function ensureCorrelationId(request: NextRequest): NextRequest {
   if (request.headers.get(NN_CORRELATION_HEADER)) return request;
@@ -64,7 +52,6 @@ function forwardRequest(request: NextRequest): NextResponse {
   return res;
 }
 
-/** Public probes and crawler assets must not run auth/session work. */
 export function isPublicProbeOrCrawlerBypassPath(pathname: string): boolean {
   if (pathname === "/healthz" || pathname === "/readyz") return true;
   if (
@@ -78,12 +65,6 @@ export function isPublicProbeOrCrawlerBypassPath(pathname: string): boolean {
   if (pathname === "/api/health" || pathname.startsWith("/api/health/")) return true;
   return false;
 }
-
-/**
- * -----------------------------
- * ADMIN GATE (SAFE + NON-BREAKING)
- * -----------------------------
- */
 
 async function enforceAdmin(request: NextRequest): Promise<NextResponse | null> {
   try {
@@ -102,23 +83,17 @@ async function enforceAdmin(request: NextRequest): Promise<NextResponse | null> 
 
     if (!hasIdentity) {
       const url = request.nextUrl.clone();
+      const callbackUrl = `${pathname}${request.nextUrl.search}`;
       url.pathname = "/login";
-      url.searchParams.set("callbackUrl", pathname);
+      url.searchParams.set("callbackUrl", callbackUrl);
       return NextResponse.redirect(url);
     }
 
     return null;
   } catch {
-    // NEVER break proxy
     return null;
   }
 }
-
-/**
- * -----------------------------
- * MAIN PROXY
- * -----------------------------
- */
 
 export async function proxy(request: NextRequest, event: NextFetchEvent) {
   try {
@@ -129,7 +104,6 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       return forwardRequest(req);
     }
 
-    // Add required headers for RSC correctness
     const headers = new Headers(req.headers);
     headers.set("x-nn-request-pathname", pathname);
     headers.set("x-nn-request-url", req.url);
@@ -140,7 +114,6 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
 
     const forwarded = new NextRequest(req.url, { headers });
 
-    // Run auth middleware safely
     const { runAuthMiddleware } = await loadAuthProxyDeps();
 
     let res: Response | null = null;
@@ -148,13 +121,11 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     try {
       res = (await runAuthMiddleware(forwarded, event)) ?? null;
     } catch {
-      // Auth failure must not break app
       res = null;
     }
 
     const correlationId = headers.get(NN_CORRELATION_HEADER) ?? randomUUID();
 
-    // No response → continue
     if (!res) {
       const adminRedirect = await enforceAdmin(forwarded);
       if (adminRedirect) return adminRedirect;
@@ -162,7 +133,6 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       return forwardRequest(forwarded);
     }
 
-    /* NextAuth continues with x-middleware-next; real redirects (sign-in) must not be replaced by NextResponse.next(). */
     if (res.headers.get("x-middleware-next") === "1") {
       const next = NextResponse.next({
         request: { headers: forwarded.headers },
@@ -183,16 +153,9 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     final.headers.set(NN_CORRELATION_HEADER, correlationId);
     return final;
   } catch {
-    // ABSOLUTE fallback — never crash proxy
     return NextResponse.next();
   }
 }
-
-/**
- * -----------------------------
- * MATCHER (UNCHANGED — CRITICAL)
- * -----------------------------
- */
 
 export const config = {
   matcher: [
