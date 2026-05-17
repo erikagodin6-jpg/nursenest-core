@@ -310,7 +310,6 @@ const nextConfig = {
         headers: [
           { key: "Cache-Control", value: "private, no-cache, no-store, must-revalidate" },
           { key: "CDN-Cache-Control", value: "no-store" },
-          { key: "Cloudflare-CDN-Cache-Control", value: "no-store" },
         ],
       },
       {
@@ -459,6 +458,9 @@ const nextConfig = {
 
   images: {
     qualities: [68, 75],
+    // Next image optimizer cache. Source assets are versioned/remote CDN-backed;
+    // a longer floor reduces repeat image fetches and PageSpeed cache-lifetime noise.
+    minimumCacheTTL: 2678400,
     remotePatterns: [
       {
         protocol: "https",
