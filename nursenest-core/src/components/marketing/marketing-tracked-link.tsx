@@ -4,17 +4,22 @@ import type React from "react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
-import { trackProductEvent } from "@/lib/observability/product-analytics";
+
+type MarketingEventProps = Record<string, string | number | boolean | undefined>;
 
 type Props = {
   href: string;
   event: string;
-  eventProps?: Record<string, string | number | boolean | undefined>;
+  eventProps?: MarketingEventProps;
   /** Optional second capture (e.g. funnel alias) — still O(1); PostHog batches network I/O. */
-  secondaryCapture?: { event: string; eventProps?: Record<string, string | number | boolean | undefined> };
+  secondaryCapture?: { event: string; eventProps?: MarketingEventProps };
   className?: string;
   style?: React.CSSProperties;
-  /** Forwarded to Next.js `Link` (both perf branches). */
+  /**
+   * Forwarded to Next.js `Link`.
+   * Defaults to false because dense marketing CTA grids can trigger large
+   * prefetch waterfalls during Lighthouse's critical window.
+   */
   prefetch?: boolean;
   children: ReactNode;
   "aria-label"?: string;
@@ -26,8 +31,23 @@ type Props = {
   "data-nn-home-tier-card"?: string;
 };
 
+function captureMarketingLinkEvent(
+  event: string,
+  eventProps?: MarketingEventProps,
+  secondaryCapture?: { event: string; eventProps?: MarketingEventProps },
+): void {
+  void import("@/lib/observability/product-analytics")
+    .then(({ trackProductEvent }) => {
+      trackProductEvent(event, eventProps);
+      if (secondaryCapture) trackProductEvent(secondaryCapture.event, secondaryCapture.eventProps);
+    })
+    .catch(() => {});
+}
+
 /**
- * Internal marketing link with optional PostHog capture (no-op when PostHog is off).
+ * Internal marketing link with optional PostHog capture.
+ * Analytics is deferred until click and route prefetch defaults off so the
+ * homepage does not eagerly pull many destination chunks into the initial PSI run.
  */
 export function MarketingTrackedLink({
   href,
@@ -35,11 +55,12 @@ export function MarketingTrackedLink({
   eventProps,
   secondaryCapture,
   className,
-  prefetch,
+  prefetch = false,
   children,
   ...rest
 }: Props) {
   const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
+
   if (marketingNarrow) {
     return (
       <Link href={href} className={className} prefetch={prefetch} {...rest}>
@@ -47,15 +68,13 @@ export function MarketingTrackedLink({
       </Link>
     );
   }
+
   return (
     <Link
       href={href}
       className={className}
       prefetch={prefetch}
-      onClick={() => {
-        trackProductEvent(event, eventProps);
-        if (secondaryCapture) trackProductEvent(secondaryCapture.event, secondaryCapture.eventProps);
-      }}
+      onClick={() => captureMarketingLinkEvent(event, eventProps, secondaryCapture)}
       {...rest}
     >
       {children}
