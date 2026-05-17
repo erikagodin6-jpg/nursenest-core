@@ -1,0 +1,85 @@
+{
+  "lessons": [
+    {
+      "pathwayId": "us-allied-core",
+      "slug": "rt-gas-exchange-and-alveolar-ventilation",
+      "title": "Gas Exchange & Alveolar Ventilation",
+      "topic": "Respiratory Therapy",
+      "topicSlug": "respiratory-therapy",
+      "system": "respiratory",
+      "bodySystem": "respiratory",
+      "previewSectionCount": 2,
+      "seoTitle": "Gas Exchange and Alveolar Ventilation for Respiratory Therapy",
+      "seoDescription": "Mechanism-first RT lesson on ventilation, oxygenation, dead space, PaCO2, PaO2, and ABG-linked respiratory decisions.",
+      "alliedProfessionKey": "respiratory",
+      "sections": [
+        {
+          "id": "clinical-meaning",
+          "heading": "Clinical Meaning",
+          "kind": "clinical_meaning",
+          "body": "Respiratory therapy practice starts with the difference between ventilation and oxygenation. Ventilation is carbon dioxide clearance through minute ventilation and alveolar ventilation. Oxygenation is oxygen movement across the alveolar-capillary membrane into arterial blood. A patient can oxygenate poorly with an acceptable PaCO2, ventilate poorly with a normal SpO2 for a short period, or fail both at once. RT learners must read the patient, the device, the ABG, and the trend together. This lesson anchors the RT pathway around mechanism-first reasoning instead of memorizing device names."
+        },
+        {
+          "id": "core-concept",
+          "heading": "Core Concept",
+          "kind": "core_concept",
+          "body": "Minute ventilation equals respiratory rate multiplied by tidal volume, but only the fraction reaching ventilated alveoli participates in gas exchange. Dead space ventilation rises when breaths move air through conducting airways or poorly perfused alveoli without effective CO2 removal. Hypoventilation raises PaCO2. Increased shunt or V/Q mismatch lowers PaO2. FiO2 primarily changes oxygenation; respiratory rate and tidal volume primarily change ventilation. PEEP can improve oxygenation by recruiting alveoli but can also reduce venous return and overdistend compliant lung units. Every ventilator adjustment should therefore be tied to the physiologic problem it is intended to fix."
+        },
+        {
+          "id": "clinical-scenario",
+          "heading": "Clinical Scenario",
+          "kind": "clinical_scenario",
+          "body": "A patient with pneumonia is on 60% FiO2 with SpO2 87%, PaO2 54, PaCO2 39. Increasing respiratory rate will not directly fix the main problem because CO2 clearance is acceptable. The RT should think oxygenation failure: atelectasis, shunt, V/Q mismatch, secretion burden, worsening consolidation, or inadequate mean airway pressure. A carefully titrated PEEP change, positioning, secretion management, and reassessment of work of breathing are more physiologically aligned than simply increasing rate."
+        },
+        {
+          "id": "exam-relevance",
+          "heading": "Exam Relevance",
+          "kind": "exam_relevance",
+          "body": "RT board-style questions often hide the target in the ABG. If PaCO2 is high, think ventilation: rate, tidal volume, dead space, airway obstruction, sedation, fatigue, or ventilator synchrony. If PaO2 is low despite oxygen, think oxygenation: FiO2, PEEP, recruitment, shunt, V/Q mismatch, diffusion impairment, secretions, or hemodynamics. Do not treat pulse oximetry as the whole answer; connect it to PaO2, patient appearance, and device settings."
+        },
+        {
+          "id": "takeaways",
+          "heading": "Takeaways",
+          "kind": "takeaways",
+          "body": "High-yield RT rule: FiO2 and PEEP are oxygenation tools; rate and tidal volume are ventilation tools. Always confirm the problem before changing the setting. Reassess after every intervention using the patient, waveform, alarm trend, and ABG rather than one isolated number."
+        }
+      ],
+      "studyTakeaways": [
+        "Separate ventilation from oxygenation before adjusting support.",
+        "Use PaCO2 to judge ventilation and PaO2/FiO2 to judge oxygenation.",
+        "Match each intervention to the physiology it changes."
+      ],
+      "studyCommonTraps": [
+        "Increasing respiratory rate for isolated hypoxemia",
+        "Treating SpO2 without checking ventilation",
+        "Ignoring dead space and work of breathing"
+      ],
+      "preTest": [
+        {
+          "question": "Which ABG value most directly reflects alveolar ventilation?",
+          "options": [
+            "PaO2",
+            "PaCO2",
+            "HCO3",
+            "SaO2"
+          ],
+          "correct": 1,
+          "rationale": "PaCO2 rises when alveolar ventilation is inadequate and falls when alveolar ventilation increases."
+        }
+      ],
+      "postTest": [
+        {
+          "question": "A patient has low PaO2 with normal PaCO2. Which setting class is most directly aligned with oxygenation?",
+          "options": [
+            "Respiratory rate",
+            "Tidal volume",
+            "PEEP/FiO2",
+            "Inspiratory trigger only"
+          ],
+          "correct": 2,
+          "rationale": "PEEP and FiO2 primarily support oxygenation; rate and tidal volume primarily affect ventilation."
+        }
+      ]
+    }
+  ]
+}
