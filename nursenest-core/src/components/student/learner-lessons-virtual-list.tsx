@@ -1,8 +1,4 @@
-"use client";
-
-import { useRef } from "react";
 import Link from "next/link";
-import { useVirtualizer } from "@tanstack/react-virtual";
 import { LessonCard, LessonCardChip } from "@/components/student/product/lesson-card";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
@@ -25,31 +21,15 @@ export function LearnerLessonsVirtualList({
   progressByRowId: Record<string, PathwayLessonProgressStatus>;
   openLessonCta: string;
 }) {
-  const parentRef = useRef<HTMLDivElement>(null);
-
-  const virtualizer = useVirtualizer({
-    count: lessons.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 192,
-    overscan: 6,
-  });
-
   if (lessons.length === 0) return null;
 
   return (
     <div
-      ref={parentRef}
-      className="nn-premium-lessons-app-list max-h-[min(70vh,880px)] overflow-auto rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_22%,var(--semantic-surface))] px-4 pb-9 pt-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:pb-10 sm:pt-5"
-      style={{ contain: "strict" }}
+      className="nn-premium-lessons-app-list rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_22%,var(--semantic-surface))] px-4 pb-5 pt-4 shadow-[var(--semantic-shadow-soft)] sm:px-5 sm:pb-6 sm:pt-5"
       data-nn-premium-lessons-hub-body=""
     >
-      <div
-        className="relative w-full"
-        style={{ height: virtualizer.getTotalSize() }}
-      >
-        {virtualizer.getVirtualItems().map((vRow) => {
-          const lesson = lessons[vRow.index];
-          if (!lesson) return null;
+      <div className="grid gap-4 sm:gap-[1.125rem]">
+        {lessons.map((lesson) => {
           const chips =
             lesson.topic?.trim() || lesson.bodySystem?.trim() ? (
               <>
@@ -61,32 +41,28 @@ export function LearnerLessonsVirtualList({
                 ) : null}
               </>
             ) : undefined;
+
+          const href = `/app/lessons/${encodeURIComponent(lesson.id)}`;
+
           return (
-            <div
+            <LessonCard
               key={lesson.id}
-              ref={virtualizer.measureElement}
-              data-index={vRow.index}
-              className="absolute left-0 top-0 w-full pb-4 sm:pb-[1.125rem]"
-              style={{ transform: `translateY(${vRow.start}px)` }}
-            >
-              <LessonCard
-                href={`/app/lessons/${lesson.id}`}
-                title={cleanLessonTitleForDisplay(lesson.title)}
-                summary={lesson.summary}
-                chips={chips}
-                progressStatus={
-                  lesson.pathwayMeta ? (progressByRowId[lesson.id] ?? "not_started") : undefined
-                }
-                footer={
-                  <Link
-                    href={`/app/lessons/${lesson.id}`}
-                    className="inline-flex text-sm font-semibold text-[var(--semantic-brand)] hover:underline"
-                  >
-                    {openLessonCta}
-                  </Link>
-                }
-              />
-            </div>
+              href={href}
+              title={cleanLessonTitleForDisplay(lesson.title)}
+              summary={lesson.summary}
+              chips={chips}
+              progressStatus={
+                lesson.pathwayMeta ? (progressByRowId[lesson.id] ?? "not_started") : undefined
+              }
+              footer={
+                <Link
+                  href={href}
+                  className="inline-flex text-sm font-semibold text-[var(--semantic-brand)] hover:underline"
+                >
+                  {openLessonCta}
+                </Link>
+              }
+            />
           );
         })}
       </div>
