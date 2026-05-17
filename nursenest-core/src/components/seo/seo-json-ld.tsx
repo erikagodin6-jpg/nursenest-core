@@ -91,6 +91,69 @@ export function WebPageJsonLd({
   );
 }
 
+export function CollectionPageJsonLd({
+  title,
+  description,
+  path,
+  itemPaths = [],
+  inLanguage,
+  collectionType = "Blog",
+}: {
+  title: string;
+  description: string;
+  path: string;
+  itemPaths?: string[];
+  inLanguage?: string;
+  collectionType?: "Blog" | "ItemList" | "CollectionPage";
+}) {
+  const url = absoluteUrl(path);
+  const v = isValidPublicUrl(url);
+  if (!v.ok) {
+    safeServerLog("seo", "collection_page_jsonld_rejected", {
+      path: path.slice(0, 400),
+      url: url.slice(0, 500),
+      code: v.code,
+      detail: (v.detail ?? "").slice(0, 200),
+    });
+    return null;
+  }
+
+  const itemListElement = Array.from(new Set(itemPaths))
+    .slice(0, 30)
+    .map((itemPath, index) => {
+      const itemUrl = absoluteUrl(itemPath.startsWith("/") ? itemPath : `/${itemPath}`);
+      return {
+        "@type": "ListItem",
+        position: index + 1,
+        url: itemUrl,
+      };
+    });
+
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": ["CollectionPage", collectionType],
+        "@id": `${url}#collection`,
+        url,
+        name: title,
+        description,
+        isPartOf: { "@id": WEBSITE_ID },
+        publisher: { "@id": ORG_ID },
+        ...(inLanguage ? { inLanguage } : {}),
+        ...(itemListElement.length
+          ? {
+              mainEntity: {
+                "@type": "ItemList",
+                itemListElement,
+              },
+            }
+          : {}),
+      }}
+    />
+  );
+}
+
 export function BlogPostingJsonLd({
   slug,
   /** When set, overrides the default `/blog/{slug}` URL (e.g. multilingual `/fr/blog/...`). */
