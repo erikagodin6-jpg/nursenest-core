@@ -52,28 +52,44 @@
     transition: none !important;
   }
 
-  .nn-premium-hero-grid {
+  .nn-premium-hero-grid,
+  .nn-pathway-hero,
+  .nn-hub-hero,
+  .nn-tier-hub-hero,
+  [data-nn-hero],
+  [data-nn-section="hero"] {
     min-height: max(32rem, calc(100svh - var(--nn-marketing-header-mobile-reserved-height, 5.25rem))) !important;
     contain: layout paint style;
   }
 
-  .nn-premium-hero-panel {
+  .nn-premium-hero-panel,
+  .nn-pathway-hero-panel,
+  .nn-hub-hero-panel,
+  [data-nn-hero-panel] {
     contain: layout paint style;
     transform: none !important;
   }
 
   .nn-home-marketing-root .nn-premium-home-section:not(:first-child),
   .nn-home-marketing-root section:not(:first-child),
-  .nn-home-marketing-root [data-nn-home-section]:not(:first-child) {
+  .nn-home-marketing-root [data-nn-home-section]:not(:first-child),
+  main > section:nth-of-type(n + 2),
+  [data-nn-marketing-section]:not(:first-child),
+  [data-nn-pathway-section]:not(:first-child),
+  [data-nn-hub-section]:not(:first-child) {
     content-visibility: auto;
     contain: layout paint style;
     contain-intrinsic-size: auto 720px;
   }
 
   .nn-home-marketing-root img[loading="lazy"],
+  main img[loading="lazy"],
   .nn-home-marketing-root picture,
+  main picture,
   .nn-home-marketing-root video,
-  .nn-home-marketing-root svg:not(.nn-header-logo-leaf) {
+  main video,
+  .nn-home-marketing-root svg:not(.nn-header-logo-leaf),
+  main svg:not(.nn-header-logo-leaf) {
     content-visibility: auto;
     contain: paint;
   }
@@ -88,11 +104,20 @@
 @media (max-width: 767.98px) {
   .nn-home-marketing-root .nn-premium-home-section:not(:first-child),
   .nn-home-marketing-root section:not(:first-child),
-  .nn-home-marketing-root [data-nn-home-section]:not(:first-child) {
+  .nn-home-marketing-root [data-nn-home-section]:not(:first-child),
+  main > section:nth-of-type(n + 2),
+  [data-nn-marketing-section]:not(:first-child),
+  [data-nn-pathway-section]:not(:first-child),
+  [data-nn-hub-section]:not(:first-child) {
     contain-intrinsic-size: auto 640px;
   }
 
-  .nn-premium-hero-grid {
+  .nn-premium-hero-grid,
+  .nn-pathway-hero,
+  .nn-hub-hero,
+  .nn-tier-hub-hero,
+  [data-nn-hero],
+  [data-nn-section="hero"] {
     min-height: max(30rem, calc(100svh - var(--nn-marketing-header-mobile-reserved-height, 5.25rem))) !important;
   }
 }
