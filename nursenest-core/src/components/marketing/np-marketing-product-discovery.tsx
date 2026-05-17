@@ -82,38 +82,38 @@ function NpTrackCard({ pathway }: { pathway: ExamPathwayDefinition }) {
 
   return (
     <li>
-      <div className="h-full rounded-2xl border border-[var(--theme-card-border)] bg-[color-mix(in_srgb,var(--theme-card-bg)_88%,var(--semantic-panel-positive))] p-5 shadow-[0_1px_0_rgba(255,255,255,0.04)] transition hover:border-primary/40">
+      <div className="flex h-full flex-col rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-5 shadow-[0_2px_14px_-4px_color-mix(in_srgb,var(--semantic-brand)_10%,transparent)] transition-all hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:shadow-[0_4px_20px_-6px_color-mix(in_srgb,var(--semantic-brand)_16%,transparent)]">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-surface)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--theme-muted-text)]">
+          <span className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
             {copy.regionLabel}
           </span>
           {waitlistOrUpcoming ? (
-            <span className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--theme-card-border))] bg-[color-mix(in_srgb,var(--semantic-warning)_14%,transparent)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--theme-heading-text)]">
+            <span className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,transparent)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">
               Rolling out
             </span>
           ) : null}
         </div>
-        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-primary">{copy.eyebrow}</p>
-        <h3 className="mt-2 text-base font-semibold text-[var(--theme-heading-text)]">{pathway.shortName}</h3>
-        <p className="mt-2 text-sm leading-6 text-[var(--theme-muted-text)]">{copy.summary}</p>
-        <div className="mt-5 flex flex-wrap gap-3 text-sm font-semibold">
-          <Link href={buildExamPathwayPath(pathway)} className="text-primary underline underline-offset-4 hover:no-underline">
+        <p className="mt-4 text-[0.6rem] font-bold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">{copy.eyebrow}</p>
+        <h3 className="mt-1.5 text-base font-semibold text-[var(--palette-heading)]">{pathway.shortName}</h3>
+        <p className="mt-2 grow text-sm leading-6 text-[var(--semantic-text-secondary)]">{copy.summary}</p>
+        <div className="mt-5 flex flex-wrap gap-4 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_60%,transparent)] pt-4 text-xs font-semibold">
+          <Link href={buildExamPathwayPath(pathway)} className="text-[var(--semantic-brand)] underline-offset-2 hover:underline">
             Open hub
           </Link>
           <Link
             href={buildExamPathwayPath(pathway, "questions")}
-            className="text-[var(--theme-heading-text)]/90 underline underline-offset-4 hover:text-primary hover:no-underline"
+            className="text-[var(--semantic-text-secondary)] underline-offset-2 hover:text-[var(--palette-heading)] hover:underline"
           >
             Questions
           </Link>
           <Link
             href={buildExamPathwayPath(pathway, "cat")}
-            className="text-[var(--theme-heading-text)]/90 underline underline-offset-4 hover:text-primary hover:no-underline"
+            className="text-[var(--semantic-text-secondary)] underline-offset-2 hover:text-[var(--palette-heading)] hover:underline"
           >
             CAT
           </Link>
           {waitlistOrUpcoming ? (
-            <Link href="/signup" className="text-[var(--theme-heading-text)]/90 underline underline-offset-4 hover:text-primary hover:no-underline">
+            <Link href="/signup" className="text-[var(--semantic-text-secondary)] underline-offset-2 hover:text-[var(--palette-heading)] hover:underline">
               Join waitlist
             </Link>
           ) : null}

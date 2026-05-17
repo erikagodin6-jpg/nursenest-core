@@ -56,24 +56,69 @@ const iconMap: Record<string, LucideIcon> = {
   Calendar,
 };
 
-const trackAccentMap: Record<string, { gradient: string; badge: string; accent: string; light: string }> = {
+const trackAccentMap: Record<string, {
+  gradient: string;
+  badge: string;
+  accent: string;
+  light: string;
+  heroOrb: string;
+  statColor: string;
+  stepBg: string;
+  stepBorder: string;
+  stepNumColor: string;
+  connectorColor: string;
+  problemBorderClass: string;
+  announcementBg: string;
+  announcementCta: string;
+  ctaGradient: string;
+}> = {
   rpn: {
     gradient: "from-emerald-50 via-white to-emerald-50/30",
     badge: "border-emerald-400/40 text-emerald-700 bg-emerald-50",
     accent: "text-emerald-600",
     light: "bg-emerald-50",
+    heroOrb: "bg-emerald-400/8",
+    statColor: "text-emerald-600",
+    stepBg: "bg-emerald-50",
+    stepBorder: "border-emerald-300/50",
+    stepNumColor: "text-emerald-700",
+    connectorColor: "bg-emerald-200/30",
+    problemBorderClass: "border-l-4 border-l-emerald-400",
+    announcementBg: "bg-emerald-50/70 border-b border-emerald-200/40",
+    announcementCta: "text-emerald-700 hover:text-emerald-800",
+    ctaGradient: "from-slate-900 via-slate-800 to-slate-900",
   },
   rn: {
-    gradient: "from-blue-50 via-white to-blue-50/30",
+    gradient: "from-blue-50/60 via-white to-slate-50/30",
     badge: "border-blue-400/40 text-blue-700 bg-blue-50",
     accent: "text-blue-600",
     light: "bg-blue-50",
+    heroOrb: "bg-blue-400/8",
+    statColor: "text-blue-600",
+    stepBg: "bg-blue-50",
+    stepBorder: "border-blue-300/50",
+    stepNumColor: "text-blue-700",
+    connectorColor: "bg-blue-200/30",
+    problemBorderClass: "border-l-4 border-l-blue-500",
+    announcementBg: "bg-blue-50/70 border-b border-blue-200/40",
+    announcementCta: "text-blue-700 hover:text-blue-800",
+    ctaGradient: "from-slate-950 via-blue-950 to-slate-900",
   },
   np: {
     gradient: "from-violet-50 via-white to-violet-50/30",
     badge: "border-violet-400/40 text-violet-700 bg-violet-50",
     accent: "text-violet-600",
     light: "bg-violet-50",
+    heroOrb: "bg-violet-400/8",
+    statColor: "text-violet-600",
+    stepBg: "bg-violet-50",
+    stepBorder: "border-violet-300/50",
+    stepNumColor: "text-violet-700",
+    connectorColor: "bg-violet-200/30",
+    problemBorderClass: "border-l-4 border-l-violet-400",
+    announcementBg: "bg-violet-50/60 border-b border-violet-200/40",
+    announcementCta: "text-violet-700 hover:text-violet-800",
+    ctaGradient: "from-slate-900 via-violet-950 to-slate-900",
   },
 };
 
@@ -98,6 +143,16 @@ export default function TrackLandingPage({ track }: TrackLandingPageProps) {
     badge: "border-primary/40 text-primary bg-primary/5",
     accent: "text-primary",
     light: "bg-primary/5",
+    heroOrb: "bg-[#BFA6F6]/8",
+    statColor: "text-[#BFA6F6]",
+    stepBg: "bg-[#BFA6F6]/10",
+    stepBorder: "border-[#BFA6F6]/30",
+    stepNumColor: "text-[#BFA6F6]",
+    connectorColor: "bg-[#BFA6F6]/20",
+    problemBorderClass: "border-l-4 border-l-[#BFA6F6]",
+    announcementBg: "bg-[#BFA6F6]/10 border-b border-[#BFA6F6]/20",
+    announcementCta: "text-[#BFA6F6] hover:text-[#a98cf0]",
+    ctaGradient: "from-[#BFA6F6]/5 via-[#BFA6F6]/10 to-[#BFA6F6]/5",
   };
   const colors = trackAccentMap[track] || defaultAccent;
   const label = trackLabel[track] || "Nursing";
@@ -119,6 +174,7 @@ export default function TrackLandingPage({ track }: TrackLandingPageProps) {
           message={copy.announcementBar.message}
           ctaText={copy.announcementBar.ctaText}
           onCta={() => setLocation(copy.announcementBar!.ctaPath)}
+          colors={colors}
         />
       )}
 
@@ -168,29 +224,35 @@ export default function TrackLandingPage({ track }: TrackLandingPageProps) {
 
       <FaqSection faq={copy.faq} colors={colors} />
 
-      <section className="py-10 bg-gray-50 border-t border-gray-100">
+      <section className="py-12 bg-white border-t border-gray-100/80">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">Explore More {label} Resources</h2>
+          <p className="text-xs font-semibold text-[#2E3A59]/35 uppercase tracking-widest text-center mb-6">Explore More {label} Resources</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Link href={`/${track}/questions`} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-teal-200 transition-all" data-testid="link-topic-questions">
-              <Target className="w-5 h-5 text-teal-500" />
+            <Link href={`/${track}/questions`} className={`flex items-center gap-3 p-5 bg-white rounded-2xl border border-gray-100 hover:shadow-lg hover:border-opacity-60 transition-all duration-200 group`} data-testid="link-topic-questions">
+              <div className={`flex-shrink-0 w-9 h-9 rounded-xl ${colors.light} flex items-center justify-center group-hover:scale-105 transition-transform`}>
+                <Target className={`w-4 h-4 ${colors.accent}`} />
+              </div>
               <div>
-                <h3 className="text-sm font-semibold text-gray-900">{t("pages.marketing.TrackLandingPage.questionsByTopic")}</h3>
-                <p className="text-xs text-gray-500">{t("pages.marketing.TrackLandingPage.browsePracticeQuestionsByClinical")}</p>
+                <h3 className="text-sm font-semibold text-[#2E3A59]">{t("pages.marketing.TrackLandingPage.questionsByTopic")}</h3>
+                <p className="text-xs text-[#2E3A59]/45 mt-0.5">{t("pages.marketing.TrackLandingPage.browsePracticeQuestionsByClinical")}</p>
               </div>
             </Link>
-            <Link href={`/how-to-become-a-nurse/${track}`} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-teal-200 transition-all" data-testid="link-career-guide">
-              <GraduationCap className="w-5 h-5 text-teal-500" />
+            <Link href={`/how-to-become-a-nurse/${track}`} className="flex items-center gap-3 p-5 bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-200 group" data-testid="link-career-guide">
+              <div className={`flex-shrink-0 w-9 h-9 rounded-xl ${colors.light} flex items-center justify-center group-hover:scale-105 transition-transform`}>
+                <GraduationCap className={`w-4 h-4 ${colors.accent}`} />
+              </div>
               <div>
-                <h3 className="text-sm font-semibold text-gray-900">{t("pages.marketing.TrackLandingPage.careerGuide")}</h3>
-                <p className="text-xs text-gray-500">How to become a {label}</p>
+                <h3 className="text-sm font-semibold text-[#2E3A59]">{t("pages.marketing.TrackLandingPage.careerGuide")}</h3>
+                <p className="text-xs text-[#2E3A59]/45 mt-0.5">How to become a {label}</p>
               </div>
             </Link>
-            <Link href="/practice-questions" className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-teal-200 transition-all" data-testid="link-practice-by-system">
-              <BookOpen className="w-5 h-5 text-teal-500" />
+            <Link href="/practice-questions" className="flex items-center gap-3 p-5 bg-white rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-200 group" data-testid="link-practice-by-system">
+              <div className={`flex-shrink-0 w-9 h-9 rounded-xl ${colors.light} flex items-center justify-center group-hover:scale-105 transition-transform`}>
+                <BookOpen className={`w-4 h-4 ${colors.accent}`} />
+              </div>
               <div>
-                <h3 className="text-sm font-semibold text-gray-900">{t("pages.marketing.TrackLandingPage.byBodySystem")}</h3>
-                <p className="text-xs text-gray-500">{t("pages.marketing.TrackLandingPage.practiceByBodySystem")}</p>
+                <h3 className="text-sm font-semibold text-[#2E3A59]">{t("pages.marketing.TrackLandingPage.byBodySystem")}</h3>
+                <p className="text-xs text-[#2E3A59]/45 mt-0.5">{t("pages.marketing.TrackLandingPage.practiceByBodySystem")}</p>
               </div>
             </Link>
           </div>
@@ -206,16 +268,22 @@ export default function TrackLandingPage({ track }: TrackLandingPageProps) {
   );
 }
 
-function AnnouncementBar({ message, ctaText, onCta }: { message: string; ctaText: string; onCta: () => void }) {
+function AnnouncementBar({ message, ctaText, onCta, colors }: {
+  message: string;
+  ctaText: string;
+  onCta: () => void;
+  colors: (typeof trackAccentMap)[string];
+}) {
+  const { t } = useI18n();
   const [visible, setVisible] = useState(true);
   if (!visible) return null;
 
   return (
-    <div className="bg-[#BFA6F6]/10 border-b border-[#BFA6F6]/20 py-2.5 px-4 text-center relative" data-testid="announcement-bar">
-      <span className="text-sm text-[#2E3A59]/80">{message}</span>
+    <div className={`${colors.announcementBg} py-2.5 px-4 text-center relative`} data-testid="announcement-bar">
+      <span className="text-sm text-[#2E3A59]/75 font-medium">{message}</span>
       <button
         onClick={onCta}
-        className="ml-3 text-sm font-medium text-[#BFA6F6] hover:text-[#a98cf0] underline underline-offset-2"
+        className={`ml-3 text-sm font-semibold ${colors.announcementCta} underline underline-offset-2`}
         data-testid="announcement-bar-cta"
       >
         {ctaText}
@@ -280,8 +348,8 @@ function HeroSection({
       data-testid="hero-section"
     >
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#BFA6F6]/8 rounded-full blur-3xl hidden md:block" />
-        <div className="absolute bottom-10 right-1/4 w-72 h-72 bg-[#BFA6F6]/6 rounded-full blur-3xl hidden md:block" />
+        <div className={`absolute top-20 left-1/4 w-96 h-96 ${colors.heroOrb} rounded-full blur-3xl hidden md:block`} />
+        <div className={`absolute bottom-10 right-1/4 w-72 h-72 ${colors.heroOrb} opacity-75 rounded-full blur-3xl hidden md:block`} />
       </div>
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center">
@@ -365,17 +433,19 @@ function HeroSection({
         )}
 
         {dynamicStats && dynamicStats.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
-            {dynamicStats.map((stat, i) => (
-              <div
-                key={i}
-                className="text-center p-4 rounded-xl bg-white/70 border border-[#BFA6F6]/15 backdrop-blur-sm"
-                data-testid={`hero-stat-${i}`}
-              >
-                <div className="text-2xl font-bold text-[#BFA6F6]">{stat.value}</div>
-                <div className="text-xs text-[#2E3A59]/50 mt-1 font-medium">{stat.label}</div>
-              </div>
-            ))}
+          <div className="max-w-3xl mx-auto overflow-hidden rounded-2xl border border-white/90 bg-white/65 backdrop-blur-sm shadow-sm">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-100/70">
+              {dynamicStats.map((stat, i) => (
+                <div
+                  key={i}
+                  className="bg-white/80 px-4 py-5 text-center"
+                  data-testid={`hero-stat-${i}`}
+                >
+                  <div className={`text-2xl md:text-3xl font-bold tracking-tight ${colors.statColor}`}>{stat.value}</div>
+                  <div className="text-[10px] text-[#2E3A59]/45 mt-1.5 font-semibold uppercase tracking-widest leading-tight">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -419,16 +489,16 @@ function ProblemSection({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-4xl mx-auto">
           {section.cards.map((card, i) => (
             <Card
               key={i}
-              className="border-gray-200/80 bg-white shadow-sm hover:shadow-md transition-shadow"
+              className={`border-gray-100 bg-white shadow-sm hover:shadow-lg transition-all duration-300 ${colors.problemBorderClass}`}
               data-testid={`problem-card-${i}`}
             >
               <CardContent className="p-6">
-                <h3 className="font-semibold text-base mb-2">{card.title}</h3>
-                <p className="text-sm text-[#2E3A59]/60 leading-relaxed">{card.description}</p>
+                <h3 className="font-semibold text-base mb-2 text-[#2E3A59]">{card.title}</h3>
+                <p className="text-sm text-[#2E3A59]/55 leading-relaxed">{card.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -461,20 +531,20 @@ function SolutionSection({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {solution.features.map((feature, i) => {
             const Icon = iconMap[feature.icon] || FlaskConical;
             return (
               <div
                 key={i}
-                className="text-center p-6 rounded-xl border border-[#BFA6F6]/15 bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                className="text-center p-6 rounded-2xl border border-gray-100 bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
                 data-testid={`solution-card-${i}`}
               >
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${colors.light} mb-4`}>
-                  <Icon className={`w-6 h-6 ${colors.accent}`} />
+                <div className={`inline-flex items-center justify-center w-11 h-11 rounded-xl ${colors.light} mb-4 group-hover:scale-105 transition-transform duration-300`}>
+                  <Icon className={`w-5 h-5 ${colors.accent}`} />
                 </div>
-                <h3 className="text-base font-semibold mb-2">{r(feature.title)}</h3>
-                <p className="text-sm text-[#2E3A59]/60 leading-relaxed">{r(feature.description)}</p>
+                <h3 className="text-sm font-semibold mb-2 text-[#2E3A59]">{r(feature.title)}</h3>
+                <p className="text-xs text-[#2E3A59]/55 leading-relaxed">{r(feature.description)}</p>
               </div>
             );
           })}
@@ -508,21 +578,21 @@ function FeatureCardsSection({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {cards.map((card, i) => {
             const Icon = iconMap[card.icon] || FlaskConical;
             return (
               <Card
                 key={i}
-                className="border-gray-200/80 bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                className="border-gray-100 bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
                 data-testid={`feature-card-${i}`}
               >
                 <CardContent className="p-6">
-                  <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg ${colors.light} mb-4`}>
+                  <div className={`inline-flex items-center justify-center w-10 h-10 rounded-xl ${colors.light} mb-4 group-hover:scale-105 transition-transform duration-300`}>
                     <Icon className={`w-5 h-5 ${colors.accent}`} />
                   </div>
-                  <h3 className="font-semibold text-base mb-2">{card.title}</h3>
-                  <p className="text-sm text-[#2E3A59]/60 leading-relaxed">{card.description}</p>
+                  <h3 className="font-semibold text-sm mb-2 text-[#2E3A59]">{card.title}</h3>
+                  <p className="text-xs text-[#2E3A59]/55 leading-relaxed">{card.description}</p>
                 </CardContent>
               </Card>
             );
@@ -553,17 +623,17 @@ function HowItWorksSection({
         </div>
 
         <div className="relative">
-          <div className="absolute left-6 md:left-8 top-0 bottom-0 w-px bg-[#BFA6F6]/20 hidden sm:block" />
+          <div className={`absolute left-6 md:left-8 top-0 bottom-0 w-px ${colors.connectorColor} hidden sm:block`} />
 
           <div className="space-y-10">
             {steps.map((step, i) => (
               <div key={i} className="flex gap-5 sm:gap-8 items-start" data-testid={`how-step-${i}`}>
-                <div className="relative z-10 flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-full bg-[#BFA6F6]/10 border-2 border-[#BFA6F6]/30 flex items-center justify-center">
-                  <span className="text-lg md:text-xl font-bold text-[#BFA6F6]">{step.step}</span>
+                <div className={`relative z-10 flex-shrink-0 w-12 h-12 md:w-16 md:h-16 rounded-full ${colors.stepBg} border-2 ${colors.stepBorder} flex items-center justify-center shadow-sm`}>
+                  <span className={`text-lg md:text-xl font-bold ${colors.stepNumColor}`}>{step.step}</span>
                 </div>
                 <div className="pt-1 md:pt-3">
-                  <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-                  <p className="text-[#2E3A59]/60 leading-relaxed">{step.description}</p>
+                  <h3 className="text-base font-semibold mb-1.5 text-[#2E3A59]">{step.title}</h3>
+                  <p className="text-sm text-[#2E3A59]/60 leading-relaxed">{step.description}</p>
                 </div>
               </div>
             ))}
@@ -606,24 +676,24 @@ function DashboardPreviewSection({
           </div>
 
           <div className="relative">
-            <div className="rounded-2xl border border-[#BFA6F6]/20 bg-white p-6 shadow-xl shadow-[#BFA6F6]/5">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-3 h-3 rounded-full bg-red-300" />
-                <div className="w-3 h-3 rounded-full bg-amber-300" />
-                <div className="w-3 h-3 rounded-full bg-green-300" />
-                <span className="ml-2 text-xs text-[#2E3A59]/40 font-mono">{t("pages.marketing.TrackLandingPage.nursenestDashboard")}</span>
+            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-2xl">
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-300/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-amber-300/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-green-300/80" />
+                <span className="ml-2 text-xs text-[#2E3A59]/35 font-mono">{t("pages.marketing.TrackLandingPage.nursenestDashboard")}</span>
               </div>
               <div className="space-y-3">
-                <div className="h-8 bg-[#BFA6F6]/8 rounded-lg" />
+                <div className={`h-8 ${colors.light} rounded-lg`} />
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="h-20 bg-[#BFA6F6]/6 rounded-lg" />
-                  <div className="h-20 bg-[#BFA6F6]/10 rounded-lg" />
-                  <div className="h-20 bg-[#BFA6F6]/6 rounded-lg" />
+                  <div className="h-20 bg-gray-50 rounded-lg border border-gray-100" />
+                  <div className={`h-20 ${colors.light} rounded-lg`} />
+                  <div className="h-20 bg-gray-50 rounded-lg border border-gray-100" />
                 </div>
-                <div className="h-32 bg-gradient-to-r from-[#BFA6F6]/5 to-[#BFA6F6]/12 rounded-lg" />
+                <div className={`h-32 bg-gradient-to-r ${colors.gradient} rounded-lg`} />
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="h-16 bg-[#BFA6F6]/8 rounded-lg" />
-                  <div className="h-16 bg-[#BFA6F6]/6 rounded-lg" />
+                  <div className="h-14 bg-gray-50 rounded-lg border border-gray-100" />
+                  <div className={`h-14 ${colors.light} rounded-lg`} />
                 </div>
               </div>
             </div>
@@ -696,21 +766,21 @@ function TestimonialsSection({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
             <Card
               key={i}
-              className="border-[#BFA6F6]/15 bg-white hover:shadow-lg transition-shadow"
+              className="border-gray-100 bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
               data-testid={`testimonial-${i}`}
             >
-              <CardContent className="p-6">
-                <Quote className="w-8 h-8 text-[#BFA6F6]/30 mb-4" />
-                <p className="text-sm text-[#2E3A59]/70 leading-relaxed mb-6 italic">
-                  "{t.quote}"
+              <CardContent className="p-7 flex flex-col h-full">
+                <Quote className={`w-6 h-6 ${colors.accent} opacity-40 mb-4 flex-shrink-0`} />
+                <p className="text-sm text-[#2E3A59]/65 leading-relaxed mb-6 flex-1">
+                  &ldquo;{t.quote}&rdquo;
                 </p>
-                <div className="border-t border-gray-100 pt-4">
-                  <p className="font-semibold text-sm">{t.name}</p>
-                  <p className="text-xs text-[#2E3A59]/50 mt-0.5">{t.role}</p>
+                <div className={`border-t border-gray-100 pt-4`}>
+                  <p className="font-semibold text-sm text-[#2E3A59]">{t.name}</p>
+                  <p className={`text-xs mt-0.5 font-medium ${colors.accent} opacity-80`}>{t.role}</p>
                 </div>
               </CardContent>
             </Card>
@@ -743,10 +813,10 @@ function ComparisonSection({
         </div>
 
         <div className="rounded-2xl border border-gray-200/80 bg-white overflow-hidden shadow-sm">
-          <div className="grid grid-cols-3 bg-gray-50 border-b border-gray-200/60">
-            <div className="p-4 text-sm font-semibold text-[#2E3A59]/70">{t("pages.marketing.TrackLandingPage.feature")}</div>
-            <div className="p-4 text-sm font-semibold text-[#2E3A59]/50 text-center">{t("pages.marketing.TrackLandingPage.genericPlatforms")}</div>
-            <div className="p-4 text-sm font-semibold text-[#BFA6F6] text-center">NurseNest</div>
+          <div className="grid grid-cols-3 bg-gray-50/80 border-b border-gray-100">
+            <div className="p-4 text-xs font-semibold text-[#2E3A59]/60 uppercase tracking-wider">{t("pages.marketing.TrackLandingPage.feature")}</div>
+            <div className="p-4 text-xs font-semibold text-[#2E3A59]/40 text-center uppercase tracking-wider">{t("pages.marketing.TrackLandingPage.genericPlatforms")}</div>
+            <div className={`p-4 text-xs font-semibold text-center uppercase tracking-wider ${colors.accent}`}>NurseNest</div>
           </div>
 
           {comparison.map((row, i) => (
@@ -850,17 +920,20 @@ function FinalCtaSection({
   const r = (text: string) => resolveMarketingText(text, region);
   return (
     <section
-      className="py-20 md:py-28 bg-gradient-to-b from-[#BFA6F6]/5 via-[#BFA6F6]/10 to-[#BFA6F6]/5"
+      className={`py-20 md:py-28 bg-gradient-to-br ${colors.ctaGradient} relative overflow-hidden`}
       data-testid="final-cta-section"
     >
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-        <Sparkles className="w-8 h-8 text-[#BFA6F6] mx-auto mb-6" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] ${colors.heroOrb} opacity-20 blur-3xl`} />
+      </div>
+      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+        <Sparkles className="w-7 h-7 text-white/50 mx-auto mb-6" />
 
-        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-4" data-testid="final-cta-headline">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight mb-4 text-white" data-testid="final-cta-headline">
           {r(cta.headline)}
         </h2>
 
-        <p className="text-lg text-[#2E3A59]/60 max-w-2xl mx-auto mb-10 leading-relaxed">
+        <p className="text-base md:text-lg text-white/55 max-w-2xl mx-auto mb-10 leading-relaxed">
           {r(cta.description)}
         </p>
 
@@ -868,7 +941,7 @@ function FinalCtaSection({
           <Button
             size="lg"
             onClick={() => onNavigate(cta.primaryCtaPath)}
-            className="bg-[#BFA6F6] hover:bg-[#a98cf0] text-white border-none px-8 h-12 rounded-full text-base font-medium shadow-lg shadow-[#BFA6F6]/25"
+            className="bg-white text-slate-900 hover:bg-white/90 border-none px-8 h-12 rounded-full text-base font-semibold shadow-lg"
             data-testid="final-primary-cta"
           >
             {cta.primaryCta}
@@ -878,14 +951,14 @@ function FinalCtaSection({
             size="lg"
             variant="outline"
             onClick={() => onNavigate(cta.secondaryCtaPath)}
-            className="border-[#BFA6F6]/30 text-[#2E3A59] px-8 h-12 rounded-full text-base hover:bg-white/50"
+            className="border-white/25 text-white px-8 h-12 rounded-full text-base hover:bg-white/10 hover:border-white/40"
             data-testid="final-secondary-cta"
           >
             {cta.secondaryCta}
           </Button>
         </div>
 
-        <p className="text-sm text-[#2E3A59]/40">{cta.reassurance}</p>
+        <p className="text-sm text-white/30">{cta.reassurance}</p>
       </div>
     </section>
   );

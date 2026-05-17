@@ -54,13 +54,13 @@ function MiniReportBand({
 }) {
   const fill = semanticFillClassForAccuracyPct(pct);
   return (
-    <div className="min-w-0 space-y-2">
+    <div className="min-w-0 space-y-1.5">
       <div className="flex items-baseline justify-between gap-2">
-        <span className="truncate text-xs font-semibold text-[var(--semantic-text-secondary)]">{label}</span>
-        <span className="shrink-0 tabular-nums text-xs font-bold text-[var(--palette-heading)]">{Math.round(pct)}%</span>
+        <span className="truncate text-[0.7rem] font-medium text-[var(--semantic-text-secondary)]">{label}</span>
+        <span className="shrink-0 tabular-nums text-[0.7rem] font-bold text-[var(--palette-heading)]">{Math.round(pct)}%</span>
       </div>
       <div
-        className={`nn-progress-track-semantic h-2.5 overflow-hidden rounded-full ${trackClass ?? ""}`}
+        className={`h-1.5 overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--semantic-border-soft)_80%,transparent)] ${trackClass ?? ""}`}
         role="progressbar"
         aria-valuenow={Math.round(pct)}
         aria-valuemin={0}
@@ -185,15 +185,17 @@ export function NpPremiumHubWorkstation({
 
   return (
     <div
-      className="nn-np-premium-workstation nn-np-premium-workstation--dense mt-8 space-y-7"
+      className="nn-np-premium-workstation nn-np-premium-workstation--dense mt-8 space-y-5"
       data-nn-np-premium-workstation="1"
       data-pathway-id={pathway.id}
     >
-      <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
-        <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">
+      {/* ── Readiness card ── */}
+      <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-5 shadow-[0_2px_20px_-6px_color-mix(in_srgb,var(--semantic-brand)_14%,transparent)] sm:p-6">
+        <p className="text-[0.6rem] font-bold uppercase tracking-[0.22em] text-[var(--semantic-brand)]">
           {t("components.examPathwayHub.npPremium.workstationEyebrow")}
         </p>
-        <div className="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
+        <div className="mt-5 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
+          {/* Left: exam stats */}
           <div className="min-w-0 space-y-4">
             <h2 className="nn-marketing-h3 text-balance text-[var(--palette-heading)]">
               {t("components.examPathwayHub.npPremium.readinessTitle")}
@@ -201,38 +203,39 @@ export function NpPremiumHubWorkstation({
             <p className="nn-marketing-body-sm max-w-2xl text-pretty text-[var(--semantic-text-secondary)]">
               {t("components.examPathwayHub.npPremium.readinessLead")}
             </p>
-            <dl className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_8%,var(--semantic-surface))] p-3">
-                <dt className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--semantic-chart-2)]">
+            <dl className="grid gap-2 sm:grid-cols-3">
+              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] p-3">
+                <dt className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--semantic-brand)]">
                   {t("components.examPathwayHub.npPremium.metricItemBand")}
                 </dt>
-                <dd className="mt-1 text-sm font-semibold text-[var(--palette-heading)]">{rc.questionRange}</dd>
+                <dd className="mt-1.5 text-sm font-semibold text-[var(--palette-heading)]">{rc.questionRange}</dd>
               </div>
-              <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_8%,var(--semantic-surface))] p-3">
-                <dt className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--semantic-chart-3)]">
+              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] p-3">
+                <dt className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--semantic-brand)]">
                   {t("components.examPathwayHub.npPremium.metricTimer")}
                 </dt>
-                <dd className="mt-1 text-sm font-semibold text-[var(--palette-heading)]">{rc.timeEstimate}</dd>
+                <dd className="mt-1.5 text-sm font-semibold text-[var(--palette-heading)]">{rc.timeEstimate}</dd>
               </div>
-              <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-4)_8%,var(--semantic-surface))] p-3">
-                <dt className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--semantic-chart-4)]">
+              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] p-3">
+                <dt className="text-[0.6rem] font-bold uppercase tracking-wider text-[var(--semantic-brand)]">
                   {t("components.examPathwayHub.npPremium.metricModeShort")}
                 </dt>
-                <dd className="mt-1 text-sm font-semibold text-[var(--palette-heading)]">{pub.experienceLabel}</dd>
+                <dd className="mt-1.5 text-sm font-semibold text-[var(--palette-heading)]">{pub.experienceLabel}</dd>
               </div>
             </dl>
             <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{pub.subtitle}</p>
           </div>
 
-          <div className="min-w-0 space-y-4 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-1)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--semantic-surface))] p-4 sm:p-5">
-            <h3 className="text-sm font-bold text-[var(--palette-heading)]">{t("components.examPathwayHub.npPremium.reportTitle")}</h3>
-            <p className="text-xs text-[var(--semantic-text-secondary)]">{t("components.examPathwayHub.npPremium.reportBody")}</p>
-            <div className="space-y-4 pt-1">
+          {/* Right: progress report panel */}
+          <div className="min-w-0 rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_100%,transparent)] bg-[var(--semantic-surface)] p-4 sm:p-5">
+            <h3 className="text-xs font-bold text-[var(--palette-heading)]">{t("components.examPathwayHub.npPremium.reportTitle")}</h3>
+            <p className="mt-1 text-[0.7rem] leading-relaxed text-[var(--semantic-text-secondary)]">{t("components.examPathwayHub.npPremium.reportBody")}</p>
+            <div className="mt-4 space-y-3.5">
               <MiniReportBand label={t("components.examPathwayHub.npPremium.reportBandMomentumLabel")} pct={lessonMomentumPct} />
               <MiniReportBand label={t("components.examPathwayHub.npPremium.reportBandConfidenceLabel")} pct={calibrationPct} />
               <MiniReportBand label={t("components.examPathwayHub.npPremium.reportBandExamDepthLabel")} pct={reasoningPct} />
             </div>
-            <div className="flex flex-col gap-2 pt-2 sm:flex-row sm:flex-wrap">
+            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_60%,transparent)] pt-3.5">
               <MarketingTrackedLink
                 href={wrapApp(weakHref, viewerSignedIn)}
                 event={PH.marketingPathwayHubCta}
@@ -245,7 +248,7 @@ export function NpPremiumHubWorkstation({
                   link_target: "weak_areas",
                   hub_path: hubPath,
                 }}
-                className="text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                className="text-[0.7rem] font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
               >
                 {t("components.examPathwayHub.premiumModules.weakAreasCta")}
               </MarketingTrackedLink>
@@ -261,7 +264,7 @@ export function NpPremiumHubWorkstation({
                   link_target: "account_progress",
                   hub_path: hubPath,
                 }}
-                className="text-xs font-semibold text-[var(--semantic-info)] underline-offset-2 hover:underline"
+                className="text-[0.7rem] font-semibold text-[var(--semantic-text-secondary)] underline-offset-2 hover:text-[var(--palette-heading)] hover:underline"
               >
                 {t("components.examPathwayHub.premiumModules.progressCta")}
               </MarketingTrackedLink>
@@ -277,7 +280,7 @@ export function NpPremiumHubWorkstation({
                   link_target: "exam_plan",
                   hub_path: hubPath,
                 }}
-                className="text-xs font-semibold text-[var(--semantic-chart-3)] underline-offset-2 hover:underline"
+                className="text-[0.7rem] font-semibold text-[var(--semantic-text-secondary)] underline-offset-2 hover:text-[var(--palette-heading)] hover:underline"
               >
                 {t("components.examPathwayHub.premiumModules.examPlanCta")}
               </MarketingTrackedLink>
@@ -286,8 +289,9 @@ export function NpPremiumHubWorkstation({
         </div>
       </div>
 
+      {/* ── Specialty focus blocks ── */}
       <section
-        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_8%,var(--semantic-surface))] p-5 sm:p-6"
+        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_100%,transparent)] bg-[var(--semantic-surface)] p-5 sm:p-6"
         aria-labelledby="np-premium-specialty-heading"
       >
         <h2 id="np-premium-specialty-heading" className="nn-marketing-h3 text-[var(--palette-heading)]">
@@ -296,15 +300,15 @@ export function NpPremiumHubWorkstation({
         <p className="nn-marketing-body-sm mt-2 max-w-3xl text-pretty text-[var(--semantic-text-secondary)]">
           {t("components.examPathwayHub.npPremium.specialtyLead")}
         </p>
-        <ul className="mt-4 grid gap-3 sm:grid-cols-3">
-          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4">
-            <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-chart-2)]">
+        <ul className="mt-5 grid gap-3 sm:grid-cols-3">
+          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-4">
+            <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-[var(--semantic-brand)]">
               {t("components.examPathwayHub.npPremium.diagnosticBlockTitle")}
             </p>
-            <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("components.examPathwayHub.npPremium.diagnosticBlockBody")}</p>
+            <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("components.examPathwayHub.npPremium.diagnosticBlockBody")}</p>
             <MarketingTrackedLink
               href={wrapApp(diagnosticHref, viewerSignedIn)}
-              className="mt-3 inline-flex text-xs font-semibold text-[var(--semantic-brand)] hover:underline"
+              className="mt-3 inline-flex text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
               event={PH.marketingPathwayHubCta}
               eventProps={{
                 ...linkCtx,
@@ -321,14 +325,14 @@ export function NpPremiumHubWorkstation({
               {t("components.examPathwayHub.npPremium.diagnosticRouteNote")}
             </p>
           </li>
-          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4">
-            <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-chart-4)]">
+          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-4">
+            <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-[var(--semantic-brand)]">
               {t("components.examPathwayHub.npPremium.pharmBlockTitle")}
             </p>
-            <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("components.examPathwayHub.npPremium.pharmBlockBody")}</p>
+            <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("components.examPathwayHub.npPremium.pharmBlockBody")}</p>
             <MarketingTrackedLink
               href={wrapApp(pharmHref, viewerSignedIn)}
-              className="mt-3 inline-flex text-xs font-semibold text-[var(--semantic-chart-4)] hover:underline"
+              className="mt-3 inline-flex text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
               event={PH.marketingPathwayHubCta}
               eventProps={{
                 ...linkCtx,
@@ -342,14 +346,14 @@ export function NpPremiumHubWorkstation({
               {t("components.examPathwayHub.premiumModules.pharmCta")}
             </MarketingTrackedLink>
           </li>
-          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-5)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4">
-            <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-chart-5)]">
+          <li className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-4">
+            <p className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-[var(--semantic-brand)]">
               {t("components.examPathwayHub.npPremium.assessmentTitle")}
             </p>
-            <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("components.examPathwayHub.npPremium.assessmentBody")}</p>
+            <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("components.examPathwayHub.npPremium.assessmentBody")}</p>
             <MarketingTrackedLink
               href={buildExamPathwayPath(pathway, "questions")}
-              className="mt-3 inline-flex text-xs font-semibold text-[var(--semantic-chart-5)] hover:underline"
+              className="mt-3 inline-flex text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
               event={PH.marketingPathwayHubCta}
               eventProps={{
                 ...linkCtx,
@@ -366,8 +370,9 @@ export function NpPremiumHubWorkstation({
         </ul>
       </section>
 
+      {/* ── Clinical tools strip ── */}
       <section
-        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--semantic-surface))] p-5 sm:p-6"
+        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_100%,transparent)] bg-[var(--semantic-surface)] p-5 sm:p-6"
         aria-labelledby="np-premium-integration-heading"
       >
         <h2 id="np-premium-integration-heading" className="nn-marketing-h3 text-[var(--palette-heading)]">
@@ -376,16 +381,16 @@ export function NpPremiumHubWorkstation({
         <p className="nn-marketing-body-sm mt-2 max-w-3xl text-[var(--semantic-text-secondary)]">
           {t("components.examPathwayHub.npPremium.integrationLead")}
         </p>
-        <div className="mt-4 flex flex-wrap gap-3">
+        <div className="mt-4 flex flex-wrap gap-2">
           {ecgAllowed ? (
             <MarketingTrackedLink
               href={ecgLocked ? buildExamPathwayPath(pathway) : wrapApp(ecgHref, viewerSignedIn)}
               event={PH.marketingPathwayHubCta}
               eventProps={{ ...linkCtx, surface: "np_premium_integration", link_target: "ecg", pathway_id: pathway.id }}
-              className={`rounded-full border px-4 py-2 text-xs font-semibold ${
+              className={`rounded-full border px-4 py-2 text-xs font-semibold transition-colors ${
                 ecgLocked
-                  ? "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)]"
-                  : "border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] text-[var(--semantic-chart-2)] hover:bg-[color-mix(in_srgb,var(--semantic-chart-2)_10%,transparent)]"
+                  ? "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] opacity-60"
+                  : "border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] text-[var(--semantic-brand)] hover:border-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,transparent)]"
               }`}
             >
               {t("components.examPathwayHub.premiumModules.ecgTitle")}
@@ -394,7 +399,7 @@ export function NpPremiumHubWorkstation({
           ) : null}
           <MarketingTrackedLink
             href={wrapApp(labsHref, viewerSignedIn)}
-            className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-3)_30%,var(--semantic-border-soft))] px-4 py-2 text-xs font-semibold text-[var(--semantic-chart-3)] hover:bg-[color-mix(in_srgb,var(--semantic-chart-3)_10%,transparent)]"
+            className="rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] px-4 py-2 text-xs font-semibold text-[var(--semantic-brand)] transition-colors hover:border-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,transparent)]"
             event={PH.marketingPathwayHubCta}
             eventProps={{ ...linkCtx, surface: "np_premium_integration", link_target: "labs", pathway_id: pathway.id }}
           >
@@ -402,10 +407,10 @@ export function NpPremiumHubWorkstation({
           </MarketingTrackedLink>
           <MarketingTrackedLink
             href={clinicalScenariosPublic ? wrapApp(casesHref, viewerSignedIn) : buildExamPathwayPath(pathway)}
-            className={`rounded-full border px-4 py-2 text-xs font-semibold ${
+            className={`rounded-full border px-4 py-2 text-xs font-semibold transition-colors ${
               clinicalScenariosPublic
-                ? "border-[color-mix(in_srgb,var(--semantic-chart-4)_30%,var(--semantic-border-soft))] text-[var(--semantic-chart-4)] hover:bg-[color-mix(in_srgb,var(--semantic-chart-4)_10%,transparent)]"
-                : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)]"
+                ? "border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] text-[var(--semantic-brand)] hover:border-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,transparent)]"
+                : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] opacity-60"
             }`}
             event={PH.marketingPathwayHubCta}
             eventProps={{ ...linkCtx, surface: "np_premium_integration", link_target: "cases", pathway_id: pathway.id }}
@@ -414,10 +419,10 @@ export function NpPremiumHubWorkstation({
           </MarketingTrackedLink>
           <MarketingTrackedLink
             href={oscePublic ? wrapApp(osceHref, viewerSignedIn) : buildExamPathwayPath(pathway)}
-            className={`rounded-full border px-4 py-2 text-xs font-semibold ${
+            className={`rounded-full border px-4 py-2 text-xs font-semibold transition-colors ${
               oscePublic
-                ? "border-[color-mix(in_srgb,var(--semantic-chart-5)_30%,var(--semantic-border-soft))] text-[var(--semantic-chart-5)] hover:bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,transparent)]"
-                : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)]"
+                ? "border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] text-[var(--semantic-brand)] hover:border-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,transparent)]"
+                : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] opacity-60"
             }`}
             event={PH.marketingPathwayHubCta}
             eventProps={{ ...linkCtx, surface: "np_premium_integration", link_target: "osce", pathway_id: pathway.id }}
@@ -427,6 +432,7 @@ export function NpPremiumHubWorkstation({
         </div>
       </section>
 
+      {/* ── Quick launch grid ── */}
       <section aria-labelledby="np-premium-quick-launch">
         <h2 id="np-premium-quick-launch" className="nn-marketing-h3 text-[var(--palette-heading)]">
           {t("components.examPathwayHub.npPremium.quickLaunchTitle")}
@@ -434,7 +440,7 @@ export function NpPremiumHubWorkstation({
         {!viewerSignedIn ? (
           <p className="nn-marketing-body-sm mt-2 text-[var(--semantic-text-secondary)]">{t("components.examPathwayHub.npPremium.guestSignInHint")}</p>
         ) : null}
-        <ul className="mt-4 grid list-none grid-cols-2 gap-3 p-0 min-[480px]:grid-cols-3 lg:grid-cols-4">
+        <ul className="mt-4 grid list-none grid-cols-2 gap-2.5 p-0 min-[480px]:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {quickTiles.map((tile) => {
             const Icon = tile.icon;
             const locked = tile.locked === true;
@@ -443,20 +449,23 @@ export function NpPremiumHubWorkstation({
                 <Link
                   href={tile.href}
                   prefetch={tile.prefetch === false ? false : undefined}
-                  className={`flex min-h-[5.5rem] flex-col justify-between rounded-xl border p-3 text-left transition-colors ${
+                  className={`flex min-h-[4.5rem] flex-col justify-between rounded-xl border p-3.5 transition-all ${
                     locked
-                      ? "border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-text-secondary)_6%,var(--semantic-surface))] text-[var(--semantic-text-secondary)]"
-                      : "border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))]"
+                      ? "border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-text-secondary)_4%,var(--semantic-surface))] opacity-60"
+                      : "border-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] hover:shadow-[0_1px_8px_-2px_color-mix(in_srgb,var(--semantic-brand)_14%,transparent)]"
                   }`}
                   aria-disabled={locked}
                 >
-                  <span className="flex items-center gap-2">
-                    <Icon className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
-                    <span className="text-xs font-bold leading-snug text-[var(--palette-heading)]">{tile.label}</span>
-                  </span>
-                  <span className="mt-2 text-[0.65rem] font-semibold text-[var(--semantic-brand)]">
-                    {locked ? t("components.examPathwayHub.premiumModules.comingSoonCta") : "→"}
-                  </span>
+                  <Icon
+                    className={`h-4 w-4 shrink-0 ${locked ? "text-[var(--semantic-text-secondary)]" : "text-[var(--semantic-brand)]"}`}
+                    aria-hidden
+                  />
+                  <span className="mt-2 text-xs font-bold leading-snug text-[var(--palette-heading)]">{tile.label}</span>
+                  {locked ? (
+                    <span className="mt-1 text-[0.6rem] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                      {t("components.examPathwayHub.premiumModules.comingSoonCta")}
+                    </span>
+                  ) : null}
                 </Link>
               </li>
             );

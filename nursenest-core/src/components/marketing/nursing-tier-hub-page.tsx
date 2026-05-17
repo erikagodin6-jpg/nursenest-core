@@ -234,12 +234,12 @@ export function NursingTierHubPage({
                 }
               />
               <div
-                className="flex min-w-0 flex-col gap-3 sm:gap-4"
+                className="flex min-w-0 flex-col gap-4 sm:gap-5"
                 data-nn-pn-hub-insight-rail="1"
                 aria-label={t("components.examPathwayHub.pnMarketingHub.insightRailAria")}
               >
-                <LearnerSurfaceCard variant="secondary" className="p-4 sm:p-5">
-                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-[var(--semantic-success)]">
+                <LearnerSurfaceCard variant="secondary" className="p-5 sm:p-6 shadow-[var(--semantic-shadow-soft)]">
+                  <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-success)]">
                     {t("components.examPathwayHub.pnMarketingHub.panelPriorKicker")}
                   </p>
                   <p className="mt-2 nn-marketing-h4 text-[var(--palette-heading)]">
@@ -259,13 +259,13 @@ export function NursingTierHubPage({
                       destination_type: "marketing_questions",
                       link_target: "prioritization_lane",
                     }}
-                    className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                    className="mt-4 inline-flex items-center gap-1 text-[13px] font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
                   >
                     {t("components.examPathwayHub.pnMarketingHub.panelPriorCta")}
                   </MarketingTrackedLink>
                 </LearnerSurfaceCard>
-                <LearnerSurfaceCard variant="minimal" className="p-4 sm:p-5">
-                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-[var(--semantic-info)]">
+                <LearnerSurfaceCard variant="secondary" className="p-5 sm:p-6 shadow-[var(--semantic-shadow-soft)]">
+                  <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-info)]">
                     {t("components.examPathwayHub.pnMarketingHub.panelWorkflowKicker")}
                   </p>
                   <p className="mt-2 nn-marketing-h4 text-[var(--palette-heading)]">
@@ -285,13 +285,13 @@ export function NursingTierHubPage({
                       destination_type: "marketing_lessons",
                       link_target: "workflow_lane",
                     }}
-                    className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                    className="mt-4 inline-flex items-center gap-1 text-[13px] font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
                   >
                     {t("components.examPathwayHub.pnMarketingHub.panelWorkflowCta")}
                   </MarketingTrackedLink>
                 </LearnerSurfaceCard>
-                <LearnerSurfaceCard variant="secondary" className="border-[color-mix(in_srgb,var(--semantic-chart-5)_22%,var(--semantic-border-soft))] p-4 sm:p-5">
-                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-[var(--semantic-chart-5)]">
+                <LearnerSurfaceCard variant="secondary" className="p-5 sm:p-6 shadow-[var(--semantic-shadow-soft)]">
+                  <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
                     {t("components.examPathwayHub.pnMarketingHub.panelNgnKicker")}
                   </p>
                   <p className="mt-2 nn-marketing-h4 text-[var(--palette-heading)]">
@@ -311,7 +311,7 @@ export function NursingTierHubPage({
                       destination_type: "app_ngn_mixed",
                       link_target: "ngn_mixed_bank",
                     }}
-                    className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                    className="mt-4 inline-flex items-center gap-1 text-[13px] font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
                     prefetch={false}
                   >
                     {t("components.examPathwayHub.pnMarketingHub.panelNgnCta")}
@@ -342,34 +342,37 @@ export function NursingTierHubPage({
           {pnHub && !npPremiumConvergence ? (
             <div className="mt-10 space-y-8" data-nn-pn-hub-readiness-band="1">
               <div>
-                <h2 className="nn-marketing-h2 text-balance text-[var(--palette-heading)]">
+                <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
+                  Exam-ready system
+                </p>
+                <h2 className="nn-marketing-h2 mt-2 text-balance text-[var(--palette-heading)]">
                   {t("components.examPathwayHub.pnMarketingHub.readinessHeading")}
                 </h2>
-                <p className="nn-marketing-body-sm mt-2 max-w-3xl text-pretty text-[var(--semantic-text-secondary)]">
+                <p className="nn-marketing-body-sm mt-3 max-w-3xl text-pretty text-[var(--semantic-text-secondary)]">
                   {t("components.examPathwayHub.pnMarketingHub.readinessLead")}
                 </p>
-                <ul className="mt-5 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-3">
-                  <li className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_14%,var(--semantic-surface))] p-4 sm:p-5">
-                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[var(--semantic-success)]">
+                <ul className="mt-6 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-3">
+                  <li className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]">
+                    <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-success)]">
                       {t("components.examPathwayHub.pnMarketingHub.metricPassingLabel")}
                     </p>
-                    <p className="mt-2 text-sm font-semibold leading-snug text-[var(--palette-heading)]">
+                    <p className="mt-2 text-[15px] font-bold leading-snug text-[var(--palette-heading)]">
                       {t("components.examPathwayHub.pnMarketingHub.metricPassingValue")}
                     </p>
                   </li>
-                  <li className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] p-4 sm:p-5">
-                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[var(--semantic-info)]">
+                  <li className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]">
+                    <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-info)]">
                       {t("components.examPathwayHub.pnMarketingHub.metricVolumeLabel")}
                     </p>
-                    <p className="mt-2 text-sm font-semibold leading-snug text-[var(--palette-heading)]">
+                    <p className="mt-2 text-[15px] font-bold leading-snug text-[var(--palette-heading)]">
                       {t("components.examPathwayHub.pnMarketingHub.metricVolumeValue")}
                     </p>
                   </li>
-                  <li className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_12%,var(--semantic-surface))] p-4 sm:p-5">
-                    <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[var(--semantic-chart-3)]">
+                  <li className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]">
+                    <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-chart-5)]">
                       {t("components.examPathwayHub.pnMarketingHub.metricAccuracyLabel")}
                     </p>
-                    <p className="mt-2 text-sm font-semibold leading-snug text-[var(--palette-heading)]">
+                    <p className="mt-2 text-[15px] font-bold leading-snug text-[var(--palette-heading)]">
                       {t("components.examPathwayHub.pnMarketingHub.metricAccuracyValue")}
                     </p>
                   </li>
@@ -378,9 +381,9 @@ export function NursingTierHubPage({
 
               <LearnerSurfaceCard
                 variant="secondary"
-                className="border-[color-mix(in_srgb,var(--semantic-chart-4)_20%,var(--semantic-border-soft))] p-4 sm:p-6"
+                className="border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] p-5 sm:p-6 shadow-[var(--semantic-shadow-soft)]"
               >
-                <p className="text-[0.65rem] font-bold uppercase tracking-[0.15em] text-[var(--semantic-chart-4)]">
+                <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
                   {t("components.examPathwayHub.pnMarketingHub.adaptiveKicker")}
                 </p>
                 <p className="mt-2 nn-marketing-h4 text-[var(--palette-heading)]">
@@ -406,28 +409,30 @@ export function NursingTierHubPage({
                 </MarketingTrackedLink>
               </LearnerSurfaceCard>
 
-              <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_6%,var(--semantic-surface))] p-4 sm:p-5">
-                <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[var(--semantic-warning)]">
+              <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_5%,var(--semantic-surface))] p-5 sm:p-6 shadow-[var(--semantic-shadow-soft)]">
+                <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-info)]">
                   {t("components.examPathwayHub.pnMarketingHub.remediationKicker")}
                 </p>
-                <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
+                <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
                   {t("components.examPathwayHub.pnMarketingHub.remediationLead")}
                 </p>
                 <ul className="mt-3 flex list-none flex-wrap gap-2 p-0">
-                  <li className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-5)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-5)_10%,var(--semantic-surface))] px-3 py-1.5 text-xs font-medium text-[var(--palette-heading)]">
+                  <li className="rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_9%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--palette-heading)]">
                     {t("components.examPathwayHub.pnMarketingHub.remediationChip1")}
                   </li>
-                  <li className="rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-1)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_10%,var(--semantic-surface))] px-3 py-1.5 text-xs font-medium text-[var(--palette-heading)]">
+                  <li className="rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_9%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--palette-heading)]">
                     {t("components.examPathwayHub.pnMarketingHub.remediationChip2")}
                   </li>
-                  <li className="rounded-full border border-[color-mix(in_srgb,var(--semantic-danger)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-1.5 text-xs font-medium text-[var(--palette-heading)]">
+                  <li className="rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_9%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--palette-heading)]">
                     {t("components.examPathwayHub.pnMarketingHub.remediationChip3")}
                   </li>
                 </ul>
-                <p className="mt-4 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
+              </div>
+              <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] p-5 sm:p-6 shadow-[var(--semantic-shadow-soft)]">
+                <p className="text-[0.6rem] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">
                   {t("components.examPathwayHub.pnMarketingHub.studyPlanKicker")}
                 </p>
-                <p className="mt-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
                   {t("components.examPathwayHub.pnMarketingHub.studyPlanBody")}
                 </p>
               </div>
