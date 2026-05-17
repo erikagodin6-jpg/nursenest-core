@@ -1,0 +1,72 @@
+name: Seed year-long SEO blogs
+
+on:
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Number of days to schedule. Use 30 first, then 180/365 after review."
+        required: true
+        default: "30"
+      start_date:
+        description: "Optional Toronto start date in YYYY-MM-DD. Leave blank for tomorrow."
+        required: false
+        default: ""
+      dry_run:
+        description: "Run without writing BlogPost rows."
+        required: true
+        type: boolean
+        default: true
+
+concurrency:
+  group: seed-year-long-seo-blogs
+  cancel-in-progress: false
+
+jobs:
+  seed:
+    name: Seed scheduled blog posts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: nursenest-core
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DIRECT_URL: ${{ secrets.DIRECT_URL }}
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate scheduler contract
+        run: node --import tsx --test src/lib/blog/year-long-seo-schedule-seed.contract.test.ts
+
+      - name: Dry-run schedule preview
+        if: ${{ inputs.dry_run == true }}
+        run: |
+          EXTRA=""
+          if [ -n "${{ inputs.start_date }}" ]; then EXTRA="--start=${{ inputs.start_date }}"; fi
+          npx tsx scripts/blog/seed-year-long-seo-blog-schedule-v2.mts --dry-run --days=${{ inputs.days }} $EXTRA
+
+      - name: Apply scheduled BlogPost rows
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "DATABASE_URL secret is required to seed production BlogPost rows."
+            exit 1
+          fi
+          EXTRA=""
+          if [ -n "${{ inputs.start_date }}" ]; then EXTRA="--start=${{ inputs.start_date }}"; fi
+          npx tsx scripts/blog/seed-year-long-seo-blog-schedule-v2.mts --apply --days=${{ inputs.days }} $EXTRA
