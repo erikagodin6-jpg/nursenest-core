@@ -96,12 +96,47 @@ type LazyWhenVisibleProps = {
   rootMargin?: string;
 };
 
+function runAfterInitialPaint(callback: () => void): () => void {
+  let cancelled = false;
+  let timeoutId = 0;
+  let idleId: number | null = null;
+
+  const run = () => {
+    if (cancelled) return;
+    callback();
+  };
+
+  timeoutId = window.setTimeout(() => {
+    if ("requestIdleCallback" in window) {
+      idleId = window.requestIdleCallback(run, { timeout: 2500 });
+      return;
+    }
+    run();
+  }, 2200);
+
+  return () => {
+    cancelled = true;
+    window.clearTimeout(timeoutId);
+    if (idleId !== null && "cancelIdleCallback" in window) {
+      window.cancelIdleCallback(idleId);
+    }
+  };
+}
+
+function IdleAfterPaint({ children }: { children: ReactNode }) {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => runAfterInitialPaint(() => setReady(true)), []);
+
+  return ready ? <>{children}</> : null;
+}
+
 /**
  * Defers below-fold client chunks until the user is close to them.
  * This directly attacks Lighthouse TBT by avoiding immediate execution of the
  * carousel/ECG/pathway/readiness/social chunks while preserving page height.
  */
-function LazyWhenVisible({ children, fallback, rootMargin = "900px 0px" }: LazyWhenVisibleProps) {
+function LazyWhenVisible({ children, fallback, rootMargin = "360px 0px" }: LazyWhenVisibleProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [visible, setVisible] = useState(false);
 
@@ -111,7 +146,7 @@ function LazyWhenVisible({ children, fallback, rootMargin = "900px 0px" }: LazyW
     if (!node) return;
 
     if (!("IntersectionObserver" in window)) {
-      const id = window.setTimeout(() => setVisible(true), 1200);
+      const id = window.setTimeout(() => setVisible(true), 2200);
       return () => window.clearTimeout(id);
     }
 
@@ -167,12 +202,14 @@ export default function HomeRestoredClient({
 
   return (
     <div className="font-sans flex w-full min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)] nn-home-marketing-root">
-      <FunnelHomepageViewBeaconLazy marketingRegion={normalizedMarketingRegion} marketingLocale={locale} />
+      <IdleAfterPaint>
+        <FunnelHomepageViewBeaconLazy marketingRegion={normalizedMarketingRegion} marketingLocale={locale} />
+      </IdleAfterPaint>
 
       {/* HERO — server island; no above-fold homepage section hydration. */}
       {heroSlot}
 
-      <LazyWhenVisible fallback={<HomeHeroScreenshotSectionSkeleton />} rootMargin="1100px 0px">
+      <LazyWhenVisible fallback={<HomeHeroScreenshotSectionSkeleton />} rootMargin="480px 0px">
         <HomeHeroScreenshotSectionLazy serverPreparedSlides={homeHeroCarouselSlides} />
       </LazyWhenVisible>
 
