@@ -4,6 +4,50 @@ import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professi
 export const NURSING_SCOPED_CAREER_SLUGS = ["rn", "pn", "np"] as const;
 export type NursingScopedCareerSlug = (typeof NURSING_SCOPED_CAREER_SLUGS)[number];
 
+/**
+ * Regional and specialty blog authority cluster slugs.
+ * These route to dedicated `/blog/{slug}/` index+detail trees rather than the generic `/nursing/{slug}/blog` pattern.
+ * Kept separate from `NURSING_SCOPED_CAREER_SLUGS` to avoid breaking existing routing.
+ */
+export const REGIONAL_BLOG_CLUSTER_SLUGS = [
+  "canada-rn",
+  "us-rn",
+  "rex-pn",
+  "nclex-pn",
+] as const;
+export type RegionalBlogClusterSlug = (typeof REGIONAL_BLOG_CLUSTER_SLUGS)[number];
+
+const REGIONAL_BLOG_BASE: Record<RegionalBlogClusterSlug, string> = {
+  "canada-rn": "/blog/canada-rn",
+  "us-rn": "/blog/us-rn",
+  "rex-pn": "/blog/rex-pn",
+  "nclex-pn": "/blog/nclex-pn",
+};
+
+const REGIONAL_BLOG_LABELS: Record<RegionalBlogClusterSlug, { h1: string; short: string; examShort: string }> = {
+  "canada-rn": { h1: "Canada RN (NCLEX-RN)", short: "Canada RN", examShort: "NCLEX-RN (Canada)" },
+  "us-rn": { h1: "US Registered Nurse (NCLEX-RN)", short: "US RN", examShort: "NCLEX-RN (United States)" },
+  "rex-pn": { h1: "REx-PN (Canada RPN)", short: "REx-PN / RPN", examShort: "REx-PN" },
+  "nclex-pn": { h1: "NCLEX-PN (US LPN / LVN)", short: "LPN / LVN", examShort: "NCLEX-PN" },
+};
+
+export function isRegionalBlogClusterSlug(slug: string | null | undefined): slug is RegionalBlogClusterSlug {
+  if (!slug) return false;
+  return (REGIONAL_BLOG_CLUSTER_SLUGS as readonly string[]).includes(slug.trim().toLowerCase());
+}
+
+export function regionalBlogClusterBase(slug: RegionalBlogClusterSlug): string {
+  return REGIONAL_BLOG_BASE[slug];
+}
+
+export function regionalBlogClusterLabels(slug: RegionalBlogClusterSlug): {
+  h1: string;
+  short: string;
+  examShort: string;
+} {
+  return REGIONAL_BLOG_LABELS[slug];
+}
+
 const NURSING_LABELS: Record<NursingScopedCareerSlug, { h1: string; short: string }> = {
   rn: { h1: "Registered Nurse (RN)", short: "RN" },
   pn: { h1: "Practical Nurse / RPN", short: "PN / RPN" },
@@ -59,6 +103,16 @@ export type GeneratedBlogPathPlan = {
 export function expectedGeneratedBlogPaths(row: { slug: string; careerSlug: string | null }): GeneratedBlogPathPlan {
   const slug = row.slug.trim();
   const cs = row.careerSlug?.trim().toLowerCase() ?? null;
+
+  // Regional/specialty clusters route to dedicated `/blog/{cluster}/` trees.
+  if (cs && isRegionalBlogClusterSlug(cs)) {
+    const base = REGIONAL_BLOG_BASE[cs as RegionalBlogClusterSlug];
+    return {
+      expectedPublicBlogPath: base,
+      expectedDetailPath: `${base}/${encodeURIComponent(slug)}`,
+      scopedListPath: base,
+    };
+  }
 
   if (cs === "rn") {
     const base = "/blog/rn";

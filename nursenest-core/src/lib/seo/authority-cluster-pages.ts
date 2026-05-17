@@ -1,6 +1,6 @@
 import { CNPLE_INVENTORY } from "@/lib/marketing/cnple-inventory-metrics";
 
-export type AuthorityClusterKey = "cnple" | "rex-pn" | "respiratory-therapy";
+export type AuthorityClusterKey = "cnple" | "rex-pn" | "respiratory-therapy" | "ca-rn" | "np-fnp" | "np-agpcnp" | "np-pmhnp" | "np-whnp" | "np-pnp-pc";
 
 export type AuthorityClusterPage = {
   cluster: AuthorityClusterKey;
@@ -35,6 +35,12 @@ export type AuthorityClusterPage = {
 const CNPLE_BASE = "/canada/np/cnple";
 const REX_BASE = "/canada/rpn/rex-pn";
 const RT_BASE = "/allied-health/respiratory-therapy";
+const CA_RN_BASE = "/canada-nclex-rn";
+const NP_FNP_BASE = "/np-specialty/fnp";
+const NP_AGPCNP_BASE = "/np-specialty/agpcnp";
+const NP_PMHNP_BASE = "/np-specialty/pmhnp";
+const NP_WHNP_BASE = "/np-specialty/whnp";
+const NP_PNP_PC_BASE = "/np-specialty/pnp-pc";
 
 const cnpleCtas = [
   { label: "CNPLE practice questions", href: `${CNPLE_BASE}/questions` },
@@ -55,6 +61,48 @@ const rtCtas = [
   { label: "Respiratory therapy lessons", href: "/allied/allied-health/lessons?alliedProfession=respiratory" },
   { label: "ABG drills", href: `${RT_BASE}/abgs` },
   { label: "Ventilator training", href: "/respiratory-therapy/ventilator-training" },
+] as const;
+
+const caRnCtas = [
+  { label: "NCLEX-RN practice questions", href: `/canada/rn/nclex-rn/questions` },
+  { label: "NCLEX-RN lessons", href: `/canada/rn/nclex-rn/lessons` },
+  { label: "NCLEX-RN CAT exam", href: `/canada/rn/nclex-rn/cat` },
+  { label: "NCLEX-RN flashcards", href: `/canada/rn/nclex-rn/flashcards` },
+] as const;
+
+const npFnpCtas = [
+  { label: "FNP practice questions", href: `/en/np/fnp/questions` },
+  { label: "FNP lessons", href: `/en/np/fnp/lessons` },
+  { label: "FNP pharmacology", href: `/en/np/fnp/pharmacology` },
+  { label: "FNP simulation", href: `/en/np/fnp/simulation` },
+] as const;
+
+const npAgpcnpCtas = [
+  { label: "AGPCNP practice questions", href: `/en/np/agpcnp/questions` },
+  { label: "AGPCNP lessons", href: `/en/np/agpcnp/lessons` },
+  { label: "AGPCNP pharmacology", href: `/en/np/agpcnp/pharmacology` },
+  { label: "AGPCNP simulation", href: `/en/np/agpcnp/simulation` },
+] as const;
+
+const npPmhnpCtas = [
+  { label: "PMHNP practice questions", href: `/en/np/pmhnp/questions` },
+  { label: "PMHNP lessons", href: `/en/np/pmhnp/lessons` },
+  { label: "PMHNP pharmacology", href: `/en/np/pmhnp/pharmacology` },
+  { label: "PMHNP simulation", href: `/en/np/pmhnp/simulation` },
+] as const;
+
+const npWhnpCtas = [
+  { label: "WHNP practice questions", href: `/en/np/whnp/questions` },
+  { label: "WHNP lessons", href: `/en/np/whnp/lessons` },
+  { label: "WHNP pharmacology", href: `/en/np/whnp/pharmacology` },
+  { label: "WHNP simulation", href: `/en/np/whnp/simulation` },
+] as const;
+
+const npPnpPcCtas = [
+  { label: "PNP-PC practice questions", href: `/en/np/pnp-pc/questions` },
+  { label: "PNP-PC lessons", href: `/en/np/pnp-pc/lessons` },
+  { label: "PNP-PC pharmacology", href: `/en/np/pnp-pc/pharmacology` },
+  { label: "PNP-PC simulation", href: `/en/np/pnp-pc/simulation` },
 ] as const;
 
 function pagePath(base: string, slug: string): string {
@@ -127,6 +175,156 @@ function commonFaq(exam: string, questionHref: string, format: string): Authorit
         question: "What topics are most important on the REx-PN?",
         answer:
           "Prioritization, safety, medication administration, infection control, delegation, therapeutic communication, and physiological adaptation are consistently high-yield because they appear across many client-needs categories.",
+      },
+    ];
+  }
+  if (exam === "NCLEX-RN") {
+    return [
+      ...base,
+      {
+        question: "Is the NCLEX-RN adaptive?",
+        answer:
+          "Yes. The NCLEX-RN uses computerized adaptive testing (CAT). Candidates should prepare with both targeted remediation by client needs category and CAT-style mixed sessions that train pacing, uncertainty tolerance, and disciplined answer selection when item difficulty changes.",
+      },
+      {
+        question: "How many questions are on the NCLEX-RN?",
+        answer:
+          "The NCLEX-RN uses a variable-length adaptive format. Candidates should prepare for stamina and sustained clinical reasoning across a full session rather than aiming for a fixed number of items.",
+      },
+      {
+        question: "What are Next Generation NCLEX items?",
+        answer:
+          "NGN items include bow-tie, extended drag-and-drop, highlight, and extended multiple-response formats. They test clinical judgment more explicitly than traditional single-best-answer items. Preparation should include practising cue recognition, analysis, prioritization, and action selection across all item types.",
+      },
+      {
+        question: "How long should I study for the NCLEX-RN?",
+        answer:
+          "Most candidates benefit from an 8 to 12 week plan combining a baseline diagnostic, client needs category review, pharmacology, clinical judgment practice, CAT simulation, and NGN item familiarity. The key is keeping active recall — timed question practice — in every week, not just the final stretch.",
+      },
+    ];
+  }
+  if (exam === "FNP") {
+    return [
+      ...base,
+      {
+        question: "What is the FNP certification exam?",
+        answer:
+          "FNP certification is offered by AANP (the Family Nurse Practitioner certification) and ANCC (the Family Nurse Practitioner board certification). Both exams test primary care clinical decision-making across the lifespan, including diagnosis, pharmacology, prevention, and patient education.",
+      },
+      {
+        question: "How long should I study for the FNP exam?",
+        answer:
+          "Most FNP candidates benefit from an 8 to 12 week preparation plan that covers all primary care systems, prescribing safety, prevention guidelines, and mixed timed simulation. Candidates with weaker pharmacology backgrounds should add a dedicated prescribing safety rotation.",
+      },
+      {
+        question: "What is the hardest part of the FNP exam?",
+        answer:
+          "Most candidates find pharmacology and multi-system cases the most challenging because both require integrating multiple clinical variables simultaneously. Practising multi-condition vignettes after mastering single-system prescribing builds the integrative reasoning the exam rewards.",
+      },
+      {
+        question: "Is FNP or AGPCNP better for primary care?",
+        answer:
+          "Both FNP and AGPCNP certifications prepare NPs for primary care. FNP covers the full lifespan including pediatric and obstetric primary care. AGPCNP focuses on adults and older adults. The right choice depends on your clinical setting and patient population.",
+      },
+    ];
+  }
+  if (exam === "AGPCNP") {
+    return [
+      ...base,
+      {
+        question: "What does the AGPCNP exam test?",
+        answer:
+          "The AGPCNP exam tests adult and older adult primary care, including chronic disease management, geriatric assessment, polypharmacy, Beers criteria, preventive care, and end-of-life considerations. Candidates need fluency in both adult and geriatric clinical reasoning.",
+      },
+      {
+        question: "How is the AGPCNP different from the FNP?",
+        answer:
+          "AGPCNP focuses on adults (18+) and older adults, with a strong geriatric component including frailty assessment, Beers-listed medications, and atypical presentations. FNP covers the full lifespan. AGPCNP preparation should include a dedicated geriatric rotation.",
+      },
+      {
+        question: "How long should I study for the AGPCNP exam?",
+        answer:
+          "Most AGPCNP candidates benefit from 8 to 12 weeks of structured preparation covering adult systems, geriatric syndromes, Beers criteria, polypharmacy, and mixed timed practice. A geriatric-specific week early in the plan improves integration.",
+      },
+      {
+        question: "What are Beers criteria and why do they matter for AGPCNP?",
+        answer:
+          "Beers criteria identify medications that are potentially inappropriate for older adults due to increased risk of adverse effects, falls, cognitive impairment, or drug-disease interactions. AGPCNP candidates must recognize Beers-listed drugs and understand why they are problematic in older patients.",
+      },
+    ];
+  }
+  if (exam === "PMHNP") {
+    return [
+      ...base,
+      {
+        question: "What does the PMHNP exam test?",
+        answer:
+          "The PMHNP exam tests psychiatric-mental health NP competencies including DSM-based diagnosis, mental status examination, risk assessment, psychopharmacology, therapeutic modalities, and safety planning. Both prescribing safety and therapeutic relationship skills are tested.",
+      },
+      {
+        question: "How long should I study for the PMHNP exam?",
+        answer:
+          "Most PMHNP candidates benefit from 8 to 12 weeks of preparation that front-loads DSM diagnostic criteria and risk assessment before layering pharmacology and case-based practice. Psychopharmacology is highest-yield and should appear in every study week.",
+      },
+      {
+        question: "What is the hardest part of the PMHNP exam?",
+        answer:
+          "Diagnostic accuracy and psychopharmacology are consistently the most challenging areas because both require precise reasoning under uncertainty. Candidates who separate diagnostic reasoning from management reasoning — naming the diagnosis first, then choosing the intervention — perform more consistently.",
+      },
+      {
+        question: "How do I study psychopharmacology for the PMHNP exam?",
+        answer:
+          "Practise each drug class with its monitoring protocol alongside its indication and contraindications. Lithium levels, metabolic panels for antipsychotics, LFTs for valproate, and QTc monitoring for certain agents are recurring exam targets. Pair every medication miss with a monitoring-requirement flashcard.",
+      },
+    ];
+  }
+  if (exam === "WHNP") {
+    return [
+      ...base,
+      {
+        question: "What does the WHNP exam test?",
+        answer:
+          "The WHNP exam tests women's health primary care across the lifespan, including reproductive health, contraception, STI management, prenatal and postpartum care, menopause, cancer screening, bone health, and cardiovascular risk reduction for women.",
+      },
+      {
+        question: "How long should I study for the WHNP exam?",
+        answer:
+          "Most WHNP candidates benefit from 8 to 12 weeks of preparation divided into reproductive, obstetric, and preventive study rotations. Candidates should practise contraindication-heavy vignettes early because pharmacology safety is tested throughout all WHNP content areas.",
+      },
+      {
+        question: "What is the hardest part of the WHNP exam?",
+        answer:
+          "Contraindications to hormonal therapies and prenatal pharmacology safety are consistently challenging because multiple patient factors — age, smoking status, BMI, comorbidities, and reproductive goals — must all be weighed simultaneously. Multi-factor vignettes are the highest-yield practice format.",
+      },
+      {
+        question: "What pregnancy safety categories should I know for the WHNP?",
+        answer:
+          "WHNP candidates should know which commonly prescribed medications carry teratogenic risk, which are considered safe in pregnancy, and which require risk-benefit discussions. Folate supplementation, iron, prenatal vitamins, and common antibiotic safety in pregnancy are recurring exam topics.",
+      },
+    ];
+  }
+  if (exam === "PNP-PC") {
+    return [
+      ...base,
+      {
+        question: "What does the PNP-PC exam test?",
+        answer:
+          "The PNP-PC exam tests pediatric primary care competencies including developmental assessment, well-child care, immunization schedules, acute illness management, chronic disease management in children, and family-centered care. Reasoning must be age-indexed.",
+      },
+      {
+        question: "How long should I study for the PNP-PC exam?",
+        answer:
+          "Most PNP-PC candidates benefit from 8 to 12 weeks of preparation organized by developmental age group — newborn, infant, toddler, school-age, and adolescent — before integrating across age groups in mixed practice. Pharmacology and developmental milestones should appear in every study week.",
+      },
+      {
+        question: "What is the hardest part of the PNP-PC exam?",
+        answer:
+          "Age-specific reasoning is the most common source of errors — a finding that is normal in a 6-month-old is abnormal in a 2-year-old, and a medication safe in a school-age child is contraindicated in a toddler. Practising by developmental stage group builds the age-indexing reflex the exam requires.",
+      },
+      {
+        question: "What pediatric pharmacology do I need to know for the PNP-PC exam?",
+        answer:
+          "Weight-based dosing calculation, age-specific contraindications, and off-label use cautions are recurring targets. Aspirin in children under 18 (Reye's syndrome risk), fluoroquinolones in adolescents (cartilage risk), and tetracyclines before age 8 (tooth staining) are classic exam items.",
       },
     ];
   }
@@ -569,129 +767,4 @@ export const AUTHORITY_CLUSTER_PAGES: readonly AuthorityClusterPage[] = [
     ["Mixed client-needs sets", "Expose gaps across safety, psychosocial, health promotion, and physiological categories.", "Question bank"],
     ["Rationale review", "Turn each miss into a scope, priority, or content rule.", "Study plan"],
     ["CAT transition", "Move from targeted sets into adaptive-style mixed sessions.", "CAT simulation"],
-  ], "This is the strongest conversion page for REx-PN learners because question practice reveals whether the learner can apply safe practical-nursing judgment under pressure."),
-  buildRexPage("delegation-questions", "REx-PN delegation questions", "assignment, supervision, scope, and safety decisions for practical nursing", [
-    ["Scope", "Separate what the RPN can do, what requires RN/provider escalation, and what can be assigned.", "Client needs"],
-    ["Stability", "Delegate predictable tasks only when the client and outcome are stable.", "Priority questions"],
-    ["Follow-up", "Know what must be reported back and what requires reassessment.", "Practice questions"],
-  ], "Delegation questions work best when learners name the task, the client condition, and the supervision requirement before reading answer choices."),
-  buildRexPage("priority-questions", "REx-PN priority questions", "which client to see first, what to do next, and what finding changes urgency", [
-    ["Acuity", "Unstable, new, unexpected, or worsening findings outrank chronic stable problems.", "Practice questions"],
-    ["Frameworks", "ABCs, safety, infection risk, Maslow, and expected versus unexpected cues.", "Study guide"],
-    ["Scope", "Pick the action a Canadian practical nurse should take now.", "CAT simulation"],
-  ], "Priority pages attract high-intent searchers because prioritization feels unpredictable. The fix is not more acronyms; it is repeated cue-to-action practice."),
-  buildRexPage("pharmacology-questions", "REx-PN pharmacology questions bank", "medication administration, teaching, adverse effects, and safety checks", [
-    ["Pre-administration", "Allergy, vitals, labs, dose, route, rights, and client readiness.", "Pharmacology"],
-    ["Teaching", "Expected effects, side effects, missed doses, and when to call for help.", "Flashcards"],
-    ["Escalation", "Hold, clarify, or report when the medication is unsafe.", "Practice questions"],
-  ], "Medication questions convert when learners see a concrete safety check they missed. Pair the question block with flashcards for repeated medication cues."),
-  buildRexPage("study-plan", "REx-PN study plan", "a practical weekly REx-PN plan for client needs, CAT practice, and remediation", [
-    ["Week 1", "Baseline mixed diagnostic and client-needs miss log.", "Practice questions"],
-    ["Weeks 2-6", "Weak-category lessons, pharmacology, priority, and delegation drills.", "Study guide"],
-    ["Final weeks", "CAT simulation, mixed practice, and repeated-error cleanup.", "CAT exam"],
-  ], "A strong REx-PN plan is measurable: fewer repeated misses by client need, cleaner priority decisions, and steadier CAT performance."),
-  buildRexPage("cat-simulation", "REx-PN CAT simulation", "adaptive-style practice strategy, readiness signals, and exam stamina", [
-    ["Before CAT", "Repair known weak categories so the session measures readiness, not avoidable gaps.", "Study plan"],
-    ["During CAT", "Expect changing item difficulty and avoid emotional score-guessing.", "CAT exam"],
-    ["After CAT", "Sort misses by client need, topic, and reasoning error.", "Practice questions"],
-  ], "CAT simulation is a conversion-ready page because learners want readiness evidence. The safest message is honest: CAT practice works only when paired with remediation."),
-
-  buildRtPage("overview", "Respiratory therapy exam prep", "RT assessment, gas exchange, airway safety, and equipment decisions", [
-    ["Assessment", "Work of breathing, breath sounds, SpO2, mental status, and trend.", "Practice questions"],
-    ["Gas exchange", "ABG interpretation plus oxygenation and ventilation decisions.", "ABG practice"],
-    ["Intervention", "Oxygen device, airway support, ventilation, suctioning, or escalation.", "Lessons"],
-  ], "RT learners should practise interpretation plus action. Naming a disorder is only half of the exam task; the next safest step is the other half."),
-  buildRtPage("exam-prep", "Respiratory therapy exam prep plan", "weekly RT study structure with interpretation and interventions", [
-    ["Week 1", "Baseline ABG, oxygen, airway, and ventilation questions.", "Practice questions"],
-    ["Middle phase", "Target weak modalities with lessons and drills.", "Lessons"],
-    ["Final phase", "Mixed cases with equipment and reassessment decisions.", "Ventilator training"],
-  ], "A strong RT plan alternates calculations, interpretation, and scenario practice so formulas stay connected to clinical decisions."),
-  buildRtPage("practice-questions", "Respiratory therapy practice questions", "case-based RT questions with rationales", [
-    ["ABGs", "Acid-base, compensation, oxygenation, and next step.", "ABG drills"],
-    ["Airway", "Patency, suctioning, escalation, and safety checks.", "Airway management"],
-    ["Ventilation", "Settings, alarms, waveforms, and patient response.", "Mechanical ventilation"],
-  ], "After each question, decide whether the miss was interpretation, equipment knowledge, or escalation judgment. Those are different fixes."),
-  buildRtPage("abgs", "Respiratory therapy ABG practice questions", "ABG interpretation and clinical action", [
-    ["pH", "Acidemia or alkalemia as the starting point.", "Practice questions"],
-    ["PaCO2/HCO3", "Respiratory versus metabolic driver and compensation.", "Lessons"],
-    ["PaO2/SpO2", "Oxygenation problem and support decision.", "Oxygen therapy"],
-  ], "ABG mastery means linking numbers to the patient. A compensated result still requires clinical context before deciding whether to intervene."),
-  buildRtPage("ventilation", "Respiratory therapy ventilation fundamentals", "ventilation physiology, control of breathing, hypoventilation, and respiratory support decisions", [
-    ["Physiology", "Minute ventilation, dead space, V/Q ratio, and gas exchange.", "Practice questions"],
-    ["Hypoventilation", "Rising PaCO2, hypoxemia, and support escalation triggers.", "ABGs"],
-    ["Support", "NIV, high-flow, intubation decision, and reassessment.", "Oxygen therapy"],
-  ], "Ventilation fundamentals anchor the rest of RT decision-making. Connect physiology to ABG pattern before selecting or adjusting a support level."),
-  buildRtPage("mechanical-ventilation", "Mechanical ventilation review", "ventilator settings, alarms, graphics, and patient-ventilator safety", [
-    ["Settings", "Mode, tidal volume, rate, FiO2, PEEP, and pressure limits.", "Ventilator training"],
-    ["Alarms", "High pressure, low pressure, apnea, and disconnection reasoning.", "Practice questions"],
-    ["Graphics", "Synchrony, obstruction, leak, and auto-PEEP patterns.", "Waveform scenarios"],
-  ], "Ventilator questions reward cause-and-effect reasoning. Connect the alarm or waveform to patient assessment before changing a setting."),
-  buildRtPage("oxygen-therapy", "Oxygen therapy review", "device selection, titration, and safety", [
-    ["Device", "Nasal cannula, simple mask, Venturi, non-rebreather, high-flow, or NIV.", "Practice questions"],
-    ["Goal", "Target oxygenation without ignoring ventilation or fatigue.", "ABGs"],
-    ["Safety", "Fire risk, humidification, skin breakdown, and reassessment.", "Lessons"],
-  ], "Oxygen therapy is not just raising FiO2. Reassess work of breathing, CO2 retention risk, mental status, and whether a higher level of support is needed."),
-  buildRtPage("airway-management", "Airway management review", "airway assessment, suctioning, adjuncts, and escalation", [
-    ["Patency", "Obstruction, secretions, stridor, trauma, or altered mental status.", "Practice questions"],
-    ["Intervention", "Positioning, suction, adjunct, bag-mask, advanced airway, or escalation.", "Lessons"],
-    ["Reassessment", "Breath sounds, SpO2, ETCO2, chest rise, and patient response.", "Ventilator training"],
-  ], "Airway management questions often hinge on what must happen before equipment details: positioning, calling help, preoxygenation, and reassessment."),
-  buildRtPage("pulmonary-function-testing", "Pulmonary function testing review", "spirometry patterns, restriction, obstruction, and interpretation", [
-    ["Obstruction", "FEV1/FVC reduction, bronchodilator response, and symptom context.", "Practice questions"],
-    ["Restriction", "Reduced volumes and clinical correlation.", "Lessons"],
-    ["Quality", "Effort, repeatability, contraindications, and test coaching.", "Exam prep"],
-  ], "PFT interpretation should connect pattern to patient story. Do not label a curve without checking quality and clinical context."),
-  buildRtPage("abg-practice-questions", "ABG practice questions", "high-intent ABG interpretation questions for respiratory therapy students", [
-    ["Classification", "pH, PaCO2, HCO3, compensation, and oxygenation status.", "ABG drills"],
-    ["Clinical link", "Connect the ABG to work of breathing, mental status, and intervention.", "Practice questions"],
-    ["Reassessment", "Predict the ABG or SpO2 change after oxygen or ventilator support.", "Oxygen therapy"],
-  ], "ABG question pages attract learners with immediate pain. Keep the workflow simple: classify, connect to patient status, choose action, then reassess."),
-  buildRtPage("mechanical-ventilation-questions", "Mechanical ventilation questions", "ventilator settings, alarms, waveform reasoning, and safety decisions", [
-    ["Mode reasoning", "What the ventilator controls and what the patient contributes.", "Ventilator modes"],
-    ["Alarm response", "High pressure, low pressure, apnea, leak, obstruction, and disconnection.", "Mechanical ventilation"],
-    ["Lung protection", "Tidal volume, plateau pressure, PEEP, FiO2, and ARDS risk.", "ARDS review"],
-  ], "Ventilator question pages should make equipment feel clinical, not mechanical. Every setting must connect to gas exchange, pressure, synchrony, or safety."),
-  buildRtPage("oxygen-therapy-questions", "Oxygen therapy questions", "oxygen device selection, FiO2 targets, escalation, and reassessment", [
-    ["Device choice", "Nasal cannula, Venturi, non-rebreather, high-flow, CPAP, or BiPAP.", "Oxygen therapy"],
-    ["Target", "Oxygenation goal, COPD risk, and signs of ventilatory failure.", "ABG practice questions"],
-    ["Escalation", "When oxygen is insufficient and ventilatory or airway support is needed.", "Airway scenarios"],
-  ], "Oxygen pages convert because they tie quick device recall to real patient decisions. The answer is not always more FiO2; sometimes it is ventilation or airway support."),
-  buildRtPage("ventilator-modes", "Ventilator modes quick review", "volume control, pressure control, SIMV, pressure support, CPAP, and BiPAP", [
-    ["Volume control", "Preset tidal volume; pressure varies with compliance and resistance.", "Mechanical ventilation questions"],
-    ["Pressure control", "Preset pressure; tidal volume varies with mechanics.", "ARDS review"],
-    ["Spontaneous support", "Pressure support, CPAP, BiPAP, and weaning readiness.", "Practice questions"],
-  ], "Ventilator-mode content is backlinkable when it is practical. Learners need the mode, what changes, what stays controlled, and what alarm pattern matters."),
-  buildRtPage("ards-review", "ARDS review for respiratory therapy", "oxygenation failure, lung-protective ventilation, PEEP, and escalation", [
-    ["Recognition", "Refractory hypoxemia, bilateral infiltrates, low compliance, and high FiO2 needs.", "ABG questions"],
-    ["Lung protection", "Low tidal volume, plateau pressure monitoring, PEEP, and permissive hypercapnia.", "Ventilator modes"],
-    ["Escalation", "Proning, recruitment considerations, hemodynamics, and team escalation.", "Mechanical ventilation"],
-  ], "ARDS review should stay clinically grounded: oxygenation is the problem, but unsafe pressure strategy can create a second problem."),
-  buildRtPage("airway-management-scenarios", "Airway management scenarios", "suctioning, adjuncts, bag-mask ventilation, intubation preparation, and reassessment", [
-    ["Initial assessment", "Patency, obstruction, secretions, stridor, mental status, and work of breathing.", "Airway management"],
-    ["Intervention", "Position, suction, adjunct, BVM, advanced airway preparation, or escalation.", "Practice questions"],
-    ["Confirmation", "Chest rise, breath sounds, SpO2, ETCO2, and ongoing reassessment.", "Mechanical ventilation"],
-  ], "Scenario pages are high-value because airway decisions are time-sensitive. The right answer often starts before the advanced device: positioning, oxygenation, and calling help."),
-] as const;
-
-const byPath = new Map(AUTHORITY_CLUSTER_PAGES.map((page) => [page.path, page]));
-const byClusterSlug = new Map(AUTHORITY_CLUSTER_PAGES.map((page) => [`${page.cluster}:${page.slug}`, page]));
-
-export function listAuthorityClusterPages(): readonly AuthorityClusterPage[] {
-  return AUTHORITY_CLUSTER_PAGES;
-}
-
-export function listAuthorityClusterPaths(): string[] {
-  return AUTHORITY_CLUSTER_PAGES.map((page) => page.path);
-}
-
-export function getAuthorityClusterPageByPath(path: string): AuthorityClusterPage | undefined {
-  return byPath.get(path);
-}
-
-export function getAuthorityClusterPage(cluster: AuthorityClusterKey, slug: string): AuthorityClusterPage | undefined {
-  return byClusterSlug.get(`${cluster}:${slug}`);
-}
-
-export function listAuthorityClusterSiblings(page: AuthorityClusterPage): AuthorityClusterPage[] {
-  return AUTHORITY_CLUSTER_PAGES.filter((candidate) => candidate.cluster === page.cluster && candidate.path !== page.path);
-}
+  ], "This is the strongest conversion pa
