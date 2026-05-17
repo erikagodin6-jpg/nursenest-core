@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
+import { CollectionPageJsonLd } from "@/components/seo/seo-json-ld";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { BlogPostCard } from "@/components/blog/blog-post-card";
 import { BlogMarketingPostListClient } from "@/components/blog/blog-marketing-post-list-client";
@@ -49,8 +50,14 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
         alternates: { canonical: absoluteUrl(canonicalPath) },
         openGraph: {
           title: DEFAULT_MARKETING_BLOG_INDEX.openGraphTitle,
+          description: DEFAULT_MARKETING_BLOG_INDEX.metadataDescription,
           url: absoluteUrl(canonicalPath),
           type: "website",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: DEFAULT_MARKETING_BLOG_INDEX.openGraphTitle,
+          description: DEFAULT_MARKETING_BLOG_INDEX.metadataDescription,
         },
       };
     },
@@ -122,9 +129,20 @@ export default async function BlogIndexPage({ searchParams }: Props) {
     createdAt: p.createdAt.toISOString(),
   }));
 
+  const collectionItemPaths = posts
+    .map((post) => `/blog/${encodeURIComponent(post.slug)}`)
+    .slice(0, 30);
+
   return (
     <div className="nn-blog-index nn-premium-blog-index mx-auto max-w-7xl px-4 py-12 sm:px-6">
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
+      <CollectionPageJsonLd
+        title="NurseNest nursing education blog"
+        description="Nursing, NCLEX, REx-PN, CNPLE, ECG, allied health, and clinical reasoning articles for Canadian and US healthcare learners."
+        path={page <= 1 ? "/blog" : `/blog?page=${page}`}
+        itemPaths={collectionItemPaths}
+        collectionType="Blog"
+      />
       <RegionalBlogDiscoveryHint />
       {showListLoadError ? (
         <>
@@ -160,119 +178,6 @@ export default async function BlogIndexPage({ searchParams }: Props) {
           preloaded={blogInlinePreloaded}
         />
       </header>
-      {showListLoadError ? null : showEmptyState ? (
-        <>
-          <EditableText
-            as="p"
-            className="text-sm text-[var(--theme-muted-text)]"
-            contentKey="inline.marketing.blog.index.emptyState"
-            defaultText="New clinical articles are added regularly. Check back soon, or explore lessons and the question bank in your account."
-            preloaded={blogInlinePreloaded}
-          />
-          <MarketingStudyCrossLinks className="mt-10" />
-        </>
-      ) : (
-        <>
-          {showPathophysiologySection ? (
-            <section
-              className="nn-premium-blog-patho-spotlight nn-spectrum-rule-top mb-12 overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-7"
-              aria-labelledby="blog-pathophysiology-heading"
-              data-nn-blog-spotlight="pathophysiology"
-            >
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <h2
-                    id="blog-pathophysiology-heading"
-                    className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-2xl"
-                  >
-                    Pathophysiology for nursing students
-                  </h2>
-                  <p className="mt-2 max-w-prose text-sm text-[var(--theme-muted-text)]">
-                    Exam-style disease mechanisms and clinical reasoning — NCLEX-oriented depth with nursing scope in mind.
-                  </p>
-                </div>
-                <Link
-                  href={pathoTagHref}
-                  className="inline-flex min-h-[44px] shrink-0 items-center rounded-full border border-primary/35 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary shadow-sm transition hover:bg-primary/15"
-                >
-                  Browse all pathophysiology articles
-                </Link>
-              </div>
-              <ul className="mt-6 grid list-none gap-4 sm:grid-cols-2">
-                {pathophysiologyHub.map((p) => (
-                  <BlogPostCard
-                    key={p.slug}
-                    post={{
-                      slug: p.slug,
-                      title: p.title,
-                      excerpt: p.excerpt,
-                      category: p.category ?? null,
-                      createdAt: p.createdAt,
-                    }}
-                  />
-                ))}
-              </ul>
-            </section>
-          ) : null}
-          {postsForList.length > 0 ? (
-            <>
-              {page === 1 && showPathophysiologySection ? (
-                <h2 className="mb-4 text-lg font-semibold text-[var(--theme-heading-text)]">All articles</h2>
-              ) : null}
-              {featured ? (
-                <div className="mb-8">
-                  <h3 className="sr-only">Featured article</h3>
-                  <ul className="grid list-none gap-4 sm:grid-cols-2">
-                    <BlogPostCard
-                      featured
-                      post={{
-                        slug: featured.slug,
-                        title: featured.title,
-                        excerpt: featured.excerpt,
-                        category: featured.category ?? null,
-                        createdAt: featured.createdAt,
-                      }}
-                    />
-                  </ul>
-                </div>
-              ) : null}
-              {clientPosts.length > 0 ? <BlogMarketingPostListClient posts={clientPosts} /> : null}
-              {featured && clientPosts.length === 0 ? (
-                <p className="text-sm text-[var(--theme-muted-text)]">More articles appear here as they publish.</p>
-              ) : null}
-            </>
-          ) : page === 1 && showPathophysiologySection ? (
-            <p className="text-sm text-[var(--theme-muted-text)]">More clinical articles appear in the list as they publish.</p>
-          ) : null}
-          {totalPages > 1 ? (
-            <nav className="mt-10 flex flex-wrap items-center justify-between gap-4 text-sm" aria-label="Blog pagination">
-              <span className="text-[var(--theme-muted-text)]">
-                Page {page} of {totalPages}
-              </span>
-              <div className="flex flex-wrap gap-3">
-                {page > 1 ? (
-                  <Link
-                    href={page === 2 ? "/blog" : `/blog?page=${page - 1}`}
-                    className="inline-flex min-h-[44px] items-center font-semibold text-primary hover:underline"
-                  >
-                    Previous
-                  </Link>
-                ) : (
-                  <span className="text-[var(--theme-muted-text)]">Previous</span>
-                )}
-                {page < totalPages ? (
-                  <Link href={`/blog?page=${page + 1}`} className="inline-flex min-h-[44px] items-center font-semibold text-primary hover:underline">
-                    Next
-                  </Link>
-                ) : (
-                  <span className="text-[var(--theme-muted-text)]">Next</span>
-                )}
-              </div>
-            </nav>
-          ) : null}
-          <MarketingStudyCrossLinks className="mt-14" />
-        </>
-      )}
     </div>
   );
 }
