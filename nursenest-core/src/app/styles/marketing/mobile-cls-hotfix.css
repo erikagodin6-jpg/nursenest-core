@@ -94,6 +94,26 @@
     contain: paint;
   }
 
+  main img,
+  main picture,
+  main video,
+  main canvas,
+  main iframe {
+    max-width: 100%;
+    height: auto;
+    overflow: clip;
+  }
+
+  main :where(img, picture, video, canvas, iframe):not([data-nn-above-fold]):not([fetchpriority="high"]) {
+    content-visibility: auto;
+    contain: layout paint;
+  }
+
+  main :where([class*="overflow-x-auto"], [class*="overflow-x-scroll"], [class*="snap-x"]) {
+    overscroll-behavior-inline: contain;
+    scroll-behavior: auto !important;
+  }
+
   .nn-home-marketing-root :where(.nn-premium-card, .nn-hub-card, .nn-pathway-card, .nn-pricing-card, .nn-feature-card, .nn-stat-card, .nn-clinical-card),
   main :where(.nn-premium-card, .nn-hub-card, .nn-pathway-card, .nn-pricing-card, .nn-feature-card, .nn-stat-card, .nn-clinical-card),
   main :where([class*="shadow-"], [class*="backdrop-blur"], [class*="blur-"]) {
