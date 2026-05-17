@@ -1,0 +1,206 @@
+/* ======================================================================
+   learner-theme-whitespace.css
+   Theme-scoped spacing lift for learner hub + learning pages only.
+   Imported by the authenticated learner layout; never imported by marketing
+   or the public homepage.
+   ======================================================================= */
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app {
+  --nn-learner-page-gutter-x: clamp(1.125rem, 4vw, 2rem);
+  --nn-learner-section-gap: clamp(1.5rem, 3.5vw, 2.5rem);
+  --nn-learner-card-padding: clamp(1.25rem, 3vw, 2rem);
+  --nn-learner-card-padding-sm: clamp(1rem, 2.5vw, 1.5rem);
+  --nn-learner-hub-max: 76rem;
+  --nn-learner-reading-max: 62rem;
+}
+
+/* Learner shell breathing room. Scoped to /app only; homepage marketing shell is untouched. */
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app:not([data-learner-exam-chrome="hidden"]) {
+  padding-left: max(var(--nn-learner-page-gutter-x), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--nn-learner-page-gutter-x), env(safe-area-inset-right, 0px));
+}
+
+/* App hub pages: pathway hub, dashboard cards, lesson hub, bank panels. */
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app :where(
+  [data-nn-nursing-tier-hub="surface"],
+  .nn-premium-pathway-hub,
+  .nn-learner-account-workspace,
+  .nn-learner-dashboard-hero
+) {
+  max-width: min(var(--nn-learner-hub-max), 100%);
+}
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app :where(
+  [data-nn-nursing-tier-hub="surface"],
+  .nn-premium-pathway-hub
+) {
+  padding-top: clamp(2rem, 4vw, 3.25rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app :where(
+  .nn-study-card,
+  .nn-exam-hub-conversion,
+  .nn-lesson-section-nav,
+  .nn-lesson-section-nav-mobile,
+  .nn-lesson-study-loop--learner,
+  .nn-practice-q-card,
+  .nn-practice-rationale-full,
+  .nn-practice-rationale-panel,
+  .nn-cat-question-card,
+  .nn-cat-rationale-card
+) {
+  padding: var(--nn-learner-card-padding-sm);
+}
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app :where(
+  .nn-study-card + .nn-study-card,
+  .nn-study-card + section,
+  section + .nn-study-card,
+  .nn-exam-hub-conversion,
+  .nn-cat-results__section
+) {
+  margin-top: var(--nn-learner-section-gap);
+}
+
+/* Learning pages: wider outside gutters, calmer vertical rhythm, readable rail width. */
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app .nn-lesson-page--learner-app {
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app .nn-lesson-page--learner-app .nn-lesson-editorial-rail--hero {
+  max-width: min(var(--nn-learner-reading-max), 100%);
+  padding-inline: var(--nn-learner-page-gutter-x);
+}
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main {
+  padding-inline: var(--nn-learner-page-gutter-x);
+}
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app .nn-lesson-page--learner-app .nn-lesson-layout--triple {
+  margin-top: clamp(1.75rem, 3vw, 2.75rem);
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+}
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--editorial {
+  padding: clamp(1.35rem, 3vw, 2rem) clamp(1.2rem, 3vw, 1.75rem) clamp(1.5rem, 3vw, 2.15rem);
+}
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout {
+  padding: clamp(1.15rem, 2.5vw, 1.6rem) clamp(1.1rem, 2.5vw, 1.55rem);
+}
+
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-content.nn-lesson-prose,
+:where(
+  [data-theme="ocean"],
+  [data-theme="blossom"],
+  [data-theme="sunset"],
+  [data-theme="aurora"]
+) .nn-learner-app .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-prose {
+  max-width: min(78ch, 100%);
+  line-height: 1.72;
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  :where(
+    [data-theme="ocean"],
+    [data-theme="blossom"],
+    [data-theme="sunset"],
+    [data-theme="aurora"]
+  ) .nn-learner-app .nn-lesson-page--learner-app .nn-lesson-layout--triple {
+    grid-template-columns: minmax(13.5rem, 16rem) minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  :where(
+    [data-theme="ocean"],
+    [data-theme="blossom"],
+    [data-theme="sunset"],
+    [data-theme="aurora"]
+  ) .nn-learner-app .nn-lesson-page--learner-app .nn-lesson-layout--triple {
+    grid-template-columns:
+      minmax(14rem, 16rem)
+      minmax(0, 1fr)
+      minmax(15rem, 18rem);
+  }
+}
+
+@media (max-width: 640px) {
+  :where(
+    [data-theme="ocean"],
+    [data-theme="blossom"],
+    [data-theme="sunset"],
+    [data-theme="aurora"]
+  ) .nn-learner-app {
+    --nn-learner-page-gutter-x: 1rem;
+    --nn-learner-card-padding: 1.125rem;
+    --nn-learner-card-padding-sm: 1rem;
+  }
+}
