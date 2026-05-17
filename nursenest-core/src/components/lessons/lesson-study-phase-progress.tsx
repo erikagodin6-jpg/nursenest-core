@@ -1,19 +1,19 @@
 import { Check, Circle, Sparkles } from "lucide-react";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
-type StudyPhase = "readiness" | "study" | "reinforce" | "mastered";
+type StudyPhase = "prime" | "learn" | "recall" | "mastered";
 
-const PHASES: { id: StudyPhase; label: string; percent: number }[] = [
-  { id: "readiness", label: "Readiness", percent: 12 },
-  { id: "study", label: "Study", percent: 42 },
-  { id: "reinforce", label: "Reinforce", percent: 72 },
-  { id: "mastered", label: "Mastered", percent: 100 },
+const PHASES: { id: StudyPhase; label: string; percent: number; hint: string }[] = [
+  { id: "prime", label: "Prime", percent: 12, hint: "Preview the cues" },
+  { id: "learn", label: "Learn", percent: 42, hint: "Build the mental model" },
+  { id: "recall", label: "Recall", percent: 72, hint: "Retrieve before reviewing" },
+  { id: "mastered", label: "Master", percent: 100, hint: "Ready to apply" },
 ];
 
 function phaseFromProgress(progress: PathwayLessonProgressStatus | null | undefined): StudyPhase {
   if (progress === "completed") return "mastered";
-  if (progress === "in_progress") return "study";
-  return "readiness";
+  if (progress === "in_progress") return "learn";
+  return "prime";
 }
 
 function phaseIndex(phase: StudyPhase): number {
@@ -21,7 +21,7 @@ function phaseIndex(phase: StudyPhase): number {
 }
 
 export function lessonStudyPhaseLabel(progress: PathwayLessonProgressStatus | null | undefined): string {
-  return PHASES[phaseIndex(phaseFromProgress(progress))]?.label ?? "Readiness";
+  return PHASES[phaseIndex(phaseFromProgress(progress))]?.label ?? "Prime";
 }
 
 export function lessonStudyProgressPercent(progress: PathwayLessonProgressStatus | null | undefined): number {
@@ -52,7 +52,7 @@ export function LessonStudyPhaseProgress({
       <div className="nn-lesson-phase-strip__top">
         <span className="nn-lesson-phase-strip__label">
           <Sparkles className="h-3.5 w-3.5" aria-hidden />
-          Lesson Progress
+          Study loop
         </span>
         <span className="nn-lesson-phase-strip__percent">
           {persisted ? `${percent}%` : "Local read"}
@@ -70,7 +70,10 @@ export function LessonStudyPhaseProgress({
               <span className="nn-lesson-phase-strip__dot" aria-hidden>
                 {complete ? <Check className="h-3 w-3" /> : <Circle className="h-2.5 w-2.5" />}
               </span>
-              <span>{phase.label}</span>
+              <span className="nn-lesson-phase-strip__step-copy">
+                <strong>{phase.label}</strong>
+                <small>{phase.hint}</small>
+              </span>
             </li>
           );
         })}
