@@ -180,6 +180,24 @@ describe("homepage PageSpeed performance contracts", () => {
     assert.ok(ssrFalseCount >= 2, `expected at least 2 ssr: false entries, got ${ssrFalseCount}`);
   });
 
+  it("mounts homepage analytics only after initial paint and idle time", () => {
+    const homeClient = source("src/components/marketing/home-restored-client.tsx");
+
+    assert.match(homeClient, /function IdleAfterPaint/);
+    assert.match(homeClient, /runAfterInitialPaint/);
+    assert.match(homeClient, /requestIdleCallback/);
+    assert.match(homeClient, /<IdleAfterPaint>\s*<FunnelHomepageViewBeaconLazy/s);
+  });
+
+  it("keeps below-fold homepage chunks outside the initial Lighthouse window", () => {
+    const homeClient = source("src/components/marketing/home-restored-client.tsx");
+
+    assert.match(homeClient, /rootMargin\s*=\s*"360px 0px"/);
+    assert.match(homeClient, /rootMargin="480px 0px"/);
+    assert.doesNotMatch(homeClient, /rootMargin="900px 0px"/);
+    assert.doesNotMatch(homeClient, /rootMargin="1100px 0px"/);
+  });
+
   it("guards Prisma homepage stats module from entering browser bundles", () => {
     const stats = source("src/lib/marketing/public-home-stats.ts");
 
