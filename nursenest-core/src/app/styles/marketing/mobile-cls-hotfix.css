@@ -30,4 +30,27 @@
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
   }
+
+  .nn-header-animate-in,
+  .nn-header-logo-link,
+  .nn-marketing-nav-link,
+  .nn-premium-hero-panel,
+  .nn-premium-hero-grid,
+  .nn-premium-home-section,
+  .nn-hiw-step-card,
+  .nn-hiw-feature-card,
+  .nn-hiw-preview-card {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .nn-premium-hero-grid {
+    min-height: max(32rem, calc(100svh - var(--nn-marketing-header-mobile-reserved-height, 5.25rem))) !important;
+  }
+
+  .nn-home-marketing-root .nn-premium-home-section:not(:first-child) {
+    content-visibility: auto;
+    contain: layout paint style;
+    contain-intrinsic-size: auto 720px;
+  }
 }
