@@ -55,6 +55,13 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
     entries.push({ loc: rnHub, lastmod: rnHubLastMod.toISOString() });
   }
 
+  // Regional blog cluster hub index pages — always included so crawlers discover them.
+  const REGIONAL_CLUSTER_HUBS = ["/blog/canada-rn", "/blog/us-rn", "/blog/rex-pn", "/blog/nclex-pn"];
+  for (const hubPath of REGIONAL_CLUSTER_HUBS) {
+    const loc = `${origin}${hubPath}`;
+    if (!seenLoc.has(loc)) { seenLoc.add(loc); entries.push({ loc }); }
+  }
+
   // Tag and category hub pages — discoverable without hitting post-level crawl budget.
   // Empty hubs emit `robots: noindex` at the page level so including them here is safe.
   try {

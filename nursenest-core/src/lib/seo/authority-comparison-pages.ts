@@ -244,6 +244,93 @@ export const AUTHORITY_COMPARISON_PAGES: readonly AuthorityComparisonPage[] = [
       { question: "How should I compare CNPLE prep resources?", answer: "Compare clinical depth, Canadian relevance, rationale quality, study planning, and whether the tool helps remediate misses." },
     ],
   },
+  // ─── RPN / LPN professional identity comparisons ──────────────────────────
+  {
+    slug: "rpn-vs-rn",
+    path: comparisonPath("rpn-vs-rn"),
+    title: "RPN vs RN in Canada: Scope, Salary, and Career Differences | NurseNest",
+    description:
+      "Compare Registered Practical Nurse (RPN) and Registered Nurse (RN) roles in Canada: scope of practice, education, salary ranges, workplace settings, and career pathways.",
+    h1: "RPN vs RN in Canada: what is the difference?",
+    eyebrow: "Career comparison",
+    lead:
+      "RPN and RN are distinct regulated nursing professions in Canada with different educational pathways, scopes of practice, and workplace settings. Understanding the differences matters when choosing a program, a career direction, or a study plan — because RPN preparation (REx-PN) and RN preparation (NCLEX-RN) are not interchangeable.",
+    comparison: {
+      caption: "RPN vs RN comparison (Canada)",
+      columns: ["Dimension", "RPN (Registered Practical Nurse)", "RN (Registered Nurse)"],
+      rows: [
+        ["Regulatory exam", "REx-PN (computerized adaptive testing)", "NCLEX-RN (computerized adaptive testing)"],
+        ["Typical education", "Diploma or collaborative degree programs", "Baccalaureate nursing degree programs"],
+        ["Scope of practice", "Province-regulated; commonly includes medication administration, wound care, LTC, and community care", "Province-regulated; broader scope including complex assessments, delegation, and specialty settings"],
+        ["Common settings", "Long-term care, rehabilitation, community, and primary care", "Acute care, hospital, specialty, ICU, community, and primary care"],
+        ["Advanced practice pathway", "Some RPNs bridge to RN programs", "NPs complete advanced graduate nursing education beyond RN licensure"],
+      ],
+    },
+    balancedNotes: [
+      "Scope of practice for both RPNs and RNs is regulated provincially — requirements vary by province. Confirm with your provincial regulatory body.",
+      "Either profession can build a rewarding nursing career. The right choice depends on the learner's goals, preferred setting, and education pathway.",
+      "Salary ranges depend on province, setting, employer, and collective agreement — check current resources for up-to-date data.",
+    ],
+    bestFor: [
+      { label: "Choose RPN if", body: "you are entering nursing through a diploma pathway, interested in LTC, rehabilitation, or community care settings, and want to write the REx-PN to become registered in Canada." },
+      { label: "Choose RN if", body: "you are pursuing a baccalaureate nursing degree, interested in acute care, specialty, or advanced practice, and plan to write NCLEX-RN to become registered in Canada." },
+    ],
+    internalLinks: [
+      { label: "REx-PN practice questions", href: "/canada/rpn/rex-pn/questions" },
+      { label: "REx-PN study hub", href: "/canada/rpn/rex-pn" },
+      { label: "NCLEX-RN Canada study hub", href: "/canada/rn/nclex-rn" },
+      { label: "Canada new grad resources", href: "/canada/new-grad" },
+    ],
+    faq: [
+      { question: "Is RPN harder than RN?", answer: "They are different, not ranked by difficulty. Each profession has its own regulated scope, exam, and career context. RPN and RN candidates each need preparation aligned to their own exam." },
+      { question: "Can an RPN become an RN in Canada?", answer: "Yes. Some provinces have bridging programs that allow RPNs to transition to RN registration. Requirements vary by province and institution." },
+      { question: "Do RPNs and RNs write the same exam?", answer: "No. RPNs write REx-PN. RNs write NCLEX-RN. The exams assess different scopes and clinical decision levels." },
+      { question: "Do RPNs work in hospitals?", answer: "Yes. RPNs work in many settings including hospitals, long-term care, rehabilitation, and community care. Setting eligibility depends on the employer and provincial scope." },
+    ],
+  },
+  {
+    slug: "lvn-vs-rn",
+    path: comparisonPath("lvn-vs-rn"),
+    title: "LVN vs RN in the US: Scope, Salary, and Career Differences | NurseNest",
+    description:
+      "Compare Licensed Vocational Nurse (LVN) and Registered Nurse (RN) roles in the United States: scope of practice, education requirements, salary, and exam preparation.",
+    h1: "LVN vs RN in the United States: what is the difference?",
+    eyebrow: "Career comparison",
+    lead:
+      "LVN (Licensed Vocational Nurse) and RN (Registered Nurse) are distinct licensed nursing roles in the US. They differ in educational requirements, scope of practice, exam, salary range, and career trajectory. LVNs write NCLEX-PN; RNs write NCLEX-RN. Using the wrong preparation materials is a common and expensive mistake.",
+    comparison: {
+      caption: "LVN vs RN comparison (United States)",
+      columns: ["Dimension", "LVN (Licensed Vocational Nurse)", "RN (Registered Nurse)"],
+      rows: [
+        ["Licensing exam", "NCLEX-PN", "NCLEX-RN"],
+        ["Typical education", "12-18 month certificate or diploma program", "2-year ADN or 4-year BSN degree"],
+        ["Scope of practice", "State-regulated; commonly includes medication administration, basic nursing care, and care plan contributions", "State-regulated; broader scope including complex assessment, care planning, delegation, and specialty practice"],
+        ["Common settings", "Long-term care, home health, physician offices, and clinics", "Hospital acute care, ICU, specialty units, outpatient, and community settings"],
+        ["Bridge pathways", "LVN-to-RN bridge programs available at many institutions", "RNs can advance to NP with graduate nursing education"],
+      ],
+    },
+    balancedNotes: [
+      "Scope of practice varies by state. Confirm with your state board of nursing for current requirements.",
+      "Salary depends on location, employer, setting, and experience. Check current compensation data for your state.",
+      "Both professions are important parts of US nursing — the right choice depends on career goals and education pathway.",
+    ],
+    bestFor: [
+      { label: "Choose LVN/LPN if", body: "you are entering nursing through a certificate or diploma pathway, prefer a shorter program timeline, and plan to write NCLEX-PN for US licensure." },
+      { label: "Choose RN if", body: "you are pursuing an ADN or BSN degree, interested in acute care or specialty settings, and plan to write NCLEX-RN for US licensure." },
+    ],
+    internalLinks: [
+      { label: "NCLEX-PN practice questions", href: "/us/lpn/nclex-pn/questions" },
+      { label: "NCLEX-PN study hub", href: "/us/lpn/nclex-pn" },
+      { label: "NCLEX-RN US study hub", href: "/us/rn/nclex-rn" },
+      { label: "LPN exam prep articles", href: "/blog/nclex-pn" },
+    ],
+    faq: [
+      { question: "Is LVN harder than RN?", answer: "They are different professions, not ranked by difficulty. LVN and RN candidates each need preparation aligned to their own exam — NCLEX-PN and NCLEX-RN are not interchangeable." },
+      { question: "Can an LVN become an RN?", answer: "Yes. LVN-to-RN bridge programs are available at many community colleges and nursing schools across the US. Requirements and timelines vary by institution and state." },
+      { question: "Do LVNs write the same exam as RNs?", answer: "No. LVNs/LPNs write NCLEX-PN. RNs write NCLEX-RN. The exams assess different scopes — studying from the wrong materials wastes time and can lead to under-preparation." },
+      { question: "What is the difference between LVN and LPN?", answer: "Licensed Vocational Nurse (LVN) and Licensed Practical Nurse (LPN) refer to the same license level. LVN terminology is commonly used in California and Texas; LPN is used in most other US states." },
+    ],
+  },
 ] as const;
 
 const bySlug = new Map(AUTHORITY_COMPARISON_PAGES.map((page) => [page.slug, page]));

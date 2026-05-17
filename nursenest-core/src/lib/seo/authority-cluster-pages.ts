@@ -64,45 +64,45 @@ const rtCtas = [
 ] as const;
 
 const caRnCtas = [
-  { label: "NCLEX-RN practice questions", href: `/canada/rn/nclex-rn/questions` },
-  { label: "NCLEX-RN lessons", href: `/canada/rn/nclex-rn/lessons` },
-  { label: "NCLEX-RN CAT exam", href: `/canada/rn/nclex-rn/cat` },
-  { label: "NCLEX-RN flashcards", href: `/canada/rn/nclex-rn/flashcards` },
+  { label: "NCLEX-RN practice questions", href: "/canada/rn/nclex-rn/questions" },
+  { label: "NCLEX-RN lessons", href: "/canada/rn/nclex-rn/lessons" },
+  { label: "NCLEX-RN CAT exam", href: "/canada/rn/nclex-rn/cat" },
+  { label: "NCLEX-RN flashcards", href: "/canada/rn/nclex-rn/flashcards" },
 ] as const;
 
 const npFnpCtas = [
-  { label: "FNP practice questions", href: `/en/np/fnp/questions` },
-  { label: "FNP lessons", href: `/en/np/fnp/lessons` },
-  { label: "FNP pharmacology", href: `/en/np/fnp/pharmacology` },
-  { label: "FNP simulation", href: `/en/np/fnp/simulation` },
+  { label: "FNP practice questions", href: "/en/np/fnp/questions" },
+  { label: "FNP lessons", href: "/en/np/fnp/lessons" },
+  { label: "FNP CAT exam", href: "/en/np/fnp/cat" },
+  { label: "FNP flashcards", href: "/en/np/fnp/flashcards" },
 ] as const;
 
 const npAgpcnpCtas = [
-  { label: "AGPCNP practice questions", href: `/en/np/agpcnp/questions` },
-  { label: "AGPCNP lessons", href: `/en/np/agpcnp/lessons` },
-  { label: "AGPCNP pharmacology", href: `/en/np/agpcnp/pharmacology` },
-  { label: "AGPCNP simulation", href: `/en/np/agpcnp/simulation` },
+  { label: "AGPCNP practice questions", href: "/en/np/agpcnp/questions" },
+  { label: "AGPCNP lessons", href: "/en/np/agpcnp/lessons" },
+  { label: "AGPCNP CAT exam", href: "/en/np/agpcnp/cat" },
+  { label: "AGPCNP flashcards", href: "/en/np/agpcnp/flashcards" },
 ] as const;
 
 const npPmhnpCtas = [
-  { label: "PMHNP practice questions", href: `/en/np/pmhnp/questions` },
-  { label: "PMHNP lessons", href: `/en/np/pmhnp/lessons` },
-  { label: "PMHNP pharmacology", href: `/en/np/pmhnp/pharmacology` },
-  { label: "PMHNP simulation", href: `/en/np/pmhnp/simulation` },
+  { label: "PMHNP practice questions", href: "/en/np/pmhnp/questions" },
+  { label: "PMHNP lessons", href: "/en/np/pmhnp/lessons" },
+  { label: "PMHNP CAT exam", href: "/en/np/pmhnp/cat" },
+  { label: "PMHNP flashcards", href: "/en/np/pmhnp/flashcards" },
 ] as const;
 
 const npWhnpCtas = [
-  { label: "WHNP practice questions", href: `/en/np/whnp/questions` },
-  { label: "WHNP lessons", href: `/en/np/whnp/lessons` },
-  { label: "WHNP pharmacology", href: `/en/np/whnp/pharmacology` },
-  { label: "WHNP simulation", href: `/en/np/whnp/simulation` },
+  { label: "WHNP practice questions", href: "/en/np/whnp/questions" },
+  { label: "WHNP lessons", href: "/en/np/whnp/lessons" },
+  { label: "WHNP CAT exam", href: "/en/np/whnp/cat" },
+  { label: "WHNP flashcards", href: "/en/np/whnp/flashcards" },
 ] as const;
 
 const npPnpPcCtas = [
-  { label: "PNP-PC practice questions", href: `/en/np/pnp-pc/questions` },
-  { label: "PNP-PC lessons", href: `/en/np/pnp-pc/lessons` },
-  { label: "PNP-PC pharmacology", href: `/en/np/pnp-pc/pharmacology` },
-  { label: "PNP-PC simulation", href: `/en/np/pnp-pc/simulation` },
+  { label: "PNP-PC practice questions", href: "/en/np/pnp-pc/questions" },
+  { label: "PNP-PC lessons", href: "/en/np/pnp-pc/lessons" },
+  { label: "PNP-PC CAT exam", href: "/en/np/pnp-pc/cat" },
+  { label: "PNP-PC flashcards", href: "/en/np/pnp-pc/flashcards" },
 ] as const;
 
 function pagePath(base: string, slug: string): string {
@@ -183,23 +183,15 @@ function commonFaq(exam: string, questionHref: string, format: string): Authorit
       ...base,
       {
         question: "Is the NCLEX-RN adaptive?",
-        answer:
-          "Yes. The NCLEX-RN uses computerized adaptive testing (CAT). Candidates should prepare with both targeted remediation by client needs category and CAT-style mixed sessions that train pacing, uncertainty tolerance, and disciplined answer selection when item difficulty changes.",
-      },
-      {
-        question: "How many questions are on the NCLEX-RN?",
-        answer:
-          "The NCLEX-RN uses a variable-length adaptive format. Candidates should prepare for stamina and sustained clinical reasoning across a full session rather than aiming for a fixed number of items.",
+        answer: "Yes. The NCLEX-RN uses CAT. Prepare with targeted remediation by client needs category and CAT-style mixed sessions that train pacing and disciplined answer selection as item difficulty changes.",
       },
       {
         question: "What are Next Generation NCLEX items?",
-        answer:
-          "NGN items include bow-tie, extended drag-and-drop, highlight, and extended multiple-response formats. They test clinical judgment more explicitly than traditional single-best-answer items. Preparation should include practising cue recognition, analysis, prioritization, and action selection across all item types.",
+        answer: "NGN items include bow-tie, extended drag-and-drop, highlight, and extended multiple-response formats. They test clinical judgment more explicitly than traditional single-best-answer items.",
       },
       {
         question: "How long should I study for the NCLEX-RN?",
-        answer:
-          "Most candidates benefit from an 8 to 12 week plan combining a baseline diagnostic, client needs category review, pharmacology, clinical judgment practice, CAT simulation, and NGN item familiarity. The key is keeping active recall — timed question practice — in every week, not just the final stretch.",
+        answer: "Most candidates benefit from an 8 to 12 week plan combining a baseline diagnostic, client needs category review, pharmacology, clinical judgment practice, CAT simulation, and NGN item familiarity.",
       },
     ];
   }
@@ -208,23 +200,15 @@ function commonFaq(exam: string, questionHref: string, format: string): Authorit
       ...base,
       {
         question: "What is the FNP certification exam?",
-        answer:
-          "FNP certification is offered by AANP (the Family Nurse Practitioner certification) and ANCC (the Family Nurse Practitioner board certification). Both exams test primary care clinical decision-making across the lifespan, including diagnosis, pharmacology, prevention, and patient education.",
+        answer: "FNP certification is offered by AANP and ANCC. Both exams test primary care clinical decision-making across the lifespan including diagnosis, pharmacology, prevention, and patient education.",
       },
       {
         question: "How long should I study for the FNP exam?",
-        answer:
-          "Most FNP candidates benefit from an 8 to 12 week preparation plan that covers all primary care systems, prescribing safety, prevention guidelines, and mixed timed simulation. Candidates with weaker pharmacology backgrounds should add a dedicated prescribing safety rotation.",
+        answer: "Most FNP candidates benefit from an 8 to 12 week plan covering all primary care systems, prescribing safety, prevention guidelines, and mixed timed simulation.",
       },
       {
         question: "What is the hardest part of the FNP exam?",
-        answer:
-          "Most candidates find pharmacology and multi-system cases the most challenging because both require integrating multiple clinical variables simultaneously. Practising multi-condition vignettes after mastering single-system prescribing builds the integrative reasoning the exam rewards.",
-      },
-      {
-        question: "Is FNP or AGPCNP better for primary care?",
-        answer:
-          "Both FNP and AGPCNP certifications prepare NPs for primary care. FNP covers the full lifespan including pediatric and obstetric primary care. AGPCNP focuses on adults and older adults. The right choice depends on your clinical setting and patient population.",
+        answer: "Most candidates find pharmacology and multi-system cases most challenging. Practising multi-condition vignettes after mastering single-system prescribing builds the integrative reasoning the exam rewards.",
       },
     ];
   }
@@ -233,23 +217,15 @@ function commonFaq(exam: string, questionHref: string, format: string): Authorit
       ...base,
       {
         question: "What does the AGPCNP exam test?",
-        answer:
-          "The AGPCNP exam tests adult and older adult primary care, including chronic disease management, geriatric assessment, polypharmacy, Beers criteria, preventive care, and end-of-life considerations. Candidates need fluency in both adult and geriatric clinical reasoning.",
+        answer: "The AGPCNP exam tests adult and older adult primary care including chronic disease management, geriatric assessment, polypharmacy, Beers criteria, preventive care, and end-of-life considerations.",
       },
       {
         question: "How is the AGPCNP different from the FNP?",
-        answer:
-          "AGPCNP focuses on adults (18+) and older adults, with a strong geriatric component including frailty assessment, Beers-listed medications, and atypical presentations. FNP covers the full lifespan. AGPCNP preparation should include a dedicated geriatric rotation.",
-      },
-      {
-        question: "How long should I study for the AGPCNP exam?",
-        answer:
-          "Most AGPCNP candidates benefit from 8 to 12 weeks of structured preparation covering adult systems, geriatric syndromes, Beers criteria, polypharmacy, and mixed timed practice. A geriatric-specific week early in the plan improves integration.",
+        answer: "AGPCNP focuses on adults and older adults with a strong geriatric component. FNP covers the full lifespan. AGPCNP preparation should include a dedicated geriatric rotation.",
       },
       {
         question: "What are Beers criteria and why do they matter for AGPCNP?",
-        answer:
-          "Beers criteria identify medications that are potentially inappropriate for older adults due to increased risk of adverse effects, falls, cognitive impairment, or drug-disease interactions. AGPCNP candidates must recognize Beers-listed drugs and understand why they are problematic in older patients.",
+        answer: "Beers criteria identify medications potentially inappropriate for older adults due to increased risk of adverse effects, falls, cognitive impairment, or drug-disease interactions.",
       },
     ];
   }
@@ -258,23 +234,15 @@ function commonFaq(exam: string, questionHref: string, format: string): Authorit
       ...base,
       {
         question: "What does the PMHNP exam test?",
-        answer:
-          "The PMHNP exam tests psychiatric-mental health NP competencies including DSM-based diagnosis, mental status examination, risk assessment, psychopharmacology, therapeutic modalities, and safety planning. Both prescribing safety and therapeutic relationship skills are tested.",
-      },
-      {
-        question: "How long should I study for the PMHNP exam?",
-        answer:
-          "Most PMHNP candidates benefit from 8 to 12 weeks of preparation that front-loads DSM diagnostic criteria and risk assessment before layering pharmacology and case-based practice. Psychopharmacology is highest-yield and should appear in every study week.",
+        answer: "The PMHNP exam tests psychiatric-mental health NP competencies including DSM-based diagnosis, mental status examination, risk assessment, psychopharmacology, and safety planning.",
       },
       {
         question: "What is the hardest part of the PMHNP exam?",
-        answer:
-          "Diagnostic accuracy and psychopharmacology are consistently the most challenging areas because both require precise reasoning under uncertainty. Candidates who separate diagnostic reasoning from management reasoning — naming the diagnosis first, then choosing the intervention — perform more consistently.",
+        answer: "Diagnostic accuracy and psychopharmacology are consistently most challenging. Candidates who separate diagnostic reasoning from management reasoning — naming the diagnosis first, then choosing the intervention — perform more consistently.",
       },
       {
         question: "How do I study psychopharmacology for the PMHNP exam?",
-        answer:
-          "Practise each drug class with its monitoring protocol alongside its indication and contraindications. Lithium levels, metabolic panels for antipsychotics, LFTs for valproate, and QTc monitoring for certain agents are recurring exam targets. Pair every medication miss with a monitoring-requirement flashcard.",
+        answer: "Practise each drug class with its monitoring protocol alongside its indication and contraindications. Lithium levels, metabolic panels for antipsychotics, and LFTs for valproate are recurring exam targets.",
       },
     ];
   }
@@ -283,23 +251,15 @@ function commonFaq(exam: string, questionHref: string, format: string): Authorit
       ...base,
       {
         question: "What does the WHNP exam test?",
-        answer:
-          "The WHNP exam tests women's health primary care across the lifespan, including reproductive health, contraception, STI management, prenatal and postpartum care, menopause, cancer screening, bone health, and cardiovascular risk reduction for women.",
-      },
-      {
-        question: "How long should I study for the WHNP exam?",
-        answer:
-          "Most WHNP candidates benefit from 8 to 12 weeks of preparation divided into reproductive, obstetric, and preventive study rotations. Candidates should practise contraindication-heavy vignettes early because pharmacology safety is tested throughout all WHNP content areas.",
+        answer: "The WHNP exam tests women's health primary care across the lifespan including reproductive health, contraception, STI management, prenatal and postpartum care, menopause, and cancer screening.",
       },
       {
         question: "What is the hardest part of the WHNP exam?",
-        answer:
-          "Contraindications to hormonal therapies and prenatal pharmacology safety are consistently challenging because multiple patient factors — age, smoking status, BMI, comorbidities, and reproductive goals — must all be weighed simultaneously. Multi-factor vignettes are the highest-yield practice format.",
+        answer: "Contraindications to hormonal therapies and prenatal pharmacology safety are consistently challenging because multiple patient factors must be weighed simultaneously.",
       },
       {
-        question: "What pregnancy safety categories should I know for the WHNP?",
-        answer:
-          "WHNP candidates should know which commonly prescribed medications carry teratogenic risk, which are considered safe in pregnancy, and which require risk-benefit discussions. Folate supplementation, iron, prenatal vitamins, and common antibiotic safety in pregnancy are recurring exam topics.",
+        question: "What pregnancy safety considerations should I know for the WHNP?",
+        answer: "WHNP candidates should know which medications carry teratogenic risk, which are considered safe in pregnancy, and which require risk-benefit discussions. Folate, iron, and common antibiotic safety in pregnancy are recurring exam topics.",
       },
     ];
   }
@@ -308,23 +268,15 @@ function commonFaq(exam: string, questionHref: string, format: string): Authorit
       ...base,
       {
         question: "What does the PNP-PC exam test?",
-        answer:
-          "The PNP-PC exam tests pediatric primary care competencies including developmental assessment, well-child care, immunization schedules, acute illness management, chronic disease management in children, and family-centered care. Reasoning must be age-indexed.",
-      },
-      {
-        question: "How long should I study for the PNP-PC exam?",
-        answer:
-          "Most PNP-PC candidates benefit from 8 to 12 weeks of preparation organized by developmental age group — newborn, infant, toddler, school-age, and adolescent — before integrating across age groups in mixed practice. Pharmacology and developmental milestones should appear in every study week.",
+        answer: "The PNP-PC exam tests pediatric primary care competencies including developmental assessment, well-child care, immunization schedules, acute illness management, and family-centered care.",
       },
       {
         question: "What is the hardest part of the PNP-PC exam?",
-        answer:
-          "Age-specific reasoning is the most common source of errors — a finding that is normal in a 6-month-old is abnormal in a 2-year-old, and a medication safe in a school-age child is contraindicated in a toddler. Practising by developmental stage group builds the age-indexing reflex the exam requires.",
+        answer: "Age-specific reasoning is the most common source of errors — a normal finding in a 6-month-old is abnormal in a 2-year-old. Practising by developmental stage group builds the age-indexing reflex the exam requires.",
       },
       {
-        question: "What pediatric pharmacology do I need to know for the PNP-PC exam?",
-        answer:
-          "Weight-based dosing calculation, age-specific contraindications, and off-label use cautions are recurring targets. Aspirin in children under 18 (Reye's syndrome risk), fluoroquinolones in adolescents (cartilage risk), and tetracyclines before age 8 (tooth staining) are classic exam items.",
+        question: "What pediatric pharmacology do I need for the PNP-PC exam?",
+        answer: "Weight-based dosing, age-specific contraindications, and off-label use cautions are recurring targets. Aspirin in children under 18, fluoroquinolones in adolescents, and tetracyclines before age 8 are classic exam items.",
       },
     ];
   }
@@ -656,6 +608,206 @@ function buildRtPage(
   };
 }
 
+function buildCaRnPage(
+  slug: string,
+  topic: string,
+  angle: string,
+  tableRows: readonly (readonly string[])[],
+  extraSection: string,
+): AuthorityClusterPage {
+  const path = pagePath(CA_RN_BASE, slug);
+  return {
+    cluster: "ca-rn",
+    slug,
+    path,
+    title: slug === "overview" ? `NCLEX-RN Exam Prep for Canada (2026) | NurseNest` : `${topic} (2026) — NCLEX-RN Canada | NurseNest`,
+    description: slug === "overview"
+      ? `Prepare for the NCLEX-RN in Canada with CAT-adaptive practice questions, Next Generation NCLEX item types, client needs category review, and clinical judgment practice.`
+      : `${topic} for NCLEX-RN preparation — Canadian registration context, client needs framing, NGN item types, and rationale-first practice questions.`,
+    h1: slug === "overview" ? "NCLEX-RN exam prep for Canadian nursing candidates (2026)" : `${topic} for NCLEX-RN preparation`,
+    eyebrow: "NCLEX-RN entry-to-practice exam — 2026 authority guide",
+    lead: `Use this NCLEX-RN guide to connect ${angle} with safe nursing decisions. NCLEX-RN success depends on client needs reasoning, safety priorities, pharmacology, therapeutic communication, and Next Generation NCLEX clinical judgment items.`,
+    examTerms: ["NCLEX-RN", "CAT", "clinical judgment", "client needs", "pharmacology", "Next Gen NCLEX", "NGN"],
+    ctas: caRnCtas,
+    table: {
+      caption: `${topic}: what to practise`,
+      columns: ["Client-needs lens", "What the item is testing", "Best NurseNest follow-up"],
+      rows: tableRows,
+    },
+    sections: [
+      {
+        heading: `How this topic shows up on NCLEX-RN items`,
+        body: [
+          `NCLEX-RN questions test safe nursing practice across all client needs categories. For ${topic.toLowerCase()}, practise identifying whether the stem is asking about physiological integrity, safe environment, health promotion, or psychosocial integrity — the client need frames the correct priority.`,
+          "Next Generation NCLEX items require clinical judgment across multiple formats: recognizing cues, analyzing cues, prioritizing hypotheses, generating solutions, taking action, and evaluating outcomes. Build this reasoning loop before focusing on answer-choice mechanics.",
+        ],
+      },
+      {
+        heading: "Case-based example",
+        body: [
+          `A client reports a new finding while the nurse is managing routine tasks. In a ${topic.toLowerCase()} question, the correct response follows acuity, scope, and expected versus unexpected findings — not task order or convenience.`,
+          "When reviewing a rationale, write a one-sentence rule: the cue, the client need, and the safe nursing action. That rule transfers to new stems faster than memorizing individual scenarios.",
+        ],
+      },
+      {
+        heading: "CAT and NGN practice strategy",
+        body: [
+          "NCLEX-RN uses computerized adaptive testing. Practise both targeted remediation by client needs category and mixed CAT-style sessions. After building a content foundation, add timed NGN item practice for bow-tie, highlight, and extended formats.",
+          extraSection,
+        ],
+      },
+    ],
+    mistakes: [
+      "Answering from memorized facts before identifying which client need the question is targeting.",
+      "Skipping NGN item type practice until the final week — NGN requires a different reasoning loop than single-best-answer items.",
+      "Reviewing only the correct answer rather than explaining why each distractor is unsafe, incomplete, or out of scope.",
+      "Practising exclusively in easy recall mode without timed CAT-style sessions that train pacing.",
+    ],
+    examDay: [
+      "Identify the client need before reading answer choices.",
+      "Use ABCs, safety, expected versus unexpected, and scope as ordered priority filters.",
+      "For NGN items, complete the full clinical judgment loop before selecting each response.",
+      "Trust the CAT algorithm — difficulty changes are part of the estimate, not a signal you are failing.",
+    ],
+    faq: commonFaq("NCLEX-RN", "/canada/rn/nclex-rn/questions", "NCLEX-RN preparation should include CAT-style practice plus targeted remediation and NGN item familiarity so you are ready for adaptive difficulty and next-generation formats."),
+    whatYoullLearn: [
+      `How ${topic} is tested across NCLEX-RN client needs categories`,
+      "Why Next Generation NCLEX items require a clinical judgment reasoning loop",
+      "The priority framework that resolves most client needs questions correctly",
+      "A CAT-aligned practice strategy — targeted remediation plus mixed sessions plus NGN formats",
+    ],
+    whoThisIsFor: "Canadian nursing graduates preparing for the NCLEX-RN, internationally educated nurses writing NCLEX-RN for Canadian registration, and repeat candidates who need to strengthen client needs reasoning and NGN item familiarity.",
+    studyOrder: [
+      "Complete a 30-question mixed client-needs diagnostic to identify your weakest category",
+      "Review the lesson for each missed concept — write the client need and the safety rule",
+      "Practise a targeted block of 20 questions in your weakest client needs area",
+      "Add NGN item type practice after content foundation is solid",
+      "Rotate to CAT-style mixed sessions after two targeted blocks",
+    ],
+    nextSteps: [
+      { label: "NCLEX-RN practice questions", href: "/canada/rn/nclex-rn/questions" },
+      { label: "NCLEX-RN CAT exam", href: "/canada/rn/nclex-rn/cat" },
+      { label: "NCLEX-RN lessons", href: "/canada/rn/nclex-rn/lessons" },
+      { label: "Canada RN hub", href: "/canada/rn/nclex-rn" },
+    ],
+    datePublished: "2026-01-15",
+    dateModified: "2026-05-17",
+  };
+}
+
+function buildNpSpecialtyPage(
+  cluster: "np-fnp" | "np-agpcnp" | "np-pmhnp" | "np-whnp" | "np-pnp-pc",
+  base: string,
+  ctas: readonly { label: string; href: string }[],
+  exam: string,
+  boardLabel: string,
+  scopeAngle: string,
+  slug: string,
+  topic: string,
+  angle: string,
+  tableRows: readonly (readonly string[])[],
+  extraSection: string,
+): AuthorityClusterPage {
+  const path = pagePath(base, slug);
+  return {
+    cluster,
+    slug,
+    path,
+    title: slug === "overview" ? `${exam} Exam Prep (2026) — ${boardLabel} | NurseNest` : `${topic} (2026) — ${exam} Prep | NurseNest`,
+    description: slug === "overview"
+      ? `Prepare for the ${exam} certification exam with board-style practice questions, pharmacology safety, clinical vignettes, and mixed timed simulation. Aligned to ${boardLabel} standards.`
+      : `${topic} for ${exam} certification preparation — ${scopeAngle} and rationale-first practice questions.`,
+    h1: slug === "overview" ? `${exam} exam prep for nurse practitioner certification (2026)` : `${topic} for ${exam} preparation`,
+    eyebrow: `${boardLabel} — 2026 authority guide`,
+    lead: `Use this ${exam} guide to connect ${angle} with advanced practice decisions. ${exam} certification success requires integrating clinical assessment, differential diagnosis, prescribing safety, diagnostics, and patient education within scope.`,
+    examTerms: [exam, "NP certification", "advanced practice", "clinical judgment", "pharmacology", boardLabel],
+    ctas,
+    table: {
+      caption: `${topic}: what to practise`,
+      columns: ["Clinical focus", "What the item is testing", "Best NurseNest follow-up"],
+      rows: tableRows,
+    },
+    sections: [
+      {
+        heading: `How this topic shows up on ${exam} items`,
+        body: [
+          `${exam} questions test advanced practice decisions within the specialty scope. For ${topic.toLowerCase()}, practise forming a working diagnosis from clinical data, selecting the most discriminating investigation, prescribing safely within specialty scope, and identifying escalation thresholds.`,
+          "Strong candidates read the whole stem before the answer choices. Comorbidities, medications, age, renal function, and specialty-specific risk factors all change the safest advanced practice response.",
+        ],
+      },
+      {
+        heading: "Case-based example",
+        body: [
+          `A patient presents with a primary concern and one complicating factor that changes management. For ${topic.toLowerCase()}, the first step is identifying the most important finding, the second is selecting the appropriate diagnostic or prescribing action, and the third is verifying scope and safety.`,
+          "Rationale review asks: what made the correct option safest for this specialty, what made each distractor incomplete, and which patient factor would have changed the plan.",
+        ],
+      },
+      {
+        heading: "Certification study strategy",
+        body: [
+          "Run a mixed 30 to 50 question diagnostic set across all domains in your first week. Tag every miss by specialty system. Focus your foundation study on the two weakest domains before rotating to mixed board-style simulation.",
+          extraSection,
+        ],
+      },
+    ],
+    mistakes: [
+      `Treating ${exam} like a general NP exam rather than a specialty-scoped certification.`,
+      "Reviewing rationales only for the correct answer instead of understanding why the other options are unsafe or out of scope.",
+      "Skipping prescribing safety review — specialty pharmacology is the highest-integration domain.",
+      "Waiting until the final week to practise timed mixed-mode simulation.",
+    ],
+    examDay: [
+      "Identify the specialty-specific scope before reading answer choices.",
+      "Use differential diagnosis framing: what cannot be missed, what changes management, what needs escalation.",
+      "Check contraindications and comorbidity interactions before confirming a prescribing answer.",
+      "Budget time evenly — do not over-invest in complex stems at the expense of straightforward items.",
+    ],
+    faq: commonFaq(exam, `${base}/questions`, `${exam} preparation should include specialty-scoped practice questions, pharmacology safety review, and mixed timed simulation aligned to ${boardLabel} standards.`),
+    whatYoullLearn: [
+      `How ${topic} is tested within the ${exam} certification scope`,
+      `The ${boardLabel} clinical reasoning patterns most commonly tested`,
+      "Why prescribing safety and comorbidity adjustment are the highest-yield exam domains",
+      "A systematic study strategy — diagnostic, targeted remediation, mixed simulation",
+    ],
+    whoThisIsFor: `NP graduates and practicing nurse practitioners preparing for ${exam} certification, as well as clinicians planning to sit their initial or recertification exam who need specialty-specific practice aligned to ${boardLabel} competency standards.`,
+    studyOrder: [
+      "Complete a 30-question mixed diagnostic to identify your weakest specialty domains",
+      "Review lessons for each missed concept — connect clinical finding to management decision",
+      "Practise a targeted 20-question block in your weakest domain",
+      "Add pharmacology safety review after system-level content is solid",
+      "Rotate to full mixed timed simulation in the final preparation phase",
+    ],
+    nextSteps: [
+      { label: `${exam} practice questions`, href: `${base}/questions` },
+      { label: `${exam} study guide`, href: `${base}/study-guide` },
+      { label: `${exam} pharmacology`, href: `${base}/pharmacology` },
+      { label: `${exam} hub`, href: base },
+    ],
+    datePublished: "2026-01-15",
+    dateModified: "2026-05-17",
+  };
+}
+
+function buildFnpPage(slug: string, topic: string, angle: string, tableRows: readonly (readonly string[])[], extraSection: string): AuthorityClusterPage {
+  return buildNpSpecialtyPage("np-fnp", NP_FNP_BASE, npFnpCtas, "FNP", "AANP / ANCC — Family NP", "family practice, prescribing safety, and lifespan primary care", slug, topic, angle, tableRows, extraSection);
+}
+
+function buildAgpcnpPage(slug: string, topic: string, angle: string, tableRows: readonly (readonly string[])[], extraSection: string): AuthorityClusterPage {
+  return buildNpSpecialtyPage("np-agpcnp", NP_AGPCNP_BASE, npAgpcnpCtas, "AGPCNP", "Adult-Gerontology Primary Care NP", "geriatric assessment, Beers criteria, and adult chronic disease", slug, topic, angle, tableRows, extraSection);
+}
+
+function buildPmhnpPage(slug: string, topic: string, angle: string, tableRows: readonly (readonly string[])[], extraSection: string): AuthorityClusterPage {
+  return buildNpSpecialtyPage("np-pmhnp", NP_PMHNP_BASE, npPmhnpCtas, "PMHNP", "Psychiatric-Mental Health NP", "DSM diagnosis, psychopharmacology, and risk assessment", slug, topic, angle, tableRows, extraSection);
+}
+
+function buildWhnpPage(slug: string, topic: string, angle: string, tableRows: readonly (readonly string[])[], extraSection: string): AuthorityClusterPage {
+  return buildNpSpecialtyPage("np-whnp", NP_WHNP_BASE, npWhnpCtas, "WHNP", "Women's Health Nurse Practitioner", "reproductive health, hormonal prescribing, and prenatal safety", slug, topic, angle, tableRows, extraSection);
+}
+
+function buildPnpPcPage(slug: string, topic: string, angle: string, tableRows: readonly (readonly string[])[], extraSection: string): AuthorityClusterPage {
+  return buildNpSpecialtyPage("np-pnp-pc", NP_PNP_PC_BASE, npPnpPcCtas, "PNP-PC", "Pediatric Primary Care NP", "developmental assessment, age-specific pharmacology, and family-centered care", slug, topic, angle, tableRows, extraSection);
+}
+
 export const AUTHORITY_CLUSTER_PAGES: readonly AuthorityClusterPage[] = [
   buildCnplePage("overview", "CNPLE exam prep", "advanced-practice assessment, diagnosis, prescribing, and Canadian NP scope", [
     ["Clinical judgment", "Prioritize risk, red flags, differential diagnosis, and follow-up safety.", "CNPLE clinical judgment"],
@@ -767,4 +919,307 @@ export const AUTHORITY_CLUSTER_PAGES: readonly AuthorityClusterPage[] = [
     ["Mixed client-needs sets", "Expose gaps across safety, psychosocial, health promotion, and physiological categories.", "Question bank"],
     ["Rationale review", "Turn each miss into a scope, priority, or content rule.", "Study plan"],
     ["CAT transition", "Move from targeted sets into adaptive-style mixed sessions.", "CAT simulation"],
-  ], "This is the strongest conversion pa
+  ], "This is the strongest conversion page for REx-PN learners because question practice reveals whether the learner can apply safe practical-nursing judgment under pressure."),
+  buildRexPage("delegation-questions", "REx-PN delegation questions", "assignment, supervision, scope, and safety decisions for practical nursing", [
+    ["Scope", "Separate what the RPN can do, what requires RN/provider escalation, and what can be assigned.", "Client needs"],
+    ["Stability", "Delegate predictable tasks only when the client and outcome are stable.", "Priority questions"],
+    ["Follow-up", "Know what must be reported back and what requires reassessment.", "Practice questions"],
+  ], "Delegation questions work best when learners name the task, the client condition, and the supervision requirement before reading answer choices."),
+  buildRexPage("priority-questions", "REx-PN priority questions", "which client to see first, what to do next, and what finding changes urgency", [
+    ["Acuity", "Unstable, new, unexpected, or worsening findings outrank chronic stable problems.", "Practice questions"],
+    ["Frameworks", "ABCs, safety, infection risk, Maslow, and expected versus unexpected cues.", "Study guide"],
+    ["Scope", "Pick the action a Canadian practical nurse should take now.", "CAT simulation"],
+  ], "Priority pages attract high-intent searchers because prioritization feels unpredictable. The fix is not more acronyms; it is repeated cue-to-action practice."),
+  buildRexPage("pharmacology-questions", "REx-PN pharmacology questions bank", "medication administration, teaching, adverse effects, and safety checks", [
+    ["Pre-administration", "Allergy, vitals, labs, dose, route, rights, and client readiness.", "Pharmacology"],
+    ["Teaching", "Expected effects, side effects, missed doses, and when to call for help.", "Flashcards"],
+    ["Escalation", "Hold, clarify, or report when the medication is unsafe.", "Practice questions"],
+  ], "Medication questions convert when learners see a concrete safety check they missed. Pair the question block with flashcards for repeated medication cues."),
+  buildRexPage("study-plan", "REx-PN study plan", "a practical weekly REx-PN plan for client needs, CAT practice, and remediation", [
+    ["Week 1", "Baseline mixed diagnostic and client-needs miss log.", "Practice questions"],
+    ["Weeks 2-6", "Weak-category lessons, pharmacology, priority, and delegation drills.", "Study guide"],
+    ["Final weeks", "CAT simulation, mixed practice, and repeated-error cleanup.", "CAT exam"],
+  ], "A strong REx-PN plan is measurable: fewer repeated misses by client need, cleaner priority decisions, and steadier CAT performance."),
+  buildRexPage("cat-simulation", "REx-PN CAT simulation", "adaptive-style practice strategy, readiness signals, and exam stamina", [
+    ["Before CAT", "Repair known weak categories so the session measures readiness, not avoidable gaps.", "Study plan"],
+    ["During CAT", "Expect changing item difficulty and avoid emotional score-guessing.", "CAT exam"],
+    ["After CAT", "Sort misses by client need, topic, and reasoning error.", "Practice questions"],
+  ], "CAT simulation is a conversion-ready page because learners want readiness evidence. The safest message is honest: CAT practice works only when paired with remediation."),
+
+  buildRtPage("overview", "Respiratory therapy exam prep", "RT assessment, gas exchange, airway safety, and equipment decisions", [
+    ["Assessment", "Work of breathing, breath sounds, SpO2, mental status, and trend.", "Practice questions"],
+    ["Gas exchange", "ABG interpretation plus oxygenation and ventilation decisions.", "ABG practice"],
+    ["Intervention", "Oxygen device, airway support, ventilation, suctioning, or escalation.", "Lessons"],
+  ], "RT learners should practise interpretation plus action. Naming a disorder is only half of the exam task; the next safest step is the other half."),
+  buildRtPage("exam-prep", "Respiratory therapy exam prep plan", "weekly RT study structure with interpretation and interventions", [
+    ["Week 1", "Baseline ABG, oxygen, airway, and ventilation questions.", "Practice questions"],
+    ["Middle phase", "Target weak modalities with lessons and drills.", "Lessons"],
+    ["Final phase", "Mixed cases with equipment and reassessment decisions.", "Ventilator training"],
+  ], "A strong RT plan alternates calculations, interpretation, and scenario practice so formulas stay connected to clinical decisions."),
+  buildRtPage("practice-questions", "Respiratory therapy practice questions", "case-based RT questions with rationales", [
+    ["ABGs", "Acid-base, compensation, oxygenation, and next step.", "ABG drills"],
+    ["Airway", "Patency, suctioning, escalation, and safety checks.", "Airway management"],
+    ["Ventilation", "Settings, alarms, waveforms, and patient response.", "Mechanical ventilation"],
+  ], "After each question, decide whether the miss was interpretation, equipment knowledge, or escalation judgment. Those are different fixes."),
+  buildRtPage("abgs", "Respiratory therapy ABG practice questions", "ABG interpretation and clinical action", [
+    ["pH", "Acidemia or alkalemia as the starting point.", "Practice questions"],
+    ["PaCO2/HCO3", "Respiratory versus metabolic driver and compensation.", "Lessons"],
+    ["PaO2/SpO2", "Oxygenation problem and support decision.", "Oxygen therapy"],
+  ], "ABG mastery means linking numbers to the patient. A compensated result still requires clinical context before deciding whether to intervene."),
+  buildRtPage("ventilation", "Respiratory therapy ventilation fundamentals", "ventilation physiology, control of breathing, hypoventilation, and respiratory support decisions", [
+    ["Physiology", "Minute ventilation, dead space, V/Q ratio, and gas exchange.", "Practice questions"],
+    ["Hypoventilation", "Rising PaCO2, hypoxemia, and support escalation triggers.", "ABGs"],
+    ["Support", "NIV, high-flow, intubation decision, and reassessment.", "Oxygen therapy"],
+  ], "Ventilation fundamentals anchor the rest of RT decision-making. Connect physiology to ABG pattern before selecting or adjusting a support level."),
+  buildRtPage("mechanical-ventilation", "Mechanical ventilation review", "ventilator settings, alarms, graphics, and patient-ventilator safety", [
+    ["Settings", "Mode, tidal volume, rate, FiO2, PEEP, and pressure limits.", "Ventilator training"],
+    ["Alarms", "High pressure, low pressure, apnea, and disconnection reasoning.", "Practice questions"],
+    ["Graphics", "Synchrony, obstruction, leak, and auto-PEEP patterns.", "Waveform scenarios"],
+  ], "Ventilator questions reward cause-and-effect reasoning. Connect the alarm or waveform to patient assessment before changing a setting."),
+  buildRtPage("oxygen-therapy", "Oxygen therapy review", "device selection, titration, and safety", [
+    ["Device", "Nasal cannula, simple mask, Venturi, non-rebreather, high-flow, or NIV.", "Practice questions"],
+    ["Goal", "Target oxygenation without ignoring ventilation or fatigue.", "ABGs"],
+    ["Safety", "Fire risk, humidification, skin breakdown, and reassessment.", "Lessons"],
+  ], "Oxygen therapy is not just raising FiO2. Reassess work of breathing, CO2 retention risk, mental status, and whether a higher level of support is needed."),
+  buildRtPage("airway-management", "Airway management review", "airway assessment, suctioning, adjuncts, and escalation", [
+    ["Patency", "Obstruction, secretions, stridor, trauma, or altered mental status.", "Practice questions"],
+    ["Intervention", "Positioning, suction, adjunct, bag-mask, advanced airway, or escalation.", "Lessons"],
+    ["Reassessment", "Breath sounds, SpO2, ETCO2, chest rise, and patient response.", "Ventilator training"],
+  ], "Airway management questions often hinge on what must happen before equipment details: positioning, calling help, preoxygenation, and reassessment."),
+  buildRtPage("pulmonary-function-testing", "Pulmonary function testing review", "spirometry patterns, restriction, obstruction, and interpretation", [
+    ["Obstruction", "FEV1/FVC reduction, bronchodilator response, and symptom context.", "Practice questions"],
+    ["Restriction", "Reduced volumes and clinical correlation.", "Lessons"],
+    ["Quality", "Effort, repeatability, contraindications, and test coaching.", "Exam prep"],
+  ], "PFT interpretation should connect pattern to patient story. Do not label a curve without checking quality and clinical context."),
+  buildRtPage("abg-practice-questions", "ABG practice questions", "high-intent ABG interpretation questions for respiratory therapy students", [
+    ["Classification", "pH, PaCO2, HCO3, compensation, and oxygenation status.", "ABG drills"],
+    ["Clinical link", "Connect the ABG to work of breathing, mental status, and intervention.", "Practice questions"],
+    ["Reassessment", "Predict the ABG or SpO2 change after oxygen or ventilator support.", "Oxygen therapy"],
+  ], "ABG question pages attract learners with immediate pain. Keep the workflow simple: classify, connect to patient status, choose action, then reassess."),
+  buildRtPage("mechanical-ventilation-questions", "Mechanical ventilation questions", "ventilator settings, alarms, waveform reasoning, and safety decisions", [
+    ["Mode reasoning", "What the ventilator controls and what the patient contributes.", "Ventilator modes"],
+    ["Alarm response", "High pressure, low pressure, apnea, leak, obstruction, and disconnection.", "Mechanical ventilation"],
+    ["Lung protection", "Tidal volume, plateau pressure, PEEP, FiO2, and ARDS risk.", "ARDS review"],
+  ], "Ventilator question pages should make equipment feel clinical, not mechanical. Every setting must connect to gas exchange, pressure, synchrony, or safety."),
+  buildRtPage("oxygen-therapy-questions", "Oxygen therapy questions", "oxygen device selection, FiO2 targets, escalation, and reassessment", [
+    ["Device choice", "Nasal cannula, Venturi, non-rebreather, high-flow, CPAP, or BiPAP.", "Oxygen therapy"],
+    ["Target", "Oxygenation goal, COPD risk, and signs of ventilatory failure.", "ABG practice questions"],
+    ["Escalation", "When oxygen is insufficient and ventilatory or airway support is needed.", "Airway scenarios"],
+  ], "Oxygen pages convert because they tie quick device recall to real patient decisions. The answer is not always more FiO2; sometimes it is ventilation or airway support."),
+  buildRtPage("ventilator-modes", "Ventilator modes quick review", "volume control, pressure control, SIMV, pressure support, CPAP, and BiPAP", [
+    ["Volume control", "Preset tidal volume; pressure varies with compliance and resistance.", "Mechanical ventilation questions"],
+    ["Pressure control", "Preset pressure; tidal volume varies with mechanics.", "ARDS review"],
+    ["Spontaneous support", "Pressure support, CPAP, BiPAP, and weaning readiness.", "Practice questions"],
+  ], "Ventilator-mode content is backlinkable when it is practical. Learners need the mode, what changes, what stays controlled, and what alarm pattern matters."),
+  buildRtPage("ards-review", "ARDS review for respiratory therapy", "oxygenation failure, lung-protective ventilation, PEEP, and escalation", [
+    ["Recognition", "Refractory hypoxemia, bilateral infiltrates, low compliance, and high FiO2 needs.", "ABG questions"],
+    ["Lung protection", "Low tidal volume, plateau pressure monitoring, PEEP, and permissive hypercapnia.", "Ventilator modes"],
+    ["Escalation", "Proning, recruitment considerations, hemodynamics, and team escalation.", "Mechanical ventilation"],
+  ], "ARDS review should stay clinically grounded: oxygenation is the problem, but unsafe pressure strategy can create a second problem."),
+  buildRtPage("airway-management-scenarios", "Airway management scenarios", "suctioning, adjuncts, bag-mask ventilation, intubation preparation, and reassessment", [
+    ["Initial assessment", "Patency, obstruction, secretions, stridor, mental status, and work of breathing.", "Airway management"],
+    ["Intervention", "Position, suction, adjunct, BVM, advanced airway preparation, or escalation.", "Practice questions"],
+    ["Confirmation", "Chest rise, breath sounds, SpO2, ETCO2, and ongoing reassessment.", "Mechanical ventilation"],
+  ], "Scenario pages are high-value because airway decisions are time-sensitive. The right answer often starts before the advanced device: positioning, oxygenation, and calling help."),
+
+  // ── Canada NCLEX-RN cluster ──────────────────────────────────────────────────
+  buildCaRnPage("overview", "NCLEX-RN exam prep for Canada", "Canadian practical nursing registration, client care priorities, and adaptive CAT strategy", [
+    ["Clinical judgment", "NGN-style next action, priority, safety.", "Questions"],
+    ["Pharmacology", "Rights, contraindications, high-alert drugs, teaching.", "Flashcards"],
+    ["Delegation", "Scope boundaries, UAP assignments, RN responsibility.", "Lessons"],
+  ], "Canada NCLEX-RN candidates should practise Next Generation NCLEX item types — bow-tie, highlight, and extended formats — alongside traditional single-best-answer items."),
+  buildCaRnPage("questions", "NCLEX-RN practice questions for Canada", "client needs, clinical judgment, and pharmacology question practice", [
+    ["Safe environment", "Infection prevention, falls, restraints, and error reporting.", "Lessons"],
+    ["Physiological integrity", "Prioritize instability, expected/unexpected findings, high-risk drugs.", "Questions"],
+    ["Psychosocial integrity", "Therapeutic communication, grief, mental health interventions.", "Flashcards"],
+  ], "Track misses by client needs category. Repeated errors in physiological adaptation usually mean content gaps, while repeated errors in safe care often mean scope or priority-setting errors."),
+  buildCaRnPage("study-guide", "NCLEX-RN study guide for Canadian candidates", "exam timeline, domain rotation, and weak-area repair", [
+    ["Weeks 1-3", "Baseline diagnostic, client needs map, miss log.", "Questions"],
+    ["Weeks 4-8", "Weak-domain lessons, pharmacology, clinical judgment drills.", "Lessons"],
+    ["Weeks 9+", "CAT simulation, NGN item types, final remediation.", "CAT exam"],
+  ], "A strong study guide keeps active recall in every week. Do not wait until the final stretch to practise under timed conditions."),
+  buildCaRnPage("clinical-judgment", "NCLEX-RN clinical judgment practice", "Next Generation NCLEX clinical reasoning and safety decisions", [
+    ["Recognize cues", "Identify the finding that changes acuity or urgency.", "Questions"],
+    ["Analyze cues", "Separate expected from unexpected, stable from unstable.", "Lessons"],
+    ["Take action", "Choose the highest-priority nursing intervention within RN scope.", "CAT exam"],
+  ], "Clinical judgment items reward reading the whole stem before the answer choices. Acuity, trend, and safety cues appear at the beginning of the vignette."),
+  buildCaRnPage("pharmacology", "NCLEX-RN pharmacology for Canada", "medication safety, high-alert drugs, and teaching for RN candidates", [
+    ["Before giving", "Allergy, vitals, labs, rights, and client understanding.", "Questions"],
+    ["High-alert meds", "Anticoagulants, insulin, opioids, digoxin.", "Flashcards"],
+    ["Teaching", "Expected effects, adverse effects, missed doses, and when to call.", "Lessons"],
+  ], "Pharmacology questions improve fastest when learners write the safety check they missed rather than just marking the answer as wrong."),
+  buildCaRnPage("priority-questions", "NCLEX-RN priority and delegation questions", "which client to assess first, what to delegate, and which finding is most urgent", [
+    ["Acuity", "Unstable, new, unexpected, or worsening findings outrank chronic stable problems.", "Questions"],
+    ["Delegation", "Stable, predictable tasks within UAP scope; RN retains accountability.", "Lessons"],
+    ["Reporting", "Lab critical values, sudden change, and unexpected deterioration.", "CAT exam"],
+  ], "Priority pages attract learners because prioritization feels unpredictable. The solution is repeated cue-to-action practice with rationale review."),
+  buildCaRnPage("cat-strategy", "NCLEX-RN CAT exam strategy for Canadian candidates", "adaptive testing mindset, question strategy, and stamina", [
+    ["Trust the process", "Item difficulty changes as the CAT estimates your ability.", "Practice exam"],
+    ["Read fully", "Final clause directs the task; stem cues direct the answer.", "Questions"],
+    ["Pace evenly", "Avoid spending exam-time trying to guess where you stand.", "Study guide"],
+  ], "CAT strategy cannot replace content readiness. Practise timed CAT-style sessions only after targeted remediation has improved your weakest client needs categories."),
+  buildCaRnPage("nclex-next-gen", "Next Generation NCLEX item types for Canada", "NGN bow-tie, drag-and-drop, highlight, and extended question formats", [
+    ["Bow-tie", "Condition + action pairs requiring clinical judgment across a full assessment.", "Questions"],
+    ["Highlight", "Identify supporting evidence or contraindicated information in a patient record.", "Clinical judgment"],
+    ["Extended", "Longer stems with layered cues requiring priority and delegation reasoning.", "CAT exam"],
+  ], "NGN items reward clinical thinking, not recall. The target is building systematic reasoning: cue recognition, analysis, priority, and action."),
+
+  // ── US NP — FNP ─────────────────────────────────────────────────────────────
+  buildFnpPage("overview", "FNP exam prep", "family practice clinical decision-making, board-style questions, and pharmacology safety", [
+    ["Clinical judgment", "Differential, diagnostics, treatment, follow-up.", "Questions"],
+    ["Pharmacology", "Drug selection, contraindications, monitoring, interactions.", "Flashcards"],
+    ["Board readiness", "Mixed domain timed practice and remediation.", "Simulation"],
+  ], "FNP preparation benefits from rotating between primary care systems — cardiovascular, respiratory, endocrine, mental health, reproductive — before combining in mixed exam sessions."),
+  buildFnpPage("questions", "FNP practice questions", "board-style FNP clinical vignettes with AANP and ANCC framing", [
+    ["Primary care", "Common presentations, guidelines, and follow-up decisions.", "Questions"],
+    ["Prescribing", "Drug selection, comorbidity adjustment, monitoring, and interactions.", "Pharmacology"],
+    ["Prevention", "Screening, immunizations, lifestyle counselling, and risk stratification.", "Lessons"],
+  ], "FNP question accuracy improves faster when learners review the clinical reasoning behind distractors — why the second-best answer is incomplete rather than wrong."),
+  buildFnpPage("study-guide", "FNP certification study guide", "domain prioritization, timed practice, and weak-area repair for AANP/ANCC", [
+    ["Week 1-2", "Baseline mixed diagnostic, miss log by system.", "Questions"],
+    ["Week 3-8", "Rotating system review, prescribing safety, and prevention.", "Lessons"],
+    ["Final phase", "Mixed timed simulation, repeated-miss cleanup, and strategy.", "Simulation"],
+  ], "FNP study guides work best when they include a prescribing safety pass — one week where every missed question connects back to a drug selection, dosing, or interaction rule."),
+  buildFnpPage("pharmacology", "FNP pharmacology for board preparation", "drug selection, comorbidity adjustments, monitoring, and safety for family NP candidates", [
+    ["Selection", "Indication, allergy, pregnancy, renal/hepatic function, comorbidity screen.", "Questions"],
+    ["Monitoring", "Labs, follow-up interval, therapeutic range, and toxicity signs.", "Flashcards"],
+    ["Interactions", "Drug-drug, drug-disease, controlled substances, and high-risk combos.", "Lessons"],
+  ], "FNP pharmacology questions are most challenging when multiple comorbidities change the safest choice. Practise multi-condition vignettes after mastering single-system prescribing."),
+  buildFnpPage("clinical-cases", "FNP clinical case practice", "unfolding primary care cases for family NP board examination preparation", [
+    ["Assessment", "History, focused exam, red flags, and differential formation.", "Questions"],
+    ["Diagnostics", "Which test changes management, and when to skip it.", "Lessons"],
+    ["Management", "Treatment, follow-up, referral threshold, and patient education.", "Pharmacology"],
+  ], "FNP clinical cases build the differential-to-management reasoning loop that board exams target."),
+
+  // ── US NP — AGPCNP ──────────────────────────────────────────────────────────
+  buildAgpcnpPage("overview", "AGPCNP exam prep", "adult-gerontology primary care decision-making, geriatric assessment, and board readiness", [
+    ["Adult primary care", "Chronic disease management, prevention, and acute presentations.", "Questions"],
+    ["Geriatrics", "Frailty, polypharmacy, Beers criteria, and atypical presentations.", "Lessons"],
+    ["Diagnostics", "When to test, when to treat empirically, when to refer.", "Pharmacology"],
+  ], "AGPCNP preparation requires fluency in both adult and older adult clinical reasoning — the same disease can present differently and require different management depending on age."),
+  buildAgpcnpPage("questions", "AGPCNP practice questions", "adult-gerontology primary care board-style vignettes with rationale", [
+    ["Chronic disease", "DM, HTN, COPD, CHF, CKD management and complications.", "Questions"],
+    ["Preventive care", "Screening intervals, immunizations, and risk counselling.", "Lessons"],
+    ["Geriatric syndromes", "Falls, delirium, dementia, incontinence, pressure injury.", "Flashcards"],
+  ], "AGPCNP questions reward recognizing when the adult primary care algorithm changes for an older patient — different screening ages, Beers-listed drugs, and functional considerations."),
+  buildAgpcnpPage("study-guide", "AGPCNP certification study guide", "systematic domain coverage for the adult-gerontology primary care NP board exam", [
+    ["Systems review", "Cardiology, pulmonology, endocrinology, nephrology, GI, musculoskeletal.", "Lessons"],
+    ["Geriatric focus", "Comprehensive geriatric assessment, delirium vs. dementia, polypharmacy.", "Questions"],
+    ["Simulation", "Mixed timed blocks with post-review miss-log by domain.", "Pharmacology"],
+  ], "AGPCNP study plans should dedicate a separate geriatric rotation — not just append geriatric content to adult-medicine weeks — because the reasoning patterns are distinct."),
+  buildAgpcnpPage("pharmacology", "AGPCNP pharmacology for board preparation", "prescribing for adults and older adults, Beers criteria, and comorbidity adjustments", [
+    ["Adult prescribing", "First-line selection, titration, monitoring, and interaction checking.", "Questions"],
+    ["Geriatric caution", "Beers-listed medications, renal function adjustments, fall risk.", "Flashcards"],
+    ["High-risk classes", "Anticoagulants, hypoglycemics, antihypertensives, CNS agents.", "Lessons"],
+  ], "Geriatric pharmacology is the highest-integration AGPCNP domain — every drug choice requires checking renal function, fall risk, cognitive status, and interactions."),
+  buildAgpcnpPage("clinical-cases", "AGPCNP clinical case practice", "adult and geriatric primary care cases for AGPCNP board examination", [
+    ["Adult case", "Chronic disease overlap, acute complication, or prevention decision.", "Questions"],
+    ["Geriatric case", "Atypical presentation, functional decline, or goals-of-care decision.", "Lessons"],
+    ["Multi-problem", "Two chronic conditions plus an acute issue requiring prioritization.", "Pharmacology"],
+  ], "AGPCNP clinical cases become useful when candidates pause before the choices and predict: which problem is active, which is stable, and which intervention fits both conditions."),
+
+  // ── US NP — PMHNP ───────────────────────────────────────────────────────────
+  buildPmhnpPage("overview", "PMHNP exam prep", "psychiatric assessment, psychopharmacology, and therapeutic modalities for mental health NP boards", [
+    ["Assessment", "MSE, risk assessment, diagnostic criteria, and differential.", "Questions"],
+    ["Psychopharmacology", "Antidepressants, antipsychotics, mood stabilisers, anxiolytics.", "Pharmacology"],
+    ["Therapies", "CBT, DBT, motivational interviewing, safety planning.", "Lessons"],
+  ], "PMHNP preparation requires equal attention to psychopharmacology and therapeutic communication — the exam tests both prescribing safety and clinical relationship skills."),
+  buildPmhnpPage("questions", "PMHNP practice questions", "psychiatric mental health board-style vignettes covering DSM-based diagnosis, pharmacology, and safety", [
+    ["Diagnosis", "DSM criteria application, differential reasoning, and ruling out organic causes.", "Questions"],
+    ["Safety", "Suicide risk, violence risk, involuntary holds, and safety planning.", "Lessons"],
+    ["Medication", "Drug selection, side effects, monitoring, and therapeutic levels.", "Pharmacology"],
+  ], "PMHNP question accuracy improves when learners separate diagnostic reasoning from management reasoning — first name the most accurate DSM-aligned diagnosis, then choose the safest first-line intervention."),
+  buildPmhnpPage("study-guide", "PMHNP certification study guide", "domain rotation, psychopharmacology mastery, and board readiness planning", [
+    ["Foundation", "DSM diagnostic criteria, MSE components, and risk assessment.", "Questions"],
+    ["Pharmacology", "Antidepressants, antipsychotics, mood stabilisers, anxiolytics, controlled substances.", "Lessons"],
+    ["Simulation", "Mixed timed blocks across diagnosis, management, and safety domains.", "Pharmacology"],
+  ], "PMHNP study plans should front-load diagnostic criteria mastery — if DSM criteria are uncertain, pharmacology and safety reasoning cannot anchor to the right clinical context."),
+  buildPmhnpPage("pharmacology", "PMHNP psychopharmacology for board preparation", "psychiatric medication selection, monitoring, side effects, and safety for PMHNP candidates", [
+    ["Antidepressants", "SSRIs, SNRIs, bupropion, mirtazapine — indication, side effects, interactions.", "Questions"],
+    ["Antipsychotics", "First vs. second generation, metabolic monitoring, EPS, NMS.", "Flashcards"],
+    ["Mood stabilisers", "Lithium, valproate, lamotrigine — therapeutic levels, toxicity, and pregnancy risk.", "Lessons"],
+  ], "Psychopharmacology questions are highest-yield when learners practise the monitoring protocol alongside the drug — lithium levels, metabolic panels for antipsychotics, and LFTs for valproate."),
+  buildPmhnpPage("clinical-cases", "PMHNP clinical case practice", "psychiatric clinical vignettes for mental health NP board examination preparation", [
+    ["Acute presentation", "First-break psychosis, acute suicidality, agitation, or mania.", "Questions"],
+    ["Chronic management", "Medication adherence, relapse prevention, and functional recovery.", "Lessons"],
+    ["Safety decision", "Involuntary hold criteria, safety planning, and escalation thresholds.", "Pharmacology"],
+  ], "PMHNP clinical cases test the integration of diagnostic precision, safety awareness, and prescribing judgment."),
+
+  // ── US NP — WHNP ────────────────────────────────────────────────────────────
+  buildWhnpPage("overview", "WHNP exam prep", "women's health primary care, reproductive health, and board examination readiness", [
+    ["Reproductive health", "Contraception, STI management, fertility, and menopause.", "Questions"],
+    ["Prenatal care", "Preconception, pregnancy screening, complications, and postpartum.", "Lessons"],
+    ["Prevention", "Cancer screening, osteoporosis, cardiovascular risk, and immunizations.", "Pharmacology"],
+  ], "WHNP preparation covers the lifespan from adolescent reproductive health through menopause and beyond — the exam tests reasoning specific to sex and gender considerations in primary care."),
+  buildWhnpPage("questions", "WHNP practice questions", "women's health board-style vignettes covering reproductive, prenatal, and preventive care", [
+    ["Contraception", "Mechanism, efficacy, contraindications, and patient-specific selection.", "Questions"],
+    ["Pregnancy complications", "Hypertension, gestational diabetes, preterm labour, and fetal surveillance.", "Lessons"],
+    ["Menopause", "Vasomotor symptoms, bone density, cardiovascular risk, and hormone therapy.", "Pharmacology"],
+  ], "WHNP questions often hinge on contraindications — a contraceptive choice that is ideal for one patient profile becomes unsafe in another."),
+  buildWhnpPage("study-guide", "WHNP certification study guide", "domain-by-domain preparation for women's health NP boards", [
+    ["Reproductive", "Contraception, STI, fertility, and family planning.", "Questions"],
+    ["Obstetrics", "Prenatal screening, complications, postpartum, and lactation.", "Lessons"],
+    ["Preventive", "Cancer screening, bone health, cardiovascular, and menopause.", "Pharmacology"],
+  ], "WHNP study guides should separate reproductive, obstetric, and preventive content into distinct study rotations before integrating them in mixed practice."),
+  buildWhnpPage("pharmacology", "WHNP pharmacology for board preparation", "hormonal therapies, STI treatment, prenatal prescribing, and safety for women's health NP candidates", [
+    ["Hormonal", "OCP, progestin-only, HRT, fertility agents — contraindications and monitoring.", "Questions"],
+    ["Prenatal safety", "Pregnancy medication risk categories, folate, iron, and common antibiotic safety.", "Flashcards"],
+    ["STI treatment", "First-line antibiotics, treatment failures, partner treatment, and reporting.", "Lessons"],
+  ], "WHNP pharmacology questions most commonly test contraindications — knowing who should NOT receive a hormonal or prenatal medication is the highest-yield skill."),
+  buildWhnpPage("clinical-cases", "WHNP clinical case practice", "women's health primary care cases for WHNP board examination preparation", [
+    ["Reproductive case", "Contraception selection, STI management, or fertility concern.", "Questions"],
+    ["Obstetric case", "Prenatal complication, postpartum complication, or lactation question.", "Lessons"],
+    ["Preventive case", "Screening decision, menopause management, or cardiovascular risk reduction.", "Pharmacology"],
+  ], "WHNP clinical cases build the integrative reasoning the boards reward — connecting presenting complaint, reproductive history, screening status, and prescribing safety in a single decision."),
+
+  // ── US NP — PNP-PC ──────────────────────────────────────────────────────────
+  buildPnpPcPage("overview", "PNP-PC exam prep", "pediatric primary care clinical decision-making, developmental assessment, and board readiness", [
+    ["Development", "Milestones, screenings, anticipatory guidance, and developmental delay.", "Questions"],
+    ["Acute illness", "Fever, respiratory infections, GI illness, rashes, and injury.", "Lessons"],
+    ["Chronic conditions", "Asthma, ADHD, obesity, DM type 1, and allergies in children.", "Pharmacology"],
+  ], "PNP-PC preparation requires age-specific reasoning — a normal finding in a 6-month-old is abnormal in a 2-year-old. Practise by developmental stage group, not just by disease."),
+  buildPnpPcPage("questions", "PNP-PC practice questions", "pediatric primary care board-style vignettes with developmental and clinical reasoning", [
+    ["Well-child", "Milestone review, vaccination schedule, and anticipatory guidance.", "Questions"],
+    ["Acute presentations", "Fever evaluation, respiratory distress, dehydration, and skin conditions.", "Lessons"],
+    ["Chronic management", "Asthma control, ADHD follow-up, obesity counselling, and allergy management.", "Pharmacology"],
+  ], "PNP-PC questions test both what to do and what to explain — parent education is a frequent answer because primary care pediatrics is family-centered."),
+  buildPnpPcPage("study-guide", "PNP-PC certification study guide", "systematic preparation for pediatric primary care NP board examination", [
+    ["Well-child", "Developmental milestones, immunizations, and anticipatory guidance by age.", "Questions"],
+    ["Acute illness", "Common pediatric presentations, safe management thresholds, and referral triggers.", "Lessons"],
+    ["Chronic and complex", "Asthma, ADHD, obesity, endocrine, and developmental disorders.", "Pharmacology"],
+  ], "PNP-PC study guides should follow the developmental age sequence — newborn through adolescence — because clinical reasoning in pediatrics is age-indexed."),
+  buildPnpPcPage("pharmacology", "PNP-PC pharmacology for board preparation", "weight-based dosing, pediatric-specific drugs, and safety for pediatric primary care NP candidates", [
+    ["Dosing", "Weight-based calculation, age-appropriate route, and maximum doses.", "Questions"],
+    ["High-yield drugs", "Antipyretics, antibiotics, ADHD medications, asthma controllers, and vaccines.", "Flashcards"],
+    ["Safety", "Age contraindications, off-label use, parent education, and dose verification.", "Lessons"],
+  ], "Pediatric pharmacology questions most commonly test dose calculation safety and age-specific contraindications."),
+  buildPnpPcPage("clinical-cases", "PNP-PC clinical case practice", "pediatric primary care cases for PNP-PC board examination preparation", [
+    ["Well-child case", "Developmental concern, delayed milestone, or anticipatory guidance question.", "Questions"],
+    ["Acute case", "Febrile child, respiratory distress, dehydration, or skin lesion triage.", "Lessons"],
+    ["Chronic case", "Asthma action plan, ADHD medication adjustment, or obesity counselling.", "Pharmacology"],
+  ], "PNP-PC clinical cases test the integration of developmental stage, clinical findings, and family-centered decision-making."),
+
+] as const;
+
+const byPath = new Map(AUTHORITY_CLUSTER_PAGES.map((page) => [page.path, page]));
+const byClusterSlug = new Map(AUTHORITY_CLUSTER_PAGES.map((page) => [`${page.cluster}:${page.slug}`, page]));
+
+export function listAuthorityClusterPages(): readonly AuthorityClusterPage[] {
+  return AUTHORITY_CLUSTER_PAGES;
+}
+
+export function listAuthorityClusterPaths(): string[] {
+  return AUTHORITY_CLUSTER_PAGES.map((page) => page.path);
+}
+
+export function getAuthorityClusterPageByPath(path: string): AuthorityClusterPage | undefined {
+  return byPath.get(path);
+}
+
+export function getAuthorityClusterPage(cluster: AuthorityClusterKey, slug: string): AuthorityClusterPage | undefined {
+  return byClusterSlug.get(`${cluster}:${slug}`);
+}
+
+export function listAuthorityClusterSiblings(page: AuthorityClusterPage): AuthorityClusterPage[] {
+  return AUTHORITY_CLUSTER_PAGES.filter((candidate) => candidate.cluster === page.cluster && candidate.path !== page.path);
+}

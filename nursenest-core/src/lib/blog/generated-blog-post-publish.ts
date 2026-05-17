@@ -63,6 +63,10 @@ export function expectedCanonicalBlogPath(slug: string, careerSlug: string | nul
   if (["paramedic", "respiratory", "mlt", "imaging", "sonography"].includes(scoped)) {
     return `/allied-health/${scoped}/blog/${slug}`;
   }
+  // Regional / specialty cluster slugs — dedicated /blog/{cluster}/ trees.
+  if (["canada-rn", "us-rn", "rex-pn", "nclex-pn"].includes(scoped)) {
+    return `/blog/${scoped}/${slug}`;
+  }
   /** RN lesson-derived SEO posts and RN hub — canonical under `/blog/rn` for organic landing URLs. */
   if (scoped === "rn") return `/blog/rn/${slug}`;
   return `/nursing/${scoped}/blog/${slug}`;
