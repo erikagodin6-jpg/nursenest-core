@@ -2,6 +2,7 @@ import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import respiratoryTherapyCatalog from "@/content/pathway-lessons/allied-professions/respiratory-therapy";
 import pharmacyTechnicianCatalog from "@/content/pathway-lessons/allied-professions/pharmacy-technician";
 import medicalLaboratoryTechnologyCatalog from "@/content/pathway-lessons/allied-professions/medical-laboratory-technology";
+import medicalImagingCatalog from "@/content/pathway-lessons/allied-professions/medical-imaging";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -10,73 +11,56 @@ type AlliedProfessionCatalogModule = {
 const respiratoryProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "respiratory");
 if (respiratoryProfession) {
   respiratoryProfession.dedicatedCatalogFile = "respiratory-therapy";
-  respiratoryProfession.topicSlugsIn = [
-    "respiratory-therapy",
-    "abg-interpretation",
-    "mechanical-ventilation",
-    "ventilator-waveforms",
-    "ventilator-troubleshooting",
-    "critical-care-respiratory-therapy",
-    "patient-assessment",
-    "human-physiology",
-    "emergency-response",
-    "infection-control",
-  ];
-  respiratoryProfession.description =
-    "Deep respiratory therapy education covering ABGs, mechanical ventilation, waveforms, ARDS, airway management, oxygenation failure, and ICU respiratory physiology.";
 }
 
 const pharmacyTechProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "pharmacy-tech");
 if (pharmacyTechProfession) {
   pharmacyTechProfession.dedicatedCatalogFile = "pharmacy-technician";
-  pharmacyTechProfession.topicSlugsIn = [
-    "pharmacy-tech",
-    "pharmacy-calculations",
-    "top-200-drugs",
-    "medication-safety",
-    "pharmacy-law-and-ethics",
-    "pharmacy-compounding",
-    "pharmacology",
-    "medical-terminology",
-    "clinical-documentation",
-  ];
 }
 
 const mltProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "mlt");
 if (mltProfession) {
   mltProfession.dedicatedCatalogFile = "medical-laboratory-technology";
-  mltProfession.topicSlugsIn = [
-    "specimen-integrity",
-    "hematology",
-    "clinical-chemistry",
-    "microbiology",
-    "transfusion-medicine",
-    "laboratory-quality-control",
-    "lab-values",
-    "infection-control",
-    "medical-terminology",
-    "clinical-documentation",
+}
+
+const imagingProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "imaging");
+if (imagingProfession) {
+  imagingProfession.dedicatedCatalogFile = "medical-imaging";
+  imagingProfession.topicSlugsIn = [
+    "radiation-safety",
+    "imaging-positioning",
+    "contrast-safety",
+    "imaging-modalities",
+    "image-quality",
+    "imaging-patient-care",
+    "radiologic-technology",
+    "ct-technologist",
+    "mri-technologist",
+    "sonography",
+    "nuclear-medicine",
+    "imaging-basics",
   ];
-  mltProfession.description =
-    "Deep MLT and MLS education covering specimen integrity, hematology, chemistry, microbiology, transfusion medicine, QC, critical values, and laboratory safety reasoning.";
-  mltProfession.examOverview = [
-    "MLT and MLS exams reward mechanism-first laboratory reasoning: specimen quality, analyzer interpretation, QC, microbiology workflow, and transfusion safety.",
-    "Use morphology, chemistry trends, culture interpretation, and QC logic together instead of memorizing isolated facts.",
-    "Short scenario-heavy laboratory study loops outperform passive memorization for certification readiness.",
+  imagingProfession.description =
+    "Deep medical imaging education covering radiation safety, positioning, CT, MRI, ultrasound, contrast reactions, image quality, trauma imaging, and imaging patient care.";
+  imagingProfession.examOverview = [
+    "Imaging exams reward modality reasoning, safety, positioning accuracy, image-quality analysis, and patient-care judgment under pressure.",
+    "Use radiation safety, contrast workflow, and positioning logic together instead of memorizing isolated projections.",
+    "Scenario-based imaging review produces stronger retention than passive anatomy-only memorization.",
   ];
-  mltProfession.features = [
-    "Dedicated laboratory medicine lesson shard separated from generic allied content.",
-    "Mechanism-first hematology, chemistry, microbiology, transfusion, and QC education.",
-    "Specimen-integrity and analytical-interference teaching aligned to real laboratory workflow.",
-    "Paginated allied lesson hubs that scale as the laboratory catalog expands.",
+  imagingProfession.features = [
+    "Dedicated imaging lesson shard with CT, MRI, radiography, and contrast-safety depth.",
+    "Mechanism-first imaging education aligned to real clinical workflow.",
+    "Image-quality and artifact reasoning integrated with patient safety and repeat prevention.",
+    "Shared imaging foundation supporting radiography, sonography, and advanced modality growth.",
   ];
-  mltProfession.ctaLine =
-    "Study hematology, chemistry, microbiology, transfusion medicine, and QC through the dedicated MLT/MLS pathway.";
-  mltProfession.premiumCtaHeadline = "Master laboratory medicine, QC, microbiology, and transfusion safety";
+  imagingProfession.ctaLine =
+    "Study radiography, CT, MRI, ultrasound, contrast safety, and imaging workflow through the dedicated imaging pathway.";
+  imagingProfession.premiumCtaHeadline = "Master imaging safety, positioning, modalities, and diagnostic workflow";
 }
 
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
   "respiratory-therapy": respiratoryTherapyCatalog,
   "pharmacy-technician": pharmacyTechnicianCatalog,
   "medical-laboratory-technology": medicalLaboratoryTechnologyCatalog,
+  "medical-imaging": medicalImagingCatalog,
 };
