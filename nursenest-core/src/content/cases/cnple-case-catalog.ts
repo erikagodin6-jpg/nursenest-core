@@ -1,5 +1,6 @@
 import type { PatientCase } from "@/lib/cases/longitudinal-case-types";
 import { CASE_COPD_EXACERBATION_DISCHARGE_SAFETY } from "@/content/cases/cnple-copd-exacerbation-loft-case";
+import { CASE_HEART_FAILURE_DIURETIC_TITRATION } from "@/content/cases/cnple-heart-failure-diuretic-titration-loft-case";
 import { CNPLE_SAMPLE_CASES } from "@/content/cases/cnple-sample-cases";
 import { CASE_PEDIATRIC_ASTHMA_EXACERBATION } from "@/content/cases/cnple-pediatric-asthma-loft-case";
 import { CASE_PEDIATRIC_FEVER_KAWASAKI } from "@/content/cases/cnple-pediatric-fever-kawasaki-loft-case";
@@ -18,6 +19,7 @@ export const CNPLE_LOFT_CASES: PatientCase[] = [
   CASE_PEDIATRIC_ASTHMA_EXACERBATION,
   CASE_PEDIATRIC_FEVER_KAWASAKI,
   CASE_COPD_EXACERBATION_DISCHARGE_SAFETY,
+  CASE_HEART_FAILURE_DIURETIC_TITRATION,
 ];
 
 export function findCnpleLoftCase(caseId: string): PatientCase | undefined {
