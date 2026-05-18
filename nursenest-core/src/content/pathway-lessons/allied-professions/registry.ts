@@ -5,6 +5,7 @@ import medicalLaboratoryTechnologyCatalog from "@/content/pathway-lessons/allied
 import medicalImagingCatalog from "@/content/pathway-lessons/allied-professions/medical-imaging";
 import emergencyMedicalServicesCatalog from "@/content/pathway-lessons/allied-professions/emergency-medical-services";
 import sonographyCatalog from "@/content/pathway-lessons/allied-professions/sonography";
+import medicalAssistantCatalog from "@/content/pathway-lessons/allied-professions/medical-assistant";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -38,35 +39,40 @@ if (emtProfession) {
 const sonographyProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "sonography");
 if (sonographyProfession) {
   sonographyProfession.dedicatedCatalogFile = "sonography";
-  sonographyProfession.topicSlugsIn = [
-    "sonography-physics",
-    "abdominal-sonography",
-    "ob-gyn-sonography",
-    "vascular-sonography",
-    "small-parts-sonography",
-    "sonography-patient-care",
-    "doppler-ultrasound",
-    "ultrasound-physics",
-    "fetal-ultrasound",
-    "echogenicity",
-    "probe-selection",
+}
+
+const medicalAssistantProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "medical-assistant");
+if (medicalAssistantProfession) {
+  medicalAssistantProfession.dedicatedCatalogFile = "medical-assistant";
+  medicalAssistantProfession.topicSlugsIn = [
+    "ma-clinical-intake",
+    "ma-vital-signs",
+    "ma-infection-control",
+    "ma-procedure-support",
+    "ma-medication-safety",
+    "ma-administrative-safety",
+    "ambulatory-care",
+    "medical-office-assistant",
+    "clinic-workflow",
+    "phone-triage",
+    "patient-rooming",
   ];
-  sonographyProfession.description =
-    "Deep sonography education covering ultrasound physics, Doppler, OB/GYN imaging, abdominal ultrasound, vascular scanning, artifacts, probe selection, and patient care.";
-  sonographyProfession.examOverview = [
-    "Sonography exams reward image optimization, anatomy recognition, Doppler reasoning, pathology pattern recognition, and role-safe communication.",
-    "Use probe selection, artifacts, vascular flow analysis, and anatomy together instead of memorizing isolated screenshots.",
-    "Scenario-heavy scanning review improves retention and clinical reasoning more than passive image memorization alone.",
+  medicalAssistantProfession.description =
+    "Deep medical assistant education covering rooming, vital signs, ambulatory workflows, medication safety, infection control, procedure support, privacy, and administrative triage routing.";
+  medicalAssistantProfession.examOverview = [
+    "Medical assistant exams reward workflow safety, prioritization, infection control, medication awareness, and recognition of urgent symptoms in ambulatory settings.",
+    "Use rooming, vitals, specimen handling, privacy, and escalation logic together instead of memorizing isolated administrative facts.",
+    "Scenario-based clinic workflow review improves retention and patient-safety reasoning more than passive memorization alone.",
   ];
-  sonographyProfession.features = [
-    "Dedicated sonography lesson shard separated from generic imaging filler.",
-    "Mechanism-first ultrasound physics, Doppler, and pathology education.",
-    "Integrated OB/GYN, vascular, abdominal, and small-parts scanning workflows.",
-    "Shared ultrasound foundation supporting future cardiac, MSK, and advanced specialty ultrasound expansion.",
+  medicalAssistantProfession.features = [
+    "Dedicated ambulatory-care lesson shard separated from generic allied-health filler.",
+    "Mechanism-first rooming, intake, infection-control, and medication-safety education.",
+    "Integrated ECG, POCT, vaccine, specimen, and administrative workflow training.",
+    "Shared clinic-care foundation supporting future pediatrics, family practice, urgent care, and specialty-office expansion.",
   ];
-  sonographyProfession.ctaLine =
-    "Study ultrasound physics, Doppler, OB/GYN, abdominal, and vascular sonography through the dedicated ultrasound pathway.";
-  sonographyProfession.premiumCtaHeadline = "Master ultrasound physics, Doppler, pathology recognition, and scanning workflow";
+  medicalAssistantProfession.ctaLine =
+    "Study ambulatory workflows, rooming, vitals, medication safety, and clinic operations through the dedicated medical assistant pathway.";
+  medicalAssistantProfession.premiumCtaHeadline = "Master ambulatory care workflows, patient intake, medication safety, and clinic operations";
 }
 
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
@@ -76,4 +82,5 @@ export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, Allie
   "medical-imaging": medicalImagingCatalog,
   "emergency-medical-services": emergencyMedicalServicesCatalog,
   sonography: sonographyCatalog,
+  "medical-assistant": medicalAssistantCatalog,
 };
