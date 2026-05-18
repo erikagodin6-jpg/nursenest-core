@@ -40,6 +40,32 @@ export type LearnerStudySnapshot = {
   weakTopicCodes: string[];
 };
 
+function emptyLearnerStudySnapshot(
+  source: TopicPerformanceSnapshot["source"] = "fallback",
+): LearnerStudySnapshot {
+  return {
+    weakTopics: [],
+    topicPerformanceSource: source,
+    topicTrends: [],
+    strongTopicsHighlight: [],
+    recommendedFocusTopic: null,
+    topWeak: null,
+    pathwayNext: null,
+    weakTopicPathwayLesson: null,
+    hasWeakTopicFlashcards: false,
+    hasMissedPracticeQuestions: false,
+    weakTopicCodes: [],
+  };
+}
+
+const LEARNER_STUDY_SNAPSHOT_TOPIC_PERF_TIMEOUT_MS = 650;
+
+function timeoutAfter<T>(ms: number, value: T): Promise<T> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(value), ms);
+  });
+}
+
 function weakTopicCodesFromRows(weak: WeakTopicRow[], max = 6): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
@@ -101,6 +127,11 @@ export type BuildLearnerStudySnapshotOptions = {
     tier: TierCode | null;
     learnerPath: string | null;
   };
+  /**
+   * Upper bound for non-preloaded topic performance. Lesson detail uses this helper for a small hint;
+   * it must never make core lesson content wait on a slow analytics scan.
+   */
+  topicPerformanceTimeoutMs?: number;
 };
 
 /**
@@ -119,26 +150,23 @@ export async function buildLearnerStudySnapshot(
    * Do **not** run a second {@link loadUnifiedTopicPerformance} here — that would undo degraded-mode savings.
    */
   if (options?.topicPerformance == null && shouldSkipNonCriticalLearnerWork()) {
-    return {
-      weakTopics: [],
-      topicPerformanceSource: "fallback",
-      topicTrends: [],
-      strongTopicsHighlight: [],
-      recommendedFocusTopic: null,
-      topWeak: null,
-      pathwayNext: null,
-      weakTopicPathwayLesson: null,
-      hasWeakTopicFlashcards: false,
-      hasMissedPracticeQuestions: false,
-      weakTopicCodes: [],
-    };
+    return emptyLearnerStudySnapshot();
   }
 
   let perf: TopicPerformanceSnapshot;
   if (options?.topicPerformance != null) {
     perf = options.topicPerformance;
   } else {
-    perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
+    const topicPerformanceTimeoutMs = Math.max(
+      100,
+      Math.floor(options?.topicPerformanceTimeoutMs ?? LEARNER_STUDY_SNAPSHOT_TOPIC_PERF_TIMEOUT_MS),
+    );
+    const timed = await Promise.race([
+      loadUnifiedTopicPerformance(userId, entitlement, 8).catch(() => null),
+      timeoutAfter<TopicPerformanceSnapshot | null>(topicPerformanceTimeoutMs, null),
+    ]);
+    if (timed == null) return emptyLearnerStudySnapshot();
+    perf = timed;
   }
   let weakTopics = perf.weakTopics;
 
