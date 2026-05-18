@@ -6,6 +6,8 @@ import { ALLIED_PROFESSION_DEDICATED_CATALOGS } from "@/content/pathway-lessons/
 import medicalLaboratoryTechnologistCatalog, {
   medicalLaboratoryTechnologistLessons,
 } from "@/content/pathway-lessons/allied-professions/medical-laboratory-technologist";
+import { medicalLaboratoryTechnologistFlashcards } from "@/content/flashcards/allied-medical-laboratory-technologist";
+import { medicalLaboratoryTechnologistQuestions } from "@/content/questions/allied-medical-laboratory-technologist";
 
 const REQUIRED_DOMAINS = [
   "hematology-cbc-interpretation",
@@ -15,6 +17,26 @@ const REQUIRED_DOMAINS = [
   "coagulation-studies-guide",
   "urinalysis-body-fluids",
   "lab-values",
+] as const;
+
+const REQUIRED_FLASHCARD_DECKS = [
+  "hematology",
+  "blood-bank",
+  "clinical-chemistry",
+  "microbiology",
+  "coagulation",
+  "urinalysis",
+  "quality-control",
+] as const;
+
+const REQUIRED_QUESTION_DOMAINS = [
+  "hematology",
+  "bloodBank",
+  "chemistry",
+  "microbiology",
+  "coagulation",
+  "urinalysis",
+  "qualityControl",
 ] as const;
 
 const WORKFLOW_MARKERS = [
@@ -89,6 +111,61 @@ describe("medical laboratory technologist allied slice", () => {
 
     for (const marker of WORKFLOW_MARKERS) {
       assert.match(lessonText, marker, `MLS/MLT lesson package must include workflow marker ${marker}`);
+    }
+  });
+
+  it("ships profession-scoped MLS/MLT flashcards with adaptive metadata", () => {
+    assert.ok(
+      medicalLaboratoryTechnologistFlashcards.length >= 16,
+      `expected at least 16 MLS/MLT flashcards, got ${medicalLaboratoryTechnologistFlashcards.length}`,
+    );
+
+    const decks = new Set(medicalLaboratoryTechnologistFlashcards.map((card) => card.deck));
+    for (const requiredDeck of REQUIRED_FLASHCARD_DECKS) {
+      assert.ok(decks.has(requiredDeck), `missing MLS/MLT flashcard deck: ${requiredDeck}`);
+    }
+
+    for (const card of medicalLaboratoryTechnologistFlashcards) {
+      assert.equal(card.alliedProfessionKey, "mlt", `${card.id} must remain mlt scoped`);
+      assert.ok(card.front.length > 8, `${card.id} front is too thin`);
+      assert.ok(card.back.length > 8, `${card.id} back is too thin`);
+      assert.ok(card.explanation.length > 45, `${card.id} explanation is too thin`);
+      assert.ok(card.examTags.includes("CSMLS"), `${card.id} must support CSMLS tagging`);
+      assert.ok(card.examTags.includes("ASCP_MLS"), `${card.id} must support ASCP MLS tagging`);
+      assert.ok(card.examTags.includes("ASCP_MLT"), `${card.id} must support ASCP MLT tagging`);
+      assert.ok(card.workflowTags || card.morphologyTags, `${card.id} must expose adaptive metadata arrays`);
+    }
+  });
+
+  it("ships profession-scoped MLS/MLT question-bank seeds", () => {
+    assert.ok(
+      medicalLaboratoryTechnologistQuestions.length >= 7,
+      `expected at least 7 MLS/MLT questions, got ${medicalLaboratoryTechnologistQuestions.length}`,
+    );
+
+    const questionDomains = new Set(medicalLaboratoryTechnologistQuestions.map((question) => question.domain));
+    for (const required of REQUIRED_QUESTION_DOMAINS) {
+      assert.ok(questionDomains.has(required), `missing MLS/MLT question domain: ${required}`);
+    }
+
+    const lessonSlugs = new Set(medicalLaboratoryTechnologistLessons.map((lesson) => lesson.slug));
+    for (const question of medicalLaboratoryTechnologistQuestions) {
+      assert.equal(question.alliedProfessionKey, "mlt", `${question.id} must remain mlt scoped`);
+      assert.ok(question.options.length >= 4, `${question.id} must include at least 4 options`);
+      assert.ok(question.correctIndex >= 0 && question.correctIndex < question.options.length, `${question.id} correctIndex is invalid`);
+      assert.equal(
+        question.incorrectRationales.length,
+        question.options.length - 1,
+        `${question.id} must explain each incorrect option`,
+      );
+      assert.ok(question.rationale.length > 75, `${question.id} rationale is too thin`);
+      assert.ok(question.examTags.includes("CSMLS"), `${question.id} must support CSMLS tagging`);
+      assert.ok(question.examTags.includes("ASCP_MLS"), `${question.id} must support ASCP MLS tagging`);
+      assert.ok(question.examTags.includes("ASCP_MLT"), `${question.id} must support ASCP MLT tagging`);
+      assert.ok((question.workflowTags ?? []).length >= 1, `${question.id} must include workflow tags`);
+      if (question.lessonSlug) {
+        assert.ok(lessonSlugs.has(question.lessonSlug), `${question.id} links to missing lesson ${question.lessonSlug}`);
+      }
     }
   });
 });
