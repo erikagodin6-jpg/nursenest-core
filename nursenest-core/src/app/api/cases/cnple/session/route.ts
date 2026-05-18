@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { CNPLE_SAMPLE_CASES } from "@/content/cases/cnple-sample-cases";
+import { findCnpleLoftCase } from "@/content/cases/cnple-case-catalog";
 import { buildStepPayload } from "@/lib/cases/longitudinal-case-engine";
 
 export async function POST(req: NextRequest) {
@@ -39,8 +39,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "mode must be PRACTICE or SIMULATION" }, { status: 400 });
   }
 
-  // Resolve case — static samples or DB-backed scenario
-  const patientCase = CNPLE_SAMPLE_CASES.find((c) => c.id === scenarioId);
+  const patientCase = findCnpleLoftCase(scenarioId);
   if (!patientCase) {
     return NextResponse.json({ error: "Case not found" }, { status: 404 });
   }
