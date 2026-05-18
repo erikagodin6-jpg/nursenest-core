@@ -6,6 +6,7 @@ import medicalImagingCatalog from "@/content/pathway-lessons/allied-professions/
 import emergencyMedicalServicesCatalog from "@/content/pathway-lessons/allied-professions/emergency-medical-services";
 import sonographyCatalog from "@/content/pathway-lessons/allied-professions/sonography";
 import medicalAssistantCatalog from "@/content/pathway-lessons/allied-professions/medical-assistant";
+import dentalHygieneCatalog from "@/content/pathway-lessons/allied-professions/dental-hygiene";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -44,35 +45,40 @@ if (sonographyProfession) {
 const medicalAssistantProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "medical-assistant");
 if (medicalAssistantProfession) {
   medicalAssistantProfession.dedicatedCatalogFile = "medical-assistant";
-  medicalAssistantProfession.topicSlugsIn = [
-    "ma-clinical-intake",
-    "ma-vital-signs",
-    "ma-infection-control",
-    "ma-procedure-support",
-    "ma-medication-safety",
-    "ma-administrative-safety",
-    "ambulatory-care",
-    "medical-office-assistant",
-    "clinic-workflow",
-    "phone-triage",
-    "patient-rooming",
+}
+
+const dentalHygieneProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "dental-hygiene");
+if (dentalHygieneProfession) {
+  dentalHygieneProfession.dedicatedCatalogFile = "dental-hygiene";
+  dentalHygieneProfession.topicSlugsIn = [
+    "dental-hygiene-periodontology",
+    "dental-hygiene-instrumentation",
+    "dental-radiography",
+    "dental-hygiene-prevention",
+    "dental-medical-emergencies",
+    "dental-hygiene-ethics",
+    "periodontal-therapy",
+    "dental-hygiene-board-exam",
+    "oral-health-prevention",
+    "fluoride-and-sealants",
+    "dental-scaling",
   ];
-  medicalAssistantProfession.description =
-    "Deep medical assistant education covering rooming, vital signs, ambulatory workflows, medication safety, infection control, procedure support, privacy, and administrative triage routing.";
-  medicalAssistantProfession.examOverview = [
-    "Medical assistant exams reward workflow safety, prioritization, infection control, medication awareness, and recognition of urgent symptoms in ambulatory settings.",
-    "Use rooming, vitals, specimen handling, privacy, and escalation logic together instead of memorizing isolated administrative facts.",
-    "Scenario-based clinic workflow review improves retention and patient-safety reasoning more than passive memorization alone.",
+  dentalHygieneProfession.description =
+    "Deep dental hygiene education covering periodontal assessment, instrumentation, radiography, prevention, fluoride, sealants, ethics, and dental-office emergency response.";
+  dentalHygieneProfession.examOverview = [
+    "Dental hygiene board exams reward periodontal reasoning, instrumentation safety, radiographic interpretation, prevention planning, and ethical decision-making.",
+    "Use probing, attachment loss, calculus detection, caries risk, and radiographic patterns together instead of memorizing isolated facts.",
+    "Scenario-based oral-health review improves retention and patient-care reasoning more than passive memorization alone.",
   ];
-  medicalAssistantProfession.features = [
-    "Dedicated ambulatory-care lesson shard separated from generic allied-health filler.",
-    "Mechanism-first rooming, intake, infection-control, and medication-safety education.",
-    "Integrated ECG, POCT, vaccine, specimen, and administrative workflow training.",
-    "Shared clinic-care foundation supporting future pediatrics, family practice, urgent care, and specialty-office expansion.",
+  dentalHygieneProfession.features = [
+    "Dedicated dental hygiene lesson shard separated from generic dental-assistant filler.",
+    "Mechanism-first periodontal, instrumentation, radiography, and prevention education.",
+    "Integrated ethics, consent, emergency response, and patient-education workflows.",
+    "Shared oral-health foundation supporting future local anesthesia, orthodontic, pediatric, and advanced periodontal expansion.",
   ];
-  medicalAssistantProfession.ctaLine =
-    "Study ambulatory workflows, rooming, vitals, medication safety, and clinic operations through the dedicated medical assistant pathway.";
-  medicalAssistantProfession.premiumCtaHeadline = "Master ambulatory care workflows, patient intake, medication safety, and clinic operations";
+  dentalHygieneProfession.ctaLine =
+    "Study periodontal therapy, instrumentation, radiography, prevention, and oral-health workflows through the dedicated dental hygiene pathway.";
+  dentalHygieneProfession.premiumCtaHeadline = "Master periodontal assessment, instrumentation, prevention, and oral-health care";
 }
 
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
@@ -83,4 +89,5 @@ export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, Allie
   "emergency-medical-services": emergencyMedicalServicesCatalog,
   sonography: sonographyCatalog,
   "medical-assistant": medicalAssistantCatalog,
+  "dental-hygiene": dentalHygieneCatalog,
 };
