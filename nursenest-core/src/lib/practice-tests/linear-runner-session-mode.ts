@@ -3,10 +3,10 @@
  *
  * ## Modes (user-facing)
  *
- * - **`linear_exam`**: `linearDeliveryMode === "exam"` — CAT-style exam chrome, no per-item rationale
- *   column during delivery, **Previous disabled**, options locked after commit.
+ * - **`linear_exam`**: `linearDeliveryMode === "exam"` — LOFT-style linear simulation chrome,
+ *   no per-item rationale column during delivery, fixed-session progress, and committed-item review semantics.
  * - **`linear_tutor`**: `linearDeliveryMode === "practice"` with **no** post-submit review navigation
- *   (`linearAllowReviewNavigation !== true`) — same CAT exam board as linear exam; per-item rationales
+ *   (`linearAllowReviewNavigation !== true`) — same board surfaces as linear exam; per-item rationales
  *   render inline below options when policy is `after_each`, **Previous disabled** until/unless review nav is enabled.
  * - **`linear_tutor_review_nav`**: practice delivery + **`linearAllowReviewNavigation === true`** —
  *   same surfaces, **Previous** allowed only for **already-committed** earlier items (server + client).
@@ -15,7 +15,7 @@
  *
  * Rows **without** `linearDeliveryMode` on stored config still hit the legacy branch in
  * `practice-test-runner-client` (free navigation, no `linear_commit`). Presentation uses the same
- * CAT exam board shell as linear engine runs (`QuestionCard` + detached footer).
+ * board shell as linear engine runs (`QuestionCard` + detached footer).
  * Migrating those rows to engine-backed delivery is **not** automatic without a config default on read
  * or a **data backfill** that sets `linearDeliveryMode` + rationale flags to match each row’s intent.
  *
@@ -24,6 +24,7 @@
  * review-nav shape on top of legacy free navigation.
  */
 
+import type { LearnerExamShellMode } from "@/components/exam/exam-session-shell";
 import type { LinearDeliveryMode } from "@/lib/practice-tests/types";
 
 export type LinearEngineRunnerUiKind =
@@ -46,4 +47,17 @@ export function resolveLinearEngineRunnerUiKind(args: {
   if (ld === "exam") return "linear_exam";
   if (args.linearAllowReviewNavigation) return "linear_tutor_review_nav";
   return "linear_tutor";
+}
+
+export function resolveLearnerExamShellModeForPracticeRunner(args: {
+  status: string;
+  catMode: boolean;
+  linearPracticeSplitReview: boolean;
+  linearDeliveryMode?: LinearDeliveryMode | null;
+}): LearnerExamShellMode {
+  if (args.status !== "IN_PROGRESS") return "review";
+  if (args.linearPracticeSplitReview) return "practice";
+  if (args.catMode) return "cat";
+  if (args.linearDeliveryMode === "exam") return "loft";
+  return "practice";
 }
