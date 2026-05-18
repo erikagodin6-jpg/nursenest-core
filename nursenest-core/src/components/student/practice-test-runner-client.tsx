@@ -3174,6 +3174,9 @@ export function PracticeTestRunnerClient({
           keyTakeaway={linearFeedback?.keyTakeaway}
           relatedLessons={linearFeedback?.relatedLessons ?? []}
           confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
+          showDistractorFallback={
+            Boolean(currentCommitted && rationaleFullStatus !== "waiting" && rationaleFullStatus !== null)
+          }
           copy={linearRationalePanelCopy}
         />
       ) : null}

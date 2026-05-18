@@ -11,6 +11,10 @@ import type { PracticeRationaleFullPanelCopy } from "@/components/study/practice
  * Per-item rationale block for linear Practice Tests — rendered inside the CAT
  * {@link QuestionCard} exam scroll region (below options) so the shell matches
  * CAT exam viewport-fit layout while still surfacing post-submit teaching content.
+ *
+ * When `showDistractorFallback` is true, incorrect option rows that have no stored
+ * per-option explanation display the copy default instead of rendering empty — so
+ * every incorrect answer always has visible rationale after submission.
  */
 export function PracticeTestPerItemRationale({
   status,
@@ -23,6 +27,7 @@ export function PracticeTestPerItemRationale({
   keyTakeaway,
   relatedLessons,
   confidenceLevel,
+  showDistractorFallback = false,
   copy,
 }: {
   status: PracticeRationaleFullPanelStatus;
@@ -35,6 +40,12 @@ export function PracticeTestPerItemRationale({
   keyTakeaway?: string | null;
   relatedLessons?: { title: string; href: string }[];
   confidenceLevel?: ConfidenceLevel | null;
+  /**
+   * When true, incorrect option rows without a stored distractor rationale show
+   * the fallback copy instead of rendering empty. Ensures all answers always have
+   * visible rationale after submission. Defaults to false for backward compat.
+   */
+  showDistractorFallback?: boolean;
   copy?: Partial<PracticeRationaleFullPanelCopy>;
 }) {
   return (
@@ -54,6 +65,7 @@ export function PracticeTestPerItemRationale({
           keyTakeaway={keyTakeaway}
           relatedLessons={relatedLessons}
           confidenceLevel={confidenceLevel}
+          showDistractorFallback={showDistractorFallback}
           copy={copy}
         />
       </div>
