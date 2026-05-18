@@ -5,16 +5,13 @@ import {
   PRE_NURSING_FOUNDATION_CHECKPOINTS,
   type PreNursingCheckpointDefinition,
 } from "@/content/pre-nursing/pre-nursing-interactive-checkpoints";
+import type { PreNursingMasteryEvent } from "@/lib/pre-nursing/pre-nursing-mastery-events";
 
 export type PreNursingCheckpointClusterProps = {
   ids: readonly string[];
   title?: string;
   description?: string;
-  onAnswered?: (event: {
-    conceptId: string;
-    selectedOptionId: string;
-    correct: boolean;
-  }) => void;
+  onAnswered?: (event: PreNursingMasteryEvent) => void;
 };
 
 export function PreNursingCheckpointCluster({
