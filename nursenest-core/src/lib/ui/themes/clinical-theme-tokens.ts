@@ -4,7 +4,8 @@ export type LaunchClinicalThemeId =
   | "blossom"
   | "aurora"
   | "sunset"
-  | "forest";
+  | "forest"
+  | "dark-clinical";
 
 export type ClinicalThemeMood =
   | "Soft, motivating, elegant"
@@ -12,7 +13,8 @@ export type ClinicalThemeMood =
   | "Clean, professional, clinical"
   | "Grounded, focused, calm"
   | "Cheerful, premium, clinically bright"
-  | "Warm, optimistic, uplifting";
+  | "Warm, optimistic, uplifting"
+  | "High-contrast, clinical, accessibility-first";
 
 export type ClinicalThemeMeta = {
   id: LaunchClinicalThemeId;
@@ -34,6 +36,7 @@ export const LAUNCH_CLINICAL_THEME_IDS = [
   "aurora",
   "sunset",
   "forest",
+  "dark-clinical",
 ] as const;
 
 /**
@@ -112,6 +115,18 @@ export const CLINICAL_THEME_META: Record<LaunchClinicalThemeId, ClinicalThemeMet
       secondary: "#0F766E",
       accent: "#D9A441",
       surface: "#F7FBF7",
+    },
+  },
+  "dark-clinical": {
+    id: "dark-clinical",
+    label: "Clinical High Contrast",
+    mood: "High-contrast, clinical, accessibility-first",
+    group: "dark",
+    swatches: {
+      primary: "#06B6D4",
+      secondary: "#22D3EE",
+      accent: "#67E8F9",
+      surface: "#0F172A",
     },
   },
 };
