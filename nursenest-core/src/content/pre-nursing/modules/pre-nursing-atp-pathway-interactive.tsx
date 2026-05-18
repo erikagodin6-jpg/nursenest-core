@@ -1,7 +1,7 @@
 "use client";
 
 import { ATPPathwayModule } from "@/content/pre-nursing/modules/pre-nursing-atp-pathway";
-import { PreNursingCheckpointCluster } from "@/components/pre-nursing/pre-nursing-checkpoint-cluster";
+import { PreNursingAdaptiveCheckpointSection } from "@/components/pre-nursing/pre-nursing-adaptive-checkpoint-section";
 import { PRE_NURSING_ATP_PATHWAY_CHECKPOINT_IDS } from "@/content/pre-nursing/pre-nursing-interactive-checkpoints";
 
 export function ATPPathwayInteractiveModule() {
@@ -9,10 +9,24 @@ export function ATPPathwayInteractiveModule() {
     <div className="space-y-10">
       <ATPPathwayModule />
 
-      <PreNursingCheckpointCluster
+      <PreNursingAdaptiveCheckpointSection
         ids={PRE_NURSING_ATP_PATHWAY_CHECKPOINT_IDS}
-        title="Clinical energy-pathway checkpoints"
-        description="Strengthen your understanding of ATP production, oxygen-dependent metabolism, tissue hypoxia, lactic acidosis, and DKA compensation using clinically framed active-recall checkpoints."
+        remediationTitle="Strengthen ATP and oxygenation foundations"
+        remediationWeakArea="Aerobic metabolism, oxygen-dependent ATP production, and compensatory physiology"
+        remediationExplanation="Learners often memorize glycolysis, ATP, lactate, and DKA terminology separately without connecting them into a unified oxygenation-and-energy framework."
+        remediationActions={[
+          "Revisit aerobic vs anaerobic metabolism.",
+          "Review why oxygen is required for high-yield ATP production.",
+          "Connect lactate elevation to tissue hypoxia and poor perfusion.",
+          "Review how Kussmaul respirations compensate for metabolic acidosis.",
+        ]}
+        remediationRelatedConcepts={[
+          "oxygenation",
+          "cellular energy",
+          "lactate",
+          "metabolic acidosis",
+          "perfusion",
+        ]}
       />
     </div>
   );
