@@ -1,5 +1,6 @@
 import type { PatientCase } from "@/lib/cases/longitudinal-case-types";
 import { CASE_COPD_EXACERBATION_DISCHARGE_SAFETY } from "@/content/cases/cnple-copd-exacerbation-loft-case";
+import { CASE_DELIRIUM_POLYPHARMACY } from "@/content/cases/cnple-delirium-polypharmacy-loft-case";
 import { CASE_DIABETES_INSULIN_SICK_DAY_MANAGEMENT } from "@/content/cases/cnple-diabetes-insulin-sick-day-loft-case";
 import { CASE_HEART_FAILURE_DIURETIC_TITRATION } from "@/content/cases/cnple-heart-failure-diuretic-titration-loft-case";
 import { CNPLE_SAMPLE_CASES } from "@/content/cases/cnple-sample-cases";
@@ -24,6 +25,7 @@ export const CNPLE_LOFT_CASES: PatientCase[] = [
   CASE_HEART_FAILURE_DIURETIC_TITRATION,
   CASE_DIABETES_INSULIN_SICK_DAY_MANAGEMENT,
   CASE_SUICIDE_RISK_LONGITUDINAL,
+  CASE_DELIRIUM_POLYPHARMACY,
 ];
 
 export function findCnpleLoftCase(caseId: string): PatientCase | undefined {
