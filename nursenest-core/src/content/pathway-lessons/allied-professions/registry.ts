@@ -1,6 +1,7 @@
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import respiratoryTherapyCatalog from "@/content/pathway-lessons/allied-professions/respiratory-therapy";
 import pharmacyTechnicianCatalog from "@/content/pathway-lessons/allied-professions/pharmacy-technician";
+import medicalLaboratoryTechnologistCatalog from "@/content/pathway-lessons/allied-professions/medical-laboratory-technologist";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -77,6 +78,39 @@ if (pharmacyTechProfession) {
   pharmacyTechProfession.premiumCtaHeadline = "Master pharmacy calculations, Top 200 drugs, and medication safety";
 }
 
+const mltProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "mlt");
+if (mltProfession) {
+  mltProfession.dedicatedCatalogFile = "medical-laboratory-technologist";
+  mltProfession.topicSlugsIn = [
+    "hematology-cbc-interpretation",
+    "blood-banking-crossmatch",
+    "clinical-chemistry-panels",
+    "microbiology-culture-identification",
+    "coagulation-studies-guide",
+    "urinalysis-body-fluids",
+    "lab-values",
+    "infection-control",
+    "medical-terminology",
+    "clinical-documentation",
+  ];
+  mltProfession.description =
+    "CSMLS, ASCP MLS, and ASCP MLT-aligned laboratory education for hematology, blood bank, clinical chemistry, microbiology, QC, analyzer reasoning, specimen integrity, and escalation judgment.";
+  mltProfession.examOverview = [
+    "MLS and MLT exams test more than reference ranges: they reward specimen integrity, analyzer logic, QC awareness, morphology recognition, and safe result verification.",
+    "Use domain-specific study loops: hematology morphology, blood bank panel reasoning, chemistry interference, microbiology identification, and coagulation workflows.",
+    "CSMLS-style fixed-format review and ASCP-style adaptive practice should both preserve laboratory workflow realism and escalation judgment.",
+  ];
+  mltProfession.features = [
+    "Dedicated MLS/MLT lesson shard separated from generic allied-health filler content.",
+    "Hematology, blood bank, chemistry, microbiology, coagulation, urinalysis, and QC topic slugs prepared for deep catalog expansion.",
+    "Workflow-first teaching for specimen integrity, analyzer flags, critical values, and result verification.",
+    "Future-ready metadata path for morphology drills, blood bank solver cases, QC simulations, and adaptive remediation.",
+  ];
+  mltProfession.ctaLine =
+    "Study hematology, blood bank, chemistry, microbiology, and QC through the dedicated MLS/MLT laboratory pathway.";
+  mltProfession.premiumCtaHeadline = "Master laboratory interpretation, QC, morphology, and transfusion safety";
+}
+
 /**
  * Static manifest for optional per-profession allied lesson shards.
  *
@@ -86,4 +120,5 @@ if (pharmacyTechProfession) {
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
   "respiratory-therapy": respiratoryTherapyCatalog,
   "pharmacy-technician": pharmacyTechnicianCatalog,
+  "medical-laboratory-technologist": medicalLaboratoryTechnologistCatalog,
 };
