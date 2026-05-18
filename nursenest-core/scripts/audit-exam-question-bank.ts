@@ -3,14 +3,16 @@
  * Permanent guard: fail when the connected Postgres has no usable published `exam_questions`
  * for core pathways (same gates as flashcard audit + pathway exam/tier scope).
  *
- * - Loads `.env` / `.env.local` from `nursenest-core/` (same cwd expectation as other Prisma scripts).
- * - Prints redacted DATABASE_URL facts (no password) + fingerprint for drift checks.
- * - Skips with exit 0 when DATABASE_URL is unset (CI without DB).
- * - Exit 1 when URL is set but counts are zero / pathway pools empty.
+ * Clinical quality audit added:
+ * - Flags shallow rationales, missing distractor teaching, missing clinical reasoning,
+ *   missing exam strategy/traps/takeaways, weak metadata, and unreviewed low-quality rows.
+ * - Defaults to report/warn mode so deploys do not fail because of legacy imported rows.
+ * - Set NN_EXAM_BANK_CLINICAL_AUDIT_STRICT=1 to fail when quality thresholds are missed.
  *
  * Usage:
  *   cd nursenest-core && npx tsx scripts/audit-exam-question-bank.ts
  *   NN_EXAM_BANK_AUDIT_SOFT=1 npx tsx scripts/audit-exam-question-bank.ts   # warn only, exit 0
+ *   NN_EXAM_BANK_CLINICAL_AUDIT_STRICT=1 npx tsx scripts/audit-exam-question-bank.ts
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -55,22 +57,213 @@ const CORE_PATHWAYS = [
   { pathwayId: "ca-np-cnple", label: "CA NP CNPLE" },
 ] as const;
 
+const MIN_RATIONALE_CHARS = 180;
+const MIN_CLINICAL_REASONING_CHARS = 100;
+const MIN_EXAM_STRATEGY_CHARS = 60;
+const QUALITY_SCORE_PASSING = 80;
+const MAX_SHALLOW_PUBLISHED_PERCENT = 5;
+
 function regionSql(country: CountryCode): Prisma.Sql {
   return country === "CA"
     ? Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'CA_ONLY')`
     : Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'US_ONLY')`;
 }
 
-async function hasStudyLinkColumn(prisma: PrismaClient): Promise<boolean> {
+async function hasColumn(prisma: PrismaClient, tableName: string, columnName: string): Promise<boolean> {
   const rows = await prisma.$queryRaw<{ exists: boolean }[]>`
     SELECT EXISTS (
       SELECT 1 FROM information_schema.columns
       WHERE table_schema = 'public'
-        AND table_name = 'exam_questions'
-        AND column_name = 'study_link_pathway_id'
+        AND table_name = ${tableName}
+        AND column_name = ${columnName}
     ) AS exists
   `;
   return Boolean(rows[0]?.exists);
+}
+
+async function hasStudyLinkColumn(prisma: PrismaClient): Promise<boolean> {
+  return hasColumn(prisma, "exam_questions", "study_link_pathway_id");
+}
+
+function pct(part: number, whole: number): string {
+  if (!whole) return "0.0%";
+  return `${((part / whole) * 100).toFixed(1)}%`;
+}
+
+async function printClinicalQualityAudit(prisma: PrismaClient, failures: string[]): Promise<void> {
+  const strict = process.env.NN_EXAM_BANK_CLINICAL_AUDIT_STRICT === "1";
+
+  const [pub] = await prisma.$queryRaw<[{ n: bigint }]>`
+    SELECT COUNT(*)::bigint AS n
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+  `;
+  const published = Number(pub.n);
+
+  console.log("\n=== Clinical quality + rationale depth audit ===");
+  console.log(`  scope                   : published non-ECG exam_questions`);
+  console.log(`  published rows          : ${published.toLocaleString()}`);
+  console.log(`  strict failure mode     : ${strict ? "ON" : "OFF (report only; set NN_EXAM_BANK_CLINICAL_AUDIT_STRICT=1)"}`);
+  console.log(`  rationale depth floor   : ${MIN_RATIONALE_CHARS} chars`);
+
+  if (published === 0) return;
+
+  const [shallow] = await prisma.$queryRaw<[{ n: bigint }]>`
+    SELECT COUNT(*)::bigint AS n
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND length(trim(coalesce(rationale, ''))) < ${MIN_RATIONALE_CHARS}
+  `;
+  const shallowRationales = Number(shallow.n);
+
+  const [missingDistractors] = await prisma.$queryRaw<[{ n: bigint }]>`
+    SELECT COUNT(*)::bigint AS n
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND lower(coalesce(question_type, '')) IN ('mcq', 'multiple_choice', 'multiple-choice', 'sata')
+      AND (
+        distractor_rationales IS NULL
+        OR jsonb_typeof(distractor_rationales::jsonb) <> 'object'
+        OR distractor_rationales::jsonb = '{}'::jsonb
+      )
+  `;
+
+  const [missingReasoning] = await prisma.$queryRaw<[{ n: bigint }]>`
+    SELECT COUNT(*)::bigint AS n
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND length(trim(coalesce(clinical_reasoning, ''))) < ${MIN_CLINICAL_REASONING_CHARS}
+  `;
+
+  const [missingStrategy] = await prisma.$queryRaw<[{ n: bigint }]>`
+    SELECT COUNT(*)::bigint AS n
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND length(trim(coalesce(exam_strategy, ''))) < ${MIN_EXAM_STRATEGY_CHARS}
+  `;
+
+  const [missingTrapOrTakeaway] = await prisma.$queryRaw<[{ n: bigint }]>`
+    SELECT COUNT(*)::bigint AS n
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND length(trim(coalesce(clinical_trap, ''))) < 40
+      AND length(trim(coalesce(key_takeaway, ''))) < 40
+  `;
+
+  const [weakMetadata] = await prisma.$queryRaw<[{ n: bigint }]>`
+    SELECT COUNT(*)::bigint AS n
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND (
+        nullif(trim(coalesce(topic, '')), '') IS NULL
+        OR nullif(trim(coalesce(body_system, '')), '') IS NULL
+        OR nullif(trim(coalesce(cognitive_level, '')), '') IS NULL
+        OR difficulty IS NULL
+      )
+  `;
+
+  const [lowQualityScore] = await prisma.$queryRaw<[{ n: bigint }]>`
+    SELECT COUNT(*)::bigint AS n
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND quality_score IS NOT NULL
+      AND quality_score < ${QUALITY_SCORE_PASSING}
+  `;
+
+  const [unsafeLanguage] = await prisma.$queryRaw<[{ n: bigint }]>`
+    SELECT COUNT(*)::bigint AS n
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND (
+        stem ~* '\\b(always|never|guarantee|guaranteed|only intervention|cure)\\b'
+        OR rationale ~* '\\b(always|never|guarantee|guaranteed|only intervention|cure)\\b'
+      )
+  `;
+
+  console.log(`  shallow rationales       : ${Number(shallowRationales).toLocaleString()} (${pct(shallowRationales, published)})`);
+  console.log(`  no distractor teaching   : ${Number(missingDistractors.n).toLocaleString()} (${pct(Number(missingDistractors.n), published)})`);
+  console.log(`  weak clinical reasoning  : ${Number(missingReasoning.n).toLocaleString()} (${pct(Number(missingReasoning.n), published)})`);
+  console.log(`  weak exam strategy       : ${Number(missingStrategy.n).toLocaleString()} (${pct(Number(missingStrategy.n), published)})`);
+  console.log(`  no trap / takeaway       : ${Number(missingTrapOrTakeaway.n).toLocaleString()} (${pct(Number(missingTrapOrTakeaway.n), published)})`);
+  console.log(`  weak metadata            : ${Number(weakMetadata.n).toLocaleString()} (${pct(Number(weakMetadata.n), published)})`);
+  console.log(`  low quality_score < ${QUALITY_SCORE_PASSING}    : ${Number(lowQualityScore.n).toLocaleString()} (${pct(Number(lowQualityScore.n), published)})`);
+  console.log(`  unsafe absolute wording  : ${Number(unsafeLanguage.n).toLocaleString()} (${pct(Number(unsafeLanguage.n), published)})`);
+
+  const shallowByExam = await prisma.$queryRaw<{ exam: string; c: bigint }[]>`
+    SELECT coalesce(exam, '(empty)') AS exam, COUNT(*)::bigint AS c
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND length(trim(coalesce(rationale, ''))) < ${MIN_RATIONALE_CHARS}
+    GROUP BY 1
+    ORDER BY c DESC
+    LIMIT 12
+  `;
+  if (shallowByExam.length) {
+    console.log("\n=== Shallow rationale hotspots by exam ===");
+    for (const r of shallowByExam) {
+      console.log(`  ${String(r.exam).padEnd(24)} ${Number(r.c).toLocaleString()}`);
+    }
+  }
+
+  const samples = await prisma.$queryRaw<{
+    id: string;
+    exam: string | null;
+    topic: string | null;
+    rationale_len: number;
+    stem_preview: string;
+  }[]>`
+    SELECT
+      id,
+      exam,
+      topic,
+      length(trim(coalesce(rationale, '')))::int AS rationale_len,
+      left(regexp_replace(coalesce(stem, ''), '\\s+', ' ', 'g'), 140) AS stem_preview
+    FROM exam_questions
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+      AND coalesce(question_format, '') <> 'ecg_video'
+      AND (
+        length(trim(coalesce(rationale, ''))) < ${MIN_RATIONALE_CHARS}
+        OR length(trim(coalesce(clinical_reasoning, ''))) < ${MIN_CLINICAL_REASONING_CHARS}
+        OR distractor_rationales IS NULL
+        OR distractor_rationales::jsonb = '{}'::jsonb
+      )
+    ORDER BY updated_at DESC NULLS LAST, created_at DESC NULLS LAST
+    LIMIT 10
+  `;
+  if (samples.length) {
+    console.log("\n=== Sample rows needing clinical enrichment ===");
+    for (const s of samples) {
+      console.log(`  ${s.id} | ${s.exam ?? "(exam?)"} | ${s.topic ?? "(topic?)"} | rationale ${s.rationale_len} chars`);
+      console.log(`      ${s.stem_preview}`);
+    }
+  }
+
+  const shallowPercent = (shallowRationales / published) * 100;
+  if (strict && shallowPercent > MAX_SHALLOW_PUBLISHED_PERCENT) {
+    failures.push(
+      `Clinical audit: ${shallowPercent.toFixed(1)}% of published non-ECG rows have rationales under ${MIN_RATIONALE_CHARS} chars (max ${MAX_SHALLOW_PUBLISHED_PERCENT}%).`,
+    );
+  }
+  if (strict && Number(missingDistractors.n) > 0) {
+    failures.push(
+      `Clinical audit: ${Number(missingDistractors.n).toLocaleString()} published MCQ/SATA rows lack distractor rationales.`,
+    );
+  }
+  if (strict && Number(lowQualityScore.n) > 0) {
+    failures.push(
+      `Clinical audit: ${Number(lowQualityScore.n).toLocaleString()} published rows have quality_score < ${QUALITY_SCORE_PASSING}.`,
+    );
+  }
 }
 
 async function main(): Promise<void> {
@@ -267,12 +460,20 @@ async function main(): Promise<void> {
       `\nGlobal practice/flashcard-style published (all regions/exams, topic/body required): ${Number(usableAll.n).toLocaleString()}`,
     );
 
+    await printClinicalQualityAudit(prisma, failures);
+    if (failures.length > 0) exitCode = 1;
+
     console.log("\n=== Canonical import / seed commands (when DB is empty) ===");
     console.log("  cd nursenest-core && npx prisma db seed");
     console.log("  cd nursenest-core && npx tsx scripts/publish-valid-draft-exam-questions.ts");
     console.log("  npm --prefix nursenest-core run import:replit-data:apply   # bundled Replit exports → Prisma");
     console.log("  npm --prefix nursenest-core run nursing:preview:db         # nursing JSON import dry-run vs DB");
     console.log("  See prisma/seed.ts (minimal sample rows) and package.json import:* scripts.");
+
+    console.log("\n=== Clinical enrichment repair target ===");
+    console.log("  Published rows should include: ≥180-char rationale, per-distractor rationales, clinical_reasoning, exam_strategy,");
+    console.log("  clinical_trap or key_takeaway, topic/body_system/cognitive_level/difficulty, and quality_score ≥80 when scored.");
+    console.log("  Use the sample IDs above as the first remediation queue; do not bulk-publish regenerated rows without review.");
 
     if (failures.length > 0) {
       console.log("\n=== Failures ===");
