@@ -11,7 +11,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { prisma } from "@/lib/db";
 import { loadAnalyticsPagePayload } from "@/lib/study/analytics-data";
 import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
-import { AnalyticsPerformanceReport } from "@/components/study/analytics-performance-report";
+import { PremiumNclexAnalyticsDashboard } from "@/components/study/premium-nclex-analytics-dashboard";
 import { AnalyticsDetailClient } from "./analytics-detail-client";
 import { loadMoreTrendData } from "./actions";
 import {
@@ -165,7 +165,7 @@ export default async function AccountAnalyticsPage() {
         />
       ) : (
         <>
-          <AnalyticsPerformanceReport
+          <PremiumNclexAnalyticsDashboard
             displayName={displayName}
             credentialLine={credentialLine}
             targetExamLine={targetExamLine}
@@ -174,6 +174,7 @@ export default async function AccountAnalyticsPage() {
             supplemental={supplemental}
             dailyActivity={dailyActivity}
             initialTopicRows={initialTopicRows}
+            questionTypeRows={questionTypeRows}
             analyticsQuality={analyticsQuality}
             onLoadMoreTrend={loadMoreTrendData}
           />

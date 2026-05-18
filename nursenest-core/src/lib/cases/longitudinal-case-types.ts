@@ -199,7 +199,9 @@ export type CaseStepQuestionFamily =
   | "interprofessional-care-consultation"
   | "chronic-disease-management"
   | "acute-respiratory"
+  | "acute-infection-escalation"
   | "alcohol-brief-intervention"
+  | "antibiotic-stewardship-prescribing"
   | "cellulitis-escalation"
   | "cellulitis-prescribing"
   | "cellulitis-prevention"
@@ -211,6 +213,8 @@ export type CaseStepQuestionFamily =
   | "patient-education"
   | "patient-education-angina"
   | "patient-education-copd"
+  | "maternal-acute-escalation"
+  | "postpartum-risk-counselling"
   | "prediabetes-cvd-risk"
   | "prescribing-endocrine"
   | "prescribing-respiratory"
@@ -219,7 +223,8 @@ export type CaseStepQuestionFamily =
   | "professional-ethics-autonomy"
   | "sihd-prescribing"
   | "tb-prescribing"
-  | "tb-professional-practice";
+  | "tb-professional-practice"
+  | "uti-prevention-stewardship";
 
 export type CaseStepQuestion = {
   stem: string;
