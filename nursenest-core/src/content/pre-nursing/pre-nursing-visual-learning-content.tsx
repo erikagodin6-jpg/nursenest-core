@@ -213,3 +213,140 @@ export function FluidShiftVisualLearningBlock() {
     </PreNursingVisualLearningBlock>
   );
 }
+
+export function RenalFiltrationVisualLearningBlock() {
+  return (
+    <PreNursingVisualLearningBlock
+      title="Renal filtration and fluid regulation"
+      description="Follow how blood enters the kidney, gets filtered, and is adjusted before urine leaves the body."
+      clinicalConnection="Renal physiology connects directly to dehydration, fluid overload, potassium safety, acid-base balance, blood pressure regulation, and medication clearance."
+      steps={[
+        {
+          id: "renal-blood-flow",
+          label: "Blood enters the kidney",
+          description:
+            "Renal arteries deliver blood to tiny filtering units called nephrons.",
+        },
+        {
+          id: "glomerulus",
+          label: "The glomerulus filters plasma",
+          description:
+            "Water and small solutes move into Bowman’s capsule while cells and large proteins usually remain in blood.",
+        },
+        {
+          id: "tubules",
+          label: "Tubules reclaim what the body needs",
+          description:
+            "Useful substances such as water, glucose, sodium, and bicarbonate can be reabsorbed back into circulation.",
+        },
+        {
+          id: "secretion",
+          label: "Waste and excess ions are secreted",
+          description:
+            "The nephron can move extra hydrogen ions, potassium, and drugs into the tubular fluid for removal.",
+        },
+        {
+          id: "concentration",
+          label: "Urine concentration is adjusted",
+          description:
+            "Hormonal signals help determine how much water is retained or excreted.",
+        },
+        {
+          id: "output",
+          label: "Urine output reflects kidney function",
+          description:
+            "Changes in urine output can signal perfusion, hydration, or renal-function problems.",
+        },
+      ]}
+    >
+      <div className="grid gap-3 md:grid-cols-4">
+        {[
+          ["Filter", "Glomerulus"],
+          ["Reclaim", "Reabsorption"],
+          ["Remove", "Secretion"],
+          ["Balance", "Water + electrolytes"],
+        ].map(([label, description]) => (
+          <div
+            key={label}
+            className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-success)_6%,var(--semantic-surface))] p-4 text-center"
+          >
+            <p className="mb-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--semantic-success)]">
+              {label}
+            </p>
+            <p className="m-0 text-sm font-semibold text-[var(--theme-heading-text)]">
+              {description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </PreNursingVisualLearningBlock>
+  );
+}
+
+export function EndocrineFeedbackVisualLearningBlock() {
+  return (
+    <PreNursingVisualLearningBlock
+      title="Endocrine feedback loops"
+      description="See how hormones use feedback signals to keep internal conditions within a safe range."
+      clinicalConnection="Feedback loops help explain glucose regulation, thyroid disorders, adrenal stress responses, calcium balance, and many medication effects."
+      steps={[
+        {
+          id: "stimulus",
+          label: "A body variable changes",
+          description:
+            "Examples include glucose rising after a meal, calcium dropping, or stress hormones increasing.",
+        },
+        {
+          id: "sensor",
+          label: "A gland or sensor detects the change",
+          description:
+            "Endocrine tissues monitor the internal environment and respond to specific signals.",
+        },
+        {
+          id: "hormone-release",
+          label: "Hormone is released",
+          description:
+            "Hormones travel through blood to target tissues with matching receptors.",
+        },
+        {
+          id: "target-response",
+          label: "Target tissue responds",
+          description:
+            "Cells change activity, uptake, secretion, storage, or metabolism in response to the hormone.",
+        },
+        {
+          id: "feedback",
+          label: "Feedback adjusts output",
+          description:
+            "Most endocrine systems reduce hormone release once the variable moves back toward the desired range.",
+        },
+        {
+          id: "clinical-pattern",
+          label: "Disease disrupts the loop",
+          description:
+            "Too much or too little hormone can create recognizable clinical patterns.",
+        },
+      ]}
+    >
+      <div className="grid gap-3 md:grid-cols-3">
+        {[
+          ["Glucose", "Insulin + glucagon"],
+          ["Calcium", "PTH + calcitonin"],
+          ["Stress", "Cortisol + catecholamines"],
+        ].map(([label, description]) => (
+          <div
+            key={label}
+            className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_7%,var(--semantic-surface))] p-4 text-center"
+          >
+            <p className="mb-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
+              {label}
+            </p>
+            <p className="m-0 text-sm font-semibold text-[var(--theme-heading-text)]">
+              {description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </PreNursingVisualLearningBlock>
+  );
+}
