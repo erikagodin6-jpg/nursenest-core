@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { buildCasperFullLengthSessionPlan } from "@/lib/casper/casper-full-length-engine";
 
@@ -14,8 +14,40 @@ export function CasperStationRunnerClient() {
   const plan = useMemo(() => buildCasperFullLengthSessionPlan(), []);
   const [stationIndex, setStationIndex] = useState(0);
   const [responses, setResponses] = useState<Record<string, string>>({});
+  const [lockedStations, setLockedStations] = useState<Record<string, boolean>>({});
 
   const station = plan.stations[stationIndex];
+
+  const [remainingSeconds, setRemainingSeconds] = useState(
+    station?.responseTimeSeconds ?? 0,
+  );
+
+  useEffect(() => {
+    setRemainingSeconds(station?.responseTimeSeconds ?? 0);
+  }, [station?.id, station?.responseTimeSeconds]);
+
+  useEffect(() => {
+    if (!station) return;
+    if (lockedStations[station.id]) return;
+
+    if (remainingSeconds <= 0) {
+      setLockedStations((current) => ({
+        ...current,
+        [station.id]: true,
+      }));
+
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setRemainingSeconds((current) => Math.max(current - 1, 0));
+    }, 1000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [lockedStations, remainingSeconds, station]);
+
   const isFinalStation = stationIndex === plan.stations.length - 1;
 
   if (!station) {
@@ -31,6 +63,8 @@ export function CasperStationRunnerClient() {
     );
   }
 
+  const stationLocked = Boolean(lockedStations[station.id]);
+
   return (
     <section className="rounded-[2rem] border border-[var(--semantic-border-primary)] bg-[var(--semantic-surface-primary)] p-8 lg:p-12">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -43,8 +77,16 @@ export function CasperStationRunnerClient() {
           </h2>
         </div>
 
-        <div className="rounded-full border border-[var(--semantic-border-primary)] px-5 py-3 text-sm font-medium text-[var(--semantic-text-secondary)]">
-          {formatSeconds(station.responseTimeSeconds)} pacing
+        <div className="flex items-center gap-3">
+          {stationLocked ? (
+            <div className="rounded-full border border-red-200 bg-red-50 px-5 py-3 text-sm font-semibold text-red-700">
+              Station locked
+            </div>
+          ) : null}
+
+          <div className="rounded-full border border-[var(--semantic-border-primary)] px-5 py-3 text-sm font-semibold text-[var(--semantic-text-secondary)]">
+            {formatSeconds(remainingSeconds)} remaining
+          </div>
         </div>
       </div>
 
@@ -80,6 +122,7 @@ export function CasperStationRunnerClient() {
         </div>
       ) : (
         <textarea
+          disabled={stationLocked}
           value={responses[station.id] ?? ""}
           onChange={(event) =>
             setResponses((current) => ({
@@ -88,9 +131,15 @@ export function CasperStationRunnerClient() {
             }))
           }
           placeholder="Type your response to both questions in this 3.5-minute practice window..."
-          className="mt-10 min-h-[280px] w-full rounded-[2rem] border border-[var(--semantic-border-primary)] bg-[var(--semantic-surface-primary)] p-6 text-base leading-8 text-[var(--semantic-text-primary)] outline-none focus:border-[var(--theme-primary)]"
+          className="mt-10 min-h-[280px] w-full rounded-[2rem] border border-[var(--semantic-border-primary)] bg-[var(--semantic-surface-primary)] p-6 text-base leading-8 text-[var(--semantic-text-primary)] outline-none focus:border-[var(--theme-primary)] disabled:cursor-not-allowed disabled:opacity-60"
         />
       )}
+
+      {stationLocked ? (
+        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-7 text-amber-800">
+          Time has expired for this station. Responses are now locked to simulate official Casper pacing.
+        </div>
+      ) : null}
 
       <div className="mt-10 flex flex-wrap justify-end gap-4">
         <button
