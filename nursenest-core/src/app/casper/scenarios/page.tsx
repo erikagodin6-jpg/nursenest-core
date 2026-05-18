@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { CASPER_SCENARIOS } from "@/lib/casper/casper-scenarios";
 
@@ -23,7 +24,11 @@ export default function CasperScenarioLibraryPage() {
 
       <section className="mt-12 grid gap-6 lg:grid-cols-2">
         {CASPER_SCENARIOS.map((scenario) => (
-          <article key={scenario.id} className="rounded-[2rem] border border-[var(--semantic-border-primary)] bg-[var(--semantic-surface-primary)] p-8">
+          <Link
+            key={scenario.id}
+            href={`/casper/scenarios/${scenario.slug}`}
+            className="rounded-[2rem] border border-[var(--semantic-border-primary)] bg-[var(--semantic-surface-primary)] p-8 transition-transform hover:-translate-y-1 hover:shadow-sm"
+          >
             <div className="flex flex-wrap gap-3">
               <span className="rounded-full bg-[var(--semantic-surface-secondary)] px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
                 {scenario.category.replace(/-/g, " ")}
@@ -41,7 +46,8 @@ export default function CasperScenarioLibraryPage() {
                 </span>
               ))}
             </div>
-          </article>
+            <p className="mt-6 text-sm font-semibold text-[var(--theme-primary)]">Read scenario analysis →</p>
+          </Link>
         ))}
       </section>
     </main>
