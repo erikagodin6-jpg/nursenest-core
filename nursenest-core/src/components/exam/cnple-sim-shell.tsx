@@ -23,6 +23,7 @@ export function CnpleSimSurface({ children }: { children: ReactNode }) {
     <div
       className="cnple-sim-surface flex min-h-[100dvh] flex-col"
       data-cnple-sim="surface"
+      data-learner-exam-stack="cnple-loft"
       style={{ background: "var(--semantic-surface, #fafaf9)" }}
     >
       {children}
@@ -45,11 +46,10 @@ export function CnpleSimBody({
   }
   return (
     <div className="flex flex-1 flex-col overflow-hidden xl:flex-row">
-      {/* Mobile patient panel toggle — visible below xl */}
       <div
         className="flex shrink-0 items-center justify-between border-b px-4 py-2 xl:hidden"
         style={{
-          background: "color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-brand) 4%)",
+          background: "var(--semantic-surface)",
           borderColor: "var(--semantic-border-soft)",
         }}
       >
@@ -65,10 +65,10 @@ export function CnpleSimBody({
           className="flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-semibold transition-colors"
           style={{
             background: panelOpen
-              ? "color-mix(in srgb, var(--semantic-brand) 12%, transparent)"
+              ? "color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface))"
               : "var(--semantic-surface)",
             borderColor: panelOpen
-              ? "color-mix(in srgb, var(--semantic-brand) 30%, transparent)"
+              ? "color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft))"
               : "var(--semantic-border-soft)",
             color: panelOpen ? "var(--semantic-brand)" : "var(--semantic-text-secondary)",
           }}
@@ -80,7 +80,6 @@ export function CnpleSimBody({
         </button>
       </div>
 
-      {/* Collapsible mobile panel */}
       {panelOpen ? (
         <aside
           id="cnple-sim-patient-panel"
@@ -88,7 +87,7 @@ export function CnpleSimBody({
           style={{
             maxHeight: "40vh",
             borderColor: "var(--semantic-border-soft)",
-            background: "color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-brand) 4%)",
+            background: "var(--semantic-surface)",
           }}
           aria-label="Patient summary"
         >
@@ -96,16 +95,14 @@ export function CnpleSimBody({
         </aside>
       ) : null}
 
-      {/* Main question surface */}
       <div className="flex-1 overflow-y-auto">{children}</div>
 
-      {/* Persistent desktop side panel (xl+) */}
       <aside
         id="cnple-sim-patient-panel"
         className="hidden w-[22rem] shrink-0 overflow-y-auto border-l xl:block"
         style={{
           borderColor: "var(--semantic-border-soft)",
-          background: "color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-brand) 4%)",
+          background: "var(--semantic-surface)",
         }}
         aria-label="Patient summary"
       >
@@ -150,11 +147,10 @@ export function CnpleSimTopBar({
     <header
       className="cnple-sim-topbar sticky top-0 z-40 flex items-center justify-between border-b px-4 py-2.5 sm:px-6"
       style={{
-        background: "color-mix(in srgb, var(--semantic-brand) 3%, var(--semantic-surface))",
+        background: "var(--semantic-surface)",
         borderColor: "var(--semantic-border-soft)",
       }}
     >
-      {/* Left: branding + exam label */}
       <div className="flex min-w-0 shrink-0 items-center gap-3">
         <span
           className="select-none text-[13px] font-bold tracking-tight"
@@ -185,7 +181,6 @@ export function CnpleSimTopBar({
         ) : null}
       </div>
 
-      {/* Center: question counter + review toggle */}
       <div className="flex flex-1 items-center justify-center gap-3">
         <span
           className="text-[13px] font-semibold tabular-nums"
@@ -205,10 +200,10 @@ export function CnpleSimTopBar({
             className="hidden rounded border px-2.5 py-1 text-[11px] font-semibold transition-colors sm:inline-flex"
             style={{
               background: showReviewScreen
-                ? "color-mix(in srgb, var(--semantic-brand) 12%, transparent)"
+                ? "color-mix(in srgb, var(--semantic-brand) 10%, var(--semantic-surface))"
                 : "var(--semantic-surface)",
               borderColor: showReviewScreen
-                ? "color-mix(in srgb, var(--semantic-brand) 30%, transparent)"
+                ? "color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft))"
                 : "var(--semantic-border-soft)",
               color: showReviewScreen ? "var(--semantic-brand)" : "var(--semantic-text-secondary)",
             }}
@@ -218,7 +213,6 @@ export function CnpleSimTopBar({
         ) : null}
       </div>
 
-      {/* Right: timer + exit */}
       <div className="flex shrink-0 items-center gap-4">
         {remainingSec != null && m != null && s != null ? (
           <div className="flex flex-col items-end">
@@ -304,7 +298,7 @@ export function CnpleSimToolbar({
     <div
       className="flex flex-wrap items-center gap-1 border-b px-4 py-2 sm:gap-2 sm:px-6"
       style={{
-        background: "color-mix(in srgb, var(--semantic-surface) 97%, var(--semantic-info) 3%)",
+        background: "var(--semantic-surface)",
         borderColor: "var(--semantic-border-soft)",
       }}
     >
@@ -360,7 +354,6 @@ export function CnpleSimToolbar({
           title={flagged ? "Remove flag from this question" : "Flag question for review"}
         >
           <FlagIcon filled={flagged} />
-          {/* Label always visible — was hidden on mobile before this fix */}
           <span className="inline">{flagged ? "Flagged" : "Flag"}</span>
         </button>
       </div>
@@ -390,7 +383,7 @@ function CnpleToolButton({
       className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-[12px] font-semibold transition-colors"
       style={{
         background: active
-          ? "color-mix(in srgb, var(--semantic-brand) 14%, transparent)"
+          ? "color-mix(in srgb, var(--semantic-brand) 12%, transparent)"
           : "transparent",
         color: active ? "var(--semantic-brand)" : "var(--semantic-text-secondary)",
         border: active
@@ -419,10 +412,10 @@ export function CnpleSimContent({ children }: { children: ReactNode }) {
 export function CnpleSimStem({ children }: { children: ReactNode }) {
   return (
     <div
-      className="cnple-sim-stem rounded-xl border px-6 py-5 text-[15px] leading-relaxed sm:text-[16px]"
+      className="cnple-sim-stem rounded-xl border px-6 py-5 text-[15px] leading-[1.55] sm:text-[16px]"
       style={{
         borderColor: "var(--semantic-border-soft)",
-        background: "color-mix(in srgb, var(--semantic-surface) 98%, var(--semantic-brand) 2%)",
+        background: "var(--semantic-surface)",
         color: "var(--semantic-text-primary)",
       }}
     >
@@ -467,41 +460,77 @@ export function CnpleSimAnswerOption({
   const isStruck = state === "struck";
   const isCorrect = state === "correct";
   const isIncorrect = state === "incorrect";
+  const accent = isCorrect
+    ? "var(--semantic-success)"
+    : isIncorrect
+      ? "var(--semantic-danger)"
+      : isSelected
+        ? "var(--semantic-brand)"
+        : "transparent";
 
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group flex w-full items-start gap-3.5 rounded-xl border px-5 py-4 text-left text-[14.5px] leading-relaxed transition-all sm:text-[15px]"
+      className="group flex w-full items-start gap-3.5 rounded-xl border px-5 py-4 text-left text-[14.5px] leading-[1.46] transition-colors disabled:cursor-not-allowed sm:text-[15px]"
+      data-cnple-answer-option=""
+      data-state={state}
+      data-selected={isSelected ? "true" : undefined}
+      data-correct={isCorrect ? "true" : undefined}
+      data-incorrect={isIncorrect ? "true" : undefined}
+      data-struck={isStruck ? "true" : undefined}
       style={{
-        borderColor: isSelected
-          ? "var(--semantic-brand)"
-          : isCorrect
+        borderColor: isCorrect
+          ? "color-mix(in srgb, var(--semantic-success) 45%, var(--semantic-border-soft))"
+          : isIncorrect
+            ? "color-mix(in srgb, var(--semantic-danger) 45%, var(--semantic-border-soft))"
+            : isSelected
+              ? "color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft))"
+              : "var(--semantic-border-soft)",
+        borderStyle: "solid",
+        borderWidth: "1.5px",
+        background: isCorrect
+          ? "color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface))"
+          : isIncorrect
+            ? "color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface))"
+            : isSelected
+              ? "color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface))"
+              : "var(--semantic-surface)",
+        boxShadow: accent === "transparent" ? "none" : `inset 4px 0 0 ${accent}`,
+        color: isStruck ? "var(--semantic-text-muted)" : "var(--semantic-text-primary)",
+        fontStyle: "normal",
+        textDecoration: isStruck ? "line-through" : "none",
+        transform: "none",
+        opacity: disabled && !isSelected && !isCorrect && !isIncorrect ? 0.55 : 1,
+      }}
+      aria-pressed={isSelected}
+      aria-label={`${letter}. ${state === "correct" ? "Correct answer. " : state === "incorrect" ? "Incorrect answer. " : ""}`}
+    >
+      <span
+        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[5px] border text-[12px] font-bold"
+        style={{
+          background: isCorrect
+            ? "color-mix(in srgb, var(--semantic-success) 12%, var(--semantic-surface))"
+            : isIncorrect
+              ? "color-mix(in srgb, var(--semantic-danger) 12%, var(--semantic-surface))"
+              : isSelected
+                ? "color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface))"
+                : "var(--semantic-surface)",
+          borderColor: isCorrect
+            ? "color-mix(in srgb, var(--semantic-success) 35%, var(--semantic-border-soft))"
+            : isIncorrect
+              ? "color-mix(in srgb, var(--semantic-danger) 35%, var(--semantic-border-soft))"
+              : isSelected
+                ? "color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft))"
+                : "var(--semantic-border-soft)",
+          color: isCorrect
             ? "var(--semantic-success)"
             : isIncorrect
               ? "var(--semantic-danger)"
-              : "var(--semantic-border-soft)",
-        background: isSelected
-          ? "color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface))"
-          : isCorrect
-            ? "color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface))"
-            : isIncorrect
-              ? "color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface))"
-              : "var(--semantic-surface)",
-        color: isStruck ? "var(--semantic-text-muted)" : "var(--semantic-text-primary)",
-        textDecoration: isStruck ? "line-through" : "none",
-        opacity: disabled && !isSelected ? 0.6 : 1,
-      }}
-      aria-pressed={isSelected}
-    >
-      <span
-        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-bold"
-        style={{
-          background: isSelected
-            ? "var(--semantic-brand)"
-            : "color-mix(in srgb, var(--semantic-border-soft) 60%, transparent)",
-          color: isSelected ? "#fff" : "var(--semantic-text-secondary)",
+              : isSelected
+                ? "var(--semantic-brand)"
+                : "var(--semantic-text-secondary)",
         }}
       >
         {letter}
@@ -540,6 +569,7 @@ export function CnpleSimNavBar({
       style={{
         background: "var(--semantic-surface)",
         borderColor: "var(--semantic-border-soft)",
+        boxShadow: "0 -1px 0 color-mix(in srgb, var(--semantic-border-soft) 70%, transparent)",
       }}
     >
       <button
@@ -645,14 +675,12 @@ export function CnpleSimReviewScreen({
         </p>
       </div>
 
-      {/* Summary row */}
       <div className="mb-6 flex gap-4 rounded-xl border p-4" style={{ borderColor: "var(--semantic-border-soft)" }}>
         <ReviewStat label="Answered" value={answered} color="var(--semantic-success)" />
         <ReviewStat label="Unanswered" value={unanswered} color={unanswered > 0 ? "var(--semantic-warning-contrast)" : "var(--semantic-text-muted)"} />
         <ReviewStat label="Flagged" value={flagged} color={flagged > 0 ? "var(--semantic-brand)" : "var(--semantic-text-muted)"} />
       </div>
 
-      {/* Question grid */}
       <div className="grid grid-cols-8 gap-2 sm:grid-cols-10">
         {questions.map((q) => (
           <button
@@ -689,7 +717,6 @@ export function CnpleSimReviewScreen({
         ))}
       </div>
 
-      {/* Submit action */}
       {onSubmit ? (
         <div className="mt-10 flex justify-end">
           <button
@@ -704,7 +731,6 @@ export function CnpleSimReviewScreen({
         </div>
       ) : null}
 
-      {/* Mandatory disclaimer */}
       <p
         className="mt-8 text-[11px] leading-relaxed"
         style={{ color: "var(--semantic-text-muted)" }}
