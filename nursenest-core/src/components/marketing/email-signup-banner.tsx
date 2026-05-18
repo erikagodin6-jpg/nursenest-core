@@ -38,6 +38,7 @@ export function EmailSignupBanner({ className }: EmailSignupBannerProps = {}) {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            aria-label={t("home.email.placeholder")}
             placeholder={t("home.email.placeholder")}
             className="w-full min-w-0 rounded-full border border-[var(--theme-input-border)] bg-[var(--theme-input-bg)] px-4 py-2.5 text-sm text-[var(--theme-heading-text)] outline-none ring-primary focus:ring-2 sm:min-w-[220px] sm:w-auto"
           />

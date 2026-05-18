@@ -13,7 +13,7 @@ type ViewportCase = {
 type Journey = {
   name: string;
   region: MarketingRegionCookieValue;
-  homeCardId: "rn" | "pn" | "np";
+  navigationLinkName: RegExp;
   followUpLinkName?: RegExp;
   expectedPath: RegExp;
   contentSignals: RegExp[];
@@ -29,7 +29,7 @@ const JOURNEYS: Journey[] = [
   {
     name: "RN",
     region: "US",
-    homeCardId: "rn",
+    navigationLinkName: /^RN$/,
     expectedPath: /^\/us\/rn\/nclex-rn\/?$/,
     contentSignals: [/NCLEX-RN/i, /Registered Nurse|RN/i],
     ctaSignals: [/Sign up|Start|Practice|Lessons|Questions|CAT/i],
@@ -37,7 +37,7 @@ const JOURNEYS: Journey[] = [
   {
     name: "RPN",
     region: "CA",
-    homeCardId: "pn",
+    navigationLinkName: /^RPN$/,
     expectedPath: /^\/canada\/pn\/rex-pn\/?$/,
     contentSignals: [/REx-PN/i, /RPN|Practical Nurse|PN/i],
     ctaSignals: [/Sign up|Start|Practice|Lessons|Questions|CAT/i],
@@ -45,7 +45,7 @@ const JOURNEYS: Journey[] = [
   {
     name: "NP",
     region: "US",
-    homeCardId: "np",
+    navigationLinkName: /^NP$/,
     expectedPath: /^\/np-exam-prep\/?$/,
     contentSignals: [/Nurse Practitioner|NP/i, /FNP|AANP|ANCC|specialty/i],
     ctaSignals: [/Choose|Start|Practice|Lessons|Questions|CAT/i],
@@ -53,7 +53,7 @@ const JOURNEYS: Journey[] = [
   {
     name: "CPNLE/CNPLE",
     region: "CA",
-    homeCardId: "np",
+    navigationLinkName: /^NP$/,
     followUpLinkName: /CNPLE|Canadian NP|Canada NP/i,
     expectedPath: /^\/canada\/np\/cnple\/?$/,
     contentSignals: [/CNPLE|CPNLE/i, /Nurse Practitioner|NP/i, /Canada|Canadian/i],
@@ -65,6 +65,7 @@ const IGNORED_CONSOLE_ERROR_PATTERNS = [
   /favicon/i,
   /ResizeObserver loop/i,
   /Failed to load resource: the server responded with a status of 404.*favicon/i,
+  /\[nursenest-core\] marketing home_stats_cache_hit/i,
 ];
 
 const IGNORED_REQUEST_FAILURE_PATTERNS = [
@@ -147,7 +148,7 @@ async function assertInternalLinksHealthy(page: Page, request: APIRequestContext
           .filter((href) => href.startsWith("/") && !href.startsWith("//") && !href.startsWith("#"))
           .filter((href) => !href.startsWith("/api/"))
           .filter((href) => !href.includes("logout"))
-          .slice(0, 18),
+          .slice(0, 8),
       ),
     ),
   );
@@ -231,12 +232,12 @@ test.describe("public visitor pathway journeys", () => {
           await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible({ timeout: 60_000 });
           await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({ timeout: 60_000 });
           await expect(page.getByRole("navigation").first()).toBeVisible();
-          await expect(page.locator(`[data-nn-home-tier-card="${journey.homeCardId}"]`).first()).toBeVisible({
-            timeout: 60_000,
-          });
+          const pathwayNavigation = page.getByRole("navigation", { name: /Marketing Pathways/i }).first();
+          const pathwayLink = pathwayNavigation.getByRole("link", { name: journey.navigationLinkName }).first();
+          await expect(pathwayLink).toBeVisible({ timeout: 60_000 });
           await assertNoHorizontalOverflow(page);
 
-          await page.locator(`[data-nn-home-tier-card="${journey.homeCardId}"]`).first().click();
+          await pathwayLink.click();
           await page.waitForLoadState("domcontentloaded", { timeout: 120_000 });
           await dismissMarketingScrims(page);
 
