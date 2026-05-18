@@ -8,6 +8,7 @@ import medicalLaboratoryTechnologistCatalog, {
 } from "@/content/pathway-lessons/allied-professions/medical-laboratory-technologist";
 import { medicalLaboratoryTechnologistFlashcards } from "@/content/flashcards/allied-medical-laboratory-technologist";
 import { medicalLaboratoryTechnologistQuestions } from "@/content/questions/allied-medical-laboratory-technologist";
+import { mltRbcMorphologyReference } from "@/content/morphology/mlt-rbc-morphology-reference";
 
 const REQUIRED_DOMAINS = [
   "hematology-cbc-interpretation",
@@ -38,6 +39,8 @@ const REQUIRED_QUESTION_DOMAINS = [
   "urinalysis",
   "qualityControl",
 ] as const;
+
+const REQUIRED_MORPHOLOGIES = ["schistocyte", "spherocyte", "target-cell", "sickle-cell", "bite-cell"] as const;
 
 const WORKFLOW_MARKERS = [
   /specimen|preanalytic|pre-analytical/i,
@@ -166,6 +169,29 @@ describe("medical laboratory technologist allied slice", () => {
       if (question.lessonSlug) {
         assert.ok(lessonSlugs.has(question.lessonSlug), `${question.id} links to missing lesson ${question.lessonSlug}`);
       }
+    }
+  });
+
+  it("ships morphology reference metadata for future image drills", () => {
+    assert.ok(
+      mltRbcMorphologyReference.length >= REQUIRED_MORPHOLOGIES.length,
+      `expected at least ${REQUIRED_MORPHOLOGIES.length} morphology entries`,
+    );
+
+    const ids = new Set(mltRbcMorphologyReference.map((entry) => entry.id));
+    for (const required of REQUIRED_MORPHOLOGIES) {
+      assert.ok(ids.has(required), `missing RBC morphology reference: ${required}`);
+    }
+
+    for (const entry of mltRbcMorphologyReference) {
+      assert.ok(entry.morphology.length > 3, `${entry.id} must include a morphology display name`);
+      assert.ok(entry.description.length > 20, `${entry.id} description is too thin`);
+      assert.ok(entry.associatedConditions.length >= 1, `${entry.id} must include associated conditions`);
+      assert.ok(entry.differentialMorphologies.length >= 1, `${entry.id} must include differential morphologies`);
+      assert.ok(entry.workflowImplications.length >= 1, `${entry.id} must include workflow implications`);
+      assert.ok(entry.escalationTriggers.length >= 1, `${entry.id} must include escalation triggers`);
+      assert.ok(entry.examRelevance.length > 40, `${entry.id} exam relevance is too thin`);
+      assert.ok(entry.morphologyTags.length >= 1, `${entry.id} must include morphology tags`);
     }
   });
 });
