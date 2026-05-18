@@ -8,6 +8,7 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { ALLIED_MARKETING_CORE_PATHWAY_IDS } from "@/lib/lessons/canonical-lessons-hubs";
+import { buildCanonicalLessonHubIndex } from "@/lib/lessons/canonical-lesson-title-normalization";
 import { LESSON_CATEGORIES } from "@/lib/lessons/lesson-taxonomy";
 import { countMarketingHubLessonsByDisplayCategoryForPathway } from "@/lib/lessons/marketing-lessons-hub-category";
 import {
@@ -118,6 +119,7 @@ async function main(): Promise<void> {
   const generatedAt = new Date().toISOString();
   const buildStarted = performance.now();
   let totalIndexedLessons = 0;
+  let totalCanonicalDuplicatesSuppressed = 0;
   const manifestEntries: Array<{
     pathwayId: string;
     fileName: string;
@@ -135,15 +137,51 @@ async function main(): Promise<void> {
     }
     const pathwayStarted = performance.now();
     const rawCount = getCatalogLessonsRaw(safe).length;
-    const summaries = getLessonSummariesIndex(safe);
+    const rawSummaries = getLessonSummariesIndex(safe);
     const lessonsBySlug = new Map(getCatalogPathwayLessonsSync(safe).map((l) => [l.slug.trim(), l]));
+    const canonicalHub = buildCanonicalLessonHubIndex(
+      rawSummaries.map((row) => {
+        const lesson = lessonsBySlug.get(row.slug.trim()) as
+          | {
+              title?: string;
+              slug?: string;
+              sections?: unknown[];
+              body?: unknown;
+              content?: unknown;
+              hiddenFromLessonHub?: boolean;
+              canonicalLessonId?: string | null;
+              redirectedToSlug?: string | null;
+            }
+          | undefined;
+        return {
+          slug: row.slug,
+          title: (lesson?.title ?? row.title).trim(),
+          sectionCount: Array.isArray(lesson?.sections) ? lesson.sections.length : 0,
+          bodyLength: JSON.stringify(lesson?.sections ?? lesson?.body ?? lesson?.content ?? "").length,
+          hiddenFromLessonHub: lesson?.hiddenFromLessonHub,
+          canonicalLessonId: lesson?.canonicalLessonId,
+          redirectedToSlug: lesson?.redirectedToSlug,
+        };
+      }),
+    );
+    const summaries = rawSummaries
+      .filter((row) => canonicalHub.visibleSlugs.has(row.slug.trim()))
+      .map((row) => ({
+        ...row,
+        title: canonicalHub.slugToCanonicalTitle[row.slug.trim()] ?? row.title,
+      }));
+    const canonicalDuplicatesSuppressed = rawSummaries.length - summaries.length;
+    totalCanonicalDuplicatesSuppressed += canonicalDuplicatesSuppressed;
     const slugToDisplayTitle: Record<string, string> = {};
-    for (const row of summaries) {
+    for (const row of rawSummaries) {
       const lesson = lessonsBySlug.get(row.slug.trim());
-      slugToDisplayTitle[row.slug] = (lesson?.title ?? row.title).trim();
+      slugToDisplayTitle[row.slug] = canonicalHub.slugToCanonicalTitle[row.slug.trim()] ?? (lesson?.title ?? row.title).trim();
     }
     const effSet = getMarketingHubEffectiveCatalogSlugSet(safe);
-    const marketingEffectiveSlugsLowercase = [...effSet].map((s) => s.toLowerCase()).sort((a, b) => a.localeCompare(b));
+    const marketingEffectiveSlugsLowercase = [...effSet]
+      .filter((s) => canonicalHub.visibleSlugs.has(s.trim()))
+      .map((s) => s.toLowerCase())
+      .sort((a, b) => a.localeCompare(b));
     const catMap = countMarketingHubLessonsByDisplayCategoryForPathway(safe);
     const categoryCounts: Record<string, number> = {};
     for (const c of LESSON_CATEGORIES) {
@@ -156,6 +194,8 @@ async function main(): Promise<void> {
       generatedAt,
       mergedRawLessonCount: rawCount,
       effectiveLessonCount: summaries.length,
+      canonicalDuplicateSuppressedCount: canonicalDuplicatesSuppressed,
+      canonicalDuplicateRedirects: canonicalHub.duplicateRedirects,
       summaries,
       slugToDisplayTitle,
       marketingEffectiveSlugsLowercase,
@@ -173,6 +213,7 @@ async function main(): Promise<void> {
         pathwayId: safe,
         mergedRawLessonCount: rawCount,
         effectiveLessonCount: summaries.length,
+        canonicalDuplicateSuppressedCount: canonicalDuplicatesSuppressed,
         slugs: summaries.map((row) => row.slug).sort((a, b) => a.localeCompare(b)),
         marketingEffectiveSlugsLowercase,
         categoryCounts,
@@ -184,7 +225,7 @@ async function main(): Promise<void> {
     const pathwayMs = Math.round(performance.now() - pathwayStarted);
     totalIndexedLessons += summaries.length;
     console.info(
-      `[build:lesson-indexes] wrote ${path.join(outDir, `${safe}.json`)} lessons=${summaries.length} raw=${rawCount} pathwayMs=${pathwayMs}`,
+      `[build:lesson-indexes] wrote ${path.join(outDir, `${safe}.json`)} lessons=${summaries.length} raw=${rawCount} canonicalDuplicatesSuppressed=${canonicalDuplicatesSuppressed} pathwayMs=${pathwayMs}`,
     );
   }
   fs.writeFileSync(
@@ -193,6 +234,7 @@ async function main(): Promise<void> {
       {
         schemaVersion: MANIFEST_SCHEMA_V1,
         generatedAt,
+        canonicalDuplicateSuppressedCount: totalCanonicalDuplicatesSuppressed,
         entries: manifestEntries.sort((a, b) => a.pathwayId.localeCompare(b.pathwayId)),
       },
       null,
@@ -220,6 +262,7 @@ async function main(): Promise<void> {
   safeServerLog("lesson_indexes", "lesson_index_generation_memoization", {
     pathwayCount: ids.length,
     totalMs: Math.round(performance.now() - buildStarted),
+    canonicalDuplicateSuppressedCount: totalCanonicalDuplicatesSuppressed,
     mergedRawHits: memo.mergedRawCatalogHits,
     mergedRawMisses: memo.mergedRawCatalogMisses,
     pathwayNormHits: memo.pathwayNormalizeHits,
@@ -276,6 +319,7 @@ async function main(): Promise<void> {
   safeServerLog("lesson_indexes", "lesson_index_generation_complete_ms", {
     totalMs: Math.round(performance.now() - buildStarted),
     pathwayCount: ids.length,
+    canonicalDuplicateSuppressedCount: totalCanonicalDuplicatesSuppressed,
   });
 
   const heapMb = Math.round(process.memoryUsage().heapUsed / (1024 * 1024));
@@ -284,6 +328,7 @@ async function main(): Promise<void> {
       {
         pathwayCount: ids.length,
         totalIndexedLessons,
+        canonicalDuplicateSuppressedCount: totalCanonicalDuplicatesSuppressed,
         totalBuildMs: Math.round(performance.now() - buildStarted),
         heapUsedMb: heapMb,
       },
