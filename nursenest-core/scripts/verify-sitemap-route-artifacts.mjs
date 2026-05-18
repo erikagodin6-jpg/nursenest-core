@@ -8,12 +8,16 @@ const REQUIRED_SITEMAP_ROUTE_ARTIFACTS = [
   "sitemap.xml/route.js",
   "sitemap-core.xml/route.js",
   "sitemap-blog.xml/route.js",
+  "sitemap-fr-blog.xml/route.js",
+  "sitemap-es-blog.xml/route.js",
   "sitemap-pathways.xml/route.js",
   "sitemap-lessons.xml/route.js",
   "sitemap-localized.xml/route.js",
   "sitemap-clinical-modules.xml/route.js",
   "sitemap-allied.xml/route.js",
   "sitemap-new-grad.xml/route.js",
+  "sitemap-cnple.xml/route.js",
+  "sitemap-authority-clusters.xml/route.js",
 ];
 
 export function verifySitemapRouteArtifactsPresent(root = packageRoot) {
