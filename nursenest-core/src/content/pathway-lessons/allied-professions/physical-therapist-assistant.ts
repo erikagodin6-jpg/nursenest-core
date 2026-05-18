@@ -1,0 +1,273 @@
+function quiz(question: string, options: string[], correct: number, rationale: string) {
+  return { question, options, correct, rationale };
+}
+
+type PtaSectionKey = "transferSafety" | "gaitAssistiveDevices" | "therapeuticExercise" | "orthopedicRehab" | "neuroRehab";
+
+const ptaSections: Record<PtaSectionKey, unknown[]> = {
+  transferSafety: [
+    {
+      id: "clinical-meaning",
+      heading: "Clinical Meaning",
+      kind: "clinical_meaning",
+      body: "Transfer safety is one of the highest-risk PTA skill areas because poor setup, missed precautions, or incorrect assistance level can cause falls, surgical complications, or staff injury. PTA learners must reason through environment, patient capacity, precautions, equipment, and communication before movement begins.",
+    },
+    {
+      id: "core-concept",
+      heading: "Core Concept",
+      kind: "core_concept",
+      body: "A safe transfer starts before the patient moves: lock surfaces, clear lines and obstacles, position equipment, confirm weight-bearing status, choose the correct assist level, use gait belt when appropriate, cue sequencing, and stop if symptoms or safety deteriorate.",
+    },
+    {
+      id: "workflow",
+      heading: "Rehab Workflow",
+      kind: "clinical_scenario",
+      body: "A post-op patient becomes dizzy during sit-to-stand practice. The PTA should stop progression, guard safely, return the patient to a safe position, reassess vitals and symptoms, notify the supervising PT or appropriate clinician per policy, and document the event rather than pushing through the activity.",
+    },
+    {
+      id: "exam-relevance",
+      heading: "Exam Relevance",
+      kind: "exam_relevance",
+      body: "PTA exam items often test the safest next action: guard position, transfer setup, contraindications, assist level, fall prevention, and when to stop treatment. The safest answer usually protects the patient before progressing the intervention.",
+    },
+  ],
+  gaitAssistiveDevices: [
+    {
+      id: "clinical-meaning",
+      heading: "Clinical Meaning",
+      kind: "clinical_meaning",
+      body: "Gait and assistive-device reasoning connects balance, strength, weight-bearing status, environment, patient cognition, and fall risk. PTAs must select and teach device sequencing within the plan of care and scope expectations.",
+    },
+    {
+      id: "core-concept",
+      heading: "Core Concept",
+      kind: "core_concept",
+      body: "Device selection depends on support need and control: cane for minimal unilateral support, crutches for greater unloading with coordination demands, walker for broader base of support, and wheelchair when ambulation is unsafe or not indicated. Fit, sequencing, and safety checks matter as much as device choice.",
+    },
+    {
+      id: "workflow",
+      heading: "Gait Training Workflow",
+      kind: "clinical_scenario",
+      body: "A patient with partial weight-bearing precautions repeatedly advances the involved limb without the walker. The PTA should stop, re-cue the sequence, guard closely, reassess whether the device and assistance level remain safe, and communicate inability to maintain precautions if persistent.",
+    },
+    {
+      id: "exam-relevance",
+      heading: "Exam Relevance",
+      kind: "exam_relevance",
+      body: "Common traps include progressing gait despite inability to follow precautions, choosing a less supportive device because it is faster, ignoring cognition, and failing to recognize stairs as a higher-risk mobility task.",
+    },
+  ],
+  therapeuticExercise: [
+    {
+      id: "clinical-meaning",
+      heading: "Clinical Meaning",
+      kind: "clinical_meaning",
+      body: "Therapeutic exercise is not just repetition. PTA reasoning includes tissue irritability, pain response, fatigue, contraindications, vital-sign response, form quality, dosage, progression, and whether the activity matches the PT plan of care.",
+    },
+    {
+      id: "core-concept",
+      heading: "Core Concept",
+      kind: "core_concept",
+      body: "Exercise progression should be purposeful: increase repetitions, resistance, range, complexity, speed, or functional demand only when symptoms, form, and safety remain acceptable. Regression is appropriate when pain, substitution, fatigue, or instability increases.",
+    },
+    {
+      id: "workflow",
+      heading: "Exercise Progression Workflow",
+      kind: "clinical_scenario",
+      body: "A patient compensates with trunk lean during hip abduction strengthening. The PTA should reduce difficulty, correct alignment, cue target muscle activation, and document the response rather than counting poor-quality repetitions as successful progression.",
+    },
+    {
+      id: "exam-relevance",
+      heading: "Exam Relevance",
+      kind: "exam_relevance",
+      body: "Exam items often test when to progress, regress, hold, or stop exercise. Safety, plan-of-care alignment, and symptom response usually outweigh simply increasing intensity.",
+    },
+  ],
+  orthopedicRehab: [
+    {
+      id: "clinical-meaning",
+      heading: "Clinical Meaning",
+      kind: "clinical_meaning",
+      body: "Orthopedic rehab requires protection of healing tissue while restoring mobility, strength, and function. PTA learners must integrate precautions, post-op stage, pain behavior, inflammation, weight-bearing orders, and functional goals.",
+    },
+    {
+      id: "core-concept",
+      heading: "Core Concept",
+      kind: "core_concept",
+      body: "Early orthopedic rehab often prioritizes safe mobility, edema control, ROM within restrictions, gait safety, and education. Later phases may emphasize progressive strengthening, balance, endurance, and task-specific function when tissue tolerance allows.",
+    },
+    {
+      id: "workflow",
+      heading: "Post-Op Workflow",
+      kind: "clinical_scenario",
+      body: "A total hip arthroplasty patient breaks hip precautions during bed mobility practice. The PTA should stop the unsafe movement, re-educate on precautions, modify setup or assistance, and communicate repeated nonadherence through the care team.",
+    },
+    {
+      id: "exam-relevance",
+      heading: "Exam Relevance",
+      kind: "exam_relevance",
+      body: "Orthopedic exam traps include ignoring precautions, progressing too aggressively, missing red flags, confusing pain-limited performance with weakness, and failing to protect surgical repairs.",
+    },
+  ],
+  neuroRehab: [
+    {
+      id: "clinical-meaning",
+      heading: "Clinical Meaning",
+      kind: "clinical_meaning",
+      body: "Neurologic rehab emphasizes motor control, balance, tone, neglect, cognition, endurance, and functional carryover. PTA reasoning must consider safety, cueing strategy, fatigue, postural control, and patient awareness.",
+    },
+    {
+      id: "core-concept",
+      heading: "Core Concept",
+      kind: "core_concept",
+      body: "Neurorehab interventions often use task-specific practice, graded cueing, balance challenge, gait retraining, positioning, and repetition with quality. Safety depends heavily on guarding, environment, cognition, and response to fatigue.",
+    },
+    {
+      id: "workflow",
+      heading: "Neuro Rehab Workflow",
+      kind: "clinical_scenario",
+      body: "A post-stroke patient demonstrates left neglect while transferring toward the affected side. The PTA should structure the environment, cue visual scanning, guard closely, and avoid assuming the patient can self-correct without support.",
+    },
+    {
+      id: "exam-relevance",
+      heading: "Exam Relevance",
+      kind: "exam_relevance",
+      body: "Neuro PTA questions often test safest setup, cueing level, balance progression, neglect awareness, fatigue response, and when the task has become unsafe or outside the PTA role.",
+    },
+  ],
+};
+
+export const physicalTherapistAssistantLessons = [
+  {
+    pathwayId: "us-allied-core",
+    slug: "pta-transfer-safety-and-guarding-foundations",
+    title: "Transfer Safety and Guarding Foundations",
+    topic: "Transfer Safety",
+    topicSlug: "pta-transfer-safety",
+    system: "rehabilitation",
+    bodySystem: "mobility",
+    previewSectionCount: 2,
+    seoTitle: "PTA Transfer Safety and Guarding Foundations",
+    seoDescription: "Physical therapist assistant lesson covering transfer setup, guarding, assist level, fall prevention, symptoms, and safe stop points.",
+    alliedProfessionKey: "pta",
+    sections: ptaSections.transferSafety,
+    studyTakeaways: [
+      "Safe transfers begin with setup, precautions, equipment, and communication.",
+      "Dizziness, loss of balance, new symptoms, or inability to follow instructions should stop progression.",
+      "PTA judgment protects patient safety before treatment intensity.",
+    ],
+    studyCommonTraps: [
+      "Progressing mobility despite dizziness or instability",
+      "Forgetting to lock surfaces or manage lines",
+      "Choosing an assistance level based on optimism instead of observed performance",
+    ],
+    preTest: [quiz("A patient becomes dizzy during sit-to-stand transfer practice. What is the safest PTA action?", ["Continue quickly to build endurance", "Return the patient to a safe position and reassess", "Ignore symptoms if gait belt is used", "Increase resistance"], 1, "Dizziness during transfer practice is a safety stop point requiring guarding, safe positioning, reassessment, and communication per policy.")],
+    postTest: [quiz("Which transfer setup action is essential before standing?", ["Unlock wheelchair brakes", "Clear lines/obstacles and lock surfaces", "Remove all guarding", "Start before explaining the task"], 1, "Safe setup includes locked surfaces, clear path, equipment positioning, and patient communication.")],
+  },
+  {
+    pathwayId: "us-allied-core",
+    slug: "pta-gait-training-and-assistive-device-reasoning",
+    title: "Gait Training and Assistive Device Reasoning",
+    topic: "Gait Training",
+    topicSlug: "pta-gait-assistive-devices",
+    system: "rehabilitation",
+    bodySystem: "mobility",
+    previewSectionCount: 2,
+    seoTitle: "PTA Gait Training and Assistive Device Reasoning",
+    seoDescription: "PTA lesson covering gait training, assistive device selection, weight-bearing precautions, guarding, stairs, and fall-risk reasoning.",
+    alliedProfessionKey: "pta",
+    sections: ptaSections.gaitAssistiveDevices,
+    studyTakeaways: [
+      "Assistive device selection depends on support need, coordination, cognition, and precautions.",
+      "Weight-bearing precautions must be maintained before gait is progressed.",
+      "Stairs and turning increase mobility risk and require extra safety reasoning.",
+    ],
+    studyCommonTraps: [
+      "Choosing a cane when the patient needs a walker",
+      "Ignoring cognitive inability to follow sequencing",
+      "Progressing stairs before level ambulation is safe",
+    ],
+    preTest: [quiz("A patient cannot maintain partial weight-bearing with a walker despite repeated cues. What should the PTA do?", ["Progress to stairs", "Stop and reassess safety/communicate concerns", "Switch to a cane", "Remove the device"], 1, "Inability to maintain precautions is a safety issue requiring reassessment and communication, not progression.")],
+    postTest: [quiz("Which device generally provides the broadest base of support?", ["Single-point cane", "Standard walker", "No device", "Sock aid"], 1, "A walker provides a broad base of support and is often used when more stability is needed.")],
+  },
+  {
+    pathwayId: "us-allied-core",
+    slug: "pta-therapeutic-exercise-progression-and-regression",
+    title: "Therapeutic Exercise Progression and Regression",
+    topic: "Therapeutic Exercise",
+    topicSlug: "pta-therapeutic-exercise",
+    system: "rehabilitation",
+    bodySystem: "musculoskeletal",
+    previewSectionCount: 2,
+    seoTitle: "PTA Therapeutic Exercise Progression and Regression",
+    seoDescription: "PTA lesson covering exercise dosage, symptom response, compensation, progression, regression, and plan-of-care alignment.",
+    alliedProfessionKey: "pta",
+    sections: ptaSections.therapeuticExercise,
+    studyTakeaways: [
+      "Progression requires acceptable symptoms, quality movement, and plan-of-care alignment.",
+      "Poor form is a clinical signal, not a completed repetition.",
+      "Regression can be the safest and most therapeutic choice.",
+    ],
+    studyCommonTraps: [
+      "Increasing resistance despite compensations",
+      "Ignoring pain response or fatigue",
+      "Progressing outside the established plan of care",
+    ],
+    preTest: [quiz("A patient performs hip abduction with trunk lean each repetition. What should the PTA do?", ["Increase resistance", "Cue and reduce difficulty to restore form", "End all therapy permanently", "Ignore it if repetitions are completed"], 1, "Compensation suggests the task is too difficult or poorly controlled; quality and safety guide progression.")],
+    postTest: [quiz("Which finding best supports exercise progression?", ["Worsening instability", "Good form with acceptable symptoms", "Increasing dizziness", "New severe pain"], 1, "Exercise can progress when movement quality, safety, and symptoms remain acceptable.")],
+  },
+  {
+    pathwayId: "us-allied-core",
+    slug: "pta-orthopedic-post-op-rehab-precautions",
+    title: "Orthopedic Post-Op Rehab and Precautions",
+    topic: "Orthopedic Rehab",
+    topicSlug: "pta-orthopedic-rehab",
+    system: "rehabilitation",
+    bodySystem: "musculoskeletal",
+    previewSectionCount: 2,
+    seoTitle: "PTA Orthopedic Post-Op Rehab and Precautions",
+    seoDescription: "PTA lesson covering post-op rehab precautions, tissue healing, weight-bearing orders, ROM protection, pain response, and functional progression.",
+    alliedProfessionKey: "pta",
+    sections: ptaSections.orthopedicRehab,
+    studyTakeaways: [
+      "Orthopedic rehab balances protection and progression.",
+      "Precautions and weight-bearing orders are safety rules, not suggestions.",
+      "Pain, inflammation, and surgical stage guide treatment intensity.",
+    ],
+    studyCommonTraps: [
+      "Ignoring hip or shoulder precautions",
+      "Treating all post-op pain as weakness",
+      "Progressing before tissue tolerance allows",
+    ],
+    preTest: [quiz("A total hip patient begins moving into a restricted position during bed mobility. What should the PTA do?", ["Let them finish to build independence", "Stop and re-educate on precautions", "Add ankle weights", "Ignore if pain is low"], 1, "Precaution violations require immediate correction and safe modification.")],
+    postTest: [quiz("Early post-op orthopedic rehab commonly prioritizes:", ["Maximal resistance training only", "Safe mobility and protected ROM", "No education", "Ignoring swelling"], 1, "Early phases emphasize protection, safety, edema control, safe mobility, and ROM within restrictions.")],
+  },
+  {
+    pathwayId: "us-allied-core",
+    slug: "pta-neurologic-rehab-balance-cueing-and-neglect",
+    title: "Neurologic Rehab: Balance, Cueing, and Neglect",
+    topic: "Neurologic Rehab",
+    topicSlug: "pta-neuro-rehab",
+    system: "rehabilitation",
+    bodySystem: "neurological",
+    previewSectionCount: 2,
+    seoTitle: "PTA Neurologic Rehab Balance Cueing and Neglect",
+    seoDescription: "PTA lesson covering neurorehab safety, balance, cueing, neglect, fatigue, task-specific practice, and functional mobility progression.",
+    alliedProfessionKey: "pta",
+    sections: ptaSections.neuroRehab,
+    studyTakeaways: [
+      "Neurorehab safety depends on cognition, balance, tone, fatigue, and awareness.",
+      "Cueing and environment setup can make a task safer or unsafe.",
+      "Neglect and poor awareness require structured support, not assumptions of self-correction.",
+    ],
+    studyCommonTraps: [
+      "Ignoring neglect during transfers",
+      "Progressing balance without guarding",
+      "Confusing fatigue-related deterioration with lack of effort",
+    ],
+    preTest: [quiz("A post-stroke patient with left neglect transfers toward the affected side without scanning. What is safest?", ["Assume they will self-correct", "Cue scanning and guard closely", "Remove all assistance", "Progress to stairs immediately"], 1, "Neglect requires cueing, environmental structure, guarding, and safety awareness.")],
+    postTest: [quiz("Which factor is especially important in neurorehab progression?", ["Cognition and safety awareness", "Ignoring fatigue", "No guarding during balance tasks", "Only counting repetitions"], 0, "Cognition, awareness, fatigue, and postural control heavily affect neurorehab safety.")],
+  },
+];
+
+export default { lessons: physicalTherapistAssistantLessons };
