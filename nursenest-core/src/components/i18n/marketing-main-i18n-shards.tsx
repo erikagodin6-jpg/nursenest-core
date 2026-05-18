@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
+import { headers } from "next/headers";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
@@ -10,6 +12,7 @@ import {
 import { safeAwait } from "@/lib/async/safe-await";
 import { mergeMarketingMessagesWithPublicOverrides } from "@/lib/marketing/merge-marketing-messages-with-public-overrides";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
+import { buildMarketingRouteBreadcrumbItems } from "@/lib/seo/marketing-route-breadcrumbs";
 
 const MARKETING_MAIN_SHARDS_TIMEOUT_MS = 2600;
 
@@ -32,6 +35,14 @@ function safeSyncLoad(locale: string): MarketingMessages {
     return loadMarketingMessageShardsSync(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
   } catch {
     return {};
+  }
+}
+
+async function readMarketingRequestPathname(): Promise<string> {
+  try {
+    return (await headers()).get("x-nn-request-pathname")?.trim() ?? "/";
+  } catch {
+    return "/";
   }
 }
 
@@ -101,13 +112,18 @@ export async function MarketingMainI18nShards({
   /** e.g. `<SiteFooter />` — rendered only after shard load, after `{children}`. */
   trailingChrome?: ReactNode;
 }) {
-  const { primary, fallback } = await loadPrimaryAndFallback(locale);
+  const [{ primary, fallback }, requestPathname] = await Promise.all([
+    loadPrimaryAndFallback(locale),
+    readMarketingRequestPathname(),
+  ]);
+  const breadcrumbItems = buildMarketingRouteBreadcrumbItems(requestPathname);
 
   return (
     <MarketingI18nShardLayer
       messages={safeMerge(primary, publicContentOverrides)}
       fallbackMessages={fallback ? safeMerge(fallback, publicContentOverrides) : undefined}
     >
+      {breadcrumbItems.length > 0 ? <BreadcrumbJsonLd items={breadcrumbItems} /> : null}
       {children}
       {trailingChrome}
     </MarketingI18nShardLayer>
