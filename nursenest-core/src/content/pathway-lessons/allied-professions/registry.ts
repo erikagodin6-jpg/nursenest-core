@@ -4,6 +4,7 @@ import pharmacyTechnicianCatalog from "@/content/pathway-lessons/allied-professi
 import medicalLaboratoryTechnologyCatalog from "@/content/pathway-lessons/allied-professions/medical-laboratory-technology";
 import medicalImagingCatalog from "@/content/pathway-lessons/allied-professions/medical-imaging";
 import emergencyMedicalServicesCatalog from "@/content/pathway-lessons/allied-professions/emergency-medical-services";
+import sonographyCatalog from "@/content/pathway-lessons/allied-professions/sonography";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -32,34 +33,40 @@ if (imagingProfession) {
 const emtProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "emt");
 if (emtProfession) {
   emtProfession.dedicatedCatalogFile = "emergency-medical-services";
-  emtProfession.topicSlugsIn = [
-    "ems-scene-safety",
-    "ems-primary-assessment",
-    "ems-airway",
-    "ems-shock",
-    "ems-cardiology",
-    "ems-trauma",
-    "prehospital-care",
-    "emergency-response",
-    "patient-assessment",
-    "critical-care-transport",
+}
+
+const sonographyProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "sonography");
+if (sonographyProfession) {
+  sonographyProfession.dedicatedCatalogFile = "sonography";
+  sonographyProfession.topicSlugsIn = [
+    "sonography-physics",
+    "abdominal-sonography",
+    "ob-gyn-sonography",
+    "vascular-sonography",
+    "small-parts-sonography",
+    "sonography-patient-care",
+    "doppler-ultrasound",
+    "ultrasound-physics",
+    "fetal-ultrasound",
+    "echogenicity",
+    "probe-selection",
   ];
-  emtProfession.description =
-    "Deep EMT and paramedic education covering scene safety, airway management, trauma, shock, STEMI systems, cardiac arrest, rapid transport, and prehospital critical thinking.";
-  emtProfession.examOverview = [
-    "EMS exams reward prioritization, rapid life-threat recognition, and protocol-driven emergency decision-making.",
-    "Use scene size-up, primary assessment, airway management, shock recognition, and trauma triage together instead of memorizing isolated algorithms.",
-    "Scenario-heavy prehospital review improves retention and field reasoning more than passive memorization alone.",
+  sonographyProfession.description =
+    "Deep sonography education covering ultrasound physics, Doppler, OB/GYN imaging, abdominal ultrasound, vascular scanning, artifacts, probe selection, and patient care.";
+  sonographyProfession.examOverview = [
+    "Sonography exams reward image optimization, anatomy recognition, Doppler reasoning, pathology pattern recognition, and role-safe communication.",
+    "Use probe selection, artifacts, vascular flow analysis, and anatomy together instead of memorizing isolated screenshots.",
+    "Scenario-heavy scanning review improves retention and clinical reasoning more than passive image memorization alone.",
   ];
-  emtProfession.features = [
-    "Dedicated EMS lesson shard separated from generic allied-health filler.",
-    "Mechanism-first trauma, cardiology, airway, and shock education.",
-    "Prehospital transport-priority and scene-safety reasoning integrated into every lesson cluster.",
-    "Shared EMS foundation supporting EMT, AEMT, paramedic, and critical-care transport expansion.",
+  sonographyProfession.features = [
+    "Dedicated sonography lesson shard separated from generic imaging filler.",
+    "Mechanism-first ultrasound physics, Doppler, and pathology education.",
+    "Integrated OB/GYN, vascular, abdominal, and small-parts scanning workflows.",
+    "Shared ultrasound foundation supporting future cardiac, MSK, and advanced specialty ultrasound expansion.",
   ];
-  emtProfession.ctaLine =
-    "Study airway, trauma, STEMI systems, shock, and EMS decision-making through the dedicated prehospital-care pathway.";
-  emtProfession.premiumCtaHeadline = "Master prehospital assessment, airway management, trauma, and emergency response";
+  sonographyProfession.ctaLine =
+    "Study ultrasound physics, Doppler, OB/GYN, abdominal, and vascular sonography through the dedicated ultrasound pathway.";
+  sonographyProfession.premiumCtaHeadline = "Master ultrasound physics, Doppler, pathology recognition, and scanning workflow";
 }
 
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
@@ -68,4 +75,5 @@ export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, Allie
   "medical-laboratory-technology": medicalLaboratoryTechnologyCatalog,
   "medical-imaging": medicalImagingCatalog,
   "emergency-medical-services": emergencyMedicalServicesCatalog,
+  sonography: sonographyCatalog,
 };
