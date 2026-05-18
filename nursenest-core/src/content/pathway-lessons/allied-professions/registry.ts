@@ -7,6 +7,7 @@ import emergencyMedicalServicesCatalog from "@/content/pathway-lessons/allied-pr
 import sonographyCatalog from "@/content/pathway-lessons/allied-professions/sonography";
 import medicalAssistantCatalog from "@/content/pathway-lessons/allied-professions/medical-assistant";
 import dentalHygieneCatalog from "@/content/pathway-lessons/allied-professions/dental-hygiene";
+import physiotherapyRehabCatalog from "@/content/pathway-lessons/allied-professions/physiotherapy-rehab";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -50,35 +51,45 @@ if (medicalAssistantProfession) {
 const dentalHygieneProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "dental-hygiene");
 if (dentalHygieneProfession) {
   dentalHygieneProfession.dedicatedCatalogFile = "dental-hygiene";
-  dentalHygieneProfession.topicSlugsIn = [
-    "dental-hygiene-periodontology",
-    "dental-hygiene-instrumentation",
-    "dental-radiography",
-    "dental-hygiene-prevention",
-    "dental-medical-emergencies",
-    "dental-hygiene-ethics",
-    "periodontal-therapy",
-    "dental-hygiene-board-exam",
-    "oral-health-prevention",
-    "fluoride-and-sealants",
-    "dental-scaling",
+}
+
+const physiotherapyProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "physiotherapy");
+if (physiotherapyProfession) {
+  physiotherapyProfession.dedicatedCatalogFile = "physiotherapy-rehab";
+  physiotherapyProfession.topicSlugsIn = [
+    "physiotherapy-assessment",
+    "therapeutic-exercise",
+    "gait-and-mobility",
+    "neurologic-rehabilitation",
+    "cardiopulmonary-rehab",
+    "rehab-documentation-scope",
+    "rehabilitation",
+    "physical-therapy",
+    "exercise-progression",
+    "mobility-training",
+    "fall-prevention",
   ];
-  dentalHygieneProfession.description =
-    "Deep dental hygiene education covering periodontal assessment, instrumentation, radiography, prevention, fluoride, sealants, ethics, and dental-office emergency response.";
-  dentalHygieneProfession.examOverview = [
-    "Dental hygiene board exams reward periodontal reasoning, instrumentation safety, radiographic interpretation, prevention planning, and ethical decision-making.",
-    "Use probing, attachment loss, calculus detection, caries risk, and radiographic patterns together instead of memorizing isolated facts.",
-    "Scenario-based oral-health review improves retention and patient-care reasoning more than passive memorization alone.",
+  physiotherapyProfession.description =
+    "Deep physiotherapy education covering movement assessment, therapeutic exercise, gait training, neurologic rehabilitation, cardiopulmonary rehab, mobility safety, and rehabilitation documentation.";
+  physiotherapyProfession.examOverview = [
+    "Physiotherapy and PTA exams reward clinical reasoning, progression safety, mobility assessment, neurologic recognition, and exercise prescription logic.",
+    "Use function, gait, symptoms, vitals, balance, and movement quality together instead of memorizing isolated exercises.",
+    "Scenario-based rehabilitation review improves retention and patient-safety reasoning more than passive memorization alone.",
   ];
-  dentalHygieneProfession.features = [
-    "Dedicated dental hygiene lesson shard separated from generic dental-assistant filler.",
-    "Mechanism-first periodontal, instrumentation, radiography, and prevention education.",
-    "Integrated ethics, consent, emergency response, and patient-education workflows.",
-    "Shared oral-health foundation supporting future local anesthesia, orthodontic, pediatric, and advanced periodontal expansion.",
+  physiotherapyProfession.features = [
+    "Dedicated rehabilitation lesson shard separated from generic allied-health filler.",
+    "Mechanism-first movement assessment, gait, neuro rehab, and therapeutic-exercise education.",
+    "Integrated cardiopulmonary monitoring, mobility safety, and rehab progression workflows.",
+    "Shared rehab foundation supporting future orthopedics, sports medicine, vestibular rehab, pediatrics, and chronic-pain expansion.",
   ];
-  dentalHygieneProfession.ctaLine =
-    "Study periodontal therapy, instrumentation, radiography, prevention, and oral-health workflows through the dedicated dental hygiene pathway.";
-  dentalHygieneProfession.premiumCtaHeadline = "Master periodontal assessment, instrumentation, prevention, and oral-health care";
+  physiotherapyProfession.ctaLine =
+    "Study movement assessment, mobility, therapeutic exercise, and rehabilitation safety through the dedicated physiotherapy pathway.";
+  physiotherapyProfession.premiumCtaHeadline = "Master rehabilitation assessment, therapeutic exercise, gait, and mobility safety";
+}
+
+const ptaProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "pta");
+if (ptaProfession) {
+  ptaProfession.dedicatedCatalogFile = "physiotherapy-rehab";
 }
 
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
@@ -90,4 +101,5 @@ export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, Allie
   sonography: sonographyCatalog,
   "medical-assistant": medicalAssistantCatalog,
   "dental-hygiene": dentalHygieneCatalog,
+  "physiotherapy-rehab": physiotherapyRehabCatalog,
 };
