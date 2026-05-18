@@ -171,6 +171,45 @@ export function PracticeTestQuestionMediaBlock({
   );
 }
 
+type PracticeOptionTeachingMap = Record<string, string | null | undefined>;
+
+function PracticeOptionTeachingAside({
+  state,
+  text,
+  label,
+}: {
+  state: AnswerOptionState;
+  text: string;
+  label: string;
+}) {
+  const correct = state === "correct";
+  const incorrect = state === "incorrect";
+  return (
+    <aside
+      className="mt-2 rounded-lg border px-3 py-2 text-[12.5px] leading-[1.5] md:mt-0 md:min-w-[17.5rem] md:max-w-[24rem] md:flex-[0_0_36%]"
+      data-nn-practice-option-rationale=""
+      style={{
+        borderColor: correct
+          ? "color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft))"
+          : incorrect
+            ? "color-mix(in srgb, var(--semantic-danger) 24%, var(--semantic-border-soft))"
+            : "var(--semantic-border-soft)",
+        background: correct
+          ? "color-mix(in srgb, var(--semantic-success) 7%, var(--semantic-surface))"
+          : incorrect
+            ? "color-mix(in srgb, var(--semantic-danger) 6%, var(--semantic-surface))"
+            : "var(--semantic-surface)",
+        color: "var(--semantic-text-secondary)",
+      }}
+    >
+      <p className="mb-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-text-muted)" }}>
+        {label}
+      </p>
+      <p className="m-0">{text}</p>
+    </aside>
+  );
+}
+
 /** Radiogroup MCQ option list (presentational); parent supplies row state and selection handler. */
 export function PracticeTestMcqRadiogroupOptions({
   canonicalKeys,
@@ -179,6 +218,9 @@ export function PracticeTestMcqRadiogroupOptions({
   disabled,
   ariaLabel,
   onSelectCanonical,
+  optionTeachingMap,
+  showOptionTeaching = false,
+  teachingLabel = "Rationale",
 }: {
   canonicalKeys: readonly string[];
   displayTexts: readonly string[];
@@ -186,20 +228,39 @@ export function PracticeTestMcqRadiogroupOptions({
   disabled: boolean;
   ariaLabel: string;
   onSelectCanonical: (canonical: string) => void;
+  optionTeachingMap?: PracticeOptionTeachingMap | null;
+  showOptionTeaching?: boolean;
+  teachingLabel?: string;
 }) {
   return (
-    <ul className="nn-cat-opt-list" role="radiogroup" aria-label={ariaLabel}>
-      {canonicalKeys.map((canonical, i) => (
-        <li key={canonical}>
-          <AnswerOptionRow
-            letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
-            text={displayTexts[i] ?? canonical}
-            state={rowState(canonical)}
-            disabled={disabled}
-            onClick={() => onSelectCanonical(canonical)}
-          />
-        </li>
-      ))}
+    <ul
+      className={showOptionTeaching ? "nn-cat-opt-list nn-practice-option-rationale-list" : "nn-cat-opt-list"}
+      role="radiogroup"
+      aria-label={ariaLabel}
+      data-nn-practice-option-rationales={showOptionTeaching ? "visible" : undefined}
+    >
+      {canonicalKeys.map((canonical, i) => {
+        const state = rowState(canonical);
+        const teaching = optionTeachingMap?.[canonical]?.trim();
+        return (
+          <li key={canonical}>
+            <div className={showOptionTeaching ? "md:flex md:items-stretch md:gap-3" : undefined}>
+              <div className="min-w-0 flex-1">
+                <AnswerOptionRow
+                  letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
+                  text={displayTexts[i] ?? canonical}
+                  state={state}
+                  disabled={disabled}
+                  onClick={() => onSelectCanonical(canonical)}
+                />
+              </div>
+              {showOptionTeaching && teaching ? (
+                <PracticeOptionTeachingAside state={state} text={teaching} label={teachingLabel} />
+              ) : null}
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
 }
