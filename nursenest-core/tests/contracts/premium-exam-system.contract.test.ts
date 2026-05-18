@@ -10,6 +10,8 @@ import path from "node:path";
 import { describe, it } from "node:test";
 
 const EXAM_CSS_PATH = path.resolve(process.cwd(), "src/app/learner-exam-session-premium.css");
+const EXAM_SHELL_CSS_PATH = path.resolve(process.cwd(), "src/app/learner-exam-shell.css");
+const EXAM_SHELL_TSX_PATH = path.resolve(process.cwd(), "src/components/exam/exam-session-shell.tsx");
 const BOARD_PARTS_PATH = path.resolve(
   process.cwd(),
   "src/components/student/practice-test-runner/practice-test-runner-board-parts.tsx",
@@ -39,6 +41,8 @@ function read(filePath: string): string {
 
 describe("premium exam system", () => {
   const css = read(EXAM_CSS_PATH);
+  const shellCss = read(EXAM_SHELL_CSS_PATH);
+  const shellTsx = read(EXAM_SHELL_TSX_PATH);
   const boardParts = read(BOARD_PARTS_PATH);
   const questionCard = read(QUESTION_CARD_PATH);
   const bowtie = read(BOWTIE_PATH);
@@ -54,6 +58,13 @@ describe("premium exam system", () => {
     for (const format of REQUIRED_FORMATS) {
       assert.match(css, new RegExp(`--nn-exam-format-${format}\\s*:`), `${format} token missing`);
     }
+  });
+
+  it("keeps LOFT simulation distinct from adaptive CAT shell mode", () => {
+    assert.match(shellTsx, /LearnerExamShellMode = "cat" \| "loft" \| "practice" \| "review"/);
+    assert.match(shellCss, /data-nn-exam-mode="loft"/, "LOFT shell selector missing");
+    assert.match(shellCss, /LOFT simulation: linear licensing exam/, "LOFT intent comment missing");
+    assert.match(shellCss, /less adaptive glow/, "LOFT must be visually documented as non-adaptive");
   });
 
   it("exposes QA hooks for major implemented exam renderers", () => {
