@@ -2,6 +2,7 @@ import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import respiratoryTherapyCatalog from "@/content/pathway-lessons/allied-professions/respiratory-therapy";
 import pharmacyTechnicianCatalog from "@/content/pathway-lessons/allied-professions/pharmacy-technician";
 import medicalLaboratoryTechnologistCatalog from "@/content/pathway-lessons/allied-professions/medical-laboratory-technologist";
+import physicalTherapistAssistantCatalog from "@/content/pathway-lessons/allied-professions/physical-therapist-assistant";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -111,6 +112,39 @@ if (mltProfession) {
   mltProfession.premiumCtaHeadline = "Master laboratory interpretation, QC, morphology, and transfusion safety";
 }
 
+const ptaProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "pta");
+if (ptaProfession) {
+  ptaProfession.dedicatedCatalogFile = "physical-therapist-assistant";
+  ptaProfession.topicSlugsIn = [
+    "pta-transfer-safety",
+    "pta-gait-assistive-devices",
+    "pta-therapeutic-exercise",
+    "pta-orthopedic-rehab",
+    "pta-neuro-rehab",
+    "patient-assessment",
+    "human-anatomy",
+    "human-physiology",
+    "vital-signs",
+    "patient-communication",
+  ];
+  ptaProfession.description =
+    "Dedicated PTA rehab education for transfer safety, gait training, assistive devices, therapeutic exercise progression, orthopedic precautions, neurorehab cueing, and fall-risk judgment.";
+  ptaProfession.examOverview = [
+    "PTA exams reward safe movement reasoning: setup, guarding, weight-bearing precautions, assist level, cueing, and when to stop or regress treatment.",
+    "Use rehab-specific study loops across transfers, gait training, therapeutic exercise, orthopedic precautions, and neurorehab progression.",
+    "Scenario practice should prioritize patient safety, plan-of-care alignment, symptom response, and scope-aware communication.",
+  ];
+  ptaProfession.features = [
+    "Dedicated PTA lesson shard separated from generic allied-health filler content.",
+    "Transfer safety, gait/device reasoning, therapeutic exercise, orthopedic rehab, and neurorehab topic slugs prepared for deeper catalog expansion.",
+    "Workflow-first teaching for fall prevention, symptom response, guarding, assist level, and safe treatment progression.",
+    "Future-ready metadata path for gait drills, transfer simulations, ROM dashboards, and adaptive rehab remediation.",
+  ];
+  ptaProfession.ctaLine =
+    "Study transfer safety, gait training, therapeutic exercise, orthopedic rehab, and neurorehab through the dedicated PTA pathway.";
+  ptaProfession.premiumCtaHeadline = "Master transfer safety, gait training, and rehab progression";
+}
+
 /**
  * Static manifest for optional per-profession allied lesson shards.
  *
@@ -121,4 +155,5 @@ export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, Allie
   "respiratory-therapy": respiratoryTherapyCatalog,
   "pharmacy-technician": pharmacyTechnicianCatalog,
   "medical-laboratory-technologist": medicalLaboratoryTechnologistCatalog,
+  "physical-therapist-assistant": physicalTherapistAssistantCatalog,
 };
