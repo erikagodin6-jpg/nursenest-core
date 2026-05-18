@@ -9163,6 +9163,7 @@ export const MARKETING_MESSAGE_KEYS = [
   "nav.psychotherapy",
   "nav.qbankGenerator",
   "nav.questionBank",
+  "nav.regionChangeHint",
   "nav.regionLabel",
   "nav.regionTheme",
   "nav.registeredNursingPrep",

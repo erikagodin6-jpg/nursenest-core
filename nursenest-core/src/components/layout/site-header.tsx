@@ -1351,7 +1351,11 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
               </div>
 
               {/* ── Section 3: Classes & Pathways (tier hubs + Pre-Nursing / ECG / HESI / TEAS) ── */}
-              <div className="space-y-1 border-t border-[var(--header-border)] pt-4" data-nn-mobile-section="classes-pathways">
+              <nav
+                aria-label={t("nav.marketingPathways")}
+                className="space-y-1 border-t border-[var(--header-border)] pt-4"
+                data-nn-mobile-section="classes-pathways"
+              >
                 <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
                   {formatTitleCase(t("nav.marketingExplore"), locale)}
                 </p>
@@ -1382,7 +1386,7 @@ export function SiteHeader({ serverHasStaffSession, precomputedNavData }: SiteHe
                     {item.label}
                   </HeaderNavAnchor>
                 ))}
-              </div>
+              </nav>
 
               <p className="mb-3 flex items-start gap-2 nn-marketing-body-sm text-[var(--nav-muted)]">
                 <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--theme-muted-text)]" aria-hidden />

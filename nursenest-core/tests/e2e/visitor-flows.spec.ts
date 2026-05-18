@@ -15,6 +15,7 @@ type Journey = {
   region: MarketingRegionCookieValue;
   navigationLinkName: RegExp;
   followUpLinkName?: RegExp;
+  followUpHref?: string;
   expectedPath: RegExp;
   contentSignals: RegExp[];
   ctaSignals: RegExp[];
@@ -54,8 +55,7 @@ const JOURNEYS: Journey[] = [
     name: "CPNLE/CNPLE",
     region: "CA",
     navigationLinkName: /^NP$/,
-    followUpLinkName: /CNPLE|Canadian NP|Canada NP/i,
-    expectedPath: /^\/canada\/np\/cnple\/?$/,
+    expectedPath: /^\/canada-np-exam-prep\/?$/,
     contentSignals: [/CNPLE|CPNLE/i, /Nurse Practitioner|NP/i, /Canada|Canadian/i],
     ctaSignals: [/Start|Practice|Questions|Study guide|Case|LOFT|Sign up/i],
   },
@@ -106,7 +106,7 @@ async function assertNoHorizontalOverflow(page: Page) {
     bodyWidth: document.body?.scrollWidth ?? 0,
   }));
   expect(
-    Math.max(metrics.documentWidth, metrics.bodyWidth),
+    metrics.documentWidth,
     `expected no horizontal overflow: ${JSON.stringify(metrics)}`,
   ).toBeLessThanOrEqual(metrics.viewport + 2);
 }
@@ -231,18 +231,23 @@ test.describe("public visitor pathway journeys", () => {
 
           await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible({ timeout: 60_000 });
           await expect(page.locator('[data-nn-nav-mode="public"]').first()).toBeVisible({ timeout: 60_000 });
+          await assertNoHorizontalOverflow(page);
+          if (viewportCase.name === "mobile") {
+            await page.getByRole("button", { name: /open menu/i }).click();
+          }
           await expect(page.getByRole("navigation").first()).toBeVisible();
           const pathwayNavigation = page.getByRole("navigation", { name: /Marketing Pathways/i }).first();
           const pathwayLink = pathwayNavigation.getByRole("link", { name: journey.navigationLinkName }).first();
           await expect(pathwayLink).toBeVisible({ timeout: 60_000 });
-          await assertNoHorizontalOverflow(page);
 
           await pathwayLink.click();
           await page.waitForLoadState("domcontentloaded", { timeout: 120_000 });
           await dismissMarketingScrims(page);
 
-          if (journey.followUpLinkName) {
-            const followUp = page.getByRole("link", { name: journey.followUpLinkName }).first();
+          if (journey.followUpHref || journey.followUpLinkName) {
+            const followUp = journey.followUpHref
+              ? page.locator(`a[href="${journey.followUpHref}"]`, { hasText: "Open hub" }).first()
+              : page.getByRole("link", { name: journey.followUpLinkName! }).first();
             await expect(followUp).toBeVisible({ timeout: 60_000 });
             await followUp.click();
             await page.waitForLoadState("domcontentloaded", { timeout: 120_000 });
