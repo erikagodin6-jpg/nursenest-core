@@ -6,6 +6,7 @@ export type CnpleCompetencyKey =
   | "communication-shared-decision-making"
   | "professional-practice-ethics"
   | "health-promotion-prevention"
+  | "older-adult-care"
   | "equity-cultural-safety";
 
 export type CnplePatientStateSignal = {
@@ -66,12 +67,12 @@ const FAMILY_COMPETENCY_MAP: Record<string, CnpleCompetencyKey[]> = {
   "suicide-risk-assessment-direct-questioning": ["diagnostic-reasoning", "communication-shared-decision-making"],
   "suicide-safety-planning-disposition": ["acute-escalation", "professional-practice-ethics"],
   "suicide-relapse-prevention-longitudinal-care": ["chronic-disease-management", "health-promotion-prevention"],
-  "delirium-recognition-polypharmacy": ["diagnostic-reasoning", "pharmacotherapy-safety"],
-  "delirium-deprescribing-and-trigger-management": ["pharmacotherapy-safety", "older-adult-care" as CnpleCompetencyKey],
-  "post-delirium-cognition-and-deprescribing-followup": ["chronic-disease-management", "communication-shared-decision-making"],
+  "delirium-recognition-polypharmacy": ["diagnostic-reasoning", "pharmacotherapy-safety", "older-adult-care"],
+  "delirium-deprescribing-and-trigger-management": ["pharmacotherapy-safety", "older-adult-care"],
+  "post-delirium-cognition-and-deprescribing-followup": ["chronic-disease-management", "communication-shared-decision-making", "older-adult-care"],
   "afib-anticoagulation-risk-benefit-initiation": ["pharmacotherapy-safety", "communication-shared-decision-making"],
   "afib-doac-selection-interaction-safety": ["pharmacotherapy-safety", "diagnostic-reasoning"],
-  "afib-anticoagulation-monitoring-falls-prevention": ["health-promotion-prevention", "chronic-disease-management"],
+  "afib-anticoagulation-monitoring-falls-prevention": ["health-promotion-prevention", "chronic-disease-management", "older-adult-care"],
   "ckd-acute-decline-medication-safety": ["pharmacotherapy-safety", "diagnostic-reasoning"],
   "ckd-albuminuria-hyperkalemia-prevention": ["chronic-disease-management", "pharmacotherapy-safety"],
   "ckd-chronic-management-pain-and-referral": ["chronic-disease-management", "health-promotion-prevention"],
@@ -88,6 +89,7 @@ const COMPETENCY_LABELS: Record<CnpleCompetencyKey, string> = {
   "communication-shared-decision-making": "Communication and shared decision-making",
   "professional-practice-ethics": "Professional practice and ethics",
   "health-promotion-prevention": "Health promotion and prevention",
+  "older-adult-care": "Older adult care",
   "equity-cultural-safety": "Equity and cultural safety",
 };
 
@@ -161,6 +163,7 @@ function recommendNextCnpleCases(scores: CnpleCompetencyScore[]): string[] {
   if (weak.has("diagnostic-reasoning")) recommendations.push("Kawasaki/MIS-C or abnormal uterine bleeding workup");
   if (weak.has("chronic-disease-management")) recommendations.push("Heart failure, diabetes sick-day, or COPD relapse prevention");
   if (weak.has("communication-shared-decision-making")) recommendations.push("Suicide risk safety planning or anticoagulation shared decision-making");
+  if (weak.has("older-adult-care")) recommendations.push("Delirium, falls-risk, or anticoagulation in older adults");
 
   return recommendations.length > 0 ? recommendations : ["Advance to mixed-domain integrated LOFT simulation"];
 }
