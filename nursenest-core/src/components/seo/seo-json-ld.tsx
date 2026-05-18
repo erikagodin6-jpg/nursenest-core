@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { SeoPageDefinition } from "@/lib/seo/programmatic-registry";
@@ -16,20 +17,166 @@ function JsonLd({ data }: { data: Record<string, unknown> }) {
 const ORG_ID = `${absoluteUrl("/")}#organization`;
 const WEBSITE_ID = `${absoluteUrl("/")}#website`;
 
-export function OrganizationJsonLd() {
+const BREADCRUMB_LABEL_OVERRIDES: Record<string, string> = {
+  about: "About",
+  allied: "Allied health",
+  "allied-health": "Allied health",
+  blog: "Blog",
+  canada: "Canada",
+  cat: "CAT exam",
+  cnple: "CNPLE",
+  "cnple-simulation-exam": "CNPLE simulation exam",
+  "cnple-vs-cnpe": "CNPLE vs CNPE",
+  ecg: "ECG",
+  exams: "Exams",
+  faq: "FAQ",
+  flashcards: "Flashcards",
+  hesi: "HESI",
+  "hesi-a2": "HESI A2",
+  "new-grad": "New grad",
+  nclex: "NCLEX",
+  "nclex-rn": "NCLEX-RN",
+  np: "NP",
+  pn: "PN",
+  practice: "Practice",
+  "practice-exams": "Practice exams",
+  "practice-tests": "Practice tests",
+  pricing: "Pricing",
+  questions: "Practice questions",
+  rex: "REx-PN",
+  "rex-pn": "REx-PN",
+  rn: "RN",
+  rpn: "RPN",
+  simulation: "Simulation",
+  simulations: "Simulations",
+  "study-plan": "Study plan",
+  teas: "TEAS",
+  tools: "Tools",
+  us: "United States",
+};
+
+const MARKETING_BREADCRUMB_SKIP_SEGMENTS = new Set(["default"]);
+
+function titleCaseSegment(segment: string): string {
+  const clean = decodeURIComponent(segment)
+    .replace(/^\/+|\/+$/g, "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!clean) return "Page";
+
+  const override = BREADCRUMB_LABEL_OVERRIDES[clean.toLowerCase()];
+  if (override) return override;
+
+  return clean
+    .split(" ")
+    .map((word) => {
+      if (/^[A-Z0-9]{2,}$/.test(word)) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
+}
+
+function normalizeMarketingPathname(rawPathname: string | null): string {
+  const pathname = (rawPathname ?? "/").split("?")[0]?.split("#")[0]?.trim() || "/";
+  const withLeadingSlash = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  const withoutTrailingSlash = withLeadingSlash !== "/" ? withLeadingSlash.replace(/\/+$/g, "") : "/";
+  return withoutTrailingSlash.replace(/\/{2,}/g, "/");
+}
+
+function buildMarketingBreadcrumbJsonLdForPathname(rawPathname: string | null): Record<string, unknown> | null {
+  const pathname = normalizeMarketingPathname(rawPathname);
+  if (pathname === "/") return null;
+
+  const lowerPath = pathname.toLowerCase();
+  if (
+    lowerPath === "/app" ||
+    lowerPath.startsWith("/app/") ||
+    lowerPath === "/api" ||
+    lowerPath.startsWith("/api/") ||
+    lowerPath === "/admin" ||
+    lowerPath.startsWith("/admin/") ||
+    lowerPath.startsWith("/_next/")
+  ) {
+    return null;
+  }
+
+  const segments = pathname
+    .split("/")
+    .map((segment) => segment.trim())
+    .filter(Boolean)
+    .filter((segment) => !MARKETING_BREADCRUMB_SKIP_SEGMENTS.has(segment.toLowerCase()));
+
+  if (segments.length === 0) return null;
+
+  const items: { name: string; item: string }[] = [{ name: "Home", item: absoluteUrl("/") }];
+  let cumulativePath = "";
+
+  for (const segment of segments) {
+    cumulativePath += `/${segment}`;
+    const url = absoluteUrl(cumulativePath);
+    const validation = isValidPublicUrl(url);
+    if (!validation.ok) {
+      safeServerLog("seo", "marketing_fallback_breadcrumb_item_rejected", {
+        pathname: pathname.slice(0, 400),
+        segment: segment.slice(0, 120),
+        url: url.slice(0, 500),
+        code: validation.code,
+        detail: (validation.detail ?? "").slice(0, 200),
+      });
+      continue;
+    }
+    items.push({ name: titleCaseSegment(segment), item: url });
+  }
+
+  if (items.length < 2) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: item.item,
+    })),
+  };
+}
+
+async function MarketingFallbackBreadcrumbJsonLd() {
+  try {
+    const headerList = await headers();
+    const data = buildMarketingBreadcrumbJsonLdForPathname(
+      headerList.get("x-nn-request-pathname") ?? headerList.get("x-pathname") ?? null,
+    );
+    if (!data) return null;
+    return <JsonLd data={data} />;
+  } catch (error) {
+    safeServerLog("seo", "marketing_fallback_breadcrumb_failed", {
+      error: error instanceof Error ? error.message.slice(0, 300) : String(error).slice(0, 300),
+    });
+    return null;
+  }
+}
+
+export async function OrganizationJsonLd() {
   return (
-    <JsonLd
-      data={{
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "@id": ORG_ID,
-        name: "NurseNest",
-        url: absoluteUrl("/"),
-        description:
-          "Canada-first nursing and allied health exam preparation platform with globally relevant pathways—including NCLEX and US licensing hubs where applicable.",
-        sameAs: [] as string[],
-      }}
-    />
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "@id": ORG_ID,
+          name: "NurseNest",
+          url: absoluteUrl("/"),
+          description:
+            "Canada-first nursing and allied health exam preparation platform with globally relevant pathways—including NCLEX and US licensing hubs where applicable.",
+          sameAs: [] as string[],
+        }}
+      />
+      <MarketingFallbackBreadcrumbJsonLd />
+    </>
   );
 }
 
