@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { ATPPathwayModule } from "@/content/pre-nursing/modules/pre-nursing-atp-pathway";
+import { ATPPathwayInteractiveModule } from "@/content/pre-nursing/modules/pre-nursing-atp-pathway-interactive";
 import { AnatomyPhysiologyModule } from "@/content/pre-nursing/modules/pre-nursing-anatomy";
 import { ChemistryModule } from "@/content/pre-nursing/modules/pre-nursing-chemistry";
 import { CommunicationModule } from "@/content/pre-nursing/modules/pre-nursing-communication";
@@ -56,7 +56,7 @@ const MAP: Record<string, ComponentType> = {
   "healthcare-structure": HealthcareStructureModule,
   "research-reading": ResearchReadingModule,
   "human-factors": HumanFactorsModule,
-  "atp-pathway": ATPPathwayModule,
+  "atp-pathway": ATPPathwayInteractiveModule,
 };
 
 export function getPreNursingModuleComponent(slug: string): ComponentType | null {
