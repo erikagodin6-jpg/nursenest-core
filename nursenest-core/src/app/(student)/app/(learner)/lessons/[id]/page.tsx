@@ -82,12 +82,6 @@ import {
 } from "@/lib/lessons/pathway-lesson-progress";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { extractExamFocusHighYieldLines, extractSecondaryExamContextLines } from "@/lib/lessons/pathway-lesson-study-extract";
-import { PathwayLessonStudyRail } from "@/components/lessons/pathway-lesson-study-rail";
-import {
-  PathwayLessonDeferredRelatedRail,
-  PathwayLessonRelatedRailSkeleton,
-} from "@/components/lessons/pathway-lesson-detail-deferred";
-import { toPathwayLessonDeferredServerSnapshot } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
 import { LessonSectionNoteInline } from "@/components/lessons/lesson-section-note-inline";
 import { LessonSectionCard, lessonSectionSurface } from "@/components/lessons/lesson-section-card";
@@ -114,6 +108,8 @@ import { shouldRenderPathwayLessonSection } from "@/lib/lessons/lesson-section-p
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
+import { isLessonRetentionSectionKind } from "@/lib/lessons/lesson-retention-section";
+import { LessonStickyReviewDock } from "@/components/lessons/lesson-sticky-review-dock";
 import {
   resolvePathwayLessonBankAssessments,
   type ExplicitLessonBankQuizCombinedLoad,
@@ -539,10 +535,13 @@ async function LessonDetailPageInner({ params }: Props) {
       });
       return <AppLessonUnavailable t={t} />;
     }
+    const retentionSections = displaySections.filter((section) => isLessonRetentionSectionKind(section.kind ?? null));
+    const learningSections = displaySections.filter((section) => !isLessonRetentionSectionKind(section.kind ?? null));
+    const articleSections = learningSections.length > 0 ? learningSections : displaySections;
     const editorialRhythmIndexBySectionId = new Map<string, number>();
     {
       let editorialRhythmCounter = 0;
-      for (const s of displaySections) {
+      for (const s of articleSections) {
         if (lessonSectionSurface(s.kind) === "editorial") {
           editorialRhythmIndexBySectionId.set(s.id, editorialRhythmCounter);
           editorialRhythmCounter += 1;
@@ -691,11 +690,18 @@ async function LessonDetailPageInner({ params }: Props) {
       examFraming.region !== "unknown" ? examFraming.examIdentityLabel : null;
 
     // Nav sections for quick-jump (aligned with rendered article sections)
-    const navSections = displaySections.map((s) => ({
-      id: s.id,
-      heading: pathwayLessonSectionSurfaceHeading(s, pathway?.countryCode, t),
-      kind: s.kind ?? null,
-    }));
+    const navSections = [
+      ...articleSections.map((s) => ({
+        id: s.id,
+        heading: pathwayLessonSectionSurfaceHeading(s, pathway?.countryCode, t),
+        kind: s.kind ?? null,
+      })),
+      {
+        id: "lesson-retention-review",
+        heading: "Review",
+        kind: "takeaways" as const,
+      },
+    ];
 
     const studyLoopBankActive =
       Boolean(userId) &&
@@ -812,14 +818,9 @@ async function LessonDetailPageInner({ params }: Props) {
             }
             compactSubscriberBanner
           >
-            {pathway && record.memoryAnchor ? (
-              <div className="mb-5">
-                <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} />
-              </div>
-            ) : null}
             <article className="nn-lesson-article-flow nn-premium-lesson-article">
-              {displaySections.length > 0 ? (
-                displaySections.map((section) => {
+              {articleSections.length > 0 ? (
+                articleSections.map((section) => {
                   const surfaceHeading = pathwayLessonSectionSurfaceHeading(section, pathway?.countryCode, t);
                   const sectionBody =
                     pathway != null
@@ -910,40 +911,84 @@ async function LessonDetailPageInner({ params }: Props) {
                 />
               </div>
             ) : null}
-            {pathway && record.studyCommonTraps && record.studyCommonTraps.length > 0 ? (
-              <div className="mt-6 w-full max-w-none">
-                <PathwayLessonCommonTrapsStrip items={record.studyCommonTraps} />
-              </div>
-            ) : null}
-            {pathway && lessonHasExamTakeaways(record.studyTakeaways) ? (
-              <div className="mt-6 w-full max-w-none">
-                <ExamTakeawaysBlock
-                  pathway={pathway}
-                  items={record.studyTakeaways}
-                  position="bottom"
-                  alliedProfessionLabel={alliedExamTakeawaysLabel}
-                />
-              </div>
-            ) : null}
           </PremiumLessonShell>
         </LessonAssessmentFlow>
 
-        <PathwayLessonQuickClinicalSummary
-          quickReviewLines={quickReviewRailLines}
-          examFocusLines={examFocusRailLines}
-          commonMistakes={record.studyCommonTraps}
-          fullAccess={entitlement.hasAccess}
-          labels={{
-            eyebrow: t("learner.lessons.quickClinical.eyebrow"),
-            title: t("learner.lessons.quickClinical.title"),
-            keyTakeaways: t("learner.lessons.quickClinical.card.keyTakeaways"),
-            redFlags: t("learner.lessons.quickClinical.card.redFlags"),
-            priorityInterventions: t("learner.lessons.quickClinical.card.priorityInterventions"),
-            examTraps: t("learner.lessons.quickClinical.card.examTraps"),
-            mustKnowLabs: t("learner.lessons.quickClinical.card.mustKnowLabs"),
-            escalationCues: t("learner.lessons.quickClinical.card.escalationCues"),
-          }}
-        />
+        <section
+          id="lesson-retention-review"
+          className="nn-lesson-retention-review-zone"
+          aria-labelledby="lesson-retention-review-heading"
+          data-nn-premium-retention-review-zone
+        >
+          <div className="nn-lesson-retention-review-zone__head">
+            <p className="nn-lesson-hero-eyebrow">Retention & exam readiness</p>
+            <h2 id="lesson-retention-review-heading">Review after learning, not during it.</h2>
+            <p>
+              Clinical pearls, traps, safety priorities, quick recall, and related concepts live here so the main lesson stays calm and uninterrupted.
+            </p>
+          </div>
+          {retentionSections.length > 0 ? (
+            <div className="nn-lesson-retention-review-zone__sections">
+              {retentionSections.map((section) => {
+                const surfaceHeading = pathwayLessonSectionSurfaceHeading(section, pathway?.countryCode, t);
+                const sectionBody =
+                  pathway != null
+                    ? pathwayLessonPremiumSectionBodyText(section, pathway.id, pathway.countryCode)
+                    : typeof section.body === "string"
+                      ? section.body
+                      : "";
+                return (
+                  <LessonSectionCard
+                    key={section.id}
+                    id={section.id}
+                    heading={surfaceHeading}
+                    kind={section.kind ?? null}
+                  >
+                    <PathwayLessonSectionContent
+                      text={sectionBody}
+                      figures={section.figures}
+                      examFocus={section.examFocus}
+                      lessonWikiBasePath={pathway ? marketingPathwayLessonsIndexPath(pathway) : null}
+                      viewerTier={lessonViewerTier}
+                      measurementSystem={lessonMeasurementSystem ?? undefined}
+                      sectionKind={section.kind ?? null}
+                      emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
+                      figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
+                    />
+                  </LessonSectionCard>
+                );
+              })}
+            </div>
+          ) : null}
+          {pathway && record.memoryAnchor ? <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} /> : null}
+          {pathway && record.studyCommonTraps && record.studyCommonTraps.length > 0 ? (
+            <PathwayLessonCommonTrapsStrip items={record.studyCommonTraps} />
+          ) : null}
+          {pathway && lessonHasExamTakeaways(record.studyTakeaways) ? (
+            <ExamTakeawaysBlock
+              pathway={pathway}
+              items={record.studyTakeaways}
+              position="bottom"
+              alliedProfessionLabel={alliedExamTakeawaysLabel}
+            />
+          ) : null}
+          <PathwayLessonQuickClinicalSummary
+            quickReviewLines={quickReviewRailLines}
+            examFocusLines={examFocusRailLines}
+            commonMistakes={record.studyCommonTraps}
+            fullAccess={entitlement.hasAccess}
+            labels={{
+              eyebrow: t("learner.lessons.quickClinical.eyebrow"),
+              title: t("learner.lessons.quickClinical.title"),
+              keyTakeaways: t("learner.lessons.quickClinical.card.keyTakeaways"),
+              redFlags: t("learner.lessons.quickClinical.card.redFlags"),
+              priorityInterventions: t("learner.lessons.quickClinical.card.priorityInterventions"),
+              examTraps: t("learner.lessons.quickClinical.card.examTraps"),
+              mustKnowLabs: t("learner.lessons.quickClinical.card.mustKnowLabs"),
+              escalationCues: t("learner.lessons.quickClinical.card.escalationCues"),
+            }}
+          />
+        </section>
 
         <LessonNavButtons
           position="bottom"

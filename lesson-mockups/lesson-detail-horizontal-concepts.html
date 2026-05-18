@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NurseNest Lesson Detail - Horizontal Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;background:#1e293b}
+svg{display:block;flex-shrink:0}
+.frame{width:1440px;min-height:1000px;overflow:hidden;background:#fff;position:relative;margin:0 0 48px}
+
+/* Existing NurseNest authenticated chrome, intentionally unchanged from platform mockups */
+.nav{height:56px;background:#0d7aaa;display:flex;align-items:center;padding:0 32px;gap:0;position:relative}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-mark{width:28px;height:28px}
+.nav-wordmark{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.nav-wordmark span{color:rgba(255,255,255,.7)}
+.nav-links{display:flex;align-items:center;gap:1px;margin-left:32px}
+.nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,.75);padding:7px 12px;border-radius:7px;text-decoration:none}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,.1)}
+.nav-link.active{color:#fff;background:rgba(255,255,255,.15);font-weight:600}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.nav-notif{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.nav-avatar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);border-radius:10px;padding:4px 12px 4px 6px;cursor:pointer}
+.nav-avatar-ring{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#0d7aaa}
+.nav-avatar-name{font-size:12.5px;font-weight:600;color:#fff}
+.nav-tier{font-size:10px;font-weight:700;color:#0d7aaa;background:#fff;padding:2px 7px;border-radius:99px;letter-spacing:.03em}
+.ctx{height:38px;background:#fff;border-bottom:1px solid #d9f3fa;display:flex;align-items:center;padding:0 32px;gap:16px}
+.ctx-label{font-size:11.5px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:6px}
+.ctx-sep{width:1px;height:14px;background:#d0e8f5}
+.ctx-item{font-size:11.5px;color:#647894;display:flex;align-items:center;gap:5px}
+.ctx-pill{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:99px}
+.pill-ready{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.pill-adaptive{background:#e6f7fd;color:#0d7aaa;border:1px solid #b8dff7}
+
+.lesson{min-height:906px;color:var(--text);background:var(--bg);padding:54px 72px 72px}
+.shell{max-width:1180px;margin:0 auto}
+.hero{padding:58px 0 46px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+h1{font-size:58px;line-height:.98;letter-spacing:-.045em;color:var(--text);max-width:920px;font-weight:800}
+.deck{font-size:19px;line-height:1.65;color:var(--muted);max-width:820px;margin-top:22px}
+.hero-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:28px}
+.chip{height:34px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--muted);display:inline-flex;align-items:center;padding:0 13px;font-size:12px;font-weight:700}
+.chip.strong{color:var(--text);background:var(--soft)}
+.mini-progress{width:160px;height:7px;border-radius:99px;background:var(--track);overflow:hidden}
+.mini-progress span{display:block;height:100%;width:66%;background:var(--accent);border-radius:inherit}
+.seg-wrap{position:sticky;top:0;z-index:5;margin:0 -6px;padding:18px 0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px)}
+.seg{display:flex;gap:8px;overflow-x:auto;padding:7px;border:1px solid var(--line);background:var(--glass);border-radius:999px;box-shadow:var(--shadow-soft)}
+.seg::-webkit-scrollbar{display:none}
+.seg span{white-space:nowrap;border-radius:999px;padding:10px 16px;font-size:13px;font-weight:750;color:var(--muted)}
+.seg span.active{background:var(--surface);color:var(--text);box-shadow:0 1px 0 rgba(12,24,36,.05),0 8px 20px rgba(12,24,36,.08)}
+.flow{display:grid;gap:44px;padding-top:44px}
+.section{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:40px 44px;box-shadow:var(--shadow-card)}
+.section.open{background:transparent;border:0;box-shadow:none;padding:18px 0}
+.section h2{font-size:31px;line-height:1.15;letter-spacing:-.028em;margin-bottom:14px;color:var(--text)}
+.section p{font-size:16px;line-height:1.78;color:var(--muted);max-width:850px}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:26px}
+.insight{border:1px solid var(--line);background:var(--soft);border-radius:16px;padding:24px}
+.insight b{display:block;font-size:14px;color:var(--text);margin-bottom:8px}
+.insight p{font-size:14px;line-height:1.6}
+.strip{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:stretch}
+.callout{border-left:5px solid var(--accent);background:var(--soft);border-radius:16px;padding:28px 30px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.callout h3{font-size:21px;letter-spacing:-.018em;margin-bottom:10px;color:var(--text)}
+.callout p{font-size:15px;line-height:1.68;color:var(--muted)}
+.review-zone{margin-top:50px;border-radius:24px;background:var(--surface);border:1px solid var(--line);padding:34px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;box-shadow:var(--shadow-card)}
+.review-zone .insight{background:var(--bg)}
+.study-bar{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);width:min(920px,calc(100% - 160px));height:58px;border:1px solid var(--line);background:var(--glass);border-radius:999px;backdrop-filter:blur(18px);box-shadow:var(--shadow-soft);display:flex;align-items:center;justify-content:space-between;padding:8px 10px 8px 22px;color:var(--text)}
+.study-bar b{font-size:13px}.study-bar span{font-size:12px;color:var(--muted)}.study-bar button{border:0;background:var(--accent);color:var(--button);font-weight:800;border-radius:999px;height:42px;padding:0 20px}
+.caption{position:absolute;right:28px;bottom:16px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+.blossom{--bg:#fff9f5;--surface:#fffefb;--soft:#fff0e8;--glass:rgba(255,253,249,.78);--line:#ead8ce;--text:#34292a;--muted:#735f5c;--accent:#a8625c;--button:#fffaf6;--track:#efddd4;--shadow-card:0 18px 45px rgba(82,48,42,.08);--shadow-soft:0 16px 44px rgba(82,48,42,.12)}
+.ocean{--bg:#f4fbfb;--surface:#fff;--soft:#e9f7f7;--glass:rgba(255,255,255,.78);--line:#cfe7e8;--text:#17323b;--muted:#5f737a;--accent:#168f90;--button:#fff;--track:#d7ebec;--shadow-card:0 18px 45px rgba(23,64,76,.08);--shadow-soft:0 16px 44px rgba(23,64,76,.12)}
+.minimal{--bg:#fbfaf7;--surface:#fff;--soft:#f3f0ea;--glass:rgba(255,255,255,.78);--line:#ded8ce;--text:#252423;--muted:#6a6660;--accent:#4f746c;--button:#fff;--track:#e4dfd6;--shadow-card:0 18px 45px rgba(36,34,30,.07);--shadow-soft:0 16px 44px rgba(36,34,30,.1)}
+.premium{--bg:#f8fafc;--surface:#fff;--soft:#eef5f7;--glass:rgba(255,255,255,.8);--line:#d5e0e6;--text:#17222c;--muted:#607080;--accent:#0d7aaa;--button:#fff;--track:#dbe6ec;--shadow-card:0 18px 45px rgba(20,45,62,.08);--shadow-soft:0 16px 44px rgba(20,45,62,.12)}
+.architecture{--bg:#fbf8f1;--surface:#fffdf8;--soft:#f6ede0;--glass:rgba(255,253,248,.8);--line:#e5d7c3;--text:#322b22;--muted:#716556;--accent:#a56b3f;--button:#fffaf4;--track:#ebddc9;--shadow-card:0 18px 45px rgba(64,45,26,.08);--shadow-soft:0 16px 44px rgba(64,45,26,.12)}
+
+#c2 .hero{padding-top:74px;padding-bottom:56px}
+#c2 h1{font-size:64px;max-width:980px}
+#c2 .section{border-radius:24px;padding:52px}
+#c2 .flow{gap:58px}
+#c3 .section{background:transparent;box-shadow:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:52px 0}
+#c3 .columns{grid-template-columns:1.2fr .8fr}
+#c4 .lesson{background:linear-gradient(180deg,var(--bg),#fff 48%,var(--bg))}
+#c4 .section{border-radius:14px}
+#c4 .high-yield{display:grid;grid-template-columns:1.4fr .8fr;gap:24px}
+#c5 .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
+#c5 .node{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;min-height:150px}
+#c5 .node strong{display:inline-flex;width:30px;height:30px;border-radius:9px;background:var(--soft);color:var(--accent);align-items:center;justify-content:center;margin-bottom:16px}
+</style>
+</head>
+<body>
+
+<template id="chrome">
+  <nav class="nav">
+    <a class="nav-logo">
+      <svg class="nav-mark" viewBox="0 0 28 28"><path d="M5 24 C5 17 10.5 12 14 12 S23 17 23 24 Z" fill="rgba(255,255,255,0.9)"/><path d="M8 24 C8 19.5 10.8 16 14 16 S20 19.5 20 24 Z" fill="#0d7aaa"/></svg>
+      <span class="nav-wordmark">Nurse<span>Nest</span></span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link">Dashboard</a><a class="nav-link">Flashcards</a><a class="nav-link">Practice</a><a class="nav-link active">Lessons</a><a class="nav-link">Modules</a><a class="nav-link">CNPLE</a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-notif"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+      <div class="nav-avatar"><div class="nav-avatar-ring">JM</div><span class="nav-avatar-name">Jasmeen M.</span><span class="nav-tier">PRO</span></div>
+    </div>
+  </nav>
+  <div class="ctx">
+    <div class="ctx-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0d7aaa" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>RN Lessons</div>
+    <div class="ctx-sep"></div><div class="ctx-item"><span class="ctx-pill pill-adaptive">Horizontal learning flow</span></div><div class="ctx-item"><span class="ctx-pill pill-ready">Pretest complete</span></div>
+  </div>
+</template>
+
+<section class="frame" id="c1" data-file="01-editorial-learning-layout.png">
+  <div class="chrome-slot"></div>
+  <main class="lesson blossom"><div class="shell">
+    <section class="hero"><div class="eyebrow">Editorial learning layout</div><h1>Hypertensive Crisis</h1><p class="deck">A spacious reading experience for long study sessions, with clinical sections arranged as a guided editorial lesson instead of a dashboard. The lesson itself is the hero.</p><div class="hero-meta"><span class="chip strong">RN cardiovascular</span><span class="chip">14 min</span><span class="chip">Progress 66%</span><div class="mini-progress"><span></span></div></div></section>
+    <div class="seg-wrap"><nav class="seg"><span class="active">Overview</span><span>Risk Factors</span><span>Assessment</span><span>Interventions</span><span>Safety</span><span>Review</span></nav></div>
+    <div class="flow">
+      <section class="section open"><h2>Clinical framing before facts.</h2><p>Lead with why the condition matters, what the learner should recognize, and how the clinical pattern unfolds. This keeps cognitive load low before moving into details.</p></section>
+      <section class="strip"><div class="section"><h2>Pattern recognition</h2><p>Assessment cues, risk signals, and escalation logic are grouped into one calm learning module.</p><div class="columns"><div class="insight"><b>High-yield cue</b><p>Use existing lesson content to surface urgent findings without inventing new facts.</p></div><div class="insight"><b>Compare with</b><p>Related disorders can be linked inline when the lesson already supports it.</p></div></div></div><div class="callout"><h3>Know this cold</h3><p>A short recall prompt sits inside the flow, not in a right rail. It reinforces the section while the learner is already there.</p></div></section>
+      <section class="section"><h2>Nursing priorities</h2><p>Interventions are organized as clinical reasoning modules with generous spacing, soft borders, and readable paragraph rhythm.</p></section>
+      <section class="review-zone"><div class="insight"><b>Related lesson</b><p>Stroke warning signs</p></div><div class="insight"><b>Readiness</b><p>Post-test available</p></div><div class="insight"><b>Retention prompt</b><p>What finding changes priority?</p></div></section>
+    </div>
+  </div></main><div class="caption">Concept 01 editorial learning layout</div>
+</section>
+
+<section class="frame" id="c2" data-file="02-apple-inspired-educational-flow.png">
+  <div class="chrome-slot"></div>
+  <main class="lesson ocean"><div class="shell">
+    <section class="hero"><div class="eyebrow">Apple-inspired educational flow</div><h1>Learn the clinical pattern, then test application.</h1><p class="deck">Large quiet typography, wide content, and a low-height glass navigation bar create a premium education feel without sidebars or boxed dashboard clutter.</p><div class="hero-meta"><span class="chip strong">NP primary care</span><span class="chip">Pretest saved</span><span class="chip">Post-test at end</span></div></section>
+    <div class="seg-wrap"><nav class="seg"><span class="active">Overview</span><span>Assessment</span><span>Diagnostics</span><span>Treatment</span><span>Patient Education</span><span>Review</span></nav></div>
+    <div class="flow">
+      <section class="section"><h2>Overview</h2><p>Clinical concepts breathe. Each module is broad, deliberate, and readable, with enough negative space to support deep study.</p></section>
+      <section class="columns"><div class="callout"><h3>Clinical pearl</h3><p>Short embedded insight blocks support retention without stealing focus from the lesson.</p></div><div class="callout"><h3>NCLEX trap</h3><p>Common mistakes are treated as learning moments within the content flow.</p></div></section>
+      <section class="section"><h2>Assessment to intervention</h2><p>A single wide module can connect observations, interpretation, and action using the existing lesson source structure.</p><div class="columns"><div class="insight"><b>Assessment finding</b><p>Render only if the lesson contains assessment content.</p></div><div class="insight"><b>Intervention link</b><p>Map existing intervention text into a paired learning block.</p></div></div></section>
+    </div>
+  </div></main><div class="study-bar"><div><b>Lesson progress</b> <span>66% complete · Post-test ready soon</span></div><button>Continue learning</button></div><div class="caption">Concept 02 apple inspired flow</div>
+</section>
+
+<section class="frame" id="c3" data-file="03-minimal-clinical-study-interface.png">
+  <div class="chrome-slot"></div>
+  <main class="lesson minimal"><div class="shell">
+    <section class="hero"><div class="eyebrow">Minimal clinical study interface</div><h1>Calm clinical study, stripped to essentials.</h1><p class="deck">This direction removes heavy card density entirely. Sections feel like refined chapters with embedded clinical prompts, making it useful for RN, RPN, NP, and allied health content.</p><div class="hero-meta"><span class="chip strong">Allied health compatible</span><span class="chip">No sidebars</span><span class="chip">Wide reading column</span></div></section>
+    <div class="seg-wrap"><nav class="seg"><span class="active">Overview</span><span>Mechanism</span><span>Signs</span><span>Assessment</span><span>Interventions</span><span>Safety</span></nav></div>
+    <div class="flow">
+      <section class="section"><h2>Mechanism</h2><p>Explanatory content is treated as a readable chapter. Supporting prompts sit beside the prose only when they add learning value.</p><div class="columns"><div class="insight"><b>Quick recall</b><p>One short question reinforces the mechanism.</p></div><div class="insight"><b>Clinical translation</b><p>Connect mechanism to bedside recognition.</p></div></div></section>
+      <section class="section"><h2>Assessment findings</h2><p>Assessment content uses generous line-height, long-session typography, and a subtle section boundary instead of repeated boxes.</p></section>
+      <section class="section"><h2>Safety priority</h2><p>Safety information receives a refined priority treatment without relying on loud colors or dashboard widgets.</p></section>
+    </div>
+  </div></main><div class="caption">Concept 03 minimal clinical study</div>
+</section>
+
+<section class="frame" id="c4" data-file="04-premium-nclex-prep-platform.png">
+  <div class="chrome-slot"></div>
+  <main class="lesson premium"><div class="shell">
+    <section class="hero"><div class="eyebrow">Premium NCLEX prep platform</div><h1>From clinical concept to exam-ready judgment.</h1><p class="deck">This concept balances educational reading with NCLEX application. Review elements are integrated as strips and modules instead of a right-hand dashboard.</p><div class="hero-meta"><span class="chip strong">RPN/RN lesson</span><span class="chip">Baseline complete</span><span class="chip">8-question post-test</span></div></section>
+    <div class="seg-wrap"><nav class="seg"><span class="active">Overview</span><span>Risk</span><span>Assessment</span><span>Priorities</span><span>Traps</span><span>Post-test</span></nav></div>
+    <div class="flow">
+      <section class="high-yield"><div class="section"><h2>Clinical reasoning flow</h2><p>Core content is centered and wide, with section modules that build from recognition to action.</p></div><div class="callout"><h3>High-yield</h3><p>Use this for the one thing the learner must retain before answering questions.</p></div></section>
+      <section class="section"><h2>Priority setting</h2><p>Priority content gets room to breathe, with callouts for safety and traps placed in the same learning rhythm.</p><div class="columns"><div class="insight"><b>Safety priority</b><p>Embedded within the current section.</p></div><div class="insight"><b>NCLEX trap</b><p>Placed after the concept it tests.</p></div></div></section>
+      <section class="review-zone"><div class="insight"><b>Post-test</b><p>Application questions at the end.</p></div><div class="insight"><b>Weak section link</b><p>Diagnostics and prioritization.</p></div><div class="insight"><b>Next lesson</b><p>Stroke warning signs.</p></div></section>
+    </div>
+  </div></main><div class="caption">Concept 04 premium nclex platform</div>
+</section>
+
+<section class="frame" id="c5" data-file="05-modern-horizontal-learning-architecture.png">
+  <div class="chrome-slot"></div>
+  <main class="lesson architecture"><div class="shell">
+    <section class="hero"><div class="eyebrow">Modern horizontal learning architecture</div><h1>A lesson built around movement through ideas.</h1><p class="deck">This layout uses horizontal rhythm, sticky segment navigation, and large educational modules to make the learner feel guided rather than buried in a long article.</p><div class="hero-meta"><span class="chip strong">RN · RPN · NP · Allied</span><span class="chip">Gated or open mode</span><span class="chip">Theme-aware</span></div></section>
+    <div class="seg-wrap"><nav class="seg"><span class="active">Start</span><span>Recognize</span><span>Interpret</span><span>Act</span><span>Teach</span><span>Review</span></nav></div>
+    <div class="flow">
+      <section class="section"><h2>Learning path</h2><p>Instead of sidebars, the lesson communicates progress through a horizontal sequence and a small bottom study bar.</p><div class="timeline"><div class="node"><strong>1</strong><h3>Recognize</h3><p>Signs and symptoms.</p></div><div class="node"><strong>2</strong><h3>Interpret</h3><p>Assessment and diagnostics.</p></div><div class="node"><strong>3</strong><h3>Act</h3><p>Interventions and safety.</p></div><div class="node"><strong>4</strong><h3>Review</h3><p>Post-test and recall.</p></div></div></section>
+      <section class="strip"><div class="callout"><h3>Integrated study prompt</h3><p>A calm embedded prompt replaces cramped retention widgets and keeps review close to the learning moment.</p></div><div class="section"><h2>Clinical clarity</h2><p>Modules use soft depth, open spacing, and purposeful hierarchy rather than dense bordered regions.</p></div></section>
+    </div>
+  </div></main><div class="study-bar"><div><b>Next step</b> <span>Finish Safety, then start post-test</span></div><button>Continue</button></div><div class="caption">Concept 05 horizontal architecture</div>
+</section>
+
+<script>
+document.querySelectorAll('.chrome-slot').forEach(slot => {
+  slot.appendChild(document.getElementById('chrome').content.cloneNode(true));
+});
+</script>
+</body>
+</html>

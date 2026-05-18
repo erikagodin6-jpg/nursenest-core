@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
 import { CheckCircle, Clock, BookMarked } from "lucide-react";
 import type { PathwayLessonExamRelevance, PathwayLessonAudienceTier } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
@@ -95,69 +94,47 @@ export function LessonPageHeader({
 
   return (
     <header className="nn-lesson-page-header nn-premium-learner-lesson-hero">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+      <div className="flex flex-col gap-5">
         <div className="min-w-0 flex-1">
-          {breadcrumbSlot ? <div className="mb-1.5 min-w-0">{breadcrumbSlot}</div> : null}
-          <nav aria-label="Lesson context" className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
-            <Link
-              href="/app/lessons"
-              className="text-[var(--semantic-text-secondary)] transition-colors hover:text-[var(--semantic-text-primary)] hover:underline"
-            >
-              Lessons
-            </Link>
-            {pathwayLine ? (
-              <>
-                <span aria-hidden className="text-[var(--semantic-border-soft)]">
-                  /
-                </span>
-                <span className="max-w-[14rem] truncate sm:max-w-none">{pathwayLine}</span>
-              </>
-            ) : null}
-            {topic ? (
-              <>
-                <span aria-hidden className="text-[var(--semantic-border-soft)]">
-                  /
-                </span>
-                <span className="max-w-[18rem] truncate text-[var(--semantic-text-secondary)] sm:max-w-none">{topic}</span>
-              </>
-            ) : null}
-          </nav>
+          <p
+            className="nn-lesson-hero-eyebrow"
+            data-nn-premium-individual-lesson-header-meta
+          >
+            {[audience, pathwayLine, bodyLabel ?? topic].filter(Boolean).join(" · ") || "Clinical lesson"}
+          </p>
 
           <h1
-            className="mt-2.5 text-balance font-semibold tracking-tight text-[var(--semantic-text-primary)]"
-            style={{
-              fontSize: "clamp(1.5rem, 1.25rem + 1.1vw, 2rem)",
-              lineHeight: 1.2,
-            }}
+            className="nn-lesson-hero-title mt-4 text-balance font-semibold tracking-tight text-[var(--semantic-text-primary)]"
           >
             {title}
           </h1>
 
           {purposeLine ? (
-            <p className="mt-2 max-w-[52ch] text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
+            <p className="nn-lesson-hero-deck mt-5 text-[var(--semantic-text-secondary)]">
               {purposeLine}
             </p>
           ) : null}
 
-          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[0.8125rem] text-[var(--semantic-text-muted)]">
+          <div className="nn-lesson-hero-meta mt-6 flex flex-wrap items-center gap-2 text-[var(--semantic-text-muted)]">
             {examRelevance ? (
-              <span className="inline-flex items-center gap-1 font-medium text-[var(--semantic-text-secondary)]">
+              <span className="nn-lesson-hero-chip inline-flex items-center gap-1 font-medium text-[var(--semantic-text-secondary)]">
                 <BookMarked className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
                 {relevancePhrase(examRelevance)}
               </span>
             ) : null}
-            {bodyLabel ? <span className="capitalize">{bodyLabel}</span> : null}
-            {audience ? <span>{audience}</span> : null}
-            <span className="tabular-nums">
+            {bodyLabel ? <span className="nn-lesson-hero-chip capitalize">{bodyLabel}</span> : null}
+            {audience ? <span className="nn-lesson-hero-chip">{audience}</span> : null}
+            <span className="nn-lesson-hero-chip tabular-nums">
               {sectionCount} section{sectionCount !== 1 ? "s" : ""}
             </span>
             {assessmentHint ? (
-              <span className="font-medium text-[var(--semantic-info)]">{assessmentHint}</span>
+              <span className="nn-lesson-hero-chip font-medium text-[var(--semantic-info)]">{assessmentHint}</span>
             ) : null}
+            <span className="nn-lesson-hero-progress" aria-hidden="true" data-progress={progress}>
+              <span />
+            </span>
+            <ProgressPill progress={progress} />
           </div>
-        </div>
-        <div className="shrink-0 pt-0.5 sm:pt-1">
-          <ProgressPill progress={progress} />
         </div>
       </div>
     </header>

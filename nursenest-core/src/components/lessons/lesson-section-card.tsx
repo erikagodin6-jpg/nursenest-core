@@ -54,6 +54,19 @@ function spineAccentClass(kind: PathwayLessonSectionKind | undefined | null): st
   return SPINE_ACCENT_CLASS[kind] ?? "";
 }
 
+function lessonSectionUsesClinicalWorkflow(kind: PathwayLessonSectionKind | undefined | null): boolean {
+  return Boolean(
+    kind &&
+      [
+        "nursing_assessment_interventions",
+        "nursing_priorities",
+        "clinical_application",
+        "labs_diagnostics",
+        "treatment_management",
+      ].includes(kind),
+  );
+}
+
 export function lessonSectionSurface(kind: PathwayLessonSectionKind | undefined | null): "editorial" | "callout" {
   if (!kind) return "editorial";
   const callout: PathwayLessonSectionKind[] = [
@@ -147,6 +160,14 @@ export function LessonSectionCard({
     );
   const headingId = `${id}-heading`;
   const bodyGap = surface === "callout" ? "mt-4" : "mt-3.5";
+  const workflow = lessonSectionUsesClinicalWorkflow(kind);
+  const workflowEl = workflow ? (
+    <div className="nn-lesson-clinical-workflow" aria-label="Clinical workflow pattern">
+      <span>Recognize</span>
+      <span>Interpret</span>
+      <span>Act</span>
+    </div>
+  ) : null;
 
   if (tierRelevanceLearnerSection && tierCrosswalk) {
     return (
@@ -161,6 +182,7 @@ export function LessonSectionCard({
         <h2 id={headingId} className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">
           {heading?.trim() || "Section"}
         </h2>
+        {workflowEl}
         <LessonSectionOptionalImage figure={sectionLeadFigure} />
         <div className={bodyGap}>{children}</div>
       </LearnerSectionContainer>
@@ -190,6 +212,7 @@ export function LessonSectionCard({
       <h2 className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">
         {heading?.trim() || "Section"}
       </h2>
+      {workflowEl}
       <LessonSectionOptionalImage figure={sectionLeadFigure} />
       <div className={bodyGap}>{children}</div>
     </section>

@@ -1727,12 +1727,15 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app,
 /* UWorld-style board: tinted top/bottom bars, white item well */
 .nn-cat-exam-board-top,
 .nn-cat-exam-board-footer {
-  background: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-surface));
+  /* Premium v2: clean semantic surface — no info-tinted band */
+  background: var(--semantic-surface);
 }
 /* Adaptive CAT exam footer — raised shadow (class from PracticeTestCatAdaptiveExamFooter) */
 .nn-cat-exam-board-footer.nn-premium-cat-adaptive-footer {
-  box-shadow: 0 -10px 28px -20px color-mix(in srgb, var(--semantic-text-primary) 18%, transparent);
-  background: color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-surface));
+  box-shadow:
+    0 -1px 0 rgba(0, 0, 0, 0.04),
+    0 -8px 24px -12px color-mix(in srgb, var(--semantic-brand) 8%, transparent);
+  background: var(--semantic-surface);
 }
 .nn-cat-exam-board-frame {
   background: color-mix(in srgb, var(--semantic-panel-muted) 14%, var(--semantic-surface));
@@ -1846,51 +1849,107 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app,
     background-color 0.14s ease,
     box-shadow 0.14s ease;
 }
+/* Premium v2: hover — no movement, no shadow lift. Clinical stillness. */
 .nn-cat-question-card--exam-stack .nn-cat-opt--interactive:hover:not(:disabled) {
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--semantic-text-primary) 5%, transparent);
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 40%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--semantic-surface));
+  box-shadow: none;
 }
+
+/* Premium v2: selected — left accent bar (4px inset) + flat tint. No glow ring. */
 .nn-cat-question-card--exam-stack .nn-cat-opt--selected,
 .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected {
-  border-width: 2px;
-  border-color: color-mix(in srgb, var(--nn-exam-accent) 52%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--nn-exam-accent) 8%, var(--bg-card));
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 14%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 12%, transparent);
+  border-width: 1.5px;
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 55%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 7%, var(--bg-card, var(--semantic-surface)));
+  box-shadow: inset 4px 0 0 var(--nn-exam-accent);
 }
 .nn-cat-question-card--exam-stack .nn-cat-opt--selected .nn-cat-opt__text,
 .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected .nn-cat-opt__text {
-  font-weight: 600;
+  font-weight: 500;
 }
+
+/* Premium v2: correct — green left accent bar. Scannable in review mode. */
+.nn-cat-question-card--exam-stack .nn-cat-opt--correct,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--correct {
+  border-width: 1.5px;
+  border-color: color-mix(in srgb, var(--semantic-success) 55%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
+  box-shadow: inset 4px 0 0 var(--semantic-success);
+}
+
+/* Premium v2: incorrect — red left accent bar. */
+.nn-cat-question-card--exam-stack .nn-cat-opt--incorrect,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--incorrect {
+  border-width: 1.5px;
+  border-color: color-mix(in srgb, var(--semantic-danger) 50%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface));
+  box-shadow: inset 4px 0 0 var(--semantic-danger);
+}
+
+/* Selected + correct: correct wins visually — green accent bar */
+.nn-cat-question-card--exam-stack .nn-cat-opt--selected.nn-cat-opt--correct,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected.nn-cat-opt--correct {
+  border-color: color-mix(in srgb, var(--semantic-success) 55%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
+  box-shadow: inset 4px 0 0 var(--semantic-success);
+}
+
+/* Selected + incorrect: red wins visually */
+.nn-cat-question-card--exam-stack .nn-cat-opt--selected.nn-cat-opt--incorrect,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected.nn-cat-opt--incorrect {
+  border-color: color-mix(in srgb, var(--semantic-danger) 50%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 9%, var(--semantic-surface));
+  box-shadow: inset 4px 0 0 var(--semantic-danger);
+}
+
+/* Premium v2: dim — unselected options in review. Muted but readable. */
 .nn-cat-question-card--exam-stack .nn-cat-opt--dim,
 .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--dim {
-  opacity: 1;
+  opacity: 0.48;
   font-weight: 400;
-  color: var(--semantic-text-secondary);
-  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-text-muted));
-  background: color-mix(in srgb, var(--semantic-panel-muted) 24%, var(--bg-card));
+  border-color: var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: none;
 }
+
+/* Premium v2: disabled/submitted — calm, neutral, not broken-looking */
 .nn-cat-question-card--exam-stack .nn-cat-opt:disabled,
 .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt:disabled {
-  opacity: 1;
-  cursor: not-allowed;
-  border-style: dashed;
-  border-width: 2px;
-  font-style: italic;
-  background: color-mix(in srgb, var(--semantic-panel-muted) 48%, var(--semantic-surface));
+  opacity: 0.55;
+  cursor: default;
+  border-style: solid;
+  border-width: 1.5px;
+  font-style: normal;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 28%, var(--semantic-surface));
   color: var(--semantic-text-secondary);
+  box-shadow: none;
 }
+
+/* Letter badge — rounded square, consistent sizing */
 .nn-cat-question-card--exam-stack .nn-cat-opt__letter {
   width: 1.75rem;
   height: 1.75rem;
   font-size: 0.6875rem;
+  border-radius: 5px;
+  flex-shrink: 0;
 }
+
+/* Focus ring: combine with left-accent shadow so both are visible simultaneously */
 .nn-cat-question-card--exam-stack .nn-cat-opt--interactive:focus-visible,
 .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--interactive:focus-visible {
   outline: none;
   box-shadow:
     0 0 0 2px var(--semantic-surface),
-    0 0 0 4px color-mix(in srgb, var(--nn-exam-accent) 38%, transparent);
+    0 0 0 4px color-mix(in srgb, var(--nn-exam-accent) 52%, transparent);
+}
+/* Focus ring on selected option — preserve left accent bar alongside focus ring */
+.nn-cat-question-card--exam-stack .nn-cat-opt--selected.nn-cat-opt--interactive:focus-visible,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected.nn-cat-opt--interactive:focus-visible {
+  box-shadow:
+    inset 4px 0 0 var(--nn-exam-accent),
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 4px color-mix(in srgb, var(--nn-exam-accent) 52%, transparent);
 }
 /* Pinned action slab: safe-area, stable separation from scroll body (CAT exam stack only) */
 .nn-cat-question-card--exam-stack .nn-cat-question-card__exam-footer--anchored {
@@ -1898,7 +1957,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app,
   padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   padding-left: max(0.125rem, env(safe-area-inset-left));
   padding-right: max(0.125rem, env(safe-area-inset-right));
-  background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  /* Premium v2: clean surface — matches card bg, no grey bleed */
+  background: var(--semantic-surface);
 }
 /* Exam stack: only the anchored footer may use sticky layering; kill study CAT mobile sticky nav */
 .nn-cat-question-card--exam-stack .nn-cat-question-nav {
@@ -1969,6 +2029,23 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app,
 .nn-cat-question-card__exam-scroll--partitioned .nn-cat-exam-stem-scroll {
   flex: 0 1 auto;
   max-height: min(40dvh, calc(100dvh - 13.5rem));
+}
+/* Premium v2 readability: override compact-mode line-height floors.
+   These rules match the same specificity as the globals.css compact-mode overrides so
+   learner-global.css (loaded last) wins in the cascade. */
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-stem-scroll .nn-cat-question-stem {
+  /* was 1.42 in globals.css compact mode — too tight for clinical scenarios */
+  line-height: 1.55;
+}
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-opt__text {
+  /* was 1.38 in globals.css — too tight for option text at any viewport */
+  line-height: 1.46;
+}
+/* Exam-stack stem: slightly more air than the 1.58 base */
+.nn-cat-question-card--exam-stack .nn-cat-question-stem,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
+  line-height: 1.62;
+  letter-spacing: -0.012em;
 }
 .nn-cat-question-card {
   border-radius: 1.25rem;
@@ -6610,3 +6687,85 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app,
   margin-top: 0;
 }
 
+
+/* ══════════════════════════════════════════════════════════════════
+   CAT EXAM — DARK THEME OVERRIDES (Premium v2)
+   Midnight / dark-clinical / dark themes need:
+   - stronger accent bar contrast
+   - proper dim legibility
+   - WCAG-safe success/danger states
+   - premium feel, not "gaming UI"
+   ════════════════════════════════════════════════════════════════ */
+
+html[data-theme="midnight"],
+html[data-theme="midnight-indigo"],
+html[data-theme="midnight-ink"],
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"],
+html[data-theme="deep-twilight"] {
+  /* Selected: higher bg tint on dark surface so the option is clearly highlighted */
+  & .nn-cat-question-card--exam-stack .nn-cat-opt--selected,
+  & .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected {
+    background: color-mix(in srgb, var(--nn-exam-accent) 13%, var(--bg-card, var(--semantic-surface)));
+  }
+
+  /* Dim: on dark themes 0.48 opacity can be too close to unreadable — keep floor at 0.45 */
+  & .nn-cat-question-card--exam-stack .nn-cat-opt--dim,
+  & .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--dim {
+    opacity: 0.45;
+    background: transparent;
+  }
+
+  /* Correct: brighter success green on dark backgrounds */
+  & .nn-cat-question-card--exam-stack .nn-cat-opt--correct,
+  & .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--correct {
+    background: color-mix(in srgb, var(--semantic-success) 12%, var(--semantic-surface));
+  }
+
+  /* Incorrect: more opaque danger bg on dark */
+  & .nn-cat-question-card--exam-stack .nn-cat-opt--incorrect,
+  & .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--incorrect {
+    background: color-mix(in srgb, var(--semantic-danger) 12%, var(--semantic-surface));
+  }
+
+  /* Top/bottom bar: slightly elevated above page on dark themes */
+  & .nn-cat-exam-board-top,
+  & .nn-cat-exam-board-footer {
+    background: color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-bg-base));
+    border-color: var(--semantic-border-soft);
+  }
+
+  /* Footer adaptive: match */
+  & .nn-cat-exam-board-footer.nn-premium-cat-adaptive-footer {
+    background: color-mix(in srgb, var(--semantic-surface) 88%, var(--semantic-bg-base));
+    box-shadow:
+      0 -1px 0 color-mix(in srgb, var(--semantic-border-soft) 70%, transparent),
+      0 -8px 24px -12px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Focus ring: brighter on dark so it's clearly visible */
+  & .nn-cat-question-card--exam-stack .nn-cat-opt--interactive:focus-visible,
+  & .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--interactive:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--semantic-surface),
+      0 0 0 4px color-mix(in srgb, var(--nn-exam-accent) 65%, transparent);
+  }
+
+  /* Selected + focus: keep the left accent bar in the later dark-theme cascade. */
+  & .nn-cat-question-card--exam-stack .nn-cat-opt--selected.nn-cat-opt--interactive:focus-visible,
+  & .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected.nn-cat-opt--interactive:focus-visible {
+    box-shadow:
+      inset 4px 0 0 var(--nn-exam-accent),
+      0 0 0 2px var(--semantic-surface),
+      0 0 0 4px color-mix(in srgb, var(--nn-exam-accent) 65%, transparent);
+  }
+}
+
+/* ── Accessibility: prefers-reduced-motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-question-card--exam-stack .nn-cat-opt,
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt {
+    transition: none;
+  }
+}
