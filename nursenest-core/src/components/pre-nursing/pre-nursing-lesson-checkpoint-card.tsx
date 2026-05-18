@@ -1,8 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
 import { AnswerOptionRow } from "@/components/study/cat-question-card";
+import {
+  createPreNursingMasteryEvent,
+  inferPreNursingMasteryState,
+  type PreNursingConfidenceLevel,
+  type PreNursingMasteryEvent,
+} from "@/lib/pre-nursing/pre-nursing-mastery-events";
 
 type CheckpointOption = {
   id: string;
@@ -20,11 +26,10 @@ export type PreNursingLessonCheckpointCardProps = {
   clinicalRelevance?: string;
   memoryAnchor?: string;
   misconceptionNote?: string;
-  onAnswered?: (event: {
-    conceptId: string;
-    selectedOptionId: string;
-    correct: boolean;
-  }) => void;
+  weakAreaTags?: string[];
+  misconceptionTag?: string;
+  confidence?: PreNursingConfidenceLevel;
+  onAnswered?: (event: PreNursingMasteryEvent) => void;
 };
 
 const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F"];
@@ -39,9 +44,14 @@ export function PreNursingLessonCheckpointCard({
   clinicalRelevance,
   memoryAnchor,
   misconceptionNote,
+  weakAreaTags,
+  misconceptionTag,
+  confidence = "neutral",
   onAnswered,
 }: PreNursingLessonCheckpointCardProps) {
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+  const interactionStartedAt = useRef<number>(Date.now());
+
   const answered = selectedOptionId != null;
   const selectedOption = useMemo(
     () => options.find((option) => option.id === selectedOptionId) ?? null,
@@ -62,12 +72,28 @@ export function PreNursingLessonCheckpointCard({
 
   function handleSelect(optionId: string) {
     if (answered) return;
+
     setSelectedOptionId(optionId);
-    onAnswered?.({
-      conceptId,
-      selectedOptionId: optionId,
-      correct: optionId === correctOptionId,
-    });
+
+    const correct = optionId === correctOptionId;
+
+    onAnswered?.(
+      createPreNursingMasteryEvent({
+        conceptId,
+        source: "lesson-checkpoint",
+        selectedOptionId: optionId,
+        correct,
+        confidence,
+        weakAreaTags,
+        misconceptionTag: correct ? undefined : misconceptionTag,
+        remediationRecommended: !correct,
+        responseLatencyMs: Date.now() - interactionStartedAt.current,
+        resultingMasteryState: inferPreNursingMasteryState({
+          correct,
+          confidence,
+        }),
+      }),
+    );
   }
 
   return (
