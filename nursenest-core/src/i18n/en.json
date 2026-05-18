@@ -1,0 +1,44 @@
+{
+  "session.start": "Start learning session",
+  "session.end": "End session",
+  "session.progress": "Session progress",
+
+  "item.next": "Next item",
+  "item.question": "Question",
+  "item.lesson": "Lesson",
+  "item.simulation": "Simulation",
+
+  "progress.accuracy": "Accuracy",
+  "progress.totalEvents": "Total events",
+  "progress.dueReviews": "Due reviews",
+
+  "domain.respiratory": "Respiratory Therapy",
+  "domain.pharmacyTech": "Pharmacy Technician",
+  "domain.mlt": "Medical Laboratory Technology",
+  "domain.imaging": "Medical Imaging",
+  "domain.sonography": "Sonography",
+  "domain.emt": "Emergency Medical Technician",
+  "domain.paramedic": "Paramedic",
+  "domain.medicalAssistant": "Medical Assistant",
+  "domain.dentalHygiene": "Dental Hygiene",
+  "domain.dentalAssistant": "Dental Assistant",
+  "domain.physiotherapy": "Physiotherapy",
+  "domain.pta": "Physical Therapist Assistant",
+  "domain.occupationalTherapy": "Occupational Therapy",
+  "domain.ota": "Occupational Therapy Assistant",
+  "domain.socialWork": "Social Work",
+  "domain.psychotherapy": "Psychotherapy",
+  "domain.mentalHealth": "Mental Health & Addictions",
+  "domain.psw": "Personal Support Worker",
+  "domain.communityHealth": "Community Health Worker",
+  "domain.dietetic": "Dietetic Technician",
+  "domain.labAssistant": "Lab Assistant",
+
+  "status.strength": "Strength",
+  "status.weakness": "Weakness",
+  "status.due": "Due for review",
+
+  "difficulty.easy": "Easy",
+  "difficulty.medium": "Medium",
+  "difficulty.hard": "Hard"
+}
