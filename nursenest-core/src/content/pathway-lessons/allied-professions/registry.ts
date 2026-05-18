@@ -8,6 +8,7 @@ import sonographyCatalog from "@/content/pathway-lessons/allied-professions/sono
 import medicalAssistantCatalog from "@/content/pathway-lessons/allied-professions/medical-assistant";
 import dentalHygieneCatalog from "@/content/pathway-lessons/allied-professions/dental-hygiene";
 import physiotherapyRehabCatalog from "@/content/pathway-lessons/allied-professions/physiotherapy-rehab";
+import occupationalTherapyCatalog from "@/content/pathway-lessons/allied-professions/occupational-therapy";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -56,40 +57,50 @@ if (dentalHygieneProfession) {
 const physiotherapyProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "physiotherapy");
 if (physiotherapyProfession) {
   physiotherapyProfession.dedicatedCatalogFile = "physiotherapy-rehab";
-  physiotherapyProfession.topicSlugsIn = [
-    "physiotherapy-assessment",
-    "therapeutic-exercise",
-    "gait-and-mobility",
-    "neurologic-rehabilitation",
-    "cardiopulmonary-rehab",
-    "rehab-documentation-scope",
-    "rehabilitation",
-    "physical-therapy",
-    "exercise-progression",
-    "mobility-training",
-    "fall-prevention",
-  ];
-  physiotherapyProfession.description =
-    "Deep physiotherapy education covering movement assessment, therapeutic exercise, gait training, neurologic rehabilitation, cardiopulmonary rehab, mobility safety, and rehabilitation documentation.";
-  physiotherapyProfession.examOverview = [
-    "Physiotherapy and PTA exams reward clinical reasoning, progression safety, mobility assessment, neurologic recognition, and exercise prescription logic.",
-    "Use function, gait, symptoms, vitals, balance, and movement quality together instead of memorizing isolated exercises.",
-    "Scenario-based rehabilitation review improves retention and patient-safety reasoning more than passive memorization alone.",
-  ];
-  physiotherapyProfession.features = [
-    "Dedicated rehabilitation lesson shard separated from generic allied-health filler.",
-    "Mechanism-first movement assessment, gait, neuro rehab, and therapeutic-exercise education.",
-    "Integrated cardiopulmonary monitoring, mobility safety, and rehab progression workflows.",
-    "Shared rehab foundation supporting future orthopedics, sports medicine, vestibular rehab, pediatrics, and chronic-pain expansion.",
-  ];
-  physiotherapyProfession.ctaLine =
-    "Study movement assessment, mobility, therapeutic exercise, and rehabilitation safety through the dedicated physiotherapy pathway.";
-  physiotherapyProfession.premiumCtaHeadline = "Master rehabilitation assessment, therapeutic exercise, gait, and mobility safety";
 }
 
 const ptaProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "pta");
 if (ptaProfession) {
   ptaProfession.dedicatedCatalogFile = "physiotherapy-rehab";
+}
+
+const occupationalTherapyProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "occupational-therapy");
+if (occupationalTherapyProfession) {
+  occupationalTherapyProfession.dedicatedCatalogFile = "occupational-therapy";
+  occupationalTherapyProfession.topicSlugsIn = [
+    "ot-assessment",
+    "ot-adl-iadl-intervention",
+    "ot-cognition-perception",
+    "ot-upper-extremity",
+    "ot-psychosocial-pediatrics",
+    "ot-ota-documentation-scope",
+    "occupational-therapy",
+    "activities-of-daily-living",
+    "adaptive-equipment",
+    "cognitive-rehabilitation",
+    "sensory-processing",
+  ];
+  occupationalTherapyProfession.description =
+    "Deep occupational therapy education covering ADLs, IADLs, cognition, sensory processing, upper-extremity rehabilitation, psychosocial OT, pediatrics, adaptive equipment, and occupation-based intervention.";
+  occupationalTherapyProfession.examOverview = [
+    "OT and OTA exams reward occupation-based reasoning, cognitive-perceptual safety, adaptive intervention planning, and client-centered rehabilitation.",
+    "Use function, environment, routines, cognition, sensation, and participation together instead of memorizing isolated impairments.",
+    "Scenario-based occupational-performance review improves retention and rehabilitation reasoning more than passive memorization alone.",
+  ];
+  occupationalTherapyProfession.features = [
+    "Dedicated occupational-therapy lesson shard separated from generic rehab filler.",
+    "Mechanism-first ADL/IADL, cognition, sensory, and occupation-based intervention education.",
+    "Integrated psychosocial, pediatric, upper-extremity, and adaptive-equipment workflows.",
+    "Shared OT foundation supporting future hand therapy, school OT, mental health OT, geriatrics, and home-modification expansion.",
+  ];
+  occupationalTherapyProfession.ctaLine =
+    "Study ADLs, cognition, adaptive equipment, sensory processing, and occupation-based rehabilitation through the dedicated OT pathway.";
+  occupationalTherapyProfession.premiumCtaHeadline = "Master occupation-based intervention, cognition, adaptive equipment, and functional rehabilitation";
+}
+
+const otaProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "ota");
+if (otaProfession) {
+  otaProfession.dedicatedCatalogFile = "occupational-therapy";
 }
 
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
@@ -102,4 +113,5 @@ export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, Allie
   "medical-assistant": medicalAssistantCatalog,
   "dental-hygiene": dentalHygieneCatalog,
   "physiotherapy-rehab": physiotherapyRehabCatalog,
+  "occupational-therapy": occupationalTherapyCatalog,
 };
