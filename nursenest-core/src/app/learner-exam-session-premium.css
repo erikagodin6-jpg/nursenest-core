@@ -815,3 +815,228 @@ html[data-theme="midnight"] .nn-exam-session-premium.nn-learner-exam-shell[data-
     transition: none;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   CAT PREMIUM REDESIGN v2 — Rail-free, centered, clinical calm
+   Appended 2026-05-18. Overrides earlier nn-cat-opt and top/bottom
+   bar declarations declared above in this same file.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Answer options: flat surface + left accent bar on selection ── */
+.nn-cat-opt {
+  min-height: 3.25rem;
+  background: var(--semantic-surface);
+  border-color: var(--semantic-border-soft);
+  /* Remove the radial gradient from the base state */
+  background-image: none;
+  box-shadow: none;
+  transition:
+    border-color 0.13s ease,
+    background-color 0.13s ease,
+    box-shadow 0.13s ease;
+}
+
+/* Hover: minimal bg shift, NO translateY lift */
+.nn-cat-opt--interactive:hover {
+  border-color: color-mix(in srgb, var(--semantic-brand) 45%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--semantic-surface));
+  background-image: none;
+  transform: none;
+}
+
+/* Selected: flat tint + 4px inset left accent bar */
+.nn-cat-opt--selected {
+  border-color: color-mix(in srgb, var(--semantic-brand) 55%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface));
+  background-image: none;
+  box-shadow: inset 4px 0 0 var(--semantic-brand);
+}
+
+/* Selected SATA: matches MCQ selected */
+.nn-cat-opt--multi.nn-cat-opt--selected {
+  border-color: color-mix(in srgb, var(--semantic-brand) 55%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface));
+  background-image: none;
+  box-shadow: inset 4px 0 0 var(--semantic-brand);
+}
+
+/* Correct: green left accent */
+.nn-cat-opt--correct {
+  border-color: color-mix(in srgb, var(--semantic-success) 55%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface));
+  background-image: none;
+  box-shadow: inset 4px 0 0 var(--semantic-success);
+}
+
+/* Incorrect: red left accent */
+.nn-cat-opt--incorrect {
+  border-color: color-mix(in srgb, var(--semantic-danger) 50%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface));
+  background-image: none;
+  box-shadow: inset 4px 0 0 var(--semantic-danger);
+}
+
+/* Dim: just opacity, no border treatment */
+.nn-cat-opt--dim {
+  opacity: 0.42;
+  box-shadow: none;
+}
+
+/* Letter badge: clean, no inset shadow */
+.nn-cat-opt__letter,
+.nn-cat-opt__control {
+  box-shadow: none;
+}
+
+/* Focus ring stays visible */
+.nn-cat-opt:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--semantic-brand) 65%, transparent);
+  outline-offset: 2px;
+}
+
+/* SATA checkbox control — square, clean */
+.nn-cat-opt--multi .nn-cat-opt__control {
+  border-radius: 4px;
+}
+
+/* Dark themes: stronger left accent contrast */
+html[data-theme="midnight"] .nn-cat-opt--selected,
+html[data-theme="midnight-indigo"] .nn-cat-opt--selected,
+html[data-theme="midnight-ink"] .nn-cat-opt--selected,
+html[data-theme="dark-clinical"] .nn-cat-opt--selected,
+html[data-theme="dark-academia"] .nn-cat-opt--selected,
+html[data-theme="dark-mode"] .nn-cat-opt--selected,
+html[data-theme="deep-twilight"] .nn-cat-opt--selected {
+  box-shadow: inset 4px 0 0 var(--semantic-brand);
+  background: color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-surface));
+}
+
+html[data-theme="midnight"] .nn-cat-opt--correct,
+html[data-theme="midnight-indigo"] .nn-cat-opt--correct,
+html[data-theme="dark-clinical"] .nn-cat-opt--correct,
+html[data-theme="dark-mode"] .nn-cat-opt--correct {
+  box-shadow: inset 4px 0 0 var(--semantic-success);
+  background: color-mix(in srgb, var(--semantic-success) 12%, var(--semantic-surface));
+}
+
+html[data-theme="midnight"] .nn-cat-opt--incorrect,
+html[data-theme="midnight-indigo"] .nn-cat-opt--incorrect,
+html[data-theme="dark-clinical"] .nn-cat-opt--incorrect,
+html[data-theme="dark-mode"] .nn-cat-opt--incorrect {
+  box-shadow: inset 4px 0 0 var(--semantic-danger);
+  background: color-mix(in srgb, var(--semantic-danger) 11%, var(--semantic-surface));
+}
+
+/* ── Top bar: taller, cleaner, premium depth ── */
+.nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top,
+.nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top--adaptive {
+  min-height: 52px;
+  background: var(--semantic-surface);
+  border-bottom-color: var(--semantic-border-soft);
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.03),
+    0 4px 12px -6px color-mix(in srgb, var(--semantic-brand) 12%, transparent);
+}
+
+/* Dark theme top bar: slightly richer surface */
+html[data-theme="midnight"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top,
+html[data-theme="midnight-indigo"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top,
+html[data-theme="midnight-ink"] .nn-cat-exam-chrome.nn-cat-premium-convergence .nn-cat-exam-board-top {
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.25),
+    0 4px 16px -6px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Progress bar: thinner, calmer ── */
+.nn-cat-exam-board-progress.nn-exam-progress--cat-exam-adaptive {
+  height: 2px;
+}
+
+.nn-cat-exam-board-progress.nn-exam-progress--cat-exam-adaptive .nn-progress-track-semantic--md {
+  min-height: 2px;
+  border-radius: 0;
+}
+
+/* ── Bottom bar: premium elevated surface ── */
+.nn-cat-exam-board-footer {
+  background: var(--semantic-surface);
+  border-top-color: var(--semantic-border-soft);
+  box-shadow:
+    0 -1px 0 rgba(0, 0, 0, 0.03),
+    0 -8px 24px -12px color-mix(in srgb, var(--semantic-brand) 8%, transparent);
+}
+
+html[data-theme="midnight"] .nn-cat-exam-board-footer,
+html[data-theme="midnight-indigo"] .nn-cat-exam-board-footer,
+html[data-theme="midnight-ink"] .nn-cat-exam-board-footer {
+  box-shadow:
+    0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 -8px 24px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Question card: flat, clean — remove nested stem panel ── */
+.nn-cat-question-card {
+  /* Already has rounded corners + border — remove the heavy shadow */
+  box-shadow: none;
+  border-color: var(--semantic-border-soft);
+}
+
+/* Remove the tinted inner stem wrapper box */
+.nn-cat-question-card > .rounded-2xl,
+.nn-cat-question-card__exam-scroll > .rounded-2xl {
+  background: transparent;
+  border-color: transparent;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+}
+
+/* Stem: slightly larger, more reading room */
+.nn-cat-question-stem {
+  font-size: 1.02rem;
+  line-height: 1.78;
+  letter-spacing: -0.014em;
+}
+
+@media (min-width: 640px) {
+  .nn-cat-question-stem {
+    font-size: 1.06rem;
+  }
+}
+
+/* Category pill: tighter, cleaner */
+.nn-cat-exam-item-head {
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.nn-cat-exam-category-label {
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  border-radius: 5px; /* square pill instead of full round */
+}
+
+/* ── Stem focus panel (dark themes): subtle, not heavy ── */
+html[data-theme="midnight"] .nn-cat-question-card > .rounded-2xl,
+html[data-theme="midnight"] .nn-cat-question-card__exam-scroll > .rounded-2xl,
+html[data-theme="midnight-indigo"] .nn-cat-question-card > .rounded-2xl,
+html[data-theme="midnight-indigo"] .nn-cat-question-card__exam-scroll > .rounded-2xl {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* ── Mobile: min-height bump for thumb ergonomics ── */
+@media (max-width: 639px) {
+  .nn-cat-opt {
+    min-height: 3.5rem;
+  }
+}
+
+/* ── Reduced motion: no transitions on options ── */
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-opt,
+  .nn-cat-opt--interactive:hover {
+    transition: none;
+    transform: none;
+  }
+}
