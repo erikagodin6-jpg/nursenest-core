@@ -1,0 +1,41 @@
+/**
+ * LOFT simulation board styling.
+ *
+ * Linear licensing simulations should feel like fixed-length board exams, not adaptive CAT.
+ * This targets the existing linear-exam board path, which currently uses the adaptive board
+ * class but does not include the adaptive CAT convergence marker.
+ */
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session:not(.nn-cat-premium-convergence) {
+  --nn-loft-simulation-shell: 1;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame {
+  border-radius: 0.95rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 64%, var(--semantic-info) 20%);
+  background: color-mix(in srgb, var(--semantic-surface) 95%, var(--semantic-panel-cool));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface) 68%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-border-soft)),
+    var(--semantic-shadow-soft);
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session:not(.nn-cat-premium-convergence) .nn-cat-exam-board-top {
+  background: color-mix(in srgb, var(--semantic-surface) 93%, var(--semantic-panel-cool));
+  border-bottom-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-info) 18%);
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session:not(.nn-cat-premium-convergence) .nn-cat-exam-board-progress {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 72%, var(--semantic-surface));
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session:not(.nn-cat-premium-convergence) .nn-cat-exam-board-footer {
+  background: color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted));
+}
+
+html[data-theme="midnight"] .nn-cat-exam-chrome.nn-cat-adaptive-exam-session:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame,
+html[data-theme="midnight-indigo"] .nn-cat-exam-chrome.nn-cat-adaptive-exam-session:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame,
+html[data-theme="deep-twilight"] .nn-cat-exam-chrome.nn-cat-adaptive-exam-session:not(.nn-cat-premium-convergence) .nn-cat-exam-board-frame {
+  background: color-mix(in srgb, var(--semantic-surface) 93%, var(--semantic-panel-cool));
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 56%, var(--semantic-info) 22%);
+}
