@@ -1,5 +1,5 @@
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
-import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
+import { CANONICAL_PRODUCTION_ORIGIN } from "@/lib/seo/canonical-site";
 import { buildSitemapIndexXmlForOrigin } from "@/lib/seo/sitemap-index-children";
 import { normalizeOrigin } from "@/lib/seo/sitemap-static-xml";
 import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
@@ -11,13 +11,16 @@ const STATIC_SITEMAP_PATHS = ["/sitemap.xml"] as const;
  * `sitemap-localized`, `sitemap-clinical-modules`, `sitemap-allied`, `sitemap-new-grad`). No DB — always 200 with valid XML (never 503).
  * Child routes enforce {@link filterPublicSitemapEntries} and DB fallbacks.
  * Response content-type is application/xml via {@link SITEMAP_XML_HEADERS}.
+ *
+ * Critical SEO invariant: the sitemap index must always emit the canonical HTTPS www origin. Do not read
+ * NEXT_PUBLIC_APP_URL here; production env drift has previously made the root index advertise non-www child sitemaps.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request): Promise<Response> {
   void STATIC_SITEMAP_PATHS;
-  const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
+  const origin = normalizeOrigin(CANONICAL_PRODUCTION_ORIGIN);
   const xml = buildSitemapIndexXmlForOrigin(origin);
 
   const etag = buildPublicResponseEtag(xml);
