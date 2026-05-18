@@ -52,6 +52,52 @@ function forwardRequest(request: NextRequest): NextResponse {
   return res;
 }
 
+export function isFlashcardsSubdomainHost(host: string | null): boolean {
+  if (!host) return false;
+
+  const normalizedHost = host.split(":")[0]?.toLowerCase() ?? "";
+
+  return normalizedHost === "flashcards.nursenest.ca" || normalizedHost.startsWith("flashcards.");
+}
+
+export function flashcardsSubdomainInternalPath(pathname: string): string {
+  if (pathname === "/" || pathname === "") return "/flashcards";
+
+  if (pathname === "/flashcards" || pathname.startsWith("/flashcards/")) {
+    return pathname;
+  }
+
+  if (pathname.startsWith("/set/")) {
+    return pathname.replace(/^\/set/, "/flashcards");
+  }
+
+  return `/flashcards${pathname}`;
+}
+
+function rewriteFlashcardsSubdomainRequest(request: NextRequest, headers: Headers): NextResponse | null {
+  if (!isFlashcardsSubdomainHost(headers.get("host"))) return null;
+
+  const pathname = request.nextUrl.pathname;
+  const internalPathname = flashcardsSubdomainInternalPath(pathname);
+
+  if (internalPathname === pathname && pathname.startsWith("/flashcards")) return null;
+
+  const url = request.nextUrl.clone();
+  url.pathname = internalPathname;
+
+  const res = NextResponse.rewrite(url, {
+    request: { headers },
+  });
+
+  const cid = headers.get(NN_CORRELATION_HEADER);
+  if (cid) res.headers.set(NN_CORRELATION_HEADER, cid);
+
+  res.headers.set("x-nn-flashcards-subdomain", "1");
+  res.headers.set("x-nn-flashcards-internal-path", internalPathname);
+
+  return res;
+}
+
 export function isPublicProbeOrCrawlerBypassPath(pathname: string): boolean {
   if (pathname === "/healthz" || pathname === "/readyz") return true;
   if (
@@ -112,6 +158,9 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
       computeMarketingNarrowViewportHintFromRequestHeaders(headers) ? "1" : "0",
     );
 
+    const flashcardsRewrite = rewriteFlashcardsSubdomainRequest(req, headers);
+    if (flashcardsRewrite) return flashcardsRewrite;
+
     const forwarded = new NextRequest(req.url, { headers });
 
     const { runAuthMiddleware } = await loadAuthProxyDeps();
@@ -162,6 +211,11 @@ export const config = {
     "/",
     "/app",
     "/app/:path*",
+    "/flashcards",
+    "/flashcards/:path*",
+    "/set/:path*",
+    "/search",
+    "/exams/:path*",
     "/admin",
     "/admin/:path*",
     "/internal",
