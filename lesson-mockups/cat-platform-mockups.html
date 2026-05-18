@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NurseNest CAT Platform — 15 Authenticated Mockups</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;background:#1e293b}
+button,input,select{font-family:inherit}svg{display:block;flex-shrink:0}
+
+/* Chrome */
+.chrome{background:#0f172a;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;border-bottom:1px solid #1e293b}
+.chrome-title{font-size:11px;font-weight:700;color:#e2e8f0;letter-spacing:.06em;text-transform:uppercase}
+.chrome-note{font-size:10px;color:#475569}
+.tabs{background:#161f2e;padding:0 24px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;position:sticky;top:44px;z-index:299;padding-top:8px}
+.tabs::-webkit-scrollbar{display:none}
+.tsep{width:1px;height:16px;background:#334155;margin:0 6px 8px;align-self:center}
+.tab{padding:6px 13px 8px;font-size:10.5px;font-weight:500;color:#64748b;border-radius:5px 5px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;background:transparent;border:none;transition:.1s}
+.tab:hover{color:#94a3b8}
+.tab.on{color:#0f172a;background:white;font-weight:700}
+
+/* Frames */
+.frame{display:none;width:1440px;min-height:900px;overflow:hidden;background:white;position:relative}
+.frame.mobile-frame{width:390px;height:844px}
+.frame.on{display:block}
+</style>
+</head>
+<body>
+<div class="chrome">
+  <span class="chrome-title">NurseNest · CAT Platform — 15 Authenticated UI Mockups</span>
+  <span class="chrome-note">Ocean · Blossom · Midnight · Mobile · NGN — Production-grade design system</span>
+</div>
+<div class="tabs">
+  <button class="tab on" onclick="show(0)">1 · Ocean Landing</button>
+  <button class="tab" onclick="show(1)">2 · Ocean MCQ Exam</button>
+  <button class="tab" onclick="show(2)">3 · Ocean NGN Case Study</button>
+  <button class="tab" onclick="show(3)">4 · Ocean NGN Bowtie</button>
+  <button class="tab" onclick="show(4)">5 · Ocean Results</button>
+  <div class="tsep"></div>
+  <button class="tab" onclick="show(5)">6 · Mobile Question</button>
+  <button class="tab" onclick="show(6)">7 · Mobile Landing</button>
+  <button class="tab" onclick="show(7)">8 · Mobile Results</button>
+  <div class="tsep"></div>
+  <button class="tab" onclick="show(8)">9 · Blossom Landing</button>
+  <button class="tab" onclick="show(9)">10 · Blossom MCQ</button>
+  <button class="tab" onclick="show(10)">11 · Blossom Results</button>
+  <div class="tsep"></div>
+  <button class="tab" onclick="show(11)">12 · Midnight Landing</button>
+  <button class="tab" onclick="show(12)">13 · Midnight MCQ</button>
+  <button class="tab" onclick="show(13)">14 · Midnight Results</button>
+  <div class="tsep"></div>
+  <button class="tab" onclick="show(14)">15 · NGN Matrix</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 1 · Ocean · CAT Pre-Exam Command Center
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame on" id="f0">
+<style>
+#f0{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f0 .nav{height:56px;background:#0d7aaa;display:flex;align-items:center;padding:0 32px;gap:0;position:relative}
+#f0 .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+#f0 .nav-mark{width:28px;height:28px}
+#f0 .nav-wordmark{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em}
+#f0 .nav-wordmark span{color:rgba(255,255,255,.7)}
+#f0 .nav-links{display:flex;align-items:center;gap:1px;margin-left:32px}
+#f0 .nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,.75);padding:7px 12px;border-radius:7px;text-decoration:none}
+#f0 .nav-link:hover{color:#fff;background:rgba(255,255,255,.1)}
+#f0 .nav-link.active{color:#fff;background:rgba(255,255,255,.15);font-weight:600}
+#f0 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+#f0 .nav-notif{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer}
+#f0 .nav-avatar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);border-radius:10px;padding:4px 12px 4px 6px;cursor:pointer}
+#f0 .nav-avatar-ring{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#0d7aaa}
+#f0 .nav-avatar-name{font-size:12.5px;font-weight:600;color:#fff}
+#f0 .nav-tier{font-size:10px;font-weight:700;color:#0d7aaa;background:#fff;padding:2px 7px;border-radius:99px;letter-spacing:.03em}
+
+#f0 .ctx{height:38px;background:#fff;border-bottom:1px solid #d9f3fa;display:flex;align-items:center;padding:0 32px;gap:16px}
+#f0 .ctx-label{font-size:11.5px;font-weight:700;color:#0f172a;display:flex;align-items:center;gap:6px}
+#f0 .ctx-sep{width:1px;height:14px;background:#d0e8f5}
+#f0 .ctx-item{font-size:11.5px;color:#647894;display:flex;align-items:center;gap:5px}
+#f0 .ctx-pill{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:99px}
+#f0 .pill-ready{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+#f0 .pill-adaptive{background:#e6f7fd;color:#0d7aaa;border:1px solid #b8dff7}
+
+#f0 .main{display:grid;grid-template-columns:1fr 420px;gap:0;height:calc(900px - 56px - 38px);overflow:hidden}
+#f0 .launch-col{padding:28px 24px 28px 32px;display:flex;flex-direction:column;gap:16px;overflow:hidden}
+#f0 .analytics-col{padding:28px 32px 28px 8px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+
+/* Launch card */
+#f0 .launch-card{background:#fff;border:1px solid #d0e8f5;border-radius:20px;padding:28px;box-shadow:0 1px 0 rgba(15,23,42,.04),0 12px 36px -16px rgba(6,88,140,.10);flex:1;display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden}
+#f0 .launch-card::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(600px 300px at 80% -10%,rgba(26,174,224,.06),transparent 60%),radial-gradient(400px 250px at -5% 100%,rgba(13,148,136,.05),transparent 55%)}
+
+#f0 .lc-header{display:flex;align-items:center;justify-content:space-between}
+#f0 .lc-title{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#647894}
+#f0 .lc-badge{font-size:10.5px;font-weight:600;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 10px;border-radius:99px;display:flex;align-items:center;gap:4px}
+
+#f0 .lc-score-row{display:flex;align-items:center;gap:28px}
+#f0 .score-ring-wrap{flex-shrink:0}
+#f0 .lc-score-detail{flex:1}
+#f0 .lc-score-headline{font-size:28px;font-weight:800;color:#0f172a;letter-spacing:-.03em;line-height:1}
+#f0 .lc-score-sub{font-size:13.5px;color:#455569;margin-top:4px;line-height:1.5}
+#f0 .lc-pass-pill{display:inline-flex;align-items:center;gap:5px;background:#f0fdf4;border:1.5px solid #bbf7d0;color:#166534;font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:99px;margin-top:8px}
+#f0 .lc-stats{display:flex;gap:10px}
+#f0 .lc-stat{background:#f3f8fc;border:1px solid #d0e8f5;border-radius:10px;padding:10px 14px;flex:1}
+#f0 .lc-stat-n{font-size:17px;font-weight:800;color:#0f172a;letter-spacing:-.02em}
+#f0 .lc-stat-l{font-size:10.5px;color:#647894;margin-top:2px;font-weight:500}
+
+/* Waveform chart area */
+#f0 .lc-chart{background:#f8fcff;border:1px solid #d0e8f5;border-radius:14px;padding:14px 16px}
+#f0 .lc-chart-label{font-size:10.5px;font-weight:600;color:#647894;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+
+#f0 .lc-pacing{background:linear-gradient(135deg,rgba(13,122,170,.06),rgba(13,148,136,.04));border:1px solid #d0e8f5;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+#f0 .lc-pacing-ico{width:36px;height:36px;background:#e6f7fd;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#f0 .lc-pacing-t{font-size:13.5px;font-weight:600;color:#0f172a}
+#f0 .lc-pacing-s{font-size:12px;color:#647894;margin-top:2px}
+
+#f0 .lc-btns{display:flex;flex-direction:column;gap:8px;margin-top:auto}
+#f0 .btn-launch{background:#0d7aaa;color:#fff;font-size:15px;font-weight:700;padding:14px 24px;border-radius:12px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px -4px rgba(13,122,170,.4)}
+#f0 .btn-resume{background:transparent;color:#0d7aaa;font-size:13.5px;font-weight:600;padding:10px 24px;border-radius:10px;border:1.5px solid #b8dff7;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+
+/* Analytics cards */
+#f0 .ac{background:#fff;border:1px solid #d0e8f5;border-radius:16px;padding:16px 18px;box-shadow:0 1px 0 rgba(15,23,42,.03),0 6px 20px -10px rgba(6,88,140,.07)}
+#f0 .ac-title{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#647894;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+#f0 .ac-title span{font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;color:#1aaee0}
+#f0 .domain-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+#f0 .domain-row:last-child{margin-bottom:0}
+#f0 .domain-name{font-size:12px;font-weight:500;color:#455569;width:130px;flex-shrink:0}
+#f0 .domain-bar-wrap{flex:1;height:6px;background:#eef4fa;border-radius:99px;overflow:hidden}
+#f0 .domain-bar{height:100%;border-radius:99px}
+#f0 .domain-pct{font-size:11.5px;font-weight:700;color:#0f172a;width:34px;text-align:right;flex-shrink:0}
+#f0 .bar-warn{background:#f97316}
+#f0 .bar-ok{background:#1aaee0}
+#f0 .bar-good{background:#16a34a}
+#f0 .bar-mid{background:#d97706}
+#f0 .ngn-row{display:flex;align-items:center;gap:10px}
+#f0 .ngn-ring{width:52px;height:52px;flex-shrink:0}
+#f0 .ngn-detail{flex:1}
+#f0 .ngn-n{font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-.02em}
+#f0 .ngn-l{font-size:11.5px;color:#647894}
+#f0 .ngn-pill{font-size:10.5px;font-weight:600;background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:2px 8px;border-radius:99px;margin-top:4px;display:inline-block}
+</style>
+
+<!-- Nav -->
+<nav class="nav">
+  <a class="nav-logo">
+    <svg class="nav-mark" viewBox="0 0 28 28">
+      <path d="M5 24 C5 17 10.5 12 14 12 S23 17 23 24 Z" fill="rgba(255,255,255,0.9)"/>
+      <path d="M8 24 C8 19.5 10.8 16 14 16 S20 19.5 20 24 Z" fill="#0d7aaa"/>
+    </svg>
+    <span class="nav-wordmark">Nurse<span>Nest</span></span>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link">Dashboard</a>
+    <a class="nav-link">Flashcards</a>
+    <a class="nav-link">Practice</a>
+    <a class="nav-link active">CAT Exam</a>
+    <a class="nav-link">Modules</a>
+    <a class="nav-link">CNPLE</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-notif">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    </div>
+    <div class="nav-avatar">
+      <div class="nav-avatar-ring">JM</div>
+      <span class="nav-avatar-name">Jasmeen M.</span>
+      <span class="nav-tier">PRO</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Context strip -->
+<div class="ctx">
+  <div class="ctx-label">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0d7aaa" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    NCLEX-RN CAT Exam
+  </div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item"><span class="ctx-pill pill-adaptive">⚡ Adaptive Testing</span></div>
+  <div class="ctx-item"><span class="ctx-pill pill-ready">✓ Ready</span></div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item">Last attempt: May 14 · 82% · 75 questions</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item">Est. 75–145 questions · ~90 min</div>
+  <div style="margin-left:auto;font-size:11px;color:#1aaee0;font-weight:600;cursor:pointer">View History ↗</div>
+</div>
+
+<!-- Main -->
+<div class="main">
+  <!-- Launch column -->
+  <div class="launch-col">
+    <div class="launch-card">
+      <div class="lc-header">
+        <div class="lc-title">Adaptive Readiness Intelligence</div>
+        <div class="lc-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Adaptive · Session 4
+        </div>
+      </div>
+
+      <div class="lc-score-row">
+        <div class="score-ring-wrap">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle cx="55" cy="55" r="44" fill="none" stroke="#eef4fa" stroke-width="9"/>
+            <circle cx="55" cy="55" r="44" fill="none" stroke="#1aaee0" stroke-width="9" stroke-linecap="round"
+              stroke-dasharray="276.5" stroke-dashoffset="66" transform="rotate(-90 55 55)"/>
+            <text x="55" y="51" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="26" font-weight="800" fill="#0f172a">78</text>
+            <text x="55" y="66" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" font-weight="600" fill="#647894">READINESS</text>
+          </svg>
+        </div>
+        <div class="lc-score-detail">
+          <div class="lc-score-headline">Likely to Pass</div>
+          <div class="lc-score-sub">Your adaptive score places you in the<br><strong style="color:#0d7aaa">high-confidence passing range</strong> for NCLEX-RN.</div>
+          <div class="lc-pass-pill">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Passing Probability: High (78–88%)
+          </div>
+        </div>
+      </div>
+
+      <div class="lc-stats">
+        <div class="lc-stat"><div class="lc-stat-n">847</div><div class="lc-stat-l">Questions answered</div></div>
+        <div class="lc-stat"><div class="lc-stat-n">62%</div><div class="lc-stat-l">Correct average</div></div>
+        <div class="lc-stat"><div class="lc-stat-n">3.2×</div><div class="lc-stat-l">Sessions / week</div></div>
+        <div class="lc-stat"><div class="lc-stat-n" style="color:#16a34a">↑6%</div><div class="lc-stat-l">This week</div></div>
+      </div>
+
+      <div class="lc-chart">
+        <div class="lc-chart-label">Adaptive Difficulty Curve — Last 5 Sessions</div>
+        <svg width="100%" height="62" viewBox="0 0 540 62" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1aaee0" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#1aaee0" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0 50 L90 44 L180 38 L270 32 L360 28 L450 22 L540 18 L540 62 L0 62Z" fill="url(#waveGrad)"/>
+          <path d="M0 50 L90 44 L180 38 L270 32 L360 28 L450 22 L540 18" fill="none" stroke="#1aaee0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="0" cy="50" r="4" fill="#1aaee0"/>
+          <circle cx="90" cy="44" r="4" fill="#1aaee0"/>
+          <circle cx="180" cy="38" r="4" fill="#1aaee0"/>
+          <circle cx="270" cy="32" r="4" fill="#1aaee0"/>
+          <circle cx="360" cy="28" r="4" fill="#1aaee0"/>
+          <circle cx="450" cy="22" r="4" fill="#1aaee0"/>
+          <circle cx="540" cy="18" r="5" fill="#0d7aaa"/>
+          <text x="0" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 2</text>
+          <text x="78" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 6</text>
+          <text x="166" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 9</text>
+          <text x="256" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 12</text>
+          <text x="346" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 14</text>
+          <text x="436" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#94a3b8">May 16</text>
+          <text x="506" y="60" font-family="DM Sans,sans-serif" font-size="8" fill="#0d7aaa" font-weight="700">Today</text>
+        </svg>
+      </div>
+
+      <div class="lc-pacing">
+        <div class="lc-pacing-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d7aaa" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="lc-pacing-t">Recommended: 75-question CAT today</div>
+          <div class="lc-pacing-s">Based on your 3.2 sessions/week cadence and readiness trajectory — optimal timing.</div>
+        </div>
+      </div>
+
+      <div class="lc-btns">
+        <button class="btn-launch">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Launch CAT Exam
+        </button>
+        <button class="btn-resume">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Resume last session — May 16 · Q 47 of 75
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Analytics column -->
+  <div class="analytics-col">
+    <div class="ac">
+      <div class="ac-title">Weak Systems <span>Study these first ↗</span></div>
+      <div class="domain-row"><div class="domain-name">Cardiovascular</div><div class="domain-bar-wrap"><div class="domain-bar bar-warn" style="width:62%"></div></div><div class="domain-pct" style="color:#f97316">62%</div></div>
+      <div class="domain-row"><div class="domain-name">Respiratory</div><div class="domain-bar-wrap"><div class="domain-bar bar-warn" style="width:58%"></div></div><div class="domain-pct" style="color:#f97316">58%</div></div>
+      <div class="domain-row"><div class="domain-name">Renal / Fluids</div><div class="domain-bar-wrap"><div class="domain-bar bar-mid" style="width:64%"></div></div><div class="domain-pct" style="color:#d97706">64%</div></div>
+    </div>
+
+    <div class="ac">
+      <div class="ac-title">Your Strengths <span>On track ✓</span></div>
+      <div class="domain-row"><div class="domain-name">Psych / Mental Health</div><div class="domain-bar-wrap"><div class="domain-bar bar-good" style="width:91%"></div></div><div class="domain-pct" style="color:#16a34a">91%</div></div>
+      <div class="domain-row"><div class="domain-name">Pharmacology</div><div class="domain-bar-wrap"><div class="domain-bar bar-good" style="width:88%"></div></div><div class="domain-pct" style="color:#16a34a">88%</div></div>
+      <div class="domain-row"><div class="domain-name">OB / Newborn Care</div><div class="domain-bar-wrap"><div class="domain-bar bar-good" style="width:83%"></div></div><div class="domain-pct" style="color:#16a34a">83%</div></div>
+    </div>
+
+    <div class="ac">
+      <div class="ac-title">NGN Readiness</div>
+      <div class="ngn-row">
+        <svg class="ngn-ring" viewBox="0 0 52 52">
+          <circle cx="26" cy="26" r="20" fill="none" stroke="#eef4fa" stroke-width="7"/>
+          <circle cx="26" cy="26" r="20" fill="none" stroke="#d97706" stroke-width="7" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="75" transform="rotate(-90 26 26)"/>
+          <text x="26" y="31" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="800" fill="#0f172a">42%</text>
+        </svg>
+        <div class="ngn-detail">
+          <div class="ngn-n">NGN Focus Needed</div>
+          <div class="ngn-l">Next-Generation Nursing questions scored below your NCLEX average</div>
+          <div class="ngn-pill">⚠ Prioritize NGN practice</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ac">
+      <div class="ac-title">Recent CAT Trend <span style="color:#16a34a">↑ Improving</span></div>
+      <svg width="100%" height="48" viewBox="0 0 330 48">
+        <polyline points="0,40 66,34 132,30 198,24 264,18 330,14" fill="none" stroke="#1aaee0" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="0" cy="40" r="3" fill="#1aaee0"/>
+        <circle cx="66" cy="34" r="3" fill="#1aaee0"/>
+        <circle cx="132" cy="30" r="3" fill="#1aaee0"/>
+        <circle cx="198" cy="24" r="3" fill="#1aaee0"/>
+        <circle cx="264" cy="18" r="3" fill="#1aaee0"/>
+        <circle cx="330" cy="14" r="4" fill="#0d7aaa"/>
+        <text x="310" y="10" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#16a34a">+6%</text>
+      </svg>
+      <div style="font-size:11.5px;color:#647894;margin-top:6px">Scores: 62% → 68% → 72% → 74% → 76% → 78%</div>
+    </div>
+
+    <div class="ac" style="background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border-color:#bbf7d0">
+      <div class="ac-title" style="color:#15803d">Confidence Stability</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:22px;font-weight:800;color:#16a34a">Stable ↑</div>
+        <div style="font-size:12px;color:#455569;flex:1">Your answer pattern shows consistent improvement across all sessions. Low variance in response time.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 2 · Ocean · Active CAT Exam — Standard MCQ
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f1">
+<style>
+#f1{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f1 .exam-header{height:52px;background:#fff;border-bottom:1.5px solid #d9f3fa;display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 12px -6px rgba(6,88,140,.1);position:relative;z-index:10}
+#f1 .eh-left{display:flex;align-items:center;gap:10px;min-width:220px}
+#f1 .eh-logo{font-size:14px;font-weight:800;color:#0d7aaa;letter-spacing:-.01em}
+#f1 .eh-mode{font-size:10.5px;font-weight:700;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 9px;border-radius:99px;letter-spacing:.03em}
+#f1 .eh-pulse{width:7px;height:7px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.2);animation:none}
+#f1 .eh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:14px}
+#f1 .eh-qnum{font-size:12.5px;font-weight:700;color:#0f172a}
+#f1 .eh-progress-wrap{width:180px;height:6px;background:#eef4fa;border-radius:99px;overflow:hidden}
+#f1 .eh-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1aaee0,#0d9488);width:30.6%}
+#f1 .eh-qlabel{font-size:11px;color:#647894;font-weight:500}
+#f1 .eh-adaptive{font-size:10.5px;font-weight:600;color:#0d7aaa;background:#e6f7fd;padding:2px 8px;border-radius:6px;display:flex;align-items:center;gap:3px}
+#f1 .eh-right{display:flex;align-items:center;gap:6px;min-width:220px;justify-content:flex-end}
+#f1 .eh-timer{font-size:14px;font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums;letter-spacing:.03em;background:#f3f8fc;border:1px solid #d0e8f5;padding:5px 12px;border-radius:8px}
+#f1 .eh-btn{width:34px;height:34px;border-radius:8px;background:#f3f8fc;border:1px solid #d0e8f5;display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+#f1 .q-area{max-width:740px;margin:0 auto;padding:32px 24px;height:calc(900px - 52px);overflow:hidden;display:flex;flex-direction:column;gap:20px}
+#f1 .q-meta{display:flex;align-items:center;gap:8px}
+#f1 .q-badge{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 10px;border-radius:99px}
+#f1 .q-diff{display:flex;gap:2px;align-items:center}
+#f1 .q-diff-dot{width:8px;height:8px;border-radius:2px}
+#f1 .q-card{background:#fff;border:1.5px solid #d0e8f5;border-radius:18px;padding:26px 28px;box-shadow:0 1px 0 rgba(15,23,42,.03),0 8px 28px -12px rgba(6,88,140,.08)}
+#f1 .q-stem{font-size:15px;line-height:1.7;color:#0f172a;font-weight:400}
+#f1 .q-stem strong{font-weight:700}
+#f1 .q-opts{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+#f1 .q-opt{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1.5px solid #d0e8f5;border-radius:12px;cursor:pointer;transition:.1s;background:#fff}
+#f1 .q-opt:hover{border-color:#1aaee0;background:#f8fcff}
+#f1 .q-opt.selected{border-color:#0d7aaa;background:#e6f7fd;box-shadow:0 0 0 3px rgba(26,174,224,.12)}
+#f1 .q-opt-letter{width:24px;height:24px;border-radius:6px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#647894;flex-shrink:0;margin-top:1px}
+#f1 .q-opt.selected .q-opt-letter{background:#0d7aaa;color:#fff}
+#f1 .q-opt-text{font-size:13.5px;color:#455569;line-height:1.55;flex:1}
+#f1 .q-opt.selected .q-opt-text{color:#0f172a;font-weight:500}
+
+#f1 .q-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px;border-top:1px solid #eef4fa}
+#f1 .q-flag{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:#647894;cursor:pointer;padding:8px 12px;border-radius:8px}
+#f1 .q-flag:hover{background:#f3f8fc;color:#455569}
+#f1 .q-nav-btns{display:flex;gap:8px}
+#f1 .btn-prev{font-size:13px;font-weight:600;color:#647894;background:#f3f8fc;border:1px solid #d0e8f5;padding:9px 18px;border-radius:10px;cursor:pointer}
+#f1 .btn-submit{font-size:13px;font-weight:700;color:#fff;background:#0d7aaa;padding:9px 22px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 10px -3px rgba(13,122,170,.4)}
+
+#f1 .utility-rail{position:absolute;right:0;top:52px;width:52px;height:calc(900px - 52px);background:#fff;border-left:1px solid #d0e8f5;display:flex;flex-direction:column;align-items:center;padding-top:16px;gap:4px}
+#f1 .ur-btn{width:36px;height:36px;border-radius:9px;background:#f3f8fc;border:1px solid #eef4fa;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#f1 .ur-btn:hover{background:#e6f7fd;border-color:#b8dff7}
+#f1 .ur-sep{width:24px;height:1px;background:#eef4fa;margin:4px 0}
+</style>
+
+<div class="exam-header">
+  <div class="eh-left">
+    <span class="eh-logo">NurseNest</span>
+    <span class="eh-mode">CAT Exam</span>
+    <div class="eh-pulse"></div>
+  </div>
+  <div class="eh-center">
+    <span class="eh-qnum">Question 23</span>
+    <div class="eh-progress-wrap"><div class="eh-progress-fill"></div></div>
+    <span class="eh-qlabel">of 75</span>
+    <span class="eh-adaptive">⚡ Adaptive ↕</span>
+  </div>
+  <div class="eh-right">
+    <div class="eh-timer">00:42:15</div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M9 11H4l9-9 9 9h-5v8a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-8z"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+  </div>
+</div>
+
+<div style="position:relative;height:848px;overflow:hidden">
+  <div class="q-area">
+    <div class="q-meta">
+      <span class="q-badge">Cardiovascular &amp; Oxygenation</span>
+      <div class="q-diff">
+        <div class="q-diff-dot" style="background:#e11d48"></div>
+        <div class="q-diff-dot" style="background:#e11d48"></div>
+        <div class="q-diff-dot" style="background:#e11d48"></div>
+        <div class="q-diff-dot" style="background:#e11d48"></div>
+        <div class="q-diff-dot" style="background:#eef4fa"></div>
+      </div>
+      <span style="font-size:11px;color:#647894;font-weight:500">Hard · Adaptive priority</span>
+    </div>
+
+    <div class="q-card">
+      <div class="q-stem">
+        A <strong>68-year-old client</strong> is admitted with an acute heart failure exacerbation. Assessment reveals: HR 104 bpm, BP 158/92 mmHg, RR 22/min, SpO₂ 92% on room air, bilateral crackles to mid-lung fields, 2+ pitting edema bilateral lower extremities, and jugular venous distension. Current medications include lisinopril 10 mg daily and metoprolol 25 mg bid. The provider has been contacted. <strong>Which action should the nurse implement FIRST?</strong>
+      </div>
+      <div class="q-opts">
+        <div class="q-opt">
+          <div class="q-opt-letter">A</div>
+          <div class="q-opt-text">Administer furosemide 40 mg IV as ordered to relieve acute fluid overload symptoms</div>
+        </div>
+        <div class="q-opt selected">
+          <div class="q-opt-letter">B</div>
+          <div class="q-opt-text">Position the client in high-Fowler's position and apply supplemental oxygen at 2–4 L/min via nasal cannula</div>
+        </div>
+        <div class="q-opt">
+          <div class="q-opt-letter">C</div>
+          <div class="q-opt-text">Obtain a 12-lead ECG and document the cardiac rhythm for provider review</div>
+        </div>
+        <div class="q-opt">
+          <div class="q-opt-letter">D</div>
+          <div class="q-opt-text">Increase IV fluid rate to 125 mL/hr to maintain adequate cardiac preload and perfusion pressure</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="q-bottom">
+      <div class="q-flag">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        Flag for review
+      </div>
+      <div style="font-size:11.5px;color:#94a3b8">← A–D to select · Enter to confirm</div>
+      <div class="q-nav-btns">
+        <button class="btn-prev">← Previous</button>
+        <button class="btn-submit">Submit Answer →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="utility-rail">
+    <div class="ur-btn" title="Calculator"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
+    <div class="ur-btn" title="Highlight"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+    <div class="ur-btn" title="Strikeout"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><path d="M16 6H8c-1.1 0-2 .9-2 2s.9 2 2 2h8c1.1 0 2 .9 2 2s-.9 2-2 2H8"/></svg></div>
+    <div class="ur-sep"></div>
+    <div class="ur-btn" title="Notes"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+    <div class="ur-btn" title="Lab Values"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/><path d="M8 16v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5"/></svg></div>
+    <div class="ur-sep"></div>
+    <div class="ur-btn" title="Progress Navigator"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 3 · Ocean · NGN Case Study + Exhibit Tabs
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f2">
+<style>
+#f2{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f2 .exam-header{height:52px;background:#fff;border-bottom:1.5px solid #d9f3fa;display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 12px -6px rgba(6,88,140,.1)}
+#f2 .eh-left{display:flex;align-items:center;gap:10px;min-width:240px}
+#f2 .eh-logo{font-size:14px;font-weight:800;color:#0d7aaa}
+#f2 .eh-mode{font-size:10.5px;font-weight:700;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 9px;border-radius:99px}
+#f2 .eh-ngn{font-size:10.5px;font-weight:700;color:#7c3aed;background:#f5f0fe;border:1px solid #ddd6fe;padding:3px 9px;border-radius:99px}
+#f2 .eh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:12px}
+#f2 .eh-case{font-size:12.5px;font-weight:700;color:#0f172a}
+#f2 .eh-case-prog{display:flex;gap:4px;align-items:center}
+#f2 .cp-dot{width:8px;height:8px;border-radius:50%}
+#f2 .cp-dot.done{background:#16a34a}
+#f2 .cp-dot.active{background:#0d7aaa}
+#f2 .cp-dot.todo{background:#d0e8f5}
+#f2 .eh-right{display:flex;align-items:center;gap:6px;min-width:220px;justify-content:flex-end}
+#f2 .eh-timer{font-size:14px;font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums;background:#f3f8fc;border:1px solid #d0e8f5;padding:5px 12px;border-radius:8px}
+#f2 .eh-btn{width:34px;height:34px;border-radius:8px;background:#f3f8fc;border:1px solid #d0e8f5;display:flex;align-items:center;justify-content:center}
+
+#f2 .case-scenario{background:#fff;border-bottom:1px solid #d0e8f5;padding:10px 24px;font-size:12.5px;color:#455569;display:flex;align-items:center;gap:12px}
+#f2 .case-scenario strong{color:#0f172a}
+#f2 .case-chip{font-size:10.5px;font-weight:600;background:#f5f0fe;border:1px solid #ddd6fe;color:#7c3aed;padding:2px 9px;border-radius:99px}
+
+#f2 .main{display:grid;grid-template-columns:420px 1fr;height:calc(900px - 52px - 40px);overflow:hidden}
+
+#f2 .exhibit-panel{background:#fff;border-right:1.5px solid #d0e8f5;display:flex;flex-direction:column}
+#f2 .ep-header{padding:14px 18px 0;border-bottom:1px solid #eef4fa}
+#f2 .ep-title{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#647894;margin-bottom:10px}
+#f2 .ep-tabs{display:flex;gap:2px}
+#f2 .ep-tab{padding:7px 13px;font-size:12px;font-weight:500;color:#647894;border-radius:8px 8px 0 0;cursor:pointer;border:1px solid transparent;border-bottom:none;background:transparent}
+#f2 .ep-tab:hover{background:#f8fcff}
+#f2 .ep-tab.active{background:#fff;color:#0d7aaa;font-weight:600;border-color:#d0e8f5;border-bottom-color:#fff;position:relative;z-index:1;margin-bottom:-1px}
+#f2 .ep-tab .new-badge{width:6px;height:6px;border-radius:50%;background:#e11d48;display:inline-block;margin-left:4px;vertical-align:middle}
+
+#f2 .ep-content{flex:1;padding:16px 18px;overflow:auto}
+#f2 .ep-section{margin-bottom:16px}
+#f2 .ep-section-title{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #eef4fa}
+#f2 .lab-row{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:6px;font-size:12.5px}
+#f2 .lab-row:hover{background:#f8fcff}
+#f2 .lab-name{color:#455569;font-weight:500}
+#f2 .lab-val{font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums}
+#f2 .lab-ref{font-size:10.5px;color:#94a3b8;margin-left:6px}
+#f2 .lab-flag{font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px}
+#f2 .flag-low{background:#fff1f2;color:#e11d48}
+#f2 .flag-high{background:#fffbeb;color:#d97706}
+#f2 .flag-crit{background:#fee2e2;color:#dc2626;font-size:9px}
+
+#f2 .q-panel{display:flex;flex-direction:column;padding:24px 28px;gap:16px}
+#f2 .qp-type{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#7c3aed;background:#f5f0fe;border:1px solid #ddd6fe;padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:5px;align-self:flex-start}
+#f2 .qp-num{font-size:11px;font-weight:600;color:#647894;margin-bottom:4px}
+#f2 .qp-stem{font-size:14.5px;line-height:1.65;color:#0f172a;font-weight:400}
+#f2 .qp-stem strong{font-weight:700}
+#f2 .qp-instruction{font-size:12px;color:#7c3aed;font-weight:600;font-style:italic;margin-top:4px}
+#f2 .sata-opts{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+#f2 .sata-opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1.5px solid #d0e8f5;border-radius:10px;cursor:pointer;background:#fff}
+#f2 .sata-opt.checked{border-color:#0d7aaa;background:#e6f7fd}
+#f2 .sata-check{width:18px;height:18px;border-radius:4px;border:1.5px solid #b8d9ef;background:#fff;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center}
+#f2 .sata-opt.checked .sata-check{background:#0d7aaa;border-color:#0d7aaa}
+#f2 .sata-text{font-size:13px;color:#455569;line-height:1.5}
+#f2 .sata-opt.checked .sata-text{color:#0f172a;font-weight:500}
+#f2 .qp-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:16px;border-top:1px solid #eef4fa}
+#f2 .btn-next-case{font-size:13px;font-weight:700;color:#fff;background:#0d7aaa;padding:9px 22px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 10px -3px rgba(13,122,170,.35)}
+</style>
+
+<div class="exam-header">
+  <div class="eh-left">
+    <span class="eh-logo">NurseNest</span>
+    <span class="eh-mode">CAT Exam</span>
+    <span class="eh-ngn">NGN Case Study</span>
+  </div>
+  <div class="eh-center">
+    <span class="eh-case">Mrs. Park, 71F · Respiratory</span>
+    <div class="eh-case-prog">
+      <div class="cp-dot done"></div><div class="cp-dot done"></div><div class="cp-dot active"></div><div class="cp-dot todo"></div><div class="cp-dot todo"></div><div class="cp-dot todo"></div>
+    </div>
+    <span style="font-size:11.5px;color:#647894">Q 3 of 6</span>
+  </div>
+  <div class="eh-right">
+    <div class="eh-timer">01:12:44</div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></div>
+  </div>
+</div>
+
+<div class="case-scenario">
+  <span><strong>Mrs. Helena Park</strong>, 71-year-old female, admitted to the med-surg unit with 3-day history of progressive dyspnea, productive cough, and fever. PMH: COPD (GOLD Stage II), HTN, Type 2 DM. Current vitals: T 38.7°C, HR 92, BP 142/88, RR 24, SpO₂ 89% on 2L NC.</span>
+  <span class="case-chip">Active Case · 6 Questions</span>
+</div>
+
+<div class="main">
+  <div class="exhibit-panel">
+    <div class="ep-header">
+      <div class="ep-title">Exhibit Panel</div>
+      <div class="ep-tabs">
+        <div class="ep-tab">H&amp;P</div>
+        <div class="ep-tab">Vital Signs</div>
+        <div class="ep-tab active">Lab Results<span class="new-badge"></span></div>
+        <div class="ep-tab">Imaging</div>
+        <div class="ep-tab">Medications</div>
+      </div>
+    </div>
+    <div class="ep-content">
+      <div class="ep-section">
+        <div class="ep-section-title">Complete Blood Count</div>
+        <div class="lab-row"><span class="lab-name">WBC</span><span><span class="lab-val">14.2</span><span class="lab-ref">4.5–11.0 ×10³/µL</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+        <div class="lab-row"><span class="lab-name">Hemoglobin</span><span><span class="lab-val">10.8</span><span class="lab-ref">12.0–16.0 g/dL</span></span><span class="lab-flag flag-low">↓ LOW</span></div>
+        <div class="lab-row"><span class="lab-name">Hematocrit</span><span><span class="lab-val">32%</span><span class="lab-ref">36–46%</span></span><span class="lab-flag flag-low">↓ LOW</span></div>
+        <div class="lab-row"><span class="lab-name">Platelets</span><span><span class="lab-val">218</span><span class="lab-ref">150–400 ×10³/µL</span></span></div>
+        <div class="lab-row"><span class="lab-name">Neutrophils</span><span><span class="lab-val">88%</span><span class="lab-ref">50–70%</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+      </div>
+      <div class="ep-section">
+        <div class="ep-section-title">Basic Metabolic Panel</div>
+        <div class="lab-row"><span class="lab-name">Sodium</span><span><span class="lab-val">136</span><span class="lab-ref">136–145 mEq/L</span></span></div>
+        <div class="lab-row"><span class="lab-name">Potassium</span><span><span class="lab-val">3.1</span><span class="lab-ref">3.5–5.0 mEq/L</span></span><span class="lab-flag flag-crit">⚠ CRIT LOW</span></div>
+        <div class="lab-row"><span class="lab-name">BUN</span><span><span class="lab-val">28</span><span class="lab-ref">7–20 mg/dL</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+        <div class="lab-row"><span class="lab-name">Creatinine</span><span><span class="lab-val">1.4</span><span class="lab-ref">0.6–1.2 mg/dL</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+        <div class="lab-row"><span class="lab-name">Glucose</span><span><span class="lab-val">188</span><span class="lab-ref">70–100 mg/dL</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+      </div>
+      <div class="ep-section">
+        <div class="ep-section-title">Arterial Blood Gas</div>
+        <div class="lab-row"><span class="lab-name">pH</span><span><span class="lab-val">7.32</span><span class="lab-ref">7.35–7.45</span></span><span class="lab-flag flag-low">↓ LOW</span></div>
+        <div class="lab-row"><span class="lab-name">PaCO₂</span><span><span class="lab-val">52</span><span class="lab-ref">35–45 mmHg</span></span><span class="lab-flag flag-high">↑ HIGH</span></div>
+        <div class="lab-row"><span class="lab-name">PaO₂</span><span><span class="lab-val">58</span><span class="lab-ref">80–100 mmHg</span></span><span class="lab-flag flag-crit">⚠ CRIT LOW</span></div>
+        <div class="lab-row"><span class="lab-name">HCO₃⁻</span><span><span class="lab-val">26</span><span class="lab-ref">22–26 mEq/L</span></span></div>
+        <div class="lab-row"><span class="lab-name">SaO₂</span><span><span class="lab-val">89%</span><span class="lab-ref">95–100%</span></span><span class="lab-flag flag-crit">⚠ CRIT LOW</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="q-panel">
+    <div>
+      <span class="qp-type">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        SATA — Select All That Apply
+      </span>
+    </div>
+    <div>
+      <div class="qp-num">Question 3 of 6 · NGN Case Study</div>
+      <div class="qp-stem">Based on <strong>Mrs. Park's laboratory results and clinical presentation</strong>, which findings require <strong>priority nursing intervention</strong>? Select all that apply.</div>
+      <div class="qp-instruction">Select all correct responses. There is no partial credit.</div>
+    </div>
+    <div class="sata-opts">
+      <div class="sata-opt checked">
+        <div class="sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="sata-text">Critically low PaO₂ of 58 mmHg indicating respiratory failure requiring immediate oxygen titration</div>
+      </div>
+      <div class="sata-opt checked">
+        <div class="sata-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="sata-text">Critical hypokalemia (K⁺ 3.1 mEq/L) with risk of cardiac dysrhythmia requiring immediate notification</div>
+      </div>
+      <div class="sata-opt">
+        <div class="sata-check"></div>
+        <div class="sata-text">Elevated WBC count of 14.2 indicating systemic infection requiring blood culture collection</div>
+      </div>
+      <div class="sata-opt">
+        <div class="sata-check"></div>
+        <div class="sata-text">Mildly elevated BUN/Creatinine suggesting dehydration requiring increased IV fluid rate</div>
+      </div>
+      <div class="sata-opt">
+        <div class="sata-check"></div>
+        <div class="sata-text">Hemoglobin of 10.8 g/dL indicating anemia requiring urgent packed red blood cell transfusion</div>
+      </div>
+    </div>
+    <div class="qp-bottom">
+      <span style="font-size:11.5px;color:#647894">2 selected · Select all that apply</span>
+      <div style="display:flex;gap:8px">
+        <button style="font-size:13px;font-weight:600;color:#647894;background:#f3f8fc;border:1px solid #d0e8f5;padding:9px 18px;border-radius:10px;cursor:pointer">← Previous</button>
+        <button class="btn-next-case">Next Question →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     FRAME 4 · Ocean · NGN Bowtie Question
+════════════════════════════════════════════════════════════════════ -->
+<div class="frame" id="f3">
+<style>
+#f3{background:#f3f8fc;font-family:'DM Sans',system-ui,sans-serif}
+#f3 .exam-header{height:52px;background:#fff;border-bottom:1.5px solid #d9f3fa;display:flex;align-items:center;padding:0 24px;gap:0;box-shadow:0 2px 12px -6px rgba(6,88,140,.1)}
+#f3 .eh-left{display:flex;align-items:center;gap:10px;min-width:280px}
+#f3 .eh-logo{font-size:14px;font-weight:800;color:#0d7aaa}
+#f3 .eh-mode{font-size:10.5px;font-weight:700;color:#0d7aaa;background:#e6f7fd;border:1px solid #b8dff7;padding:3px 9px;border-radius:99px}
+#f3 .eh-ngn{font-size:10.5px;font-weight:700;color:#7c3aed;background:#f5f0fe;border:1px solid #ddd6fe;padding:3px 9px;border-radius:99px}
+#f3 .eh-bowtie{font-size:10.5px;font-weight:700;color:#0d9488;background:#f0fdfa;border:1px solid #99f6e4;padding:3px 9px;border-radius:99px}
+#f3 .eh-center{flex:1;display:flex;align-items:center;justify-content:center;gap:12px}
+#f3 .eh-right{display:flex;align-items:center;gap:6px;min-width:240px;justify-content:flex-end}
+#f3 .eh-timer{font-size:14px;font-weight:700;color:#0f172a;font-variant-numeric:tabular-nums;background:#f3f8fc;border:1px solid #d0e8f5;padding:5px 12px;border-radius:8px}
+#f3 .eh-btn{width:34px;height:34px;border-radius:8px;background:#f3f8fc;border:1px solid #d0e8f5;display:flex;align-items:center;justify-content:center}
+
+#f3 .content{padding:24px 32px;height:calc(900px - 52px);overflow:hidden;display:flex;flex-direction:column;gap:16px}
+#f3 .bt-header{text-align:center}
+#f3 .bt-type{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0d9488;background:#f0fdfa;border:1px solid #99f6e4;padding:3px 12px;border-radius:99px;display:inline-block;margin-bottom:8px}
+#f3 .bt-title{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:4px}
+#f3 .bt-instruction{font-size:13px;color:#647894}
+
+#f3 .bowtie{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:start;flex:1}
+#f3 .bt-col{display:flex;flex-direction:column;gap:10px}
+#f3 .bt-col-title{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:7px 14px;border-radius:8px;text-align:center;margin-bottom:4px}
+#f3 .bt-col-title.actions{background:#e6f7fd;color:#0d7aaa}
+#f3 .bt-col-title.params{background:#f0fdfa;color:#0d9488}
+
+#f3 .bt-select{background:#fff;border:1.5px solid #d0e8f5;border-radius:12px;padding:12px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#455569;transition:.1s;position:relative}
+#f3 .bt-select:hover{border-color:#1aaee0}
+#f3 .bt-select.filled{border-color:#0d7aaa;background:#e6f7fd;color:#0f172a;font-weight:500}
+#f3 .bt-select.filled.teal{border-color:#0d9488;background:#f0fdfa}
+#f3 .bt-arrow-left{display:flex;align-items:center;justify-content:flex-end;margin-top:20px}
+#f3 .bt-arrow-right{display:flex;align-items:center;justify-content:flex-start;margin-top:20px}
+
+#f3 .bt-center{display:flex;flex-direction:column;align-items:center;gap:0}
+#f3 .bt-scenario-card{background:#fff;border:2px solid #d0e8f5;border-radius:20px;padding:20px;box-shadow:0 4px 20px -8px rgba(6,88,140,.12);width:280px;text-align:center}
+#f3 .bt-scenario-label{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#647894;margin-bottom:10px}
+#f3 .bt-patient-avatar{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#e6f7fd,#d9f3fa);border:2px solid #b8dff7;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:20px;font-weight:800;color:#0d7aaa}
+#f3 .bt-patient-name{font-size:14px;font-weight:700;color:#0f172a}
+#f3 .bt-patient-meta{font-size:11.5px;color:#647894;margin-top:2px}
+#f3 .bt-divider{height:1px;background:#eef4fa;margin:10px 0}
+#f3 .bt-condition{font-size:12px;color:#455569;line-height:1.55;text-align:left}
+#f3 .bt-condition strong{color:#0f172a;font-weight:600}
+#f3 .bt-vitals{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:center}
+#f3 .bt-vital{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px;background:#f3f8fc;border:1px solid #d0e8f5;color:#455569}
+#f3 .bt-vital.warn{background:#fff1f2;border-color:#fca5a5;color:#dc2626}
+
+#f3 .bt-arrows-row{display:flex;align-items:center;gap:0;width:100%;padding:0 12px}
+#f3 .bt-arrow{flex:1;height:2px;background:linear-gradient(90deg,#d0e8f5,#1aaee0)}
+#f3 .bt-arrow.right-arr{background:linear-gradient(90deg,#1aaee0,#d0e8f5)}
+#f3 .arrowhead{width:8px;height:8px;border-top:2px solid #1aaee0;border-right:2px solid #1aaee0;transform:rotate(45deg);flex-shrink:0}
+#f3 .arrowhead.left{transform:rotate(-135deg)}
+
+#f3 .bt-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid #eef4fa}
+</style>
+
+<div class="exam-header">
+  <div class="eh-left">
+    <span class="eh-logo">NurseNest</span>
+    <span class="eh-mode">CAT Exam</span>
+    <span class="eh-ngn">NGN</span>
+    <span class="eh-bowtie">Bowtie</span>
+  </div>
+  <div class="eh-center">
+    <span style="font-size:12.5px;font-weight:700;color:#0f172a">Question 31</span>
+    <div style="width:160px;height:6px;background:#eef4fa;border-radius:99px;overflow:hidden"><div style="width:41.3%;height:100%;background:linear-gradient(90deg,#1aaee0,#0d9488);border-radius:99px"></div></div>
+    <span style="font-size:11px;color:#647894">of 75</span>
+  </div>
+  <div class="eh-right">
+    <div class="eh-timer">01:04:22</div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><path d="M6 2v6l-2 4h16l-2-4V2"/><line x1="6" y1="2" x2="18" y2="2"/></svg></div>
+    <div class="eh-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#647894" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="bt-header">
+    <div class="bt-type">NGN · Bowtie Question Format</div>
+    <div class="bt-title">For each column, select the most appropriate nursing actions and parameters to monitor.</div>
+    <div class="bt-instruction">Select <strong>2 actions</strong> on the left and <strong>2 parameters</strong> on the right for this client's condition.</div>
+  </div>
+
+  <div class="bowtie">
+    <!-- Left: Actions -->
+    <div class="bt-col">
+      <div class="bt-col-title actions">Actions to Take</div>
+      <div class="bt-select filled">
+        <span>Elevate head of bed to 30–45°</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0d7aaa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="bt-select filled">
+        <span>Administer IV furosemide as ordered</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0d7aaa" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div style="height:1px;background:#eef4fa;margin:4px 0"></div>
+      <div style="font-size:10.5px;font-weight:600;color:#647894;margin-bottom:4px;padding-left:2px">Additional options:</div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Administer 500 mL NS bolus</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Place client in Trendelenburg position</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Restrict fluid intake to 500 mL/day</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <!-- Center: Client condition -->
+    <div class="bt-center">
+      <div style="height:60px;display:flex;align-items:center">
+        <div style="display:flex;align-items:center;gap:8px;width:100%">
+          <div style="flex:1;height:2px;background:linear-gradient(90deg,rgba(208,232,245,0),#1aaee0)"></div>
+          <div style="width:10px;height:10px;border-top:2px solid #1aaee0;border-right:2px solid #1aaee0;transform:rotate(45deg)"></div>
+        </div>
+      </div>
+      <div class="bt-scenario-card">
+        <div class="bt-scenario-label">Client Condition</div>
+        <div class="bt-patient-avatar">RC</div>
+        <div class="bt-patient-name">Mr. Robert Chen</div>
+        <div class="bt-patient-meta">82M · CVICU · Post-op Day 2</div>
+        <div class="bt-divider"></div>
+        <div class="bt-condition">
+          <strong>Diagnosis:</strong> Acute decompensated heart failure following CABG. Fluid overload with bilateral pulmonary edema. SpO₂ trending down from 95% → 90%.
+        </div>
+        <div class="bt-vitals">
+          <span class="bt-vital warn">HR 112 ↑</span>
+          <span class="bt-vital warn">BP 160/98 ↑</span>
+          <span class="bt-vital warn">SpO₂ 90% ↓</span>
+          <span class="bt-vital">RR 22</span>
+          <span class="bt-vital warn">Wt +3.2 kg ↑</span>
+        </div>
+      </div>
+      <div style="height:60px;display:flex;align-items:center">
+        <div style="display:flex;align-items:center;gap:8px;width:100%">
+          <div style="width:10px;height:10px;border-top:2px solid #0d9488;border-left:2px solid #0d9488;transform:rotate(-45deg)"></div>
+          <div style="flex:1;height:2px;background:linear-gradient(90deg,#0d9488,rgba(208,232,245,0))"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Parameters -->
+    <div class="bt-col">
+      <div class="bt-col-title params">Parameters to Monitor</div>
+      <div class="bt-select filled teal">
+        <span>Urinary output hourly (goal &gt;30 mL/hr)</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="bt-select filled teal">
+        <span>SpO₂ and lung auscultation q2h</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div style="height:1px;background:#eef4fa;margin:4px 0"></div>
+      <div style="font-size:10.5px;font-weight:600;color:#647894;margin-bottom:4px;padding-left:2px">Additional options:</div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Blood glucose every 6 hours</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Daily weight at the same time each morning</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="bt-select">
+        <span style="color:#94a3b8">Serum potassium after each diuretic dose</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b8d9ef" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="bt-bottom">
+    <span style="font-size:11.5px;color:#647894">Both columns must be complete to submit</span>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div style="font-size:11.5px;color:#16a34a;font-weight:600;background:#f0fdf4;border:1px solid #bbf7d0;padding:4px 12px;border-radius:8px">✓ 2/2 Actions · ✓ 2/2 Parameters</div>
+      <button style="font-size:13px;font-weight:600;color:#647894;background:#f3f8fc;border:1px solid #d0e8f5;padding:9px 18px;border-radius:10px;cursor:pointer">← Previous</button>
+      <button style="font-size:13px;font-weight:700;color:#fff;background:#0d7aaa;padding:9px 22px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 2px 10px -3px rgba(13,122,170,.35)">Submit Answer →</button>
+    </div>
+  </div>
+</div>
+</div>

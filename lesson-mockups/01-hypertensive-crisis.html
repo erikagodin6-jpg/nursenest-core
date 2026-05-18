@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hypertensive Crisis — NurseNest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font:'DM Sans',system-ui,sans-serif;
+  --blue:#1aaee0;--blue-soft:#e6f7fc;--blue-deep:#0a4f72;
+  --ink:#0f172a;--body:#455569;--muted:#647894;
+  --page:#f3f8fc;--card:#fff;--card-border:#d0e8f5;
+  --success:#16a34a;--success-soft:#f0fdf4;
+  --danger:#e11d48;--danger-soft:#fff1f2;
+  --warning:#d97706;--warning-soft:#fffbeb;
+  --purple:#7c3aed;--purple-soft:#f5f0fe;
+  --r-sm:.5rem;--r-md:.75rem;--r-lg:1rem;--r-xl:1.25rem;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 8px 24px -12px rgba(15,23,42,.1);
+  --shadow-lg:0 4px 20px -6px rgba(15,23,42,.14),0 1px 4px rgba(15,23,42,.06);
+}
+body{font-family:var(--font);background:var(--page);color:var(--body);line-height:1.7;font-size:15px}
+/* HEADER */
+.hdr{background:var(--card);border-bottom:1px solid var(--card-border);padding:.875rem 1.5rem}
+.hdr-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:.75rem}
+.logo{display:flex;align-items:center;gap:.45rem;font-weight:700;font-size:1rem;color:var(--ink);text-decoration:none}
+.logo-leaf{color:var(--blue)}
+.crumb{margin-left:auto;display:flex;align-items:center;gap:.375rem;font-size:.78rem;color:var(--muted)}
+.crumb a{color:var(--muted);text-decoration:none}.crumb a:hover{color:var(--blue)}
+.crumb-sep{opacity:.4}
+/* HERO */
+.hero{background:linear-gradient(150deg,#071726 0%,#0d2d4a 55%,#0e3f63 100%);padding:2.75rem 1.5rem 2.25rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 140% 90% at 85% -15%,rgba(26,174,224,.28),transparent 58%),radial-gradient(ellipse 60% 50% at 5% 110%,rgba(26,174,224,.1),transparent 55%)}
+.hero-in{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:.375rem;font-size:.6875rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:.875rem}
+.eyebrow-pip{width:5px;height:5px;border-radius:50%;background:var(--blue)}
+h1.title{font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:700;letter-spacing:-.025em;line-height:1.15;color:#fff;margin-bottom:.875rem;max-width:42rem}
+h1.title em{color:var(--blue);font-style:normal}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:.875rem;font-size:.8125rem;color:rgba(255,255,255,.55)}
+.badge{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .625rem;border-radius:9999px;background:rgba(26,174,224,.18);border:1px solid rgba(26,174,224,.3);color:#7de5ff;font-size:.75rem;font-weight:600}
+/* PROGRESS */
+.prog-bar{background:var(--card);border-bottom:1px solid var(--card-border);padding:.625rem 1.5rem}
+.prog-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:1rem}
+.track{flex:1;height:4px;border-radius:9999px;background:#daeef7;overflow:hidden}
+.fill{height:100%;width:35%;border-radius:9999px;background:linear-gradient(90deg,var(--blue),#60d0f8)}
+.prog-label{font-size:.75rem;color:var(--muted);font-weight:500;white-space:nowrap}
+/* LAYOUT */
+.layout{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;display:grid;grid-template-columns:210px 1fr 272px;gap:1.5rem;align-items:start}
+/* LEFT NAV */
+.snav{position:sticky;top:1.25rem}
+.snav-label{font-size:.6875rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 .5rem;margin-bottom:.5rem}
+.snav ul{list-style:none;display:flex;flex-direction:column;gap:1px}
+.snav a{display:flex;align-items:center;gap:.5rem;padding:.4rem .625rem;border-radius:.5rem;font-size:.8125rem;font-weight:500;color:var(--muted);text-decoration:none;transition:all .15s}
+.snav a:hover,.snav .active a{background:var(--blue-soft);color:var(--blue);font-weight:600}
+.nav-pip{width:6px;height:6px;border-radius:50%;background:#c0d8e8;flex-shrink:0}
+.snav .active .nav-pip{background:var(--blue)}
+/* ARTICLE */
+.article{display:flex;flex-direction:column;gap:1.25rem;min-width:0}
+/* SECTION CARD */
+.sc{background:var(--card);border-radius:var(--r-xl);border:1px solid var(--card-border);box-shadow:var(--shadow);padding:1.625rem 1.5rem 1.875rem;overflow:hidden}
+.kind{font-size:.6875rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.375rem}
+.kind-blue{color:#0369a1}.kind-green{color:#166534}.kind-purple{color:var(--purple)}.kind-red{color:#9f1239}.kind-blue2{color:var(--blue)}
+h2.sh{font-size:1.175rem;font-weight:700;letter-spacing:-.02em;line-height:1.25;color:var(--ink);margin-bottom:.875rem}
+.prose{font-size:.9375rem;line-height:1.75;color:var(--body)}
+.prose p{margin-bottom:.825rem}.prose p:last-child{margin-bottom:0}
+.prose strong{color:var(--ink);font-weight:600}
+/* DEFINITION GRID */
+.def-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1rem}
+.def-box{border-radius:var(--r-lg);border:1.5px solid;padding:1rem 1.0625rem}
+.def-box-blue{background:#f0f9ff;border-color:rgba(26,174,224,.28)}
+.def-box-red{background:var(--danger-soft);border-color:rgba(225,29,72,.22)}
+.def-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
+.def-box-blue .def-eyebrow{color:#0369a1}.def-box-red .def-eyebrow{color:#be123c}
+.def-bp{font-size:1.5rem;font-weight:700;color:var(--ink);line-height:1;margin-bottom:.375rem}
+.def-desc{font-size:.8125rem;color:var(--body);line-height:1.5}
+/* PATHO FLOW */
+.flow{display:flex;flex-direction:column;margin-top:1rem}
+.fstep{display:flex;gap:.875rem}
+.fstep-line{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.fstep-dot{width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--blue);background:var(--blue);margin-top:3px;flex-shrink:0}
+.fstep-bar{width:2px;flex:1;min-height:18px;margin:4px 0;background:linear-gradient(to bottom,var(--blue),#d0e8f5)}
+.fstep:last-child .fstep-bar{display:none}
+.fstep-body{padding-bottom:1.125rem}
+.fstep-t{font-size:.875rem;font-weight:600;color:var(--ink);margin-bottom:.2rem}
+.fstep-d{font-size:.8125rem;color:var(--body);line-height:1.55}
+/* S&S GRID */
+.ss-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1rem}
+.ss-box{border-radius:var(--r-lg);border:1.5px solid;padding:.875rem 1rem}
+.ss-box-b{background:var(--blue-soft);border-color:rgba(26,174,224,.22)}
+.ss-box-r{background:var(--danger-soft);border-color:rgba(225,29,72,.18)}
+.ss-title{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+.ss-box-b .ss-title{color:#0369a1}.ss-box-r .ss-title{color:#be123c}
+.ss-list{list-style:none;display:flex;flex-direction:column;gap:.275rem}
+.ss-list li{font-size:.8375rem;color:var(--body);display:flex;align-items:flex-start;gap:.375rem}
+.ss-list li::before{content:'·';font-weight:700;margin-top:.05rem}
+.ss-box-b .ss-list li::before{color:var(--blue)}.ss-box-r .ss-list li::before{color:var(--danger)}
+/* RED FLAGS */
+.rf-card{background:#fff4f5;border-radius:var(--r-xl);border:1.5px solid rgba(225,29,72,.22);box-shadow:0 2px 14px -4px rgba(225,29,72,.1);padding:1.375rem 1.375rem 1.5rem}
+.rf-hdr{display:flex;align-items:center;gap:.625rem;margin-bottom:1rem}
+.rf-icon{width:32px;height:32px;border-radius:50%;background:rgba(225,29,72,.1);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rf-title{font-size:1.0625rem;font-weight:700;color:#9f1239;line-height:1.2}
+.rf-sub{font-size:.78rem;color:#dc2626;font-weight:500}
+.rf-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.rf-item{background:#fff;border-radius:var(--r-md);border:1px solid rgba(225,29,72,.14);padding:.625rem .875rem;font-size:.84rem;color:#7f1d1d;font-weight:500;display:flex;align-items:flex-start;gap:.4rem;line-height:1.4}
+.rf-arr{color:var(--danger);flex-shrink:0;margin-top:.1rem}
+/* INTERVENTIONS */
+.iv-list{display:flex;flex-direction:column;gap:.625rem;margin-top:.875rem}
+.iv-item{display:flex;align-items:flex-start;gap:.75rem;background:#f8fafc;border-radius:var(--r-md);padding:.75rem 1rem;border-left:3px solid var(--blue)}
+.iv-num{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
+.iv-text{font-size:.875rem;color:var(--ink);font-weight:500;line-height:1.45}
+.iv-note{display:block;font-weight:400;color:var(--muted);font-size:.79rem;margin-top:.15rem}
+/* MEDS TABLE */
+.med-tbl{width:100%;border-collapse:collapse;font-size:.8375rem;margin-top:.875rem}
+.med-tbl thead{background:#f0f9ff}
+.med-tbl th{padding:.5875rem .875rem;text-align:left;font-size:.6875rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0369a1;border-bottom:2px solid #bae6fd}
+.med-tbl td{padding:.6875rem .875rem;border-bottom:1px solid #f0f6fa;color:var(--body);vertical-align:top}
+.med-tbl tr:last-child td{border-bottom:none}
+.mn{font-weight:600;color:var(--ink)}
+.mt{font-size:.77rem;color:var(--muted)}
+.mc{display:inline-flex;padding:.15rem .5rem;border-radius:9999px;font-size:.72rem;font-weight:600}
+/* CALLOUT */
+.callout{border-radius:var(--r-md);padding:.875rem 1rem;display:flex;gap:.625rem;margin-top:1rem}
+.callout-exam{background:var(--blue-soft);border:1px solid rgba(26,174,224,.22)}
+.callout-clinical{background:var(--success-soft);border:1px solid rgba(22,163,74,.18)}
+.callout-icon{font-size:.9375rem;flex-shrink:0;margin-top:.125rem}
+.callout-lbl{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.25rem}
+.callout-exam .callout-lbl{color:#0369a1}.callout-clinical .callout-lbl{color:#166534}
+.callout-txt{font-size:.84rem;line-height:1.55;color:var(--body)}
+/* RIGHT SIDEBAR */
+.sidebar{position:sticky;top:1.25rem;display:flex;flex-direction:column;gap:1rem}
+.scard{background:var(--card);border-radius:var(--r-xl);border:1px solid var(--card-border);box-shadow:var(--shadow);overflow:hidden}
+.scard-hdr{padding:.8125rem 1rem .6875rem;border-bottom:1px solid var(--card-border)}
+.scard-title{font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--ink)}
+.scard-body{padding:.875rem 1rem}
+.hy-list{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.hy-li{display:flex;align-items:flex-start;gap:.5rem;font-size:.8125rem;color:var(--body);line-height:1.5}
+.hy-pip{width:6px;height:6px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:.45rem}
+.kn{display:flex;flex-direction:column;gap:0}
+.kn-row{display:flex;justify-content:space-between;align-items:baseline;padding:.45rem 0;border-bottom:1px solid #f0f6fa;font-size:.8125rem}
+.kn-row:last-child{border-bottom:none}
+.kn-lbl{color:var(--muted)}.kn-val{font-weight:700;color:var(--ink)}
+.kn-val.red{color:var(--danger)}
+</style>
+</head>
+<body>
+<!-- Header -->
+<header class="hdr">
+  <div class="hdr-in">
+    <a class="logo" href="#">
+      <svg class="logo-leaf" width="20" height="20" viewBox="0 0 50 50" fill="none">
+        <path d="M10 42C10 28 18 18 25 18S40 28 40 42Z" fill="currentColor" opacity=".9"/>
+        <path d="M14 42C14 31 20 24 25 24S36 31 36 42Z" fill="white" opacity=".75"/>
+      </svg>
+      NurseNest
+    </a>
+    <nav class="crumb">
+      <a href="#">Dashboard</a><span class="crumb-sep">›</span>
+      <a href="#">Cardiovascular</a><span class="crumb-sep">›</span>
+      <a href="#">Hypertension</a><span class="crumb-sep">›</span>
+      <span>Hypertensive Crisis</span>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-in">
+    <div class="eyebrow"><div class="eyebrow-pip"></div>Cardiovascular System · Lesson 4 of 8</div>
+    <h1 class="title">Hypertensive Crisis:<br><em>Emergency Assessment & Management</em></h1>
+    <div class="meta">
+      <span class="badge">🩺 RN Level</span>
+      <span>⏱ 18 min read</span>
+      <span>📋 NCLEX Priority</span>
+      <span>🇨🇦 Canada-aligned</span>
+    </div>
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="prog-bar">
+  <div class="prog-in">
+    <div class="track"><div class="fill"></div></div>
+    <span class="prog-label">35% complete · Section 2 of 6</span>
+  </div>
+</div>
+
+<!-- Main -->
+<main class="layout">
+  <!-- Left nav -->
+  <nav class="snav">
+    <p class="snav-label">Contents</p>
+    <ul>
+      <li><a href="#"><span class="nav-pip"></span>Overview</a></li>
+      <li class="active"><a href="#"><span class="nav-pip"></span>Pathophysiology</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Clinical Presentation</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Red Flags</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Nursing Interventions</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Medications</a></li>
+      <li><a href="#"><span class="nav-pip"></span>Client Education</a></li>
+    </ul>
+  </nav>
+
+  <!-- Article -->
+  <article class="article">
+    <!-- Overview -->
+    <div class="sc">
+      <div class="kind kind-blue">Overview</div>
+      <h2 class="sh">What Is a Hypertensive Crisis?</h2>
+      <div class="prose"><p>A <strong>hypertensive crisis</strong> occurs when blood pressure rises severely enough to cause, or risk causing, acute end-organ damage. It is classified into two distinct categories based on the presence or absence of acute target organ involvement.</p></div>
+      <div class="def-grid">
+        <div class="def-box def-box-blue">
+          <div class="def-eyebrow">Hypertensive Urgency</div>
+          <div class="def-bp">≥ 180/110</div>
+          <div class="def-desc">Severely elevated BP <strong>without</strong> acute end-organ damage. Symptomatic but not immediately life-threatening. Oral therapy over 24–48 hours.</div>
+        </div>
+        <div class="def-box def-box-red">
+          <div class="def-eyebrow">Hypertensive Emergency</div>
+          <div class="def-bp">≥ 180/120</div>
+          <div class="def-desc">Severely elevated BP <strong>with</strong> acute end-organ damage. Requires immediate IV antihypertensive therapy. ICU admission.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pathophysiology -->
+    <div class="sc">
+      <div class="kind kind-purple">Pathophysiology</div>
+      <h2 class="sh">The Cascade of Vascular Injury</h2>
+      <div class="prose"><p>When BP rises acutely, the systemic vasculature fails to autoregulate, triggering a cycle of endothelial injury, RAAS activation, and progressive organ hypoperfusion.</p></div>
+      <div class="flow">
+        <div class="fstep">
+          <div class="fstep-line"><div class="fstep-dot" style="background:var(--blue);box-shadow:0 0 0 2px var(--blue)"></div><div class="fstep-bar"></div></div>
+          <div class="fstep-body"><div class="fstep-t">Acute BP Surge</div><div class="fstep-d">Abrupt elevation overwhelms autoregulatory capacity; shear forces damage endothelial cells of arterioles.</div></div>
+        </div>
+        <div class="fstep">
+          <div class="fstep-line"><div class="fstep-dot" style="background:#d97706;box-shadow:0 0 0 2px #d97706"></div><div class="fstep-bar" style="background:linear-gradient(to bottom,#d97706,#f0e8d0)"></div></div>
+          <div class="fstep-body"><div class="fstep-t">Endothelial Dysfunction</div><div class="fstep-d">Fibrinoid necrosis of arteriole walls → vasoactive mediator release → RAAS & sympathetic activation → sodium retention.</div></div>
+        </div>
+        <div class="fstep">
+          <div class="fstep-line"><div class="fstep-dot" style="background:var(--danger);box-shadow:0 0 0 2px var(--danger)"></div><div class="fstep-bar" style="background:linear-gradient(to bottom,var(--danger),#ffd0d8)"></div></div>
+          <div class="fstep-body"><div class="fstep-t">Target Organ Ischemia</div><div class="fstep-d">Reduced perfusion to brain, kidneys, heart, and eyes with ongoing hypertension-driven injury.</div></div>
+        </div>
+        <div class="fstep">
+          <div class="fstep-line"><div class="fstep-dot" style="background:#9f1239;box-shadow:0 0 0 2px #9f1239"></div></div>
+          <div class="fstep-body"><div class="fstep-t">Organ Failure</div><div class="fstep-d">Hypertensive encephalopathy, AKI, ACS, acute pulmonary edema, or retinal hemorrhage may develop without intervention.</div></div>
+        </div>
+      </div>
+      <div class="callout callout-exam">
+        <span class="callout-icon">💡</span>
+        <div><div class="callout-lbl">Exam Tip</div><div class="callout-txt">The differentiator is <strong>end-organ damage</strong> — not the BP number alone. BP 200/130 without symptoms = urgency; BP 180/120 with neuro changes = emergency.</div></div>
+      </div>
+    </div>
+
+    <!-- Signs & Symptoms -->
+    <div class="sc">
+      <div class="kind kind-blue2">Signs &amp; Symptoms</div>
+      <h2 class="sh">Clinical Presentation</h2>
+      <div class="prose"><p>Presentation varies by which target organ(s) are involved. Neurological and cardiac symptoms signal emergency status and require immediate escalation.</p></div>
+      <div class="ss-grid">
+        <div class="ss-box ss-box-b">
+          <div class="ss-title">Urgency — No Organ Damage</div>
+          <ul class="ss-list">
+            <li>Severe pulsatile, occipital headache</li>
+            <li>Shortness of breath at rest</li>
+            <li>Epistaxis, palpitations</li>
+            <li>Anxiety, flushing, diaphoresis</li>
+            <li>No acute neurological deficits</li>
+          </ul>
+        </div>
+        <div class="ss-box ss-box-r">
+          <div class="ss-title">Emergency — Organ Damage Present</div>
+          <ul class="ss-list">
+            <li>Altered LOC, seizures, confusion</li>
+            <li>Chest pain / ST-segment changes</li>
+            <li>Acute pulmonary edema, crackles</li>
+            <li>Oliguria, hematuria, rising creatinine</li>
+            <li>Visual changes, papilledema</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Red Flags -->
+    <div class="rf-card">
+      <div class="rf-hdr">
+        <div class="rf-icon">🚨</div>
+        <div><div class="rf-title">Red Flags — Escalate Immediately</div><div class="rf-sub">Call Rapid Response if any of these are present</div></div>
+      </div>
+      <div class="rf-grid">
+        <div class="rf-item"><span class="rf-arr">▸</span>Sudden onset "worst headache of life"</div>
+        <div class="rf-item"><span class="rf-arr">▸</span>New focal neurological deficits</div>
+        <div class="rf-item"><span class="rf-arr">▸</span>Chest pain with diaphoresis or radiation</div>
+        <div class="rf-item"><span class="rf-arr">▸</span>Decreasing level of consciousness</div>
+        <div class="rf-item"><span class="rf-arr">▸</span>Acute pulmonary edema / SpO₂ &lt; 90%</div>
+        <div class="rf-item"><span class="rf-arr">▸</span>Oliguria or anuria (UO &lt; 0.5 mL/kg/hr)</div>
+      </div>
+    </div>
+
+    <!-- Nursing Interventions -->
+    <div class="sc">
+      <div class="kind kind-green">Nursing Interventions</div>
+      <h2 class="sh">Priority Nursing Actions</h2>
+      <div class="prose"><p>Act systematically using A-B-C-S. The goal in emergencies is a <strong>controlled 25% MAP reduction within the first hour</strong> — not normalization. Rapid drops risk cerebral and coronary ischemia in chronic hypertensives.</p></div>
+      <div class="iv-list">
+        <div class="iv-item">
+          <div class="iv-num">1</div>
+          <div class="iv-text">Continuous cardiac monitoring + BP every 5 min (arterial line preferred)<span class="iv-note">Document BP trending; alert prescriber for changes ≥ 20 mmHg systolic</span></div>
+        </div>
+        <div class="iv-item">
+          <div class="iv-num">2</div>
+          <div class="iv-text">Establish large-bore IV access × 2 (18G or larger)<span class="iv-note">Required for IV antihypertensives and emergency fluid/medication access</span></div>
+        </div>
+        <div class="iv-item">
+          <div class="iv-num">3</div>
+          <div class="iv-text">HOB elevated 30–45°; minimize stimuli; quiet environment<span class="iv-note">Reduces ICP in encephalopathy; positioning promotes venous drainage</span></div>
+        </div>
+        <div class="iv-item">
+          <div class="iv-num">4</div>
+          <div class="iv-text">12-lead ECG, stat labs (BMP, CBC, UA, troponin), hourly neuro checks<span class="iv-note">NIH Stroke Scale if neuro symptoms present; monitor for AKI and electrolyte shifts</span></div>
+        </div>
+        <div class="iv-item">
+          <div class="iv-num">5</div>
+          <div class="iv-text">Administer IV antihypertensive per order; titrate to goal MAP<span class="iv-note">Goal: ≤ 25% MAP reduction in 1 hr → 160/100 by 2–6 hr → near normal by 24–48 hr</span></div>
+        </div>
+      </div>
+      <div class="callout callout-clinical">
+        <span class="callout-icon">🩺</span>
+        <div><div class="callout-lbl">Clinical Pearl</div><div class="callout-txt"><strong>Do not normalize BP rapidly.</strong> Chronic hypertensives have shifted autoregulatory curves — over-correction causes cerebral, renal, and myocardial ischemia. Target 25% MAP reduction in 1 hour.</div></div>
+      </div>
+    </div>
+
+    <!-- Medications -->
+    <div class="sc">
+      <div class="kind kind-purple">Medications</div>
+      <h2 class="sh">IV Antihypertensive Agents</h2>
+      <div class="prose"><p>Drug choice depends on the affected target organ. All agents below require continuous monitoring; titrate to effect rather than to fixed doses.</p></div>
+      <table class="med-tbl">
+        <thead><tr><th>Drug</th><th>Class</th><th>Onset</th><th>Preferred Use</th></tr></thead>
+        <tbody>
+          <tr><td><div class="mn">Labetalol</div><div class="mt">IV bolus or infusion</div></td><td><span class="mc" style="background:#e0f5fc;color:#0369a1">α+β Blocker</span></td><td>5–10 min</td><td>Aortic dissection, stroke, pregnancy</td></tr>
+          <tr><td><div class="mn">Nicardipine</div><div class="mt">IV infusion</div></td><td><span class="mc" style="background:#f0f9ff;color:#0c4a6e">CCB</span></td><td>5–15 min</td><td>Stroke, ACS, post-op hypertension</td></tr>
+          <tr><td><div class="mn">Nitroprusside</div><div class="mt">Light-protected IV infusion</div></td><td><span class="mc" style="background:#f5f0fe;color:#6d28d9">Vasodilator</span></td><td>&lt; 2 min</td><td>Encephalopathy, acute HF</td></tr>
+          <tr><td><div class="mn">Hydralazine</div><div class="mt">IV bolus</div></td><td><span class="mc" style="background:#fdf2f8;color:#9d174d">Vasodilator</span></td><td>10–20 min</td><td>Pregnancy, eclampsia</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <!-- Right sidebar -->
+  <aside class="sidebar">
+    <div class="scard">
+      <div class="scard-hdr" style="background:#f0f9ff;border-color:#bae6fd"><div class="scard-title" style="color:#0369a1">⚡ High-Yield Takeaways</div></div>
+      <div class="scard-body">
+        <ul class="hy-list">
+          <li class="hy-li"><div class="hy-pip"></div>Emergency ≠ urgency — end-organ damage is the sole differentiator</li>
+          <li class="hy-li"><div class="hy-pip"></div>Target ≤ 25% MAP reduction in the first hour</li>
+          <li class="hy-li"><div class="hy-pip"></div>Never give sublingual nifedipine — dangerous BP drops risk stroke</li>
+          <li class="hy-li"><div class="hy-pip"></div>Labetalol is first-line in pregnancy (not ACE inhibitors)</li>
+          <li class="hy-li"><div class="hy-pip"></div>Nitroprusside requires light-protected tubing; monitor thiocyanate levels</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="scard-hdr"><div class="scard-title">📊 Key Numbers</div></div>
+      <div class="scard-body" style="padding-top:.5rem">
+        <div class="kn">
+          <div class="kn-row"><span class="kn-lbl">Urgency threshold</span><span class="kn-val">≥ 180/110</span></div>
+          <div class="kn-row"><span class="kn-lbl">Emergency threshold</span><span class="kn-val red">≥ 180/120</span></div>
+          <div class="kn-row"><span class="kn-lbl">1-hr reduction goal</span><span class="kn-val">25% MAP</span></div>
+          <div class="kn-row"><span class="kn-lbl">2–6 hr BP target</span><span class="kn-val">160/100</span></div>
+          <div class="kn-row"><span class="kn-lbl">24–48 hr target</span><span class="kn-val">135/85</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scard" style="border-color:rgba(124,58,237,.22)">
+      <div class="scard-hdr" style="background:#faf5ff;border-color:rgba(124,58,237,.18)"><div class="scard-title" style="color:var(--purple)">🎯 Exam Focus</div></div>
+      <div class="scard-body">
+        <ul class="hy-list">
+          <li class="hy-li"><div class="hy-pip" style="background:var(--purple)"></div>NCLEX priority: which patient do you see first?</li>
+          <li class="hy-li"><div class="hy-pip" style="background:var(--purple)"></div>Know urgency vs emergency classification cold</li>
+          <li class="hy-li"><div class="hy-pip" style="background:var(--purple)"></div>Labetalol = drug of choice in pregnancy</li>
+          <li class="hy-li"><div class="hy-pip" style="background:var(--purple)"></div>Avoid over-correction — causes watershed infarcts</li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+</main>
+</body>
+</html>
