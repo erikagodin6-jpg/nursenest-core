@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 
 import { examQuestionExamPublishAllowlist } from "@/lib/content-quality/exam-question-exam-normalization";
+import { CLINICAL_QUESTION_QUALITY_THRESHOLDS } from "@/lib/questions/clinical-question-quality";
 
 /**
  * Matches published rows regardless of legacy casing (`published` vs `PUBLISHED`).
@@ -69,6 +70,11 @@ export const EXAM_QUESTION_TOPIC_OR_BODY_SQL = Prisma.sql`(
 /** Non-empty stem (CAT uses any non-whitespace; audits often use ≥10 elsewhere). */
 export const EXAM_QUESTION_STEM_NON_EMPTY_SQL = Prisma.sql`length(trim(coalesce(stem, ''))) > 0`;
 
+/** Clinically meaningful stem floor used by premium publish gates. */
+export const EXAM_QUESTION_STEM_CLINICAL_DEPTH_SQL = Prisma.sql`
+  length(trim(coalesce(stem, ''))) >= ${CLINICAL_QUESTION_QUALITY_THRESHOLDS.minStemChars}
+`;
+
 /** MCQ-style `options` JSON array with at least two entries (matches CAT completeness). */
 export const EXAM_QUESTION_OPTIONS_MIN_TWO_SQL = Prisma.sql`
   options IS NOT NULL
@@ -78,7 +84,66 @@ export const EXAM_QUESTION_OPTIONS_MIN_TWO_SQL = Prisma.sql`
   END
 `;
 
+/** Premium clinical MCQ/SATA floor: four plausible options. */
+export const EXAM_QUESTION_OPTIONS_MIN_FOUR_SQL = Prisma.sql`
+  options IS NOT NULL
+  AND CASE jsonb_typeof(options::jsonb)
+    WHEN 'array' THEN jsonb_array_length(options::jsonb) >= 4
+    ELSE false
+  END
+`;
+
 export const EXAM_QUESTION_RATIONALE_REQUIRED_SQL = Prisma.sql`length(trim(coalesce(rationale, ''))) > 0`;
+
+/** Premium clinical rationale floor: long enough to teach why correct + why wrong. */
+export const EXAM_QUESTION_RATIONALE_CLINICAL_DEPTH_SQL = Prisma.sql`
+  length(trim(coalesce(rationale, ''))) >= ${CLINICAL_QUESTION_QUALITY_THRESHOLDS.minRationaleChars}
+`;
+
+/** Premium clinical reasoning floor: cue recognition + prioritization + action. */
+export const EXAM_QUESTION_CLINICAL_REASONING_DEPTH_SQL = Prisma.sql`
+  length(trim(coalesce(clinical_reasoning, ''))) >= ${CLINICAL_QUESTION_QUALITY_THRESHOLDS.minClinicalReasoningChars}
+`;
+
+/** Premium exam strategy floor: includes approach / prioritization logic. */
+export const EXAM_QUESTION_EXAM_STRATEGY_DEPTH_SQL = Prisma.sql`
+  length(trim(coalesce(exam_strategy, ''))) >= ${CLINICAL_QUESTION_QUALITY_THRESHOLDS.minExamStrategyChars}
+`;
+
+/** Premium durable teaching signal: trap or takeaway must exist. */
+export const EXAM_QUESTION_TRAP_OR_TAKEAWAY_SQL = Prisma.sql`(
+  length(trim(coalesce(clinical_trap, ''))) >= ${CLINICAL_QUESTION_QUALITY_THRESHOLDS.minTrapOrTakeawayChars}
+  OR length(trim(coalesce(key_takeaway, ''))) >= ${CLINICAL_QUESTION_QUALITY_THRESHOLDS.minTrapOrTakeawayChars}
+)`;
+
+/** Premium remediation/adaptive metadata. */
+export const EXAM_QUESTION_METADATA_COMPLETE_SQL = Prisma.sql`
+  coalesce(trim(topic), '') <> ''
+  AND coalesce(trim(body_system), '') <> ''
+  AND coalesce(trim(cognitive_level), '') <> ''
+  AND difficulty IS NOT NULL
+`;
+
+/**
+ * Premium distractor teaching: MCQ/SATA-style rows need a non-empty distractor_rationales object.
+ * This is deliberately permissive at SQL level; TS quality scoring handles per-option depth.
+ */
+export const EXAM_QUESTION_DISTRACTOR_TEACHING_PRESENT_SQL = Prisma.sql`
+  CASE
+    WHEN lower(trim(coalesce(question_type, ''))) IN ('mcq', 'multiple_choice', 'multiple-choice', 'sata', 'select-all-that-apply')
+    THEN (
+      distractor_rationales IS NOT NULL
+      AND jsonb_typeof(distractor_rationales::jsonb) = 'object'
+      AND distractor_rationales::jsonb <> '{}'::jsonb
+    )
+    ELSE true
+  END
+`;
+
+/** Premium quality score floor when a score exists. */
+export const EXAM_QUESTION_QUALITY_SCORE_PASSING_IF_PRESENT_SQL = Prisma.sql`(
+  quality_score IS NULL OR quality_score >= ${CLINICAL_QUESTION_QUALITY_THRESHOLDS.passingScore}
+)`;
 
 /**
  * Published row shape aligned with strict CAT `isCompleteCatQuestionRow` (subset via SQL).
@@ -92,6 +157,26 @@ export const EXAM_QUESTION_CAT_PIPELINE_ROW_SQL = Prisma.sql`
   AND ${EXAM_QUESTION_OPTIONS_MIN_TWO_SQL}
   AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
   AND ${EXAM_QUESTION_RATIONALE_REQUIRED_SQL}
+`;
+
+/**
+ * Premium clinical row shape. Use for new publish gates and audits; do not retrofit into legacy scripts
+ * until the remediation queue has cleared old imported content.
+ */
+export const EXAM_QUESTION_PREMIUM_CLINICAL_ROW_SQL = Prisma.sql`
+  ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+  AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
+  AND ${EXAM_QUESTION_NON_ECG_TAG_SQL}
+  AND ${EXAM_QUESTION_STEM_CLINICAL_DEPTH_SQL}
+  AND ${EXAM_QUESTION_OPTIONS_MIN_FOUR_SQL}
+  AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
+  AND ${EXAM_QUESTION_RATIONALE_CLINICAL_DEPTH_SQL}
+  AND ${EXAM_QUESTION_CLINICAL_REASONING_DEPTH_SQL}
+  AND ${EXAM_QUESTION_EXAM_STRATEGY_DEPTH_SQL}
+  AND ${EXAM_QUESTION_TRAP_OR_TAKEAWAY_SQL}
+  AND ${EXAM_QUESTION_DISTRACTOR_TEACHING_PRESENT_SQL}
+  AND ${EXAM_QUESTION_METADATA_COMPLETE_SQL}
+  AND ${EXAM_QUESTION_QUALITY_SCORE_PASSING_IF_PRESENT_SQL}
 `;
 
 /**
@@ -145,6 +230,28 @@ export function examQuestionDraftPublishableStrictSql(): Prisma.Sql {
     OR coalesce(trim(body_system), '') <> ''
     OR coalesce(trim(nclex_client_needs_category), '') <> ''
   )
+  AND exam IN (${Prisma.join([...examQuestionExamPublishAllowlist()])})
+`;
+}
+
+/**
+ * Premium draft → published gate for new/curated content. This deliberately exceeds the legacy strict gate.
+ */
+export function examQuestionDraftPublishablePremiumClinicalSql(): Prisma.Sql {
+  return Prisma.sql`
+  ${EXAM_QUESTION_DRAFT_STATUS_SQL}
+  AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
+  AND ${EXAM_QUESTION_NON_ECG_TAG_SQL}
+  AND ${EXAM_QUESTION_STEM_CLINICAL_DEPTH_SQL}
+  AND ${EXAM_QUESTION_OPTIONS_MIN_FOUR_SQL}
+  AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
+  AND ${EXAM_QUESTION_RATIONALE_CLINICAL_DEPTH_SQL}
+  AND ${EXAM_QUESTION_CLINICAL_REASONING_DEPTH_SQL}
+  AND ${EXAM_QUESTION_EXAM_STRATEGY_DEPTH_SQL}
+  AND ${EXAM_QUESTION_TRAP_OR_TAKEAWAY_SQL}
+  AND ${EXAM_QUESTION_DISTRACTOR_TEACHING_PRESENT_SQL}
+  AND ${EXAM_QUESTION_METADATA_COMPLETE_SQL}
+  AND ${EXAM_QUESTION_QUALITY_SCORE_PASSING_IF_PRESENT_SQL}
   AND exam IN (${Prisma.join([...examQuestionExamPublishAllowlist()])})
 `;
 }
