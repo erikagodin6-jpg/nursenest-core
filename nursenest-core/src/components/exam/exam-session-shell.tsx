@@ -3,11 +3,11 @@
 import type { ReactNode } from "react";
 import { useExamStudyThemeOptional } from "@/components/exam/exam-study-theme-context";
 
-/** CAT vs practice vs post-session review — drives ambient shell styling only (see `learner-exam-shell.css`). */
-export type LearnerExamShellMode = "cat" | "practice" | "review";
+/** CAT vs LOFT vs practice vs post-session review — drives ambient shell styling only (see `learner-exam-shell.css`). */
+export type LearnerExamShellMode = "cat" | "loft" | "practice" | "review";
 
 /**
- * Focused, low-chrome container for timed tests, CAT, and exam-style practice.
+ * Focused, low-chrome container for timed tests, CAT, LOFT simulation, and exam-style practice.
  * Theme primary is used only for thin accents (progress fill, selection rings)—surfaces stay neutral.
  *
  * When `ExamStudyThemeProvider` is present, optional session `data-theme` overrides apply to this shell only.
@@ -19,7 +19,7 @@ export function ExamSessionShell({
   neutralPalette = false,
   /** Larger radius, stronger shadow — reference “full-screen study” chrome. */
   immersive = false,
-  /** Ambient shell personality: immersive CAT exam vs brighter practice vs review (visual/CSS only). */
+  /** Ambient shell personality: adaptive CAT vs linear LOFT simulation vs brighter practice vs review (visual/CSS only). */
   examMode,
 }: {
   children: ReactNode;
