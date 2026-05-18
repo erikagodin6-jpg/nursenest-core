@@ -15,6 +15,8 @@ export function CasperStationRunnerClient() {
   const [stationIndex, setStationIndex] = useState(0);
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [lockedStations, setLockedStations] = useState<Record<string, boolean>>({});
+  const [breakVisible, setBreakVisible] = useState(false);
+  const [activeBreakMinutes, setActiveBreakMinutes] = useState<number | null>(null);
 
   const station = plan.stations[stationIndex];
 
@@ -29,12 +31,22 @@ export function CasperStationRunnerClient() {
   useEffect(() => {
     if (!station) return;
     if (lockedStations[station.id]) return;
+    if (breakVisible) return;
 
     if (remainingSeconds <= 0) {
       setLockedStations((current) => ({
         ...current,
         [station.id]: true,
       }));
+
+      const currentSection = plan.sections.find(
+        (section) => section.key === station.sectionKey,
+      );
+
+      if (currentSection?.breakAfter) {
+        setBreakVisible(true);
+        setActiveBreakMinutes(currentSection.breakAfter.durationMinutes);
+      }
 
       return;
     }
@@ -46,7 +58,7 @@ export function CasperStationRunnerClient() {
     return () => {
       window.clearInterval(interval);
     };
-  }, [lockedStations, remainingSeconds, station]);
+  }, [breakVisible, lockedStations, plan.sections, remainingSeconds, station]);
 
   const isFinalStation = stationIndex === plan.stations.length - 1;
 
@@ -64,6 +76,42 @@ export function CasperStationRunnerClient() {
   }
 
   const stationLocked = Boolean(lockedStations[station.id]);
+
+  if (breakVisible) {
+    return (
+      <section className="rounded-[2rem] border border-[var(--semantic-border-primary)] bg-[var(--semantic-surface-primary)] p-8 text-center lg:p-12">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--semantic-text-secondary)]">
+          Optional break
+        </p>
+
+        <h2 className="mt-4 text-4xl font-semibold tracking-tight text-[var(--semantic-text-primary)]">
+          Pause before the next section.
+        </h2>
+
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[var(--semantic-text-secondary)]">
+          The real Casper assessment includes optional breaks between major portions of the exam. This simulation mirrors that pacing cadence.
+        </p>
+
+        <div className="mt-8 inline-flex rounded-full border border-[var(--semantic-border-primary)] px-6 py-3 text-sm font-semibold text-[var(--semantic-text-secondary)]">
+          Suggested break: {activeBreakMinutes} minutes
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <button
+            type="button"
+            onClick={() => {
+              setBreakVisible(false);
+              setActiveBreakMinutes(null);
+              setStationIndex((current) => current + 1);
+            }}
+            className="rounded-2xl bg-[var(--theme-primary)] px-6 py-4 font-semibold text-white shadow-sm hover:opacity-90"
+          >
+            Continue simulation
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="rounded-[2rem] border border-[var(--semantic-border-primary)] bg-[var(--semantic-surface-primary)] p-8 lg:p-12">
