@@ -2,7 +2,9 @@
 
 import { ATPPathwayModule } from "@/content/pre-nursing/modules/pre-nursing-atp-pathway";
 import { PreNursingAdaptiveCheckpointSection } from "@/components/pre-nursing/pre-nursing-adaptive-checkpoint-section";
+import { PreNursingLessonMiniAssessment } from "@/components/pre-nursing/pre-nursing-lesson-mini-assessment";
 import { PRE_NURSING_ATP_PATHWAY_CHECKPOINT_IDS } from "@/content/pre-nursing/pre-nursing-interactive-checkpoints";
+import { PRE_NURSING_ATP_MINI_ASSESSMENT } from "@/content/pre-nursing/pre-nursing-mini-assessments";
 
 export function ATPPathwayInteractiveModule() {
   return (
@@ -27,6 +29,13 @@ export function ATPPathwayInteractiveModule() {
           "metabolic acidosis",
           "perfusion",
         ]}
+      />
+
+      <PreNursingLessonMiniAssessment
+        title="ATP pathway mastery check"
+        description="Confirm that you can connect oxygen availability, ATP production, lactate, tissue hypoxia, and DKA compensation into one clinical reasoning framework."
+        checkpoints={PRE_NURSING_ATP_MINI_ASSESSMENT}
+        masteryThreshold={80}
       />
     </div>
   );
