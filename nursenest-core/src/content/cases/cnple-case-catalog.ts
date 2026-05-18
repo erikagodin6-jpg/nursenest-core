@@ -6,6 +6,7 @@ import { CNPLE_SAMPLE_CASES } from "@/content/cases/cnple-sample-cases";
 import { CASE_PEDIATRIC_ASTHMA_EXACERBATION } from "@/content/cases/cnple-pediatric-asthma-loft-case";
 import { CASE_PEDIATRIC_FEVER_KAWASAKI } from "@/content/cases/cnple-pediatric-fever-kawasaki-loft-case";
 import { CNPLE_SUPPLEMENTAL_LOFT_CASES } from "@/content/cases/cnple-supplemental-loft-cases";
+import { CASE_SUICIDE_RISK_LONGITUDINAL } from "@/content/cases/cnple-suicide-risk-longitudinal-loft-case";
 
 /**
  * Canonical runtime catalog for CNPLE LOFT cases.
@@ -22,6 +23,7 @@ export const CNPLE_LOFT_CASES: PatientCase[] = [
   CASE_COPD_EXACERBATION_DISCHARGE_SAFETY,
   CASE_HEART_FAILURE_DIURETIC_TITRATION,
   CASE_DIABETES_INSULIN_SICK_DAY_MANAGEMENT,
+  CASE_SUICIDE_RISK_LONGITUDINAL,
 ];
 
 export function findCnpleLoftCase(caseId: string): PatientCase | undefined {
