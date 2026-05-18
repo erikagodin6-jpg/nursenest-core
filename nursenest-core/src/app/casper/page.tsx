@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
+import { CasperFormatOverview } from "@/components/casper/casper-format-overview";
 import { CASPER_FREE_MINI_TEST, listCasperScenarioCategories } from "@/lib/casper/casper-scenarios";
 
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 const features = [
   ["Professionalism analysis", "Structured feedback on accountability, empathy, communication, and judgment."],
   ["Healthcare realism", "Clinical-adjacent dilemmas covering confidentiality, patient safety, teamwork, and equity."],
-  ["Calm simulation design", "A writing-focused experience that does not reuse NCLEX or CAT exam chrome."],
+  ["Casper-aligned pacing", "Practice uses typed and video-response format guidance aligned to the current Acuity Casper structure."],
 ] as const;
 
 export default function CasperLandingPage() {
@@ -57,6 +58,8 @@ export default function CasperLandingPage() {
           </div>
         </aside>
       </section>
+
+      <CasperFormatOverview />
 
       <section className="grid gap-6 lg:grid-cols-3">
         {features.map(([title, body]) => (
