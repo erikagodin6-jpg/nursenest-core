@@ -191,7 +191,7 @@ export default async function RootLayout({
       data-theme={NURSENEST_DEFAULT_THEME}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)]">
+      <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)] [font-family:var(--font-sans)] antialiased [font-synthesis:none] [text-rendering:optimizeLegibility]">
         <Script id="nn-marketing-theme-seed" strategy="beforeInteractive">
           {marketingThemeBeforeInteractiveInlineScript()}
         </Script>
