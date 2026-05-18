@@ -44,4 +44,19 @@ describe("Practice Exam per-option rationale UI", () => {
     assert.ok(runner.includes("isBowtie && bowtiePayload"));
     assert.ok(runner.includes("catMode"));
   });
+
+  it("wires the live linear MCQ runner to per-option rationales after submit", () => {
+    assert.ok(
+      runner.includes("optionTeachingMap"),
+      "practice-test-runner-client.tsx must pass optionTeachingMap into PracticeTestMcqRadiogroupOptions for live MCQ practice review.",
+    );
+    assert.ok(
+      runner.includes("showOptionTeaching"),
+      "practice-test-runner-client.tsx must enable showOptionTeaching after answer commit in linear practice mode.",
+    );
+    assert.ok(
+      runner.includes("linearFeedback?.distractorRationalesMap"),
+      "live per-option rationale wiring must consume stored distractorRationalesMap, not invented client copy.",
+    );
+  });
 });
