@@ -36,7 +36,13 @@ const siteUrl = MARKETING_SITE_ORIGIN || "https://www.nursenest.ca";
 const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
 
-const NURSENEST_LEAF_FAVICON = "/logos/arctic-frost-leaf.svg?v=2026-05-17";
+// IMPORTANT:
+// The old arch favicon damaged brand consistency across tabs/bookmarks.
+// Force all favicon surfaces to use the canonical NurseNest leaf branding.
+const NURSENEST_LEAF_FAVICON = "/logos/arctic-frost-leaf.svg?v=2026-05-18-leaf";
+const NURSENEST_LEAF_PNG_192 = "/icon-192.png?v=2026-05-18-leaf";
+const NURSENEST_LEAF_PNG_512 = "/icon-512.png?v=2026-05-18-leaf";
+const NURSENEST_APPLE_ICON = "/apple-touch-icon.png?v=2026-05-18-leaf";
 
 function navigationIntentBeforeInteractiveInlineScript(): string {
   return `
@@ -80,13 +86,12 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: "/favicon.ico?v=2026-05-17", type: "image/x-icon", sizes: "any" },
       { url: NURSENEST_LEAF_FAVICON, type: "image/svg+xml", sizes: "any" },
-      { url: "/icon-192.png?v=2026-05-17", type: "image/png", sizes: "192x192" },
-      { url: "/icon-512.png?v=2026-05-17", type: "image/png", sizes: "512x512" },
+      { url: NURSENEST_LEAF_PNG_192, type: "image/png", sizes: "192x192" },
+      { url: NURSENEST_LEAF_PNG_512, type: "image/png", sizes: "512x512" },
     ],
-    apple: [{ url: "/apple-touch-icon.png?v=2026-05-17", sizes: "180x180" }],
-    shortcut: [{ url: "/favicon.ico?v=2026-05-17", type: "image/x-icon" }],
+    apple: [{ url: NURSENEST_APPLE_ICON, sizes: "180x180" }],
+    shortcut: [{ url: NURSENEST_LEAF_FAVICON, type: "image/svg+xml" }],
   },
   openGraph: {
     type: "website",
@@ -118,41 +123,3 @@ export const metadata: Metadata = {
 async function getSessionSafe() {
   if (process.env.NN_UI_PREVIEW_MODE === "1") return null;
   if (process.env.NEXT_PHASE === "phase-production-build") return null;
-  const hasSecret = Boolean(
-    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
-      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
-  );
-  if (!hasSecret) return null;
-  try {
-    const { auth } = await import("@/lib/auth");
-    return await auth();
-  } catch {
-    return null;
-  }
-}
-
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const session = await getSessionSafe();
-
-  return (
-    <html lang="en" data-theme={NURSENEST_DEFAULT_THEME} suppressHydrationWarning>
-      <head>
-        <Script
-          id="nn-theme-seed"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: marketingThemeBeforeInteractiveInlineScript() }}
-        />
-        <Script
-          id="nn-nav-intent-seed"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: navigationIntentBeforeInteractiveInlineScript() }}
-        />
-      </head>
-      <body className={dmSans.className}>
-        <AuthSessionProvider session={session}>
-          <AppThemeProvider>{children}</AppThemeProvider>
-        </AuthSessionProvider>
-      </body>
-    </html>
-  );
-}
