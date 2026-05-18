@@ -79,7 +79,7 @@ export function CnpleLongitudinalCaseShell({
 
   const handleOptionSelect = useCallback(
     (optionId: string) => {
-      if (advanceResult) return; // already answered
+      if (advanceResult) return;
       setSelectedOption(optionId);
     },
     [advanceResult],
@@ -93,7 +93,6 @@ export function CnpleLongitudinalCaseShell({
       const result = await onAdvance(selectedOption, dwellMs);
       setAdvanceResult(result);
 
-      // Update meds from step changes
       if (currentStep.step.medicationChanges?.length) {
         setActiveMeds((prev) => applyMedicationChanges(prev, currentStep.step.medicationChanges));
       }
@@ -129,7 +128,6 @@ export function CnpleLongitudinalCaseShell({
   const evolved = currentStep.evolvedState;
   const trajectoryState = currentStep.trajectoryState;
 
-  // Use evolved labs if available; fall back to authored
   const labs: LabResult[] = evolved?.evolvedLabs?.length
     ? evolved.evolvedLabs.map((l) => ({
         test: l.test,
@@ -140,7 +138,6 @@ export function CnpleLongitudinalCaseShell({
       }))
     : buildLabResults(step.diagnosticArtifacts ?? []);
 
-  // Use evolved vitals if available; fall back to authored
   const vitalsForPanel: VitalSign[] = evolved?.evolvedVitals?.length
     ? evolved.evolvedVitals.map((v) => ({
         label: v.label,
@@ -151,8 +148,11 @@ export function CnpleLongitudinalCaseShell({
     : step.vitals.map((v) => ({ label: v.label, value: v.value, unit: v.unit, flag: v.flag }));
 
   return (
-    <div className="cnple-case-shell w-full" data-cnple-case="shell">
-      {/* Case header with trajectory badge */}
+    <div
+      className="cnple-case-shell w-full"
+      data-cnple-case="shell"
+      data-learner-exam-stack="cnple-loft"
+    >
       <CaseProgressHeader
         title={patientCase.title}
         tagline={patientCase.tagline}
@@ -162,17 +162,13 @@ export function CnpleLongitudinalCaseShell({
         stabilityState={trajectoryState?.stabilityState}
       />
 
-      {/* Mobile tab bar */}
       <div className="flex gap-1 border-b px-4 pt-2 lg:hidden" style={{ borderColor: "var(--semantic-border-soft)" }}>
         {(["scenario", "patient", "diagnostics"] as MobileTab[]).map((tab) => (
           <MobileTabButton key={tab} tab={tab} active={mobileTab === tab} onSelect={setMobileTab} />
         ))}
       </div>
 
-      {/* 3-column grid (desktop) / single-panel (mobile) */}
       <div className="mt-4 flex gap-5 lg:grid lg:grid-cols-[17rem_1fr_19rem] lg:items-start lg:gap-6">
-
-        {/* ── LEFT: Patient context ─────────────────────────────────────────── */}
         <aside
           className={`flex flex-col gap-4 ${mobileTab === "patient" ? "block" : "hidden"} lg:flex`}
           data-cnple-panel="patient"
@@ -185,7 +181,6 @@ export function CnpleLongitudinalCaseShell({
             allergies={patientCase.allergies}
             compact={false}
           />
-          {/* Evolved vitals trend summary */}
           {evolved?.evolvedVitals?.length ? (
             <EvolvedVitalsTrendRow vitals={evolved.evolvedVitals} />
           ) : null}
@@ -195,9 +190,6 @@ export function CnpleLongitudinalCaseShell({
                 medications={mergeAdherenceWithMedications(
                   activeMeds,
                   evolved.medicationAdherenceRecords,
-                  // Pass current step's authored medication changes so newly-started
-                  // medications have dose/route/frequency immediately — before activeMeds
-                  // state refreshes via handleContinue().
                   step.medicationChanges,
                 ) as AdherenceMedEntry[]}
               />
@@ -216,12 +208,10 @@ export function CnpleLongitudinalCaseShell({
           </div>
         </aside>
 
-        {/* ── CENTER: Evolving scenario ─────────────────────────────────────── */}
         <main
           className={`flex flex-col gap-5 ${mobileTab === "scenario" ? "block" : "hidden"} lg:flex min-w-0`}
           data-cnple-panel="scenario"
         >
-          {/* Clinical update banner */}
           {step.updateNarrative && (
             <FollowUpUpdateCard
               title={step.heading}
@@ -232,23 +222,19 @@ export function CnpleLongitudinalCaseShell({
             </FollowUpUpdateCard>
           )}
 
-          {/* Patient-reported messages */}
           {evolved?.patientMessages?.map((msg, i) => (
             <PatientMessageCard key={i} message={msg} />
           ))}
 
-          {/* Safety flag banner */}
           {trajectoryState?.activeSafetyFlags?.length ? (
             <SafetyFlagBanner flags={trajectoryState.activeSafetyFlags} />
           ) : null}
 
-          {/* Scenario narrative */}
           <ScenarioNarrativePanel
             text={step.scenarioText}
             clinicalUpdate={step.clinicalUpdate}
           />
 
-          {/* Question */}
           <QuestionPanel
             step={currentStep}
             selectedOption={selectedOption}
@@ -260,17 +246,14 @@ export function CnpleLongitudinalCaseShell({
           />
         </main>
 
-        {/* ── RIGHT: Diagnostics & notes ───────────────────────────────────── */}
         <aside
           className={`flex flex-col gap-4 ${mobileTab === "diagnostics" ? "block" : "hidden"} lg:flex`}
           data-cnple-panel="diagnostics"
         >
-          {/* Delayed consequence alerts */}
           {evolved?.delayedConsequences?.map((dc, i) => (
             <DelayedConsequenceAlert key={i} consequence={dc} />
           ))}
 
-          {/* Lab trend table — uses evolved labs if available */}
           {labs.length > 0 && (
             <EvolvedLabTrendPanel
               labs={labs}
@@ -301,8 +284,6 @@ export function CnpleLongitudinalCaseShell({
   );
 }
 
-// ── Case progress header ──────────────────────────────────────────────────────
-
 function CaseProgressHeader({
   title,
   tagline,
@@ -328,7 +309,6 @@ function CaseProgressHeader({
       }}
       data-cnple-case="header"
     >
-      {/* Top accent line */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-0.5"
         style={{
@@ -372,7 +352,6 @@ function CaseProgressHeader({
           </p>
         </div>
       </div>
-      {/* Progress bar */}
       <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full" style={{ background: "var(--semantic-border-soft)" }}>
         <div
           className="h-full rounded-full transition-[width] duration-500 ease-out"
@@ -385,8 +364,6 @@ function CaseProgressHeader({
     </div>
   );
 }
-
-// ── Scenario narrative panel ──────────────────────────────────────────────────
 
 function ScenarioNarrativePanel({
   text,
@@ -436,8 +413,6 @@ function ScenarioNarrativePanel({
   );
 }
 
-// ── Question panel ────────────────────────────────────────────────────────────
-
 function QuestionPanel({
   step,
   selectedOption,
@@ -464,7 +439,6 @@ function QuestionPanel({
       style={{ borderColor: "var(--semantic-border-soft)", background: "var(--semantic-surface)" }}
       data-cnple-case="question-panel"
     >
-      {/* Stem */}
       <p className="mb-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-text-muted)" }}>
         Clinical judgment question
       </p>
@@ -472,26 +446,20 @@ function QuestionPanel({
         {question.stem}
       </p>
 
-      {/* Options */}
       <div className="space-y-2.5" role="radiogroup" aria-label="Answer options">
         {question.options.map((opt) => {
           const isChosen = selectedOption === opt.id;
           const isCorrect = answered && opt.id === advanceResult?.correctOptionId;
           const isWrong = answered && isChosen && !advanceResult?.isCorrect;
           const revealCorrect = answered && step.mode === "PRACTICE";
-
-          let borderColor = "var(--semantic-border-soft)";
-          let bg = "var(--semantic-surface)";
-          if (revealCorrect && isCorrect) {
-            borderColor = "var(--semantic-success)";
-            bg = "color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface))";
-          } else if (isWrong) {
-            borderColor = "var(--semantic-danger)";
-            bg = "color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface))";
-          } else if (!answered && isChosen) {
-            borderColor = "var(--semantic-brand)";
-            bg = "color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface))";
-          }
+          const state = revealCorrect && isCorrect ? "correct" : isWrong ? "incorrect" : isChosen ? "selected" : "default";
+          const accent = state === "correct"
+            ? "var(--semantic-success)"
+            : state === "incorrect"
+              ? "var(--semantic-danger)"
+              : state === "selected"
+                ? "var(--semantic-brand)"
+                : "transparent";
 
           return (
             <button
@@ -501,31 +469,63 @@ function QuestionPanel({
               aria-checked={isChosen}
               disabled={answered}
               onClick={() => onOptionSelect(opt.id)}
-              className="flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-left transition-[border-color,background] disabled:cursor-default"
-              style={{ borderColor, background: bg }}
+              className="flex w-full items-start gap-3 rounded-xl border px-4 py-3 text-left transition-colors disabled:cursor-default"
+              data-cnple-answer-option=""
+              data-state={state}
+              data-selected={isChosen ? "true" : undefined}
+              data-correct={state === "correct" ? "true" : undefined}
+              data-incorrect={state === "incorrect" ? "true" : undefined}
+              style={{
+                borderColor: state === "correct"
+                  ? "color-mix(in srgb, var(--semantic-success) 45%, var(--semantic-border-soft))"
+                  : state === "incorrect"
+                    ? "color-mix(in srgb, var(--semantic-danger) 45%, var(--semantic-border-soft))"
+                    : state === "selected"
+                      ? "color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft))"
+                      : "var(--semantic-border-soft)",
+                borderStyle: "solid",
+                borderWidth: "1.5px",
+                background: state === "correct"
+                  ? "color-mix(in srgb, var(--semantic-success) 8%, var(--semantic-surface))"
+                  : state === "incorrect"
+                    ? "color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface))"
+                    : state === "selected"
+                      ? "color-mix(in srgb, var(--semantic-brand) 7%, var(--semantic-surface))"
+                      : "var(--semantic-surface)",
+                boxShadow: accent === "transparent" ? "none" : `inset 4px 0 0 ${accent}`,
+                transform: "none",
+                opacity: answered && state === "default" ? 0.48 : 1,
+              }}
             >
               <span
-                className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[11px] font-bold"
+                className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-[5px] border text-[11px] font-bold"
                 style={{
-                  borderColor: revealCorrect && isCorrect
-                    ? "var(--semantic-success)"
-                    : isWrong
-                      ? "var(--semantic-danger)"
-                      : isChosen
-                        ? "var(--semantic-brand)"
+                  borderColor: state === "correct"
+                    ? "color-mix(in srgb, var(--semantic-success) 35%, var(--semantic-border-soft))"
+                    : state === "incorrect"
+                      ? "color-mix(in srgb, var(--semantic-danger) 35%, var(--semantic-border-soft))"
+                      : state === "selected"
+                        ? "color-mix(in srgb, var(--semantic-brand) 35%, var(--semantic-border-soft))"
                         : "var(--semantic-border-soft)",
-                  color: revealCorrect && isCorrect
+                  background: state === "correct"
+                    ? "color-mix(in srgb, var(--semantic-success) 12%, var(--semantic-surface))"
+                    : state === "incorrect"
+                      ? "color-mix(in srgb, var(--semantic-danger) 12%, var(--semantic-surface))"
+                      : state === "selected"
+                        ? "color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-surface))"
+                        : "var(--semantic-surface)",
+                  color: state === "correct"
                     ? "var(--semantic-success)"
-                    : isWrong
+                    : state === "incorrect"
                       ? "var(--semantic-danger)"
-                      : isChosen
+                      : state === "selected"
                         ? "var(--semantic-brand)"
                         : "var(--semantic-text-muted)",
                 }}
               >
                 {opt.id}
               </span>
-              <span className="text-[13px] leading-relaxed" style={{ color: "var(--semantic-text-primary)" }}>
+              <span className="text-[13px] leading-[1.46]" style={{ color: "var(--semantic-text-primary)" }}>
                 {opt.label}
               </span>
             </button>
@@ -533,19 +533,17 @@ function QuestionPanel({
         })}
       </div>
 
-      {/* Consequence & rationale (practice mode reveal) */}
       {answered && step.mode === "PRACTICE" && (
         <RationaleReveal result={advanceResult} />
       )}
       {answered && step.mode === "SIMULATION" && (
-        <div className="mt-4 rounded-xl border px-4 py-3" style={{ borderColor: "var(--semantic-border-soft)", background: "color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface))" }}>
+        <div className="mt-4 rounded-xl border px-4 py-3" style={{ borderColor: "var(--semantic-border-soft)", background: "var(--semantic-surface)" }}>
           <p className="text-[13px]" style={{ color: "var(--semantic-text-secondary)" }}>
             Simulation mode — rationale and correct answer will be revealed in the session review.
           </p>
         </div>
       )}
 
-      {/* Action buttons */}
       <div className="mt-5 flex justify-end gap-3">
         {!answered && (
           <button
@@ -584,8 +582,6 @@ function QuestionPanel({
   );
 }
 
-// ── Rationale reveal ──────────────────────────────────────────────────────────
-
 function RationaleReveal({ result }: { result: CaseStepAdvanceResult }) {
   const trajectoryColor =
     result.trajectory === "optimal"
@@ -598,7 +594,6 @@ function RationaleReveal({ result }: { result: CaseStepAdvanceResult }) {
 
   return (
     <div className="mt-4 space-y-3">
-      {/* Consequence */}
       <div
         className="rounded-xl border-l-4 p-4"
         style={{
@@ -614,9 +609,8 @@ function RationaleReveal({ result }: { result: CaseStepAdvanceResult }) {
         </p>
       </div>
 
-      {/* Rationale */}
       {result.rationale && (
-        <div className="rounded-xl border p-4" style={{ borderColor: "var(--semantic-border-soft)", background: "color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface))" }}>
+        <div className="rounded-xl border p-4" style={{ borderColor: "var(--semantic-border-soft)", background: "var(--semantic-surface)" }}>
           <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-info)" }}>
             Rationale
           </p>
@@ -626,7 +620,6 @@ function RationaleReveal({ result }: { result: CaseStepAdvanceResult }) {
         </div>
       )}
 
-      {/* Why wrong */}
       {result.whyWrong && (
         <div className="rounded-xl border p-4" style={{ borderColor: "color-mix(in srgb, var(--semantic-danger) 20%, var(--semantic-border-soft))", background: "color-mix(in srgb, var(--semantic-danger) 5%, var(--semantic-surface))" }}>
           <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--semantic-danger)" }}>
@@ -640,8 +633,6 @@ function RationaleReveal({ result }: { result: CaseStepAdvanceResult }) {
     </div>
   );
 }
-
-// ── Clinical notes right panel ────────────────────────────────────────────────
 
 function ClinicalNotesPanel({ judmentFocus, domain }: { judmentFocus: string; domain: string }) {
   return (
@@ -683,8 +674,6 @@ function EmptyDiagnosticsPanel() {
   );
 }
 
-// ── Mobile tab button ─────────────────────────────────────────────────────────
-
 function MobileTabButton({
   tab,
   active,
@@ -714,8 +703,6 @@ function MobileTabButton({
     </button>
   );
 }
-
-// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function trajectoryToTimelineType(
   direction: string,
@@ -755,9 +742,6 @@ function buildLabResults(
   return labs;
 }
 
-// ── New evolution UI sub-components ──────────────────────────────────────────
-
-/** Stability badge shown in the case header. */
 function StabilityBadge({ state }: { state: PatientStabilityState }) {
   const config: Record<PatientStabilityState, { label: string; color: string; bg: string }> = {
     improving:    { label: "Condition Improving",    color: "var(--semantic-success)",           bg: "color-mix(in srgb, var(--semantic-success) 12%, transparent)" },
@@ -777,7 +761,6 @@ function StabilityBadge({ state }: { state: PatientStabilityState }) {
   );
 }
 
-/** Evolved vitals trend summary — compact row of vital trends. */
 function EvolvedVitalsTrendRow({ vitals }: { vitals: EvolvedVitalReading[] }) {
   const trending = vitals.filter((v) => v.trend && v.trend !== "stable");
   if (trending.length === 0) return null;
@@ -802,7 +785,6 @@ function EvolvedVitalsTrendRow({ vitals }: { vitals: EvolvedVitalReading[] }) {
   );
 }
 
-/** Patient-reported symptom message card. */
 function PatientMessageCard({ message }: { message: { type: string; text: string } }) {
   const msgColor =
     message.type === "symptom_improvement" ? "var(--semantic-success)"
@@ -828,7 +810,6 @@ function PatientMessageCard({ message }: { message: { type: string; text: string
   );
 }
 
-/** Active safety flag banner — shown above scenario text when flags are present. */
 function SafetyFlagBanner({ flags }: { flags: Array<{ code: string; label: string; severity: "warning" | "critical" }> }) {
   const hasCritical = flags.some((f) => f.severity === "critical");
   const borderColor = hasCritical ? "var(--semantic-danger)" : "var(--semantic-warning-contrast)";
@@ -855,7 +836,6 @@ function SafetyFlagBanner({ flags }: { flags: Array<{ code: string; label: strin
   );
 }
 
-/** Delayed consequence alert — surfaces prior harmful decision consequences. */
 function DelayedConsequenceAlert({
   consequence,
 }: {
@@ -884,7 +864,6 @@ function DelayedConsequenceAlert({
   );
 }
 
-/** Lab trend table with evolution arrows. */
 function EvolvedLabTrendPanel({
   labs,
   evolvedLabs,
@@ -955,7 +934,6 @@ function EvolvedLabTrendPanel({
   );
 }
 
-/** Trend direction arrow. */
 function TrendArrow({ trend }: { trend: "improving" | "worsening" | "stable" }) {
   if (trend === "improving") return (
     <span className="text-[11px] font-bold" style={{ color: "var(--semantic-success)" }} aria-label="improving">↑</span>
