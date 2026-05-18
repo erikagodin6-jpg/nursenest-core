@@ -4,7 +4,6 @@
  * rendering updated pathway lessons does not depend on ContentItem sync.
  */
 import { randomUUID } from "node:crypto";
-import { Suspense } from "react";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
@@ -15,7 +14,10 @@ import { PremiumLessonShell } from "@/components/student/premium-lesson-shell";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
-import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/entitlement-logging";
+import {
+  logBlockedAccess,
+  logEntitlementMismatch,
+} from "@/lib/entitlements/entitlement-logging";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import {
   accessScopeForLessonCatalogPages,
@@ -34,13 +36,13 @@ import {
   legacyContentMapLessonTitle,
 } from "@/lib/lessons/legacy-content-map-lessons";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import { localizeBreadcrumbCrumbs } from "@/lib/seo/breadcrumb-i18n";
-import { learnerPathwayLessonBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-lesson-body";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
-import { classifyContentItemLesson, classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
+import {
+  classifyContentItemLesson,
+  classifyPathwayLesson,
+} from "@/lib/content-quality/classify-lesson";
 import { countTotalWordsInLessonSections } from "@/lib/lessons/pathway-lesson-premium";
 import { assertPathwayLessonNoLegacyFallbackWithSubstantiveIncoming } from "@/lib/lessons/pathway-lesson-render-invariants";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -59,7 +61,10 @@ import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entit
 import { computePathwayLessonLinkedLearningSignals } from "@/lib/lessons/pathway-lesson-linked-learning-assets";
 import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
 import { PathwayLessonNextStepsCards } from "@/components/lessons/pathway-lesson-next-steps-cards";
-import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import {
+  pathwayHubAppFlashcardsHref,
+  pathwayHubAppQuestionsHref,
+} from "@/lib/marketing/pathway-hub-app-questions-href";
 import { resolveQuizEmbedQuestionsForLessonSlug } from "@/lib/lessons/lesson-quiz-embeds";
 import { PathwayLessonQuizEmbedSection } from "@/components/lessons/pathway-lesson-quiz-embed-section";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
@@ -76,15 +81,18 @@ import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import { lessonTopicMatchesTopPriority } from "@/lib/coach/study-coach-lesson-priority";
 import { buildPathwayLessonCoachExcerpt } from "@/lib/coach/build-pathway-lesson-coach-excerpt";
-import {
-  loadPathwayLessonProgressForSlug,
-  type PathwayLessonProgressStatus,
-} from "@/lib/lessons/pathway-lesson-progress";
+import { loadPathwayLessonProgressForSlug } from "@/lib/lessons/pathway-lesson-progress";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
-import { extractExamFocusHighYieldLines, extractSecondaryExamContextLines } from "@/lib/lessons/pathway-lesson-study-extract";
+import {
+  extractExamFocusHighYieldLines,
+  extractSecondaryExamContextLines,
+} from "@/lib/lessons/pathway-lesson-study-extract";
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
 import { LessonSectionNoteInline } from "@/components/lessons/lesson-section-note-inline";
-import { LessonSectionCard, lessonSectionSurface } from "@/components/lessons/lesson-section-card";
+import {
+  LessonSectionCard,
+  lessonSectionSurface,
+} from "@/components/lessons/lesson-section-card";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
@@ -106,7 +114,10 @@ import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentat
 import { resolvePublicLessonTitle } from "@/lib/public-display-copy";
 import { shouldRenderPathwayLessonSection } from "@/lib/lessons/lesson-section-page-layout";
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
-import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
+import {
+  PathwayLessonCommonTrapsStrip,
+  PathwayLessonMemoryAnchorStrip,
+} from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 import { isLessonRetentionSectionKind } from "@/lib/lessons/lesson-retention-section";
 import { LessonStickyReviewDock } from "@/components/lessons/lesson-sticky-review-dock";
@@ -116,10 +127,16 @@ import {
 } from "@/lib/lessons/lesson-bank-assessment-selection";
 import { PathwayLessonInteractiveModules } from "@/components/lessons/pathway-lesson-interactive-modules";
 import { getLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
-import { loadPathwayLessonAdjacent, mapPathwayLessonAdjacentToAppHrefs } from "@/lib/lessons/pathway-lesson-adjacent";
+import {
+  loadPathwayLessonAdjacent,
+  mapPathwayLessonAdjacentToAppHrefs,
+} from "@/lib/lessons/pathway-lesson-adjacent";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
-import { hasRenderableLessonFigure, hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
+import {
+  hasRenderableLessonFigure,
+  hasRenderableLessonImageUrl,
+} from "@/lib/lessons/has-renderable-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 import { AppLessonRelatedReading } from "@/components/linking/app-lesson-related-reading";
 import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
@@ -127,17 +144,6 @@ import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesso
 
 /** Bust data cache after admin publishes pathway or ContentItem lessons (see admin PATCH + revalidatePath). */
 export const dynamic = "force-dynamic";
-
-function pathwayLessonProgressRailSummary(status: PathwayLessonProgressStatus): string {
-  switch (status) {
-    case "completed":
-      return "Marked complete — revisit anytime for retention.";
-    case "in_progress":
-      return "In progress — continue sections below.";
-    default:
-      return "Not started — use Contents to jump in.";
-  }
-}
 
 function LessonBody({
   content,
@@ -150,8 +156,10 @@ function LessonBody({
     <aside
       className="rounded-xl border px-4 py-3 text-sm leading-relaxed"
       style={{
-        borderColor: "color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft))",
-        background: "color-mix(in srgb, var(--semantic-panel-cool) 45%, transparent)",
+        borderColor:
+          "color-mix(in srgb, var(--semantic-info) 28%, var(--semantic-border-soft))",
+        background:
+          "color-mix(in srgb, var(--semantic-panel-cool) 45%, transparent)",
         color: "var(--semantic-text-secondary)",
       }}
     >
@@ -179,7 +187,14 @@ function LessonBody({
               }
               return null;
             };
-            const textBlock = pickString("text", "body", "markdown", "md", "html", "content");
+            const textBlock = pickString(
+              "text",
+              "body",
+              "markdown",
+              "md",
+              "html",
+              "content",
+            );
             if (textBlock) {
               return (
                 <p key={i} className="whitespace-pre-wrap">
@@ -187,7 +202,10 @@ function LessonBody({
                 </p>
               );
             }
-            if (Array.isArray(o.items) && o.items.every((x) => typeof x === "string")) {
+            if (
+              Array.isArray(o.items) &&
+              o.items.every((x) => typeof x === "string")
+            ) {
               return (
                 <ul key={i} className="list-disc space-y-1 pl-5">
                   {(o.items as string[]).map((line, j) => (
@@ -204,19 +222,35 @@ function LessonBody({
     );
   }
   if (typeof content === "string") {
-    return <div className="mt-6 whitespace-pre-wrap text-sm leading-relaxed">{content}</div>;
+    return (
+      <div className="mt-6 whitespace-pre-wrap text-sm leading-relaxed">
+        {content}
+      </div>
+    );
   }
   if (content && typeof content === "object" && !Array.isArray(content)) {
     const o = content as Record<string, unknown>;
-    const one = typeof o.text === "string" ? o.text : typeof o.body === "string" ? o.body : null;
+    const one =
+      typeof o.text === "string"
+        ? o.text
+        : typeof o.body === "string"
+          ? o.body
+          : null;
     if (one?.trim()) {
-      return <div className="mt-6 whitespace-pre-wrap text-sm leading-relaxed">{one}</div>;
+      return (
+        <div className="mt-6 whitespace-pre-wrap text-sm leading-relaxed">
+          {one}
+        </div>
+      );
     }
     return <div className="mt-6">{unsupported}</div>;
   }
   if (content == null) {
     return (
-      <p className="mt-6 text-sm leading-relaxed" style={{ color: "var(--semantic-text-muted)" }}>
+      <p
+        className="mt-6 text-sm leading-relaxed"
+        style={{ color: "var(--semantic-text-muted)" }}
+      >
         {t("learner.lessons.detail.contentLessonSparse")}
       </p>
     );
@@ -228,21 +262,31 @@ type Props = { params: Promise<{ id: string }> };
 
 async function LessonDetailPageInner({ params }: Props) {
   const { id } = await params;
-  const session = await getProtectedRouteSession("(student).app.(learner).lessons.[id]");
+  const session = await getProtectedRouteSession(
+    "(student).app.(learner).lessons.[id]",
+  );
   const userId = (session?.user as { id?: string })?.id ?? "";
   const [entitlementResult, staff] = await Promise.all([
     resolveEntitlementForPage(userId),
     getStaffSession().catch(() => null),
   ]);
-  const lessonAccess = accessScopeForLessonCatalogPages(entitlementResult, staff);
-  const { t, messages, fallbackMessages } = await getLearnerMarketingBundle();
+  const lessonAccess = accessScopeForLessonCatalogPages(
+    entitlementResult,
+    staff,
+  );
+  const { t } = await getLearnerMarketingBundle();
   const studySettings = await loadStudySettings(userId);
 
   if (lessonAccess === "error") {
     return (
       <div className="space-y-4">
-        <p className="text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
-        <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
+        <p className="text-sm text-muted">
+          {t("learner.entitlement.verifyFailed")}
+        </p>
+        <Link
+          className="text-sm font-semibold text-primary underline"
+          href="/app/lessons"
+        >
           {t("learner.lessons.detail.backToLessons")}
         </Link>
       </div>
@@ -252,7 +296,9 @@ async function LessonDetailPageInner({ params }: Props) {
   if (!lessonAccess.hasAccess) {
     return (
       <div className="space-y-4">
-        <p className="text-sm text-muted">{t("learner.lessons.detail.subscriberRequired")}</p>
+        <p className="text-sm text-muted">
+          {t("learner.lessons.detail.subscriberRequired")}
+        </p>
         <SubscriptionPaywall context="lessons" />
       </div>
     );
@@ -267,34 +313,48 @@ async function LessonDetailPageInner({ params }: Props) {
   let learnerPath: string | null = null;
   if (userId) {
     const lpRow = await withDatabaseFallback(
-      () => prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }),
+      () =>
+        prisma.user.findUnique({
+          where: { id: userId },
+          select: { learnerPath: true },
+        }),
       null,
     );
     learnerPath = lpRow?.learnerPath ?? null;
   }
 
-  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-pathways-catalog");
+  const { getExamPathwayById } =
+    await import("@/lib/exam-pathways/exam-pathways-catalog");
 
   const marketingLocale = await getMarketingLocaleForDefaultRoute();
 
   const resolved = await withDatabaseFallback(async () => {
     const learnerPathRow = userId
-      ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
+      ? await prisma.user.findUnique({
+          where: { id: userId },
+          select: { learnerPath: true },
+        })
       : null;
     const learnerPath = learnerPathRow?.learnerPath ?? null;
 
     const pathwayLessonReadOmit = await pathwayLessonReadOmitArgs();
     // Option B: pathway lesson detail body comes from `pathway_lessons` only — ContentItem is legacy app lessons + redirect when tagged.
-    const pwRow = await prisma.pathwayLesson.findUnique({ ...pathwayLessonReadOmit, where: { id } });
+    const pwRow = await prisma.pathwayLesson.findUnique({
+      ...pathwayLessonReadOmit,
+      where: { id },
+    });
     if (pwRow) {
-      const pathwayResolution = await resolveAppSubscriberPathwayLessonForDetail({
-        entitlement,
-        learnerPath,
-        marketingLocale,
-        pwRow,
-      });
-      if (pathwayResolution.kind === "out_of_plan") return { kind: "out_of_plan" as const };
-      if (pathwayResolution.kind === "not_found") return { kind: "not_found" as const };
+      const pathwayResolution =
+        await resolveAppSubscriberPathwayLessonForDetail({
+          entitlement,
+          learnerPath,
+          marketingLocale,
+          pwRow,
+        });
+      if (pathwayResolution.kind === "out_of_plan")
+        return { kind: "out_of_plan" as const };
+      if (pathwayResolution.kind === "not_found")
+        return { kind: "not_found" as const };
       return {
         kind: "pathway_ok" as const,
         record: pathwayResolution.record,
@@ -308,7 +368,9 @@ async function LessonDetailPageInner({ params }: Props) {
     });
     if (contentLesson) {
       const row = await prisma.contentItem.findFirst({
-        where: { AND: [{ id }, { type: "lesson" }, lessonAccessWhere(entitlement)] },
+        where: {
+          AND: [{ id }, { type: "lesson" }, lessonAccessWhere(entitlement)],
+        },
         select: {
           id: true,
           title: true,
@@ -321,7 +383,9 @@ async function LessonDetailPageInner({ params }: Props) {
         },
       });
       if (!row) return { kind: "out_of_plan" as const };
-      const linkedPathwayLessonId = pathwayLessonIdFromContentItemTags(row.tags);
+      const linkedPathwayLessonId = pathwayLessonIdFromContentItemTags(
+        row.tags,
+      );
       if (linkedPathwayLessonId) {
         permanentRedirect(`/app/lessons/${linkedPathwayLessonId}`);
       }
@@ -338,11 +402,17 @@ async function LessonDetailPageInner({ params }: Props) {
 
   let resolvedLesson = resolved;
   if (resolvedLesson === null) {
-    safeServerLog("page_lesson_detail", "db_unavailable_attempting_legacy_only", { id });
+    safeServerLog(
+      "page_lesson_detail",
+      "db_unavailable_attempting_legacy_only",
+      { id },
+    );
     const legacyLesson = await getLegacyContentMapLessonById(id);
     if (!legacyLesson) {
       resolvedLesson = { kind: "not_found" as const };
-    } else if (!canAccessLegacyContentMapLesson(entitlement, id, legacyLesson)) {
+    } else if (
+      !canAccessLegacyContentMapLesson(entitlement, id, legacyLesson)
+    ) {
       resolvedLesson = { kind: "out_of_plan" as const };
     } else {
       resolvedLesson = { kind: "legacy_ok" as const, lesson: legacyLesson };
@@ -385,8 +455,13 @@ async function LessonDetailPageInner({ params }: Props) {
     }
     return (
       <div className="space-y-4">
-        <p className="text-sm text-muted">{t("learner.lessons.detail.outOfPlan")}</p>
-        <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
+        <p className="text-sm text-muted">
+          {t("learner.lessons.detail.outOfPlan")}
+        </p>
+        <Link
+          className="text-sm font-semibold text-primary underline"
+          href="/app/lessons"
+        >
           {t("learner.lessons.detail.backToLessons")}
         </Link>
       </div>
@@ -394,22 +469,32 @@ async function LessonDetailPageInner({ params }: Props) {
   }
 
   if (resolvedLesson.kind === "legacy_ok") {
-    const title = cleanLessonTitleForDisplay(legacyContentMapLessonTitle(resolvedLesson.lesson, id));
+    const title = cleanLessonTitleForDisplay(
+      legacyContentMapLessonTitle(resolvedLesson.lesson, id),
+    );
     const anchorNorm = normalizeTopicKey(title);
     let legacyContinue = null;
     if (userId) {
       try {
-        legacyContinue = await loadLessonContinueStudyNext(userId, entitlement, learnerPath, {
-          variant: "legacy",
-          lessonId: id,
-          anchorNorm,
-          topicCode: null,
-        });
+        legacyContinue = await loadLessonContinueStudyNext(
+          userId,
+          entitlement,
+          learnerPath,
+          {
+            variant: "legacy",
+            lessonId: id,
+            anchorNorm,
+            topicCode: null,
+          },
+        );
       } catch {
         legacyContinue = null;
       }
     }
-    const legacyPathway = learnerPath?.trim() && getExamPathwayById(learnerPath.trim()) ? learnerPath.trim() : null;
+    const legacyPathway =
+      learnerPath?.trim() && getExamPathwayById(learnerPath.trim())
+        ? learnerPath.trim()
+        : null;
     const legacyQuestionBankHref = legacyPathway
       ? pathwayHubAppQuestionsHref(legacyPathway)
       : "/app/account/study-preferences";
@@ -446,7 +531,10 @@ async function LessonDetailPageInner({ params }: Props) {
             <CoachLessonHelper lessonTitle={title} topic={title} />
           )}
           <LessonContinueStudyNextBlock bundle={legacyContinue} />
-          <div className="mt-10 flex flex-wrap gap-3 border-t pt-6" style={{ borderColor: "var(--border-subtle)" }}>
+          <div
+            className="mt-10 flex flex-wrap gap-3 border-t pt-6"
+            style={{ borderColor: "var(--border-subtle)" }}
+          >
             <Link
               href={legacyQuestionBankHref}
               className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
@@ -457,7 +545,11 @@ async function LessonDetailPageInner({ params }: Props) {
             <Link
               href="/app/practice-tests?startMode=practice_exam"
               className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
-              style={{ borderColor: "var(--border-subtle)", color: "var(--semantic-text-secondary)", background: "var(--bg-card)" }}
+              style={{
+                borderColor: "var(--border-subtle)",
+                color: "var(--semantic-text-secondary)",
+                background: "var(--bg-card)",
+              }}
             >
               {t("learner.lessons.detail.ctaTimedExam")}
             </Link>
@@ -507,8 +599,13 @@ async function LessonDetailPageInner({ params }: Props) {
     const pathway = getExamPathwayById(pathwayId);
     const tier = entitlement.tier as TierCode | null;
     const lessonViewerTier =
-      pathway != null ? contentTierForPathwayLessonRender(pathway, tier) : (tier ?? undefined);
-    const lessonMeasurementSystem = pathway != null ? getMeasurementSystemForCountry(pathway.countryCode) : null;
+      pathway != null
+        ? contentTierForPathwayLessonRender(pathway, tier)
+        : (tier ?? undefined);
+    const lessonMeasurementSystem =
+      pathway != null
+        ? getMeasurementSystemForCountry(pathway.countryCode)
+        : null;
 
     const omitHy = new Set(record.omitHighYieldSectionIds ?? []);
     const displaySections = sortPathwayLessonSectionsForClinicalDisplay(
@@ -518,13 +615,19 @@ async function LessonDetailPageInner({ params }: Props) {
         section,
         resolvedBodyText:
           pathway != null
-            ? pathwayLessonPremiumSectionBodyText(section, pathway.id, pathway.countryCode)
+            ? pathwayLessonPremiumSectionBodyText(
+                section,
+                pathway.id,
+                pathway.countryCode,
+              )
             : typeof section.body === "string"
               ? section.body
               : "",
         viewerTier: lessonViewerTier,
         measurementSystem: lessonMeasurementSystem ?? undefined,
-        linkedNextStepsUsesCardRail: Boolean(pathway && section.kind === "related_next_steps"),
+        linkedNextStepsUsesCardRail: Boolean(
+          pathway && section.kind === "related_next_steps",
+        ),
       }),
     );
     if (displaySections.length === 0) {
@@ -535,9 +638,14 @@ async function LessonDetailPageInner({ params }: Props) {
       });
       return <AppLessonUnavailable t={t} />;
     }
-    const retentionSections = displaySections.filter((section) => isLessonRetentionSectionKind(section.kind ?? null));
-    const learningSections = displaySections.filter((section) => !isLessonRetentionSectionKind(section.kind ?? null));
-    const articleSections = learningSections.length > 0 ? learningSections : displaySections;
+    const retentionSections = displaySections.filter((section) =>
+      isLessonRetentionSectionKind(section.kind ?? null),
+    );
+    const learningSections = displaySections.filter(
+      (section) => !isLessonRetentionSectionKind(section.kind ?? null),
+    );
+    const articleSections =
+      learningSections.length > 0 ? learningSections : displaySections;
     const editorialRhythmIndexBySectionId = new Map<string, number>();
     {
       let editorialRhythmCounter = 0;
@@ -560,7 +668,11 @@ async function LessonDetailPageInner({ params }: Props) {
         entitlement,
         countryCode: pathway.countryCode,
         ids: combinedExplicitIds,
-        logContext: { pathwayId, lessonSlug: record.slug, side: "study_loop_combined" },
+        logContext: {
+          pathwayId,
+          lessonSlug: record.slug,
+          side: "study_loop_combined",
+        },
       });
       explicitCombinedLoad = {
         items: resolved.items,
@@ -573,7 +685,8 @@ async function LessonDetailPageInner({ params }: Props) {
       hasPathway: Boolean(pathway),
       lessonStudyLoopEnabled: studySettings.lessonStudyLoopEnabled,
       enablePrePostQuizzes: studySettings.enablePrePostQuizzes,
-      resolvedCombinedExplicitItemCount: explicitCombinedLoad?.items.length ?? 0,
+      resolvedCombinedExplicitItemCount:
+        explicitCombinedLoad?.items.length ?? 0,
     });
 
     const bankLoopPackPromise =
@@ -621,70 +734,103 @@ async function LessonDetailPageInner({ params }: Props) {
       record.localeMeta?.requestedContentLocale?.trim() ||
       marketingLocale;
 
-    const pathwayAdjacentPromise = loadPathwayLessonAdjacent(pathwayId, record.slug, pathwayLessonLocale).catch(() => ({
+    const pathwayAdjacentPromise = loadPathwayLessonAdjacent(
+      pathwayId,
+      record.slug,
+      pathwayLessonLocale,
+    ).catch(() => ({
       prev: null,
       next: null,
     }));
 
     lessonsPerfMark("personalization_start", { route: "app_lessons_detail" });
-    const [relatedQuestionStems, initialProgress, pathwayStudySnap, bankLoopPack, bankAssessments, pathwayAdjacentSlugs] =
-      await Promise.all([
-        pathway != null
-          ? loadRelatedExamQuestionStemsForPathwayLesson({
-              pathway,
-              lessonSlug: record.slug,
-              lessonTitle: record.title,
-              lessonTopic: record.topic,
-              lessonTopicSlug: record.topicSlug,
-              bodySystem: record.bodySystem,
-            })
-          : Promise.resolve([]),
-        userId
-          ? loadPathwayLessonProgressForSlug(userId, pathwayId, record.slug).catch(() => "not_started" as const)
-          : Promise.resolve("not_started" as const),
-        userId
-          ? buildLearnerStudySnapshot(userId, entitlement, learnerPath).catch(() => null)
-          : Promise.resolve(null),
-        bankLoopPackPromise,
-        bankAssessmentsPromise,
-        pathwayAdjacentPromise,
-      ]);
+    const [
+      relatedQuestionStems,
+      initialProgress,
+      pathwayStudySnap,
+      bankLoopPack,
+      bankAssessments,
+      pathwayAdjacentSlugs,
+    ] = await Promise.all([
+      pathway != null
+        ? loadRelatedExamQuestionStemsForPathwayLesson({
+            pathway,
+            lessonSlug: record.slug,
+            lessonTitle: record.title,
+            lessonTopic: record.topic,
+            lessonTopicSlug: record.topicSlug,
+            bodySystem: record.bodySystem,
+          })
+        : Promise.resolve([]),
+      userId
+        ? loadPathwayLessonProgressForSlug(
+            userId,
+            pathwayId,
+            record.slug,
+          ).catch(() => "not_started" as const)
+        : Promise.resolve("not_started" as const),
+      userId
+        ? buildLearnerStudySnapshot(userId, entitlement, learnerPath).catch(
+            () => null,
+          )
+        : Promise.resolve(null),
+      bankLoopPackPromise,
+      bankAssessmentsPromise,
+      pathwayAdjacentPromise,
+    ]);
     lessonsPerfMark("personalization_end", { route: "app_lessons_detail" });
-    const studyNextHint =
-      Boolean(
-        pathwayStudySnap &&
-          record.topicSlug &&
-          lessonTopicMatchesTopPriority(record.topicSlug, pathwayStudySnap),
-      );
+    const studyNextHint = Boolean(
+      pathwayStudySnap &&
+      record.topicSlug &&
+      lessonTopicMatchesTopPriority(record.topicSlug, pathwayStudySnap),
+    );
     const pathwayCoachExcerpt = buildPathwayLessonCoachExcerpt(displaySections);
     const quickReviewRailLines = buildQuickReviewBullets(record);
     const examFocusPrimaryRail = extractExamFocusHighYieldLines(record);
-    const examFocusFallbackRail = extractSecondaryExamContextLines(record.sections);
+    const examFocusFallbackRail = extractSecondaryExamContextLines(
+      record.sections,
+    );
     const examFocusRailLines =
-      examFocusPrimaryRail.length > 0 ? examFocusPrimaryRail : examFocusFallbackRail;
+      examFocusPrimaryRail.length > 0
+        ? examFocusPrimaryRail
+        : examFocusFallbackRail;
     const pathwayQuality = classifyPathwayLesson(record);
     let pathwayContinue = null;
     if (userId && pathwayId) {
       try {
-        pathwayContinue = await loadLessonContinueStudyNext(userId, entitlement, learnerPath, {
-          variant: "pathway",
-          lessonId: id,
-          pathwayId,
-          topicSlug: record.topicSlug,
-        });
+        pathwayContinue = await loadLessonContinueStudyNext(
+          userId,
+          entitlement,
+          learnerPath,
+          {
+            variant: "pathway",
+            lessonId: id,
+            pathwayId,
+            topicSlug: record.topicSlug,
+          },
+        );
       } catch {
         pathwayContinue = null;
       }
     }
-    const pathwayAdjacentApp = mapPathwayLessonAdjacentToAppHrefs(pathwayAdjacentSlugs);
+    const pathwayAdjacentApp =
+      mapPathwayLessonAdjacentToAppHrefs(pathwayAdjacentSlugs);
     const pathwayPrevApp = pathwayAdjacentApp.prev
-      ? { title: pathwayAdjacentApp.prev.title, href: pathwayAdjacentApp.prev.href }
+      ? {
+          title: pathwayAdjacentApp.prev.title,
+          href: pathwayAdjacentApp.prev.href,
+        }
       : null;
     const pathwayNextApp = pathwayAdjacentApp.next
-      ? { title: pathwayAdjacentApp.next.title, href: pathwayAdjacentApp.next.href }
+      ? {
+          title: pathwayAdjacentApp.next.title,
+          href: pathwayAdjacentApp.next.href,
+        }
       : null;
 
-    const pathwayLessonQuizEmbed = pathway ? resolveQuizEmbedQuestionsForLessonSlug(record.slug) : null;
+    const pathwayLessonQuizEmbed = pathway
+      ? resolveQuizEmbedQuestionsForLessonSlug(record.slug)
+      : null;
 
     const examFramingLabel =
       examFraming.region !== "unknown" ? examFraming.examIdentityLabel : null;
@@ -715,7 +861,9 @@ async function LessonDetailPageInner({ params }: Props) {
       stemPreviewByQuestionId[stem.id] = stem.stemPreview;
     }
 
-    let topicLinkedQuizPreload: Awaited<ReturnType<typeof loadLessonTopicLinkedQuizItems>>["items"] = [];
+    let topicLinkedQuizPreload: Awaited<
+      ReturnType<typeof loadLessonTopicLinkedQuizItems>
+    >["items"] = [];
     if (pathway && entitlement.hasAccess && relatedQuestionStems.length > 0) {
       const topicQuizRes = await loadLessonTopicLinkedQuizItems({
         entitlement,
@@ -731,11 +879,14 @@ async function LessonDetailPageInner({ params }: Props) {
         ? getAlliedProfessionByProfessionKey(entitlement.alliedCareer)?.h1
         : undefined;
 
-    const pathwayInteractiveModules = pathway ? getLessonInteractiveModules(record) : [];
+    const pathwayInteractiveModules = pathway
+      ? getLessonInteractiveModules(record)
+      : [];
 
     const linkedLearningSignals =
       pathway != null
-        ? record.linkedLearningSignals ?? computePathwayLessonLinkedLearningSignals(pathway.id, record)
+        ? (record.linkedLearningSignals ??
+          computePathwayLessonLinkedLearningSignals(pathway.id, record))
         : null;
 
     const hasCatalogPre =
@@ -749,9 +900,12 @@ async function LessonDetailPageInner({ params }: Props) {
       !studyLoopBankActive &&
       Boolean(bankAssessments.postTest?.length);
     const assessmentHintParts: string[] = [];
-    if (hasCatalogPre) assessmentHintParts.push(`Readiness ${bankAssessments.preTest!.length}`);
-    if (hasCatalogPost) assessmentHintParts.push(`Retention ${bankAssessments.postTest!.length}`);
-    const assessmentHint = assessmentHintParts.length > 0 ? assessmentHintParts.join(" · ") : null;
+    if (hasCatalogPre)
+      assessmentHintParts.push(`Readiness ${bankAssessments.preTest!.length}`);
+    if (hasCatalogPost)
+      assessmentHintParts.push(`Retention ${bankAssessments.postTest!.length}`);
+    const assessmentHint =
+      assessmentHintParts.length > 0 ? assessmentHintParts.join(" · ") : null;
 
     const matchedLessonImage = resolveLessonImage({
       slug: record.slug,
@@ -813,90 +967,130 @@ async function LessonDetailPageInner({ params }: Props) {
               <LessonQualityNotice
                 tier={pathwayQuality.tier}
                 wordCount={pathwayQuality.wordCount}
-                mode={process.env.NODE_ENV === "development" ? "staff_qa" : "hidden"}
+                mode={
+                  process.env.NODE_ENV === "development" ? "staff_qa" : "hidden"
+                }
               />
             }
             compactSubscriberBanner
           >
             <article className="nn-lesson-article-flow nn-premium-lesson-article">
-              {articleSections.length > 0 ? (
-                articleSections.map((section) => {
-                  const surfaceHeading = pathwayLessonSectionSurfaceHeading(section, pathway?.countryCode, t);
-                  const sectionBody =
-                    pathway != null
-                      ? pathwayLessonPremiumSectionBodyText(section, pathway.id, pathway.countryCode)
-                      : typeof section.body === "string"
-                        ? section.body
-                        : "";
-                  const figs = section.figures;
-                  const usableFigs = figs?.filter(hasRenderableLessonFigure) ?? [];
-                  const sectionLeadFigure = usableFigs[0];
-                  const sectionFiguresRest =
-                    usableFigs.length > 1 ? usableFigs.slice(1) : undefined;
-                  return (
-                    <LessonSectionCard
-                      key={section.id}
-                      id={section.id}
-                      heading={surfaceHeading}
-                      kind={section.kind ?? null}
-                      editorialRhythmIndex={editorialRhythmIndexBySectionId.get(section.id)}
-                      tierRelevanceLearnerSection={
-                        Boolean(pathway) && section.kind === "tier_specific_relevance"
-                      }
-                      sectionLeadFigure={sectionLeadFigure}
-                    >
-                      {section.kind === "related_next_steps" && pathway ? (
-                        <PathwayLessonNextStepsCards
-                          pathwayId={pathway.id}
-                          analyticsSurface="app_lesson"
-                          practiceHref={buildAppQuestionBankTopicDrillHref(
-                            pathway,
-                            record.topic,
-                            record.topicSlug ?? undefined,
-                          )}
-                          lessonsHref={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
-                          flashcardsHref={pathwayHubAppFlashcardsHref(pathway.id, record.topicSlug)}
-                          practiceLabel={t("learner.studyLoop.practiceThisTopicCta")}
-                          lessonsLabel={t("learner.lessons.detail.nextStepsReviewLessons")}
-                          flashcardsLabel={t("learner.studyLoop.sameTopicFlashcards")}
-                        />
-                      ) : (
-                        <PathwayLessonSectionContent
-                          text={sectionBody}
-                          figures={sectionFiguresRest}
-                          examFocus={section.examFocus}
-                          lessonWikiBasePath={pathway ? marketingPathwayLessonsIndexPath(pathway) : null}
-                          viewerTier={lessonViewerTier}
-                          measurementSystem={lessonMeasurementSystem ?? undefined}
-                          sectionKind={section.kind ?? null}
-                          emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
-                          figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
-                          hasSectionLeadFigure={Boolean(sectionLeadFigure)}
-                        />
-                      )}
-                      {userId ? (
-                        <LessonSectionNoteInline
-                          userId={userId}
-                          sectionId={section.id}
-                          sectionHeading={surfaceHeading}
-                          scope="PATHWAY_LESSON"
-                          pathwayId={pathwayId}
-                          topic={record.topic}
-                        />
-                      ) : null}
-                    </LessonSectionCard>
-                  );
-                })
-              ) : null}
+              {articleSections.length > 0
+                ? articleSections.map((section) => {
+                    const surfaceHeading = pathwayLessonSectionSurfaceHeading(
+                      section,
+                      pathway?.countryCode,
+                      t,
+                    );
+                    const sectionBody =
+                      pathway != null
+                        ? pathwayLessonPremiumSectionBodyText(
+                            section,
+                            pathway.id,
+                            pathway.countryCode,
+                          )
+                        : typeof section.body === "string"
+                          ? section.body
+                          : "";
+                    const figs = section.figures;
+                    const usableFigs =
+                      figs?.filter(hasRenderableLessonFigure) ?? [];
+                    const sectionLeadFigure = usableFigs[0];
+                    const sectionFiguresRest =
+                      usableFigs.length > 1 ? usableFigs.slice(1) : undefined;
+                    return (
+                      <LessonSectionCard
+                        key={section.id}
+                        id={section.id}
+                        heading={surfaceHeading}
+                        kind={section.kind ?? null}
+                        editorialRhythmIndex={editorialRhythmIndexBySectionId.get(
+                          section.id,
+                        )}
+                        tierRelevanceLearnerSection={
+                          Boolean(pathway) &&
+                          section.kind === "tier_specific_relevance"
+                        }
+                        sectionLeadFigure={sectionLeadFigure}
+                      >
+                        {section.kind === "related_next_steps" && pathway ? (
+                          <PathwayLessonNextStepsCards
+                            pathwayId={pathway.id}
+                            analyticsSurface="app_lesson"
+                            practiceHref={buildAppQuestionBankTopicDrillHref(
+                              pathway,
+                              record.topic,
+                              record.topicSlug ?? undefined,
+                            )}
+                            lessonsHref={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
+                            flashcardsHref={pathwayHubAppFlashcardsHref(
+                              pathway.id,
+                              record.topicSlug,
+                            )}
+                            practiceLabel={t(
+                              "learner.studyLoop.practiceThisTopicCta",
+                            )}
+                            lessonsLabel={t(
+                              "learner.lessons.detail.nextStepsReviewLessons",
+                            )}
+                            flashcardsLabel={t(
+                              "learner.studyLoop.sameTopicFlashcards",
+                            )}
+                          />
+                        ) : (
+                          <PathwayLessonSectionContent
+                            text={sectionBody}
+                            figures={sectionFiguresRest}
+                            examFocus={section.examFocus}
+                            lessonWikiBasePath={
+                              pathway
+                                ? marketingPathwayLessonsIndexPath(pathway)
+                                : null
+                            }
+                            viewerTier={lessonViewerTier}
+                            measurementSystem={
+                              lessonMeasurementSystem ?? undefined
+                            }
+                            sectionKind={section.kind ?? null}
+                            emptyBodyMessage={t(
+                              "learner.lessons.detail.sectionEmptyBody",
+                            )}
+                            figuresVisualLeadMessage={t(
+                              "learner.lessons.detail.sectionFiguresVisualLead",
+                            )}
+                            hasSectionLeadFigure={Boolean(sectionLeadFigure)}
+                          />
+                        )}
+                        {userId ? (
+                          <LessonSectionNoteInline
+                            userId={userId}
+                            sectionId={section.id}
+                            sectionHeading={surfaceHeading}
+                            scope="PATHWAY_LESSON"
+                            pathwayId={pathwayId}
+                            topic={record.topic}
+                          />
+                        ) : null}
+                      </LessonSectionCard>
+                    );
+                  })
+                : null}
             </article>
             {pathway && pathwayLessonQuizEmbed?.length ? (
               <div className="mt-8 w-full max-w-none">
                 <PathwayLessonQuizEmbedSection
                   lessonSlug={record.slug}
                   links={{
-                    practiceExamsHref: "/app/practice-tests?startMode=practice_exam",
-                    flashcardsHref: pathwayHubAppFlashcardsHref(pathway.id, record.topicSlug),
-                    practiceQuestionsHref: pathwayHubAppQuestionsHref(pathway.id, record.topic),
+                    practiceExamsHref:
+                      "/app/practice-tests?startMode=practice_exam",
+                    flashcardsHref: pathwayHubAppFlashcardsHref(
+                      pathway.id,
+                      record.topicSlug,
+                    ),
+                    practiceQuestionsHref: pathwayHubAppQuestionsHref(
+                      pathway.id,
+                      record.topic,
+                    ),
                     relatedLessonsHref: `/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`,
                   }}
                 />
@@ -922,18 +1116,30 @@ async function LessonDetailPageInner({ params }: Props) {
         >
           <div className="nn-lesson-retention-review-zone__head">
             <p className="nn-lesson-hero-eyebrow">Retention & exam readiness</p>
-            <h2 id="lesson-retention-review-heading">Review after learning, not during it.</h2>
+            <h2 id="lesson-retention-review-heading">
+              Review after learning, not during it.
+            </h2>
             <p>
-              Clinical pearls, traps, safety priorities, quick recall, and related concepts live here so the main lesson stays calm and uninterrupted.
+              Clinical pearls, traps, safety priorities, quick recall, and
+              related concepts live here so the main lesson stays calm and
+              uninterrupted.
             </p>
           </div>
           {retentionSections.length > 0 ? (
             <div className="nn-lesson-retention-review-zone__sections">
               {retentionSections.map((section) => {
-                const surfaceHeading = pathwayLessonSectionSurfaceHeading(section, pathway?.countryCode, t);
+                const surfaceHeading = pathwayLessonSectionSurfaceHeading(
+                  section,
+                  pathway?.countryCode,
+                  t,
+                );
                 const sectionBody =
                   pathway != null
-                    ? pathwayLessonPremiumSectionBodyText(section, pathway.id, pathway.countryCode)
+                    ? pathwayLessonPremiumSectionBodyText(
+                        section,
+                        pathway.id,
+                        pathway.countryCode,
+                      )
                     : typeof section.body === "string"
                       ? section.body
                       : "";
@@ -948,20 +1154,32 @@ async function LessonDetailPageInner({ params }: Props) {
                       text={sectionBody}
                       figures={section.figures}
                       examFocus={section.examFocus}
-                      lessonWikiBasePath={pathway ? marketingPathwayLessonsIndexPath(pathway) : null}
+                      lessonWikiBasePath={
+                        pathway
+                          ? marketingPathwayLessonsIndexPath(pathway)
+                          : null
+                      }
                       viewerTier={lessonViewerTier}
                       measurementSystem={lessonMeasurementSystem ?? undefined}
                       sectionKind={section.kind ?? null}
-                      emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
-                      figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
+                      emptyBodyMessage={t(
+                        "learner.lessons.detail.sectionEmptyBody",
+                      )}
+                      figuresVisualLeadMessage={t(
+                        "learner.lessons.detail.sectionFiguresVisualLead",
+                      )}
                     />
                   </LessonSectionCard>
                 );
               })}
             </div>
           ) : null}
-          {pathway && record.memoryAnchor ? <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} /> : null}
-          {pathway && record.studyCommonTraps && record.studyCommonTraps.length > 0 ? (
+          {pathway && record.memoryAnchor ? (
+            <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} />
+          ) : null}
+          {pathway &&
+          record.studyCommonTraps &&
+          record.studyCommonTraps.length > 0 ? (
             <PathwayLessonCommonTrapsStrip items={record.studyCommonTraps} />
           ) : null}
           {pathway && lessonHasExamTakeaways(record.studyTakeaways) ? (
@@ -980,14 +1198,49 @@ async function LessonDetailPageInner({ params }: Props) {
             labels={{
               eyebrow: t("learner.lessons.quickClinical.eyebrow"),
               title: t("learner.lessons.quickClinical.title"),
-              keyTakeaways: t("learner.lessons.quickClinical.card.keyTakeaways"),
+              keyTakeaways: t(
+                "learner.lessons.quickClinical.card.keyTakeaways",
+              ),
               redFlags: t("learner.lessons.quickClinical.card.redFlags"),
-              priorityInterventions: t("learner.lessons.quickClinical.card.priorityInterventions"),
+              priorityInterventions: t(
+                "learner.lessons.quickClinical.card.priorityInterventions",
+              ),
               examTraps: t("learner.lessons.quickClinical.card.examTraps"),
-              mustKnowLabs: t("learner.lessons.quickClinical.card.mustKnowLabs"),
-              escalationCues: t("learner.lessons.quickClinical.card.escalationCues"),
+              mustKnowLabs: t(
+                "learner.lessons.quickClinical.card.mustKnowLabs",
+              ),
+              escalationCues: t(
+                "learner.lessons.quickClinical.card.escalationCues",
+              ),
             }}
           />
+          {pathway ? (
+            <>
+              <PathwayLessonActions
+                pathwayId={pathway.id}
+                lessonSlug={record.slug}
+                topicCode={record.topicSlug}
+                topicLabel={record.topic}
+                userId={userId}
+                canMarkComplete={entitlement.hasAccess}
+                initialProgress={initialProgress}
+                catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
+                allLessonsHrefOverride={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
+                linkedLearningSignals={linkedLearningSignals}
+              />
+              <AppLessonRelatedReading
+                pathway={pathway}
+                lesson={{
+                  slug: record.slug,
+                  title: record.title,
+                  topic: record.topic,
+                  topicSlug: record.topicSlug,
+                  bodySystem: record.bodySystem,
+                }}
+                locale={marketingLocale}
+              />
+            </>
+          ) : null}
         </section>
 
         <LessonNavButtons
@@ -1043,28 +1296,23 @@ async function LessonDetailPageInner({ params }: Props) {
             bodySystem={record.bodySystem}
             pathwayShortName={pathway?.shortName ?? null}
             examFramingLabel={examFramingLabel}
-            sectionCount={displaySections.length > 0 ? displaySections.length : 1}
+            sectionCount={
+              displaySections.length > 0 ? displaySections.length : 1
+            }
             examRelevance={record.examRelevance ?? null}
             audienceTiers={record.audienceTiers ?? null}
             progress={initialProgress}
-            breadcrumbSlot={
-              pathway ? (
-                <BreadcrumbTrail
-                  items={localizeBreadcrumbCrumbs(
-                    learnerPathwayLessonBreadcrumbs(pathway, displayTitle),
-                    messages,
-                    fallbackMessages,
-                  )}
-                />
-              ) : null
-            }
             purposeLine={purposeLine}
             assessmentHint={assessmentHint}
           />
           <div className="mt-4">
-            <LessonStudyPhaseProgress progress={initialProgress} persisted={Boolean(userId) && entitlement.hasAccess} />
+            <LessonStudyPhaseProgress
+              progress={initialProgress}
+              persisted={Boolean(userId) && entitlement.hasAccess}
+            />
           </div>
-          {matchedLessonImage.url && hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
+          {matchedLessonImage.url &&
+          hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
             <div className="mt-4">
               <LessonClinicalImageCard
                 url={matchedLessonImage.url}
@@ -1076,42 +1324,18 @@ async function LessonDetailPageInner({ params }: Props) {
               />
             </div>
           ) : null}
-          {pathway ? (
-            <>
-              <PathwayLessonActions
-                pathwayId={pathway.id}
-                lessonSlug={record.slug}
-                topicCode={record.topicSlug}
-                topicLabel={record.topic}
-                userId={userId}
-                canMarkComplete={entitlement.hasAccess}
-                initialProgress={initialProgress}
-                catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
-                allLessonsHrefOverride={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
-                linkedLearningSignals={linkedLearningSignals}
-              />
-              <AppLessonRelatedReading
-                pathway={pathway}
-                lesson={{
-                  slug: record.slug,
-                  title: record.title,
-                  topic: record.topic,
-                  topicSlug: record.topicSlug,
-                  bodySystem: record.bodySystem,
-                }}
-                locale={marketingLocale}
-              />
-            </>
-          ) : null}
         </div>
 
-        <div className="nn-lesson-layout nn-lesson-layout--triple">
+        <div className="nn-lesson-layout nn-lesson-layout--premium-reading">
           <LessonSectionNav
             sections={navSections}
             progress={initialProgress}
             progressVisible={Boolean(userId) && entitlement.hasAccess}
           />
-          <div className="nn-lesson-main min-w-0" data-testid="pathway-lesson-main-column">
+          <div
+            className="nn-lesson-main min-w-0"
+            data-testid="pathway-lesson-main-column"
+          >
             <div className="nn-lesson-editorial-rail nn-lesson-editorial-rail--main">
               {studyLoopBankActive ? (
                 <PathwayLessonStudyLoopOrchestrator
@@ -1135,41 +1359,8 @@ async function LessonDetailPageInner({ params }: Props) {
               )}
             </div>
           </div>
-          {pathway ? (
-            <aside
-              className="nn-lesson-study-rail-aside shrink-0 border-t border-[var(--semantic-border-soft)] pt-6 xl:sticky xl:top-24 xl:w-full xl:self-start xl:border-t-0 xl:pt-0 xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
-              aria-label="Lesson utilities"
-              data-testid="pathway-lesson-study-rail"
-            >
-              <PathwayLessonStudyRail
-                quickReviewLines={quickReviewRailLines}
-                examFocusLines={examFocusRailLines}
-                commonMistakes={record.studyCommonTraps}
-                fullAccess={entitlement.hasAccess}
-                progressSummary={
-                  userId && entitlement.hasAccess
-                    ? {
-                        status: initialProgress,
-                        label: pathwayLessonProgressRailSummary(initialProgress),
-                      }
-                    : null
-                }
-                relatedQuestionsSlot={
-                  <Suspense fallback={<PathwayLessonRelatedRailSkeleton />}>
-                    <PathwayLessonDeferredRelatedRail
-                      pathway={pathway}
-                      lesson={toPathwayLessonDeferredServerSnapshot(record)}
-                      contentLocale={pathwayLessonLocale}
-                      bankEntitlement={entitlement.hasAccess ? entitlement : null}
-                      fullQuizAccess={entitlement.hasAccess}
-                      userId={userId ?? ""}
-                    />
-                  </Suspense>
-                }
-              />
-            </aside>
-          ) : null}
         </div>
+        <LessonStickyReviewDock enabled={entitlement.hasAccess} />
       </div>
     );
   }
@@ -1180,7 +1371,14 @@ async function LessonDetailPageInner({ params }: Props) {
     contentItemId: row.id,
     slug: row.slug,
   });
-  console.log("[PUBLIC FETCH] slug", row.slug, "contentItemId", row.id, "table", "content_items");
+  console.log(
+    "[PUBLIC FETCH] slug",
+    row.slug,
+    "contentItemId",
+    row.id,
+    "table",
+    "content_items",
+  );
   const displayTitle = resolvePublicLessonTitle({
     curatedTitle: row.title,
     generatedTitle: row.seoTitle,
@@ -1193,21 +1391,32 @@ async function LessonDetailPageInner({ params }: Props) {
   let contentContinue = null;
   if (userId) {
     try {
-      contentContinue = await loadLessonContinueStudyNext(userId, entitlement, learnerPath, {
-        variant: "content",
-        lessonId: id,
-        anchorNorm,
-        topicCode,
-      });
+      contentContinue = await loadLessonContinueStudyNext(
+        userId,
+        entitlement,
+        learnerPath,
+        {
+          variant: "content",
+          lessonId: id,
+          anchorNorm,
+          topicCode,
+        },
+      );
     } catch {
       contentContinue = null;
     }
   }
 
   const topicLabelForDrill = bs || displayTitle;
-  const pathwayForContentDrill = learnerPath ? getExamPathwayById(learnerPath) : null;
+  const pathwayForContentDrill = learnerPath
+    ? getExamPathwayById(learnerPath)
+    : null;
   const contentPracticeHref = pathwayForContentDrill
-    ? buildAppQuestionBankTopicDrillHref(pathwayForContentDrill, topicLabelForDrill, topicCode ?? undefined)
+    ? buildAppQuestionBankTopicDrillHref(
+        pathwayForContentDrill,
+        topicLabelForDrill,
+        topicCode ?? undefined,
+      )
     : (() => {
         const qs = new URLSearchParams();
         qs.set("preset", "topic_drill");
@@ -1218,7 +1427,10 @@ async function LessonDetailPageInner({ params }: Props) {
 
   return (
     <div className="nn-lesson-page">
-      <StaffEditLivePageBanner adminHref={`/admin/lessons/${encodeURIComponent(id)}`} label="Edit this lesson" />
+      <StaffEditLivePageBanner
+        adminHref={`/admin/lessons/${encodeURIComponent(id)}`}
+        label="Edit this lesson"
+      />
       <header className="nn-lesson-page-header">
         <Link
           href="/app/lessons"
@@ -1234,7 +1446,10 @@ async function LessonDetailPageInner({ params }: Props) {
           {displayTitle}
         </h1>
         {row.summary ? (
-          <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--semantic-text-muted)" }}>
+          <p
+            className="mt-2 text-sm leading-relaxed"
+            style={{ color: "var(--semantic-text-muted)" }}
+          >
             {row.summary}
           </p>
         ) : null}
@@ -1251,7 +1466,9 @@ async function LessonDetailPageInner({ params }: Props) {
             <LessonQualityNotice
               tier={contentQ.tier}
               wordCount={contentQ.wordCount}
-              mode={process.env.NODE_ENV === "development" ? "staff_qa" : "hidden"}
+              mode={
+                process.env.NODE_ENV === "development" ? "staff_qa" : "hidden"
+              }
             />
           }
         >
@@ -1264,7 +1481,10 @@ async function LessonDetailPageInner({ params }: Props) {
           />
         )}
         <LessonContinueStudyNextBlock bundle={contentContinue} />
-        <div className="mt-10 flex flex-wrap gap-3 border-t pt-6" style={{ borderColor: "var(--border-subtle)" }}>
+        <div
+          className="mt-10 flex flex-wrap gap-3 border-t pt-6"
+          style={{ borderColor: "var(--border-subtle)" }}
+        >
           <Link
             href={contentPracticeHref}
             className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
@@ -1275,7 +1495,11 @@ async function LessonDetailPageInner({ params }: Props) {
           <Link
             href="/app/practice-tests?startMode=practice_exam"
             className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
-            style={{ borderColor: "var(--border-subtle)", color: "var(--semantic-text-secondary)", background: "var(--bg-card)" }}
+            style={{
+              borderColor: "var(--border-subtle)",
+              color: "var(--semantic-text-secondary)",
+              background: "var(--bg-card)",
+            }}
           >
             {t("learner.lessons.detail.ctaTimedExam")}
           </Link>

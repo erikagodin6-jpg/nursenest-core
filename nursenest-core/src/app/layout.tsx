@@ -78,7 +78,8 @@ function navigationIntentBeforeInteractiveInlineScript(): string {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health",
+    default:
+      "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health",
     template: "%s | NurseNest",
   },
   description:
@@ -98,7 +99,8 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: siteUrl,
     siteName: "NurseNest",
-    title: "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health",
+    title:
+      "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health",
     description:
       "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.",
     images: [
@@ -112,7 +114,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health",
+    title:
+      "NurseNest | Global Nursing Exam Prep — Canada-First Depth for RN, RPN, NP & Allied Health",
     description:
       "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.",
     images: [ROOT_LAYOUT_OPEN_GRAPH_IMAGE],
@@ -123,3 +126,80 @@ export const metadata: Metadata = {
 async function getSessionSafe() {
   if (process.env.NN_UI_PREVIEW_MODE === "1") return null;
   if (process.env.NEXT_PHASE === "phase-production-build") return null;
+  const hasSecret = Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+    (process.env.NEXTAUTH_SECRET &&
+      process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+  if (!hasSecret) return null;
+
+  // Skip the auth DB call when no session cookie is present. Unauthenticated
+  // visitors (the vast majority of marketing traffic) pay zero DB latency;
+  // the client-side SessionProvider fetches the session via /api/auth/session
+  // on hydration if needed. Authenticated users still trigger the full auth()
+  // call because a session cookie is present.
+  try {
+    const { cookies } = await import("next/headers");
+    const jar = await cookies();
+    const hasSession =
+      jar.has("authjs.session-token") ||
+      jar.has("__Secure-authjs.session-token") ||
+      jar.has("next-auth.session-token") ||
+      jar.has("__Secure-next-auth.session-token");
+    if (!hasSession) return null;
+  } catch {
+    // Can't read cookies (e.g. static export) - fall through to auth().
+  }
+
+  try {
+    const { auth } = await import("@/lib/auth");
+    return await auth();
+  } catch (error) {
+    console.error(
+      "[root-layout] auth failed; continuing without session",
+      error,
+    );
+    return null;
+  }
+}
+
+function SafeProviders({
+  session,
+  children,
+}: {
+  session: Awaited<ReturnType<typeof getSessionSafe>>;
+  children: React.ReactNode;
+}) {
+  return (
+    <AppThemeProvider>
+      <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
+    </AppThemeProvider>
+  );
+}
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const session = await getSessionSafe();
+
+  return (
+    <html
+      lang="en"
+      className={`${dmSans.variable} h-full antialiased`}
+      data-theme={NURSENEST_DEFAULT_THEME}
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)]">
+        <Script id="nn-marketing-theme-seed" strategy="beforeInteractive">
+          {marketingThemeBeforeInteractiveInlineScript()}
+        </Script>
+        <Script id="nn-navigation-intent-seed" strategy="beforeInteractive">
+          {navigationIntentBeforeInteractiveInlineScript()}
+        </Script>
+        <SafeProviders session={session}>{children}</SafeProviders>
+      </body>
+    </html>
+  );
+}

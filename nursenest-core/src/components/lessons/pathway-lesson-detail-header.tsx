@@ -62,7 +62,6 @@ export function PathwayLessonDetailHeaderSkeleton({ pathway }: { pathway: ExamPa
 /** Pathway lesson detail — compact hero: hub wayfinding, title, topic, optional study links (marketing). */
 export function PathwayLessonDetailHeader({
   pathway,
-  lessonsBasePath,
   lessonTitle,
   lessonTopic,
   bodySystem,
@@ -106,39 +105,13 @@ export function PathwayLessonDetailHeader({
           : "rounded-lg border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_97%,var(--semantic-panel-cool)_3%)]",
       ].join(" ")}
     >
-      <nav
-        aria-label="Lesson location"
-        className={[
-          "flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs font-medium text-[var(--theme-muted-text)] sm:text-xs",
-          centered ? "justify-center opacity-90" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-      >
-        <Link
-          href={lessonsBasePath}
-          className="text-[var(--semantic-brand)] underline-offset-2 hover:text-[var(--theme-heading-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
-        >
-          Lesson Hub
-        </Link>
-        <span aria-hidden className="text-[var(--semantic-border-soft)]">
-          /
-        </span>
-        <span>{place}</span>
-        {bodySystem?.trim() ? (
-          <>
-            <span aria-hidden className="text-[var(--semantic-border-soft)]">
-              ·
-            </span>
-            <span className="text-[var(--theme-body-text)]">{bodySystem.trim()}</span>
-          </>
-        ) : null}
-        <span className="sr-only"> ({compactExamName})</span>
-      </nav>
+      <p className="nn-lesson-hero-eyebrow" data-nn-premium-individual-lesson-header-meta>
+        {[compactExamName, place, bodySystem?.trim()].filter(Boolean).join(" · ")}
+      </p>
 
       <div
         className={[
-          "mt-2",
+          "mt-4",
           centered ? "text-center" : "",
           !centered && hasTrailing ? "lg:flex lg:items-start lg:justify-between lg:gap-6" : "",
           centered && hasTrailing ? "lg:grid lg:grid-cols-[1fr_auto] lg:items-start lg:gap-4 lg:text-left" : "",
@@ -150,14 +123,7 @@ export function PathwayLessonDetailHeader({
           <h1 className={["nn-lesson-page-title text-balance", centered ? "text-center" : ""].filter(Boolean).join(" ")}>
             {displayLessonTitle}
           </h1>
-          <p
-            className={[
-              "mt-1.5 text-sm font-medium leading-snug text-[var(--theme-heading-text)] sm:text-[0.9375rem]",
-              centered ? "mx-auto max-w-2xl" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-          >
+          <p className={["nn-lesson-hero-deck mt-5", centered ? "mx-auto" : ""].filter(Boolean).join(" ")}>
             {lessonTopic}
           </p>
           {assessmentFlowHint ? (
@@ -223,22 +189,6 @@ export function PathwayLessonDetailHeader({
             {trailing}
           </div>
         ) : null}
-      </div>
-
-      <div
-        className={[
-          "mt-2.5 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-brand)_8%)] pt-2",
-          centered ? "text-center" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
-      >
-        <Link
-          href={lessonsBasePath}
-          className="text-[11px] font-medium text-[var(--theme-muted-text)] underline-offset-2 hover:text-[var(--semantic-brand)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:text-xs"
-        >
-          ← All Lessons
-        </Link>
       </div>
     </header>
   );

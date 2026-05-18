@@ -27,7 +27,9 @@ export function LessonSectionNav({
   progressVisible?: boolean;
 }) {
   const { t } = useMarketingI18n();
-  const [activeId, setActiveId] = useState<string | null>(sections[0]?.id ?? null);
+  const [activeId, setActiveId] = useState<string | null>(
+    sections[0]?.id ?? null,
+  );
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
@@ -77,7 +79,10 @@ export function LessonSectionNav({
   if (sections.length === 0) return null;
 
   return (
-    <div className="nn-lesson-section-nav-shell" data-nn-premium-horizontal-lesson-nav>
+    <div
+      className="nn-lesson-section-nav-shell"
+      data-nn-premium-horizontal-lesson-nav
+    >
       <nav
         className="nn-lesson-section-nav nn-lesson-section-nav--horizontal"
         aria-label={t("learner.lessons.nav.ariaSectionsNav")}
@@ -90,11 +95,17 @@ export function LessonSectionNav({
         </span>
         <ol className="nn-lesson-horizontal-nav__list">
           {sections.map((section) => {
-            const { role, chipLabel } = getLessonSectionTheme(section.kind ?? null, section.heading);
+            const { role, chipLabel } = getLessonSectionTheme(
+              section.kind ?? null,
+              section.heading,
+            );
             const activeIndex = sections.findIndex((s) => s.id === activeId);
             const index = sections.findIndex((s) => s.id === section.id);
             const isActive = activeId === section.id;
-            const isCompleted = progressVisible && (progress === "completed" || (activeIndex > 0 && index < activeIndex));
+            const isCompleted =
+              progressVisible &&
+              (progress === "completed" ||
+                (activeIndex > 0 && index < activeIndex));
 
             return (
               <li key={section.id}>
@@ -110,11 +121,17 @@ export function LessonSectionNav({
                     goTo(section.id);
                   }}
                 >
-                  <span className="nn-lesson-nav-dot flex-shrink-0" data-role={role} aria-hidden="true">
+                  <span
+                    className="nn-lesson-nav-dot flex-shrink-0"
+                    data-role={role}
+                    aria-hidden="true"
+                  >
                     {isCompleted ? <Check className="h-2.5 w-2.5" /> : null}
                   </span>
                   <span className="nn-lesson-nav-copy">
-                    <span className="nn-lesson-nav-label">{section.heading?.trim() || chipLabel}</span>
+                    <span className="nn-lesson-nav-label">
+                      {section.heading?.trim() || chipLabel}
+                    </span>
                   </span>
                 </a>
               </li>

@@ -9,6 +9,8 @@ const RETENTION_SECTION_KINDS = new Set<PathwayLessonSectionKind>([
   "exam_relevance",
 ]);
 
-export function isLessonRetentionSectionKind(kind: PathwayLessonSectionKind | null | undefined): boolean {
+export function isLessonRetentionSectionKind(
+  kind: PathwayLessonSectionKind | null | undefined,
+): boolean {
   return kind ? RETENTION_SECTION_KINDS.has(kind) : false;
 }

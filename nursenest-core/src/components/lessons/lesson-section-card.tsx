@@ -15,7 +15,10 @@ import {
   Target,
   Thermometer,
 } from "lucide-react";
-import type { PathwayLessonFigure, PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonFigure,
+  PathwayLessonSectionKind,
+} from "@/lib/lessons/pathway-lesson-types";
 import { LessonSectionOptionalImage } from "@/components/lessons/lesson-section-optional-image";
 import { getLessonSectionTheme } from "@/lib/ui/lesson-section-theme";
 import { LearnerSectionContainer } from "@/components/learner-ui/learner-section-container";
@@ -32,7 +35,8 @@ const SPINE_ACCENT_CLASS: Partial<Record<PathwayLessonSectionKind, string>> = {
   clinical_manifestations: "nn-lesson-section-card--spine-signs-symptoms",
   labs_diagnostics: "nn-lesson-section-card--spine-labs-diagnostics",
   treatment_management: "nn-lesson-section-card--spine-treatment-meds",
-  nursing_assessment_interventions: "nn-lesson-section-card--spine-nursing-care",
+  nursing_assessment_interventions:
+    "nn-lesson-section-card--spine-nursing-care",
   nursing_priorities: "nn-lesson-section-card--spine-nursing-care",
   clinical_application: "nn-lesson-section-card--spine-nursing-care",
   complications: "nn-lesson-section-card--spine-complications",
@@ -49,25 +53,31 @@ const SPINE_ACCENT_CLASS: Partial<Record<PathwayLessonSectionKind, string>> = {
   country_specific_notes: "nn-lesson-section-card--spine-regional",
 };
 
-function spineAccentClass(kind: PathwayLessonSectionKind | undefined | null): string {
+function spineAccentClass(
+  kind: PathwayLessonSectionKind | undefined | null,
+): string {
   if (!kind) return "";
   return SPINE_ACCENT_CLASS[kind] ?? "";
 }
 
-function lessonSectionUsesClinicalWorkflow(kind: PathwayLessonSectionKind | undefined | null): boolean {
+function lessonSectionUsesClinicalWorkflow(
+  kind: PathwayLessonSectionKind | undefined | null,
+): boolean {
   return Boolean(
     kind &&
-      [
-        "nursing_assessment_interventions",
-        "nursing_priorities",
-        "clinical_application",
-        "labs_diagnostics",
-        "treatment_management",
-      ].includes(kind),
+    [
+      "nursing_assessment_interventions",
+      "nursing_priorities",
+      "clinical_application",
+      "labs_diagnostics",
+      "treatment_management",
+    ].includes(kind),
   );
 }
 
-export function lessonSectionSurface(kind: PathwayLessonSectionKind | undefined | null): "editorial" | "callout" {
+export function lessonSectionSurface(
+  kind: PathwayLessonSectionKind | undefined | null,
+): "editorial" | "callout" {
   if (!kind) return "editorial";
   const callout: PathwayLessonSectionKind[] = [
     "clinical_pearls",
@@ -125,14 +135,13 @@ export function LessonSectionCard({
   const surface = lessonSectionSurface(kind);
   const tierCrosswalk = kind === "tier_specific_relevance";
   const spineClass = spineAccentClass(kind);
-  const rhythmClass =
-    spineClass
-      ? ""
-      : surface === "editorial" && typeof editorialRhythmIndex === "number"
-        ? editorialRhythmIndex % 2 === 0
-          ? "nn-lesson-section-card--rhythm-a"
-          : "nn-lesson-section-card--rhythm-b"
-        : "";
+  const rhythmClass = spineClass
+    ? ""
+    : surface === "editorial" && typeof editorialRhythmIndex === "number"
+      ? editorialRhythmIndex % 2 === 0
+        ? "nn-lesson-section-card--rhythm-a"
+        : "nn-lesson-section-card--rhythm-b"
+      : "";
   const ROLE_ICON = {
     info: Lightbulb,
     warning: Thermometer,
@@ -151,7 +160,10 @@ export function LessonSectionCard({
 
   const chipRow =
     surface === "callout" ? (
-      <span className="nn-lesson-section-chip inline-flex items-center gap-1.5" aria-hidden="true">
+      <span
+        className="nn-lesson-section-chip inline-flex items-center gap-1.5"
+        aria-hidden="true"
+      >
         <ChipIcon className="nn-icon-sm" aria-hidden="true" />
         {chipLabel}
       </span>
@@ -162,7 +174,10 @@ export function LessonSectionCard({
   const bodyGap = surface === "callout" ? "mt-4" : "mt-3.5";
   const workflow = lessonSectionUsesClinicalWorkflow(kind);
   const workflowEl = workflow ? (
-    <div className="nn-lesson-clinical-workflow" aria-label="Clinical workflow pattern">
+    <div
+      className="nn-lesson-clinical-workflow"
+      aria-label="Clinical workflow pattern"
+    >
       <span>Recognize</span>
       <span>Interpret</span>
       <span>Act</span>
@@ -179,7 +194,10 @@ export function LessonSectionCard({
         className={["scroll-mt-24 mb-0", className].filter(Boolean).join(" ")}
       >
         {chipRow}
-        <h2 id={headingId} className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">
+        <h2
+          id={headingId}
+          className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]"
+        >
           {heading?.trim() || "Section"}
         </h2>
         {workflowEl}
@@ -194,7 +212,9 @@ export function LessonSectionCard({
       id={id}
       className={[
         "nn-lesson-section-card scroll-mt-24",
-        surface === "editorial" ? "nn-lesson-section-card--editorial" : "nn-lesson-section-card--callout",
+        surface === "editorial"
+          ? "nn-lesson-section-card--editorial"
+          : "nn-lesson-section-card--callout",
         tierCrosswalk ? "nn-lesson-section-card--tier-callout" : "",
         spineClass,
         rhythmClass,

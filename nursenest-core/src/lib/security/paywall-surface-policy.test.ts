@@ -16,8 +16,14 @@ const nursenestCoreRoot = join(here, "..", "..", "..");
 
 describe("paywall surface policy (static checks)", () => {
   it("next.config production headers include private no-cache no-store for /app routes", () => {
-    const nextConfig = readFileSync(join(nursenestCoreRoot, "next.config.mjs"), "utf8");
-    assert.match(nextConfig, /private,\s*no-cache,\s*no-store,\s*must-revalidate/);
+    const nextConfig = readFileSync(
+      join(nursenestCoreRoot, "next.config.mjs"),
+      "utf8",
+    );
+    assert.match(
+      nextConfig,
+      /private,\s*no-cache,\s*no-store,\s*must-revalidate/,
+    );
     assert.match(nextConfig, /["']\/app["']/);
     assert.match(nextConfig, /["']\/app\/:path\*["']/);
   });
@@ -32,31 +38,76 @@ describe("paywall surface policy (static checks)", () => {
   });
 
   it("core lesson/question APIs require session at the top of the handler", () => {
-    const lessons = readFileSync(join(nursenestCoreRoot, "src", "app", "api", "lessons", "route.ts"), "utf8");
+    const lessons = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "lessons", "route.ts"),
+      "utf8",
+    );
     assert.match(lessons, /if\s*\(\s*!userId\s*\)/);
     assert.match(lessons, /401/);
-    const questions = readFileSync(join(nursenestCoreRoot, "src", "app", "api", "questions", "[id]", "route.ts"), "utf8");
+    const questions = readFileSync(
+      join(
+        nursenestCoreRoot,
+        "src",
+        "app",
+        "api",
+        "questions",
+        "[id]",
+        "route.ts",
+      ),
+      "utf8",
+    );
     assert.match(questions, /if\s*\(\s*!userId\s*\)/);
     assert.match(questions, /401/);
-    const pt = readFileSync(join(nursenestCoreRoot, "src", "app", "api", "practice-tests", "route.ts"), "utf8");
+    const pt = readFileSync(
+      join(
+        nursenestCoreRoot,
+        "src",
+        "app",
+        "api",
+        "practice-tests",
+        "route.ts",
+      ),
+      "utf8",
+    );
     assert.match(pt, /requireSubscriberSession/);
   });
 
   it("subscriber gate resolves entitlements from DB via getUserAccess", () => {
     const gate = readFileSync(
-      join(nursenestCoreRoot, "src", "lib", "entitlements", "require-subscriber-session.ts"),
+      join(
+        nursenestCoreRoot,
+        "src",
+        "lib",
+        "entitlements",
+        "require-subscriber-session.ts",
+      ),
       "utf8",
     );
     assert.match(gate, /getUserAccess/);
     assert.match(gate, /accessScopeFromUserAccess/);
 
-    const resolve = readFileSync(join(nursenestCoreRoot, "src", "lib", "entitlements", "resolve-entitlement.ts"), "utf8");
+    const resolve = readFileSync(
+      join(
+        nursenestCoreRoot,
+        "src",
+        "lib",
+        "entitlements",
+        "resolve-entitlement.ts",
+      ),
+      "utf8",
+    );
     assert.match(resolve, /getUserAccess/);
   });
 
   it("production next.config does not blanket no-store all /api/* (allows /api/public edge cache); sets explicit /api/public policy", () => {
-    const nextConfig = readFileSync(join(nursenestCoreRoot, "next.config.mjs"), "utf8");
-    assert.match(nextConfig, /do not set a blanket `no-store` on all `\/api\/\*`/);
+    const nextConfig = readFileSync(
+      join(nursenestCoreRoot, "next.config.mjs"),
+      "utf8",
+    );
+    assert.match(
+      nextConfig,
+      /do not set a blanket `no-store` on all `\/api\/\*`/,
+    );
     assert.match(nextConfig, /source:\s*"\/api\/public\/:path\*"/);
     assert.match(
       nextConfig,
@@ -84,7 +135,10 @@ describe("paywall surface policy (static checks)", () => {
     );
     assert.match(body, /fullAccess\s*&&\s*lessonHasExamTakeaways/);
     assert.match(body, /fullAccess\s*&&\s*lesson\.memoryAnchor/);
-    assert.match(body, /commonMistakes=\{fullAccess\s*\?\s*lesson\.studyCommonTraps/);
+    assert.match(
+      body,
+      /commonMistakes=\{\s*fullAccess\s*\?\s*lesson\.studyCommonTraps/,
+    );
   });
 
   it("marketing pathway lesson server body uses thin client/deferred helpers (no full record across boundaries)", () => {
@@ -106,7 +160,13 @@ describe("paywall surface policy (static checks)", () => {
     );
     assert.match(body, /toPathwayLessonDeferredServerSnapshot\(/);
     assert.match(body, /pickPathwayLessonMarketingRecordChipsSource\(/);
-    assert.match(body, /<PathwayLessonStudyRail[\s\S]*?quickReviewLines=/);
+    assert.match(
+      body,
+      /className="nn-lesson-layout nn-lesson-layout--premium-reading/,
+    );
+    assert.match(body, /<LessonStickyReviewDock enabled=\{fullAccess\}/);
+    assert.match(body, /id="lesson-retention-review"/);
+    assert.equal(body.includes("PathwayLessonStudyRail"), false);
   });
 
   it("marketing pathway lesson page.tsx stays a thin shell (body owns paywall render tree)", () => {
