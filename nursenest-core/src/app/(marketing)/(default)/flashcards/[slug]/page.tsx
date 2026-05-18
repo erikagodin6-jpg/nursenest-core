@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, BookOpen, Brain, CheckCircle2, Layers3, ShieldAlert, ShieldCheck, Sparkles } from "lucide-react";
@@ -341,7 +342,7 @@ function TrustBadge({
   );
 }
 
-function TrustListItem({ children }: { children: React.ReactNode }) {
+function TrustListItem({ children }: { children: ReactNode }) {
   return (
     <li className="flex gap-2">
       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
