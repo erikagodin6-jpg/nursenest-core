@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { AlliedMarketingPathwayMissing } from "@/components/marketing/allied-marketing-pathway-missing";
+import { AlliedRespiratoryTherapyAuthority } from "@/components/marketing/allied-respiratory-therapy-authority";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
@@ -156,9 +157,13 @@ export default async function AlliedCareerHubPage({ params }: Props) {
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
         <WebPageJsonLd title={prof.title} description={prof.description} path={hubPath} />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
+
+        {prof.professionKey === "respiratory" ? <AlliedRespiratoryTherapyAuthority /> : null}
+
         <p className="nn-marketing-label mb-4 font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">
           Allied Health · {categoryMeta.label}
         </p>
+
         <AlliedHealthPathwayHub
           pathway={pathway}
           hubPath={hubPath}
