@@ -200,6 +200,123 @@ export const PRE_NURSING_FOUNDATION_CHECKPOINTS: Record<string, PreNursingCheckp
     misconceptionNote:
       "Beginners often memorize electrolyte names without linking them to patient risk. Potassium should immediately make you think heart rhythm and muscle function.",
   },
+
+  atpAerobicVsAnaerobic: {
+    conceptId: "prenursing.atp.aerobic-vs-anaerobic",
+    eyebrow: "Energy pathway checkpoint",
+    title: "Aerobic vs anaerobic check",
+    stem: "A tissue is not receiving enough oxygen and begins relying mostly on glycolysis. What is the most important consequence for ATP production?",
+    correctOptionId: "c",
+    options: [
+      {
+        id: "a",
+        label: "ATP production increases because glycolysis is faster",
+        rationale:
+          "Glycolysis can happen quickly, but it produces very little ATP compared with full aerobic metabolism. Speed does not mean adequate energy production.",
+      },
+      {
+        id: "b",
+        label: "The electron transport chain produces more ATP to compensate",
+        rationale:
+          "The electron transport chain requires oxygen as the final electron acceptor. Without oxygen, it cannot compensate effectively.",
+      },
+      {
+        id: "c",
+        label: "ATP production drops sharply because the cell loses aerobic metabolism",
+        rationale:
+          "Correct. Anaerobic glycolysis yields only about 2 ATP per glucose, while aerobic respiration yields roughly 36–38 ATP. This energy drop is why hypoxia threatens high-demand tissues.",
+      },
+      {
+        id: "d",
+        label: "The cell no longer needs ATP because oxygen is absent",
+        rationale:
+          "Cells always need ATP for membrane pumps, protein synthesis, and survival. Oxygen loss makes ATP production harder, not unnecessary.",
+      },
+    ],
+    clinicalRelevance:
+      "Poor oxygen delivery can rapidly impair high-demand organs such as the brain, heart, and kidneys because they depend on sustained ATP production.",
+    memoryAnchor: "Oxygen unlocks high-yield ATP production.",
+    misconceptionNote:
+      "Beginners often remember that glycolysis makes ATP but miss how little ATP it produces compared with aerobic metabolism.",
+  },
+
+  atpLactateHypoxia: {
+    conceptId: "prenursing.atp.lactate-hypoxia",
+    eyebrow: "Clinical thinking checkpoint",
+    title: "Lactate and hypoxia check",
+    stem: "A patient in shock has an elevated lactate level. Which explanation best connects this finding to cellular energy production?",
+    correctOptionId: "b",
+    options: [
+      {
+        id: "a",
+        label: "The body is making too much oxygen in the mitochondria",
+        rationale:
+          "Shock usually means oxygen delivery to tissues is inadequate. Elevated lactate points toward oxygen shortage and anaerobic metabolism, not excess oxygen production.",
+      },
+      {
+        id: "b",
+        label: "Cells are shifting toward anaerobic metabolism because tissue oxygen delivery is poor",
+        rationale:
+          "Correct. When tissues do not receive enough oxygen, pyruvate is converted toward lactate so glycolysis can continue temporarily, but ATP yield remains low.",
+      },
+      {
+        id: "c",
+        label: "The kidneys are filtering glucose too quickly",
+        rationale:
+          "Kidney filtration does not directly explain lactate elevation in shock. Lactate is tied to tissue oxygen delivery and anaerobic metabolism.",
+      },
+      {
+        id: "d",
+        label: "The patient is producing too much calcitonin",
+        rationale:
+          "Calcitonin affects calcium regulation. It does not explain elevated lactate during poor tissue perfusion.",
+      },
+    ],
+    clinicalRelevance:
+      "Lactate helps clinicians recognize tissue hypoxia and impaired perfusion. It connects cellular metabolism to patient deterioration.",
+    memoryAnchor: "Lactate rises when cells are struggling to make energy without enough oxygen.",
+    misconceptionNote:
+      "A common trap is treating lactate as a random lab. It is a clue about oxygen delivery and cellular stress.",
+  },
+
+  atpDkaKussmaul: {
+    conceptId: "prenursing.atp.dka-kussmaul-respirations",
+    eyebrow: "Clinical thinking checkpoint",
+    title: "DKA compensation check",
+    stem: "A patient with diabetic ketoacidosis develops deep, rapid respirations. What is the body trying to do?",
+    correctOptionId: "a",
+    options: [
+      {
+        id: "a",
+        label: "Blow off carbon dioxide to compensate for metabolic acidosis",
+        rationale:
+          "Correct. In DKA, ketone accumulation causes metabolic acidosis. Deep, rapid breathing helps reduce CO2, which can partially raise pH.",
+      },
+      {
+        id: "b",
+        label: "Slow oxygen movement into the bloodstream",
+        rationale:
+          "The body is not trying to reduce oxygenation. The respirations are a compensatory acid-base response.",
+      },
+      {
+        id: "c",
+        label: "Increase blood glucose by retaining carbon dioxide",
+        rationale:
+          "Carbon dioxide retention would worsen acidosis. Kussmaul respirations do the opposite by blowing off CO2.",
+      },
+      {
+        id: "d",
+        label: "Lower potassium by stopping ventilation",
+        rationale:
+          "Ventilation does not directly lower potassium this way. DKA potassium management is complex, but Kussmaul respirations are primarily acid-base compensation.",
+      },
+    ],
+    clinicalRelevance:
+      "Kussmaul respirations are a warning sign that the body is compensating for a serious metabolic problem. They connect glucose, ketones, acid-base balance, and respiratory compensation.",
+    memoryAnchor: "DKA breathes deep to dump CO2.",
+    misconceptionNote:
+      "Beginners often think abnormal breathing always means a primary lung problem. Sometimes breathing changes are compensation for metabolic acidosis.",
+  },
 };
 
 export const PRE_NURSING_ANATOMY_INITIAL_CHECKPOINT_IDS = [
@@ -208,4 +325,10 @@ export const PRE_NURSING_ANATOMY_INITIAL_CHECKPOINT_IDS = [
   "cardiovascularBloodFlow",
   "oxygenationGasExchange",
   "potassiumCardiacConduction",
+] as const;
+
+export const PRE_NURSING_ATP_PATHWAY_CHECKPOINT_IDS = [
+  "atpAerobicVsAnaerobic",
+  "atpLactateHypoxia",
+  "atpDkaKussmaul",
 ] as const;
