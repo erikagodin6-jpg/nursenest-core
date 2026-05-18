@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { CNPLE_SAMPLE_CASES } from "@/content/cases/cnple-sample-cases";
+import { findCnpleLoftCase } from "@/content/cases/cnple-case-catalog";
 import {
   parseDecisionsJson,
   processStepAdvance,
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: "chosenOptionId is required" }, { status: 400 });
   }
 
-  const patientCase = CNPLE_SAMPLE_CASES.find((c) => c.id === caseSession.scenarioId);
+  const patientCase = findCnpleLoftCase(caseSession.scenarioId);
   if (!patientCase) return NextResponse.json({ error: "Case not found" }, { status: 404 });
 
   const stepIndex = caseSession.currentStageIndex;
@@ -76,7 +76,6 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     typeof dwellMs === "number" ? dwellMs : undefined,
   );
 
-  // Persist updated session — include enriched decision fields from engine
   const nextStageIndex = result.completed ? stepIndex : stepIndex + 1;
   await prisma.longitudinalCaseSession.update({
     where: { id: sessionId },
@@ -91,7 +90,6 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
           cnpleDomainSlug: step.cnpleDomain,
           trajectory: result.trajectory,
           dwellMs: typeof dwellMs === "number" ? dwellMs : undefined,
-          // Phase 8 enriched fields — persisted so recomputation is accurate
           prescribingRiskSeverity: classifyPrescribingRiskSeverity(step.question.family, result.trajectory) ?? undefined,
           followUpAppropriateness: result.followUpAppropriateness ?? undefined,
         },
