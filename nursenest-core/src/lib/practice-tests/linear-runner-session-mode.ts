@@ -25,6 +25,7 @@
  */
 
 import type { LearnerExamShellMode } from "@/components/exam/exam-session-shell";
+import { isLoftSimulationPolicy, type LoftSimulationPolicyInput } from "@/lib/practice-tests/loft-simulation-policy";
 import type { LinearDeliveryMode } from "@/lib/practice-tests/types";
 
 export type LinearEngineRunnerUiKind =
@@ -54,10 +55,12 @@ export function resolveLearnerExamShellModeForPracticeRunner(args: {
   catMode: boolean;
   linearPracticeSplitReview: boolean;
   linearDeliveryMode?: LinearDeliveryMode | null;
+  loftPolicy?: LoftSimulationPolicyInput | null;
 }): LearnerExamShellMode {
   if (args.status !== "IN_PROGRESS") return "review";
   if (args.linearPracticeSplitReview) return "practice";
   if (args.catMode) return "cat";
   if (args.linearDeliveryMode === "exam") return "loft";
+  if (args.loftPolicy && isLoftSimulationPolicy(args.loftPolicy)) return "loft";
   return "practice";
 }
