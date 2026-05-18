@@ -143,6 +143,45 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/sitemap-index.xml", destination: "/sitemap.xml", permanent: true },
+      /** New Grad public marketing canonical lives on newgrad.nursenest.ca. */
+      {
+        source: "/",
+        has: [{ type: "host", value: "newgrad.nursenest.ca" }],
+        destination: "/new-grad",
+        permanent: false,
+      },
+      {
+        source: "/new-grad",
+        has: [{ type: "host", value: "www.nursenest.ca" }],
+        destination: "https://newgrad.nursenest.ca/new-grad",
+        permanent: true,
+      },
+      {
+        source: "/new-grad/:path*",
+        has: [{ type: "host", value: "www.nursenest.ca" }],
+        destination: "https://newgrad.nursenest.ca/new-grad/:path*",
+        permanent: true,
+      },
+      {
+        source: "/newgrad",
+        destination: "https://newgrad.nursenest.ca/new-grad",
+        permanent: true,
+      },
+      {
+        source: "/newgrad/:path*",
+        destination: "https://newgrad.nursenest.ca/new-grad/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:locale(en|fr)/new-grad",
+        destination: "https://newgrad.nursenest.ca/new-grad",
+        permanent: true,
+      },
+      {
+        source: "/:locale(en|fr)/new-grad/:path*",
+        destination: "https://newgrad.nursenest.ca/new-grad/:path*",
+        permanent: true,
+      },
       /** Legacy allied host bookmarked sitemap → canonical www HTTPS urlset. */
       {
         source: "/sitemap-allied.xml",
