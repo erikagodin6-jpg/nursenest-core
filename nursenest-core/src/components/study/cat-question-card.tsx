@@ -51,8 +51,10 @@ export function QuestionCard({
   const hasMeta = topic ?? subtopic ?? difficultyLabel;
   const examHead =
     examCategoryLabel != null && examCategoryLabel.trim().length > 0 ? (
-      <div className="nn-cat-exam-item-head mb-2 flex items-start justify-between gap-3">
-        <p className="nn-cat-exam-category-label m-0">{examCategoryLabel.trim().toUpperCase()}</p>
+      <div className="nn-cat-exam-item-head mb-4 flex items-start justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-3">
+        <p className="nn-cat-exam-category-label m-0 inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_9%,var(--semantic-surface))] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--semantic-brand)]">
+          {examCategoryLabel.trim().toUpperCase()}
+        </p>
         {examHeaderRightSlot ? <div className="nn-cat-exam-item-head__actions shrink-0">{examHeaderRightSlot}</div> : null}
       </div>
     ) : null;
@@ -60,15 +62,15 @@ export function QuestionCard({
   const meta =
     examHead ??
     (hasMeta ? (
-      <div className="nn-cat-topic-meta">
-        {topic ? <span className="nn-cat-topic-meta__name">{topic}</span> : null}
+      <div className="nn-cat-topic-meta mb-4 inline-flex flex-wrap items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_36%,var(--semantic-surface))] px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+        {topic ? <span className="nn-cat-topic-meta__name text-[var(--semantic-brand)]">{topic}</span> : null}
         {subtopic ? <span>· {subtopic}</span> : null}
         {difficultyLabel ? <span>· {difficultyLabel}</span> : null}
       </div>
     ) : null);
 
   const stemBlock = (
-    <p className="nn-cat-question-stem">
+    <p className="nn-cat-question-stem text-[1.02rem] leading-[1.72] tracking-[-0.012em] text-[var(--theme-heading-text)] sm:text-[1.08rem]">
       {typeof stem === "string" && stem.trim().length > 0
         ? stem
         : "Question text is unavailable. Try reloading this item."}
@@ -170,29 +172,31 @@ export function QuestionCard({
   if (examStackedLayout && examDetachedFooter) {
     if (examStemScrollPartition) {
       return (
-        <div className="nn-cat-question-card nn-cat-question-card--exam-stack nn-cat-question-card--exam-detached flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-[var(--semantic-surface)]">
+        <div className="nn-cat-question-card nn-cat-question-card--exam-stack nn-cat-question-card--exam-detached flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,var(--semantic-panel-muted))] shadow-[0_24px_70px_color-mix(in_srgb,var(--semantic-brand)_10%,transparent)]">
           <div
             id="nn-cat-exam-scroll-region"
-            className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached nn-cat-question-card__exam-scroll--partitioned flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-2.5 pb-2 pt-2 sm:px-4 sm:pb-2 sm:pt-2.5"
+            className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached nn-cat-question-card__exam-scroll--partitioned flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-4 pb-4 pt-4 sm:px-6 sm:pb-5 sm:pt-5"
           >
             {meta}
-            <div className="nn-cat-exam-stem-scroll min-h-0 min-w-0 shrink-0 overflow-y-auto overflow-x-hidden overscroll-y-contain">
+            <div className="nn-cat-exam-stem-scroll min-h-0 min-w-0 shrink-0 overflow-y-auto overflow-x-hidden overscroll-y-contain rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_13%,var(--semantic-surface))] px-4 py-4">
               {stemBlock}
             </div>
-            <div className="nn-cat-exam-post-stem shrink-0 pt-1 sm:pt-1.5">{children}</div>
+            <div className="nn-cat-exam-post-stem shrink-0 pt-4 sm:pt-5">{children}</div>
           </div>
         </div>
       );
     }
     return (
-      <div className="nn-cat-question-card nn-cat-question-card--exam-stack nn-cat-question-card--exam-detached flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-[var(--semantic-surface)]">
+      <div className="nn-cat-question-card nn-cat-question-card--exam-stack nn-cat-question-card--exam-detached flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,var(--semantic-panel-muted))] shadow-[0_24px_70px_color-mix(in_srgb,var(--semantic-brand)_10%,transparent)]">
         <div
           id="nn-cat-exam-scroll-region"
-          className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-5"
+          className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-5 pb-7 pt-5 sm:px-7 sm:pb-9 sm:pt-6"
         >
           {meta}
-          {stemBlock}
-          {children}
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_13%,var(--semantic-surface))] px-4 py-4">
+            {stemBlock}
+          </div>
+          <div className="mt-5">{children}</div>
         </div>
       </div>
     );
@@ -200,10 +204,10 @@ export function QuestionCard({
 
   if (examStackedLayout && footerSlot) {
     return (
-      <div className="nn-cat-question-card nn-cat-question-card--exam-stack flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="nn-cat-question-card nn-cat-question-card--exam-stack flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,var(--semantic-panel-muted))] shadow-[0_24px_70px_color-mix(in_srgb,var(--semantic-brand)_9%,transparent)]">
         <div
           id="nn-cat-exam-scroll-region"
-          className="nn-cat-question-card__exam-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
+          className="nn-cat-question-card__exam-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-5 py-5 sm:px-7 sm:py-6"
           style={{
             /*
              * Match footer border-box height (footer uses padding-bottom: calc(16px + env(safe-area-inset-bottom))).
@@ -215,12 +219,14 @@ export function QuestionCard({
           }}
         >
           {meta}
-          {stemBlock}
-          {children}
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_13%,var(--semantic-surface))] px-4 py-4">
+            {stemBlock}
+          </div>
+          <div className="mt-5">{children}</div>
         </div>
         <div
           ref={footerRef}
-          className="nn-cat-question-card__exam-footer nn-cat-question-card__exam-footer--anchored shrink-0 border-t border-[var(--semantic-border-soft)]"
+          className="nn-cat-question-card__exam-footer nn-cat-question-card__exam-footer--anchored shrink-0 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-muted))]"
         >
           {footerSlot}
         </div>
@@ -229,10 +235,12 @@ export function QuestionCard({
   }
 
   return (
-    <div className="nn-cat-question-card min-w-0 max-w-full">
+    <div className="nn-cat-question-card min-w-0 max-w-full rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_96%,var(--semantic-panel-muted))] p-5 shadow-[0_18px_55px_color-mix(in_srgb,var(--semantic-brand)_8%,transparent)] sm:p-6">
       {meta}
-      {stemBlock}
-      {children}
+      <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_13%,var(--semantic-surface))] px-4 py-4">
+        {stemBlock}
+      </div>
+      <div className="mt-5">{children}</div>
     </div>
   );
 }
@@ -282,7 +290,7 @@ export function AnswerOptionRow({
     return (
       <label
         data-nn-qa-exam-format="sata"
-        className={`nn-cat-opt nn-cat-opt--multi ${stateClass} ${interactiveClass} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+        className={`nn-cat-opt nn-cat-opt--multi ${stateClass} ${interactiveClass} ${disabled ? "cursor-not-allowed" : "cursor-pointer"} rounded-2xl border-[var(--semantic-border-soft)] px-4 py-3.5 shadow-sm`}
       >
         <input
           type="checkbox"
@@ -296,7 +304,7 @@ export function AnswerOptionRow({
           className={`nn-cat-opt__control ${checked || state === "correct" ? "nn-cat-opt__control--checked" : ""}`}
           aria-hidden="true"
         />
-        <span className="nn-cat-opt__text">{text}</span>
+        <span className="nn-cat-opt__text text-sm leading-relaxed sm:text-[0.95rem]">{text}</span>
         {state === "correct" ? (
           <span className="sr-only">Correct answer.</span>
         ) : state === "incorrect" ? (
@@ -317,7 +325,7 @@ export function AnswerOptionRow({
       data-nn-qa-exam-format="mcq"
       disabled={disabled}
       onClick={onClick}
-      className={`nn-cat-opt ${stateClass} ${interactiveClass}`}
+      className={`nn-cat-opt ${stateClass} ${interactiveClass} rounded-2xl border-[var(--semantic-border-soft)] px-4 py-3.5 text-left shadow-sm`}
       aria-pressed={state === "selected"}
     >
       <span className="nn-cat-opt__letter">{letter}</span>
@@ -325,7 +333,7 @@ export function AnswerOptionRow({
         className={`nn-cat-opt__control ${state === "selected" || state === "correct" ? "nn-cat-opt__control--checked" : ""}`}
         aria-hidden="true"
       />
-      <span className="nn-cat-opt__text">{text}</span>
+      <span className="nn-cat-opt__text text-sm leading-relaxed sm:text-[0.95rem]">{text}</span>
       {state === "correct" ? (
         <span className="sr-only">Correct answer.</span>
       ) : state === "incorrect" ? (
