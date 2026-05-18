@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { CNPLE_SAMPLE_CASES } from "@/content/cases/cnple-sample-cases";
+import { findCnpleLoftCase } from "@/content/cases/cnple-case-catalog";
 import {
   parseDecisionsJson,
   classifyReadiness,
@@ -32,14 +32,13 @@ export async function GET(_req: NextRequest, { params }: RouteParams) {
   if (!caseSession) return NextResponse.json({ error: "Session not found" }, { status: 404 });
   if (caseSession.userId !== userId) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const patientCase = CNPLE_SAMPLE_CASES.find((c) => c.id === caseSession.scenarioId);
+  const patientCase = findCnpleLoftCase(caseSession.scenarioId);
   if (!patientCase) return NextResponse.json({ error: "Case not found" }, { status: 404 });
 
   const decisions = parseDecisionsJson(caseSession.decisionsJson);
   const score = caseSession.scoreJson as CaseSessionScore | null;
   const readiness = score ? classifyReadiness(score.score0to100) : "not_ready";
 
-  // Build per-step review with full rationale revealed
   const stepReviews = patientCase.steps.map((step, i) => {
     const decision = decisions.find((d) => d.stepIndex === i);
     return {
@@ -63,7 +62,6 @@ export async function GET(_req: NextRequest, { params }: RouteParams) {
     };
   });
 
-  // Build domain remediation links for weak domains
   const remediationLinks = (score?.weakDomains ?? []).map(buildDomainRemediationLinks);
 
   return NextResponse.json({
