@@ -10,6 +10,7 @@ import { CASE_PEDIATRIC_ASTHMA_EXACERBATION } from "@/content/cases/cnple-pediat
 import { CASE_PEDIATRIC_FEVER_KAWASAKI } from "@/content/cases/cnple-pediatric-fever-kawasaki-loft-case";
 import { CNPLE_SUPPLEMENTAL_LOFT_CASES } from "@/content/cases/cnple-supplemental-loft-cases";
 import { CASE_SUICIDE_RISK_LONGITUDINAL } from "@/content/cases/cnple-suicide-risk-longitudinal-loft-case";
+import { CASE_WOMENS_HEALTH_ABNORMAL_BLEEDING } from "@/content/cases/cnple-womens-health-abnormal-bleeding-loft-case";
 
 /**
  * Canonical runtime catalog for CNPLE LOFT cases.
@@ -30,6 +31,7 @@ export const CNPLE_LOFT_CASES: PatientCase[] = [
   CASE_DELIRIUM_POLYPHARMACY,
   CASE_AFIB_ANTICOAGULATION_RISK_BENEFIT,
   CASE_CKD_MEDICATION_SAFETY,
+  CASE_WOMENS_HEALTH_ABNORMAL_BLEEDING,
 ];
 
 export function findCnpleLoftCase(caseId: string): PatientCase | undefined {
