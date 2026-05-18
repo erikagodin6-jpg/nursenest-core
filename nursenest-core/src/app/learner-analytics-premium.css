@@ -1,0 +1,143 @@
+/* ======================================================================
+   learner-analytics-premium.css
+   Learner analytics visual layer only.
+   Imported by /app/account/analytics; does not touch learner navigation.
+   ======================================================================= */
+
+.nn-premium-analytics-report {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  --nn-analytics-shell-bg: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted)) 48%,
+    color-mix(in srgb, var(--semantic-panel-positive) 10%, var(--semantic-surface)) 100%
+  );
+  --nn-analytics-card-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-surface-elevated, var(--semantic-surface)) 92%, var(--semantic-panel-cool)) 0%,
+    color-mix(in srgb, var(--semantic-surface) 96%, var(--semantic-panel-muted)) 100%
+  );
+  --nn-analytics-card-border: color-mix(in srgb, var(--semantic-chart-3) 14%, var(--semantic-border-soft));
+  --nn-analytics-glow-primary: color-mix(in srgb, var(--semantic-chart-3) 12%, transparent);
+  --nn-analytics-glow-secondary: color-mix(in srgb, var(--semantic-chart-4) 10%, transparent);
+  --nn-analytics-glow-tertiary: color-mix(in srgb, var(--semantic-chart-7) 8%, transparent);
+  background: var(--nn-analytics-shell-bg);
+}
+
+.nn-premium-analytics-report::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(760px 300px at 0% 0%, var(--nn-analytics-glow-primary), transparent 58%),
+    radial-gradient(620px 260px at 100% 8%, var(--nn-analytics-glow-secondary), transparent 56%),
+    radial-gradient(540px 220px at 78% 100%, var(--nn-analytics-glow-tertiary), transparent 58%);
+}
+
+.nn-premium-analytics-report > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nn-premium-analytics-report .nn-premium-analytics-chart-column,
+.nn-premium-analytics-report [class*="rounded-2xl"][class*="border"] {
+  border-color: var(--nn-analytics-card-border);
+  background: var(--nn-analytics-card-bg);
+}
+
+.nn-premium-analytics-report .nn-premium-analytics-chart-column,
+.nn-premium-analytics-report [class*="rounded-2xl"][class*="border"],
+.nn-premium-analytics-report [class*="rounded-xl"][class*="border"] {
+  box-shadow:
+    0 22px 48px -38px color-mix(in srgb, var(--semantic-text-primary) 22%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--semantic-surface-elevated, var(--semantic-surface)) 52%, transparent);
+}
+
+.nn-premium-analytics-report .nn-readiness-donut-svg {
+  filter: drop-shadow(0 18px 28px color-mix(in srgb, var(--semantic-brand) 14%, transparent));
+}
+
+.nn-premium-analytics-report .nn-readiness-donut-arc {
+  filter: drop-shadow(0 0 10px color-mix(in srgb, currentColor 28%, transparent));
+}
+
+.nn-premium-analytics-report a:focus-visible,
+.nn-premium-analytics-report button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--semantic-brand) 58%, transparent);
+  outline-offset: 3px;
+}
+
+.nn-premium-analytics-report .nn-btn-primary,
+.nn-premium-analytics-report .nn-btn-secondary {
+  transition:
+    transform 160ms var(--brand-motion-ease-calm-out, ease-out),
+    border-color 160ms var(--brand-motion-ease-calm-out, ease-out),
+    background-color 160ms var(--brand-motion-ease-calm-out, ease-out),
+    box-shadow 160ms var(--brand-motion-ease-calm-out, ease-out);
+}
+
+.nn-premium-analytics-report .nn-btn-primary:hover,
+.nn-premium-analytics-report .nn-btn-secondary:hover {
+  transform: translateY(-1px);
+}
+
+html[data-theme="midnight"] .nn-premium-analytics-report {
+  --nn-analytics-shell-bg: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 62%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-surface) 86%, var(--semantic-panel-cool)) 52%,
+    color-mix(in srgb, var(--semantic-info) 8%, var(--semantic-surface)) 100%
+  );
+  --nn-analytics-card-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-panel-muted) 54%, var(--semantic-surface)) 0%,
+    color-mix(in srgb, var(--semantic-surface) 86%, var(--semantic-panel-cool)) 100%
+  );
+  --nn-analytics-card-border: color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft));
+  --nn-analytics-glow-primary: color-mix(in srgb, var(--semantic-info) 18%, transparent);
+  --nn-analytics-glow-secondary: color-mix(in srgb, var(--semantic-chart-3) 16%, transparent);
+  --nn-analytics-glow-tertiary: color-mix(in srgb, var(--semantic-success) 10%, transparent);
+}
+
+html[data-theme="midnight"] .nn-premium-analytics-report .nn-readiness-donut-svg {
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--semantic-info) 20%, transparent));
+}
+
+:is(html[data-theme="blossom"], html[data-theme="aurora"]) .nn-premium-analytics-report {
+  --nn-analytics-glow-primary: color-mix(in srgb, var(--semantic-chart-1) 10%, transparent);
+  --nn-analytics-glow-secondary: color-mix(in srgb, var(--semantic-chart-2) 9%, transparent);
+  --nn-analytics-card-border: color-mix(in srgb, var(--semantic-chart-1) 14%, var(--semantic-border-soft));
+}
+
+html[data-theme="sunset"] .nn-premium-analytics-report {
+  --nn-analytics-glow-primary: color-mix(in srgb, var(--semantic-chart-1) 10%, transparent);
+  --nn-analytics-glow-secondary: color-mix(in srgb, var(--semantic-warning) 8%, transparent);
+  --nn-analytics-card-border: color-mix(in srgb, var(--semantic-chart-1) 13%, var(--semantic-border-soft));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-premium-analytics-report .nn-btn-primary,
+  .nn-premium-analytics-report .nn-btn-secondary {
+    transition: none;
+  }
+
+  .nn-premium-analytics-report .nn-btn-primary:hover,
+  .nn-premium-analytics-report .nn-btn-secondary:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .nn-premium-analytics-report {
+    border-radius: 1.35rem;
+  }
+
+  .nn-premium-analytics-report [class*="rounded-2xl"][class*="border"] {
+    border-radius: 1rem;
+  }
+}
