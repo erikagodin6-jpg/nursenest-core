@@ -3,6 +3,7 @@ import respiratoryTherapyCatalog from "@/content/pathway-lessons/allied-professi
 import pharmacyTechnicianCatalog from "@/content/pathway-lessons/allied-professions/pharmacy-technician";
 import medicalLaboratoryTechnologyCatalog from "@/content/pathway-lessons/allied-professions/medical-laboratory-technology";
 import medicalImagingCatalog from "@/content/pathway-lessons/allied-professions/medical-imaging";
+import emergencyMedicalServicesCatalog from "@/content/pathway-lessons/allied-professions/emergency-medical-services";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -26,36 +27,39 @@ if (mltProfession) {
 const imagingProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "imaging");
 if (imagingProfession) {
   imagingProfession.dedicatedCatalogFile = "medical-imaging";
-  imagingProfession.topicSlugsIn = [
-    "radiation-safety",
-    "imaging-positioning",
-    "contrast-safety",
-    "imaging-modalities",
-    "image-quality",
-    "imaging-patient-care",
-    "radiologic-technology",
-    "ct-technologist",
-    "mri-technologist",
-    "sonography",
-    "nuclear-medicine",
-    "imaging-basics",
+}
+
+const emtProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "emt");
+if (emtProfession) {
+  emtProfession.dedicatedCatalogFile = "emergency-medical-services";
+  emtProfession.topicSlugsIn = [
+    "ems-scene-safety",
+    "ems-primary-assessment",
+    "ems-airway",
+    "ems-shock",
+    "ems-cardiology",
+    "ems-trauma",
+    "prehospital-care",
+    "emergency-response",
+    "patient-assessment",
+    "critical-care-transport",
   ];
-  imagingProfession.description =
-    "Deep medical imaging education covering radiation safety, positioning, CT, MRI, ultrasound, contrast reactions, image quality, trauma imaging, and imaging patient care.";
-  imagingProfession.examOverview = [
-    "Imaging exams reward modality reasoning, safety, positioning accuracy, image-quality analysis, and patient-care judgment under pressure.",
-    "Use radiation safety, contrast workflow, and positioning logic together instead of memorizing isolated projections.",
-    "Scenario-based imaging review produces stronger retention than passive anatomy-only memorization.",
+  emtProfession.description =
+    "Deep EMT and paramedic education covering scene safety, airway management, trauma, shock, STEMI systems, cardiac arrest, rapid transport, and prehospital critical thinking.";
+  emtProfession.examOverview = [
+    "EMS exams reward prioritization, rapid life-threat recognition, and protocol-driven emergency decision-making.",
+    "Use scene size-up, primary assessment, airway management, shock recognition, and trauma triage together instead of memorizing isolated algorithms.",
+    "Scenario-heavy prehospital review improves retention and field reasoning more than passive memorization alone.",
   ];
-  imagingProfession.features = [
-    "Dedicated imaging lesson shard with CT, MRI, radiography, and contrast-safety depth.",
-    "Mechanism-first imaging education aligned to real clinical workflow.",
-    "Image-quality and artifact reasoning integrated with patient safety and repeat prevention.",
-    "Shared imaging foundation supporting radiography, sonography, and advanced modality growth.",
+  emtProfession.features = [
+    "Dedicated EMS lesson shard separated from generic allied-health filler.",
+    "Mechanism-first trauma, cardiology, airway, and shock education.",
+    "Prehospital transport-priority and scene-safety reasoning integrated into every lesson cluster.",
+    "Shared EMS foundation supporting EMT, AEMT, paramedic, and critical-care transport expansion.",
   ];
-  imagingProfession.ctaLine =
-    "Study radiography, CT, MRI, ultrasound, contrast safety, and imaging workflow through the dedicated imaging pathway.";
-  imagingProfession.premiumCtaHeadline = "Master imaging safety, positioning, modalities, and diagnostic workflow";
+  emtProfession.ctaLine =
+    "Study airway, trauma, STEMI systems, shock, and EMS decision-making through the dedicated prehospital-care pathway.";
+  emtProfession.premiumCtaHeadline = "Master prehospital assessment, airway management, trauma, and emergency response";
 }
 
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
@@ -63,4 +67,5 @@ export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, Allie
   "pharmacy-technician": pharmacyTechnicianCatalog,
   "medical-laboratory-technology": medicalLaboratoryTechnologyCatalog,
   "medical-imaging": medicalImagingCatalog,
+  "emergency-medical-services": emergencyMedicalServicesCatalog,
 };
