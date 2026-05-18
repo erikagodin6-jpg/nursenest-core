@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { ecgApiDeniedResponse, getCurrentEcgModuleAccess } from "@/lib/ecg-module/ecg-module.server";
+import { PEDIATRIC_ECG_CURRICULUM } from "@/lib/ecg-module/ecg-pediatric-curriculum";
 import {
-  PEDIATRIC_ECG_CURRICULUM,
   filterPediatricTopicForRpnTier,
-} from "@/lib/ecg-module/ecg-pediatric-curriculum";
-import { getPediatricContentAccessLevel } from "@/lib/ecg-module/ecg-pediatric-governance";
+  getPediatricContentAccessLevel,
+} from "@/lib/ecg-module/ecg-pediatric-governance";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";

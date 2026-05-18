@@ -146,8 +146,8 @@ function LazyWhenVisible({ children, fallback, rootMargin = "360px 0px" }: LazyW
     if (!node) return;
 
     if (!("IntersectionObserver" in window)) {
-      const id = window.setTimeout(() => setVisible(true), 2200);
-      return () => window.clearTimeout(id);
+      const id = globalThis.setTimeout(() => setVisible(true), 2200);
+      return () => globalThis.clearTimeout(id);
     }
 
     const observer = new IntersectionObserver(

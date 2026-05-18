@@ -13,7 +13,13 @@
  *
  * Hard-blocks critical safety incoherence. Soft-warns on lower severity issues.
  */
-import type { PatientCase, CaseStep, DiagnosticArtifact, FollowUpInterval } from "@/lib/cases/longitudinal-case-types";
+import type {
+  PatientCase,
+  CaseStep,
+  DiagnosticArtifact,
+  FollowUpInterval,
+  StructuredFollowUpInterval,
+} from "@/lib/cases/longitudinal-case-types";
 
 // ── Result types ──────────────────────────────────────────────────────────────
 
@@ -35,7 +41,7 @@ export type CaseAuthoringAuditResult = {
 
 // ── Vital sign ranges ─────────────────────────────────────────────────────────
 
-type VitalRange = { min: number; max: number; criticalLow?: number; criticalHigh?: number };
+type VitalRange = { min: number; max: number; criticalLow?: number | null; criticalHigh?: number | null };
 
 const VITAL_RANGES: Record<string, VitalRange> = {
   "systolic":   { min: 50,  max: 280, criticalLow: 70,  criticalHigh: 230 },
@@ -178,7 +184,9 @@ export function auditCaseAuthoring(patientCase: PatientCase): CaseAuthoringAudit
     }
 
     // Medication combos per-step
-    const stepMedNames = step.medicationChanges.filter((m) => m.flag === "new").map((m) => m.name);
+    const stepMedNames = step.medicationChanges
+      .filter((m) => medicationChangeFlag(m) === "new")
+      .map((m) => m.name);
     const cumMedNames = [...allMedNames, ...stepMedNames];
     for (const combo of UNSAFE_COMBINATIONS) {
       const matches = combo.drugs.map((d) => cumMedNames.some((n) => d.test(n)));
@@ -197,7 +205,7 @@ export function auditCaseAuthoring(patientCase: PatientCase): CaseAuthoringAudit
       const days = intervalToDays(step.followUpInterval);
       if (days < 0) {
         violations.push(v("invalid_follow_up_interval", "critical",
-          `Follow-up interval at step ${step.index} is negative (got ${step.followUpInterval.value} ${step.followUpInterval.unit}). Elapsed time must be non-negative.`,
+          `Follow-up interval at step ${step.index} is negative (got ${formatFollowUpInterval(step.followUpInterval)}). Elapsed time must be non-negative.`,
           `${loc}.followUpInterval`));
       }
       if (days > 3650) {
@@ -294,7 +302,7 @@ function validateArtifact(
         "implausible_lab_value",
         "critical",
         `${v2.test} value ${v2.value} ${v2.unit ?? ""} is outside plausibility range [${range.min}–${range.max}].`,
-        `${loc}.diagnosticArtifacts.${artifact.name}.${v2.test}`,
+        `${loc}.diagnosticArtifacts.${diagnosticArtifactName(artifact)}.${v2.test}`,
       ));
     }
   }
@@ -309,7 +317,7 @@ function validateArtifact(
       if (k > 6.5 && na < 120) {
         violations.push(v("extreme_electrolyte_combination", "warning",
           `K+ ${kVal.value} + Na+ ${naVal.value}: extreme electrolyte combination requires clinical narrative justification.`,
-          `${loc}.diagnosticArtifacts.${artifact.name}`));
+          `${loc}.diagnosticArtifacts.${diagnosticArtifactName(artifact)}`));
       }
     }
   }
@@ -354,7 +362,7 @@ function validateQuestion(
 
   // All options must have a consequence
   for (const opt of q.options) {
-    if (!q.consequencesByOptionId[opt.id]) {
+    if (!q.consequencesByOptionId?.[opt.id]) {
       violations.push(v("missing_consequence", "warning",
         `Option ${opt.id} has no consequence entry.`,
         `${loc}.question.consequencesByOptionId`));
@@ -363,7 +371,7 @@ function validateQuestion(
 
   // Wrong options must have whyWrong
   for (const opt of q.options) {
-    if (opt.id !== q.correctOptionId && !q.whyWrongByOptionId[opt.id]) {
+    if (opt.id !== q.correctOptionId && !q.whyWrongByOptionId?.[opt.id]) {
       violations.push(v("missing_why_wrong", "warning",
         `Option ${opt.id} is a distractor but has no whyWrongByOptionId entry.`,
         `${loc}.question.whyWrongByOptionId`));
@@ -428,8 +436,44 @@ function checkRange(
 }
 
 function intervalToDays(interval: FollowUpInterval): number {
-  const mult: Record<FollowUpInterval["unit"], number> = {
+  if (typeof interval === "string") return intervalStringToDays(interval);
+  const mult: Record<StructuredFollowUpInterval["unit"], number> = {
     hours: 1 / 24, days: 1, weeks: 7, months: 30,
   };
   return interval.value * mult[interval.unit];
+}
+
+function diagnosticArtifactName(artifact: DiagnosticArtifact): string {
+  return artifact.name ?? artifact.label ?? artifact.type ?? "result";
+}
+
+function formatFollowUpInterval(interval: FollowUpInterval): string {
+  if (typeof interval === "string") return interval;
+  return `${interval.value} ${interval.unit}`;
+}
+
+function intervalStringToDays(interval: string): number {
+  const normalized = interval.toLowerCase().replace(/[–—]/g, "-");
+  const matches = [...normalized.matchAll(/(\d+(?:\.\d+)?)(?:\s*-\s*(\d+(?:\.\d+)?))?\s*(hour|hours|day|days|week|weeks|month|months)/g)];
+  if (matches.length === 0) return 0;
+
+  const [, firstRaw, secondRaw, unitRaw] = matches[0]!;
+  const first = Number(firstRaw);
+  const second = secondRaw ? Number(secondRaw) : first;
+  const value = Number.isFinite(first) && Number.isFinite(second) ? (first + second) / 2 : first;
+  const unit = unitRaw ?? "days";
+  const multiplier = unit.startsWith("hour") ? 1 / 24 : unit.startsWith("week") ? 7 : unit.startsWith("month") ? 30 : 1;
+  return value * multiplier;
+}
+
+function medicationChangeFlag(
+  change: PatientCase["steps"][number]["medicationChanges"][number],
+): "new" | "changed" | "discontinued" | "hold" | undefined {
+  if (change.flag) return change.flag;
+  if (change.change === "start") return "new";
+  if (change.change === "continue") return "changed";
+  if (change.change === "stop") return "discontinued";
+  if (change.change === "hold") return "hold";
+  if (change.change === "change") return "changed";
+  return undefined;
 }

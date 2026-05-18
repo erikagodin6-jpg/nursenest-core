@@ -125,11 +125,17 @@ export type ClinicalUpdate = {
 
 /** Lab result, imaging, ECG, or other diagnostic arriving at this step. */
 export type DiagnosticArtifact = {
-  type: "lab_panel" | "ecg" | "imaging" | "spirometry" | "biopsy" | "other";
-  name: string;
+  type?: "lab_panel" | "ecg" | "imaging" | "spirometry" | "biopsy" | "other";
+  name?: string;
+  /** Compact authored result label used by newer static case rows. */
+  label?: string;
+  /** Compact authored result value used by newer static case rows. */
+  value?: string;
   /** Key finding / interpretation. */
-  finding: string;
+  finding?: string;
+  interpretation?: string;
   impression?: string;
+  isAbnormal?: boolean;
   timestamp?: string;
   /** Ordered values for lab panels. */
   values?: Array<{
@@ -146,7 +152,7 @@ export type VitalReading = {
   label: string;
   value: string;
   unit?: string;
-  flag?: "high" | "low" | "critical";
+  flag?: "high" | "low" | "critical" | "borderline";
 };
 
 /** A medication entry — used in both initial list and per-step changes. */
@@ -156,16 +162,20 @@ export type MedicationChange = {
   route?: string;
   frequency?: string;
   indication?: string;
+  change?: "start" | "continue" | "stop" | "hold" | "change";
+  note?: string;
   /** Change type — new prescription, dose adjustment, hold, or discontinuation. */
   flag?: "new" | "changed" | "discontinued" | "hold";
 };
 
 /** Time elapsed between visits or steps. */
-export type FollowUpInterval = {
+export type StructuredFollowUpInterval = {
   value: number;
   unit: "hours" | "days" | "weeks" | "months";
   label: string;
 };
+
+export type FollowUpInterval = StructuredFollowUpInterval | string;
 
 /** Referral/escalation decision record. */
 export type ReferralDecision = {
@@ -177,29 +187,53 @@ export type ReferralDecision = {
 // ── Question model ─────────────────────────────────────────────────────────────
 
 /** Clinical judgment question for one case step. */
+export type CaseStepQuestionFamily =
+  | "single-best-answer-clinical-judgment"
+  | "case-based-diagnostic-reasoning"
+  | "safe-prescribing-medication-management"
+  | "lab-diagnostic-interpretation"
+  | "lifespan-primary-care"
+  | "acute-deterioration-urgent-referral"
+  | "health-promotion-screening"
+  | "professional-ethics-legal-scope"
+  | "interprofessional-care-consultation"
+  | "chronic-disease-management"
+  | "acute-respiratory"
+  | "alcohol-brief-intervention"
+  | "cellulitis-escalation"
+  | "cellulitis-prescribing"
+  | "cellulitis-prevention"
+  | "chest-pain-differential"
+  | "endocrine-diagnostics"
+  | "oat-duration"
+  | "oat-induction"
+  | "oud-oat"
+  | "patient-education"
+  | "patient-education-angina"
+  | "patient-education-copd"
+  | "prediabetes-cvd-risk"
+  | "prescribing-endocrine"
+  | "prescribing-respiratory"
+  | "prescribing-respiratory-steroid"
+  | "preventive-screening"
+  | "professional-ethics-autonomy"
+  | "sihd-prescribing"
+  | "tb-prescribing"
+  | "tb-professional-practice";
+
 export type CaseStepQuestion = {
   stem: string;
-  /** One of the 10 CNPLE-aligned question families. */
-  family:
-    | "single-best-answer-clinical-judgment"
-    | "case-based-diagnostic-reasoning"
-    | "safe-prescribing-medication-management"
-    | "lab-diagnostic-interpretation"
-    | "lifespan-primary-care"
-    | "acute-deterioration-urgent-referral"
-    | "health-promotion-screening"
-    | "professional-ethics-legal-scope"
-    | "interprofessional-care-consultation"
-    | "chronic-disease-management";
+  /** CNPLE-aligned question family used for analytics and remediation. */
+  family: CaseStepQuestionFamily;
   options: CaseStepOption[];
   correctOptionId: string;
   rationale: string;
   /** Why each distractor is incorrect. Keyed by option id. */
-  whyWrongByOptionId: Record<string, string>;
+  whyWrongByOptionId?: Record<string, string>;
   /** Short clinical judgment focus note for the report card. */
-  clinicalJudgmentFocus: string;
+  clinicalJudgmentFocus?: string;
   /** What happens depending on which option the learner chose. Keyed by option id. */
-  consequencesByOptionId: Record<string, CaseStepConsequence>;
+  consequencesByOptionId?: Record<string, CaseStepConsequence>;
 };
 
 export type CaseStepOption = {
@@ -369,7 +403,7 @@ export type EvolvedVitalReading = {
   label: string;
   value: string;
   unit?: string;
-  flag?: "high" | "low" | "critical";
+  flag?: "high" | "low" | "critical" | "borderline";
   trend?: "improving" | "worsening" | "stable";
 };
 

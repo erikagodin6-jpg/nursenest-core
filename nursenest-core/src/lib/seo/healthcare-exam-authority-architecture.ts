@@ -456,7 +456,7 @@ export function buildHealthcareExamAuthorityUrlInventory(): HealthcareExamAuthor
     title: p.title,
     targetQueries: p.targetQueries,
   }));
-  const clusters = HEALTHCARE_EXAM_TOPIC_CLUSTERS.map((p) => ({
+  const clusters = (HEALTHCARE_EXAM_TOPIC_CLUSTERS as readonly HealthcareExamTopicCluster[]).map((p) => ({
     kind: "topic-cluster" as const,
     id: p.id,
     family: p.families[0]!,

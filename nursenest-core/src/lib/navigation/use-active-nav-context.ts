@@ -24,7 +24,10 @@ export function useActiveNavContext(existingSession?: ActiveNavSessionInput): Ac
   const { region } = useNursenestRegion();
   const globalRegion = useClientGlobalRegionCookie();
   const locale = useMarketingLocale();
-  const stableSession = sessionSource.status === "authenticated" ? sessionSource.session : null;
+  const stableSession =
+    sessionSource.status === "authenticated"
+      ? ("session" in sessionSource ? sessionSource.session : sessionSource.data)
+      : null;
 
   return useMemo(
     () =>

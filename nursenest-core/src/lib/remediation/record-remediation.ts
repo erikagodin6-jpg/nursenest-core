@@ -215,7 +215,7 @@ export async function recordRemediationCapture(
         canonicalTopicId,       // null when outside CNPLE taxonomy
         prescribingSafetyMiss,
         totalScore: scoreBreakdown.total,
-        scoreBreakdown,         // per-component for PostHog ingestion
+        scoreBreakdownJson: JSON.stringify(scoreBreakdown), // per-component for PostHog ingestion
         mistakeCount,
         isSata: input.isSata ?? false,
         sataPartialCredit: input.sataPartialCredit ?? false,

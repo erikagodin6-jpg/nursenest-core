@@ -62,7 +62,7 @@ function buildRetestHref(
   pathwayId: string | null,
   topic: string | null,
   topicCode: string | null,
-  practiceQuestionsHref: string,
+  practiceQuestionsHref: string | null,
 ): string {
   const qs = new URLSearchParams();
   qs.set("preset", "topic_drill");
@@ -72,7 +72,7 @@ function buildRetestHref(
   qs.set("sessionSize", "5");
   return qs.has("topic") || qs.has("topicCode")
     ? `/app/questions?${qs.toString()}`
-    : practiceQuestionsHref;
+    : (practiceQuestionsHref ?? "/app/questions");
 }
 
 export async function buildStudyPlanForUser(

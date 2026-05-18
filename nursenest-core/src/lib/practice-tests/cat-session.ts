@@ -76,11 +76,25 @@ import { STUDY_DIVERSITY_CAT_STEP_RECENT_SESSION_LOOKBACK } from "@/lib/study/st
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import type {
   CatAdaptiveSessionType,
+  CatEngineMode,
+  CatEngineType,
   CatExamFeedbackMode,
   CatSelectionBasis,
   PracticeTestConfigJson,
   PracticeTestResultsJson,
 } from "@/lib/practice-tests/types";
+
+function catEngineTypeFromReadiness(engineType: string | null | undefined): CatEngineType {
+  return engineType === "SIMULATION" ? "SIMULATION" : "CAT";
+}
+
+function catEngineModeFromReadiness(mode: string | null | undefined): CatEngineMode {
+  if (mode === "beta" || mode === "mini_adaptive" || mode === "simulation" || mode === "unavailable") {
+    return mode;
+  }
+  if (mode === "loft_simulation") return "simulation";
+  return "production_ready";
+}
 
 function catStopBoundsForConfig(config: PracticeTestConfigJson, bounds: { min: number; max: number }): CatStopBounds {
   const examCfg = getExamConfig(config.catExamConfigId ?? "") ?? NCLEX_RN_US_EXAM_CONFIG;
@@ -484,8 +498,8 @@ export async function createCatPracticeTestPayload(
       catMinQuestions: runLength,
       catMaxQuestions: runLength,
       catPassingThreshold: pathwayReadiness?.passingThreshold ?? 0,
-      catEngineType: pathwayReadiness?.engineType ?? "CAT",
-      catEngineMode: pathwayReadiness?.mode ?? "production_ready",
+      catEngineType: catEngineTypeFromReadiness(pathwayReadiness?.engineType),
+      catEngineMode: catEngineModeFromReadiness(pathwayReadiness?.mode),
       catWeakCategories,
       catWeakPriorityByCanonical,
       catPresentationMode: presentationMode,
@@ -540,8 +554,8 @@ export async function createCatPracticeTestPayload(
       catMinQuestions: bounds.min,
       catMaxQuestions: bounds.max,
       catPassingThreshold: pathwayReadiness?.passingThreshold ?? 0,
-      catEngineType: pathwayReadiness?.engineType ?? "CAT",
-      catEngineMode: pathwayReadiness?.mode ?? "production_ready",
+      catEngineType: catEngineTypeFromReadiness(pathwayReadiness?.engineType),
+      catEngineMode: catEngineModeFromReadiness(pathwayReadiness?.mode),
       catWeakCategories,
       catWeakPriorityByCanonical,
       catPresentationMode: presentationMode,
@@ -606,8 +620,8 @@ export async function createCatPracticeTestPayload(
     catMinQuestions: bounds.min,
     catMaxQuestions: bounds.max,
     catPassingThreshold: pathwayReadiness?.passingThreshold ?? 0,
-    catEngineType: pathwayReadiness?.engineType ?? "CAT",
-    catEngineMode: pathwayReadiness?.mode ?? "production_ready",
+    catEngineType: catEngineTypeFromReadiness(pathwayReadiness?.engineType),
+    catEngineMode: catEngineModeFromReadiness(pathwayReadiness?.mode),
     catWeakCategories,
     catWeakPriorityByCanonical,
     catPresentationMode: presentationMode,

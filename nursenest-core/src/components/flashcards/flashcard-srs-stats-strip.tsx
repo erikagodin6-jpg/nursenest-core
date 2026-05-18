@@ -19,6 +19,18 @@ type Props = {
   className?: string;
 };
 
+function normalizeSrsStats(stats: Partial<FlashcardSrsStats> | null | undefined): FlashcardSrsStats | null {
+  if (!stats) return null;
+  return {
+    dueToday: stats.dueToday ?? 0,
+    overdue: stats.overdue ?? 0,
+    lapsingCards: stats.lapsingCards ?? 0,
+    newCards: stats.newCards ?? 0,
+    streak: stats.streak ?? 0,
+    masteryPct: stats.masteryPct ?? 0,
+  };
+}
+
 async function fetchSrsStats(pathwayId: string | null): Promise<FlashcardSrsStats | null> {
   try {
     const qs = new URLSearchParams({ countsOnly: "1" });
@@ -53,7 +65,7 @@ async function fetchSrsStats(pathwayId: string | null): Promise<FlashcardSrsStat
 }
 
 export function FlashcardSrsStatsStrip({ pathwayId = null, stats: overrideStats, className = "" }: Props) {
-  const [stats, setStats] = useState<FlashcardSrsStats | null>(overrideStats ?? null);
+  const [stats, setStats] = useState<FlashcardSrsStats | null>(() => normalizeSrsStats(overrideStats));
 
   useEffect(() => {
     if (overrideStats) return;

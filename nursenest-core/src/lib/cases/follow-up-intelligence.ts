@@ -5,7 +5,11 @@
  * given the urgency of the patient's condition.
  * Inappropriate timing penalises the trajectory score.
  */
-import type { FollowUpInterval, FollowUpAppropriateness } from "@/lib/cases/longitudinal-case-types";
+import type {
+  FollowUpInterval,
+  FollowUpAppropriateness,
+  StructuredFollowUpInterval,
+} from "@/lib/cases/longitudinal-case-types";
 
 // ── Urgency levels ────────────────────────────────────────────────────────────
 
@@ -33,13 +37,28 @@ const URGENCY_WINDOWS: Record<ClinicalUrgencyLevel, { minDays: number; maxDays: 
 
 /** Converts a FollowUpInterval to total days. */
 export function intervalToDays(interval: FollowUpInterval): number {
-  const multipliers: Record<FollowUpInterval["unit"], number> = {
+  if (typeof interval === "string") return intervalStringToDays(interval);
+  const multipliers: Record<StructuredFollowUpInterval["unit"], number> = {
     hours:  1 / 24,
     days:   1,
     weeks:  7,
     months: 30,
   };
   return interval.value * multipliers[interval.unit];
+}
+
+function intervalStringToDays(interval: string): number {
+  const normalized = interval.toLowerCase().replace(/[–—]/g, "-");
+  const matches = [...normalized.matchAll(/(\d+(?:\.\d+)?)(?:\s*-\s*(\d+(?:\.\d+)?))?\s*(hour|hours|day|days|week|weeks|month|months)/g)];
+  if (matches.length === 0) return 0;
+
+  const [, firstRaw, secondRaw, unitRaw] = matches[0]!;
+  const first = Number(firstRaw);
+  const second = secondRaw ? Number(secondRaw) : first;
+  const value = Number.isFinite(first) && Number.isFinite(second) ? (first + second) / 2 : first;
+  const unit = unitRaw ?? "days";
+  const multiplier = unit.startsWith("hour") ? 1 / 24 : unit.startsWith("week") ? 7 : unit.startsWith("month") ? 30 : 1;
+  return value * multiplier;
 }
 
 // ── Appropriateness scoring ───────────────────────────────────────────────────

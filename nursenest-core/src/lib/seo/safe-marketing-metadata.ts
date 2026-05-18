@@ -52,7 +52,7 @@ function stripDuplicateBrandSuffix(title: Metadata["title"]): Metadata["title"] 
   return trimmed.slice(0, -BRAND_SUFFIX.length).trimEnd();
 }
 
-export type SafeMetadataContext = {
+export type SafeMetadataContext = Partial<Metadata> & {
   pathname?: string;
   /** e.g. marketing.exam_hub, marketing.blog, app.learner */
   routeGroup?: string;
@@ -60,8 +60,26 @@ export type SafeMetadataContext = {
   fallbackMetadata?: Metadata;
 };
 
+type SafeMetadataDirectInput = Metadata & {
+  /** Legacy callers sometimes passed the absolute page URL next to Next metadata fields. */
+  url?: string;
+  /** JSON-LD belongs in page markup; tolerate legacy metadata inputs without returning it to Next. */
+  structuredData?: unknown;
+};
+
+function metadataFromContext(ctx: SafeMetadataContext): Metadata {
+  const { pathname, routeGroup, locale, fallbackMetadata, ...metadata } = ctx;
+  void pathname;
+  void routeGroup;
+  void locale;
+  void fallbackMetadata;
+  return metadata;
+}
+
 function fallbackMetadataForContext(ctx: SafeMetadataContext): Metadata {
-  return ctx.fallbackMetadata ?? FALLBACK_SITE_METADATA;
+  if (ctx.fallbackMetadata) return ctx.fallbackMetadata;
+  const contextualFallback = metadataFromContext(ctx);
+  return Object.keys(contextualFallback).length > 0 ? contextualFallback : FALLBACK_SITE_METADATA;
 }
 
 function logNonfatalMetadataValidationFailure(
@@ -102,14 +120,32 @@ function logNonfatalMetadataValidationFailure(
  * **Exam pathway routes** (`routeGroup` `marketing.exam_hub*`) pass the **country URL segment**
  * (`us` | `canada`), not a marketing i18n locale — those must **not** use this override or every hub would be noindexed.
  */
+function normalizeSafeMetadataInput(input: SafeMetadataDirectInput): Metadata {
+  const { url, structuredData, ...metadata } = input;
+  void url;
+  void structuredData;
+  return metadata;
+}
+
 export async function safeGenerateMetadata(
   run: () => Promise<Metadata>,
+  ctx?: SafeMetadataContext,
+): Promise<Metadata>;
+export async function safeGenerateMetadata(
+  metadata: SafeMetadataDirectInput,
+  ctx?: SafeMetadataContext,
+): Promise<Metadata>;
+export async function safeGenerateMetadata(
+  runOrMetadata: (() => Promise<Metadata>) | SafeMetadataDirectInput,
   ctx: SafeMetadataContext = {},
 ): Promise<Metadata> {
   const t0 = Date.now();
   const fallbackMetadata = fallbackMetadataForContext(ctx);
   try {
-    const m = await run();
+    const m =
+      typeof runOrMetadata === "function"
+        ? await runOrMetadata()
+        : normalizeSafeMetadataInput(runOrMetadata);
     const durationMs = Date.now() - t0;
     if (m == null || typeof m !== "object") {
       logCrawlSurfaceEvent({

@@ -215,7 +215,7 @@ export function CnpleLongitudinalCaseShell({
           {step.updateNarrative && (
             <FollowUpUpdateCard
               title={step.heading}
-              timestamp={step.followUpInterval?.label}
+              timestamp={followUpIntervalLabel(step.followUpInterval)}
               variant={clinicalDirectionToVariant(step.clinicalUpdate.direction)}
             >
               {step.updateNarrative}
@@ -264,11 +264,11 @@ export function CnpleLongitudinalCaseShell({
             .filter((a) => a.type !== "lab_panel")
             .map((artifact, i) => (
               <DiagnosticResultCard
-                key={`${artifact.type}-${i}`}
+                key={`${artifact.type ?? artifact.label ?? artifact.name ?? "result"}-${i}`}
                 result={{
-                  type: artifact.type === "lab_panel" ? "other" : artifact.type,
-                  name: artifact.name,
-                  finding: artifact.finding,
+                  type: artifact.type === "lab_panel" ? "other" : (artifact.type ?? "other"),
+                  name: artifact.name ?? artifact.label ?? "Diagnostic result",
+                  finding: artifact.finding ?? artifact.interpretation ?? artifact.value ?? "",
                   impression: artifact.impression,
                   timestamp: artifact.timestamp,
                 }}
@@ -277,7 +277,7 @@ export function CnpleLongitudinalCaseShell({
           {labs.length === 0 && (step.diagnosticArtifacts ?? []).filter(a => a.type !== "lab_panel").length === 0 && (
             <EmptyDiagnosticsPanel />
           )}
-          <ClinicalNotesPanel judmentFocus={step.question.clinicalJudgmentFocus} domain={step.cnpleDomain} />
+          <ClinicalNotesPanel judmentFocus={step.question.clinicalJudgmentFocus ?? "Clinical judgment and safe next-step reasoning."} domain={step.cnpleDomain} />
         </aside>
       </div>
     </div>
@@ -951,12 +951,13 @@ function applyMedicationChanges(
 ): MedicationEntry[] {
   const updated = current.map((m) => ({ ...m, flag: undefined as MedicationEntry["flag"] }));
   for (const change of changes) {
+    const changeFlag = medicationChangeFlag(change);
     const existingIdx = updated.findIndex(
       (m) => m.name.toLowerCase() === change.name.toLowerCase(),
     );
-    if (change.flag === "discontinued") {
+    if (changeFlag === "discontinued") {
       if (existingIdx >= 0) updated[existingIdx] = { ...updated[existingIdx]!, flag: "discontinued" };
-    } else if (change.flag === "changed") {
+    } else if (changeFlag === "changed") {
       if (existingIdx >= 0) {
         updated[existingIdx] = {
           ...updated[existingIdx]!,
@@ -965,7 +966,7 @@ function applyMedicationChanges(
           flag: "changed",
         };
       }
-    } else if (change.flag === "new") {
+    } else if (changeFlag === "new") {
       updated.push({
         name: change.name,
         dose: change.dose,
@@ -977,4 +978,20 @@ function applyMedicationChanges(
     }
   }
   return updated;
+}
+
+function followUpIntervalLabel(interval: CaseStepPayload["step"]["followUpInterval"]): string | undefined {
+  if (!interval) return undefined;
+  if (typeof interval === "string") return interval;
+  return interval.label;
+}
+
+function medicationChangeFlag(change: MedChangeInput): "new" | "changed" | "discontinued" | "hold" | undefined {
+  if (change.flag) return change.flag;
+  if (change.change === "start") return "new";
+  if (change.change === "continue") return "changed";
+  if (change.change === "stop") return "discontinued";
+  if (change.change === "hold") return "hold";
+  if (change.change === "change") return "changed";
+  return undefined;
 }

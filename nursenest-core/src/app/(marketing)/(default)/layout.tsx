@@ -251,7 +251,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
   void getMarketingDefaultLayoutSentryRuntimePromise().catch(() => {});
   // Typed as the real union so downstream runtime?.foo optional chains still
   // compile. The value is always null at runtime — Sentry loads in background.
-  const runtime: Awaited<ReturnType<typeof getMarketingDefaultLayoutSentryRuntimePromise>> = null;
+  const runtime = null as Awaited<ReturnType<typeof getMarketingDefaultLayoutSentryRuntimePromise>>;
 
   const marketingDefaultLayoutInner = async () => {
     const perfLayoutT0 = safeNowMs();

@@ -18,14 +18,18 @@ export type CnpleDomainSlug =
   | "diagnostics-labs"
   | "health-promotion-prevention"
   | "chronic-disease-management"
+  | "dermatology-wound-care"
+  | "endocrine-metabolic"
   | "acute-urgent-care"
   | "pediatrics"
   | "adult-care"
   | "older-adult-care"
   | "reproductive-sexual-health"
   | "mental-health"
+  | "mental-health-substance-use"
   | "indigenous-health-cultural-safety"
   | "ethics-legal-professional"
+  | "professional-practice"
   | "interprofessional-collaboration"
   | "patient-education-shared-decision";
 
@@ -83,6 +87,20 @@ export const CNPLE_DOMAINS: CnpleDomain[] = [
       "Guideline-based management of hypertension, diabetes, COPD, heart failure, dyslipidemia, osteoporosis, CKD, and other prevalent chronic conditions across adult and older-adult populations.",
   },
   {
+    slug: "endocrine-metabolic",
+    label: "Endocrine and Metabolic Care",
+    shortLabel: "Endocrine",
+    description:
+      "Thyroid disease, diabetes-adjacent metabolic risk, endocrine prescribing, monitoring intervals, and patient education for long-term endocrine conditions.",
+  },
+  {
+    slug: "dermatology-wound-care",
+    label: "Dermatology and Wound Care",
+    shortLabel: "Skin/Wounds",
+    description:
+      "Skin infection assessment, wound and cellulitis escalation, recurrence prevention, dermatologic red flags, and related prescribing safety.",
+  },
+  {
     slug: "acute-urgent-care",
     label: "Acute Deterioration and Urgent Referral Recognition",
     shortLabel: "Acute/Urgent",
@@ -125,6 +143,13 @@ export const CNPLE_DOMAINS: CnpleDomain[] = [
       "Assessment and management of depression, anxiety, PTSD, substance use disorders, eating disorders, psychosis risk, and safe prescribing in mental health (Canadian context).",
   },
   {
+    slug: "mental-health-substance-use",
+    label: "Mental Health and Substance Use",
+    shortLabel: "MH/SUD",
+    description:
+      "Integrated mental health and substance-use assessment, opioid agonist therapy readiness, harm reduction, follow-up planning, and safe prescribing.",
+  },
+  {
     slug: "indigenous-health-cultural-safety",
     label: "Indigenous Health and Culturally Safe Care",
     shortLabel: "Cultural Safety",
@@ -137,6 +162,13 @@ export const CNPLE_DOMAINS: CnpleDomain[] = [
     shortLabel: "Ethics/Legal",
     description:
       "Informed consent, capacity assessment, mandatory reporting, privacy legislation (PIPEDA/provincial), scope of practice in Canadian jurisdictions, documentation standards, and professional accountability.",
+  },
+  {
+    slug: "professional-practice",
+    label: "Professional Practice",
+    shortLabel: "Professional",
+    description:
+      "NP scope, collaborative practice, documentation, mandatory reporting, public-health obligations, autonomy, and ethical decision-making in Canadian care settings.",
   },
   {
     slug: "interprofessional-collaboration",

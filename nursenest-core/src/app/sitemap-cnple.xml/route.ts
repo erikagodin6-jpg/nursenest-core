@@ -20,7 +20,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
-const PATHWAY_SITEMAP_OWNED_CNPLE_PATHS = new Set([CNPLE_HUB, CNPLE_QUESTIONS]);
+const PATHWAY_SITEMAP_OWNED_CNPLE_PATHS = new Set<string>([CNPLE_HUB, CNPLE_QUESTIONS]);
 
 export async function GET(request: Request): Promise<Response> {
   const origin = normalizeOrigin(resolveCanonicalSiteOrigin());

@@ -104,7 +104,7 @@ export function processStepAdvance(
 
   const { question } = step;
   const isCorrect = chosenOptionId === question.correctOptionId;
-  const consequence = question.consequencesByOptionId[chosenOptionId];
+  const consequence = question.consequencesByOptionId?.[chosenOptionId];
   const trajectory: CaseStepConsequence["trajectory"] = consequence?.trajectory ?? "suboptimal";
   const consequenceText = consequence?.outcome ?? "";
 
@@ -144,7 +144,7 @@ export function processStepAdvance(
     trajectory,
     consequence: consequenceText,
     rationale: mode === "PRACTICE" ? question.rationale : null,
-    whyWrong: mode === "PRACTICE" && !isCorrect ? (question.whyWrongByOptionId[chosenOptionId] ?? null) : null,
+    whyWrong: mode === "PRACTICE" && !isCorrect ? (question.whyWrongByOptionId?.[chosenOptionId] ?? null) : null,
     correctOptionId: mode === "PRACTICE" ? question.correctOptionId : null,
     nextStep:
       !isLastStep

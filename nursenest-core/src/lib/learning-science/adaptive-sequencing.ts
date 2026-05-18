@@ -115,7 +115,7 @@ export function chooseNextBestSurface(input: {
 }): LearningSurface {
   const sequence = buildAdaptiveSequence(input);
 
-  return sequence.sort((a, b) => {
+  return [...sequence].sort((a, b) => {
     const urgencyWeight = {
       urgent: 3,
       important: 2,

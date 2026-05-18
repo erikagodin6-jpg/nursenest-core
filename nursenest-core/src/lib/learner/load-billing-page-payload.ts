@@ -125,6 +125,7 @@ const SUBSCRIPTION_SELECT = {
   status: true,
   stripeSubscriptionId: true,
   stripeCustomerId: true,
+  planCode: true,
   planTier: true,
   planCountry: true,
   alliedCareer: true,

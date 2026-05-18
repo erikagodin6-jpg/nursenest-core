@@ -73,13 +73,14 @@ export function buildMedicationAdherenceRecords(
     // Apply authored medication changes at this step
     for (const change of step.medicationChanges) {
       const key = change.name.toLowerCase();
-      if (change.flag === "new") {
+      const flag = medicationChangeFlag(change);
+      if (flag === "new") {
         medStatusMap.set(key, "started");
-      } else if (change.flag === "discontinued") {
+      } else if (flag === "discontinued") {
         medStatusMap.set(key, "stopped");
-      } else if (change.flag === "hold") {
+      } else if (flag === "hold") {
         medStatusMap.set(key, "stopped");
-      } else if (change.flag === "changed") {
+      } else if (flag === "changed") {
         medStatusMap.set(key, "active");
       }
     }
@@ -100,6 +101,16 @@ export function buildMedicationAdherenceRecords(
   }
 
   return records;
+}
+
+function medicationChangeFlag(change: MedicationChange): "new" | "changed" | "discontinued" | "hold" | undefined {
+  if (change.flag) return change.flag;
+  if (change.change === "start") return "new";
+  if (change.change === "continue") return "changed";
+  if (change.change === "stop") return "discontinued";
+  if (change.change === "hold") return "hold";
+  if (change.change === "change") return "changed";
+  return undefined;
 }
 
 /**

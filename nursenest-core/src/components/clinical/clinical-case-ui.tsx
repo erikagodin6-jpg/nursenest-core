@@ -26,7 +26,7 @@ export type VitalSign = {
   label: string;
   value: string;
   unit?: string;
-  flag?: "high" | "low" | "critical";
+  flag?: "high" | "low" | "critical" | "borderline";
 };
 
 export type Allergy = {

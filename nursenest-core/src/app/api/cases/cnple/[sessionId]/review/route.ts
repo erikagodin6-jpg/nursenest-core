@@ -53,12 +53,12 @@ export async function GET(_req: NextRequest, { params }: RouteParams) {
       trajectory: decision?.trajectory ?? null,
       rationale: step.question.rationale,
       whyWrong: decision && !decision.isCorrect
-        ? (step.question.whyWrongByOptionId[decision.chosenOptionId] ?? null)
+        ? (step.question.whyWrongByOptionId?.[decision.chosenOptionId] ?? null)
         : null,
       consequence: decision
-        ? (step.question.consequencesByOptionId[decision.chosenOptionId]?.outcome ?? null)
+        ? (step.question.consequencesByOptionId?.[decision.chosenOptionId]?.outcome ?? null)
         : null,
-      clinicalJudgmentFocus: step.question.clinicalJudgmentFocus,
+      clinicalJudgmentFocus: step.question.clinicalJudgmentFocus ?? null,
       cnpleDomain: step.cnpleDomain,
     };
   });
