@@ -9,6 +9,8 @@ import medicalAssistantCatalog from "@/content/pathway-lessons/allied-profession
 import dentalHygieneCatalog from "@/content/pathway-lessons/allied-professions/dental-hygiene";
 import physiotherapyRehabCatalog from "@/content/pathway-lessons/allied-professions/physiotherapy-rehab";
 import occupationalTherapyCatalog from "@/content/pathway-lessons/allied-professions/occupational-therapy";
+import mentalHealthSocialWorkCatalog from "@/content/pathway-lessons/allied-professions/mental-health-social-work";
+import dieteticTechnicianCatalog from "@/content/pathway-lessons/allied-professions/dietetic-technician";
 
 type AlliedProfessionCatalogModule = {
   lessons?: unknown[];
@@ -67,40 +69,83 @@ if (ptaProfession) {
 const occupationalTherapyProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "occupational-therapy");
 if (occupationalTherapyProfession) {
   occupationalTherapyProfession.dedicatedCatalogFile = "occupational-therapy";
-  occupationalTherapyProfession.topicSlugsIn = [
-    "ot-assessment",
-    "ot-adl-iadl-intervention",
-    "ot-cognition-perception",
-    "ot-upper-extremity",
-    "ot-psychosocial-pediatrics",
-    "ot-ota-documentation-scope",
-    "occupational-therapy",
-    "activities-of-daily-living",
-    "adaptive-equipment",
-    "cognitive-rehabilitation",
-    "sensory-processing",
-  ];
-  occupationalTherapyProfession.description =
-    "Deep occupational therapy education covering ADLs, IADLs, cognition, sensory processing, upper-extremity rehabilitation, psychosocial OT, pediatrics, adaptive equipment, and occupation-based intervention.";
-  occupationalTherapyProfession.examOverview = [
-    "OT and OTA exams reward occupation-based reasoning, cognitive-perceptual safety, adaptive intervention planning, and client-centered rehabilitation.",
-    "Use function, environment, routines, cognition, sensation, and participation together instead of memorizing isolated impairments.",
-    "Scenario-based occupational-performance review improves retention and rehabilitation reasoning more than passive memorization alone.",
-  ];
-  occupationalTherapyProfession.features = [
-    "Dedicated occupational-therapy lesson shard separated from generic rehab filler.",
-    "Mechanism-first ADL/IADL, cognition, sensory, and occupation-based intervention education.",
-    "Integrated psychosocial, pediatric, upper-extremity, and adaptive-equipment workflows.",
-    "Shared OT foundation supporting future hand therapy, school OT, mental health OT, geriatrics, and home-modification expansion.",
-  ];
-  occupationalTherapyProfession.ctaLine =
-    "Study ADLs, cognition, adaptive equipment, sensory processing, and occupation-based rehabilitation through the dedicated OT pathway.";
-  occupationalTherapyProfession.premiumCtaHeadline = "Master occupation-based intervention, cognition, adaptive equipment, and functional rehabilitation";
 }
 
 const otaProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "ota");
 if (otaProfession) {
   otaProfession.dedicatedCatalogFile = "occupational-therapy";
+}
+
+const mentalHealthAddictionsProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "mental-health-addictions");
+if (mentalHealthAddictionsProfession) {
+  mentalHealthAddictionsProfession.dedicatedCatalogFile = "mental-health-social-work";
+  mentalHealthAddictionsProfession.topicSlugsIn = [
+    "mental-health-communication",
+    "suicide-risk-assessment",
+    "addictions-care",
+    "trauma-informed-care",
+    "mental-health-crisis-intervention",
+    "social-work-ethics",
+    "motivational-interviewing",
+    "harm-reduction",
+    "crisis-deescalation",
+  ];
+  mentalHealthAddictionsProfession.description =
+    "Deep mental health and addictions education covering therapeutic communication, suicide-risk assessment, safety planning, harm reduction, withdrawal recognition, trauma-informed care, crisis intervention, and de-escalation.";
+  mentalHealthAddictionsProfession.premiumCtaHeadline = "Master crisis communication, addictions care, safety planning, and trauma-informed support";
+}
+
+const socialWorkProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "social-work");
+if (socialWorkProfession) {
+  socialWorkProfession.dedicatedCatalogFile = "mental-health-social-work";
+  socialWorkProfession.topicSlugsIn = [
+    "social-work-ethics",
+    "suicide-risk-assessment",
+    "trauma-informed-care",
+    "mental-health-communication",
+    "addictions-care",
+    "mental-health-crisis-intervention",
+    "advocacy",
+    "social-determinants-of-health",
+    "mandatory-reporting",
+  ];
+  socialWorkProfession.description =
+    "Deep social work education covering ethics, confidentiality, advocacy, social determinants, mandatory reporting, suicide-risk escalation, trauma-informed care, and crisis communication.";
+  socialWorkProfession.premiumCtaHeadline = "Master social-work ethics, advocacy, risk assessment, and client-centered support";
+}
+
+const psychotherapyProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "psychotherapy");
+if (psychotherapyProfession) {
+  psychotherapyProfession.dedicatedCatalogFile = "mental-health-social-work";
+  psychotherapyProfession.topicSlugsIn = [
+    "mental-health-communication",
+    "trauma-informed-care",
+    "suicide-risk-assessment",
+    "mental-health-crisis-intervention",
+    "addictions-care",
+    "therapeutic-boundaries",
+    "therapeutic-alliance",
+  ];
+}
+
+const dieteticTechnicianProfession = ALLIED_PROFESSIONS.find((p) => p.professionKey === "dietetic-technician");
+if (dieteticTechnicianProfession) {
+  dieteticTechnicianProfession.dedicatedCatalogFile = "dietetic-technician";
+  dieteticTechnicianProfession.topicSlugsIn = [
+    "nutrition-assessment",
+    "medical-nutrition-therapy",
+    "food-service-safety",
+    "nutrition-education",
+    "lifecycle-nutrition",
+    "dietetic-technician-scope",
+    "malnutrition-screening",
+    "renal-nutrition",
+    "diabetes-nutrition",
+    "dysphagia-diets",
+  ];
+  dieteticTechnicianProfession.description =
+    "Deep dietetic technician education covering nutrition assessment, medical nutrition therapy support, food-service safety, allergens, dysphagia textures, lifecycle nutrition, teach-back, documentation, and scope.";
+  dieteticTechnicianProfession.premiumCtaHeadline = "Master nutrition assessment, MNT support, food safety, and patient education";
 }
 
 export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, AlliedProfessionCatalogModule>> = {
@@ -114,4 +159,6 @@ export const ALLIED_PROFESSION_DEDICATED_CATALOGS: Readonly<Record<string, Allie
   "dental-hygiene": dentalHygieneCatalog,
   "physiotherapy-rehab": physiotherapyRehabCatalog,
   "occupational-therapy": occupationalTherapyCatalog,
+  "mental-health-social-work": mentalHealthSocialWorkCatalog,
+  "dietetic-technician": dieteticTechnicianCatalog,
 };
