@@ -1,6 +1,16 @@
 import type { PatientCase } from "@/lib/cases/longitudinal-case-types";
+import { CASE_AFIB_ANTICOAGULATION_RISK_BENEFIT } from "@/content/cases/cnple-afib-anticoagulation-loft-case";
+import { CASE_CKD_MEDICATION_SAFETY } from "@/content/cases/cnple-ckd-medication-safety-loft-case";
+import { CASE_COPD_EXACERBATION_DISCHARGE_SAFETY } from "@/content/cases/cnple-copd-exacerbation-loft-case";
+import { CASE_DELIRIUM_POLYPHARMACY } from "@/content/cases/cnple-delirium-polypharmacy-loft-case";
+import { CASE_DIABETES_INSULIN_SICK_DAY_MANAGEMENT } from "@/content/cases/cnple-diabetes-insulin-sick-day-loft-case";
+import { CASE_HEART_FAILURE_DIURETIC_TITRATION } from "@/content/cases/cnple-heart-failure-diuretic-titration-loft-case";
 import { CNPLE_SAMPLE_CASES } from "@/content/cases/cnple-sample-cases";
+import { CASE_PEDIATRIC_ASTHMA_EXACERBATION } from "@/content/cases/cnple-pediatric-asthma-loft-case";
+import { CASE_PEDIATRIC_FEVER_KAWASAKI } from "@/content/cases/cnple-pediatric-fever-kawasaki-loft-case";
 import { CNPLE_SUPPLEMENTAL_LOFT_CASES } from "@/content/cases/cnple-supplemental-loft-cases";
+import { CASE_SUICIDE_RISK_LONGITUDINAL } from "@/content/cases/cnple-suicide-risk-longitudinal-loft-case";
+import { CASE_WOMENS_HEALTH_ABNORMAL_BLEEDING } from "@/content/cases/cnple-womens-health-abnormal-bleeding-loft-case";
 
 /**
  * Canonical runtime catalog for CNPLE LOFT cases.
@@ -12,6 +22,16 @@ import { CNPLE_SUPPLEMENTAL_LOFT_CASES } from "@/content/cases/cnple-supplementa
 export const CNPLE_LOFT_CASES: PatientCase[] = [
   ...CNPLE_SAMPLE_CASES,
   ...CNPLE_SUPPLEMENTAL_LOFT_CASES,
+  CASE_PEDIATRIC_ASTHMA_EXACERBATION,
+  CASE_PEDIATRIC_FEVER_KAWASAKI,
+  CASE_COPD_EXACERBATION_DISCHARGE_SAFETY,
+  CASE_HEART_FAILURE_DIURETIC_TITRATION,
+  CASE_DIABETES_INSULIN_SICK_DAY_MANAGEMENT,
+  CASE_SUICIDE_RISK_LONGITUDINAL,
+  CASE_DELIRIUM_POLYPHARMACY,
+  CASE_AFIB_ANTICOAGULATION_RISK_BENEFIT,
+  CASE_CKD_MEDICATION_SAFETY,
+  CASE_WOMENS_HEALTH_ABNORMAL_BLEEDING,
 ];
 
 export function findCnpleLoftCase(caseId: string): PatientCase | undefined {
