@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NurseNest Flashcard Hub — Layout Audit & Redesign</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;background:#0a0e16}
+button,a{font-family:inherit}svg{display:block;flex-shrink:0}
+
+/* ── Mockup chrome ──────────────────────────────────────────────────── */
+.chrome{background:#050810;padding:9px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:400;border-bottom:1px solid #1a2030}
+.chrome-title{font-size:10px;font-weight:700;color:#64748b;letter-spacing:.08em;text-transform:uppercase}
+.tabs{background:#07111f;padding:7px 20px 0;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;position:sticky;top:38px;z-index:399;border-bottom:1px solid #1a2030}
+.tabs::-webkit-scrollbar{display:none}
+.tg{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#334155;padding:7px 6px 0;align-self:flex-start;white-space:nowrap}
+.tsep{width:1px;height:13px;background:#1a2030;margin:0 4px 7px;align-self:center}
+.tab{padding:5px 13px 7px;font-size:10px;font-weight:600;color:#475569;border-radius:4px 4px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;background:transparent;border:none}
+.tab.on{color:#0f172a;background:white;font-weight:700}
+.frame{display:none;overflow:hidden;position:relative}
+.frame.on{display:block}
+.frame-d{width:1440px;height:900px}
+.frame-m{width:390px;height:844px}
+
+/* ── TOKEN SETS ─────────────────────────────────────────────────────── */
+/* OCEAN — clean */
+.oc{
+  --bg:#eef4fa;--surf:#fff;--surf2:#f6fafd;--panel:#f3f8fc;
+  --bdr:rgba(176,220,243,.65);--bdr2:rgba(100,180,220,.8);--div:rgba(176,220,243,.38);
+  --txt:#0f172a;--txt2:#3d5166;--muted:#647894;--subtle:#94a3b8;
+  --acc:#1aaee0;--acc-d:#0d7aaa;--acc-s:rgba(13,122,170,.07);
+  --ok:#16a34a;--ok-bg:rgba(22,163,74,.07);--ok-bdr:rgba(22,163,74,.24);
+  --warn:#d97706;--warn-bg:rgba(217,119,6,.07);--warn-bdr:rgba(217,119,6,.22);
+  --err:#dc2626;--err-bg:rgba(220,38,38,.06);--err-bdr:rgba(220,38,38,.2);
+  --nav:#fff;--nav-bdr:rgba(176,220,243,.8);--nav-sh:0 1px 0 rgba(0,0,0,.04),0 4px 16px -6px rgba(6,88,140,.07);
+  --sh:0 1px 0 rgba(0,0,0,.03),0 6px 20px -10px rgba(6,88,140,.07);
+  --sh2:0 2px 0 rgba(0,0,0,.04),0 16px 40px -16px rgba(6,88,140,.12);
+  --chip-bg:rgba(13,122,170,.08);--chip-bdr:rgba(13,122,170,.2);--chip-fg:#0a6a94;
+  --prog-t:rgba(176,220,243,.4);--prog-f:#1aaee0;
+  --c1:#1aaee0;--c2:#16a34a;--c3:#52b8d4;--c4:#f5a524;--c5:#0d9488;--c6:#7c8fa6;--c7:#a7e3d1;--c8:#d8bd79;
+}
+/* MIDNIGHT — clean */
+.mn{
+  --bg:#060e1a;--surf:#0f1c2e;--surf2:#0b1520;--panel:#0c1828;
+  --bdr:rgba(36,55,88,.9);--bdr2:rgba(56,189,248,.22);--div:rgba(36,55,88,.5);
+  --txt:#e8f2ff;--txt2:#b0cceb;--muted:#5a7594;--subtle:#3e5470;
+  --acc:#38bdf8;--acc-d:#0ea5e9;--acc-s:rgba(56,189,248,.1);
+  --ok:#34d399;--ok-bg:rgba(52,211,153,.09);--ok-bdr:rgba(52,211,153,.25);
+  --warn:#fbbf24;--warn-bg:rgba(251,191,36,.09);--warn-bdr:rgba(251,191,36,.24);
+  --err:#f87171;--err-bg:rgba(248,113,113,.09);--err-bdr:rgba(248,113,113,.22);
+  --nav:#0a1422;--nav-bdr:rgba(36,55,88,.95);--nav-sh:0 1px 0 rgba(0,0,0,.28),0 4px 20px -6px rgba(0,0,0,.42);
+  --sh:0 2px 0 rgba(0,0,0,.2),0 8px 28px -12px rgba(0,0,0,.38);
+  --sh2:0 4px 0 rgba(0,0,0,.28),0 20px 48px -16px rgba(0,0,0,.52);
+  --chip-bg:rgba(56,189,248,.12);--chip-bdr:rgba(56,189,248,.24);--chip-fg:#7dd3fc;
+  --prog-t:rgba(36,55,88,.6);--prog-f:#38bdf8;
+  --c1:#38bdf8;--c2:#34d399;--c3:#67e8f9;--c4:#fbbf24;--c5:#34d399;--c6:#94a3b8;--c7:#5eead4;--c8:#fbbf24;
+}
+
+/* ── SHARED SHELL ───────────────────────────────────────────────────── */
+.shell{display:flex;flex-direction:column;background:var(--bg);color:var(--txt);overflow:hidden}
+.shell.frame-d{width:1440px;height:900px}
+.shell.frame-m{width:390px;height:844px}
+
+/* Global header */
+.gnav{height:52px;flex-shrink:0;background:var(--nav);border-bottom:1px solid var(--nav-bdr);box-shadow:var(--nav-sh);display:flex;align-items:center;padding:0 28px;gap:0;z-index:10}
+.gnav-brand{font-size:15px;font-weight:800;letter-spacing:-.03em;color:var(--txt)}
+.gnav-dot{color:var(--acc)}
+.gnav-links{display:flex;align-items:center;gap:2px;margin-left:28px}
+.gnav-link{font-size:13px;font-weight:500;color:var(--muted);padding:5px 10px;border-radius:7px;text-decoration:none;transition:.12s}
+.gnav-link.cur{color:var(--txt);background:var(--acc-s)}
+.gnav-r{margin-left:auto;display:flex;align-items:center;gap:10px}
+.gnav-streak{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--warn);padding:4px 10px;border-radius:8px;background:var(--warn-bg);border:1px solid var(--warn-bdr)}
+.gnav-av{width:30px;height:30px;border-radius:50%;background:var(--acc-s);border:1.5px solid var(--bdr2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--acc)}
+
+/* ── BEFORE STATE — muddy visual patterns ──────────────────────────── */
+
+/* BEFORE: Hub canvas */
+.before-body{flex:1;overflow-y:auto}
+.before-canvas{max-width:1040px;margin:0 auto;padding:28px 40px 60px;display:flex;flex-direction:column;gap:20px}
+
+/* BEFORE: Hero - competing gradients, busy borders, cramped */
+.bef-hero{
+  border-radius:16px;
+  border:1px solid color-mix(in srgb,var(--bdr2) 60%,var(--c1) 40%);
+  background:
+    radial-gradient(520px 180px at 100% 0%,color-mix(in srgb,var(--c8) 12%,transparent),transparent 64%),
+    radial-gradient(440px 150px at 0% 0%,color-mix(in srgb,var(--c7) 14%,transparent),transparent 68%),
+    radial-gradient(300px 120px at 50% 100%,color-mix(in srgb,var(--c1) 8%,transparent),transparent 70%),
+    color-mix(in srgb,var(--panel) 80%,var(--surf));
+  box-shadow:var(--sh);
+  padding:22px 24px;
+}
+.bef-hero-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.bef-eyebrow{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.bef-title{font-size:22px;font-weight:800;letter-spacing:-.03em;color:var(--txt)}
+.bef-sub{font-size:13px;color:var(--muted);line-height:1.5;margin-top:5px;max-width:42ch}
+.bef-stats{display:flex;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid var(--div)}
+.bef-stat{display:flex;flex-direction:column;gap:1px}
+.bef-stat-v{font-size:18px;font-weight:800;letter-spacing:-.03em;color:var(--txt)}
+.bef-stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.bef-stat-div{width:1px;height:28px;background:var(--div)}
+.bef-cta{flex-shrink:0;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;color:#fff;background:var(--acc-d);border:none;box-shadow:0 1px 0 rgba(0,0,0,.1),0 4px 12px -4px rgba(13,122,170,.28);cursor:pointer}
+
+/* BEFORE: Filter chips — too many mixed colors and styles */
+.bef-filter-row{display:flex;gap:7px;flex-wrap:wrap;padding:14px 16px;background:color-mix(in srgb,var(--surf) 92%,var(--panel));border:1px solid var(--bdr);border-radius:12px;box-shadow:var(--sh)}
+.bef-chip{font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:7px;border:1.5px solid var(--bdr);background:var(--surf);color:var(--muted);cursor:pointer}
+.bef-chip.a{background:var(--chip-bg);border-color:var(--chip-bdr);color:var(--chip-fg)}
+.bef-chip.w{background:var(--warn-bg);border-color:var(--warn-bdr);color:var(--warn)}
+.bef-chip.g{background:var(--ok-bg);border-color:var(--ok-bdr);color:var(--ok)}
+.bef-chip.e{background:rgba(217,119,6,.07);border-color:rgba(217,119,6,.2);color:#b45309}
+
+/* BEFORE: Deck library — another busy surface with competing gradients */
+.bef-deck-lib{
+  border-radius:16px;
+  border:1px solid color-mix(in srgb,var(--bdr) 68%,var(--c2) 20%);
+  background:
+    linear-gradient(145deg,color-mix(in srgb,var(--panel) 18%,var(--surf)),color-mix(in srgb,var(--c7) 12%,var(--surf)));
+  box-shadow:var(--sh);
+  padding:20px 22px;
+}
+.bef-deck-lib-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+.bef-section-title{font-size:14px;font-weight:700;color:var(--txt);letter-spacing:-.02em}
+.bef-section-link{font-size:12px;font-weight:600;color:var(--acc)}
+.bef-deck-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.bef-deck-card{
+  border-radius:12px;
+  border:1.5px solid color-mix(in srgb,var(--bdr) 64%,var(--c1) 22%);
+  background:
+    radial-gradient(280px 90px at 100% 0%,color-mix(in srgb,var(--c7) 10%,transparent),transparent 68%),
+    color-mix(in srgb,var(--surf) 94%,var(--panel));
+  padding:14px;
+  display:flex;flex-direction:column;gap:8px;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+}
+.bef-deck-accent{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:12px 0 0 12px}
+.bef-deck-inner{padding-left:10px}
+.bef-deck-title{font-size:13px;font-weight:700;color:var(--txt);letter-spacing:-.01em;line-height:1.3}
+.bef-deck-chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.bef-deck-chip{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--chip-bg);border:1px solid var(--chip-bdr);color:var(--chip-fg)}
+.bef-deck-chip.due{background:var(--warn-bg);border-color:var(--warn-bdr);color:var(--warn)}
+.bef-deck-footer{margin-top:6px;display:flex;align-items:center;gap:8px}
+.bef-prog-bar{flex:1;height:3px;border-radius:99px;background:var(--prog-t);overflow:hidden}
+.bef-prog-fill{height:100%;border-radius:99px;background:var(--prog-f)}
+.bef-deck-meta{font-size:10px;color:var(--muted);white-space:nowrap}
+
+/* BEFORE: Weak areas band — yet another tinted surface */
+.bef-weak-band{
+  border-radius:14px;
+  border:1px solid color-mix(in srgb,var(--bdr) 70%,var(--warn) 18%);
+  background:color-mix(in srgb,var(--warn-bg) 18%,var(--surf));
+  box-shadow:var(--sh);
+  padding:18px 20px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.bef-weak-head{display:flex;align-items:center;gap:10px}
+.bef-warn-badge{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:5px;background:var(--warn-bg);border:1px solid var(--warn-bdr);color:var(--warn)}
+.bef-weak-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bef-weak-card{border-radius:10px;border:1px solid var(--warn-bdr);background:color-mix(in srgb,var(--warn-bg) 30%,var(--surf));padding:10px 12px;cursor:pointer}
+.bef-weak-title{font-size:12.5px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.bef-weak-sub{font-size:11px;color:var(--muted)}
+
+/* ── AFTER STATE — clean layout system ─────────────────────────────── */
+
+/* AFTER: Hub canvas — generous spacing, no section boxes everywhere */
+.hub-body{flex:1;overflow-y:auto}
+.hub-canvas{max-width:1024px;margin:0 auto;padding:36px 44px 64px;display:flex;flex-direction:column;gap:0}
+
+/* AFTER: Breadcrumb */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-bottom:28px}
+.bc-sep{color:var(--subtle);font-size:11px}
+.bc-cur{color:var(--txt2);font-weight:500}
+
+/* AFTER: Hero — clean, no competing gradients */
+.hub-hero{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:32px}
+.hub-hero-l{}
+.hub-title{font-size:30px;font-weight:800;letter-spacing:-.045em;color:var(--txt);line-height:1.12;margin-bottom:6px}
+.hub-sub{font-size:14px;color:var(--muted);font-weight:400;line-height:1.55;max-width:46ch;margin-bottom:18px}
+.hub-stats{display:flex;align-items:center;gap:18px}
+.hub-stat{display:flex;flex-direction:column;gap:1px}
+.hub-stat-v{font-size:19px;font-weight:800;letter-spacing:-.03em;color:var(--txt)}
+.hub-stat-l{font-size:10.5px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.hub-stat-div{width:1px;height:26px;background:var(--div)}
+/* Streak widget — only decorative element in hero */
+.streak-card{background:var(--surf);border:1px solid var(--bdr);border-radius:14px;padding:14px 18px;box-shadow:var(--sh);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.streak-fire{font-size:28px;line-height:1}
+.streak-num{font-size:22px;font-weight:800;letter-spacing:-.04em;color:var(--txt);line-height:1}
+.streak-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+.streak-dots{display:flex;gap:4px;margin-top:7px}
+.sd{width:18px;height:18px;border-radius:5px;background:var(--warn-bg);border:1.5px solid var(--warn-bdr)}
+.sd.on{background:var(--warn);border-color:var(--warn)}
+
+/* AFTER: Filter chips — single row, minimal styling */
+.filter-row{display:flex;align-items:center;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin-bottom:36px}
+.filter-row::-webkit-scrollbar{display:none}
+.fc{font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:9px;border:1.5px solid var(--bdr);background:var(--surf);color:var(--muted);white-space:nowrap;cursor:pointer;transition:.12s}
+.fc:hover{border-color:var(--bdr2);color:var(--txt2)}
+.fc.on{background:var(--chip-bg);border-color:var(--chip-bdr);color:var(--chip-fg)}
+
+/* AFTER: Sections — just a title + content, no card wrapper around them */
+.hub-section{margin-bottom:40px}
+.hub-sec-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px}
+.hub-sec-title{font-size:15px;font-weight:700;color:var(--txt);letter-spacing:-.02em}
+.hub-sec-link{font-size:12px;font-weight:600;color:var(--acc);text-decoration:none}
+.hub-sec-badge{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;margin-left:8px}
+.hub-sec-badge.warn{background:var(--warn-bg);border:1px solid var(--warn-bdr);color:var(--warn)}
+
+/* AFTER: Deck cards — carousel, one clean elevation system */
+.carousel{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.carousel::-webkit-scrollbar{display:none}
+.dk{width:268px;min-width:268px;height:160px;border-radius:16px;border:1px solid var(--bdr);background:var(--surf);box-shadow:var(--sh);display:flex;flex-direction:column;overflow:hidden;position:relative;cursor:pointer;transition:box-shadow .15s,transform .15s}
+.dk:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.dk-bar{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:16px 0 0 16px}
+.dk-body{padding:14px 14px 14px 20px;flex:1;display:flex;flex-direction:column}
+.dk-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:auto}
+.dk-title{font-size:13.5px;font-weight:700;color:var(--txt);line-height:1.3;letter-spacing:-.015em;flex:1}
+/* Mastery ring */
+.ring-wrap{position:relative;width:44px;height:44px;flex-shrink:0}
+.ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--txt);letter-spacing:-.02em}
+.dk-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.dk-ch{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 6px;border-radius:4px;background:var(--chip-bg);border:1px solid var(--chip-bdr);color:var(--chip-fg)}
+.dk-ch.due{background:var(--warn-bg);border-color:var(--warn-bdr);color:var(--warn)}
+.dk-foot{display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid var(--div)}
+.dk-pbar{flex:1;height:3.5px;border-radius:99px;background:var(--prog-t);overflow:hidden}
+.dk-pfill{height:100%;border-radius:99px;background:var(--prog-f)}
+.dk-meta{font-size:10.5px;color:var(--muted);font-weight:500;white-space:nowrap}
+
+/* AFTER: Weak area grid — just cards, no wrapper surface */
+.weak-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wk{border-radius:14px;border:1px solid var(--bdr);background:var(--surf);box-shadow:var(--sh);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.12s}
+.wk:hover{transform:translateY(-1px);box-shadow:var(--sh2)}
+.wk.urgent{border-color:var(--err-bdr)}
+.wk.warn{border-color:var(--warn-bdr)}
+.wk-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.wk.urgent .wk-icon{background:var(--err-bg)}
+.wk.warn .wk-icon{background:var(--warn-bg)}
+.wk-body{flex:1}
+.wk-title{font-size:13px;font-weight:700;color:var(--txt);letter-spacing:-.01em;margin-bottom:2px}
+.wk-sub{font-size:11.5px;color:var(--muted)}
+.wk-badge{font-size:9.5px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:5px;white-space:nowrap}
+.wk.urgent .wk-badge{background:var(--err-bg);border:1px solid var(--err-bdr);color:var(--err)}
+.wk.warn .wk-badge{background:var(--warn-bg);border:1px solid var(--warn-bdr);color:var(--warn)}
+
+/* AFTER: Topic grid */
+.topic-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tpc{border-radius:12px;border:1px solid var(--bdr);background:var(--surf);box-shadow:var(--sh);padding:14px 16px;cursor:pointer;transition:.12s;display:flex;align-items:center;gap:10px}
+.tpc:hover{border-color:var(--bdr2);transform:translateY(-1px)}
+.tpc-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.tpc-info{flex:1}
+.tpc-name{font-size:13px;font-weight:600;color:var(--txt);letter-spacing:-.01em;margin-bottom:2px}
+.tpc-count{font-size:11px;color:var(--muted)}
+.tpc-pct{font-size:12px;font-weight:700}
+.tpc-pct.hi{color:var(--ok)}
+.tpc-pct.mid{color:var(--warn)}
+.tpc-pct.lo{color:var(--err)}
+
+/* ── MOBILE ─────────────────────────────────────────────────────────── */
+.mob-nav{height:46px;flex-shrink:0;background:var(--nav);border-bottom:1px solid var(--nav-bdr);box-shadow:var(--nav-sh);display:flex;align-items:center;padding:0 14px;gap:0}
+.mob-body{flex:1;overflow-y:auto}
+.mob-canvas{padding:20px 16px 72px}
+.mob-hero{margin-bottom:22px}
+.mob-title{font-size:22px;font-weight:800;letter-spacing:-.04em;color:var(--txt);margin-bottom:4px}
+.mob-sub{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+.mob-stats{display:flex;gap:14px;padding:12px 14px;background:var(--surf);border:1px solid var(--bdr);border-radius:12px;box-shadow:var(--sh)}
+.mob-stat-v{font-size:16px;font-weight:800;color:var(--txt);letter-spacing:-.03em}
+.mob-stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:1px}
+.mob-stat-div{width:1px;background:var(--div)}
+.mob-filter{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:24px;margin-top:16px;padding-bottom:2px}
+.mob-filter::-webkit-scrollbar{display:none}
+.mob-sec{margin-bottom:28px}
+.mob-sec-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
+.mob-sec-title{font-size:14px;font-weight:700;color:var(--txt);letter-spacing:-.02em}
+.mob-sec-link{font-size:12px;font-weight:600;color:var(--acc)}
+.mob-carousel{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px 4px}
+.mob-carousel::-webkit-scrollbar{display:none}
+.mob-dk{width:200px;min-width:200px;height:142px;border-radius:14px;border:1px solid var(--bdr);background:var(--surf);box-shadow:var(--sh);display:flex;flex-direction:column;overflow:hidden;position:relative;cursor:pointer}
+.mob-dk-bar{position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:14px 0 0 14px}
+.mob-dk-body{padding:12px 12px 12px 18px;flex:1;display:flex;flex-direction:column}
+.mob-dk-title{font-size:12.5px;font-weight:700;color:var(--txt);line-height:1.3;flex:1;margin-bottom:6px}
+.mob-dk-foot{display:flex;align-items:center;gap:6px;padding-top:7px;border-top:1px solid var(--div)}
+.mob-dk-pbar{flex:1;height:3px;border-radius:99px;background:var(--prog-t);overflow:hidden}
+.mob-dk-pfill{height:100%;border-radius:99px;background:var(--prog-f)}
+.mob-dk-meta{font-size:9.5px;color:var(--muted);white-space:nowrap}
+.mob-wk-grid{display:flex;flex-direction:column;gap:9px}
+.mob-wk{border-radius:12px;border:1px solid var(--bdr);background:var(--surf);padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.mob-wk.urgent{border-color:var(--err-bdr)}
+.mob-wk-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.mob-wk.urgent .mob-wk-icon{background:var(--err-bg)}
+.mob-wk-body{flex:1}
+.mob-wk-title{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:1px}
+.mob-wk-sub{font-size:11px;color:var(--muted)}
+/* Mobile bottom nav */
+.mob-bot{position:absolute;bottom:0;left:0;right:0;height:64px;background:var(--nav);border-top:1px solid var(--nav-bdr);display:flex;align-items:center;justify-content:space-around;padding:0 8px}
+.mob-nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 14px;cursor:pointer}
+.mob-nav-icon{font-size:16px}
+.mob-nav-label{font-size:9.5px;font-weight:600;color:var(--muted)}
+.mob-nav-item.cur .mob-nav-label{color:var(--acc)}
+
+/* ── DASHBOARD ──────────────────────────────────────────────────────── */
+.dash-body{flex:1;overflow-y:auto}
+.dash-canvas{max-width:1024px;margin:0 auto;padding:32px 44px 64px}
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.dash-card{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;padding:18px 20px;box-shadow:var(--sh)}
+.dash-card.wide{grid-column:1/-1}
+.dash-card.half{grid-column:span 2}
+.dash-lbl{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.dash-big{font-size:38px;font-weight:800;letter-spacing:-.05em;color:var(--txt);line-height:1}
+.dash-unit{font-size:14px;font-weight:600;color:var(--muted)}
+.dash-chg{font-size:12px;color:var(--ok);font-weight:600;margin-top:5px}
+.dash-ring-row{display:flex;align-items:center;gap:20px}
+.dash-ring-info{flex:1}
+.dash-ring-title{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.dash-ring-sub{font-size:12px;color:var(--muted)}
+.dash-due-list{display:flex;flex-direction:column;gap:8px}
+.dash-due-row{display:flex;align-items:center;gap:10px}
+.dash-due-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.dash-due-topic{font-size:13px;color:var(--txt2);flex:1}
+.dash-due-cnt{font-size:12px;font-weight:700;color:var(--txt);font-variant-numeric:tabular-nums}
+.dash-due-bar{width:72px;height:4px;border-radius:99px;background:var(--prog-t);overflow:hidden}
+.dash-due-fill{height:100%;border-radius:99px}
+/* Heatmap */
+.heatmap{display:grid;grid-template-columns:repeat(26,1fr);gap:3px;margin-top:10px}
+.hm{aspect-ratio:1;border-radius:3px;background:var(--prog-t)}
+.hm.l1{opacity:.25;background:var(--prog-f)}
+.hm.l2{opacity:.5;background:var(--prog-f)}
+.hm.l3{opacity:.75;background:var(--prog-f)}
+.hm.l4{background:var(--prog-f)}
+
+/* ── ANNOTATION LABELS (for before/after markers) ───────────────────── */
+.anno{position:absolute;background:#ef4444;color:#fff;font-size:9px;font-weight:700;letter-spacing:.05em;padding:2px 7px;border-radius:4px;z-index:100;white-space:nowrap}
+.anno.b{background:#3b82f6}
+</style>
+</head>
+<body>
+
+<div class="chrome">
+  <span class="chrome-title">NurseNest Hub Layouts — Audit & Redesign · 6 frames</span>
+</div>
+<div class="tabs">
+  <span class="tg">BEFORE</span>
+  <button class="tab on" onclick="s(0)">① Muddy Hub · Ocean</button>
+  <div class="tsep"></div>
+  <span class="tg">AFTER</span>
+  <button class="tab" onclick="s(1)">② Clean Hub · Ocean</button>
+  <button class="tab" onclick="s(2)">③ Deck Cards Close-up</button>
+  <button class="tab" onclick="s(3)">④ Weak Areas + Topics</button>
+  <button class="tab" onclick="s(4)">⑤ Midnight Theme</button>
+  <div class="tsep"></div>
+  <span class="tg">MOBILE</span>
+  <button class="tab" onclick="s(5)">⑥ Mobile Hub</button>
+  <div class="tsep"></div>
+  <span class="tg">DASHBOARD</span>
+  <button class="tab" onclick="s(6)">⑦ SR Dashboard</button>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     FRAME 0 · Before · Ocean · Muddy
+     Problems annotated in red
+══════════════════════════════════════════════════════════════ -->
+<div class="frame frame-d on" id="f0">
+<div class="shell frame-d oc">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links">
+      <a class="gnav-link cur">Flashcards</a>
+      <a class="gnav-link">Lessons</a>
+      <a class="gnav-link">Practice</a>
+      <a class="gnav-link">CAT Exam</a>
+    </div>
+    <div class="gnav-r">
+      <span class="gnav-streak">🔥 7</span>
+      <div class="gnav-av">E</div>
+    </div>
+  </nav>
+  <div class="before-body" style="position:relative">
+    <div class="before-canvas">
+
+      <!-- Problem annotations (red) -->
+      <span class="anno" style="top:22px;left:42px">① 3 competing radial gradients on hero</span>
+      <span class="anno" style="top:182px;left:42px">② Dense chip strip inside its own card surface</span>
+      <span class="anno" style="top:258px;left:42px">③ Library section = another gradient card wrapping the cards</span>
+      <span class="anno" style="top:258px;right:42px">④ Deck cards: gradient bg + colored border + colored bar</span>
+      <span class="anno" style="top:530px;left:42px">⑤ Weak area section: tinted surface + tinted cards = 3 layers of amber</span>
+
+      <!-- Hero (muddy) -->
+      <div class="bef-hero" style="position:relative">
+        <div class="bef-hero-inner">
+          <div>
+            <p class="bef-eyebrow">Flashcards · NCLEX RN</p>
+            <h1 class="bef-title">Micro-Practice Mode</h1>
+            <p class="bef-sub">Clinically styled MCQ flashcards with rationale-based adaptive learning.</p>
+            <div class="bef-stats">
+              <div class="bef-stat"><span class="bef-stat-v">2,847</span><span class="bef-stat-l">Total cards</span></div>
+              <div class="bef-stat-div"></div>
+              <div class="bef-stat"><span class="bef-stat-v">67%</span><span class="bef-stat-l">Mastery</span></div>
+              <div class="bef-stat-div"></div>
+              <div class="bef-stat"><span class="bef-stat-v">42</span><span class="bef-stat-l">Due today</span></div>
+            </div>
+          </div>
+          <button class="bef-cta">Start Session</button>
+        </div>
+      </div>
+
+      <!-- Filter row (muddy: inside another card) -->
+      <div class="bef-filter-row">
+        <span class="bef-chip a">All</span>
+        <span class="bef-chip">Adult Health</span>
+        <span class="bef-chip w">⚠ Weak Areas</span>
+        <span class="bef-chip g">✓ Not Studied</span>
+        <span class="bef-chip">Pharmacology</span>
+        <span class="bef-chip e">ECG</span>
+        <span class="bef-chip">Priority</span>
+        <span class="bef-chip">SATA</span>
+        <span class="bef-chip">Pediatrics</span>
+      </div>
+
+      <!-- Deck library (muddy) -->
+      <div class="bef-deck-lib">
+        <div class="bef-deck-lib-head">
+          <span class="bef-section-title">All Decks</span>
+          <a class="bef-section-link">View all →</a>
+        </div>
+        <div class="bef-deck-grid">
+          <!-- Card 1 -->
+          <div class="bef-deck-card">
+            <div class="bef-deck-accent" style="background:#1aaee0"></div>
+            <div class="bef-deck-inner">
+              <div class="bef-deck-title">Priority &amp; Delegation</div>
+              <div class="bef-deck-chips">
+                <span class="bef-deck-chip">Adult Health</span>
+                <span class="bef-deck-chip due">14 due</span>
+              </div>
+              <div class="bef-deck-footer">
+                <div class="bef-prog-bar"><div class="bef-prog-fill" style="width:82%"></div></div>
+                <span class="bef-deck-meta">82% · 35 min</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="bef-deck-card">
+            <div class="bef-deck-accent" style="background:#0d9488"></div>
+            <div class="bef-deck-inner">
+              <div class="bef-deck-title">Cardiovascular Pharmacology</div>
+              <div class="bef-deck-chips">
+                <span class="bef-deck-chip">Pharmacology</span>
+                <span class="bef-deck-chip due">8 due</span>
+              </div>
+              <div class="bef-deck-footer">
+                <div class="bef-prog-bar"><div class="bef-prog-fill" style="width:61%"></div></div>
+                <span class="bef-deck-meta">61% · 20 min</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="bef-deck-card">
+            <div class="bef-deck-accent" style="background:#d8bd79"></div>
+            <div class="bef-deck-inner">
+              <div class="bef-deck-title">ECG Interpretation Fundamentals</div>
+              <div class="bef-deck-chips">
+                <span class="bef-deck-chip">ECG</span>
+                <span class="bef-deck-chip due">18 due</span>
+              </div>
+              <div class="bef-deck-footer">
+                <div class="bef-prog-bar"><div class="bef-prog-fill" style="width:41%"></div></div>
+                <span class="bef-deck-meta">41% · 28 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weak areas (muddy: another whole tinted surface) -->
+      <div class="bef-weak-band">
+        <div class="bef-weak-head">
+          <span class="bef-section-title">Weak Areas</span>
+          <span class="bef-warn-badge">⚠ 40 overdue</span>
+          <a class="bef-section-link" style="margin-left:auto">Review all →</a>
+        </div>
+        <div class="bef-weak-grid">
+          <div class="bef-weak-card">
+            <div class="bef-weak-title">Fluid &amp; Electrolytes</div>
+            <div class="bef-weak-sub">34% mastery · 22 overdue</div>
+          </div>
+          <div class="bef-weak-card">
+            <div class="bef-weak-title">ECG Interpretation</div>
+            <div class="bef-weak-sub">41% mastery · 18 overdue</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     FRAME 1 · After · Ocean · Clean Hub
+══════════════════════════════════════════════════════════════ -->
+<div class="frame frame-d" id="f1">
+<div class="shell frame-d oc">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links">
+      <a class="gnav-link cur">Flashcards</a>
+      <a class="gnav-link">Lessons</a>
+      <a class="gnav-link">Practice</a>
+      <a class="gnav-link">CAT Exam</a>
+    </div>
+    <div class="gnav-r">
+      <span class="gnav-streak">🔥 7</span>
+      <div class="gnav-av">E</div>
+    </div>
+  </nav>
+  <div class="hub-body">
+    <div class="hub-canvas">
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a style="color:inherit;text-decoration:none">Home</a>
+        <span class="bc-sep">›</span>
+        <span class="bc-cur">Flashcards</span>
+      </div>
+
+      <!-- Hero — typography + one streak widget. No surface gradients. -->
+      <div class="hub-hero">
+        <div class="hub-hero-l">
+          <h1 class="hub-title">Flashcards</h1>
+          <p class="hub-sub">Clinical micro-practice. Adaptive MCQ with rationale-based learning.</p>
+          <div class="hub-stats">
+            <div class="hub-stat">
+              <span class="hub-stat-v">2,847</span>
+              <span class="hub-stat-l">Cards</span>
+            </div>
+            <div class="hub-stat-div"></div>
+            <div class="hub-stat">
+              <span class="hub-stat-v">67%</span>
+              <span class="hub-stat-l">Mastery</span>
+            </div>
+            <div class="hub-stat-div"></div>
+            <div class="hub-stat">
+              <span class="hub-stat-v">42</span>
+              <span class="hub-stat-l">Due today</span>
+            </div>
+          </div>
+        </div>
+        <div class="streak-card">
+          <span class="streak-fire">🔥</span>
+          <div>
+            <div class="streak-num">7</div>
+            <div class="streak-lbl">day streak</div>
+            <div class="streak-dots">
+              <div class="sd on"></div><div class="sd on"></div><div class="sd on"></div>
+              <div class="sd on"></div><div class="sd on"></div><div class="sd on"></div>
+              <div class="sd on"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter chips — floating row, no card wrapper -->
+      <div class="filter-row">
+        <button class="fc on">All</button>
+        <button class="fc">Adult Health</button>
+        <button class="fc">Pharmacology</button>
+        <button class="fc">ECG</button>
+        <button class="fc">Priority</button>
+        <button class="fc">SATA</button>
+        <button class="fc">Pediatrics</button>
+        <button class="fc">Critical Care</button>
+      </div>
+
+      <!-- Continue Studying -->
+      <div class="hub-section">
+        <div class="hub-sec-hd">
+          <span class="hub-sec-title">Continue Studying</span>
+          <a class="hub-sec-link">See all decks →</a>
+        </div>
+        <div class="carousel">
+          <!-- Card 1 - CV Pharm -->
+          <div class="dk">
+            <div class="dk-bar" style="background:#0d9488"></div>
+            <div class="dk-body">
+              <div class="dk-top">
+                <div class="dk-title">Cardiovascular Pharmacology</div>
+                <div class="ring-wrap">
+                  <svg viewBox="0 0 44 44" width="44" height="44">
+                    <circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/>
+                    <circle cx="22" cy="22" r="16" fill="none" stroke="#d97706" stroke-width="3.5" stroke-dasharray="61.6 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/>
+                  </svg>
+                  <span class="ring-label">61%</span>
+                </div>
+              </div>
+              <div class="dk-chips">
+                <span class="dk-ch">Pharmacology</span>
+                <span class="dk-ch due">8 due</span>
+              </div>
+              <div class="dk-foot">
+                <div class="dk-pbar"><div class="dk-pfill" style="width:61%"></div></div>
+                <span class="dk-meta">~20 min</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 - Priority -->
+          <div class="dk">
+            <div class="dk-bar" style="background:#1aaee0"></div>
+            <div class="dk-body">
+              <div class="dk-top">
+                <div class="dk-title">Priority &amp; Delegation</div>
+                <div class="ring-wrap">
+                  <svg viewBox="0 0 44 44" width="44" height="44">
+                    <circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/>
+                    <circle cx="22" cy="22" r="16" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-dasharray="82.4 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/>
+                  </svg>
+                  <span class="ring-label">82%</span>
+                </div>
+              </div>
+              <div class="dk-chips">
+                <span class="dk-ch">Adult Health</span>
+                <span class="dk-ch due">14 due</span>
+              </div>
+              <div class="dk-foot">
+                <div class="dk-pbar"><div class="dk-pfill" style="width:82%;background:#16a34a"></div></div>
+                <span class="dk-meta">~35 min</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 - Pediatric -->
+          <div class="dk">
+            <div class="dk-bar" style="background:#e8829a"></div>
+            <div class="dk-body">
+              <div class="dk-top">
+                <div class="dk-title">Pediatric Assessment</div>
+                <div class="ring-wrap">
+                  <svg viewBox="0 0 44 44" width="44" height="44">
+                    <circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/>
+                    <circle cx="22" cy="22" r="16" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-dasharray="76.4 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/>
+                  </svg>
+                  <span class="ring-label">76%</span>
+                </div>
+              </div>
+              <div class="dk-chips">
+                <span class="dk-ch">Pediatrics</span>
+                <span class="dk-ch due">6 due</span>
+              </div>
+              <div class="dk-foot">
+                <div class="dk-pbar"><div class="dk-pfill" style="width:76%;background:#16a34a"></div></div>
+                <span class="dk-meta">~18 min</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 4 - Fluid -->
+          <div class="dk">
+            <div class="dk-bar" style="background:#52b8d4"></div>
+            <div class="dk-body">
+              <div class="dk-top">
+                <div class="dk-title">Fluid &amp; Electrolytes</div>
+                <div class="ring-wrap">
+                  <svg viewBox="0 0 44 44" width="44" height="44">
+                    <circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/>
+                    <circle cx="22" cy="22" r="16" fill="none" stroke="#dc2626" stroke-width="3.5" stroke-dasharray="34.2 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/>
+                  </svg>
+                  <span class="ring-label">34%</span>
+                </div>
+              </div>
+              <div class="dk-chips">
+                <span class="dk-ch">Adult Health</span>
+                <span class="dk-ch due">22 due</span>
+              </div>
+              <div class="dk-foot">
+                <div class="dk-pbar"><div class="dk-pfill" style="width:34%;background:#dc2626"></div></div>
+                <span class="dk-meta">~28 min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weak Areas -->
+      <div class="hub-section">
+        <div class="hub-sec-hd">
+          <span class="hub-sec-title">Weak Areas <span class="hub-sec-badge warn">40 overdue</span></span>
+          <a class="hub-sec-link">Review all →</a>
+        </div>
+        <div class="weak-grid">
+          <div class="wk urgent">
+            <div class="wk-icon">🧪</div>
+            <div class="wk-body">
+              <div class="wk-title">Fluid &amp; Electrolytes</div>
+              <div class="wk-sub">34% mastery · 22 overdue</div>
+            </div>
+            <span class="wk-badge">Critical</span>
+          </div>
+          <div class="wk warn">
+            <div class="wk-icon">📈</div>
+            <div class="wk-body">
+              <div class="wk-title">ECG Interpretation</div>
+              <div class="wk-sub">41% mastery · 18 overdue</div>
+            </div>
+            <span class="wk-badge">Review</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Topics -->
+      <div class="hub-section" style="margin-bottom:0">
+        <div class="hub-sec-hd">
+          <span class="hub-sec-title">All Topics</span>
+        </div>
+        <div class="topic-grid">
+          <div class="tpc"><div class="tpc-dot" style="background:#1aaee0"></div><div class="tpc-info"><div class="tpc-name">Cardiovascular</div><div class="tpc-count">342 cards</div></div><span class="tpc-pct hi">79%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#0d9488"></div><div class="tpc-info"><div class="tpc-name">Pharmacology</div><div class="tpc-count">418 cards</div></div><span class="tpc-pct mid">61%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#d8bd79"></div><div class="tpc-info"><div class="tpc-name">ECG</div><div class="tpc-count">156 cards</div></div><span class="tpc-pct lo">41%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#e8829a"></div><div class="tpc-info"><div class="tpc-name">Pediatrics</div><div class="tpc-count">224 cards</div></div><span class="tpc-pct hi">76%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#d97706"></div><div class="tpc-info"><div class="tpc-name">Priority</div><div class="tpc-count">198 cards</div></div><span class="tpc-pct hi">82%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#f5a524"></div><div class="tpc-info"><div class="tpc-name">SATA</div><div class="tpc-count">134 cards</div></div><span class="tpc-pct mid">58%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#52b8d4"></div><div class="tpc-info"><div class="tpc-name">Fluid/Electrolytes</div><div class="tpc-count">187 cards</div></div><span class="tpc-pct lo">34%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#9585c8"></div><div class="tpc-info"><div class="tpc-name">Mental Health</div><div class="tpc-count">211 cards</div></div><span class="tpc-pct hi">71%</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     FRAME 2 · Deck Cards Close-up — full library view
+══════════════════════════════════════════════════════════════ -->
+<div class="frame frame-d" id="f2">
+<div class="shell frame-d oc">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links"><a class="gnav-link cur">Flashcards</a><a class="gnav-link">Lessons</a><a class="gnav-link">Practice</a></div>
+    <div class="gnav-r"><span class="gnav-streak">🔥 7</span><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="hub-body">
+    <div class="hub-canvas">
+      <div class="breadcrumb"><a style="color:inherit;text-decoration:none">Flashcards</a><span class="bc-sep">›</span><span class="bc-cur">All Decks</span></div>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px">
+        <h1 class="hub-title" style="font-size:24px">All Decks</h1>
+        <div class="filter-row" style="margin-bottom:0;margin-left:24px;flex:1;justify-content:flex-end">
+          <button class="fc on">All</button>
+          <button class="fc">Due First</button>
+          <button class="fc">By Mastery</button>
+          <button class="fc">A–Z</button>
+        </div>
+      </div>
+      <!-- Full 3-col grid of deck cards -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div class="dk" style="width:100%;min-width:0;height:176px">
+          <div class="dk-bar" style="background:#1aaee0"></div>
+          <div class="dk-body">
+            <div class="dk-top">
+              <div class="dk-title">Priority &amp; Delegation</div>
+              <div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-dasharray="82.4 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">82%</span></div>
+            </div>
+            <div class="dk-chips"><span class="dk-ch">Adult Health</span><span class="dk-ch">Priority</span><span class="dk-ch due">14 due</span></div>
+            <div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:82%;background:#16a34a"></div></div><span class="dk-meta">332 cards · ~35 min</span></div>
+          </div>
+        </div>
+        <div class="dk" style="width:100%;min-width:0;height:176px">
+          <div class="dk-bar" style="background:#0d9488"></div>
+          <div class="dk-body">
+            <div class="dk-top">
+              <div class="dk-title">Cardiovascular Pharmacology</div>
+              <div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#d97706" stroke-width="3.5" stroke-dasharray="61.6 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">61%</span></div>
+            </div>
+            <div class="dk-chips"><span class="dk-ch">Pharmacology</span><span class="dk-ch">Cardiovascular</span><span class="dk-ch due">8 due</span></div>
+            <div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:61%"></div></div><span class="dk-meta">418 cards · ~20 min</span></div>
+          </div>
+        </div>
+        <div class="dk" style="width:100%;min-width:0;height:176px">
+          <div class="dk-bar" style="background:#d8bd79"></div>
+          <div class="dk-body">
+            <div class="dk-top">
+              <div class="dk-title">ECG Interpretation</div>
+              <div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#dc2626" stroke-width="3.5" stroke-dasharray="41.2 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">41%</span></div>
+            </div>
+            <div class="dk-chips"><span class="dk-ch">ECG</span><span class="dk-ch">Critical Care</span><span class="dk-ch due">18 due</span></div>
+            <div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:41%;background:#dc2626"></div></div><span class="dk-meta">156 cards · ~28 min</span></div>
+          </div>
+        </div>
+        <div class="dk" style="width:100%;min-width:0;height:176px">
+          <div class="dk-bar" style="background:#52b8d4"></div>
+          <div class="dk-body">
+            <div class="dk-top">
+              <div class="dk-title">Fluid &amp; Electrolytes</div>
+              <div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#dc2626" stroke-width="3.5" stroke-dasharray="34.2 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">34%</span></div>
+            </div>
+            <div class="dk-chips"><span class="dk-ch">Adult Health</span><span class="dk-ch due">22 due</span></div>
+            <div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:34%;background:#dc2626"></div></div><span class="dk-meta">187 cards · ~28 min</span></div>
+          </div>
+        </div>
+        <div class="dk" style="width:100%;min-width:0;height:176px">
+          <div class="dk-bar" style="background:#e8829a"></div>
+          <div class="dk-body">
+            <div class="dk-top">
+              <div class="dk-title">Pediatric Assessment</div>
+              <div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-dasharray="76.4 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">76%</span></div>
+            </div>
+            <div class="dk-chips"><span class="dk-ch">Pediatrics</span><span class="dk-ch">Assessment</span><span class="dk-ch due">6 due</span></div>
+            <div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:76%;background:#16a34a"></div></div><span class="dk-meta">224 cards · ~18 min</span></div>
+          </div>
+        </div>
+        <div class="dk" style="width:100%;min-width:0;height:176px">
+          <div class="dk-bar" style="background:#9585c8"></div>
+          <div class="dk-body">
+            <div class="dk-top">
+              <div class="dk-title">Mental Health &amp; Psych</div>
+              <div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#16a34a" stroke-width="3.5" stroke-dasharray="71.4 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">71%</span></div>
+            </div>
+            <div class="dk-chips"><span class="dk-ch">Mental Health</span><span class="dk-ch due">4 due</span></div>
+            <div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:71%;background:#16a34a"></div></div><span class="dk-meta">211 cards · ~15 min</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     FRAME 3 · Weak Areas + Topic Grid detail
+══════════════════════════════════════════════════════════════ -->
+<div class="frame frame-d" id="f3">
+<div class="shell frame-d oc">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links"><a class="gnav-link cur">Flashcards</a><a class="gnav-link">Lessons</a><a class="gnav-link">Practice</a></div>
+    <div class="gnav-r"><span class="gnav-streak">🔥 7</span><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="hub-body">
+    <div class="hub-canvas">
+      <div class="breadcrumb" style="margin-bottom:20px"><a style="color:inherit;text-decoration:none">Flashcards</a><span class="bc-sep">›</span><span class="bc-cur">Weak Areas</span></div>
+
+      <!-- Weak area alert banner — minimal, one line -->
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;border:1px solid var(--err-bdr);background:var(--err-bg);margin-bottom:28px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span style="font-size:13px;font-weight:600;color:var(--err)">40 cards overdue</span>
+        <span style="font-size:13px;color:var(--muted)">Spaced repetition recommends reviewing these first.</span>
+        <button style="margin-left:auto;font-size:12px;font-weight:700;color:#fff;background:var(--err);border:none;padding:6px 14px;border-radius:7px;cursor:pointer">Start Review</button>
+      </div>
+
+      <h2 style="font-size:18px;font-weight:700;color:var(--txt);letter-spacing:-.02em;margin-bottom:18px">Needs Attention</h2>
+      <div class="weak-grid" style="margin-bottom:36px">
+        <div class="wk urgent"><div class="wk-icon">🧪</div><div class="wk-body"><div class="wk-title">Fluid &amp; Electrolytes</div><div class="wk-sub">34% mastery · 22 overdue · Last studied 4d ago</div></div><span class="wk-badge">Critical</span></div>
+        <div class="wk urgent"><div class="wk-icon">📈</div><div class="wk-body"><div class="wk-title">ECG Interpretation</div><div class="wk-sub">41% mastery · 18 overdue · Last studied 3d ago</div></div><span class="wk-badge">Critical</span></div>
+        <div class="wk warn"><div class="wk-icon">💊</div><div class="wk-body"><div class="wk-title">Cardiovascular Pharmacology</div><div class="wk-sub">61% mastery · 8 due · Last studied today</div></div><span class="wk-badge">Review</span></div>
+        <div class="wk warn"><div class="wk-icon">👶</div><div class="wk-body"><div class="wk-title">Pediatric Medication Dosing</div><div class="wk-sub">55% mastery · 6 due · Last studied yesterday</div></div><span class="wk-badge">Review</span></div>
+      </div>
+
+      <h2 style="font-size:18px;font-weight:700;color:var(--txt);letter-spacing:-.02em;margin-bottom:18px">All Topics</h2>
+      <div class="topic-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="tpc"><div class="tpc-dot" style="background:#1aaee0"></div><div class="tpc-info"><div class="tpc-name">Cardiovascular</div><div class="tpc-count">342 cards</div></div><span class="tpc-pct hi">79%</span></div>
+        <div class="tpc"><div class="tpc-dot" style="background:#0d9488"></div><div class="tpc-info"><div class="tpc-name">Pharmacology</div><div class="tpc-count">418 cards</div></div><span class="tpc-pct mid">61%</span></div>
+        <div class="tpc"><div class="tpc-dot" style="background:#d8bd79"></div><div class="tpc-info"><div class="tpc-name">ECG</div><div class="tpc-count">156 cards</div></div><span class="tpc-pct lo">41%</span></div>
+        <div class="tpc"><div class="tpc-dot" style="background:#e8829a"></div><div class="tpc-info"><div class="tpc-name">Pediatrics</div><div class="tpc-count">224 cards</div></div><span class="tpc-pct hi">76%</span></div>
+        <div class="tpc"><div class="tpc-dot" style="background:#d97706"></div><div class="tpc-info"><div class="tpc-name">Priority</div><div class="tpc-count">198 cards</div></div><span class="tpc-pct hi">82%</span></div>
+        <div class="tpc"><div class="tpc-dot" style="background:#f5a524"></div><div class="tpc-info"><div class="tpc-name">SATA</div><div class="tpc-count">134 cards</div></div><span class="tpc-pct mid">58%</span></div>
+        <div class="tpc"><div class="tpc-dot" style="background:#52b8d4"></div><div class="tpc-info"><div class="tpc-name">Fluid/Electrolytes</div><div class="tpc-count">187 cards</div></div><span class="tpc-pct lo">34%</span></div>
+        <div class="tpc"><div class="tpc-dot" style="background:#9585c8"></div><div class="tpc-info"><div class="tpc-name">Mental Health</div><div class="tpc-count">211 cards</div></div><span class="tpc-pct hi">71%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     FRAME 4 · After · Midnight Theme
+══════════════════════════════════════════════════════════════ -->
+<div class="frame frame-d" id="f4">
+<div class="shell frame-d mn">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links">
+      <a class="gnav-link cur">Flashcards</a>
+      <a class="gnav-link">Lessons</a>
+      <a class="gnav-link">Practice</a>
+      <a class="gnav-link">CAT Exam</a>
+    </div>
+    <div class="gnav-r">
+      <span class="gnav-streak">🔥 7</span>
+      <div class="gnav-av">E</div>
+    </div>
+  </nav>
+  <div class="hub-body">
+    <div class="hub-canvas">
+      <div class="breadcrumb">
+        <a style="color:inherit;text-decoration:none">Home</a>
+        <span class="bc-sep">›</span>
+        <span class="bc-cur">Flashcards</span>
+      </div>
+      <div class="hub-hero">
+        <div class="hub-hero-l">
+          <h1 class="hub-title">Flashcards</h1>
+          <p class="hub-sub">Clinical micro-practice. Adaptive MCQ with rationale-based learning.</p>
+          <div class="hub-stats">
+            <div class="hub-stat"><span class="hub-stat-v">2,847</span><span class="hub-stat-l">Cards</span></div>
+            <div class="hub-stat-div"></div>
+            <div class="hub-stat"><span class="hub-stat-v">67%</span><span class="hub-stat-l">Mastery</span></div>
+            <div class="hub-stat-div"></div>
+            <div class="hub-stat"><span class="hub-stat-v">42</span><span class="hub-stat-l">Due today</span></div>
+          </div>
+        </div>
+        <div class="streak-card">
+          <span class="streak-fire">🔥</span>
+          <div><div class="streak-num">7</div><div class="streak-lbl">day streak</div>
+          <div class="streak-dots"><div class="sd on"></div><div class="sd on"></div><div class="sd on"></div><div class="sd on"></div><div class="sd on"></div><div class="sd on"></div><div class="sd on"></div></div></div>
+        </div>
+      </div>
+      <div class="filter-row">
+        <button class="fc on">All</button>
+        <button class="fc">Adult Health</button>
+        <button class="fc">Pharmacology</button>
+        <button class="fc">ECG</button>
+        <button class="fc">Priority</button>
+        <button class="fc">SATA</button>
+        <button class="fc">Pediatrics</button>
+      </div>
+      <div class="hub-section">
+        <div class="hub-sec-hd"><span class="hub-sec-title">Continue Studying</span><a class="hub-sec-link">See all →</a></div>
+        <div class="carousel">
+          <div class="dk"><div class="dk-bar" style="background:#38bdf8"></div><div class="dk-body"><div class="dk-top"><div class="dk-title">Priority &amp; Delegation</div><div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(36,55,88,.8)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#34d399" stroke-width="3.5" stroke-dasharray="82.4 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">82%</span></div></div><div class="dk-chips"><span class="dk-ch">Adult Health</span><span class="dk-ch due">14 due</span></div><div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:82%;background:#34d399"></div></div><span class="dk-meta">~35 min</span></div></div></div>
+          <div class="dk"><div class="dk-bar" style="background:#34d399"></div><div class="dk-body"><div class="dk-top"><div class="dk-title">Cardiovascular Pharmacology</div><div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(36,55,88,.8)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#fbbf24" stroke-width="3.5" stroke-dasharray="61.6 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">61%</span></div></div><div class="dk-chips"><span class="dk-ch">Pharmacology</span><span class="dk-ch due">8 due</span></div><div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:61%;background:#fbbf24"></div></div><span class="dk-meta">~20 min</span></div></div></div>
+          <div class="dk"><div class="dk-bar" style="background:#fbbf24"></div><div class="dk-body"><div class="dk-top"><div class="dk-title">ECG Interpretation</div><div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(36,55,88,.8)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#f87171" stroke-width="3.5" stroke-dasharray="41.2 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">41%</span></div></div><div class="dk-chips"><span class="dk-ch">ECG</span><span class="dk-ch due">18 due</span></div><div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:41%;background:#f87171"></div></div><span class="dk-meta">~28 min</span></div></div></div>
+          <div class="dk"><div class="dk-bar" style="background:#67e8f9"></div><div class="dk-body"><div class="dk-top"><div class="dk-title">Fluid &amp; Electrolytes</div><div class="ring-wrap"><svg viewBox="0 0 44 44" width="44" height="44"><circle cx="22" cy="22" r="16" fill="none" stroke="rgba(36,55,88,.8)" stroke-width="3.5"/><circle cx="22" cy="22" r="16" fill="none" stroke="#f87171" stroke-width="3.5" stroke-dasharray="34.2 100.5" stroke-linecap="round" transform="rotate(-90 22 22)"/></svg><span class="ring-label">34%</span></div></div><div class="dk-chips"><span class="dk-ch">Adult Health</span><span class="dk-ch due">22 due</span></div><div class="dk-foot"><div class="dk-pbar"><div class="dk-pfill" style="width:34%;background:#f87171"></div></div><span class="dk-meta">~28 min</span></div></div></div>
+        </div>
+      </div>
+      <div class="hub-section">
+        <div class="hub-sec-hd"><span class="hub-sec-title">Weak Areas <span class="hub-sec-badge warn">40 overdue</span></span><a class="hub-sec-link">Review all →</a></div>
+        <div class="weak-grid">
+          <div class="wk urgent"><div class="wk-icon">🧪</div><div class="wk-body"><div class="wk-title">Fluid &amp; Electrolytes</div><div class="wk-sub">34% · 22 overdue</div></div><span class="wk-badge">Critical</span></div>
+          <div class="wk warn"><div class="wk-icon">📈</div><div class="wk-body"><div class="wk-title">ECG Interpretation</div><div class="wk-sub">41% · 18 overdue</div></div><span class="wk-badge">Review</span></div>
+        </div>
+      </div>
+      <div class="hub-section" style="margin-bottom:0">
+        <div class="hub-sec-hd"><span class="hub-sec-title">All Topics</span></div>
+        <div class="topic-grid">
+          <div class="tpc"><div class="tpc-dot" style="background:#38bdf8"></div><div class="tpc-info"><div class="tpc-name">Cardiovascular</div><div class="tpc-count">342 cards</div></div><span class="tpc-pct hi">79%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#34d399"></div><div class="tpc-info"><div class="tpc-name">Pharmacology</div><div class="tpc-count">418 cards</div></div><span class="tpc-pct mid">61%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#fbbf24"></div><div class="tpc-info"><div class="tpc-name">ECG</div><div class="tpc-count">156 cards</div></div><span class="tpc-pct lo">41%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#f472b6"></div><div class="tpc-info"><div class="tpc-name">Pediatrics</div><div class="tpc-count">224 cards</div></div><span class="tpc-pct hi">76%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#fbbf24"></div><div class="tpc-info"><div class="tpc-name">Priority</div><div class="tpc-count">198 cards</div></div><span class="tpc-pct hi">82%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#fb923c"></div><div class="tpc-info"><div class="tpc-name">SATA</div><div class="tpc-count">134 cards</div></div><span class="tpc-pct mid">58%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#67e8f9"></div><div class="tpc-info"><div class="tpc-name">Fluid/Electrolytes</div><div class="tpc-count">187 cards</div></div><span class="tpc-pct lo">34%</span></div>
+          <div class="tpc"><div class="tpc-dot" style="background:#a78bfa"></div><div class="tpc-info"><div class="tpc-name">Mental Health</div><div class="tpc-count">211 cards</div></div><span class="tpc-pct hi">71%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     FRAME 5 · Mobile Hub · Ocean
+══════════════════════════════════════════════════════════════ -->
+<div class="frame frame-m" id="f5">
+<div class="shell frame-m oc" style="position:relative">
+  <nav class="mob-nav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+      <span class="gnav-streak" style="font-size:11px;padding:3px 8px">🔥 7</span>
+      <div class="gnav-av">E</div>
+    </div>
+  </nav>
+  <div class="mob-body">
+    <div class="mob-canvas">
+      <div class="mob-hero">
+        <h1 class="mob-title">Flashcards</h1>
+        <p class="mob-sub">Clinical micro-practice with adaptive rationale.</p>
+        <div class="mob-stats">
+          <div><div class="mob-stat-v">2,847</div><div class="mob-stat-l">Cards</div></div>
+          <div class="mob-stat-div"></div>
+          <div><div class="mob-stat-v">67%</div><div class="mob-stat-l">Mastery</div></div>
+          <div class="mob-stat-div"></div>
+          <div><div class="mob-stat-v">42</div><div class="mob-stat-l">Due</div></div>
+        </div>
+      </div>
+      <div class="mob-filter">
+        <button class="fc on" style="font-size:11.5px;padding:5px 11px">All</button>
+        <button class="fc" style="font-size:11.5px;padding:5px 11px">Adult Health</button>
+        <button class="fc" style="font-size:11.5px;padding:5px 11px">Pharmacology</button>
+        <button class="fc" style="font-size:11.5px;padding:5px 11px">ECG</button>
+        <button class="fc" style="font-size:11.5px;padding:5px 11px">Priority</button>
+      </div>
+      <div class="mob-sec">
+        <div class="mob-sec-hd"><span class="mob-sec-title">Continue Studying</span><a class="mob-sec-link">See all →</a></div>
+        <div class="mob-carousel">
+          <div class="mob-dk"><div class="mob-dk-bar" style="background:#0d9488"></div><div class="mob-dk-body"><div class="mob-dk-title">Cardiovascular Pharmacology</div><div class="dk-chips"><span class="dk-ch" style="font-size:8.5px">Pharmacology</span><span class="dk-ch due" style="font-size:8.5px">8 due</span></div><div class="mob-dk-foot"><div class="mob-dk-pbar"><div class="mob-dk-pfill" style="width:61%"></div></div><span class="mob-dk-meta">61% · 20m</span></div></div></div>
+          <div class="mob-dk"><div class="mob-dk-bar" style="background:#1aaee0"></div><div class="mob-dk-body"><div class="mob-dk-title">Priority &amp; Delegation</div><div class="dk-chips"><span class="dk-ch" style="font-size:8.5px">Adult Health</span><span class="dk-ch due" style="font-size:8.5px">14 due</span></div><div class="mob-dk-foot"><div class="mob-dk-pbar"><div class="mob-dk-pfill" style="width:82%;background:#16a34a"></div></div><span class="mob-dk-meta">82% · 35m</span></div></div></div>
+          <div class="mob-dk"><div class="mob-dk-bar" style="background:#e8829a"></div><div class="mob-dk-body"><div class="mob-dk-title">Pediatric Assessment</div><div class="dk-chips"><span class="dk-ch" style="font-size:8.5px">Pediatrics</span><span class="dk-ch due" style="font-size:8.5px">6 due</span></div><div class="mob-dk-foot"><div class="mob-dk-pbar"><div class="mob-dk-pfill" style="width:76%;background:#16a34a"></div></div><span class="mob-dk-meta">76% · 18m</span></div></div></div>
+        </div>
+      </div>
+      <div class="mob-sec">
+        <div class="mob-sec-hd"><span class="mob-sec-title">Weak Areas <span class="hub-sec-badge warn" style="font-size:9px;margin-left:6px">40 overdue</span></span><a class="mob-sec-link">All →</a></div>
+        <div class="mob-wk-grid">
+          <div class="mob-wk urgent"><div class="mob-wk-icon">🧪</div><div class="mob-wk-body"><div class="mob-wk-title">Fluid &amp; Electrolytes</div><div class="mob-wk-sub">34% · 22 overdue</div></div></div>
+          <div class="mob-wk" style="border-color:var(--warn-bdr)"><div class="mob-wk-icon">📈</div><div class="mob-wk-body"><div class="mob-wk-title">ECG Interpretation</div><div class="mob-wk-sub">41% · 18 overdue</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Mobile bottom nav -->
+  <div class="mob-bot">
+    <div class="mob-nav-item cur"><div class="mob-nav-icon" style="color:var(--acc)">🃏</div><span class="mob-nav-label" style="color:var(--acc)">Cards</span></div>
+    <div class="mob-nav-item"><div class="mob-nav-icon">📚</div><span class="mob-nav-label">Lessons</span></div>
+    <div class="mob-nav-item"><div class="mob-nav-icon">📝</div><span class="mob-nav-label">Practice</span></div>
+    <div class="mob-nav-item"><div class="mob-nav-icon">📊</div><span class="mob-nav-label">Progress</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     FRAME 6 · Spaced Repetition Dashboard · Ocean
+══════════════════════════════════════════════════════════════ -->
+<div class="frame frame-d" id="f6">
+<div class="shell frame-d oc">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links"><a class="gnav-link">Flashcards</a><a class="gnav-link">Lessons</a><a class="gnav-link">Practice</a><a class="gnav-link cur">Progress</a></div>
+    <div class="gnav-r"><span class="gnav-streak">🔥 7</span><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="dash-body">
+    <div class="dash-canvas">
+      <div class="breadcrumb" style="margin-bottom:24px"><a style="color:inherit;text-decoration:none">Dashboard</a><span class="bc-sep">›</span><span class="bc-cur">Spaced Repetition</span></div>
+      <h1 class="hub-title" style="font-size:24px;margin-bottom:24px">Study Progress</h1>
+
+      <!-- Stat cards row -->
+      <div class="dash-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+        <div class="dash-card"><div class="dash-lbl">Overall Mastery</div><div><span class="dash-big">67</span><span class="dash-unit">%</span></div><div class="dash-chg">↑ 4% this week</div></div>
+        <div class="dash-card"><div class="dash-lbl">Cards Due Today</div><div><span class="dash-big">42</span></div><div class="dash-chg" style="color:var(--warn)">18 overdue</div></div>
+        <div class="dash-card"><div class="dash-lbl">Study Streak</div><div><span class="dash-big">7</span><span class="dash-unit">days</span></div><div class="dash-chg">Personal best: 14d</div></div>
+        <div class="dash-card"><div class="dash-lbl">Cards Reviewed</div><div><span class="dash-big">1,904</span></div><div class="dash-chg">↑ 127 this week</div></div>
+      </div>
+
+      <div class="dash-grid">
+        <!-- Due today breakdown -->
+        <div class="dash-card">
+          <div class="dash-lbl">Due Today by Topic</div>
+          <div class="dash-due-list">
+            <div class="dash-due-row"><div class="dash-due-dot" style="background:#52b8d4"></div><span class="dash-due-topic">Fluid &amp; Electrolytes</span><span class="dash-due-cnt">22</span><div class="dash-due-bar"><div class="dash-due-fill" style="width:100%;background:#dc2626"></div></div></div>
+            <div class="dash-due-row"><div class="dash-due-dot" style="background:#d8bd79"></div><span class="dash-due-topic">ECG Interpretation</span><span class="dash-due-cnt">18</span><div class="dash-due-bar"><div class="dash-due-fill" style="width:82%;background:#d97706"></div></div></div>
+            <div class="dash-due-row"><div class="dash-due-dot" style="background:#1aaee0"></div><span class="dash-due-topic">Priority &amp; Delegation</span><span class="dash-due-cnt">14</span><div class="dash-due-bar"><div class="dash-due-fill" style="width:64%;background:#1aaee0"></div></div></div>
+            <div class="dash-due-row"><div class="dash-due-dot" style="background:#0d9488"></div><span class="dash-due-topic">Pharmacology</span><span class="dash-due-cnt">8</span><div class="dash-due-bar"><div class="dash-due-fill" style="width:36%;background:#16a34a"></div></div></div>
+            <div class="dash-due-row"><div class="dash-due-dot" style="background:#e8829a"></div><span class="dash-due-topic">Pediatrics</span><span class="dash-due-cnt">6</span><div class="dash-due-bar"><div class="dash-due-fill" style="width:27%;background:#16a34a"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Mastery rings -->
+        <div class="dash-card">
+          <div class="dash-lbl">Topic Mastery</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+            <div class="dash-ring-row">
+              <svg viewBox="0 0 40 40" width="40" height="40" style="flex-shrink:0"><circle cx="20" cy="20" r="14" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3"/><circle cx="20" cy="20" r="14" fill="none" stroke="#16a34a" stroke-width="3" stroke-dasharray="72.1 88" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg>
+              <div class="dash-ring-info"><div class="dash-ring-title">Priority &amp; Delegation</div><div class="dash-ring-sub">82% · 332 cards</div></div>
+              <span style="font-size:13px;font-weight:800;color:#16a34a">82%</span>
+            </div>
+            <div class="dash-ring-row">
+              <svg viewBox="0 0 40 40" width="40" height="40" style="flex-shrink:0"><circle cx="20" cy="20" r="14" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3"/><circle cx="20" cy="20" r="14" fill="none" stroke="#d97706" stroke-width="3" stroke-dasharray="54.2 88" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg>
+              <div class="dash-ring-info"><div class="dash-ring-title">Cardiovascular Pharmacology</div><div class="dash-ring-sub">61% · 418 cards</div></div>
+              <span style="font-size:13px;font-weight:800;color:#d97706">61%</span>
+            </div>
+            <div class="dash-ring-row">
+              <svg viewBox="0 0 40 40" width="40" height="40" style="flex-shrink:0"><circle cx="20" cy="20" r="14" fill="none" stroke="rgba(176,220,243,.4)" stroke-width="3"/><circle cx="20" cy="20" r="14" fill="none" stroke="#dc2626" stroke-width="3" stroke-dasharray="36.2 88" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg>
+              <div class="dash-ring-info"><div class="dash-ring-title">Fluid &amp; Electrolytes</div><div class="dash-ring-sub">34% · 187 cards</div></div>
+              <span style="font-size:13px;font-weight:800;color:#dc2626">34%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Heatmap -->
+        <div class="dash-card">
+          <div class="dash-lbl">26-Week Study Activity</div>
+          <div class="heatmap">
+            <div class="hm l4"></div><div class="hm l3"></div><div class="hm l4"></div><div class="hm l2"></div><div class="hm l3"></div><div class="hm l4"></div><div class="hm l1"></div>
+            <div class="hm l3"></div><div class="hm l4"></div><div class="hm l2"></div><div class="hm l3"></div><div class="hm l4"></div><div class="hm l2"></div><div class="hm l4"></div>
+            <div class="hm l1"></div><div class="hm l2"></div><div class="hm l3"></div><div class="hm l4"></div><div class="hm l3"></div><div class="hm l2"></div><div class="hm l4"></div>
+            <div class="hm l4"></div><div class="hm l3"></div><div class="hm l2"></div><div class="hm l4"></div><div class="hm l4"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;margin-top:10px;font-size:10px;color:var(--muted)">
+            <span>Less</span>
+            <div class="hm" style="width:10px;height:10px;border-radius:2px"></div>
+            <div class="hm l1" style="width:10px;height:10px;border-radius:2px"></div>
+            <div class="hm l2" style="width:10px;height:10px;border-radius:2px"></div>
+            <div class="hm l3" style="width:10px;height:10px;border-radius:2px"></div>
+            <div class="hm l4" style="width:10px;height:10px;border-radius:2px"></div>
+            <span>More</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function s(i){
+  document.querySelectorAll('.frame').forEach((f,idx)=>f.classList.toggle('on',idx===i));
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('on',idx===i));
+}
+</script>
+</body>
+</html>

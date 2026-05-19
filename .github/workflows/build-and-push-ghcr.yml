@@ -94,8 +94,17 @@ jobs:
           echo "  digest: ${{ steps.build.outputs.digest }}"
 
           if [ -z "$DO_TOKEN" ]; then
-            echo "ERROR: DIGITALOCEAN_ACCESS_TOKEN secret is not set."
-            echo "Production cannot be updated without this secret because DigitalOcean must be pointed at the immutable sha image tag."
+            echo "::error::DIGITALOCEAN_ACCESS_TOKEN secret is not set — DigitalOcean will NOT deploy the new image."
+            echo ""
+            echo "The Docker image was pushed to GHCR successfully, but the live site will NOT update"
+            echo "because the DO deployment trigger was skipped."
+            echo ""
+            echo "To fix: GitHub repo → Settings → Secrets and variables → Actions → New repository secret"
+            echo "  Name:  DIGITALOCEAN_ACCESS_TOKEN"
+            echo "  Value: <DO personal access token with Apps write scope>"
+            echo ""
+            echo "Until then, deploy manually using an immutable sha tag:"
+            echo "  doctl apps update d6a4b825-4d70-4dd4-8d71-04b354d36f43 --spec .do/app-nursenest-core-next.yaml"
             exit 1
           fi
 
