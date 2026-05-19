@@ -379,11 +379,14 @@ export async function createCatPracticeTestPayload(
   );
   const simBounds = nclexRnSimulationBoundsFromConfig(examCfg);
   const fallbackBounds = sim ? simBounds : practiceCatBounds(input.questionCount);
+  // Guided practice sessions ("practice") must use practiceCatBounds so that short
+  // runs (10–50 Q) are honoured.  Readiness-config bounds (e.g. NCLEX 120–145) only
+  // apply to full adaptive CAT sessions, not user-requested guided practice.
   const bounds = sim
     ? simBounds
-    : pathwayReadiness
-      ? { min: pathwayReadiness.minQuestions, max: pathwayReadiness.maxQuestions }
-      : fallbackBounds;
+    : adaptiveSessionType === "practice" || !pathwayReadiness
+      ? fallbackBounds
+      : { min: pathwayReadiness.minQuestions, max: pathwayReadiness.maxQuestions };
 
   const sessionPickSalt = randomUUID();
   const poolInput: PickQuestionsInput = {

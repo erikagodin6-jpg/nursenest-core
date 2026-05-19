@@ -61,6 +61,8 @@ export default async function PracticeTestRunPage({ params }: Props) {
 
   let initialPathwaySurface: PracticeTestPathwayClientShell | null = null;
   let nclexShellMode: "cat" | "practice" | null = null;
+  // pathwayLabel for NCLEX runners — resolved below
+  let pathwayLabelForShell: string | null = null;
 
   if (userId && id.length >= 8) {
     const row = await prisma.practiceTest.findFirst({
@@ -73,18 +75,32 @@ export default async function PracticeTestRunPage({ params }: Props) {
         ? String((raw as Record<string, unknown>).pathwayId).trim()
         : "";
 
-    // Detect NCLEX shell mode from config
+    // Detect which shell to render from stored config.
+    // Priority:
+    //   1. exam_simulation      → NclexCatRunner     (locked exam, no rationale)
+    //   2. catAdaptiveSessionType "practice" → PracticeTestRunnerClient
+    //      (CAT-based guided practice uses cat_advance + catStudyReveal; the
+    //       NclexPracticeRunner uses commit_answer and is only for linear sessions)
+    //   3. linear practice      → NclexPracticeRunner (commit_answer + split rationale)
     if (raw && typeof raw === "object" && !Array.isArray(raw)) {
       const cfg = raw as Record<string, unknown>;
       if (cfg.catPresentationMode === "exam_simulation") {
         nclexShellMode = "cat";
-      } else if (cfg.linearDeliveryMode === "practice" && cfg.linearRationaleVisibility === "after_each") {
+      } else if (
+        cfg.catAdaptiveSessionType !== "practice" &&
+        cfg.linearDeliveryMode === "practice" &&
+        cfg.linearRationaleVisibility === "after_each"
+      ) {
         nclexShellMode = "practice";
       }
+      // catAdaptiveSessionType === "practice" falls through to PracticeTestRunnerClient
+      // which already handles cat_advance + catStudyReveal correctly.
     }
+
     if (pathwayId) {
       const p = getExamPathwayById(pathwayId);
       if (p) {
+        pathwayLabelForShell = p.shortName ?? null;
         initialPathwaySurface = {
           id: p.id,
           countrySlug: p.countrySlug,
@@ -116,14 +132,18 @@ export default async function PracticeTestRunPage({ params }: Props) {
     );
   }
 
-  // NCLEX shell mode: render the new polished exam shells for CAT simulation and practice mode
+  // NCLEX shell mode: render the new polished exam shells.
+  // CAT exam simulation → NclexCatRunner (locked, no rationale).
+  // Linear practice → NclexPracticeRunner (commit_answer + split rationale).
+  // CAT guided practice falls through to PracticeTestRunnerClient below —
+  // that runner already handles cat_advance + catStudyReveal correctly.
   if (nclexShellMode === "cat") {
     return (
       <ExamSessionErrorBoundary surface="practice_test">
         <NclexCatRunner
           testId={id}
           userId={userId}
-          pathwayLabel={initialPathwaySurface?.shortName ?? null}
+          pathwayLabel={pathwayLabelForShell}
         />
       </ExamSessionErrorBoundary>
     );
@@ -135,7 +155,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
         <NclexPracticeRunner
           testId={id}
           userId={userId}
-          pathwayLabel={initialPathwaySurface?.shortName ?? null}
+          pathwayLabel={pathwayLabelForShell}
         />
       </ExamSessionErrorBoundary>
     );

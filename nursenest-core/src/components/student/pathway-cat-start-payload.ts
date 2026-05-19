@@ -110,6 +110,8 @@ export type PracticeAdaptiveCreatePayload = {
   catSelectionBasis: PracticeAdaptiveSelectionBasis;
   catPresentationMode: "practice";
   catExamFeedbackMode: "study";
+  /** Must be "practice" so the server uses practiceCatBounds instead of readiness-config bounds. */
+  catAdaptiveSessionType: "practice";
   pathwayId: string;
   timedMode: false;
   timeLimitSec: 0;
@@ -146,6 +148,7 @@ export function buildPracticeAdaptiveCreatePayload(opts: {
     catSelectionBasis: opts.catSelectionBasis,
     catPresentationMode: "practice",
     catExamFeedbackMode: "study",
+    catAdaptiveSessionType: "practice",
     pathwayId: opts.pathwayId,
     timedMode: false,
     timeLimitSec: 0,

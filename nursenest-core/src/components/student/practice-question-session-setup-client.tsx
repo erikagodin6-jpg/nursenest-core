@@ -219,7 +219,12 @@ export function PracticeQuestionSessionSetupClient({
       }
 
       if (!sessionId) throw new Error("session_id_missing");
-      router.push(`/app/practice-tests/${sessionId}`);
+      // Include pathwayId so the exam page can load the pathway surface without
+      // an extra DB round-trip and the learner never sees a second pathway selector.
+      const dest = effectivePathwayId
+        ? `/app/practice-tests/${sessionId}?pathwayId=${encodeURIComponent(effectivePathwayId)}`
+        : `/app/practice-tests/${sessionId}`;
+      router.push(dest);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
       setStartError(

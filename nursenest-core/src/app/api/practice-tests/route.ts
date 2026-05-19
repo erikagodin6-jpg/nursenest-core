@@ -441,7 +441,17 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
-    const configuredCount = readinessConfig?.maxQuestions ?? d.questionCount;
+    // Resolve adaptive session type early — needed to decide whether readiness-config
+    // bounds should apply.  Exam simulation always uses full CAT bounds regardless.
+    const adaptiveSessionType = d.catPresentationMode === "exam_simulation" ? "cat" : d.catAdaptiveSessionType;
+
+    // Guided practice sessions ("practice") use the caller's requested count so short
+    // runs (10–50 Q) are not inflated to the readiness-config max (e.g. 120 for NCLEX).
+    // Full CAT and exam simulation continue to respect the readiness / pathway cap.
+    const configuredCount =
+      adaptiveSessionType === "practice"
+        ? d.questionCount
+        : readinessConfig?.maxQuestions ?? d.questionCount;
     const enforcedQuestionCount =
       d.catPresentationMode === "exam_simulation" ? pathwayCap : Math.min(configuredCount, pathwayCap);
     const enforcedTimedMode =
@@ -455,7 +465,6 @@ export async function POST(req: Request) {
       catPresentationMode: d.catPresentationMode,
       pathway: simPathway,
     });
-    const adaptiveSessionType = d.catPresentationMode === "exam_simulation" ? "cat" : d.catAdaptiveSessionType;
     const catExamFeedbackModeForCreate =
       adaptiveSessionType === "practice"
         ? "study"
