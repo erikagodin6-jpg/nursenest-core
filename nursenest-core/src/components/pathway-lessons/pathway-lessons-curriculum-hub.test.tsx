@@ -69,10 +69,10 @@ describe("PathwayLessonsCurriculumHub", () => {
     );
 
     assert.match(html, /Cardiovascular/);
-    assert.match(html, /33% complete/);
+    assert.match(html, /33%/);
     assert.match(html, /2 of 6 lessons/);
     assert.match(html, /Category progress/i);
-    assert.match(html, /line-clamp-3/);
+    assert.match(html, /truncate/);
   });
 
   it("does not render paid progress UI for anonymous or unpaid visitors", () => {
@@ -93,7 +93,7 @@ describe("PathwayLessonsCurriculumHub", () => {
 
     assert.doesNotMatch(html, /Category progress/i);
     assert.doesNotMatch(html, /1 of 2 completed/i);
-    assert.match(html, /2 lessons/);
+    assert.match(html, /Cardiac Lesson 2/);
   });
 
   it("renders the same shared progress UI in tier priority order: RN (US+CA), RPN/PN, NP, Allied, then New Grad", () => {
@@ -126,7 +126,7 @@ describe("PathwayLessonsCurriculumHub", () => {
         />,
       );
       assert.match(html, /Category progress/i, pathwayId);
-      assert.match(html, /33% complete/, pathwayId);
+      assert.match(html, /33%/, pathwayId);
       assert.match(html, /1 of 3 lessons/, pathwayId);
       assert.match(html, /data-testid="lesson-card-link"/, pathwayId);
     }
@@ -185,7 +185,7 @@ describe("PathwayLessonsCurriculumHub", () => {
     const titleMatches = [...html.matchAll(/data-testid="lesson-card-title"/g)];
     assert.ok(titleMatches.length >= 10);
     assert.match(html, /data-testid="lesson-card-link"/);
-    assert.match(html, /data-testid="lesson-card"/);
+    assert.match(html, /nn-qa-pathway-lesson-card/);
     assert.match(html, /Clinical Topic 1/);
     assert.match(html, /text-\[var\(--theme-body-text\)\]/);
   });

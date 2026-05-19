@@ -430,7 +430,7 @@ export function pathwayLessonMarketingDetailHref(
  */
 export function pathwayLessonMarketingHubVerifiedCardHref(
   lessonsBasePath: string,
-  lesson: Pick<PathwayLessonRecord, "slug" | "hubMarketingDegraded">,
+  lesson: Pick<PathwayLessonRecord, "slug">,
 ): string | null {
   return pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
 }
