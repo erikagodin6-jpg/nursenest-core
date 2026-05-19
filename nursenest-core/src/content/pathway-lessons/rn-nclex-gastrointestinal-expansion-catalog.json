@@ -6,7 +6,7 @@
     "ca-rn-nclex-rn": [
       {
         "slug": "abdominal-assessment-nurses-nclex-rn",
-        "title": "Abdominal Assessment for Nurses",
+        "title": "Abdominal Assessment",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -507,7 +507,7 @@
       },
       {
         "slug": "jaundice-causes-nursing-implications-nclex",
-        "title": "Jaundice: Causes and Nursing Implications",
+        "title": "Jaundice",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -1843,7 +1843,7 @@
       },
       {
         "slug": "gi-bleed-first-actions-priorities-nclex",
-        "title": "GI Bleed: First Actions and Priorities",
+        "title": "GI Bleed",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -2678,7 +2678,7 @@
       },
       {
         "slug": "enteral-feeding-tubes-ng-peg-nclex",
-        "title": "Enteral Feeding Tubes (NG, PEG)",
+        "title": "Enteral Feeding Tubes",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -3012,7 +3012,7 @@
       },
       {
         "slug": "total-parenteral-nutrition-nclex-rn",
-        "title": "Total Parenteral Nutrition (TPN)",
+        "title": "Total Parenteral Nutrition",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -4849,7 +4849,7 @@
       },
       {
         "slug": "acute-abdomen-first-action-nclex",
-        "title": "Acute Abdomen: What Do You Do First?",
+        "title": "Acute Abdomen",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -5183,7 +5183,7 @@
       },
       {
         "slug": "postoperative-gi-complications-priority-nclex",
-        "title": "Post-Op GI Complications: Who Do You See First?",
+        "title": "Post-Op GI Complications",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -5352,7 +5352,7 @@
     "us-rn-nclex-rn": [
       {
         "slug": "abdominal-assessment-nurses-nclex-rn",
-        "title": "Abdominal Assessment for Nurses",
+        "title": "Abdominal Assessment",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -5853,7 +5853,7 @@
       },
       {
         "slug": "jaundice-causes-nursing-implications-nclex",
-        "title": "Jaundice: Causes and Nursing Implications",
+        "title": "Jaundice",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -7189,7 +7189,7 @@
       },
       {
         "slug": "gi-bleed-first-actions-priorities-nclex",
-        "title": "GI Bleed: First Actions and Priorities",
+        "title": "GI Bleed",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -8024,7 +8024,7 @@
       },
       {
         "slug": "enteral-feeding-tubes-ng-peg-nclex",
-        "title": "Enteral Feeding Tubes (NG, PEG)",
+        "title": "Enteral Feeding Tubes",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -8358,7 +8358,7 @@
       },
       {
         "slug": "total-parenteral-nutrition-nclex-rn",
-        "title": "Total Parenteral Nutrition (TPN)",
+        "title": "Total Parenteral Nutrition",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -10195,7 +10195,7 @@
       },
       {
         "slug": "acute-abdomen-first-action-nclex",
-        "title": "Acute Abdomen: What Do You Do First?",
+        "title": "Acute Abdomen",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",
@@ -10529,7 +10529,7 @@
       },
       {
         "slug": "postoperative-gi-complications-priority-nclex",
-        "title": "Post-Op GI Complications: Who Do You See First?",
+        "title": "Post-Op GI Complications",
         "topic": "Gastrointestinal",
         "topicSlug": "gastrointestinal",
         "bodySystem": "Gastrointestinal",

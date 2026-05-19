@@ -2627,7 +2627,7 @@
       },
       {
         "slug": "proc-skill-suctioning-oral-nasopharyngeal-rn",
-        "title": "Suctioning (Oral and Nasopharyngeal)",
+        "title": "Suctioning",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",
@@ -4629,7 +4629,7 @@
       },
       {
         "slug": "proc-skill-drain-care-jp-hemovac-rn",
-        "title": "Drain Care (JP and Hemovac)",
+        "title": "Drain Care",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",
@@ -5399,7 +5399,7 @@
       },
       {
         "slug": "proc-skill-specimen-collection-rn",
-        "title": "Specimen Collection (Urine, Stool, Sputum)",
+        "title": "Specimen Collection",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",
@@ -5553,7 +5553,7 @@
       },
       {
         "slug": "proc-skill-blood-draw-basics-rn",
-        "title": "Blood Draw Basics (Peripheral Venipuncture)",
+        "title": "Peripheral Venipuncture",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",
@@ -6323,7 +6323,7 @@
       },
       {
         "slug": "proc-skill-what-do-you-first-procedures-rn",
-        "title": "What Do You Do First? (Procedures & Skills)",
+        "title": "Procedures Skills Priority",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",
@@ -9254,7 +9254,7 @@
       },
       {
         "slug": "proc-skill-suctioning-oral-nasopharyngeal-rn",
-        "title": "Suctioning (Oral and Nasopharyngeal)",
+        "title": "Suctioning",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",
@@ -11256,7 +11256,7 @@
       },
       {
         "slug": "proc-skill-drain-care-jp-hemovac-rn",
-        "title": "Drain Care (JP and Hemovac)",
+        "title": "Drain Care",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",
@@ -12026,7 +12026,7 @@
       },
       {
         "slug": "proc-skill-specimen-collection-rn",
-        "title": "Specimen Collection (Urine, Stool, Sputum)",
+        "title": "Specimen Collection",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",
@@ -12180,7 +12180,7 @@
       },
       {
         "slug": "proc-skill-blood-draw-basics-rn",
-        "title": "Blood Draw Basics (Peripheral Venipuncture)",
+        "title": "Peripheral Venipuncture",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",
@@ -12950,7 +12950,7 @@
       },
       {
         "slug": "proc-skill-what-do-you-first-procedures-rn",
-        "title": "What Do You Do First? (Procedures & Skills)",
+        "title": "Procedures Skills Priority",
         "topic": "Procedures & Skills",
         "topicSlug": "procedures-and-skills",
         "bodySystem": "General",

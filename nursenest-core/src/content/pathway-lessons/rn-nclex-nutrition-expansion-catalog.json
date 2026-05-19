@@ -6,7 +6,7 @@
     "ca-rn-nclex-rn": [
       {
         "slug": "nutritional-assessment-nurses-nclex",
-        "title": "Nutritional Assessment for Nurses",
+        "title": "Nutritional Assessment",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -546,7 +546,7 @@
       },
       {
         "slug": "electrolytes-nutrition-sodium-potassium-nclex",
-        "title": "Electrolytes and Nutrition (Na, K, Mg, Ca)",
+        "title": "Electrolytes and Nutrition",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -762,7 +762,7 @@
       },
       {
         "slug": "diets-clear-full-liquid-soft-regular-nclex",
-        "title": "Diets: Clear Liquid, Full Liquid, Soft, Regular",
+        "title": "Therapeutic Diets",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -1086,7 +1086,7 @@
       },
       {
         "slug": "cardiac-diet-low-sodium-low-fat-nclex",
-        "title": "Cardiac Diet (Low Sodium, Low Fat)",
+        "title": "Cardiac Diet",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -1194,7 +1194,7 @@
       },
       {
         "slug": "renal-diet-potassium-phosphorus-protein-nclex",
-        "title": "Renal Diet (Potassium, Phosphorus, Protein)",
+        "title": "Renal Diet",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -2166,7 +2166,7 @@
       },
       {
         "slug": "vitamin-deficiencies-b12-d-iron-nclex",
-        "title": "Vitamin Deficiencies (B12, D, Iron)",
+        "title": "Vitamin Deficiencies",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -3246,7 +3246,7 @@
       },
       {
         "slug": "nutrition-prioritization-first-actions-nclex",
-        "title": "What Do You Do First? (Nutrition Prioritization)",
+        "title": "Nutrition Priority",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -3464,7 +3464,7 @@
     "us-rn-nclex-rn": [
       {
         "slug": "nutritional-assessment-nurses-nclex",
-        "title": "Nutritional Assessment for Nurses",
+        "title": "Nutritional Assessment",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -4004,7 +4004,7 @@
       },
       {
         "slug": "electrolytes-nutrition-sodium-potassium-nclex",
-        "title": "Electrolytes and Nutrition (Na, K, Mg, Ca)",
+        "title": "Electrolytes and Nutrition",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -4220,7 +4220,7 @@
       },
       {
         "slug": "diets-clear-full-liquid-soft-regular-nclex",
-        "title": "Diets: Clear Liquid, Full Liquid, Soft, Regular",
+        "title": "Therapeutic Diets",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -4544,7 +4544,7 @@
       },
       {
         "slug": "cardiac-diet-low-sodium-low-fat-nclex",
-        "title": "Cardiac Diet (Low Sodium, Low Fat)",
+        "title": "Cardiac Diet",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -4652,7 +4652,7 @@
       },
       {
         "slug": "renal-diet-potassium-phosphorus-protein-nclex",
-        "title": "Renal Diet (Potassium, Phosphorus, Protein)",
+        "title": "Renal Diet",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -5624,7 +5624,7 @@
       },
       {
         "slug": "vitamin-deficiencies-b12-d-iron-nclex",
-        "title": "Vitamin Deficiencies (B12, D, Iron)",
+        "title": "Vitamin Deficiencies",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",
@@ -6704,7 +6704,7 @@
       },
       {
         "slug": "nutrition-prioritization-first-actions-nclex",
-        "title": "What Do You Do First? (Nutrition Prioritization)",
+        "title": "Nutrition Priority",
         "topic": "Nutrition",
         "topicSlug": "nutrition",
         "bodySystem": "Gastrointestinal",

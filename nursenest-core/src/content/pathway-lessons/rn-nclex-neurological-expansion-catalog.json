@@ -173,7 +173,7 @@
       },
       {
         "slug": "neuro-assessment-pupils-motor-speech-sensation",
-        "title": "Neuro Assessment: Pupils, Motor Strength, Speech, Sensation",
+        "title": "Neuro Assessment",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -340,7 +340,7 @@
       },
       {
         "slug": "cranial-nerves-nurses-nclex-rn",
-        "title": "Cranial Nerves for Nurses",
+        "title": "Cranial Nerves",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -507,7 +507,7 @@
       },
       {
         "slug": "stroke-ischemic-vs-hemorrhagic-nclex",
-        "title": "Stroke: Ischemic vs Hemorrhagic",
+        "title": "Stroke",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -841,7 +841,7 @@
       },
       {
         "slug": "thrombolytic-stroke-tpa-tnk-safety-nclex",
-        "title": "Thrombolytic Therapy for Stroke: tPA/TNK Safety",
+        "title": "Thrombolytic Therapy for Stroke",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -2344,7 +2344,7 @@
       },
       {
         "slug": "increased-icp-early-vs-late-signs-nclex",
-        "title": "Increased ICP: Early vs Late Signs",
+        "title": "Increased ICP",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -2845,7 +2845,7 @@
       },
       {
         "slug": "spinal-cord-injury-levels-motor-sensory-nclex",
-        "title": "Spinal Cord Injury: Levels and Motor/Sensory Loss",
+        "title": "Spinal Cord Injury",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -5851,7 +5851,7 @@
       },
       {
         "slug": "brain-tumor-icp-seizure-risk-nclex-rn",
-        "title": "Brain Tumours: Increased ICP and Seizure Risk",
+        "title": "Brain Tumours",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -6519,7 +6519,7 @@
       },
       {
         "slug": "neuro-priority-first-action-nclex-rn",
-        "title": "Neuro Priority Questions: What Do You Do First?",
+        "title": "Neuro Priority Questions",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -6855,7 +6855,7 @@
       },
       {
         "slug": "neuro-assessment-pupils-motor-speech-sensation",
-        "title": "Neuro Assessment: Pupils, Motor Strength, Speech, Sensation",
+        "title": "Neuro Assessment",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -7022,7 +7022,7 @@
       },
       {
         "slug": "cranial-nerves-nurses-nclex-rn",
-        "title": "Cranial Nerves for Nurses",
+        "title": "Cranial Nerves",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -7189,7 +7189,7 @@
       },
       {
         "slug": "stroke-ischemic-vs-hemorrhagic-nclex",
-        "title": "Stroke: Ischemic vs Hemorrhagic",
+        "title": "Stroke",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -7523,7 +7523,7 @@
       },
       {
         "slug": "thrombolytic-stroke-tpa-tnk-safety-nclex",
-        "title": "Thrombolytic Therapy for Stroke: tPA/TNK Safety",
+        "title": "Thrombolytic Therapy for Stroke",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -9026,7 +9026,7 @@
       },
       {
         "slug": "increased-icp-early-vs-late-signs-nclex",
-        "title": "Increased ICP: Early vs Late Signs",
+        "title": "Increased ICP",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -9527,7 +9527,7 @@
       },
       {
         "slug": "spinal-cord-injury-levels-motor-sensory-nclex",
-        "title": "Spinal Cord Injury: Levels and Motor/Sensory Loss",
+        "title": "Spinal Cord Injury",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -12533,7 +12533,7 @@
       },
       {
         "slug": "brain-tumor-icp-seizure-risk-nclex-rn",
-        "title": "Brain Tumours: Increased ICP and Seizure Risk",
+        "title": "Brain Tumours",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",
@@ -13201,7 +13201,7 @@
       },
       {
         "slug": "neuro-priority-first-action-nclex-rn",
-        "title": "Neuro Priority Questions: What Do You Do First?",
+        "title": "Neuro Priority Questions",
         "topic": "Neurological",
         "topicSlug": "neurological",
         "bodySystem": "Neurologic",

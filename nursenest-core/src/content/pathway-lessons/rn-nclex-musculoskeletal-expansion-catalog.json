@@ -6,7 +6,7 @@
     "ca-rn-nclex-rn": [
       {
         "slug": "musculoskeletal-assessment-nurses-nclex",
-        "title": "Musculoskeletal Assessment for Nurses",
+        "title": "Musculoskeletal Assessment",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",
@@ -114,7 +114,7 @@
       },
       {
         "slug": "fracture-types-nursing-care-nclex",
-        "title": "Fractures: Types and Nursing Care",
+        "title": "Fractures",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",
@@ -222,7 +222,7 @@
       },
       {
         "slug": "fracture-complications-fat-embolism-infection-nclex",
-        "title": "Fracture Complications (Fat Embolism, Infection)",
+        "title": "Fracture Complications",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",
@@ -2061,7 +2061,7 @@
       },
       {
         "slug": "neurovascular-assessment-five-ps-nclex",
-        "title": "Neurovascular Assessment (5 P’s)",
+        "title": "Neurovascular Assessment",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",
@@ -2277,7 +2277,7 @@
       },
       {
         "slug": "musculoskeletal-prioritization-first-action-nclex",
-        "title": "What Do You Do First? (Musculoskeletal Prioritization)",
+        "title": "Musculoskeletal Priority",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",
@@ -2495,7 +2495,7 @@
     "us-rn-nclex-rn": [
       {
         "slug": "musculoskeletal-assessment-nurses-nclex",
-        "title": "Musculoskeletal Assessment for Nurses",
+        "title": "Musculoskeletal Assessment",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",
@@ -2603,7 +2603,7 @@
       },
       {
         "slug": "fracture-types-nursing-care-nclex",
-        "title": "Fractures: Types and Nursing Care",
+        "title": "Fractures",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",
@@ -2711,7 +2711,7 @@
       },
       {
         "slug": "fracture-complications-fat-embolism-infection-nclex",
-        "title": "Fracture Complications (Fat Embolism, Infection)",
+        "title": "Fracture Complications",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",
@@ -4550,7 +4550,7 @@
       },
       {
         "slug": "neurovascular-assessment-five-ps-nclex",
-        "title": "Neurovascular Assessment (5 P’s)",
+        "title": "Neurovascular Assessment",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",
@@ -4766,7 +4766,7 @@
       },
       {
         "slug": "musculoskeletal-prioritization-first-action-nclex",
-        "title": "What Do You Do First? (Musculoskeletal Prioritization)",
+        "title": "Musculoskeletal Priority",
         "topic": "Musculoskeletal",
         "topicSlug": "musculoskeletal",
         "bodySystem": "Musculoskeletal",

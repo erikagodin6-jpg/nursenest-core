@@ -6,7 +6,7 @@
     "ca-rn-nclex-rn": [
       {
         "slug": "endocrine-system-overview-nurses-nclex",
-        "title": "Endocrine System Overview for Nurses",
+        "title": "Endocrine System Overview",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -114,7 +114,7 @@
       },
       {
         "slug": "hormone-negative-feedback-nclex",
-        "title": "Hormone Feedback Loops (Negative Feedback Basics)",
+        "title": "Hormone Feedback Loops",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -222,7 +222,7 @@
       },
       {
         "slug": "pituitary-disorders-nclex",
-        "title": "Pituitary Disorders (Hyperpituitarism, Hypopituitarism)",
+        "title": "Pituitary Disorders",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -978,7 +978,7 @@
       },
       {
         "slug": "diabetes-chronic-complications-nclex",
-        "title": "Chronic Complications of Diabetes (Micro/Macrovascular)",
+        "title": "Chronic Diabetes Complications",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -1086,7 +1086,7 @@
       },
       {
         "slug": "hyperthyroidism-graves-nclex",
-        "title": "Hyperthyroidism (Graves Disease)",
+        "title": "Hyperthyroidism",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -1194,7 +1194,7 @@
       },
       {
         "slug": "hypothyroidism-hashimoto-myxedema-nclex",
-        "title": "Hypothyroidism (Hashimoto’s, Myxedema)",
+        "title": "Hypothyroidism",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -1302,7 +1302,7 @@
       },
       {
         "slug": "thyroid-medications-levothyroxine-antithyroid-nclex",
-        "title": "Thyroid Medications (Levothyroxine, Methimazole, PTU)",
+        "title": "Thyroid Medications",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -1410,7 +1410,7 @@
       },
       {
         "slug": "parathyroid-disorders-nclex",
-        "title": "Parathyroid Disorders (Hyperparathyroidism vs Hypoparathyroidism)",
+        "title": "Parathyroid Disorders",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -1518,7 +1518,7 @@
       },
       {
         "slug": "calcium-imbalance-hyper-hypo-nclex",
-        "title": "Calcium Imbalances (Hypercalcemia vs Hypocalcemia)",
+        "title": "Calcium Imbalances",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -1626,7 +1626,7 @@
       },
       {
         "slug": "adrenal-insufficiency-addisons-nclex",
-        "title": "Adrenal Insufficiency (Addison’s Disease)",
+        "title": "Adrenal Insufficiency",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -2274,7 +2274,7 @@
       },
       {
         "slug": "growth-hormone-disorders-nclex",
-        "title": "Growth Hormone Disorders (Acromegaly, Dwarfism)",
+        "title": "Growth Hormone Disorders",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -2814,7 +2814,7 @@
       },
       {
         "slug": "endocrine-prioritization-first-action-nclex",
-        "title": "What Do You Do First? (Endocrine Prioritization)",
+        "title": "Endocrine Priority",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -3032,7 +3032,7 @@
     "us-rn-nclex-rn": [
       {
         "slug": "endocrine-system-overview-nurses-nclex",
-        "title": "Endocrine System Overview for Nurses",
+        "title": "Endocrine System Overview",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -3140,7 +3140,7 @@
       },
       {
         "slug": "hormone-negative-feedback-nclex",
-        "title": "Hormone Feedback Loops (Negative Feedback Basics)",
+        "title": "Hormone Feedback Loops",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -3248,7 +3248,7 @@
       },
       {
         "slug": "pituitary-disorders-nclex",
-        "title": "Pituitary Disorders (Hyperpituitarism, Hypopituitarism)",
+        "title": "Pituitary Disorders",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -4004,7 +4004,7 @@
       },
       {
         "slug": "diabetes-chronic-complications-nclex",
-        "title": "Chronic Complications of Diabetes (Micro/Macrovascular)",
+        "title": "Chronic Diabetes Complications",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -4112,7 +4112,7 @@
       },
       {
         "slug": "hyperthyroidism-graves-nclex",
-        "title": "Hyperthyroidism (Graves Disease)",
+        "title": "Hyperthyroidism",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -4220,7 +4220,7 @@
       },
       {
         "slug": "hypothyroidism-hashimoto-myxedema-nclex",
-        "title": "Hypothyroidism (Hashimoto’s, Myxedema)",
+        "title": "Hypothyroidism",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -4328,7 +4328,7 @@
       },
       {
         "slug": "thyroid-medications-levothyroxine-antithyroid-nclex",
-        "title": "Thyroid Medications (Levothyroxine, Methimazole, PTU)",
+        "title": "Thyroid Medications",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -4436,7 +4436,7 @@
       },
       {
         "slug": "parathyroid-disorders-nclex",
-        "title": "Parathyroid Disorders (Hyperparathyroidism vs Hypoparathyroidism)",
+        "title": "Parathyroid Disorders",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -4544,7 +4544,7 @@
       },
       {
         "slug": "calcium-imbalance-hyper-hypo-nclex",
-        "title": "Calcium Imbalances (Hypercalcemia vs Hypocalcemia)",
+        "title": "Calcium Imbalances",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -4652,7 +4652,7 @@
       },
       {
         "slug": "adrenal-insufficiency-addisons-nclex",
-        "title": "Adrenal Insufficiency (Addison’s Disease)",
+        "title": "Adrenal Insufficiency",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -5300,7 +5300,7 @@
       },
       {
         "slug": "growth-hormone-disorders-nclex",
-        "title": "Growth Hormone Disorders (Acromegaly, Dwarfism)",
+        "title": "Growth Hormone Disorders",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",
@@ -5840,7 +5840,7 @@
       },
       {
         "slug": "endocrine-prioritization-first-action-nclex",
-        "title": "What Do You Do First? (Endocrine Prioritization)",
+        "title": "Endocrine Priority",
         "topic": "Endocrine",
         "topicSlug": "endocrine",
         "bodySystem": "Endocrine",

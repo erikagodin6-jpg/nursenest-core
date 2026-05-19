@@ -6,7 +6,7 @@
     "ca-rn-nclex-rn": [
       {
         "slug": "respiratory-assessment-ipap-nclex",
-        "title": "Respiratory Assessment for Nurses (Inspection, Palpation, Percussion, Auscultation)",
+        "title": "Respiratory Assessment",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -654,7 +654,7 @@
       },
       {
         "slug": "suctioning-techniques-oral-np-tracheal-nclex",
-        "title": "Suctioning Techniques (Oral, NP, Tracheal)",
+        "title": "Suctioning Techniques",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -2382,7 +2382,7 @@
       },
       {
         "slug": "abg-compensation-patterns-advanced-nclex",
-        "title": "ABG Interpretation Advanced (Compensation Patterns)",
+        "title": "Advanced ABG Interpretation",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -2490,7 +2490,7 @@
       },
       {
         "slug": "respiratory-acidosis-alkalosis-clinical-nclex",
-        "title": "Respiratory Acidosis vs Alkalosis (Clinical Correlation)",
+        "title": "Respiratory Acidosis vs Alkalosis",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -2814,7 +2814,7 @@
       },
       {
         "slug": "occupational-lung-disease-nclex",
-        "title": "Occupational Lung Disease (Asbestosis, Silicosis)",
+        "title": "Occupational Lung Disease",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -3030,7 +3030,7 @@
       },
       {
         "slug": "airborne-droplet-contact-respiratory-precautions-nclex",
-        "title": "Airborne vs Droplet vs Contact (Respiratory Focus)",
+        "title": "Airborne vs Droplet vs Contact Precautions",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -3246,7 +3246,7 @@
       },
       {
         "slug": "respiratory-prioritization-first-action-nclex",
-        "title": "What Do You Do First? (Respiratory Prioritization)",
+        "title": "Respiratory Priority",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -3464,7 +3464,7 @@
     "us-rn-nclex-rn": [
       {
         "slug": "respiratory-assessment-ipap-nclex",
-        "title": "Respiratory Assessment for Nurses (Inspection, Palpation, Percussion, Auscultation)",
+        "title": "Respiratory Assessment",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -4112,7 +4112,7 @@
       },
       {
         "slug": "suctioning-techniques-oral-np-tracheal-nclex",
-        "title": "Suctioning Techniques (Oral, NP, Tracheal)",
+        "title": "Suctioning Techniques",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -5840,7 +5840,7 @@
       },
       {
         "slug": "abg-compensation-patterns-advanced-nclex",
-        "title": "ABG Interpretation Advanced (Compensation Patterns)",
+        "title": "Advanced ABG Interpretation",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -5948,7 +5948,7 @@
       },
       {
         "slug": "respiratory-acidosis-alkalosis-clinical-nclex",
-        "title": "Respiratory Acidosis vs Alkalosis (Clinical Correlation)",
+        "title": "Respiratory Acidosis vs Alkalosis",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -6272,7 +6272,7 @@
       },
       {
         "slug": "occupational-lung-disease-nclex",
-        "title": "Occupational Lung Disease (Asbestosis, Silicosis)",
+        "title": "Occupational Lung Disease",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -6488,7 +6488,7 @@
       },
       {
         "slug": "airborne-droplet-contact-respiratory-precautions-nclex",
-        "title": "Airborne vs Droplet vs Contact (Respiratory Focus)",
+        "title": "Airborne vs Droplet vs Contact Precautions",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
@@ -6704,7 +6704,7 @@
       },
       {
         "slug": "respiratory-prioritization-first-action-nclex",
-        "title": "What Do You Do First? (Respiratory Prioritization)",
+        "title": "Respiratory Priority",
         "topic": "Respiratory",
         "topicSlug": "respiratory",
         "bodySystem": "Respiratory",
