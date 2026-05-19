@@ -277,9 +277,17 @@ export const CONTENT_REGISTRY_IDS = Object.keys(CONTENT_REGISTRY) as ContentRegi
 
 /** Top-level directories allowed under `src/content/`. */
 export const APPROVED_SRC_CONTENT_TOP_LEVEL_DIRS = [
+  "allied-mastery",
+  "blog-static-longtail",
+  "cases",
+  "clinical-illustrations",
+  "exams",
+  "flashcards",
   "lessons",
+  "nursing-mechanism-explainers.ts",
   "pathway-lessons",
   "pre-nursing",
+  "questions",
   "topic-maps",
 ] as const;
 
@@ -289,6 +297,7 @@ export const APPROVED_SRC_CONTENT_ROOT_FILES = new Set([
   "blog-static-posts.ts",
   "clinical-case-studies.json",
   "flashcard-samples.json",
+  "nursing-mechanism-explainers.ts",
   "tools-overlays-all.json",
   "transfusion-safety-questions.json",
 ]);
