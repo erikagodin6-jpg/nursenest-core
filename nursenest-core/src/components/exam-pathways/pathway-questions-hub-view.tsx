@@ -1,6 +1,6 @@
 import type React from "react";
 import Link from "next/link";
-import { BookOpen, Brain, Zap, CheckCircle, Users, ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, Brain, CheckCircle, Users, Zap } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
@@ -15,13 +15,26 @@ function formatCount(n: number): string {
   return String(n);
 }
 
+function cleanExamName(examName: string): string {
+  return examName
+    .replace(/NCLEX_RN/g, "NCLEX-RN")
+    .replace(/NCLEX_PN/g, "NCLEX-PN")
+    .replace(/\s*\/\s*(NCLEX-RN|NCLEX-PN)\s*/g, " / $1 ")
+    .replace(/\b(NCLEX-RN)\s*\/\s*\1\b/g, "$1")
+    .replace(/\b(NCLEX-PN)\s*\/\s*\1\b/g, "$1")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 function StatTile({
   label,
   value,
+  helper,
   accent,
 }: {
   label: string;
   value: string;
+  helper?: string;
   accent: "success" | "info" | "brand";
 }) {
   const accentVar =
@@ -32,14 +45,19 @@ function StatTile({
         : "var(--semantic-brand)";
 
   return (
-    <div className="nn-metric-tile flex flex-col gap-1 px-4 py-3 sm:px-5 sm:py-4" style={{ "--tile-accent": accentVar } as React.CSSProperties}>
-      <span
-        className="text-2xl font-extrabold tabular-nums leading-none"
-        style={{ color: accentVar }}
-      >
+    <div
+      className="rounded-2xl border border-[var(--semantic-border-soft)] bg-white/80 px-4 py-4 shadow-sm ring-1 ring-white/70"
+      style={{ borderTop: `3px solid ${accentVar}` }}
+    >
+      <span className="block text-2xl font-extrabold leading-none tabular-nums" style={{ color: accentVar }}>
         {value}
       </span>
-      <span className="text-xs font-medium text-[var(--semantic-text-secondary)]">{label}</span>
+      <span className="mt-1 block text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-primary)]">
+        {label}
+      </span>
+      {helper ? (
+        <span className="mt-1 block text-xs leading-relaxed text-[var(--semantic-text-muted)]">{helper}</span>
+      ) : null}
     </div>
   );
 }
@@ -57,12 +75,12 @@ function InfoCard({
 }) {
   const cls =
     variant === "positive"
-      ? "nn-semantic-inset nn-semantic-inset--positive"
+      ? "bg-[var(--semantic-panel-positive)]"
       : variant === "cool"
-        ? "nn-semantic-inset nn-semantic-inset--cool"
+        ? "bg-[var(--semantic-panel-cool)]"
         : variant === "warm"
-          ? "nn-semantic-inset nn-semantic-inset--warm"
-          : "nn-semantic-inset";
+          ? "bg-[var(--semantic-panel-warm)]"
+          : "bg-[var(--semantic-surface-muted)]";
 
   const iconColor =
     variant === "positive"
@@ -74,12 +92,12 @@ function InfoCard({
           : "text-[var(--semantic-brand)]";
 
   return (
-    <div className={`${cls} flex flex-col gap-2 p-4 sm:p-5`}>
-      <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 ${iconColor}`}>
+    <div className={`${cls} rounded-2xl border border-[var(--semantic-border-soft)] p-5`}>
+      <div className={`mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-white/70 ${iconColor}`}>
         <Icon className="h-4 w-4" />
       </div>
-      <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{title}</p>
-      <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{body}</p>
+      <p className="text-sm font-bold text-[var(--semantic-text-primary)]">{title}</p>
+      <p className="mt-1.5 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{body}</p>
     </div>
   );
 }
@@ -114,30 +132,25 @@ function StudyModeCard({
         : "bg-primary text-primary-foreground hover:opacity-90";
 
   return (
-    <div
-      className="flex flex-1 flex-col gap-3 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6"
-      style={{ borderTop: `3px solid ${accentColor}` }}
-    >
-      <div
-        className="flex h-10 w-10 items-center justify-center rounded-xl"
-        style={{ background: `color-mix(in srgb, ${accentColor} 14%, var(--semantic-surface))` }}
-      >
-        <div style={{ color: accentColor }}>
-          <Icon className="h-5 w-5" />
+    <div className="group flex flex-1 flex-col rounded-3xl border border-[var(--semantic-border-soft)] bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6">
+      <div className="flex items-start gap-4">
+        <div
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl"
+          style={{ background: `color-mix(in srgb, ${accentColor} 14%, white)` }}
+        >
+          <Icon className="h-5 w-5" style={{ color: accentColor }} />
+        </div>
+        <div>
+          <p className="text-base font-bold text-[var(--semantic-text-primary)]">{title}</p>
+          <p className="mt-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{description}</p>
         </div>
       </div>
-      <div className="flex flex-col gap-1">
-        <p className="text-sm font-bold text-[var(--semantic-text-primary)]">{title}</p>
-        <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{description}</p>
-      </div>
-      <div className="mt-auto pt-1">
-        <Link
-          href={ctaHref}
-          className={`inline-flex min-h-[40px] items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition-opacity ${btnBg}`}
-        >
-          {ctaLabel}
-        </Link>
-      </div>
+      <Link
+        href={ctaHref}
+        className={`mt-5 inline-flex min-h-[42px] items-center justify-center rounded-full px-5 py-2 text-sm font-bold transition ${btnBg}`}
+      >
+        {ctaLabel}
+      </Link>
     </div>
   );
 }
@@ -174,215 +187,193 @@ export function PathwayQuestionsHubView({
   boardLinkContext?: NpQuestionsHubBoardLinkContext;
 }) {
   const snap = questionSnapshot?.status === "ok" ? questionSnapshot : null;
-  const totalQuestions = snap ? formatCount(snap.pathwayScopedCount) : "–";
-  const catEligible = snap ? formatCount(snap.adaptiveEligibleCount) : "–";
-  const totalLessons = typeof lessonCount === "number" ? String(lessonCount) : "–";
+  const totalQuestions = snap ? formatCount(snap.pathwayScopedCount) : "—";
+  const totalLessons = typeof lessonCount === "number" ? String(lessonCount) : "—";
   const hasQuestions = snap ? snap.pathwayScopedCount > 0 : false;
   const catPoolUsable = snap ? snap.adaptiveEligibleCount >= CAT_MIN_COMPLETE_POOL : false;
+  const everyQuestionCatEligible = snap ? snap.adaptiveEligibleCount === snap.pathwayScopedCount && snap.pathwayScopedCount > 0 : false;
+  const catEligibleValue = everyQuestionCatEligible ? "All" : snap ? formatCount(snap.adaptiveEligibleCount) : "—";
+  const cleanName = cleanExamName(examName);
 
   return (
-    <div className="space-y-10">
-      {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="nn-learner-page-hero">
+    <div className="space-y-9">
+      <section className="overflow-hidden rounded-[2rem] border border-[var(--semantic-border-soft)] bg-gradient-to-br from-white via-[var(--semantic-surface)] to-[var(--semantic-panel-cool)] p-6 shadow-sm sm:p-8">
         {isTopicNarrowed ? (
-          <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-white/50 px-3 py-1 text-xs font-semibold text-[var(--semantic-brand)]">
-            Narrowed to: {displayTopicLabel}
+          <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-white/80 px-3 py-1 text-xs font-semibold text-[var(--semantic-brand)]">
+            Narrowed to {displayTopicLabel}
           </div>
         ) : null}
 
-        <h1 className="text-2xl font-extrabold leading-tight text-[var(--theme-heading-text)] sm:text-3xl">
-          {pathway.shortName} {countryLabel} practice questions
-        </h1>
-        <p className="mt-2 max-w-xl text-sm leading-relaxed text-[var(--semantic-text-secondary)] sm:text-base">
-          {isTopicNarrowed
-            ? `Items scoped to ${displayTopicLabel} within ${pathway.shortName} and ${examName}. Sign in to run the same filter in the app.`
-            : `Clinical vignettes and rationales written for ${examName} — same scope and language as test day for your ${countryLabel} track.`}
-        </p>
+        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+          <div>
+            <Link
+              href={overviewHref}
+              className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-[var(--semantic-brand)] hover:underline"
+            >
+              <ArrowLeft className="h-4 w-4" /> {pathway.shortName} overview
+            </Link>
+            <h1 className="max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
+              {pathway.shortName} {countryLabel} practice questions
+            </h1>
+            <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--semantic-text-secondary)]">
+              {isTopicNarrowed
+                ? `Practice ${displayTopicLabel} items within ${pathway.shortName}. Sign in to keep this same filter in your study dashboard.`
+                : `Clinical vignettes, rationales, and exam-style practice scoped to ${cleanName} for the ${countryLabel} track.`}
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              {hasQuestions ? (
+                <Link
+                  href={appQuestionsScoped}
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+                >
+                  Start practicing
+                </Link>
+              ) : (
+                <Link
+                  href={lessonsHref}
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+                >
+                  View lessons
+                </Link>
+              )}
+              {catPoolUsable ? (
+                <Link
+                  href={catHref}
+                  className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white/80 px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-white"
+                >
+                  Open CAT intro
+                </Link>
+              ) : null}
+              <Link
+                href={lessonsHref}
+                className="inline-flex min-h-[46px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white/60 px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-white"
+              >
+                Browse lessons
+              </Link>
+            </div>
+          </div>
 
-        {/* Stat tiles — suppress zero practice counts (learner confidence) */}
-        <div
-          className={`mt-5 grid gap-3 ${
-            snap && snap.pathwayScopedCount > 0 && snap.adaptiveEligibleCount > 0
-              ? "grid-cols-3"
-              : snap && (snap.pathwayScopedCount > 0 || snap.adaptiveEligibleCount > 0)
-                ? "grid-cols-2"
-                : "grid-cols-1 sm:grid-cols-2"
-          }`}
-        >
-          {snap && snap.pathwayScopedCount > 0 ? (
-            <StatTile label="Practice questions" value={totalQuestions} accent="brand" />
-          ) : null}
-          <StatTile label="Clinical lessons" value={totalLessons} accent="info" />
-          {snap && snap.adaptiveEligibleCount > 0 ? (
-            <StatTile label="CAT-eligible" value={catEligible} accent="success" />
-          ) : null}
-        </div>
-
-        {/* CTAs */}
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          {hasQuestions ? (
-            <Link
-              href={appQuestionsScoped}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
-            >
-              Start practice
-            </Link>
-          ) : (
-            <Link
-              href={lessonsHref}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
-            >
-              View lessons
-            </Link>
-          )}
-          {catPoolUsable ? (
-            <Link
-              href={catHref}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white/60 px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-white/80"
-            >
-              Open CAT intro
-            </Link>
-          ) : null}
-          {hasQuestions ? (
-            <Link
-              href={lessonsHref}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-white/60 px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-white/80"
-            >
-              View lessons
-            </Link>
-          ) : null}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            {snap && snap.pathwayScopedCount > 0 ? (
+              <StatTile label="Practice questions" value={totalQuestions} accent="brand" helper="Pathway-scoped" />
+            ) : null}
+            <StatTile label="Clinical lessons" value={totalLessons} accent="info" helper="Available now" />
+            {snap && snap.adaptiveEligibleCount > 0 ? (
+              <StatTile label="CAT-ready pool" value={catEligibleValue} accent="success" helper={everyQuestionCatEligible ? "All scored items" : "Adaptive-eligible"} />
+            ) : null}
+          </div>
         </div>
       </section>
 
-      {/* ── Bank ramping (no harsh zero-inventory headline) ─────────────────────── */}
       {snap && !hasQuestions ? (
-        <div className="mt-8 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_88%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)]">
-          <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
-            Start with lessons and adaptive prep — scored counts appear as publishing expands
+        <div className="rounded-3xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_88%,var(--semantic-surface))] p-5 shadow-sm sm:p-6">
+          <p className="text-sm font-bold text-[var(--semantic-text-primary)]">
+            Start with lessons while this bank expands
           </p>
           <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
-            Clinical lessons and CAT surfaces stay available for this pathway. When the scored linear bank is still
-            ramping, focus on lessons and adaptive sessions tied to your scope — no broken experience.
+            This pathway is live, but the scored linear question count is still ramping. Use lessons and adaptive study routes first; question counts will appear as publishing expands.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
-            <Link
-              href={lessonsHref}
-              className="inline-flex min-h-11 items-center rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-semibold text-[var(--semantic-brand-contrast)]"
-            >
+            <Link href={lessonsHref} className="inline-flex min-h-11 items-center rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-semibold text-[var(--semantic-brand-contrast)]">
               Browse lessons
             </Link>
             {catPoolUsable ? (
-              <Link
-                href={catHref}
-                className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm"
-              >
+              <Link href={catHref} className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-white px-5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm">
                 Try CAT exam
               </Link>
             ) : null}
-            <Link
-              href="/signup"
-              className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
-            >
+            <Link href="/signup" className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2">
               Create account
             </Link>
           </div>
         </div>
       ) : null}
 
-      {/* ── Info cards ───────────────────────────────────── */}
       {!isTopicNarrowed ? (
-        <section>
-          <h2 className="mb-4 text-base font-bold text-[var(--semantic-text-primary)]">
-            What you get here
-          </h2>
+        <section className="rounded-3xl border border-[var(--semantic-border-soft)] bg-white p-5 shadow-sm sm:p-6">
+          <div className="mb-5">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">What is included</p>
+            <h2 className="mt-1 text-xl font-extrabold text-[var(--semantic-text-primary)]">Clean exam prep, not a generic question dump</h2>
+          </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <InfoCard
               icon={CheckCircle}
               variant="positive"
-              title="What this bank includes"
-              body={`Board-style vignettes scoped to ${examName} and your ${countryLabel} region. Every item includes a rationale and distractor explanation.`}
+              title="Scoped question bank"
+              body={`Board-style vignettes written for ${cleanName} and your ${countryLabel} region. Each item includes a rationale and distractor explanation.`}
             />
             <InfoCard
               icon={Zap}
               variant="cool"
-              title="Best way to start"
-              body="Jump into a quick practice set right from this page, or sign in for a full session that tracks your history and filters by topic."
+              title="Fast entry point"
+              body="Start with a short practice set, then move into a full tracked session when you want analytics and topic filters."
             />
             <InfoCard
               icon={Brain}
               variant="muted"
-              title={catPoolUsable ? "Adaptive practice available" : "Adaptive practice"}
+              title={catPoolUsable ? "Adaptive CAT available" : "Adaptive CAT pathway"}
               body={
                 catPoolUsable
-                  ? snap && snap.adaptiveEligibleCount > 0
-                    ? `${catEligible} items are CAT-eligible — the adaptive engine adjusts difficulty based on your answers, mirroring computerized adaptive testing.`
-                    : "Eligible CAT items are available for adaptive sessions — difficulty adjusts from your responses."
-                  : "CAT-style runs need a larger pool of complete adaptive-eligible items. Use linear practice and lessons until the pathway bank meets the minimum."
+                  ? everyQuestionCatEligible
+                    ? "The full scored pool is CAT-ready, so adaptive sessions can adjust difficulty from your answer pattern."
+                    : `${catEligibleValue} items are CAT-ready for adaptive sessions that adjust difficulty from your answers.`
+                  : "CAT-style runs need a larger completed adaptive pool. Use linear practice and lessons until this pathway reaches the readiness floor."
               }
             />
             <InfoCard
               icon={Users}
               variant="warm"
-              title="Signed-in experience"
-              body={`When you're signed in, practice stays locked to ${pathway.shortName}. Rationales, filters, and topic drill all stay in scope for your plan.`}
+              title="Signed-in continuity"
+              body={`When you sign in, practice stays locked to ${pathway.shortName}. Rationales, filters, and topic drill stay inside your plan scope.`}
             />
           </div>
         </section>
       ) : null}
 
-      {/* ── Topic-narrowed aside ──────────────────────────── */}
       {isTopicNarrowed ? (
         <>
-          <aside className="nn-semantic-inset nn-semantic-inset--cool p-4 sm:p-5">
-            <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
-              Narrowed to one clinical topic
-            </p>
+          <aside className="rounded-3xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-5 sm:p-6">
+            <p className="text-sm font-bold text-[var(--semantic-text-primary)]">Narrowed to one clinical topic</p>
             <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
               You landed here from a lesson or topic link. Open the full hub anytime to see every topic in this pathway.
             </p>
-            <Link
-              href={questionsHubPath}
-              className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-info)] underline underline-offset-2 hover:no-underline"
-            >
+            <Link href={questionsHubPath} className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-info)] underline underline-offset-2 hover:no-underline">
               Clear topic — full practice hub
             </Link>
           </aside>
-          <PathwayQuestionHubRelatedLessons
-            topicLabel={displayTopicLabel}
-            lessonsBasePath={lessonsHref}
-            lessons={relatedLessonsForTopic}
-          />
+          <PathwayQuestionHubRelatedLessons topicLabel={displayTopicLabel} lessonsBasePath={lessonsHref} lessons={relatedLessonsForTopic} />
         </>
       ) : null}
 
-      {/* ── NP board specialty links ──────────────────────── */}
       {pathway.roleTrack === "np" && boardLinkContext ? (
-        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5">
+        <div className="rounded-3xl border border-[var(--semantic-border-soft)] bg-white p-5 shadow-sm sm:p-6">
           <NpQuestionsHubBoardLinks pathwayId={pathway.id} linkContext={boardLinkContext} />
         </div>
       ) : null}
 
-      {/* ── Choose how to study ──────────────────────────── */}
       <section>
-        <h2 className="mb-4 text-base font-bold text-[var(--semantic-text-primary)]">
-          Choose how you want to study
-        </h2>
-        <div className="flex flex-col gap-4 sm:flex-row">
+        <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">Start studying</p>
+            <h2 className="text-xl font-extrabold text-[var(--semantic-text-primary)]">Choose your next step</h2>
+          </div>
+        </div>
+        <div className="grid gap-4 lg:grid-cols-3">
           {hasQuestions ? (
             <>
               <StudyModeCard
                 icon={Zap}
                 accentClass="success"
-                title="Quick practice questions"
-                description={`Run a fast set of ${pathway.shortName} items. No login required to browse — sign in to save progress.`}
+                title="Quick practice"
+                description={`Run a focused set of ${pathway.shortName} items and jump straight into rationales.`}
                 ctaLabel="Start items"
                 ctaHref={appQuestionsScoped}
               />
               <StudyModeCard
                 icon={BookOpen}
                 accentClass="info"
-                title="Full question bank session"
-                description="Open the in-app bank with all filters and topic drill. Tracks rationale reads, correct rate, and topic gaps."
+                title="Full session"
+                description="Open the in-app bank with all filters, topic drill, rationale tracking, and performance history."
                 ctaLabel="Open practice"
                 ctaHref={appQuestionsScoped}
               />
@@ -392,7 +383,7 @@ export function PathwayQuestionsHubView({
               icon={BookOpen}
               accentClass="info"
               title="Clinical lessons"
-              description="Structured pathways, objectives, and links — start here while the scored question bank for this pathway is still growing."
+              description="Use structured objectives and lesson links while the scored question bank for this pathway grows."
               ctaLabel="View lessons"
               ctaHref={lessonsHref}
             />
@@ -401,8 +392,8 @@ export function PathwayQuestionsHubView({
             <StudyModeCard
               icon={Brain}
               accentClass="brand"
-              title="CAT-style adaptive run"
-              description="One question at a time, difficulty adjusts from your answers. Pathway-scoped pool, requires an active plan."
+              title="Adaptive CAT"
+              description="One question at a time. Difficulty adjusts from your answers using the pathway-scoped pool."
               ctaLabel="Open CAT intro"
               ctaHref={catHref}
             />
@@ -410,42 +401,24 @@ export function PathwayQuestionsHubView({
         </div>
       </section>
 
-      {/* ── Bottom navigation ─────────────────────────────── */}
-      <nav
-        aria-label="Page navigation"
-        className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 sm:p-6"
-      >
+      <nav aria-label="Page navigation" className="rounded-3xl border border-[var(--semantic-border-soft)] bg-white p-5 shadow-sm sm:p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <Link
-            href={overviewHref}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--semantic-text-primary)] hover:text-primary"
-          >
+          <Link href={overviewHref} className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--semantic-text-primary)] hover:text-primary">
             <ArrowLeft className="h-4 w-4 shrink-0" />
             <span>Previous: Exam overview</span>
           </Link>
-          <Link
-            href={lessonsHref}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--semantic-text-primary)] hover:text-primary"
-          >
+          <Link href={lessonsHref} className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--semantic-text-primary)] hover:text-primary">
             <span>Next: Clinical lessons</span>
             <ArrowRight className="h-4 w-4 shrink-0" />
           </Link>
         </div>
         <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-[var(--semantic-border-soft)] pt-4 text-sm">
-          <span className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-            Related:
-          </span>
+          <span className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">Related</span>
           {catPoolUsable ? (
-            <Link href={catHref} className="font-medium text-primary hover:underline">
-              CAT prep for this pathway
-            </Link>
+            <Link href={catHref} className="font-medium text-primary hover:underline">CAT prep</Link>
           ) : null}
-          <Link href={HUB.practiceExams} className="font-medium text-primary hover:underline">
-            Practice exams
-          </Link>
-          <Link href="/signup" className="font-medium text-primary hover:underline">
-            Create account
-          </Link>
+          <Link href={HUB.practiceExams} className="font-medium text-primary hover:underline">Practice exams</Link>
+          <Link href="/signup" className="font-medium text-primary hover:underline">Create account</Link>
         </div>
       </nav>
     </div>
