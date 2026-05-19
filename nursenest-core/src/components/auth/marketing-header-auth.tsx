@@ -12,7 +12,6 @@ import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/mark
 import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
 import { shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
-import { formatTitleCase } from "@/lib/format/text-case";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { SupportEmailAccountMenuLink } from "@/components/support/support-email-account-menu-link";
 import { SignOutButton } from "@/components/auth/sign-out-button";
@@ -36,7 +35,7 @@ function useLocalizeHref() {
 }
 
 /**
- * Marketing header: Sign in + Get Started (guests) or account menu (signed-in). Same component at all breakpoints.
+ * Marketing header: sign in + start free (guests) or account menu (signed-in). Same component at all breakpoints.
  */
 function useMarketingAuthResumePath(locale: string): string {
   const pathname = usePathname() ?? "/";
@@ -92,7 +91,7 @@ export function MarketingHeaderAuthDesktop({
     return (
       <div style={navChromeStyle} className="flex max-w-[100vw] items-center gap-2">
         <Link href={loginHref} className={SIGN_IN_CLASS} aria-label="Log in to your NurseNest account">
-          {formatTitleCase("Log in", locale)}
+          {t("nav.logIn")}
         </Link>
         <Link
           href={guestMarketingSignupHref}
@@ -100,7 +99,7 @@ export function MarketingHeaderAuthDesktop({
           aria-label="Start free account — nursing and healthcare exam prep"
           title="Start free — no credit card required"
         >
-          {formatTitleCase("Start Free", locale)}
+          {t("nav.signup")}
         </Link>
       </div>
     );
@@ -133,7 +132,7 @@ export function MarketingHeaderAuthDesktop({
               {t("account.idPrefix")} {user.id?.slice(0, 8)}…
             </div>
             {admin ? (
-              <span className="mt-1 inline-block rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-primary">
+              <span className="mt-1 inline-block rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                 {t("account.role.admin")}
               </span>
             ) : null}
@@ -144,7 +143,7 @@ export function MarketingHeaderAuthDesktop({
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            {formatTitleCase(t("nav.learnerApp"), locale)}
+            {t("nav.learnerApp")}
           </Link>
           {admin ? (
             <Link
@@ -157,7 +156,7 @@ export function MarketingHeaderAuthDesktop({
                 navigateAdminDashboardHard(e);
               }}
             >
-              {formatTitleCase(t("nav.admin"), locale)}
+              {t("nav.admin")}
             </Link>
           ) : null}
           <SupportEmailAccountMenuLink
@@ -206,7 +205,7 @@ export function MarketingHeaderAuthMobile({
           onClick={onNavigate}
           aria-label="Log in to your NurseNest account"
         >
-          {formatTitleCase("Log in", locale)}
+          {t("nav.logIn")}
         </Link>
         <Link
           href={guestMarketingSignupHref}
@@ -215,7 +214,7 @@ export function MarketingHeaderAuthMobile({
           aria-label="Start free account — nursing and healthcare exam prep"
           title="Start free — no credit card required"
         >
-          {formatTitleCase("Start Free", locale)}
+          {t("nav.signup")}
         </Link>
       </div>
     );
@@ -237,7 +236,7 @@ export function MarketingHeaderAuthMobile({
         className="block rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
         onClick={onNavigate}
       >
-        {formatTitleCase(t("nav.learnerApp"), locale)}
+        {t("nav.learnerApp")}
       </Link>
       {admin ? (
         <Link
@@ -249,7 +248,7 @@ export function MarketingHeaderAuthMobile({
             navigateAdminDashboardHard(e);
           }}
         >
-          {formatTitleCase(t("nav.admin"), locale)}
+          {t("nav.admin")}
         </Link>
       ) : null}
       <SupportEmailAccountMenuLink
