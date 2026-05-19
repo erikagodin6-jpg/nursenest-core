@@ -3,15 +3,11 @@
 # DO App Platform pulls the pre-built image instead of cloning GitHub,
 # eliminating the "Selecting branch" hang entirely.
 #
-# ── Required GitHub repo secrets ─────────────────────────────────────────────
-#   DIGITALOCEAN_ACCESS_TOKEN   DO personal access token (App write scope)
+# Production deploys must use the sha-* image tag, not the mutable latest tag,
+# otherwise App Platform/CDN/runtime state can continue serving a stale image.
 #
-# ── One-time manual setup ────────────────────────────────────────────────────
-#   Make the GHCR package public so DO can pull without credentials:
-#   GitHub → erikagodin6-jpg → Packages → nursenest → Package settings
-#     → Change visibility → Public
-#   (Safe: the image contains no secrets; all secrets are DO runtime env vars.)
-# ─────────────────────────────────────────────────────────────────────────────
+# Required GitHub repo secrets:
+#   DIGITALOCEAN_ACCESS_TOKEN   DO personal access token (App write scope)
 
 name: Build → GHCR → Deploy DigitalOcean
 
@@ -71,6 +67,23 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: false
 
+      - name: Render immutable DigitalOcean spec
+        run: |
+          cp .do/app-nursenest-core-next.yaml /tmp/app-nursenest-core-next.yaml
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+
+          spec_path = Path('/tmp/app-nursenest-core-next.yaml')
+          text = spec_path.read_text()
+          old = '      tag: latest'
+          new = f'      tag: sha-{os.environ["GITHUB_SHA"]}'
+          if old not in text:
+              raise SystemExit('Expected GHCR image tag line not found in DO spec')
+          spec_path.write_text(text.replace(old, new, 1))
+          PY
+          echo "Rendered DO spec image tag: sha-${GITHUB_SHA}"
+
       - name: Trigger DigitalOcean deployment
         env:
           DO_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
@@ -81,27 +94,16 @@ jobs:
           echo "  digest: ${{ steps.build.outputs.digest }}"
 
           if [ -z "$DO_TOKEN" ]; then
-            echo ""
-            echo "WARN: DIGITALOCEAN_ACCESS_TOKEN secret not set — skipping DO deploy trigger."
-            echo "Add the secret to this repo to enable automatic deploys after image push."
-            exit 0
-          fi
-
-          HTTP_STATUS=$(curl -s -o /tmp/do-response.json -w "%{http_code}" \
-            -X POST \
-            -H "Authorization: Bearer $DO_TOKEN" \
-            -H "Content-Type: application/json" \
-            "https://api.digitalocean.com/v2/apps/d6a4b825-4d70-4dd4-8d71-04b354d36f43/deployments")
-
-          echo "DO API response (HTTP $HTTP_STATUS):"
-          cat /tmp/do-response.json
-
-          if [ "$HTTP_STATUS" != "200" ] && [ "$HTTP_STATUS" != "201" ]; then
-            echo "ERROR: DO deploy trigger returned HTTP $HTTP_STATUS"
+            echo "ERROR: DIGITALOCEAN_ACCESS_TOKEN secret is not set."
+            echo "Production cannot be updated without this secret because DigitalOcean must be pointed at the immutable sha image tag."
             exit 1
           fi
 
-          DEPLOY_ID=$(jq -r '.deployment.id // "unknown"' /tmp/do-response.json)
-          echo ""
-          echo "DigitalOcean deployment triggered: $DEPLOY_ID"
+          curl -fsSL https://github.com/digitalocean/doctl/releases/download/v1.124.0/doctl-1.124.0-linux-amd64.tar.gz \
+            | tar -xz -C /tmp
+          /tmp/doctl auth init --access-token "$DO_TOKEN"
+
+          /tmp/doctl apps update d6a4b825-4d70-4dd4-8d71-04b354d36f43 --spec /tmp/app-nursenest-core-next.yaml
+
+          echo "DigitalOcean app spec updated to image tag sha-${{ github.sha }}."
           echo "Track at: https://cloud.digitalocean.com/apps/d6a4b825-4d70-4dd4-8d71-04b354d36f43"
