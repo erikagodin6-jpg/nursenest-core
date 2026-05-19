@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NurseNest Flashcard Hub v2 — Simple System Selector</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:#0a0f1a}
+button{font-family:inherit;cursor:pointer}svg{display:block;flex-shrink:0}a{text-decoration:none}
+
+/* chrome */
+.chrome{background:#050810;padding:9px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:400;border-bottom:1px solid #1a2030}
+.chrome-t{font-size:10px;font-weight:700;color:#475569;letter-spacing:.08em;text-transform:uppercase}
+.tabs{background:#07111f;padding:7px 20px 0;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;position:sticky;top:38px;z-index:399;border-bottom:1px solid #1a2030}
+.tabs::-webkit-scrollbar{display:none}
+.tg{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#334155;padding:7px 6px 0;align-self:flex-start;white-space:nowrap}
+.tsep{width:1px;height:13px;background:#1a2030;margin:0 4px 7px;align-self:center}
+.tab{padding:5px 13px 7px;font-size:10px;font-weight:600;color:#475569;border-radius:4px 4px 0 0;cursor:pointer;white-space:nowrap;font-family:inherit;background:transparent;border:none}
+.tab.on{color:#0f172a;background:white;font-weight:700}
+.frame{display:none;overflow:hidden}
+.frame.on{display:block}
+.fd{width:1440px;height:900px}
+.fm{width:390px;height:844px}
+
+/* ── TOKEN SETS ─────────────────────────────────────────────── */
+.oc{
+  --bg:#f2f6fb;--surf:#fff;--panel:#eef4fa;
+  --bdr:rgba(176,220,243,.6);--bdr2:rgba(100,175,215,.75);--div:rgba(176,220,243,.35);
+  --txt:#0f172a;--txt2:#3d5166;--muted:#647894;--subtle:#94a3b8;
+  --acc:#0d7aaa;--acc-bg:rgba(13,122,170,.08);--acc-bdr:rgba(13,122,170,.22);
+  --ok:#16a34a;--ok-bg:rgba(22,163,74,.08);--ok-bdr:rgba(22,163,74,.22);
+  --warn:#d97706;--warn-bg:rgba(217,119,6,.08);--warn-bdr:rgba(217,119,6,.22);
+  --err:#dc2626;--err-bg:rgba(220,38,38,.07);--err-bdr:rgba(220,38,38,.2);
+  --nav:#fff;--nav-bdr:rgba(176,220,243,.75);
+  --nav-sh:0 1px 0 rgba(0,0,0,.04),0 3px 12px -4px rgba(6,88,140,.06);
+  --sh:0 1px 0 rgba(0,0,0,.03),0 4px 14px -8px rgba(6,88,140,.07);
+  --sh-hov:0 1px 0 rgba(0,0,0,.04),0 8px 24px -8px rgba(6,88,140,.13);
+  --prog-t:rgba(176,220,243,.35);--prog-ok:#16a34a;--prog-warn:#d97706;--prog-err:#dc2626;
+}
+.mn{
+  --bg:#06101d;--surf:#0f1c2e;--panel:#0b1523;
+  --bdr:rgba(36,55,88,.85);--bdr2:rgba(56,189,248,.2);--div:rgba(36,55,88,.45);
+  --txt:#e4f0ff;--txt2:#adc8e8;--muted:#5a7594;--subtle:#3e5470;
+  --acc:#38bdf8;--acc-bg:rgba(56,189,248,.1);--acc-bdr:rgba(56,189,248,.25);
+  --ok:#34d399;--ok-bg:rgba(52,211,153,.1);--ok-bdr:rgba(52,211,153,.25);
+  --warn:#fbbf24;--warn-bg:rgba(251,191,36,.1);--warn-bdr:rgba(251,191,36,.25);
+  --err:#f87171;--err-bg:rgba(248,113,113,.09);--err-bdr:rgba(248,113,113,.22);
+  --nav:#09162a;--nav-bdr:rgba(36,55,88,.9);
+  --nav-sh:0 1px 0 rgba(0,0,0,.25),0 3px 14px -4px rgba(0,0,0,.38);
+  --sh:0 2px 0 rgba(0,0,0,.18),0 4px 18px -8px rgba(0,0,0,.35);
+  --sh-hov:0 3px 0 rgba(0,0,0,.24),0 12px 32px -8px rgba(0,0,0,.5);
+  --prog-t:rgba(36,55,88,.55);--prog-ok:#34d399;--prog-warn:#fbbf24;--prog-err:#f87171;
+}
+
+/* ── SHELL ──────────────────────────────────────────────────── */
+.shell{display:flex;flex-direction:column;background:var(--bg);color:var(--txt);overflow:hidden}
+
+/* ── GLOBAL NAV ─────────────────────────────────────────────── */
+.gnav{height:50px;flex-shrink:0;background:var(--nav);border-bottom:1px solid var(--nav-bdr);box-shadow:var(--nav-sh);display:flex;align-items:center;padding:0 24px;gap:0;z-index:10;position:relative}
+.gnav-brand{font-size:15px;font-weight:800;letter-spacing:-.03em;color:var(--txt)}
+.gnav-dot{color:var(--acc)}
+.gnav-links{display:flex;align-items:center;gap:1px;margin-left:24px}
+.gnav-link{font-size:13px;font-weight:500;color:var(--muted);padding:5px 10px;border-radius:7px;transition:.1s}
+.gnav-link.cur{color:var(--txt);background:var(--acc-bg);font-weight:600}
+.gnav-r{margin-left:auto;display:flex;align-items:center;gap:8px}
+.gnav-av{width:30px;height:30px;border-radius:50%;background:var(--acc-bg);border:1.5px solid var(--acc-bdr);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--acc)}
+
+/* ── PAGE BODY ──────────────────────────────────────────────── */
+.body{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bdr) transparent}
+.page{max-width:960px;margin:0 auto;padding:32px 40px 64px}
+
+/* ── PAGE HEADER ─────────────────────────────────────────────── */
+.page-hd{margin-bottom:28px}
+.page-title{font-size:22px;font-weight:800;letter-spacing:-.04em;color:var(--txt);margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--muted)}
+
+/* ── FILTER TABS ─────────────────────────────────────────────── */
+.filter-bar{display:flex;align-items:center;gap:6px;margin-bottom:28px;flex-wrap:wrap}
+.ft{font-size:13px;font-weight:600;padding:7px 16px;border-radius:9px;border:1.5px solid var(--bdr);background:transparent;color:var(--muted);cursor:pointer;transition:.12s;white-space:nowrap}
+.ft:hover{color:var(--txt2);border-color:var(--bdr2)}
+.ft.on{background:var(--acc-bg);border-color:var(--acc-bdr);color:var(--acc)}
+.ft.on.warn{background:var(--warn-bg);border-color:var(--warn-bdr);color:var(--warn)}
+.ft.on.err{background:var(--err-bg);border-color:var(--err-bdr);color:var(--err)}
+.filter-sep{width:1px;height:20px;background:var(--div);margin:0 2px}
+
+/* ── SYSTEM GRID ─────────────────────────────────────────────── */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+/* System card — the whole thing is the tap target */
+.sys{
+  border:1.5px solid var(--bdr);
+  border-radius:14px;
+  background:var(--surf);
+  box-shadow:var(--sh);
+  padding:18px 20px;
+  cursor:pointer;
+  transition:border-color .12s,box-shadow .13s,transform .13s;
+  display:flex;flex-direction:column;gap:0;
+  position:relative;
+  -webkit-user-select:none;user-select:none;
+}
+.sys:hover{border-color:var(--bdr2);box-shadow:var(--sh-hov);transform:translateY(-1px)}
+.sys:active{transform:translateY(0);box-shadow:var(--sh)}
+
+/* Coloured left strip — 3px, same border-radius */
+.sys-strip{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:14px 0 0 14px}
+
+/* Card content */
+.sys-name{font-size:14px;font-weight:700;color:var(--txt);letter-spacing:-.015em;margin-bottom:10px;padding-left:10px;line-height:1.3}
+.sys-foot{display:flex;align-items:center;justify-content:space-between;padding-left:10px;gap:8px}
+.sys-count{font-size:12px;color:var(--muted);font-weight:500}
+.sys-pct{font-size:12.5px;font-weight:700}
+.sys-pct.hi{color:var(--ok)}
+.sys-pct.mid{color:var(--warn)}
+.sys-pct.lo{color:var(--err)}
+.sys-pbar{margin-top:8px;margin-left:10px;height:3px;border-radius:99px;background:var(--prog-t);overflow:hidden}
+.sys-pfill{height:100%;border-radius:99px}
+.sys-pfill.hi{background:var(--prog-ok)}
+.sys-pfill.mid{background:var(--prog-warn)}
+.sys-pfill.lo{background:var(--prog-err)}
+
+/* Due badge — only shown when cards are due */
+.sys-due{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--warn-bg);border:1px solid var(--warn-bdr);color:var(--warn);white-space:nowrap}
+.sys-due.lo{background:var(--err-bg);border-color:var(--err-bdr);color:var(--err)}
+
+/* Empty / disabled state */
+.sys.none{opacity:.42;pointer-events:none}
+
+/* ── SECTION LABEL ───────────────────────────────────────────── */
+.section-lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;margin-top:32px}
+.section-lbl:first-of-type{margin-top:0}
+
+/* ── QUICK START BANNER ──────────────────────────────────────── */
+.qstart{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;border:1.5px solid var(--acc-bdr);background:var(--acc-bg);margin-bottom:28px;cursor:pointer;transition:.12s}
+.qstart:hover{border-color:var(--acc);background:color-mix(in srgb,var(--acc-bg) 160%,transparent)}
+.qstart-icon{font-size:20px;line-height:1;flex-shrink:0}
+.qstart-body{flex:1}
+.qstart-title{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.qstart-sub{font-size:12px;color:var(--muted)}
+.qstart-btn{font-size:13px;font-weight:700;color:#fff;background:var(--acc);border:none;padding:8px 18px;border-radius:9px;cursor:pointer;white-space:nowrap}
+.mn .qstart-btn{color:var(--bg)}
+
+/* ── MOBILE ──────────────────────────────────────────────────── */
+.mob-nav{height:46px;flex-shrink:0;background:var(--nav);border-bottom:1px solid var(--nav-bdr);box-shadow:var(--nav-sh);display:flex;align-items:center;padding:0 16px}
+.mob-body{flex:1;overflow-y:auto}
+.mob-page{padding:20px 16px 80px}
+.mob-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mob-sys{border:1.5px solid var(--bdr);border-radius:12px;background:var(--surf);box-shadow:var(--sh);padding:14px 14px 14px 16px;cursor:pointer;position:relative;display:flex;flex-direction:column}
+.mob-sys-strip{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:12px 0 0 12px}
+.mob-sys-name{font-size:13px;font-weight:700;color:var(--txt);letter-spacing:-.01em;margin-bottom:8px;line-height:1.25}
+.mob-sys-foot{display:flex;align-items:center;justify-content:space-between}
+.mob-sys-count{font-size:11px;color:var(--muted)}
+.mob-sys-pct{font-size:12px;font-weight:700}
+.mob-sys-pbar{height:2.5px;border-radius:99px;background:var(--prog-t);overflow:hidden;margin-top:8px}
+.mob-sys-pfill{height:100%;border-radius:99px}
+/* Mobile bottom tab bar */
+.mob-bot{position:absolute;bottom:0;left:0;right:0;height:60px;background:var(--nav);border-top:1px solid var(--nav-bdr);display:flex;align-items:center;justify-content:space-around;padding-bottom:4px}
+.mob-tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 16px;cursor:pointer}
+.mob-tab-icon{font-size:18px}
+.mob-tab-lbl{font-size:9.5px;font-weight:600;color:var(--muted)}
+.mob-tab.cur .mob-tab-lbl{color:var(--acc)}
+.mob-filter-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:22px}
+.mob-filter-row::-webkit-scrollbar{display:none}
+.mob-ft{font-size:12px;font-weight:600;padding:6px 13px;border-radius:8px;border:1.5px solid var(--bdr);background:transparent;color:var(--muted);white-space:nowrap;cursor:pointer}
+.mob-ft.on{background:var(--acc-bg);border-color:var(--acc-bdr);color:var(--acc)}
+.mob-ft.on.warn{background:var(--warn-bg);border-color:var(--warn-bdr);color:var(--warn)}
+
+/* ── SELECTED STATE (post-tap preview) ───────────────────────── */
+.sys.sel{border-color:var(--acc-bdr);background:var(--acc-bg)}
+.sys.sel .sys-name{color:var(--acc)}
+
+/* ── STUDY PANEL (mock of what appears after selecting) ──────── */
+.study-panel{display:flex;align-items:center;gap:16px;padding:16px 20px;border-radius:13px;border:1.5px solid var(--acc-bdr);background:var(--acc-bg);margin-top:20px}
+.study-panel-info{flex:1}
+.study-panel-title{font-size:14px;font-weight:700;color:var(--txt);margin-bottom:3px}
+.study-panel-sub{font-size:12px;color:var(--muted)}
+.study-panel-start{font-size:13.5px;font-weight:700;color:#fff;background:var(--acc);border:none;padding:10px 24px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.mn .study-panel-start{color:var(--bg)}
+</style>
+</head>
+<body>
+
+<div class="chrome"><span class="chrome-t">Flashcard Hub v2 — System Selector</span></div>
+<div class="tabs">
+  <span class="tg">OCEAN</span>
+  <button class="tab on"  onclick="s(0)">① All Systems</button>
+  <button class="tab"     onclick="s(1)">② Weak Areas filter</button>
+  <button class="tab"     onclick="s(2)">③ Untested filter</button>
+  <button class="tab"     onclick="s(3)">④ System selected</button>
+  <div class="tsep"></div>
+  <span class="tg">MIDNIGHT</span>
+  <button class="tab"     onclick="s(4)">⑤ Midnight</button>
+  <div class="tsep"></div>
+  <span class="tg">MOBILE</span>
+  <button class="tab"     onclick="s(5)">⑥ Mobile — all</button>
+  <button class="tab"     onclick="s(6)">⑦ Mobile — weak areas</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FRAME 0 · Ocean · All Systems (default)
+══════════════════════════════════════════════════════════════ -->
+<div class="frame fd on" id="f0">
+<div class="shell fd oc">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links">
+      <span class="gnav-link cur">Flashcards</span>
+      <span class="gnav-link">Lessons</span>
+      <span class="gnav-link">Practice</span>
+      <span class="gnav-link">CAT Exam</span>
+    </div>
+    <div class="gnav-r"><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="body">
+    <div class="page">
+
+      <div class="page-hd">
+        <h1 class="page-title">Flashcards</h1>
+        <p class="page-sub">Select a system to study, or filter by performance.</p>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <button class="ft on">All Systems</button>
+        <button class="ft warn">Weak Areas</button>
+        <button class="ft">Untested</button>
+        <button class="ft err">Incorrect</button>
+        <button class="ft">Recently Studied</button>
+        <div class="filter-sep"></div>
+        <button class="ft">Custom Tags</button>
+      </div>
+
+      <!-- Systems -->
+      <div class="section-lbl">Clinical Systems</div>
+      <div class="grid">
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#1aaee0"></div>
+          <div class="sys-name">Cardiovascular &amp; Oxygenation</div>
+          <div class="sys-pbar"><div class="sys-pfill hi" style="width:79%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">342 cards</span>
+            <span class="sys-pct hi">79%</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#0d9488"></div>
+          <div class="sys-name">Pharmacology</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:61%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">418 cards</span>
+            <span class="sys-pct mid">61%</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#e8829a"></div>
+          <div class="sys-name">Pediatrics</div>
+          <div class="sys-pbar"><div class="sys-pfill hi" style="width:76%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">224 cards</span>
+            <span class="sys-pct hi">76%</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#52b8d4"></div>
+          <div class="sys-name">Fluid &amp; Electrolytes</div>
+          <div class="sys-pbar"><div class="sys-pfill lo" style="width:34%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">187 cards</span>
+            <span class="sys-pct lo">34%</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#9585c8"></div>
+          <div class="sys-name">Mental Health &amp; Psych</div>
+          <div class="sys-pbar"><div class="sys-pfill hi" style="width:71%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">211 cards</span>
+            <span class="sys-pct hi">71%</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#d97706"></div>
+          <div class="sys-name">Priority &amp; Delegation</div>
+          <div class="sys-pbar"><div class="sys-pfill hi" style="width:82%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">198 cards</span>
+            <span class="sys-pct hi">82%</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#d8bd79"></div>
+          <div class="sys-name">ECG Interpretation</div>
+          <div class="sys-pbar"><div class="sys-pfill lo" style="width:41%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">156 cards</span>
+            <span class="sys-pct lo">41%</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#f5a524"></div>
+          <div class="sys-name">SATA Practice</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:58%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">134 cards</span>
+            <span class="sys-pct mid">58%</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#e11d48"></div>
+          <div class="sys-name">Critical Care</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:53%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">289 cards</span>
+            <span class="sys-pct mid">53%</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FRAME 1 · Ocean · Weak Areas filter
+     Only systems with weak cards appear; counts reflect weak cards
+══════════════════════════════════════════════════════════════ -->
+<div class="frame fd" id="f1">
+<div class="shell fd oc">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links">
+      <span class="gnav-link cur">Flashcards</span>
+      <span class="gnav-link">Lessons</span>
+      <span class="gnav-link">Practice</span>
+    </div>
+    <div class="gnav-r"><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="body">
+    <div class="page">
+      <div class="page-hd">
+        <h1 class="page-title">Flashcards</h1>
+        <p class="page-sub">Select a system to study, or filter by performance.</p>
+      </div>
+      <div class="filter-bar">
+        <button class="ft">All Systems</button>
+        <button class="ft on warn">Weak Areas</button>
+        <button class="ft">Untested</button>
+        <button class="ft err">Incorrect</button>
+        <button class="ft">Recently Studied</button>
+        <div class="filter-sep"></div>
+        <button class="ft">Custom Tags</button>
+      </div>
+
+      <div class="section-lbl">4 systems with weak cards — 87 cards total</div>
+      <div class="grid">
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#52b8d4"></div>
+          <div class="sys-name">Fluid &amp; Electrolytes</div>
+          <div class="sys-pbar"><div class="sys-pfill lo" style="width:34%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">22 weak cards</span>
+            <span class="sys-due lo">22 overdue</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#d8bd79"></div>
+          <div class="sys-name">ECG Interpretation</div>
+          <div class="sys-pbar"><div class="sys-pfill lo" style="width:41%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">18 weak cards</span>
+            <span class="sys-due lo">18 overdue</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#0d9488"></div>
+          <div class="sys-name">Pharmacology</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:61%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">29 weak cards</span>
+            <span class="sys-due">8 due</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#e11d48"></div>
+          <div class="sys-name">Critical Care</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:53%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">18 weak cards</span>
+            <span class="sys-due">6 due</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Study all weak areas CTA -->
+      <div class="study-panel" style="margin-top:24px">
+        <div style="font-size:22px">🎯</div>
+        <div class="study-panel-info">
+          <div class="study-panel-title">Study all weak areas</div>
+          <div class="study-panel-sub">87 cards across 4 systems · prioritised by overdue date</div>
+        </div>
+        <button class="study-panel-start">Start Session →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FRAME 2 · Ocean · Untested filter
+══════════════════════════════════════════════════════════════ -->
+<div class="frame fd" id="f2">
+<div class="shell fd oc">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links">
+      <span class="gnav-link cur">Flashcards</span>
+      <span class="gnav-link">Lessons</span>
+      <span class="gnav-link">Practice</span>
+    </div>
+    <div class="gnav-r"><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="body">
+    <div class="page">
+      <div class="page-hd">
+        <h1 class="page-title">Flashcards</h1>
+        <p class="page-sub">Select a system to study, or filter by performance.</p>
+      </div>
+      <div class="filter-bar">
+        <button class="ft">All Systems</button>
+        <button class="ft warn">Weak Areas</button>
+        <button class="ft on">Untested</button>
+        <button class="ft err">Incorrect</button>
+        <button class="ft">Recently Studied</button>
+        <div class="filter-sep"></div>
+        <button class="ft">Custom Tags</button>
+      </div>
+
+      <div class="section-lbl">6 systems with untested cards — 943 cards never seen</div>
+      <div class="grid">
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#0d9488"></div>
+          <div class="sys-name">Pharmacology</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:61%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">163 untested</span>
+            <span class="sys-pct mid">61% done</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#1aaee0"></div>
+          <div class="sys-name">Cardiovascular &amp; Oxygenation</div>
+          <div class="sys-pbar"><div class="sys-pfill hi" style="width:79%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">72 untested</span>
+            <span class="sys-pct hi">79% done</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#e11d48"></div>
+          <div class="sys-name">Critical Care</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:53%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">136 untested</span>
+            <span class="sys-pct mid">53% done</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#d8bd79"></div>
+          <div class="sys-name">ECG Interpretation</div>
+          <div class="sys-pbar"><div class="sys-pfill lo" style="width:41%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">92 untested</span>
+            <span class="sys-pct lo">41% done</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#f5a524"></div>
+          <div class="sys-name">SATA Practice</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:58%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">56 untested</span>
+            <span class="sys-pct mid">58% done</span>
+          </div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#52b8d4"></div>
+          <div class="sys-name">Fluid &amp; Electrolytes</div>
+          <div class="sys-pbar"><div class="sys-pfill lo" style="width:34%"></div></div>
+          <div class="sys-foot">
+            <span class="sys-count">124 untested</span>
+            <span class="sys-pct lo">34% done</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="study-panel" style="margin-top:24px">
+        <div style="font-size:22px">📋</div>
+        <div class="study-panel-info">
+          <div class="study-panel-title">Study all untested cards</div>
+          <div class="study-panel-sub">943 cards you've never seen · across 6 systems</div>
+        </div>
+        <button class="study-panel-start">Start Session →</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FRAME 3 · Ocean · System selected (post-tap state)
+══════════════════════════════════════════════════════════════ -->
+<div class="frame fd" id="f3">
+<div class="shell fd oc">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links">
+      <span class="gnav-link cur">Flashcards</span>
+      <span class="gnav-link">Lessons</span>
+      <span class="gnav-link">Practice</span>
+    </div>
+    <div class="gnav-r"><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="body">
+    <div class="page">
+      <div class="page-hd">
+        <h1 class="page-title">Flashcards</h1>
+        <p class="page-sub">Select a system to study, or filter by performance.</p>
+      </div>
+      <div class="filter-bar">
+        <button class="ft on">All Systems</button>
+        <button class="ft warn">Weak Areas</button>
+        <button class="ft">Untested</button>
+        <button class="ft err">Incorrect</button>
+        <button class="ft">Recently Studied</button>
+        <div class="filter-sep"></div>
+        <button class="ft">Custom Tags</button>
+      </div>
+
+      <!-- Selected system deck generation panel -->
+      <div class="study-panel" style="margin-bottom:24px;border-color:rgba(13,122,170,.35)">
+        <div style="font-size:22px">💊</div>
+        <div class="study-panel-info">
+          <div class="study-panel-title">Pharmacology — 418 cards</div>
+          <div class="study-panel-sub">61% mastery · 29 weak · 163 untested · 8 due today</div>
+        </div>
+        <button class="study-panel-start">Start Session →</button>
+      </div>
+
+      <div class="section-lbl">Clinical Systems</div>
+      <div class="grid">
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#1aaee0"></div>
+          <div class="sys-name">Cardiovascular &amp; Oxygenation</div>
+          <div class="sys-pbar"><div class="sys-pfill hi" style="width:79%"></div></div>
+          <div class="sys-foot"><span class="sys-count">342 cards</span><span class="sys-pct hi">79%</span></div>
+        </div>
+
+        <!-- This one is "selected" -->
+        <div class="sys sel">
+          <div class="sys-strip" style="background:#0d9488"></div>
+          <div class="sys-name">Pharmacology</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:61%"></div></div>
+          <div class="sys-foot"><span class="sys-count">418 cards</span><span class="sys-pct mid">61%</span></div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#e8829a"></div>
+          <div class="sys-name">Pediatrics</div>
+          <div class="sys-pbar"><div class="sys-pfill hi" style="width:76%"></div></div>
+          <div class="sys-foot"><span class="sys-count">224 cards</span><span class="sys-pct hi">76%</span></div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#52b8d4"></div>
+          <div class="sys-name">Fluid &amp; Electrolytes</div>
+          <div class="sys-pbar"><div class="sys-pfill lo" style="width:34%"></div></div>
+          <div class="sys-foot"><span class="sys-count">187 cards</span><span class="sys-pct lo">34%</span></div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#9585c8"></div>
+          <div class="sys-name">Mental Health &amp; Psych</div>
+          <div class="sys-pbar"><div class="sys-pfill hi" style="width:71%"></div></div>
+          <div class="sys-foot"><span class="sys-count">211 cards</span><span class="sys-pct hi">71%</span></div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#d97706"></div>
+          <div class="sys-name">Priority &amp; Delegation</div>
+          <div class="sys-pbar"><div class="sys-pfill hi" style="width:82%"></div></div>
+          <div class="sys-foot"><span class="sys-count">198 cards</span><span class="sys-pct hi">82%</span></div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#d8bd79"></div>
+          <div class="sys-name">ECG Interpretation</div>
+          <div class="sys-pbar"><div class="sys-pfill lo" style="width:41%"></div></div>
+          <div class="sys-foot"><span class="sys-count">156 cards</span><span class="sys-pct lo">41%</span></div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#f5a524"></div>
+          <div class="sys-name">SATA Practice</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:58%"></div></div>
+          <div class="sys-foot"><span class="sys-count">134 cards</span><span class="sys-pct mid">58%</span></div>
+        </div>
+
+        <div class="sys">
+          <div class="sys-strip" style="background:#e11d48"></div>
+          <div class="sys-name">Critical Care</div>
+          <div class="sys-pbar"><div class="sys-pfill mid" style="width:53%"></div></div>
+          <div class="sys-foot"><span class="sys-count">289 cards</span><span class="sys-pct mid">53%</span></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FRAME 4 · Midnight · All Systems
+══════════════════════════════════════════════════════════════ -->
+<div class="frame fd" id="f4">
+<div class="shell fd mn">
+  <nav class="gnav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-links">
+      <span class="gnav-link cur">Flashcards</span>
+      <span class="gnav-link">Lessons</span>
+      <span class="gnav-link">Practice</span>
+      <span class="gnav-link">CAT Exam</span>
+    </div>
+    <div class="gnav-r"><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="body">
+    <div class="page">
+      <div class="page-hd">
+        <h1 class="page-title">Flashcards</h1>
+        <p class="page-sub">Select a system to study, or filter by performance.</p>
+      </div>
+      <div class="filter-bar">
+        <button class="ft on">All Systems</button>
+        <button class="ft warn">Weak Areas</button>
+        <button class="ft">Untested</button>
+        <button class="ft err">Incorrect</button>
+        <button class="ft">Recently Studied</button>
+        <div class="filter-sep"></div>
+        <button class="ft">Custom Tags</button>
+      </div>
+      <div class="section-lbl">Clinical Systems</div>
+      <div class="grid">
+        <div class="sys"><div class="sys-strip" style="background:#38bdf8"></div><div class="sys-name">Cardiovascular &amp; Oxygenation</div><div class="sys-pbar"><div class="sys-pfill hi" style="width:79%"></div></div><div class="sys-foot"><span class="sys-count">342 cards</span><span class="sys-pct hi">79%</span></div></div>
+        <div class="sys"><div class="sys-strip" style="background:#34d399"></div><div class="sys-name">Pharmacology</div><div class="sys-pbar"><div class="sys-pfill mid" style="width:61%"></div></div><div class="sys-foot"><span class="sys-count">418 cards</span><span class="sys-pct mid">61%</span></div></div>
+        <div class="sys"><div class="sys-strip" style="background:#f472b6"></div><div class="sys-name">Pediatrics</div><div class="sys-pbar"><div class="sys-pfill hi" style="width:76%"></div></div><div class="sys-foot"><span class="sys-count">224 cards</span><span class="sys-pct hi">76%</span></div></div>
+        <div class="sys"><div class="sys-strip" style="background:#67e8f9"></div><div class="sys-name">Fluid &amp; Electrolytes</div><div class="sys-pbar"><div class="sys-pfill lo" style="width:34%"></div></div><div class="sys-foot"><span class="sys-count">187 cards</span><span class="sys-pct lo">34%</span></div></div>
+        <div class="sys"><div class="sys-strip" style="background:#a78bfa"></div><div class="sys-name">Mental Health &amp; Psych</div><div class="sys-pbar"><div class="sys-pfill hi" style="width:71%"></div></div><div class="sys-foot"><span class="sys-count">211 cards</span><span class="sys-pct hi">71%</span></div></div>
+        <div class="sys"><div class="sys-strip" style="background:#fbbf24"></div><div class="sys-name">Priority &amp; Delegation</div><div class="sys-pbar"><div class="sys-pfill hi" style="width:82%"></div></div><div class="sys-foot"><span class="sys-count">198 cards</span><span class="sys-pct hi">82%</span></div></div>
+        <div class="sys"><div class="sys-strip" style="background:#fbbf24"></div><div class="sys-name">ECG Interpretation</div><div class="sys-pbar"><div class="sys-pfill lo" style="width:41%"></div></div><div class="sys-foot"><span class="sys-count">156 cards</span><span class="sys-pct lo">41%</span></div></div>
+        <div class="sys"><div class="sys-strip" style="background:#fb923c"></div><div class="sys-name">SATA Practice</div><div class="sys-pbar"><div class="sys-pfill mid" style="width:58%"></div></div><div class="sys-foot"><span class="sys-count">134 cards</span><span class="sys-pct mid">58%</span></div></div>
+        <div class="sys"><div class="sys-strip" style="background:#f87171"></div><div class="sys-name">Critical Care</div><div class="sys-pbar"><div class="sys-pfill mid" style="width:53%"></div></div><div class="sys-foot"><span class="sys-count">289 cards</span><span class="sys-pct mid">53%</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FRAME 5 · Mobile · All Systems
+══════════════════════════════════════════════════════════════ -->
+<div class="frame fm" id="f5">
+<div class="shell fm oc" style="position:relative">
+  <nav class="mob-nav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-r" style="margin-left:auto"><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="mob-body">
+    <div class="mob-page">
+      <div style="margin-bottom:18px">
+        <h1 style="font-size:20px;font-weight:800;letter-spacing:-.04em;color:var(--txt);margin-bottom:3px">Flashcards</h1>
+        <p style="font-size:12.5px;color:var(--muted)">Tap a system to study.</p>
+      </div>
+      <div class="mob-filter-row">
+        <button class="mob-ft on">All</button>
+        <button class="mob-ft warn">Weak Areas</button>
+        <button class="mob-ft">Untested</button>
+        <button class="mob-ft">Incorrect</button>
+        <button class="mob-ft">Recent</button>
+      </div>
+      <div class="mob-grid">
+        <div class="mob-sys"><div class="mob-sys-strip" style="background:#1aaee0"></div><div class="mob-sys-name">Cardiovascular</div><div class="mob-sys-pbar"><div class="mob-sys-pfill hi" style="width:79%;background:var(--ok)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count">342 cards</span><span class="mob-sys-pct hi" style="color:var(--ok);font-weight:700;font-size:12px">79%</span></div></div>
+        <div class="mob-sys"><div class="mob-sys-strip" style="background:#0d9488"></div><div class="mob-sys-name">Pharmacology</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:61%;background:var(--warn)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count">418 cards</span><span style="color:var(--warn);font-weight:700;font-size:12px">61%</span></div></div>
+        <div class="mob-sys"><div class="mob-sys-strip" style="background:#e8829a"></div><div class="mob-sys-name">Pediatrics</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:76%;background:var(--ok)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count">224 cards</span><span style="color:var(--ok);font-weight:700;font-size:12px">76%</span></div></div>
+        <div class="mob-sys"><div class="mob-sys-strip" style="background:#52b8d4"></div><div class="mob-sys-name">Fluid &amp; Electrolytes</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:34%;background:var(--err)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count">187 cards</span><span style="color:var(--err);font-weight:700;font-size:12px">34%</span></div></div>
+        <div class="mob-sys"><div class="mob-sys-strip" style="background:#9585c8"></div><div class="mob-sys-name">Mental Health</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:71%;background:var(--ok)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count">211 cards</span><span style="color:var(--ok);font-weight:700;font-size:12px">71%</span></div></div>
+        <div class="mob-sys"><div class="mob-sys-strip" style="background:#d97706"></div><div class="mob-sys-name">Priority &amp; Delegation</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:82%;background:var(--ok)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count">198 cards</span><span style="color:var(--ok);font-weight:700;font-size:12px">82%</span></div></div>
+        <div class="mob-sys"><div class="mob-sys-strip" style="background:#d8bd79"></div><div class="mob-sys-name">ECG Interpretation</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:41%;background:var(--err)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count">156 cards</span><span style="color:var(--err);font-weight:700;font-size:12px">41%</span></div></div>
+        <div class="mob-sys"><div class="mob-sys-strip" style="background:#f5a524"></div><div class="mob-sys-name">SATA Practice</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:58%;background:var(--warn)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count">134 cards</span><span style="color:var(--warn);font-weight:700;font-size:12px">58%</span></div></div>
+        <div class="mob-sys"><div class="mob-sys-strip" style="background:#e11d48"></div><div class="mob-sys-name">Critical Care</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:53%;background:var(--warn)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count">289 cards</span><span style="color:var(--warn);font-weight:700;font-size:12px">53%</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="mob-bot">
+    <div class="mob-tab cur"><div class="mob-tab-icon">🃏</div><span class="mob-tab-lbl" style="color:var(--acc)">Cards</span></div>
+    <div class="mob-tab"><div class="mob-tab-icon">📚</div><span class="mob-tab-lbl">Lessons</span></div>
+    <div class="mob-tab"><div class="mob-tab-icon">📝</div><span class="mob-tab-lbl">Practice</span></div>
+    <div class="mob-tab"><div class="mob-tab-icon">👤</div><span class="mob-tab-lbl">Profile</span></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FRAME 6 · Mobile · Weak Areas filter
+══════════════════════════════════════════════════════════════ -->
+<div class="frame fm" id="f6">
+<div class="shell fm oc" style="position:relative">
+  <nav class="mob-nav">
+    <span class="gnav-brand">Nurse<span class="gnav-dot">.</span></span>
+    <div class="gnav-r" style="margin-left:auto"><div class="gnav-av">E</div></div>
+  </nav>
+  <div class="mob-body">
+    <div class="mob-page">
+      <div style="margin-bottom:18px">
+        <h1 style="font-size:20px;font-weight:800;letter-spacing:-.04em;color:var(--txt);margin-bottom:3px">Flashcards</h1>
+        <p style="font-size:12.5px;color:var(--muted)">Tap a system to study.</p>
+      </div>
+      <div class="mob-filter-row">
+        <button class="mob-ft">All</button>
+        <button class="mob-ft on warn">Weak Areas</button>
+        <button class="mob-ft">Untested</button>
+        <button class="mob-ft">Incorrect</button>
+        <button class="mob-ft">Recent</button>
+      </div>
+      <!-- Study all CTA -->
+      <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:11px;border:1.5px solid var(--warn-bdr);background:var(--warn-bg);margin-bottom:18px;cursor:pointer">
+        <span style="font-size:18px">🎯</span>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--txt);margin-bottom:1px">Study all weak areas</div><div style="font-size:11.5px;color:var(--muted)">87 cards · 4 systems</div></div>
+        <button style="font-size:12px;font-weight:700;color:#fff;background:var(--warn);border:none;padding:7px 13px;border-radius:8px;cursor:pointer;flex-shrink:0">Start →</button>
+      </div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">4 systems with weak cards</div>
+      <div class="mob-grid">
+        <div class="mob-sys" style="border-color:var(--err-bdr)"><div class="mob-sys-strip" style="background:#52b8d4"></div><div class="mob-sys-name">Fluid &amp; Electrolytes</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:34%;background:var(--err)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count" style="color:var(--err);font-weight:600">22 weak</span><span style="color:var(--err);font-weight:700;font-size:12px">34%</span></div></div>
+        <div class="mob-sys" style="border-color:var(--err-bdr)"><div class="mob-sys-strip" style="background:#d8bd79"></div><div class="mob-sys-name">ECG Interpretation</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:41%;background:var(--err)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count" style="color:var(--err);font-weight:600">18 weak</span><span style="color:var(--err);font-weight:700;font-size:12px">41%</span></div></div>
+        <div class="mob-sys" style="border-color:var(--warn-bdr)"><div class="mob-sys-strip" style="background:#0d9488"></div><div class="mob-sys-name">Pharmacology</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:61%;background:var(--warn)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count" style="color:var(--warn);font-weight:600">29 weak</span><span style="color:var(--warn);font-weight:700;font-size:12px">61%</span></div></div>
+        <div class="mob-sys" style="border-color:var(--warn-bdr)"><div class="mob-sys-strip" style="background:#e11d48"></div><div class="mob-sys-name">Critical Care</div><div class="mob-sys-pbar"><div class="mob-sys-pfill" style="width:53%;background:var(--warn)"></div></div><div class="mob-sys-foot"><span class="mob-sys-count" style="color:var(--warn);font-weight:600">18 weak</span><span style="color:var(--warn);font-weight:700;font-size:12px">53%</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="mob-bot">
+    <div class="mob-tab cur"><div class="mob-tab-icon">🃏</div><span class="mob-tab-lbl" style="color:var(--acc)">Cards</span></div>
+    <div class="mob-tab"><div class="mob-tab-icon">📚</div><span class="mob-tab-lbl">Lessons</span></div>
+    <div class="mob-tab"><div class="mob-tab-icon">📝</div><span class="mob-tab-lbl">Practice</span></div>
+    <div class="mob-tab"><div class="mob-tab-icon">👤</div><span class="mob-tab-lbl">Profile</span></div>
+  </div>
+</div>
+</div>
+
+<script>
+function s(i){
+  document.querySelectorAll('.frame').forEach((f,idx)=>f.classList.toggle('on',idx===i));
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('on',idx===i));
+}
+</script>
+</body>
+</html>
