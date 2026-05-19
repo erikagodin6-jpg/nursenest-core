@@ -12,6 +12,7 @@ import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/mark
 import { mapLegacyMarketingHref } from "@/lib/marketing/marketing-chrome-href";
 import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/admin-dashboard-link";
 import { shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
+import { formatTitleCase } from "@/lib/format/text-case";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
 import { SupportEmailAccountMenuLink } from "@/components/support/support-email-account-menu-link";
 import { SignOutButton } from "@/components/auth/sign-out-button";
@@ -35,7 +36,7 @@ function useLocalizeHref() {
 }
 
 /**
- * Marketing header: sign in + start free (guests) or account menu (signed-in). Same component at all breakpoints.
+ * Marketing header: Sign In + Start Free (guests) or account menu (signed-in). Same component at all breakpoints.
  */
 function useMarketingAuthResumePath(locale: string): string {
   const pathname = usePathname() ?? "/";
@@ -91,7 +92,7 @@ export function MarketingHeaderAuthDesktop({
     return (
       <div style={navChromeStyle} className="flex max-w-[100vw] items-center gap-2">
         <Link href={loginHref} className={SIGN_IN_CLASS} aria-label="Log in to your NurseNest account">
-          {t("nav.logIn")}
+          {formatTitleCase(t("nav.logIn"), locale)}
         </Link>
         <Link
           href={guestMarketingSignupHref}
@@ -99,7 +100,7 @@ export function MarketingHeaderAuthDesktop({
           aria-label="Start free account — nursing and healthcare exam prep"
           title="Start free — no credit card required"
         >
-          {t("nav.signup")}
+          {formatTitleCase(t("nav.signup"), locale)}
         </Link>
       </div>
     );
@@ -133,7 +134,7 @@ export function MarketingHeaderAuthDesktop({
             </div>
             {admin ? (
               <span className="mt-1 inline-block rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
-                {t("account.role.admin")}
+                {formatTitleCase(t("account.role.admin"), locale)}
               </span>
             ) : null}
           </div>
@@ -143,7 +144,7 @@ export function MarketingHeaderAuthDesktop({
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            {t("nav.learnerApp")}
+            {formatTitleCase(t("nav.learnerApp"), locale)}
           </Link>
           {admin ? (
             <Link
@@ -156,7 +157,7 @@ export function MarketingHeaderAuthDesktop({
                 navigateAdminDashboardHard(e);
               }}
             >
-              {t("nav.admin")}
+              {formatTitleCase(t("nav.admin"), locale)}
             </Link>
           ) : null}
           <SupportEmailAccountMenuLink
@@ -205,7 +206,7 @@ export function MarketingHeaderAuthMobile({
           onClick={onNavigate}
           aria-label="Log in to your NurseNest account"
         >
-          {t("nav.logIn")}
+          {formatTitleCase(t("nav.logIn"), locale)}
         </Link>
         <Link
           href={guestMarketingSignupHref}
@@ -214,7 +215,7 @@ export function MarketingHeaderAuthMobile({
           aria-label="Start free account — nursing and healthcare exam prep"
           title="Start free — no credit card required"
         >
-          {t("nav.signup")}
+          {formatTitleCase(t("nav.signup"), locale)}
         </Link>
       </div>
     );
@@ -230,13 +231,13 @@ export function MarketingHeaderAuthMobile({
       <p className="font-mono text-xs text-[var(--nav-muted)]">
         {t("account.idPrefix")} {user.id}
       </p>
-      {admin ? <p className="text-xs font-semibold text-primary">{t("account.role.administrator")}</p> : null}
+      {admin ? <p className="text-xs font-semibold text-primary">{formatTitleCase(t("account.role.administrator"), locale)}</p> : null}
       <Link
         href="/app"
         className="block rounded-xl border border-[var(--nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
         onClick={onNavigate}
       >
-        {t("nav.learnerApp")}
+        {formatTitleCase(t("nav.learnerApp"), locale)}
       </Link>
       {admin ? (
         <Link
@@ -248,7 +249,7 @@ export function MarketingHeaderAuthMobile({
             navigateAdminDashboardHard(e);
           }}
         >
-          {t("nav.admin")}
+          {formatTitleCase(t("nav.admin"), locale)}
         </Link>
       ) : null}
       <SupportEmailAccountMenuLink
