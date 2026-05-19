@@ -275,25 +275,34 @@
    --------------------------------------------------------------------- */
 [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
     .nn-premium-pathway-hub--pn-rpn
+  ) {
+  --nn-rn-hub-panel: color-mix(in srgb, var(--semantic-surface) 88%, var(--theme-page-bg));
+  --nn-rn-hub-card: color-mix(in srgb, var(--semantic-surface) 92%, var(--theme-card-bg));
+  --nn-rn-hub-border: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-surface));
+  --nn-rn-hub-soft-shadow: 0 20px 48px -34px color-mix(in srgb, var(--palette-heading) 20%, transparent);
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
   )
   .nn-nursing-tier-hub-hero-band {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   border-radius: 1.15rem;
-  border-color: color-mix(in srgb, var(--semantic-info) 18%, var(--border-subtle));
+  border-color: color-mix(in srgb, var(--semantic-info) 9%, var(--nn-rn-hub-border));
   box-shadow:
-    0 22px 50px -36px color-mix(in srgb, var(--palette-heading) 26%, transparent),
-    0 1px 0 color-mix(in srgb, var(--semantic-info) 16%, transparent) inset;
+    var(--nn-rn-hub-soft-shadow),
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 86%, transparent) inset;
   background:
-    radial-gradient(520px 240px at 6% 0%, color-mix(in srgb, var(--semantic-success) 11%, transparent), transparent 56%),
-    radial-gradient(480px 220px at 96% 8%, color-mix(in srgb, var(--semantic-chart-2) 11%, transparent), transparent 56%),
-    radial-gradient(400px 200px at 48% 100%, color-mix(in srgb, var(--semantic-info) 9%, transparent), transparent 58%),
+    radial-gradient(520px 240px at 6% 0%, color-mix(in srgb, var(--semantic-success) 5%, transparent), transparent 58%),
+    radial-gradient(480px 220px at 96% 8%, color-mix(in srgb, var(--semantic-chart-2) 5%, transparent), transparent 58%),
+    radial-gradient(400px 200px at 48% 100%, color-mix(in srgb, var(--semantic-info) 4%, transparent), transparent 60%),
     linear-gradient(
       128deg,
-      color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--theme-page-bg)) 0%,
-      color-mix(in srgb, var(--semantic-info) 5%, var(--theme-page-bg)) 45%,
-      transparent 100%
+      color-mix(in srgb, var(--semantic-info) 2%, var(--nn-rn-hub-panel)) 0%,
+      color-mix(in srgb, var(--semantic-surface) 86%, var(--theme-page-bg)) 48%,
+      color-mix(in srgb, var(--semantic-surface) 72%, var(--theme-page-bg)) 100%
     );
 }
 
@@ -307,8 +316,8 @@
   pointer-events: none;
   border-radius: inherit;
   background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--semantic-text-muted) 5%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-text-muted) 5%, transparent) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in srgb, var(--semantic-text-muted) 2.5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--semantic-text-muted) 2.5%, transparent) 1px, transparent 1px);
   background-size: 44px 44px;
   mask-image: radial-gradient(circle at 12% 0%, rgba(0, 0, 0, 0.32), transparent 64%);
   -webkit-mask-image: radial-gradient(circle at 12% 0%, rgba(0, 0, 0, 0.32), transparent 64%);
@@ -327,6 +336,15 @@
 [data-theme="midnight"]
   [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
     .nn-premium-pathway-hub--pn-rpn
+  ) {
+  --nn-rn-hub-panel: color-mix(in srgb, var(--semantic-surface) 72%, var(--theme-page-bg));
+  --nn-rn-hub-card: color-mix(in srgb, var(--semantic-surface) 80%, var(--theme-card-bg));
+  --nn-rn-hub-border: color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-border-soft));
+}
+
+[data-theme="midnight"]
+  [data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
   )
   .nn-nursing-tier-hub-hero-band,
 [data-theme="apex"]
@@ -340,9 +358,9 @@
     radial-gradient(460px 220px at 98% 6%, color-mix(in srgb, var(--semantic-chart-2) 10%, transparent), transparent 56%),
     linear-gradient(
       125deg,
-      color-mix(in srgb, var(--semantic-info) 9%, var(--theme-page-bg)) 0%,
-      color-mix(in srgb, var(--semantic-chart-4) 5%, var(--theme-page-bg)) 52%,
-      transparent 100%
+      color-mix(in srgb, var(--semantic-info) 8%, var(--nn-rn-hub-panel)) 0%,
+      color-mix(in srgb, var(--semantic-chart-4) 4%, var(--theme-page-bg)) 52%,
+      var(--theme-page-bg) 100%
     );
 }
 
@@ -355,6 +373,36 @@
   box-shadow:
     0 22px 50px -36px color-mix(in srgb, var(--palette-heading) 24%, transparent),
     0 1px 0 color-mix(in srgb, var(--semantic-chart-5) 12%, transparent) inset;
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )[data-nn-nursing-tier-hub="surface"]
+  .nn-exam-hub-study-card {
+  border-color: color-mix(in srgb, var(--semantic-info) 7%, var(--nn-rn-hub-border));
+  background:
+    linear-gradient(150deg, color-mix(in srgb, var(--semantic-info) 2%, var(--nn-rn-hub-card)) 0%, transparent 56%),
+    var(--nn-rn-hub-card);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 78%, transparent),
+    0 18px 44px -34px color-mix(in srgb, var(--palette-heading) 18%, transparent);
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )[data-nn-nursing-tier-hub="surface"]
+  .nn-exam-hub-study-card:hover {
+  border-color: color-mix(in srgb, var(--semantic-info) 12%, var(--nn-rn-hub-border));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-surface) 82%, transparent),
+    0 20px 52px -32px color-mix(in srgb, var(--palette-heading) 20%, transparent);
+}
+
+[data-pathway-track="rn"].nn-premium-pathway-hub:not(.nn-premium-pathway-hub--new-grad):not(
+    .nn-premium-pathway-hub--pn-rpn
+  )[data-nn-nursing-tier-hub="surface"]
+  .nn-exam-hub-study-card__icon {
+  background: color-mix(in srgb, var(--semantic-surface) 82%, var(--theme-card-bg));
 }
 
 /* ---------------------------------------------------------------------

@@ -189,4 +189,31 @@ describe("PathwayLessonsCurriculumHub", () => {
     assert.match(html, /Clinical Topic 1/);
     assert.match(html, /text-\[var\(--theme-body-text\)\]/);
   });
+
+  it("keeps verifier-degraded hub rows clickable instead of greying out most lesson titles", () => {
+    const lessons = Array.from({ length: 8 }, (_, index) =>
+      lesson({
+        slug: `degraded-${index + 1}`,
+        title: `Clickable degraded lesson ${index + 1}`,
+        bodySystem: "cardiovascular",
+        system: "cardiovascular",
+        hubMarketingDegraded: index > 1,
+        hubMarketingDegradedReason: "unverified_inventory_fill",
+      }),
+    );
+
+    const html = renderToStaticMarkup(
+      <PathwayLessonsCurriculumHub
+        lessons={lessons}
+        preparedLessons={lessons}
+        lessonsBasePath="/canada/rn/nclex-rn/lessons"
+        pathwayId="ca-rn-nclex-rn"
+      />,
+    );
+
+    const linkMatches = [...html.matchAll(/data-testid="lesson-card-link"/g)];
+    assert.equal(linkMatches.length, 8);
+    assert.match(html, /href="\/canada\/rn\/nclex-rn\/lessons\/degraded-8"/);
+    assert.match(html, /Clickable Degraded Lesson 8/);
+  });
 });

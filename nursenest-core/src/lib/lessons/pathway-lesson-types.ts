@@ -422,15 +422,16 @@ export function pathwayLessonMarketingDetailHref(
 }
 
 /**
- * Hub lesson **card** link only after strict {@link verifyMarketingHubLessonRowsResolve} success.
- * Rows marked {@link PathwayLessonRecord.hubMarketingDegraded} (soft recovery, verify cap, or pipeline bypass)
- * must not render a marketing detail `href` — same contract as “detail loader would not treat as strict public link”.
+ * Hub lesson **card** link for any renderable lesson slug.
+ *
+ * `hubMarketingDegraded` means the hub verifier recovered from a soft mismatch or skipped
+ * full detail verification to keep large lesson libraries fast. It must not make the row
+ * visually inert; the detail route remains the source of truth for preview/paywall/quality UI.
  */
 export function pathwayLessonMarketingHubVerifiedCardHref(
   lessonsBasePath: string,
   lesson: Pick<PathwayLessonRecord, "slug" | "hubMarketingDegraded">,
 ): string | null {
-  if (lesson.hubMarketingDegraded) return null;
   return pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
 }
 
