@@ -22,6 +22,13 @@ import { contentItemLessonTaxonomyFromCorpus } from "@/lib/taxonomy/content-writ
 
 export const dynamic = "force-dynamic";
 
+const sectionSchema = z.object({
+  id: z.string(),
+  heading: z.string(),
+  kind: z.string().optional(),
+  body: z.string().default(""),
+});
+
 const patchSchema = z
   .object({
     title: z.string().min(4).optional(),
@@ -29,6 +36,8 @@ const patchSchema = z
     seoTitle: z.string().min(4).optional(),
     seoDescription: z.string().optional(),
     body: z.string().optional(),
+    /** Direct sections JSON — when provided, overrides body-parsing. */
+    sections: z.array(sectionSchema).optional(),
     status: z.nativeEnum(ContentStatus).optional(),
     topic: z.string().min(1).optional(),
     topicSlug: z.string().min(1).optional(),
@@ -106,7 +115,11 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   const mergedSeoDescription = d.seoDescription ?? existing.seoDescription;
   const mergedLocale = (d.locale !== undefined ? d.locale : existing.locale).trim();
   const mergedBody =
-    d.body !== undefined ? d.body : plainBodyFromPathwaySectionsJson(existing.sections);
+    d.sections !== undefined
+      ? d.sections.map((s) => s.body).filter(Boolean).join("\n\n")
+      : d.body !== undefined
+        ? d.body
+        : plainBodyFromPathwaySectionsJson(existing.sections);
   const nextStatus = d.status ?? existing.status;
 
   let topic = d.topic ?? existing.topic;
@@ -216,9 +229,11 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
 
   const previousSlug = existing.slug;
   const sectionsJson: Prisma.InputJsonValue =
-    d.body !== undefined
-      ? (pathwaySectionsFromPlainBody(mergedBody, mergedTitle) as unknown as Prisma.InputJsonValue)
-      : (existing.sections as Prisma.InputJsonValue);
+    d.sections !== undefined
+      ? (d.sections as unknown as Prisma.InputJsonValue)
+      : d.body !== undefined
+        ? (pathwaySectionsFromPlainBody(mergedBody, mergedTitle) as unknown as Prisma.InputJsonValue)
+        : (existing.sections as Prisma.InputJsonValue);
 
   let nextPublishedAt: Date | null = existing.published_at;
   if (nextStatus === ContentStatus.PUBLISHED) {

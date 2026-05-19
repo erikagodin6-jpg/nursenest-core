@@ -345,8 +345,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app,
 }
 .nn-lesson-page--learner-app .nn-lesson-editorial-rail--hero {
   width: 100%;
-  max-width: min(48rem, 100%);
-  margin-inline: auto;
+  max-width: 100%;
+  margin-inline: 0;
   padding-inline: clamp(1rem, 3vw, 1.5rem);
 }
 .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main {
@@ -413,7 +413,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app,
 }
 .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-content.nn-lesson-prose,
 .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-prose {
-  max-width: min(96ch, 100%);
+  max-width: 100%;
   width: 100%;
   font-size: 0.9375rem;
   line-height: 1.62;
@@ -6873,14 +6873,14 @@ html[data-theme="deep-twilight"] {
 
 .nn-lesson-layout--premium-reading {
   display: block;
-  width: min(100%, var(--nn-lesson-reader-wide));
-  margin-inline: auto;
+  width: 100%;
+  margin-inline: 0;
 }
 
 .nn-lesson-layout--premium-reading .nn-lesson-main {
   width: 100%;
   max-width: none;
-  margin-inline: auto;
+  margin-inline: 0;
 }
 
 .nn-lesson-section-nav-shell {
@@ -6971,46 +6971,56 @@ html[data-theme="deep-twilight"] {
 .nn-premium-lesson-detail-shell .nn-premium-lesson-article,
 .nn-premium-lesson-detail-shell .nn-premium-lesson-reading-flow {
   display: block;
-  max-width: var(--nn-lesson-reader-wide);
-  margin-inline: auto;
+  max-width: 100%;
+  margin-inline: 0;
 }
 
 .nn-premium-lesson-detail-shell .nn-premium-lesson-article > * + * {
-  margin-top: clamp(3.4rem, 7vw, 5.7rem);
+  margin-top: clamp(2rem, 3.5vw, 2.75rem);
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-section-card {
   scroll-margin-top: 6.5rem;
 }
 
+/* Every section gets its own distinct colored box */
 .nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--editorial {
-  border: 0;
-  border-bottom: 1px solid var(--nn-lesson-reading-border);
-  border-radius: 0;
-  background: transparent;
-  padding: 0 0 clamp(2.3rem, 4vw, 3.4rem);
-  box-shadow: none;
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 22%, var(--nn-lesson-reading-border));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 72%, var(--nn-lesson-reading-border));
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 8%, transparent), transparent 40%),
+    color-mix(in srgb, var(--lsc-soft) 26%, var(--nn-lesson-reading-surface) 74%);
+  padding: clamp(1.75rem, 2.5vw, 2.5rem) clamp(1.5rem, 2.5vw, 2.25rem);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent),
+    0 18px 48px color-mix(in srgb, var(--lsc-color) 6%, transparent);
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-section-card.nn-lesson-section-card--callout,
 .nn-premium-lesson-detail-shell .nn-lesson-section-card:not(.nn-lesson-section-card--editorial) {
-  border: 1px solid var(--nn-lesson-reading-border);
-  border-radius: 1.35rem;
-  background: var(--nn-lesson-reading-surface);
-  padding: clamp(2rem, 3.4vw, 3rem);
-  box-shadow: var(--nn-lesson-reading-shadow);
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 28%, var(--nn-lesson-reading-border));
+  border-left: 4px solid color-mix(in srgb, var(--lsc-color) 78%, var(--nn-lesson-reading-border));
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--lsc-color) 12%, transparent), transparent 42%),
+    color-mix(in srgb, var(--lsc-soft) 34%, var(--nn-lesson-reading-surface) 66%);
+  padding: clamp(1.75rem, 2.5vw, 2.5rem) clamp(1.5rem, 2.5vw, 2.25rem);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent),
+    0 18px 48px color-mix(in srgb, var(--lsc-color) 8%, transparent);
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-section-heading {
-  max-width: min(100%, 26ch);
-  font-size: clamp(1.75rem, 1.65vw + 1.15rem, 2.75rem);
-  line-height: 1.08;
-  letter-spacing: -0.04em;
+  max-width: 100%;
+  font-size: clamp(1.35rem, 1.4vw + 0.9rem, 2.1rem);
+  line-height: 1.14;
+  letter-spacing: -0.03em;
 }
 
 .nn-premium-lesson-detail-shell .nn-lesson-content.nn-lesson-prose,
 .nn-premium-lesson-detail-shell .nn-lesson-prose {
-  max-width: var(--nn-lesson-reader-max);
+  max-width: 100%;
   color: var(--semantic-text-secondary);
   font-size: clamp(1.02rem, 0.3vw + 0.96rem, 1.16rem);
   line-height: 1.84;
