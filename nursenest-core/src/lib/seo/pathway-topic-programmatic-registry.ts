@@ -216,7 +216,7 @@ function lessonsAngleSlug(pathwayId: string, body: BodyTopic): string {
   if (pathwayId.includes("np-")) {
     return `np-lessons-${body.key}`;
   }
-   if (pathwayId === "us-lpn-nclex-pn" || pathwayId === "ca-rpn-rex-pn") {
+  if (pathwayId === "us-lpn-nclex-pn" || pathwayId === "ca-rpn-rex-pn") {
     return `pn-lessons-${body.key}`;
   }
   return `rn-lessons-${body.key}`;
@@ -229,7 +229,7 @@ function buildBodyPracticePage(pathway: ExamPathwayDefinition, body: BodyTopic, 
   return {
     slug: seoSlug,
     title: `${h1} | ${SITE}`,
-    description: `Pathway-scored practice for ${body.label} on ${pathway.displayName}. ${body.lead.slice(0, 120)}…`,
+    description: `Practice ${body.label} questions for ${pathway.displayName}. Review focused clinical vignettes, rationales, and study tips for this exam pathway.`,
     h1,
     cluster,
     pageKind: "topic-guide" satisfies SeoPageKind,
@@ -238,44 +238,44 @@ function buildBodyPracticePage(pathway: ExamPathwayDefinition, body: BodyTopic, 
     practiceConversion: false,
     sections: [
       {
-        heading: `How ${body.label} shows up on ${pathway.shortName} items`,
+        heading: `${body.label} on ${pathway.shortName}`,
         level: 2,
         body: [
           body.lead,
-          `${SITE} keeps the bank scoped to your pathway so examples, rationales, and difficulty track what you are authorized to study—not a generic “nursing mega-bank.”`,
+          `${SITE} keeps practice aligned to your exam pathway, so the examples and rationales stay focused on what you are preparing for.`,
         ],
       },
       {
-        heading: "Study loop that beats passive reading",
+        heading: "A better study loop",
         level: 2,
         body: [
           body.studyTip,
-          "Mix a short lesson block on the same system, then return to questions within 48 hours so you are testing retrieval, not familiarity.",
+          "Start with a short lesson block on the same system, then return to questions within 48 hours. That tests recall instead of simple familiarity.",
         ],
       },
       {
-        heading: "What to do when a category stays weak",
+        heading: "When this category still feels weak",
         level: 2,
         body: [
-          "Export or screenshot your miss themes, then schedule a second pass after sleep—spaced repetition beats marathon cramming for procedural exams.",
-          "If timing is the issue, switch to shorter timed sets before full-length practice exams.",
+          "Write down the reason for each miss: missed cue, wrong priority, content gap, or timing pressure.",
+          "If timing is the issue, use shorter timed sets before full-length practice exams. If content is the issue, review the related lesson before adding more questions.",
         ],
       },
     ],
     faq: [
       {
-        question: `Are ${body.label} questions filtered for ${pathway.displayName}?`,
-        answer: `Yes. Items are pathway-scoped for entitlement and content rules, so you practice in the same tier and region context as your subscription.`,
+        question: `Are these ${body.label} questions filtered for ${pathway.displayName}?`,
+        answer: `Yes. Practice is organized around this pathway, so questions, rationales, and study links stay aligned with ${pathway.shortName}.`,
       },
       {
         question: "Do I need lessons if I only want questions?",
         answer:
-          "You can start in the question bank, but when accuracy stalls, a focused lesson on the same system usually breaks the plateau faster than more random items.",
+          "You can start with questions, but if your accuracy stalls, a focused lesson on the same body system usually fixes the gap faster than more random practice.",
       },
       {
         question: "Where does adaptive CAT fit in?",
         answer:
-          "CAT-style practice helps calibrate difficulty and stamina. Use it after you have baseline accuracy in the system so the session targets gaps instead of guessing cold.",
+          "Use CAT-style practice after you have baseline accuracy in the topic. It helps calibrate difficulty and stamina instead of turning early gaps into guessing.",
       },
     ],
   };
@@ -284,11 +284,11 @@ function buildBodyPracticePage(pathway: ExamPathwayDefinition, body: BodyTopic, 
 function buildLessonsAnglePage(pathway: ExamPathwayDefinition, body: BodyTopic, seoSlug: string): SeoPageDefinition {
   const pack = linkPackForPathwayId(pathway.id);
   const cluster = clusterForPathwayId(pathway.id);
-  const h1 = `${pathway.shortName} lessons hub — ${body.label}`;
+  const h1 = `${pathway.shortName} lessons — ${body.label}`;
   return {
     slug: seoSlug,
     title: `${h1} | ${SITE}`,
-    description: `Structured lessons for ${body.label} within ${pathway.displayName}, paired with pathway-scoped practice and CAT.`,
+    description: `Structured ${body.label} lessons for ${pathway.displayName}, paired with focused practice questions and CAT-style review.`,
     h1,
     cluster,
     pageKind: "topic-guide" satisfies SeoPageKind,
@@ -297,31 +297,31 @@ function buildLessonsAnglePage(pathway: ExamPathwayDefinition, body: BodyTopic, 
     practiceConversion: false,
     sections: [
       {
-        heading: "Why lessons plus questions beats either alone",
+        heading: "Why lessons and questions work better together",
         level: 2,
         body: [
-          `Lessons give you the mental model for ${body.label}; questions force you to apply it under uncertainty like the real exam.`,
-          "Use the lesson index for your pathway, then jump to the matching question set while the rules are still fresh.",
+          `Lessons give you the clinical model for ${body.label}; questions make you apply it under exam-style uncertainty.`,
+          "Use the lesson index for your pathway, then move to a matching question set while the rules are still fresh.",
         ],
       },
       {
         heading: "A realistic weekly rhythm",
         level: 2,
         body: [
-          "Two or three focused sessions beat seven distracted ones: one lesson block, one question set, one short review of rationales.",
-          "If you are working clinically, anchor study to cases you saw that week—transfer improves retention.",
+          "Two or three focused sessions beat seven distracted ones: one lesson block, one question set, and one short review of rationales.",
+          "If you are working clinically, connect study topics to cases you saw that week. Real context improves retention.",
         ],
       },
     ],
     faq: [
       {
-        question: `Will ${body.label} lessons match my exam authorization?`,
+        question: `Will ${body.label} lessons match my exam pathway?`,
         answer: `Lessons are organized under your pathway hub so titles and depth align with ${pathway.shortName} expectations in ${pathway.countryCode}.`,
       },
       {
-        question: "How do I avoid duplicating the topic cluster page?",
+        question: "When should I use this page?",
         answer:
-          "This guide is a study-mode landing page: use it when you want a lessons-first route into the same clinical territory as your practice sets.",
+          "Use it when you want a lessons-first route into the same clinical topic covered by your practice sets.",
       },
     ],
   };
