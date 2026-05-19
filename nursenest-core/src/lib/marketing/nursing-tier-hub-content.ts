@@ -152,7 +152,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
 
   const pnIntro =
     pathway.countrySlug === "canada"
-      ? `${examLabel} prep for ${countryLabel}: build practical-nursing judgement first—prioritization, safe delegation within RPN scope, medications, and acute cues—then rehearse adaptive pacing and longer practice exams when you are ready.`
+      ? `${examLabel} prep for ${countryLabel}: build practical-nursing judgment first—prioritization, safe delegation within RPN scope, medications, and acute cues—then rehearse adaptive pacing and longer practice exams when you are ready.`
       : `${examLabel} prep for ${countryLabel}: anchor LVN/LPN scope in lessons, sharpen prioritization and pharmacology with drills, then layer CAT-style sessions and timed practice exams as stamina grows.`;
 
   const pnDescription = `This hub is scoped for ${audienceLabel} candidates in ${countryLabel}: pathway lessons, question bank, flashcards, labs, medication math, clinical scenarios, OSCE-style drills when enabled, and readiness analytics inside one NurseNest account.`;
@@ -181,7 +181,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
     examLabel,
     title,
     intro: isGenericIntl
-      ? `${examLabel} preparation context for ${countryLabel}: start with lessons and drills that strengthen transferable clinical judgement, then confirm every regulatory step with your official body.`
+      ? `${examLabel} preparation context for ${countryLabel}: start with lessons and drills that strengthen transferable clinical judgment, then confirm every regulatory step with your official body.`
       : isPnHub
         ? pnIntro
         : isCnplePathway(pathway.id)
@@ -208,7 +208,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
           : "Start with Lessons, then move into Practice Questions, CAT, and Exams as your confidence grows.",
     differenceHeading: isPnHub ? "How the modes fit PN / RPN prep" : isCnplePathway(pathway.id) ? "How the modes fit CNPLE prep" : "What is the difference?",
     differenceBody: isGenericIntl
-      ? "Lessons summarise concepts, Flashcards speed recall, Practice Questions build judgement under time pressure, and optional adaptive sessions mirror NCLEX-style pacing—not regulator-owned exam designs."
+      ? "Lessons summarize concepts, Flashcards speed recall, Practice Questions build judgment under time pressure, and optional adaptive sessions mirror NCLEX-style pacing—not regulator-owned exam designs."
       : isPnHub
         ? pnDifferenceBody
         : isCnplePathway(pathway.id)
@@ -269,6 +269,6 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
           ? "Adaptive sessions use NCLEX-style formats for cognitive rehearsal only. They are not the NMC CBT, AHPRA/NMBA assessments, or PRC PNLE."
           : undefined,
       },
-    ],
+    ].filter((action) => !(action.id === "exams" && !isGenericIntl)) as NursingTierHubAction[],
   };
 }
