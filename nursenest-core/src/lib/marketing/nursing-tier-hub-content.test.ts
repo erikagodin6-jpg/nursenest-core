@@ -9,7 +9,7 @@ import {
 } from "@/lib/marketing/nursing-tier-hub-content";
 
 describe("buildNursingTierHubContent", () => {
-  it("builds stable RN hub content with the five primary study actions including CAT", () => {
+  it("builds stable RN hub content with four primary study actions including CAT", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
 
@@ -25,9 +25,9 @@ describe("buildNursingTierHubContent", () => {
         ["flashcards", "Flashcards", "/app/flashcards?pathwayId=us-rn-nclex-rn"],
         ["practice_questions", "Practice Questions", "/us/rn/nclex-rn/questions"],
         ["cat", "CAT", "/us/rn/nclex-rn/cat"],
-        ["exams", "Practice Exam", "/app/practice-tests?pathwayId=us-rn-nclex-rn"],
       ],
     );
+    assert.equal(content.actions.some((action) => action.id === "exams"), false);
   });
 
   it("uses region-aware PN naming for the United States", () => {
@@ -40,6 +40,7 @@ describe("buildNursingTierHubContent", () => {
     assert.equal(content.examLabel, "NCLEX-PN");
     assert.match(content.includedNote, /Practical-nursing tier|PN\/RPN/i);
     assert.match(content.intro, /LVN\/LPN scope|NCLEX-PN prep for the United States/i);
+    assert.equal(content.actions.some((action) => action.id === "exams"), false);
   });
 
   it("uses region-aware PN naming for Canada", () => {
@@ -51,6 +52,7 @@ describe("buildNursingTierHubContent", () => {
     assert.equal(content.audienceLabel, "RPN");
     assert.equal(content.examLabel, "REx-PN");
     assert.match(content.includedNote, /RPN/i);
+    assert.equal(content.actions.some((action) => action.id === "exams"), false);
   });
 
   it("keeps NP landing copy tier-first while preserving the current default pathway links", () => {
@@ -64,6 +66,7 @@ describe("buildNursingTierHubContent", () => {
     assert.equal(content.examLabel, "ANCC / AANP - Family NP");
     assert.equal(content.actions[0]?.href, "/us/np/fnp/lessons");
     assert.match(content.includedNote, /Family NP/i);
+    assert.equal(content.actions.some((action) => action.id === "exams"), false);
   });
 
   it("Canadian RN hub copy names Canada (not US) and keeps /canada/ routes on cards", () => {
@@ -79,14 +82,14 @@ describe("buildNursingTierHubContent", () => {
         "/app/flashcards?pathwayId=ca-rn-nclex-rn",
         "/canada/rn/nclex-rn/questions",
         "/canada/rn/nclex-rn/cat",
-        "/app/practice-tests?pathwayId=ca-rn-nclex-rn",
       ],
     );
+    assert.equal(content.actions.some((action) => action.id === "exams"), false);
   });
 });
 
 describe("resolveNursingTierHubStudyCardHref", () => {
-  it("guest RN: flashcards and exams wrap with login callback; practice questions and CAT stay on marketing hubs", () => {
+  it("guest RN: flashcards wrap with login callback; practice questions and CAT stay on marketing hubs", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
@@ -94,24 +97,21 @@ describe("resolveNursingTierHubStudyCardHref", () => {
     const flash = byId.get("flashcards")!;
     const practice = byId.get("practice_questions")!;
     const cat = byId.get("cat")!;
-    const exams = byId.get("exams")!;
+    assert.equal(byId.has("exams"), false);
     assert.equal(
       resolveNursingTierHubStudyCardHref(pathway, flash, { viewerSignedIn: false }).startsWith("/login?callbackUrl="),
       true,
     );
     assert.equal(resolveNursingTierHubStudyCardHref(pathway, practice, { viewerSignedIn: false }), "/us/rn/nclex-rn/questions");
     assert.equal(resolveNursingTierHubStudyCardHref(pathway, cat, { viewerSignedIn: false }), "/us/rn/nclex-rn/cat");
-    assert.equal(
-      resolveNursingTierHubStudyCardHref(pathway, exams, { viewerSignedIn: false }).startsWith("/login?callbackUrl="),
-      true,
-    );
   });
 
-  it("signed-in RN: flashcards, CAT launch, practice tests, and exams use direct /app hrefs (paywall enforced server-side)", () => {
+  it("signed-in RN: flashcards and CAT launch use direct /app hrefs; practice questions stay on the marketing hub", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
     const content = buildNursingTierHubContent(pathway);
     const byId = new Map(content.actions.map((a) => [a.id, a]));
+    assert.equal(byId.has("exams"), false);
     assert.equal(
       resolveNursingTierHubStudyCardHref(pathway, byId.get("flashcards")!, { viewerSignedIn: true }),
       "/app/flashcards?pathwayId=us-rn-nclex-rn",
@@ -123,10 +123,6 @@ describe("resolveNursingTierHubStudyCardHref", () => {
     assert.equal(
       resolveNursingTierHubStudyCardHref(pathway, byId.get("cat")!, { viewerSignedIn: true }),
       appPathwayCatSessionStartPath("us-rn-nclex-rn"),
-    );
-    assert.equal(
-      resolveNursingTierHubStudyCardHref(pathway, byId.get("exams")!, { viewerSignedIn: true }),
-      "/app/practice-tests?pathwayId=us-rn-nclex-rn",
     );
   });
 });
