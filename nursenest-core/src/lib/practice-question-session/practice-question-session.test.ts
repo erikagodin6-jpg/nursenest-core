@@ -43,6 +43,35 @@ describe("parsePracticeSessionSearchParams", () => {
     assert.equal(p.practiceHubIds, "pharmacology,cardiovascular");
     assert.equal(p.studyFilter, "weak");
   });
+
+  it("infers weak-area source and mode from studyFilter=weak", () => {
+    const p = parsePracticeSessionSearchParams(
+      new URLSearchParams("pathwayId=ca-rn-nclex-rn&studyFilter=weak&practiceHubIds=pharmacology"),
+    );
+    assert.equal(p.pathwayId, "ca-rn-nclex-rn");
+    assert.equal(p.source, "weak_areas");
+    assert.equal(p.mode, "weak_area");
+    assert.equal(p.studyFilter, "weak");
+    assert.equal(p.practiceHubIds, "pharmacology");
+  });
+
+  it("infers weak-area source and mode from legacy studyMode=weak", () => {
+    const p = parsePracticeSessionSearchParams(
+      new URLSearchParams("pathwayId=ca-rn-nclex-rn&studyMode=weak"),
+    );
+    assert.equal(p.source, "weak_areas");
+    assert.equal(p.mode, "weak_area");
+    assert.equal(p.studyFilter, "weak");
+  });
+
+  it("preserves explicit weak-area session source", () => {
+    const p = parsePracticeSessionSearchParams(
+      new URLSearchParams("pathwayId=ca-rn-nclex-rn&source=weak_areas&mode=weak_area&studyFilter=weak"),
+    );
+    assert.equal(p.source, "weak_areas");
+    assert.equal(p.mode, "weak_area");
+    assert.equal(p.studyFilter, "weak");
+  });
 });
 
 describe("practiceSessionUrl", () => {
@@ -108,6 +137,19 @@ describe("buildQuestionListSearchParams", () => {
       categorySlug: null,
       count: 10,
       mode: "tutor",
+      shuffle: true,
+      userId: "user_test_1234567890",
+    });
+    assert.equal(qs.get("studyMode"), "weak");
+  });
+
+  it("adds studyMode weak for weak_area mode", () => {
+    const qs = buildQuestionListSearchParams({
+      pathwayId: "ca-rn-nclex-rn",
+      source: "mixed_review",
+      categorySlug: null,
+      count: 20,
+      mode: "weak_area",
       shuffle: true,
       userId: "user_test_1234567890",
     });
