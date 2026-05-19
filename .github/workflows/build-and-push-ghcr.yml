@@ -20,9 +20,14 @@ permissions:
   contents: read
   packages: write
 
+# Allow only one build at a time, but do NOT cancel in-progress builds.
+# Cancelling a running Docker build means the image never lands in GHCR and
+# the live site stays on stale code indefinitely.  With cancel-in-progress: false
+# a queued run waits for the current build to finish; the most recent commit
+# always gets deployed once the previous build completes.
 concurrency:
   group: ghcr-build-main
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
