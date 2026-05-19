@@ -14,22 +14,22 @@ type Props = {
 
 const accentMap = {
   brand: {
-    bg: "bg-[var(--semantic-panel-cool)]",
     icon: "text-[var(--semantic-brand)]",
-    iconBg: "bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]",
+    iconBg: "bg-[color-mix(in_srgb,var(--semantic-brand)_10%,white)]",
     value: "text-[var(--semantic-brand)]",
+    borderTop: "border-t-[var(--semantic-brand)]",
   },
   success: {
-    bg: "bg-[var(--semantic-panel-positive)]",
     icon: "text-[var(--semantic-success)]",
-    iconBg: "bg-[color-mix(in_srgb,var(--semantic-success)_12%,var(--semantic-surface))]",
+    iconBg: "bg-[color-mix(in_srgb,var(--semantic-success)_10%,white)]",
     value: "text-[var(--semantic-success)]",
+    borderTop: "border-t-[var(--semantic-success)]",
   },
   info: {
-    bg: "bg-[var(--semantic-panel-cool)]",
     icon: "text-[var(--semantic-info)]",
-    iconBg: "bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))]",
+    iconBg: "bg-[color-mix(in_srgb,var(--semantic-info)_10%,white)]",
     value: "text-[var(--semantic-info-contrast)]",
+    borderTop: "border-t-[var(--semantic-info)]",
   },
 };
 
@@ -54,10 +54,10 @@ export function PathwayStatsCards({ stats }: Props) {
     <div
       className={`grid gap-3 ${
         stats.length === 2
-          ? "grid-cols-2"
-          :         stats.length === 3
-            ? "grid-cols-3"
-            : "grid-cols-2 sm:grid-cols-4"
+          ? "grid-cols-1 sm:grid-cols-2"
+          : stats.length === 3
+            ? "grid-cols-1 sm:grid-cols-3"
+            : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
       }`}
       role="list"
       aria-label="Pathway statistics"
@@ -69,18 +69,21 @@ export function PathwayStatsCards({ stats }: Props) {
           <div
             key={stat.label}
             role="listitem"
-            className={`${accent.bg} flex flex-col gap-1 rounded-2xl border border-[var(--semantic-border-soft)] p-3 shadow-[var(--semantic-shadow-soft)] sm:gap-1.5 sm:p-5`}
+            className={`rounded-2xl border border-t-2 border-[var(--semantic-border-soft)] ${accent.borderTop} bg-white px-4 py-4 shadow-sm ring-1 ring-black/[0.015] sm:px-5 sm:py-5`}
           >
-            <span
-              className={`${accent.iconBg} hidden h-8 w-8 items-center justify-center rounded-lg sm:flex`}
-              aria-hidden
-            >
-              <Icon className={`h-4 w-4 ${accent.icon}`} strokeWidth={1.75} />
-            </span>
-            <p className={`text-xl font-extrabold tracking-tight sm:text-2xl ${accent.value}`}>
-              {typeof stat.value === "number" ? stat.value.toLocaleString() : stat.value}
-            </p>
-            <p className="text-xs font-medium text-[var(--theme-muted-text)]">{stat.label}</p>
+            <div className="flex items-center gap-3">
+              <span className={`${accent.iconBg} flex h-9 w-9 shrink-0 items-center justify-center rounded-xl`} aria-hidden>
+                <Icon className={`h-4 w-4 ${accent.icon}`} strokeWidth={1.75} />
+              </span>
+              <div className="min-w-0">
+                <p className={`text-2xl font-extrabold leading-none tracking-tight ${accent.value}`}>
+                  {typeof stat.value === "number" ? stat.value.toLocaleString() : stat.value}
+                </p>
+                <p className="mt-1 truncate text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                  {stat.label}
+                </p>
+              </div>
+            </div>
           </div>
         );
       })}
