@@ -54,10 +54,19 @@ function forwardRequest(request: NextRequest): NextResponse {
 
 export function isPublicProbeOrCrawlerBypassPath(pathname: string): boolean {
   if (pathname === "/healthz" || pathname === "/readyz") return true;
+  /*
+   * Sitemap index + all child urlsets must bypass auth middleware so Googlebot
+   * can fetch them without hitting session/redirect logic. Previously only
+   * /sitemap.xml, /sitemap-allied.xml, and /sitemap-new-grad.xml were listed;
+   * the other 10 child sitemaps (sitemap-core, sitemap-blog, sitemap-pathways,
+   * sitemap-lessons, sitemap-localized, sitemap-clinical-modules, sitemap-cnple,
+   * sitemap-authority-clusters, sitemap-fr-blog, sitemap-es-blog) went through
+   * the full auth middleware chain and were unreachable to crawlers (GSC error).
+   * Pattern covers all current and future /sitemap-*.xml children automatically.
+   */
   if (
     pathname === "/sitemap.xml" ||
-    pathname === "/sitemap-allied.xml" ||
-    pathname === "/sitemap-new-grad.xml" ||
+    (pathname.startsWith("/sitemap-") && pathname.endsWith(".xml")) ||
     pathname === "/robots.txt"
   ) {
     return true;
