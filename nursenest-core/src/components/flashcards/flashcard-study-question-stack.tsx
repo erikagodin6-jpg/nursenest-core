@@ -135,6 +135,7 @@ export function FlashcardStudyQuestionStack({
   function commitPick(letter: string) {
     if (revealed || !exam || !tutorMcq) return;
     setPickedLetter(letter);
+    onAnswerSubmitted?.(letter, letter === exam.correctLetter);
   }
 
   const promptSplit = splitPromptLeadingImage(prompt);

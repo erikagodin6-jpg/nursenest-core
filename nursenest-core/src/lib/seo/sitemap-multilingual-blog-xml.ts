@@ -24,27 +24,33 @@ export async function listMultilingualBlogSitemapEntriesForLocale(
   locale: MultilingualBlogLocaleCode,
 ): Promise<SitemapUrlEntry[]> {
   const origin = normalizeOrigin(resolveSitemapOrigin());
-  const entries: SitemapUrlEntry[] = [];
-
-  for (const row of listMultilingualBlogRegistryEntries()) {
-    if (row.locale !== locale) continue;
-
-    const enOk = await englishVisibleFor(row.sourceEnglishSlug);
-    const idx = evaluateMultilingualBlogIndexability({
-      entry: row,
-      englishSourceVisible: enOk,
+  const candidates = listMultilingualBlogRegistryEntries().filter((entry) => {
+    if (entry.locale !== locale) return false;
+    const cheapIndexability = evaluateMultilingualBlogIndexability({
+      entry,
+      englishSourceVisible: true,
     });
-    if (!idx.indexable) continue;
+    return cheapIndexability.indexable;
+  });
 
-    const path = buildMultilingualBlogPublicPath(locale, row.localizedSlug);
-    const loc = `${origin}${path}`;
-    entries.push({
-      loc,
-      lastmod: row.dateModified,
-    });
-  }
+  const entries = await Promise.all(
+    candidates.map(async (entry): Promise<SitemapUrlEntry | null> => {
+      const enOk = await englishVisibleFor(entry.sourceEnglishSlug);
+      const idx = evaluateMultilingualBlogIndexability({
+        entry,
+        englishSourceVisible: enOk,
+      });
+      if (!idx.indexable) return null;
 
-  return entries;
+      const path = buildMultilingualBlogPublicPath(locale, entry.localizedSlug);
+      return {
+        loc: `${origin}${path}`,
+        lastmod: entry.dateModified,
+      };
+    }),
+  );
+
+  return entries.filter((entry): entry is SitemapUrlEntry => entry !== null);
 }
 
 export async function buildMultilingualBlogSitemapXmlForLocale(locale: MultilingualBlogLocaleCode): Promise<string> {

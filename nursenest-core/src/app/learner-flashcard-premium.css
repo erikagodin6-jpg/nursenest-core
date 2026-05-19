@@ -541,3 +541,313 @@ html[data-theme="aurora"] .nn-flashcard-study-premium {
     transition: none !important;
   }
 }
+
+/* ── Micro-practice redesign layer — no side rails, wider learning canvas ─── */
+.nn-flashcards-hub-premium,
+.nn-flashcard-study-canvas,
+.nn-flashcard-study-premium {
+  --nn-flashcard-bg: var(--semantic-background, var(--theme-bg));
+  --nn-flashcard-surface: var(--semantic-card, var(--semantic-surface));
+  --nn-flashcard-elevated: var(--semantic-surface-elevated, var(--semantic-surface));
+  --nn-flashcard-muted: var(--semantic-muted, var(--semantic-panel-muted));
+  --nn-flashcard-foreground: var(--semantic-foreground, var(--semantic-text-primary));
+  --nn-flashcard-subtle: var(--semantic-muted-foreground, var(--semantic-text-secondary));
+  --nn-flashcard-primary: var(--semantic-primary, var(--semantic-brand));
+}
+
+.nn-flashcard-study-canvas {
+  max-width: min(100%, 76rem);
+}
+
+.nn-flashcard-study-canvas .nn-premium-flashcard-session-root {
+  border-radius: clamp(1.25rem, 2.5vw, 1.85rem);
+}
+
+.nn-flashcard-session-layout[data-nn-premium-flashcard-study] {
+  display: block;
+  max-width: min(100%, 68rem);
+}
+
+.nn-flashcard-session-main {
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.nn-flashcard-study-micro-status {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-flashcard-primary) 12%);
+  border-radius: 1.35rem;
+  background:
+    radial-gradient(
+      420px 140px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-8) 8%, transparent),
+      transparent 66%
+    ),
+    color-mix(in srgb, var(--nn-flashcard-surface) 94%, var(--nn-flashcard-muted));
+  padding: 0.8rem;
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-flashcard-study-micro-status > div {
+  min-width: 0;
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--nn-flashcard-elevated) 84%, transparent);
+  padding: 0.75rem 0.85rem;
+}
+
+.nn-flashcard-study-micro-status__label {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--semantic-text-muted);
+}
+
+.nn-flashcard-study-micro-status strong {
+  display: block;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.92rem;
+  color: var(--nn-flashcard-foreground);
+}
+
+.nn-flashcard-study-support-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-chart-2) 12%);
+  border-radius: 1.2rem;
+  background: color-mix(in srgb, var(--semantic-panel-cool) 20%, var(--nn-flashcard-surface));
+  padding: 0.85rem 1rem;
+  font-size: 0.8rem;
+}
+
+.nn-flashcard-study-support-strip > div:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+}
+
+.nn-flashcards-micro-practice-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.15rem);
+}
+
+.nn-flashcards-micro-practice-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 13.5rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--nn-flashcard-primary) 14%);
+  border-radius: 1.65rem;
+  background:
+    radial-gradient(
+      360px 160px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-7) 10%, transparent),
+      transparent 66%
+    ),
+    color-mix(in srgb, var(--nn-flashcard-surface) 94%, var(--nn-flashcard-muted));
+  box-shadow: var(--semantic-shadow-soft);
+  padding: clamp(1rem, 2vw, 1.35rem);
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.nn-flashcards-micro-practice-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--nn-flashcard-primary) 28%, var(--semantic-border-soft));
+  box-shadow: 0 18px 45px -34px color-mix(in srgb, var(--semantic-text-primary) 42%, transparent);
+}
+
+.nn-flashcards-micro-practice-card__label,
+.nn-flashcards-spaced-repetition-dock__eyebrow {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+
+.nn-flashcards-micro-practice-card strong {
+  display: block;
+  margin-top: 1rem;
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  letter-spacing: 0;
+  color: var(--nn-flashcard-foreground);
+}
+
+.nn-flashcards-micro-practice-card > span:not(.nn-flashcards-micro-practice-card__label) {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.82rem;
+  color: var(--nn-flashcard-subtle);
+}
+
+.nn-flashcards-micro-practice-card p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.58;
+  color: var(--nn-flashcard-subtle);
+}
+
+.nn-flashcards-micro-practice-card em {
+  display: inline-flex;
+  margin-top: 1rem;
+  font-style: normal;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--nn-flashcard-primary);
+}
+
+.nn-flashcards-spaced-repetition-dock {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.8fr);
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-chart-3) 14%);
+  border-radius: 1.65rem;
+  background:
+    radial-gradient(
+      520px 180px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-3) 9%, transparent),
+      transparent 66%
+    ),
+    color-mix(in srgb, var(--nn-flashcard-surface) 94%, var(--nn-flashcard-muted));
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  box-shadow: var(--semantic-shadow-soft);
+}
+
+.nn-flashcards-spaced-repetition-dock h2 {
+  margin-top: 0.35rem;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  line-height: 1.12;
+  letter-spacing: 0;
+  color: var(--nn-flashcard-foreground);
+}
+
+.nn-flashcards-spaced-repetition-dock p {
+  margin-top: 0.7rem;
+  max-width: 46rem;
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--nn-flashcard-subtle);
+}
+
+.nn-flashcards-spaced-repetition-dock__heatmap {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.nn-flashcards-spaced-repetition-dock__heatmap span {
+  aspect-ratio: 1;
+  border-radius: 0.45rem;
+  background: color-mix(in srgb, var(--semantic-border-soft) 60%, var(--nn-flashcard-surface));
+}
+
+.nn-flashcards-spaced-repetition-dock__heatmap span[data-intensity="1"] {
+  background: color-mix(in srgb, var(--semantic-chart-7) 22%, var(--nn-flashcard-surface));
+}
+
+.nn-flashcards-spaced-repetition-dock__heatmap span[data-intensity="2"] {
+  background: color-mix(in srgb, var(--semantic-chart-3) 28%, var(--nn-flashcard-surface));
+}
+
+.nn-flashcards-spaced-repetition-dock__heatmap span[data-intensity="3"] {
+  background: color-mix(in srgb, var(--nn-flashcard-primary) 34%, var(--nn-flashcard-surface));
+}
+
+.nn-flashcard-related-concepts span {
+  display: inline-flex;
+  min-height: 1.8rem;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 80%, var(--nn-flashcard-primary) 10%);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--nn-flashcard-muted) 48%, var(--nn-flashcard-surface));
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--nn-flashcard-subtle);
+}
+
+.nn-flashcard-empty-state {
+  background:
+    radial-gradient(
+      460px 160px at 100% 0%,
+      color-mix(in srgb, var(--semantic-chart-7) 8%, transparent),
+      transparent 66%
+    ),
+    var(--nn-flashcard-surface, var(--semantic-surface));
+}
+
+html[data-theme="blossom"] .nn-flashcards-hub-premium,
+html[data-theme="blossom"] .nn-flashcard-study-canvas,
+html[data-theme="blossom"] .nn-flashcard-study-premium {
+  --nn-flashcard-primary: color-mix(in srgb, var(--semantic-brand) 78%, var(--semantic-warning) 10%);
+}
+
+html[data-theme="midnight"] .nn-flashcards-hub-premium,
+html[data-theme="midnight"] .nn-flashcard-study-canvas,
+html[data-theme="midnight"] .nn-flashcard-study-premium,
+html[data-theme="midnight-indigo"] .nn-flashcards-hub-premium,
+html[data-theme="midnight-indigo"] .nn-flashcard-study-canvas,
+html[data-theme="midnight-indigo"] .nn-flashcard-study-premium {
+  --nn-flashcard-surface: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+  --nn-flashcard-muted: color-mix(in srgb, var(--semantic-panel-muted) 70%, var(--semantic-surface));
+}
+
+@media (max-width: 900px) {
+  .nn-flashcards-micro-practice-board,
+  .nn-flashcards-spaced-repetition-dock {
+    grid-template-columns: 1fr;
+  }
+
+  .nn-flashcards-micro-practice-card {
+    min-height: 11.5rem;
+  }
+
+  .nn-flashcard-study-micro-status {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .nn-flashcards-hub-premium {
+    padding-inline: 0;
+  }
+
+  .nn-flashcard-study-canvas {
+    padding-inline: 0.85rem;
+  }
+
+  .nn-flashcard-study-micro-status {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0.6rem;
+  }
+
+  .nn-flashcard-study-micro-status > div {
+    min-width: 9.5rem;
+    scroll-snap-align: start;
+  }
+
+  .nn-flashcard-study-support-strip {
+    align-items: flex-start;
+  }
+
+  .nn-flashcard-confidence-controls {
+    grid-template-columns: 1fr;
+  }
+}

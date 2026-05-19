@@ -240,12 +240,16 @@ export function FlashcardCustomStudyClient() {
   }
 
   if (!activeCards.length) {
+    const emptyStateClass =
+      "nn-flashcard-empty-state mx-auto max-w-3xl space-y-3 rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-8 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]";
+    const emptyHeadingClass = "text-lg font-semibold text-[var(--semantic-text-primary)]";
+    const emptyLinkClass = "inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-brand)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]";
     if (summary?.starredOnly) {
       return (
-        <section className="mx-auto max-w-3xl space-y-3 rounded-2xl border border-border bg-[var(--theme-card-bg)] px-6 py-8 text-sm text-[var(--theme-muted-text)]">
-          <h2 className="text-lg font-semibold text-[var(--theme-fg)]">No starred cards yet</h2>
+        <section className={emptyStateClass}>
+          <h2 className={emptyHeadingClass}>No starred cards yet</h2>
           <p>Star cards while you study — they will appear here for quick review.</p>
-          <Link href={exitHref} className="inline-block text-primary underline">
+          <Link href={exitHref} className={emptyLinkClass}>
             {t("flashcards.backToMyCards")}
           </Link>
         </section>
@@ -253,10 +257,10 @@ export function FlashcardCustomStudyClient() {
     }
     if (summary?.weakOnly) {
       return (
-        <section className="mx-auto max-w-3xl space-y-3 rounded-2xl border border-border bg-[var(--theme-card-bg)] px-6 py-8 text-sm text-[var(--theme-muted-text)]">
-          <h2 className="text-lg font-semibold text-[var(--theme-fg)]">No weak-area flashcards yet</h2>
+        <section className={emptyStateClass}>
+          <h2 className={emptyHeadingClass}>No weak-area flashcards yet</h2>
           <p>Weak-area cards appear after you rate cards as difficult or need more practice in a tracked session.</p>
-          <Link href={exitHref} className="inline-block text-primary underline">
+          <Link href={exitHref} className={emptyLinkClass}>
             {t("flashcards.backToMyCards")}
           </Link>
         </section>
@@ -264,24 +268,24 @@ export function FlashcardCustomStudyClient() {
     }
     if (summary && summary.selectedCategories.length > 0) {
       return (
-        <section className="mx-auto max-w-3xl space-y-3 rounded-2xl border border-border bg-[var(--theme-card-bg)] px-6 py-8 text-sm text-[var(--theme-muted-text)]">
-          <h2 className="text-lg font-semibold text-[var(--theme-fg)]">No cards in selected systems</h2>
+        <section className={emptyStateClass}>
+          <h2 className={emptyHeadingClass}>No cards in selected systems</h2>
           <p>Try adding another body system or clear the filter to study all systems.</p>
-          <Link href={exitHref} className="inline-block text-primary underline">
+          <Link href={exitHref} className={emptyLinkClass}>
             {t("flashcards.backToMyCards")}
           </Link>
         </section>
       );
     }
     return (
-      <section className="mx-auto max-w-3xl space-y-3 rounded-2xl border border-border bg-[var(--theme-card-bg)] px-6 py-8 text-sm text-[var(--theme-muted-text)]">
-        <h2 className="text-lg font-semibold text-[var(--theme-fg)]">No cards for this pathway yet</h2>
+      <section className={emptyStateClass}>
+        <h2 className={emptyHeadingClass}>No cards for this pathway yet</h2>
         <p>
           {summary && summary.matchingCards === 0
             ? "There are no published flashcards or bank-linked lesson questions for this filter. Try the hub with All cards, study a lesson with checkpoints (we synthesize recall cards from the catalog when the bank is empty), or pick another body system."
             : t("flashcards.noCardsMatch")}
         </p>
-        <Link href={exitHref} className="inline-block text-primary underline">
+        <Link href={exitHref} className={emptyLinkClass}>
           {t("flashcards.backToMyCards")}
         </Link>
       </section>
@@ -289,9 +293,9 @@ export function FlashcardCustomStudyClient() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
+    <div className="nn-flashcard-study-canvas mx-auto max-w-6xl px-4 py-6">
       <div className="mb-4 flex justify-between">
-        <Link href={exitHref} className="text-sm text-primary underline">
+        <Link href={exitHref} className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline">
           ← {t("flashcards.backToMyCards")}
         </Link>
       </div>

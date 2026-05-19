@@ -688,6 +688,32 @@ export function FlashcardsHubClient({
   ]);
 
   const deckProgressFillClass = semanticFillClassForAccuracyPct(poolFillPct);
+  const hubDeckRows = [
+    {
+      title: "Continue studying",
+      body: "Pick up a fast MCQ-style recall session with rationales after every answer.",
+      metric: matchingCards != null ? `${matchingCards}` : "—",
+      meta: "adaptive cards matched",
+      href: startHref,
+      cta: "Resume micro-practice",
+    },
+    {
+      title: "Weak areas",
+      body: "Recover topics you missed, flagged, or rated as needing repetition.",
+      metric: weakOnly || incorrectOnly ? "Active" : "Focus",
+      meta: "spaced repetition queue",
+      href: weakAreaFlashcardsHref(scopedPathwayId),
+      cta: "Review weak areas",
+    },
+    {
+      title: "Priority & delegation",
+      body: "Short clinical questions that train recognition, interpretation, and action.",
+      metric: `${poolFillPct}%`,
+      meta: "current deck match",
+      href: startHref,
+      cta: "Start focused review",
+    },
+  ];
 
   return (
     <LearnerStudyPageShell
@@ -727,6 +753,34 @@ export function FlashcardsHubClient({
           </LearnerCtaLink>
         </div>
       </header>
+
+      <section className="nn-flashcards-micro-practice-board" aria-label="Flashcard micro-practice overview">
+        {hubDeckRows.map((row) => (
+          <Link key={row.title} href={row.href} className="nn-flashcards-micro-practice-card">
+            <span className="nn-flashcards-micro-practice-card__label">{row.title}</span>
+            <strong>{row.metric}</strong>
+            <span>{row.meta}</span>
+            <p>{row.body}</p>
+            <em>{row.cta} →</em>
+          </Link>
+        ))}
+      </section>
+
+      <section className="nn-flashcards-spaced-repetition-dock" aria-label="Spaced repetition dashboard">
+        <div>
+          <span className="nn-flashcards-spaced-repetition-dock__eyebrow">Spaced repetition</span>
+          <h2>Clinical recall, tuned by confidence.</h2>
+          <p>
+            Flashcards behave like rapid clinical questions. Rationale review and confidence ratings decide what returns
+            in future sessions.
+          </p>
+        </div>
+        <div className="nn-flashcards-spaced-repetition-dock__heatmap" aria-hidden>
+          {Array.from({ length: 28 }).map((_, i) => (
+            <span key={i} data-intensity={(i + selectedCanonicalIds.length + (weakOnly ? 2 : 0)) % 4} />
+          ))}
+        </div>
+      </section>
 
       {loadError ? (
         <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_08%,var(--semantic-surface))] px-3 py-2 text-sm text-[var(--semantic-danger)]">

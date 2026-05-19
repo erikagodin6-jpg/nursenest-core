@@ -156,10 +156,10 @@ export function FlashcardWeakStudyClient({
 
     return (
       <div
-        className="mx-auto max-w-lg py-20 text-center"
+        className="nn-flashcard-empty-state mx-auto max-w-lg rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-12 text-center shadow-[var(--semantic-shadow-soft)]"
         data-nn-e2e-flashcards-weak-study-empty
       >
-        <h2 className="mb-2 text-lg font-semibold">
+        <h2 className="mb-2 text-lg font-semibold text-[var(--semantic-text-primary)]">
           {pathwayRequired ? "Select your exam track" : "No weak cards yet"}
         </h2>
 
@@ -223,7 +223,7 @@ export function FlashcardWeakStudyClient({
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6" data-nn-e2e-flashcards-weak-study-root>
+    <div className="nn-flashcard-study-canvas mx-auto max-w-6xl px-4 py-6" data-nn-e2e-flashcards-weak-study-root>
       {/* HEADER */}
       <div className="mb-4 flex items-center justify-between">
         <Link

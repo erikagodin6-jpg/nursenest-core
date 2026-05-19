@@ -176,7 +176,7 @@ export function evaluateEvidenceGovernance(input: EvidenceGovernanceInput): Evid
       issues.push({
         code: "LOW_CONFIDENCE_SOURCE",
         severity: riskDomains.some((domain) => domain !== "general") ? "blocker" : "review",
-        message: `${source.title} has ${source.confidence} evidence confidence.",
+        message: `${source.title} has ${source.confidence} evidence confidence.`,
         remediation: "Use a guideline, regulatory source, drug reference, or clinician-reviewed authoritative source for clinical claims.",
       });
     }
@@ -191,7 +191,7 @@ export function evaluateEvidenceGovernance(input: EvidenceGovernanceInput): Evid
       issues.push({
         code: "STALE_SOURCE",
         severity: riskDomains.some((domain) => domain !== "general") ? "blocker" : "review",
-        message: `${source.title} is due for evidence freshness review.",
+        message: `${source.title} is due for evidence freshness review.`,
         remediation: "Refresh against the latest guideline/reference and update reviewedAt/version metadata.",
       });
     }
@@ -250,7 +250,7 @@ export function evaluateEvidenceGovernance(input: EvidenceGovernanceInput): Evid
       issues.push({
         code: "HIGH_RISK_DOMAIN_UNSUPPORTED",
         severity: "blocker",
-        message: `High-risk domain '${domain}' lacks high-confidence evidence support.",
+        message: `High-risk domain '${domain}' lacks high-confidence evidence support.`,
         remediation: "Attach a high-confidence source specific to this risk domain.",
       });
     }

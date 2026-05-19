@@ -91,7 +91,7 @@ export function FlashcardExamMcqAnswerList({
                   onClick={() => onPickLetter?.(option.letter)}
                   className={`${flashcardExamMcqOptionClass(
                     visualArgs
-                  )} w-full text-left transition-all duration-150 hover:scale-[1.01] active:scale-[0.99]`}
+                  )} w-full text-left transition-all duration-150`}
                 >
                   {baseRow}
                 </button>

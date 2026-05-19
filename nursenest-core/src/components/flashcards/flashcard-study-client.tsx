@@ -204,9 +204,9 @@ export function FlashcardStudyClient({
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
+    <div className="nn-flashcard-study-canvas mx-auto max-w-6xl px-4 py-6">
       {/* header */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="nn-flashcard-study-breadcrumb-row mb-5 flex flex-wrap items-center justify-between gap-3">
         <Link
           href="/app/flashcards"
           className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]"

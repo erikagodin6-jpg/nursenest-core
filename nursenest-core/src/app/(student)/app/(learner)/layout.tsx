@@ -356,7 +356,6 @@ export default async function LearnerShellLayout({ children }: { children: React
                       <div className="flex min-w-0 flex-shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2.5">
                         <LearnerShellUserBar
                           pathwayShortLabel={pathwayShortLabel}
-                          serverHasStaffSession={staffSession != null && !qaShell}
                           learnerQaOverlay={
                             qaShell && adminQaSimulationHelpers
                               ? adminQaSimulationHelpers.learnerQaUserBarOverlayFromPayload(qaShell)

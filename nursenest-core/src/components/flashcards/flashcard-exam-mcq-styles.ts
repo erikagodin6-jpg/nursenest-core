@@ -1,7 +1,7 @@
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 const ROW_BASE =
-  "flex w-full min-h-[52px] items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm leading-snug text-[var(--semantic-text-primary)] transition-all duration-150";
+  "flex w-full min-h-[56px] items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm leading-snug text-[var(--semantic-text-primary)] transition-all duration-200";
 
 const LETTER_BASE =
   "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold tabular-nums transition-all duration-150";
@@ -47,15 +47,14 @@ export function flashcardExamMcqOptionClass(args: McqVisualStateArgs): string {
     return `${ROW_BASE}
       border-[color-mix(in_srgb,var(--semantic-success)_60%,var(--semantic-border-soft))]
       bg-[color-mix(in_srgb,var(--semantic-success)_14%,var(--semantic-surface))]
-      shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--semantic-success)_25%,transparent)]
-      ring-1 ring-[color-mix(in_srgb,var(--semantic-success)_30%,transparent)]`;
+      shadow-[inset_4px_0_0_color-mix(in_srgb,var(--semantic-success)_78%,transparent),var(--semantic-shadow-soft)]`;
   }
 
   if (wasPicked) {
     return `${ROW_BASE}
-      border-[color-mix(in_srgb,var(--semantic-danger)_55%,var(--semantic-border-soft))]
-      bg-[color-mix(in_srgb,var(--semantic-danger)_12%,var(--semantic-surface))]
-      animate-[shake_0.2s_ease-in-out]`;
+      border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))]
+      bg-[color-mix(in_srgb,var(--semantic-danger)_7%,var(--semantic-surface))]
+      text-[var(--semantic-text-secondary)]`;
   }
 
   return `${ROW_BASE}

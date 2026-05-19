@@ -5,8 +5,6 @@ import Link from "next/link";
 import { ChevronDown, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
-import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
-import { shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { SupportEmailAccountMenuLink } from "@/components/support/support-email-account-menu-link";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -59,12 +57,9 @@ function countryDisplayKey(country: string): string {
 
 export function LearnerShellUserBar({
   pathwayShortLabel = null,
-  serverHasStaffSession,
   learnerQaOverlay = null,
 }: {
   pathwayShortLabel?: string | null;
-  /** DB staff row for this request (JWT role may still lag after promotion). */
-  serverHasStaffSession?: boolean;
   /** When staff is in learner QA mode, show simulated plan/scope instead of JWT subscription hints. */
   learnerQaOverlay?: { planLabel: string; scopeLine: string } | null;
 }) {
@@ -108,7 +103,6 @@ export function LearnerShellUserBar({
   const user = session.user;
   const displayName = user.name?.trim() || user.email?.split("@")[0] || t("learner.userBar.fallbackName");
   const emailLine = user.email?.trim() ?? "";
-  const admin = shouldShowAdminDashboardNav({ serverHasStaffSession, sessionRole: user.role });
   const sub = user.subscriptionStatus ?? "none";
   const tier = user.tier ?? "";
   const country = user.country ?? "";
@@ -197,11 +191,6 @@ export function LearnerShellUserBar({
                 ? t("learner.userBar.pathwaySet", { pathway: pathwayShortLabel.trim() })
                 : t("learner.userBar.pathwayUnset")}
             </p>
-            {admin ? (
-              <span className="mt-2 inline-flex rounded-md bg-primary/12 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
-                {t("account.role.admin")}
-              </span>
-            ) : null}
           </div>
 
           <div className="max-h-[min(22rem,70vh)] overflow-y-auto overscroll-contain py-1">
@@ -214,19 +203,6 @@ export function LearnerShellUserBar({
             {renderGroup("learner.userBar.section.account", ACCOUNT_LINKS)}
           </div>
 
-          {admin ? (
-            <div className="border-t border-[var(--border-subtle)] px-2 py-1.5">
-              <Link
-                href={ADMIN_DASHBOARD_HREF}
-                prefetch={false}
-                className={`${linkClass} font-medium text-primary`}
-                role="menuitem"
-                onClick={closeAfterNav}
-              >
-                {t("nav.admin")}
-              </Link>
-            </div>
-          ) : null}
           <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-muted)]/30 p-2">
             <SupportEmailAccountMenuLink
               onActivate={closeAfterNav}

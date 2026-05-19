@@ -7,13 +7,10 @@ import {
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Clock,
-  Flame,
   Home,
   Keyboard,
   RefreshCw,
   Star,
-  Target,
   XCircle,
 } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -329,6 +326,7 @@ export function ActiveStudySession({
   const remainingCards = Math.max(0, sessionCards.length - index - 1);
   const ratedSession = ratingTally.again + ratingTally.hard + ratingTally.good + ratingTally.easy;
   const readinessLabel = Math.min(100, progressPct);
+  const focusLabel = header.categoriesLabel?.trim() || formatTopicLine(current) || "Adaptive review";
 
   return (
     <div className="nn-active-flashcard-session space-y-4" data-nn-premium-flashcard-active-session>
@@ -372,6 +370,29 @@ export function ActiveStudySession({
           </Link>
         </div>
       </div>
+
+      <section
+        className="nn-flashcard-study-micro-status"
+        aria-label="Flashcard study progress"
+        data-nn-flashcard-horizontal-status
+      >
+        <div>
+          <span className="nn-flashcard-study-micro-status__label">Micro-practice</span>
+          <strong>{index + 1} of {sessionCards.length}</strong>
+        </div>
+        <div>
+          <span className="nn-flashcard-study-micro-status__label">Focus</span>
+          <strong>{focusLabel}</strong>
+        </div>
+        <div>
+          <span className="nn-flashcard-study-micro-status__label">Confidence logged</span>
+          <strong>{ratedSession}</strong>
+        </div>
+        <div>
+          <span className="nn-flashcard-study-micro-status__label">Remaining</span>
+          <strong>{remainingCards}</strong>
+        </div>
+      </section>
 
       {/* MAIN CARD */}
       <FlashcardStudyQuestionStack
@@ -466,156 +487,23 @@ export function ActiveStudySession({
             </div>
           ) : null
         }
-        rail={
-          <div className="nn-flashcard-rail-panel flex flex-col gap-3 p-1">
-            <header className="flex flex-wrap items-center justify-between gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,transparent)] pb-3">
-              <span className="nn-premium-hero-panel__tag">Study pulse</span>
-              <span className="nn-premium-hero-panel__live">Live</span>
-            </header>
-
-            <div className="nn-premium-hero-stats nn-premium-hero-stats--rail gap-2">
-              <div className="nn-premium-hero-stat nn-premium-hero-stat--readiness">
-                <Target className="nn-premium-hero-stat__glyph" aria-hidden />
-                <span className="nn-premium-hero-stat__label">Session readiness</span>
-                <span className="nn-premium-hero-stat__value">{readinessLabel}%</span>
-              </div>
-              <div className="nn-premium-hero-stat nn-premium-hero-stat--streak">
-                <Flame className="nn-premium-hero-stat__glyph" aria-hidden />
-                <span className="nn-premium-hero-stat__label">Ratings logged</span>
-                <span className="nn-premium-hero-stat__value">{ratedSession}</span>
-              </div>
-            </div>
-
-            <div className="nn-progress-track-semantic nn-progress-track-semantic--xs" role="presentation">
-              <div
-                className="nn-progress-fill-semantic-readiness nn-progress-fill-reveal motion-reduce:transition-none transition-[width] duration-500 ease-out"
-                style={{ width: `${readinessLabel}%` }}
-              />
-            </div>
-
-            <dl className="space-y-2 text-xs text-[var(--semantic-text-secondary)]">
-              <div className="flex justify-between gap-2">
-                <dt className="font-medium text-[var(--semantic-text-muted)]">Queue</dt>
-                <dd className="tabular-nums text-[var(--semantic-text-primary)]">
-                  {index + 1} / {sessionCards.length}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-2">
-                <dt className="font-medium text-[var(--semantic-text-muted)]">Remaining</dt>
-                <dd className="tabular-nums text-[var(--semantic-text-primary)]">{remainingCards}</dd>
-              </div>
-              {sessionMode === "test" ? (
-                <div className="flex justify-between gap-2">
-                  <dt className="flex items-center gap-1 font-medium text-[var(--semantic-text-muted)]">
-                    <Clock className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
-                    Elapsed
-                  </dt>
-                  <dd className="font-mono tabular-nums text-[var(--semantic-text-primary)]">{formatElapsed(elapsed)}</dd>
-                </div>
-              ) : null}
-            </dl>
-
-            <div className="nn-flashcard-rail-tile rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-1)_16%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_92%,var(--semantic-panel-muted))] px-3 py-2.5">
-              <div className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--semantic-text-muted)]">
-                Confidence mix
-              </div>
-              <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[11px] tabular-nums">
-                <span className="text-[color-mix(in_srgb,var(--semantic-danger)_85%,var(--semantic-text-secondary))]">
-                  {ratingTally.again} again
-                </span>
-                <span className="text-[color-mix(in_srgb,var(--semantic-warning)_75%,var(--semantic-text-secondary))]">
-                  {ratingTally.hard} hard
-                </span>
-                <span className="text-[color-mix(in_srgb,var(--semantic-success)_80%,var(--semantic-text-secondary))]">
-                  {ratingTally.good} good
-                </span>
-                <span className="text-[color-mix(in_srgb,var(--semantic-brand)_80%,var(--semantic-text-secondary))]">
-                  {ratingTally.easy} easy
-                </span>
-              </div>
-            </div>
-
-            <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_35%,var(--semantic-surface))] px-3 py-2.5 text-[11px] leading-snug text-[var(--semantic-text-secondary)]">
-              <span className="font-semibold text-[var(--semantic-text-primary)]">Spaced repetition · </span>
-              Use Incorrect / Unsure / Known so weak cards surface again in your review queue.
-            </div>
-
-            {header.categoriesLabel?.trim() ? (
-              <p className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_40%,var(--semantic-surface))] px-3 py-2 text-[11px] leading-snug text-[var(--semantic-text-secondary)]">
-                <span className="font-semibold text-[var(--semantic-text-primary)]">Focus · </span>
-                {header.categoriesLabel}
-              </p>
-            ) : null}
-
-            {revealed && (current.lessonHref || current.practiceTopicHref || current.practiceTestsTopicHref) ? (
-              <div className="space-y-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,transparent)] pt-3">
-                <div className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--semantic-text-muted)]">
-                  Study shortcuts
-                </div>
-                <div className="flex flex-col gap-2">
-                  {current.lessonHref ? (
-                    <div className="nn-flashcard-rail-tile rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_94%,var(--semantic-panel-muted))] px-3 py-2 text-[11px] leading-snug">
-                      <div className="text-[10px] font-semibold uppercase text-[var(--semantic-text-muted)]">
-                        {t("learner.qbank.ui.relatedLesson")}
-                      </div>
-                      <Link
-                        href={current.lessonHref}
-                        data-testid="active-study-review-lesson"
-                        className="mt-1 inline-block font-medium text-[var(--semantic-brand)] underline underline-offset-2"
-                      >
-                        {current.lessonTitle?.trim() || t("learner.studyLoop.reviewLessonCta")}
-                      </Link>
-                    </div>
-                  ) : null}
-                  {current.practiceTestsTopicHref ? (
-                    <div className="nn-flashcard-rail-tile rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_94%,var(--semantic-panel-muted))] px-3 py-2 text-[11px] leading-snug">
-                      <div className="text-[10px] font-semibold uppercase text-[var(--semantic-text-muted)]">
-                        {t("learner.studyLoop.topicPracticeTestsCta")}
-                      </div>
-                      <Link
-                        href={current.practiceTestsTopicHref}
-                        data-testid="active-study-practice-tests-topic"
-                        className="mt-1 inline-block font-medium text-[var(--semantic-chart-2)] underline underline-offset-2"
-                      >
-                        {t("learner.studyLoop.practiceQuestionsThisTopic")}
-                      </Link>
-                    </div>
-                  ) : null}
-                  {current.practiceTopicHref ? (
-                    <div className="nn-flashcard-rail-tile rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-surface)_94%,var(--semantic-panel-muted))] px-3 py-2 text-[11px] leading-snug">
-                      <div className="text-[10px] font-semibold uppercase text-[var(--semantic-text-muted)]">
-                        {t("learner.studyLoop.practiceTopic")}
-                      </div>
-                      <Link href={current.practiceTopicHref} className="mt-1 inline-block font-medium text-[var(--semantic-info)] underline underline-offset-2">
-                        {t("learner.qbank.ui.topicDrillSameCode")}
-                      </Link>
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            ) : null}
-
-            <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] px-3 py-2.5">
-              <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-                <Keyboard className="h-3.5 w-3.5" aria-hidden />
-                Shortcuts
-              </div>
-              <ul className="space-y-1.5 text-[11px] leading-relaxed text-[var(--semantic-text-secondary)]">
-                <li>
-                  <kbd className="nn-flashcard-kbd">Space</kbd> or <kbd className="nn-flashcard-kbd">Enter</kbd> reveal
-                </li>
-                <li>
-                  <kbd className="nn-flashcard-kbd">1</kbd>–<kbd className="nn-flashcard-kbd">4</kbd> rate: Again / Hard / Good / Easy
-                </li>
-                <li>
-                  <kbd className="nn-flashcard-kbd">←</kbd> / <kbd className="nn-flashcard-kbd">→</kbd> navigate
-                </li>
-              </ul>
-            </div>
-          </div>
-        }
         mainFooter={
           <>
+            <div className="nn-flashcard-study-support-strip" data-nn-flashcard-support-strip>
+              <div>
+                <span className="font-semibold text-[var(--semantic-text-primary)]">Spaced repetition</span>
+                <span className="text-[var(--semantic-text-secondary)]">
+                  Rate confidence so weak concepts resurface without turning this into a dashboard.
+                </span>
+              </div>
+              <div className="hidden items-center gap-2 text-[11px] text-[var(--semantic-text-muted)] sm:flex">
+                <Keyboard className="h-3.5 w-3.5" aria-hidden />
+                <span><kbd className="nn-flashcard-kbd">1</kbd> Need repetition</span>
+                <span><kbd className="nn-flashcard-kbd">2</kbd> Unsure</span>
+                <span><kbd className="nn-flashcard-kbd">3</kbd> Got it</span>
+              </div>
+            </div>
+
             {revealed && enableLocalStudyPins && current?.id ? (
               <div
                 className="nn-flashcard-bookmark-controls flex flex-wrap gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3"
@@ -660,46 +548,36 @@ export function ActiveStudySession({
             ) : null}
 
             {revealed ? (
-              <div className="nn-flashcard-confidence-controls grid grid-cols-2 gap-2 sm:grid-cols-4" data-nn-premium-flashcard-confidence>
+              <div className="nn-flashcard-confidence-controls grid grid-cols-1 gap-2 sm:grid-cols-3" data-nn-premium-flashcard-confidence>
                 <button
                   type="button"
                   data-nn-flashcard-rating="again"
-                  aria-label="Again — needs more review (key 1)"
+                  aria-label="Need repetition — needs more review (key 1)"
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-danger)_14%,var(--semantic-surface))]"
                   onClick={() => submitRating("again")}
                   disabled={saving}
                 >
-                  <XCircle className="h-4 w-4 shrink-0" aria-hidden /> Again
+                  <XCircle className="h-4 w-4 shrink-0" aria-hidden /> Need repetition
                 </button>
                 <button
                   type="button"
                   data-nn-flashcard-rating="hard"
-                  aria-label="Hard — struggled (key 2)"
+                  aria-label="Unsure — struggled (key 2)"
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))]"
                   onClick={() => submitRating("hard")}
                   disabled={saving}
                 >
-                  <RefreshCw className="h-4 w-4 shrink-0" aria-hidden /> Hard
+                  <RefreshCw className="h-4 w-4 shrink-0" aria-hidden /> Unsure
                 </button>
                 <button
                   type="button"
                   data-nn-flashcard-rating="good"
-                  aria-label="Good — recalled with effort (key 3)"
+                  aria-label="Got it — recalled with effort (key 3)"
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-success)_16%,var(--semantic-surface))]"
                   onClick={() => submitRating("good")}
                   disabled={saving}
                 >
-                  <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden /> Good
-                </button>
-                <button
-                  type="button"
-                  data-nn-flashcard-rating="easy"
-                  aria-label="Easy — recalled instantly (key 4)"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))]"
-                  onClick={() => submitRating("easy")}
-                  disabled={saving}
-                >
-                  <Star className="h-4 w-4 shrink-0" aria-hidden /> Easy
+                  <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden /> Got it
                 </button>
               </div>
             ) : null}

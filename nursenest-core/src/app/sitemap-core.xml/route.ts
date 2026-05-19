@@ -61,15 +61,13 @@ export async function GET(request: Request): Promise<Response> {
   let xml: string;
 
   try {
-    const { listBlogSitemapEntriesSafe } = await import("@/lib/seo/sitemap-blog-xml");
-
-    const [coreUrls, blogEntries, pathwayExamOwnedUrls] = await Promise.all([
+    const [coreUrls, pathwayExamOwnedUrls] = await Promise.all([
       collectCoreUrls(origin, {
+        productionSafeStatic: true,
         omitPathwayLessonSeoUrls: true,
         omitLocalizedMarketingUrls: true,
         omitExamPathwayAndTopicProgrammaticUrls: true,
       }),
-      listBlogSitemapEntriesSafe(),
       collectExamPathwayUrls(origin),
     ]);
     const pathwayExamOwned = new Set(pathwayExamOwnedUrls.map((u) => normalizeSitemapLoc(u)));
@@ -77,7 +75,7 @@ export async function GET(request: Request): Promise<Response> {
       (u) => !pathwayExamOwned.has(normalizeSitemapLoc(u)) && !isChildSegmentOwnedCoreUrl(u, origin),
     );
 
-    const coreWithoutBlog = excludeAbsoluteUrlsMatchingBlogSitemapEntries(coreUrlsWithoutPathwayExamOverlap, blogEntries);
+    const coreWithoutBlog = excludeAbsoluteUrlsMatchingBlogSitemapEntries(coreUrlsWithoutPathwayExamOverlap, []);
 
     const merged: SitemapUrlEntry[] = mergeCoreUrlsWithBlogEntries(coreWithoutBlog, []);
     const filtered = filterPublicSitemapEntries(merged, origin);
