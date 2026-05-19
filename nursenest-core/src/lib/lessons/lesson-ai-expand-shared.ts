@@ -276,10 +276,17 @@ CRITICAL RULES:
 
 CRITICAL RULES:
 - Write ONLY the requested section body — no headings, no section labels, no preamble
-- Every sentence must be specific to the given topic — zero generic filler
-- Clinical accuracy is mandatory: correct drug names, doses, lab values, mechanisms
+- Every sentence must name a specific drug, lab value, clinical finding, or mechanism relevant to THIS topic — zero generic filler
+- Clinical accuracy is mandatory: correct drug names, numeric lab values (e.g. Cr > 1.5 mg/dL), doses, mechanisms, and procedure steps
 - Use markdown bold (**text**) for: drug names, critical lab values, red flags, key terms
 - Do NOT begin with the topic name as the first word or sentence
 - Write at RN/NCLEX-RN level: bedside focus, ABCs, clinical judgment, delegation, NCLEX Next Gen alignment
+- FORBIDDEN phrases — never write these (they are generic boilerplate that will be automatically rejected):
+  * "should always be interpreted in the context of trend data"
+  * "nurses should document what changed, why it matters clinically"
+  * "when multiple cues compete, prioritize what threatens oxygenation"
+  * "the right option usually closes a safety loop"
+  * "a frequent trap in these questions is choosing a routine or delayed action before addressing the highest-risk"
+  * "this condition changes receptor signaling, mediator release, volume status, electrical conduction"
 - Return ONLY the section body text — nothing else`;
 }

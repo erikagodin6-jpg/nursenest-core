@@ -23,8 +23,31 @@ export const RN_EXPAND_REQUIRED_SECTION_KINDS = [
 
 export type RNExpandRequiredSectionKind = (typeof RN_EXPAND_REQUIRED_SECTION_KINDS)[number];
 
-export const RN_EXPAND_SECTION_WORD_MIN = 150;
-export const RN_EXPAND_TOTAL_WORD_MIN = 1200;
+export const RN_EXPAND_SECTION_WORD_MIN = 200;
+export const RN_EXPAND_TOTAL_WORD_MIN = 1800;
+
+/**
+ * Phrases that indicate a section body is still generic template content rather than
+ * topic-specific clinical writing. Any section containing one of these is flagged as
+ * needing regeneration even if it meets the word count threshold.
+ */
+export const RN_EXPAND_GENERIC_REJECTION_PHRASES: ReadonlyArray<string> = [
+  "should always be interpreted in the context of trend data",
+  "nurses should document what changed, why it matters clinically",
+  "which red flags require rapid response, emergent treatment, or higher-level monitoring",
+  "this condition changes receptor signaling, mediator release, volume status",
+  "subtle symptom progression is often an early clue",
+  "when multiple cues compete, prioritize what threatens oxygenation",
+  "the right option usually closes a safety loop",
+  "a frequent trap in these questions is choosing a routine or delayed action",
+  "this topic is clinically important because it requires early recognition",
+];
+
+/** Returns true when the body contains generic template boilerplate that should be regenerated. */
+export function bodyIsGenericBoilerplate(body: string): boolean {
+  const lower = (body ?? "").toLowerCase();
+  return RN_EXPAND_GENERIC_REJECTION_PHRASES.some((phrase) => lower.includes(phrase.toLowerCase()));
+}
 export const RN_EXPAND_FLASHCARD_PROMPT_MIN = 8;
 export const RN_EXPAND_FLASHCARD_PROMPT_STRING_MIN = 10;
 
@@ -271,7 +294,16 @@ export function validateExpandedLesson(lesson: LessonLike, options?: ExpandedLes
     if (w < RN_EXPAND_SECTION_WORD_MIN) {
       thinSections.push({ kind, words: w });
     }
-    missingClinicalRequirements.push(...evalClinical(kind, sec.body ?? "", options));
+    // Flag sections containing generic boilerplate as clinical failures — they need regeneration
+    // even when word count looks sufficient.
+    if (bodyIsGenericBoilerplate(sec.body ?? "")) {
+      missingClinicalRequirements.push({
+        kind,
+        requirement: "body contains generic template boilerplate — regenerate with topic-specific content",
+      });
+    } else {
+      missingClinicalRequirements.push(...evalClinical(kind, sec.body ?? "", options));
+    }
   }
 
   const { prompts, errors: flashErrors } = extractLinkedFlashcardPromptStrings(lesson);
