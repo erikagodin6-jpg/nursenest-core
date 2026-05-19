@@ -1,8 +1,6 @@
-name: Build GHCR image from nursenest-core
+name: Build GHCR image from nursenest-core (manual legacy)
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -10,64 +8,12 @@ permissions:
   packages: write
 
 concurrency:
-  group: nursenest-core-ghcr-live
+  group: nursenest-core-ghcr-live-legacy
   cancel-in-progress: true
 
-env:
-  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/nursenest
-  DIGITALOCEAN_APP_ID: ${{ vars.DIGITALOCEAN_APP_ID || 'd6a4b825-4d70-4dd4-8d71-04b354d36f43' }}
-  DIGITALOCEAN_ACCESS_TOKEN_PRESENT: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN != '' }}
-
 jobs:
-  build:
+  disabled:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push image used by DigitalOcean
-        run: |
-          set -euxo pipefail
-          SHORT_SHA="${GITHUB_SHA::7}"
-          docker build \
-            --build-arg NN_BUILD_COMMIT="${GITHUB_SHA}" \
-            --build-arg NN_BUILD_BRANCH="${GITHUB_REF_NAME}" \
-            --build-arg SOURCE_COMMIT="${GITHUB_SHA}" \
-            --build-arg SOURCE_VERSION="sha-${SHORT_SHA}" \
-            --build-arg SOURCE_BRANCH="${GITHUB_REF_NAME}" \
-            --build-arg GITHUB_SHA="${GITHUB_SHA}" \
-            --build-arg GITHUB_REF_NAME="${GITHUB_REF_NAME}" \
-            --build-arg DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
-            --build-arg AUTH_SECRET="build-time-placeholder" \
-            --build-arg BUILD_WEBPACK_PARALLELISM="1" \
-            --build-arg NN_FORCE_SINGLE_BUILD_WORKER="true" \
-            --build-arg NN_TIMED_INCLUDE_NPM_PRUNE="1" \
-            -t "${IMAGE_NAME}:latest" \
-            -t "${IMAGE_NAME}:sha-${SHORT_SHA}" \
-            .
-          docker push "${IMAGE_NAME}:latest"
-          docker push "${IMAGE_NAME}:sha-${SHORT_SHA}"
-
-      - name: Install doctl
-        if: env.DIGITALOCEAN_ACCESS_TOKEN_PRESENT == 'true'
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      - name: Trigger DigitalOcean deployment
-        if: env.DIGITALOCEAN_ACCESS_TOKEN_PRESENT == 'true'
-        run: doctl apps create-deployment "${DIGITALOCEAN_APP_ID}"
-
-      - name: Explain skipped DigitalOcean deployment
-        if: env.DIGITALOCEAN_ACCESS_TOKEN_PRESENT != 'true'
-        run: |
-          echo "DigitalOcean deployment was not triggered because DIGITALOCEAN_ACCESS_TOKEN is not configured in this repository."
-          echo "The image was still pushed to GHCR. Manually redeploy the DigitalOcean app after the image push completes."
+      - name: Legacy workflow disabled
+        run: echo "Use build-and-push-ghcr.yml for the production GHCR to DigitalOcean path."
