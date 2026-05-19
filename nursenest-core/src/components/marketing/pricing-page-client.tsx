@@ -171,6 +171,84 @@ const PLAN_CARD_BULLET_KEYS = [
   "pages.pricing.planCard.bullet4",
 ] as const;
 
+const PRICING_AUDIENCE_SEGMENTS = [
+  {
+    title: "Individual Providers",
+    body: "Independent clinicians, tutors, and educators who need exam-aligned learning tools, clinical modules, and focused readiness support.",
+    bullets: ["Single-seat access", "Clinical readiness modules", "Flexible learner pathways"],
+  },
+  {
+    title: "Clinics",
+    body: "Small teams that want structured onboarding, consistent clinical refreshers, and shared readiness language across providers or learners.",
+    bullets: ["Multi-provider onboarding", "Role-aware study pathways", "Team implementation support"],
+  },
+  {
+    title: "Healthcare Organizations",
+    body: "Organizations supporting cohorts, transition-to-practice programs, remediation, or clinical education initiatives at scale.",
+    bullets: ["Cohort rollout planning", "Analytics and reporting options", "Enterprise support workflows"],
+  },
+  {
+    title: "Institutional / Enterprise Pricing",
+    body: "Custom contracts for schools, programs, and healthcare systems that need scalable licensing, enterprise support, reporting, and integration planning.",
+    bullets: ["Custom contracts", "Scalable licensing", "API/EHR integration planning", "Advanced analytics and reporting"],
+  },
+] as const;
+
+function PricingAudienceSection() {
+  return (
+    <section
+      aria-labelledby="pricing-audience-heading"
+      className="rounded-[2rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--semantic-shadow-soft)] sm:p-8"
+    >
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--semantic-brand)]">
+            Pricing pathways
+          </p>
+          <h2 id="pricing-audience-heading" className="mt-3 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">
+            Plans for individuals, clinics, and institutions
+          </h2>
+          <p className="mt-4 text-sm leading-7 text-[var(--theme-body-text)]">
+            Choose self-serve access for individual study, or start a sales conversation for multi-provider onboarding,
+            enterprise support, analytics, reporting, and integration planning.
+          </p>
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Link href="/for-institutions" className={MARKETING_PRIMARY_CTA_CLASS}>
+            Book a Demo
+          </Link>
+          <Link href="/contact" className={MARKETING_SECONDARY_CTA_CLASS}>
+            Contact Sales
+          </Link>
+          <Link href="#pricing-plans-heading" className={MARKETING_TERTIARY_LINK_CLASS}>
+            Get Started
+          </Link>
+        </div>
+      </div>
+
+      <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {PRICING_AUDIENCE_SEGMENTS.map((segment) => (
+          <article
+            key={segment.title}
+            className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface-alt)_62%,var(--semantic-surface))] p-5"
+          >
+            <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">{segment.title}</h3>
+            <p className="mt-3 text-sm leading-6 text-[var(--theme-body-text)]">{segment.body}</p>
+            <ul className="mt-4 space-y-2 text-sm leading-6 text-[var(--semantic-text-secondary)]">
+              {segment.bullets.map((bullet) => (
+                <li key={bullet} className="flex gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function checkoutErrorUserMessage(
   parsed: ParsedCheckoutErrorBody,
   httpStatus: number,
@@ -1426,6 +1504,8 @@ export function PricingPageClient({
       </div>
 
       <PricingConversionClarity />
+
+      <PricingAudienceSection />
 
       <PricingClinicalReadinessEcosystem />
 

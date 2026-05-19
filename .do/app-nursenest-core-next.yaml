@@ -3,8 +3,10 @@ region: tor
 domains:
   - domain: nursenest.ca
     type: PRIMARY
+    zone: nursenest.ca
   - domain: www.nursenest.ca
     type: ALIAS
+    zone: nursenest.ca
 ingress:
   rules:
     - component:

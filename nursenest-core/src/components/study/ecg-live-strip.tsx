@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { Minus, Plus, ZoomIn } from "lucide-react";
 import { generateEcgWaveform, type EcgStripMediaConfig } from "@/lib/ecg-module/ecg-waveform-generator";
 
@@ -62,6 +62,9 @@ export function EcgLiveStrip({
   const [paused, setPaused] = useState(false);
   const [zoom, setZoom] = useState<1 | 1.5 | 2>(1);
   const waveform = useMemo(() => generateEcgWaveform(config), [config]);
+  const instanceId = useId().replace(/:/g, "");
+  const minorPatternId = `ecg-minor-${instanceId}-${config.rhythmKey}`;
+  const majorPatternId = `ecg-major-${instanceId}-${config.rhythmKey}`;
 
   useEffect(() => {
     const node = rootRef.current;
@@ -145,15 +148,15 @@ export function EcgLiveStrip({
             aria-label={`${title}: ${config.rhythmKey.replace(/_/g, " ")}`}
           >
             <defs>
-              <pattern id={`ecg-minor-${config.rhythmKey}`} width={waveform.grid.minor} height={waveform.grid.minor} patternUnits="userSpaceOnUse">
+              <pattern id={minorPatternId} width={waveform.grid.minor} height={waveform.grid.minor} patternUnits="userSpaceOnUse">
                 <path d={`M ${waveform.grid.minor} 0 L 0 0 0 ${waveform.grid.minor}`} fill="none" stroke="#f7b4b4" strokeWidth="0.6" />
               </pattern>
-              <pattern id={`ecg-major-${config.rhythmKey}`} width={waveform.grid.major} height={waveform.grid.major} patternUnits="userSpaceOnUse">
-                <rect width={waveform.grid.major} height={waveform.grid.major} fill={`url(#ecg-minor-${config.rhythmKey})`} />
+              <pattern id={majorPatternId} width={waveform.grid.major} height={waveform.grid.major} patternUnits="userSpaceOnUse">
+                <rect width={waveform.grid.major} height={waveform.grid.major} fill={`url(#${minorPatternId})`} />
                 <path d={`M ${waveform.grid.major} 0 L 0 0 0 ${waveform.grid.major}`} fill="none" stroke="#ee7777" strokeWidth="1" />
               </pattern>
             </defs>
-            <rect width="100%" height="100%" fill={`url(#ecg-major-${config.rhythmKey})`} />
+            <rect width="100%" height="100%" fill={`url(#${majorPatternId})`} />
 
             {/* waveform */}
             <g className={animate ? "animate-[ecg-scroll_2.8s_linear_infinite]" : ""}>

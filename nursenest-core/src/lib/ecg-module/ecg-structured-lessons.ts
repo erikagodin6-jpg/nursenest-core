@@ -1,4 +1,5 @@
 import type { EcgLevel } from "@/lib/ecg-module/ecg-module-config";
+import { defaultEcgStripConfigForRhythm, type EcgStripMediaConfig } from "@/lib/ecg-module/ecg-waveform-generator";
 
 export type EcgStructuredLesson = {
   id: string;
@@ -328,6 +329,31 @@ export const ECG_STRUCTURED_LESSONS: readonly EcgStructuredLesson[] = [
   },
 ] as const;
 
+const ECG_STRUCTURED_LESSON_STRIP_RHYTHMS: Record<string, string> = {
+  "how-to-read-an-ecg-strip": "normal_sinus_rhythm",
+  "normal-sinus-rhythm": "normal_sinus_rhythm",
+  "sinus-bradycardia": "sinus_bradycardia",
+  "sinus-tachycardia": "sinus_tachycardia",
+  "atrial-fibrillation": "atrial_fibrillation",
+  "atrial-flutter": "atrial_flutter",
+  "supraventricular-tachycardia": "svt",
+  "first-degree-av-block": "first_degree_av_block",
+  "mobitz-i-wenckebach": "second_degree_type_i_av_block",
+  "mobitz-ii": "second_degree_type_ii_av_block",
+  "third-degree-heart-block": "third_degree_av_block",
+  "ventricular-tachycardia": "ventricular_tachycardia",
+  "torsades-de-pointes": "torsades_de_pointes",
+  "ventricular-fibrillation": "ventricular_fibrillation",
+  "stemi-localization-advanced": "stemi_pattern",
+  "wide-complex-tachycardia-differentiation": "ventricular_tachycardia",
+  "pacemaker-interpretation": "paced_rhythm",
+};
+
 export function getEcgStructuredLessons(level: EcgLevel): readonly EcgStructuredLesson[] {
   return ECG_STRUCTURED_LESSONS.filter((lesson) => lesson.level === level);
+}
+
+export function getEcgStructuredLessonStripConfig(lesson: EcgStructuredLesson): EcgStripMediaConfig | null {
+  const rhythmKey = ECG_STRUCTURED_LESSON_STRIP_RHYTHMS[lesson.id];
+  return rhythmKey ? defaultEcgStripConfigForRhythm(rhythmKey) : null;
 }

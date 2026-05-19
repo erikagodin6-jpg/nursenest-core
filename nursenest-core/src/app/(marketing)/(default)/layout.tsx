@@ -161,6 +161,7 @@ function marketingDefaultLayoutStaticShellForHome({
                 <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
                   {children}
                 </MarketingDefaultMainMotionSlot>
+                <SiteFooter serverHasStaffSession={false} />
               </MarketingDefaultLayoutChromeFailsafeShell>
             </MarketingHeaderGlobalRegionServerBridge>
           </MarketingFeedbackShell>
@@ -496,6 +497,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                     <MarketingDefaultMainMotionSlot serverNarrowViewportHint={failsafeNarrowHint}>
                       {children}
                     </MarketingDefaultMainMotionSlot>
+                    <SiteFooter serverHasStaffSession={false} />
                   </MarketingDefaultLayoutChromeFailsafeShell>
                 </MarketingHeaderGlobalRegionServerBridge>
               </MarketingFeedbackShell>
