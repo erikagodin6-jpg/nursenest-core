@@ -64,16 +64,16 @@ const LEVEL_ACCENTS = {
 
 export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto flex w-full max-w-6xl flex-col gap-14 px-4 py-12 sm:px-6 lg:px-8">
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section
-        className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_38%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-8"
+        className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_38%,var(--semantic-surface))] p-7 shadow-[var(--semantic-shadow-soft)] sm:p-10"
         aria-labelledby="ecg-hub-hero-heading"
       >
         <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_20%_20%,var(--semantic-info)_0px,transparent_55%),radial-gradient(circle_at_80%_0%,var(--semantic-chart-3)_0px,transparent_50%)]" />
         <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-start">
-          <div className="min-w-0 space-y-4">
+          <div className="min-w-0 space-y-6">
             <div className="flex flex-wrap items-center gap-2">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-info-soft)_55%,var(--semantic-surface))] text-[var(--semantic-info)]">
                 <Activity className="h-5 w-5" aria-hidden />
@@ -103,7 +103,7 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
               </Link>
             </div>
             {/* Feature chips */}
-            <ul className="flex flex-wrap gap-2 pt-1" aria-label="Module features">
+            <ul className="flex flex-wrap gap-2 pt-3" aria-label="Module features">
               {[
                 "Answers hidden until submission",
                 "7-step guided analysis",
@@ -135,7 +135,7 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
 
       {/* ── Curriculum Roadmap ────────────────────────────────────────────── */}
       <section aria-labelledby="ecg-curriculum-heading">
-        <div className="mb-6">
+        <div className="mb-9">
           <h2 id="ecg-curriculum-heading" className="text-xl font-semibold text-[var(--semantic-text-primary)] sm:text-2xl">
             Curriculum Roadmap
           </h2>
@@ -144,7 +144,7 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
           </p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           {ECG_CURRICULUM.map((currLevel) => {
             const accent = LEVEL_ACCENTS[currLevel.level];
             const Icon = accent.icon;
@@ -152,11 +152,11 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
             return (
               <div
                 key={currLevel.id}
-                className={`rounded-2xl border ${accent.border} ${accent.bg} p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6`}
+                className={`rounded-2xl border ${accent.border} ${accent.bg} p-6 shadow-[var(--semantic-shadow-soft)] sm:p-9`}
                 data-testid={`ecg-curriculum-level-${currLevel.level}`}
               >
                 {/* Level header */}
-                <div className="flex items-start justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
+                <div className="flex items-start justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-6">
                   <div className="min-w-0">
                     <p className={`text-[11px] font-bold uppercase tracking-wide ${accent.eyebrowColor}`}>
                       {currLevel.eyebrow}
@@ -177,11 +177,11 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
                 </div>
 
                 {/* Topics covered */}
-                <div className="mt-4">
-                  <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                <div className="mt-7">
+                  <p className="mb-3 text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
                     Topics covered
                   </p>
-                  <ul className="flex flex-wrap gap-1.5" aria-label={`Level ${currLevel.level} topics`}>
+                  <ul className="flex flex-wrap gap-2" aria-label={`Level ${currLevel.level} topics`}>
                     {currLevel.units.map((unit) => (
                       <li
                         key={unit.id}
@@ -194,7 +194,7 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
                 </div>
 
                 {/* CTA */}
-                <div className="mt-5 flex flex-wrap items-center gap-3">
+                <div className="mt-8 flex flex-wrap items-center gap-3">
                   <Link
                     href={currLevel.startHref}
                     className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[var(--role-cta)] px-5 text-sm font-semibold text-[var(--role-cta-foreground)] shadow-[0_2px_8px_var(--role-cta-shadow)]"
@@ -234,12 +234,12 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
 
       {/* ── Pediatric ECG Lane ───────────────────────────────────────────── */}
       <section
-        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_04%,var(--semantic-surface))] p-5 sm:p-6"
+        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_04%,var(--semantic-surface))] p-7 sm:p-10"
         aria-labelledby="ecg-pediatric-heading"
         data-testid="ecg-pediatric-lane-card"
       >
         <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0 flex-1 space-y-3">
+          <div className="min-w-0 flex-1 space-y-5">
             <div className="flex items-center gap-2">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_12%,var(--semantic-surface))] text-[color-mix(in_srgb,var(--semantic-chart-3)_90%,var(--semantic-text-primary))]">
                 <Baby className="h-4 w-4" aria-hidden />
@@ -260,7 +260,7 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
               why it must not be over-escalated.
             </p>
             <ul
-              className="flex flex-wrap gap-1.5"
+              className="flex flex-wrap gap-2"
               aria-label="Pediatric ECG topics covered"
             >
               {[
@@ -279,7 +279,7 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
                 </li>
               ))}
             </ul>
-            <div className="flex flex-wrap items-center gap-3 pt-1">
+            <div className="flex flex-wrap items-center gap-3 pt-3">
               <Link
                 href="/modules/ecg/pediatric"
                 className="inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[color-mix(in_srgb,var(--semantic-chart-3)_85%,var(--semantic-text-primary))] px-5 text-sm font-semibold text-white shadow-sm"
@@ -302,13 +302,13 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
 
       {/* ── How This Module Works ────────────────────────────────────────── */}
       <section
-        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_04%,var(--semantic-surface))] p-5 sm:p-6"
+        className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_04%,var(--semantic-surface))] p-7 sm:p-10"
         aria-labelledby="ecg-how-heading"
       >
         <h2 id="ecg-how-heading" className="text-lg font-semibold text-[var(--semantic-text-primary)]">
           How this module teaches ECG
         </h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {[
             {
               step: "1",
@@ -333,7 +333,7 @@ export function EcgModuleHub({ t }: { t: LearnerMarketingT }) {
           ].map((card) => (
             <div
               key={card.step}
-              className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-4"
+              className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-6"
             >
               <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-success)_15%,var(--semantic-surface))] text-sm font-bold text-[var(--semantic-success)]">
                 {card.step}
