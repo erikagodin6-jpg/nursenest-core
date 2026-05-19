@@ -1,15 +1,27 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+/**
+ * nclex-exam-layout.tsx
+ *
+ * Fixed-viewport exam layout components. Architecture contract:
+ *   - .nn-nclex-exam-page: position:fixed; inset:0; display:flex; flex-direction:column; overflow:hidden
+ *   - Top bar + Bottom bar: flex-shrink:0 (never collapse)
+ *   - .nn-nclex-exam-body: flex:1; min-height:0; overflow:hidden
+ *   - Question area: flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden
+ *   - Answer list: flex:1; min-height:0; overflow:hidden (cards share space via flex:1)
+ *   - Answer cards: flex:1; flex-basis:0; min-height:2.25rem; max-height:5.5rem
+ *   - NO inline styles that fight the CSS — rely entirely on class names
+ */
+
+import { useState } from "react";
 import type { ReactNode } from "react";
 import { NclexCatTopBar, NclexPracticeTopBar, NclexEndTestModal } from "@/components/exam/nclex-cat-top-bar";
 import { NclexBottomBar, NclexPracticeBottomBar } from "@/components/exam/nclex-bottom-bar";
 import {
   NclexQuestionTypePanel,
   inferNclexQuestionType,
-  type NclexQuestionType,
 } from "@/components/exam/nclex-question-type-panel";
-import { NclexRationalePanel, buildNclexDistractors } from "@/components/exam/nclex-rationale-panel";
+import { NclexRationalePanel } from "@/components/exam/nclex-rationale-panel";
 import type { NclexRationalePanelStatus } from "@/components/exam/nclex-rationale-panel";
 import { NclexCalculatorModal } from "@/components/exam/nclex-calculator-modal";
 import { NclexNotesDrawer } from "@/components/exam/nclex-notes-drawer";
@@ -19,9 +31,8 @@ import { NclexNotesDrawer } from "@/components/exam/nclex-notes-drawer";
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type NclexCatExamLayoutProps = {
-  /** 1-based */
-  questionNumber: number;
-  totalQuestions: number | null;
+  questionNumber: number;          // 1-based
+  totalQuestions: number | null;   // null = unknown length (true CAT)
   remainingSec: number | null | undefined;
   examLabel?: string;
   flagged: boolean;
@@ -32,19 +43,14 @@ export type NclexCatExamLayoutProps = {
   canGoPrev?: boolean;
   canGoNext?: boolean;
   hasAnswer: boolean;
-  /** When true the Next button submits (CAT one-question-at-a-time flow) */
   nextIsSubmit?: boolean;
   disabled?: boolean;
-  /** The question content area */
   children: ReactNode;
   questionFormat?: string | null;
   isSata?: boolean;
-  /** Show question type panel on the left */
   showTypePanel?: boolean;
-  /** Notes text per question */
   noteText?: string;
   onNoteSave?: (text: string) => void;
-  /** Loading between questions */
   transitioning?: boolean;
 };
 
@@ -78,7 +84,10 @@ export function NclexCatExamLayout({
   const questionType = inferNclexQuestionType(questionFormat, isSata);
 
   return (
-    <div className="nn-nclex-exam-page" data-nclex-cat-shell>
+    // data-nclex-shell triggers the html/body overflow:hidden CSS rule
+    <div className="nn-nclex-exam-page" data-nclex-shell="cat">
+
+      {/* ── Fixed top bar ─────────────────────────────────────────────── */}
       <NclexCatTopBar
         examLabel={examLabel}
         questionNumber={questionNumber}
@@ -92,24 +101,41 @@ export function NclexCatExamLayout({
         disabled={disabled}
       />
 
+      {/* ── Body: type-panel + question area ──────────────────────────── */}
       <div className="nn-nclex-exam-body">
         {showTypePanel && <NclexQuestionTypePanel type={questionType} />}
 
+        {/*
+          Question area is a flex column:
+            Row 1: children (stem + answer list) — fills all space
+          Loading overlay sits inside via position:relative on this div.
+        */}
         <div
-          className={`nn-nclex-question-area${transitioning ? " nn-nclex-loading-overlay-parent" : ""}`}
-          style={{ position: "relative" }}
+          className="nn-nclex-question-area nn-nclex-loading-overlay-parent"
+          style={transitioning ? { position: "relative" } : undefined}
         >
           {transitioning && (
             <div className="nn-nclex-loading-overlay" aria-live="polite" aria-label="Loading next question">
               <div className="nn-nclex-spinner" />
             </div>
           )}
-          <div className={transitioning ? "" : "nn-nclex-question-transition"}>
+          {/*
+            This inner div is a flex pass-through: flex:1 + min-height:0 + flex-column
+            so stem and answer-list (the children) remain direct flex descendants.
+            The animation class only applies opacity/transform, not layout.
+          */}
+          <div
+            className={[
+              "nn-nclex-question-inner",
+              !transitioning ? "nn-nclex-question-transition" : "",
+            ].filter(Boolean).join(" ")}
+          >
             {children}
           </div>
         </div>
       </div>
 
+      {/* ── Fixed bottom bar ──────────────────────────────────────────── */}
       <NclexBottomBar
         canGoPrev={canGoPrev}
         canGoNext={canGoNext}
@@ -120,29 +146,22 @@ export function NclexCatExamLayout({
         onMark={onFlag}
         nextSubmits={nextIsSubmit}
         disabled={disabled}
-        primaryAction={canGoNext ? "next" : "finish"}
+        primaryAction="next"
       />
 
+      {/* ── Overlays ──────────────────────────────────────────────────── */}
       {showEndModal && (
         <NclexEndTestModal
           isCat
-          onConfirm={() => {
-            setShowEndModal(false);
-            onEndTest();
-          }}
+          onConfirm={() => { setShowEndModal(false); onEndTest(); }}
           onCancel={() => setShowEndModal(false)}
         />
       )}
-
       {showCalc && <NclexCalculatorModal onClose={() => setShowCalc(false)} />}
-
       {showNotes && (
         <NclexNotesDrawer
           initialText={noteText}
-          onSave={(text) => {
-            onNoteSave?.(text);
-            setShowNotes(false);
-          }}
+          onSave={(text) => { onNoteSave?.(text); setShowNotes(false); }}
           onClose={() => setShowNotes(false)}
         />
       )}
@@ -175,9 +194,7 @@ export type NclexPracticeExamLayoutProps = {
   questionFormat?: string | null;
   isSata?: boolean;
   showTypePanel?: boolean;
-  /** Children = the question card content */
   children: ReactNode;
-  /** Rationale data — shown in right panel after submit */
   rationaleStatus: NclexRationalePanelStatus;
   correctAnswerText?: string | null;
   correctAnswerLetter?: string | null;
@@ -234,7 +251,9 @@ export function NclexPracticeExamLayout({
   const questionType = inferNclexQuestionType(questionFormat, isSata);
 
   return (
-    <div className="nn-nclex-exam-page" data-nclex-practice-shell>
+    <div className="nn-nclex-exam-page" data-nclex-shell="practice">
+
+      {/* ── Fixed top bar ─────────────────────────────────────────────── */}
       <NclexPracticeTopBar
         questionNumber={questionNumber}
         totalQuestions={totalQuestions}
@@ -245,25 +264,39 @@ export function NclexPracticeExamLayout({
         disabled={disabled}
       />
 
+      {/* ── Body ──────────────────────────────────────────────────────── */}
       <div className="nn-nclex-exam-body">
         {showTypePanel && <NclexQuestionTypePanel type={questionType} />}
 
-        {/* Two-column practice split: question | rationale */}
-        <div className="nn-nclex-practice-split" style={{ flex: 1, minWidth: 0 }}>
+        {/* Practice split: question (flex:1) | rationale (fixed width) */}
+        <div className="nn-nclex-practice-split">
+
+          {/* Left: question content */}
           <div className="nn-nclex-practice-split__question">
             <div
-              className={`nn-nclex-question-area nn-nclex-question-area--with-rationale${transitioning ? "" : " nn-nclex-question-transition"}`}
-              style={{ flex: 1, minHeight: 0, position: "relative" }}
+              className={[
+                "nn-nclex-question-area",
+                "nn-nclex-loading-overlay-parent",
+                !transitioning ? "nn-nclex-question-transition" : "",
+              ].filter(Boolean).join(" ")}
             >
               {transitioning && (
                 <div className="nn-nclex-loading-overlay">
                   <div className="nn-nclex-spinner" />
                 </div>
               )}
-              {children}
+              <div
+                className={[
+                  "nn-nclex-question-inner",
+                  !transitioning ? "nn-nclex-question-transition" : "",
+                ].filter(Boolean).join(" ")}
+              >
+                {children}
+              </div>
             </div>
           </div>
 
+          {/* Right: rationale panel (hidden on narrow viewports via CSS) */}
           <NclexRationalePanel
             status={rationaleStatus}
             correctAnswerText={correctAnswerText}
@@ -277,6 +310,7 @@ export function NclexPracticeExamLayout({
         </div>
       </div>
 
+      {/* ── Fixed bottom bar ──────────────────────────────────────────── */}
       <NclexPracticeBottomBar
         canGoPrev={canGoPrev}
         canGoNext={canGoNext}
@@ -293,27 +327,20 @@ export function NclexPracticeExamLayout({
         isLastQuestion={isLastQuestion}
       />
 
+      {/* ── Overlays ──────────────────────────────────────────────────── */}
       {showEndModal && (
         <NclexEndTestModal
           isCat={false}
           unansweredCount={unansweredCount}
-          onConfirm={() => {
-            setShowEndModal(false);
-            onFinish();
-          }}
+          onConfirm={() => { setShowEndModal(false); onFinish(); }}
           onCancel={() => setShowEndModal(false)}
         />
       )}
-
       {showCalc && <NclexCalculatorModal onClose={() => setShowCalc(false)} />}
-
       {showNotes && (
         <NclexNotesDrawer
           initialText={noteText}
-          onSave={(text) => {
-            onNoteSave?.(text);
-            setShowNotes(false);
-          }}
+          onSave={(text) => { onNoteSave?.(text); setShowNotes(false); }}
           onClose={() => setShowNotes(false)}
         />
       )}
@@ -322,21 +349,21 @@ export function NclexPracticeExamLayout({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ANSWER CARDS — large white rounded cards matching screenshots
+// ANSWER CARDS
+// These are direct children of .nn-nclex-answer-list.
+// Each card is flex:1 flex-basis:0 so all cards share vertical space equally.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
 export type NclexAnswerCardState = "default" | "selected" | "correct" | "incorrect" | "dim";
 
+/** Wrapper list — flex column, fills remaining space, overflow:hidden */
 export function NclexAnswerList({ children }: { children: ReactNode }) {
-  return (
-    <div className="nn-nclex-answer-list" role="list">
-      {children}
-    </div>
-  );
+  return <div className="nn-nclex-answer-list">{children}</div>;
 }
 
+/** Single answer card */
 export function NclexAnswerCard({
   index,
   text,
@@ -357,22 +384,25 @@ export function NclexAnswerCard({
   onChange?: (checked: boolean) => void;
 }) {
   const letter = OPTION_LETTERS[index] ?? String(index + 1);
+  const isLocked = disabled || state === "correct" || state === "incorrect" || state === "dim";
 
   const cardClass = [
     "nn-nclex-answer-card",
-    state === "selected" ? "nn-nclex-answer-card--selected" : "",
-    state === "correct" ? "nn-nclex-answer-card--correct" : "",
+    state === "selected"  ? "nn-nclex-answer-card--selected"  : "",
+    state === "correct"   ? "nn-nclex-answer-card--correct"   : "",
     state === "incorrect" ? "nn-nclex-answer-card--incorrect" : "",
-    state === "dim" ? "nn-nclex-answer-card--dim" : "",
-    disabled || state === "correct" || state === "incorrect" || state === "dim"
-      ? "nn-nclex-answer-card--locked"
-      : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+    state === "dim"       ? "nn-nclex-answer-card--dim"       : "",
+    isLocked              ? "nn-nclex-answer-card--locked"    : "",
+  ].filter(Boolean).join(" ");
 
+  /* Radio/checkbox control circle/square */
   const controlEl = isCheckbox ? (
-    <div className={`nn-nclex-answer-card__control nn-nclex-answer-card__control--checkbox${checked || state === "correct" ? " nn-nclex-answer-card--selected" : ""}`} aria-hidden="true">
+    <div
+      className={`nn-nclex-answer-card__control nn-nclex-answer-card__control--checkbox${
+        checked || state === "correct" ? " nn-nclex-answer-card--selected" : ""
+      }`}
+      aria-hidden="true"
+    >
       {(checked || state === "correct") && (
         <svg className="nn-nclex-answer-card__control-check" viewBox="0 0 10 8">
           <polyline points="1,4 4,7 9,1" />
@@ -387,28 +417,15 @@ export function NclexAnswerCard({
     </div>
   );
 
+  /* Correctness icon */
   const statusIcon =
     state === "correct" ? (
-      <svg
-        className="nn-nclex-answer-card__status-icon"
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        aria-label="Correct"
-      >
+      <svg className="nn-nclex-answer-card__status-icon" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-label="Correct">
         <circle cx="10" cy="10" r="9" stroke="#16a34a" strokeWidth="1.5" fill="#dcfce7" />
         <polyline points="6,10 9,13 14,7" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ) : state === "incorrect" ? (
-      <svg
-        className="nn-nclex-answer-card__status-icon"
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        aria-label="Incorrect"
-      >
+      <svg className="nn-nclex-answer-card__status-icon" width="18" height="18" viewBox="0 0 20 20" fill="none" aria-label="Incorrect">
         <circle cx="10" cy="10" r="9" stroke="#dc2626" strokeWidth="1.5" fill="#fee2e2" />
         <line x1="7" y1="7" x2="13" y2="13" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" />
         <line x1="13" y1="7" x2="7" y2="13" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" />
@@ -417,11 +434,11 @@ export function NclexAnswerCard({
 
   if (isCheckbox) {
     return (
-      <label className={cardClass} role="listitem">
+      <label className={cardClass}>
         <input
           type="checkbox"
           checked={checked}
-          disabled={disabled || state === "correct" || state === "incorrect" || state === "dim"}
+          disabled={isLocked}
           onChange={(e) => onChange?.(e.target.checked)}
           className="sr-only"
         />
@@ -429,7 +446,7 @@ export function NclexAnswerCard({
         <span className="nn-nclex-answer-card__letter">{letter}</span>
         <span className="nn-nclex-answer-card__text">{text}</span>
         {statusIcon}
-        {state === "correct" && <span className="sr-only">Correct answer</span>}
+        {state === "correct"   && <span className="sr-only">Correct answer</span>}
         {state === "incorrect" && <span className="sr-only">Incorrect</span>}
       </label>
     );
@@ -439,8 +456,7 @@ export function NclexAnswerCard({
     <button
       type="button"
       className={cardClass}
-      role="listitem"
-      disabled={disabled || state === "correct" || state === "incorrect" || state === "dim"}
+      disabled={isLocked}
       onClick={onClick}
       aria-pressed={state === "selected"}
     >
@@ -448,7 +464,7 @@ export function NclexAnswerCard({
       <span className="nn-nclex-answer-card__letter">{letter}</span>
       <span className="nn-nclex-answer-card__text">{text}</span>
       {statusIcon}
-      {state === "correct" && <span className="sr-only">Correct answer</span>}
+      {state === "correct"   && <span className="sr-only">Correct answer</span>}
       {state === "incorrect" && <span className="sr-only">Incorrect</span>}
     </button>
   );
@@ -465,26 +481,21 @@ export function NclexQuestionStem({
   stem: string;
   instruction?: string | null;
 }) {
-  const parts = instruction
-    ? stem.replace(instruction, `<em class="nn-nclex-question-instruction">${instruction}</em>`)
-    : stem;
+  if (!instruction || !stem.includes(instruction)) {
+    return <p className="nn-nclex-question-stem">{stem}</p>;
+  }
 
+  const parts = stem.split(instruction);
   return (
-    <div className="nn-nclex-question-stem" role="heading" aria-level={2}>
-      {instruction ? (
-        <>
-          {stem.split(instruction).map((part, i, arr) => (
-            <span key={i}>
-              {part}
-              {i < arr.length - 1 && (
-                <em className="nn-nclex-question-instruction">{instruction}</em>
-              )}
-            </span>
-          ))}
-        </>
-      ) : (
-        stem
-      )}
-    </div>
+    <p className="nn-nclex-question-stem">
+      {parts.map((part, i) => (
+        <span key={i}>
+          {part}
+          {i < parts.length - 1 && (
+            <em className="nn-nclex-question-instruction">{instruction}</em>
+          )}
+        </span>
+      ))}
+    </p>
   );
 }

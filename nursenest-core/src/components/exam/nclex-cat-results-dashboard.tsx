@@ -287,7 +287,7 @@ export function NclexCatResultsDashboard({
   const domainScores = buildDomainScores(results);
 
   return (
-    <div className="nn-nclex-results-page">
+    <div className="nn-nclex-results-page" data-nclex-shell="results">
       {/* ── Sidebar ── */}
       <aside className="nn-nclex-results-sidebar">
         <div className="nn-nclex-results-sidebar__logo">
