@@ -28,27 +28,28 @@ type Props = {
  */
 export function PathwayHero({ eyebrow, title, subtitle, toolbar, ctas, backLink }: Props) {
   return (
-    <header className="nn-gradient-safe relative overflow-hidden rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-gradient-to-br from-[var(--hero-gradient-start)] via-[var(--semantic-surface)] to-[var(--hero-gradient-end)] p-3 shadow-[var(--semantic-shadow-soft)] sm:p-3.5">
-      <div className="relative">
+    <header className="relative overflow-hidden rounded-[2rem] border border-[var(--semantic-border-soft)] bg-white p-5 shadow-sm ring-1 ring-black/[0.015] sm:p-7 lg:p-8">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--semantic-brand)] via-[var(--semantic-info)] to-[var(--semantic-success)] opacity-75" />
+      <div className="relative max-w-4xl">
         {backLink ? (
           <Link
             href={backLink.href}
-            className="mb-1.5 inline-flex text-sm font-medium text-[var(--semantic-brand)] hover:underline"
+            className="mb-4 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
           >
             ← {backLink.label}
           </Link>
         ) : null}
 
-        {eyebrow ? <div className={backLink ? "mb-1" : "mb-1.5"}>{eyebrow}</div> : null}
+        {eyebrow ? <div className={backLink ? "mb-2" : "mb-3"}>{eyebrow}</div> : null}
 
-        <h1 className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-[1.7rem]">
+        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl lg:text-5xl">
           {title}
         </h1>
 
-        <p className="mt-0.5 max-w-3xl text-sm leading-5 text-[var(--theme-muted-text)]">{subtitle}</p>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--theme-muted-text)] sm:text-lg">{subtitle}</p>
 
         {ctas && ctas.length > 0 ? (
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="mt-6 flex flex-wrap gap-3">
             {ctas.map((cta) => (
               <Link key={cta.href + cta.label} href={cta.href} className={ctaClass(cta.variant)}>
                 {cta.label}
@@ -57,20 +58,20 @@ export function PathwayHero({ eyebrow, title, subtitle, toolbar, ctas, backLink 
           </div>
         ) : null}
 
-        {toolbar ? <div className="mt-2">{toolbar}</div> : null}
+        {toolbar ? <div className="mt-5">{toolbar}</div> : null}
       </div>
     </header>
   );
 }
 
 function ctaClass(variant: CtaButton["variant"]): string {
-  const base = "inline-flex min-h-[44px] items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition-colors";
+  const base = "inline-flex min-h-[46px] items-center justify-center rounded-full px-6 py-2.5 text-sm font-bold transition-colors";
   switch (variant) {
     case "primary":
-      return `${base} bg-[var(--role-cta)] text-[var(--role-cta-foreground)] shadow-[0_10px_22px_color-mix(in_srgb,var(--role-cta-shadow)_55%,transparent)] hover:bg-[var(--role-cta-hover)]`;
+      return `${base} bg-[var(--role-cta)] text-[var(--role-cta-foreground)] shadow-sm hover:bg-[var(--role-cta-hover)]`;
     case "outline":
-      return `${base} border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))]`;
+      return `${base} border border-[var(--semantic-border-soft)] bg-white text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_4%,white)]`;
     case "ghost":
-      return `${base} text-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,transparent)]`;
+      return `${base} px-4 text-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,transparent)]`;
   }
 }
