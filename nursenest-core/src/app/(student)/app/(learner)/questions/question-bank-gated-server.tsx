@@ -22,7 +22,18 @@ import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config
 import { resolveSubscribedQuestionBankPathways } from "@/lib/learner/tier-scoped-study-routes";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 
-type SearchParams = Promise<{ pathwayId?: string | string[] }>;
+type SearchParams = Promise<{
+  pathwayId?: string | string[];
+  source?: string | string[];
+  studyMode?: string | string[];
+  studyFilter?: string | string[];
+}>;
+
+function firstSearchParamValue(value: string | string[] | undefined): string {
+  if (typeof value === "string") return value.trim().toLowerCase();
+  if (Array.isArray(value) && typeof value[0] === "string") return value[0].trim().toLowerCase();
+  return "";
+}
 
 export async function QuestionBankGatedEntry({
   searchParams,
@@ -40,6 +51,11 @@ export async function QuestionBankGatedEntry({
       : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
         ? rawPid[0].trim()
         : null;
+  const launcherShouldOpenSession =
+    variant === "launcher" &&
+    (firstSearchParamValue(sp.source) === "weak_areas" ||
+      firstSearchParamValue(sp.studyMode) === "weak" ||
+      firstSearchParamValue(sp.studyFilter) === "weak");
 
   const session = await getProtectedRouteSession("(student).app.(learner).questions");
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -162,7 +178,7 @@ export async function QuestionBankGatedEntry({
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
   const studySettings = userId ? await loadStudySettings(userId) : null;
 
-  if (variant === "launcher") {
+  if (variant === "launcher" && !launcherShouldOpenSession) {
     return (
       <div className="space-y-6">
         {userId ? (
@@ -188,7 +204,7 @@ export async function QuestionBankGatedEntry({
     );
   }
 
-  if (variant === "practice_session") {
+  if (variant === "practice_session" || launcherShouldOpenSession) {
     return (
       <div className="space-y-6">
         {userId ? (
