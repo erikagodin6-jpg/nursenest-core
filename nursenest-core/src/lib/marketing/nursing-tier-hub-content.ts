@@ -152,18 +152,18 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
 
   const pnIntro =
     pathway.countrySlug === "canada"
-      ? `${examLabel} prep for ${countryLabel}: build practical-nursing judgment first—prioritization, safe delegation within RPN scope, medications, and acute cues—then rehearse adaptive pacing and longer practice exams when you are ready.`
-      : `${examLabel} prep for ${countryLabel}: anchor LVN/LPN scope in lessons, sharpen prioritization and pharmacology with drills, then layer CAT-style sessions and timed practice exams as stamina grows.`;
+      ? `${examLabel} prep for ${countryLabel}: build practical-nursing judgment first—prioritization, safe delegation within RPN scope, medications, and acute cues—then rehearse adaptive pacing when you are ready.`
+      : `${examLabel} prep for ${countryLabel}: anchor LVN/LPN scope in lessons, sharpen prioritization and pharmacology with drills, then layer CAT-style sessions as stamina grows.`;
 
   const pnDescription = `This hub is scoped for ${audienceLabel} candidates in ${countryLabel}: pathway lessons, question bank, flashcards, labs, medication math, clinical scenarios, OSCE-style drills when enabled, and readiness analytics inside one NurseNest account.`;
 
-  const pnIncludedNote = `Practical-nursing tier: ${examLabel} lessons and items use PN/RPN-appropriate delegation language; adaptive sessions and practice exams stay pathway-tagged so you are not rehearsing RN-only stems by accident.`;
+  const pnIncludedNote = `Practical-nursing tier: ${examLabel} lessons and items use PN/RPN-appropriate delegation language; adaptive sessions stay pathway-tagged so you are not rehearsing RN-only stems by accident.`;
 
   const pnStartHere =
-    "Suggested loop: stabilize concepts in Lessons → run short prioritization and safety sets in Practice Questions → reinforce with Flashcards and weak-area decks → add CAT and Practice Exam blocks once timing feels exam-realistic.";
+    "Suggested loop: stabilize concepts in Lessons → run short prioritization and safety sets in Practice Questions → reinforce with Flashcards and weak-area decks → add CAT once timing feels exam-realistic.";
 
   const pnDifferenceBody =
-    "Lessons emphasize scope-safe assessment and communication; Practice Questions stress who to see first and what can wait; Flashcards keep high-yield meds and labs sticky; CAT adapts item difficulty from your last answers; Practice Exams build full-length stamina—all filtered to this PN/RPN pathway.";
+    "Lessons emphasize scope-safe assessment and communication; Practice Questions stress who to see first and what can wait; Flashcards keep high-yield meds and labs sticky; CAT adapts item difficulty from your last answers—all filtered to this PN/RPN pathway.";
 
   const actionsPnLessons =
     "Topic lessons framed for practical nursing—assessment, infection control, scope, and acute priorities without RN-only depth creep.";
@@ -186,7 +186,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
         ? pnIntro
         : isCnplePathway(pathway.id)
           ? `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or the LOFT-style simulation next.`
-          : `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or adaptive CAT-style exams next.`,
+          : `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or adaptive CAT-style practice next.`,
     description: isGenericIntl
       ? `This hub explains how NurseNest can support ${audienceLabel} learners targeting registration in ${countryLabel} without claiming to replace regulator materials.`
       : isPnHub
@@ -205,7 +205,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
         ? pnStartHere
         : isCnplePathway(pathway.id)
           ? "Start with Lessons, move to Practice Questions, run Flashcards for recall, then add Simulation runs as you approach exam readiness."
-          : "Start with Lessons, then move into Practice Questions, CAT, and Exams as your confidence grows.",
+          : "Start with Lessons, then move into Practice Questions and CAT as your confidence grows.",
     differenceHeading: isPnHub ? "How the modes fit PN / RPN prep" : isCnplePathway(pathway.id) ? "How the modes fit CNPLE prep" : "What is the difference?",
     differenceBody: isGenericIntl
       ? "Lessons summarize concepts, Flashcards speed recall, Practice Questions build judgment under time pressure, and optional adaptive sessions mirror NCLEX-style pacing—not regulator-owned exam designs."
@@ -213,7 +213,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
         ? pnDifferenceBody
         : isCnplePathway(pathway.id)
           ? "Use Lessons for Canadian NP clinical content, Flashcards for spaced-repetition recall, Practice Questions for item-level drills by domain, and Simulation for the LOFT linear fixed-length experience — CNPLE uses LOFT format, not CAT adaptive."
-          : "Use Lessons for core concepts, Flashcards for recall, Practice Questions for focused drills, CAT for adaptive item-level sessions, and Exams for longer linear or timed practice-test sets.",
+          : "Use Lessons for core concepts, Flashcards for recall, Practice Questions for focused drills, and CAT for adaptive item-level sessions.",
     actions: [
       {
         id: "lessons",
