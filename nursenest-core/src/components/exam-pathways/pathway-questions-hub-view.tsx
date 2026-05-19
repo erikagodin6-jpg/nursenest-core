@@ -136,9 +136,12 @@ function StudyModeCard({
       <div className="flex items-start gap-4">
         <div
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl"
-          style={{ background: `color-mix(in srgb, ${accentColor} 14%, white)` }}
+          style={{
+            background: `color-mix(in srgb, ${accentColor} 14%, white)`,
+            color: accentColor,
+          }}
         >
-          <Icon className="h-5 w-5" style={{ color: accentColor }} />
+          <Icon className="h-5 w-5" />
         </div>
         <div>
           <p className="text-base font-bold text-[var(--semantic-text-primary)]">{title}</p>
