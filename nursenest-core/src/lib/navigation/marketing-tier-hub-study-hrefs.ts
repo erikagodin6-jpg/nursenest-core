@@ -1,8 +1,9 @@
 /**
- * Canonical hrefs for nursing tier hub study tiles (Lessons, Flashcards, Practice Questions, public
- * CAT landing, Practice Tests hub). {@link resolveMarketingTierHubStudyActionHref} validates
- * optional `href` overrides so CMS/config cannot ship `#`, fragments-only, protocol tricks, or
- * cross-tier paths onto these tiles.
+ * Canonical hrefs for nursing tier hub study destinations (Lessons, Flashcards, Practice Questions,
+ * and public CAT landing). The legacy `exams` action remains supported for non-standard/regional
+ * fallback flows, but it is no longer rendered as a primary nursing marketing hub tile.
+ * {@link resolveMarketingTierHubStudyActionHref} validates optional `href` overrides so CMS/config
+ * cannot ship `#`, fragments-only, protocol tricks, or cross-tier paths onto these destinations.
  */
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -50,7 +51,7 @@ function pathnameOf(href: string): string | null {
 }
 
 /**
- * Single canonical builder for tier hub study-card destinations (marketing + tests).
+ * Single canonical builder for tier hub study destinations.
  */
 export function marketingTierHubStudyActionHref(pathway: ExamPathwayDefinition, actionId: MarketingTierHubStudyActionId): string {
   switch (actionId) {
@@ -63,7 +64,7 @@ export function marketingTierHubStudyActionHref(pathway: ExamPathwayDefinition, 
     case "cat":
       return buildExamPathwayPath(pathway, "cat");
     case "exams":
-      /** Practice Exam tile — learner timed/linear sets hub (CAT launch is a sub-route from there). */
+      // Legacy practice-test destination: retained for fallback and non-standard flows, not rendered as a primary nursing hub tile.
       return pathwayHubAppPracticeTestsHref(pathway.id);
     default: {
       const _never: never = actionId;
@@ -84,7 +85,7 @@ function isSafeHttpOrHttpsExternal(href: string): boolean {
 }
 
 /**
- * Resolves a study-tile href: rejects placeholders and unsafe URLs, keeps same-pathway internal
+ * Resolves a study-destination href: rejects placeholders and unsafe URLs, keeps same-pathway internal
  * paths (optionally stripping query when pathname matches the canonical hub path), and falls back
  * to {@link marketingTierHubStudyActionHref} when the override is unusable.
  */
