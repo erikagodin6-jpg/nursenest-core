@@ -16,6 +16,7 @@ concurrency:
 env:
   IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/nursenest
   DIGITALOCEAN_APP_ID: ${{ vars.DIGITALOCEAN_APP_ID || 'd6a4b825-4d70-4dd4-8d71-04b354d36f43' }}
+  DIGITALOCEAN_ACCESS_TOKEN_PRESENT: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN != '' }}
 
 jobs:
   build:
@@ -45,7 +46,7 @@ jobs:
             --build-arg GITHUB_SHA="${GITHUB_SHA}" \
             --build-arg GITHUB_REF_NAME="${GITHUB_REF_NAME}" \
             --build-arg DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" \
-            --build-arg AUTH_SECRET="dummy" \
+            --build-arg AUTH_SECRET="build-time-placeholder" \
             --build-arg BUILD_WEBPACK_PARALLELISM="1" \
             --build-arg NN_FORCE_SINGLE_BUILD_WORKER="true" \
             --build-arg NN_TIMED_INCLUDE_NPM_PRUNE="1" \
@@ -56,15 +57,17 @@ jobs:
           docker push "${IMAGE_NAME}:sha-${SHORT_SHA}"
 
       - name: Install doctl
-        if: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN != '' }}
+        if: env.DIGITALOCEAN_ACCESS_TOKEN_PRESENT == 'true'
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Trigger DigitalOcean deployment
-        if: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN != '' }}
+        if: env.DIGITALOCEAN_ACCESS_TOKEN_PRESENT == 'true'
         run: doctl apps create-deployment "${DIGITALOCEAN_APP_ID}"
 
       - name: Explain skipped DigitalOcean deployment
-        if: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN == '' }}
-        run: echo "DigitalOcean deployment was not triggered because DIGITALOCEAN_ACCESS_TOKEN is not configured in this repository. The image was still pushed; manually redeploy the app in DigitalOcean."
+        if: env.DIGITALOCEAN_ACCESS_TOKEN_PRESENT != 'true'
+        run: |
+          echo "DigitalOcean deployment was not triggered because DIGITALOCEAN_ACCESS_TOKEN is not configured in this repository."
+          echo "The image was still pushed to GHCR. Manually redeploy the DigitalOcean app after the image push completes."
