@@ -367,17 +367,48 @@ export function NclexCatRunner({
       }
 
       if (resp.catAdvanced) {
+        // The CAT engine reorders remaining questions after every answer.
+        // Re-fetch the session (minimal — no question content, just the updated
+        // questionIds array and cursorIndex) so the client shows the correct
+        // next question rather than blindly incrementing the index.
         setCatUiPhase("advancing");
-        setTimeout(() => {
+        try {
+          const sessionRes = await fetchWithRetry(
+            `/api/practice-tests/${testId}?hydrate=minimal`,
+            { method: "GET" },
+          );
           if (!mountedRef.current) return;
-          setIdx((prev) => prev + 1);
-          setAnswers((prev) => {
-            const next = { ...prev };
-            // don't clear — backend tracks committed answers
-            return next;
-          });
-          setCatUiPhase("answering");
-        }, 350);
+          if (sessionRes.ok) {
+            const sessionData = await sessionRes.json() as {
+              questionIds?: unknown;
+              cursorIndex?: number;
+              answers?: Record<string, unknown>;
+            };
+            const freshIds = Array.isArray(sessionData.questionIds)
+              ? sessionData.questionIds.map(String)
+              : null;
+            const freshIdx = typeof sessionData.cursorIndex === "number"
+              ? sessionData.cursorIndex
+              : null;
+            if (freshIds) setQuestionIds(freshIds);
+            if (freshIdx !== null) setIdx(freshIdx);
+            if (sessionData.answers) setAnswers(sessionData.answers);
+            // Eagerly cache the next question if it isn't already in the map
+            const nextId = freshIds && freshIdx !== null ? freshIds[freshIdx] : null;
+            if (nextId && !questionCache[nextId]) {
+              void fetchQuestion(testId, nextId).then((q) => {
+                if (!mountedRef.current || !q) return;
+                setQuestionCache((prev) => ({ ...prev, [q.id]: q }));
+              });
+            }
+          } else {
+            // Fallback: increment locally if re-fetch fails
+            setIdx((prev) => prev + 1);
+          }
+        } catch {
+          if (mountedRef.current) setIdx((prev) => prev + 1);
+        }
+        if (mountedRef.current) setCatUiPhase("answering");
       }
     } catch {
       if (mountedRef.current) setCatUiPhase("answering");
