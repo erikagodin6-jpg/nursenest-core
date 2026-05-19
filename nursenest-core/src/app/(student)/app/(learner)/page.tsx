@@ -160,19 +160,19 @@ async function LearnerDashboardHeavyContent({
   let benchmark: BenchmarkData | null = null;
   const studySettings = await loadStudySettings(userId);
   const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
-  const [socialPrivacy, socialInviteCode] = await Promise.all([
-    prisma.socialPrivacySetting.findUnique({
-      where: { userId },
-      select: { socialEnabled: true, statsHidden: true, visibilityScope: true },
-    }),
-    prisma.socialInviteCode.findFirst({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      select: { displayCode: true, enabled: true },
-    }),
-  ]);
 
   try {
+    const [socialPrivacy, socialInviteCode] = await Promise.all([
+      prisma.socialPrivacySetting.findUnique({
+        where: { userId },
+        select: { socialEnabled: true, statsHidden: true, visibilityScope: true },
+      }),
+      prisma.socialInviteCode.findFirst({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        select: { displayCode: true, enabled: true },
+      }),
+    ]);
     const snap = await loadPremiumDashboardSnapshot(userId, entitlement);
     const [nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, daysSinceLastActivity, resumeExtras] =
       await Promise.all([

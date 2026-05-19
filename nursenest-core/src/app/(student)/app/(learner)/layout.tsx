@@ -27,6 +27,7 @@ import {
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { LearnerShellUserBar } from "@/components/auth/learner-shell-user-bar";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 import { LearnerShellLanguageControl } from "@/components/student/learner-shell-language-control";
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
 import { LearnerExamChromeGate } from "@/components/exam/learner-exam-chrome";
@@ -362,6 +363,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                               : null
                           }
                         />
+                        <SignOutButton className="inline-flex min-h-10 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_72%,var(--semantic-surface))] hover:text-[var(--semantic-text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)]" />
                         {!coreOnlyEmergency ? <SupportEmailHeaderLink /> : null}
                         <LearnerShellLanguageControl />
                         <LearnerThemeControl />
