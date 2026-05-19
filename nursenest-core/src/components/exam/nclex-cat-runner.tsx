@@ -75,8 +75,13 @@ function isBowtieQuestion(q: QRow): boolean {
 
 // ── Session loader ────────────────────────────────────────────────────────────
 
+// Single-request boot: ?hydrate=full returns session metadata + all question
+// content in one DB round-trip.  Without this flag the runner had to make two
+// serial requests (metadata → then individual question), showing a spinner for
+// the combined latency of both.
 async function loadSession(testId: string): Promise<{
   questionIds: string[];
+  questions: Record<string, QRow>; // pre-hydrated question cache
   answers: Record<string, unknown>;
   cursorIndex: number;
   timedMode: boolean;
@@ -87,45 +92,64 @@ async function loadSession(testId: string): Promise<{
   pathwayLabel?: string | null;
   pathwayId?: string | null;
 }> {
-  const res = await fetchWithRetry(`/api/practice-tests/${testId}`, {
+  const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=full`, {
     method: "GET",
-    headers: { "Content-Type": "application/json" },
   });
   if (!res.ok) throw new Error("Failed to load session");
   const j = await res.json() as {
-    test?: {
-      questionIds?: unknown;
-      answers?: Record<string, unknown>;
-      cursorIndex?: number;
-      timedMode?: boolean;
-      timeLimitSec?: number | null;
-      elapsedMs?: number | null;
-      status?: string;
-      results?: PracticeTestResultsJson | null;
-      config?: { pathwayId?: string | null };
-    };
+    id?: string;
+    status?: string;
+    config?: { pathwayId?: string | null };
     pathwaySurface?: { shortName?: string | null; id?: string | null } | null;
+    timedMode?: boolean;
+    timeLimitSec?: number | null;
+    elapsedMs?: number | null;
+    cursorIndex?: number;
+    answers?: Record<string, unknown>;
+    questionIds?: unknown;
+    questions?: unknown[];
+    results?: PracticeTestResultsJson | null;
   };
-  const t = j.test ?? {};
+
+  const rawIds = Array.isArray(j.questionIds) ? j.questionIds.map(String) : [];
+
+  // Build question cache from the hydrated questions array
+  const questionMap: Record<string, QRow> = {};
+  if (Array.isArray(j.questions)) {
+    for (const q of j.questions) {
+      if (q && typeof q === "object") {
+        const row = q as Record<string, unknown>;
+        if (typeof row.id === "string" && row.id) {
+          questionMap[row.id] = row as unknown as QRow;
+        }
+      }
+    }
+  }
+
   return {
-    questionIds: Array.isArray(t.questionIds) ? t.questionIds.map(String) : [],
-    answers: t.answers ?? {},
-    cursorIndex: t.cursorIndex ?? 0,
-    timedMode: t.timedMode ?? false,
-    timeLimitSec: t.timeLimitSec ?? null,
-    elapsedMs: t.elapsedMs ?? null,
-    status: t.status ?? "IN_PROGRESS",
-    results: t.results ?? null,
+    questionIds: rawIds,
+    questions: questionMap,
+    answers: (j.answers && typeof j.answers === "object" && !Array.isArray(j.answers))
+      ? (j.answers as Record<string, unknown>)
+      : {},
+    cursorIndex: j.cursorIndex ?? 0,
+    timedMode: j.timedMode ?? false,
+    timeLimitSec: j.timeLimitSec ?? null,
+    elapsedMs: j.elapsedMs ?? null,
+    status: j.status ?? "IN_PROGRESS",
+    results: j.results ?? null,
     pathwayLabel: j.pathwaySurface?.shortName ?? null,
-    pathwayId: j.pathwaySurface?.id ?? t.config?.pathwayId ?? null,
+    pathwayId: j.pathwaySurface?.id ?? j.config?.pathwayId ?? null,
   };
 }
 
+// Fallback: fetch a single question if it was somehow not in the hydrated batch.
 async function fetchQuestion(testId: string, questionId: string): Promise<QRow | null> {
   try {
-    const res = await fetchWithRetry(`/api/practice-tests/${testId}/question?questionId=${encodeURIComponent(questionId)}`, {
-      method: "GET",
-    });
+    const res = await fetchWithRetry(
+      `/api/practice-tests/${testId}/question?questionId=${encodeURIComponent(questionId)}`,
+      { method: "GET" },
+    );
     if (!res.ok) return null;
     const j = await res.json() as { question?: QRow };
     return j.question ?? null;
@@ -230,6 +254,11 @@ export function NclexCatRunner({
           return;
         }
 
+        // Seed cache from the single hydrated response — no second fetch needed.
+        if (Object.keys(s.questions).length > 0) {
+          setQuestionCache(s.questions);
+        }
+
         setQuestionIds(s.questionIds);
         setAnswers(s.answers ?? {});
         setIdx(s.cursorIndex ?? 0);
@@ -253,7 +282,9 @@ export function NclexCatRunner({
     })();
   }, [testId]);
 
-  // ── Prefetch current + next question ──────────────────────────────────────
+  // ── Fallback fetch: fire only when a question is missing from the hydrated cache ──
+  // Under normal conditions this never fires — all questions arrive with ?hydrate=full.
+  // It exists as a safety net for any edge-case where hydration returns a partial batch.
 
   useEffect(() => {
     if (phase !== "ready" || catUiPhase === "completed") return;
@@ -361,12 +392,15 @@ export function NclexCatRunner({
     setCatUiPhase("submitted");
     try {
       await abandonTest(testId);
-      // Reload to get final results
-      const s = await loadSession(testId);
+      // Minimal reload just to get results — no question content needed here.
+      const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=minimal`, { method: "GET" });
       if (!mountedRef.current) return;
-      if (s.results) {
-        setResults(s.results);
-        setElapsedMs(s.elapsedMs);
+      if (res.ok) {
+        const j = await res.json() as { results?: PracticeTestResultsJson | null; elapsedMs?: number | null };
+        if (j.results) {
+          setResults(j.results);
+          setElapsedMs(j.elapsedMs ?? null);
+        }
       }
     } catch { /* best-effort */ }
     finally {
