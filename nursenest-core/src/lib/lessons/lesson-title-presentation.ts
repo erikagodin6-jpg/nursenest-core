@@ -7,6 +7,7 @@ const MEDICAL_ACRONYMS = new Map<string, string>([
   ["acs", "ACS"],
   ["abg", "ABG"],
   ["cad", "CAD"],
+  ["cabg", "CABG"],
   ["copd", "COPD"],
   ["cva", "CVA"],
   ["dka", "DKA"],
@@ -25,6 +26,9 @@ const MEDICAL_ACRONYMS = new Map<string, string>([
   ["spo2", "SpO2"],
   ["uti", "UTI"],
 ]);
+
+const INSTRUCTIONAL_TITLE_SUFFIX_PATTERN =
+  /\s*[:–—-]\s*(?:recognition(?:\s+and\s+priorit(?:y|ies))?|priorit(?:y|ies)|nursing\s+priorit(?:y|ies)|what\s+do\s+you\s+do\s+first\??|teaching\s+points?(?:\s+and\s+safety\s+monitoring)?|safety\s+monitoring|monitoring\s+and\s+safety|pre-?\s*and\s+post-?\s*procedure\s+nursing(?:\s+care)?|pre-?procedure\s+and\s+post-?procedure\s+nursing(?:\s+care)?|management\s+and\s+teaching|assessment\s+and\s+interventions?|clinical\s+judgment|exam\s+priorit(?:y|ies))\s*$/i;
 
 function normalizeSpacing(value: string): string {
   return value.replace(/\s+/g, " ").trim();
@@ -47,6 +51,16 @@ function stripPathwaySegments(value: string): string {
       /\b(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn|cnple|fnp|aanp|ancc)(?:\s*(?:exam|test))?\b(?:\s*,?\s*(?:canada|us|u\.s\.|united states))?/gi,
       " ",
     );
+}
+
+function stripInstructionalSuffix(value: string): string {
+  let next = value;
+  for (let i = 0; i < 3; i += 1) {
+    const stripped = normalizeSpacing(next.replace(INSTRUCTIONAL_TITLE_SUFFIX_PATTERN, ""));
+    if (stripped === next) break;
+    next = stripped;
+  }
+  return next;
 }
 
 function restoreAcronymCasing(value: string, sourceTitle: string): string {
@@ -73,7 +87,7 @@ export function cleanLessonTitleForDisplay(rawTitle: string): string {
   if (!source) return "";
 
   const stripped = normalizeSpacing(
-    stripPathwaySegments(stripPathwaySuffixParentheticals(source))
+    stripInstructionalSuffix(stripPathwaySegments(stripPathwaySuffixParentheticals(source)))
       .replace(/\(\s*\)/g, " ")
       .replace(/\s+([,;:.!?])/g, "$1")
       .replace(/[-–—,:|]\s*$/g, ""),
