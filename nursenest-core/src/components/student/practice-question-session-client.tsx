@@ -46,6 +46,15 @@ type GradedRow = {
   rationaleSections?: Array<{ heading: string; body: string }> | null;
 };
 
+type QuestionListResponse = {
+  questions?: QFull[];
+  error?: string;
+  studyModeNote?: string | null;
+  weakTopicCodeApplied?: string | null;
+  weakTopicConfidence?: "high" | "medium" | "low" | null;
+  topicRelaxed?: boolean;
+};
+
 function parseOptions(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x) => String(x));
   return [];
@@ -110,6 +119,7 @@ export function PracticeQuestionSessionClient({
   const [answer, setAnswer] = useState<unknown>(null);
   const [graded, setGraded] = useState<Record<string, GradedRow>>({});
   const [grading, setGrading] = useState(false);
+  const [weakAreaNote, setWeakAreaNote] = useState<QuestionListResponse | null>(null);
   /** Per-question: answering | awaiting_confidence | done */
   const [itemStep, setItemStep] = useState<"answering" | "feedback" | "confidence">("answering");
   const examRationaleRef = useRef<Record<string, GradedRow>>({});
@@ -119,9 +129,11 @@ export function PracticeQuestionSessionClient({
   const mode = (parsed.mode ?? DEFAULT_PRACTICE_MODE) as PracticeSessionMode;
   const shuffle = parsed.shuffle ?? DEFAULT_SHUFFLE;
   const count = parsed.count ?? DEFAULT_PRACTICE_COUNT;
+  const isWeakAreaSession = source === "weak_areas" || mode === "weak_area" || parsed.studyFilter === "weak";
 
   const reloadParams = useCallback(() => {
     if (!pathwayId) return;
+    setWeakAreaNote(null);
     if (source === "previously_incorrect") {
       const events = readQuestionPerformanceEvents(userId, 220);
       const ids = questionIdsWithIncorrectAttempts(events, 200);
@@ -146,9 +158,9 @@ export function PracticeQuestionSessionClient({
     void fetch(`/api/questions?${qs.toString()}`)
       .then(async (res) => {
         const rawText = await res.text();
-        let data: { questions?: QFull[]; error?: string };
+        let data: QuestionListResponse;
         try {
-          data = JSON.parse(rawText) as { questions?: QFull[]; error?: string };
+          data = JSON.parse(rawText) as QuestionListResponse;
         } catch {
           setError("Invalid server response.");
           setPhase("error");
@@ -160,6 +172,7 @@ export function PracticeQuestionSessionClient({
           return;
         }
         const list = data.questions ?? [];
+        if (isWeakAreaSession) setWeakAreaNote(data);
         if (list.length === 0) {
           setQuestions([]);
           setPhase("empty");
@@ -177,7 +190,7 @@ export function PracticeQuestionSessionClient({
         setError("Could not load questions.");
         setPhase("error");
       });
-  }, [pathwayId, source, parsed.categorySlug, parsed.practiceHubIds, count, mode, shuffle, userId]);
+  }, [pathwayId, source, parsed.categorySlug, parsed.practiceHubIds, count, mode, shuffle, userId, isWeakAreaSession]);
 
   useEffect(() => {
     reloadParams();
@@ -224,6 +237,19 @@ export function PracticeQuestionSessionClient({
   const sessionAttempted = useMemo(() => Object.keys(graded).length, [graded]);
 
   const showRationaleNow = Boolean(g && (mode === "tutor" || mode === "weak_area"));
+  const weakAreaBanner = useMemo(() => {
+    if (!isWeakAreaSession || !weakAreaNote) return null;
+    if (weakAreaNote.studyModeNote === "weak_topic_unavailable") {
+      return "Starter remediation mode: answer a few questions and rate confidence so NurseNest can identify your true weak areas.";
+    }
+    if (weakAreaNote.studyModeNote === "weak_topic_low_confidence" || weakAreaNote.weakTopicConfidence === "low") {
+      return "Starter remediation mode: we are using early performance signals while your weak-area profile builds.";
+    }
+    if (weakAreaNote.topicRelaxed) {
+      return "Weak-area pool widened: not enough items matched the narrow filters, so this session expanded safely.";
+    }
+    return null;
+  }, [isWeakAreaSession, weakAreaNote]);
 
   async function submitAnswer() {
     if (!current) return;
@@ -475,6 +501,12 @@ export function PracticeQuestionSessionClient({
 
         <div className="nn-question-session nn-question-session--split">
           <div className="nn-question-session-primary min-h-0 space-y-5 overflow-y-auto p-4 sm:p-6">
+            {weakAreaBanner ? (
+              <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                <p className="font-semibold text-[var(--semantic-text-primary)]">Weak Areas</p>
+                <p className="mt-1">{weakAreaBanner}</p>
+              </div>
+            ) : null}
             <div className="nn-question-stem-card">
               {current.questionType ? <span className="nn-question-type-chip">{current.questionType}</span> : null}
               {current.subtopic ? <p className="mb-2 text-xs font-medium text-[var(--semantic-text-muted)]">{current.subtopic}</p> : null}
