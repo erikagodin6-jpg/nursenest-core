@@ -2,6 +2,8 @@ import Link from "next/link";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamSessionErrorBoundary } from "@/components/exam/exam-session-error-boundary";
 import { PracticeTestRunnerClient } from "@/components/student/practice-test-runner-client";
+import { NclexCatRunner } from "@/components/exam/nclex-cat-runner";
+import { NclexPracticeRunner } from "@/components/exam/nclex-practice-runner";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -58,6 +60,8 @@ export default async function PracticeTestRunPage({ params }: Props) {
   const studySettings = await loadStudySettings(userId);
 
   let initialPathwaySurface: PracticeTestPathwayClientShell | null = null;
+  let nclexShellMode: "cat" | "practice" | null = null;
+
   if (userId && id.length >= 8) {
     const row = await prisma.practiceTest.findFirst({
       where: { id, userId },
@@ -68,6 +72,16 @@ export default async function PracticeTestRunPage({ params }: Props) {
       raw && typeof raw === "object" && !Array.isArray(raw) && typeof (raw as Record<string, unknown>).pathwayId === "string"
         ? String((raw as Record<string, unknown>).pathwayId).trim()
         : "";
+
+    // Detect NCLEX shell mode from config
+    if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+      const cfg = raw as Record<string, unknown>;
+      if (cfg.catPresentationMode === "exam_simulation") {
+        nclexShellMode = "cat";
+      } else if (cfg.linearDeliveryMode === "practice" && cfg.linearRationaleVisibility === "after_each") {
+        nclexShellMode = "practice";
+      }
+    }
     if (pathwayId) {
       const p = getExamPathwayById(pathwayId);
       if (p) {
@@ -99,6 +113,31 @@ export default async function PracticeTestRunPage({ params }: Props) {
           />
         </div>
       </div>
+    );
+  }
+
+  // NCLEX shell mode: render the new polished exam shells for CAT simulation and practice mode
+  if (nclexShellMode === "cat") {
+    return (
+      <ExamSessionErrorBoundary surface="practice_test">
+        <NclexCatRunner
+          testId={id}
+          userId={userId}
+          pathwayLabel={initialPathwaySurface?.shortName ?? null}
+        />
+      </ExamSessionErrorBoundary>
+    );
+  }
+
+  if (nclexShellMode === "practice") {
+    return (
+      <ExamSessionErrorBoundary surface="practice_test">
+        <NclexPracticeRunner
+          testId={id}
+          userId={userId}
+          pathwayLabel={initialPathwaySurface?.shortName ?? null}
+        />
+      </ExamSessionErrorBoundary>
     );
   }
 

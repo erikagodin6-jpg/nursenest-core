@@ -73,6 +73,7 @@ import { LearnerSilentSectionBoundary } from "@/components/learner/learner-silen
 import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
 import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-stats-for-shell";
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
+import { LearnerAppFooter } from "@/components/student/learner-app-footer";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 import { PremiumLayoutVersionMarker } from "@/components/layout/premium-layout-version-marker";
 import { isFocusedPracticeTestSessionPath } from "@/lib/learner/focused-exam-shell";
@@ -430,6 +431,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   {LearnerTutorShellComponent ? <LearnerTutorShellComponent context={tutorContext} /> : null}
                 </LearnerSilentSectionBoundary>
               ) : null}
+              <LearnerAppFooter />
             </div>
           </LearnerExamChromeGate>
         </LearnerExamStudyProviders>

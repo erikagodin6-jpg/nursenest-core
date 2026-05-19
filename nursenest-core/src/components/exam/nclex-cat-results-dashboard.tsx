@@ -234,13 +234,13 @@ function ReadinessGauge({
 // ── Sidebar nav ──────────────────────────────────────────────────────────────
 
 const NAV_ITEMS = [
-  { label: "Dashboard", Icon: LayoutDashboard, href: "/app" },
-  { label: "My Sessions", Icon: ClipboardList, href: "/app/practice-tests" },
+  { label: "Dashboard", Icon: LayoutDashboard, href: "/app", active: false },
+  { label: "My Sessions", Icon: ClipboardList, href: "/app/practice-tests", active: false },
   { label: "Results", Icon: BarChart2, href: "#", active: true },
-  { label: "Study Plan", Icon: BookOpen, href: "/app/exam-plan" },
-  { label: "Resources", Icon: Library, href: "/app/lessons" },
-  { label: "Settings", Icon: Settings, href: "/app/account" },
-  { label: "Sign out", Icon: LogOut, href: "/api/auth/signout" },
+  { label: "Study Plan", Icon: BookOpen, href: "/app/exam-plan", active: false },
+  { label: "Resources", Icon: Library, href: "/app/lessons", active: false },
+  { label: "Settings", Icon: Settings, href: "/app/account", active: false },
+  { label: "Sign out", Icon: LogOut, href: "/api/auth/signout", active: false },
 ] as const;
 
 // ── Main component ────────────────────────────────────────────────────────────

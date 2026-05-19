@@ -49,7 +49,7 @@ export function NclexCalculatorModal({ onClose }: { onClose: () => void }) {
         >
           <X size={12} />
         </button>
-        <NclexCalculator />
+        <NclexCalculator onClose={onClose} />
       </div>
     </div>
   );
