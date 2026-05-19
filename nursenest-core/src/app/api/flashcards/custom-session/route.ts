@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
-import { auth } from "@/lib/auth";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { classifyDatabaseFallbackKind } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
@@ -19,7 +19,7 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   return runWithApiTelemetry(req, "GET /api/flashcards/custom-session", "content", async () => {
     try {
-      const session = await auth();
+      const session = await getProtectedRouteSession("api.flashcards.custom-session");
       const userId = (session?.user as { id?: string } | undefined)?.id;
       if (!userId) {
         return NextResponse.json({ error: "Sign in required", code: "auth_required" }, { status: 401 });
