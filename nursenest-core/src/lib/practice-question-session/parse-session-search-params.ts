@@ -32,9 +32,20 @@ function parseEnum<T extends string>(raw: string | null, allowed: readonly T[], 
   return (allowed as readonly string[]).includes(v) ? (v as T) : fallback;
 }
 
+function rawLower(sp: URLSearchParams, key: string): string {
+  return sp.get(key)?.trim().toLowerCase() ?? "";
+}
+
 export function parsePracticeSessionSearchParams(sp: URLSearchParams): ParsedPracticeSessionParams {
   const pathwayId = sp.get("pathwayId")?.trim() || null;
-  const source = parseEnum(sp.get("source"), PRACTICE_SESSION_SOURCES, DEFAULT_PRACTICE_SOURCE);
+  const studyModeRaw = rawLower(sp, "studyMode");
+  const studyFilterRaw = rawLower(sp, "studyFilter");
+  const weakIntent = studyModeRaw === "weak" || studyFilterRaw === "weak";
+
+  const sourceRaw = sp.get("source");
+  const source = weakIntent && !sourceRaw
+    ? "weak_areas"
+    : parseEnum(sourceRaw, PRACTICE_SESSION_SOURCES, DEFAULT_PRACTICE_SOURCE);
   const catRaw = sp.get("category")?.trim().toLowerCase() ?? "";
   const categorySlug = (PRACTICE_CATEGORY_SLUGS as readonly string[]).includes(catRaw)
     ? (catRaw as PracticeCategorySlug)
@@ -46,7 +57,10 @@ export function parsePracticeSessionSearchParams(sp: URLSearchParams): ParsedPra
       ? countRaw
       : DEFAULT_PRACTICE_COUNT;
 
-  const mode = parseEnum(sp.get("mode"), PRACTICE_SESSION_MODES, DEFAULT_PRACTICE_MODE);
+  const modeRaw = sp.get("mode");
+  const mode = weakIntent && !modeRaw
+    ? "weak_area"
+    : parseEnum(modeRaw, PRACTICE_SESSION_MODES, DEFAULT_PRACTICE_MODE);
   const shuffleRaw = sp.get("shuffle");
   const shuffle =
     shuffleRaw === null || shuffleRaw === ""
@@ -56,8 +70,7 @@ export function parsePracticeSessionSearchParams(sp: URLSearchParams): ParsedPra
   const practiceHubIdsRaw = sp.get("practiceHubIds")?.trim();
   const practiceHubIds = practiceHubIdsRaw && practiceHubIdsRaw.length > 0 ? practiceHubIdsRaw : null;
 
-  const studyFilterRaw = sp.get("studyFilter")?.trim().toLowerCase() ?? "";
-  const studyFilter = parseEnum(studyFilterRaw || "all", PRACTICE_SESSION_STUDY_FILTERS, "all");
+  const studyFilter = parseEnum(studyFilterRaw || (weakIntent ? "weak" : "all"), PRACTICE_SESSION_STUDY_FILTERS, "all");
 
   return { pathwayId, source, categorySlug, count, mode, shuffle, practiceHubIds, studyFilter };
 }
