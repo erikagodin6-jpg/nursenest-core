@@ -11,19 +11,32 @@ export type GraphSubstrateIntegrityReport = {
   ok: boolean;
   parallelRegistryViolations: string[];
   remediationDivergence: string[];
+  shadowAuthorityViolations: string[];
+  adaptiveHeuristicViolations: string[];
 };
 
 const FORBIDDEN_PARALLEL_PATTERNS = [
   { re: /function\s+buildLocalBreadcrumbHierarchy/, label: "local breadcrumb hierarchy builder" },
   { re: /const\s+glossaryHierarchy\s*=/, label: "local glossary hierarchy" },
   { re: /remediationLadderFromRouteHeuristic/, label: "route-heuristic remediation ladder" },
+  { re: /pathway-unknown/, label: "pathway-unknown adaptive logic" },
+  { re: /rankNextAction(?!FromGraph)/, label: "non-graph next-action ranking" },
+];
+
+const SHADOW_AUTHORITY_PATTERNS = [
+  { re: /new\s+Map\s*<\s*string\s*,\s*.*Breadcrumb/, label: "parallel breadcrumb registry Map" },
+  { re: /ontologyMapper\s*=\s*\{/, label: "standalone ontology mapper" },
+  { re: /buildRemediationLadder\s*\(/, label: "standalone remediation ladder builder" },
 ];
 
 const REMEDIATION_NAV = "src/lib/breadcrumbs/remediation-navigation.ts";
+const DASHBOARD_ORCH = "src/lib/learner/rn-coaching-intelligence/dashboard-orchestration-v3.ts";
 
 export function auditGraphSubstrateIntegrity(repoRoot = process.cwd()): GraphSubstrateIntegrityReport {
   const parallelRegistryViolations: string[] = [];
   const remediationDivergence: string[] = [];
+  const shadowAuthorityViolations: string[] = [];
+  const adaptiveHeuristicViolations: string[] = [];
 
   const remNav = readFileSync(join(repoRoot, REMEDIATION_NAV), "utf8");
   if (!remNav.includes("orchestrateBreadcrumbGraph")) {
@@ -38,33 +51,70 @@ export function auditGraphSubstrateIntegrity(repoRoot = process.cwd()): GraphSub
     remediationDivergence.push("learner-navigation must not call buildRnRemediationGraphSteps directly");
   }
 
+  const dashSrc = readFileSync(join(repoRoot, DASHBOARD_ORCH), "utf8");
+  if (dashSrc.includes("function buildDashboardCards") && !dashSrc.includes("resolveDashboardSubstrateOrchestration")) {
+    adaptiveHeuristicViolations.push("dashboard-orchestration-v3 missing substrate orchestration");
+  }
+  if (/return\s+buildDashboardCards/.test(dashSrc) && !/resolveDashboardSubstrateOrchestration/.test(dashSrc)) {
+    adaptiveHeuristicViolations.push("dashboard cards must prefer graph substrate path");
+  }
+
+  const libDir = join(repoRoot, "src/lib");
+  scanDir(libDir, parallelRegistryViolations, shadowAuthorityViolations, adaptiveHeuristicViolations, repoRoot);
+
   const appLearner = join(repoRoot, "src/app/(student)/app/(learner)");
-  scanDir(appLearner, parallelRegistryViolations, repoRoot);
+  scanDir(appLearner, parallelRegistryViolations, shadowAuthorityViolations, adaptiveHeuristicViolations, repoRoot);
 
   return {
     graphVersion: EDUCATIONAL_GRAPH_VERSION,
-    ok: parallelRegistryViolations.length === 0 && remediationDivergence.length === 0,
+    ok:
+      parallelRegistryViolations.length === 0 &&
+      remediationDivergence.length === 0 &&
+      shadowAuthorityViolations.length === 0 &&
+      adaptiveHeuristicViolations.length === 0,
     parallelRegistryViolations,
     remediationDivergence,
+    shadowAuthorityViolations,
+    adaptiveHeuristicViolations,
   };
 }
 
-function scanDir(dir: string, violations: string[], repoRoot: string): void {
+function scanDir(
+  dir: string,
+  violations: string[],
+  shadows: string[],
+  adaptive: string[],
+  repoRoot: string,
+): void {
   if (!statSync(dir, { throwIf: false })?.isDirectory()) return;
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
-    if (statSync(p).isDirectory()) scanDir(p, violations, repoRoot);
-    else if (p.endsWith(".tsx") || p.endsWith(".ts")) {
+    if (statSync(p).isDirectory()) {
+      if (name === "node_modules" || name === ".next") continue;
+      scanDir(p, violations, shadows, adaptive, repoRoot);
+    } else if (p.endsWith(".tsx") || p.endsWith(".ts")) {
+      if (p.endsWith(".test.ts") || p.endsWith(".contract.test.ts")) continue;
       const text = readFileSync(p, "utf8");
       if (
         text.includes("<BreadcrumbTrail") &&
         !text.includes("LearnerBreadcrumbTrail") &&
-        !text.includes("AnalyticsBreadcrumbTrail")
+        !text.includes("AnalyticsBreadcrumbTrail") &&
+        !text.includes("BreadcrumbsFromResolution")
       ) {
         violations.push(`ungoverned_trail:${relative(repoRoot, p)}`);
       }
       for (const pat of FORBIDDEN_PARALLEL_PATTERNS) {
         if (pat.re.test(text)) violations.push(`${pat.label}:${relative(repoRoot, p)}`);
+      }
+      for (const pat of SHADOW_AUTHORITY_PATTERNS) {
+        if (pat.re.test(text)) shadows.push(`${pat.label}:${relative(repoRoot, p)}`);
+      }
+      if (
+        p.includes("adaptive-recommendation") &&
+        text.includes("rankNextAction") &&
+        !text.includes("orchestrateEducationalGraph")
+      ) {
+        adaptive.push(`non_graph_adaptive:${relative(repoRoot, p)}`);
       }
     }
   }

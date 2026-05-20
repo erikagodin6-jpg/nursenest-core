@@ -8,6 +8,12 @@ import { computeSemanticRouteCoverage } from "@/lib/breadcrumbs/governance/seman
 import { auditGraphSubstrateIntegrity } from "@/lib/breadcrumbs/governance/graph-substrate-integrity";
 import { detectOntologyNamespaceConflicts } from "@/lib/breadcrumbs/breadcrumb-root-registry";
 import { ACADEMY_PATHNAME_REGISTRY } from "@/lib/breadcrumbs/pathname-normalization";
+import {
+  validatePsychometricLineage,
+  resolvePsychometricLineageStamp,
+} from "@/lib/breadcrumbs/governance/psychometric-lineage-validation";
+import { reportSemanticGovernanceStatus } from "@/lib/breadcrumbs/governance/semantic-governance-status-reporter";
+import { assertReplayLineageConsistent, buildGraphTelemetryReplaySnapshot, captureGraphTelemetryReplayFrame } from "@/lib/breadcrumbs/governance/graph-telemetry-replay";
 
 export type SemanticReleaseGateFailure = {
   code: string;

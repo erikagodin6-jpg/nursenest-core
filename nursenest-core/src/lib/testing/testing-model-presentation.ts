@@ -1,7 +1,14 @@
 /**
  * Testing-model presentation contracts — UI semantics derived from capabilities, not pathway hacks.
  */
-import type { PostExamSessionKind } from "@/lib/learner/post-exam-performance-report";
+/** Session kinds for results presentation — kept local to avoid testing-model ↔ post-exam import cycle. */
+export type PostExamSessionKindForPresentation =
+  | "loft_simulation"
+  | "cat"
+  | "practice_exam"
+  | "readiness_assessment"
+  | string
+  | null;
 import { getTestingEngineCapabilities } from "@/lib/testing/testing-engine-capabilities";
 import { getTestingModelDefinition } from "@/lib/testing/testing-model-definitions";
 import { getTestingModelForPathwayId } from "@/lib/testing/testing-model-pathway-map";
@@ -38,7 +45,7 @@ export type TestingModelRecommendationSemantics = {
 
 function modelFromSession(
   pathwayId: string | null | undefined,
-  sessionKind?: PostExamSessionKind | string | null,
+  sessionKind?: PostExamSessionKindForPresentation,
 ): TestingModel {
   if (sessionKind === "loft_simulation") return "LOFT";
   if (sessionKind === "cat") return "CAT";
@@ -51,7 +58,7 @@ function modelFromSession(
 
 export function resolveResultsHeroVariant(
   pathwayId: string | null | undefined,
-  sessionKind?: PostExamSessionKind | string | null,
+  sessionKind?: PostExamSessionKindForPresentation,
 ): ResultsHeroVariant {
   const model = modelFromSession(pathwayId, sessionKind);
   if (model === "LOFT" || sessionKind === "loft_simulation") return "loft_simulation";
@@ -61,7 +68,7 @@ export function resolveResultsHeroVariant(
 
 export function getTestingModelResultsProfile(
   pathwayId: string | null | undefined,
-  sessionKind?: PostExamSessionKind | string | null,
+  sessionKind?: PostExamSessionKindForPresentation,
 ): TestingModelResultsProfile {
   const model = modelFromSession(pathwayId, sessionKind);
   const def = getTestingModelDefinition(model);

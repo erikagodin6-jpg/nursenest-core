@@ -42,6 +42,11 @@ import {
   loadExamAttemptDimensionBreakdown,
   type DimensionBreakdown,
 } from "@/lib/learner/exam-attempt-dimension-breakdown";
+import {
+  resolveReportCardCognitionOrchestration,
+  type ReportCardCognitionOrchestration,
+} from "@/lib/educational-cognition/report-card-cognition";
+import { resolvePrimaryDashboardPathwayId } from "@/lib/educational-cognition/learner-dashboard-cognition-surface";
 
 export type TierAccuracyBucket = {
   tierKey: string;
@@ -126,6 +131,8 @@ export type ReportCardData = {
   peerBenchmark: PeerComparisonResult | null;
   /** Exam-attempt × question metadata (same bounded loader as readiness dashboard). */
   examDimensions: DimensionBreakdown;
+  /** Governed cognition orchestration — readiness, graph steps, remediation caps. */
+  cognition: ReportCardCognitionOrchestration;
   degraded?: LearnerAggregateDegradedState;
 };
 
@@ -295,6 +302,10 @@ function buildMockReportSlices(
 async function loadReportCardDataUncached(userId: string, entitlement: AccessScope): Promise<ReportCardData | null> {
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
   try {
+  const { warmDurableLearnerCognitionCache } = await import(
+    "@/lib/educational-cognition/learner-cognition-persistence"
+  );
+  await warmDurableLearnerCognitionCache(userId);
 
   const skipHeavy = shouldSkipNonCriticalLearnerWork();
   const mockAttemptCap = mockAttemptTakeForReportCard(skipHeavy);
@@ -365,6 +376,7 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
     const pathwayRaw = pathwaySummaryResult.rows;
     const durationMsPathwaySummaries = pathwaySummaryResult.durationMs;
 
+    const pathwayIdDegraded = await resolvePrimaryDashboardPathwayId(entitlement, core.learnerPath);
     const readiness = computeReadiness({
       practiceCorrect: 0,
       practiceTotal: 0,
@@ -372,12 +384,22 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
       weakTopics: [],
       lessonsCompleted: core.lessonsCompleted,
       lessonsAvailable: core.lessonsAvailable,
+      pathwayId: pathwayIdDegraded,
       scope: core.scope,
       practiceSignalReliable: false,
       topicPerformanceSignalReliable: false,
       lessonCompletionSignalReliable:
         core.coreReliability.lessonsAvailable && core.coreReliability.lessonsCompleted,
       mockHistorySignalReliable: core.coreReliability.recentMocks,
+    });
+
+    const { orchestration: cognitionDegraded } = await resolveReportCardCognitionOrchestration({
+      userId,
+      entitlement,
+      learnerPath: core.learnerPath,
+      readiness,
+      weakTopics: [],
+      topicTrends: [],
     });
 
     const pathways: PathwayLessonSummary[] = pathwayRaw.map((p) => ({
@@ -426,6 +448,7 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
       mockLog: mockSlices.mockLog,
       peerBenchmark: null,
       examDimensions: EMPTY_EXAM_DIMENSION_BREAKDOWN,
+      cognition: cognitionDegraded,
       degraded: learnerAggregateDegradedState("durability_degraded", [
         "bank_sessions",
         "question_tier_breakdown",
@@ -636,6 +659,15 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
   }
   const examDimensions = await examDimensionsPromise.catch(() => EMPTY_EXAM_DIMENSION_BREAKDOWN);
 
+  const { orchestration: cognition } = await resolveReportCardCognitionOrchestration({
+    userId,
+    entitlement,
+    learnerPath: bundle.user.learnerPath,
+    readiness: dash.readiness,
+    weakTopics: dash.weakTopics,
+    topicTrends: dash.topicTrends,
+  });
+
   safeServerLog("learner_report_card", "report_card_load_phases", {
     userIdPrefix: userId.slice(0, 8),
     degraded: false,
@@ -670,6 +702,7 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
       mockLog,
       peerBenchmark: peerBenchmark ?? null,
       examDimensions,
+      cognition,
       degraded: undefined,
     };
   } catch {

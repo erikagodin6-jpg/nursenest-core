@@ -21,6 +21,7 @@ import {
   trackBreadcrumbRendered,
   trackBreadcrumbSchemaEmitted,
 } from "@/lib/breadcrumbs/breadcrumb-telemetry";
+import { buildSemanticTelemetryLineage } from "@/lib/breadcrumbs/governance/semantic-telemetry-lineage";
 import { auditTrailHrefs } from "@/lib/breadcrumbs/canonical-breadcrumb-href-builder";
 
 export type GovernedBreadcrumbResolution = BreadcrumbResolution & {
@@ -38,6 +39,8 @@ export type ApplyGovernedResolutionInput = {
   canonicalRootId?: string;
   competencyId?: string | null;
   topicSlug?: string | null;
+  remediationPathwayId?: string | null;
+  educationalIntent?: string;
   /** Skip telemetry (SSR batch / tests). */
   silent?: boolean;
 };
@@ -96,6 +99,20 @@ export function applyGovernedBreadcrumbResolution(
       ontologyClassification,
       competencyId: input.competencyId ?? undefined,
       topicSlug: input.topicSlug ?? undefined,
+      educationalIntent: input.educationalIntent,
+      lineage: buildSemanticTelemetryLineage({
+        pathname: input.pathname,
+        breadcrumbIntent: intent,
+        breadcrumbSurface: input.surface,
+        breadcrumbDepth: governed.breadcrumbDepth,
+        canonicalRoot,
+        schemaOwner,
+        ontologyClassification,
+        educationalIntent: input.educationalIntent,
+        topicSlug: input.topicSlug ?? undefined,
+        competencyId: input.competencyId ?? undefined,
+        pathwayId: input.remediationPathwayId,
+      }),
     });
     if (governed.schemaItems.length > 0) {
       trackBreadcrumbSchemaEmitted({

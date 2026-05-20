@@ -1,25 +1,24 @@
 import type { ReactNode } from "react";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerBreadcrumbTrail } from "@/components/navigation/learner-breadcrumb-trail";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { DashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
-import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 
 type LearnerDashboardPageShellProps = {
-  crumbs: BreadcrumbCrumb[];
   t: LearnerMarketingT;
   heroHeading: string;
   identity?: DashboardIdentity | null;
   context?: ReactNode;
   children: ReactNode;
+  pathname?: string;
 };
 
 export function LearnerDashboardPageShell({
-  crumbs,
   t,
   heroHeading,
   identity,
   context,
   children,
+  pathname = "/app",
 }: LearnerDashboardPageShellProps) {
   return (
     <div
@@ -31,7 +30,12 @@ export function LearnerDashboardPageShell({
       data-nn-premium-platform-module="learner-dashboard"
     >
       <div className="flex min-w-0 flex-col gap-7 sm:gap-8">
-        <BreadcrumbTrail items={crumbs} />
+        <LearnerBreadcrumbTrail
+          kind="dashboard"
+          pathname={pathname}
+          navClassName="nn-marketing-caption text-[var(--theme-muted-text)]"
+          className="mb-0 min-h-0"
+        />
 
         <header className="nn-dash-page-header nn-dash-page-header--compact nn-dash-page-header--learner-hub nn-learner-page-hero nn-learner-dashboard-hero nn-learner-cockpit-hero nn-product-surface-accent nn-exam-session-topbar min-w-0 shadow-[var(--semantic-shadow-soft)]">
           <div className="nn-dash-page-header__top">

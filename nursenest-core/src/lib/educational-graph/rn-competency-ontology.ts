@@ -70,7 +70,7 @@ export const RN_COMPETENCY_NODES: readonly RnCompetencyNode[] = [
     label: "Perfusion & hemodynamics",
     description: "Preload, afterload, cardiac output, shock patterns, and perfusion-first nursing actions.",
     cognitiveOperations: ["interpret_mechanism", "prioritize_action", "monitor_reassess"],
-    topicSlugs: ["heart-failure", "shock", "sepsis", "cardiovascular", "myocardial-infarction"],
+    topicSlugs: ["heart-failure", "shock", "cardiovascular", "myocardial-infarction"],
   },
   {
     id: "fluid_electrolyte_balance",

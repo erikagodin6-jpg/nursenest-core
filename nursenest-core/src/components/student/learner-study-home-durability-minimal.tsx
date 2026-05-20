@@ -1,4 +1,3 @@
-import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { DashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -10,7 +9,6 @@ import { LearnerDashboardUserPanelBand } from "@/components/student/learner-dash
  * Minimal study hub when durability flags skip heavy dashboard queries — keeps core links usable.
  */
 export function LearnerStudyHomeDurabilityMinimal({
-  crumbs,
   t,
   locale,
   examsNavLabel,
@@ -21,7 +19,6 @@ export function LearnerStudyHomeDurabilityMinimal({
   banner,
   showShell = true,
 }: {
-  crumbs: BreadcrumbCrumb[];
   t: LearnerMarketingT;
   locale: string;
   examsNavLabel: import("@/lib/testing/testing-model").LearnerExamsSurfaceLabel;
@@ -67,7 +64,7 @@ export function LearnerStudyHomeDurabilityMinimal({
   }
 
   return (
-    <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
+    <LearnerDashboardPageShell t={t} heroHeading={heroHeading} identity={identity}>
       {content}
     </LearnerDashboardPageShell>
   );

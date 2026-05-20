@@ -12,6 +12,9 @@ export type EducatorGraphMetricSummary = {
   pathwayContinuationRecoveryRate: number;
   semanticRouteEngagementScore: number;
   continuityInterruptionRate: number;
+  hydrationFallbackRate: number;
+  tutoringContinuityAdherence: number;
+  glossaryTraversalDepthAvg: number;
 };
 
 export type EducatorGraphAnalyticsInput = {
@@ -28,6 +31,10 @@ export type EducatorGraphAnalyticsInput = {
   pathwayRecoveries?: number;
   semanticRouteViews?: number;
   continuityInterruptions?: number;
+  hydrationFallbacks?: number;
+  tutoringContinuations?: number;
+  tutoringCompletions?: number;
+  glossaryDepths?: readonly number[];
 };
 
 export function aggregateEducatorGraphMetrics(
@@ -61,5 +68,19 @@ export function aggregateEducatorGraphMetrics(
     semanticRouteEngagementScore: Math.min(100, routeViews),
     continuityInterruptionRate:
       routeViews > 0 ? Math.round((interruptions / routeViews) * 100) / 100 : 0,
+    hydrationFallbackRate:
+      routeViews > 0 ? Math.round(((input.hydrationFallbacks ?? 0) / routeViews) * 100) / 100 : 0,
+    tutoringContinuityAdherence:
+      (input.tutoringContinuations ?? 0) > 0
+        ? Math.round(((input.tutoringCompletions ?? 0) / (input.tutoringContinuations ?? 1)) * 100) / 100
+        : 0,
+    glossaryTraversalDepthAvg:
+      (input.glossaryDepths ?? []).length > 0
+        ? Math.round(
+            ((input.glossaryDepths ?? []).reduce((a, b) => a + b, 0) / (input.glossaryDepths ?? []).length) * 10,
+          ) / 10
+        : depths.length > 0
+          ? Math.round((depths.reduce((a, b) => a + b, 0) / depths.length) * 10) / 10
+          : 0,
   };
 }

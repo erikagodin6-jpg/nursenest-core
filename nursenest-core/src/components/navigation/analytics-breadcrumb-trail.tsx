@@ -11,6 +11,12 @@ import {
 } from "@/lib/breadcrumbs/breadcrumb-telemetry";
 import type { BreadcrumbSchemaOwner } from "@/lib/breadcrumbs/breadcrumb-schema-governance";
 import { trackNavigationEvent } from "@/lib/breadcrumbs/navigation-analytics";
+import {
+  resolvePsychometricLineageStamp,
+  psychometricTelemetryDedupeKey,
+  registerPsychometricTelemetryDedupe,
+} from "@/lib/breadcrumbs/governance/psychometric-lineage-validation";
+import { captureGraphTelemetryReplayFrame } from "@/lib/breadcrumbs/governance/graph-telemetry-replay";
 
 export function AnalyticsBreadcrumbTrail({
   items,
@@ -21,6 +27,7 @@ export function AnalyticsBreadcrumbTrail({
   topicSlug,
   competencyId,
   remediationPathwayId,
+  pathwayId,
   canonicalRoot,
   learnerStateReason,
   graphDepth,
@@ -43,6 +50,7 @@ export function AnalyticsBreadcrumbTrail({
   topicSlug?: string;
   competencyId?: string | null;
   remediationPathwayId?: string;
+  pathwayId?: string | null;
   canonicalRoot?: string;
   learnerStateReason?: string | null;
   graphDepth?: number;
@@ -59,6 +67,20 @@ export function AnalyticsBreadcrumbTrail({
   useEffect(() => {
     if (renderedRef.current || items.length === 0) return;
     renderedRef.current = true;
+    const psych = resolvePsychometricLineageStamp({
+      pathwayId: pathwayId ?? remediationPathwayId ?? null,
+      educationalIntent,
+    });
+    const dedupeOk = registerPsychometricTelemetryDedupe(
+      psychometricTelemetryDedupeKey(psych, pathname, "breadcrumb_rendered"),
+    );
+    if (!dedupeOk) return;
+    captureGraphTelemetryReplayFrame({
+      kind: breadcrumbSurface === "glossary" ? "glossary_traversal" : "remediation_chain",
+      pathname,
+      pathwayId: pathwayId ?? remediationPathwayId ?? null,
+      educationalIntent: psych.educationalIntent,
+    });
     trackBreadcrumbRendered({
       breadcrumbIntent: intent,
       breadcrumbSurface: breadcrumbSurface ?? "unknown",
@@ -69,6 +91,9 @@ export function AnalyticsBreadcrumbTrail({
       pathname,
       competencyId: competencyId ?? undefined,
       topicSlug,
+      educationalIntent: psych.educationalIntent,
+      cognitionReliabilityTier: psych.cognitionReliabilityTier,
+      graphVersion: psych.graphVersion,
     });
     trackNavigationEvent({
       event: "breadcrumb_rendered",
@@ -76,8 +101,11 @@ export function AnalyticsBreadcrumbTrail({
       breadcrumbSurface,
       pathname,
       ontologyNamespace,
-      educationalIntent,
-      testing_model,
+      educationalIntent: psych.educationalIntent,
+      testing_model: testing_model ?? psych.testing_model,
+      ontologyRevision: psych.ontologyRevision,
+      graphVersion: psych.graphVersion,
+      cognitionReliabilityTier: psych.cognitionReliabilityTier,
       topicSlug,
       competencyId,
       remediationPathwayId,

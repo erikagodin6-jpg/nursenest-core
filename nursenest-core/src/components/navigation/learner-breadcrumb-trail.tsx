@@ -54,6 +54,10 @@ function pathnameFromProps(props: LearnerBreadcrumbTrailProps): string {
         return "/app/exam-plan";
       case "guided":
         return "/app/guided";
+      case "focus-areas":
+        return "/app/account/focus-areas";
+      case "focus-area-detail":
+        return `/app/account/focus-areas/${"topicSlug" in props ? props.topicSlug ?? "topic" : "topic"}`;
       default:
         return "/app";
     }
@@ -96,6 +100,7 @@ export function LearnerBreadcrumbTrail(props: LearnerBreadcrumbTrailProps) {
         learnerStateReason={"learnerStateReason" in props ? props.learnerStateReason : undefined}
         graphDepth={"graphDepth" in props ? props.graphDepth : undefined}
         educationalIntent={"educationalIntent" in props ? props.educationalIntent : undefined}
+        pathwayId={"remediationPathwayId" in props ? props.remediationPathwayId : undefined}
         sourceSurface={breadcrumbSurface}
       />
     </div>

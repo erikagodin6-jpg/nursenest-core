@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
-import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import { loadLearnerCoachingContext } from "@/lib/learner/rn-coaching-intelligence/learner-coaching-context-loader";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -16,13 +16,9 @@ export async function GET(req: Request) {
     });
 
     try {
-      const snap = await loadUnifiedTopicPerformance(gate.userId, gate.entitlement, 12);
-      return NextResponse.json({
-        topicTrends: snap.trends,
-        weakTopics: snap.weakTopics,
-        strongTopics: snap.strongTopics,
-        recentSessionCount: snap.weakTopics.reduce((n, w) => n + (w.attempted ?? 0), 0),
-        source: snap.source,
+      const ctx = await loadLearnerCoachingContext(gate.userId, gate.entitlement);
+      return NextResponse.json(ctx, {
+        headers: { "Cache-Control": "private, no-store, must-revalidate" },
       });
     } catch {
       return NextResponse.json({ error: "Unable to load coaching context." }, { status: 503 });

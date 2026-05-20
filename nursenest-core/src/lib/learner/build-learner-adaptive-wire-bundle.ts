@@ -30,6 +30,11 @@ import { weakTopicSuggestsLabsFocus } from "@/lib/labs/labs-adaptive-signals";
 import { weakTopicSuggestsMedCalcFocus } from "@/lib/med-calculations/med-calc-adaptive-signals";
 import { weakTopicSuggestsScenarioFocus } from "@/lib/scenarios/scenario-adaptive-signals";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { warmDurableLearnerCognitionCache } from "@/lib/educational-cognition/learner-cognition-persistence";
+import {
+  pathwayRoleTrackForWire,
+  projectAdaptiveWireBundleFromCognition,
+} from "@/lib/educational-cognition/adaptive-wire-cognition-projection";
 
 export type AdaptiveWireBundleJson = {
   pathwayId: string;
@@ -77,6 +82,8 @@ export type AdaptiveWireEngineContext = {
   weakSignals: TopicWeaknessSignalInput[];
   lessonCandidates: LessonRecommendationCandidate[];
   linkedLearning: PathwayLessonLinkedLearningSignals | null;
+  weakTopics: WeakTopicRow[];
+  topicPerformance: TopicPerformanceSnapshot | null;
 };
 
 async function loadAdaptiveWireEngineContext(
@@ -150,7 +157,15 @@ async function loadAdaptiveWireEngineContext(
     lessonCandidates,
   );
 
-  return { pathwayId, roleTrack, weakSignals, lessonCandidates, linkedLearning };
+  return {
+    pathwayId,
+    roleTrack,
+    weakSignals,
+    lessonCandidates,
+    linkedLearning,
+    weakTopics: dashboard.weakTopics,
+    topicPerformance: topicPerformance ?? null,
+  };
 }
 
 function narrowRecommendationsForApi(
@@ -186,6 +201,8 @@ export async function loadLearnerAdaptiveWireBundle(
 ): Promise<AdaptiveWireBundleJson | null> {
   if (!userId || !entitlement.hasAccess) return null;
 
+  await warmDurableLearnerCognitionCache(userId);
+
   const hasMeaningfulExplicitCatProfile =
     options != null &&
     "catOrPracticeProfile" in options &&
@@ -200,7 +217,23 @@ export async function loadLearnerAdaptiveWireBundle(
   });
   if (!ctx) return null;
 
-  const { pathwayId, roleTrack, weakSignals, lessonCandidates, linkedLearning } = ctx;
+  const { pathwayId, roleTrack, weakSignals, lessonCandidates, linkedLearning, weakTopics, topicPerformance } =
+    ctx;
+
+  const cognitionProjected = await projectAdaptiveWireBundleFromCognition({
+    userId,
+    entitlement,
+    pathwayId,
+    roleTrack: pathwayRoleTrackForWire(pathwayId),
+    readiness: null,
+    topicPerformance,
+    weakTopics: options?.supplementalWeakTopicRows ?? weakTopics,
+    lessonCandidates,
+    catOrPracticeProfile: resolvedCatOrPracticeProfile,
+  });
+  if (cognitionProjected && !cognitionProjected.recommendations.usedEmptyFallback) {
+    return cognitionProjected;
+  }
 
   const recommendations = narrowRecommendationsForApi(
     buildAdaptiveRecommendationBundleWithLessons(

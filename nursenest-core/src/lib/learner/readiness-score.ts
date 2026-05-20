@@ -1,4 +1,5 @@
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
+import { applyReadinessPresentationPolicy } from "@/lib/testing/policies/readiness-policy";
 
 /** Minimal mock fields for readiness (avoids circular import with dashboard loader). */
 export type ReadinessMockInput = { score: number; total: number };
@@ -132,6 +133,8 @@ export function computeReadiness(args: {
   weakTopics: WeakTopicRow[];
   lessonsCompleted: number;
   lessonsAvailable: number;
+  /** When set, readiness presentation is governed by testing-model semantics. */
+  pathwayId?: string | null;
   /** Optional scope for conservative calibration in thinner cohorts. */
   scope?: { tier?: string; country?: string };
   /**
@@ -449,7 +452,7 @@ export function computeReadiness(args: {
 
   const topWeakAreas = topicPerformanceSignalReliable ? weakTopics.slice(0, 3).map((w) => w.topic) : [];
 
-  return {
+  const raw: ReadinessResult = {
     score,
     band,
     confidence,
@@ -462,6 +465,11 @@ export function computeReadiness(args: {
     topWeakAreas,
     calibratedPreview,
   };
+
+  if (args.pathwayId?.trim()) {
+    return applyReadinessPresentationPolicy(args.pathwayId, raw);
+  }
+  return raw;
 }
 
 export function readinessBandLabel(band: ReadinessBand): string {

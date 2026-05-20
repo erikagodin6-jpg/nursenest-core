@@ -24,7 +24,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
-import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
+import { buildGovernedAdaptiveRecommendations } from "@/lib/educational-cognition/adaptive-recommendation-cognition";
 import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-recommendations";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import { computePassReadinessForecast } from "@/lib/study/pass-readiness-forecast";
@@ -96,7 +96,12 @@ export async function loadCoachPageData(
     const examDatePlanType = userRow?.examDatePlanType?.toLowerCase() ?? null;
 
     // Build adaptive plan
-    const adaptive = buildAdaptiveRecommendations({
+    const preferredPathwayId =
+      snapshot.cognition?.pathwayId ??
+      snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
+      snapshot.pathways[0]?.pathwayId ??
+      null;
+    const adaptive = await buildGovernedAdaptiveRecommendations({
       examDatePlanType: userRow?.examDatePlanType,
       examDate: userRow?.examDate ?? null,
       readiness: snapshot.readiness,
@@ -112,11 +117,10 @@ export async function loadCoachPageData(
       mockCount: snapshot.mockCount,
       practiceSessionCount: snapshot.practice.sessionCount,
       subscriberCountry: entitlement.country,
-      preferredPathwayId:
-        snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
-        snapshot.pathways[0]?.pathwayId ??
-        null,
+      preferredPathwayId,
       availablePathwayIds: snapshot.pathways.map((p) => p.pathwayId),
+      userId,
+      entitlement,
     });
 
     // Overall accuracy from practice summary

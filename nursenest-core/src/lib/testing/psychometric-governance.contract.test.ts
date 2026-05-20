@@ -11,6 +11,7 @@ import {
   buildCaseSessionAnalytics,
   toCaseAnalyticsPostHogEvent,
 } from "@/lib/cases/case-session-analytics";
+import { captureGovernedLearnerProductEvent } from "@/lib/observability/governed-learner-analytics";
 import { buildPostExamPerformanceReportFromCase } from "@/lib/learner/post-exam-performance-report";
 import {
   TESTING_MODEL_DEFINITIONS,
@@ -34,6 +35,10 @@ import {
   validateTestingModelMarketingLanguage,
 } from "@/lib/testing/testing-model";
 import { CNPLE_PATHWAY_ID } from "@/lib/testing/testing-model-pathway-map";
+import {
+  getPsychometricTelemetryViolationCount,
+  resetPsychometricTelemetryViolationCount,
+} from "@/lib/testing/testing-telemetry-governance";
 
 const ROOT = join(process.cwd(), "src");
 
@@ -348,16 +353,14 @@ describe("third-pass presentation + governed analytics", () => {
     assert.equal(profile.showPassProbability, true);
   });
 
-  it("governed analytics blocks cat_ events on LOFT pathways", async () => {
-    const { captureGovernedLearnerProductEvent } = await import(
-      "@/lib/observability/governed-learner-analytics"
-    );
-    const { getPsychometricTelemetryViolationCount, resetPsychometricTelemetryViolationCount } =
-      await import("@/lib/testing/testing-telemetry-governance");
+  it("governed analytics blocks cat_ events on LOFT pathways", () => {
     resetPsychometricTelemetryViolationCount();
-    captureGovernedLearnerProductEvent("user-test", { hasAccess: true, country: "CA", tier: "NP" }, "cat_advance", {
-      pathway_id: CNPLE_PATHWAY_ID,
-    });
+    captureGovernedLearnerProductEvent(
+      "user-test",
+      { hasAccess: true, reason: "active_subscription", country: "CA", tier: "NP" },
+      "cat_advance",
+      { pathway_id: CNPLE_PATHWAY_ID },
+    );
     assert.ok(getPsychometricTelemetryViolationCount() >= 1);
   });
 

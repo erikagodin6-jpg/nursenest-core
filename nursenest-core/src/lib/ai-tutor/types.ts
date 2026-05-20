@@ -14,8 +14,12 @@ export type TutoringEntitlementSnapshot = AccessScope & {
  * Question or lesson identifiers are opaque ids only; labels are plain text snippets
  * already authorized for the learner surface (titles), never full bank content.
  */
+import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
+
 export type TutoringPromptContext = {
   entitlementSnapshot: TutoringEntitlementSnapshot;
+  /** When set, prompt composition uses graph-ordered remediation only. */
+  graphSteps?: readonly EduGraphStep[];
   /** Opaque content ids (question id, lesson id, deck id, etc.) — never log stems. */
   focusContentIds: string[];
   /** Short plain-text labels for display composition (titles), max lengths enforced in builders. */

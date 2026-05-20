@@ -3,11 +3,8 @@
  */
 
 import type { NavigationAnalyticsPayload } from "@/lib/breadcrumbs/navigation-analytics";
-import {
-  BREADCRUMB_ONTOLOGY_REVISION,
-  EDUCATIONAL_GRAPH_VERSION,
-} from "@/lib/breadcrumbs/governance/graph-os-constants";
 import { normalizeEducationalPathname } from "@/lib/breadcrumbs/pathname-normalization";
+import { resolvePsychometricLineageStamp } from "@/lib/breadcrumbs/governance/psychometric-lineage-validation";
 import type { BreadcrumbSurface } from "@/lib/breadcrumbs/breadcrumb-surface";
 
 export type SemanticRouteKind =
@@ -64,6 +61,7 @@ export function enrichNavigationTelemetryLineage(
     remediationPathwayIds?: readonly string[];
     ontologyNamespace?: string;
     breadcrumbSurface?: BreadcrumbSurface;
+    pathwayId?: string | null;
   },
 ): NavigationTelemetryLineage & NavigationAnalyticsPayload {
   const pathname = normalizeEducationalPathname(payload.pathname);
@@ -75,19 +73,25 @@ export function enrichNavigationTelemetryLineage(
     payload.competencyId ?? "",
     pathname,
   ].join(":");
+  const psych = resolvePsychometricLineageStamp({
+    pathwayId: extras?.pathwayId ?? payload.remediationPathwayId ?? null,
+    educationalIntent: payload.educationalIntent,
+    cognitionReliabilityTier: extras?.cognitionReliabilityTier ?? payload.cognitionReliabilityTier,
+  });
 
   return {
     ...payload,
     pathname,
     semanticRouteKind,
     ontologyNamespace,
-    ontologyRevision: BREADCRUMB_ONTOLOGY_REVISION,
-    graphVersion: EDUCATIONAL_GRAPH_VERSION,
-    educationalIntent: payload.educationalIntent,
-    testing_model: extras?.testing_model ?? payload.testing_model,
+    ontologyRevision: payload.ontologyRevision ?? psych.ontologyRevision,
+    graphVersion: payload.graphVersion ?? psych.graphVersion,
+    educationalIntent: payload.educationalIntent ?? psych.educationalIntent,
+    testing_model: extras?.testing_model ?? payload.testing_model ?? psych.testing_model,
     remediationPathwayIds: extras?.remediationPathwayIds,
     graphTraversalDepth,
-    cognitionReliabilityTier: extras?.cognitionReliabilityTier ?? "unknown",
+    cognitionReliabilityTier:
+      extras?.cognitionReliabilityTier ?? payload.cognitionReliabilityTier ?? psych.cognitionReliabilityTier,
     graphContinuityKey,
   };
 }

@@ -6,7 +6,11 @@ import type { BreadcrumbIntent } from "@/lib/breadcrumbs/breadcrumb-intent";
 import type { BreadcrumbSurface } from "@/lib/breadcrumbs/breadcrumb-surface";
 import type { BreadcrumbSchemaOwner } from "@/lib/breadcrumbs/breadcrumb-schema-governance";
 import { normalizeEducationalPathname } from "@/lib/breadcrumbs/pathname-normalization";
-import { EDUCATIONAL_GRAPH_VERSION, BREADCRUMB_ONTOLOGY_REVISION } from "@/lib/breadcrumbs/governance/graph-os-constants";
+import {
+  EDUCATIONAL_GRAPH_VERSION,
+  BREADCRUMB_ONTOLOGY_REVISION,
+} from "@/lib/breadcrumbs/governance/graph-os-constants";
+import { resolvePsychometricLineageStamp } from "@/lib/breadcrumbs/governance/psychometric-lineage-validation";
 import type { OntologyClassification } from "@/lib/breadcrumbs/breadcrumb-root-registry";
 
 export type SemanticRouteKind = "learner" | "marketing" | "academy" | "discovery" | "seo_fallback" | "unknown";
@@ -21,6 +25,8 @@ export type SemanticTelemetryLineage = {
   schemaOwner: BreadcrumbSchemaOwner;
   breadcrumbDepth: number;
   graphVersion: string;
+  ontologyRevision: string;
+  testing_model: string;
   educationalIntent: string;
   cognitionReliabilityTier: CognitionReliabilityTier;
   breadcrumbIntent: BreadcrumbIntent;
@@ -70,11 +76,24 @@ export function buildSemanticTelemetryLineage(args: {
   educationalIntent?: string;
   topicSlug?: string;
   competencyId?: string;
+  pathwayId?: string | null;
+  testing_model?: string;
+  cognitionReliabilityTier?: CognitionReliabilityTier;
 }): SemanticTelemetryLineage {
   const normalizedPathname = normalizeEducationalPathname(args.pathname);
   const semanticRouteKind = semanticRouteKindFromPath(normalizedPathname);
+  const psych = resolvePsychometricLineageStamp({
+    pathwayId: args.pathwayId,
+    educationalIntent: args.educationalIntent ?? args.breadcrumbIntent,
+    cognitionReliabilityTier: args.cognitionReliabilityTier,
+  });
   const cognitionReliabilityTier: CognitionReliabilityTier =
-    args.schemaOwner === "page" && semanticRouteKind !== "seo_fallback" ? "high" : args.schemaOwner === "layout_fallback" ? "medium" : "low";
+    args.cognitionReliabilityTier ??
+    (args.schemaOwner === "page" && semanticRouteKind !== "seo_fallback"
+      ? "high"
+      : args.schemaOwner === "layout_fallback"
+        ? "medium"
+        : psych.cognitionReliabilityTier);
 
   return {
     normalizedPathname,
@@ -84,8 +103,10 @@ export function buildSemanticTelemetryLineage(args: {
     canonicalRoot: args.canonicalRoot,
     schemaOwner: args.schemaOwner,
     breadcrumbDepth: args.breadcrumbDepth,
-    graphVersion: EDUCATIONAL_GRAPH_VERSION,
-    educationalIntent: args.educationalIntent ?? args.breadcrumbIntent,
+    graphVersion: psych.graphVersion || EDUCATIONAL_GRAPH_VERSION,
+    ontologyRevision: psych.ontologyRevision || BREADCRUMB_ONTOLOGY_REVISION,
+    testing_model: args.testing_model ?? psych.testing_model,
+    educationalIntent: args.educationalIntent ?? psych.educationalIntent ?? args.breadcrumbIntent,
     cognitionReliabilityTier,
     breadcrumbIntent: args.breadcrumbIntent,
     breadcrumbSurface: args.breadcrumbSurface,

@@ -155,12 +155,22 @@ if (
 
 const durabilityModules = [
   "cognition-persistence-observability.ts",
+  "persistence-runtime-governance.ts",
   "cognition-version-governance.ts",
   "cognition-envelope-integrity.ts",
   "repair-durable-learner-cognition-envelope.ts",
   "prepare-durable-cognition-envelope.ts",
   "resolve-measurement-cognition-input.ts",
+  "measurement-source-governance.ts",
   "educator-cognition-aggregation.ts",
+  "cognition-longitudinal-observability.ts",
+  "ontology-lifecycle-governance.ts",
+  "ontology-migration-registry.ts",
+  "cognition-replay-runtime.ts",
+  "graph-continuity-replay.ts",
+  "cognition-explainability.ts",
+  "telemetry-route-classification.ts",
+  "telemetry-isolation-governance.ts",
 ];
 for (const mod of durabilityModules) {
   const p = path.join(ROOT, "src/lib/educational-cognition", mod);
@@ -188,11 +198,61 @@ if (!/cognitionVersionTelemetryProps/.test(telemetryV5)) {
   pass("telemetry V5 includes cognition version metadata");
 }
 
-const repairContract = path.join(ROOT, "src/lib/educational-cognition/cognition-repair.contract.test.ts");
-if (!fs.existsSync(repairContract)) {
-  fail("cognition-repair.contract.test.ts", "Missing repair contract suite");
+const contractSuites = [
+  "cognition-repair.contract.test.ts",
+  "cognition-integrity.contract.test.ts",
+  "cognition-versioning.contract.test.ts",
+  "cognition-persistence-observability.contract.test.ts",
+  "ontology-lifecycle.contract.test.ts",
+  "cognition-replay.contract.test.ts",
+  "telemetry-isolation.contract.test.ts",
+  "explainability-governance.contract.test.ts",
+  "persistence-runtime.contract.test.ts",
+  "graph-continuity.contract.test.ts",
+  "persistence-governance.contract.test.ts",
+  "cognition-governance.contract.test.ts",
+];
+for (const suite of contractSuites) {
+  const p = path.join(ROOT, "src/lib/educational-cognition", suite);
+  if (!fs.existsSync(p)) fail(suite, "Missing cognition contract suite");
+  else pass(`${suite} present`);
+}
+
+const adaptiveExplain = fs.readFileSync(
+  path.join(ROOT, "src/lib/educational-cognition/adaptive-recommendation-cognition.ts"),
+  "utf8",
+);
+if (!/explainability/.test(adaptiveExplain)) {
+  fail("adaptive-recommendation-cognition", "Must expose cognition explainability metadata");
 } else {
-  pass("repair contract tests present");
+  pass("adaptive recommendations include explainability metadata");
+}
+
+const prepareOntology = fs.readFileSync(
+  path.join(ROOT, "src/lib/educational-cognition/prepare-durable-cognition-envelope.ts"),
+  "utf8",
+);
+if (!/applyOntologyLifecycleToEnvelope/.test(prepareOntology)) {
+  fail("prepare-durable-cognition-envelope", "Must apply ontology lifecycle governance");
+} else {
+  pass("durable envelope pipeline includes ontology lifecycle");
+}
+
+const telemetryIso = path.join(ROOT, "src/lib/educational-cognition/telemetry-isolation-governance.ts");
+if (!fs.existsSync(telemetryIso)) {
+  fail("telemetry-isolation-governance.ts", "Missing telemetry isolation module");
+} else {
+  pass("telemetry isolation governance present");
+}
+
+const playwrightGov = path.join(ROOT, "tests/e2e/learner/playwright-posthog-governance.spec.ts");
+if (fs.existsSync(playwrightGov)) {
+  const pw = fs.readFileSync(playwrightGov, "utf8");
+  if (!/Authenticated telemetry isolation matrix/.test(pw)) {
+    fail("playwright-posthog-governance", "Missing authenticated telemetry matrix");
+  } else {
+    pass("Playwright authenticated telemetry matrix present");
+  }
 }
 
 // ── Educational Graph OS: substrate + lineage + coverage ───────────────────

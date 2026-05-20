@@ -2,6 +2,8 @@ import { isLoftSimulationPolicy } from "@/lib/practice-tests/loft-simulation-pol
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { CoachingModel, CoachingSemanticsCopy } from "@/lib/learner/post-exam-coaching/types";
+import { enforceGovernedAiMeasurementCopy } from "@/lib/measurements/measurement-ai-boundary";
+import { validateAiMeasurementCopy } from "@/lib/measurements/measurement-ai-governance";
 import {
   getCoachingPolicyForPathway,
   validatePsychometricCopyForModel,
@@ -75,8 +77,21 @@ export function sanitizeCoachingNarrative(
   model: CoachingModel,
   pathwayId?: string | null,
 ): string {
-  if (model !== "loft_readiness") return text;
   let out = text;
+  if (model !== "loft_readiness") {
+    const governed = enforceGovernedAiMeasurementCopy({
+      text: out,
+      surface: "coaching",
+      pathwayId,
+      applyFallback: true,
+    });
+    if (governed.blocked) return governed.text;
+    const measurementIssues = validateAiMeasurementCopy(governed.text, { pathwayId });
+    if (measurementIssues.some((i) => i.severity === "block")) {
+      return "Review serial lab trends and pathway instructional units in your remediation plan — avoid unsourced conversion shortcuts.";
+    }
+    return governed.text;
+  }
   out = out.replace(/\badaptive readiness\b/gi, "blueprint readiness");
   out = out.replace(/\badaptive estimate\b/gi, "readiness estimate");
   out = out.replace(/\bstandard error\b/gi, "estimate stability");
@@ -92,7 +107,18 @@ export function sanitizeCoachingNarrative(
       return "Review domain balance and schedule your next blueprint-balanced LOFT simulation when ready.";
     }
   }
-  return out;
+  const governed = enforceGovernedAiMeasurementCopy({
+    text: out,
+    surface: "loft",
+    pathwayId,
+    applyFallback: true,
+  });
+  if (governed.blocked) return governed.text;
+  const measurementIssues = validateAiMeasurementCopy(governed.text, { pathwayId });
+  if (measurementIssues.some((i) => i.severity === "block")) {
+    return "Review serial lab trends and pathway instructional units in your remediation plan — avoid unsourced conversion shortcuts.";
+  }
+  return governed.text;
 }
 
 export function loftSafeTrendLabel(

@@ -5,8 +5,10 @@
  * - testing-model-definitions — behavioral contracts
  * - testing-engine-capabilities — engine boundary guards
  * - testing-coaching-policy — post-exam / remediation coaching semantics
+ * - psychometric-orchestrator — unified context for downstream intelligence
  * - psychometric-isolation — LOFT vs CAT language enforcement
  * - testing-marketing-governance — marketing/SEO validators
+ * - policies/* — telemetry, readiness, and domain policy engines
  */
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
@@ -105,6 +107,25 @@ export {
   type TestingModelRecommendationSemantics,
   type TestingModelResultsProfile,
 } from "@/lib/testing/testing-model-presentation";
+export {
+  resolvePsychometricContext,
+  resolvePsychometricContextForPathway,
+  governOrchestratedLearnerCopy,
+  governOrchestratedMarketingCopy,
+  captureOrchestratedAnalytics,
+  pathwaySupportsPsychometricCapability,
+  dashboardWidgetAllowed,
+  validateOrchestratedLearnerSemantics,
+  buildGovernedStudyLoopCapture,
+  resolveStudyLoopCtaEventName,
+  type PsychometricOrchestrationContext,
+  type ResolvePsychometricContextOptions,
+} from "@/lib/testing/psychometric-orchestrator";
+export {
+  getTestingModelReadinessSemantics,
+  type TestingModelReadinessSemantics,
+} from "@/lib/testing/policies/readiness-policy";
+export { telemetryPolicyForModel } from "@/lib/testing/policies/telemetry-policy";
 
 export {
   CNPLE_PATHWAY_ID,

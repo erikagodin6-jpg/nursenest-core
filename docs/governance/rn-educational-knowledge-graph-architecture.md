@@ -15,7 +15,9 @@ One governed **RN clinical reasoning graph** connecting lessons, mechanisms, int
 | Mechanism explainers | `nursing-mechanism-clusters.ts` | `/nursing-mechanisms`, lesson hubs |
 | Interpretation guides | `clinical-interpretation-registry.ts` | `/clinical-interpretation` |
 | Glossary | `nursing-glossary-registry.ts` | `/nursing-glossary` |
-| Remediation V2 | `educational-graph/remediation-ladder-v2.ts` | Public lesson detail |
+| **Graph orchestrator (canonical)** | `educational-graph/educational-graph-orchestrator.ts` | All surfaces |
+| Remediation V2 (adapter) | `remediation-ladder-v2.ts` | Public lesson detail |
+| App remediation (adapter) | `rn-coaching-intelligence/competency-graph-orchestration.ts` | `/app`, post-exam, planner V3 |
 | Learner longitudinal | `post-exam-coaching/*`, `longitudinal-memory.ts` | `/app` coaching (CAT/LOFT) |
 | Graph governance | `educational-graph/graph-governance.ts` | Resolver caps + audits |
 
@@ -56,5 +58,10 @@ App-side post-exam ladder remains in `buildCompetencyGraphSteps` — converge hr
 ```bash
 node nursenest-core/scripts/audit-rn-educational-graph.mjs
 node --import tsx --test nursenest-core/src/lib/educational-graph/educational-graph.contract.test.ts
+node --import tsx --test nursenest-core/src/lib/educational-graph/educational-graph-orchestrator.contract.test.ts
 node --import tsx --test nursenest-core/src/lib/linking/seo-graph-hardening.contract.test.ts
 ```
+
+## Third pass (orchestration)
+
+Call `orchestrateEducationalGraph()` with `sourceSurface` + optional `learnerState`. Map to legacy UI via `graph-step-adapters.ts`. Do not add parallel interpretation maps or href builders outside `graph-href-builders.ts`.

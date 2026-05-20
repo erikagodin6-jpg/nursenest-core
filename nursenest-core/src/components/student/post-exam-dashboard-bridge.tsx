@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { captureGovernedGraphTelemetry } from "@/lib/educational-graph/capture-governed-graph-telemetry";
 import {
   clearDashboardFeedSession,
   readDashboardFeedFromSession,
@@ -44,6 +45,14 @@ export function PostExamDashboardBridgeBanner() {
         <Link
           href={feed.primaryHref}
           className="nn-btn-primary inline-flex min-h-[2.75rem] items-center rounded-lg px-4 text-sm font-semibold"
+          onClick={() => {
+            void captureGovernedGraphTelemetry({
+              event: "next_best_action_clicked",
+              topicSlug: feed.topWeakTopic ?? "post_exam",
+              sourceSurface: "dashboard_feed",
+              pathwayId: feed.pathwayId,
+            });
+          }}
         >
           Continue remediation
         </Link>

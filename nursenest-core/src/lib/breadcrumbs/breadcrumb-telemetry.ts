@@ -41,6 +41,7 @@ export type BreadcrumbTelemetryPayload = {
   crumbLabel?: string;
   competencyId?: string;
   topicSlug?: string;
+  pathwayId?: string | null;
   lineage?: SemanticTelemetryLineage;
 };
 
@@ -74,6 +75,11 @@ function enrichPayload(payload: BreadcrumbTelemetryPayload): BreadcrumbTelemetry
       educationalIntent: payload.educationalIntent ?? payload.breadcrumbIntent,
       topicSlug: payload.topicSlug,
       competencyId: payload.competencyId,
+      pathwayId: payload.pathwayId,
+      testing_model: payload.testing_model,
+      cognitionReliabilityTier: payload.cognitionReliabilityTier as
+        | import("@/lib/breadcrumbs/governance/semantic-telemetry-lineage").CognitionReliabilityTier
+        | undefined,
     });
   return {
     ...payload,
@@ -81,6 +87,8 @@ function enrichPayload(payload: BreadcrumbTelemetryPayload): BreadcrumbTelemetry
     semanticRouteKind: lineage.semanticRouteKind,
     ontologyNamespace: lineage.ontologyNamespace,
     graphVersion: lineage.graphVersion,
+    ontologyRevision: lineage.ontologyRevision,
+    testing_model: lineage.testing_model,
     educationalIntent: lineage.educationalIntent,
     cognitionReliabilityTier: lineage.cognitionReliabilityTier,
     lineage,
@@ -109,6 +117,8 @@ export function trackBreadcrumbTelemetry(payload: BreadcrumbTelemetryPayload): v
     semantic_route_kind: enriched.semanticRouteKind,
     ontology_namespace: enriched.ontologyNamespace?.slice(0, 64),
     graph_version: enriched.graphVersion,
+    ontology_revision: enriched.lineage?.ontologyRevision?.slice(0, 80),
+    testing_model: enriched.lineage?.testing_model?.slice(0, 40),
     educational_intent: enriched.educationalIntent?.slice(0, 40),
     cognition_reliability_tier: enriched.cognitionReliabilityTier,
     crumb_index: enriched.crumbIndex != null ? String(enriched.crumbIndex) : undefined,

@@ -8,7 +8,7 @@ import {
 describe("marketing route breadcrumb JSON-LD fallback", () => {
   it.each([
     ["/canada/rn/nclex-rn", ["Home", "Canada", "RN", "NCLEX-RN"]],
-    ["/canada/rpn/rex-pn/questions", ["Home", "Canada", "RPN", "REx-PN", "Practice Questions"]],
+    ["/canada/pn/rex-pn/questions", ["Home", "Canada", "RPN", "REx-PN", "Practice Questions"]],
     ["/canada/np/cnple/simulation", ["Home", "Canada", "NP", "CNPLE", "Simulation"]],
     ["/allied-health/respiratory-therapy/question-bank", ["Home", "Allied Health", "Respiratory Therapy", "Question Bank"]],
     ["/advanced-ecg-nursing/12-lead-stemi", ["Home", "Advanced ECG Nursing", "12-Lead STEMI"]],

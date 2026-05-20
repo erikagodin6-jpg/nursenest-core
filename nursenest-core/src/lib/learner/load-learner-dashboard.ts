@@ -20,6 +20,12 @@ import {
 } from "@/lib/allied/allied-weak-topic-filter";
 import { computeReadiness, type ReadinessResult } from "@/lib/learner/readiness-score";
 import {
+  resolveDashboardEducationalCognition,
+  resolvePrimaryDashboardPathwayId,
+  type LearnerDashboardCognitionSurface,
+} from "@/lib/educational-cognition/learner-dashboard-cognition-surface";
+import { captureCognitionOrchestratedEvent } from "@/lib/educational-cognition/cognition-telemetry-governance";
+import {
   loadSessionGradingAggregate,
   type SessionGradingAggregate,
 } from "@/lib/learner/session-grading-aggregate";
@@ -113,6 +119,8 @@ export type LearnerDashboardModel = {
   continueLesson: ContinueLesson | null;
   recommendedQuizTopic: string | null;
   readiness: ReadinessResult;
+  /** Governed presentation slice — semantic authority for dashboard widgets and adaptive visibility. */
+  cognition: LearnerDashboardCognitionSurface;
   /** Recent completed exam-session grading (tier-scoped); reused by premium snapshot. */
   sessionGrading: SessionGradingAggregate;
   /**
@@ -893,6 +901,11 @@ export async function loadLearnerDashboard(
   const core = await loadLearnerDashboardCore(userId, entitlement, preload);
   if (!core) return null;
 
+  const { warmDurableLearnerCognitionCache } = await import(
+    "@/lib/educational-cognition/learner-cognition-persistence"
+  );
+  await warmDurableLearnerCognitionCache(userId);
+
   const skipHeavy = shouldSkipNonCriticalLearnerWork();
 
   let weakTopics: WeakTopicRow[] = [];
@@ -931,6 +944,8 @@ export async function loadLearnerDashboard(
     }
   }
 
+  const pathwayIdForReadiness = await resolvePrimaryDashboardPathwayId(entitlement, core.learnerPath);
+
   const readiness = computeReadiness({
     practiceCorrect: practiceAgg.correct,
     practiceTotal: practiceAgg.total,
@@ -938,6 +953,7 @@ export async function loadLearnerDashboard(
     weakTopics,
     lessonsCompleted: core.lessonsCompleted,
     lessonsAvailable: core.lessonsAvailable,
+    pathwayId: pathwayIdForReadiness,
     scope: core.scope,
     practiceSignalReliable: sessionGradingReliable,
     topicPerformanceSignalReliable: topicPerformanceReliable,
@@ -945,6 +961,21 @@ export async function loadLearnerDashboard(
       core.coreReliability.lessonsAvailable && core.coreReliability.lessonsCompleted,
     mockHistorySignalReliable: core.coreReliability.recentMocks,
   });
+
+  const { ctx: cognitionCtx, surface: cognition } = await resolveDashboardEducationalCognition({
+    entitlement,
+    learnerPath: core.learnerPath,
+    readinessResult: readiness,
+    weakTopicLabels: weakTopics.map((w) => w.topic),
+    userId,
+  });
+  captureCognitionOrchestratedEvent(
+    cognitionCtx,
+    userId,
+    entitlement,
+    "cognition_context_resolved",
+    { source_surface: "load_learner_dashboard" },
+  );
 
   const durationMsTotal = Math.round(performance.now() - tDashboard);
   safeServerLog("learner_dashboard_perf", "dashboard_load_complete", {
@@ -990,6 +1021,7 @@ export async function loadLearnerDashboard(
     continueLesson: core.continueLesson,
     recommendedQuizTopic,
     readiness,
+    cognition,
     sessionGrading: practiceAgg,
     sessionGradingReliable,
     topicPerformanceReliable,

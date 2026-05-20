@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
+import {
+  buildGovernedAdaptiveRecommendations,
+  type GovernedAdaptiveRecommendations,
+} from "@/lib/educational-cognition/adaptive-recommendation-cognition";
 import type { LearnerDashboardModel } from "@/lib/learner/load-learner-dashboard";
 import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
 import { explainNextAction } from "@/lib/insights/explain-actions";
@@ -17,7 +20,7 @@ function lessonPct(lessonsCompleted: number, lessonsAvailable: number): number {
 }
 
 function buildDailyPlan(
-  adaptive: ReturnType<typeof buildAdaptiveRecommendations>,
+  adaptive: GovernedAdaptiveRecommendations,
   primaryHref: string,
 ): DailyAdaptivePlan {
   const todayTasks = adaptive.todayFocus.slice(0, 4).map((label, i) => ({
@@ -104,7 +107,7 @@ export async function buildLearnerInsightSnapshot(
   const la = dashboard.lessonsAvailable;
   const lp = lessonPct(lc, la);
 
-  const adaptive = buildAdaptiveRecommendations({
+  const adaptive = await buildGovernedAdaptiveRecommendations({
     examDatePlanType: userExam?.examDatePlanType ?? undefined,
     examDate: userExam?.examDate ?? null,
     readiness: dashboard.readiness,
@@ -120,6 +123,9 @@ export async function buildLearnerInsightSnapshot(
     mockCount,
     practiceSessionCount: dashboard.sessionGrading.sessionCount,
     subscriberCountry: entitlement.country,
+    preferredPathwayId: dashboard.cognition.pathwayId,
+    userId,
+    entitlement,
   });
 
   const primary = explainNextAction(adaptive.primaryNext);

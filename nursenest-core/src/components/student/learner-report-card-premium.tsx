@@ -13,6 +13,7 @@ import { LearnerStudySurfaceSection } from "@/components/learner-ui/learner-stud
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import { LearnerReportInset, LearnerReportOutcomeStatStrip, type LearnerReportOutcomeTile } from "@/components/student/learner-report-card-primitives";
 import { PremiumNursingDimensionBands } from "@/components/student/dashboard/learner-premium-nursing-analytics";
+import { EducGraphNextStepsPanel } from "@/components/educational-cognition/educ-graph-next-steps-panel";
 
 function pctBar(pct: number | null, label: string) {
   const v = pct == null ? 0 : Math.min(100, Math.max(0, pct));
@@ -247,6 +248,26 @@ export function LearnerReportCardPremium({
           </div>
         )}
       </LearnerStudySurfaceSection>
+
+      {data.cognition.graphNextSteps.length > 0 ? (
+        <LearnerStudySurfaceSection
+          id="rc-graph-next-steps"
+          eyebrow={data.cognition.primaryMetricLabel}
+          title="Recommended study path"
+          intro={
+            data.cognition.fatigueCapActive
+              ? "Focused next steps — remediation load is capped to protect momentum."
+              : "Orchestrated from your learner cognition graph and weak-area signals."
+          }
+          tone="supportive"
+        >
+          <EducGraphNextStepsPanel
+            steps={data.cognition.graphNextSteps}
+            title="Next best actions"
+            maxVisible={data.cognition.maxRemediationItems}
+          />
+        </LearnerStudySurfaceSection>
+      ) : null}
 
       <LearnerStudySurfaceSection
         id="rc-performance"

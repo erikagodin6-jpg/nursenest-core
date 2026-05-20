@@ -1,4 +1,8 @@
-import { composeTutoringPromptEnvelope } from "@/lib/ai-tutor/prompt-composition";
+import {
+  composeTutoringPromptEnvelope,
+  composeTutoringPromptFromGraphSteps,
+} from "@/lib/ai-tutor/prompt-composition";
+import type { EduGraphStep } from "@/lib/educational-graph/graph-step-contract";
 import type {
   TutoringExplainOptions,
   TutoringGenerateOptions,
@@ -53,7 +57,12 @@ export class StubTutoringProvider implements TutoringProvider {
     const g = guardTutoringEntitlementSnapshot(ctx.entitlementSnapshot);
     if (!g.ok) return null;
     const boundCtx: TutoringPromptContext = { ...ctx, entitlementSnapshot: g.value };
-    void composeTutoringPromptEnvelope(boundCtx);
+    const graphSteps = (boundCtx as TutoringPromptContext & { graphSteps?: readonly EduGraphStep[] }).graphSteps;
+    if (graphSteps?.length) {
+      void composeTutoringPromptFromGraphSteps(boundCtx, graphSteps);
+    } else {
+      void composeTutoringPromptEnvelope(boundCtx);
+    }
     const ms = options?.timeoutMs;
     const runner = async () =>
       runDeterministicTutoringFallbackChain(boundCtx, [defaultWeakTopicFallback]) ??

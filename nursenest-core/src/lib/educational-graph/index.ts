@@ -21,3 +21,8 @@ export * from "@/lib/educational-graph/nursing-glossary-governance";
 export * from "@/lib/educational-graph/remediation-ladder-v2";
 export * from "@/lib/educational-graph/topic-hub-learning-graph";
 export * from "@/lib/educational-graph/structured-data-educational-entities";
+export {
+  buildGlossaryGraphNode,
+  validateGlossaryGraphNode,
+  type GlossaryGraphNode,
+} from "@/lib/educational-graph/glossary-graph-node";

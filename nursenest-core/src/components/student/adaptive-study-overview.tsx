@@ -3,9 +3,9 @@ import { CheckCircle2, Circle, Compass, Flag, Heart, Target } from "lucide-react
 import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { retentionPromptHints } from "@/lib/learner/exam-plan-engine";
 import { AdaptiveRecommendationLoopPanel } from "@/components/student/adaptive-recommendation-loop-panel";
-import { PH } from "@/lib/observability/posthog-conversion-events";
-import { trackClientEvent } from "@/lib/observability/posthog-client";
-import { buildStudyLoopCatClickProps } from "@/lib/observability/study-loop-cat-analytics";
+import type { GovernedAdaptiveRecommendations } from "@/lib/educational-cognition/adaptive-recommendation-cognition";
+import { GovernedNextActionLink } from "@/components/educational-graph/governed-next-action-link";
+import { EducGraphNextStepsPanel } from "@/components/educational-cognition/educ-graph-next-steps-panel";
 
 function trajectoryLabel(t: AdaptiveLearnerRecommendations["trajectory"]): string {
   switch (t) {
@@ -32,7 +32,7 @@ export function AdaptiveStudyOverview({
   subscriber = true,
   userId,
 }: {
-  adaptive: AdaptiveLearnerRecommendations;
+  adaptive: AdaptiveLearnerRecommendations | GovernedAdaptiveRecommendations;
   showHeading?: boolean;
   compact?: boolean;
   subscriber?: boolean;
@@ -54,6 +54,14 @@ export function AdaptiveStudyOverview({
     cadenceDisplay,
     studyCadencePreference,
   } = adaptive;
+
+  const governed = adaptive as GovernedAdaptiveRecommendations;
+  const primaryGraphStep =
+    "cognition" in governed && governed.cognition?.primaryGraphStep ? governed.cognition.primaryGraphStep : null;
+  const graphNextSteps =
+    "cognition" in governed && governed.cognition?.graphNextSteps?.length
+      ? governed.cognition.graphNextSteps
+      : [];
 
   const retention = subscriber
     ? retentionPromptHints({
@@ -204,31 +212,30 @@ export function AdaptiveStudyOverview({
       {!compact ? (
         <div className="mt-5 rounded-xl border border-primary/15 bg-primary/[0.04] p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Next best action</p>
-          <Link
-            href={primaryNext.href}
+          <GovernedNextActionLink
+            action={primaryNext}
+            graphStep={primaryGraphStep}
+            sourceSurface="dashboard_feed"
+            clickEvent="next_best_action_clicked"
             className="mt-2 flex items-start gap-2 text-base font-semibold text-[var(--theme-heading-text)] hover:underline"
-            onClick={() => {
-              if (primaryNext.kind !== "cat") return;
-              trackClientEvent(
-                PH.learnerStudyLoopCatCtaClicked,
-                buildStudyLoopCatClickProps({
-                  href: primaryNext.href,
-                  sourceSurface: "adaptive_study_overview_primary",
-                }),
-              );
-            }}
           >
             <Target className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
             <span>{primaryNext.title}</span>
-          </Link>
+          </GovernedNextActionLink>
           <p className="mt-1 text-sm text-muted-foreground">{primaryNext.reason}</p>
         </div>
       ) : (
         <div className="mt-4 rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
           <span className="font-medium text-foreground">Primary step: </span>
-          <Link href={primaryNext.href} className="font-semibold text-primary underline-offset-2 hover:underline">
+          <GovernedNextActionLink
+            action={primaryNext}
+            graphStep={primaryGraphStep}
+            sourceSurface="dashboard_feed"
+            clickEvent="next_best_action_clicked"
+            className="font-semibold text-primary underline-offset-2 hover:underline"
+          >
             {primaryNext.title}
-          </Link>
+          </GovernedNextActionLink>
         </div>
       )}
 
@@ -236,26 +243,28 @@ export function AdaptiveStudyOverview({
         <ul className="mt-4 space-y-2">
           {secondary.map((s) => (
             <li key={s.href + s.title}>
-              <Link
-                href={s.href}
+              <GovernedNextActionLink
+                action={s}
+                sourceSurface="dashboard_feed"
                 className="text-sm font-medium text-primary hover:underline"
-                onClick={() => {
-                  if (s.kind !== "cat") return;
-                  trackClientEvent(
-                    PH.learnerStudyLoopCatCtaClicked,
-                    buildStudyLoopCatClickProps({
-                      href: s.href,
-                      sourceSurface: "adaptive_study_overview_secondary",
-                    }),
-                  );
-                }}
               >
                 {s.title}
-              </Link>
+              </GovernedNextActionLink>
               <span className="text-sm text-muted-foreground"> · {s.reason}</span>
             </li>
           ))}
         </ul>
+      ) : null}
+
+      {graphNextSteps.length > 1 ? (
+        <div className="mt-6">
+          <EducGraphNextStepsPanel
+            steps={graphNextSteps}
+            title="Graph-guided study path"
+            intro="Orchestrated from your cognition graph — same authority as report card and remediation."
+            maxVisible={4}
+          />
+        </div>
       ) : null}
 
       {userId ? <AdaptiveRecommendationLoopPanel userId={userId} fallbackTopics={weakTop3} /> : null}

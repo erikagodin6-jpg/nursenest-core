@@ -20,12 +20,16 @@ export function governLearnerDisplayCopy(
   pathwayId: string | null | undefined,
   text: string,
 ): LearnerCopyGovernanceResult {
-  const sanitized = sanitizeLearnerCopyForPathway(pathwayId, text);
-  const violations = validatePsychometricCopyForPathway(pathwayId, sanitized);
+  const violations = validatePsychometricCopyForPathway(pathwayId, text);
   if (violations.length > 0) {
+    const sanitized = sanitizeLearnerCopyForPathway(
+      pathwayId,
+      text,
+      "Review domain balance and schedule your next licensing-style simulation when ready.",
+    );
     return { ok: false, violations, sanitized };
   }
-  return { ok: true, sanitized };
+  return { ok: true, sanitized: text };
 }
 
 /** Strict guard — throws when LOFT pathways receive CAT psychometric language. */
@@ -41,7 +45,8 @@ export function assertLearnerDisplayCopy(pathwayId: string | null | undefined, t
 
 /** CMS / marketing publish gate. */
 export function governMarketingCopy(pathwayId: string | null | undefined, text: string) {
-  return validateTestingModelMarketingLanguage(pathwayId, text);
+  const id = (pathwayId ?? "").trim() || "unknown";
+  return validateTestingModelMarketingLanguage(id, text);
 }
 
 /** Model-only validation (no pathway context). */

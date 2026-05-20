@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-20T09:53:03.983Z",
+  "generatedAt": "2026-05-20T10:55:11.838Z",
   "glossary": {
-    "count": 21,
+    "count": 36,
     "slugs": [
       "preload",
       "afterload",
@@ -23,7 +23,22 @@
       "prioritization",
       "anticoagulation",
       "troponin",
-      "map"
+      "map",
+      "lactic-acid",
+      "anion-gap",
+      "insulin",
+      "vasopressor",
+      "peep",
+      "fio2",
+      "inr",
+      "creatinine",
+      "hemoglobin",
+      "platelet",
+      "pao2",
+      "hco3",
+      "osmolality",
+      "raas",
+      "scope-of-practice"
     ]
   },
   "mechanisms": {
@@ -37,73 +52,29 @@
     "figma_pending": 6
   },
   "legacyCanadaRpnRexPn": {
-    "fileCount": 36,
+    "fileCount": 4,
     "topFiles": [
-      {
-        "file": "src/lib/seo/blog-content-examples.ts",
-        "count": 17
-      },
-      {
-        "file": "src/lib/seo/authority-cluster-pages.contract.test.ts",
-        "count": 14
-      },
-      {
-        "file": "src/lib/seo/seo-authority-clusters.contract.test.ts",
-        "count": 12
-      },
-      {
-        "file": "src/lib/seo/healthcare-test-bank-pages.ts",
-        "count": 7
-      },
-      {
-        "file": "src/lib/seo/phase2-authority-expansion-seo.contract.test.ts",
-        "count": 6
-      },
-      {
-        "file": "src/lib/i18n/marketing-path.test.ts",
-        "count": 5
-      },
-      {
-        "file": "src/lib/seo/authority-comparison-pages.ts",
-        "count": 5
-      },
-      {
-        "file": "src/lib/seo/authority-resource-pages.ts",
-        "count": 5
-      },
-      {
-        "file": "src/lib/seo/breadcrumb-resolver.ts",
-        "count": 4
-      },
       {
         "file": "src/lib/navigation/rpn-route-aliases.contract.test.ts",
         "count": 3
       },
       {
-        "file": "src/lib/marketing/marketing-route-integrity.test.ts",
-        "count": 2
-      },
-      {
-        "file": "src/lib/seo/french-blog-posts-chunk2.ts",
-        "count": 2
-      },
-      {
-        "file": "src/lib/seo/french-blog-posts.ts",
-        "count": 2
-      },
-      {
-        "file": "src/lib/seo/long-form-seo-blog-posts-chunk3.ts",
+        "file": "src/lib/educational-graph/educational-graph-orchestrator.contract.test.ts",
         "count": 2
       },
       {
         "file": "src/app/(marketing)/(default)/canada/rpn/rex-pn/test-bank/page.tsx",
         "count": 1
+      },
+      {
+        "file": "src/lib/linking/seo-graph-hardening.contract.test.ts",
+        "count": 1
       }
     ]
   },
   "recommendations": [
-    "Glossary at 21 terms — expand via editorial batches toward 200+ with governance gates.",
-    "Migrate 36 files still referencing /canada/rpn/rex-pn.",
+    "Glossary at 36 terms — expand via editorial batches toward 200+ with governance gates.",
+    "Migrate 4 files still referencing /canada/rpn/rex-pn.",
     "Remediation V2: mechanism → lessons → interpretation → prioritize → flashcards → CAT.",
     "Wire longitudinal weak-topic signals into buildTopicHubLearningGraph for personalized sequencing."
   ]

@@ -2,7 +2,8 @@
  * Governed learner analytics — all pathway-scoped PostHog events must pass psychometric telemetry guards.
  */
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
+import { skipLearnerBusinessAnalyticsForAccessScope } from "@/lib/observability/admin-learner-qa-analytics";
+import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import {
   assertPathwayPostHogCapture,
   logPsychometricTelemetryViolation,
@@ -37,6 +38,8 @@ export function captureGovernedLearnerProductEvent(
     return;
   }
 
+  if (skipLearnerBusinessAnalyticsForAccessScope(entitlement)) return;
+
   const model = getTestingModelForPathwayId(pathwayId);
   const governed: Record<string, string | number | boolean | undefined> = {
     ...toTestingModelPostHogFields(pathwayId),
@@ -53,5 +56,10 @@ export function captureGovernedLearnerProductEvent(
     delete governed.pass_outlook_pct;
   }
 
-  captureLearnerProductEvent(userId, entitlement, event, governed);
+  void captureServerEvent(analyticsDistinctId(userId), event, {
+    actor: "authenticated",
+    ...governed,
+    country: entitlement.country ?? undefined,
+    tier: entitlement.tier ?? undefined,
+  });
 }

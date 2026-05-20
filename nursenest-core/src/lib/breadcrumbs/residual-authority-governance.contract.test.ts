@@ -10,8 +10,8 @@ const REPO = process.cwd();
 const SRC = join(REPO, "src");
 
 const GRANDFATHER_APP_SHELL = new Set([
-  "lib/seo/breadcrumb-resolver.ts",
-  "lib/breadcrumbs/app-shell-breadcrumb-adapter.ts",
+  "src/lib/seo/breadcrumb-resolver.ts",
+  "src/lib/breadcrumbs/app-shell-breadcrumb-adapter.ts",
 ]);
 
 const ALLOWED_TRAIL_WRAPPERS =

@@ -25,6 +25,7 @@ import {
   type RecentMock,
 } from "@/lib/learner/load-learner-dashboard";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
+import type { LearnerDashboardCognitionSurface } from "@/lib/educational-cognition/learner-dashboard-cognition-surface";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import { learnerAggregateDegradedState, mergeLearnerAggregateDegraded } from "@/lib/learner/aggregate-loader-degraded-state";
@@ -236,6 +237,8 @@ export type PremiumDashboardSnapshot = {
   pathways: PathwayProgressRow[];
   overallLessons: { completed: number; total: number; pct: number };
   readiness: ReadinessResult;
+  /** Governed dashboard presentation — derived from educational cognition resolver. */
+  cognition: LearnerDashboardCognitionSurface;
   practice: PracticePerformanceSummary;
   recentMocks: RecentMock[];
   studyStreakDays: number;
@@ -452,6 +455,7 @@ async function loadPremiumDashboardSnapshotUncached(
         pct: lessonPct,
       },
       readiness: dash.readiness,
+      cognition: dash.cognition,
       practice,
       recentMocks: dash.recentMocks,
       studyStreakDays: streakDays,

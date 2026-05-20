@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { ExamCountdownCard } from "@/components/student/dashboard/exam-countdown-card";
 import { ReadinessScoreCard } from "@/components/student/dashboard/readiness-score-card";
 import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
@@ -44,6 +43,7 @@ import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 import { LearnerDashboardReadinessNextStrip } from "@/components/student/learner-dashboard-readiness-next-strip";
 import { PostExamDashboardBridgeBanner } from "@/components/student/post-exam-dashboard-bridge";
+import { LearnerCoachingDashboardPanel } from "@/components/student/learner-coaching-dashboard-panel";
 import { LearnerHubClinicalQuickLaunch } from "@/components/student/learner-hub-clinical-quick-launch";
 import { LearnerDashboardHubLayout, type LearnerDashboardHubNavItem } from "@/components/student/learner-dashboard-hub-layout";
 import { LearnerDashboardMobileFold } from "@/components/student/learner-dashboard-mobile-fold";
@@ -110,7 +110,6 @@ function RecentGainsBlock({
 }
 
 export type LearnerStudyHomeProps = {
-  crumbs: BreadcrumbCrumb[];
   t: LearnerMarketingT;
   /** Marketing locale — matches shell nav label casing. */
   locale: string;
@@ -154,7 +153,6 @@ export type LearnerStudyHomeProps = {
 };
 
 export function LearnerStudyHome({
-  crumbs,
   t,
   locale,
   examsNavLabel,
@@ -195,7 +193,12 @@ export function LearnerStudyHome({
   const showHeatmap = studySettings.showHeatmap;
   const showWeaknessAlerts = studySettings.enableWeaknessAlerts;
   const showDecayAlerts = studySettings.enableSpacedRepetition && studySettings.enableDecayAlerts;
-  const showAdaptivePlan = studySettings.enableAdaptivePlan;
+  const showAdaptivePlan =
+    snapshot.cognition?.showAdaptivePlan === true
+      ? true
+      : snapshot.cognition?.showAdaptivePlan === false
+        ? false
+        : studySettings.enableAdaptivePlan;
   const preferredPathwayId =
     snapshot.pathways.find((p) => p.pathwayId === snapshot.learnerPath)?.pathwayId ??
     snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
@@ -269,6 +272,7 @@ export function LearnerStudyHome({
       items={hubNavItems}
     >
       <PostExamDashboardBridgeBanner />
+      <LearnerCoachingDashboardPanel />
 
       {/* 1 — Premium hero strip: readiness snapshot + optional exam/streak + primary next action */}
       <LearnerDashboardReadinessNextStrip
@@ -562,7 +566,6 @@ export function LearnerStudyHome({
 
   return (
     <LearnerDashboardPageShell
-      crumbs={crumbs}
       t={t}
       heroHeading={heroHeading}
       identity={identity}

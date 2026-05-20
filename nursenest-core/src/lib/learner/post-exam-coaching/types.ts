@@ -127,4 +127,8 @@ export type PostExamCoachingReport = {
   clinicalJudgment: StructuredClinicalInsight[];
   recommendations: CoachingRecommendation[];
   dashboardFeed: PostExamDashboardFeed;
+  /** Present when built via rn-coaching-intelligence orchestration. */
+  timingV2?: import("@/lib/learner/rn-coaching-intelligence/coaching-types").TimingIntelligenceV2Result;
+  certaintyTier?: import("@/lib/learner/rn-coaching-intelligence/coaching-types").CoachingCertaintyTier;
+  learnerState?: import("@/lib/learner/rn-coaching-intelligence/learner-state-types").RnLearnerStateSnapshot;
 };
