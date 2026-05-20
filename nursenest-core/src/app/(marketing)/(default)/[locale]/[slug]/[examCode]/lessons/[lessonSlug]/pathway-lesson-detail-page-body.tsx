@@ -42,6 +42,10 @@ import {
 import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
 import { extractClinicalPearlLines } from "@/lib/lessons/extract-clinical-pearl-lines";
 import { rnLessonSectionStackClass } from "@/lib/lessons/rn-reading-stack";
+import {
+  PREMIUM_LESSON_READING_V2_SHELL_CLASS,
+  usesPremiumLessonReadingV2Layout,
+} from "@/lib/lessons/premium-lesson-reading-v2";
 import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
 import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
@@ -182,6 +186,11 @@ export async function PathwayLessonDetailPageBody({
   const { lesson, fullAccess, scope, entitlementError } = routeResolution;
   const isRnLessonPathway =
     pathway.id === "ca-rn-nclex-rn" || pathway.id === "us-rn-nclex-rn";
+  const usesReadingV2Layout = usesPremiumLessonReadingV2Layout({
+    pathwayId: pathway.id,
+    examFamily: pathway.examFamily,
+    roleTrack: pathway.roleTrack,
+  });
   const linkedLearningSignals =
     lesson.linkedLearningSignals ??
     computePathwayLessonLinkedLearningSignals(pathway.id, lesson);
@@ -360,7 +369,7 @@ export async function PathwayLessonDetailPageBody({
   const clinicalPearlsSection = retentionSections.find(
     (section) => section.kind === "clinical_pearls",
   );
-  const rnClinicalPearlLines = isRnLessonPathway
+  const rnClinicalPearlLines = usesReadingV2Layout
     ? extractClinicalPearlLines(
         typeof clinicalPearlsSection?.body === "string"
           ? clinicalPearlsSection.body
@@ -403,7 +412,7 @@ export async function PathwayLessonDetailPageBody({
     <PathwayLessonDetailMarketingI18nLayer messages={marketingMessages}>
       <div className="mx-auto w-full max-w-[100rem] px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
         <div
-          className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
+          className={`nn-lesson-page-shell nn-premium-lesson-detail-shell nn-lesson-reading-shell--blossom px-0 py-2 sm:px-6 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}${usesReadingV2Layout ? ` ${PREMIUM_LESSON_READING_V2_SHELL_CLASS}` : ""}${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
         >
           <MarketingPathwayLessonDetailViewBeacon
             pathway={pathway}
@@ -555,7 +564,7 @@ export async function PathwayLessonDetailPageBody({
               sections={tocNavSections}
               progress={lessonProgress}
               progressVisible={Boolean(userId) && fullAccess}
-              layout={isRnLessonPathway ? "rn-v2" : "default"}
+              layout={usesReadingV2Layout ? "rn-v2" : "default"}
               clinicalPearls={rnClinicalPearlLines}
             >
               <div
@@ -591,7 +600,7 @@ export async function PathwayLessonDetailPageBody({
                 fullAccess={fullAccess}
                 assessmentsEnabled={studySettings.enablePrePostQuizzes}
                 sectionAnchors={
-                  isRnLessonPathway
+                  usesReadingV2Layout
                     ? undefined
                     : displaySections.map((s) => ({
                         id: s.id,
@@ -605,7 +614,7 @@ export async function PathwayLessonDetailPageBody({
                       <LessonRecallToggle />
                     </div>
                     <article
-                      className={`nn-lesson-article-flow nn-premium-lesson-article nn-premium-lesson-reading-flow w-full max-w-none${isRnLessonPathway ? " nn-lesson-reading-stack" : ""}`}
+                      className={`nn-lesson-article-flow nn-premium-lesson-article nn-premium-lesson-reading-flow w-full max-w-none${usesReadingV2Layout ? " nn-lesson-reading-stack" : ""}`}
                       data-nn-lesson-article
                       data-nn-premium-lessons-section-system
                     >
@@ -633,7 +642,7 @@ export async function PathwayLessonDetailPageBody({
                               kind={section.kind}
                               className={[
                                 wide ? "nn-lesson-section-card--wide" : "",
-                                isRnLessonPathway
+                                usesReadingV2Layout
                                   ? rnLessonSectionStackClass(sectionIndex) ?? ""
                                   : "",
                               ]

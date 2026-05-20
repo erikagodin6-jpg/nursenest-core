@@ -98,6 +98,10 @@ import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
 import { extractClinicalPearlLines } from "@/lib/lessons/extract-clinical-pearl-lines";
 import { rnLessonSectionStackClass } from "@/lib/lessons/rn-reading-stack";
+import {
+  PREMIUM_LESSON_READING_V2_SHELL_CLASS,
+  usesPremiumLessonReadingV2Layout,
+} from "@/lib/lessons/premium-lesson-reading-v2";
 import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
 import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
@@ -650,10 +654,15 @@ async function LessonDetailPageInner({ params }: Props) {
       learningSections.length > 0 ? learningSections : displaySections;
     const isRnLessonPathway =
       pathwayId === "ca-rn-nclex-rn" || pathwayId === "us-rn-nclex-rn";
+    const usesReadingV2Layout = usesPremiumLessonReadingV2Layout({
+      pathwayId,
+      examFamily: pathway?.examFamily ?? null,
+      roleTrack: pathway?.roleTrack ?? null,
+    });
     const clinicalPearlsSection = retentionSections.find(
       (section) => section.kind === "clinical_pearls",
     );
-    const rnClinicalPearlLines = isRnLessonPathway
+    const rnClinicalPearlLines = usesReadingV2Layout
       ? extractClinicalPearlLines(
           typeof clinicalPearlsSection?.body === "string"
             ? clinicalPearlsSection.body
@@ -989,7 +998,7 @@ async function LessonDetailPageInner({ params }: Props) {
             compactSubscriberBanner
           >
             <article
-              className={`nn-lesson-article-flow nn-premium-lesson-article${isRnLessonPathway ? " nn-lesson-reading-stack" : ""}`}
+              className={`nn-lesson-article-flow nn-premium-lesson-article${usesReadingV2Layout ? " nn-lesson-reading-stack" : ""}`}
             >
               {articleSections.length > 0
                 ? articleSections.map((section, sectionIndex) => {
@@ -1021,7 +1030,7 @@ async function LessonDetailPageInner({ params }: Props) {
                         heading={surfaceHeading}
                         kind={section.kind ?? null}
                         className={
-                          isRnLessonPathway
+                          usesReadingV2Layout
                             ? rnLessonSectionStackClass(sectionIndex)
                             : undefined
                         }
@@ -1302,7 +1311,7 @@ async function LessonDetailPageInner({ params }: Props) {
 
     return (
       <div
-        className={`nn-lesson-page nn-lesson-page--learner-app nn-premium-lesson-detail-shell${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
+        className={`nn-lesson-page nn-lesson-page--learner-app nn-premium-lesson-detail-shell${usesReadingV2Layout ? ` ${PREMIUM_LESSON_READING_V2_SHELL_CLASS}` : ""}${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}${pathway?.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <StaffEditLivePageBanner
           adminHref={buildAdminPathwayLessonStableEditHref({
@@ -1354,7 +1363,7 @@ async function LessonDetailPageInner({ params }: Props) {
             sections={navSections}
             progress={initialProgress}
             progressVisible={Boolean(userId) && entitlement.hasAccess}
-            layout={isRnLessonPathway ? "rn-v2" : "default"}
+            layout={usesReadingV2Layout ? "rn-v2" : "default"}
             clinicalPearls={rnClinicalPearlLines}
           >
             <div

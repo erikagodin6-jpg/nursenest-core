@@ -286,8 +286,12 @@ describe("premium lesson reading architecture v2", () => {
   it("keeps RN lessons on the wide colored-section reading canvas with modular section cards", () => {
     assert.match(marketingDetail, /nn-lesson-page-shell--rn/);
     assert.match(learnerDetail, /nn-lesson-page-shell--rn/);
-    assert.match(marketingDetail, /layout=\{isRnLessonPathway \? "rn-v2" : "default"\}/);
-    assert.match(learnerDetail, /layout=\{isRnLessonPathway \? "rn-v2" : "default"\}/);
+    assert.match(marketingDetail, /usesPremiumLessonReadingV2Layout/);
+    assert.match(learnerDetail, /usesPremiumLessonReadingV2Layout/);
+    assert.match(marketingDetail, /layout=\{usesReadingV2Layout \? "rn-v2" : "default"\}/);
+    assert.match(learnerDetail, /layout=\{usesReadingV2Layout \? "rn-v2" : "default"\}/);
+    assert.match(marketingDetail, /PREMIUM_LESSON_READING_V2_SHELL_CLASS/);
+    assert.match(learnerDetail, /PREMIUM_LESSON_READING_V2_SHELL_CLASS/);
     assert.match(marketingDetail, /extractClinicalPearlLines/);
     assert.match(learnerDetail, /extractClinicalPearlLines/);
     for (const [label, css] of [
@@ -296,6 +300,11 @@ describe("premium lesson reading architecture v2", () => {
     ] as const) {
       assert.match(css, /--nn-rn-lesson-canvas-wide:\s*min\(100%,\s*87\.5rem\)/, `${label} RN canvas width missing`);
       assert.match(css, /\.nn-premium-lesson-detail-shell\.nn-lesson-page-shell--rn/, `${label} RN shell selector missing`);
+      assert.match(
+        css,
+        /\.nn-lesson-page-shell--reading-v2/,
+        `${label} premium reading v2 shell selector missing`,
+      );
       assert.match(css, /max-width:\s*96ch/, `${label} RN readable prose width missing`);
       assert.match(css, /\.nn-lesson-reading-stack/, `${label} RN reading stack missing`);
       assert.match(
