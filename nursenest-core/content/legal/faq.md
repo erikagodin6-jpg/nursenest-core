@@ -60,6 +60,14 @@ No. The platform is educational only and is not a substitute for clinical judgme
 
 Readiness or performance indicators are estimates based on your activity and are meant to support studying, not to guarantee an outcome.
 
+## Can I Switch Between SI (Metric) and Conventional (US) Units?
+
+Yes. NurseNest lets you view clinical values in **SI (metric)** or **conventional (US customary)** units.
+
+- **In study sessions:** Use the **SI / Conv.** (or **SI (metric) / Conventional**) toggle on lessons, practice exams, CAT, and flashcards.
+- **Account default:** Set your preference under **Account → Personal** or **Study preferences**. It is saved to your profile and synced in this browser so you do not have to choose units on every page.
+- **What changes:** Lab values, weights, volumes, and similar measurements in lesson text, questions, rationales, and flashcards update when you switch. Your exam answer keys are unchanged; only display units change.
+
 ## I Do Not Recognize a Charge. What Should I Do?
 
 Email support@nursenest.ca first so we can review the transaction quickly. Please allow up to 4 business days for a response.

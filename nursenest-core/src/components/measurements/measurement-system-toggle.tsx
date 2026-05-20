@@ -2,6 +2,7 @@
 
 import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
 import type { MeasurementPreference } from "@/lib/measurements/measurement-preference";
+import { commitMeasurementPreferenceToProfile } from "@/lib/measurements/commit-measurement-preference-to-profile";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 
 export function MeasurementSystemToggle({
@@ -12,6 +13,7 @@ export function MeasurementSystemToggle({
   compact = false,
   onSystemChange,
   onPreferenceCommitted,
+  syncToProfile = false,
 }: {
   fallbackSystem: MeasurementSystem;
   initialPreference?: MeasurementPreference | null;
@@ -21,12 +23,15 @@ export function MeasurementSystemToggle({
   onSystemChange?: (system: MeasurementSystem) => void;
   /** Optional server sync (e.g. PATCH profile) after localStorage + cookie are updated. */
   onPreferenceCommitted?: (preference: MeasurementPreference) => void | Promise<void>;
+  /** When true, also PATCH `/api/learner/personal-profile` (account default). */
+  syncToProfile?: boolean;
 }) {
   const { preference, measurementSystem, setPreference } = useMeasurementPreference(fallbackSystem, initialPreference);
 
   function update(next: MeasurementPreference) {
     setPreference(next);
     onSystemChange?.(next === "imperial" ? "US" : "SI");
+    if (syncToProfile) void commitMeasurementPreferenceToProfile(next);
     void onPreferenceCommitted?.(next);
   }
 
@@ -43,7 +48,7 @@ export function MeasurementSystemToggle({
           className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${preference === "metric" ? "bg-[var(--semantic-brand)] text-white" : "text-[var(--semantic-text-secondary)]"}`}
           aria-pressed={preference === "metric"}
         >
-          Metric
+          SI (metric)
         </button>
         <button
           type="button"
@@ -51,11 +56,11 @@ export function MeasurementSystemToggle({
           className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${preference === "imperial" ? "bg-[var(--semantic-brand)] text-white" : "text-[var(--semantic-text-secondary)]"}`}
           aria-pressed={preference === "imperial"}
         >
-          Imperial
+          Conventional
         </button>
       </div>
       <p className="text-xs text-[var(--semantic-text-secondary)]">
-        Showing <span className="font-semibold text-[var(--semantic-text-primary)]">{measurementSystem === "US" ? "imperial / US customary" : "metric / SI"}</span> values.
+        Showing <span className="font-semibold text-[var(--semantic-text-primary)]">{measurementSystem === "US" ? "conventional (US customary)" : "SI (metric)"}</span> values.
       </p>
     </div>
   );

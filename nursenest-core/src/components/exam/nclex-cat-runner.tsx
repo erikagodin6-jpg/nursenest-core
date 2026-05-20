@@ -10,7 +10,7 @@
  * Drop-in replacement when catPresentationMode === "exam_simulation".
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   NclexCatExamLayout,
@@ -27,6 +27,21 @@ import {
   tryNormalizeBowtiePayload,
 } from "@/lib/questions/bowtie-adapter";
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import { buildCatAdvancePatchBody } from "@/lib/practice-tests/cat-advance-contract";
+import {
+  assertCatExamPhaseTransition,
+  catExamCanChangeAnswer,
+  catExamCanLockAnswer,
+  catExamCanRequestCatAdvance,
+  catExamFooterPrimaryBusy,
+  catExamOptionsInteractionLocked,
+  type CatExamUiPhase,
+} from "@/lib/practice-tests/cat-exam-ui-state";
+import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
+import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -43,11 +58,8 @@ type QRow = {
   difficulty?: number | null;
 };
 
-type CatUiPhase =
-  | "answering"      // user is selecting an option
-  | "submitted"      // answer submitted, waiting for server
-  | "advancing"      // server returned next item, transitioning
-  | "completed";     // CAT ended — show results
+/** Re-export exam FSM — `completed` when results replace the question shell. */
+type CatRunnerPhase = CatExamUiPhase | "completed";
 
 function parseOptions(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x) => String(x));
@@ -161,23 +173,24 @@ async function fetchQuestion(testId: string, questionId: string): Promise<QRow |
 async function catAdvanceApi(
   testId: string,
   questionId: string,
-  selectedOption: unknown,
-  flagged: boolean,
+  answers: Record<string, unknown>,
+  cursorIndex: number,
 ): Promise<{
   catAdvanced?: boolean;
   catCompleted?: boolean;
   results?: PracticeTestResultsJson;
   error?: string;
 }> {
+  const body = buildCatAdvancePatchBody({
+    testId,
+    answers,
+    cursorIndex,
+    examQuestionId: questionId,
+  });
   const res = await fetchWithRetry(`/api/practice-tests/${testId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "cat_advance",
-      questionId,
-      selectedOption,
-      flagged,
-    }),
+    body: JSON.stringify(body),
   });
   const j = await res.json() as {
     catAdvanced?: boolean;
@@ -216,11 +229,23 @@ export function NclexCatRunner({
   const [questionCache, setQuestionCache] = useState<Record<string, QRow>>({});
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
-  const [catUiPhase, setCatUiPhase] = useState<CatUiPhase>("answering");
+  const [catUiPhase, setCatUiPhase] = useState<CatRunnerPhase>("answering");
   const [results, setResults] = useState<PracticeTestResultsJson | null>(null);
   const [pathwayLabel, setPathwayLabel] = useState(pathwayLabelProp ?? "NCLEX-RN®");
   const [pathwayId, setPathwayId] = useState<string | null>(null);
+  const [pathwayCountryCode, setPathwayCountryCode] = useState<string | null>(null);
   const [elapsedMs, setElapsedMs] = useState<number | null>(null);
+
+  const pathwayCountryByPathwayId = useMemo(() => {
+    if (!pathwayId || !pathwayCountryCode) return {};
+    return { [pathwayId]: pathwayCountryCode };
+  }, [pathwayId, pathwayCountryCode]);
+
+  const fallbackMeasurementSystem = useMemo(
+    () => resolveMeasurementSystemForLearnerPathway(pathwayId, pathwayCountryByPathwayId),
+    [pathwayId, pathwayCountryByPathwayId],
+  );
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
 
   // Timer
   const [timedMode, setTimedMode] = useState(false);
@@ -265,7 +290,11 @@ export function NclexCatRunner({
         setTimedMode(s.timedMode);
         setTimeLimitSec(s.timeLimitSec ?? null);
         if (s.pathwayLabel) setPathwayLabel(s.pathwayLabel);
-        if (s.pathwayId) setPathwayId(s.pathwayId);
+        if (s.pathwayId) {
+          setPathwayId(s.pathwayId);
+          const pathway = getExamPathwayById(s.pathwayId);
+          if (pathway) setPathwayCountryCode(String(pathway.countryCode));
+        }
 
         if (s.timedMode && s.timeLimitSec) {
           const used = Math.floor((s.elapsedMs ?? 0) / 1000);
@@ -326,8 +355,20 @@ export function NclexCatRunner({
   const optsCanonical = current ? parseOptions(current.options) : [];
   const optsDisplay = current?.displayOptions ?? optsCanonical;
 
+  const bowtiePayloadEarly = isBowtie && current
+    ? tryNormalizeBowtiePayload(
+        current.questionFormat ?? current.questionType,
+        current.stem,
+        current.options,
+      )
+    : null;
+  const hasAnswer =
+    isBowtie && bowtiePayloadEarly
+      ? isBowtieAnswerComplete(coerceBowtieDraftAnswer(raw))
+      : hasMeaningfulAnswer(raw);
+
   function setAnswerForCurrent(val: unknown) {
-    if (!currentId) return;
+    if (!currentId || catUiPhase !== "answering" || !catExamCanChangeAnswer(catUiPhase)) return;
     setAnswers((prev) => ({ ...prev, [currentId]: val }));
   }
 
@@ -336,23 +377,40 @@ export function NclexCatRunner({
     setFlagged((prev) => ({ ...prev, [currentId]: !prev[currentId] }));
   }
 
-  // ── Submit + advance ──────────────────────────────────────────────────────
+  function lockAnswer() {
+    if (!currentId || catUiPhase !== "answering") return;
+    if (!catExamCanLockAnswer("answering", hasAnswer)) return;
+    try {
+      assertCatExamPhaseTransition(catUiPhase, "submitted_locked");
+    } catch {
+      return;
+    }
+    setCatUiPhase("submitted_locked");
+  }
 
-  async function submitAndAdvance() {
+  // ── Server advance (after submit lock) ────────────────────────────────────
+
+  async function requestCatAdvance() {
     if (!currentId || advanceInFlightRef.current) return;
-    if (catUiPhase !== "answering") return;
-    if (!hasMeaningfulAnswer(raw)) return;
+    if (catUiPhase !== "submitted_locked" && catUiPhase !== "advancing") return;
+    if (!catExamCanRequestCatAdvance(catUiPhase)) return;
 
     advanceInFlightRef.current = true;
-    setCatUiPhase("submitted");
+    try {
+      assertCatExamPhaseTransition("submitted_locked", "advancing");
+    } catch {
+      advanceInFlightRef.current = false;
+      return;
+    }
+    setCatUiPhase("advancing");
 
     try {
-      const resp = await catAdvanceApi(testId, currentId, raw, flagged[currentId] ?? false);
+      const resp = await catAdvanceApi(testId, currentId, answers, idx);
 
       if (!mountedRef.current) return;
 
       if (resp.error) {
-        setCatUiPhase("answering");
+        setCatUiPhase("submitted_locked");
         return;
       }
 
@@ -367,11 +425,6 @@ export function NclexCatRunner({
       }
 
       if (resp.catAdvanced) {
-        // The CAT engine reorders remaining questions after every answer.
-        // Re-fetch the session (minimal — no question content, just the updated
-        // questionIds array and cursorIndex) so the client shows the correct
-        // next question rather than blindly incrementing the index.
-        setCatUiPhase("advancing");
         try {
           const sessionRes = await fetchWithRetry(
             `/api/practice-tests/${testId}?hydrate=minimal`,
@@ -420,7 +473,7 @@ export function NclexCatRunner({
   async function handleEndTest() {
     if (advanceInFlightRef.current) return;
     advanceInFlightRef.current = true;
-    setCatUiPhase("submitted");
+    setCatUiPhase("advancing");
     try {
       await abandonTest(testId);
       // Minimal reload just to get results — no question content needed here.
@@ -487,22 +540,23 @@ export function NclexCatRunner({
 
   const questionNumber = idx + 1;
   const isTransitioning = catUiPhase === "advancing";
-  const isSubmitting = catUiPhase === "submitted";
-  const disabled = isSubmitting || isTransitioning;
+  const examPhase: CatExamUiPhase =
+    catUiPhase === "completed" ? "answering" : catUiPhase;
+  const optionsLocked = catExamOptionsInteractionLocked(examPhase);
+  const examPrimaryBusy = catExamFooterPrimaryBusy(examPhase, advanceInFlightRef.current);
 
-  // Build bowtie payload if applicable
+  const rawStem = current?.stem ?? "";
   const bowtiePayload = isBowtie && current
-    ? tryNormalizeBowtiePayload(current.questionFormat ?? current.questionType, current.stem, current.options)
-    : null;
-  const isBowtieComplete = isBowtie && bowtiePayload
-    ? isBowtieAnswerComplete(coerceBowtieDraftAnswer(raw))
-    : false;
+    ? tryNormalizeBowtiePayload(
+        current.questionFormat ?? current.questionType,
+        rawStem ? resolveMeasurementTokens(rawStem, measurementSystem) : rawStem,
+        current.options,
+      )
+    : bowtiePayloadEarly;
 
-  const hasAnswer = isBowtie
-    ? isBowtieComplete
-    : hasMeaningfulAnswer(raw);
-
-  const stemText = current?.stem ?? "";
+  const stemText = current?.stem
+    ? resolveMeasurementTokens(current.stem, measurementSystem)
+    : "";
   // Detect inline SATA instruction
   const sataInstruction = isSata ? "Select all that apply." : null;
 
@@ -511,12 +565,12 @@ export function NclexCatRunner({
       <div className="nn-nclex-spinner" />
     </div>
   ) : isBowtie && bowtiePayload ? (
-    <div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
+    <div className="nn-nclex-bowtie-slot">
       <BowtieQuestionRenderer
         payload={bowtiePayload}
         value={raw}
         showScenarioBanner={false}
-        disabled={disabled}
+        disabled={optionsLocked || examPrimaryBusy}
         onChange={setAnswerForCurrent}
         reveal={null}
       />
@@ -524,7 +578,7 @@ export function NclexCatRunner({
   ) : (
     <NclexAnswerList>
       {optsCanonical.map((canonical, i) => {
-        const display = optsDisplay[i] ?? canonical;
+        const display = resolveMeasurementTokens(optsDisplay[i] ?? canonical, measurementSystem);
         const isSelected = isSata
           ? Array.isArray(raw) && raw.includes(canonical)
           : raw === canonical;
@@ -540,7 +594,7 @@ export function NclexCatRunner({
               state={state}
               isCheckbox
               checked={isSelected}
-              disabled={disabled}
+              disabled={optionsLocked || examPrimaryBusy}
               onChange={(checked) => {
                 const prev = Array.isArray(raw) ? [...raw] : [];
                 setAnswerForCurrent(
@@ -557,7 +611,7 @@ export function NclexCatRunner({
             index={i}
             text={display}
             state={state}
-            disabled={disabled}
+            disabled={optionsLocked || examPrimaryBusy}
             onClick={() => setAnswerForCurrent(canonical)}
           />
         );
@@ -577,16 +631,26 @@ export function NclexCatRunner({
       onPrev={() => {
         /* CAT does not allow going back */
       }}
-      onNext={() => void submitAndAdvance()}
+      onNext={() => {}}
       canGoPrev={false}
-      canGoNext={true}
+      canGoNext={catUiPhase === "submitted_locked"}
       hasAnswer={hasAnswer}
-      nextIsSubmit={true}
-      disabled={disabled}
+      catExamUiPhase={examPhase}
+      onSubmitAnswer={lockAnswer}
+      onAdvance={() => void requestCatAdvance()}
+      examPrimaryBusy={examPrimaryBusy}
+      disabled={examPrimaryBusy || isTransitioning}
       questionFormat={current?.questionFormat}
       isSata={isSata}
       showTypePanel={true}
       transitioning={isTransitioning}
+      unitsControl={
+        <ExamMeasurementUnitToggle
+          fallbackSystem={fallbackMeasurementSystem}
+          syncToProfile={Boolean(userId)}
+          disabled={disabled}
+        />
+      }
     >
       <NclexQuestionStem
         stem={stemText}

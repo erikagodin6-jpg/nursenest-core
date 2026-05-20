@@ -22,7 +22,10 @@ import { BrandedPageLoader } from "@/components/ui/premium-loader";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { isSataPayload } from "@/lib/flashcards/flashcard-exam-style";
+import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { useFlashcardStudyTelemetry, deriveCardFlags } from "@/lib/flashcards/use-flashcard-study-telemetry";
 import type { CardEventMeta } from "@/lib/flashcards/use-flashcard-study-telemetry";
@@ -157,7 +160,20 @@ export function ActiveStudySession({
   const [, bumpPins] = useReducer((x: number) => x + 1, 0);
 
   const deduped = useMemo(() => dedupeCardsById(cards), [cards]);
-  const { measurementSystem } = useMeasurementPreference("US");
+  const sessionPathwayIdEarly = useMemo(
+    () => deduped.find((c) => c.pathwayId)?.pathwayId ?? null,
+    [deduped],
+  );
+  const fallbackMeasurementSystem = useMemo(() => {
+    const pid = sessionPathwayIdEarly;
+    if (!pid) return "US" as const;
+    const pathway = getExamPathwayById(pid);
+    const countryMap = pathway
+      ? { [pid]: String(pathway.countryCode) }
+      : undefined;
+    return resolveMeasurementSystemForLearnerPathway(pid, countryMap);
+  }, [sessionPathwayIdEarly]);
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
 
   const [sessionCards, setSessionCards] = useState(deduped);
   const [index, setIndex] = useState(0);
@@ -351,6 +367,7 @@ export function ActiveStudySession({
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
+          <ExamMeasurementUnitToggle fallbackSystem={fallbackMeasurementSystem} />
           {sessionMode === "test" && (
             <span
               className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-2 py-1 font-mono text-xs text-[var(--semantic-text-primary)]"

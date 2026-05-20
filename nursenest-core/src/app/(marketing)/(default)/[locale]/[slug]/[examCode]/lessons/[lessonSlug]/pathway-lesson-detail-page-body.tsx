@@ -6,7 +6,13 @@ import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson
 import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
 import { LessonReadingScrollProgress } from "@/components/lessons/lesson-reading-scroll-progress";
 import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
-import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
+import { cookies } from "next/headers";
+import { resolveLessonMeasurementSystem } from "@/lib/measurements/resolve-lesson-measurement-system";
+import {
+  readMeasurementPreferenceFromCookieStore,
+  type MeasurementPreference,
+} from "@/lib/measurements/measurement-preference";
+import { LessonMeasurementUnitsBar } from "@/components/lessons/lesson-measurement-units-bar";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
@@ -246,9 +252,14 @@ export async function PathwayLessonDetailPageBody({
     pathway,
     tierForLessonContent,
   );
-  const lessonMeasurementSystem = getMeasurementSystemForCountry(
-    pathway.countryCode,
-  );
+  const cookieStore = await cookies();
+  const measurementPreference: MeasurementPreference | null =
+    readMeasurementPreferenceFromCookieStore(cookieStore);
+  const lessonMeasurementSystem = resolveLessonMeasurementSystem({
+    countryCode: pathway.countryCode,
+    pathwayId: pathway.id,
+    preference: measurementPreference,
+  });
 
   const base = marketingPathwayLessonsIndexPath(pathway);
   const blogHubPath = buildExamPathwayPath(pathway, "blog");
@@ -555,6 +566,14 @@ export async function PathwayLessonDetailPageBody({
               />
             )
           ) : null}
+
+          <div className="mt-4 flex justify-end">
+            <LessonMeasurementUnitsBar
+              fallbackSystem={lessonMeasurementSystem}
+              initialPreference={measurementPreference}
+              syncToProfile={Boolean(userId)}
+            />
+          </div>
 
           <div
             className="nn-lesson-layout nn-lesson-layout--premium-reading mt-5"

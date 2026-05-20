@@ -51,7 +51,14 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { loadLessonContinueStudyNext } from "@/lib/learner/lesson-context-study-next";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
-import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
+import { cookies } from "next/headers";
+import { LessonMeasurementUnitsBar } from "@/components/lessons/lesson-measurement-units-bar";
+import {
+  parseMeasurementPreference,
+  readMeasurementPreferenceFromCookieStore,
+  type MeasurementPreference,
+} from "@/lib/measurements/measurement-preference";
+import { resolveLessonMeasurementSystem } from "@/lib/measurements/resolve-lesson-measurement-system";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-practice-section";
@@ -608,9 +615,32 @@ async function LessonDetailPageInner({ params }: Props) {
       pathway != null
         ? contentTierForPathwayLessonRender(pathway, tier)
         : (tier ?? undefined);
+    const cookieStore = await cookies();
+    const cookieMeasurementPreference: MeasurementPreference | null =
+      readMeasurementPreferenceFromCookieStore(cookieStore);
+    let profileMeasurementPreference: MeasurementPreference | null = null;
+    if (userId) {
+      try {
+        const prefRow = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { measurementPreference: true },
+        });
+        profileMeasurementPreference = parseMeasurementPreference(
+          prefRow?.measurementPreference ?? null,
+        );
+      } catch {
+        /* optional */
+      }
+    }
+    const measurementPreference =
+      cookieMeasurementPreference ?? profileMeasurementPreference;
     const lessonMeasurementSystem =
       pathway != null
-        ? getMeasurementSystemForCountry(pathway.countryCode)
+        ? resolveLessonMeasurementSystem({
+            countryCode: pathway.countryCode,
+            pathwayId: pathway.id,
+            preference: measurementPreference,
+          })
         : null;
 
     const omitHy = new Set(record.omitHighYieldSectionIds ?? []);
@@ -1356,6 +1386,14 @@ async function LessonDetailPageInner({ params }: Props) {
               />
             </div>
           ) : null}
+        </div>
+
+        <div className="mt-4 flex justify-end">
+          <LessonMeasurementUnitsBar
+            fallbackSystem={lessonMeasurementSystem ?? "US"}
+            initialPreference={measurementPreference}
+            syncToProfile={Boolean(userId)}
+          />
         </div>
 
         <div className="nn-lesson-layout nn-lesson-layout--premium-reading">

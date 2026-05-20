@@ -92,6 +92,10 @@ import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-c
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
 import { ResultsSummary } from "@/components/study/cat-results-summary";
 import type { StudySettings } from "@/lib/learner/study-settings";
+import { ExamMeasurementUnitToggle } from "@/components/measurements/exam-measurement-unit-toggle";
+import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 import { logDedupedClientDiagnostic } from "@/lib/runtime/client-diagnostic-log";
 import { captureClientException } from "@/lib/runtime/client-observability";
@@ -208,6 +212,32 @@ export function PracticeTestRunnerClient({
   const [sessionStartMs, setSessionStartMs] = useState<number | null>(null);
   const [savedElapsedMs, setSavedElapsedMs] = useState<number | null>(null);
   const [testConfig, setTestConfig] = useState<PracticeTestConfigJson | null>(null);
+
+  const activePathwayId = testConfig?.pathwayId ?? pathwaySurface?.id ?? initialPathwaySurface?.id ?? null;
+  const pathwayCountryByPathwayId = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const surf of [pathwaySurface, initialPathwaySurface]) {
+      if (!surf) continue;
+      map[surf.id] = surf.countrySlug === "us" ? "US" : surf.countrySlug === "ca" ? "CA" : "US";
+    }
+    return map;
+  }, [pathwaySurface, initialPathwaySurface]);
+  const fallbackMeasurementSystem = useMemo(
+    () => resolveMeasurementSystemForLearnerPathway(activePathwayId, pathwayCountryByPathwayId),
+    [activePathwayId, pathwayCountryByPathwayId],
+  );
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
+  const resolveMeasureText = useCallback(
+    (text: string) => resolveMeasurementTokens(text, measurementSystem),
+    [measurementSystem],
+  );
+  const examUnitsToggle = (
+    <ExamMeasurementUnitToggle
+      fallbackSystem={fallbackMeasurementSystem}
+      syncToProfile={Boolean(userId)}
+      disabled={saving || qLoading}
+    />
+  );
   const [pathwaySurface, setPathwaySurface] = useState<PracticeTestPathwayClientShell | null>(() => initialPathwaySurface ?? null);
   const [catMode, setCatMode] = useState(false);
   const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
@@ -700,7 +730,13 @@ export function PracticeTestRunnerClient({
   );
   const bowtiePayload = useMemo(
     () =>
-      current ? tryNormalizeBowtiePayload(current.questionType, current.stem, current.options) : null,
+      current
+        ? tryNormalizeBowtiePayload(
+            current.questionType,
+            current.stem ? resolveMeasureText(current.stem) : current.stem,
+            current.options,
+          )
+        : null,
     [current],
   );
   const isBowtie = Boolean(bowtiePayload);
@@ -837,6 +873,11 @@ export function PracticeTestRunnerClient({
     const mapCanonToDisplay = new Map(optsCanonical.map((k, i) => [k, optsDisplay[i] ?? k]));
     return optsOrderCanonical.map((k) => mapCanonToDisplay.get(k) ?? k);
   }, [optsCanonical, optsDisplay, optsOrderCanonical]);
+
+  const optsOrderDisplayResolved = useMemo(
+    () => optsOrderDisplay.map((t) => resolveMeasureText(t)),
+    [optsOrderDisplay, resolveMeasureText],
+  );
 
   const hasMeaningfulAnswer = (qid: string): boolean => {
     const v = answersRef.current[qid];
@@ -1965,6 +2006,7 @@ export function PracticeTestRunnerClient({
             }
             right={
               <div className="flex flex-wrap items-center justify-end gap-2">
+                {examUnitsToggle}
                 <ExamSessionThemeTrigger />
                 <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
               </div>
@@ -2020,7 +2062,7 @@ export function PracticeTestRunnerClient({
   const sessionPct = total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
 
   const optionDisplayMap = Object.fromEntries(
-    optsOrderCanonical.map((k, i) => [k, optsOrderDisplay[i] ?? k]),
+    optsOrderCanonical.map((k, i) => [k, optsOrderDisplayResolved[i] ?? k]),
   );
 
   /** Shared empty state for CAT / linear / legacy MCQ lists (same copy + surfaces). */
@@ -2072,7 +2114,7 @@ export function PracticeTestRunnerClient({
       optLocked || Boolean(isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase));
 
     const formatCatOptionText = (i: number, canonical: string) => {
-      const rawT = optsOrderDisplay[i] ?? canonical;
+      const rawT = optsOrderDisplayResolved[i] ?? canonical;
       return isExamStyle ? stripRedundantMcqLetterPrefix(rawT) : rawT;
     };
 
@@ -2277,6 +2319,7 @@ export function PracticeTestRunnerClient({
                         {tx("learner.practiceTests.run.catExamAdaptivePrecisionShort", "Estimate updating")}
                       </span>
                     ) : null}
+                    {examUnitsToggle}
                     <ExamSessionThemeTrigger variant="pill" />
                     <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
                     <button
@@ -2342,7 +2385,7 @@ export function PracticeTestRunnerClient({
                       </div>
                     ) : (
                       <QuestionCard
-                        stem={current.stem ?? ""}
+                        stem={current.stem ? resolveMeasureText(current.stem) : ""}
                         topic={null}
                         subtopic={null}
                         difficultyLabel={null}
@@ -2549,6 +2592,7 @@ export function PracticeTestRunnerClient({
                   }
                   right={
                     <div className="flex flex-wrap items-center justify-end gap-2">
+                      {examUnitsToggle}
                       <ExamSessionThemeTrigger variant="pill" />
                       <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
                     </div>
@@ -2562,7 +2606,7 @@ export function PracticeTestRunnerClient({
                     <div className="nn-question-session-primary min-h-0 overflow-x-auto overflow-y-auto">
                       <div className="min-h-0 min-w-0">
                         <QuestionCard
-                          stem={current.stem ?? ""}
+                          stem={current.stem ? resolveMeasureText(current.stem) : ""}
                           topic={current.topic}
                           subtopic={current.subtopic}
                           difficultyLabel={
@@ -2625,7 +2669,7 @@ export function PracticeTestRunnerClient({
                       rationalePanelMode={rationalePanelMode}
                       catStudyFeedback={catStudyFeedback}
                       optionKeys={optsOrderCanonical}
-                      optionTexts={optsOrderDisplay}
+                      optionTexts={optsOrderDisplayResolved}
                     />
                   </div>
                 </div>
@@ -2685,7 +2729,7 @@ export function PracticeTestRunnerClient({
               <li key={canonical}>
                 <AnswerOptionRow
                   letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
-                  text={optsOrderDisplay[i] ?? canonical}
+                  text={optsOrderDisplayResolved[i] ?? canonical}
                   state={legacyCatOptState(canonical)}
                   disabled={false}
                   isCheckbox
@@ -2705,7 +2749,7 @@ export function PracticeTestRunnerClient({
       ) : (
         <PracticeTestMcqRadiogroupOptions
           canonicalKeys={optsOrderCanonical}
-          displayTexts={optsOrderDisplay}
+          displayTexts={optsOrderDisplayResolved}
           rowState={legacyCatOptState}
           disabled={false}
           ariaLabel={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
@@ -2714,7 +2758,9 @@ export function PracticeTestRunnerClient({
       );
 
     const legacyStemTrimmed =
-      typeof current.stem === "string" && current.stem.trim().length > 0 ? current.stem.trim() : "";
+      typeof current.stem === "string" && current.stem.trim().length > 0
+        ? resolveMeasureText(current.stem.trim())
+        : "";
     const legacyStemSplit = legacyStemTrimmed ? splitPromptLeadingImage(legacyStemTrimmed) : null;
     const legacyClinicalSrc =
       legacyStemSplit?.imageHtml && legacyStemSplit.imageHtml.trim().length > 0
@@ -2728,7 +2774,7 @@ export function PracticeTestRunnerClient({
       legacyStemSplit && legacyStemSplit.remainingPrompt.trim().length > 0
         ? legacyStemSplit.remainingPrompt
         : legacyStemTrimmed
-          ? current.stem
+          ? legacyStemTrimmed
           : legacyStemUnavailable;
     const legacyExamCategoryLine =
       [current.topic, current.subtopic].find((s) => typeof s === "string" && s.trim().length > 0)?.trim() ??
@@ -3080,14 +3126,16 @@ export function PracticeTestRunnerClient({
 
   const linearQuestionStem =
     typeof current.stem === "string" && current.stem.trim().length > 0
-      ? current.stem
+      ? resolveMeasureText(current.stem)
       : tx(
           "learner.practiceTests.run.questionUnavailable",
           "Question text is unavailable. Try reloading this item.",
         );
 
   const rawStemTrimmed =
-    typeof current.stem === "string" && current.stem.trim().length > 0 ? current.stem.trim() : "";
+    typeof current.stem === "string" && current.stem.trim().length > 0
+      ? resolveMeasureText(current.stem.trim())
+      : "";
   const linearStemClinicalSplit = rawStemTrimmed ? splitPromptLeadingImage(rawStemTrimmed) : null;
   const stemBodyForLinearCard =
     linearStemClinicalSplit && linearStemClinicalSplit.remainingPrompt.trim().length > 0

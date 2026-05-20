@@ -21,8 +21,7 @@ import {
   NclexQuestionTypePanel,
   inferNclexQuestionType,
 } from "@/components/exam/nclex-question-type-panel";
-import { NclexRationalePanel } from "@/components/exam/nclex-rationale-panel";
-import type { NclexRationalePanelStatus } from "@/components/exam/nclex-rationale-panel";
+import type { CatExamUiPhase } from "@/lib/practice-tests/cat-exam-ui-state";
 import { NclexCalculatorModal } from "@/components/exam/nclex-calculator-modal";
 import { NclexNotesDrawer } from "@/components/exam/nclex-notes-drawer";
 
@@ -52,6 +51,13 @@ export type NclexCatExamLayoutProps = {
   noteText?: string;
   onNoteSave?: (text: string) => void;
   transitioning?: boolean;
+  /** CAT exam FSM — when set, footer uses submit → advance (E2E + contract). */
+  catExamUiPhase?: CatExamUiPhase;
+  onSubmitAnswer?: () => void;
+  onAdvance?: () => void;
+  examPrimaryBusy?: boolean;
+  /** SI / conventional units toggle (rendered in top bar). */
+  unitsControl?: ReactNode;
 };
 
 export function NclexCatExamLayout({
@@ -76,6 +82,11 @@ export function NclexCatExamLayout({
   noteText = "",
   onNoteSave,
   transitioning = false,
+  catExamUiPhase,
+  onSubmitAnswer,
+  onAdvance,
+  examPrimaryBusy = false,
+  unitsControl,
 }: NclexCatExamLayoutProps) {
   const [showEndModal, setShowEndModal] = useState(false);
   const [showCalc, setShowCalc] = useState(false);
@@ -83,9 +94,17 @@ export function NclexCatExamLayout({
 
   const questionType = inferNclexQuestionType(questionFormat, isSata);
 
+  const catExamTwoStep =
+    catExamUiPhase != null && onSubmitAnswer != null && onAdvance != null;
+
   return (
     // data-nclex-shell triggers the html/body overflow:hidden CSS rule
-    <div className="nn-nclex-exam-page" data-nclex-shell="cat">
+    <div
+      className="nn-nclex-exam-page nn-cat-exam-chrome nn-cat-exam-chrome--premium nn-cat-adaptive-exam-session nn-cat-premium-convergence"
+      data-nclex-shell="cat"
+      data-cat-exam-root=""
+      data-nn-cat-premium-convergence=""
+    >
 
       {/* ── Fixed top bar ─────────────────────────────────────────────── */}
       <NclexCatTopBar
@@ -99,6 +118,7 @@ export function NclexCatExamLayout({
         onNotes={() => setShowNotes(true)}
         onEndTest={() => setShowEndModal(true)}
         disabled={disabled}
+        unitsControl={unitsControl}
       />
 
       {/* ── Body: type-panel + question area ──────────────────────────── */}
@@ -136,18 +156,69 @@ export function NclexCatExamLayout({
       </div>
 
       {/* ── Fixed bottom bar ──────────────────────────────────────────── */}
-      <NclexBottomBar
-        canGoPrev={canGoPrev}
-        canGoNext={canGoNext}
-        hasAnswer={hasAnswer}
-        marked={flagged}
-        onPrev={onPrev}
-        onNext={onNext}
-        onMark={onFlag}
-        nextSubmits={nextIsSubmit}
-        disabled={disabled}
-        primaryAction="next"
-      />
+      {catExamTwoStep ? (
+        <div
+          className="nn-nclex-bottom-bar"
+          role="navigation"
+          aria-label="Exam navigation"
+          data-nn-qa-cat-adaptive-exam-footer=""
+        >
+          <button
+            type="button"
+            className="nn-nclex-bottom-bar__btn"
+            onClick={onPrev}
+            disabled={disabled || examPrimaryBusy || !canGoPrev}
+            aria-label="Previous question"
+          >
+            Previous
+          </button>
+          <button
+            type="button"
+            className={`nn-nclex-bottom-bar__btn nn-nclex-bottom-bar__btn--mark${flagged ? " nn-nclex-bottom-bar__btn--mark-active" : ""}`}
+            onClick={onFlag}
+            disabled={disabled || examPrimaryBusy}
+            aria-pressed={flagged}
+          >
+            Mark for Review
+          </button>
+          <div className="nn-nclex-bottom-bar__spacer" />
+          {catExamUiPhase === "answering" ? (
+            <button
+              type="button"
+              data-nn-qa-cat-exam-submit-answer=""
+              className="nn-nclex-bottom-bar__btn nn-nclex-bottom-bar__btn--next"
+              onClick={onSubmitAnswer}
+              disabled={disabled || examPrimaryBusy || !hasAnswer}
+            >
+              Submit answer
+            </button>
+          ) : (
+            <button
+              type="button"
+              data-nn-qa-cat-exam-advance=""
+              data-nn-qa-cat-exam-advance-intent="server_driven"
+              className="nn-nclex-bottom-bar__btn nn-nclex-bottom-bar__btn--next"
+              onClick={onAdvance}
+              disabled={disabled || examPrimaryBusy || catExamUiPhase === "advancing"}
+            >
+              Next
+            </button>
+          )}
+        </div>
+      ) : (
+        <NclexBottomBar
+          canGoPrev={canGoPrev}
+          canGoNext={canGoNext}
+          hasAnswer={hasAnswer}
+          marked={flagged}
+          onPrev={onPrev}
+          onNext={onNext}
+          onMark={onFlag}
+          nextSubmits={nextIsSubmit}
+          disabled={disabled}
+          primaryAction="next"
+        />
+      )}
 
       {/* ── Overlays ──────────────────────────────────────────────────── */}
       {showEndModal && (
@@ -195,18 +266,13 @@ export type NclexPracticeExamLayoutProps = {
   isSata?: boolean;
   showTypePanel?: boolean;
   children: ReactNode;
-  rationaleStatus: NclexRationalePanelStatus;
-  correctAnswerText?: string | null;
-  correctAnswerLetter?: string | null;
-  correctExplanation?: string | null;
-  distractors?: { letter: string; text: string; reason: string }[];
-  keyTakeaway?: string | null;
-  referenceSource?: string | null;
-  clinicalPearl?: string | null;
+  /** Post-submit rationale (PracticeRationaleFullPanel + lesson links). */
+  rationaleSlot?: ReactNode;
   noteText?: string;
   onNoteSave?: (text: string) => void;
   transitioning?: boolean;
   unansweredCount?: number;
+  unitsControl?: ReactNode;
 };
 
 export function NclexPracticeExamLayout({
@@ -231,18 +297,12 @@ export function NclexPracticeExamLayout({
   isSata = false,
   showTypePanel = true,
   children,
-  rationaleStatus,
-  correctAnswerText,
-  correctAnswerLetter,
-  correctExplanation,
-  distractors = [],
-  keyTakeaway,
-  referenceSource,
-  clinicalPearl,
+  rationaleSlot,
   noteText = "",
   onNoteSave,
   transitioning = false,
   unansweredCount,
+  unitsControl,
 }: NclexPracticeExamLayoutProps) {
   const [showEndModal, setShowEndModal] = useState(false);
   const [showCalc, setShowCalc] = useState(false);
@@ -251,7 +311,12 @@ export function NclexPracticeExamLayout({
   const questionType = inferNclexQuestionType(questionFormat, isSata);
 
   return (
-    <div className="nn-nclex-exam-page" data-nclex-shell="practice">
+    <div
+      className="nn-nclex-exam-page nn-cat-exam-chrome nn-cat-exam-chrome--premium nn-cat-premium-convergence"
+      data-nclex-shell="practice"
+      data-cat-exam-root=""
+      data-nn-cat-premium-convergence=""
+    >
 
       {/* ── Fixed top bar ─────────────────────────────────────────────── */}
       <NclexPracticeTopBar
@@ -262,51 +327,39 @@ export function NclexPracticeExamLayout({
         onPause={onPause}
         onFinish={() => setShowEndModal(true)}
         disabled={disabled}
+        unitsControl={unitsControl}
       />
 
-      {/* ── Body ──────────────────────────────────────────────────────── */}
+      {/* ── Body (same single-column shell as CAT) ─────────────────────── */}
       <div className="nn-nclex-exam-body">
         {showTypePanel && <NclexQuestionTypePanel type={questionType} />}
 
-        {/* Practice split: question (flex:1) | rationale (fixed width) */}
-        <div className="nn-nclex-practice-split">
-
-          {/* Left: question content */}
-          <div className="nn-nclex-practice-split__question">
-            <div
-              className={[
-                "nn-nclex-question-area",
-                "nn-nclex-loading-overlay-parent",
-                !transitioning ? "nn-nclex-question-transition" : "",
-              ].filter(Boolean).join(" ")}
-            >
-              {transitioning && (
-                <div className="nn-nclex-loading-overlay">
-                  <div className="nn-nclex-spinner" />
-                </div>
-              )}
-              <div
-                className={[
-                  "nn-nclex-question-inner",
-                  !transitioning ? "nn-nclex-question-transition" : "",
-                ].filter(Boolean).join(" ")}
-              >
-                {children}
-              </div>
+        <div
+          className={[
+            "nn-nclex-question-area",
+            "nn-nclex-loading-overlay-parent",
+            !transitioning ? "nn-nclex-question-transition" : "",
+          ].filter(Boolean).join(" ")}
+        >
+          {transitioning && (
+            <div className="nn-nclex-loading-overlay" aria-live="polite">
+              <div className="nn-nclex-spinner" />
             </div>
+          )}
+          <div
+            className={[
+              "nn-nclex-question-inner",
+              "nn-nclex-question-inner--practice",
+              !transitioning ? "nn-nclex-question-transition" : "",
+            ].filter(Boolean).join(" ")}
+          >
+            {children}
+            {rationaleSlot ? (
+              <div className="nn-nclex-practice-rationale-band nn-question-session-rationale">
+                {rationaleSlot}
+              </div>
+            ) : null}
           </div>
-
-          {/* Right: rationale panel (hidden on narrow viewports via CSS) */}
-          <NclexRationalePanel
-            status={rationaleStatus}
-            correctAnswerText={correctAnswerText}
-            correctAnswerLetter={correctAnswerLetter}
-            correctExplanation={correctExplanation}
-            distractors={distractors}
-            keyTakeaway={keyTakeaway}
-            referenceSource={referenceSource}
-            clinicalPearl={clinicalPearl}
-          />
         </div>
       </div>
 
