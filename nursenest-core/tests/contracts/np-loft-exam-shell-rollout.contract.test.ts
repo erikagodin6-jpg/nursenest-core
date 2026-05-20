@@ -18,6 +18,21 @@ const layout = readFileSync(join(root, "src/components/exam/nclex-exam-layout.ts
 
 describe("NP premium exam shell rollout", () => {
   for (const pathwayId of PREMIUM_EXAM_SHELL_NP_CAT_PATHWAY_IDS) {
+    it(`${pathwayId} practice exams use NclexPracticeRunner route`, () => {
+      assert.equal(
+        resolvePremiumNclexShellRoute({
+          pathwayId,
+          config: {
+            pathwayId,
+            selectionMode: "weak",
+            linearDeliveryMode: "exam",
+            linearRationaleVisibility: "end_of_exam",
+          },
+        }),
+        "practice",
+      );
+    });
+
     it(`${pathwayId} CAT exam simulation routes to cat shell`, () => {
       assert.equal(
         resolvePremiumNclexShellRoute({
