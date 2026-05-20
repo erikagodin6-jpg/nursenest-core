@@ -2,7 +2,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { clinicalInterpretationGuidePath, listPublishedClinicalInterpretationGuides } from "@/lib/clinical-interpretation/clinical-interpretation-registry";
 import { publishedMechanismForTopic } from "@/lib/linking/mechanism-link-candidates";
-import { normalizeTopicKey } from "@/lib/linking/topic-synonym-map";
+import { normalizeTopicKey } from "@/lib/linking/link-resolver";
 import { listTopicSiblingLessonsForMarketing } from "@/lib/lessons/pathway-lesson-topic-siblings";
 import { resolveRnCompetencyForTopic } from "@/lib/educational-graph/rn-competency-ontology";
 

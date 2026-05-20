@@ -3,7 +3,7 @@
  * Conservative mapping: topic slugs align with {@link TOPIC_CLUSTER_DEFINITIONS} and catalog metadata.
  */
 
-import { normalizeTopicKey } from "@/lib/linking/topic-synonym-map";
+import { normalizeTopicKey } from "@/lib/linking/link-resolver";
 
 /** High-level RN competency bands (clinical judgment + NCSBN-style domains, simplified). */
 export type RnCompetencyId =
