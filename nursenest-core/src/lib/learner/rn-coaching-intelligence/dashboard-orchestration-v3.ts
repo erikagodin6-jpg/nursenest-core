@@ -2,10 +2,6 @@ import type { RnLearnerStateSnapshot } from "@/lib/learner/rn-coaching-intellige
 import type { PostExamDashboardFeed } from "@/lib/learner/rn-coaching-intelligence/coaching-types";
 import { readDashboardFeedFromSession } from "@/lib/learner/rn-coaching-intelligence/dashboard-feed";
 import { readLearnerStateFromSession } from "@/lib/learner/rn-coaching-intelligence/learner-state-store";
-import {
-  resolveDashboardSubstrateOrchestration,
-  type DashboardSubstrateOrchestration,
-} from "@/lib/educational-cognition/dashboard-substrate-orchestration";
 import type { DashboardGraphAction } from "@/lib/educational-graph/dashboard-graph-actions";
 
 export type DashboardOrchestrationCard = {
@@ -27,23 +23,9 @@ export type DashboardOrchestrationV3 = {
   graphActions?: DashboardGraphAction[];
 };
 
-/** Canonical dashboard orchestration from cognition context (preferred). */
-function toDashboardOrchestrationV3(orch: DashboardSubstrateOrchestration): DashboardOrchestrationV3 {
-  const { substrate: _substrate, graphActions, ...v3 } = orch;
-  return { ...v3, graphActions };
-}
-
 export function composeDashboardOrchestrationFromContext(
   ctx: import("@/lib/educational-cognition/educational-cognition-types").EducationalCognitionContext,
 ): DashboardOrchestrationV3 {
-  const pathwayId = ctx.pathwayId ?? ctx.learnerState?.pathwayId ?? null;
-  if (pathwayId) {
-    try {
-      return toDashboardOrchestrationV3(resolveDashboardSubstrateOrchestration({ pathwayId }));
-    } catch {
-      /* session-only fallback below */
-    }
-  }
   const feed = readDashboardFeedFromSession();
   const learnerState = ctx.learnerState ?? readLearnerStateFromSession();
   return buildDashboardCards({ feed, learnerState });
@@ -57,13 +39,7 @@ function buildDashboardCardsLegacy(): DashboardOrchestrationV3 {
 }
 
 export function composeDashboardOrchestrationV3(): DashboardOrchestrationV3 {
-  const learnerState = readLearnerStateFromSession();
-  const pathwayId = (learnerState?.pathwayId ?? "us-rn-nclex-rn").trim();
-  try {
-    return toDashboardOrchestrationV3(resolveDashboardSubstrateOrchestration({ pathwayId }));
-  } catch {
-    return buildDashboardCardsLegacy();
-  }
+  return buildDashboardCardsLegacy();
 }
 
 function buildDashboardCards(args: {
