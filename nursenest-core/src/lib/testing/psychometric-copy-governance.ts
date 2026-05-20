@@ -20,8 +20,8 @@ export function governLearnerDisplayCopy(
   pathwayId: string | null | undefined,
   text: string,
 ): LearnerCopyGovernanceResult {
-  const sanitized = sanitizeLearnerCopyForPathway(pathwayId, text);
-  const violations = validatePsychometricCopyForPathway(pathwayId, sanitized);
+  const violations = validatePsychometricCopyForPathway(pathwayId, text);
+  const sanitized = sanitizeLearnerCopyForPathway(pathwayId, text, "Review this learning activity in your study plan.");
   if (violations.length > 0) {
     return { ok: false, violations, sanitized };
   }
@@ -33,7 +33,7 @@ export function assertLearnerDisplayCopy(pathwayId: string | null | undefined, t
   const result = governLearnerDisplayCopy(pathwayId, text);
   if (!result.ok) {
     const first = result.violations[0];
-    assertNoCatLanguageForLoftPathway(pathwayId, text);
+    assertNoCatLanguageForLoftPathway(pathwayId, text, "learner_display_copy");
     throw new Error(first?.message ?? "Psychometric copy violation");
   }
   return result.sanitized;

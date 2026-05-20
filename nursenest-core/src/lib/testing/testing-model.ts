@@ -26,6 +26,7 @@ import {
   pathwayUsesCatEngine,
   pathwayUsesLoftEngine,
 } from "@/lib/testing/testing-model-pathway-map";
+import type { TestingModelAnalyticsDimensions } from "@/lib/testing/testing-telemetry-governance";
 
 export type { TestingModel, LearnerExamsSurfaceLabel } from "@/lib/testing/testing-model-types";
 export {

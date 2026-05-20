@@ -19,7 +19,7 @@ export type MarketingLanguageAuditResult = {
  * CNPLE runs full CNPLE content guardrails plus LOFT isolation rules.
  */
 export function validateTestingModelMarketingLanguage(
-  pathwayId: string,
+  pathwayId: string | null | undefined,
   text: string,
 ): MarketingLanguageAuditResult {
   const psychometric = validatePsychometricCopyForPathway(pathwayId, text);
