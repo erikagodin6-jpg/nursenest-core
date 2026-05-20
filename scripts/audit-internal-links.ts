@@ -8,8 +8,8 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
-import { MARKETING_LANGUAGES } from "../nursenest-core/src/lib/i18n/marketing-languages";
+import * as programmaticSlugModule from "../nursenest-core/src/lib/seo/programmatic-registry-slugs";
+import * as marketingLanguagesModule from "../nursenest-core/src/lib/i18n/marketing-languages";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -147,6 +147,21 @@ function matchPattern(tokens: SegToken[], parts: string[], ti: number, pi: numbe
 function matchesAnyPattern(patterns: RoutePattern[], pathname: string): boolean {
   const parts = pathname.split("/").filter(Boolean);
   return patterns.some((p) => matchPattern(p.tokens, parts, 0, 0));
+}
+
+const programmaticSlugInterop = programmaticSlugModule as typeof programmaticSlugModule & {
+  default?: typeof programmaticSlugModule;
+};
+const marketingLanguagesInterop = marketingLanguagesModule as typeof marketingLanguagesModule & {
+  default?: typeof marketingLanguagesModule;
+};
+const getAllProgrammaticSlugs =
+  programmaticSlugModule.getAllProgrammaticSlugs ?? programmaticSlugInterop.default?.getAllProgrammaticSlugs;
+const MARKETING_LANGUAGES =
+  marketingLanguagesModule.MARKETING_LANGUAGES ?? marketingLanguagesInterop.default?.MARKETING_LANGUAGES ?? [];
+
+if (typeof getAllProgrammaticSlugs !== "function") {
+  throw new Error("Internal link audit could not load programmatic SEO slugs.");
 }
 
 const PROGRAMMATIC_SLUGS = new Set(getAllProgrammaticSlugs());
