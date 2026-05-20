@@ -3,7 +3,8 @@
  */
 
 import { buildCognitionVersionMetadata } from "@/lib/educational-cognition/cognition-version-governance";
-import { resolvePsychometricContextForPathway } from "@/lib/testing/psychometric-orchestrator";
+import { getTestingModelForPathwayId } from "@/lib/testing/testing-model-pathway-map";
+import { getTestingModelDefinition } from "@/lib/testing/testing-model-definitions";
 import {
   BREADCRUMB_ONTOLOGY_REVISION,
   EDUCATIONAL_GRAPH_VERSION,
@@ -38,12 +39,13 @@ export function resolvePsychometricLineageStamp(args?: {
   sessionKind?: string | null;
 }): PsychometricLineageStamp {
   const pathwayId = args?.pathwayId?.trim() || null;
-  const psych = pathwayId ? resolvePsychometricContextForPathway(pathwayId) : null;
+  const model = pathwayId ? getTestingModelForPathwayId(pathwayId) : null;
+  const definition = model ? getTestingModelDefinition(model) : null;
   const version = buildCognitionVersionMetadata();
-  const testing_model = psych?.model ?? "unknown";
+  const testing_model = model ?? "unknown";
   const tier: CognitionReliabilityTier =
     args?.cognitionReliabilityTier ??
-    (psych?.readiness.allowsPassOutlook ? "high" : psych ? "medium" : "unknown");
+    (definition?.allowsConfidenceEstimation ? "high" : model ? "medium" : "unknown");
 
   return {
     testing_model,
