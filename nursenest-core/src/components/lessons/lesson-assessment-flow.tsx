@@ -218,6 +218,7 @@ export function LessonAssessmentFlow({
   // Track whether the learner completed the pre during this session
   // so the pre score is available for the delta even before a round-trip.
   const [sessionPreScore, setSessionPreScore] = useState<{ score: number; total: number } | null>(null);
+  const [preCleared, setPreCleared] = useState(!hasPre);
 
   // ── Sync enabled flag when study settings change (avoid sync setState in effect body). ──
   useEffect(() => {
@@ -238,6 +239,14 @@ export function LessonAssessmentFlow({
       .then(setPriorScores)
       .finally(() => setScoresLoading(false));
   }, [hasAnyAssessments, lessonId, userId]);
+
+  useEffect(() => {
+    if (priorScores?.pre) setPreCleared(true);
+  }, [priorScores?.pre]);
+
+  useEffect(() => {
+    if (!enabled || !hasPre) setPreCleared(true);
+  }, [enabled, hasPre]);
 
   // ── Progress event listener ────────────────────────────────────────────────
   useEffect(() => {
@@ -322,13 +331,14 @@ export function LessonAssessmentFlow({
             items={preTest!}
             priorScore={priorScores?.pre ?? null}
             onScoreRecorded={handlePreComplete}
-            onSkip={() => undefined}
+            onSkip={() => setPreCleared(true)}
+            onDismiss={() => setPreCleared(true)}
           />
         )
       ) : null}
 
-      {/* ── Lesson content ───────────────────────────────────────────────── */}
-      {children}
+      {/* ── Lesson content (gated until pre-test is skipped or complete) ── */}
+      {!enabled || !hasPre || preCleared ? children : null}
 
       {/* ── Post-lesson retention check ──────────────────────────────────── */}
       {enabled && hasPost ? (

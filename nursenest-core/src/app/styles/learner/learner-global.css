@@ -7619,3 +7619,167 @@ html[data-theme="deep-twilight"] {
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------------
+   RN v2.7 reading workspace — left rail + pearls, full-width progress strip.
+   --------------------------------------------------------------------- */
+
+.nn-lesson-page-shell--rn .nn-lesson-reading-shell--blossom {
+  background: var(--theme-page-bg);
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip {
+  grid-column: 1 / -1;
+  margin-bottom: 1.125rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid var(--nn-lesson-reading-border);
+  border-radius: 0.75rem;
+  background: var(--semantic-surface);
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__top b {
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__bar {
+  height: 0.375rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--semantic-border-soft));
+  overflow: hidden;
+}
+
+.nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-progress-strip__bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--semantic-brand) 72%, var(--semantic-text-secondary));
+}
+
+.nn-lesson-clinical-pearls-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.nn-lesson-clinical-pearls-rail__label {
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-lesson-clinical-pearls-rail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nn-lesson-clinical-pearls-rail__box {
+  border-radius: 0.625rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
+  padding: 0.625rem 0.6875rem;
+  font-size: 0.71875rem;
+  line-height: 1.5;
+}
+
+.nn-lesson-clinical-pearls-rail__box b {
+  display: block;
+  margin-bottom: 0.3125rem;
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--semantic-brand) 82%, var(--semantic-text-secondary));
+}
+
+.nn-lesson-clinical-pearls-rail__box p {
+  margin: 0;
+  color: var(--semantic-text-secondary);
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] {
+    grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr);
+    column-gap: clamp(1rem, 1.25vw, 1.25rem);
+  }
+
+  .nn-lesson-reading-viewport[data-layout="rn-v2"][data-left-collapsed="true"] {
+    grid-template-columns: 3.25rem minmax(0, 1fr);
+  }
+
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-viewport__right {
+    display: none !important;
+  }
+
+  .nn-lesson-reading-viewport[data-layout="rn-v2"] .nn-lesson-reading-viewport__left-inner {
+    gap: 0.875rem;
+  }
+
+  .nn-lesson-reading-viewport[data-layout="rn-v2"][data-left-collapsed="true"]
+    .nn-lesson-clinical-pearls-rail,
+  .nn-lesson-reading-viewport[data-layout="rn-v2"][data-left-collapsed="true"]
+    .nn-lesson-section-nav--rail {
+    display: none;
+  }
+
+  .nn-lesson-page-shell--rn .nn-lesson-reading-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .nn-lesson-page-shell--rn .nn-lesson-reading-stack .nn-lesson-section-card {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .nn-lesson-page-shell--rn
+    .nn-lesson-reading-stack
+    .nn-lesson-section-card.nn-lesson-section-card--under-left {
+    width: calc(100% + min(15rem, 240px) + clamp(1rem, 1.25vw, 1.25rem));
+    margin-left: calc(-1 * (min(15rem, 240px) + clamp(1rem, 1.25vw, 1.25rem)));
+  }
+
+  .nn-lesson-page-shell--rn
+    .nn-lesson-reading-viewport[data-layout="rn-v2"][data-left-collapsed="true"]
+    .nn-lesson-section-card--under-left {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+.nn-lesson-page-shell--rn .nn-premium-lesson-article > * + * {
+  margin-top: 0;
+}
+
+.nn-lesson-page-shell--rn
+  .nn-lesson-section-card.nn-lesson-section-card--editorial,
+.nn-lesson-page-shell--rn
+  .nn-lesson-section-card.nn-lesson-section-card--callout,
+.nn-lesson-page-shell--rn
+  .nn-lesson-section-card:not(.nn-lesson-section-card--editorial) {
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 22%, var(--nn-lesson-reading-border));
+  border-left: 1px solid color-mix(in srgb, var(--lsc-color) 22%, var(--nn-lesson-reading-border));
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--lsc-soft) 18%, var(--semantic-surface) 82%);
+  box-shadow: none;
+  padding: clamp(1.5rem, 2.4vw, 2.125rem);
+}

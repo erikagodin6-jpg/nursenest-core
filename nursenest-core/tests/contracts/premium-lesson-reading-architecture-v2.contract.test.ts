@@ -188,6 +188,10 @@ describe("premium lesson reading architecture v2", () => {
   it("uses a reading-first viewport with constrained side rails", () => {
     assert.match(readingViewport, /nn-lesson-reading-viewport/);
     assert.match(readingViewport, /LessonCompactProgressRail/);
+    assert.match(readingViewport, /data-layout=\{rnLayout \? "rn-v2"/);
+    assert.match(readingViewport, /layout\?: "default" \| "rn-v2"/);
+    assert.match(readingViewport, /LessonClinicalPearlsRail/);
+    assert.match(readingViewport, /LessonReadingProgressStrip/);
     assert.match(readingViewport, /layout="rail"/);
     assert.match(sectionNav, /data-nn-premium-horizontal-lesson-nav/);
     assert.match(sectionNav, /nn-lesson-section-nav--horizontal/);
@@ -206,6 +210,16 @@ describe("premium lesson reading architecture v2", () => {
       );
       assert.match(css, /max-width:\s*15rem/, `${label} left rail width cap missing`);
       assert.match(css, /max-width:\s*13\.75rem/, `${label} right rail width cap missing`);
+      assert.match(
+        css,
+        /\.nn-lesson-reading-viewport\[data-layout="rn-v2"\]/,
+        `${label} RN v2 reading viewport selector missing`,
+      );
+      assert.match(
+        css,
+        /grid-template-columns:\s*minmax\(11rem,\s*15rem\)\s*minmax\(0,\s*1fr\)/,
+        `${label} RN v2 two-column grid missing`,
+      );
     }
   });
 
@@ -272,14 +286,23 @@ describe("premium lesson reading architecture v2", () => {
   it("keeps RN lessons on the wide colored-section reading canvas with modular section cards", () => {
     assert.match(marketingDetail, /nn-lesson-page-shell--rn/);
     assert.match(learnerDetail, /nn-lesson-page-shell--rn/);
+    assert.match(marketingDetail, /layout=\{isRnLessonPathway \? "rn-v2" : "default"\}/);
+    assert.match(learnerDetail, /layout=\{isRnLessonPathway \? "rn-v2" : "default"\}/);
+    assert.match(marketingDetail, /extractClinicalPearlLines/);
+    assert.match(learnerDetail, /extractClinicalPearlLines/);
     for (const [label, css] of [
       ["marketing", marketingCss],
       ["learner", learnerCss],
     ] as const) {
       assert.match(css, /--nn-rn-lesson-canvas-wide:\s*min\(100%,\s*87\.5rem\)/, `${label} RN canvas width missing`);
       assert.match(css, /\.nn-premium-lesson-detail-shell\.nn-lesson-page-shell--rn/, `${label} RN shell selector missing`);
-      assert.match(css, /border-left:\s*4px solid color-mix\(in srgb, var\(--lsc-color\)/, `${label} colored section accent missing`);
       assert.match(css, /max-width:\s*96ch/, `${label} RN readable prose width missing`);
+      assert.match(css, /\.nn-lesson-reading-stack/, `${label} RN reading stack missing`);
+      assert.match(
+        css,
+        /box-shadow:\s*none/,
+        `${label} RN flat section cards missing`,
+      );
     }
   });
 

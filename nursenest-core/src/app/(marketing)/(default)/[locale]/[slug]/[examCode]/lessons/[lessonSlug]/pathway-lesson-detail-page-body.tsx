@@ -40,6 +40,8 @@ import {
   extractSecondaryExamContextLines,
 } from "@/lib/lessons/pathway-lesson-study-extract";
 import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
+import { extractClinicalPearlLines } from "@/lib/lessons/extract-clinical-pearl-lines";
+import { rnLessonSectionStackClass } from "@/lib/lessons/rn-reading-stack";
 import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
 import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
@@ -355,6 +357,17 @@ export async function PathwayLessonDetailPageBody({
   const articleSections =
     learningSections.length > 0 ? learningSections : displaySections;
 
+  const clinicalPearlsSection = retentionSections.find(
+    (section) => section.kind === "clinical_pearls",
+  );
+  const rnClinicalPearlLines = isRnLessonPathway
+    ? extractClinicalPearlLines(
+        typeof clinicalPearlsSection?.body === "string"
+          ? clinicalPearlsSection.body
+          : "",
+      )
+    : [];
+
   const tocNavSections = [
     ...articleSections.map((s) => ({
       id: s.id,
@@ -542,6 +555,8 @@ export async function PathwayLessonDetailPageBody({
               sections={tocNavSections}
               progress={lessonProgress}
               progressVisible={Boolean(userId) && fullAccess}
+              layout={isRnLessonPathway ? "rn-v2" : "default"}
+              clinicalPearls={rnClinicalPearlLines}
             >
               <div
                 className="nn-lesson-main nn-lesson-main--blossom min-w-0"
@@ -575,10 +590,14 @@ export async function PathwayLessonDetailPageBody({
                 postTest={fullAccess ? bankAssessments.postTest : undefined}
                 fullAccess={fullAccess}
                 assessmentsEnabled={studySettings.enablePrePostQuizzes}
-                sectionAnchors={displaySections.map((s) => ({
-                  id: s.id,
-                  label: s.heading,
-                }))}
+                sectionAnchors={
+                  isRnLessonPathway
+                    ? undefined
+                    : displaySections.map((s) => ({
+                        id: s.id,
+                        label: s.heading,
+                      }))
+                }
               >
                 <LessonRecallProvider>
                   <div className="mt-5 sm:mt-6">
@@ -586,13 +605,13 @@ export async function PathwayLessonDetailPageBody({
                       <LessonRecallToggle />
                     </div>
                     <article
-                      className="nn-lesson-article-flow nn-premium-lesson-article nn-premium-lesson-reading-flow w-full max-w-none"
+                      className={`nn-lesson-article-flow nn-premium-lesson-article nn-premium-lesson-reading-flow w-full max-w-none${isRnLessonPathway ? " nn-lesson-reading-stack" : ""}`}
                       data-nn-lesson-article
                       data-nn-premium-lessons-section-system
                     >
                       {(() => {
                         let editorialRhythmIndex = 0;
-                        return articleSections.map((section) => {
+                        return articleSections.map((section, sectionIndex) => {
                           const wide = pathwayLessonSectionPrefersWideColumn(
                             section.kind,
                             {
@@ -612,11 +631,14 @@ export async function PathwayLessonDetailPageBody({
                               id={section.id}
                               heading={section.heading}
                               kind={section.kind}
-                              className={
-                                wide
-                                  ? "nn-lesson-section-card--wide"
-                                  : undefined
-                              }
+                              className={[
+                                wide ? "nn-lesson-section-card--wide" : "",
+                                isRnLessonPathway
+                                  ? rnLessonSectionStackClass(sectionIndex) ?? ""
+                                  : "",
+                              ]
+                                .filter(Boolean)
+                                .join(" ") || undefined}
                               editorialRhythmIndex={rhythmIdx}
                             >
                               {section.audioUrl ? (

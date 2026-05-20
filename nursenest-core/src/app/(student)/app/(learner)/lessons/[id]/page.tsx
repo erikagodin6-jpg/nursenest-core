@@ -96,6 +96,8 @@ import {
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonReadingViewport } from "@/components/lessons/lesson-reading-viewport";
+import { extractClinicalPearlLines } from "@/lib/lessons/extract-clinical-pearl-lines";
+import { rnLessonSectionStackClass } from "@/lib/lessons/rn-reading-stack";
 import { LessonStudyPhaseProgress } from "@/components/lessons/lesson-study-phase-progress";
 import { PathwayLessonQuickClinicalSummary } from "@/components/lessons/pathway-lesson-quick-clinical-summary";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
@@ -646,6 +648,18 @@ async function LessonDetailPageInner({ params }: Props) {
     );
     const articleSections =
       learningSections.length > 0 ? learningSections : displaySections;
+    const isRnLessonPathway =
+      pathwayId === "ca-rn-nclex-rn" || pathwayId === "us-rn-nclex-rn";
+    const clinicalPearlsSection = retentionSections.find(
+      (section) => section.kind === "clinical_pearls",
+    );
+    const rnClinicalPearlLines = isRnLessonPathway
+      ? extractClinicalPearlLines(
+          typeof clinicalPearlsSection?.body === "string"
+            ? clinicalPearlsSection.body
+            : "",
+        )
+      : [];
     const editorialRhythmIndexBySectionId = new Map<string, number>();
     {
       let editorialRhythmCounter = 0;
@@ -974,9 +988,11 @@ async function LessonDetailPageInner({ params }: Props) {
             }
             compactSubscriberBanner
           >
-            <article className="nn-lesson-article-flow nn-premium-lesson-article">
+            <article
+              className={`nn-lesson-article-flow nn-premium-lesson-article${isRnLessonPathway ? " nn-lesson-reading-stack" : ""}`}
+            >
               {articleSections.length > 0
-                ? articleSections.map((section) => {
+                ? articleSections.map((section, sectionIndex) => {
                     const surfaceHeading = pathwayLessonSectionSurfaceHeading(
                       section,
                       pathway?.countryCode,
@@ -1004,6 +1020,11 @@ async function LessonDetailPageInner({ params }: Props) {
                         id={section.id}
                         heading={surfaceHeading}
                         kind={section.kind ?? null}
+                        className={
+                          isRnLessonPathway
+                            ? rnLessonSectionStackClass(sectionIndex)
+                            : undefined
+                        }
                         editorialRhythmIndex={editorialRhythmIndexBySectionId.get(
                           section.id,
                         )}
@@ -1279,9 +1300,6 @@ async function LessonDetailPageInner({ params }: Props) {
       </>
     );
 
-    const isRnLessonPathway =
-      pathwayId === "ca-rn-nclex-rn" || pathwayId === "us-rn-nclex-rn";
-
     return (
       <div
         className={`nn-lesson-page nn-lesson-page--learner-app nn-premium-lesson-detail-shell${isRnLessonPathway ? " nn-lesson-page-shell--rn" : ""}`}
@@ -1336,6 +1354,8 @@ async function LessonDetailPageInner({ params }: Props) {
             sections={navSections}
             progress={initialProgress}
             progressVisible={Boolean(userId) && entitlement.hasAccess}
+            layout={isRnLessonPathway ? "rn-v2" : "default"}
+            clinicalPearls={rnClinicalPearlLines}
           >
             <div
               className="nn-lesson-main min-w-0"

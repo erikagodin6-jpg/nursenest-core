@@ -204,6 +204,7 @@ export function LessonPreAssessmentCard({
   priorScore,
   onScoreRecorded,
   onSkip,
+  onDismiss,
 }: {
   items: PathwayLessonQuizItem[];
   priorScore: LessonAssessmentScore | null;
@@ -213,6 +214,8 @@ export function LessonPreAssessmentCard({
    */
   onScoreRecorded: (score: number, total: number) => void;
   onSkip: () => void;
+  /** Called when the learner skips or continues into the lesson body. */
+  onDismiss?: () => void;
 }) {
   const [phase, setPhase] = useState<PreAssessmentPhase>("idle");
   const [finalScore, setFinalScore] = useState<{ score: number; total: number } | null>(null);
@@ -229,6 +232,7 @@ export function LessonPreAssessmentCard({
         onSkip={() => {
           setPhase("skipped");
           onSkip();
+          onDismiss?.();
         }}
       />
     );
@@ -255,7 +259,10 @@ export function LessonPreAssessmentCard({
         score={finalScore.score}
         total={finalScore.total}
         showScoreSummary={false}
-        onContinue={() => setPhase("skipped")} // hides card, lesson becomes visible
+        onContinue={() => {
+          setPhase("skipped");
+          onDismiss?.();
+        }}
       />
     );
   }

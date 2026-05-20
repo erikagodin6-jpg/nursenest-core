@@ -294,6 +294,7 @@ export function PathwayLessonLegacyStudyShell({
         </section>
       ) : null}
 
+      {(!showPreTab || preDone) ? (
       <section id="lesson-core" className="scroll-mt-20" aria-label="Lesson content">
         {sectionAnchors && sectionAnchors.length > 0 ? (
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-8">
@@ -321,6 +322,7 @@ export function PathwayLessonLegacyStudyShell({
           children
         )}
       </section>
+      ) : null}
 
       {showPostTab ? (
         <section
