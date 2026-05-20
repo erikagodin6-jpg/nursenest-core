@@ -8,7 +8,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
+import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry-slugs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
