@@ -2,15 +2,7 @@ import Link from "next/link";
 import { CheckCircle2, Circle, Compass, Flag, Heart, Target } from "lucide-react";
 import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { retentionPromptHints } from "@/lib/learner/exam-plan-engine";
-import dynamic from "next/dynamic";
-
-const AdaptiveRecommendationLoopPanel = dynamic(
-  () =>
-    import("@/components/student/adaptive-recommendation-loop-panel").then(
-      (m) => m.AdaptiveRecommendationLoopPanel,
-    ),
-  { ssr: false },
-);
+import { AdaptiveRecommendationLoopPanel } from "@/components/student/adaptive-recommendation-loop-panel";
 import type { GovernedAdaptiveRecommendations } from "@/lib/educational-cognition/adaptive-recommendation-cognition";
 import { GovernedNextActionLink } from "@/components/educational-graph/governed-next-action-link";
 import { EducGraphNextStepsPanel } from "@/components/educational-cognition/educ-graph-next-steps-panel";
