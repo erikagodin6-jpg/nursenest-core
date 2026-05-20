@@ -190,250 +190,44 @@
   background: color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface));
 }
 
-/* ── Segmented blocks (compare, dual summary) ───────────────────────── */
-
-.nn-ls-segments {
-  display: grid;
-  gap: 0;
-  overflow: hidden;
-  border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 92%, transparent);
-}
-
-.nn-ls-segment {
-  padding: 1rem 1.2rem;
-  background: var(--semantic-panel-muted);
-}
-
-.nn-ls-segment:nth-child(even) {
-  background: color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface));
-}
-
-.nn-ls-segment + .nn-ls-segment {
-  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
-}
-
-@media (min-width: 640px) {
-  .nn-ls-segments[data-nn-ls-cols="2"] {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .nn-ls-segments[data-nn-ls-cols="2"] .nn-ls-segment + .nn-ls-segment {
-    border-top: none;
-    border-left: 1px solid color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
-  }
-}
-
-.nn-ls-segment__label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--semantic-text-muted);
-}
-
-.nn-ls-segment__body {
-  margin-top: 0.35rem;
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: var(--semantic-text-secondary);
-}
-
-/* ── Note / callout panels ───────────────────────────────────────────── */
-
-.nn-ls-note {
-  border-radius: 1rem;
-  padding: 0.95rem 1.15rem;
-  border: 1px solid var(--semantic-border-soft);
-  background: var(--semantic-panel-muted);
-  font-size: 0.8125rem;
-  line-height: 1.55;
-  color: var(--semantic-text-secondary);
-}
-
-.nn-ls-note[data-nn-ls-note-tone="info"] {
-  border-color: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-panel-cool) 50%, var(--semantic-surface));
-}
-
-.nn-ls-note[data-nn-ls-note-tone="success"] {
-  border-color: color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-panel-positive) 45%, var(--semantic-surface));
-}
-
-.nn-ls-note[data-nn-ls-note-tone="danger"] {
-  border-color: color-mix(in srgb, var(--semantic-danger) 24%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-danger-soft) 70%, var(--semantic-surface));
-  color: var(--semantic-danger-contrast);
-}
-
-/* ── Study recommendation (compact next-step) ───────────────────────── */
-
-.nn-ls-rec {
-  display: block;
-  text-decoration: none;
-  border-radius: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft));
-  padding: 1.1rem 1.25rem;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)) 0%,
-    var(--semantic-surface) 48%,
-    color-mix(in srgb, var(--semantic-chart-3) 7%, var(--semantic-surface)) 100%
-  );
-  box-shadow: var(--semantic-shadow-soft);
-  transition:
-    transform var(--nn-btn-motion-duration, 150ms) var(--nn-btn-motion-ease, ease),
-    border-color var(--motion-base, 160ms) ease;
-}
-
-.nn-ls-rec:hover {
-  border-color: color-mix(in srgb, var(--semantic-brand) 32%, var(--semantic-border-soft));
-  transform: translateY(-1px);
-}
-
-.nn-ls-rec__title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--semantic-text-primary);
-}
-
-.nn-ls-rec__body {
-  margin-top: 0.35rem;
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--semantic-text-secondary);
-}
-
-.nn-ls-rec__meta {
-  margin-top: 0.65rem;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--semantic-brand);
-}
-
-/* ── Progress card shell (wrap semantic track inside) ─────────────────── */
-
-.nn-ls-progress-card {
-  border-radius: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 95%, var(--semantic-text-muted));
-  background: var(--semantic-surface);
-  padding: 1.1rem 1.25rem;
-  box-shadow: var(--semantic-shadow-soft);
-}
-
-.nn-ls-progress-card__label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--semantic-text-muted);
-}
-
-.nn-ls-progress-card__title {
-  margin-top: 0.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--semantic-text-primary);
-}
-
-/* ── Empty state inset (optional wrapper around empty UI) ────────────── */
-
-.nn-ls-empty {
-  border-radius: 1.5rem;
-  border: 1px dashed color-mix(in srgb, var(--semantic-border-soft) 70%, var(--semantic-text-muted));
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--semantic-panel-muted) 80%, var(--semantic-surface)),
-    color-mix(in srgb, var(--semantic-panel-cool) 35%, var(--semantic-surface))
-  );
-  padding: 2rem 1.5rem;
-}
-
-/* ── Brand loader (inline; semantic brand dots) ───────────────────────── */
-
-.nn-brand-loader {
-  vertical-align: middle;
-}
-
-.nn-brand-loader__dot {
-  display: inline-block;
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 999px;
-  background: var(--semantic-brand);
-  animation: nn-brand-loader-pulse 0.65s ease-in-out infinite;
-}
-
-.nn-brand-loader__dot:nth-child(2) {
-  animation-delay: 0.12s;
-}
-
-.nn-brand-loader__dot:nth-child(3) {
-  animation-delay: 0.24s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .nn-brand-loader__dot {
-    animation: none;
-    opacity: 0.65;
-  }
-}
-
-@keyframes nn-brand-loader-pulse {
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: translateY(0);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(-2px);
-  }
-}
-
-/* Stat grid rhythm when composing multiple AnalyticsMetricTile / stat cards */
-.nn-ls-stat-grid {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
-}
-
-/* ── Tutor dock (Study Assistant) ─────────────────────────────────────── */
-
-@media (prefers-reduced-motion: no-preference) {
-  .nn-ls-tutor-panel {
-    animation: nn-tutor-panel-in 0.22s ease-out both;
-  }
-
-  @keyframes nn-tutor-panel-in {
-    from {
-      opacity: 0.88;
-      transform: translateX(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-}
-
-/* ── Learner lesson readability pass ───────────────────────────────────
-   Applies to the existing lesson detail template without touching every
-   page variant. Goal: one dominant teaching column; nav and utilities are
-   support surfaces, not competing lesson bodies.
-   --------------------------------------------------------------------- */
+/* learner lesson readability + overflow guardrails */
 
 .nn-lesson-page--learner-app {
   max-width: min(100%, 72rem);
   margin-inline: auto;
+  overflow-x: clip;
 }
 
-.nn-lesson-editorial-rail--hero {
+.nn-lesson-main {
+  width: 100%;
   max-width: 58rem;
+  min-width: 0;
   margin-inline: auto;
+}
+
+.nn-lesson-main :where(pre, code, table) {
+  max-width: 100%;
+}
+
+.nn-lesson-main pre {
+  overflow-x: auto;
+  border-radius: 1rem;
+}
+
+.nn-lesson-main table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.nn-lesson-main :where(p, li, blockquote, td, th) {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+.nn-lesson-main section[id],
+.nn-premium-lesson-article section[id] {
+  scroll-margin-top: calc(var(--nn-learner-sticky-offset, 6rem) + 1rem);
 }
 
 .nn-lesson-layout--triple {
@@ -443,49 +237,9 @@
   align-items: start;
 }
 
-.nn-lesson-main {
-  width: 100%;
-  max-width: 58rem;
-  margin-inline: auto;
-}
-
-.nn-lesson-editorial-rail--main {
-  max-width: 100%;
-}
-
-.nn-lesson-article-flow,
-.nn-premium-lesson-article {
-  display: grid;
-  gap: clamp(1.1rem, 2.4vw, 1.65rem);
-}
-
-.nn-lesson-article-flow > * + *,
-.nn-premium-lesson-article > * + * {
-  margin-top: 0;
-}
-
-.nn-lesson-section-nav-mobile--sticky-lane {
-  position: sticky;
-  top: calc(var(--nn-learner-sticky-offset, 5.5rem) + 0.5rem);
-  z-index: 20;
-  border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-surface) 94%, transparent);
-  box-shadow: var(--semantic-shadow-soft);
-  backdrop-filter: blur(12px);
-}
-
-.nn-lesson-section-nav-mobile__summary {
-  min-height: 2.85rem;
-}
-
 .nn-lesson-section-nav {
   max-width: 15rem;
   opacity: 0.96;
-}
-
-.nn-lesson-section-nav .nn-lesson-nav-item {
-  border-radius: 0.8rem;
 }
 
 .nn-lesson-study-rail-aside {
@@ -498,61 +252,6 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.75rem;
-}
-
-.nn-lesson-utilities-rail .nn-premium-rail-section,
-.nn-lesson-utility-card {
-  box-shadow: none;
-}
-
-.nn-lesson-utility-card {
-  border-radius: 0.95rem;
-  border: 1px solid var(--semantic-border-soft);
-  background: color-mix(in srgb, var(--semantic-panel-muted) 65%, var(--semantic-surface));
-  padding: 0.85rem 0.95rem;
-}
-
-.nn-lesson-utility-card__row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--semantic-text-secondary);
-}
-
-.nn-lesson-utility-card h2 {
-  margin: 0;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--semantic-text-primary);
-}
-
-.nn-lesson-utility-card p {
-  margin: 0.1rem 0 0;
-  font-size: 0.75rem;
-  line-height: 1.4;
-  color: var(--semantic-text-muted);
-}
-
-.nn-lesson-utility-card--accent {
-  border-color: color-mix(in srgb, var(--semantic-brand) 24%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface));
-}
-
-.nn-lesson-assessment-toggle {
-  margin-bottom: 0.25rem;
-}
-
-.nn-lesson-page--learner-app .nn-lesson-assessment-toggle + * {
-  margin-top: 0;
-}
-
-.nn-lesson-page--learner-app [data-testid="pathway-lesson-main-column"] {
-  min-width: 0;
-}
-
-.nn-lesson-page--learner-app [data-testid="pathway-lesson-study-rail"] {
-  color: var(--semantic-text-secondary);
 }
 
 @media (min-width: 768px) {
@@ -574,11 +273,6 @@
     max-height: calc(100vh - 8rem);
     overflow-y: auto;
     overscroll-behavior: contain;
-  }
-
-  .nn-lesson-main,
-  .nn-lesson-study-rail-aside {
-    margin-inline: 0;
   }
 
   .nn-lesson-study-rail-aside {
@@ -609,24 +303,17 @@
   }
 }
 
-@media (min-width: 1536px) {
-  .nn-lesson-layout--triple {
-    grid-template-columns: minmax(12rem, 15rem) minmax(0, 60rem) minmax(14rem, 18rem);
-  }
-}
-
 @media (max-width: 767px) {
   .nn-lesson-page--learner-app {
-    margin-inline: -0.15rem;
-  }
-
-  .nn-lesson-editorial-rail--hero,
-  .nn-lesson-main,
-  .nn-lesson-study-rail-aside {
-    max-width: 100%;
+    margin-inline: 0;
+    padding-inline: 0.75rem;
   }
 
   .nn-lesson-layout--triple {
     gap: 1rem;
+  }
+
+  .nn-lesson-section-nav {
+    max-width: 100%;
   }
 }
