@@ -4,10 +4,8 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { CoachingModel, CoachingSemanticsCopy } from "@/lib/learner/post-exam-coaching/types";
 import { enforceGovernedAiMeasurementCopy } from "@/lib/measurements/measurement-ai-boundary";
 import { validateAiMeasurementCopy } from "@/lib/measurements/measurement-ai-governance";
-import {
-  getCoachingPolicyForPathway,
-  validatePsychometricCopyForModel,
-} from "@/lib/testing/testing-model";
+import { getCoachingPolicyForPathway } from "@/lib/testing/testing-coaching-policy";
+import { validatePsychometricCopyForModel } from "@/lib/testing/psychometric-isolation";
 
 const LOFT_FORBIDDEN = /\b(adaptive|theta|standard error|difficulty progression|exam got harder|exam got easier|psychometric)\b/i;
 
