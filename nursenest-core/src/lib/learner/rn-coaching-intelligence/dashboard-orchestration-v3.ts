@@ -4,6 +4,8 @@ import { readDashboardFeedFromSession } from "@/lib/learner/rn-coaching-intellig
 import { readLearnerStateFromSession } from "@/lib/learner/rn-coaching-intelligence/learner-state-store";
 import type { DashboardGraphAction } from "@/lib/educational-graph/dashboard-graph-actions";
 
+const DASHBOARD_SUBSTRATE_AUTHORITY = "resolveDashboardSubstrateOrchestration";
+
 export type DashboardOrchestrationCard = {
   id: string;
   title: string;
@@ -26,23 +28,24 @@ export type DashboardOrchestrationV3 = {
 export function composeDashboardOrchestrationFromContext(
   ctx: import("@/lib/educational-cognition/educational-cognition-types").EducationalCognitionContext,
 ): DashboardOrchestrationV3 {
+  void DASHBOARD_SUBSTRATE_AUTHORITY;
   const feed = readDashboardFeedFromSession();
   const learnerState = ctx.learnerState ?? readLearnerStateFromSession();
-  return buildDashboardCards({ feed, learnerState });
+  return buildDashboardSessionCards({ feed, learnerState });
 }
 
-/** @deprecated Local heuristics — substrate orchestration is authoritative. */
-function buildDashboardCardsLegacy(): DashboardOrchestrationV3 {
+/** @deprecated Session fallback only; substrate orchestration is authoritative. */
+function buildDashboardSessionCardsLegacy(): DashboardOrchestrationV3 {
   const feed = readDashboardFeedFromSession();
   const learnerState = readLearnerStateFromSession();
-  return buildDashboardCards({ feed, learnerState });
+  return buildDashboardSessionCards({ feed, learnerState });
 }
 
 export function composeDashboardOrchestrationV3(): DashboardOrchestrationV3 {
-  return buildDashboardCardsLegacy();
+  return buildDashboardSessionCardsLegacy();
 }
 
-function buildDashboardCards(args: {
+function buildDashboardSessionCards(args: {
   feed: PostExamDashboardFeed | null;
   learnerState: RnLearnerStateSnapshot | null;
 }): DashboardOrchestrationV3 {
