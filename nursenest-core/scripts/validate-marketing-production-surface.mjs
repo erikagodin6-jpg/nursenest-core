@@ -240,7 +240,7 @@ function readJson(filePath) {
 function assertLayoutSingleChrome() {
   const src = fs.readFileSync(DEFAULT_MARKETING_LAYOUT, "utf8");
   const footers = src.match(/<SiteFooter\b/g) ?? [];
-  const headers = src.match(/<SiteHeader\b/g) ?? [];
+  const headers = src.match(/<SiteHeader(?:Server)?\b/g) ?? [];
   if (footers.length !== 1) {
     throw new Error(
       `(default)/layout.tsx must contain exactly one <SiteFooter /> (found ${footers.length}) — duplicate chrome risks broken layout.`,
@@ -248,7 +248,7 @@ function assertLayoutSingleChrome() {
   }
   if (headers.length !== 1) {
     throw new Error(
-      `(default)/layout.tsx must contain exactly one <SiteHeader /> (found ${headers.length}) — duplicate chrome risks broken layout.`,
+      `(default)/layout.tsx must contain exactly one <SiteHeader /> / <SiteHeaderServer /> (found ${headers.length}) — duplicate chrome risks broken layout.`,
     );
   }
 }
