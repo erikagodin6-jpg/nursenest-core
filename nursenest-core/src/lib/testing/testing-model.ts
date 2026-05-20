@@ -63,6 +63,13 @@ export {
   type MarketingLanguageAuditResult,
 } from "@/lib/testing/testing-marketing-governance";
 export {
+  assertLearnerDisplayCopy,
+  governCopyForTestingModel,
+  governLearnerDisplayCopy,
+  governMarketingCopy,
+  type LearnerCopyGovernanceResult,
+} from "@/lib/testing/psychometric-copy-governance";
+export {
   assertPathwayPostHogCapture,
   getPsychometricTelemetryViolationCount,
   logPsychometricTelemetryViolation,
