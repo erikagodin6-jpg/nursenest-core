@@ -11,8 +11,10 @@ import { fileURLToPath } from "node:url";
 import * as programmaticRegistry from "../nursenest-core/src/lib/seo/programmatic-registry";
 import * as marketingLanguages from "../nursenest-core/src/lib/i18n/marketing-languages";
 
-const { getAllProgrammaticSlugs } = programmaticRegistry;
-const { MARKETING_LANGUAGES } = marketingLanguages;
+const programmaticRegistryExports = (programmaticRegistry as any).default ?? programmaticRegistry;
+const marketingLanguageExports = (marketingLanguages as any).default ?? marketingLanguages;
+const { getAllProgrammaticSlugs } = programmaticRegistryExports;
+const { MARKETING_LANGUAGES } = marketingLanguageExports;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
